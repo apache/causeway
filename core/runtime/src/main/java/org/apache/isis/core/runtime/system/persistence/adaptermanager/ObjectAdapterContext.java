@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -30,6 +31,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -41,8 +43,16 @@ public class ObjectAdapterContext {
     private final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
     private final ServicesInjector servicesInjector;
     
-    ObjectAdapterContext(ServicesInjector servicesInjector) {
+    ObjectAdapterContext(
+            ServicesInjector servicesInjector, 
+            AuthenticationSession authenticationSession, 
+            SpecificationLoader specificationLoader, 
+            PersistenceSession persistenceSession) {
         this.servicesInjector = servicesInjector;
+        this.objectAdapterFactories = new ObjectAdapterContext_Factories(
+                authenticationSession, 
+                specificationLoader, 
+                persistenceSession);
     }
 
     // -- LIFE-CYCLING
@@ -112,10 +122,57 @@ public class ObjectAdapterContext {
     
     // -- FACTORIES
     
+    public static interface ObjectAdapterFactories {
+        
+        /**
+         * Creates (but does not {@link #mapAndInjectServices(ObjectAdapter) map}) a new
+         * root {@link ObjectAdapter adapter} for the supplied domain object.
+         *
+         * @see #createStandaloneAdapter(Object)
+         * @see #createCollectionAdapter(Object, ParentedCollectionOid)
+         */
+        ObjectAdapter createRootAdapter(Object pojo, RootOid rootOid);
+        
+        /**
+         * Creates a {@link ObjectAdapter adapter} with no {@link Oid}.
+         *
+         * <p>
+         * Standalone adapters are never {@link #mapAndInjectServices(ObjectAdapter) mapped}
+         * (they have no {@link Oid}, after all).
+         *
+         * <p>
+         * Should only be called if the pojo is known not to be
+         * {@link #getAdapterFor(Object) mapped}, and for immutable value types
+         * referenced.
+         */
+        ObjectAdapter createStandaloneAdapter(Object pojo);
+
+        ObjectAdapter createCollectionAdapter(Object pojo, ParentedCollectionOid collectionOid);
+
+        /**
+         * Creates an {@link ObjectAdapter adapter} to represent a collection
+         * of the parent.
+         *
+         * <p>
+         * The returned adapter will have a {@link ParentedCollectionOid}; its version
+         * and its persistence are the same as its owning parent.
+         *
+         * <p>
+         * Should only be called if the pojo is known not to be
+         * {@link #getAdapterFor(Object) mapped}.
+         */
+        ObjectAdapter createCollectionAdapter(Object pojo, ObjectAdapter parentAdapter, OneToManyAssociation otma);
+    }
     
+    private final ObjectAdapterFactories objectAdapterFactories;
+    
+    public ObjectAdapterFactories getFactories() {
+        return objectAdapterFactories;
+    }
     
     // ------------------------------------------------------------------------------------------------
     
+    @Deprecated // don't expose caching
     public void addAdapterHonoringSpecImmutability(Object pojo, ObjectAdapter adapter) {
         // add all aggregated collections
         final ObjectSpecification objSpec = adapter.getSpecification();
@@ -137,6 +194,7 @@ public class ObjectAdapterContext {
      * @param hintRootOid - allow a different persistent root oid to be provided.
      * @param session 
      */
+    @Deprecated // expected to be moved
     public void remapAsPersistent(final ObjectAdapter adapter, RootOid hintRootOid, PersistenceSession session) {
 
         final ObjectAdapter rootAdapter = adapter.getAggregateRoot();  // TODO: REVIEW: think this is redundant; would seem this method is only ever called for roots anyway.
@@ -248,6 +306,8 @@ public class ObjectAdapterContext {
         final PropertyOrCollectionAccessorFacet accessor = association.getFacet(PropertyOrCollectionAccessorFacet.class);
         return accessor.getProperty(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
     }
+
+
 
 
 

@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -46,6 +47,7 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.memento.CollectionData;
 import org.apache.isis.core.runtime.memento.Data;
 import org.apache.isis.core.runtime.memento.ObjectData;
@@ -65,8 +67,14 @@ public class ObjectAdapterLegacy {
     
     static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterLegacy.class);
     
-    public static ObjectAdapterContext openContext(ServicesInjector servicesInjector) {
-        final ObjectAdapterContext objectAdapterContext = new ObjectAdapterContext(servicesInjector);
+    public static ObjectAdapterContext openContext(
+            ServicesInjector servicesInjector, 
+            AuthenticationSession authenticationSession, 
+            SpecificationLoader specificationLoader, 
+            PersistenceSession persistenceSession) {
+        final ObjectAdapterContext objectAdapterContext = 
+                new ObjectAdapterContext(servicesInjector, authenticationSession, 
+                        specificationLoader, persistenceSession);
         objectAdapterContext.open();
         return objectAdapterContext;
     }

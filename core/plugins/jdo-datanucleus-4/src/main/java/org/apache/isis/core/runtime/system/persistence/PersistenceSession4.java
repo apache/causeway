@@ -161,7 +161,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
             LOG.debug("opening {}", this);
         }
 
-        objectAdapterContext = ObjectAdapterLegacy.openContext(servicesInjector);
+        objectAdapterContext = ObjectAdapterLegacy.openContext(servicesInjector, authenticationSession, specificationLoader, this);
 
         persistenceManager = jdoPersistenceManagerFactory.getPersistenceManager();
 
@@ -914,7 +914,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
      * Makes an {@link ObjectAdapter} persistent. The specified object should be
      * stored away via this object store's persistence mechanism, and have a
      * new and unique OID assigned to it. The object, should also be added to
-     * the {@link PersistenceSession4} as the object is implicitly 'in use'.
+     * the {@link PersistenceSession} as the object is implicitly 'in use'.
      *
      * <p>
      * If the object has any associations then each of these, where they aren't
@@ -985,18 +985,6 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
     private static boolean objectSpecNotPersistable(final ObjectAdapter adapter) {
         return adapter.isParentedCollection();
-    }
-
-
-    // -- ObjectPersistor impl
-
-    private void makePersistent(final ObjectAdapter adapter) {
-        makePersistentInTransaction(adapter);
-    }
-
-
-    private void remove(final ObjectAdapter adapter) {
-        destroyObjectInTransaction(adapter);
     }
 
     // -- destroyObjectInTransaction
@@ -1153,7 +1141,7 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
 
         // we create value facets as standalone (so not added to maps)
         if (objSpec.containsFacet(ValueFacet.class)) {
-            adapter = createStandaloneAdapter(pojo);
+            adapter = objectAdapterContext.getFactories().createStandaloneAdapter(pojo);
             return adapter;
         }
 
@@ -1463,9 +1451,6 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         return pojo;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ObjectAdapter adapterFor(final Object pojo) {
 
@@ -1477,14 +1462,14 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
             return existingOrValueAdapter;
         }
 
-        final ObjectAdapter newAdapter = createTransientOrViewModelRootAdapter(pojo);
+
+        // Creates a new transient root {@link ObjectAdapter adapter} for the supplied domain
+        final RootOid rootOid = createTransientOrViewModelOid(pojo);
+        final ObjectAdapter newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
 
         return mapAndInjectServices(newAdapter);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter, final OneToManyAssociation collection) {
 
@@ -1496,47 +1481,16 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
             return existingOrValueAdapter;
         }
 
+        ensureMapsConsistent(parentAdapter);
+        
         // the List, Set etc. instance gets wrapped in its own adapter
-        final ObjectAdapter newAdapter = createCollectionAdapter(pojo, parentAdapter, collection);
+        final ObjectAdapter newAdapter = objectAdapterContext.getFactories()
+                .createCollectionAdapter(pojo, parentAdapter, collection);
 
         return mapAndInjectServices(newAdapter);
     }
 
-    /**
-     * Creates an {@link ObjectAdapter adapter} to represent a collection
-     * of the parent.
-     *
-     * <p>
-     * The returned adapter will have a {@link ParentedCollectionOid}; its version
-     * and its persistence are the same as its owning parent.
-     *
-     * <p>
-     * Should only be called if the pojo is known not to be
-     * {@link #getAdapterFor(Object) mapped}.
-     */
-    private ObjectAdapter createCollectionAdapter(
-            final Object pojo,
-            final ObjectAdapter parentAdapter,
-            final OneToManyAssociation otma) {
 
-        ensureMapsConsistent(parentAdapter);
-        Assert.assertNotNull(pojo);
-
-        final Oid parentOid = parentAdapter.getOid();
-
-        // persistence of collection follows the parent
-        final ParentedCollectionOid collectionOid = new ParentedCollectionOid((RootOid) parentOid, otma);
-        final ObjectAdapter collectionAdapter = createCollectionAdapter(pojo, collectionOid);
-
-        // we copy over the type onto the adapter itself
-        // [not sure why this is really needed, surely we have enough info in
-        // the adapter
-        // to look this up on the fly?]
-        final TypeOfFacet facet = otma.getFacet(TypeOfFacet.class);
-        collectionAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(facet));
-
-        return collectionAdapter;
-    }
 
 
     /**
@@ -1620,66 +1574,14 @@ implements IsisLifecycleListener2.PersistenceSessionLifecycleManagement {
         final ObjectAdapter createdAdapter;
         if(oid instanceof RootOid) {
             final RootOid rootOid = (RootOid) oid;
-            createdAdapter = createRootAdapter(pojo, rootOid);
+            createdAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
         } else /*if (oid instanceof CollectionOid)*/ {
             final ParentedCollectionOid collectionOid = (ParentedCollectionOid) oid;
-            createdAdapter = createCollectionAdapter(pojo, collectionOid);
+            createdAdapter = objectAdapterContext.getFactories().createCollectionAdapter(pojo, collectionOid);
         }
         return createdAdapter;
     }
 
-    /**
-     * Creates a new transient root {@link ObjectAdapter adapter} for the supplied domain
-     * object.
-     */
-    private ObjectAdapter createTransientOrViewModelRootAdapter(final Object pojo) {
-        final RootOid rootOid = createTransientOrViewModelOid(pojo);
-        return createRootAdapter(pojo, rootOid);
-    }
-
-    /**
-     * Creates a {@link ObjectAdapter adapter} with no {@link Oid}.
-     *
-     * <p>
-     * Standalone adapters are never {@link #mapAndInjectServices(ObjectAdapter) mapped}
-     * (they have no {@link Oid}, after all).
-     *
-     * <p>
-     * Should only be called if the pojo is known not to be
-     * {@link #getAdapterFor(Object) mapped}, and for immutable value types
-     * referenced.
-     */
-    private ObjectAdapter createStandaloneAdapter(final Object pojo) {
-        return createAdapter(pojo, null);
-    }
-
-    /**
-     * Creates (but does not {@link #mapAndInjectServices(ObjectAdapter) map}) a new
-     * root {@link ObjectAdapter adapter} for the supplied domain object.
-     *
-     * @see #createStandaloneAdapter(Object)
-     * @see #createCollectionAdapter(Object, ParentedCollectionOid)
-     */
-    private ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
-        assert rootOid != null;
-        return createAdapter(pojo, rootOid);
-    }
-
-    private ObjectAdapter createCollectionAdapter(
-            final Object pojo,
-            ParentedCollectionOid collectionOid) {
-        assert collectionOid != null;
-        return createAdapter(pojo, collectionOid);
-    }
-
-    private PojoAdapter createAdapter(
-            final Object pojo,
-            final Oid oid) {
-        return new PojoAdapter(
-                pojo, oid,
-                authenticationSession,
-                specificationLoader, this);
-    }
 
 
     private ObjectAdapter mapAndInjectServices(final ObjectAdapter adapter) {
