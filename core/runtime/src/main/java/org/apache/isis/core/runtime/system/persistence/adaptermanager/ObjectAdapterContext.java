@@ -18,6 +18,9 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -39,6 +42,9 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
  * @since 2.0.0-M2
  */
 public class ObjectAdapterContext {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext.class);
+    
     private final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     private final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
     private final ServicesInjector servicesInjector;
@@ -110,6 +116,7 @@ public class ObjectAdapterContext {
     
     @Deprecated // don't expose caching
     public void removeAdapter(ObjectAdapter adapter) {
+        LOG.debug("removing adapter: {}", adapter);
         if(adapter==null) {
             return; // nothing to do
         }

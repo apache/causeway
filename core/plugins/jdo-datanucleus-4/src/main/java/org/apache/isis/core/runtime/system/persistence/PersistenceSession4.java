@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.functions._Predicates.equalTo;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
@@ -335,7 +336,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             // the guard is in case we're here as the result of a redirect following a previous exception;just ignore.
 
             final Timestamp completedAt;
-            final Interaction.Execution priorExecution = interaction.getPriorExecution();
+            final Interaction.Execution<?, ?> priorExecution = interaction.getPriorExecution();
             if (priorExecution != null) {
                 // copy over from the most recent (which will be the top-level) interaction
                 completedAt = priorExecution.getCompletedAt();
@@ -585,6 +586,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     // -- helper: postEvent
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     void postLifecycleEventIfRequired(
             final ObjectAdapter adapter,
             final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
@@ -786,7 +788,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         fetchPlan.addGroup(FetchGroup.DEFAULT);
         final List<Object> persistentPojos = Lists.newArrayList();
         try {
-            final Collection<Object> pojos = persistenceManager.getObjectsById(dnOids, true);
+            final Collection<Object> pojos = uncheckedCast(persistenceManager.getObjectsById(dnOids, true));
             for (final Object pojo : pojos) {
                 try {
                     persistentPojos.add(pojo);
@@ -1542,17 +1544,9 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public void removeAdapterFromCache(final ObjectAdapter adapter) {
         ensureMapsConsistent(adapter);
-
-        LOG.debug("removing adapter: {}", adapter);
-
-        unmap(adapter);
-    }
-
-    private void unmap(final ObjectAdapter adapter) {
-        ensureMapsConsistent(adapter);
-
         objectAdapterContext.removeAdapter(adapter);
     }
+
 
     /**
      * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
