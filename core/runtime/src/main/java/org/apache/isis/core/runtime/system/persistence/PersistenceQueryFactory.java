@@ -19,14 +19,17 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.Map;
+import java.util.function.Function;
+
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -38,10 +41,10 @@ public class PersistenceQueryFactory {
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFactory.class);
 
     private final SpecificationLoader specificationLoader;
-    private final ObjectAdapterProvider adapterProvider;
+    private final Function<Object, ObjectAdapter> adapterProvider;
 
     PersistenceQueryFactory(
-            final ObjectAdapterProvider adapterProvider,
+            final Function<Object, ObjectAdapter> adapterProvider,
             final SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
         this.adapterProvider = adapterProvider;
@@ -80,7 +83,7 @@ public class PersistenceQueryFactory {
         for (final Map.Entry<String, Object> entry : argumentsByParameterName.entrySet()) {
             final String parameterName = entry.getKey();
             final Object argument = argumentsByParameterName.get(parameterName);
-            final ObjectAdapter argumentAdapter = argument != null ? adapterProvider.adapterFor(argument) : null;
+            final ObjectAdapter argumentAdapter = argument != null ? adapterProvider.apply(argument) : null;
             argumentsAdaptersByParameterName.put(parameterName, argumentAdapter);
         }
         return argumentsAdaptersByParameterName;

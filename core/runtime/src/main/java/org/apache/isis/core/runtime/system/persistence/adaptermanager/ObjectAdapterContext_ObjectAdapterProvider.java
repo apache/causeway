@@ -16,14 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.system.persistence;
+package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.function.Function;
 
-import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.core.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -31,25 +31,31 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
-public class PersistenceSession5_ObjectAdapterProvider implements ObjectAdapterProvider {
-
-    private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession5_ObjectAdapterProvider.class);
-
-    protected final PersistenceSession5 holder;
-    protected final ObjectAdapterContext objectAdapterContext;
-
-    // -- open
-
-    PersistenceSession5_ObjectAdapterProvider(PersistenceSession5 holder, ObjectAdapterContext objectAdapterContext) {
-        this.holder = holder;
+/**
+ *  
+ * @since 2.0.0-M2
+ */
+class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvider {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_ObjectAdapterProvider.class);
+    private final ObjectAdapterContext objectAdapterContext;
+    private final PersistenceSession persistenceSession;
+    private final SpecificationLoader specificationLoader; 
+    private final IsisJdoMetamodelPlugin isisJdoMetamodelPlugin; 
+    
+    ObjectAdapterContext_ObjectAdapterProvider(ObjectAdapterContext objectAdapterContext,
+            PersistenceSession persistenceSession) {
         this.objectAdapterContext = objectAdapterContext;
+        this.persistenceSession = persistenceSession;
+        this.specificationLoader = persistenceSession.getServicesInjector().getSpecificationLoader();
+        this.isisJdoMetamodelPlugin = IsisJdoMetamodelPlugin.get();
     }
 
     @Override
     public ObjectAdapter adapterFor(Object pojo) {
-        //return holder.getObjectAdapterProvider().adapterFor(pojo);
         
         if(pojo == null) {
             return null;
@@ -60,7 +66,7 @@ public class PersistenceSession5_ObjectAdapterProvider implements ObjectAdapterP
         }
 
         // Creates a new transient root {@link ObjectAdapter adapter} for the supplied domain
-        final RootOid rootOid = holder.createTransientOrViewModelOid(pojo);
+        final RootOid rootOid = persistenceSession.createTransientOrViewModelOid(pojo);
         final ObjectAdapter newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
 
         return objectAdapterContext.mapAndInjectServices(newAdapter);
@@ -68,7 +74,6 @@ public class PersistenceSession5_ObjectAdapterProvider implements ObjectAdapterP
 
     @Override
     public ObjectAdapter adapterFor(Object pojo, ObjectAdapter parentAdapter, OneToManyAssociation collection) {
-        //return holder.getObjectAdapterProvider().adapterFor(pojo, parentAdapter, collection);
 
         assert parentAdapter != null;
         assert collection != null;
@@ -97,9 +102,18 @@ public class PersistenceSession5_ObjectAdapterProvider implements ObjectAdapterP
         return objectAdapterContext.adapterForViewModel(viewModelPojo, rootOidFactory);
     }
     
+    protected ObjectAdapter addPersistentToCache(final Object pojo) {
+        if (persistenceSession.getPersistenceManager().getObjectId(pojo) == null) {
+            return null;
+        }
+        final RootOid oid = persistenceSession.createPersistentOrViewModelOid(pojo);
+        final ObjectAdapter adapter = objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
+        return adapter;
+    }
+    
     // -- HELPER
     
-    protected ObjectAdapter existingOrValueAdapter(Object pojo) {
+    private ObjectAdapter existingOrValueAdapter(Object pojo) {
 
         // attempt to locate adapter for the pojo
         ObjectAdapter adapter = objectAdapterContext.lookupAdapterByPojo(pojo);
@@ -107,9 +121,12 @@ public class PersistenceSession5_ObjectAdapterProvider implements ObjectAdapterP
             return adapter;
         }
 
+        // equivalent to  isInstanceOfPersistable = pojo instanceof Persistable;
+        final boolean isInstanceOfPersistable = isisJdoMetamodelPlugin.isPersistenceEnhanced(pojo.getClass());
+        
         // pojo may have been lazily loaded by object store, but we haven't yet seen it
-        if (pojo instanceof Persistable) {
-            adapter = holder.mapPersistent((Persistable) pojo);
+        if (isInstanceOfPersistable) {
+            adapter = addPersistentToCache(pojo);
 
             // TODO: could return null if the pojo passed in !dnIsPersistent() || !dnIsDetached()
             // in which case, we would ought to map as a transient object, rather than fall through and treat as a value?
@@ -122,7 +139,7 @@ public class PersistenceSession5_ObjectAdapterProvider implements ObjectAdapterP
         }
         
         // need to create (and possibly map) the adapter.
-        final ObjectSpecification objSpec = holder.specificationLoader.loadSpecification(pojo.getClass());
+        final ObjectSpecification objSpec = specificationLoader.loadSpecification(pojo.getClass());
 
         // we create value facets as standalone (so not added to maps)
         if (objSpec.containsFacet(ValueFacet.class)) {
@@ -134,7 +151,6 @@ public class PersistenceSession5_ObjectAdapterProvider implements ObjectAdapterP
     }
 
 
+    
+   
 }
-
-
-

@@ -98,6 +98,7 @@ public interface PersistenceSession extends ObjectAdapterProvider, Transactional
 
     void close();
 
+    RootOid createTransientOrViewModelOid(Object pojo);
     RootOid createPersistentOrViewModelOid(Object pojo);
 
     ObjectAdapter createTransientInstance(ObjectSpecification spec);
@@ -121,7 +122,9 @@ public interface PersistenceSession extends ObjectAdapterProvider, Transactional
      * Convenient equivalent to {@code getPersistenceManager()}.
      * @return
      */
-    PersistenceManager pm();
+    default PersistenceManager pm() {
+        return getPersistenceManager();
+    }
 
     List<ObjectAdapter> getServices();
 
@@ -175,5 +178,6 @@ public interface PersistenceSession extends ObjectAdapterProvider, Transactional
     boolean isTransient(Object pojo);
     boolean isRepresentingPersistent(Object pojo);
     boolean isDestroyed(Object pojo);
+    
 
 }

@@ -132,7 +132,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
 
         // sub-components
         this.persistenceQueryFactory = new PersistenceQueryFactory(
-                this.getObjectAdapterProvider(), 
+                obj->this.getObjectAdapterProvider().adapterFor(obj), 
                 this.specificationLoader);
         this.transactionManager = new IsisTransactionManager(this, /*authenticationSession,*/ servicesInjector);
 
@@ -177,10 +177,6 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         return persistenceManager;
     }
 
-    @Override
-    public PersistenceManager pm() {
-        return persistenceManager;
-    }
 
     @Override
     public IsisConfiguration getConfiguration() {

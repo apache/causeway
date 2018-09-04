@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -55,6 +56,7 @@ public class ObjectAdapterContext {
     private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
     private final ObjectAdapterContext_Consistency consistencyMixin;
+    private final ObjectAdapterContext_ObjectAdapterProvider objectAdapterProviderMixin;
     private final ObjectAdapterContext_AdapterManager adapterManagerMixin;
     private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
     
@@ -65,6 +67,7 @@ public class ObjectAdapterContext {
             PersistenceSession persistenceSession) {
         
         this.consistencyMixin = new ObjectAdapterContext_Consistency(this);
+        this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, persistenceSession);
         this.adapterManagerMixin = new ObjectAdapterContext_AdapterManager(this, persistenceSession);
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
         
@@ -224,6 +227,16 @@ public class ObjectAdapterContext {
     
     public void removeAdapterFromCache(final ObjectAdapter adapter) {
         adapterManagerMixin.removeAdapterFromCache(adapter);
+    }
+    
+    // -- OBJECT ADAPTER PROVIDER SUPPORT
+    
+    public ObjectAdapter addPersistentToCache(final Object pojo) {
+        return objectAdapterProviderMixin.addPersistentToCache(pojo);
+    }
+    
+    public ObjectAdapterProvider getObjectAdapterProvider() {
+        return objectAdapterProviderMixin;
     }
     
     // -- MEMENTO SUPPORT

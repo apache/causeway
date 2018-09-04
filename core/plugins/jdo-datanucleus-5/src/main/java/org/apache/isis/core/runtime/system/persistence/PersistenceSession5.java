@@ -131,7 +131,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession5.class);
     private ObjectAdapterContext objectAdapterContext;
-    private PersistenceSession5_ObjectAdapterProvider objectAdapterProviderMixin;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -161,8 +160,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
 
         objectAdapterContext = ObjectAdapterLegacy.openContext(servicesInjector, authenticationSession, specificationLoader, this);
-        objectAdapterProviderMixin = new PersistenceSession5_ObjectAdapterProvider(this, objectAdapterContext);
-        
+
         persistenceManager = jdoPersistenceManagerFactory.getPersistenceManager();
 
         final IsisLifecycleListener.PersistenceSessionLifecycleManagement psLifecycleMgmt = this;
@@ -837,15 +835,15 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
 
     // -- lazilyLoaded
-
-    ObjectAdapter mapPersistent(final Persistable pojo) {
-        if (persistenceManager.getObjectId(pojo) == null) {
-            return null;
-        }
-        final RootOid oid = createPersistentOrViewModelOid(pojo);
-        final ObjectAdapter adapter = objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
-        return adapter;
-    }
+//
+//    private ObjectAdapter addPersistentToCache(final Persistable pojo) {
+//        if (persistenceManager.getObjectId(pojo) == null) {
+//            return null;
+//        }
+//        final RootOid oid = createPersistentOrViewModelOid(pojo);
+//        final ObjectAdapter adapter = objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
+//        return adapter;
+//    }
 
 
     // -- refreshRootInTransaction, refreshRoot, resolve
@@ -1421,7 +1419,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * Create a new {@link Oid#isTransient() transient} {@link Oid} for the
      * supplied pojo, uniquely distinguishable from any other {@link Oid}.
      */
-    final RootOid createTransientOrViewModelOid(final Object pojo) {
+    @Override
+    public final RootOid createTransientOrViewModelOid(final Object pojo) {
         return newIdentifier(pojo, Type.TRANSIENT);
     }
 
@@ -1560,7 +1559,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
             // DN would not be calling this callback if the pojo was not persistent.
 
-            adapter = mapPersistent(pojo);
+            adapter = objectAdapterContext.addPersistentToCache(pojo);
             if (adapter == null) {
                 throw new RuntimeException(
                         "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
@@ -1687,9 +1686,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     
     @Override
     public ObjectAdapterProvider getObjectAdapterProvider() {
-        return objectAdapterProviderMixin;
+        return objectAdapterContext.getObjectAdapterProvider();
     }
-
 
     
 }
