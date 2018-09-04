@@ -32,8 +32,7 @@ import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -279,7 +278,7 @@ public class ObjectAdapterMemento implements Serializable {
          */
         TRANSIENT {
             /**
-             * {@link AdapterManager.ConcurrencyChecking} is ignored for transients.
+             * {@link ConcurrencyChecking} is ignored for transients.
              */
             @Override
             ObjectAdapter recreateAdapter(

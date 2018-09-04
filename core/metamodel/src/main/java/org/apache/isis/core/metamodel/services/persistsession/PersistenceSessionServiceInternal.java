@@ -18,7 +18,6 @@ package org.apache.isis.core.metamodel.services.persistsession;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
@@ -29,44 +28,10 @@ import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
-public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider {
-
-    // -- ObjectAdapterProvider
-    
-    @Programmatic
-    ObjectAdapterProvider getObjectAdapterProvider();
-    
-    @Programmatic
-    default ObjectAdapter adapterFor(Object domainObject) {
-        return getObjectAdapterProvider().adapterFor(domainObject);
-    }
-
-    @Programmatic
-    default ObjectAdapter adapterFor(
-            final Object pojo,
-            final ObjectAdapter parentAdapter,
-            OneToManyAssociation collection) {
-        return getObjectAdapterProvider().adapterFor(pojo, parentAdapter, collection);
-    }
-
-    @Programmatic
-    default ObjectSpecification specificationForViewModel(final Object viewModelPojo) {
-        return getObjectAdapterProvider().specificationForViewModel(viewModelPojo);
-    }
-
-    @Programmatic
-    default ObjectAdapter adapterForViewModel(
-            final Object viewModelPojo, 
-            final Function<ObjectSpecId, RootOid> rootOidFactory) {
-        return getObjectAdapterProvider().adapterForViewModel(viewModelPojo, rootOidFactory);
-    }
-    
+public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider.Delegating {
     
     // -- instantiate
 

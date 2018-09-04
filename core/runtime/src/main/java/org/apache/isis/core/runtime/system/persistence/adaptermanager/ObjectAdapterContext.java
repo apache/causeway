@@ -443,7 +443,15 @@ public class ObjectAdapterContext {
         return accessor.getProperty(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
     }
 
-
+    /**
+     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
+     */
+    @Deprecated
+    public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
+        removeAdapterFromCache(adapter);
+        adapter.replacePojo(pojo);
+        mapAndInjectServices(adapter);
+    }
 
 
 }

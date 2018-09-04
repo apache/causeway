@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.model.mementos;
 import java.io.Serializable;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

@@ -18,7 +18,6 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import javax.jdo.PersistenceManager;
 
@@ -29,20 +28,18 @@ import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-public interface PersistenceSession extends ObjectAdapterProvider, TransactionalResource, SessionScopedComponent {
+public interface PersistenceSession extends ObjectAdapterProvider.Delegating, TransactionalResource, SessionScopedComponent {
 
     // -- CONSTANTS
 
@@ -62,38 +59,32 @@ public interface PersistenceSession extends ObjectAdapterProvider, Transactional
      */
     public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
 
-
-    // -- OBJECT ADAPTER PROVIDER
-    
-    ObjectAdapterProvider getObjectAdapterProvider();
-    default ObjectAdapter adapterFor(Object domainObject) {
-        return getObjectAdapterProvider().adapterFor(domainObject);
-    }
-    default ObjectAdapter adapterFor(
-            final Object pojo,
-            final ObjectAdapter parentAdapter,
-            OneToManyAssociation collection) {
-        return getObjectAdapterProvider().adapterFor(pojo, parentAdapter, collection);
-    }
-    default ObjectSpecification specificationForViewModel(final Object viewModelPojo) {
-        return getObjectAdapterProvider().specificationForViewModel(viewModelPojo);
-    }
-    default ObjectAdapter adapterForViewModel(
-            final Object viewModelPojo, 
-            final Function<ObjectSpecId, RootOid> rootOidFactory) {
-        return getObjectAdapterProvider().adapterForViewModel(viewModelPojo, rootOidFactory);
-    }
-    
     //---
-    
+
     MementoRecreateObjectSupport mementoSupport();
-    
-    ObjectAdapter adapterFor(RootOid rootOid);
-    ObjectAdapter adapterFor(RootOid oid, AdapterManager.ConcurrencyChecking concurrencyChecking);
+
+    ObjectAdapter adapterFor(RootOid rootOid, ConcurrencyChecking concurrencyChecking);
+    Map<RootOid, ObjectAdapter> adaptersFor(List<RootOid> rootOids, ConcurrencyChecking concurrencyChecking);
     ObjectAdapter adapterForAny(RootOid rootOid);
-    Map<RootOid, ObjectAdapter> adaptersFor(List<RootOid> rootOids);
     <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
     
+    /**
+     * As per {@link #adapterFor(RootOid, ConcurrencyChecking)}, with
+     * {@link ConcurrencyChecking#NO_CHECK no checking}.
+     *
+     * <p>
+     * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
+     * know that the oid does indeed represent an object you know exists.
+     * </p>
+     */
+    default ObjectAdapter adapterFor(final RootOid rootOid) {
+        return adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
+    }
+    
+    default Map<RootOid, ObjectAdapter> adaptersFor(List<RootOid> rootOids) {
+        return adaptersFor(rootOids, ConcurrencyChecking.NO_CHECK);
+    }
+
     // --
 
     void close();
@@ -125,8 +116,6 @@ public interface PersistenceSession extends ObjectAdapterProvider, Transactional
     default PersistenceManager pm() {
         return getPersistenceManager();
     }
-
-    List<ObjectAdapter> getServices();
 
     ServicesInjector getServicesInjector();
 
@@ -174,10 +163,10 @@ public interface PersistenceSession extends ObjectAdapterProvider, Transactional
     void refreshRoot(ObjectAdapter adapter);
 
     void resolve(Object parent);
-    
+
     boolean isTransient(Object pojo);
     boolean isRepresentingPersistent(Object pojo);
     boolean isDestroyed(Object pojo);
-    
+
 
 }

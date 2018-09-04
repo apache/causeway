@@ -26,7 +26,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -203,7 +203,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
                 otherVersion != null &&
                 thisVersion.different(otherVersion)) {
 
-            if(AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
+            if(ConcurrencyChecking.isCurrentlyEnabled()) {
                 LOG.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
                 final String currentUser = authenticationSession.getUserName();
                 throw new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);

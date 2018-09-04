@@ -34,7 +34,7 @@ import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.core.commons.authentication.MessageBroker;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
@@ -76,7 +76,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
             }
 
             private String titleFor(final EntityModel model) {
-                return model.getObjectAdapterMemento().getObjectAdapter(AdapterManager.ConcurrencyChecking.NO_CHECK,
+                return model.getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK,
                         model.getPersistenceSession(), model.getSpecificationLoader()).titleString(null);
             }
 

@@ -46,7 +46,7 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -316,7 +316,7 @@ implements FormExecutor {
                 // was throwing an exception when rebuild grid after invoking action
                 // not certain why that would be the case, but think it should be
                 // safe to simply disable while recreating the page to re-render back to user.
-                AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
                         new Callable<EntityPage>() {
                             @Override public EntityPage call() throws Exception {
                                 return new EntityPage(targetAdapter, ex);

@@ -92,9 +92,6 @@ abstract class PersistenceSessionBase implements PersistenceSession {
      */
     protected final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = _Maps.newHashMap();
 
-
-    protected final boolean concurrencyCheckingGloballyEnabled;
-
     // -- CONSTRUCTOR
 
     /**
@@ -137,11 +134,6 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         this.transactionManager = new IsisTransactionManager(this, /*authenticationSession,*/ servicesInjector);
 
         this.state = State.NOT_INITIALIZED;
-
-        final boolean concurrencyCheckingGloballyDisabled =
-                this.configuration.getBoolean("isis.persistor.disableConcurrencyChecking", false);
-        this.concurrencyCheckingGloballyEnabled = !concurrencyCheckingGloballyDisabled;
-
     }
 
     // -- GETTERS

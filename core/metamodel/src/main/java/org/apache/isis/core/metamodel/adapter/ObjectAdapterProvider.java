@@ -18,8 +18,10 @@
  */
 package org.apache.isis.core.metamodel.adapter;
 
+import java.util.List;
 import java.util.function.Function;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -31,6 +33,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
  *
  */
 public interface ObjectAdapterProvider {
+    
+    // -- INTERFACE
 
     /**
      * @return standalone (value) or root adapter
@@ -52,7 +56,47 @@ public interface ObjectAdapterProvider {
             final Function<ObjectSpecId, RootOid> rootOidFactory);
     
 
+    List<ObjectAdapter> getServices();
     
+    
+    // -- FOR THOSE THAT IMPLEMENT THROUGH DELEGATION
+    
+    public static interface Delegating extends ObjectAdapterProvider {
+        
+        @Programmatic
+        ObjectAdapterProvider getObjectAdapterProvider();
+        
+        @Programmatic
+        default ObjectAdapter adapterFor(Object domainObject) {
+            return getObjectAdapterProvider().adapterFor(domainObject);
+        }
+
+        @Programmatic
+        default ObjectAdapter adapterFor(
+                final Object pojo,
+                final ObjectAdapter parentAdapter,
+                OneToManyAssociation collection) {
+            return getObjectAdapterProvider().adapterFor(pojo, parentAdapter, collection);
+        }
+
+        @Programmatic
+        default ObjectSpecification specificationForViewModel(final Object viewModelPojo) {
+            return getObjectAdapterProvider().specificationForViewModel(viewModelPojo);
+        }
+
+        @Programmatic
+        default ObjectAdapter adapterForViewModel(
+                final Object viewModelPojo, 
+                final Function<ObjectSpecId, RootOid> rootOidFactory) {
+            return getObjectAdapterProvider().adapterForViewModel(viewModelPojo, rootOidFactory);
+        }
+        
+        @Programmatic
+        default List<ObjectAdapter> getServices() {
+            return getObjectAdapterProvider().getServices();
+        }
+        
+    }
     
 
 }

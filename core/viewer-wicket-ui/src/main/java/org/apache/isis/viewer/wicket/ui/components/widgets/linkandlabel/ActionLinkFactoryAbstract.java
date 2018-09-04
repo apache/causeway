@@ -36,7 +36,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -114,7 +114,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                                         return null;
                                     }
                                     final ObjectAdapter objectAdapter = input.getObjectAdapter(
-                                            AdapterManager.ConcurrencyChecking.NO_CHECK,
+                                            ConcurrencyChecking.NO_CHECK,
                                             persistenceSession, specificationLoader);
                                     return objectAdapter != null ? objectAdapter.getObject() : null;
                                 }
@@ -173,7 +173,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
             // REVIEW: I wonder if this is still needed after the ISIS-1613 rework?
             final ActionPromptHeaderPanel titlePanel =
-                    AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                    ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
                             new Callable<ActionPromptHeaderPanel>() {
                                 @Override
                                 public ActionPromptHeaderPanel call() throws Exception {
@@ -239,7 +239,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                             // was throwing an exception when rebuild grid after invoking action
                             // not certain why that would be the case, but think it should be
                             // safe to simply disable while recreating the page to re-render back to user.
-                            AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                            ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
                                     new Callable<EntityPage>() {
                                         @Override public EntityPage call() throws Exception {
                                             return new EntityPage(targetAdapter, null);

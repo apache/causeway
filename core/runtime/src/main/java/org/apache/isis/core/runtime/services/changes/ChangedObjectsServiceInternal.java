@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -228,7 +228,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
     }
 
     private Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> capturePostValuesAndDrain(final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties) {
-        return AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Callable<Set<Map.Entry<AdapterAndProperty, PreAndPostValues>>>() {
+        return ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Callable<Set<Map.Entry<AdapterAndProperty, PreAndPostValues>>>() {
             @Override
             public Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> call() {
                 final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = Maps.newLinkedHashMap();

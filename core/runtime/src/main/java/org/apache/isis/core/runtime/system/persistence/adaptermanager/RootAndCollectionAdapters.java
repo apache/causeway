@@ -28,7 +28,6 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -37,7 +36,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 /**
  * A root {@link ObjectAdapter adapter} along with aggregated {@link ObjectAdapter adapters}
  * for any of its {@link OneToManyAssociation collection}s that are currently present in
- * the {@link AdapterManager map}s.
+ * the {@link ObjectAdapterContext}s map.
  *
  * <p>
  * Used for &quot;impact analysis&quot; when persisting transient root objects; all aggregated adapters

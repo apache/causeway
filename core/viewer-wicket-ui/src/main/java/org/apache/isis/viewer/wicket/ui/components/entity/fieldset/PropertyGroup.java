@@ -39,7 +39,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
@@ -154,7 +154,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         final List<PropertyLayoutData> properties = this.fieldSet.getProperties();
         // changed to NO_CHECK because more complex BS3 layouts trip concurrency exception
         // (haven't investigated as to why).
-        final ObjectAdapter adapter = getModel().load(AdapterManager.ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter adapter = getModel().load(ConcurrencyChecking.NO_CHECK);
         return getObjectAssociations(properties, adapter);
     }
 
@@ -223,7 +223,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 
-        final ObjectAdapter adapter = entityModel.load(AdapterManager.ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
         final List<ObjectAction> associatedActions =
                 ObjectAction.Util.findForAssociation(adapter, otoa, getDeploymentCategory());
 

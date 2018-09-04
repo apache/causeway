@@ -18,16 +18,19 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -43,6 +46,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_ObjectAdapterProvider.class);
     private final ObjectAdapterContext objectAdapterContext;
     private final PersistenceSession persistenceSession;
+    private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader; 
     private final IsisJdoMetamodelPlugin isisJdoMetamodelPlugin; 
     
@@ -50,7 +54,8 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
             PersistenceSession persistenceSession) {
         this.objectAdapterContext = objectAdapterContext;
         this.persistenceSession = persistenceSession;
-        this.specificationLoader = persistenceSession.getServicesInjector().getSpecificationLoader();
+        this.servicesInjector = persistenceSession.getServicesInjector();
+        this.specificationLoader = servicesInjector.getSpecificationLoader();
         this.isisJdoMetamodelPlugin = IsisJdoMetamodelPlugin.get();
     }
 
@@ -109,6 +114,20 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         final RootOid oid = persistenceSession.createPersistentOrViewModelOid(pojo);
         final ObjectAdapter adapter = objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
         return adapter;
+    }
+    
+    @Override
+    public List<ObjectAdapter> getServices() {
+        final List<Object> services = servicesInjector.getRegisteredServices();
+        final List<ObjectAdapter> serviceAdapters = _Lists.newArrayList();
+        for (final Object servicePojo : services) {
+            ObjectAdapter serviceAdapter = objectAdapterContext.lookupAdapterFor(servicePojo);
+            if(serviceAdapter == null) {
+                throw new IllegalStateException("ObjectAdapter for service " + servicePojo + " does not exist?!?");
+            }
+            serviceAdapters.add(serviceAdapter);
+        }
+        return serviceAdapters;
     }
     
     // -- HELPER

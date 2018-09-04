@@ -34,6 +34,8 @@ import com.google.common.collect.Maps;
 
 import org.datanucleus.enhancement.Persistable;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+
 public class IsisLifecycleListener
 implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,
 DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener,
@@ -45,13 +47,12 @@ SuspendableListener {
     interface PersistenceSessionLifecycleManagement {
 
         void ensureRootObject(Persistable pojo);
-        void initializeMapAndCheckConcurrency(Persistable pojo);
+        ObjectAdapter initializeMapAndCheckConcurrency(Persistable pojo);
 
         void enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(Persistable pojo);
         void invokeIsisPersistingCallback(Persistable pojo);
         void enlistUpdatingAndInvokeIsisUpdatingCallback(Persistable pojo);
         void enlistDeletingAndInvokeIsisRemovingCallbackFacet(Persistable pojo);
-        //ObjectAdapter getAdapterFor(Persistable pojo);
     }
 
     private final PersistenceSessionLifecycleManagement persistenceSession;

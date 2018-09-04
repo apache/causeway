@@ -55,7 +55,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
@@ -104,7 +104,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
     {
 
         if(handler instanceof RenderPageRequestHandler) {
-            AdapterManager.ConcurrencyChecking.disable();
+            ConcurrencyChecking.disable();
 
             final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
 
@@ -131,7 +131,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         LOG.debug("onRequestHandlerExecuted: handler: {}", handler);
 
         if(handler instanceof RenderPageRequestHandler) {
-            AdapterManager.ConcurrencyChecking.reset(AdapterManager.ConcurrencyChecking.CHECK);
+            ConcurrencyChecking.reset(ConcurrencyChecking.CHECK);
         }
 
         if (getIsisSessionFactory().inSession()) {

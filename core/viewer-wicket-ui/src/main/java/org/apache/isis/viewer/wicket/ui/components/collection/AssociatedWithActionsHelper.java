@@ -27,7 +27,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -72,7 +72,7 @@ public class AssociatedWithActionsHelper implements Serializable {
     private ObjectSpecification getObjectSpecification(final IsisSessionFactory isisSessionFactory) {
         final ObjectAdapterMemento parentOam = collectionModel.getParentObjectAdapterMemento();
         final ObjectAdapter parentAdapter = parentOam.getObjectAdapter(
-                AdapterManager.ConcurrencyChecking.NO_CHECK,
+                ConcurrencyChecking.NO_CHECK,
                 isisSessionFactory.getCurrentSession().getPersistenceSession(),
                 isisSessionFactory.getSpecificationLoader());
         return parentAdapter.getSpecification();

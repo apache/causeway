@@ -22,7 +22,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -37,7 +37,7 @@ public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarModel> {
     public PropertyEditPromptHeaderPanel(String id, final ScalarModel model) {
         super(id, model);
 
-        ObjectAdapter targetAdapter = model.getParentEntityModel().load(AdapterManager.ConcurrencyChecking.NO_CHECK);
+        ObjectAdapter targetAdapter = model.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 

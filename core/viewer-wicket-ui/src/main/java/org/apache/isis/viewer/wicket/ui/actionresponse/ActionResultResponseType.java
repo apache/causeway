@@ -29,7 +29,7 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -167,7 +167,7 @@ public enum ActionResultResponseType {
                 // was throwing an exception when rebuild grid after invoking action
                 // not certain why that would be the case, but think it should be
                 // safe to simply disable while recreating the page to re-render back to user.
-                AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
                         new Callable<EntityPage>() {
                             @Override public EntityPage call() throws Exception {
                                 return new EntityPage(actualAdapter, exIfAny);

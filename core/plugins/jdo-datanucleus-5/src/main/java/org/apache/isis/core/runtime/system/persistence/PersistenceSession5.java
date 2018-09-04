@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Function;
 
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
@@ -56,15 +55,13 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -131,6 +128,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession5.class);
     private ObjectAdapterContext objectAdapterContext;
+    private PersistenceSession5_Decouple mixin;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -171,8 +169,9 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindUsingApplibQueryDefault.class,
                 new PersistenceQueryFindUsingApplibQueryProcessor(this));
-        
+
         objectAdapterContext = ObjectAdapterLegacy.openContext(servicesInjector, authenticationSession, specificationLoader, this);
+        mixin = new PersistenceSession5_Decouple(this, objectAdapterContext);
 
         // tell the proxy of all request-scoped services to instantiate the underlying
         // services, store onto the thread-local and inject into them...
@@ -220,20 +219,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                 ((RequestScopedService)service).__isis_startRequest(servicesInjector);
             }
         }
-    }
-    
-    @Override
-    public List<ObjectAdapter> getServices() {
-        final List<Object> services = servicesInjector.getRegisteredServices();
-        final List<ObjectAdapter> serviceAdapters = _Lists.newArrayList();
-        for (final Object servicePojo : services) {
-            ObjectAdapter serviceAdapter = objectAdapterContext.lookupAdapterFor(servicePojo);
-            if(serviceAdapter == null) {
-                throw new IllegalStateException("ObjectAdapter for service " + servicePojo + " does not exist?!?");
-            }
-            serviceAdapters.add(serviceAdapter);
-        }
-        return serviceAdapters;
     }
 
     private Command createCommand() {
@@ -717,7 +702,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     // -- loadPersistentPojo
 
-    private Object loadPersistentPojo(final RootOid rootOid) {
+    //TODO[ISIS-1976] used by mixin
+    Object loadPersistentPojo(final RootOid rootOid) {
 
         Object result;
         try {
@@ -749,7 +735,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return result;
     }
 
-    private Map<RootOid,Object> loadPersistentPojos(final List<RootOid> rootOids) {
+    //TODO[ISIS-1976] used by mixin
+    Map<RootOid,Object> loadPersistentPojos(final List<RootOid> rootOids) {
 
         if(rootOids.isEmpty()) {
             return zip(rootOids, Collections.emptyList());
@@ -810,19 +797,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
         return objectSpec.getCorrespondingClass();
     }
-
-
-
-    // -- lazilyLoaded
-//
-//    private ObjectAdapter addPersistentToCache(final Persistable pojo) {
-//        if (persistenceManager.getObjectId(pojo) == null) {
-//            return null;
-//        }
-//        final RootOid oid = createPersistentOrViewModelOid(pojo);
-//        final ObjectAdapter adapter = objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
-//        return adapter;
-//    }
 
 
     // -- refreshRootInTransaction, refreshRoot, resolve
@@ -1098,180 +1072,23 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public Map<RootOid, ObjectAdapter> adaptersFor(final List<RootOid> rootOids) {
-        return adaptersFor(rootOids, AdapterManager.ConcurrencyChecking.NO_CHECK);
+    public Map<RootOid, ObjectAdapter> adaptersFor(
+            final List<RootOid> rootOids, 
+            final ConcurrencyChecking concurrencyChecking) {
+
+        return mixin.adaptersFor(rootOids, concurrencyChecking);
     }
 
-    private Map<RootOid,ObjectAdapter> adaptersFor(
-            final List<RootOid> rootOids,
-            final AdapterManager.ConcurrencyChecking concurrencyChecking) {
-
-        final Map<RootOid, ObjectAdapter> adapterByOid = _Maps.newLinkedHashMap();
-
-        List<RootOid> notYetLoadedOids = _Lists.newArrayList();
-        for (RootOid rootOid : rootOids) {
-            // attempt to locate adapter for the Oid
-            ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(rootOid);
-            // handle view models or transient
-            if (adapter == null) {
-                if (rootOid.isTransient() || rootOid.isViewModel()) {
-                    final Object pojo = recreatePojoTransientOrViewModel(rootOid);
-                    adapter = objectAdapterContext.addRecreatedPojoToCache(rootOid, pojo);
-                    sync(concurrencyChecking, adapter, rootOid);
-                }
-            }
-            if (adapter != null) {
-                adapterByOid.put(rootOid, adapter);
-            } else {
-                // persistent oid, to load in bulk
-                notYetLoadedOids.add(rootOid);
-            }
-        }
-
-        // recreate, in bulk, all those not yet loaded
-        final Map<RootOid, Object> pojoByOid = loadPersistentPojos(notYetLoadedOids);
-        for (Map.Entry<RootOid, Object> entry : pojoByOid.entrySet()) {
-            final RootOid rootOid = entry.getKey();
-            final Object pojo = entry.getValue();
-            if(pojo != null) {
-                ObjectAdapter adapter;
-                try {
-                    adapter = objectAdapterContext.addRecreatedPojoToCache(rootOid, pojo);
-                    adapterByOid.put(rootOid, adapter);
-                } catch(ObjectNotFoundException ex) {
-                    throw ex; // just rethrow
-                } catch(RuntimeException ex) {
-                    throw new PojoRecreationException(rootOid, ex);
-                }
-                sync(concurrencyChecking, adapter, rootOid);
-            } else {
-                // null indicates it couldn't be loaded
-                // do nothing here...
-            }
-        }
-
-        return adapterByOid;
-    }
-
-    /**
-     * As per {@link #adapterFor(RootOid, ConcurrencyChecking)}, with
-     * {@link ConcurrencyChecking#NO_CHECK no checking}.
-     *
-     * <p>
-     * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
-     * know that the oid does indeed represent an object you know exists.
-     * </p>
-     */
-    @Override
-    public ObjectAdapter adapterFor(final RootOid rootOid) {
-        return adapterFor(rootOid, AdapterManager.ConcurrencyChecking.NO_CHECK);
-    }
-
-
-    /**
-     * Either returns an existing {@link ObjectAdapter adapter} (as per
-     * {@link #lookupAdapterFor(Oid)}), otherwise re-creates an adapter with the
-     * specified (persistent) {@link Oid}.
-     *
-     * <p>
-     * Typically called when the {@link Oid} is already known, that is, when
-     * resolving an already-persisted object. Is also available for
-     * <tt>Memento</tt> support however, so {@link Oid} could also represent a
-     * {@link Oid#isTransient() transient} object.
-     *
-     * <p>
-     * The pojo itself is recreated by delegating to a {@link AdapterManager}.
-     *
-     * <p>
-     * The {@link ConcurrencyChecking} parameter determines whether concurrency checking is performed.
-     * If it is requested, then a check is made to ensure that the {@link Oid#getVersion() version}
-     * of the {@link RootOid oid} of the recreated adapter is the same as that of the provided {@link RootOid oid}.
-     * If the version differs, then a {@link ConcurrencyException} is thrown.
-     *
-     * <p>
-     * ALSO, even if a {@link ConcurrencyException}, then the provided {@link RootOid oid}'s {@link Version version}
-     * will be {@link RootOid#setVersion(Version) set} to the current
-     * value.  This allows the client to retry if they wish.
-     *
-     * @throws {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} if the object does not exist.
-     */
     @Override
     public ObjectAdapter adapterFor(
             final RootOid rootOid,
-            final AdapterManager.ConcurrencyChecking concurrencyChecking) {
+            final ConcurrencyChecking concurrencyChecking) {
 
-        // attempt to locate adapter for the Oid
-        ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(rootOid);
-        if (adapter == null) {
-            // else recreate
-            try {
-                final Object pojo;
-                if(rootOid.isTransient() || rootOid.isViewModel()) {
-                    pojo = recreatePojoTransientOrViewModel(rootOid);
-                } else {
-                    pojo = loadPersistentPojo(rootOid);
-                }
-                adapter = objectAdapterContext.addRecreatedPojoToCache(rootOid, pojo);
-            } catch(ObjectNotFoundException ex) {
-                throw ex; // just rethrow
-            } catch(RuntimeException ex) {
-                throw new PojoRecreationException(rootOid, ex);
-            }
-        }
-
-        // sync versions of original, with concurrency checking if required
-        sync(concurrencyChecking, adapter, rootOid);
-
-        return adapter;
+        return mixin.adapterFor(rootOid, concurrencyChecking);
     }
 
-
-
-    private void sync(
-            final AdapterManager.ConcurrencyChecking concurrencyChecking,
-            final ObjectAdapter adapter, final RootOid rootOid) {
-        // sync versions of original, with concurrency checking if required
-        Oid adapterOid = adapter.getOid();
-        if(adapterOid instanceof RootOid) {
-            final RootOid recreatedOid = (RootOid) adapterOid;
-            final RootOid originalOid = rootOid;
-
-            try {
-                if(concurrencyChecking.isChecking()) {
-
-                    // check for exception, but don't throw if suppressed through thread-local
-                    final Version otherVersion = originalOid.getVersion();
-                    final Version thisVersion = recreatedOid.getVersion();
-                    if( thisVersion != null &&
-                            otherVersion != null &&
-                            thisVersion.different(otherVersion)) {
-
-                        if(concurrencyCheckingGloballyEnabled && AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
-                            LOG.info("concurrency conflict detected on {} ({})", recreatedOid, otherVersion);
-                            final String currentUser = authenticationSession.getUserName();
-                            throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
-                        } else {
-                            LOG.info("concurrency conflict detected but suppressed, on {} ({})", recreatedOid, otherVersion);
-                        }
-                    }
-                }
-            } finally {
-                final Version originalVersion = originalOid.getVersion();
-                final Version recreatedVersion = recreatedOid.getVersion();
-                if(recreatedVersion != null && (
-                        originalVersion == null ||
-                        recreatedVersion.different(originalVersion))
-                        ) {
-                    if(LOG.isDebugEnabled()) {
-                        LOG.debug("updating version in oid, on {} ({}) to ({})", originalOid, originalVersion, recreatedVersion);
-                    }
-                    originalOid.setVersion(recreatedVersion);
-                }
-            }
-        }
-    }
-
-    private Object recreatePojoTransientOrViewModel(final RootOid rootOid) {
+    //TODO[ISIS-1976] used by mixin
+    Object recreatePojoTransientOrViewModel(final RootOid rootOid) {
         final ObjectSpecification spec =
                 specificationLoader.lookupBySpecId(rootOid.getObjectSpecId());
         final Object pojo;
@@ -1286,16 +1103,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         }
         return pojo;
-    }
-
-    /**
-     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
-     */
-    @Deprecated
-    private void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
-        objectAdapterContext.removeAdapterFromCache(adapter);
-        adapter.replacePojo(pojo);
-        objectAdapterContext.mapAndInjectServices(adapter);
     }
 
     // -- TransactionManager delegate methods
@@ -1334,7 +1141,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             final Version originalVersion = adapter.getVersion();
 
             // sync the pojo held by the adapter with that just loaded
-            remapRecreatedPojo(adapter, pojo);
+            objectAdapterContext.remapRecreatedPojo(adapter, pojo);
 
             // since there was already an adapter, do concurrency check
             // (but don't set abort cause if checking is suppressed through thread-local)
@@ -1346,7 +1153,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                     otherVersion != null &&
                     thisVersion.different(otherVersion)) {
 
-                if (AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
+                if (ConcurrencyChecking.isCurrentlyEnabled()) {
                     LOG.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
                     final String currentUser = authenticationSession.getUserName();
                     final ConcurrencyException abortCause = new ConcurrencyException(currentUser, thisOid,
@@ -1364,7 +1171,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             // ie from ObjectStore#resolveImmediately()
             adapter = objectAdapterContext.lookupAdapterFor(originalOid);
             if (adapter != null) {
-                remapRecreatedPojo(adapter, pojo);
+                objectAdapterContext.remapRecreatedPojo(adapter, pojo);
             } else {
                 adapter = objectAdapterContext.addRecreatedPojoToCache(originalOid, pojo);
 
@@ -1374,7 +1181,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
 
         adapter.setVersion(datastoreVersion);
-        
+
         return objectAdapterContext.lookupAdapterFor(pojo);
     }
 
@@ -1634,26 +1441,16 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public ObjectSpecification specificationForViewModel(Object viewModelPojo) {
-        return objectAdapterContext.specificationForViewModel(viewModelPojo);
-    }
-
-    @Override
-    public ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {
-        return objectAdapterContext.adapterForViewModel(viewModelPojo, rootOidFactory);
-    }
-
-    @Override
     public MementoRecreateObjectSupport mementoSupport() {
         return objectAdapterContext.mementoSupport();
     }
-    
+
     @Override
     public ObjectAdapterProvider getObjectAdapterProvider() {
         return objectAdapterContext.getObjectAdapterProvider();
     }
 
-    
+
 }
 
 

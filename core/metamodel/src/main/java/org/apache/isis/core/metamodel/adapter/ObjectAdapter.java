@@ -30,7 +30,6 @@ import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.MethodUtil;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -162,7 +161,7 @@ public interface ObjectAdapter extends Instance {
      * <p>
      * This id allows the object to added to, stored by,
      * and retrieved from the object store.  Objects can be looked up by their
-     * {@link Oid} from the {@link AdapterManager}.
+     * {@link Oid}.
      *
      * <p>
      * Note that standalone value objects ("foobar", or 5, or a date),
