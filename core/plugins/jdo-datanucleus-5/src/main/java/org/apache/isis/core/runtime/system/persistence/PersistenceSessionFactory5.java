@@ -43,7 +43,7 @@ import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
 /**
  *
- * Factory for {@link PersistenceSession5}.
+ * Factory for {@link PersistenceSession}.
  *
  * <p>
  * Implementing class is added to {@link ServicesInjector} as an (internal) domain service; all public methods
