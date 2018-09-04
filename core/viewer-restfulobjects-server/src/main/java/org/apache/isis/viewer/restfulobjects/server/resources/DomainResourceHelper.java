@@ -27,7 +27,6 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -89,11 +88,6 @@ public class DomainResourceHelper {
 
         @Override
         public PersistenceSession getPersistenceSession() {
-            return rendererContext.getPersistenceSession();
-        }
-
-        @Override
-        public AdapterManager getAdapterManager() {
             return rendererContext.getPersistenceSession();
         }
 

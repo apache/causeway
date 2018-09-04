@@ -34,7 +34,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.JavaCollectionFacet;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -56,11 +56,11 @@ public class JavaCollectionFacetTest {
     @Mock
     private Iterator<ObjectAdapter> mockIterator;
     @Mock
-    private AdapterManager mockAdapterManager;
+    private ObjectAdapterProvider mockAdapterManager;
 
     @Before
     public void setUp() throws Exception {
-        mockAdapterManager = context.mock(AdapterManager.class);
+        mockAdapterManager = context.mock(ObjectAdapterProvider.class);
 
         facet = new JavaCollectionFacet(mockFacetHolder, mockAdapterManager);
     }

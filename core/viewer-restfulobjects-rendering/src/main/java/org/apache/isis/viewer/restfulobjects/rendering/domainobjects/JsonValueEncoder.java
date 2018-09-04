@@ -35,7 +35,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -831,17 +831,17 @@ public final class JsonValueEncoder {
 
 
     private static ObjectAdapter adapterFor(Object value) {
-        return getAdapterManager().adapterFor(value);
+        return getObjectAdapterProvider().adapterFor(value);
     }
 
-    private static AdapterManager testAdapterManager;
+    private static ObjectAdapterProvider testAdapterManager;
 
     // for testing purposes only
-    static void testSetAdapterManager(AdapterManager adapterManager) {
+    static void testSetAdapterManager(ObjectAdapterProvider adapterManager) {
         JsonValueEncoder.testAdapterManager = adapterManager;
     }
 
-    public static AdapterManager getAdapterManager() {
+    public static ObjectAdapterProvider getObjectAdapterProvider() {
         return testAdapterManager != null? testAdapterManager: getPersistenceSession();
     }
 

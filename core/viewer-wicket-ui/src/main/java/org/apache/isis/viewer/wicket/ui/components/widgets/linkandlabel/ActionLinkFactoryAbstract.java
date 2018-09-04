@@ -173,7 +173,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
             // REVIEW: I wonder if this is still needed after the ISIS-1613 rework?
             final ActionPromptHeaderPanel titlePanel =
-                    PersistenceSession.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                    AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
                             new Callable<ActionPromptHeaderPanel>() {
                                 @Override
                                 public ActionPromptHeaderPanel call() throws Exception {

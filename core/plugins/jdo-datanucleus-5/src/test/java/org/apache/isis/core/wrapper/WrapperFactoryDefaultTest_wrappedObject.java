@@ -19,6 +19,10 @@
 
 package org.apache.isis.core.wrapper;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +44,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -74,10 +78,6 @@ import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepository;
 import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepositoryImpl;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 public class WrapperFactoryDefaultTest_wrappedObject {
 
     @Rule
@@ -87,7 +87,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     public ExpectedException expectedException = ExpectedException.none();
     
     @Mock
-    private AdapterManager mockAdapterManager;
+    private ObjectAdapterProvider mockAdapterManager;
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
@@ -210,8 +210,8 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(session));
 
-                allowing(mockAdapterManager).lookupAdapterFor(employeeDO);
-                will(returnValue(mockEmployeeAdapter));
+//                allowing(mockAdapterManager).lookupAdapterFor(employeeDO);
+//                will(returnValue(mockEmployeeAdapter));
 
                 allowing(mockAdapterManager).adapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));

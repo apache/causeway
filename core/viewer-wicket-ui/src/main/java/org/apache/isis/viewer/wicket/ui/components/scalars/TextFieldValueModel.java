@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 /**
@@ -37,7 +37,7 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
 
     public interface ScalarModelProvider {
         ScalarModel getModel();
-        AdapterManager getAdapterManager();
+        ObjectAdapterProvider getObjectAdapterProvider();
     }
 
     private final ScalarModelProvider scalarModelProvider;
@@ -63,7 +63,7 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
         if (object == null) {
             scalarModelProvider.getModel().setObject(null);
         } else {
-            final ObjectAdapter objectAdapter = scalarModelProvider.getAdapterManager().adapterFor(object);
+            final ObjectAdapter objectAdapter = scalarModelProvider.getObjectAdapterProvider().adapterFor(object);
             scalarModelProvider.getModel().setObject(objectAdapter);
         }
     }

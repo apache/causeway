@@ -26,7 +26,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -101,9 +101,9 @@ public class CommandUtil {
         buf.append(name).append(": ").append(titleOf).append("\n");
     }
 
-    public static ObjectAdapter[] adaptersFor(final Object[] args, final AdapterManager adapterManager) {
+    public static ObjectAdapter[] adaptersFor(final Object[] args, final ObjectAdapterProvider adapterProvider) {
         return _NullSafe.stream(args)
-                .map(ObjectAdapter.Functions.adapterForUsing(adapterManager))
+                .map(ObjectAdapter.Functions.adapterForUsing(adapterProvider))
                 .collect(_Arrays.toArray(ObjectAdapter.class, _NullSafe.size(args)));
     }
 

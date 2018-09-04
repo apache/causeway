@@ -245,6 +245,20 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
     }
 
+    @Override
+    public List<ObjectAdapter> getServices() {
+        final List<Object> services = servicesInjector.getRegisteredServices();
+        final List<ObjectAdapter> serviceAdapters = _Lists.newArrayList();
+        for (final Object servicePojo : services) {
+            ObjectAdapter serviceAdapter = lookupAdapterFor(servicePojo);
+            if(serviceAdapter == null) {
+                throw new IllegalStateException("ObjectAdapter for service " + servicePojo + " does not exist?!?");
+            }
+            serviceAdapters.add(serviceAdapter);
+        }
+        return serviceAdapters;
+    }
+
     private Command createCommand() {
         final Command command = commandService.create();
 

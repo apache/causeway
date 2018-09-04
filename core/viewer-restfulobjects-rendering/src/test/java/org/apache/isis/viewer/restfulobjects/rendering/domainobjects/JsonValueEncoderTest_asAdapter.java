@@ -18,6 +18,11 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import com.fasterxml.jackson.databind.node.BigIntegerNode;
@@ -37,16 +42,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
 
 @RunWith(JMock.class)
 public class JsonValueEncoderTest_asAdapter {
@@ -58,14 +60,14 @@ public class JsonValueEncoderTest_asAdapter {
     private EncodableFacet mockEncodableFacet;
     private ObjectAdapter mockObjectAdapter;
 
-    private AdapterManager mockAdapterManager;
+    private ObjectAdapterProvider mockAdapterManager;
 
     @Before
     public void setUp() throws Exception {
         mockObjectSpec = context.mock(ObjectSpecification.class);
         mockEncodableFacet = context.mock(EncodableFacet.class);
         mockObjectAdapter = context.mock(ObjectAdapter.class);
-        mockAdapterManager = context.mock(AdapterManager.class);
+        mockAdapterManager = context.mock(ObjectAdapterProvider.class);
 
         JsonValueEncoder.testSetAdapterManager(mockAdapterManager);
 

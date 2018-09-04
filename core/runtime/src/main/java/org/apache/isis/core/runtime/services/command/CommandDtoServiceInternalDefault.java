@@ -30,7 +30,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
@@ -224,7 +224,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
     @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
 
-    protected AdapterManager getAdapterManager() {
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
         return isisSessionFactory.getCurrentSession().getPersistenceSession();
     }
 
