@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.jdo.PersistenceManagerFactory;
@@ -30,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.base._LazyThreadSafe;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -53,57 +55,41 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionFactory5.class);
 
-//    private final ConfigurationServiceInternal configuration;
-//
-//    public PersistenceSessionFactory5(final ConfigurationServiceInternal isisConfiguration) {
-//        this.configuration = isisConfiguration;
-//    }
-
     public static final String JDO_OBJECTSTORE_CONFIG_PREFIX = "isis.persistor.datanucleus";  // specific to the JDO objectstore
     public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
 
 
-    private DataNucleusApplicationComponents5 applicationComponents;
+    private final _LazyThreadSafe<DataNucleusApplicationComponents5> applicationComponents = 
+            _LazyThreadSafe.of(this::createDataNucleusApplicationComponents);
 
+    private IsisConfiguration configuration;
+    
     @Programmatic
     @Override
     public void init(final IsisConfigurationDefault configuration) {
-        this.applicationComponents = createDataNucleusApplicationComponents(configuration);
+        this.configuration = configuration;
     }
 
     @Programmatic
     @Override
     public boolean isInitialized() {
-        return this.applicationComponents != null;
+        return this.configuration != null;
     }
 
-    private DataNucleusApplicationComponents5 createDataNucleusApplicationComponents(
-            final IsisConfiguration configuration) {
+    private DataNucleusApplicationComponents5 createDataNucleusApplicationComponents() {
 
         final RegisterEntities registerEntities = new RegisterEntities();
         final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
         
-        if (shouldCreate(this.applicationComponents)) {
+        final IsisConfiguration jdoObjectstoreConfig = configuration.createSubset(
+                JDO_OBJECTSTORE_CONFIG_PREFIX);
 
-            final IsisConfiguration jdoObjectstoreConfig = configuration.createSubset(
-                    JDO_OBJECTSTORE_CONFIG_PREFIX);
+        final IsisConfiguration dataNucleusConfig = configuration.createSubset(DATANUCLEUS_CONFIG_PREFIX);
+        final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
+        addDataNucleusPropertiesIfRequired(datanucleusProps);
 
-            final IsisConfiguration dataNucleusConfig = configuration.createSubset(DATANUCLEUS_CONFIG_PREFIX);
-            final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
-            addDataNucleusPropertiesIfRequired(datanucleusProps);
-
-            DataNucleusApplicationComponents5 applicationComponents1 = 
-                    new DataNucleusApplicationComponents5(jdoObjectstoreConfig,
-                            datanucleusProps, classesToBePersisted);
-            
-            this.applicationComponents = applicationComponents1;
-        }
-
-        return applicationComponents;
-    }
-    
-    private boolean shouldCreate(final DataNucleusApplicationComponents5 applicationComponents) {
-        return applicationComponents == null || applicationComponents.isStale();
+        return new DataNucleusApplicationComponents5(jdoObjectstoreConfig,
+                        datanucleusProps, classesToBePersisted);
     }
 
     private static void addDataNucleusPropertiesIfRequired(
@@ -169,10 +155,11 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         if(!isInitialized()) {
             return;
         }
-        if(applicationComponents != null) {
-            applicationComponents.shutdown();
-            applicationComponents = null;
+        if(applicationComponents.isMemoized()) {
+            applicationComponents.get().shutdown();
+            applicationComponents.clear();
         }
+        this.configuration = null;
     }
 
     /**
@@ -184,9 +171,15 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
             final ServicesInjector servicesInjector,
             final AuthenticationSession authenticationSession) {
 
+        Objects.requireNonNull(applicationComponents, "PersistenceSession5 requires initialization. "+this.hashCode());
+        
         final FixturesInstalledFlag fixturesInstalledFlag = this;
+        
+        //[ahuber] if stale force recreate
+        guardAgainstStaleState();
+        
         final PersistenceManagerFactory persistenceManagerFactory =
-                applicationComponents.getPersistenceManagerFactory();
+                applicationComponents.get().getPersistenceManagerFactory();
 
         return new PersistenceSession5(
                 servicesInjector,
@@ -206,6 +199,18 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     @Override
     public void setFixturesInstalled(final Boolean fixturesInstalled) {
         this.fixturesInstalled = fixturesInstalled;
+    }
+    
+    // [ahuber] JRebel support, not tested at all
+    private void guardAgainstStaleState() {
+        if(applicationComponents.get().isStale()) {
+            try {
+                applicationComponents.get().shutdown();
+            } catch (Exception e) {
+                // ignore
+            }
+            applicationComponents.clear();
+        }
     }
 
 
