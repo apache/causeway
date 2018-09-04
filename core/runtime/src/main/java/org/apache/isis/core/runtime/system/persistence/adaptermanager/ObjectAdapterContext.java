@@ -297,7 +297,7 @@ public class ObjectAdapterContext {
         oidAdapterMap.add(adapter.getOid(), adapter);
     }
     
-    public ObjectSpecification specificationForViewModel(Object viewModelPojo) {
+    public ObjectAdapter specificationForViewModel(Object viewModelPojo) {
         //FIXME[ISIS-1976]
         // this is horrible, but there's a catch-22 here...
         // we need an adapter in order to query the state of the object via the metamodel, on the other hand
@@ -311,12 +311,12 @@ public class ObjectAdapterContext {
                     createdTemporaryAdapter[0] = true;
                     return RootOid.create(objectSpecId, UUID.randomUUID().toString()); });
     
-        final ObjectSpecification spec = viewModelAdapter.getSpecification();
+        //final ObjectSpecification spec = viewModelAdapter.getSpecification();
         
         if(createdTemporaryAdapter[0]) {
             adapterManagerMixin.removeAdapterFromCache(viewModelAdapter);
         }
-        return spec;
+        return viewModelAdapter;
     }
 
     public ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {

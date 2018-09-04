@@ -97,7 +97,8 @@ extends RecreatableObjectFacetAbstract {
 
         final _Mementos.Memento memento = _Mementos.create(codec, serializer);
 
-        final ObjectSpecification spec = adapterProvider.specificationForViewModel(viewModelPojo);
+        final ObjectAdapter ownerAdapter = adapterProvider.specificationForViewModel(viewModelPojo);
+        final ObjectSpecification spec = ownerAdapter.getSpecification();
         
         final List<OneToOneAssociation> properties = spec.getProperties(Contributed.EXCLUDED);
         for (OneToOneAssociation property : properties) {
@@ -111,8 +112,6 @@ extends RecreatableObjectFacetAbstract {
             }
 
             // otherwise, include
-
-            final ObjectAdapter ownerAdapter = adapterProvider.adapterFor(viewModelPojo);
 
             final ObjectAdapter propertyValueAdapter = property.get(ownerAdapter,
                     InteractionInitiatedBy.FRAMEWORK);

@@ -24,7 +24,6 @@ import java.util.function.Function;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 /**
@@ -49,7 +48,13 @@ public interface ObjectAdapterProvider {
             final ObjectAdapter parentAdapter,
             OneToManyAssociation collection);
 
-    ObjectSpecification specificationForViewModel(final Object viewModelPojo);
+    /**
+     * @param viewModelPojo
+     * @return an ObjectAdapter 'bypassing mapping', that holds the ObjectSpecification
+     * FIXME[ISIS-1976] Note: whether or not 'bypassing mapping' should not be exposed by the API.
+     * So this further needs refactoring. 
+     */
+    ObjectAdapter specificationForViewModel(final Object viewModelPojo);
 
     ObjectAdapter adapterForViewModel(
             final Object viewModelPojo, 
@@ -80,7 +85,7 @@ public interface ObjectAdapterProvider {
         }
 
         @Programmatic
-        default ObjectSpecification specificationForViewModel(final Object viewModelPojo) {
+        default ObjectAdapter specificationForViewModel(final Object viewModelPojo) {
             return getObjectAdapterProvider().specificationForViewModel(viewModelPojo);
         }
 
