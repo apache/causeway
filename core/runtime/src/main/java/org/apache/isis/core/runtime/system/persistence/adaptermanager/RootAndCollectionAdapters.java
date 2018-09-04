@@ -52,11 +52,11 @@ class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
 
     public RootAndCollectionAdapters(
             final ObjectAdapter parentAdapter,
-            final AdapterManager adapterManager) {
+            final ObjectAdapterContext_AdapterManager adapterManagerMixin) {
         Assert.assertNotNull(parentAdapter);
         this.rootAdapterOid = (RootOid) parentAdapter.getOid();
         this.parentAdapter = parentAdapter;
-        addCollectionAdapters(adapterManager);
+        addCollectionAdapters(adapterManagerMixin);
     }
 
     public ObjectAdapter getRootAdapter() {
@@ -96,10 +96,10 @@ class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
     // Helpers
     ////////////////////////////////////////////////////////////////////////
 
-    private void addCollectionAdapters(AdapterManager objectAdapterLookup) {
+    private void addCollectionAdapters(ObjectAdapterContext_AdapterManager adapterManagerMixin) {
         for (final OneToManyAssociation otma : parentAdapter.getSpecification().getCollections(Contributed.EXCLUDED)) {
             final ParentedCollectionOid collectionOid = new ParentedCollectionOid((RootOid) rootAdapterOid, otma);
-            final ObjectAdapter collectionAdapter = objectAdapterLookup.lookupAdapterFor(collectionOid);
+            final ObjectAdapter collectionAdapter = adapterManagerMixin.lookupAdapterFor(collectionOid);
             if (collectionAdapter != null) {
                 // collection adapters are lazily created and so there may not be one.
                 addCollectionAdapter(otma, collectionAdapter);

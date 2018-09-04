@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -39,6 +38,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.memento.Data;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -51,9 +51,12 @@ public class ObjectAdapterContext {
     
     private final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     private final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
-    private final AdapterManager adapterManager; //FIXME[ISIS-1976] remove
+    private final PersistenceSession persistenceSession; 
     private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
+    private final ObjectAdapterContext_Consistency consistencyMixin;
+    private final ObjectAdapterContext_AdapterManager adapterManagerMixin;
+    private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
     
     ObjectAdapterContext(
             ServicesInjector servicesInjector, 
@@ -61,7 +64,11 @@ public class ObjectAdapterContext {
             SpecificationLoader specificationLoader, 
             PersistenceSession persistenceSession) {
         
-        this.adapterManager = persistenceSession;
+        this.consistencyMixin = new ObjectAdapterContext_Consistency(this);
+        this.adapterManagerMixin = new ObjectAdapterContext_AdapterManager(this, persistenceSession);
+        this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
+        
+        this.persistenceSession = persistenceSession;
         this.servicesInjector = servicesInjector;
         this.specificationLoader = specificationLoader;
         
@@ -137,6 +144,16 @@ public class ObjectAdapterContext {
         pojoAdapterMap.remove(adapter);
     }
     
+    // -- CACHE CONSISTENCY
+    
+    public void ensureMapsConsistent(final ObjectAdapter adapter) {
+        consistencyMixin.ensureMapsConsistent(adapter);
+    }
+
+    public void ensureMapsConsistent(final Oid oid) {
+        consistencyMixin.ensureMapsConsistent(oid);
+    }
+    
     // -- FACTORIES
     
     public static interface ObjectAdapterFactories {
@@ -187,6 +204,38 @@ public class ObjectAdapterContext {
         return objectAdapterFactories;
     }
     
+    // -- ADAPTER MANAGER LEGACY
+    
+    public ObjectAdapter addRecreatedPojoToCache(Oid oid, Object recreatedPojo) {
+        return adapterManagerMixin.addRecreatedPojoToCache(oid, recreatedPojo);
+    }
+    
+    public ObjectAdapter mapAndInjectServices(final ObjectAdapter adapter) {
+        return adapterManagerMixin.mapAndInjectServices(adapter);
+    }
+    
+    public ObjectAdapter lookupAdapterFor(Object pojo) {
+        return adapterManagerMixin.lookupAdapterFor(pojo);
+    }
+    
+    public ObjectAdapter lookupAdapterFor(final Oid oid) {
+        return adapterManagerMixin.lookupAdapterFor(oid);
+    }
+    
+    public void removeAdapterFromCache(final ObjectAdapter adapter) {
+        adapterManagerMixin.removeAdapterFromCache(adapter);
+    }
+    
+    // -- MEMENTO SUPPORT
+    
+    public static interface MementoRecreateObjectSupport {
+        ObjectAdapter recreateObject(ObjectSpecification spec, Oid oid, Data data);
+    }
+    
+    public MementoRecreateObjectSupport mementoSupport() {
+        return mementoSupportMixin;
+    }
+    
     // ------------------------------------------------------------------------------------------------
     
     @Deprecated // don't expose caching
@@ -218,20 +267,20 @@ public class ObjectAdapterContext {
         final ObjectSpecification spec = viewModelAdapter.getSpecification();
         
         if(createdTemporaryAdapter[0]) {
-            adapterManager.removeAdapterFromCache(viewModelAdapter);
+            adapterManagerMixin.removeAdapterFromCache(viewModelAdapter);
         }
         return spec;
     }
 
     public ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {
-        ObjectAdapter viewModelAdapter = adapterManager.lookupAdapterFor(viewModelPojo);
+        ObjectAdapter viewModelAdapter = adapterManagerMixin.lookupAdapterFor(viewModelPojo);
         if(viewModelAdapter == null) {
             final ObjectSpecification objectSpecification = 
                     specificationLoader.loadSpecification(viewModelPojo.getClass());
             final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
             final RootOid newRootOid = rootOidFactory.apply(objectSpecId);
 
-            viewModelAdapter = adapterManager.addRecreatedPojoToCache(newRootOid, viewModelPojo);
+            viewModelAdapter = adapterManagerMixin.addRecreatedPojoToCache(newRootOid, viewModelPojo);
         }
         return viewModelAdapter;
     }
@@ -252,7 +301,8 @@ public class ObjectAdapterContext {
         final ObjectAdapter rootAdapter = adapter.getAggregateRoot();  // TODO: REVIEW: think this is redundant; would seem this method is only ever called for roots anyway.
         final RootOid transientRootOid = (RootOid) rootAdapter.getOid();
 
-        final RootAndCollectionAdapters rootAndCollectionAdapters = new RootAndCollectionAdapters(adapter, session);
+        final RootAndCollectionAdapters rootAndCollectionAdapters = 
+                new RootAndCollectionAdapters(adapter, adapterManagerMixin);
 
         removeFromCache(rootAndCollectionAdapters, transientRootOid);
         

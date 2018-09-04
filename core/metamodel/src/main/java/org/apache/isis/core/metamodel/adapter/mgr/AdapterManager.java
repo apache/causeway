@@ -23,11 +23,8 @@ import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
-public interface AdapterManager extends ObjectAdapterProvider {
+public interface AdapterManager /*extends ObjectAdapterProvider*/ {
 
 
     enum ConcurrencyChecking {
@@ -122,46 +119,46 @@ public interface AdapterManager extends ObjectAdapterProvider {
 
     // -- DEPRECATIONS
 
-    /**
-     * Enable RecreatableObjectFacet to 'temporarily' map an existing pojo to an oid.
-     * @deprecated don't expose caching
-     */
-    @Programmatic @Deprecated
-    ObjectAdapter addRecreatedPojoToCache(Oid oid, Object recreatedPojo);
-
-    /**
-     * Enable RecreatableObjectFacet to remove a 'temporarily' mapped adapter for a pojo.
-     * @deprecated don't expose caching
-     */
-    @Programmatic @Deprecated
-    void removeAdapterFromCache(ObjectAdapter adapter);
-
-    
-    /**
-     * Gets the {@link ObjectAdapter adapter} for the specified domain object if
-     * it exists in the identity map.
-     *
-     * <p>
-     * Provided by the <tt>AdapterManager</tt> when used by framework.
-     *
-     * @param pojo
-     *            - must not be <tt>null</tt>
-     * @return adapter, or <tt>null</tt> if doesn't exist.
-     * @deprecated don't expose caching
-     */
-    @Programmatic @Deprecated
-    ObjectAdapter lookupAdapterFor(Object pojo);
-
-    /**
-     * Gets the {@link ObjectAdapter adapter} for the {@link Oid} if it exists
-     * in the identity map.
-     *
-     * @param oid
-     *            - must not be <tt>null</tt>
-     * @return adapter, or <tt>null</tt> if doesn't exist.
-     * @deprecated don't expose caching
-     */
-    @Programmatic @Deprecated
-    ObjectAdapter lookupAdapterFor(Oid oid);
+//    /**
+//     * Enable RecreatableObjectFacet to 'temporarily' map an existing pojo to an oid.
+//     * @deprecated don't expose caching
+//     */
+//    @Programmatic @Deprecated
+//    ObjectAdapter addRecreatedPojoToCache(Oid oid, Object recreatedPojo);
+//
+//    /**
+//     * Enable RecreatableObjectFacet to remove a 'temporarily' mapped adapter for a pojo.
+//     * @deprecated don't expose caching
+//     */
+//    @Programmatic @Deprecated
+//    void removeAdapterFromCache(ObjectAdapter adapter);
+//
+//    
+//    /**
+//     * Gets the {@link ObjectAdapter adapter} for the specified domain object if
+//     * it exists in the identity map.
+//     *
+//     * <p>
+//     * Provided by the <tt>AdapterManager</tt> when used by framework.
+//     *
+//     * @param pojo
+//     *            - must not be <tt>null</tt>
+//     * @return adapter, or <tt>null</tt> if doesn't exist.
+//     * @deprecated don't expose caching
+//     */
+//    @Programmatic @Deprecated
+//    ObjectAdapter lookupAdapterFor(Object pojo);
+//
+//    /**
+//     * Gets the {@link ObjectAdapter adapter} for the {@link Oid} if it exists
+//     * in the identity map.
+//     *
+//     * @param oid
+//     *            - must not be <tt>null</tt>
+//     * @return adapter, or <tt>null</tt> if doesn't exist.
+//     * @deprecated don't expose caching
+//     */
+//    @Programmatic @Deprecated
+//    ObjectAdapter lookupAdapterFor(Oid oid);
 
 }

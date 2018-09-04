@@ -195,7 +195,8 @@ public class Memento implements Serializable {
         
         final Oid oid = getOid();
 
-        return ObjectAdapterLegacy.__Memento.recreateObject(spec, oid, data);
+        return getPersistenceSession().mementoSupport().recreateObject(spec, oid, data);
+                
     }
 
 

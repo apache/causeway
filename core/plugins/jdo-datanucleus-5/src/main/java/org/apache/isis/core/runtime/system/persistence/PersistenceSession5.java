@@ -19,8 +19,6 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.functions._Predicates.equalTo;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
@@ -57,7 +55,6 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -65,7 +62,9 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -88,7 +87,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFac
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
@@ -97,7 +95,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -111,6 +108,7 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllIns
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext;
+import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterLegacy;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -133,6 +131,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession5.class);
     private ObjectAdapterContext objectAdapterContext;
+    private PersistenceSession5_ObjectAdapterProvider objectAdapterProviderMixin;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -162,7 +161,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
 
         objectAdapterContext = ObjectAdapterLegacy.openContext(servicesInjector, authenticationSession, specificationLoader, this);
-
+        objectAdapterProviderMixin = new PersistenceSession5_ObjectAdapterProvider(this, objectAdapterContext);
+        
         persistenceManager = jdoPersistenceManagerFactory.getPersistenceManager();
 
         final IsisLifecycleListener.PersistenceSessionLifecycleManagement psLifecycleMgmt = this;
@@ -244,13 +244,13 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             }
         }
     }
-
+    
     @Override
     public List<ObjectAdapter> getServices() {
         final List<Object> services = servicesInjector.getRegisteredServices();
         final List<ObjectAdapter> serviceAdapters = _Lists.newArrayList();
         for (final Object servicePojo : services) {
-            ObjectAdapter serviceAdapter = lookupAdapterFor(servicePojo);
+            ObjectAdapter serviceAdapter = objectAdapterContext.lookupAdapterFor(servicePojo);
             if(serviceAdapter == null) {
                 throw new IllegalStateException("ObjectAdapter for service " + servicePojo + " does not exist?!?");
             }
@@ -381,9 +381,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         interaction.clear();
     }
-
-
-
 
     // -- QuerySubmitter impl, findInstancesInTransaction
     @Override
@@ -724,7 +721,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         Objects.requireNonNull(oid);
 
-        final ObjectAdapter adapter = lookupAdapterFor(oid);
+        final ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(oid);
         if (adapter != null) {
             return adapter;
         }
@@ -736,13 +733,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                         LOG.debug("getObject; oid={}", oid);
 
                         final Object pojo = loadPersistentPojo(oid);
-                        return addRecreatedPojoToCache(oid, pojo);
+                        return objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
                     }
                 });
     }
-
-
-
 
     // -- loadPersistentPojo
 
@@ -844,16 +838,14 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     // -- lazilyLoaded
 
-    private ObjectAdapter mapPersistent(final Persistable pojo) {
+    ObjectAdapter mapPersistent(final Persistable pojo) {
         if (persistenceManager.getObjectId(pojo) == null) {
             return null;
         }
         final RootOid oid = createPersistentOrViewModelOid(pojo);
-        final ObjectAdapter adapter = addRecreatedPojoToCache(oid, pojo);
+        final ObjectAdapter adapter = objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
         return adapter;
     }
-
-
 
 
     // -- refreshRootInTransaction, refreshRoot, resolve
@@ -1089,10 +1081,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public ObjectAdapter getAggregateRoot(final ParentedCollectionOid collectionOid) {
         final Oid rootOid = collectionOid.getRootOid();
-        ObjectAdapter rootadapter = lookupAdapterFor(rootOid);
+        ObjectAdapter rootadapter = objectAdapterContext.lookupAdapterFor(rootOid);
         if(rootadapter == null) {
             final Oid parentOidNowPersisted = remappedFrom(rootOid);
-            rootadapter = lookupAdapterFor(parentOidNowPersisted);
+            rootadapter = objectAdapterContext.lookupAdapterFor(parentOidNowPersisted);
         }
         return rootadapter;
     }
@@ -1106,133 +1098,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     // -- AdapterManager implementation
-
-    @Override
-    public ObjectAdapter lookupAdapterFor(final Object pojo) {
-        Objects.requireNonNull(pojo);
-
-        return objectAdapterContext.lookupAdapterByPojo(pojo);  
-    }
-
-    @Override
-    public ObjectAdapter lookupAdapterFor(final Oid oid) {
-        Objects.requireNonNull(oid);
-        ensureMapsConsistent(oid);
-
-        return objectAdapterContext.lookupAdapterById(oid);
-    }
-
-
-    private ObjectAdapter existingOrValueAdapter(Object pojo) {
-
-        // attempt to locate adapter for the pojo
-        ObjectAdapter adapter = lookupAdapterFor(pojo);
-        if (adapter != null) {
-            return adapter;
-        }
-
-        // pojo may have been lazily loaded by object store, but we haven't yet seen it
-        if (pojo instanceof Persistable) {
-            adapter = mapPersistent((Persistable) pojo);
-
-            // TODO: could return null if the pojo passed in !dnIsPersistent() || !dnIsDetached()
-            // in which case, we would ought to map as a transient object, rather than fall through and treat as a value?
-        } else {
-            adapter = null;
-        }
-
-        if(adapter != null) {
-            return adapter;
-        }
-
-        // need to create (and possibly map) the adapter.
-        final ObjectSpecification objSpec = specificationLoader.loadSpecification(pojo.getClass());
-
-        // we create value facets as standalone (so not added to maps)
-        if (objSpec.containsFacet(ValueFacet.class)) {
-            adapter = objectAdapterContext.getFactories().createStandaloneAdapter(pojo);
-            return adapter;
-        }
-
-        return null;
-    }
-
-
-
-    /**
-     * Fail early if any problems.
-     */
-    private void ensureMapsConsistent(final ObjectAdapter adapter) {
-        if (adapter.isValue()) {
-            return;
-        }
-        if (adapter.isParentedCollection()) {
-            return;
-        }
-        ensurePojoAdapterMapConsistent(adapter);
-        ensureOidAdapterMapConsistent(adapter);
-    }
-
-    /**
-     * Fail early if any problems.
-     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
-     */
-    @Deprecated
-    private void ensureMapsConsistent(final Oid oid) {
-        Objects.requireNonNull(oid);
-
-        final ObjectAdapter adapter = objectAdapterContext.lookupAdapterById(oid);
-        if (adapter == null) {
-            return;
-        }
-        ensureOidAdapterMapConsistent(adapter);
-        ensurePojoAdapterMapConsistent(adapter);
-    }
-
-    private void ensurePojoAdapterMapConsistent(final ObjectAdapter adapter) {
-        final Object adapterPojo = adapter.getObject();
-        final ObjectAdapter adapterAccordingToMap = objectAdapterContext.lookupAdapterByPojo(adapterPojo);
-
-        if(adapterPojo == null) {
-            // nothing to check
-            return;
-        }
-        ensureMapConsistent(adapter, adapterAccordingToMap, "PojoAdapterMap");
-    }
-
-    private void ensureOidAdapterMapConsistent(final ObjectAdapter adapter) {
-        final Oid adapterOid = adapter.getOid();
-        final ObjectAdapter adapterAccordingToMap = objectAdapterContext.lookupAdapterById(adapterOid);
-
-        if(adapterOid == null) {
-            // nothing to check
-            return;
-        }
-        ensureMapConsistent(adapter, adapterAccordingToMap, "OidAdapterMap");
-    }
-
-    private void ensureMapConsistent(
-            final ObjectAdapter adapter,
-            final ObjectAdapter adapterAccordingToMap,
-            final String mapName) {
-
-        final Oid adapterOid = adapter.getOid();
-
-        // take care not to touch the pojo, since it might have been deleted.
-
-        if(adapterAccordingToMap == null) {
-            throw new IllegalStateException("mismatch in "
-                    + mapName
-                    + ": provided adapter's OID: " + adapterOid + "; but no adapter found in map");
-        }
-
-        ensureThatArg(
-                adapter, equalTo(adapterAccordingToMap),
-                ()->"mismatch in "
-                        + mapName
-                        + ": provided adapter's OID: " + adapterOid + ", \n"
-                        + "but map's adapter's OID was: " + adapterAccordingToMap.getOid());
-    }
 
     @Override
     public ObjectAdapter adapterForAny(RootOid rootOid) {
@@ -1272,24 +1137,24 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public Map<RootOid, ObjectAdapter> adaptersFor(final List<RootOid> rootOids) {
-        return adaptersFor(rootOids, ConcurrencyChecking.NO_CHECK);
+        return adaptersFor(rootOids, AdapterManager.ConcurrencyChecking.NO_CHECK);
     }
 
     private Map<RootOid,ObjectAdapter> adaptersFor(
             final List<RootOid> rootOids,
-            final ConcurrencyChecking concurrencyChecking) {
+            final AdapterManager.ConcurrencyChecking concurrencyChecking) {
 
         final Map<RootOid, ObjectAdapter> adapterByOid = _Maps.newLinkedHashMap();
 
         List<RootOid> notYetLoadedOids = _Lists.newArrayList();
         for (RootOid rootOid : rootOids) {
             // attempt to locate adapter for the Oid
-            ObjectAdapter adapter = lookupAdapterFor(rootOid);
+            ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(rootOid);
             // handle view models or transient
             if (adapter == null) {
                 if (rootOid.isTransient() || rootOid.isViewModel()) {
                     final Object pojo = recreatePojoTransientOrViewModel(rootOid);
-                    adapter = addRecreatedPojoToCache(rootOid, pojo);
+                    adapter = objectAdapterContext.addRecreatedPojoToCache(rootOid, pojo);
                     sync(concurrencyChecking, adapter, rootOid);
                 }
             }
@@ -1309,7 +1174,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             if(pojo != null) {
                 ObjectAdapter adapter;
                 try {
-                    adapter = addRecreatedPojoToCache(rootOid, pojo);
+                    adapter = objectAdapterContext.addRecreatedPojoToCache(rootOid, pojo);
                     adapterByOid.put(rootOid, adapter);
                 } catch(ObjectNotFoundException ex) {
                     throw ex; // just rethrow
@@ -1337,7 +1202,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public ObjectAdapter adapterFor(final RootOid rootOid) {
-        return adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
+        return adapterFor(rootOid, AdapterManager.ConcurrencyChecking.NO_CHECK);
     }
 
 
@@ -1371,10 +1236,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public ObjectAdapter adapterFor(
             final RootOid rootOid,
-            final ConcurrencyChecking concurrencyChecking) {
+            final AdapterManager.ConcurrencyChecking concurrencyChecking) {
 
         // attempt to locate adapter for the Oid
-        ObjectAdapter adapter = lookupAdapterFor(rootOid);
+        ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(rootOid);
         if (adapter == null) {
             // else recreate
             try {
@@ -1384,7 +1249,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                 } else {
                     pojo = loadPersistentPojo(rootOid);
                 }
-                adapter = addRecreatedPojoToCache(rootOid, pojo);
+                adapter = objectAdapterContext.addRecreatedPojoToCache(rootOid, pojo);
             } catch(ObjectNotFoundException ex) {
                 throw ex; // just rethrow
             } catch(RuntimeException ex) {
@@ -1401,7 +1266,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
 
     private void sync(
-            final ConcurrencyChecking concurrencyChecking,
+            final AdapterManager.ConcurrencyChecking concurrencyChecking,
             final ObjectAdapter adapter, final RootOid rootOid) {
         // sync versions of original, with concurrency checking if required
         Oid adapterOid = adapter.getOid();
@@ -1419,7 +1284,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                             otherVersion != null &&
                             thisVersion.different(otherVersion)) {
 
-                        if(concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
+                        if(concurrencyCheckingGloballyEnabled && AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
                             LOG.info("concurrency conflict detected on {} ({})", recreatedOid, otherVersion);
                             final String currentUser = authenticationSession.getUserName();
                             throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
@@ -1461,167 +1326,20 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return pojo;
     }
 
-    @Override
-    public ObjectAdapter adapterFor(final Object pojo) {
-
-        if(pojo == null) {
-            return null;
-        }
-        final ObjectAdapter existingOrValueAdapter = existingOrValueAdapter(pojo);
-        if(existingOrValueAdapter != null) {
-            return existingOrValueAdapter;
-        }
-
-        // Creates a new transient root {@link ObjectAdapter adapter} for the supplied domain
-        final RootOid rootOid = createTransientOrViewModelOid(pojo);
-        final ObjectAdapter newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
-
-        return mapAndInjectServices(newAdapter);
-    }
-
-    @Override
-    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter, final OneToManyAssociation collection) {
-
-        assert parentAdapter != null;
-        assert collection != null;
-
-        final ObjectAdapter existingOrValueAdapter = existingOrValueAdapter(pojo);
-        if(existingOrValueAdapter != null) {
-            return existingOrValueAdapter;
-        }
-
-        ensureMapsConsistent(parentAdapter);
-        
-        // the List, Set etc. instance gets wrapped in its own adapter
-        final ObjectAdapter newAdapter = objectAdapterContext.getFactories()
-                .createCollectionAdapter(pojo, parentAdapter, collection);
-
-        return mapAndInjectServices(newAdapter);
-    }
-
-
-
-    /**
-     * Either returns an existing {@link ObjectAdapter adapter} (as per
-     * {@link #lookupAdapterFor(Object)} or {@link #lookupAdapterFor(Oid)}), otherwise
-     * re-creates an adapter with the specified (persistent) {@link Oid}.
-     *
-     * <p>
-     * Typically called when the {@link Oid} is already known, that is, when
-     * resolving an already-persisted object. Is also available for
-     * <tt>Memento</tt> support however, so {@link Oid} could also represent a
-     * {@link Oid#isTransient() transient} object.
-     *
-     * @param oid
-     * @param recreatedPojo - already known to the object store impl, or a service
-     */
-    @Override
-    public ObjectAdapter addRecreatedPojoToCache(final Oid oid, final Object recreatedPojo) {
-
-        // attempt to locate adapter for the pojo
-        // REVIEW: this check is possibly redundant because the pojo will most likely
-        // have just been instantiated, so won't yet be in any maps
-        final ObjectAdapter adapterLookedUpByPojo = lookupAdapterFor(recreatedPojo);
-        if (adapterLookedUpByPojo != null) {
-            return adapterLookedUpByPojo;
-        }
-
-        // attempt to locate adapter for the Oid
-        final ObjectAdapter adapterLookedUpByOid = lookupAdapterFor(oid);
-        if (adapterLookedUpByOid != null) {
-            return adapterLookedUpByOid;
-        }
-
-        final ObjectAdapter createdAdapter = createRootOrAggregatedAdapter(oid, recreatedPojo);
-        return mapAndInjectServices(createdAdapter);
-    }
-
-    /**
-     * Removes the specified object from both the identity-adapter map, and the
-     * pojo-adapter map.
-     *
-     * <p>
-     * This indicates that the object is no longer in use, and therefore that no
-     * objects exists within the system.
-     *
-     * <p>
-     * If an {@link ObjectAdapter adapter} is removed while its pojo still is
-     * referenced then a subsequent interaction of that pojo will create a
-     * different {@link ObjectAdapter adapter}.
-     *
-     * <p>
-     * TODO: should do a cascade remove of any aggregated objects.
-     */
-    @Override
-    public void removeAdapterFromCache(final ObjectAdapter adapter) {
-        ensureMapsConsistent(adapter);
-        objectAdapterContext.removeAdapter(adapter);
-    }
-
-    
     /**
      * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
      */
     @Deprecated
     private void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
-        removeAdapterFromCache(adapter);
+        objectAdapterContext.removeAdapterFromCache(adapter);
         adapter.replacePojo(pojo);
-        mapAndInjectServices(adapter);
-    }
-
-
-    private ObjectAdapter createRootOrAggregatedAdapter(final Oid oid, final Object pojo) {
-        final ObjectAdapter createdAdapter;
-        if(oid instanceof RootOid) {
-            final RootOid rootOid = (RootOid) oid;
-            createdAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
-        } else /*if (oid instanceof CollectionOid)*/ {
-            final ParentedCollectionOid collectionOid = (ParentedCollectionOid) oid;
-            createdAdapter = objectAdapterContext.getFactories().createCollectionAdapter(pojo, collectionOid);
-        }
-        return createdAdapter;
-    }
-
-
-
-    private ObjectAdapter mapAndInjectServices(final ObjectAdapter adapter) {
-        // since the whole point of this method is to map an adapter that's just been created.
-        // so we *don't* call ensureMapsConsistent(adapter);
-
-        Assert.assertNotNull(adapter);
-        final Object pojo = adapter.getObject();
-        Assert.assertFalse("POJO Map already contains object", pojo, objectAdapterContext.containsAdapterForPojo(pojo));
-
-        if (LOG.isDebugEnabled()) {
-            // don't interact with the underlying object because may be a ghost
-            // and would trigger a resolve
-            // don't call toString() on adapter because calls hashCode on
-            // underlying object, may also trigger a resolve.
-            LOG.debug("adding identity for adapter with oid={}", adapter.getOid());
-        }
-
-        // value adapters are not mapped (but all others - root and aggregated adapters - are)
-        if (adapter.isValue()) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("not mapping value adapter");
-            }
-            servicesInjector.injectServicesInto(pojo);
-            return adapter;
-        }
-
-        objectAdapterContext.addAdapterHonoringSpecImmutability(pojo, adapter);
-
-        // must inject after mapping, otherwise infinite loop
-        servicesInjector.injectServicesInto(pojo);
-
-        return adapter;
+        objectAdapterContext.mapAndInjectServices(adapter);
     }
 
     // -- TransactionManager delegate methods
     protected IsisTransaction getCurrentTransaction() {
         return transactionManager.getCurrentTransaction();
     }
-
 
     // -- FrameworkSynchronizer delegate methods
 
@@ -1636,7 +1354,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public void initializeMapAndCheckConcurrency(final Persistable pojo) {
+    public ObjectAdapter initializeMapAndCheckConcurrency(final Persistable pojo) {
         final Persistable pc = pojo;
 
         // need to do eagerly, because (if a viewModel then) a
@@ -1646,7 +1364,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         final Version datastoreVersion = getVersionIfAny(pc);
 
         final RootOid originalOid;
-        ObjectAdapter adapter = lookupAdapterFor(pojo);
+        ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(pojo);
         if (adapter != null) {
             ensureRootObject(pojo);
             originalOid = (RootOid) adapter.getOid();
@@ -1666,7 +1384,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                     otherVersion != null &&
                     thisVersion.different(otherVersion)) {
 
-                if (ConcurrencyChecking.isCurrentlyEnabled()) {
+                if (AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
                     LOG.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
                     final String currentUser = authenticationSession.getUserName();
                     final ConcurrencyException abortCause = new ConcurrencyException(currentUser, thisOid,
@@ -1682,11 +1400,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
             // it appears to be possible that there is already an adapter for this Oid,
             // ie from ObjectStore#resolveImmediately()
-            adapter = lookupAdapterFor(originalOid);
+            adapter = objectAdapterContext.lookupAdapterFor(originalOid);
             if (adapter != null) {
                 remapRecreatedPojo(adapter, pojo);
             } else {
-                adapter = addRecreatedPojoToCache(originalOid, pojo);
+                adapter = objectAdapterContext.addRecreatedPojoToCache(originalOid, pojo);
 
                 CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
                 postLifecycleEventIfRequired(adapter, LoadedLifecycleEventFacet.class);
@@ -1694,6 +1412,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
 
         adapter.setVersion(datastoreVersion);
+        
+        return objectAdapterContext.lookupAdapterFor(pojo);
     }
 
     // -- create...Oid (main API)
@@ -1701,7 +1421,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * Create a new {@link Oid#isTransient() transient} {@link Oid} for the
      * supplied pojo, uniquely distinguishable from any other {@link Oid}.
      */
-    private final RootOid createTransientOrViewModelOid(final Object pojo) {
+    final RootOid createTransientOrViewModelOid(final Object pojo) {
         return newIdentifier(pojo, Type.TRANSIENT);
     }
 
@@ -1770,7 +1490,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
-        final ObjectAdapter adapter = lookupAdapterFor(pojo);
+        final ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(pojo);
         if (adapter == null) {
             // not expected.
             return;
@@ -1831,7 +1551,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
-        ObjectAdapter adapter = lookupAdapterFor(pojo);
+        ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(pojo);
         if (adapter == null) {
             // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
             // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet
@@ -1887,9 +1607,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     private Version getVersionIfAny(final Persistable pojo) {
         return Utils.getVersionIfAny(pojo, authenticationSession);
     }
-
-
-
 
     // -- DomainObjectServices impl
 
@@ -1962,6 +1679,18 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {
         return objectAdapterContext.adapterForViewModel(viewModelPojo, rootOidFactory);
     }
+
+    @Override
+    public MementoRecreateObjectSupport mementoSupport() {
+        return objectAdapterContext.mementoSupport();
+    }
+    
+    @Override
+    public ObjectAdapterProvider getObjectAdapterProvider() {
+        return objectAdapterProviderMixin;
+    }
+
+
     
 }
 

@@ -18,6 +18,7 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.jdo.PersistenceManager;
 
@@ -32,13 +33,16 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
+import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-public interface PersistenceSession extends AdapterManager, TransactionalResource, SessionScopedComponent {
+public interface PersistenceSession extends ObjectAdapterProvider, TransactionalResource, SessionScopedComponent {
 
     // -- CONSTANTS
 
@@ -59,21 +63,38 @@ public interface PersistenceSession extends AdapterManager, TransactionalResourc
     public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
 
 
-    // -- INTERFACE DECLARATION
+    // -- OBJECT ADAPTER PROVIDER
     
-    default ObjectAdapterProvider getObjectAdapterProvider() {
-        return this;
+    ObjectAdapterProvider getObjectAdapterProvider();
+    default ObjectAdapter adapterFor(Object domainObject) {
+        return getObjectAdapterProvider().adapterFor(domainObject);
+    }
+    default ObjectAdapter adapterFor(
+            final Object pojo,
+            final ObjectAdapter parentAdapter,
+            OneToManyAssociation collection) {
+        return getObjectAdapterProvider().adapterFor(pojo, parentAdapter, collection);
+    }
+    default ObjectSpecification specificationForViewModel(final Object viewModelPojo) {
+        return getObjectAdapterProvider().specificationForViewModel(viewModelPojo);
+    }
+    default ObjectAdapter adapterForViewModel(
+            final Object viewModelPojo, 
+            final Function<ObjectSpecId, RootOid> rootOidFactory) {
+        return getObjectAdapterProvider().adapterForViewModel(viewModelPojo, rootOidFactory);
     }
     
+    //---
+    
+    MementoRecreateObjectSupport mementoSupport();
+    
     ObjectAdapter adapterFor(RootOid rootOid);
-
-    ObjectAdapter adapterFor(RootOid oid, ConcurrencyChecking concurrencyChecking);
-
+    ObjectAdapter adapterFor(RootOid oid, AdapterManager.ConcurrencyChecking concurrencyChecking);
     ObjectAdapter adapterForAny(RootOid rootOid);
-
     Map<RootOid, ObjectAdapter> adaptersFor(List<RootOid> rootOids);
-
     <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
+    
+    // --
 
     void close();
 
@@ -154,6 +175,5 @@ public interface PersistenceSession extends AdapterManager, TransactionalResourc
     boolean isTransient(Object pojo);
     boolean isRepresentingPersistent(Object pojo);
     boolean isDestroyed(Object pojo);
-
 
 }
