@@ -923,7 +923,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                 makePersistentTransactionAssumed(adapter);
 
                 // clear out the map of transient -> persistent
-                PersistenceSession5.this.persistentByTransient.clear();
+                // already empty // PersistenceSession5.this.persistentByTransient.clear();
             }
 
         });
@@ -1050,28 +1050,13 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         persistenceManager.flush();
     }
 
-
-    // -- getAggregateRoot, remappedFrom
-
-    private Map<Oid, Oid> persistentByTransient = _Maps.newHashMap();
+    // -- getAggregateRoot
 
     @Override
     public ObjectAdapter getAggregateRoot(final ParentedCollectionOid collectionOid) {
         final Oid rootOid = collectionOid.getRootOid();
         ObjectAdapter rootadapter = objectAdapterContext.lookupAdapterFor(rootOid);
-        if(rootadapter == null) {
-            final Oid parentOidNowPersisted = remappedFrom(rootOid);
-            rootadapter = objectAdapterContext.lookupAdapterFor(parentOidNowPersisted);
-        }
         return rootadapter;
-    }
-
-    /**
-     * To support ISIS-234; keep track, for the duration of the transaction only,
-     * of the old transient {@link Oid}s and their corresponding persistent {@link Oid}s.
-     */
-    private Oid remappedFrom(final Oid transientOid) {
-        return persistentByTransient.get(transientOid);
     }
 
     // -- AdapterManager implementation
