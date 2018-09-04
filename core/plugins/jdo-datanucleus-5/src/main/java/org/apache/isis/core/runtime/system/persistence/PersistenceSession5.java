@@ -159,8 +159,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             LOG.debug("opening {}", this);
         }
 
-        objectAdapterContext = ObjectAdapterLegacy.openContext(servicesInjector, authenticationSession, specificationLoader, this);
-
         persistenceManager = jdoPersistenceManagerFactory.getPersistenceManager();
 
         final IsisLifecycleListener.PersistenceSessionLifecycleManagement psLifecycleMgmt = this;
@@ -173,8 +171,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindUsingApplibQueryDefault.class,
                 new PersistenceQueryFindUsingApplibQueryProcessor(this));
-
-        initServices();
+        
+        objectAdapterContext = ObjectAdapterLegacy.openContext(servicesInjector, authenticationSession, specificationLoader, this);
 
         // tell the proxy of all request-scoped services to instantiate the underlying
         // services, store onto the thread-local and inject into them...
@@ -220,25 +218,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         for (final Object service : servicesInjector.getRegisteredServices()) {
             if(service instanceof RequestScopedService) {
                 ((RequestScopedService)service).__isis_startRequest(servicesInjector);
-            }
-        }
-    }
-
-    /**
-     * Creates {@link ObjectAdapter adapters} for the service list, ensuring that these are mapped correctly,
-     * and have the same OIDs as in any previous sessions.
-     * 
-     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
-     */
-    @Deprecated
-    private void initServices() {
-        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
-        for (final Object service : registeredServices) {
-            final ObjectAdapter serviceAdapter = adapterFor(service);
-            
-            // remap as Persistent if required
-            if (serviceAdapter.getOid().isTransient()) {
-                objectAdapterContext.remapAsPersistent(serviceAdapter, null, this);
             }
         }
     }

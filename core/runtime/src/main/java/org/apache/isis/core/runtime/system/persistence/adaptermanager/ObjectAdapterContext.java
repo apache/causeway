@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -86,6 +87,7 @@ public class ObjectAdapterContext {
     public void open() {
         oidAdapterMap.open();
         pojoAdapterMap.open();
+        initServices();
     }
     
     public void close() {
@@ -250,6 +252,25 @@ public class ObjectAdapterContext {
     }
     
     // ------------------------------------------------------------------------------------------------
+    
+    /**
+     * Creates {@link ObjectAdapter adapters} for the service list, ensuring that these are mapped correctly,
+     * and have the same OIDs as in any previous sessions.
+     * 
+     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
+     */
+    @Deprecated
+    private void initServices() {
+        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
+        for (final Object service : registeredServices) {
+            final ObjectAdapter serviceAdapter = objectAdapterProviderMixin.adapterFor(service);
+            
+            // remap as Persistent if required
+            if (serviceAdapter.getOid().isTransient()) {
+                remapAsPersistent(serviceAdapter, null, persistenceSession);
+            }
+        }
+    }
     
     @Deprecated // don't expose caching
     public void addAdapterHonoringSpecImmutability(Object pojo, ObjectAdapter adapter) {
