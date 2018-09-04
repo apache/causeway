@@ -19,7 +19,6 @@
 package org.apache.isis.core.webapp;
 
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
-import static org.apache.isis.commons.internal.context._Context.setDefaultClassLoader;
 import static org.apache.isis.commons.internal.resources._Resource.putContextPathIfPresent;
 
 import java.util.ArrayList;
@@ -30,11 +29,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.webapp.modules.WebModule;
 
 /**
@@ -47,10 +46,11 @@ import org.apache.isis.core.webapp.modules.WebModule;
  * Installs {@link WebModule}s on the ServletContext. 
  * </p>   
  *  
- * @since 2.0.0
+ * @since 2.0.0-M2
  *
  */
-@WebListener
+//@WebListener //[ahuber] to support Servlet 3.0 annotations @WebFilter, @WebListener or others 
+//with skinny war deployment requires additional configuration, so for now we disable this annotation
 public class IsisWebAppContextListener implements ServletContextListener {
     
     private static final Logger LOG = LoggerFactory.getLogger(IsisWebAppContextListener.class);
@@ -65,8 +65,11 @@ public class IsisWebAppContextListener implements ServletContextListener {
         final ServletContext servletContext = event.getServletContext();
         
         LOG.info("=== PHASE 1 === Setting up ServletContext parameters");
+  
+        //[ahuber] set the ServletContext initializing thread as preliminary default until overridden by
+        // IsisWicketApplication#init() or others that better know what ClassLoader to use as application default.
+        _Context.setDefaultClassLoader(Thread.currentThread().getContextClassLoader(), false);
         
-        setDefaultClassLoader(this.getClass().getClassLoader(), true);
         putContextPathIfPresent(servletContext.getContextPath());
         
         final IsisWebAppConfigProvider configProvider = new IsisWebAppConfigProvider();

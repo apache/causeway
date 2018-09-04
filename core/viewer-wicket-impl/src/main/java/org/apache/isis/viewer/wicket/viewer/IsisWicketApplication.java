@@ -75,6 +75,7 @@ import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -133,7 +134,7 @@ import net.ftlines.wicketsource.WicketSource;
  *
  * <p>
  * Its main responsibility is to allow the set of {@link ComponentFactory}s used
- * to render the domain objects to be registered. This type of customisation is
+ * to render the domain objects to be registered. This type of customization is
  * common place. At a more fundamental level, also allows the {@link Page}
  * implementation for each {@link PageType page type} to be overridden. This is
  * probably less common, because CSS can also be used for this purpose.
@@ -147,7 +148,7 @@ import net.ftlines.wicketsource.WicketSource;
  * make the {@link ComponentFactory} defined within it available.
  *
  * <p>
- * Alternatively, {@link ComponentFactory}s can be specified by overridding {@link #newIsisWicketModule()}.
+ * Alternatively, {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule()}.
  * This mechanism allows a number of other aspects to be customized.
  */
 public class IsisWicketApplication
@@ -302,6 +303,11 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
      */
     @Override
     protected void init() {
+        
+        //[ahuber] the implementing class is assumed to be loaded be a class-loader
+        // that's suitable for the entire web-application to use as default.
+        _Context.setDefaultClassLoader(this.getClass().getClassLoader(), true);
+        
         List<Future<Object>> futures = null;
         try {
             super.init();
