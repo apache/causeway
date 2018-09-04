@@ -33,7 +33,10 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.ObjectAdapterFactories;
 
 /**
- *  
+ * package private mixin for ObjectAdapterContext
+ * <p>
+ * Responsibility: provides ObjectAdapter factories
+ * </p>
  * @since 2.0.0-M2
  */
 class ObjectAdapterContext_Factories implements ObjectAdapterFactories {

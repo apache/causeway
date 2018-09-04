@@ -32,6 +32,10 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
+ * package private mixin for ObjectAdapterContext
+ * <p>
+ * Responsibility: AdapterManager 'legacy' support
+ * </p>
  *  
  * @since 2.0.0-M2
  */

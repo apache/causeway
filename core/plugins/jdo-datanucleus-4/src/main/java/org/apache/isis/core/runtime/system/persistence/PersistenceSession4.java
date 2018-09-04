@@ -92,7 +92,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -107,7 +106,6 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingA
 import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
-import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterLegacy;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
@@ -171,7 +169,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                 PersistenceQueryFindUsingApplibQueryDefault.class,
                 new PersistenceQueryFindUsingApplibQueryProcessor(this));
 
-        objectAdapterContext = ObjectAdapterLegacy.openContext(servicesInjector, authenticationSession, specificationLoader, this);
+        objectAdapterContext = ObjectAdapterContext.openContext(servicesInjector, authenticationSession, specificationLoader, this);
         mixin = new PersistenceSession4_Decouple(this, objectAdapterContext);
 
         // tell the proxy of all request-scoped services to instantiate the underlying

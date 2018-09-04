@@ -30,7 +30,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 /**
- *  
+ * package private mixin for ObjectAdapterContext
+ * <p>
+ * Responsibility: ObjectAdapter Cache/Map consistency
+ * </p> 
  * @since 2.0.0-M2
  */
 class ObjectAdapterContext_Consistency {

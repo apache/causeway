@@ -27,11 +27,8 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.schema.common.v1.CollectionDto;
@@ -46,18 +43,6 @@ import org.apache.isis.schema.utils.CommonDtoUtils;
 public class ObjectAdapterLegacy {
     
     static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterLegacy.class);
-    
-    public static ObjectAdapterContext openContext(
-            ServicesInjector servicesInjector, 
-            AuthenticationSession authenticationSession, 
-            SpecificationLoader specificationLoader, 
-            PersistenceSession persistenceSession) {
-        final ObjectAdapterContext objectAdapterContext = 
-                new ObjectAdapterContext(servicesInjector, authenticationSession, 
-                        specificationLoader, persistenceSession);
-        objectAdapterContext.open();
-        return objectAdapterContext;
-    }
     
     // -- CommandExecutorServiceDefault --------------------------------------------------------
     

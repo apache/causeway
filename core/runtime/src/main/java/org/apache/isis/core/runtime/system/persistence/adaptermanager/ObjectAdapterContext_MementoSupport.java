@@ -48,7 +48,10 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
 
 /**
- *  
+ * package private mixin for ObjectAdapterContext
+ * <p>
+ * Responsibility: provides object recreation to mementos
+ * </p>
  * @since 2.0.0-M2
  */
 class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSupport {

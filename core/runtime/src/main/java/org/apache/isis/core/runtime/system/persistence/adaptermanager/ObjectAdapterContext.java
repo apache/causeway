@@ -44,12 +44,25 @@ import org.apache.isis.core.runtime.memento.Data;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
+ * Encapsulate ObjectAdpater life-cycling.  
  *  
  * @since 2.0.0-M2
  */
 public class ObjectAdapterContext {
     
     private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext.class);
+    
+    public static ObjectAdapterContext openContext(
+            ServicesInjector servicesInjector, 
+            AuthenticationSession authenticationSession, 
+            SpecificationLoader specificationLoader, 
+            PersistenceSession persistenceSession) {
+        final ObjectAdapterContext objectAdapterContext = 
+                new ObjectAdapterContext(servicesInjector, authenticationSession, 
+                        specificationLoader, persistenceSession);
+        objectAdapterContext.open();
+        return objectAdapterContext;
+    }
     
     private final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     private final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
@@ -61,7 +74,7 @@ public class ObjectAdapterContext {
     private final ObjectAdapterContext_AdapterManager adapterManagerMixin;
     private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
     
-    ObjectAdapterContext(
+    private ObjectAdapterContext(
             ServicesInjector servicesInjector, 
             AuthenticationSession authenticationSession, 
             SpecificationLoader specificationLoader, 

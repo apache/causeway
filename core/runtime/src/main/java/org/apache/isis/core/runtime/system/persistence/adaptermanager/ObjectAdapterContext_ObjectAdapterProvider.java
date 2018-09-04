@@ -38,7 +38,10 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
- *  
+ * package private mixin for ObjectAdapterContext
+ * <p>
+ * Responsibility: provides ObjectAdapterProvider implementation
+ * </p> 
  * @since 2.0.0-M2
  */
 class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvider {
