@@ -19,6 +19,9 @@
 package org.apache.isis.core.metamodel.services.swagger;
 
 import static org.apache.isis.commons.internal.base._Strings.prefix;
+import static org.apache.isis.commons.internal.base._With.ifPresentElse;
+import static org.apache.isis.commons.internal.resources._Resource.getRestfulPathIfAny;
+import static org.apache.isis.commons.internal.resources._Resource.prependContextPathIfPresent;
 
 import java.util.Map;
 
@@ -31,7 +34,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.commons.internal.resources._Resource;
 import org.apache.isis.core.metamodel.services.swagger.internal.SwaggerSpecGenerator;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -49,9 +51,9 @@ public class SwaggerServiceDefault implements SwaggerService {
     @PostConstruct
     public void init(final Map<String,String> properties) {
 
-        final String restfulPath = _Resource.getRestfulPathOrThrow(); 
+        final String restfulPath = ifPresentElse(getRestfulPathIfAny(), "undefined");
         
-        this.basePath = prefix(_Resource.prependContextPathIfPresent(restfulPath), "/");
+        this.basePath = prefix(prependContextPathIfPresent(restfulPath), "/");
     }
 
     @Programmatic
