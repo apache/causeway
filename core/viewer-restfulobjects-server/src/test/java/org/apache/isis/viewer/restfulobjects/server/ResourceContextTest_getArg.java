@@ -32,6 +32,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.url.UrlDecoderUtil;
@@ -75,14 +76,17 @@ public class ResourceContextTest_getArg {
     public void setUp() throws Exception {
         deploymentCategory = DeploymentCategory.PRODUCTION;
 
+        _Context.put(IsisSessionFactory.class, mockIsisSessionFactory, false);
+        
         context.checking(new Expectations() {
             {
                 allowing(mockHttpServletRequest).getQueryString();
                 will(returnValue(""));
-                allowing(mockHttpServletRequest).getServletContext();
-                will(returnValue(mockServletContext));
-                allowing(mockServletContext).getAttribute("org.apache.isis.core.webapp.isisSessionFactory");
-                will(returnValue(mockIsisSessionFactory));
+                //[ISIS-1976] IsisSessionFactory does no longer live on the ServletContext
+//                allowing(mockHttpServletRequest).getServletContext();
+//                will(returnValue(mockServletContext));
+//                allowing(mockServletContext).getAttribute("org.apache.isis.core.webapp.isisSessionFactory");
+//                will(returnValue(mockIsisSessionFactory));
                 allowing(mockIsisSessionFactory).getServicesInjector();
                 will(returnValue(mockServicesInjector));
                 allowing(mockIsisSessionFactory).getConfiguration();
