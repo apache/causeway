@@ -25,7 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
@@ -100,7 +100,7 @@ public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String
                 declaredField.setAccessible(true);
                 try {
                     Object o = declaredField.get(mixin);
-                    return getAdapterManager().adapterFor(o);
+                    return getObjectAdapterProvider().adapterFor(o);
                 } catch (IllegalAccessException e) {
                     if(policy == Policy.FAIL_FAST) {
                         throw new RuntimeException(
@@ -119,7 +119,7 @@ public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String
         return null;
     }
 
-    private AdapterManager getAdapterManager() {
+    private ObjectAdapterProvider getObjectAdapterProvider() {
         return servicesInjector.getPersistenceSessionServiceInternal();
     }
 

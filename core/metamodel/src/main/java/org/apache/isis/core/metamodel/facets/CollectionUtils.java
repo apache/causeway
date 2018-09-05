@@ -35,26 +35,26 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 public final class CollectionUtils {
 
     private CollectionUtils() {
     }
 
-    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final AdapterManager adapterMap) {
-        final ObjectAdapter collection = adapterMap.adapterFor(option);
+    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final ObjectAdapterProvider adapterProvider) {
+        final ObjectAdapter collection = adapterProvider.adapterFor(option);
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
         final Object[] optionArray = new Object[facet.size(collection)];
         int j = 0;

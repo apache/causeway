@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -87,7 +87,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     public ExpectedException expectedException = ExpectedException.none();
     
     @Mock
-    private AdapterManager mockAdapterManager;
+    private ObjectAdapterProvider mockAdapterManager;
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
@@ -210,8 +210,8 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(session));
 
-                allowing(mockAdapterManager).getAdapterFor(employeeDO);
-                will(returnValue(mockEmployeeAdapter));
+//                allowing(mockAdapterManager).lookupAdapterFor(employeeDO);
+//                will(returnValue(mockEmployeeAdapter));
 
                 allowing(mockAdapterManager).adapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));

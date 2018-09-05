@@ -24,6 +24,7 @@ import java.util.Collection;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -33,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -84,7 +84,7 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
         final Class<?> returnType = actionMethod.getReturnType();
         final FacetHolder action = processMethodContext.getFacetHolder();
         final ActionChoicesFacetViaMethod facet = new ActionChoicesFacetViaMethod(choicesMethod, returnType, action,
-                getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), adapterManager);
+                getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), adapterProvider);
         FacetUtil.addFacet(facet);
     }
 
@@ -109,9 +109,9 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    ObjectAdapterProvider adapterProvider;
 
 }

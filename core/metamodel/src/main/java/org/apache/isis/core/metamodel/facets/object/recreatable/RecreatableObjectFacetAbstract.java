@@ -41,11 +41,8 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
         return ViewModelFacet.class;
     }
 
-    public RecreatableObjectFacetAbstract(
-            final FacetHolder holder,
-            final RecreationMechanism recreationMechanism,
-            final PostConstructMethodCache postConstructMethodCache,
-            final ServicesInjector servicesInjector) {
+    public RecreatableObjectFacetAbstract(final FacetHolder holder, final RecreationMechanism recreationMechanism,
+            final PostConstructMethodCache postConstructMethodCache, final ServicesInjector servicesInjector) {
         super(type(), holder);
         this.postConstructMethodCache = postConstructMethodCache;
         this.recreationMechanism = recreationMechanism;
@@ -60,10 +57,10 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
     @Override
     public boolean isImplicitlyImmutable() {
         final FacetHolder facetHolder = getFacetHolder();
-        if(facetHolder instanceof ObjectSpecificationDefault) {
+        if (facetHolder instanceof ObjectSpecificationDefault) {
             final ObjectSpecificationDefault objectSpec = (ObjectSpecificationDefault) facetHolder;
             final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
-            if(ViewModel.Cloneable.class.isAssignableFrom(correspondingClass)) {
+            if (ViewModel.Cloneable.class.isAssignableFrom(correspondingClass)) {
                 return false;
             }
         }
@@ -82,10 +79,8 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
     }
 
     @Override
-    public final Object instantiate(
-            final Class<?> viewModelClass,
-            final String mementoStr) {
-        if(getRecreationMechanism() == RecreationMechanism.INITIALIZES) {
+    public final Object instantiate(final Class<?> viewModelClass, final String mementoStr) {
+        if (getRecreationMechanism() == RecreationMechanism.INITIALIZES) {
             throw new IllegalStateException("This view model instantiates rather than initializes");
         }
         final Object viewModelPojo = doInstantiate(viewModelClass, mementoStr);
@@ -95,17 +90,16 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
     }
 
     /**
-     * Hook for subclass; must be overridden if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INSTANTIATES} (ignored otherwise).
+     * Hook for subclass; must be overridden if {@link #getRecreationMechanism()} is
+     * {@link RecreationMechanism#INSTANTIATES} (ignored otherwise).
      */
     protected Object doInstantiate(final Class<?> viewModelClass, final String mementoStr) {
         throw new IllegalStateException("doInstantiate() must be overridden if RecreationMechanism is INSTANTIATES");
     }
 
     @Override
-    public final void initialize(
-            final Object viewModelPojo,
-            final String mementoStr) {
-        if(getRecreationMechanism() == RecreationMechanism.INSTANTIATES) {
+    public final void initialize(final Object viewModelPojo, final String mementoStr) {
+        if (getRecreationMechanism() == RecreationMechanism.INSTANTIATES) {
             throw new IllegalStateException("This view model instantiates rather than initializes");
         }
         doInitialize(viewModelPojo, mementoStr);
@@ -113,21 +107,18 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
     }
 
     /**
-     * Hook for subclass; must be overridden if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INITIALIZES} (ignored otherwise).
+     * Hook for subclass; must be overridden if {@link #getRecreationMechanism()} is
+     * {@link RecreationMechanism#INITIALIZES} (ignored otherwise).
      */
-    protected void doInitialize(
-            final Object viewModelPojo,
-            final String mementoStr) {
+    protected void doInitialize(final Object viewModelPojo, final String mementoStr) {
         throw new IllegalStateException("doInitialize() must be overridden if RecreationMechanism is INITIALIZE");
     }
 
     private void invokePostConstructMethod(final Object viewModel) {
         final Method postConstructMethod = postConstructMethodCache.postConstructMethodFor(viewModel);
-        if(postConstructMethod != null) {
+        if (postConstructMethod != null) {
             MethodExtensions.invoke(postConstructMethod, viewModel);
         }
     }
-
-
 
 }

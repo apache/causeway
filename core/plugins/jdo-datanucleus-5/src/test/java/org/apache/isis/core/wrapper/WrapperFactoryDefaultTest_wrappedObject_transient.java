@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.wrapper;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,7 +46,7 @@ import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -67,9 +70,6 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 /**
  * Contract test.
  */
@@ -79,7 +79,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    private AdapterManager mockAdapterManager;
+    private ObjectAdapterProvider mockAdapterManager;
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
@@ -159,8 +159,8 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
                 allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
                 will(returnValue(DeploymentCategory.PRODUCTION));
 
-                allowing(mockAdapterManager).getAdapterFor(employeeDO);
-                will(returnValue(mockEmployeeAdapter));
+//                allowing(mockAdapterManager).lookupAdapterFor(employeeDO);
+//                will(returnValue(mockEmployeeAdapter));
 
                 allowing(mockAdapterManager).adapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));

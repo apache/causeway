@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -45,7 +45,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     private final DeploymentCategory deploymentCategory;
     private final SpecificationLoader specificationLoader;
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
 
     public ActionChoicesFacetViaMethod(
             final Method method,
@@ -54,14 +54,14 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager) {
+            final ObjectAdapterProvider adapterProvider) {
         super(holder);
         this.method = method;
         this.choicesType = choicesType;
         this.deploymentCategory = deploymentCategory;
         this.specificationLoader = specificationLoader;
         this.authenticationSessionProvider = authenticationSessionProvider;
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
     }
 
     /**
@@ -108,7 +108,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             return null;
         }
 
-        final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
+        final ObjectAdapter collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
 
         final AuthenticationSession authenticationSession = getAuthenticationSession();
         final DeploymentCategory deploymentCategory = getDeploymentCategory();
@@ -120,7 +120,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
                 _Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
-        return CollectionUtils.getCollectionAsObjectArray(filteredObjects, parameterSpec, getAdapterManager());
+        return CollectionUtils.getCollectionAsObjectArray(filteredObjects, parameterSpec, getObjectAdapterProvider());
     }
 
     @Override
@@ -140,8 +140,8 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
         return specificationLoader;
     }
 
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
+        return adapterProvider;
     }
 
     protected DeploymentCategory getDeploymentCategory() {

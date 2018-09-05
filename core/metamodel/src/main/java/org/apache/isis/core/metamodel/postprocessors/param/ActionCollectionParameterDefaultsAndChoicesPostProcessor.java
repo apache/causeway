@@ -27,6 +27,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -37,7 +38,6 @@ import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefau
 import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -55,7 +55,7 @@ ServicesInjectorAware {
     private DeploymentCategoryProvider deploymentCategoryProvider;
     private SpecificationLoader specificationLoader;
     private AuthenticationSessionProvider authenticationSessionProvider;
-    private PersistenceSessionServiceInternal adapterManager;
+    private ObjectAdapterProvider adapterProvider;
 
     @Override
     public void postProcess(final ObjectSpecification objectSpecification) {
@@ -145,7 +145,7 @@ ServicesInjectorAware {
                     new ActionParameterChoicesFacetFromParentedCollection(
                             scalarOrCollectionParam, otma,
                             getDeploymentCategory(), specificationLoader,
-                            authenticationSessionProvider, adapterManager ));
+                            authenticationSessionProvider, adapterProvider ));
         }
     }
 
@@ -172,7 +172,7 @@ ServicesInjectorAware {
         deploymentCategoryProvider = servicesInjector.getDeploymentCategoryProvider();
         specificationLoader = servicesInjector.getSpecificationLoader();
         authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
 }

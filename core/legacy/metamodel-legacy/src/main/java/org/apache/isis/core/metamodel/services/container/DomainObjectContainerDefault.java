@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -71,7 +72,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
         if (persistentObject == null) {
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
         }
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(persistentObject));
+        final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(persistentObject));
         if (!repositoryService.isPersistent(persistentObject)) {
             throw new RepositoryException("Object not persistent: " + adapter);
         }
@@ -156,7 +157,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
     @Programmatic
     @Override
     public String validate(final Object domainObject) {
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
+        final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
         final InteractionResult validityResult =
                 adapter.getSpecification().isValidResult(adapter, InteractionInitiatedBy.FRAMEWORK);
         return validityResult.getReason();
@@ -170,7 +171,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
     @Programmatic
     @Override
     public boolean isViewModel(final Object domainObject) {
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
+        final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
         return adapter.getSpecification().isViewModel();
     }
     
@@ -184,7 +185,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
     @Programmatic
     @Override
     public void persist(final Object domainObject) {
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
+        final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
 
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework; instantiate using newTransientInstance(...) rather than simply new'ing up.");
@@ -216,7 +217,9 @@ public class DomainObjectContainerDefault implements DomainObjectContainer {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
     
-
+    private ObjectAdapterProvider getObjectAdapterProvider() {
+        return persistenceSessionServiceInternal;
+    }
 
     // -- service dependencies
 

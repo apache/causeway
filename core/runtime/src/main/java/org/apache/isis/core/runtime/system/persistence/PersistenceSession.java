@@ -27,7 +27,8 @@ import org.apache.isis.applib.services.bookmark.BookmarkService.FieldResetPolicy
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -35,9 +36,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
+import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-public interface PersistenceSession extends AdapterManager, TransactionalResource, SessionScopedComponent {
+public interface PersistenceSession extends ObjectAdapterProvider.Delegating, TransactionalResource, SessionScopedComponent {
 
     // -- CONSTANTS
 
@@ -57,21 +59,37 @@ public interface PersistenceSession extends AdapterManager, TransactionalResourc
      */
     public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
 
+    //---
 
-    // -- INTERFACE DECLARATION
+    MementoRecreateObjectSupport mementoSupport();
 
-    ObjectAdapter adapterFor(RootOid rootOid);
-
-    ObjectAdapter adapterFor(RootOid oid, ConcurrencyChecking concurrencyChecking);
-
+    ObjectAdapter adapterFor(RootOid rootOid, ConcurrencyChecking concurrencyChecking);
+    Map<RootOid, ObjectAdapter> adaptersFor(List<RootOid> rootOids, ConcurrencyChecking concurrencyChecking);
     ObjectAdapter adapterForAny(RootOid rootOid);
-
-    Map<RootOid, ObjectAdapter> adaptersFor(List<RootOid> rootOids);
-
     <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
+    
+    /**
+     * As per {@link #adapterFor(RootOid, ConcurrencyChecking)}, with
+     * {@link ConcurrencyChecking#NO_CHECK no checking}.
+     *
+     * <p>
+     * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
+     * know that the oid does indeed represent an object you know exists.
+     * </p>
+     */
+    default ObjectAdapter adapterFor(final RootOid rootOid) {
+        return adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
+    }
+    
+    default Map<RootOid, ObjectAdapter> adaptersFor(List<RootOid> rootOids) {
+        return adaptersFor(rootOids, ConcurrencyChecking.NO_CHECK);
+    }
+
+    // --
 
     void close();
 
+    RootOid createTransientOrViewModelOid(Object pojo);
     RootOid createPersistentOrViewModelOid(Object pojo);
 
     ObjectAdapter createTransientInstance(ObjectSpecification spec);
@@ -95,9 +113,9 @@ public interface PersistenceSession extends AdapterManager, TransactionalResourc
      * Convenient equivalent to {@code getPersistenceManager()}.
      * @return
      */
-    PersistenceManager pm();
-
-    List<ObjectAdapter> getServices();
+    default PersistenceManager pm() {
+        return getPersistenceManager();
+    }
 
     ServicesInjector getServicesInjector();
 
@@ -146,6 +164,9 @@ public interface PersistenceSession extends AdapterManager, TransactionalResourc
 
     void resolve(Object parent);
 
+    boolean isTransient(Object pojo);
+    boolean isRepresentingPersistent(Object pojo);
+    boolean isDestroyed(Object pojo);
 
 
 }

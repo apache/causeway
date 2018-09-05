@@ -27,7 +27,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -51,7 +51,7 @@ implements ImperativeFacet {
             final IsisConfiguration isisConfiguration,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager) {
+            final ObjectAdapterProvider adapterManager) {
         super(typeSpec, holder, deploymentCategory, isisConfiguration, specificationLoader, authenticationSessionProvider, adapterManager);
         this.method = method;
     }
@@ -76,7 +76,7 @@ implements ImperativeFacet {
             final InteractionInitiatedBy interactionInitiatedBy) {
         final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
 
-        final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
+        final ObjectAdapter collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
 
         boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
         if(filterForVisibility) {

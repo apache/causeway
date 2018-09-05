@@ -26,7 +26,7 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -50,7 +50,7 @@ public final class LinkAndLabelUtil {
 
         final EntityModel parentEntityModel = scalarModelForAssociation.getParentEntityModel();
 
-        final ObjectAdapter parentAdapter = parentEntityModel.load(AdapterManager.ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter parentAdapter = parentEntityModel.load(ConcurrencyChecking.NO_CHECK);
 
         final OneToOneAssociation oneToOneAssociation =
                 scalarModelForAssociation.getPropertyMemento().getProperty(scalarModelForAssociation.getSpecificationLoader());

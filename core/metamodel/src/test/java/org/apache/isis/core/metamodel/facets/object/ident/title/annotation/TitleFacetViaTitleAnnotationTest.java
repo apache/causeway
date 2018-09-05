@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.object.ident.title.annotation;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -31,7 +34,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
@@ -39,9 +42,6 @@ import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetV
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 public class TitleFacetViaTitleAnnotationTest {
 
@@ -55,7 +55,7 @@ public class TitleFacetViaTitleAnnotationTest {
     private ObjectAdapter mockObjectAdapter;
 
     @Mock
-    private AdapterManager mockAdapterManager;
+    private ObjectAdapterProvider mockAdapterManager;
     
     protected static class DomainObjectWithProblemInItsAnnotatedTitleMethod {
 

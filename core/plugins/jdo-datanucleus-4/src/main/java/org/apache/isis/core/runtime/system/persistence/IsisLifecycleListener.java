@@ -35,9 +35,8 @@ import com.google.common.collect.Maps;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerBase;
 
-public class IsisLifecycleListener2
+public class IsisLifecycleListener
 implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,
 DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener,
 SuspendableListener {
@@ -45,10 +44,10 @@ SuspendableListener {
     /**
      * The internal contract between PersistenceSession and this class.
      */
-    interface PersistenceSessionLifecycleManagement extends AdapterManagerBase {
+    interface PersistenceSessionLifecycleManagement {
 
         void ensureRootObject(Persistable pojo);
-        void initializeMapAndCheckConcurrency(Persistable pojo);
+        ObjectAdapter initializeMapAndCheckConcurrency(Persistable pojo);
 
         void enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(Persistable pojo);
         void invokeIsisPersistingCallback(Persistable pojo);
@@ -58,7 +57,7 @@ SuspendableListener {
 
     private final PersistenceSessionLifecycleManagement persistenceSession;
 
-    public IsisLifecycleListener2(final PersistenceSessionLifecycleManagement persistenceSession) {
+    public IsisLifecycleListener(final PersistenceSessionLifecycleManagement persistenceSession) {
         this.persistenceSession = persistenceSession;
     }
 
@@ -187,9 +186,9 @@ SuspendableListener {
     // Logging
     // /////////////////////////////////////////////////////////
 
-    private enum Phase {
-        PRE, POST
-    }
+//    private enum Phase {
+//        PRE, POST
+//    }
 
     private static Map<Integer, LifecycleEventType> events = Maps.newHashMap();
 
@@ -200,15 +199,15 @@ SuspendableListener {
             events.put(code, this);
         }
 
-        public static LifecycleEventType lookup(int code) {
-            return events.get(code);
-        }
+//        public static LifecycleEventType lookup(int code) {
+//            return events.get(code);
+//        }
     }
 
-    private String logString(Phase phase, LoggingLocation location, InstanceLifecycleEvent event) {
-        final Persistable pojo = Utils.persistenceCapableFor(event);
-        final ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
-        return phase + " " + location.prefix + " " + LifecycleEventType.lookup(event.getEventType()) + ": oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
-    }
+//    private String logString(Phase phase, LoggingLocation location, InstanceLifecycleEvent event) {
+//        final Persistable pojo = Utils.persistenceCapableFor(event);
+//        final ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
+//        return phase + " " + location.prefix + " " + LifecycleEventType.lookup(event.getEventType()) + ": oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
+//    }
 
 }

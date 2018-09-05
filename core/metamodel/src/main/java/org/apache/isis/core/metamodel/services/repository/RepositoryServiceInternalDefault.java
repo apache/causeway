@@ -22,11 +22,10 @@ package org.apache.isis.core.metamodel.services.repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RepositoryException;
@@ -41,6 +40,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 @DomainService(
@@ -72,7 +72,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
     @Programmatic
     @Override
     public boolean isPersistent(final Object domainObject) {
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(domainObject));
+        final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
         return adapter.representsPersistent();
     }
 
@@ -82,7 +82,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
         if (isPersistent(object)) {
             return object;
         }
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(object));
+        final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(object));
 
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework (unable to create/obtain an adapter)");
@@ -120,7 +120,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
         if (object == null) {
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
         }
-        final ObjectAdapter adapter = persistenceSessionServiceInternal.adapterFor(unwrapped(object));
+        final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(object));
         if (!isPersistent(object)) {
             throw new RepositoryException("Object not persistent: " + adapter);
         }
@@ -206,6 +206,9 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
 
+    private ObjectAdapterProvider getObjectAdapterProvider() {
+        return persistenceSessionServiceInternal;
+    }
 
     @javax.inject.Inject
     FactoryService factoryService;

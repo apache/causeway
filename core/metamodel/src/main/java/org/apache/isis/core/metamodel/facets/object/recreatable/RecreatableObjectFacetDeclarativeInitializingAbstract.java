@@ -21,13 +21,12 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.memento._Mementos;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -39,23 +38,20 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract extends RecreatableObjectFacetAbstract {
+public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract 
+extends RecreatableObjectFacetAbstract {
 
-    private final SpecificationLoader specificationLoader;
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
 
     public RecreatableObjectFacetDeclarativeInitializingAbstract(
             final FacetHolder holder,
             final RecreationMechanism recreationMechanism,
-            final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
+            final ObjectAdapterProvider adapterProvider,
             final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
         super(holder, recreationMechanism, postConstructMethodCache, servicesInjector);
-        this.specificationLoader = specificationLoader;
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
     }
 
     @Override
@@ -68,21 +64,12 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
 
         final _Mementos.Memento memento = _Mementos.parse(codec, serializer, mementoStr);
 
-        //TODO Legacy of ...
-        //        final MementoService mementoService = servicesInjector.lookupService(MementoService.class);
-        //        final BookmarkService bookmarkService = servicesInjector.lookupService(BookmarkService.class);
-        //
-        //        final MementoService.Memento memento = mementoService.parse(mementoStr);
-
         final Set<String> mementoKeys = memento.keySet();
 
-        // manually recreate the adapter in order to be able to query state via the metamodel
-        ObjectAdapter viewModelAdapter = adapterManager.getAdapterFor(viewModelPojo);
-        if(viewModelAdapter == null) {
-            final ObjectSpecification objectSpecification = specificationLoader.loadSpecification(viewModelPojo.getClass());
-            final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-            viewModelAdapter = adapterManager.mapRecreatedPojo(new RootOid(objectSpecId, mementoStr, Oid.State.VIEWMODEL), viewModelPojo);
-        }
+        final ObjectAdapter viewModelAdapter = adapterProvider.adapterForViewModel(
+                viewModelPojo, 
+                (ObjectSpecId objectSpecId)->
+                    new RootOid(objectSpecId, mementoStr, Oid.State.VIEWMODEL)  );
 
         final ObjectSpecification spec = viewModelAdapter.getSpecification();
         final List<OneToOneAssociation> properties = spec.getProperties(Contributed.EXCLUDED);
@@ -96,17 +83,8 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
                 propertyValue = memento.get(propertyId, propertyType);
             }
 
-            //TODO Legacy of ...
-            //            if(mementoKeys.contains(propertyId)) {
-            //                final Class<?> propertyType = property.getSpecification().getCorrespondingClass();
-            //                propertyValue = memento.get(propertyId, propertyType);
-            //            } else if(mementoKeys.contains(propertyId + ".bookmark")) {
-            //                final Bookmark propertyValueBookmark = memento.get(propertyId + ".bookmark", Bookmark.class);
-            //                propertyValue = bookmarkService.lookup(propertyValueBookmark);
-            //            }
-
             if(propertyValue != null) {
-                property.set(viewModelAdapter, adapterManager.adapterFor(propertyValue), InteractionInitiatedBy.FRAMEWORK);
+                property.set(viewModelAdapter, adapterProvider.adapterFor(propertyValue), InteractionInitiatedBy.FRAMEWORK);
             }
         }
     }
@@ -119,74 +97,32 @@ public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract exte
 
         final _Mementos.Memento memento = _Mementos.create(codec, serializer);
 
-        //TODO Legacy of ...
-        //        final MementoService mementoService = servicesInjector.lookupService(MementoService.class);
-        //        final BookmarkService bookmarkService = servicesInjector.lookupService(BookmarkService.class);
-        //
-        //        final MementoService.Memento memento = mementoService.create();
-
-        // this is horrible, but there's a catch-22 here...
-        // we need an adapter in order to query the state of the object via the metamodel, on the other hand
-        // we can't create an adapter without the identifier, which is what we're trying to derive
-        // so... we create a temporary transient adapter, use it to wrap this adapter and interrogate this pojo,
-        // then throw away that adapter (remove from the adapter map)
-        boolean createdTemporaryAdapter = false;
-        ObjectAdapter viewModelAdapter = adapterManager.getAdapterFor(viewModelPojo);
-        if(viewModelAdapter == null) {
-
-            final ObjectSpecification objectSpecification =
-                    specificationLoader.loadSpecification(viewModelPojo.getClass());
-
-            final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-            viewModelAdapter =
-                    adapterManager.mapRecreatedPojo(
-                            RootOid.create(objectSpecId, UUID.randomUUID().toString()),
-                            viewModelPojo);
-
-            createdTemporaryAdapter = true;
-        }
-
-        try {
-            final ObjectSpecification spec = viewModelAdapter.getSpecification();
-            final List<OneToOneAssociation> properties = spec.getProperties(Contributed.EXCLUDED);
-            for (OneToOneAssociation property : properties) {
-                // ignore read-only
-                if(!property.containsDoOpFacet(PropertySetterFacet.class)) {
-                    continue;
-                }
-                // ignore those explicitly annotated as @NotPersisted
-                if(property.isNotPersisted()) {
-                    continue;
-                }
-
-                // otherwise, include
-
-                // REVIEW: this look to be the same as viewModelAdapter, above?
-                final ObjectAdapter ownerAdapter = adapterManager.adapterFor(viewModelPojo);
-
-                final ObjectAdapter propertyValueAdapter = property.get(ownerAdapter,
-                        InteractionInitiatedBy.FRAMEWORK);
-                if(propertyValueAdapter != null) {
-                    final Object propertyValue = propertyValueAdapter.getObject();
-
-                    memento.put(property.getId(), propertyValue);
-
-                    //TODO Legacy of ...
-                    //                    if(mementoService.canSet(propertyValue)) {
-                    //                        memento.set(property.getId(), propertyValue);
-                    //                    } else {
-                    //                        final Bookmark propertyValueBookmark = bookmarkService.bookmarkFor(propertyValue);
-                    //                        memento.set(property.getId() + ".bookmark", propertyValueBookmark);
-                    //                    }
-                }
+        final ObjectAdapter ownerAdapter = adapterProvider.specificationForViewModel(viewModelPojo);
+        final ObjectSpecification spec = ownerAdapter.getSpecification();
+        
+        final List<OneToOneAssociation> properties = spec.getProperties(Contributed.EXCLUDED);
+        for (OneToOneAssociation property : properties) {
+            // ignore read-only
+            if(!property.containsDoOpFacet(PropertySetterFacet.class)) {
+                continue;
             }
-            return memento.asString();
-        } finally {
-            if(createdTemporaryAdapter) {
-                adapterManager.removeAdapter(viewModelAdapter);
+            // ignore those explicitly annotated as @NotPersisted
+            if(property.isNotPersisted()) {
+                continue;
+            }
+
+            // otherwise, include
+
+            final ObjectAdapter propertyValueAdapter = property.get(ownerAdapter,
+                    InteractionInitiatedBy.FRAMEWORK);
+            if(propertyValueAdapter != null) {
+                final Object propertyValue = propertyValueAdapter.getObject();
+
+                memento.put(property.getId(), propertyValue);
             }
         }
+        return memento.asString();
     }
-
+    
 
 }

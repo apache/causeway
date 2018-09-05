@@ -55,5 +55,14 @@ public class CollectionData extends Data {
         str.append(")");
         return str.toString();
     }
+    
+    /**
+     * TODO[ISIS-1976] only introduced for refactoring.
+     */
+    @Deprecated
+    public Data[] getElements() {
+        return elements;
+    }
+    
 
 }

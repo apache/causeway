@@ -19,31 +19,35 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.Map;
+import java.util.function.Function;
+
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.persistence.query.*;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
 public class PersistenceQueryFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFactory.class);
 
     private final SpecificationLoader specificationLoader;
-    private final AdapterManager adapterManager;
+    private final Function<Object, ObjectAdapter> adapterProvider;
 
     PersistenceQueryFactory(
-            final AdapterManager adapterManager,
+            final Function<Object, ObjectAdapter> adapterProvider,
             final SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
     }
 
     /**
@@ -79,7 +83,7 @@ public class PersistenceQueryFactory {
         for (final Map.Entry<String, Object> entry : argumentsByParameterName.entrySet()) {
             final String parameterName = entry.getKey();
             final Object argument = argumentsByParameterName.get(parameterName);
-            final ObjectAdapter argumentAdapter = argument != null ? adapterManager.adapterFor(argument) : null;
+            final ObjectAdapter argumentAdapter = argument != null ? adapterProvider.apply(argument) : null;
             argumentsAdaptersByParameterName.put(parameterName, argumentAdapter);
         }
         return argumentsAdaptersByParameterName;

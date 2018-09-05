@@ -28,7 +28,7 @@ import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -48,7 +48,7 @@ class CommandInvocationHandler<T> implements InvocationHandler {
     private final SpecificationLoader specificationLoader;
     private final CommandDtoServiceInternal commandDtoServiceInternal;
     private final CommandContext commandContext;
-    private final Supplier<AdapterManager> adapterManagerSupplier;
+    private final Supplier<ObjectAdapterProvider> adapterProviderSupplier;
 
     CommandInvocationHandler(
             BackgroundCommandService backgroundCommandService,
@@ -57,14 +57,14 @@ class CommandInvocationHandler<T> implements InvocationHandler {
             SpecificationLoader specificationLoader,
             CommandDtoServiceInternal commandDtoServiceInternal,
             CommandContext commandContext,
-            Supplier<AdapterManager> adapterManagerSupplier) {
+            Supplier<ObjectAdapterProvider> adapterProviderSupplier) {
         this.backgroundCommandService = requires(backgroundCommandService, "backgroundCommandService");
         this.target = requires(target, "target");
         this.mixedInIfAny = mixedInIfAny;
         this.specificationLoader = requires(specificationLoader, "specificationLoader");
         this.commandDtoServiceInternal = requires(commandDtoServiceInternal, "commandDtoServiceInternal");
         this.commandContext = requires(commandContext, "commandContext");
-        this.adapterManagerSupplier = requires(adapterManagerSupplier, "adapterManagerSupplier");
+        this.adapterProviderSupplier = requires(adapterProviderSupplier, "adapterProviderSupplier");
     }
 
     @Override
@@ -102,7 +102,7 @@ class CommandInvocationHandler<T> implements InvocationHandler {
             action = findMixedInAction(action, mixedInIfAny);
         }
 
-        final ObjectAdapter domainObjectAdapter = getAdapterManager().adapterFor(domainObject);
+        final ObjectAdapter domainObjectAdapter = getObjectAdapterProvider().adapterFor(domainObject);
         final String domainObjectClassName = CommandUtil.targetClassNameFor(domainObjectAdapter);
 
         final String targetActionName = CommandUtil.targetMemberNameFor(action);
@@ -124,13 +124,13 @@ class CommandInvocationHandler<T> implements InvocationHandler {
 
     // -- HELPER
 
-    private AdapterManager getAdapterManager() {
-        return adapterManagerSupplier.get();
+    private ObjectAdapterProvider getObjectAdapterProvider() {
+        return adapterProviderSupplier.get();
     }
 
     private ObjectAction findMixedInAction(final ObjectAction action, final Object domainObject) {
         final String actionId = action.getId();
-        final ObjectSpecification domainSpec = getAdapterManager().adapterFor(domainObject).getSpecification();
+        final ObjectSpecification domainSpec = getObjectAdapterProvider().adapterFor(domainObject).getSpecification();
         List<ObjectAction> objectActions = domainSpec.getObjectActions(Contributed.INCLUDED);
         for (ObjectAction objectAction : objectActions) {
             if(objectAction instanceof ObjectActionMixedIn) {
@@ -146,8 +146,8 @@ class CommandInvocationHandler<T> implements InvocationHandler {
     }
 
     private ObjectAdapter[] adaptersFor(final Object[] args) {
-        final AdapterManager adapterManager = getAdapterManager();
-        return CommandUtil.adaptersFor(args, adapterManager);
+        final ObjectAdapterProvider adapterProvider = getObjectAdapterProvider();
+        return CommandUtil.adaptersFor(args, adapterProvider);
     }
 
     private ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {

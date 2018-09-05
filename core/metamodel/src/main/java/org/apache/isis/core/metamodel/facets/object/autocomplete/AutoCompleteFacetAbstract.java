@@ -27,7 +27,7 @@ import java.util.List;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -46,7 +46,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
 
     private final DeploymentCategory deploymentCategory;
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
     private final ServicesInjector servicesInjector;
     private final Class<?> repositoryClass;
     private final Method repositoryMethod;
@@ -67,7 +67,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         this.repositoryMethod = repositoryMethod;
 
         this.deploymentCategory = servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
-        this.adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        this.adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
         this.servicesInjector = servicesInjector;
         this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
     }
@@ -82,7 +82,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
                     @Override
                     public ObjectAdapter exec() {
                         final Object list = invoke();
-                        return adapterManager.adapterFor(list);
+                        return adapterProvider.adapterFor(list);
                     }
 
                     private Object invoke()  {

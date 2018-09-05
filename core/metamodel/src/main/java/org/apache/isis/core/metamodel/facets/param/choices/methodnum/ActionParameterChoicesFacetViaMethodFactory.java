@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -95,7 +96,7 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
             FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder,
-                    getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), adapterManager
+                    getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), adapterProvider
                     ));
         }
     }
@@ -151,9 +152,9 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    ObjectAdapterProvider adapterProvider;
 
 }

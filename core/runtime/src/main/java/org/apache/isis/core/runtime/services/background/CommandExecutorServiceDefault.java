@@ -44,7 +44,6 @@ import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -55,6 +54,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterLegacy;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.schema.cmd.v1.ActionDto;
@@ -63,12 +63,9 @@ import org.apache.isis.schema.cmd.v1.MemberDto;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.cmd.v1.ParamsDto;
 import org.apache.isis.schema.cmd.v1.PropertyDto;
-import org.apache.isis.schema.common.v1.CollectionDto;
 import org.apache.isis.schema.common.v1.InteractionType;
 import org.apache.isis.schema.common.v1.OidDto;
 import org.apache.isis.schema.common.v1.OidsDto;
-import org.apache.isis.schema.common.v1.ValueDto;
-import org.apache.isis.schema.common.v1.ValueType;
 import org.apache.isis.schema.common.v1.ValueWithTypeDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.CommonDtoUtils;
@@ -348,44 +345,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     }
 
     private ObjectAdapter adapterFor(final Object targetObject) {
-        if(targetObject instanceof OidDto) {
-            final OidDto oidDto = (OidDto) targetObject;
-            return adapterFor(oidDto);
-        }
-        if(targetObject instanceof CollectionDto) {
-            final CollectionDto collectionDto = (CollectionDto) targetObject;
-            final List<ValueDto> valueDtoList = collectionDto.getValue();
-            final List<Object> pojoList = Lists.newArrayList();
-            for (final ValueDto valueDto : valueDtoList) {
-                ValueType valueType = collectionDto.getType();
-                final Object valueOrOidDto = CommonDtoUtils.getValue(valueDto, valueType);
-                // converting from adapter and back means we handle both
-                // collections of references and of values
-                final ObjectAdapter objectAdapter = adapterFor(valueOrOidDto);
-                Object pojo = objectAdapter != null ? objectAdapter.getObject() : null;
-                pojoList.add(pojo);
-            }
-            return adapterFor(pojoList);
-        }
-        if(targetObject instanceof Bookmark) {
-            final Bookmark bookmark = (Bookmark) targetObject;
-            return adapterFor(bookmark);
-        }
-        return getPersistenceSession().adapterFor(targetObject);
-    }
-
-    private ObjectAdapter adapterFor(final OidDto oidDto) {
-        final Bookmark bookmark = Bookmark.from(oidDto);
-        return adapterFor(bookmark);
-    }
-
-    private ObjectAdapter adapterFor(final Bookmark bookmark) {
-        final RootOid rootOid = RootOid.create(bookmark);
-        return adapterFor(rootOid);
-    }
-
-    private ObjectAdapter adapterFor(final RootOid rootOid) {
-        return getPersistenceSession().adapterFor(rootOid);
+        return ObjectAdapterLegacy.__CommandExecutorServiceDefault.adapterFor(targetObject);
     }
 
     // //////////////////////////////////////

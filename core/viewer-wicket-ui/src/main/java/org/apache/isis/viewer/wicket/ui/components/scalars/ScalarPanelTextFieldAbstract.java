@@ -37,7 +37,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
@@ -351,7 +351,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     }
 
     @Override
-    public AdapterManager getAdapterManager() {
+    public ObjectAdapterProvider getObjectAdapterProvider() {
         return getPersistenceSession();
     }
 

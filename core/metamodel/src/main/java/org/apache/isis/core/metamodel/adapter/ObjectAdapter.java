@@ -30,9 +30,9 @@ import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.MethodUtil;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -161,7 +161,7 @@ public interface ObjectAdapter extends Instance {
      * <p>
      * This id allows the object to added to, stored by,
      * and retrieved from the object store.  Objects can be looked up by their
-     * {@link Oid} from the {@link AdapterManager}.
+     * {@link Oid}.
      *
      * <p>
      * Note that standalone value objects ("foobar", or 5, or a date),
@@ -169,11 +169,11 @@ public interface ObjectAdapter extends Instance {
      */
     Oid getOid();
 
-    /**
-     * Since {@link Oid}s are now immutable, it is the reference from the
-     * {@link ObjectAdapter} to its {@link Oid} that must now be updated.
-     */
-    void replaceOid(Oid persistedOid);
+//    /**
+//     * Since {@link Oid}s are now immutable, it is the reference from the
+//     * {@link ObjectAdapter} to its {@link Oid} that must now be updated.
+//     */
+//    void replaceOid(Oid persistedOid);
 
     /**
      * Returns either itself (if this is a root) or the parented collections, the
@@ -355,7 +355,6 @@ public interface ObjectAdapter extends Instance {
     }
 
     boolean isTransient();
-
     boolean representsPersistent();
     boolean isDestroyed();
 
@@ -410,19 +409,26 @@ public interface ObjectAdapter extends Instance {
          * <li>if the method does not declare all parameters for arguments, then truncates arguments.
          * </ul>
          */
-        public static Object invokeAutofit(final Method method, final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable, final AdapterManager adapterManager) {
+        public static Object invokeAutofit(
+                final Method method, 
+                final ObjectAdapter target, 
+                List<ObjectAdapter> argumentsIfAvailable, 
+                final ObjectAdapterProvider adapterProvider) {
+            
             final List<ObjectAdapter> args = _Lists.newArrayList();
             if(argumentsIfAvailable != null) {
                 args.addAll(argumentsIfAvailable);
             }
 
-            adjust(method, args, adapterManager);
+            adjust(method, args, adapterProvider);
 
             final ObjectAdapter[] argArray = args.toArray(new ObjectAdapter[]{});
             return invoke(method, target, argArray);
         }
 
-        private static void adjust(final Method method, final List<ObjectAdapter> args, final AdapterManager adapterManager) {
+        private static void adjust(
+                final Method method, final List<ObjectAdapter> args, final ObjectAdapterProvider adapterProvider) {
+            
             final Class<?>[] parameterTypes = method.getParameterTypes();
             ListExtensions.adjust(args, parameterTypes.length);
 
@@ -430,7 +436,7 @@ public interface ObjectAdapter extends Instance {
                 final Class<?> cls = parameterTypes[i];
                 if(args.get(i) == null && cls.isPrimitive()) {
                     final Object object = ClassExtensions.toDefault(cls);
-                    final ObjectAdapter adapter = adapterManager.adapterFor(object);
+                    final ObjectAdapter adapter = adapterProvider.adapterFor(object);
                     args.set(i, adapter);
                 }
             }
@@ -476,20 +482,28 @@ public interface ObjectAdapter extends Instance {
             return Util::unwrap;
         }
 
-        public static Function<Object, ObjectAdapter> adapterForUsing(final AdapterManager adapterManager) {
-            return adapterManager::adapterFor;
+        public static Function<Object, ObjectAdapter> adapterForUsing(final ObjectAdapterProvider adapterProvider) {
+            return adapterProvider::adapterFor;
         }
 
         @Deprecated
-        public static com.google.common.base.Function<Object, ObjectAdapter> adapter_ForUsing(final AdapterManager adapterManager) {
+        public static com.google.common.base.Function<Object, ObjectAdapter> adapter_ForUsing(final ObjectAdapterProvider adapterProvider) {
             return new com.google.common.base.Function<Object, ObjectAdapter>() {
                 @Override
                 public ObjectAdapter apply(final Object pojo) {
-                    return adapterManager.adapterFor(pojo);
+                    return adapterProvider.adapterFor(pojo);
                 }
             };
         }
     }
+
+    /**
+     * 
+     * @param persistedRootOid
+     * @return a copy of this adapter, having a new RootOid 
+     * @since 2.0.0-M2
+     */
+    ObjectAdapter withOid(RootOid newOid);
 
 
 }

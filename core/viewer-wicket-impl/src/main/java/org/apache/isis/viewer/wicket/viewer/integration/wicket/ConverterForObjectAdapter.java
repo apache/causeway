@@ -23,6 +23,7 @@ import java.util.Locale;
 
 import org.apache.wicket.util.convert.IConverter;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -44,8 +45,11 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
      */
     @Override
     public ObjectAdapter convertToObject(final String value, final Locale locale) {
-        final Oid oid = RootOid.deStringEncoded(value);
-        return getPersistenceSession().getAdapterFor(oid);
+        final RootOid rootOid = RootOid.deStringEncoded(value);
+        
+        //FIXME[ISIS-1976]
+        //return getPersistenceSession().lookupAdapterFor(rootOid);
+        throw _Exceptions.notImplemented();
     }
 
     /**

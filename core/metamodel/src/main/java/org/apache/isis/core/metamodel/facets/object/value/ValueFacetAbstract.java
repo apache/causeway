@@ -19,15 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.object.value;
 
-import org.apache.isis.applib.adapters.*;
+import org.apache.isis.applib.adapters.DefaultsProvider;
+import org.apache.isis.applib.adapters.EncoderDecoder;
+import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.Parser2;
+import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.commons.lang.ClassExtensions;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
-
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;
 import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
@@ -117,7 +120,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
             // install the EncodeableFacet if we've been given an EncoderDecoder
             final EncoderDecoder<?> encoderDecoder = semanticsProvider.getEncoderDecoder();
             if (encoderDecoder != null) {
-                facetHolder.addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder, getAdapterMap(), this.servicesInjector));
+                facetHolder.addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder, getObjectAdapterProvider(), this.servicesInjector));
             }
 
             // install the ParseableFacet and other facets if we've been given a
@@ -128,6 +131,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
                 facetHolder.addFacet(new TitleFacetUsingParser(parser, holder, this.servicesInjector));
                 facetHolder.addFacet(new TypicalLengthFacetUsingParser(parser, holder, this.servicesInjector));
                 if(parser instanceof Parser2) {
+                    @SuppressWarnings("rawtypes")
                     final Parser2 parser2 = (Parser2) parser;
                     final Integer maxLength = parser2.maxLength();
                     if(maxLength != null) {
@@ -179,7 +183,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
         return servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
     }
 
-    private AdapterManager getAdapterMap() {
+    private ObjectAdapterProvider getObjectAdapterProvider() {
         return servicesInjector.getPersistenceSessionServiceInternal();
     }
 

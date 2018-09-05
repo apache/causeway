@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.choices.method;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -30,7 +31,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -60,7 +60,7 @@ public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacet
         processMethodContext.removeMethod(choicesMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property, getSpecificationLoader(), adapterManager));
+        FacetUtil.addFacet(new PropertyChoicesFacetViaMethod(choicesMethod, returnType, property, getSpecificationLoader(), adapterProvider));
     }
 
     // ///////////////////////////////////////////////////////
@@ -71,9 +71,9 @@ public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacet
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    ObjectAdapterProvider adapterProvider;
 
 }

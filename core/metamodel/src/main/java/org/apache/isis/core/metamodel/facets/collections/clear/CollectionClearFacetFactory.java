@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.collections.clear;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -31,7 +32,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -61,11 +61,13 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
         FacetUtil.addFacet(createCollectionClearFacet(method, getMethod, collection));
     }
 
-    private CollectionClearFacet createCollectionClearFacet(final Method clearMethodIfAny, final Method accessorMethod, final FacetHolder collection) {
+    private CollectionClearFacet createCollectionClearFacet(
+            final Method clearMethodIfAny, final Method accessorMethod, final FacetHolder collection) {
+        
         if (clearMethodIfAny != null) {
             return new CollectionClearFacetViaClearMethod(clearMethodIfAny, collection);
         } else {
-            return new CollectionClearFacetViaAccessor(accessorMethod, collection, adapterManager);
+            return new CollectionClearFacetViaAccessor(accessorMethod, collection, adapterProvider);
         }
     }
 
@@ -77,10 +79,10 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    ObjectAdapterProvider adapterProvider;
 
 
 }

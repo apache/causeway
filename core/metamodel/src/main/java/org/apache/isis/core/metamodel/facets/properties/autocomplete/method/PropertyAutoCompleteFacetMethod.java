@@ -23,14 +23,11 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -49,7 +46,7 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
     private final int minLength;
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
     private final DeploymentCategory deploymentCategory;
     private SpecificationLoader specificationLoader;
 
@@ -60,14 +57,14 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
             final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager) {
+            final ObjectAdapterProvider adapterProvider) {
         super(holder);
         this.method = method;
         this.choicesClass = choicesClass;
         this.deploymentCategory = deploymentCategory;
         this.specificationLoader = specificationLoader;
         this.authenticationSessionProvider = authenticationSessionProvider;
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
         this.minLength = MinLengthUtil.determineMinLength(method);
     }
 
@@ -104,7 +101,7 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
             return null;
         }
 
-        final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
+        final ObjectAdapter collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
 
         final FacetedMethod facetedMethod = (FacetedMethod) getFacetHolder();
         final Class<?> propertyType = facetedMethod.getType();
@@ -117,7 +114,7 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
                 _Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject());
 
         final ObjectSpecification propertySpec = getSpecification(propertyType);
-        return CollectionUtils.getCollectionAsObjectArray(filteredObjects, propertySpec, getAdapterManager());
+        return CollectionUtils.getCollectionAsObjectArray(filteredObjects, propertySpec, getObjectAdapterProvider());
     }
 
     @Override
@@ -136,8 +133,8 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
     // Dependencies
     // ////////////////////////////////////////////
 
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
+        return adapterProvider;
     }
 
     protected SpecificationLoader getSpecificationLoader() {

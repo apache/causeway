@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
@@ -39,7 +39,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
     private static final Logger LOG = LoggerFactory.getLogger(TitleFacetViaTitleAnnotation.class);
     private final List<TitleComponent> components;
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
 
     public static class TitleComponent {
         public static final Function<? super Annotations.Evaluator<Title>, ? extends TitleComponent> FROM_EVALUATORS = new Function<Annotations.Evaluator<Title>, TitleComponent>() {
@@ -85,10 +85,10 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
     }
 
-    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, final AdapterManager adapterManager) {
+    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, final ObjectAdapterProvider adapterProvider) {
         super(holder);
         this.components = components;
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
                     continue;
                 }
                 // ignore context, if provided
-                final ObjectAdapter titlePartAdapter = adapterManager.adapterFor(titlePart);
+                final ObjectAdapter titlePartAdapter = adapterProvider.adapterFor(titlePart);
                 if(Objects.equal(contextAdapter, titlePartAdapter)) {
                     continue;
                 }

@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
-import com.google.common.base.Predicate;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -94,7 +94,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     public ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy) {
         final MutableProposedHolder proposedHolder = getProposedHolder(owner);
         final Object proposed = proposedHolder.getProposed();
-        return getAdapterMap().adapterFor(proposed);
+        return getObjectAdapterProvider().adapterFor(proposed);
     }
 
     protected MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
@@ -303,7 +303,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
                     interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
-                adapters.add(getAdapterMap().adapterFor(choice));
+                adapters.add(getObjectAdapterProvider().adapterFor(choice));
             }
         }
         /* // now incorporated into above choices processing (BoundedFacet is no more)
@@ -355,7 +355,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
                     interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
-                ObjectAdapter adapter = choice != null? getAdapterMap().adapterFor(choice) : null;
+                ObjectAdapter adapter = choice != null? getObjectAdapterProvider().adapterFor(choice) : null;
                 adapters.add(adapter);
             }
         }
@@ -392,7 +392,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
                 // invoked it is unable to return a default.
                 return null;
             }
-            return getAdapterMap().adapterFor(dflt);
+            return getObjectAdapterProvider().adapterFor(dflt);
         }
         return null;
     }
@@ -481,7 +481,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         ObjectAdapter proposedValueAdapter = null;
         ObjectSpecification proposedValueSpec;
         if(proposedValue != null) {
-            proposedValueAdapter = getAdapterMap().adapterFor(proposedValue);
+            proposedValueAdapter = getObjectAdapterProvider().adapterFor(proposedValue);
             if(proposedValueAdapter == null) {
                 return null;
             }
@@ -526,7 +526,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return parentAction.getSpecificationLoader();
     }
 
-    protected AdapterManager getAdapterMap() {
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
         return parentAction.getPersistenceSessionService();
     }
 

@@ -34,7 +34,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -216,7 +216,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
             }
 
             final ObjectAdapter proposedAdapter = proposedValue.getObjectAdapter(
-                    AdapterManager.ConcurrencyChecking.NO_CHECK,
+                    ConcurrencyChecking.NO_CHECK,
                     getPersistenceSession(), getSpecificationLoader());
 
             final String reasonIfAny = scalarModel.validate(proposedAdapter);

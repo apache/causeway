@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -36,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
@@ -93,7 +93,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, paramAsHolder, adapterManager));
+            FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, paramAsHolder, adapterProvider));
         }
     }
 
@@ -137,9 +137,9 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    ObjectAdapterProvider adapterProvider;
 
 }

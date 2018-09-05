@@ -100,7 +100,7 @@ PasswordValueFacet {
 
     @Override
     public ObjectAdapter createValue(final String password) {
-        return getAdapterManager().adapterFor(new Password(password));
+        return getObjectAdapterProvider().adapterFor(new Password(password));
     }
 
     private Password password(final Object object) {

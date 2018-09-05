@@ -25,27 +25,33 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.facets.CollectionUtils;
-import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 
 public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesClass;
 
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
 
-    public PropertyChoicesFacetViaMethod(final Method method, final Class<?> choicesClass, final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
+    public PropertyChoicesFacetViaMethod(
+            final Method method, 
+            final Class<?> choicesClass, 
+            final FacetHolder holder, 
+            final SpecificationLoader specificationLookup, 
+            final ObjectAdapterProvider adapterProvider) {
+        
         super(holder, specificationLookup);
         this.method = method;
         this.choicesClass = choicesClass;
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
     }
 
     /**
@@ -75,7 +81,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
             return ObjectExtensions.asArray(options);
         }
         final ObjectSpecification specification = specificationLookup.loadSpecification(choicesClass);
-        return CollectionUtils.getCollectionAsObjectArray(options, specification, getAdapterManager());
+        return CollectionUtils.getCollectionAsObjectArray(options, specification, getObjectAdapterProvider());
     }
 
     @Override
@@ -87,8 +93,8 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
     // Dependencies
     // ////////////////////////////////////////////
 
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
+        return adapterProvider;
     }
 
 }

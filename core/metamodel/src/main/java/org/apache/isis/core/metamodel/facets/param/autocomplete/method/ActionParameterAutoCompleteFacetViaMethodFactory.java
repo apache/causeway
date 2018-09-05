@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -35,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -73,6 +73,7 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
             final Class<?> paramType = params[i];
             final Class<?> arrayOfParamType = (Array.newInstance(paramType, 0)).getClass();
 
+            @SuppressWarnings("rawtypes")
             final Class[] returnTypes = { arrayOfParamType, List.class, Set.class, Collection.class };
             Method autoCompleteMethod = findAutoCompleteNumMethodReturning(processMethodContext, i, returnTypes);
             if (autoCompleteMethod == null) {
@@ -86,7 +87,7 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
                     new ActionParameterAutoCompleteFacetViaMethod(
                             autoCompleteMethod, paramType, paramAsHolder,
                             getDeploymentCategory(), getSpecificationLoader(),
-                            getAuthenticationSessionProvider(), adapterManager));
+                            getAuthenticationSessionProvider(), adapterProvider));
         }
     }
 
@@ -110,9 +111,9 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    ObjectAdapterProvider adapterProvider;
 
 }

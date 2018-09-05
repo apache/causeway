@@ -28,7 +28,6 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -37,13 +36,13 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 /**
  * A root {@link ObjectAdapter adapter} along with aggregated {@link ObjectAdapter adapters}
  * for any of its {@link OneToManyAssociation collection}s that are currently present in
- * the {@link AdapterManager map}s.
+ * the {@link ObjectAdapterContext}s map.
  *
  * <p>
  * Used for &quot;impact analysis&quot; when persisting transient root objects; all aggregated adapters
  * must also be persisted.
  */
-public class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
+class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
 
     private final ObjectAdapter parentAdapter;
     private final RootOid rootAdapterOid;
@@ -52,11 +51,11 @@ public class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
 
     public RootAndCollectionAdapters(
             final ObjectAdapter parentAdapter,
-            final AdapterManager adapterManager) {
+            final ObjectAdapterContext_AdapterManager adapterManagerMixin) {
         Assert.assertNotNull(parentAdapter);
         this.rootAdapterOid = (RootOid) parentAdapter.getOid();
         this.parentAdapter = parentAdapter;
-        addCollectionAdapters(adapterManager);
+        addCollectionAdapters(adapterManagerMixin);
     }
 
     public ObjectAdapter getRootAdapter() {
@@ -96,10 +95,10 @@ public class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
     // Helpers
     ////////////////////////////////////////////////////////////////////////
 
-    private void addCollectionAdapters(AdapterManager objectAdapterLookup) {
+    private void addCollectionAdapters(ObjectAdapterContext_AdapterManager adapterManagerMixin) {
         for (final OneToManyAssociation otma : parentAdapter.getSpecification().getCollections(Contributed.EXCLUDED)) {
             final ParentedCollectionOid collectionOid = new ParentedCollectionOid((RootOid) rootAdapterOid, otma);
-            final ObjectAdapter collectionAdapter = objectAdapterLookup.getAdapterFor(collectionOid);
+            final ObjectAdapter collectionAdapter = adapterManagerMixin.lookupAdapterFor(collectionOid);
             if (collectionAdapter != null) {
                 // collection adapters are lazily created and so there may not be one.
                 addCollectionAdapter(otma, collectionAdapter);

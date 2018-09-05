@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.runtime.persistence.adapter;
 
-import java.util.Objects;
-
-import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +26,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -43,7 +40,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession4;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
@@ -53,7 +50,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     private final AuthenticationSession authenticationSession;
     private final SpecificationLoader specificationLoader;
-    private final PersistenceSession4 persistenceSession;
+    private final PersistenceSession persistenceSession;
 
     /**
      * can be {@link #replacePojo(Object) replace}d.
@@ -62,7 +59,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     /**
      * can be {@link #replaceOid(Oid) replace}d.
      */
-    private Oid oid;
+    private final Oid oid;
 
     /**
      * only for standalone or parented collections.
@@ -74,12 +71,12 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             final Oid oid,
             final AuthenticationSession authenticationSession,
             final SpecificationLoader specificationLoader,
-            final PersistenceSession4 persistenceSession) {
+            final PersistenceSession persistenceSession) {
 
         this.persistenceSession = persistenceSession;
         this.specificationLoader = specificationLoader;
         this.authenticationSession = authenticationSession;
-
+        
         if (pojo instanceof ObjectAdapter) {
             throw new IsisException("Adapter can't be used to adapt an adapter: " + pojo);
         }
@@ -105,8 +102,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return specification;
     }
 
-
-
     // -- getObject, replacePojo
     @Override
     public Object getObject() {
@@ -123,19 +118,11 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         this.pojo = pojo;
     }
 
-
-    // -- getOid, replaceOid
+    // -- getOid
     @Override
     public Oid getOid() {
         return oid;
     }
-
-    @Override
-    public void replaceOid(Oid persistedOid) {
-        Objects.requireNonNull(oid); // values have no oid, so cannot be replaced
-        this.oid = persistedOid;
-    }
-
 
     // -- isParentedCollection, isValue
 
@@ -149,25 +136,15 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return oid == null;
     }
 
-
-
     // -- isTransient, representsPersistent, isDestroyed
-
+    
     @Override
     public boolean isTransient() {
         if(getSpecification().isService() || getSpecification().isViewModel()) {
             // services and view models are treated as persistent objects
             return false;
         }
-        if (pojo instanceof Persistable) {
-            final Persistable pojo = (Persistable) this.pojo;
-            final boolean isPersistent = pojo.dnIsPersistent();
-            final boolean isDeleted = pojo.dnIsDeleted();
-            if (!isPersistent && !isDeleted) {
-                return true;
-            }
-        }
-        return false;
+        return persistenceSession.isTransient(pojo); 
     }
 
     @Override
@@ -176,16 +153,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             // services and view models are treated as persistent objects
             return true;
         }
-        if (pojo instanceof Persistable) {
-            final Persistable pojo = (Persistable) this.pojo;
-            final boolean isPersistent = pojo.dnIsPersistent();
-            final boolean isDeleted = pojo.dnIsDeleted();
-            // REVIEW: should we also ensure !isDeleted ???
-            if (isPersistent) {
-                return true;
-            }
-        }
-        return false;
+        return persistenceSession.isRepresentingPersistent(pojo);
     }
 
     @Override
@@ -194,14 +162,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             // services and view models are treated as persistent objects
             return false;
         }
-        if (pojo instanceof Persistable) {
-            final Persistable pojo = (Persistable) this.pojo;
-            final boolean isDeleted = pojo.dnIsDeleted();
-            if (isDeleted) {
-                return true;
-            }
-        }
-        return false;
+        return persistenceSession.isDestroyed(pojo);
     }
 
 
@@ -214,8 +175,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         ParentedCollectionOid collectionOid = (ParentedCollectionOid) oid;
         return persistenceSession.getAggregateRoot(collectionOid);
     }
-
-
 
     // -- getVersion, setVersion, checkLock
 
@@ -244,7 +203,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
                 otherVersion != null &&
                 thisVersion.different(otherVersion)) {
 
-            if(AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
+            if(ConcurrencyChecking.isCurrentlyEnabled()) {
                 LOG.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
                 final String currentUser = authenticationSession.getUserName();
                 throw new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);
@@ -438,6 +397,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         throw new UnsupportedOperationException();
     }
 
-
+    @Override
+    public ObjectAdapter withOid(RootOid newOid) {
+        return new PojoAdapter(pojo, newOid, authenticationSession, specificationLoader, persistenceSession);
+    }
 
 }

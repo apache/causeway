@@ -33,13 +33,10 @@ import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.user.UserService;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.util.ToString;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
@@ -95,9 +92,6 @@ abstract class PersistenceSessionBase implements PersistenceSession {
      */
     protected final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = _Maps.newHashMap();
 
-
-    protected final boolean concurrencyCheckingGloballyEnabled;
-
     // -- CONSTRUCTOR
 
     /**
@@ -134,16 +128,12 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         this.userService = lookupService(UserService.class);
 
         // sub-components
-        final AdapterManager adapterManager = this;
-        this.persistenceQueryFactory = new PersistenceQueryFactory(adapterManager, this.specificationLoader);
+        this.persistenceQueryFactory = new PersistenceQueryFactory(
+                obj->this.getObjectAdapterProvider().adapterFor(obj), 
+                this.specificationLoader);
         this.transactionManager = new IsisTransactionManager(this, /*authenticationSession,*/ servicesInjector);
 
         this.state = State.NOT_INITIALIZED;
-
-        final boolean concurrencyCheckingGloballyDisabled =
-                this.configuration.getBoolean("isis.persistor.disableConcurrencyChecking", false);
-        this.concurrencyCheckingGloballyEnabled = !concurrencyCheckingGloballyDisabled;
-
     }
 
     // -- GETTERS
@@ -179,28 +169,10 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         return persistenceManager;
     }
 
-    @Override
-    public PersistenceManager pm() {
-        return persistenceManager;
-    }
 
     @Override
     public IsisConfiguration getConfiguration() {
         return configuration;
-    }
-
-    @Override
-    public List<ObjectAdapter> getServices() {
-        final List<Object> services = servicesInjector.getRegisteredServices();
-        final List<ObjectAdapter> serviceAdapters = _Lists.newArrayList();
-        for (final Object servicePojo : services) {
-            ObjectAdapter serviceAdapter = getAdapterFor(servicePojo);
-            if(serviceAdapter == null) {
-                throw new IllegalStateException("ObjectAdapter for service " + servicePojo + " does not exist?!?");
-            }
-            serviceAdapters.add(serviceAdapter);
-        }
-        return serviceAdapters;
     }
 
     // -- ENUMS

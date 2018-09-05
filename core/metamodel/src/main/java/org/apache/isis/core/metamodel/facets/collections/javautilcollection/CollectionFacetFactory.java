@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -30,7 +31,6 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 public class CollectionFacetFactory extends FacetFactoryAbstract {
 
@@ -63,7 +63,7 @@ public class CollectionFacetFactory extends FacetFactoryAbstract {
                     facetHolder.addFacet(typeOfFacet);
         }
 
-        final CollectionFacet collectionFacet = new JavaCollectionFacet(facetHolder, adapterManager);
+        final CollectionFacet collectionFacet = new JavaCollectionFacet(facetHolder, adapterProvider);
 
         facetHolder.addFacet(collectionFacet);
     }
@@ -72,7 +72,7 @@ public class CollectionFacetFactory extends FacetFactoryAbstract {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final CollectionFacet collectionFacet = new JavaArrayFacet(facetHolder, adapterManager);
+        final CollectionFacet collectionFacet = new JavaArrayFacet(facetHolder, adapterProvider);
         facetHolder.addFacet(collectionFacet);
 
         final TypeOfFacet typeOfFacet =
@@ -93,9 +93,9 @@ public class CollectionFacetFactory extends FacetFactoryAbstract {
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    ObjectAdapterProvider adapterProvider;
 
 }

@@ -118,7 +118,7 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
 
     @Override
     public ObjectAdapter createValue(final LocalResourcePath value) {
-        return getAdapterManager().adapterFor(value);
+        return getObjectAdapterProvider().adapterFor(value);
     }
 
     // /////// toString ///////

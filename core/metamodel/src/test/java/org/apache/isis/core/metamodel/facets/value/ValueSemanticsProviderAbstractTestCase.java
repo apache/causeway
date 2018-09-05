@@ -19,10 +19,16 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
+import static org.apache.isis.core.unittestsupport.jmocking.JMockActions.returnArgument;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
 import java.util.Locale;
 
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
@@ -39,19 +45,12 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.Encodable
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.apache.isis.core.unittestsupport.jmocking.JMockActions.returnArgument;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
 public abstract class ValueSemanticsProviderAbstractTestCase {
 
@@ -69,7 +68,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Mock
     protected ServicesInjector mockServicesInjector;
     @Mock
-    protected PersistenceSessionServiceInternal mockAdapterManager;
+    protected PersistenceSessionServiceInternal mockSessionServiceInternal;
     @Mock
     protected SpecificationLoader mockSpecificationLoader;
     @Mock
@@ -99,7 +98,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
                 will(returnValue(mockAuthenticationSessionProvider));
 
                 allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-                will(returnValue(mockAdapterManager));
+                will(returnValue(mockSessionServiceInternal));
 
                 allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
                 will(returnValue(mockAuthenticationSessionProvider));
@@ -107,7 +106,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
                 allowing(mockServicesInjector).injectServicesInto(with(any(Object.class)));
 
                 never(mockAuthenticationSessionProvider);
-                never(mockAdapterManager);
+                never(mockSessionServiceInternal);
             }
         });
     }
@@ -128,7 +127,10 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
 
     protected void setValue(final ValueSemanticsProviderAndFacetAbstract<?> value) {
         this.valueSemanticsProvider = value;
-        this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(value, mockFacetHolder, mockAdapterManager,
+        this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(
+                value, 
+                mockFacetHolder, 
+                mockSessionServiceInternal,
                 mockServicesInjector);
         this.parseableFacet = new ParseableFacetUsingParser(value, mockFacetHolder, mockServicesInjector);
     }

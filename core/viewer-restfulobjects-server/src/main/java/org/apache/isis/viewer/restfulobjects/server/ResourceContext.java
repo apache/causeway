@@ -39,7 +39,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -266,15 +265,6 @@ public class ResourceContext implements RendererContext6 {
     @Override
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
-    }
-
-    /**
-     * @deprecated - use {@link #getPersistenceSession()}.
-     */
-    @Deprecated
-    @Override
-    public AdapterManager getAdapterManager() {
-        return persistenceSession;
     }
 
     @Override

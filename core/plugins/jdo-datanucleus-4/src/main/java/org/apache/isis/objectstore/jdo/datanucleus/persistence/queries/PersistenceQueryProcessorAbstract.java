@@ -24,7 +24,7 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.system.persistence.IsisLifecycleListener2;
+import org.apache.isis.core.runtime.system.persistence.IsisLifecycleListener;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession4;
 import org.datanucleus.enhancement.Persistable;
@@ -44,7 +44,7 @@ implements PersistenceQueryProcessor<T> {
 
     /**
      * Traversing the provided list causes (or should cause) the
-     * {@link IsisLifecycleListener2#postLoad(InstanceLifecycleEvent) {
+     * {@link IsisLifecycleListener#postLoad(InstanceLifecycleEvent) {
      * to be called.
      */
     protected List<ObjectAdapter> loadAdapters(final List<?> pojos) {
@@ -55,8 +55,7 @@ implements PersistenceQueryProcessor<T> {
             ObjectAdapter adapter;
             if(pojo instanceof Persistable) {
                 // an entity
-                persistenceSession.initializeMapAndCheckConcurrency((Persistable) pojo);
-                adapter = persistenceSession.getAdapterFor(pojo);
+                adapter = persistenceSession.initializeMapAndCheckConcurrency((Persistable) pojo);
             } else {
                 // a value type
                 adapter = persistenceSession.adapterFor(pojo);

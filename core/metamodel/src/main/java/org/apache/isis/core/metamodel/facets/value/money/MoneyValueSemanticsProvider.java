@@ -213,7 +213,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
 
     @Override
     public ObjectAdapter createValue(final float amount, final String currencyCode) {
-        return getAdapterManager().adapterFor(new Money(amount, currencyCode));
+        return getObjectAdapterProvider().adapterFor(new Money(amount, currencyCode));
     }
 
     // /////// toString ///////

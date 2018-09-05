@@ -24,7 +24,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
@@ -81,7 +81,7 @@ public class PropertyFormExecutorStrategy implements FormExecutorStrategy<Scalar
         // not certain why that would be the case, but (following similar code for action prompt)
         // think it should be safe to simply disable while recreating the page to re-render back to user.
         final EntityPage entityPage =
-                AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+                ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
                         new Callable<EntityPage>() {
                             @Override public EntityPage call() throws Exception {
                                 return new EntityPage(resultAdapter, null);

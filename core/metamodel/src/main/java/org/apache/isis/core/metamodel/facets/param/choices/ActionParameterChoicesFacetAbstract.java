@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.param.choices;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -38,19 +38,19 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
     private final DeploymentCategory deploymentCategory;
     private final SpecificationLoader specificationLoader;
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
 
     public ActionParameterChoicesFacetAbstract(
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager) {
+            final ObjectAdapterProvider adapterProvider) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.deploymentCategory = deploymentCategory;
         this.specificationLoader = specificationLoader;
         this.authenticationSessionProvider = authenticationSessionProvider;
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
     }
 
     protected ObjectSpecification getSpecification(final Class<?> type) {
@@ -65,8 +65,8 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
         return specificationLoader;
     }
 
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
+        return adapterProvider;
     }
 
     protected DeploymentCategory getDeploymentCategory() {

@@ -23,7 +23,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -37,7 +37,7 @@ extends FacetAbstract
 implements PropertyOrCollectionAccessorFacet {
 
     private final ObjectSpecification onType;
-    private final AdapterManager adapterManager;
+    private final ObjectAdapterProvider adapterProvider;
     private final SpecificationLoader specificationLoader;
     private final IsisConfiguration configuration;
     private final AuthenticationSessionProvider authenticationSessionProvider;
@@ -54,10 +54,10 @@ implements PropertyOrCollectionAccessorFacet {
             final IsisConfiguration configuration,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final AdapterManager adapterManager) {
+            final ObjectAdapterProvider adapterProvider) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.onType = onType;
-        this.adapterManager = adapterManager;
+        this.adapterProvider = adapterProvider;
         this.specificationLoader = specificationLoader;
         this.configuration = configuration;
         this.authenticationSessionProvider = authenticationSessionProvider;
@@ -80,8 +80,8 @@ implements PropertyOrCollectionAccessorFacet {
 
     // //////////////////////////////////////
 
-    protected AdapterManager getAdapterManager() {
-        return adapterManager;
+    protected ObjectAdapterProvider getObjectAdapterProvider() {
+        return adapterProvider;
     }
 
     protected SpecificationLoader getSpecificationLoader() {

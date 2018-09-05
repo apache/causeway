@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.accessor;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -30,7 +31,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
@@ -60,7 +60,7 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
                         getDeploymentCategory(), getConfiguration(),
                         getSpecificationLoader(),
                         getAuthenticationSessionProvider(),
-                        adapterManager
+                        adapterProvider
                         ));
     }
 
@@ -116,9 +116,9 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
 
     @Override public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    ObjectAdapterProvider adapterProvider;
 
 }

@@ -36,7 +36,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;

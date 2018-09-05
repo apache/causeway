@@ -35,11 +35,11 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -55,38 +55,10 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 public class PersistenceSessionServiceInternalDefault implements PersistenceSessionServiceInternal {
 
     @Override
-    public ObjectAdapter getAdapterFor(Oid oid) {
-        return getPersistenceSession().getAdapterFor(oid);
+    public ObjectAdapterProvider getObjectAdapterProvider() {
+        return getPersistenceSession();
     }
-
-    @Override
-    public ObjectAdapter getAdapterFor(final Object pojo) {
-        return getPersistenceSession().getAdapterFor(pojo);
-    }
-
-    @Override
-    public ObjectAdapter adapterFor(final Object pojo) {
-        return getPersistenceSession().adapterFor(pojo);
-    }
-
-    @Override
-    public ObjectAdapter adapterFor(
-            final Object pojo,
-            final ObjectAdapter ownerAdapter,
-            final OneToManyAssociation collection) {
-        return getPersistenceSession().adapterFor(pojo, ownerAdapter, collection);
-    }
-
-    @Override
-    public ObjectAdapter mapRecreatedPojo(Oid oid, Object recreatedPojo) {
-        return getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
-    }
-
-    @Override
-    public void removeAdapter(ObjectAdapter adapter) {
-        getPersistenceSession().removeAdapter(adapter);
-    }
-
+    
     @Override
     public void makePersistent(final ObjectAdapter adapter) {
         getPersistenceSession().makePersistentInTransaction(adapter);

@@ -19,13 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.properties.defaults.fromtype;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbstract {
@@ -52,7 +52,7 @@ public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbst
         final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         final DefaultedFacet returnTypeDefaultedFacet = getDefaultedFacet(returnType);
         if (returnTypeDefaultedFacet != null) {
-            final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet = new PropertyDefaultFacetDerivedFromDefaultedFacet(returnTypeDefaultedFacet, processMethodContext.getFacetHolder(), adapterManager);
+            final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet = new PropertyDefaultFacetDerivedFromDefaultedFacet(returnTypeDefaultedFacet, processMethodContext.getFacetHolder(), adapterProvider);
             FacetUtil.addFacet(propertyFacet);
         }
     }
@@ -70,9 +70,9 @@ public class PropertyDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbst
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
+        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
-    PersistenceSessionServiceInternal adapterManager;
+    ObjectAdapterProvider adapterProvider;
 
 }

@@ -24,7 +24,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -48,7 +48,7 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
 
         // this is a bit of a hack, but getting a concurrency exception when click on a tab
         // which simply holds a newly modified reference.
-        AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Runnable() {
+        ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Runnable() {
             @Override
             public void run() {
                 buildGui();

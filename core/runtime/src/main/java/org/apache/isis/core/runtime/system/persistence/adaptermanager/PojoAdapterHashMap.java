@@ -30,7 +30,11 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-public class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScopedComponent {
+/**
+ * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
+ */
+@Deprecated
+class PojoAdapterHashMap implements Iterable<ObjectAdapter>, SessionScopedComponent {
 
     private static class IdentityHashKey {
         private final Object pojo;

@@ -18,6 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Timestamp;
@@ -31,16 +35,12 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 
 public class JsonValueEncoderTest_appendValueAndFormat {
 
@@ -56,7 +56,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     @Mock
     private ObjectAdapter mockObjectAdapter;
 
-    private AdapterManager mockAdapterManager;
+    private ObjectAdapterProvider mockAdapterManager;
 
     @Before
     public void setUp() {

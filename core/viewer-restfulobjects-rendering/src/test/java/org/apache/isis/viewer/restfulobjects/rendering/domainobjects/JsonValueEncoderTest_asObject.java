@@ -18,6 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import org.jmock.Expectations;
@@ -29,15 +32,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 @RunWith(JMock.class)
 public class JsonValueEncoderTest_asObject {
@@ -47,7 +47,7 @@ public class JsonValueEncoderTest_asObject {
     private ObjectAdapter mockObjectAdapter;
     private ObjectSpecification mockObjectSpec;
     private EncodableFacet mockEncodableFacet;
-    private AdapterManager mockAdapterManager;
+    private ObjectAdapterProvider mockAdapterManager;
 
     private Object encoded;
 
@@ -65,7 +65,7 @@ public class JsonValueEncoderTest_asObject {
             }
         });
         mockEncodableFacet = context.mock(EncodableFacet.class);
-        mockAdapterManager = context.mock(AdapterManager.class);
+        mockAdapterManager = context.mock(ObjectAdapterProvider.class);
 
         JsonValueEncoder.testSetAdapterManager(mockAdapterManager);
         encoded = new Object();

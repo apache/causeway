@@ -26,13 +26,12 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 @DomainService(
@@ -41,37 +40,8 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
         )
 public class PersistenceSessionServiceInternalNoop implements PersistenceSessionServiceInternal {
 
-
     @Override
-    public ObjectAdapter getAdapterFor(final Object pojo) {
-        throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
-    }
-
-    @Override
-    public ObjectAdapter adapterFor(
-            final Object pojo,
-            final ObjectAdapter ownerAdapter,
-            final OneToManyAssociation collection) {
-        throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
-    }
-
-    @Override
-    public ObjectAdapter mapRecreatedPojo(Oid oid, Object recreatedPojo) {
-        throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
-    }
-
-    @Override
-    public void removeAdapter(ObjectAdapter adapter) {
-        throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
-    }
-
-    @Override
-    public ObjectAdapter adapterFor(final Object domainObject) {
-        throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
-    }
-
-    @Override
-    public ObjectAdapter getAdapterFor(Oid oid) {
+    public ObjectAdapterProvider getObjectAdapterProvider() {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
 
@@ -176,6 +146,8 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
     public TransactionState getTransactionState() {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
+
+
 
 
 }
