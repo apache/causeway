@@ -108,15 +108,15 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return pojo;
     }
 
-    /**
-     * Sometimes it is necessary to manage the replacement of the underlying
-     * domain object (by another component such as an object store). This method
-     * allows the adapter to be kept while the domain object is replaced.
-     */
-    @Override
-    public void replacePojo(final Object pojo) {
-        this.pojo = pojo;
-    }
+//    /**
+//     * Sometimes it is necessary to manage the replacement of the underlying
+//     * domain object (by another component such as an object store). This method
+//     * allows the adapter to be kept while the domain object is replaced.
+//     */
+//    @Override
+//    public void replacePojo(final Object pojo) {
+//        this.pojo = pojo;
+//    }
 
     // -- getOid
     @Override
@@ -400,6 +400,22 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     @Override
     public ObjectAdapter withOid(RootOid newOid) {
         return new PojoAdapter(pojo, newOid, authenticationSession, specificationLoader, persistenceSession);
+    }
+    
+    @Override
+    public ObjectAdapter withPojo(Object newPojo) {
+        return new PojoAdapter(newPojo, oid, authenticationSession, specificationLoader, persistenceSession);
+    }
+
+
+    @Override
+    public Friend friend() {
+        return new Friend() {
+            @Override
+            public void replacePojo(Object pojo) {
+                PojoAdapter.this.pojo = pojo;
+            }
+        };
     }
 
 }

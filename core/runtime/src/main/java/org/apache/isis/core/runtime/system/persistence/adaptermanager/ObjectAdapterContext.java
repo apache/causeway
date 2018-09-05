@@ -427,7 +427,7 @@ public class ObjectAdapterContext {
 
             if (collectionPojoActuallyOnPojo != collectionPojoWrappedByAdapter) {
                 pojoAdapterMap.remove(collectionAdapter);
-                collectionAdapter.replacePojo(collectionPojoActuallyOnPojo);
+                collectionAdapter.friend().replacePojo(collectionPojoActuallyOnPojo);
                 pojoAdapterMap.add(collectionPojoActuallyOnPojo, collectionAdapter);
             }
         }
@@ -470,7 +470,7 @@ public class ObjectAdapterContext {
     @Deprecated
     public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
         removeAdapterFromCache(adapter);
-        adapter.replacePojo(pojo);
+        adapter.friend().replacePojo(pojo);
         mapAndInjectServices(adapter);
     }
 

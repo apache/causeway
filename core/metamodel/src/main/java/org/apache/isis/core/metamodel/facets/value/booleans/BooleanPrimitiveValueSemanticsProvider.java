@@ -56,21 +56,21 @@ public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemantic
     // BooleanValueFacet impl
     // //////////////////////////////////////////////////////////////////
 
-    @Override
-    public void reset(final ObjectAdapter object) {
-        object.replacePojo(Boolean.FALSE);
-    }
-
-    @Override
-    public void set(final ObjectAdapter object) {
-        object.replacePojo(Boolean.TRUE);
-    }
-
-    @Override
-    public void toggle(final ObjectAdapter object) {
-        final boolean current = ((Boolean) object.getObject()).booleanValue();
-        final boolean toggled = !current;
-        object.replacePojo(Boolean.valueOf(toggled));
-    }
+//    @Override
+//    public void reset(final ObjectAdapter object) {
+//        object.replacePojo(Boolean.FALSE);
+//    }
+//
+//    @Override
+//    public void set(final ObjectAdapter object) {
+//        object.replacePojo(Boolean.TRUE);
+//    }
+//
+//    @Override
+//    public void toggle(final ObjectAdapter object) {
+//        final boolean current = ((Boolean) object.getObject()).booleanValue();
+//        final boolean toggled = !current;
+//        object.replacePojo(Boolean.valueOf(toggled));
+//    }
 
 }
