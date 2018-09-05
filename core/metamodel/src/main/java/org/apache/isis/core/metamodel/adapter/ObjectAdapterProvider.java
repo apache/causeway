@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -36,6 +37,12 @@ public interface ObjectAdapterProvider {
     // -- INTERFACE
 
     /**
+     * @param pojo
+     * @return oid for the given domain object 
+     */
+    Oid oidFor(Object domainObject);
+    
+    /**
      * @return standalone (value) or root adapter
      */
     ObjectAdapter adapterFor(Object domainObject);
@@ -44,7 +51,7 @@ public interface ObjectAdapterProvider {
      * @return collection adapter.
      */
     ObjectAdapter adapterFor(
-            final Object pojo,
+            final Object domainObject,
             final ObjectAdapter parentAdapter,
             OneToManyAssociation collection);
 
@@ -70,6 +77,11 @@ public interface ObjectAdapterProvider {
         
         @Programmatic
         ObjectAdapterProvider getObjectAdapterProvider();
+        
+        @Programmatic
+        default Oid oidFor(Object domainObject) {
+            return getObjectAdapterProvider().oidFor(domainObject);
+        }
         
         @Programmatic
         default ObjectAdapter adapterFor(Object domainObject) {
@@ -102,6 +114,9 @@ public interface ObjectAdapterProvider {
         }
         
     }
+
+
+    
     
 
 }

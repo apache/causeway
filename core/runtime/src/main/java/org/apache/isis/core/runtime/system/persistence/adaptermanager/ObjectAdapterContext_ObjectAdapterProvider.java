@@ -28,6 +28,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -62,6 +63,20 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         this.isisJdoMetamodelPlugin = IsisJdoMetamodelPlugin.get();
     }
 
+    @Override
+    public Oid oidFor(Object pojo) {
+        if(pojo == null) {
+            return null;
+        }
+        final Oid persistentOrValueOid = persistentOrValueOid(pojo);
+        if(persistentOrValueOid != null) {
+            return persistentOrValueOid;
+        }
+        // Creates a new transient root for the supplied domain object
+        final RootOid rootOid = persistenceSession.createTransientOrViewModelOid(pojo);
+        return rootOid;
+    }
+    
     @Override
     public ObjectAdapter adapterFor(Object pojo) {
         
@@ -134,6 +149,48 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     }
     
     // -- HELPER
+    
+    private Oid persistentOrValueOid(Object pojo) {
+        
+        Oid oid;
+
+        // equivalent to  isInstanceOfPersistable = pojo instanceof Persistable;
+        final boolean isInstanceOfPersistable = isisJdoMetamodelPlugin.isPersistenceEnhanced(pojo.getClass());
+        
+        // pojo may have been lazily loaded by object store, but we haven't yet seen it
+        if (isInstanceOfPersistable) {
+            oid = persistentOid(pojo);
+
+            // TODO: could return null if the pojo passed in !dnIsPersistent() || !dnIsDetached()
+            // in which case, we would ought to map as a transient object, rather than fall through and treat as a value?
+        } else {
+            oid = null;
+        }
+
+        if(oid != null) {
+            return oid;
+        }
+        
+        // need to create (and possibly map) the adapter.
+        final ObjectSpecification objSpec = specificationLoader.loadSpecification(pojo.getClass());
+
+        // we create value facets as standalone (so not added to maps)
+        if (objSpec.containsFacet(ValueFacet.class)) {
+            //TODO[ISIS-1976] don't need an adapter, just its oid
+            oid = objectAdapterContext.getFactories().createStandaloneAdapter(pojo).getOid(); 
+            return oid;
+        }
+
+        return null;
+    }
+    
+    protected Oid persistentOid(final Object pojo) {
+        if (persistenceSession.getPersistenceManager().getObjectId(pojo) == null) {
+            return null;
+        }
+        final RootOid oid = persistenceSession.createPersistentOrViewModelOid(pojo);
+        return oid;
+    }
     
     private ObjectAdapter existingOrValueAdapter(Object pojo) {
 
