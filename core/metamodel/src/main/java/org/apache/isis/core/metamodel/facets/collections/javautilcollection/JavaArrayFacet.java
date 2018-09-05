@@ -49,8 +49,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
         for (int i = 0; i < length; i++) {
             array[i] = initData[i].getObject();
         }
-        arrayAdapter.friend().replacePojo(array);
-        return arrayAdapter;
+        return arrayAdapter.withPojo(array);  
     }
 
     /**

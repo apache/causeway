@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.function.Function;
 
 import com.google.common.collect.Collections2;
 
@@ -77,14 +76,6 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     @SuppressWarnings("unchecked")
     private Collection<? super Object> pojoCollection(final ObjectAdapter collectionAdapter) {
         return (Collection<? super Object>) collectionAdapter.getObject();
-    }
-
-    // //////////////////////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // //////////////////////////////////////////////////////////////////////
-
-    private ObjectAdapterProvider getObjectAdapterProvider() {
-        return adapterProvider;
     }
 
 }
