@@ -1140,15 +1140,17 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         final Version datastoreVersion = getVersionIfAny(pc);
 
         final RootOid originalOid;
-        ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(pojo);
-        if (adapter != null) {
-            ensureRootObject(pojo);
-            originalOid = (RootOid) adapter.getOid();
+        final ObjectAdapter originalAdapter = objectAdapterContext.lookupAdapterFor(pojo);
+        final ObjectAdapter newAdapter;
+        
+        if (originalAdapter != null) {
+            ensureRootObject(pojo); //[ahuber] while already mapped has no side-effect
+            originalOid = (RootOid) originalAdapter.getOid();
 
-            final Version originalVersion = adapter.getVersion();
+            final Version originalVersion = originalAdapter.getVersion();
 
             // sync the pojo held by the adapter with that just loaded
-            objectAdapterContext.remapRecreatedPojo(adapter, pojo);
+            newAdapter = objectAdapterContext.remapRecreatedPojo(originalAdapter, pojo);
 
             // since there was already an adapter, do concurrency check
             // (but don't set abort cause if checking is suppressed through thread-local)
@@ -1171,24 +1173,30 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                     LOG.info("concurrency conflict detected but suppressed, on {} ({})", thisOid, otherVersion);
                 }
             }
+            
         } else {
             originalOid = createPersistentOrViewModelOid(pojo);
 
+            ObjectAdapter adapter;
+            
             // it appears to be possible that there is already an adapter for this Oid,
             // ie from ObjectStore#resolveImmediately()
             adapter = objectAdapterContext.lookupAdapterFor(originalOid);
             if (adapter != null) {
-                objectAdapterContext.remapRecreatedPojo(adapter, pojo);
+                adapter = objectAdapterContext.remapRecreatedPojo(adapter, pojo);
             } else {
                 adapter = objectAdapterContext.addRecreatedPojoToCache(originalOid, pojo);
 
                 CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
                 postLifecycleEventIfRequired(adapter, LoadedLifecycleEventFacet.class);
             }
+        
+            newAdapter = adapter;
+            
         }
-
-        adapter.setVersion(datastoreVersion);
-
+        
+        newAdapter.setVersion(datastoreVersion);
+        
         return objectAdapterContext.lookupAdapterFor(pojo);
     }
 

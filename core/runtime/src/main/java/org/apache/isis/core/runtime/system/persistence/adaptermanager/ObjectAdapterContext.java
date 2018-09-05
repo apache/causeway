@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.memento.Data;
+import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -468,14 +469,24 @@ public class ObjectAdapterContext {
      * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
      */
     @Deprecated
-    public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
-        removeAdapterFromCache(adapter);
+    public ObjectAdapter remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
+        final ObjectAdapter newAdapter = adapter.withPojo(pojo);
+        pojoAdapterMap.remove(adapter);
+        pojoAdapterMap.remove(newAdapter);
         
-        adapter.friend().replacePojo(pojo);
-        mapAndInjectServices(adapter);
+        oidAdapterMap.remove(adapter.getOid());
+        oidAdapterMap.remove(newAdapter.getOid());
+
+        //FIXME[ISIS-1976] can't remove yet, does have strange side-effects 
+        if(true){
+            adapter.friend().replacePojo(pojo);
+            mapAndInjectServices(adapter);
+            return adapter;
+        }
+        //---
         
-        //final ObjectAdapter newAdapter = adapter.withPojo(pojo);
-        //mapAndInjectServices(newAdapter);
+        mapAndInjectServices(newAdapter);
+        return newAdapter;
     }
 
 
