@@ -19,13 +19,16 @@
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -66,6 +69,7 @@ public class ObjectAdapterContext {
     
     private final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     private final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
+    private final OidAdapterHashMap oidAdapterMap2 = new OidAdapterHashMap();
     private final PersistenceSession persistenceSession; 
     private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
@@ -100,6 +104,7 @@ public class ObjectAdapterContext {
     public void open() {
         oidAdapterMap.open();
         pojoAdapterMap.open();
+        oidAdapterMap2.open();
         initServices();
     }
     
@@ -107,6 +112,7 @@ public class ObjectAdapterContext {
         
         try {
             oidAdapterMap.close();
+            oidAdapterMap2.close();
         } catch(final Throwable ex) {
             // ignore
             LOG.error("close: oidAdapterMap#close() failed; continuing to avoid memory leakage");
@@ -120,22 +126,45 @@ public class ObjectAdapterContext {
         }
     }
     
-    // -- CACHING
+    // -- CACHING DEPR.
 
     @Deprecated // don't expose caching
     protected ObjectAdapter lookupAdapterByPojo(Object pojo) {
-        return pojoAdapterMap.getAdapter(pojo);
+        final ObjectAdapter adapter = pojoAdapterMap.getAdapter(pojo);
+        if(adapter!=null) {
+            Oid y = adapter.getOid();
+            Objects.requireNonNull(y);
+            
+            Oid x = objectAdapterProviderMixin.oidFor(pojo);
+            Objects.requireNonNull(x);
+            
+            //FIXME[ISIS-1976] oids must match
+            //Ensure.ensureThatArg(x, _Predicates.equalTo(y), ()->String.format("x: %s\ny: %s", ""+x, ""+y));
+        }
+        return adapter;
     }
     
     private void putPojo(Object pojo, ObjectAdapter adapter) {
+        
+        Oid x = objectAdapterProviderMixin.oidFor(pojo);
+        Oid y = adapter.getOid();
+        Objects.requireNonNull(y);
+        
+        //FIXME[ISIS-1976] oids must match
+        //Ensure.ensureThatArg(x, _Predicates.equalTo(y), ()->String.format("x: %s\ny: %s", ""+x, ""+y));
+        
+        oidAdapterMap2.add(adapter.getOid(), adapter);
         pojoAdapterMap.add(adapter.getObject(), adapter);
     }
     
     private void removePojo(ObjectAdapter adapter) {
+        Oid y = adapter.getOid();
+        Objects.requireNonNull(y);
+        oidAdapterMap2.remove(y);
         pojoAdapterMap.remove(adapter);
     }
     
-    // --
+    // -- CACHING
     
     @Deprecated // don't expose caching
     public boolean containsAdapterForPojo(Object pojo) {
@@ -315,28 +344,15 @@ public class ObjectAdapterContext {
         oidAdapterMap.add(adapter.getOid(), adapter);
     }
     
-    public ObjectAdapter specificationForViewModel(Object viewModelPojo) {
-        //FIXME[ISIS-1976]
-        // this is horrible, but there's a catch-22 here...
-        // we need an adapter in order to query the state of the object via the metamodel, on the other hand
-        // we can't create an adapter without the identifier, which is what we're trying to derive
-        // so... we create a temporary transient adapter, use it to wrap this adapter and interrogate this pojo,
-        // then throw away that adapter (remove from the adapter map)
-        final boolean[] createdTemporaryAdapter = {false};
-        final ObjectAdapter viewModelAdapter = adapterForViewModel(
-                viewModelPojo, 
-                (ObjectSpecId objectSpecId)->{
-                    createdTemporaryAdapter[0] = true;
-                    return RootOid.create(objectSpecId, UUID.randomUUID().toString()); });
-    
-        //final ObjectSpecification spec = viewModelAdapter.getSpecification();
-        
-        if(createdTemporaryAdapter[0]) {
-            adapterManagerMixin.removeAdapterFromCache(viewModelAdapter);
-        }
-        return viewModelAdapter;
+    public ObjectAdapter disposableAdapterForViewModel(Object viewModelPojo) {
+            final ObjectSpecification objectSpecification = 
+                    specificationLoader.loadSpecification(viewModelPojo.getClass());
+            final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
+            final RootOid newRootOid = RootOid.create(objectSpecId, UUID.randomUUID().toString());
+            final ObjectAdapter createdAdapter = adapterManagerMixin.createRootOrAggregatedAdapter(newRootOid, viewModelPojo);
+            return createdAdapter;
     }
-
+    
     public ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {
         ObjectAdapter viewModelAdapter = adapterManagerMixin.lookupAdapterFor(viewModelPojo);
         if(viewModelAdapter == null) {

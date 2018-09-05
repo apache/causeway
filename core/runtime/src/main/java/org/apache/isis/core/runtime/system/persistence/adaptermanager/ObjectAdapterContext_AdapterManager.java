@@ -178,6 +178,36 @@ class ObjectAdapterContext_AdapterManager {
         return adapter;
     }
     
+    ObjectAdapter injectServices(final ObjectAdapter adapter) {
+        // since the whole point of this method is to map an adapter that's just been created.
+        // so we *don't* call ensureMapsConsistent(adapter);
+
+        Assert.assertNotNull(adapter);
+        final Object pojo = adapter.getObject();
+
+        if (LOG.isDebugEnabled()) {
+            // don't interact with the underlying object because may be a ghost
+            // and would trigger a resolve
+            // don't call toString() on adapter because calls hashCode on
+            // underlying object, may also trigger a resolve.
+            LOG.debug("adding identity for adapter with oid={}", adapter.getOid());
+        }
+
+        // value adapters are not mapped (but all others - root and aggregated adapters - are)
+        if (adapter.isValue()) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("not mapping value adapter");
+            }
+            servicesInjector.injectServicesInto(pojo);
+            return adapter;
+        }
+
+        // must inject after mapping, otherwise infinite loop
+        servicesInjector.injectServicesInto(pojo);
+
+        return adapter;
+    }
+    
     ObjectAdapter createRootOrAggregatedAdapter(final Oid oid, final Object pojo) {
         final ObjectAdapter createdAdapter;
         if(oid instanceof RootOid) {

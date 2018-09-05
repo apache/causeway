@@ -116,8 +116,15 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     }
 
     @Override
-    public ObjectAdapter specificationForViewModel(Object viewModelPojo) {
-        return objectAdapterContext.specificationForViewModel(viewModelPojo);
+    public ObjectSpecification specificationForViewModel(Object viewModelPojo) {
+        final ObjectSpecification objectSpecification = 
+                specificationLoader.loadSpecification(viewModelPojo.getClass());
+        return objectSpecification;
+    }
+    
+    @Override
+    public ObjectAdapter disposableAdapterForViewModel(Object viewModelPojo) {
+        return objectAdapterContext.disposableAdapterForViewModel(viewModelPojo);
     }
 
     @Override
