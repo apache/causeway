@@ -128,12 +128,12 @@ public class ObjectAdapterContext {
     }
     
     @Deprecated // don't expose caching
-    public ObjectAdapter lookupAdapterByPojo(Object pojo) {
+    protected ObjectAdapter lookupAdapterByPojo(Object pojo) {
         return pojoAdapterMap.getAdapter(pojo);
     }
 
     @Deprecated // don't expose caching
-    public ObjectAdapter lookupAdapterById(Oid oid) {
+    protected ObjectAdapter lookupAdapterById(Oid oid) {
         return oidAdapterMap.getAdapter(oid);
     }
 
@@ -164,10 +164,12 @@ public class ObjectAdapterContext {
     
     // -- CACHE CONSISTENCY
     
+    @Deprecated // don't expose caching
     public void ensureMapsConsistent(final ObjectAdapter adapter) {
         consistencyMixin.ensureMapsConsistent(adapter);
     }
 
+    @Deprecated // don't expose caching
     public void ensureMapsConsistent(final Oid oid) {
         consistencyMixin.ensureMapsConsistent(oid);
     }
@@ -224,31 +226,37 @@ public class ObjectAdapterContext {
     
     // -- ADAPTER MANAGER LEGACY
     
+    @Deprecated // don't expose caching
     public ObjectAdapter addRecreatedPojoToCache(Oid oid, Object recreatedPojo) {
         return adapterManagerMixin.addRecreatedPojoToCache(oid, recreatedPojo);
     }
     
+    @Deprecated // don't expose caching
     public ObjectAdapter mapAndInjectServices(final ObjectAdapter adapter) {
         return adapterManagerMixin.mapAndInjectServices(adapter);
     }
     
+    @Deprecated // don't expose caching
     public ObjectAdapter lookupAdapterFor(Object pojo) {
         return adapterManagerMixin.lookupAdapterFor(pojo);
     }
     
+    @Deprecated // don't expose caching
     public ObjectAdapter lookupAdapterFor(final Oid oid) {
         return adapterManagerMixin.lookupAdapterFor(oid);
     }
     
+    @Deprecated // don't expose caching
     public void removeAdapterFromCache(final ObjectAdapter adapter) {
         adapterManagerMixin.removeAdapterFromCache(adapter);
     }
     
-    // -- OBJECT ADAPTER PROVIDER SUPPORT
-    
+    @Deprecated // don't expose caching
     public ObjectAdapter addPersistentToCache(final Object pojo) {
         return objectAdapterProviderMixin.addPersistentToCache(pojo);
     }
+    
+    // -- OBJECT ADAPTER PROVIDER SUPPORT
     
     public ObjectAdapterProvider getObjectAdapterProvider() {
         return objectAdapterProviderMixin;

@@ -19,8 +19,6 @@
 
 package org.apache.isis.commons.internal.base;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.function.Supplier;
 
 /**
@@ -35,11 +33,30 @@ import java.util.function.Supplier;
  *
  * @since 2.0.0
  */
-public final class _Lazy<T> implements Supplier<T> {
+public interface _Lazy<T> extends Supplier<T> {
+    
+    // -- INTERFACE
+    
+    /**
+     * @return whether this lazy got initialized and holds a memoized value
+     */
+    public boolean isMemoized();
 
-    private final Supplier<? extends T> supplier;
-    private T value;
-    private boolean memoized;
+    /**
+     * Clears the lazy's memoized value. Resets this lazy to its initial state.<br>
+     * isMemoized() = false;
+     *
+     */
+    public void clear();
+
+    /**
+     * Evaluates this lazy value and memoizes it, when called the first time
+     * after initialization or clear().
+     */
+    @Override
+    public T get();
+    
+    // -- FACTORIES
 
     /**
      * Concurrent calls to this lazy's get() method might result in concurrent calls to the 
@@ -48,41 +65,18 @@ public final class _Lazy<T> implements Supplier<T> {
      * @return an (non-thread-safe) instance of _Lacy that initializes with the specified {@code supplier}
      */
     public static <T> _Lazy<T> of(Supplier<? extends T> supplier) {
-        return new _Lazy<T>(supplier);
+        return new _Lazy_Simple<T>(supplier);
     }
-
-    private _Lazy(Supplier<? extends T> supplier) {
-        this.supplier = requires(supplier, "supplier");
-    }
-
+    
     /**
-     * @return whether this lazy got initialized and holds a memoized value
+     * Thread-safe variant to {@link _Lazy#of(Supplier)}.
+     * Concurrent calls to this lazy's get() method will never result in concurrent calls to the 
+     * specified {@code supplier}. 
+     * @param supplier
+     * @return an (thread-safe) instance of _Lacy that initializes with the specified {@code supplier}
      */
-    public boolean isMemoized() {
-        return memoized;
-    }
-
-    /**
-     * Clears the lazy's memoized value. Resets this lazy to its initial state.<br>
-     * isMemoized() = false;
-     *
-     */
-    public void clear() {
-        this.memoized = false;
-        this.value = null;
-    }
-
-    /**
-     * Evaluates this lazy value and memoizes it, when called the first time
-     * after initialization or clear().
-     */
-    @Override
-    public T get() {
-        if(memoized) {
-            return value;
-        }
-        memoized=true;
-        return value = supplier.get();
+    public static <T> _Lazy<T> threadSafe(Supplier<? extends T> supplier) {
+        return new _Lazy_ThreadSafe<T>(supplier);
     }
 
 }

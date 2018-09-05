@@ -1134,7 +1134,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         final RootOid originalOid;
         ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(pojo);
         if (adapter != null) {
-            ensureRootObject(pojo);
+            ensureRootObject(pojo); //[ahuber] while already mapped has no side-effect
             originalOid = (RootOid) adapter.getOid();
 
             final Version originalVersion = adapter.getVersion();

@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.commons.internal.base._LazyThreadSafe;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 
 public class RegisterEntities {
@@ -45,7 +45,7 @@ public class RegisterEntities {
     @Deprecated
     public final static String PACKAGE_PREFIX_KEY = "isis.persistor.datanucleus.RegisterEntities.packagePrefix";
 
-    private final _LazyThreadSafe<Set<String>> entityTypes = _LazyThreadSafe.of(this::findEntityTypes);
+    private final _Lazy<Set<String>> entityTypes = _Lazy.threadSafe(this::findEntityTypes);
 
     public Set<String> getEntityTypes() {
         return entityTypes.get();

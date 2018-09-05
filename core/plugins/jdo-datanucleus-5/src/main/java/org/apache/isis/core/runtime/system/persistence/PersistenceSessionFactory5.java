@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.internal.base._LazyThreadSafe;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -59,8 +59,8 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
 
 
-    private final _LazyThreadSafe<DataNucleusApplicationComponents5> applicationComponents = 
-            _LazyThreadSafe.of(this::createDataNucleusApplicationComponents);
+    private final _Lazy<DataNucleusApplicationComponents5> applicationComponents = 
+            _Lazy.threadSafe(this::createDataNucleusApplicationComponents);
 
     private IsisConfiguration configuration;
     
