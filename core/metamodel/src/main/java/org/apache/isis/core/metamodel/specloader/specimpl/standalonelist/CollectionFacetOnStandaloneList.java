@@ -64,7 +64,8 @@ public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
      * Does nothing.
      */
     @Override
-    public void init(final ObjectAdapter collection, final ObjectAdapter[] initData) {
+    public ObjectAdapter init(final ObjectAdapter collection, final ObjectAdapter[] initData) {
+        return collection;
     }
 
 }

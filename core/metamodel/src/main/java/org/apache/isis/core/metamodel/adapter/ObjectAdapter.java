@@ -469,19 +469,6 @@ public interface ObjectAdapter extends Instance {
             return Util::unwrap;
         }
 
-        public static Function<Object, ObjectAdapter> adapterForUsing(final ObjectAdapterProvider adapterProvider) {
-            return adapterProvider::adapterFor;
-        }
-
-        @Deprecated
-        public static com.google.common.base.Function<Object, ObjectAdapter> adapter_ForUsing(final ObjectAdapterProvider adapterProvider) {
-            return new com.google.common.base.Function<Object, ObjectAdapter>() {
-                @Override
-                public ObjectAdapter apply(final Object pojo) {
-                    return adapterProvider.adapterFor(pojo);
-                }
-            };
-        }
     }
 
     /**

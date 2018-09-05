@@ -56,8 +56,9 @@ public interface CollectionFacet extends Facet {
 
     /**
      * Set the contents of this collection.
+     * @return a possibly new instance
      */
-    void init(ObjectAdapter collectionAdapter, ObjectAdapter[] elements);
+    ObjectAdapter init(ObjectAdapter collectionAdapter, ObjectAdapter[] elements);
 
     /**
      * Convenience method that returns the {@link TypeOfFacet} on this facet's

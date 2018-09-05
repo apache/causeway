@@ -272,7 +272,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
                 getSpecificationLoader(),
                 interactionInitiatedBy);
         List<ObjectAdapter> adapters = _NullSafe.stream(pojoOptions)
-                .map( ObjectAdapter.Functions.adapterForUsing( getObjectAdapterProvider() ) )
+                .map(  getObjectAdapterProvider()::adapterFor )
                 .collect(Collectors.toList());
         return adapters.toArray(new ObjectAdapter[]{});
     }
