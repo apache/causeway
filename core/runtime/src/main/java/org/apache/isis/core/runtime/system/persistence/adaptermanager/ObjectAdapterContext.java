@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.memento.Data;
-import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -110,29 +109,39 @@ public class ObjectAdapterContext {
             oidAdapterMap.close();
         } catch(final Throwable ex) {
             // ignore
-            ObjectAdapterLegacy.LOG.error("close: oidAdapterMap#close() failed; continuing to avoid memory leakage");
+            LOG.error("close: oidAdapterMap#close() failed; continuing to avoid memory leakage");
         }
 
         try {
             pojoAdapterMap.close();
         } catch(final Throwable ex) {
             // ignore
-            ObjectAdapterLegacy.LOG.error("close: pojoAdapterMap#close() failed; continuing to avoid memory leakage");
+            LOG.error("close: pojoAdapterMap#close() failed; continuing to avoid memory leakage");
         }
     }
     
     // -- CACHING
 
     @Deprecated // don't expose caching
-    public boolean containsAdapterForPojo(Object pojo) {
-        return pojoAdapterMap.containsPojo(pojo);
-    }
-    
-    @Deprecated // don't expose caching
     protected ObjectAdapter lookupAdapterByPojo(Object pojo) {
         return pojoAdapterMap.getAdapter(pojo);
     }
-
+    
+    private void putPojo(Object pojo, ObjectAdapter adapter) {
+        pojoAdapterMap.add(adapter.getObject(), adapter);
+    }
+    
+    private void removePojo(ObjectAdapter adapter) {
+        pojoAdapterMap.remove(adapter);
+    }
+    
+    // --
+    
+    @Deprecated // don't expose caching
+    public boolean containsAdapterForPojo(Object pojo) {
+        return lookupAdapterByPojo(pojo)!=null;
+    }
+    
     @Deprecated // don't expose caching
     protected ObjectAdapter lookupAdapterById(Oid oid) {
         return oidAdapterMap.getAdapter(oid);
@@ -147,7 +156,7 @@ public class ObjectAdapterContext {
         if (oid != null) { // eg. value objects don't have an Oid
             oidAdapterMap.add(oid, adapter);
         }
-        pojoAdapterMap.add(adapter.getObject(), adapter);
+        putPojo(adapter.getObject(), adapter);
     }
     
     @Deprecated // don't expose caching
@@ -160,7 +169,7 @@ public class ObjectAdapterContext {
         if (oid != null) { // eg. value objects don't have an Oid
             oidAdapterMap.remove(oid);
         }
-        pojoAdapterMap.remove(adapter);
+        removePojo(adapter);
     }
     
     // -- CACHE CONSISTENCY
@@ -299,7 +308,7 @@ public class ObjectAdapterContext {
         // add all aggregated collections
         final ObjectSpecification objSpec = adapter.getSpecification();
         if (!adapter.isParentedCollection() || adapter.isParentedCollection() && !objSpec.isImmutable()) {
-            pojoAdapterMap.add(pojo, adapter);
+            putPojo(pojo, adapter);
         }
 
         // order is important - add to pojo map first, then identity map
@@ -382,16 +391,16 @@ public class ObjectAdapterContext {
         }
 
         // associate root adapter with the new Oid, and remap
-        if (ObjectAdapterLegacy.LOG.isDebugEnabled()) {
-            ObjectAdapterLegacy.LOG.debug("replacing root adapter and re-adding into maps; oid is now: {} (was: {})", persistedRootOid.enString(), transientRootOid.enString());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("replacing root adapter and re-adding into maps; oid is now: {} (was: {})", persistedRootOid.enString(), transientRootOid.enString());
         }
         
         final ObjectAdapter adapterReplacement = adapter.withOid(persistedRootOid); 
         
         replaceRootAdapter(adapterReplacement, rootAndCollectionAdapters);
         
-        if (ObjectAdapterLegacy.LOG.isDebugEnabled()) {
-            ObjectAdapterLegacy.LOG.debug("made persistent {}; was {}", adapterReplacement, transientRootOid);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("made persistent {}; was {}", adapterReplacement, transientRootOid);
         }
     }
 
@@ -403,11 +412,8 @@ public class ObjectAdapterContext {
         
         final RootOid persistedRootOid = (RootOid) adapterReplacement.getOid();
         
-//        oidAdapterMap.add(persistedRootOid, adapterReplacement);
-//        pojoAdapterMap.add(adapterReplacement.getObject(), adapterReplacement);
-
         // associate the collection adapters with new Oids, and re-map
-        ObjectAdapterLegacy.LOG.debug("replacing Oids for collection adapter(s) and re-adding into maps");
+        LOG.debug("replacing Oids for collection adapter(s) and re-adding into maps");
         
         for (final ObjectAdapter collectionAdapter : rootAndCollectionAdapters) {
             final ParentedCollectionOid previousCollectionOid = (ParentedCollectionOid) collectionAdapter.getOid();
@@ -417,8 +423,8 @@ public class ObjectAdapterContext {
 
         // some object store implementations may replace collection instances (eg ORM may replace with a cglib-enhanced
         // proxy equivalent.  So, ensure that the collection adapters still wrap the correct pojos.
-        if (ObjectAdapterLegacy.LOG.isDebugEnabled()) {
-            ObjectAdapterLegacy.LOG.debug("synchronizing collection pojos, remapping in pojo map if required");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("synchronizing collection pojos, remapping in pojo map if required");
         }
         for (final OneToManyAssociation otma : rootAndCollectionAdapters.getCollections()) {
             final ObjectAdapter collectionAdapter = rootAndCollectionAdapters.getCollectionAdapter(otma);
@@ -427,9 +433,9 @@ public class ObjectAdapterContext {
             final Object collectionPojoActuallyOnPojo = getCollectionPojo(otma, adapterReplacement);
 
             if (collectionPojoActuallyOnPojo != collectionPojoWrappedByAdapter) {
-                pojoAdapterMap.remove(collectionAdapter);
+                removePojo(collectionAdapter);
                 final ObjectAdapter newCollectionAdapter = collectionAdapter.withPojo(collectionPojoActuallyOnPojo);
-                pojoAdapterMap.add(collectionPojoActuallyOnPojo, newCollectionAdapter);
+                putPojo(collectionPojoActuallyOnPojo, newCollectionAdapter);
             }
         }
         
@@ -438,17 +444,17 @@ public class ObjectAdapterContext {
     private void removeFromCache(
             final RootAndCollectionAdapters rootAndCollectionAdapters, 
             final RootOid transientRootOid) {
-        ObjectAdapterLegacy.LOG.debug("remapAsPersistent: {}", transientRootOid);
-        ObjectAdapterLegacy.LOG.debug("removing root adapter from oid map");
+        LOG.debug("remapAsPersistent: {}", transientRootOid);
+        LOG.debug("removing root adapter from oid map");
     
         boolean removed = oidAdapterMap.remove(transientRootOid);
         if (!removed) {
-            ObjectAdapterLegacy.LOG.warn("could not remove oid: {}", transientRootOid);
+            LOG.warn("could not remove oid: {}", transientRootOid);
             // should we fail here with a more serious error?
         }
     
-        if (ObjectAdapterLegacy.LOG.isDebugEnabled()) {
-            ObjectAdapterLegacy.LOG.debug("removing collection adapter(s) from oid map");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("removing collection adapter(s) from oid map");
         }
         for (final ObjectAdapter collectionAdapter : rootAndCollectionAdapters) {
             final Oid collectionOid = collectionAdapter.getOid();
@@ -471,8 +477,8 @@ public class ObjectAdapterContext {
     @Deprecated
     public ObjectAdapter remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
         final ObjectAdapter newAdapter = adapter.withPojo(pojo);
-        pojoAdapterMap.remove(adapter);
-        pojoAdapterMap.remove(newAdapter);
+        removePojo(adapter);
+        removePojo(newAdapter);
         
         oidAdapterMap.remove(adapter.getOid());
         oidAdapterMap.remove(newAdapter.getOid());
