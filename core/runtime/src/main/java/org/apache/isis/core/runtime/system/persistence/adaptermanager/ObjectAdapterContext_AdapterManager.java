@@ -23,6 +23,7 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -43,6 +44,7 @@ class ObjectAdapterContext_AdapterManager {
     
     private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_AdapterManager.class);
     private final ObjectAdapterContext objectAdapterContext;
+    @SuppressWarnings("unused")
     private final PersistenceSession persistenceSession;
     private final ServicesInjector servicesInjector; 
     
@@ -68,10 +70,8 @@ class ObjectAdapterContext_AdapterManager {
      * @param recreatedPojo - already known to the object store impl, or a service
      */
     //@Override
-    public ObjectAdapter addRecreatedPojoToCache(Oid oid, Object recreatedPojo) {
+    ObjectAdapter addRecreatedPojoToCache(Oid oid, Object recreatedPojo) {
         // attempt to locate adapter for the pojo
-        // REVIEW: this check is possibly redundant because the pojo will most likely
-        // have just been instantiated, so won't yet be in any maps
         final ObjectAdapter adapterLookedUpByPojo = lookupAdapterFor(recreatedPojo);
         if (adapterLookedUpByPojo != null) {
             return adapterLookedUpByPojo;
@@ -80,6 +80,7 @@ class ObjectAdapterContext_AdapterManager {
         // attempt to locate adapter for the Oid
         final ObjectAdapter adapterLookedUpByOid = lookupAdapterFor(oid);
         if (adapterLookedUpByOid != null) {
+            _Exceptions.throwUnexpectedCodeReach();
             return adapterLookedUpByOid;
         }
 
@@ -128,23 +129,6 @@ class ObjectAdapterContext_AdapterManager {
         return objectAdapterContext.lookupAdapterByPojo(pojo);  
     }
 
-    /**
-     * Gets the {@link ObjectAdapter adapter} for the {@link Oid} if it exists
-     * in the identity map.
-     *
-     * @param oid
-     *            - must not be <tt>null</tt>
-     * @return adapter, or <tt>null</tt> if doesn't exist.
-     * @deprecated don't expose caching
-     */
-    //@Override
-    ObjectAdapter lookupAdapterFor(final Oid oid) {
-        Objects.requireNonNull(oid);
-        objectAdapterContext.ensureMapsConsistent(oid);
-
-        return objectAdapterContext.lookupAdapterById(oid);
-    }
- 
     ObjectAdapter mapAndInjectServices(final ObjectAdapter adapter) {
         // since the whole point of this method is to map an adapter that's just been created.
         // so we *don't* call ensureMapsConsistent(adapter);

@@ -26,7 +26,6 @@ import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
@@ -137,6 +136,7 @@ public class ObjectAdapterContext {
     
     private final Cache cache = new Cache();
     
+    @SuppressWarnings("unused")
     private final PersistenceSession persistenceSession; 
     private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
@@ -179,50 +179,51 @@ public class ObjectAdapterContext {
     
     // -- CACHING POJO
 
-    @Deprecated // don't expose caching
-    protected ObjectAdapter lookupAdapterByPojo(Object pojo) {
+    // package private // don't expose caching
+    ObjectAdapter lookupAdapterByPojo(Object pojo) {
         return cache.lookupAdapterByPojo(pojo);
     }
     
-    @Deprecated // don't expose caching
-    public boolean containsAdapterForPojo(Object pojo) {
+    // package private // don't expose caching
+    boolean containsAdapterForPojo(Object pojo) {
         return lookupAdapterByPojo(pojo)!=null;
     }
     
     // -- CACHING OID
     
-    @Deprecated // don't expose caching
-    protected ObjectAdapter lookupAdapterById(Oid oid) {
+    // package private // don't expose caching
+    ObjectAdapter lookupAdapterById(Oid oid) {
         return cache.lookupAdapterById(oid);
     }
     
     // -- CACHING BOTH
 
-    @Deprecated // don't expose caching
-    public void addAdapter(ObjectAdapter adapter) {
+    // package private // don't expose caching
+    void addAdapter(ObjectAdapter adapter) {
         cache.addAdapter(adapter);
     }
     
-    @Deprecated // don't expose caching
-    public void removeAdapter(ObjectAdapter adapter) {
+    // package private // don't expose caching
+    void removeAdapter(ObjectAdapter adapter) {
         cache.removeAdapter(adapter);
     }
     
     // -- CACHE CONSISTENCY
     
-    @Deprecated // don't expose caching
-    public void ensureMapsConsistent(final ObjectAdapter adapter) {
+    // package private // don't expose caching
+    void ensureMapsConsistent(final ObjectAdapter adapter) {
         consistencyMixin.ensureMapsConsistent(adapter);
     }
 
-    @Deprecated // don't expose caching
-    public void ensureMapsConsistent(final Oid oid) {
+    // package private // don't expose caching
+    void ensureMapsConsistent(final Oid oid) {
         consistencyMixin.ensureMapsConsistent(oid);
     }
     
     // -- FACTORIES
     
-    public static interface ObjectAdapterFactories {
+    // package private
+    static interface ObjectAdapterFactories {
         
         /**
          * Creates (but does not {@link #mapAndInjectServices(ObjectAdapter) map}) a new
@@ -266,7 +267,8 @@ public class ObjectAdapterContext {
     
     private final ObjectAdapterFactories objectAdapterFactories;
     
-    public ObjectAdapterFactories getFactories() {
+    // package private
+    ObjectAdapterFactories getFactories() {
         return objectAdapterFactories;
     }
     
@@ -289,11 +291,20 @@ public class ObjectAdapterContext {
     
     @Deprecated // don't expose caching
     public ObjectAdapter lookupAdapterFor(final Oid oid) {
-        return adapterManagerMixin.lookupAdapterFor(oid);
+        Objects.requireNonNull(oid);
+        consistencyMixin.ensureMapsConsistent(oid);
+        return cache.lookupAdapterById(oid);
     }
     
-    @Deprecated // don't expose caching
-    public void removeAdapterFromCache(final ObjectAdapter adapter) {
+    // package private
+    ObjectAdapter lookupParentedCollectionAdapter(ParentedCollectionOid collectionOid) {
+        Objects.requireNonNull(collectionOid);
+        consistencyMixin.ensureMapsConsistent(collectionOid);
+        return cache.lookupAdapterById(collectionOid);
+    }
+    
+    // package private // don't expose caching
+    void removeAdapterFromCache(final ObjectAdapter adapter) {
         adapterManagerMixin.removeAdapterFromCache(adapter);
     }
     
@@ -331,12 +342,7 @@ public class ObjectAdapterContext {
         final List<Object> registeredServices = servicesInjector.getRegisteredServices();
         for (final Object service : registeredServices) {
             final ObjectAdapter serviceAdapter = objectAdapterProviderMixin.adapterFor(service);
-            
-            // remap as Persistent if required
-            if (serviceAdapter.getOid().isTransient()) {
-                _Exceptions.unexpectedCodeReach();
-                //remapAsPersistent(serviceAdapter, null, persistenceSession);
-            }
+            Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
         }
     }
     
@@ -349,7 +355,8 @@ public class ObjectAdapterContext {
             return createdAdapter;
     }
     
-    public ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {
+    // package private
+    ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {
         ObjectAdapter viewModelAdapter = adapterManagerMixin.lookupAdapterFor(viewModelPojo);
         if(viewModelAdapter == null) {
             final ObjectSpecification objectSpecification = 
@@ -370,20 +377,16 @@ public class ObjectAdapterContext {
      * @param session 
      */
     @Deprecated // expected to be moved
-    public void remapAsPersistent(final ObjectAdapter adapter, RootOid newRootOid, PersistenceSession session) {
+    public void remapAsPersistent(final ObjectAdapter rootAdapter, RootOid newRootOid, PersistenceSession session) {
 
         Objects.requireNonNull(newRootOid);
+        Assert.assertFalse("expected to not be a parented collection", rootAdapter.isParentedCollection());
         
-     // TODO: REVIEW: think this is redundant; would seem this method is only ever called for roots anyway.
-        final ObjectAdapter rootAdapter = adapter.getAggregateRoot();  
         final RootOid transientRootOid = (RootOid) rootAdapter.getOid();
         
-        Assert.assertTrue("expected same", Objects.equals(adapter, rootAdapter));
-
         final RootAndCollectionAdapters rootAndCollectionAdapters = 
-                new RootAndCollectionAdapters(adapter, adapterManagerMixin);
+                new RootAndCollectionAdapters(rootAdapter, this);
 
-        Assert.assertTrue("expected same", Objects.equals(rootAndCollectionAdapters.getRootAdapter().getOid(), transientRootOid));
         removeFromCache(rootAndCollectionAdapters);
         
         final RootOid persistedRootOid;
@@ -392,7 +395,7 @@ public class ObjectAdapterContext {
                 throw new IsisAssertException("hintRootOid must be persistent");
             }
             final ObjectSpecId hintRootOidObjectSpecId = newRootOid.getObjectSpecId();
-            final ObjectSpecId adapterObjectSpecId = adapter.getSpecification().getSpecId();
+            final ObjectSpecId adapterObjectSpecId = rootAdapter.getSpecification().getSpecId();
             if(!hintRootOidObjectSpecId.equals(adapterObjectSpecId)) {
                 throw new IsisAssertException("hintRootOid's objectType must be same as that of adapter " +
                         "(was: '" + hintRootOidObjectSpecId + "'; adapter's is " + adapterObjectSpecId + "'");
@@ -406,8 +409,7 @@ public class ObjectAdapterContext {
             LOG.debug("replacing root adapter and re-adding into maps; oid is now: {} (was: {})", persistedRootOid.enString(), transientRootOid.enString());
         }
         
-        final ObjectAdapter adapterReplacement = adapter.withOid(persistedRootOid); 
-        
+        final ObjectAdapter adapterReplacement = rootAdapter.withOid(persistedRootOid); 
         replaceRootAdapter(adapterReplacement, rootAndCollectionAdapters);
         
         if (LOG.isDebugEnabled()) {
@@ -476,6 +478,8 @@ public class ObjectAdapterContext {
         mapAndInjectServices(newAdapter);
         return newAdapter;
     }
+
+    
 
 
 }

@@ -35,9 +35,11 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
  * Responsibility: ObjectAdapter Cache/Map consistency
  * </p> 
  * @since 2.0.0-M2
+ * @deprecated expected to be made obsolete
  */
 class ObjectAdapterContext_Consistency {
     
+    @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_Consistency.class);
     private final ObjectAdapterContext objectAdapterContext;
     
@@ -47,9 +49,8 @@ class ObjectAdapterContext_Consistency {
 
     /**
      * Fail early if any problems.
-     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
      */
-    protected void ensureMapsConsistent(final ObjectAdapter adapter) {
+    void ensureMapsConsistent(final ObjectAdapter adapter) {
         if (adapter.isValue()) {
             return;
         }
@@ -62,9 +63,8 @@ class ObjectAdapterContext_Consistency {
 
     /**
      * Fail early if any problems.
-     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
      */
-    protected void ensureMapsConsistent(final Oid oid) {
+    void ensureMapsConsistent(final Oid oid) {
         Objects.requireNonNull(oid);
 
         final ObjectAdapter adapter = objectAdapterContext.lookupAdapterById(oid);
