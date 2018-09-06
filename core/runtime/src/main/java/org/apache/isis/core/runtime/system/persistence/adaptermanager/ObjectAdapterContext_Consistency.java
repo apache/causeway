@@ -118,5 +118,26 @@ class ObjectAdapterContext_Consistency {
                         + mapName
                         + ": provided adapter's OID: " + adapterOid + ", \n"
                         + "but map's adapter's OID was: " + adapterAccordingToMap.getOid());
+        
+        ensureThatArg(
+                adapter.getObject(), equalTo(adapterAccordingToMap.getObject()),
+                ()->String.format("mismatch in %s (oid='%s')"
+                        + ": provided adapter's hash: %s (pojo='%s'), \n"
+                        + "but map's adapter's hash was: %s (pojo='%s')",
+                        mapName, adapterOid,
+                        Integer.toHexString(adapter.hashCode()), ""+adapter.getObject(),
+                        Integer.toHexString(adapterAccordingToMap.hashCode()), ""+adapterAccordingToMap.getObject()
+                        ));
+
+//      TODO[ISIS-1976] too strict, remove        
+//        ensureThatArg(
+//                adapter, equalTo(adapterAccordingToMap),
+//                ()->String.format("mismatch in %s (oid='%s')"
+//                        + ": provided adapter's hash: %s (pojo='%s'), \n"
+//                        + "but map's adapter's hash was: %s (pojo='%s')",
+//                        mapName, adapterOid,
+//                        Integer.toHexString(adapter.hashCode()), ""+adapter.getObject(),
+//                        Integer.toHexString(adapterAccordingToMap.hashCode()), ""+adapterAccordingToMap.getObject()
+//                        ));
     }
 }
