@@ -153,7 +153,7 @@
 
         <wicket.version>8.0.0</wicket.version>
         <wicketstuff.version>8.0.0</wicketstuff.version>
-        <wicket-bootstrap.version>2.0.1</wicket-bootstrap.version>
+        <wicket-bootstrap.version>2.0.2</wicket-bootstrap.version>
         <wicket-source.version>7.0.0</wicket-source.version>
 
 <!-- [ahuber] update to newer versions just does not work as a drop in replacement

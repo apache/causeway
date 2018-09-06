@@ -297,7 +297,7 @@ public final class ServiceActionUtil {
         .withPlacement(TooltipConfig.Placement.bottom)
         .withBtnOkClass("btn btn-danger")
         .withBtnCancelClass("btn btn-default");
-
+        
         component.add(new ConfirmationBehavior(null, confirmationConfig));
     }
 
