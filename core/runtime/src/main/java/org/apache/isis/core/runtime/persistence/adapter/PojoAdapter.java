@@ -407,15 +407,4 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return new PojoAdapter(newPojo, oid, authenticationSession, specificationLoader, persistenceSession);
     }
 
-
-    @Override
-    public Friend friend() {
-        return new Friend() {
-            @Override
-            public void replacePojo(Object pojo) {
-                PojoAdapter.this.pojo = pojo;
-            }
-        };
-    }
-
 }

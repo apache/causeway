@@ -487,18 +487,18 @@ public interface ObjectAdapter extends Instance {
      */
     ObjectAdapter withPojo(Object newPojo);
 
-    @Deprecated
-    public static interface Friend {
-      /**
-      * Sometimes it is necessary to manage the replacement of the underlying
-      * domain object (by another component such as an object store). This method
-      * allows the adapter to be kept while the domain object is replaced.
-      */
-     void replacePojo(Object pojo);
-    }
-    
-    @Deprecated
-    Friend friend();
+//    @Deprecated
+//    public static interface Friend {
+//      /**
+//      * Sometimes it is necessary to manage the replacement of the underlying
+//      * domain object (by another component such as an object store). This method
+//      * allows the adapter to be kept while the domain object is replaced.
+//      */
+//     void replacePojo(Object pojo);
+//    }
+//    
+//    @Deprecated
+//    Friend friend();
 
 
 }

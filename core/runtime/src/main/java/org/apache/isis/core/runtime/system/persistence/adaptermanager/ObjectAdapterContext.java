@@ -502,23 +502,11 @@ public class ObjectAdapterContext {
         return accessor.getProperty(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
     }
 
-    /**
-     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
-     */
     @Deprecated
     public ObjectAdapter remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
         final ObjectAdapter newAdapter = adapter.withPojo(pojo);
         cache.removeAdapter(adapter);
         cache.removeAdapter(newAdapter);
-
-        //FIXME[ISIS-1976] can't remove yet, does have strange side-effects 
-        if(true){
-            adapter.friend().replacePojo(pojo);
-            mapAndInjectServices(adapter);
-            return adapter;
-        }
-        //---
-        
         mapAndInjectServices(newAdapter);
         return newAdapter;
     }

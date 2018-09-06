@@ -113,7 +113,7 @@ class ObjectAdapterContext_Consistency {
         }
 
         ensureThatArg(
-                adapter, equalTo(adapterAccordingToMap),
+                adapterOid, equalTo(adapterAccordingToMap.getOid()),
                 ()->"mismatch in "
                         + mapName
                         + ": provided adapter's OID: " + adapterOid + ", \n"
