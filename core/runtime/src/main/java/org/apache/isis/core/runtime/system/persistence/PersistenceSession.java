@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -89,9 +90,6 @@ public interface PersistenceSession extends ObjectAdapterProvider.Delegating, Tr
 
     void close();
 
-    RootOid createTransientOrViewModelOid(Object pojo);
-    RootOid createPersistentOrViewModelOid(Object pojo);
-
     ObjectAdapter createTransientInstance(ObjectSpecification spec);
 
     ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
@@ -108,6 +106,14 @@ public interface PersistenceSession extends ObjectAdapterProvider.Delegating, Tr
     IsisConfiguration getConfiguration();
 
     PersistenceManager getPersistenceManager();
+    
+    /**
+     * @param pojo
+     * @param type
+     * @return String representing an object's id.
+     * @since 2.0.0-M2
+     */
+    String identifierFor(Object pojo, State type);
 
     /**
      * Convenient equivalent to {@code getPersistenceManager()}.
@@ -167,6 +173,8 @@ public interface PersistenceSession extends ObjectAdapterProvider.Delegating, Tr
     boolean isTransient(Object pojo);
     boolean isRepresentingPersistent(Object pojo);
     boolean isDestroyed(Object pojo);
+
+
 
 
 }

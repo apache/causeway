@@ -37,11 +37,11 @@ public interface ObjectAdapterProvider {
     
     // -- INTERFACE
 
-    /**
-     * @param pojo
-     * @return oid for the given domain object 
-     */
-    Oid oidFor(Object domainObject);
+//    /**
+//     * @param pojo
+//     * @return oid for the given domain object 
+//     */
+//    Oid oidFor(Object domainObject);
     
     /**
      * @return standalone (value) or root adapter
@@ -86,10 +86,10 @@ public interface ObjectAdapterProvider {
         @Programmatic
         ObjectAdapterProvider getObjectAdapterProvider();
         
-        @Programmatic
-        default Oid oidFor(Object domainObject) {
-            return getObjectAdapterProvider().oidFor(domainObject);
-        }
+//        @Programmatic
+//        default Oid oidFor(Object domainObject) {
+//            return getObjectAdapterProvider().oidFor(domainObject);
+//        }
         
         @Programmatic
         default ObjectAdapter adapterFor(Object domainObject) {

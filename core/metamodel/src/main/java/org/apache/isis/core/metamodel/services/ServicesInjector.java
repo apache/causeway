@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -211,6 +212,13 @@ public class ServicesInjector implements ApplicationScopedComponent {
      */
     public List<Object> getRegisteredServices() {
         return Collections.unmodifiableList(services);
+    }
+    
+    /**
+     * @return Stream of all currently registered service instances.
+     */
+    public Stream<Object> streamRegisteredServiceInstances() {
+        return services.stream();
     }
     
     // -- INJECT SERVICES INTO

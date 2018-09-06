@@ -1167,7 +1167,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             }
             
         } else {
-            originalOid = createPersistentOrViewModelOid(pojo);
+            originalOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
 
             ObjectAdapter adapter;
             
@@ -1192,69 +1192,12 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return objectAdapterContext.lookupAdapterFor(pojo);
     }
 
-    // -- create...Oid (main API)
-    /**
-     * Create a new {@link Oid#isTransient() transient} {@link Oid} for the
-     * supplied pojo, uniquely distinguishable from any other {@link Oid}.
-     */
     @Override
-    public final RootOid createTransientOrViewModelOid(final Object pojo) {
-        return newIdentifier(pojo, Type.TRANSIENT);
-    }
-
-    /**
-     * Return an equivalent {@link RootOid}, but being persistent.
-     *
-     * <p>
-     * It is the responsibility of the implementation to determine the new unique identifier.
-     * For example, the generator may simply assign a new value from a sequence, or a GUID;
-     * or, the generator may use the oid to look up the object and inspect the object in order
-     * to obtain an application-defined value.
-     *
-     * @param pojo - being persisted
-     */
-    @Override
-    public final RootOid createPersistentOrViewModelOid(Object pojo) {
-        return newIdentifier(pojo, Type.PERSISTENT);
-    }
-
-    private RootOid newIdentifier(final Object pojo, final Type type) {
-        final ObjectSpecification spec = objectSpecFor(pojo);
-        if(spec.isService()) {
-            return newRootId(spec, SERVICE_IDENTIFIER, type);
-        }
-
-        final ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
-        final String identifier =
-                recreatableObjectFacet != null
-                ? recreatableObjectFacet.memento(pojo)
-                        : newIdentifierFor(pojo, type);
-
-                return newRootId(spec, identifier, type);
-    }
-
-    private String newIdentifierFor(final Object pojo, final Type type) {
-        return type == Type.TRANSIENT
+    public String identifierFor(final Object pojo, final Oid.State type) {
+        return type == Oid.State.TRANSIENT
                 ? UUID.randomUUID().toString()
                         : JdoObjectIdSerializer.toOidIdentifier(getPersistenceManager().getObjectId(pojo));
     }
-
-    private RootOid newRootId(final ObjectSpecification spec, final String identifier, final Type type) {
-        final Oid.State state =
-                spec.containsDoOpFacet(ViewModelFacet.class)
-                ? Oid.State.VIEWMODEL
-                        : type == Type.TRANSIENT
-                        ? Oid.State.TRANSIENT
-                                : Oid.State.PERSISTENT;
-        final ObjectSpecId objectSpecId = spec.getSpecId();
-        return new RootOid(objectSpecId, identifier, state);
-    }
-
-    private ObjectSpecification objectSpecFor(final Object pojo) {
-        final Class<?> pojoClass = pojo.getClass();
-        return getSpecificationLoader().loadSpecification(pojoClass);
-    }
-
 
 
     /**
@@ -1305,7 +1248,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         if (rootOid.isTransient()) {
             // persisting
-            final RootOid persistentOid = createPersistentOrViewModelOid(pojo);
+            final RootOid persistentOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
 
             objectAdapterContext.remapAsPersistent(adapter, persistentOid, this);
 

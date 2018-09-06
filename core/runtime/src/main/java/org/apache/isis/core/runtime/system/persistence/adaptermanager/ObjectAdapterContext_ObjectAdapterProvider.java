@@ -20,11 +20,13 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -47,6 +49,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
  */
 class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvider {
     
+    @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_ObjectAdapterProvider.class);
     private final ObjectAdapterContext objectAdapterContext;
     private final PersistenceSession persistenceSession;
@@ -63,20 +66,19 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         this.isisJdoMetamodelPlugin = IsisJdoMetamodelPlugin.get();
     }
 
-    @Override
-    public Oid oidFor(Object pojo) {
-        if(pojo == null) {
-            return null;
-        }
-        final Oid persistentOrValueOid = persistentOrValueOid(pojo);
-        if(persistentOrValueOid != null) {
-            return persistentOrValueOid;
-        }
-        final RootOid rootOid = servicesInjector.isRegisteredServiceInstance(pojo) 
-                ? persistenceSession.createPersistentOrViewModelOid(pojo) 
-                        : persistenceSession.createTransientOrViewModelOid(pojo);
-        return rootOid;
-    }
+//    @Override
+//    public Oid oidFor(Object pojo) {
+//        if(pojo == null) {
+//            return null;
+//        }
+//        final Oid persistentOrValueOid = persistentOrValueOid(pojo);
+//        if(persistentOrValueOid != null) {
+//            return persistentOrValueOid;
+//        }
+//        final RootOid rootOid = objectAdapterContext.rootOidFor(pojo);
+//        
+//        return rootOid;
+//    }
     
     @Override
     public ObjectAdapter adapterFor(Object pojo) {
@@ -89,16 +91,14 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
             return existingOrValueAdapter;
         }
 
-        final RootOid rootOid = servicesInjector.isRegisteredServiceInstance(pojo) 
-                ? persistenceSession.createPersistentOrViewModelOid(pojo) 
-                        : persistenceSession.createTransientOrViewModelOid(pojo);
+        final RootOid rootOid = objectAdapterContext.createTransientOrViewModelOid(pojo);
         
-//        final RootOid rootOid = persistenceSession.createTransientOrViewModelOid(pojo);
         final ObjectAdapter newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
 
         return objectAdapterContext.mapAndInjectServices(newAdapter);
     }
-
+    
+    
     @Override
     public ObjectAdapter adapterFor(Object pojo, ObjectAdapter parentAdapter, OneToManyAssociation collection) {
 
@@ -140,66 +140,68 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         if (persistenceSession.getPersistenceManager().getObjectId(pojo) == null) {
             return null;
         }
-        final RootOid oid = persistenceSession.createPersistentOrViewModelOid(pojo);
+        final RootOid oid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
         final ObjectAdapter adapter = objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
         return adapter;
     }
     
+    private List<ObjectAdapter> initServiceAdapters() {
+        return servicesInjector.streamRegisteredServiceInstances()
+        .map(this::adapterFor)
+        .peek(serviceAdapter->{
+            Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
+        })
+        .collect(Collectors.toList());
+    }
+    
+    private _Lazy<List<ObjectAdapter>> serviceAdapters = _Lazy.of(this::initServiceAdapters);
+    
     @Override
     public List<ObjectAdapter> getServices() {
-        final List<Object> services = servicesInjector.getRegisteredServices();
-        final List<ObjectAdapter> serviceAdapters = _Lists.newArrayList();
-        for (final Object servicePojo : services) {
-            ObjectAdapter serviceAdapter = objectAdapterContext.lookupAdapterFor(servicePojo);
-            if(serviceAdapter == null) {
-                throw new IllegalStateException("ObjectAdapter for service " + servicePojo + " does not exist?!?");
-            }
-            serviceAdapters.add(serviceAdapter);
-        }
-        return serviceAdapters;
+        return serviceAdapters.get();
     }
     
     // -- HELPER
     
-    private Oid persistentOrValueOid(Object pojo) {
-        
-        Oid oid;
-
-        // equivalent to  isInstanceOfPersistable = pojo instanceof Persistable;
-        final boolean isInstanceOfPersistable = isisJdoMetamodelPlugin.isPersistenceEnhanced(pojo.getClass());
-        
-        // pojo may have been lazily loaded by object store, but we haven't yet seen it
-        if (isInstanceOfPersistable) {
-            oid = persistentOid(pojo);
-
-            // TODO: could return null if the pojo passed in !dnIsPersistent() || !dnIsDetached()
-            // in which case, we would ought to map as a transient object, rather than fall through and treat as a value?
-        } else {
-            oid = null;
-        }
-
-        if(oid != null) {
-            return oid;
-        }
-        
-        // need to create (and possibly map) the adapter.
-        final ObjectSpecification objSpec = specificationLoader.loadSpecification(pojo.getClass());
-
-        // we create value facets as standalone (so not added to maps)
-        if (objSpec.containsFacet(ValueFacet.class)) {
-            //TODO[ISIS-1976] don't need an adapter, just its oid
-            oid = objectAdapterContext.getFactories().createStandaloneAdapter(pojo).getOid(); 
-            return oid;
-        }
-
-        return null;
-    }
+//    private Oid persistentOrValueOid(Object pojo) {
+//        
+//        Oid oid;
+//
+//        // equivalent to  isInstanceOfPersistable = pojo instanceof Persistable;
+//        final boolean isInstanceOfPersistable = isisJdoMetamodelPlugin.isPersistenceEnhanced(pojo.getClass());
+//        
+//        // pojo may have been lazily loaded by object store, but we haven't yet seen it
+//        if (isInstanceOfPersistable) {
+//            oid = persistentOid(pojo);
+//
+//            // TODO: could return null if the pojo passed in !dnIsPersistent() || !dnIsDetached()
+//            // in which case, we would ought to map as a transient object, rather than fall through and treat as a value?
+//        } else {
+//            oid = null;
+//        }
+//
+//        if(oid != null) {
+//            return oid;
+//        }
+//        
+//        // need to create (and possibly map) the adapter.
+//        final ObjectSpecification objSpec = specificationLoader.loadSpecification(pojo.getClass());
+//
+//        // we create value facets as standalone (so not added to maps)
+//        if (objSpec.containsFacet(ValueFacet.class)) {
+//            //TODO[ISIS-1976] don't need an adapter, just its oid
+//            oid = objectAdapterContext.getFactories().createStandaloneAdapter(pojo).getOid(); 
+//            return oid;
+//        }
+//
+//        return null;
+//    }
     
     protected Oid persistentOid(final Object pojo) {
         if (persistenceSession.getPersistenceManager().getObjectId(pojo) == null) {
             return null;
         }
-        final RootOid oid = persistenceSession.createPersistentOrViewModelOid(pojo);
+        final RootOid oid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
         return oid;
     }
     

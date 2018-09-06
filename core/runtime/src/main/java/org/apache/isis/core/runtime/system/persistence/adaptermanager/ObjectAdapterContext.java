@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
@@ -144,6 +143,8 @@ public class ObjectAdapterContext {
     private final ObjectAdapterContext_ObjectAdapterProvider objectAdapterProviderMixin;
     private final ObjectAdapterContext_AdapterManager adapterManagerMixin;
     private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
+    private final ObjectAdapterContext_ServiceLookup serviceLookupMixin;
+    private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
     
     private ObjectAdapterContext(
             ServicesInjector servicesInjector, 
@@ -155,6 +156,8 @@ public class ObjectAdapterContext {
         this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, persistenceSession);
         this.adapterManagerMixin = new ObjectAdapterContext_AdapterManager(this, persistenceSession);
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
+        this.serviceLookupMixin = new ObjectAdapterContext_ServiceLookup(this, servicesInjector);
+        this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(this, persistenceSession);
         
         this.persistenceSession = persistenceSession;
         this.servicesInjector = servicesInjector;
@@ -166,15 +169,25 @@ public class ObjectAdapterContext {
                 persistenceSession);
     }
 
+    // -- DEBUG
+    
+    private void printContextInfo(String msg) {
+        String id = Integer.toHexString(this.hashCode());
+        String session = ""+persistenceSession;
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!! "+String.format("%s id=%s session='%s'", 
+                msg, id, session));
+    }
+    
     // -- LIFE-CYCLING
     
     public void open() {
+        printContextInfo("OPEN_");
         cache.open();
-        initServices();
     }
     
     public void close() {
         cache.close();
+        printContextInfo("CLOSE");
     }
     
     // -- CACHING POJO
@@ -218,6 +231,22 @@ public class ObjectAdapterContext {
     // package private // don't expose caching
     void ensureMapsConsistent(final Oid oid) {
         consistencyMixin.ensureMapsConsistent(oid);
+    }
+    
+    // -- NEW IDENTIFIER
+    
+    RootOid createTransientOrViewModelOid(final Object pojo) {
+        return newIdentifierMixin.createTransientOrViewModelOid(pojo);
+    }
+
+    public RootOid createPersistentOrViewModelOid(Object pojo) {
+        return newIdentifierMixin.createPersistentOrViewModelOid(pojo);
+    }
+    
+    // -- SERVICE LOOKUP
+    
+    public ObjectAdapter lookupServiceAdapterFor(RootOid rootOid) {
+        return serviceLookupMixin.serviceAdapterFor(rootOid);
     }
     
     // -- FACTORIES
@@ -331,20 +360,20 @@ public class ObjectAdapterContext {
     
     // ------------------------------------------------------------------------------------------------
     
-    /**
-     * Creates {@link ObjectAdapter adapters} for the service list, ensuring that these are mapped correctly,
-     * and have the same OIDs as in any previous sessions.
-     * 
-     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
-     */
-    @Deprecated
-    private void initServices() {
-        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
-        for (final Object service : registeredServices) {
-            final ObjectAdapter serviceAdapter = objectAdapterProviderMixin.adapterFor(service);
-            Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
-        }
-    }
+//    /**
+//     * Creates {@link ObjectAdapter adapters} for the service list, ensuring that these are mapped correctly,
+//     * and have the same OIDs as in any previous sessions.
+//     * 
+//     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
+//     */
+//    @Deprecated
+//    private void initServices() {
+//        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
+//        for (final Object service : registeredServices) {
+//            final ObjectAdapter serviceAdapter = objectAdapterProviderMixin.adapterFor(service);
+//            Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
+//        }
+//    }
     
     public ObjectAdapter disposableAdapterForViewModel(Object viewModelPojo) {
             final ObjectSpecification objectSpecification = 
@@ -479,7 +508,7 @@ public class ObjectAdapterContext {
         return newAdapter;
     }
 
-    
+   
 
 
 }
