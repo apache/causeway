@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -348,18 +349,6 @@ public class ObjectAdapterContext {
                 //remapAsPersistent(serviceAdapter, null, persistenceSession);
             }
         }
-    }
-    
-    @Deprecated // don't expose caching
-    public void addAdapterHonoringSpecImmutability(Object pojo, ObjectAdapter adapter) {
-        // add all aggregated collections
-        final ObjectSpecification objSpec = adapter.getSpecification();
-        if (!adapter.isParentedCollection() || adapter.isParentedCollection() && !objSpec.isImmutable()) {
-            cache.putPojo(pojo, adapter);
-        }
-
-        // order is important - add to pojo map first, then identity map
-        oidAdapterMap().add(adapter.getOid(), adapter);
     }
     
     public ObjectAdapter disposableAdapterForViewModel(Object viewModelPojo) {

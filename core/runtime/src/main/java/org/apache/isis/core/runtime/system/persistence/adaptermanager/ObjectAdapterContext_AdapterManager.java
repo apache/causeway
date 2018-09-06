@@ -23,9 +23,7 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
@@ -171,7 +169,8 @@ class ObjectAdapterContext_AdapterManager {
             return adapter;
         }
 
-        objectAdapterContext.addAdapterHonoringSpecImmutability(pojo, adapter);
+        Assert.assertTrue("expected same", Objects.equals(adapter.getObject(), pojo));
+        objectAdapterContext.addAdapter(adapter);
 
         // must inject after mapping, otherwise infinite loop
         servicesInjector.injectServicesInto(pojo);
