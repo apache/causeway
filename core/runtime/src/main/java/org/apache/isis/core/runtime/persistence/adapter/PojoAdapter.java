@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.persistence.adapter;
 
+import java.util.function.Function;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +57,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     /**
      * can be {@link #replacePojo(Object) replace}d.
      */
-    private Object pojo;
+    private final Object pojo;
     /**
      * can be {@link #replaceOid(Oid) replace}d.
      */
@@ -83,8 +85,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         this.pojo = pojo;
         this.oid = oid;
     }
-
-
+    
     // -- getSpecification
 
     /**

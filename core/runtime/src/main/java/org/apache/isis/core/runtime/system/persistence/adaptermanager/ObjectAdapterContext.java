@@ -245,7 +245,7 @@ public class ObjectAdapterContext {
     // -- SERVICE LOOKUP
     
     public ObjectAdapter lookupServiceAdapterFor(RootOid rootOid) {
-        return serviceLookupMixin.serviceAdapterFor(rootOid);
+        return serviceLookupMixin.lookupServiceAdapterFor(rootOid);
     }
     
     // -- FACTORIES

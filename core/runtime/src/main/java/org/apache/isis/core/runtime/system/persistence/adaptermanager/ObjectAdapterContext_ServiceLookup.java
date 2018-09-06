@@ -24,6 +24,8 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.base._Timing;
+import org.apache.isis.commons.internal.base._Timing.StopWatch;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -52,22 +54,16 @@ class ObjectAdapterContext_ServiceLookup {
         this.servicesInjector = servicesInjector;
     }
 
-    ObjectAdapter serviceAdapterFor(RootOid rootOid) {
+    ObjectAdapter lookupServiceAdapterFor(RootOid rootOid) {
         
         final ServicesByIdResource servicesByIdResource =
                 _Context.computeIfAbsent(ServicesByIdResource.class, cls->initLookupResource());
         
-        try {
-            final Object serviceInstance = servicesByIdResource.lookupServiceInstance(rootOid);
-            if(serviceInstance==null) {
-                return null;
-            }
-            return objectAdapterContext.getFactories().createRootAdapter(serviceInstance, rootOid);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            throw new IllegalStateException("Could not resolve service for id '" + rootOid.enStringNoVersion() + "'");
+        final Object serviceInstance = servicesByIdResource.lookupServiceInstance(rootOid);
+        if(serviceInstance==null) {
+            return null;
         }
+        return objectAdapterContext.getFactories().createRootAdapter(serviceInstance, rootOid);
         
     }
     
@@ -93,6 +89,8 @@ class ObjectAdapterContext_ServiceLookup {
         
         objectAdapterContext.printContextInfo("INIT SERVICE ID LOOKUP RESOURCE");
         
+        StopWatch watch = _Timing.now();
+        
         final ServicesByIdResource lookupResource = new ServicesByIdResource();
         
         servicesInjector.streamRegisteredServiceInstances()
@@ -101,6 +99,8 @@ class ObjectAdapterContext_ServiceLookup {
             Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
             lookupResource.servicesById.put((RootOid)serviceAdapter.getOid() , serviceAdapter.getObject());
         });
+        
+        objectAdapterContext.printContextInfo("took (µs) "+watch.stop().getMicros());
         
         return lookupResource;
     }
