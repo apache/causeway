@@ -146,15 +146,6 @@ public class ServicesInjector implements ApplicationScopedComponent {
         serviceByConcreteType.clear();
         autowire();
     }
-    
-    private Map<Class<?>, Object> initServiceByConcreteType(){
-        final Map<Class<?>, Object> map = _Maps.newHashMap();
-        for (Object service : services) {
-            final Class<?> concreteType = service.getClass();
-            map.put(concreteType, service);
-        }
-        return map;
-    }
 
     public boolean isRegisteredService(final Class<?> cls) {
         return serviceByConcreteType.get().containsKey(cls);
@@ -457,6 +448,17 @@ public class ServicesInjector implements ApplicationScopedComponent {
         .forEach(filteredServicesAndContainer::add);
     }
 
+    // -- LAZY INIT
+    
+    private Map<Class<?>, Object> initServiceByConcreteType(){
+        final Map<Class<?>, Object> map = _Maps.newHashMap();
+        for (Object service : services) {
+            final Class<?> concreteType = service.getClass();
+            map.put(concreteType, service);
+        }
+        return map;
+    }
+    
     // -- REFLECTIVE PREDICATES
 
     private static final Predicate<Object> isOfType(final Class<?> cls) {
