@@ -22,18 +22,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
-import java.util.function.Supplier;
-
-import com.google.common.cache.Cache;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -49,9 +44,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.memento.Data;
-import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 
 /**
  * Encapsulate ObjectAdpater life-cycling.  
@@ -201,10 +194,6 @@ public class ObjectAdapterContext {
     @Deprecated // don't expose caching
     protected ObjectAdapter lookupAdapterById(Oid oid) {
         return cache.lookupAdapterById(oid);
-    }
-    
-    private OidAdapterHashMap oidAdapterMap() {
-        return cache.oidAdapterMap;
     }
     
     // -- CACHING BOTH
@@ -377,38 +366,40 @@ public class ObjectAdapterContext {
      * Note that there is no management of {@link Version}s here. That is
      * because the {@link PersistenceSession} is expected to manage this.
      *
-     * @param hintRootOid - allow a different persistent root oid to be provided.
+     * @param newRootOid - allow a different persistent root oid to be provided.
      * @param session 
      */
     @Deprecated // expected to be moved
-    public void remapAsPersistent(final ObjectAdapter adapter, RootOid hintRootOid, PersistenceSession session) {
+    public void remapAsPersistent(final ObjectAdapter adapter, RootOid newRootOid, PersistenceSession session) {
 
-        final ObjectAdapter rootAdapter = adapter.getAggregateRoot();  // TODO: REVIEW: think this is redundant; would seem this method is only ever called for roots anyway.
+        Objects.requireNonNull(newRootOid);
+        
+     // TODO: REVIEW: think this is redundant; would seem this method is only ever called for roots anyway.
+        final ObjectAdapter rootAdapter = adapter.getAggregateRoot();  
         final RootOid transientRootOid = (RootOid) rootAdapter.getOid();
+        
+        Assert.assertTrue("expected same", Objects.equals(adapter, rootAdapter));
 
         final RootAndCollectionAdapters rootAndCollectionAdapters = 
                 new RootAndCollectionAdapters(adapter, adapterManagerMixin);
 
-        removeFromCache(rootAndCollectionAdapters, transientRootOid);
+        Assert.assertTrue("expected same", Objects.equals(rootAndCollectionAdapters.getRootAdapter().getOid(), transientRootOid));
+        removeFromCache(rootAndCollectionAdapters);
         
-        // intended for testing (bit nasty)
         final RootOid persistedRootOid;
-        if(hintRootOid != null) {
-            if(hintRootOid.isTransient()) {
+        {
+            if(newRootOid.isTransient()) {
                 throw new IsisAssertException("hintRootOid must be persistent");
             }
-            final ObjectSpecId hintRootOidObjectSpecId = hintRootOid.getObjectSpecId();
+            final ObjectSpecId hintRootOidObjectSpecId = newRootOid.getObjectSpecId();
             final ObjectSpecId adapterObjectSpecId = adapter.getSpecification().getSpecId();
             if(!hintRootOidObjectSpecId.equals(adapterObjectSpecId)) {
                 throw new IsisAssertException("hintRootOid's objectType must be same as that of adapter " +
                         "(was: '" + hintRootOidObjectSpecId + "'; adapter's is " + adapterObjectSpecId + "'");
             }
             // ok
-            persistedRootOid = hintRootOid;
-        } else {
-            // normal flow - delegate to OidGenerator to obtain a persistent root oid
-            persistedRootOid = session.createPersistentOrViewModelOid(adapter.getObject());
-        }
+            persistedRootOid = newRootOid;
+        } 
 
         // associate root adapter with the new Oid, and remap
         if (LOG.isDebugEnabled()) {
@@ -438,14 +429,13 @@ public class ObjectAdapterContext {
         for (final ObjectAdapter collectionAdapter : rootAndCollectionAdapters) {
             final ParentedCollectionOid previousCollectionOid = (ParentedCollectionOid) collectionAdapter.getOid();
             final ParentedCollectionOid persistedCollectionOid = previousCollectionOid.asPersistent(persistedRootOid);
-            oidAdapterMap().add(persistedCollectionOid, collectionAdapter);
+            Assert.assertTrue("expected equal", Objects.equals(collectionAdapter.getOid(), persistedCollectionOid));
+            addAdapter(collectionAdapter);
         }
 
         // some object store implementations may replace collection instances (eg ORM may replace with a cglib-enhanced
         // proxy equivalent.  So, ensure that the collection adapters still wrap the correct pojos.
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("synchronizing collection pojos, remapping in pojo map if required");
-        }
+        LOG.debug("synchronizing collection pojos, remapping in pojo map if required");
         for (final OneToManyAssociation otma : rootAndCollectionAdapters.getCollections()) {
             final ObjectAdapter collectionAdapter = rootAndCollectionAdapters.getCollectionAdapter(otma);
 
@@ -461,28 +451,15 @@ public class ObjectAdapterContext {
         
     }
 
-    private void removeFromCache(
-            final RootAndCollectionAdapters rootAndCollectionAdapters, 
-            final RootOid transientRootOid) {
+    private void removeFromCache(final RootAndCollectionAdapters rootAndCollectionAdapters) {
+        final ObjectAdapter rootAdapter = rootAndCollectionAdapters.getRootAdapter();
         
         LOG.debug("removing root adapter from oid map");
+        cache.removeAdapter(rootAdapter);
     
-        boolean removed = oidAdapterMap().remove(transientRootOid);
-        if (!removed) {
-            LOG.warn("could not remove oid: {}", transientRootOid);
-            // should we fail here with a more serious error?
-        }
-    
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("removing collection adapter(s) from oid map");
-        }
+        LOG.debug("removing collection adapter(s) from oid map");
         for (final ObjectAdapter collectionAdapter : rootAndCollectionAdapters) {
-            final Oid collectionOid = collectionAdapter.getOid();
-            removed = oidAdapterMap().remove(collectionOid);
-            if (!removed) {
-                ObjectAdapterLegacy.LOG.warn("could not remove collectionOid: {}", collectionOid);
-                // should we fail here with a more serious error?
-            }
+            cache.removeAdapter(collectionAdapter);
         }
     }
 

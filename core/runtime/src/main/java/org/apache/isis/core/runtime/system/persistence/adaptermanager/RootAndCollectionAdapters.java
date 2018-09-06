@@ -22,12 +22,17 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import com.google.common.collect.Maps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -43,6 +48,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
  * must also be persisted.
  */
 class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(RootAndCollectionAdapters.class);
 
     private final ObjectAdapter parentAdapter;
     private final RootOid rootAdapterOid;
