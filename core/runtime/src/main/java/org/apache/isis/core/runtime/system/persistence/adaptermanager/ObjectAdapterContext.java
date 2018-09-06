@@ -135,7 +135,6 @@ public class ObjectAdapterContext {
     
     private final Cache cache = new Cache();
     
-    @SuppressWarnings("unused")
     private final PersistenceSession persistenceSession; 
     private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
@@ -171,7 +170,7 @@ public class ObjectAdapterContext {
 
     // -- DEBUG
     
-    private void printContextInfo(String msg) {
+    void printContextInfo(String msg) {
         String id = Integer.toHexString(this.hashCode());
         String session = ""+persistenceSession;
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!! "+String.format("%s id=%s session='%s'", 
@@ -359,21 +358,6 @@ public class ObjectAdapterContext {
     }
     
     // ------------------------------------------------------------------------------------------------
-    
-//    /**
-//     * Creates {@link ObjectAdapter adapters} for the service list, ensuring that these are mapped correctly,
-//     * and have the same OIDs as in any previous sessions.
-//     * 
-//     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
-//     */
-//    @Deprecated
-//    private void initServices() {
-//        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
-//        for (final Object service : registeredServices) {
-//            final ObjectAdapter serviceAdapter = objectAdapterProviderMixin.adapterFor(service);
-//            Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
-//        }
-//    }
     
     public ObjectAdapter disposableAdapterForViewModel(Object viewModelPojo) {
             final ObjectSpecification objectSpecification = 

@@ -91,7 +91,7 @@ class ObjectAdapterContext_ServiceLookup {
     
     private ServicesByIdResource initLookupResource() {
         
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! INIT SERVICE ID LOOKUP RESOURCE");
+        objectAdapterContext.printContextInfo("INIT SERVICE ID LOOKUP RESOURCE");
         
         final ServicesByIdResource lookupResource = new ServicesByIdResource();
         

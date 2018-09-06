@@ -145,6 +145,15 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         return adapter;
     }
     
+    @Override
+    public List<ObjectAdapter> getServices() {
+        return serviceAdapters.get();
+    }
+    
+    // -- HELPER
+    
+    private _Lazy<List<ObjectAdapter>> serviceAdapters = _Lazy.of(this::initServiceAdapters);
+    
     private List<ObjectAdapter> initServiceAdapters() {
         return servicesInjector.streamRegisteredServiceInstances()
         .map(this::adapterFor)
@@ -153,15 +162,6 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         })
         .collect(Collectors.toList());
     }
-    
-    private _Lazy<List<ObjectAdapter>> serviceAdapters = _Lazy.of(this::initServiceAdapters);
-    
-    @Override
-    public List<ObjectAdapter> getServices() {
-        return serviceAdapters.get();
-    }
-    
-    // -- HELPER
     
 //    private Oid persistentOrValueOid(Object pojo) {
 //        
@@ -197,13 +197,13 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
 //        return null;
 //    }
     
-    protected Oid persistentOid(final Object pojo) {
-        if (persistenceSession.getPersistenceManager().getObjectId(pojo) == null) {
-            return null;
-        }
-        final RootOid oid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
-        return oid;
-    }
+//    private Oid persistentOid(final Object pojo) {
+//        if (persistenceSession.getPersistenceManager().getObjectId(pojo) == null) {
+//            return null;
+//        }
+//        final RootOid oid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
+//        return oid;
+//    }
     
     private ObjectAdapter existingOrValueAdapter(Object pojo) {
 
