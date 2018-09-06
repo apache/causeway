@@ -23,11 +23,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -48,8 +53,6 @@ import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The repository of services, also able to inject into any object.
@@ -78,7 +81,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
      * services that are assignable to the type.  It's possible that this is an empty list.
      */
     private final Map<Class<?>, List<Object>> servicesAssignableToType = _Maps.newHashMap();
-    private final Map<Class<?>, Object> serviceByConcreteType = _Maps.newHashMap();
+    private final _Lazy<Map<Class<?>, Object>> serviceByConcreteType = _Lazy.of(this::initServiceByConcreteType);
     private final Map<Class<?>, Method[]> methodsByClassCache = _Maps.newHashMap();
     private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newHashMap();
 
@@ -143,18 +146,30 @@ public class ServicesInjector implements ApplicationScopedComponent {
         serviceByConcreteType.clear();
         autowire();
     }
-
-    public boolean isRegisteredService(final Class<?> cls) {
-        // lazily construct cache
-        if(serviceByConcreteType.isEmpty()) {
-            for (Object service : services) {
-                final Class<?> concreteType = service.getClass();
-                serviceByConcreteType.put(concreteType, service);
-            }
+    
+    private Map<Class<?>, Object> initServiceByConcreteType(){
+        final Map<Class<?>, Object> map = _Maps.newHashMap();
+        for (Object service : services) {
+            final Class<?> concreteType = service.getClass();
+            map.put(concreteType, service);
         }
-        return serviceByConcreteType.containsKey(cls);
+        return map;
     }
 
+    public boolean isRegisteredService(final Class<?> cls) {
+        return serviceByConcreteType.get().containsKey(cls);
+    }
+
+    public boolean isRegisteredServiceInstance(final Object pojo) {
+        if(pojo==null) {
+            return false;
+        }
+        final Class<?> key = pojo.getClass();
+        final Object serviceInstance = serviceByConcreteType.get().get(key);
+        return Objects.equals(pojo, serviceInstance);
+    }
+    
+    
     public <T> void addFallbackIfRequired(final Class<T> serviceClass, final T serviceInstance) {
         if(!contains(services, serviceClass)) {
             // add to beginning;
@@ -206,7 +221,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     public List<Object> getRegisteredServices() {
         return Collections.unmodifiableList(services);
     }
-
+    
     // -- INJECT SERVICES INTO
 
     /**

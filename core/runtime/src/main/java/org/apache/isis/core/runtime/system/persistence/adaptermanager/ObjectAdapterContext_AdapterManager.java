@@ -23,7 +23,9 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
@@ -149,7 +151,6 @@ class ObjectAdapterContext_AdapterManager {
         // since the whole point of this method is to map an adapter that's just been created.
         // so we *don't* call ensureMapsConsistent(adapter);
 
-        Assert.assertNotNull(adapter);
         final Object pojo = adapter.getObject();
         Assert.assertFalse("POJO Map already contains object", pojo, objectAdapterContext.containsAdapterForPojo(pojo));
 

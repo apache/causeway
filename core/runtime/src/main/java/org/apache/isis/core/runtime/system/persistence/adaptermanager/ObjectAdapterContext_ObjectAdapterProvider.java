@@ -72,8 +72,9 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         if(persistentOrValueOid != null) {
             return persistentOrValueOid;
         }
-        // Creates a new transient root for the supplied domain object
-        final RootOid rootOid = persistenceSession.createTransientOrViewModelOid(pojo);
+        final RootOid rootOid = servicesInjector.isRegisteredServiceInstance(pojo) 
+                ? persistenceSession.createPersistentOrViewModelOid(pojo) 
+                        : persistenceSession.createTransientOrViewModelOid(pojo);
         return rootOid;
     }
     
@@ -88,8 +89,11 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
             return existingOrValueAdapter;
         }
 
-        // Creates a new transient root {@link ObjectAdapter adapter} for the supplied domain
-        final RootOid rootOid = persistenceSession.createTransientOrViewModelOid(pojo);
+        final RootOid rootOid = servicesInjector.isRegisteredServiceInstance(pojo) 
+                ? persistenceSession.createPersistentOrViewModelOid(pojo) 
+                        : persistenceSession.createTransientOrViewModelOid(pojo);
+        
+//        final RootOid rootOid = persistenceSession.createTransientOrViewModelOid(pojo);
         final ObjectAdapter newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
 
         return objectAdapterContext.mapAndInjectServices(newAdapter);
