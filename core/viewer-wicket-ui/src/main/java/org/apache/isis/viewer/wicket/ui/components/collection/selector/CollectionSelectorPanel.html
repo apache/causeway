@@ -23,12 +23,10 @@
 <wicket:panel>
     <div class="linksSelectorPanel">
         <div class="btn-group viewLinks" wicket:id="views">
-            <button type="button" class="btn btn-sm btn-info">
-                <span wicket:id="viewButtonIcon" class="ViewLinkItem"></span>
-                <span wicket:id="viewButtonTitle" class="ViewLinkItemTitle"></span>
-            </button>
             <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
+            	<span wicket:id="viewButtonIcon" class="ViewLinkItem"></span>
+                <span wicket:id="viewButtonTitle" class="ViewLinkItemTitle"></span>
+                &nbsp; <span class="caret"></span>
             </button>
             <ul wicket:id="viewList" class="dropdown-menu dropdown-menu-right" role="menu">
                 <li wicket:id="viewItem" class="viewItem">
