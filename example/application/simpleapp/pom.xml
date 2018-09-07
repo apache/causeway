@@ -45,8 +45,16 @@
         <compiler-plugin.target>1.8</compiler-plugin.target>
         <compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
 
-        <!-- override incode-build -->
-        <datanucleus-core.version>5.1.11</datanucleus-core.version>
+        <!-- workaround for DN enhancer failing with already registered bundle in case
+        	the mixin at https://github.com/danhaywood/java-mavenmixin-datanucleusenhance/blob/master/pom.xml
+        	has different DN versions than Isis' core.
+        	-->
+        <mavenmixin-datanucleusenhance.version>0.0.5</mavenmixin-datanucleusenhance.version>
+	    <datanucleus-maven-plugin.version>5.0.2</datanucleus-maven-plugin.version>
+	    <datanucleus-core.version>5.1.11</datanucleus-core.version>
+	    <datanucleus-api-jdo.version>5.1.9</datanucleus-api-jdo.version>
+	    <datanucleus-jodatime.version>5.1.0-release</datanucleus-jodatime.version>
+        
 
         <hsqldb.version>2.3.4</hsqldb.version>
 
