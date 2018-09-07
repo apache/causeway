@@ -171,10 +171,12 @@ public class ObjectAdapterContext {
     // -- DEBUG
     
     void printContextInfo(String msg) {
-        String id = Integer.toHexString(this.hashCode());
-        String session = ""+persistenceSession;
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!! "+String.format("%s id=%s session='%s'", 
-                msg, id, session));
+        if(LOG.isDebugEnabled()) {
+            String id = Integer.toHexString(this.hashCode());
+            String session = ""+persistenceSession;
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!! "+String.format("%s id=%s session='%s'", 
+                    msg, id, session));
+        }
     }
     
     // -- LIFE-CYCLING
