@@ -36,7 +36,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>2.0.0-M1</revision>
+        <revision>2.0.0-M2-SNAPSHOT</revision>
         <isis.version>${revision}</isis.version>
 
         <lombok.version>[1.18,)</lombok.version>
@@ -46,7 +46,7 @@
         <compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
 
         <!-- override incode-build -->
-        <datanucleus-core.version>5.1.6</datanucleus-core.version>
+        <datanucleus-core.version>5.1.11</datanucleus-core.version>
 
         <hsqldb.version>2.3.4</hsqldb.version>
 
