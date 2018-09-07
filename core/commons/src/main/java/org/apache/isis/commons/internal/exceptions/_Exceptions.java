@@ -81,6 +81,26 @@ public final class _Exceptions {
     public static IllegalStateException notImplemented() {
         return new IllegalStateException("internal error: code was reached, that is not implemented yet");
     }
+    
+    /**
+    * Used to hide from the compiler the fact, that this call always throws.
+    *
+    * <pre>{
+    *    throw unexpectedCodeReach();
+    *    return 0; // won't compile: unreachable code
+    *}</pre>
+    *
+    * hence ...
+    *
+    * <pre>{
+    *    throwUnexpectedCodeReach();
+    *    return 0;
+    *}</pre>
+    *
+    */
+    public static void throwUnexpectedCodeReach() {
+        throw unexpectedCodeReach();
+    }
 
     /**
      * Used to hide from the compiler the fact, that this call always throws.

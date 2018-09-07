@@ -108,13 +108,6 @@ public interface ObjectAdapter extends Instance {
     Instance getInstance(Specification specification);
 
     /**
-     * Sometimes it is necessary to manage the replacement of the underlying
-     * domain object (by another component such as an object store). This method
-     * allows the adapter to be kept while the domain object is replaced.
-     */
-    void replacePojo(Object pojo);
-
-    /**
      * For (stand-alone) collections, returns the element type.
      *
      * <p>
@@ -168,12 +161,6 @@ public interface ObjectAdapter extends Instance {
      * are not mapped and have a <tt>null</tt> oid.
      */
     Oid getOid();
-
-//    /**
-//     * Since {@link Oid}s are now immutable, it is the reference from the
-//     * {@link ObjectAdapter} to its {@link Oid} that must now be updated.
-//     */
-//    void replaceOid(Oid persistedOid);
 
     /**
      * Returns either itself (if this is a root) or the parented collections, the
@@ -482,28 +469,36 @@ public interface ObjectAdapter extends Instance {
             return Util::unwrap;
         }
 
-        public static Function<Object, ObjectAdapter> adapterForUsing(final ObjectAdapterProvider adapterProvider) {
-            return adapterProvider::adapterFor;
-        }
-
-        @Deprecated
-        public static com.google.common.base.Function<Object, ObjectAdapter> adapter_ForUsing(final ObjectAdapterProvider adapterProvider) {
-            return new com.google.common.base.Function<Object, ObjectAdapter>() {
-                @Override
-                public ObjectAdapter apply(final Object pojo) {
-                    return adapterProvider.adapterFor(pojo);
-                }
-            };
-        }
     }
 
     /**
      * 
-     * @param persistedRootOid
+     * @param newOid
      * @return a copy of this adapter, having a new RootOid 
      * @since 2.0.0-M2
      */
     ObjectAdapter withOid(RootOid newOid);
+
+    /**
+     * 
+     * @param newPojo
+     * @return a copy of this adapter, having a new Pojo 
+     * @since 2.0.0-M2
+     */
+    ObjectAdapter withPojo(Object newPojo);
+
+//    @Deprecated
+//    public static interface Friend {
+//      /**
+//      * Sometimes it is necessary to manage the replacement of the underlying
+//      * domain object (by another component such as an object store). This method
+//      * allows the adapter to be kept while the domain object is replaced.
+//      */
+//     void replacePojo(Object pojo);
+//    }
+//    
+//    @Deprecated
+//    Friend friend();
 
 
 }

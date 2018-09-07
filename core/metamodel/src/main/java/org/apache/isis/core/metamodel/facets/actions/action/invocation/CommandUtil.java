@@ -103,7 +103,7 @@ public class CommandUtil {
 
     public static ObjectAdapter[] adaptersFor(final Object[] args, final ObjectAdapterProvider adapterProvider) {
         return _NullSafe.stream(args)
-                .map(ObjectAdapter.Functions.adapterForUsing(adapterProvider))
+                .map(adapterProvider::adapterFor)
                 .collect(_Arrays.toArray(ObjectAdapter.class, _NullSafe.size(args)));
     }
 

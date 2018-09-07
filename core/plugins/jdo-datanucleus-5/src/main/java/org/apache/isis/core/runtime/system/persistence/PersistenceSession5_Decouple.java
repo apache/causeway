@@ -82,7 +82,13 @@ class PersistenceSession5_Decouple  {
     public ObjectAdapter adapterFor(
             final RootOid rootOid,
             final ConcurrencyChecking concurrencyChecking) {
-
+        
+        //FIXME[ISIS-1976] guard against service lookup
+        final ObjectAdapter serviceAdapter = objectAdapterContext.lookupServiceAdapterFor(rootOid);
+        if (serviceAdapter != null) {
+            return serviceAdapter;
+        }
+        
         // attempt to locate adapter for the Oid
         ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(rootOid);
         if (adapter == null) {
@@ -98,6 +104,14 @@ class PersistenceSession5_Decouple  {
             } catch(ObjectNotFoundException ex) {
                 throw ex; // just rethrow
             } catch(RuntimeException ex) {
+                
+                System.err.println("------------------------------------------");
+                System.err.println("rootOid: "+rootOid.enString());
+                
+                ex.printStackTrace();
+                System.err.println("------------------------------------------");
+
+                
                 throw new PojoRecreationException(rootOid, ex);
             }
         }

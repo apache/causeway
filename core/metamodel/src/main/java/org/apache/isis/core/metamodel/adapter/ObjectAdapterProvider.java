@@ -22,8 +22,10 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 /**
@@ -35,6 +37,12 @@ public interface ObjectAdapterProvider {
     
     // -- INTERFACE
 
+//    /**
+//     * @param pojo
+//     * @return oid for the given domain object 
+//     */
+//    Oid oidFor(Object domainObject);
+    
     /**
      * @return standalone (value) or root adapter
      */
@@ -44,17 +52,24 @@ public interface ObjectAdapterProvider {
      * @return collection adapter.
      */
     ObjectAdapter adapterFor(
-            final Object pojo,
+            final Object domainObject,
             final ObjectAdapter parentAdapter,
             OneToManyAssociation collection);
 
     /**
-     * @param viewModelPojo
-     * @return an ObjectAdapter 'bypassing mapping', that holds the ObjectSpecification
-     * FIXME[ISIS-1976] Note: whether or not 'bypassing mapping' should not be exposed by the API.
-     * So this further needs refactoring. 
+     * Returns an ObjectAdapter that holds the ObjectSpecification used for 
+     * interrogating the domain object's metadata. 
+     * <p>
+     * Does _not_ perform dependency injection on the domain object. Also bypasses 
+     * caching (if any), that is each call to this method creates a new unique instance.
+     * </p>
+     * 
+     * @param viewModelPojo domain object
+     * @return  
      */
-    ObjectAdapter specificationForViewModel(final Object viewModelPojo);
+    ObjectAdapter disposableAdapterForViewModel(Object viewModelPojo);
+    
+    ObjectSpecification specificationForViewModel(Object viewModelPojo);
 
     ObjectAdapter adapterForViewModel(
             final Object viewModelPojo, 
@@ -71,6 +86,11 @@ public interface ObjectAdapterProvider {
         @Programmatic
         ObjectAdapterProvider getObjectAdapterProvider();
         
+//        @Programmatic
+//        default Oid oidFor(Object domainObject) {
+//            return getObjectAdapterProvider().oidFor(domainObject);
+//        }
+        
         @Programmatic
         default ObjectAdapter adapterFor(Object domainObject) {
             return getObjectAdapterProvider().adapterFor(domainObject);
@@ -85,7 +105,12 @@ public interface ObjectAdapterProvider {
         }
 
         @Programmatic
-        default ObjectAdapter specificationForViewModel(final Object viewModelPojo) {
+        default ObjectAdapter disposableAdapterForViewModel(final Object viewModelPojo) {
+            return getObjectAdapterProvider().disposableAdapterForViewModel(viewModelPojo);
+        }
+        
+        @Programmatic
+        default ObjectSpecification specificationForViewModel(Object viewModelPojo) {
             return getObjectAdapterProvider().specificationForViewModel(viewModelPojo);
         }
 
@@ -102,6 +127,12 @@ public interface ObjectAdapterProvider {
         }
         
     }
+
+
+   
+
+
+    
     
 
 }

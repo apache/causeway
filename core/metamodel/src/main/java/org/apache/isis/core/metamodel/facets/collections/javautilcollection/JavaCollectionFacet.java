@@ -24,7 +24,6 @@ import java.util.Iterator;
 
 import com.google.common.collect.Collections2;
 
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,13 +39,14 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     }
     
     @Override
-    public void init(final ObjectAdapter collection, final ObjectAdapter[] initData) {
+    public ObjectAdapter init(final ObjectAdapter collection, final ObjectAdapter[] initData) {
         final Collection<? super Object> pojoCollection = pojoCollection(collection);
         pojoCollection.clear();
         for (final ObjectAdapter element : initData) {
             final Object pojo = element.getObject();
             pojoCollection.add(pojo);
         }
+        return collection;
     }
     
     @Override
@@ -55,8 +55,8 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
         
         //TODO [ahuber] java doc states, this is a live view, don't know if this is needed, 
         // or if a copy is sufficient
-        return Collections2.transform(pojoCollection,
-                ObjectAdapter.Functions.adapter_ForUsing(getObjectAdapterProvider()));
+        return Collections2.transform(pojoCollection, adapterProvider::adapterFor);
+                
     }
 
     @Override
@@ -76,14 +76,6 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     @SuppressWarnings("unchecked")
     private Collection<? super Object> pojoCollection(final ObjectAdapter collectionAdapter) {
         return (Collection<? super Object>) collectionAdapter.getObject();
-    }
-
-    // //////////////////////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // //////////////////////////////////////////////////////////////////////
-
-    private ObjectAdapterProvider getObjectAdapterProvider() {
-        return adapterProvider;
     }
 
 }

@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.memento._Mementos;
@@ -97,7 +98,7 @@ extends RecreatableObjectFacetAbstract {
 
         final _Mementos.Memento memento = _Mementos.create(codec, serializer);
 
-        final ObjectAdapter ownerAdapter = adapterProvider.specificationForViewModel(viewModelPojo);
+        final ObjectAdapter ownerAdapter = adapterProvider.disposableAdapterForViewModel(viewModelPojo);
         final ObjectSpecification spec = ownerAdapter.getSpecification();
         
         final List<OneToOneAssociation> properties = spec.getProperties(Contributed.EXCLUDED);

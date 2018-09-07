@@ -74,7 +74,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
 
             final Object recreatedPojo = persistenceSession.instantiateAndInjectServices(spec);
             adapter = objectAdapterContext.addRecreatedPojoToCache(oid, recreatedPojo);
-            populateCollection(adapter, (CollectionData) data);
+            adapter = populateCollection(adapter, (CollectionData) data);
 
         } else {
             Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
@@ -138,14 +138,14 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         }
     }
     
-    private void populateCollection(final ObjectAdapter collectionAdapter, final CollectionData state) {
+    private ObjectAdapter populateCollection(final ObjectAdapter collectionAdapter, final CollectionData state) {
         final ObjectAdapter[] initData = new ObjectAdapter[state.getElements().length];
         int i = 0;
         for (final Data elementData : state.getElements()) {
             initData[i++] = recreateReference(elementData);
         }
         final CollectionFacet facet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
-        facet.init(collectionAdapter, initData);
+        return facet.init(collectionAdapter, initData);
     }
     
     private void updateFieldsAndResolveState(final ObjectAdapter objectAdapter, final Data data) {

@@ -26,6 +26,9 @@ import java.util.Set;
 
 import com.google.common.collect.Maps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
@@ -43,7 +46,11 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
  * must also be persisted.
  */
 class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
+    
+    @SuppressWarnings("unused")
+    private static final Logger LOG = LoggerFactory.getLogger(RootAndCollectionAdapters.class);
 
+    private final ObjectAdapterContext context;
     private final ObjectAdapter parentAdapter;
     private final RootOid rootAdapterOid;
 
@@ -51,11 +58,12 @@ class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
 
     public RootAndCollectionAdapters(
             final ObjectAdapter parentAdapter,
-            final ObjectAdapterContext_AdapterManager adapterManagerMixin) {
+            final ObjectAdapterContext context) {
         Assert.assertNotNull(parentAdapter);
         this.rootAdapterOid = (RootOid) parentAdapter.getOid();
         this.parentAdapter = parentAdapter;
-        addCollectionAdapters(adapterManagerMixin);
+        this.context = context;
+        addCollectionAdapters();
     }
 
     public ObjectAdapter getRootAdapter() {
@@ -95,10 +103,10 @@ class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
     // Helpers
     ////////////////////////////////////////////////////////////////////////
 
-    private void addCollectionAdapters(ObjectAdapterContext_AdapterManager adapterManagerMixin) {
+    private void addCollectionAdapters() {
         for (final OneToManyAssociation otma : parentAdapter.getSpecification().getCollections(Contributed.EXCLUDED)) {
             final ParentedCollectionOid collectionOid = new ParentedCollectionOid((RootOid) rootAdapterOid, otma);
-            final ObjectAdapter collectionAdapter = adapterManagerMixin.lookupAdapterFor(collectionOid);
+            final ObjectAdapter collectionAdapter = context.lookupParentedCollectionAdapter(collectionOid);
             if (collectionAdapter != null) {
                 // collection adapters are lazily created and so there may not be one.
                 addCollectionAdapter(otma, collectionAdapter);

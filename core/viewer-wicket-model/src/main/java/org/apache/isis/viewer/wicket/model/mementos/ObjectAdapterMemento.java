@@ -134,7 +134,7 @@ public class ObjectAdapterMemento implements Serializable {
                 final List<Object> listOfPojos =
                         _Lists.transform(oam.list, Functions.toPojo(persistenceSession, specificationLoader));
 
-                return ObjectAdapter.Functions.adapterForUsing(persistenceSession).apply(listOfPojos);
+                return persistenceSession.adapterFor(listOfPojos);
             }
 
             @Override

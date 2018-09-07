@@ -35,9 +35,11 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
  * Responsibility: ObjectAdapter Cache/Map consistency
  * </p> 
  * @since 2.0.0-M2
+ * @deprecated expected to be made obsolete
  */
 class ObjectAdapterContext_Consistency {
     
+    @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_Consistency.class);
     private final ObjectAdapterContext objectAdapterContext;
     
@@ -47,9 +49,8 @@ class ObjectAdapterContext_Consistency {
 
     /**
      * Fail early if any problems.
-     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
      */
-    protected void ensureMapsConsistent(final ObjectAdapter adapter) {
+    void ensureMapsConsistent(final ObjectAdapter adapter) {
         if (adapter.isValue()) {
             return;
         }
@@ -62,9 +63,8 @@ class ObjectAdapterContext_Consistency {
 
     /**
      * Fail early if any problems.
-     * @deprecated https://issues.apache.org/jira/browse/ISIS-1976
      */
-    protected void ensureMapsConsistent(final Oid oid) {
+    void ensureMapsConsistent(final Oid oid) {
         Objects.requireNonNull(oid);
 
         final ObjectAdapter adapter = objectAdapterContext.lookupAdapterById(oid);
@@ -113,10 +113,31 @@ class ObjectAdapterContext_Consistency {
         }
 
         ensureThatArg(
-                adapter, equalTo(adapterAccordingToMap),
+                adapterOid, equalTo(adapterAccordingToMap.getOid()),
                 ()->"mismatch in "
                         + mapName
                         + ": provided adapter's OID: " + adapterOid + ", \n"
                         + "but map's adapter's OID was: " + adapterAccordingToMap.getOid());
+        
+        ensureThatArg(
+                adapter.getObject(), equalTo(adapterAccordingToMap.getObject()),
+                ()->String.format("mismatch in %s (oid='%s')"
+                        + ": provided adapter's hash: %s (pojo='%s'), \n"
+                        + "but map's adapter's hash was: %s (pojo='%s')",
+                        mapName, adapterOid,
+                        Integer.toHexString(adapter.hashCode()), ""+adapter.getObject(),
+                        Integer.toHexString(adapterAccordingToMap.hashCode()), ""+adapterAccordingToMap.getObject()
+                        ));
+
+//      TODO[ISIS-1976] too strict, remove        
+//        ensureThatArg(
+//                adapter, equalTo(adapterAccordingToMap),
+//                ()->String.format("mismatch in %s (oid='%s')"
+//                        + ": provided adapter's hash: %s (pojo='%s'), \n"
+//                        + "but map's adapter's hash was: %s (pojo='%s')",
+//                        mapName, adapterOid,
+//                        Integer.toHexString(adapter.hashCode()), ""+adapter.getObject(),
+//                        Integer.toHexString(adapterAccordingToMap.hashCode()), ""+adapterAccordingToMap.getObject()
+//                        ));
     }
 }

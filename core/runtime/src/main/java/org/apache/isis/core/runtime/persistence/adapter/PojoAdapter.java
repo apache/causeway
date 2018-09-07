@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.persistence.adapter;
 
+import java.util.function.Function;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +57,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     /**
      * can be {@link #replacePojo(Object) replace}d.
      */
-    private Object pojo;
+    private final Object pojo;
     /**
      * can be {@link #replaceOid(Oid) replace}d.
      */
@@ -83,8 +85,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         this.pojo = pojo;
         this.oid = oid;
     }
-
-
+    
     // -- getSpecification
 
     /**
@@ -108,15 +109,15 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return pojo;
     }
 
-    /**
-     * Sometimes it is necessary to manage the replacement of the underlying
-     * domain object (by another component such as an object store). This method
-     * allows the adapter to be kept while the domain object is replaced.
-     */
-    @Override
-    public void replacePojo(final Object pojo) {
-        this.pojo = pojo;
-    }
+//    /**
+//     * Sometimes it is necessary to manage the replacement of the underlying
+//     * domain object (by another component such as an object store). This method
+//     * allows the adapter to be kept while the domain object is replaced.
+//     */
+//    @Override
+//    public void replacePojo(final Object pojo) {
+//        this.pojo = pojo;
+//    }
 
     // -- getOid
     @Override
@@ -400,6 +401,11 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     @Override
     public ObjectAdapter withOid(RootOid newOid) {
         return new PojoAdapter(pojo, newOid, authenticationSession, specificationLoader, persistenceSession);
+    }
+    
+    @Override
+    public ObjectAdapter withPojo(Object newPojo) {
+        return new PojoAdapter(newPojo, oid, authenticationSession, specificationLoader, persistenceSession);
     }
 
 }

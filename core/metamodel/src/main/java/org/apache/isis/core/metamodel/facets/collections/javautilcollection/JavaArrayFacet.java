@@ -43,13 +43,13 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
     @Override
-    public void init(final ObjectAdapter arrayAdapter, final ObjectAdapter[] initData) {
+    public ObjectAdapter init(final ObjectAdapter arrayAdapter, final ObjectAdapter[] initData) {
         final int length = initData.length;
         final Object[] array = new Object[length];
         for (int i = 0; i < length; i++) {
             array[i] = initData[i].getObject();
         }
-        arrayAdapter.replacePojo(array);
+        return arrayAdapter.withPojo(array);  
     }
 
     /**
