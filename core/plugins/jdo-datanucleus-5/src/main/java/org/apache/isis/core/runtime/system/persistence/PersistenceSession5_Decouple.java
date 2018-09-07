@@ -83,7 +83,24 @@ class PersistenceSession5_Decouple  {
             final RootOid rootOid,
             final ConcurrencyChecking concurrencyChecking) {
         
-        //FIXME[ISIS-1976] guard against service lookup
+        /* FIXME[ISIS-1976] guard against service lookup
+         * https://github.com/apache/isis/pull/121#discussion_r215889748
+         * 
+         * Eventually I'm hoping that this code will simplify and then become pluggable.
+         * Assuming that we stop supporting transient pojos, instead this code could
+         * iterate over a set of "PersistenceProviders", following the chain of
+         * responsibility pattern, where the first PersistenceProvider that recognises
+         * the format of the rootOid then takes responsibility for retrieving the
+         * corresponding pojo from its persistence store.
+         * 
+         * In the case of a PersistenceProvider for DN, that means a query to the DB. In
+         * the case of a PersistenceProvider for view models, it means unmarshalling the
+         * state from the oid into the pojo. (fyi, there's also the optional SPI
+         * service, UrlEncodingService or something like, whereby the root oid is a key
+         * into some other datastore. So really my "PersistenceProvider" is a
+         * generalization of that concept).
+         */
+
         final ObjectAdapter serviceAdapter = objectAdapterContext.lookupServiceAdapterFor(rootOid);
         if (serviceAdapter != null) {
             return serviceAdapter;
@@ -105,11 +122,13 @@ class PersistenceSession5_Decouple  {
                 throw ex; // just rethrow
             } catch(RuntimeException ex) {
                 
+                //FIXME[ISIS-1976] remove
                 System.err.println("------------------------------------------");
                 System.err.println("rootOid: "+rootOid.enString());
                 
                 ex.printStackTrace();
                 System.err.println("------------------------------------------");
+                //--
 
                 
                 throw new PojoRecreationException(rootOid, ex);

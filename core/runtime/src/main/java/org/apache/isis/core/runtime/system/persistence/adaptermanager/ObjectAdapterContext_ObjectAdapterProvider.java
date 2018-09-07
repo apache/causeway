@@ -151,7 +151,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     
     // -- HELPER
     
-    private _Lazy<List<ObjectAdapter>> serviceAdapters = _Lazy.of(this::initServiceAdapters);
+    private final _Lazy<List<ObjectAdapter>> serviceAdapters = _Lazy.of(this::initServiceAdapters);
     
     private List<ObjectAdapter> initServiceAdapters() {
         return servicesInjector.streamRegisteredServiceInstances()

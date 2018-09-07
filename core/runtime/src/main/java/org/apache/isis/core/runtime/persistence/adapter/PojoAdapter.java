@@ -109,16 +109,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return pojo;
     }
 
-//    /**
-//     * Sometimes it is necessary to manage the replacement of the underlying
-//     * domain object (by another component such as an object store). This method
-//     * allows the adapter to be kept while the domain object is replaced.
-//     */
-//    @Override
-//    public void replacePojo(final Object pojo) {
-//        this.pojo = pojo;
-//    }
-
     // -- getOid
     @Override
     public Oid getOid() {
