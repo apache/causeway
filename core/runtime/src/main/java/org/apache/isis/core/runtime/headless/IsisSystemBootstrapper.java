@@ -18,10 +18,6 @@
  */
 package org.apache.isis.core.runtime.headless;
 
-import java.util.List;
-
-import javax.jdo.PersistenceManagerFactory;
-
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.AppManifestAbstract2;
@@ -33,10 +29,14 @@ import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
+import org.apache.isis.core.runtime.headless.logging.LeveledLogger;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.jdo.PersistenceManagerFactory;
+import java.util.List;
 
 public class IsisSystemBootstrapper {
 
@@ -48,8 +48,8 @@ public class IsisSystemBootstrapper {
     private static ThreadLocal<AppManifest2> isftAppManifest = new ThreadLocal<>();
 
 
-    private final LogConfig logConfig;
     private final AppManifest2 appManifest2;
+    private final LeveledLogger logger;
 
     public IsisSystemBootstrapper(
             final LogConfig logConfig,
@@ -61,8 +61,8 @@ public class IsisSystemBootstrapper {
             final LogConfig logConfig,
             final AppManifest2 appManifest2) {
 
-        this.logConfig = logConfig;
         this.appManifest2 = appManifest2;
+        this.logger = new LeveledLogger(LOG, logConfig.getTestLoggingLevel());
     }
 
     public AppManifest2 getAppManifest2() {
@@ -148,9 +148,8 @@ public class IsisSystemBootstrapper {
 
         final IsisSystem isft =
                 IsisSystem.builder()
-                .withLoggingAt(org.apache.log4j.Level.INFO)
-                .with(appManifest2)
-                .build();
+                    .with(appManifest2)
+                    .build();
 
         isft.setUpSystem();
 
@@ -207,23 +206,7 @@ public class IsisSystemBootstrapper {
     }
 
     private void log(final String message) {
-        switch (logConfig.getTestLoggingLevel()) {
-        case ERROR:
-            LOG.error(message);
-            break;
-        case WARN:
-            LOG.warn(message);
-            break;
-        case INFO:
-            LOG.info(message);
-            break;
-        case DEBUG:
-            LOG.debug(message);
-            break;
-        case TRACE:
-            LOG.trace(message);
-            break;
-        }
+        logger.log(message);
     }
 
 }

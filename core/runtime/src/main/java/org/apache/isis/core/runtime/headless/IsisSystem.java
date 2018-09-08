@@ -19,10 +19,7 @@
 
 package org.apache.isis.core.runtime.headless;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
-import java.util.Set;
-
+import com.google.common.base.Joiner;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -34,13 +31,14 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.headless.auth.AuthenticationRequestNameOnly;
-import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 
-import com.google.common.base.Joiner;
+import java.util.Set;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 
 /**
@@ -83,8 +81,6 @@ public class IsisSystem {
 
         protected AppManifest appManifestIfAny;
 
-        protected org.apache.log4j.Level level;
-
         public T with(IsisConfiguration configuration) {
             this.configuration = (IsisConfigurationDefault) configuration;
             return uncheckedCast(this);
@@ -100,11 +96,6 @@ public class IsisSystem {
             return uncheckedCast(this);
         }
 
-        public T withLoggingAt(org.apache.log4j.Level level) {
-            this.level = level;
-            return uncheckedCast(this);
-        }
-
         public S build() {
             final IsisSystem isisSystem =
                     new IsisSystem(
@@ -115,10 +106,6 @@ public class IsisSystem {
         }
 
         protected S configure(final S isisSystem) {
-            if(level != null) {
-                isisSystem.setLevel(level);
-            }
-
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public synchronized void run() {
@@ -166,24 +153,6 @@ public class IsisSystem {
         this.authenticationRequestIfAny = authenticationRequestIfAny;
     }
 
-
-
-    // -- level
-    private org.apache.log4j.Level level = org.apache.log4j.Level.INFO;
-
-    /**
-     * The level to use for the root logger if fallback (ie a <tt>logging.properties</tt> file cannot be found).
-     */
-    public org.apache.log4j.Level getLevel() {
-        return level;
-    }
-
-    public void setLevel(org.apache.log4j.Level level) {
-        this.level = level;
-    }
-
-
-
     // -- setup (also componentProvider)
 
     // populated at #setupSystem
@@ -210,9 +179,6 @@ public class IsisSystem {
 
         boolean firstTime = isisSessionFactory == null;
         if(firstTime) {
-            IsisLoggingConfigurer isisLoggingConfigurer = new IsisLoggingConfigurer(getLevel());
-            isisLoggingConfigurer.configureLogging(".", new String[] {});
-
             componentProvider = new IsisComponentProviderDefault(
                     appManifestIfAny,
                     configurationOverride
