@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -92,7 +93,9 @@ class ObjectAdapterContext_NewIdentifier {
 
     RootOid newIdentifier(final Object pojo, final Oid.State type) {
         final ObjectSpecification spec = objectSpecFor(pojo);
+      //FIXME[ISIS-1976] remove guard 
         if(spec.isService()) {
+            //_Exceptions.throwUnexpectedCodeReach(); 
             return newRootId(spec, PersistenceSession.SERVICE_IDENTIFIER, Oid.State.PERSISTENT); // services are always persistent
         }
 

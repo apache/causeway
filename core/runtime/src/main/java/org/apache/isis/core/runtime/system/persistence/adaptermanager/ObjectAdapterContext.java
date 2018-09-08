@@ -96,14 +96,6 @@ public class ObjectAdapterContext {
             return adapter;
         }
         
-        private void putPojo(Object pojo, ObjectAdapter adapter) {
-            pojoAdapterMap.add(adapter.getObject(), adapter);
-        }
-        
-        private void removePojo(ObjectAdapter adapter) {
-            pojoAdapterMap.remove(adapter);
-        }
-        
         private ObjectAdapter lookupAdapterById(Oid oid) {
             return oidAdapterMap.getAdapter(oid);
         }
@@ -113,22 +105,17 @@ public class ObjectAdapterContext {
                 return; // nothing to do
             }
             final Oid oid = adapter.getOid();
-            if (oid != null) { // eg. value objects don't have an Oid
-                oidAdapterMap.add(oid, adapter);
-            }
-            putPojo(adapter.getObject(), adapter);
+            oidAdapterMap.add(oid, adapter);
+            pojoAdapterMap.add(adapter.getObject(), adapter);
         }
         
         private void removeAdapter(ObjectAdapter adapter) {
-            LOG.debug("removing adapter: {}", adapter);
             if(adapter==null) {
                 return; // nothing to do
             }
             final Oid oid = adapter.getOid();
-            if (oid != null) { // eg. value objects don't have an Oid
-                oidAdapterMap.remove(oid);
-            }
-            removePojo(adapter);
+            oidAdapterMap.remove(oid);
+            pojoAdapterMap.remove(adapter);
         }
         
     }
@@ -152,7 +139,7 @@ public class ObjectAdapterContext {
             PersistenceSession persistenceSession) {
         
         this.consistencyMixin = new ObjectAdapterContext_Consistency(this);
-        this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, persistenceSession);
+        this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, persistenceSession, authenticationSession);
         this.adapterManagerMixin = new ObjectAdapterContext_AdapterManager(this, persistenceSession);
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
         this.serviceLookupMixin = new ObjectAdapterContext_ServiceLookup(this, servicesInjector);
@@ -460,9 +447,11 @@ public class ObjectAdapterContext {
             final Object collectionPojoActuallyOnPojo = getCollectionPojo(otma, adapterReplacement);
 
             if (collectionPojoActuallyOnPojo != collectionPojoWrappedByAdapter) {
-                cache.removePojo(collectionAdapter);
+                cache.removeAdapter(collectionAdapter);
                 final ObjectAdapter newCollectionAdapter = collectionAdapter.withPojo(collectionPojoActuallyOnPojo);
-                cache.putPojo(collectionPojoActuallyOnPojo, newCollectionAdapter);
+                Assert.assertTrue("expected same", 
+                        Objects.equals(newCollectionAdapter.getObject(), collectionPojoActuallyOnPojo));
+                cache.addAdapter(collectionAdapter);
             }
         }
         

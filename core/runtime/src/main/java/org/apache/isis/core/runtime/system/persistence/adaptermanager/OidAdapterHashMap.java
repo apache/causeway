@@ -22,6 +22,8 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
@@ -62,8 +64,10 @@ class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent {
     /**
      * Add an adapter for a given oid
      */
-    public void add(final Oid oid, final ObjectAdapter adapter) {
-
+    public void add(@Nullable final Oid oid, final ObjectAdapter adapter) {
+        if(oid==null) { // eg. value objects don't have an Oid
+            return;
+        }
         adapterByOidMap.put(oid, adapter);
         // log at end so that if toString needs adapters they're in maps.
         if (LOG.isDebugEnabled()) {
@@ -80,7 +84,10 @@ class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent {
      *
      * @return <tt>true</tt> if an adapter was removed.
      */
-    public boolean remove(final Oid oid) {
+    public boolean remove(@Nullable final Oid oid) {
+        if(oid==null) { // eg. value objects don't have an Oid
+            return false;
+        }
         LOG.debug("remove oid: {}", oid);
         return adapterByOidMap.remove(oid) != null;
     }

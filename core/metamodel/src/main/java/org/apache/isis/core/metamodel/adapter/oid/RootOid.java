@@ -204,8 +204,6 @@ public class RootOid implements TypedOid, Serializable {
         return state.isPersistent();
     }
 
-
-
     // -- Version
 
     @Override
@@ -284,7 +282,28 @@ public class RootOid implements TypedOid, Serializable {
         return enString();
     }
 
+    // -- ROOT-ID SUPPORT FOR VALUE
+    
+    public boolean isValue() {
+        return false;
+    }
+    
+    private RootOid() { identifier=null; objectSpecId=null; state=null; };
+    
+    private static final RootOid VALUE_OID = new RootOid() {
+        private static final long serialVersionUID = 1L;
 
+        @Override
+        public boolean isValue() {
+            return true;
+        }
+    };
+    
+    public static RootOid value() {
+        return VALUE_OID;
+    }
+    
+    // --
 
 
 }

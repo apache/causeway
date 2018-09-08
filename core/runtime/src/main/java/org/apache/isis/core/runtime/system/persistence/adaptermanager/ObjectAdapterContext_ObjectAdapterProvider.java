@@ -26,10 +26,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -37,7 +40,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.adaptermanager.factories.OidFactory;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -52,17 +57,29 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_ObjectAdapterProvider.class);
     private final ObjectAdapterContext objectAdapterContext;
     private final PersistenceSession persistenceSession;
+    private final AuthenticationSession authenticationSession;
     private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader; 
-    private final IsisJdoMetamodelPlugin isisJdoMetamodelPlugin; 
+    private final IsisJdoMetamodelPlugin isisJdoMetamodelPlugin;
+    private final OidFactory oidFactory; 
     
     ObjectAdapterContext_ObjectAdapterProvider(ObjectAdapterContext objectAdapterContext,
-            PersistenceSession persistenceSession) {
+            PersistenceSession persistenceSession, AuthenticationSession authenticationSession) {
         this.objectAdapterContext = objectAdapterContext;
         this.persistenceSession = persistenceSession;
+        this.authenticationSession = authenticationSession;
         this.servicesInjector = persistenceSession.getServicesInjector();
         this.specificationLoader = servicesInjector.getSpecificationLoader();
         this.isisJdoMetamodelPlugin = IsisJdoMetamodelPlugin.get();
+        
+        this.oidFactory = OidFactory.builder(pojo->specificationLoader.loadSpecification(pojo.getClass()))
+                .add(new OidProviders.OidForServices())
+                .add(new OidProviders.OidForValues())
+                .add(new OidProviders.OidForViewModels())
+                .add(new OidProviders.OidForPersistables())
+                .add(new OidProviders.OidForMixins())
+                .add(new OidProviders.OidForStandaloneCollections())
+                .build();
     }
 
 //    @Override
@@ -85,12 +102,44 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         if(pojo == null) {
             return null;
         }
+        
+        final  ObjectAdapter existing = objectAdapterContext.lookupAdapterByPojo(pojo);
+        if (existing != null) {
+            return existing;
+        }
+        
+        final RootOid rootOid2 = oidFactory.oidFor(pojo);
+        
+//        if(rootOid2==null) {
+//            System.err.println("!!! "+pojo);
+//            _Exceptions.throwUnexpectedCodeReach();
+//        }
+//        
+//        if(rootOid2!=null && rootOid2.isValue()) {
+//            return objectAdapterContext.getFactories().createRootAdapter(pojo, null);
+//        }
+        
+        // -- legacy code
+        
         final ObjectAdapter existingOrValueAdapter = existingOrValueAdapter(pojo);
         if(existingOrValueAdapter != null) {
             return existingOrValueAdapter;
         }
 
         final RootOid rootOid = objectAdapterContext.createTransientOrViewModelOid(pojo);
+        
+      //at this point we know its not a value
+        if(rootOid2==null) {
+            System.err.println("!!! expected "+rootOid);
+            _Exceptions.throwUnexpectedCodeReach();
+        }
+        
+        
+        if(rootOid2!=null && rootOid2.isValue()) {
+            Assert.assertEquals("expected same", rootOid, null);
+        } else if(!rootOid.isTransient()) {
+            Assert.assertEquals("expected same", rootOid, rootOid2);    
+        }
         
         final ObjectAdapter newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
 

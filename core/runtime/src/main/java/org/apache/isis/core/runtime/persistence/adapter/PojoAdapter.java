@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.runtime.persistence.adapter;
 
-import java.util.function.Function;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
