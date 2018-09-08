@@ -62,9 +62,9 @@ public class LogStream extends OutputStream {
     }
 
     @Override
-    public void write(int b) {
-        String str = Integer.toString(b);
-        this.buf.append(str);
+    public void write(int codePoint) {
+        char[] chars = Character.toChars(codePoint);
+        this.buf.append(chars);
     }
 
     @Override
