@@ -284,10 +284,6 @@ public class RootOid implements TypedOid, Serializable {
 
     // -- ROOT-ID SUPPORT FOR VALUE
     
-    public boolean isValue() {
-        return false;
-    }
-    
     private RootOid() { identifier=null; objectSpecId=null; state=null; };
     
     private static final RootOid VALUE_OID = new RootOid() {

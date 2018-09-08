@@ -89,11 +89,11 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     @Override
     public Bookmark bookmarkFor(Object domainObject) {
         final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
-        final Oid oid = adapter.getOid();
-        if(oid == null) {
+        if(adapter.isValue()) {
             // values cannot be bookmarked
             return null;
         }
+        final Oid oid = adapter.getOid();
         if(!(oid instanceof RootOid)) {
             // must be root
             return null;

@@ -432,11 +432,6 @@ public class ObjectAdapterMemento implements Serializable {
         }
 
         final RootOid oid = (RootOid) adapter.getOid();
-        
-        if(oid==null) {
-            System.out.println("!!! "+adapter.getSpecification());
-        }
-        
         if (oid.isTransient()) {
             transientMemento = new Memento(adapter);
             type = Type.TRANSIENT;

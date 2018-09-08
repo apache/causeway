@@ -79,11 +79,11 @@ public class OidProviders {
 
     }
     
-    public static class OidForMixins implements OidProvider {
+    public static class OidForOthers implements OidProvider {
 
         @Override
         public boolean isHandling(Object pojo, ObjectSpecification spec) {
-            return spec.isMixin();
+            return true; // try to handle anything
         }
 
         @Override
@@ -94,23 +94,6 @@ public class OidProviders {
         }
 
     }
-    
-    public static class OidForStandaloneCollections implements OidProvider {
-
-        @Override
-        public boolean isHandling(Object pojo, ObjectSpecification spec) {
-            return true; //FIXME spec.isParentedOrFreeCollection() && !spec.isParented();
-        }
-
-        @Override
-        public RootOid oidFor(Object pojo, ObjectSpecification spec) {
-            final PersistenceSession persistenceSession = IsisContext.getPersistenceSession().get();
-            final String identifier = persistenceSession.identifierFor(pojo, Oid.State.TRANSIENT);
-            return new RootOid(spec.getSpecId(), identifier, Oid.State.TRANSIENT);
-        }
-
-    }
-    
     
 
 }

@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.persistence.adapter;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,13 +54,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     private final SpecificationLoader specificationLoader;
     private final PersistenceSession persistenceSession;
 
-    /**
-     * can be {@link #replacePojo(Object) replace}d.
-     */
     private final Object pojo;
-    /**
-     * can be {@link #replaceOid(Oid) replace}d.
-     */
     private final Oid oid;
 
     /**
@@ -81,7 +77,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             throw new IsisException("Adapter can't be used to adapt an adapter: " + pojo);
         }
         this.pojo = pojo;
-        this.oid = oid;
+        this.oid = requires(oid, "oid");
     }
     
     // -- getSpecification
@@ -122,7 +118,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public boolean isValue() {
-        return oid == null;
+        return oid.isValue();
     }
 
     // -- isTransient, representsPersistent, isDestroyed
