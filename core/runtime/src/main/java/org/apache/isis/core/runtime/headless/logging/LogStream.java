@@ -18,16 +18,15 @@
  */
 package org.apache.isis.core.runtime.headless.logging;
 
-import java.io.OutputStream;
-import java.io.PrintStream;
-
 import org.slf4j.Logger;
 import org.slf4j.event.Level;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 public class LogStream extends OutputStream {
 
-    private final Logger logger;
-    private final Level level;
+    private final LeveledLogger logger;
 
     private final StringBuilder buf = new StringBuilder();
 
@@ -36,8 +35,7 @@ public class LogStream extends OutputStream {
     }
 
     public LogStream(final Logger logger, final Level level) {
-        this.logger = logger;
-        this.level = level;
+        this.logger = new LeveledLogger(logger, level);
     }
 
     @Override
@@ -45,24 +43,7 @@ public class LogStream extends OutputStream {
 
     @Override
     public void flush() {
-        final String message = toString();
-        switch (level) {
-        case ERROR:
-            logger.error(message);
-            break;
-        case WARN:
-            logger.warn(message);
-            break;
-        case INFO:
-            logger.info(message);
-            break;
-        case DEBUG:
-            logger.debug(message);
-            break;
-        case TRACE:
-            logger.trace(message);
-            break;
-        }
+        logger.log(toString());
 
         // Clear the buffer
         buf.delete(0, buf.length());

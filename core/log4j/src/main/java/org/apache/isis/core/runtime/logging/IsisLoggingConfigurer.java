@@ -51,11 +51,15 @@ public class IsisLoggingConfigurer {
      * The root logging level can also be adjusted using command line arguments.
      */
     public void configureLogging(final String configDirectory, final String[] args) {
+        configureLoggingWithFile(configDirectory + "/" + LoggingConstants.LOGGING_CONFIG_FILE, args);
+    }
+
+    public void configureLoggingWithFile(final String configFile, final String[] args) {
         if (loggingSetup) {
             return;
         }
         loggingSetup = true;
-        configureLogging(configDirectory);
+        configureLogging(configFile);
         applyLoggingLevelFromCommandLine(args);
     }
 
@@ -77,12 +81,11 @@ public class IsisLoggingConfigurer {
      * {@link Level#WARN warning}, a typical {@link PatternLayout} and logging
      * to the {@link ConsoleAppender console}.
      */
-    private void configureLogging(final String configDirectory) {
+    private void configureLogging(final String configFile) {
         final Properties properties = new Properties();
-        final String path = configDirectory + "/" + LoggingConstants.LOGGING_CONFIG_FILE;
         FileInputStream inStream = null;
         try {
-            inStream = new FileInputStream(path);
+            inStream = new FileInputStream(configFile);
             properties.load(inStream);
         } catch (final IOException ignore) {
             // ignore
@@ -94,7 +97,7 @@ public class IsisLoggingConfigurer {
             InputStream inStream2 = null;
             try {
                 final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                inStream2 = classLoader.getResourceAsStream(path);
+                inStream2 = classLoader.getResourceAsStream(configFile);
                 if (inStream2 != null) {
                     properties.load(inStream2);
                 }
