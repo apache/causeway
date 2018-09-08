@@ -19,6 +19,7 @@
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -108,37 +109,9 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
             return existing;
         }
         
-        final RootOid rootOid2 = oidFactory.oidFor(pojo);
-        
-//        if(rootOid2==null) {
-//            System.err.println("!!! "+pojo);
-//            _Exceptions.throwUnexpectedCodeReach();
-//        }
-//        
-//        if(rootOid2!=null && rootOid2.isValue()) {
-//            return objectAdapterContext.getFactories().createRootAdapter(pojo, null);
-//        }
-        
-        // -- legacy code
-        
-        final ObjectAdapter existingOrValueAdapter = existingOrValueAdapter(pojo);
-        if(existingOrValueAdapter != null) {
-            return existingOrValueAdapter;
-        }
-
-        final RootOid rootOid = objectAdapterContext.createTransientOrViewModelOid(pojo);
-        
-      //at this point we know its not a value
-        if(rootOid2==null) {
-            System.err.println("!!! expected "+rootOid);
-            _Exceptions.throwUnexpectedCodeReach();
-        }
-        
-        
-        if(rootOid2!=null && rootOid2.isValue()) {
-            Assert.assertEquals("expected same", rootOid, null);
-        } else if(!rootOid.isTransient()) {
-            Assert.assertEquals("expected same", rootOid, rootOid2);    
+        final RootOid rootOid = oidFactory.oidFor(pojo);
+        if(rootOid.isValue()) {
+            return objectAdapterContext.getFactories().createRootAdapter(pojo, null); 
         }
         
         final ObjectAdapter newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);

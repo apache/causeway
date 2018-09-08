@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager.factories
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -52,11 +53,15 @@ class OidFactory_Builder implements OidFactoryBuilder {
                 
                 final ObjectSpecification spec = specProvider.apply(pojo);
                 
-                return handler.stream()
+                final RootOid rootOid = handler.stream()
                 .filter(h->h.isHandling(pojo, spec))
                 .findFirst()
                 .map(h->h.oidFor(pojo, spec))
                 .orElse(null);
+                
+                Objects.requireNonNull(rootOid, "Could not create an Oid for pojo: "+pojo);
+                
+                return rootOid;
             }
             
         };
