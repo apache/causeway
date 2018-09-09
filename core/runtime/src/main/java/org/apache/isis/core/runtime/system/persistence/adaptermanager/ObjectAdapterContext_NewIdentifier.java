@@ -57,25 +57,6 @@ class ObjectAdapterContext_NewIdentifier {
         this.specificationLoader = servicesInjector.getSpecificationLoader();
     }
     
-//    RootOid rootOidFor(Object pojo) {
-//        final RootOid rootOid = servicesInjector.isRegisteredServiceInstance(pojo) 
-//                ? createPersistentOrViewModelOid(pojo) 
-//                        : createTransientOrViewModelOid(pojo);
-//        
-//                
-//        return rootOid;
-//    }
-    
-    
-    // -- create...Oid (main API)
-    /**
-     * Create a new {@link Oid#isTransient() transient} {@link Oid} for the
-     * supplied pojo, uniquely distinguishable from any other {@link Oid}.
-     */
-    final RootOid createTransientOrViewModelOid(final Object pojo) {
-        return newIdentifier(pojo, Oid.State.TRANSIENT);
-    }
-
     /**
      * Return an equivalent {@link RootOid}, but being persistent.
      *
@@ -87,46 +68,21 @@ class ObjectAdapterContext_NewIdentifier {
      *
      * @param pojo - being persisted
      */
-    final RootOid createPersistentOrViewModelOid(Object pojo) {
-        return newIdentifier(pojo, Oid.State.PERSISTENT);
-    }
-
-    RootOid newIdentifier(final Object pojo, final Oid.State type) {
-        final ObjectSpecification spec = objectSpecFor(pojo);
-      //FIXME[ISIS-1976] remove guard 
-        if(spec.isService()) {
-            //_Exceptions.throwUnexpectedCodeReach(); 
-            return newRootId(spec, PersistenceSession.SERVICE_IDENTIFIER, Oid.State.PERSISTENT); // services are always persistent
-        }
-
+    final RootOid createPersistentOid(Object pojo) {
+        final Oid.State type = Oid.State.PERSISTENT;
+        
+        final ObjectSpecification spec = specificationLoader.loadSpecification(pojo.getClass());
+        
+        //FIXME[ISIS-1976] remove guard
         final ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
-        final String identifier =
-                recreatableObjectFacet != null
-                ? recreatableObjectFacet.memento(pojo)
-                        : persistenceSession.identifierFor(pojo, type);
-
-                return newRootId(spec, identifier, type);
-    }
-    
-    
-    private RootOid newRootId(final ObjectSpecification spec, final String identifier, final Oid.State type) {
-        final Oid.State state =
-                spec.containsDoOpFacet(ViewModelFacet.class)
-                ? Oid.State.VIEWMODEL
-                        : type == Oid.State.TRANSIENT
-                        ? Oid.State.TRANSIENT
-                                : Oid.State.PERSISTENT;
+        if(spec.isService() || recreatableObjectFacet!=null || spec.containsDoOpFacet(ViewModelFacet.class)) {
+            _Exceptions.throwUnexpectedCodeReach();
+        }
+        
+        final String identifier = persistenceSession.identifierFor(pojo, type);
+        
         final ObjectSpecId objectSpecId = spec.getSpecId();
-        return new RootOid(objectSpecId, identifier, state);
+        return new RootOid(objectSpecId, identifier, type);
     }
-    
-    // -- HELPER
-    
-    private ObjectSpecification objectSpecFor(final Object pojo) {
-        final Class<?> pojoClass = pojo.getClass();
-        return specificationLoader.loadSpecification(pojoClass);
-    }
-
-
     
 }

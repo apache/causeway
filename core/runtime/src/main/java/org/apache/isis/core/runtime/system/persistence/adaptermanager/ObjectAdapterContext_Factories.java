@@ -53,11 +53,6 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
     }
 
     @Override
-    public ObjectAdapter createStandaloneAdapter(final Object pojo) {
-        return createAdapter(pojo, null);
-    }
-
-    @Override
     public ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
         assert rootOid != null;
         return createAdapter(pojo, rootOid);

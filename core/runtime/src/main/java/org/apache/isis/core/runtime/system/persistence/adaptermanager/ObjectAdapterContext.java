@@ -223,12 +223,8 @@ public class ObjectAdapterContext {
     
     // -- NEW IDENTIFIER
     
-    RootOid createTransientOrViewModelOid(final Object pojo) {
-        return newIdentifierMixin.createTransientOrViewModelOid(pojo);
-    }
-
     public RootOid createPersistentOrViewModelOid(Object pojo) {
-        return newIdentifierMixin.createPersistentOrViewModelOid(pojo);
+        return newIdentifierMixin.createPersistentOid(pojo);
     }
     
     // -- SERVICE LOOKUP
@@ -251,20 +247,6 @@ public class ObjectAdapterContext {
          */
         ObjectAdapter createRootAdapter(Object pojo, RootOid rootOid);
         
-        /**
-         * Creates a {@link ObjectAdapter adapter} with no {@link Oid}.
-         *
-         * <p>
-         * Standalone adapters are never {@link #mapAndInjectServices(ObjectAdapter) mapped}
-         * (they have no {@link Oid}, after all).
-         *
-         * <p>
-         * Should only be called if the pojo is known not to be
-         * {@link #lookupAdapterFor(Object) mapped}, and for immutable value types
-         * referenced.
-         */
-        ObjectAdapter createStandaloneAdapter(Object pojo);
-
         ObjectAdapter createCollectionAdapter(Object pojo, ParentedCollectionOid collectionOid);
 
         /**

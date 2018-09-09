@@ -65,7 +65,7 @@ class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent {
      * Add an adapter for a given oid
      */
     public void add(@Nullable final Oid oid, final ObjectAdapter adapter) {
-        if(oid==null) { // eg. value objects don't have an Oid
+        if(oid.isValue()) { // not stored for value 
             return;
         }
         adapterByOidMap.put(oid, adapter);
@@ -85,7 +85,7 @@ class OidAdapterHashMap implements Iterable<Oid>, SessionScopedComponent {
      * @return <tt>true</tt> if an adapter was removed.
      */
     public boolean remove(@Nullable final Oid oid) {
-        if(oid==null) { // eg. value objects don't have an Oid
+        if(oid.isValue()) { // not stored for value 
             return false;
         }
         LOG.debug("remove oid: {}", oid);
