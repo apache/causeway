@@ -35,6 +35,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -71,19 +72,39 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
 
     @Override
     public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
-        return getPersistenceSession().createTransientInstance(spec);
+        return getPersistenceSession().newTransientInstance(spec);
     }
 
     @Override
     public ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento) {
-        return getPersistenceSession().createViewModelInstance(spec, memento);
+        return getPersistenceSession().recreateViewModelInstance(spec, memento);
     }
 
     @Override
     public Object lookup(
             final Bookmark bookmark,
             final BookmarkService.FieldResetPolicy fieldResetPolicy) {
-        return getPersistenceSession().lookup(bookmark, fieldResetPolicy);
+        
+        final RootOid oid = RootOid.create(bookmark);
+        final PersistenceSession ps = getPersistenceSession();
+        final boolean denyRefresh = fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH; 
+                        
+        if(oid.isViewModel()) {
+            //FIXME[ISIS-1976] if code is reachable requires separate view model handler
+            throw _Exceptions.unexpectedCodeReach();
+        } else if(denyRefresh) {
+            return ps.fetchPersistentPojoInTransaction(oid);
+        } else {
+            
+            final ObjectAdapter adapter = adapterFor(oid);
+            if(adapter == null) {
+                return null;
+            }            
+            
+            ps.refreshRootInTransaction(adapter.getObject());
+            return adapter.getObject();
+        }
+        
     }
 
     @Override

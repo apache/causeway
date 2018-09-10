@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
@@ -127,7 +128,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
         //FIXME[ISIS-1976] remove guard
         final ObjectAdapter serviceAdapter = objectAdapterContext.lookupServiceAdapterFor(rootOid);
         if (serviceAdapter != null) {
-            //_Exceptions.unexpectedCodeReach();
+            _Exceptions.unexpectedCodeReach();
             return serviceAdapter;
         }
         

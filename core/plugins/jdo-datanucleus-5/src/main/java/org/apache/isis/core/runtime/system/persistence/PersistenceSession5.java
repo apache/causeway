@@ -48,13 +48,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
@@ -65,7 +63,7 @@ import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
@@ -79,16 +77,13 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFac
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -324,7 +319,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             }
         }
 
-
         commandService.complete(command);
 
         command.flushActionDomainEvents();
@@ -336,12 +330,12 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
         final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.MULTIPLE);
-        return CollectionFacetUtils.convertToAdapterList(instances);
+        return CollectionFacet.Utils.convertToAdapterList(instances);
     }
     @Override
     public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
         final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.SINGLE);
-        final List<ObjectAdapter> list = CollectionFacetUtils.convertToAdapterList(instances);
+        final List<ObjectAdapter> list = CollectionFacet.Utils.convertToAdapterList(instances);
         return list.size() > 0 ? list.get(0) : null;
     }
 
@@ -407,36 +401,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             final PersistenceQueryProcessor<Q> persistenceQueryProcessor,
             final PersistenceQuery persistenceQuery) {
         return persistenceQueryProcessor.process((Q) persistenceQuery);
-    }
-
-    // -- createTransientInstance, createViewModelInstance
-
-    /**
-     * Create a root or standalone {@link ObjectAdapter adapter}.
-     *
-     * <p>
-     * Creates a new instance of the specified type and returns it in an adapter.
-     *
-     * <p>
-     * The returned object will be initialised (had the relevant callback
-     * lifecycle methods invoked).
-     *
-     * <p>
-     * While creating the object it will be initialised with default values and
-     * its created lifecycle method (its logical constructor) will be invoked.
-     *
-     * <p>
-     * This method is ultimately delegated to by the
-     * {@link org.apache.isis.applib.DomainObjectContainer}.
-     */
-    @Override
-    public ObjectAdapter createTransientInstance(final ObjectSpecification objectSpec) {
-        return objectAdapterContext.newInstance(objectSpec);
-    }
-
-    @Override
-    public ObjectAdapter createViewModelInstance(final ObjectSpecification objectSpec, final String memento) {
-        return objectAdapterContext.recreateInstance(objectSpec, memento);
     }
 
 
@@ -525,6 +489,19 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             throw new ObjectNotFoundException(rootOid);
         }
         return result;
+    }
+    
+    @Override
+    public Object fetchPersistentPojoInTransaction(final RootOid oid) {
+        
+        Objects.requireNonNull(oid);
+
+        return transactionManager.executeWithinTransaction(()-> {
+            LOG.debug("getObject; oid={}", oid);
+
+            final Object pojo = fetchPersistentPojo(oid);
+            return objectAdapterContext.addRecreatedPojoToCache(oid, pojo).getObject();
+        });
     }
 
     @Override
@@ -791,48 +768,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return rootadapter;
     }
 
-    // -- AdapterManager implementation
-
-    @Override
-    public ObjectAdapter adapterForAny(RootOid rootOid) {
-
-        final ObjectSpecId specId = rootOid.getObjectSpecId();
-        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(specId);
-        if(spec == null) {
-            // eg "NONEXISTENT:123"
-            return null;
-        }
-
-        if(spec.containsFacet(ViewModelFacet.class)) {
-
-            // this is a hack; the RO viewer when rendering the URL for the view model loses the "view model" indicator
-            // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an
-            // oid in the wrong state.  The code below checks for this and recreates the oid with the current state of 'view model'
-            if(!rootOid.isViewModel()) {
-                rootOid = new RootOid(rootOid.getObjectSpecId(), rootOid.getIdentifier(), Oid.State.VIEWMODEL);
-            }
-
-            try {
-                return adapterFor(rootOid);
-            } catch(final ObjectNotFoundException ex) {
-                return null;
-            } catch(final PojoRecreationException ex) {
-                return null;
-            }
-        } else {
-            try {
-                ObjectAdapter objectAdapter = loadObjectInTransaction(rootOid);
-                return objectAdapter.isTransient() ? null : objectAdapter;
-            } catch(final ObjectNotFoundException ex) {
-                return null;
-            }
-        }
-    }
-
-    // -- TransactionManager delegate methods
-    protected IsisTransaction getCurrentTransaction() {
-        return transactionManager.getCurrentTransaction();
-    }
 
     // -- FrameworkSynchronizer delegate methods
 
@@ -884,7 +819,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                     final String currentUser = authenticationSession.getUserName();
                     final ConcurrencyException abortCause = new ConcurrencyException(currentUser, thisOid,
                             thisVersion, otherVersion);
-                    getCurrentTransaction().setAbortCause(abortCause);
+                    
+                    transactionManager.getCurrentTransaction().setAbortCause(abortCause);
 
                 } else {
                     LOG.info("concurrency conflict detected but suppressed, on {} ({})", thisOid, otherVersion);
@@ -921,6 +857,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     public String identifierFor(final Object pojo) {
         final Object jdoOid = getPersistenceManager().getObjectId(pojo);
         if(jdoOid==null) {
+            _Exceptions.throwUnexpectedCodeReach();
             return UUID.randomUUID().toString(); //FIXME[ISIS-1976] should be guarded against somewhere else
         }
         
@@ -1059,56 +996,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return Utils.getVersionIfAny(pojo, authenticationSession);
     }
 
-    // -- DomainObjectServices impl
-
-    @Override
-    public Object lookup(
-            final Bookmark bookmark,
-            final BookmarkService.FieldResetPolicy fieldResetPolicy) {
-        final RootOid oid = RootOid.create(bookmark);
-        
-        final ObjectAdapter adapter = adapterFor(oid);
-        if(adapter == null) {
-            return null;
-        }
-        
-        //FIXME[ISIS-1976]
-        Assert.assertEquals("expected same", oid.isViewModel(), adapter.getSpecification().isViewModel());
-        
-        final boolean denyRefresh = 
-                fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH || 
-                        oid.isViewModel();
-               
-        if(denyRefresh) {
-            loadObjectInTransaction(oid);
-        } else {
-            refreshRootInTransaction(adapter.getObject());
-        }
-        return adapter.getObject();
-    }
+    // -- 
     
-    //FIXME[ISIS-1976] already moved
-    @Deprecated
-    private ObjectAdapter loadObjectInTransaction(final RootOid oid) {
-
-        // can be either a view model or a persistent entity.
-
-        Objects.requireNonNull(oid);
-
-        final ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(oid);
-        if (adapter != null) {
-            return adapter;
-        }
-
-        return transactionManager.executeWithinTransaction(
-                ()-> {
-                        LOG.debug("getObject; oid={}", oid);
-
-                        final Object pojo = fetchPersistentPojo(oid);
-                        return objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
-                });
-    }
-
     @Override
     public boolean isTransient(@Nullable Object pojo) {
         if (pojo!=null && pojo instanceof Persistable) {

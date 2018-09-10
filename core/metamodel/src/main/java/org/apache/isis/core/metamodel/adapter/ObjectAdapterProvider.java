@@ -45,6 +45,7 @@ public interface ObjectAdapterProvider {
      * @param pojo
      * @return oid for the given domain object 
      */
+    @Programmatic
     default @Nullable Oid oidFor(@Nullable Object domainObject) {
         return mapIfPresentElse(adapterFor(domainObject), ObjectAdapter::getOid, null);
     }
@@ -82,6 +83,27 @@ public interface ObjectAdapterProvider {
             final Function<ObjectSpecId, RootOid> rootOidFactory);
     
 
+    // -- DOMAIN OBJECT CREATION SUPPORT
+    
+    /**
+     * <p>
+     * Creates a new instance of the specified type and returns it.
+     *
+     * <p>
+     * The returned object will be initialised (had the relevant callback
+     * lifecycle methods invoked).
+     *
+     * <p>
+     * While creating the object it will be initialised with default values and
+     * its created lifecycle method (its logical constructor) will be invoked.
+     *
+     */
+    ObjectAdapter newTransientInstance(ObjectSpecification objectSpec);
+    
+    @Nullable ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, @Nullable final String memento);
+    
+    // -- SERVICE LOOKUP 
+    
     List<ObjectAdapter> getServices();
     
     
@@ -120,6 +142,16 @@ public interface ObjectAdapterProvider {
                 final Object viewModelPojo, 
                 final Function<ObjectSpecId, RootOid> rootOidFactory) {
             return getObjectAdapterProvider().adapterForViewModel(viewModelPojo, rootOidFactory);
+        }
+        
+        @Programmatic
+        default ObjectAdapter newTransientInstance(ObjectSpecification objectSpec) {
+            return getObjectAdapterProvider().newTransientInstance(objectSpec);
+        }
+        
+        @Programmatic
+        default ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, final String memento) {
+            return getObjectAdapterProvider().recreateViewModelInstance(objectSpec, memento);
         }
         
         @Programmatic

@@ -137,6 +137,20 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         return adapter;
     }
     
+    // -- DOMAIN OBJECT CREATION SUPPORT
+    
+    @Override
+    public ObjectAdapter newTransientInstance(ObjectSpecification objectSpec) {
+        return objectAdapterContext.objectCreationMixin.newInstance(objectSpec);
+    }
+    
+    @Override
+    public ObjectAdapter recreateViewModelInstance(ObjectSpecification objectSpec, final String memento) {
+        return objectAdapterContext.objectCreationMixin.recreateInstance(objectSpec, memento);
+    }
+    
+    // -- SERVICE SUPPORT
+    
     @Override
     public List<ObjectAdapter> getServices() {
         return serviceAdapters.get();

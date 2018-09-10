@@ -19,8 +19,14 @@
 package org.apache.isis.viewer.restfulobjects.server.util;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
@@ -55,11 +61,50 @@ public final class OidUtils {
     private static ObjectAdapter getObjectAdapter(
             final RendererContext rendererContext,
             final String oidStrUnencoded) {
-        RootOid rootOid = RootOid.deString(oidStrUnencoded);
-
-        final PersistenceSession persistenceSession = rendererContext.getPersistenceSession();
-
-        return persistenceSession.adapterForAny(rootOid);
+        final RootOid rootOid = RootOid.deString(oidStrUnencoded);
+        final PersistenceSession ps = rendererContext.getPersistenceSession();
+        final Object domainObject = domainObjectForAny(ps, rootOid);
+        
+        return ps.adapterFor(domainObject);
     }
 
+    
+    private static Object domainObjectForAny(final PersistenceSession persistenceSession, RootOid rootOid) {
+        
+        final ObjectSpecId specId = rootOid.getObjectSpecId();
+        final ObjectSpecification spec = persistenceSession.getServicesInjector()
+                .getSpecificationLoader()
+                .lookupBySpecId(specId);
+        if(spec == null) {
+            // eg "NONEXISTENT:123"
+            return null;
+        }
+
+        if(spec.containsFacet(ViewModelFacet.class)) {
+
+            // this is a hack; the RO viewer when rendering the URL for the view model loses the "view model" indicator
+            // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an
+            // oid in the wrong state.  The code below checks for this and recreates the oid with the current state of 'view model'
+            if(!rootOid.isViewModel()) {
+                rootOid = new RootOid(rootOid.getObjectSpecId(), rootOid.getIdentifier(), Oid.State.VIEWMODEL);
+            }
+
+            try {
+                return persistenceSession.adapterFor(rootOid);
+            } catch(final ObjectNotFoundException ex) {
+                return null;
+            } catch(final PojoRecreationException ex) {
+                return null;
+            }
+        } else {
+            try {
+                final Object domainObject = persistenceSession.fetchPersistentPojoInTransaction(rootOid);
+                //[ISIS-1976] changed behavior: predicate was objectAdapter.isTransient();
+                return persistenceSession.isTransient(domainObject) ? null : domainObject;
+            } catch(final ObjectNotFoundException ex) {
+                return null;
+            }
+        }
+    }
+    
 }

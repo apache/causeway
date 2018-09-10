@@ -22,18 +22,14 @@ import java.util.Map;
 import javax.jdo.PersistenceManager;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService.FieldResetPolicy;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
@@ -68,11 +64,13 @@ extends
     void refreshRoot(Object domainObject);
     
     /**
-     * Re-initialises the fields of an object. If the object is unresolved then
+     * Re-initializes the fields of an object. If the object is unresolved then
      * the object's missing data should be retrieved from the persistence
      * mechanism and be used to set up the value objects and associations.
+     * @since 2.0.0-M2
      */
     void refreshRootInTransaction(Object domainObject);
+    
     
     /**
      * @param pojo a persistable object
@@ -89,6 +87,8 @@ extends
     boolean isDestroyed(Object pojo);
     /**@since 2.0.0-M2*/
     Object fetchPersistentPojo(RootOid rootOid);
+    /**@since 2.0.0-M2*/
+    Object fetchPersistentPojoInTransaction(final RootOid oid);
     /**@since 2.0.0-M2*/
     Map<RootOid, Object> fetchPersistentPojos(List<RootOid> rootOids);
     
@@ -159,12 +159,7 @@ extends
     
     // -- TODO remove ObjectAdapter references from API
     
-    ObjectAdapter adapterForAny(RootOid rootOid);
     <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
-
-    ObjectAdapter createTransientInstance(ObjectSpecification spec);
-
-    ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
 
     void destroyObjectInTransaction(ObjectAdapter adapter);
 
@@ -177,10 +172,5 @@ extends
     // -- OTHERS
     
     void execute(List<PersistenceCommand> persistenceCommandList);
-
-    Object lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
-    
-
-    
 
 }

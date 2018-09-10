@@ -22,8 +22,6 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -137,7 +135,7 @@ public class ObjectAdapterContext {
     private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
     private final ObjectAdapterContext_ObjectAdapterByIdProvider objectAdapterByIdProviderMixin;
     private final ObjectAdapterContext_DependencyInjection dependencyInjectionMixin;
-    private final ObjectAdapterContext_ObjectCreation objectReCreationMixin;
+    final ObjectAdapterContext_ObjectCreation objectCreationMixin;
     private final ObjectAdapterContext_LifecycleEventSupport lifecycleEventMixin;
     
     private ObjectAdapterContext(
@@ -154,7 +152,7 @@ public class ObjectAdapterContext {
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(this, persistenceSession);
         this.objectAdapterByIdProviderMixin = new ObjectAdapterContext_ObjectAdapterByIdProvider(this, persistenceSession, authenticationSession);
         this.dependencyInjectionMixin = new ObjectAdapterContext_DependencyInjection(this, persistenceSession);
-        this.objectReCreationMixin = new ObjectAdapterContext_ObjectCreation(this, persistenceSession);
+        this.objectCreationMixin = new ObjectAdapterContext_ObjectCreation(this, persistenceSession);
         this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(this, persistenceSession);
         
         this.persistenceSession = persistenceSession;
@@ -351,16 +349,6 @@ public class ObjectAdapterContext {
         return mementoSupportMixin;
     }
     
-    // -- DOMAIN OBJECT CREATION SUPPORT
-    
-    public ObjectAdapter newInstance(ObjectSpecification objectSpec) {
-        return objectReCreationMixin.newInstance(objectSpec);
-    }
-    
-    public ObjectAdapter recreateInstance(ObjectSpecification objectSpec, @Nullable final String memento) {
-        return objectReCreationMixin.recreateInstance(objectSpec, memento);
-    }
-    
     // -- LIFECYCLE EVENT SUPPORT
     
     public void postLifecycleEventIfRequired(
@@ -505,71 +493,6 @@ public class ObjectAdapterContext {
         mapAndInjectServices(newAdapter);
         return newAdapter;
     }
-
-    /**
-     * Loads the object identified by the specified {@link RootOid}.
-     *
-     * <p>
-     * That is, it retrieves the object identified by the specified {@link RootOid} from the object
-     * store.
-     *
-     * <p>The cache should be checked first and, if the object is cached,
-     * the cached version should be returned. It is important that if this
-     * method is called again, while the originally returned object is in
-     * working memory, then this method must return that same Java object.
-     *
-     * <p>
-     * Assuming that the object is not cached then the data for the object
-     * should be retrieved from the persistence mechanism and the object
-     * recreated (as describe previously). The specified OID should then be
-     * assigned to the recreated object by calling its <method>setOID </method>.
-     * Before returning the object its resolved flag should also be set by
-     * calling its <method>setResolved </method> method as well.
-     *
-     * <p>
-     * If the persistence mechanism does not known of an object with the
-     * specified {@link RootOid} then a {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} should be
-     * thrown.
-     *
-     * <p>
-     * Note that the OID could be for an internal collection, and is
-     * therefore related to the parent object (using a {@link ParentedCollectionOid}).
-     * The elements for an internal collection are commonly stored as
-     * part of the parent object, so to get element the parent object needs to
-     * be retrieved first, and the internal collection can be got from that.
-     *
-     * <p>
-     * Returns the stored {@link ObjectAdapter} object.
-     *
-     *
-     * @return the requested {@link ObjectAdapter} that has the specified
-     *         {@link RootOid}.
-     *
-     * @throws org.apache.isis.core.runtime.persistence.ObjectNotFoundException
-     *             when no object corresponding to the oid can be found
-     */
-    private ObjectAdapter loadObjectInTransaction(final RootOid oid) {
-
-        // can be either a view model or a persistent entity.
-
-        Objects.requireNonNull(oid);
-
-        final ObjectAdapter adapter = lookupAdapterFor(oid);
-        if (adapter != null) {
-            return adapter;
-        }
-
-        return persistenceSession.getTransactionManager().executeWithinTransaction(
-                ()-> {
-                        LOG.debug("getObject; oid={}", oid);
-
-                        final Object pojo = persistenceSession.fetchPersistentPojo(oid);
-                        return addRecreatedPojoToCache(oid, pojo);
-                });
-    }
-
-
-
 
 
 
