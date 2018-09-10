@@ -109,8 +109,6 @@ import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdap
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturn;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
@@ -379,12 +377,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         final PersistenceQueryProcessor<? extends PersistenceQuery> processor = lookupProcessorFor(persistenceQuery);
 
         final List<ObjectAdapter> instances = transactionManager.executeWithinTransaction(
-                new TransactionalClosureWithReturn<List<ObjectAdapter>>() {
-                    @Override
-                    public List<ObjectAdapter> execute() {
-                        return processPersistenceQuery(processor, persistenceQuery);
-                    }
-                });
+                ()->processPersistenceQuery(processor, persistenceQuery) );
         final ObjectSpecification specification = persistenceQuery.getSpecification();
         final FreeStandingList results = new FreeStandingList(specification, instances);
         return adapterFor(results);
@@ -688,14 +681,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
 
         return transactionManager.executeWithinTransaction(
-                new TransactionalClosureWithReturn<ObjectAdapter>() {
-                    @Override
-                    public ObjectAdapter execute() {
+                ()-> {
                         LOG.debug("getObject; oid={}", oid);
 
                         final Object pojo = fetchPersistentPojo(oid);
                         return objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
-                    }
                 });
     }
 
@@ -807,11 +797,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     private void refreshRootInTransaction(final ObjectAdapter adapter) {
         Assert.assertTrue("only resolve object that is persistent", adapter, adapter.representsPersistent());
-        getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
-
-            @Override
-            public void execute() {
-
+        getTransactionManager().executeWithinTransaction(()->{
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("resolveImmediately; oid={}", adapter.getOid().enString());
                 }
@@ -824,8 +810,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                 }
 
                 refreshRoot(adapter);
-            }
-
         });
     }
 
@@ -889,16 +873,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             throw new NotPersistableException("Cannot persist services: " + adapter);
         }
 
-        getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
-
-            @Override
-            public void execute() {
+        getTransactionManager().executeWithinTransaction(()->{
                 makePersistentTransactionAssumed(adapter);
-
                 // clear out the map of transient -> persistent
                 // already empty // PersistenceSession5.this.persistentByTransient.clear();
-            }
-
         });
     }
 
@@ -953,12 +931,9 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             return;
         }
         LOG.debug("destroyObject {}", adapter);
-        transactionManager.executeWithinTransaction(new TransactionalClosure() {
-            @Override
-            public void execute() {
+        transactionManager.executeWithinTransaction(()->{
                 final DestroyObjectCommand command = newDestroyObjectCommand(adapter);
                 transactionManager.addCommand(command);
-            }
         });
     }
 

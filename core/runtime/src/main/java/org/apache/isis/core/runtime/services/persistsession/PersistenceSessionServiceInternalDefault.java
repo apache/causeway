@@ -23,6 +23,7 @@ import static java.util.Optional.ofNullable;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
@@ -46,7 +47,6 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -172,8 +172,13 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     }
 
     @Override
-    public void executeWithinTransaction(TransactionalClosure transactionalClosure) {
-        getTransactionManager().executeWithinTransaction(transactionalClosure);
+    public void executeWithinTransaction(Runnable task) {
+        getTransactionManager().executeWithinTransaction(task);
+    }
+    
+    @Override
+    public <T> T executeWithinTransaction(Supplier<T> task) {
+        return getTransactionManager().executeWithinTransaction(task);
     }
 
     @Override
@@ -208,5 +213,8 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
 
     @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
+
+
+
 
 }

@@ -83,7 +83,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
@@ -159,18 +158,10 @@ implements ImperativeFacet {
             final ObjectAdapter[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ObjectAdapter[] holder = new ObjectAdapter[1];
-
-        getPersistenceSessionServiceInternal().executeWithinTransaction(
-                new TransactionalClosure(){
-                    @Override
-                    public void execute() {
-                        holder[0] = doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy);
-
-                    }
-                }
-                );
-        return holder[0];
+        final ObjectAdapter holder = 
+                getPersistenceSessionServiceInternal().executeWithinTransaction(()->
+                    doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy));
+        return holder;
     }
 
     ObjectAdapter doInvoke(

@@ -46,43 +46,17 @@ extends
     TransactionalResource, 
     SessionScopedComponent {
 
-    // -- CONSTANTS
-
-    public static final String SERVICE_IDENTIFIER = "1";
-
-    /**
-     * @see #isFixturesInstalled()
-     */
-    public static final String INSTALL_FIXTURES_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_INSTALL_FIXTURES_KEY;
-    public static final boolean INSTALL_FIXTURES_DEFAULT = false;
-
-    //---
-
-    MementoRecreateObjectSupport mementoSupport();
-
-    ObjectAdapter adapterForAny(RootOid rootOid);
-    <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
-
-    // --
-
+    // -------------------------------------------------------------------------------------------------
+    // -- STABLE API (DRAFT)
+    // -------------------------------------------------------------------------------------------------
+    
+    void open();
     void close();
-
-    ObjectAdapter createTransientInstance(ObjectSpecification spec);
-
-    ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
-
-    void destroyObjectInTransaction(ObjectAdapter adapter);
-
-    void execute(List<PersistenceCommand> persistenceCommandList);
-    <T> ObjectAdapter firstMatchingQuery(final Query<T> query);
-
     boolean flush();
-
-    ObjectAdapter getAggregateRoot(ParentedCollectionOid collectionOid);
-
+    
     IsisConfiguration getConfiguration();
-
-    PersistenceManager getPersistenceManager();
+    IsisTransactionManager getTransactionManager();
+    ServicesInjector getServicesInjector();
     
     /**
      * @param pojo a persistable object
@@ -101,7 +75,13 @@ extends
     Object fetchPersistentPojo(RootOid rootOid);
     /**@since 2.0.0-M2*/
     Map<RootOid, Object> fetchPersistentPojos(List<RootOid> rootOids);
-
+    
+    
+    // -------------------------------------------------------------------------------------------------
+    // -- JDO SPECIFIC
+    // -------------------------------------------------------------------------------------------------
+    
+    PersistenceManager getPersistenceManager();
     /**
      * Convenient equivalent to {@code getPersistenceManager()}.
      * @return
@@ -109,19 +89,7 @@ extends
     default PersistenceManager pm() {
         return getPersistenceManager();
     }
-
-    ServicesInjector getServicesInjector();
-
-    IsisTransactionManager getTransactionManager();
-
-    Object instantiateAndInjectServices(ObjectSpecification spec);
-
-    boolean isFixturesInstalled();
-
-    Object lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
-
-    void makePersistentInTransaction(ObjectAdapter adapter);
-
+    
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}
      * @param cls
@@ -150,13 +118,56 @@ extends
     default <T> javax.jdo.Query newJdoQuery(Class<T> cls, String filter){
         return pm().newQuery(cls, filter);
     }
+    
+    // -------------------------------------------------------------------------------------------------
+    // -- API NOT STABLE YET - SUBJECT TO REFACTORING
+    // -------------------------------------------------------------------------------------------------
+    
+    // -- SERVICE SUPPORT
 
-    void open();
+    static final String SERVICE_IDENTIFIER = "1";
 
+    // -- FIXTURE SUPPORT
+    
+    /**
+     * @see #isFixturesInstalled()
+     */
+    static final String INSTALL_FIXTURES_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_INSTALL_FIXTURES_KEY;
+    static final boolean INSTALL_FIXTURES_DEFAULT = false;
+    
+    boolean isFixturesInstalled();
+    
+    // -- MEMENTO SUPPORT
+    
+    MementoRecreateObjectSupport mementoSupport();
+    
+    // -- TODO remove ObjectAdapter references from API
+    
+    ObjectAdapter adapterForAny(RootOid rootOid);
+    <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
+
+    ObjectAdapter createTransientInstance(ObjectSpecification spec);
+
+    ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
+
+    void destroyObjectInTransaction(ObjectAdapter adapter);
+
+    <T> ObjectAdapter firstMatchingQuery(final Query<T> query);
+    
+    ObjectAdapter getAggregateRoot(ParentedCollectionOid collectionOid);
+    
+    void makePersistentInTransaction(ObjectAdapter adapter);
+    
     void refreshRoot(ObjectAdapter adapter);
+    
+    // -- OTHERS
+    
+    void execute(List<PersistenceCommand> persistenceCommandList);
+
+    Object instantiateAndInjectServices(ObjectSpecification spec);
+
+    Object lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
 
     void resolve(Object parent);
-
-    
 
 }
