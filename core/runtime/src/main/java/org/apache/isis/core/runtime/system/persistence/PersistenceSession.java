@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -50,14 +51,28 @@ extends
     // -- STABLE API (DRAFT)
     // -------------------------------------------------------------------------------------------------
     
-    void open();
-    void close();
-    boolean flush();
-    void resolve(Object parent);
-    
     IsisConfiguration getConfiguration();
     IsisTransactionManager getTransactionManager();
     ServicesInjector getServicesInjector();
+    
+    void open();
+    void close();
+    
+    default boolean flush() {
+        return getTransactionManager().flushTransaction();
+    }
+    
+    /**
+     * Forces a reload (refresh in JDO terminology) of the domain object
+     */
+    void refreshRoot(Object domainObject);
+    
+    /**
+     * Re-initialises the fields of an object. If the object is unresolved then
+     * the object's missing data should be retrieved from the persistence
+     * mechanism and be used to set up the value objects and associations.
+     */
+    void refreshRootInTransaction(Object domainObject);
     
     /**
      * @param pojo a persistable object
@@ -159,13 +174,12 @@ extends
     
     void makePersistentInTransaction(ObjectAdapter adapter);
     
-    void refreshRoot(ObjectAdapter adapter);
-    
     // -- OTHERS
     
     void execute(List<PersistenceCommand> persistenceCommandList);
 
     Object lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
+    
 
     
 

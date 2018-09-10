@@ -111,7 +111,7 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
 
     @Override
     public void resolve(final Object parent) {
-        getPersistenceSession().resolve(parent);
+        getPersistenceSession().refreshRootInTransaction(parent);
     }
 
     /**

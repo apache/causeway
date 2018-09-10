@@ -81,7 +81,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
 
     protected void resolveIfRequired(final Object domainObject) {
         if (resolveObjectChangedEnabled) {
-            getPersistenceSession().resolve(domainObject);
+            getPersistenceSession().refreshRootInTransaction(domainObject);
         }
     }
 

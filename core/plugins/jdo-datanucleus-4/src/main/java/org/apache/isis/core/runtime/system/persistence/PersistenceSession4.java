@@ -21,8 +21,6 @@ package org.apache.isis.core.runtime.system.persistence;
 import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Modifier;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -33,6 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
@@ -48,7 +47,6 @@ import org.datanucleus.identity.DatastoreIdImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -58,7 +56,6 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -70,9 +67,6 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
@@ -91,8 +85,6 @@ import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -223,8 +215,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         servicesInjector.injectServicesInto(command);
         return command;
     }
-
-
 
     // -- close
 
@@ -502,71 +492,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return !installFixtures;
     }
 
-    // -- loadObject
-
-    /**
-     * Loads the object identified by the specified {@link RootOid}.
-     *
-     * <p>
-     * That is, it retrieves the object identified by the specified {@link RootOid} from the object
-     * store, {@link AdapterManager#addRecreatedPojoToCache(org.apache.isis.core.metamodel.adapter.oid.Oid, Object) mapped by
-     * the adapter manager}.
-     *
-     * <p>The cache should be checked first and, if the object is cached,
-     * the cached version should be returned. It is important that if this
-     * method is called again, while the originally returned object is in
-     * working memory, then this method must return that same Java object.
-     *
-     * <p>
-     * Assuming that the object is not cached then the data for the object
-     * should be retrieved from the persistence mechanism and the object
-     * recreated (as describe previously). The specified OID should then be
-     * assigned to the recreated object by calling its <method>setOID </method>.
-     * Before returning the object its resolved flag should also be set by
-     * calling its <method>setResolved </method> method as well.
-     *
-     * <p>
-     * If the persistence mechanism does not known of an object with the
-     * specified {@link RootOid} then a {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} should be
-     * thrown.
-     *
-     * <p>
-     * Note that the OID could be for an internal collection, and is
-     * therefore related to the parent object (using a {@link ParentedCollectionOid}).
-     * The elements for an internal collection are commonly stored as
-     * part of the parent object, so to get element the parent object needs to
-     * be retrieved first, and the internal collection can be got from that.
-     *
-     * <p>
-     * Returns the stored {@link ObjectAdapter} object.
-     *
-     *
-     * @return the requested {@link ObjectAdapter} that has the specified
-     *         {@link RootOid}.
-     *
-     * @throws org.apache.isis.core.runtime.persistence.ObjectNotFoundException
-     *             when no object corresponding to the oid can be found
-     */
-    private ObjectAdapter loadObjectInTransaction(final RootOid oid) {
-
-        // can be either a view model or a persistent entity.
-
-        Objects.requireNonNull(oid);
-
-        final ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(oid);
-        if (adapter != null) {
-            return adapter;
-        }
-
-        return transactionManager.executeWithinTransaction(
-                ()-> {
-                        LOG.debug("getObject; oid={}", oid);
-
-                        final Object pojo = fetchPersistentPojo(oid);
-                        return objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
-                });
-    }
-
     // -- FETCHING
 
     @Override
@@ -666,47 +591,21 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
 
-    // -- refreshRootInTransaction, refreshRoot, resolve
-
-    /**
-     * Re-initialises the fields of an object. If the object is unresolved then
-     * the object's missing data should be retrieved from the persistence
-     * mechanism and be used to set up the value objects and associations.
-     */
-    private void refreshRootInTransaction(final ObjectAdapter adapter) {
-        Assert.assertTrue("only resolve object that is persistent", adapter, adapter.representsPersistent());
-        getTransactionManager().executeWithinTransaction(()->{
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("resolveImmediately; oid={}", adapter.getOid().enString());
-                }
-
-                if (!adapter.representsPersistent()) {
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("; not persistent - ignoring");
-                    }
-                    return;
-                }
-
-                refreshRoot(adapter);
-        });
-    }
-
-    /**
-     * Forces a reload (refresh in JDO terminology) of the domain object wrapped in the {@link ObjectAdapter}.
-     */
+    // -- REFRESH
+    
     @Override
-    public void refreshRoot(final ObjectAdapter adapter) {
-
-        final Object domainObject = adapter.getObject();
-        if (domainObject == null) {
-            // REVIEW: is this possible?
-            throw new PojoRefreshException(adapter.getOid());
+    public void refreshRoot(final Object domainObject) {
+        
+        if(!isRepresentingPersistent(domainObject)) {
+            debugLogNotPersistentIgnoring(domainObject);
+            return; // only resolve object that is representing persistent
         }
 
         try {
             persistenceManager.refresh(domainObject);
         } catch (final RuntimeException e) {
-            throw new PojoRefreshException(adapter.getOid(), e);
+            final Oid oid = oidFor(domainObject);
+            throw new PojoRefreshException(oid, e);
         }
 
         // possibly redundant because also called in the post-load event
@@ -714,15 +613,21 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         // get an eager left-outer-join as the result of a refresh (sounds possible).
         initializeMapAndCheckConcurrency((Persistable) domainObject);
     }
-
+    
     @Override
-    public void resolve(final Object parent) {
-        final ObjectAdapter adapter = adapterFor(parent);
-        refreshRootInTransaction(adapter);
+    public void refreshRootInTransaction(final Object domainObject) {
+        
+        if(!isRepresentingPersistent(domainObject)) {
+            debugLogNotPersistentIgnoring(domainObject);
+            return; // only resolve object that is representing persistent
+        }
+        
+        getTransactionManager().executeWithinTransaction(()->{
+                debugLogRefreshImmediately(domainObject);
+                refreshRoot(domainObject);
+        });
     }
-
-
-
+    
     // -- makePersistent
 
     /**
@@ -810,12 +715,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
         LOG.debug("destroyObject {}", adapter);
         transactionManager.executeWithinTransaction(()->{
-            final DestroyObjectCommand command = newDestroyObjectCommand(adapter);
-            transactionManager.addCommand(command);
+                final DestroyObjectCommand command = newDestroyObjectCommand(adapter);
+                transactionManager.addCommand(command);
         });
     }
-
-
 
     // -- newXxxCommand
     /**
@@ -929,7 +832,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     protected IsisTransaction getCurrentTransaction() {
         return transactionManager.getCurrentTransaction();
     }
-
 
     // -- FrameworkSynchronizer delegate methods
 
@@ -1156,36 +1058,60 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return Utils.getVersionIfAny(pojo, authenticationSession);
     }
 
-
-
-
     // -- DomainObjectServices impl
 
     @Override
     public Object lookup(
             final Bookmark bookmark,
             final BookmarkService.FieldResetPolicy fieldResetPolicy) {
-        RootOid oid = RootOid.create(bookmark);
+        final RootOid oid = RootOid.create(bookmark);
+        
         final ObjectAdapter adapter = adapterFor(oid);
         if(adapter == null) {
             return null;
         }
-        if(fieldResetPolicy == BookmarkService.FieldResetPolicy.RESET && !adapter.getSpecification().isViewModel()) {
-            refreshRootInTransaction(adapter);
-        } else {
+        
+        //FIXME[ISIS-1976]
+        Assert.assertEquals("expected same", oid.isViewModel(), adapter.getSpecification().isViewModel());
+        
+        final boolean denyRefresh = 
+                fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH || 
+                        oid.isViewModel();
+               
+        if(denyRefresh) {
             loadObjectInTransaction(oid);
+        } else {
+            refreshRootInTransaction(adapter.getObject());
         }
         return adapter.getObject();
     }
+    
+    //FIXME[ISIS-1976] already moved
+    @Deprecated
+    private ObjectAdapter loadObjectInTransaction(final RootOid oid) {
 
-    @Override
-    public boolean flush() {
-        return getTransactionManager().flushTransaction();
+        // can be either a view model or a persistent entity.
+
+        Objects.requireNonNull(oid);
+
+        final ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(oid);
+        if (adapter != null) {
+            return adapter;
+        }
+
+        return transactionManager.executeWithinTransaction(
+                ()-> {
+                        LOG.debug("getObject; oid={}", oid);
+
+                        final Object pojo = fetchPersistentPojo(oid);
+                        return objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
+                });
     }
 
+
     @Override
-    public boolean isTransient(Object pojo) {
-        if (pojo instanceof Persistable) {
+    public boolean isTransient(@Nullable Object pojo) {
+        if (pojo!=null && pojo instanceof Persistable) {
             final Persistable p = (Persistable) pojo;
             final boolean isPersistent = p.dnIsPersistent();
             final boolean isDeleted = p.dnIsDeleted();
@@ -1197,8 +1123,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public boolean isRepresentingPersistent(Object pojo) {
-        if (pojo instanceof Persistable) {
+    public boolean isRepresentingPersistent(@Nullable Object pojo) {
+        if (pojo!=null && pojo instanceof Persistable) {
             final Persistable p = (Persistable) pojo;
             final boolean isPersistent = p.dnIsPersistent();
             if (isPersistent) {
@@ -1209,8 +1135,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public boolean isDestroyed(Object pojo) {
-        if (pojo instanceof Persistable) {
+    public boolean isDestroyed(@Nullable Object pojo) {
+        if (pojo!=null && pojo instanceof Persistable) {
             final Persistable p = (Persistable) pojo;
             final boolean isDeleted = p.dnIsDeleted();
             if (isDeleted) {
@@ -1235,7 +1161,22 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return objectAdapterContext.getObjectAdapterByIdProvider();
     }
 
+    // -- HELPER
+    
+    private void debugLogNotPersistentIgnoring(Object domainObject) {
+        if (LOG.isDebugEnabled() && domainObject!=null) {
+            final Oid oid = oidFor(domainObject);
+            LOG.debug("; oid={} not persistent - ignoring", oid.enString());
+        }     
+    }
 
+    private void debugLogRefreshImmediately(Object domainObject) {
+        if (LOG.isDebugEnabled()) {
+            final Oid oid = oidFor(domainObject);
+            LOG.debug("refresh immediately; oid={}", oid.enString());
+        }
+    }
+    
 }
 
 

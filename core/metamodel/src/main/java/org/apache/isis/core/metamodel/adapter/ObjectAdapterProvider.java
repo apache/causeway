@@ -18,10 +18,15 @@
  */
 package org.apache.isis.core.metamodel.adapter;
 
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
 import java.util.List;
 import java.util.function.Function;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -36,16 +41,18 @@ public interface ObjectAdapterProvider {
     
     // -- INTERFACE
 
-//    /**
-//     * @param pojo
-//     * @return oid for the given domain object 
-//     */
-//    Oid oidFor(Object domainObject);
+    /**
+     * @param pojo
+     * @return oid for the given domain object 
+     */
+    default @Nullable Oid oidFor(@Nullable Object domainObject) {
+        return mapIfPresentElse(adapterFor(domainObject), ObjectAdapter::getOid, null);
+    }
     
     /**
      * @return standalone (value) or root adapter
      */
-    ObjectAdapter adapterFor(Object domainObject);
+    @Nullable ObjectAdapter adapterFor(@Nullable Object domainObject);
 
     /**
      * @return collection adapter.
@@ -85,11 +92,6 @@ public interface ObjectAdapterProvider {
         @Programmatic
         ObjectAdapterProvider getObjectAdapterProvider();
         
-//        @Programmatic
-//        default Oid oidFor(Object domainObject) {
-//            return getObjectAdapterProvider().oidFor(domainObject);
-//        }
-        
         @Programmatic
         default ObjectAdapter adapterFor(Object domainObject) {
             return getObjectAdapterProvider().adapterFor(domainObject);
@@ -126,12 +128,6 @@ public interface ObjectAdapterProvider {
         }
         
     }
-
-
-   
-
-
-    
     
 
 }
