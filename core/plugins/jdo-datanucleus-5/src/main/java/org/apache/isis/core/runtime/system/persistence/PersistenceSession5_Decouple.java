@@ -123,16 +123,6 @@ class PersistenceSession5_Decouple  {
             } catch(ObjectNotFoundException ex) {
                 throw ex; // just rethrow
             } catch(RuntimeException ex) {
-                
-                //FIXME[ISIS-1976] remove
-                System.err.println("------------------------------------------");
-                System.err.println("rootOid: "+rootOid.enString());
-                
-                ex.printStackTrace();
-                System.err.println("------------------------------------------");
-                //--
-
-                
                 throw new PojoRecreationException(rootOid, ex);
             }
         }
