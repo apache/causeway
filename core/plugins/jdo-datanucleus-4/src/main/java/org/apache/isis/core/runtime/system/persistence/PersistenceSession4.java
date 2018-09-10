@@ -1032,6 +1032,17 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
         return false;
     }
+    
+    @Override
+    public boolean isRecognized(Object pojo) {
+        if (pojo!=null && pojo instanceof Persistable) {
+            final Object jdoOid = pm().getObjectId(pojo);
+            if(jdoOid!=null) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public MementoRecreateObjectSupport mementoSupport() {

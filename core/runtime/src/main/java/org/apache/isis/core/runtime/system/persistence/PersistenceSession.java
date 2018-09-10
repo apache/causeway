@@ -85,6 +85,9 @@ extends
     boolean isRepresentingPersistent(Object pojo);
     /**@since 2.0.0-M2*/
     boolean isDestroyed(Object pojo);
+    /** whether pojo is recognized by the persistence layer, that is, it has an ObjectId
+     * @since 2.0.0-M2*/
+    boolean isRecognized(Object pojo);
     /**@since 2.0.0-M2*/
     Object fetchPersistentPojo(RootOid rootOid);
     /**@since 2.0.0-M2*/
@@ -172,5 +175,6 @@ extends
     // -- OTHERS
     
     void execute(List<PersistenceCommand> persistenceCommandList);
+    
 
 }

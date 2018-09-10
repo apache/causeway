@@ -51,7 +51,6 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -855,12 +854,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public String identifierFor(final Object pojo) {
-        final Object jdoOid = getPersistenceManager().getObjectId(pojo);
-        if(jdoOid==null) {
-            _Exceptions.throwUnexpectedCodeReach();
-            return UUID.randomUUID().toString(); //FIXME[ISIS-1976] should be guarded against somewhere else
-        }
-        
+        final Object jdoOid = pm().getObjectId(pojo);
         requireNonNull(jdoOid, 
                 ()->String.format("Pojo of type '%s' is not recognized by JDO.", 
                         pojo.getClass().getName()));
@@ -1029,6 +1023,17 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             final Persistable p = (Persistable) pojo;
             final boolean isDeleted = p.dnIsDeleted();
             if (isDeleted) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean isRecognized(Object pojo) {
+        if (pojo!=null && pojo instanceof Persistable) {
+            final Object jdoOid = pm().getObjectId(pojo);
+            if(jdoOid!=null) {
                 return true;
             }
         }

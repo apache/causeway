@@ -61,8 +61,8 @@ public class OidProviders {
         @Override
         public RootOid oidFor(Object pojo, ObjectSpecification spec) {
             final PersistenceSession persistenceSession = IsisContext.getPersistenceSession().get();
-            final boolean isPersistent = !persistenceSession.isTransient(pojo);
-            if(isPersistent) {
+            final boolean isRecognized = persistenceSession.isRecognized(pojo);
+            if(isRecognized) {
                 final String identifier = persistenceSession.identifierFor(pojo);
                 return new RootOid(spec.getSpecId(), identifier, Oid.State.PERSISTENT);
             } else {
