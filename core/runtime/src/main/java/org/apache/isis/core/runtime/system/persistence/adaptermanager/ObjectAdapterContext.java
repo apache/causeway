@@ -31,12 +31,12 @@ import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -133,7 +133,9 @@ public class ObjectAdapterContext {
     private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
     private final ObjectAdapterContext_ServiceLookup serviceLookupMixin;
     private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
-    private final ObjectAdapterContext_ObjectAdapterByIdProvider byIdMixin;
+    private final ObjectAdapterContext_ObjectAdapterByIdProvider objectAdapterByIdProviderMixin;
+    private final ObjectAdapterContext_DependencyInjection dependencyInjectionMixin;
+    private final ObjectAdapterContext_ObjectReCreation objectReCreationMixin;
     
     private ObjectAdapterContext(
             ServicesInjector servicesInjector, 
@@ -147,7 +149,9 @@ public class ObjectAdapterContext {
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
         this.serviceLookupMixin = new ObjectAdapterContext_ServiceLookup(this, servicesInjector);
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(this, persistenceSession);
-        this.byIdMixin = new ObjectAdapterContext_ObjectAdapterByIdProvider(this, persistenceSession, authenticationSession);
+        this.objectAdapterByIdProviderMixin = new ObjectAdapterContext_ObjectAdapterByIdProvider(this, persistenceSession, authenticationSession);
+        this.dependencyInjectionMixin = new ObjectAdapterContext_DependencyInjection(this, persistenceSession);
+        this.objectReCreationMixin = new ObjectAdapterContext_ObjectReCreation(this, persistenceSession);
         
         this.persistenceSession = persistenceSession;
         this.servicesInjector = servicesInjector;
@@ -165,8 +169,7 @@ public class ObjectAdapterContext {
         if(LOG.isDebugEnabled()) {
             String id = Integer.toHexString(this.hashCode());
             String session = ""+persistenceSession;
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!! "+String.format("%s id=%s session='%s'", 
-                    msg, id, session));
+            LOG.debug(String.format("%s id=%s session='%s'", msg, id, session));
         }
     }
     
@@ -240,7 +243,13 @@ public class ObjectAdapterContext {
     // -- BY-ID SUPPORT
     
     public ObjectAdapterByIdProvider getObjectAdapterByIdProvider() {
-        return byIdMixin;
+        return objectAdapterByIdProviderMixin;
+    }
+    
+    // -- DEPENDENCY INJECTION
+    
+    public Object instantiateAndInjectServices(ObjectSpecification objectSpec) {
+        return dependencyInjectionMixin.instantiateAndInjectServices(objectSpec);
     }
     
     // -- FACTORIES
@@ -336,6 +345,12 @@ public class ObjectAdapterContext {
     
     public MementoRecreateObjectSupport mementoSupport() {
         return mementoSupportMixin;
+    }
+    
+    // -- OBJECT RECREATION SUPPORT
+    
+    public Object recreateViewModel(final ObjectSpecification spec, final String memento) {
+        return objectReCreationMixin.recreateViewModel(spec, memento);
     }
     
     // ------------------------------------------------------------------------------------------------
@@ -476,8 +491,6 @@ public class ObjectAdapterContext {
     }
 
 
-
-   
 
 
 }

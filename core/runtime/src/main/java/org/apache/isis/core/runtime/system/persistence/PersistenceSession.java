@@ -164,8 +164,6 @@ extends
     
     void execute(List<PersistenceCommand> persistenceCommandList);
 
-    Object instantiateAndInjectServices(ObjectSpecification spec);
-
     Object lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
 
     void resolve(Object parent);

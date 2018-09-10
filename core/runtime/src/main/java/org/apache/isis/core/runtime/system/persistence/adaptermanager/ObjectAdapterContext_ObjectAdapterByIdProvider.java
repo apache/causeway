@@ -46,7 +46,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 /**
  * package private mixin for ObjectAdapterContext
  * <p>
- * Responsibility: creates RootOids 
+ * Responsibility: implements ObjectAdapterByIdProvider 
  * </p> 
  * @since 2.0.0-M2
  */
@@ -223,7 +223,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             pojo = recreateViewModel(spec, memento);
 
         } else {
-            pojo = persistenceSession.instantiateAndInjectServices(spec);
+            pojo = objectAdapterContext.instantiateAndInjectServices(spec);
 
         }
         return pojo;
@@ -237,7 +237,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
 
         final Object viewModelPojo;
         if(facet.getRecreationMechanism().isInitializes()) {
-            viewModelPojo = persistenceSession.instantiateAndInjectServices(spec);
+            viewModelPojo = objectAdapterContext.instantiateAndInjectServices(spec);
             facet.initialize(viewModelPojo, memento);
         } else {
             viewModelPojo = facet.instantiate(spec.getCorrespondingClass(), memento);

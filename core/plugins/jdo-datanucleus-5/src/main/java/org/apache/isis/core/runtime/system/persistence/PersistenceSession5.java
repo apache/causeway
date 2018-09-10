@@ -457,56 +457,14 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         final Object pojo;
 
         if(variant == Variant.VIEW_MODEL) {
-            pojo = recreateViewModel(spec, memento);
+            pojo = objectAdapterContext.recreateViewModel(spec, memento);
         } else {
-            pojo = instantiateAndInjectServices(spec);
+            pojo = objectAdapterContext.instantiateAndInjectServices(spec);
 
         }
 
         final ObjectAdapter adapter = adapterFor(pojo);
         return initializePropertiesAndDoCallback(adapter);
-    }
-
-    //FIXME[ISIS-1976] remove
-    private Object recreateViewModel(final ObjectSpecification spec, final String memento) {
-        final ViewModelFacet facet = spec.getFacet(ViewModelFacet.class);
-        if(facet == null) {
-            throw new IllegalArgumentException("spec does not have ViewModelFacet; spec is " + spec.getFullIdentifier());
-        }
-
-        final Object viewModelPojo;
-        if(facet.getRecreationMechanism().isInitializes()) {
-            viewModelPojo = instantiateAndInjectServices(spec);
-            facet.initialize(viewModelPojo, memento);
-        } else {
-            viewModelPojo = facet.instantiate(spec.getCorrespondingClass(), memento);
-        }
-        return viewModelPojo;
-    }
-
-    @Override
-    public Object instantiateAndInjectServices(final ObjectSpecification objectSpec) {
-
-        final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
-        if (correspondingClass.isArray()) {
-            return Array.newInstance(correspondingClass.getComponentType(), 0);
-        }
-
-        final Class<?> cls = correspondingClass;
-        if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new IsisException("Cannot create an instance of an abstract class: " + cls);
-        }
-
-        final Object newInstance;
-        try {
-            newInstance = cls.newInstance();
-        } catch (final IllegalAccessException | InstantiationException e) {
-            throw new IsisException("Failed to create instance of type " + objectSpec.getFullIdentifier(), e);
-        }
-
-        servicesInjector.injectServicesInto(newInstance);
-        return newInstance;
-
     }
 
     private ObjectAdapter initializePropertiesAndDoCallback(final ObjectAdapter adapter) {

@@ -72,7 +72,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         
         if (spec.isParentedOrFreeCollection()) {
 
-            final Object recreatedPojo = persistenceSession.instantiateAndInjectServices(spec);
+            final Object recreatedPojo = objectAdapterContext.instantiateAndInjectServices(spec);
             adapter = objectAdapterContext.addRecreatedPojoToCache(oid, recreatedPojo);
             adapter = populateCollection(adapter, (CollectionData) data);
 
