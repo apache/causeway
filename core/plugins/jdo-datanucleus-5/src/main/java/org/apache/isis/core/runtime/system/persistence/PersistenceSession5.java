@@ -21,8 +21,6 @@ package org.apache.isis.core.runtime.system.persistence;
 import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Modifier;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -48,7 +46,6 @@ import org.datanucleus.identity.DatastoreIdImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -58,7 +55,6 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -70,9 +66,6 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
@@ -91,8 +84,6 @@ import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -439,95 +430,13 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public ObjectAdapter createTransientInstance(final ObjectSpecification objectSpec) {
-        return createInstance(objectSpec, Variant.TRANSIENT, null);
+        return objectAdapterContext.newInstance(objectSpec);
     }
 
     @Override
     public ObjectAdapter createViewModelInstance(final ObjectSpecification objectSpec, final String memento) {
-        return createInstance(objectSpec, Variant.VIEW_MODEL, memento);
+        return objectAdapterContext.recreateInstance(objectSpec, memento);
     }
-
-    private ObjectAdapter createInstance(
-            final ObjectSpecification spec,
-            final Variant variant,
-            final String memento) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("creating {} instance of {}", variant, spec);
-        }
-        final Object pojo;
-
-        if(variant == Variant.VIEW_MODEL) {
-            pojo = objectAdapterContext.recreateViewModel(spec, memento);
-        } else {
-            pojo = objectAdapterContext.instantiateAndInjectServices(spec);
-
-        }
-
-        final ObjectAdapter adapter = adapterFor(pojo);
-        return initializePropertiesAndDoCallback(adapter);
-    }
-
-    private ObjectAdapter initializePropertiesAndDoCallback(final ObjectAdapter adapter) {
-
-        // initialize new object
-        final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED);
-        for (ObjectAssociation field : fields) {
-            field.toDefault(adapter);
-        }
-        final Object pojo = adapter.getObject();
-        servicesInjector.injectServicesInto(pojo);
-
-        CallbackFacet.Util.callCallback(adapter, CreatedCallbackFacet.class);
-
-        if (Command.class.isAssignableFrom(pojo.getClass())) {
-
-            // special case... the command object is created while the transaction is being started and before
-            // the event bus service is initialized (nb: we initialize services *within* a transaction).  To resolve
-            // this catch-22 situation, we simply suppress the posting of this event for this domain class.
-
-            // this seems the least unpleasant of the various options available:
-            // * we could have put a check in the EventBusService to ignore the post if not yet initialized;
-            //   however this might hide other genuine errors
-            // * we could have used the thread-local in JdoStateManagerForIsis and the "skip(...)" hook in EventBusServiceJdo
-            //   to have this event be skipped; but that seems like co-opting some other design
-            // * we could have the transaction initialize the EventBusService as a "special case" before creating the Command;
-            //   but then do we worry about it being re-init'd later by the ServicesInitializer?
-
-            // so, doing it this way is this simplest, least obscure.
-
-            if(LOG.isDebugEnabled()) {
-                LOG.debug("Skipping postEvent for creation of Command pojo");
-            }
-
-        } else {
-            postLifecycleEventIfRequired(adapter, CreatedLifecycleEventFacet.class);
-        }
-
-        return adapter;
-    }
-
-
-    // -- helper: postEvent
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    void postLifecycleEventIfRequired(
-            final ObjectAdapter adapter,
-            final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
-        final LifecycleEventFacet facet = adapter.getSpecification().getFacet(lifecycleEventFacetClass);
-        if(facet != null) {
-            final Class<? extends AbstractLifecycleEvent<?>> eventType = facet.getEventType();
-            final Object instance = InstanceUtil.createInstance(eventType);
-            final Object pojo = adapter.getObject();
-            postEvent((AbstractLifecycleEvent) instance, pojo);
-        }
-    }
-
-    void postEvent(final AbstractLifecycleEvent<Object> event, final Object pojo) {
-        event.setSource(pojo);
-        eventBusService.post(event);
-    }
-
-
 
 
     // -- fixture installation
@@ -1017,7 +926,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         changedObjectsServiceInternal.enlistDeleting(adapter);
 
         CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
-        postLifecycleEventIfRequired(adapter, RemovingLifecycleEventFacet.class);
+        objectAdapterContext.postLifecycleEventIfRequired(adapter, RemovingLifecycleEventFacet.class);
     }
 
     @Override
@@ -1079,7 +988,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                 adapter = objectAdapterContext.addRecreatedPojoToCache(originalOid, pojo);
 
                 CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
-                postLifecycleEventIfRequired(adapter, LoadedLifecycleEventFacet.class);
+                objectAdapterContext.postLifecycleEventIfRequired(adapter, LoadedLifecycleEventFacet.class);
             }
         
             newAdapter = adapter;
@@ -1126,7 +1035,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             // persisting
             // previously this was performed in the DataNucleusSimplePersistAlgorithm.
             CallbackFacet.Util.callCallback(adapter, PersistingCallbackFacet.class);
-            postLifecycleEventIfRequired(adapter, PersistingLifecycleEventFacet.class);
+            objectAdapterContext.postLifecycleEventIfRequired(adapter, PersistingLifecycleEventFacet.class);
 
         } else {
             // updating
@@ -1158,7 +1067,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             objectAdapterContext.remapAsPersistent(adapter, persistentOid, this);
 
             CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
-            postLifecycleEventIfRequired(adapter, PersistedLifecycleEventFacet.class);
+            objectAdapterContext.postLifecycleEventIfRequired(adapter, PersistedLifecycleEventFacet.class);
 
             changedObjectsServiceInternal.enlistCreated(adapter);
 
@@ -1167,7 +1076,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             // the callback and transaction.enlist are done in the preDirty callback
             // (can't be done here, as the enlist requires to capture the 'before' values)
             CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
-            postLifecycleEventIfRequired(adapter, UpdatedLifecycleEventFacet.class);
+            objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatedLifecycleEventFacet.class);
         }
 
         Version versionIfAny = getVersionIfAny(pojo);
@@ -1211,7 +1120,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if(!wasAlreadyEnlisted) {
             // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so
             CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
-            postLifecycleEventIfRequired(adapter, UpdatingLifecycleEventFacet.class);
+            objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatingLifecycleEventFacet.class);
         }
 
         ensureRootObject(pojo);

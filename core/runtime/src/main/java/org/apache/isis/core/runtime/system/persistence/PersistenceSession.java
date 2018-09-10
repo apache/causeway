@@ -53,6 +53,7 @@ extends
     void open();
     void close();
     boolean flush();
+    void resolve(Object parent);
     
     IsisConfiguration getConfiguration();
     IsisTransactionManager getTransactionManager();
@@ -166,6 +167,6 @@ extends
 
     Object lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
 
-    void resolve(Object parent);
+    
 
 }

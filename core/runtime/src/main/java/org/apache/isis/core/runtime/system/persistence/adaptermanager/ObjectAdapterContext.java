@@ -22,6 +22,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +38,7 @@ import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -135,7 +137,8 @@ public class ObjectAdapterContext {
     private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
     private final ObjectAdapterContext_ObjectAdapterByIdProvider objectAdapterByIdProviderMixin;
     private final ObjectAdapterContext_DependencyInjection dependencyInjectionMixin;
-    private final ObjectAdapterContext_ObjectReCreation objectReCreationMixin;
+    private final ObjectAdapterContext_ObjectCreation objectReCreationMixin;
+    private final ObjectAdapterContext_LifecycleEventSupport lifecycleEventMixin;
     
     private ObjectAdapterContext(
             ServicesInjector servicesInjector, 
@@ -151,7 +154,8 @@ public class ObjectAdapterContext {
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(this, persistenceSession);
         this.objectAdapterByIdProviderMixin = new ObjectAdapterContext_ObjectAdapterByIdProvider(this, persistenceSession, authenticationSession);
         this.dependencyInjectionMixin = new ObjectAdapterContext_DependencyInjection(this, persistenceSession);
-        this.objectReCreationMixin = new ObjectAdapterContext_ObjectReCreation(this, persistenceSession);
+        this.objectReCreationMixin = new ObjectAdapterContext_ObjectCreation(this, persistenceSession);
+        this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(this, persistenceSession);
         
         this.persistenceSession = persistenceSession;
         this.servicesInjector = servicesInjector;
@@ -347,10 +351,22 @@ public class ObjectAdapterContext {
         return mementoSupportMixin;
     }
     
-    // -- OBJECT RECREATION SUPPORT
+    // -- DOMAIN OBJECT CREATION SUPPORT
     
-    public Object recreateViewModel(final ObjectSpecification spec, final String memento) {
-        return objectReCreationMixin.recreateViewModel(spec, memento);
+    public ObjectAdapter newInstance(ObjectSpecification objectSpec) {
+        return objectReCreationMixin.newInstance(objectSpec);
+    }
+    
+    public ObjectAdapter recreateInstance(ObjectSpecification objectSpec, @Nullable final String memento) {
+        return objectReCreationMixin.recreateInstance(objectSpec, memento);
+    }
+    
+    // -- LIFECYCLE EVENT SUPPORT
+    
+    public void postLifecycleEventIfRequired(
+            final ObjectAdapter adapter,
+            final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
+        lifecycleEventMixin.postLifecycleEventIfRequired(adapter, lifecycleEventFacetClass);
     }
     
     // ------------------------------------------------------------------------------------------------
@@ -489,6 +505,10 @@ public class ObjectAdapterContext {
         mapAndInjectServices(newAdapter);
         return newAdapter;
     }
+
+
+
+
 
 
 

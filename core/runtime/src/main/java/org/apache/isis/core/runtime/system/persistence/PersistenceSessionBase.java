@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
-import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
@@ -67,7 +66,6 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     protected final CommandService commandService;
 
     protected final InteractionContext interactionContext;
-    protected final EventBusService eventBusService ;
     protected final ChangedObjectsServiceInternal changedObjectsServiceInternal;
     protected final FactoryService factoryService;
     protected final MetricsService metricsService;
@@ -122,7 +120,6 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         this.commandContext = lookupService(CommandContext.class);
         this.commandService = lookupService(CommandService.class);
         this.interactionContext = lookupService(InteractionContext.class);
-        this.eventBusService = lookupService(EventBusService.class);
         this.changedObjectsServiceInternal = lookupService(ChangedObjectsServiceInternal.class);
         this.metricsService = lookupService(MetricsService.class);
         this.factoryService = lookupService(FactoryService.class);
@@ -182,11 +179,6 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     protected enum Type {
         TRANSIENT,
         PERSISTENT
-    }
-
-    protected enum Variant {
-        TRANSIENT,
-        VIEW_MODEL
     }
 
     protected enum State {
@@ -263,6 +255,5 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     public String toString() {
         return new ToString(this).toString();
     }
-
 
 }
