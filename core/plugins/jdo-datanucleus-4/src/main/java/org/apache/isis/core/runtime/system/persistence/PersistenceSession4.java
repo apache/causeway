@@ -18,12 +18,14 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
+import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +40,6 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.identity.SingleFieldIdentity;
 import javax.jdo.listener.InstanceLifecycleListener;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.datanucleus.enhancement.Persistable;
@@ -54,12 +55,12 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.iactn.Interaction;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -127,7 +128,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession4.class);
     private ObjectAdapterContext objectAdapterContext;
-    private PersistenceSession4_Decouple mixin;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -170,7 +170,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                 new PersistenceQueryFindUsingApplibQueryProcessor(this));
 
         objectAdapterContext = ObjectAdapterContext.openContext(servicesInjector, authenticationSession, specificationLoader, this);
-        mixin = new PersistenceSession4_Decouple(this, objectAdapterContext);
 
         // tell the proxy of all request-scoped services to instantiate the underlying
         // services, store onto the thread-local and inject into them...
@@ -477,6 +476,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return initializePropertiesAndDoCallback(adapter);
     }
 
+    //FIXME[ISIS-1976] remove
     private Object recreateViewModel(final ObjectSpecification spec, final String memento) {
         final ViewModelFacet facet = spec.getFacet(ViewModelFacet.class);
         if(facet == null) {
@@ -695,19 +695,16 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                     public ObjectAdapter execute() {
                         LOG.debug("getObject; oid={}", oid);
 
-                        final Object pojo = loadPersistentPojo(oid);
+                        final Object pojo = fetchPersistentPojo(oid);
                         return objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
                     }
                 });
     }
 
+    // -- FETCHING
 
-
-
-    // -- loadPersistentPojo
-
-    //TODO[ISIS-1976] used by mixin
-    Object loadPersistentPojo(final RootOid rootOid) {
+    @Override
+    public Object fetchPersistentPojo(final RootOid rootOid) {
 
         Object result;
         try {
@@ -739,14 +736,14 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return result;
     }
 
-    //TODO[ISIS-1976] used by mixin
-    Map<RootOid,Object> loadPersistentPojos(final List<RootOid> rootOids) {
+    @Override
+    public Map<RootOid,Object> fetchPersistentPojos(final List<RootOid> rootOids) {
 
         if(rootOids.isEmpty()) {
-            return zip(rootOids, Collections.emptyList());
+            return Collections.emptyMap();
         }
 
-        final List<Object> dnOids = _Lists.newArrayList();
+        final List<Object> dnOids = new ArrayList<>(rootOids.size());
         for (final RootOid rootOid : rootOids) {
             final Object id = JdoObjectIdSerializer.toJdoObjectId(rootOid);
             if(id instanceof SingleFieldIdentity) {
@@ -762,7 +759,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
         FetchPlan fetchPlan = persistenceManager.getFetchPlan();
         fetchPlan.addGroup(FetchGroup.DEFAULT);
-        final List<Object> persistentPojos = Lists.newArrayList();
+        final List<Object> persistentPojos = new ArrayList<>(rootOids.size());
         try {
             final Collection<Object> pojos = uncheckedCast(persistenceManager.getObjectsById(dnOids, true));
             for (final Object pojo : pojos) {
@@ -1077,40 +1074,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         }
     }
 
-    @Override
-    public Map<RootOid, ObjectAdapter> adaptersFor(
-            final List<RootOid> rootOids,
-            final ConcurrencyChecking concurrencyChecking) {
-
-        return mixin.adaptersFor(rootOids, concurrencyChecking);
-        }
-
-    @Override
-    public ObjectAdapter adapterFor(
-            final RootOid rootOid,
-            final ConcurrencyChecking concurrencyChecking) {
-
-        return mixin.adapterFor(rootOid, concurrencyChecking);
-            }
-
-    //TODO[ISIS-1976] used by mixin
-    Object recreatePojoTransientOrViewModel(final RootOid rootOid) {
-        final ObjectSpecification spec =
-                specificationLoader.lookupBySpecId(rootOid.getObjectSpecId());
-        final Object pojo;
-
-        if(rootOid.isViewModel()) {
-
-            final String memento = rootOid.getIdentifier();
-            pojo = recreateViewModel(spec, memento);
-
-        } else {
-            pojo = instantiateAndInjectServices(spec);
-
-        }
-        return pojo;
-    }
-
     // -- TransactionManager delegate methods
     protected IsisTransaction getCurrentTransaction() {
         return transactionManager.getCurrentTransaction();
@@ -1202,7 +1165,15 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public String identifierFor(final Object pojo) {
-        return JdoObjectIdSerializer.toOidIdentifier(getPersistenceManager().getObjectId(pojo));
+        final Object jdoOid = getPersistenceManager().getObjectId(pojo);
+        if(jdoOid==null) {
+            return UUID.randomUUID().toString(); //FIXME[ISIS-1976] should be guarded against somewhere else
+        }
+        
+        requireNonNull(jdoOid, 
+                ()->String.format("Pojo of type '%s' is not recognized by JDO.", 
+                        pojo.getClass().getName()));
+        return JdoObjectIdSerializer.toOidIdentifier(jdoOid);
     }
 
 
@@ -1408,6 +1379,12 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return objectAdapterContext.getObjectAdapterProvider();
     }
     
+    @Override
+    public ObjectAdapterByIdProvider getObjectAdapterByIdProvider() {
+        return objectAdapterContext.getObjectAdapterByIdProvider();
+    }
+
+
 }
 
 

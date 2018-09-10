@@ -27,8 +27,8 @@ import org.apache.isis.applib.services.bookmark.BookmarkService.FieldResetPolicy
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -39,7 +39,12 @@ import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-public interface PersistenceSession extends ObjectAdapterProvider.Delegating, TransactionalResource, SessionScopedComponent {
+public interface PersistenceSession 
+extends 
+    ObjectAdapterProvider.Delegating,
+    ObjectAdapterByIdProvider.Delegating,
+    TransactionalResource, 
+    SessionScopedComponent {
 
     // -- CONSTANTS
 
@@ -55,27 +60,8 @@ public interface PersistenceSession extends ObjectAdapterProvider.Delegating, Tr
 
     MementoRecreateObjectSupport mementoSupport();
 
-    ObjectAdapter adapterFor(RootOid rootOid, ConcurrencyChecking concurrencyChecking);
-    Map<RootOid, ObjectAdapter> adaptersFor(List<RootOid> rootOids, ConcurrencyChecking concurrencyChecking);
     ObjectAdapter adapterForAny(RootOid rootOid);
     <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
-    
-    /**
-     * As per {@link #adapterFor(RootOid, ConcurrencyChecking)}, with
-     * {@link ConcurrencyChecking#NO_CHECK no checking}.
-     *
-     * <p>
-     * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
-     * know that the oid does indeed represent an object you know exists.
-     * </p>
-     */
-    default ObjectAdapter adapterFor(final RootOid rootOid) {
-        return adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
-    }
-    
-    default Map<RootOid, ObjectAdapter> adaptersFor(List<RootOid> rootOids) {
-        return adaptersFor(rootOids, ConcurrencyChecking.NO_CHECK);
-    }
 
     // --
 
@@ -111,6 +97,10 @@ public interface PersistenceSession extends ObjectAdapterProvider.Delegating, Tr
     boolean isRepresentingPersistent(Object pojo);
     /**@since 2.0.0-M2*/
     boolean isDestroyed(Object pojo);
+    /**@since 2.0.0-M2*/
+    Object fetchPersistentPojo(RootOid rootOid);
+    /**@since 2.0.0-M2*/
+    Map<RootOid, Object> fetchPersistentPojos(List<RootOid> rootOids);
 
     /**
      * Convenient equivalent to {@code getPersistenceManager()}.
@@ -167,8 +157,6 @@ public interface PersistenceSession extends ObjectAdapterProvider.Delegating, Tr
 
     void resolve(Object parent);
 
-
-
-
+    
 
 }

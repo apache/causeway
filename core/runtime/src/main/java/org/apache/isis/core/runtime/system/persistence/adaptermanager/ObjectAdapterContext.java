@@ -29,7 +29,9 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -131,6 +133,7 @@ public class ObjectAdapterContext {
     private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
     private final ObjectAdapterContext_ServiceLookup serviceLookupMixin;
     private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
+    private final ObjectAdapterContext_ObjectAdapterByIdProvider byIdMixin;
     
     private ObjectAdapterContext(
             ServicesInjector servicesInjector, 
@@ -144,6 +147,7 @@ public class ObjectAdapterContext {
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
         this.serviceLookupMixin = new ObjectAdapterContext_ServiceLookup(this, servicesInjector);
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(this, persistenceSession);
+        this.byIdMixin = new ObjectAdapterContext_ObjectAdapterByIdProvider(this, persistenceSession, authenticationSession);
         
         this.persistenceSession = persistenceSession;
         this.servicesInjector = servicesInjector;
@@ -231,6 +235,12 @@ public class ObjectAdapterContext {
     
     public ObjectAdapter lookupServiceAdapterFor(RootOid rootOid) {
         return serviceLookupMixin.lookupServiceAdapterFor(rootOid);
+    }
+    
+    // -- BY-ID SUPPORT
+    
+    public ObjectAdapterByIdProvider getObjectAdapterByIdProvider() {
+        return byIdMixin;
     }
     
     // -- FACTORIES
@@ -464,6 +474,8 @@ public class ObjectAdapterContext {
         mapAndInjectServices(newAdapter);
         return newAdapter;
     }
+
+
 
    
 
