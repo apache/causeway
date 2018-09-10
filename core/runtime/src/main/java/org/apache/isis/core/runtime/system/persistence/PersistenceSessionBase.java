@@ -40,6 +40,7 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
@@ -49,6 +50,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     // -- CONSTANTS
 
     protected static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
+    protected static final String ROOT_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_ROOT_KEY;
 
     // -- FIELDS
 

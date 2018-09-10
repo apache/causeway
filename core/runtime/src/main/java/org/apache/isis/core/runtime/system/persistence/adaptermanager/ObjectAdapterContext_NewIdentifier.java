@@ -69,20 +69,13 @@ class ObjectAdapterContext_NewIdentifier {
      * @param pojo - being persisted
      */
     final RootOid createPersistentOid(Object pojo) {
-        final Oid.State type = Oid.State.PERSISTENT;
-        
+  
         final ObjectSpecification spec = specificationLoader.loadSpecification(pojo.getClass());
         
-        //FIXME[ISIS-1976] remove guard
-        final ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
-        if(spec.isService() || recreatableObjectFacet!=null || spec.containsDoOpFacet(ViewModelFacet.class)) {
-            _Exceptions.throwUnexpectedCodeReach();
-        }
-        
-        final String identifier = persistenceSession.identifierFor(pojo, type);
+        final String identifier = persistenceSession.identifierFor(pojo);
         
         final ObjectSpecId objectSpecId = spec.getSpecId();
-        return new RootOid(objectSpecId, identifier, type);
+        return new RootOid(objectSpecId, identifier, Oid.State.PERSISTENT);
     }
     
 }

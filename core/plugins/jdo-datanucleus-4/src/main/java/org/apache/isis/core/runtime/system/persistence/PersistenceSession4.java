@@ -1201,10 +1201,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public String identifierFor(final Object pojo, final Oid.State type) {
-        return type == Oid.State.TRANSIENT
-                ? UUID.randomUUID().toString()
-                        : JdoObjectIdSerializer.toOidIdentifier(getPersistenceManager().getObjectId(pojo));
+    public String identifierFor(final Object pojo) {
+        return JdoObjectIdSerializer.toOidIdentifier(getPersistenceManager().getObjectId(pojo));
     }
 
 

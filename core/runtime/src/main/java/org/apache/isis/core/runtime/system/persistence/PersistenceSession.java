@@ -29,7 +29,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -51,14 +50,6 @@ public interface PersistenceSession extends ObjectAdapterProvider.Delegating, Tr
      */
     public static final String INSTALL_FIXTURES_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_INSTALL_FIXTURES_KEY;
     public static final boolean INSTALL_FIXTURES_DEFAULT = false;
-
-    // [ahuber] could as well be 'protected', not referenced from other then implementing classes
-    public static final String ROOT_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_ROOT_KEY;
-
-    /**
-     * Append regular <a href="http://www.datanucleus.org/products/accessplatform/persistence_properties.html">datanucleus properties</a> to this key
-     */
-    public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
 
     //---
 
@@ -108,12 +99,18 @@ public interface PersistenceSession extends ObjectAdapterProvider.Delegating, Tr
     PersistenceManager getPersistenceManager();
     
     /**
-     * @param pojo
-     * @param type
+     * @param pojo a persistable object
      * @return String representing an object's id.
      * @since 2.0.0-M2
      */
-    String identifierFor(Object pojo, State type);
+    String identifierFor(Object pojo);
+    
+    /**@since 2.0.0-M2*/
+    boolean isTransient(Object pojo);
+    /**@since 2.0.0-M2*/
+    boolean isRepresentingPersistent(Object pojo);
+    /**@since 2.0.0-M2*/
+    boolean isDestroyed(Object pojo);
 
     /**
      * Convenient equivalent to {@code getPersistenceManager()}.
@@ -170,9 +167,6 @@ public interface PersistenceSession extends ObjectAdapterProvider.Delegating, Tr
 
     void resolve(Object parent);
 
-    boolean isTransient(Object pojo);
-    boolean isRepresentingPersistent(Object pojo);
-    boolean isDestroyed(Object pojo);
 
 
 

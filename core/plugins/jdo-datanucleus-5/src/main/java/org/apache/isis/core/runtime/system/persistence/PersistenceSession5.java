@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
+import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import java.lang.reflect.Array;
@@ -33,6 +34,7 @@ import java.util.UUID;
 
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.identity.SingleFieldIdentity;
@@ -42,6 +44,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.datanucleus.enhancement.Persistable;
+import org.datanucleus.enhancer.methods.IsDeleted;
+import org.datanucleus.enhancer.methods.IsPersistent;
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.datanucleus.identity.DatastoreIdImpl;
 import org.slf4j.Logger;
@@ -1193,10 +1197,16 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public String identifierFor(final Object pojo, final Oid.State type) {
-        return type == Oid.State.TRANSIENT
-                ? UUID.randomUUID().toString()
-                        : JdoObjectIdSerializer.toOidIdentifier(getPersistenceManager().getObjectId(pojo));
+    public String identifierFor(final Object pojo) {
+        final Object jdoOid = getPersistenceManager().getObjectId(pojo);
+        if(jdoOid==null) {
+            return UUID.randomUUID().toString(); //FIXME[ISIS-1976] should be guarded against somewhere else
+        }
+        
+        requireNonNull(jdoOid, 
+                ()->String.format("Pojo of type '%s' is not recognized by JDO.", 
+                        pojo.getClass().getName()));
+        return JdoObjectIdSerializer.toOidIdentifier(jdoOid);
     }
 
 

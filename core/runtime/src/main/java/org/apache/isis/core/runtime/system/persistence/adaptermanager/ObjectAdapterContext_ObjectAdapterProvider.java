@@ -68,7 +68,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
                 .add(new OidProviders.OidForServices())
                 .add(new OidProviders.OidForValues())
                 .add(new OidProviders.OidForViewModels())
-                .add(new OidProviders.OidForPersistables())
+                .add(new OidProviders.OidForPersistent())
                 .add(new OidProviders.OidForOthers())
                 .build();
     }

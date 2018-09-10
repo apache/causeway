@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
+import java.util.UUID;
+
 import org.apache.isis.core.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -45,13 +47,13 @@ public class OidProviders {
 
     }
 
-    public static class OidForPersistables implements OidProvider {
+    public static class OidForPersistent implements OidProvider {
 
         private final IsisJdoMetamodelPlugin isisJdoMetamodelPlugin = IsisJdoMetamodelPlugin.get();
 
         @Override
         public boolean isHandling(Object pojo, ObjectSpecification spec) {
-            // equivalent to  isInstanceOfPersistable = pojo instanceof Persistable;
+            // equivalent to 'isInstanceOfPersistable = pojo instanceof Persistable'
             final boolean isInstanceOfPersistable = isisJdoMetamodelPlugin.isPersistenceEnhanced(pojo.getClass());
             return isInstanceOfPersistable;
         }
@@ -59,13 +61,17 @@ public class OidProviders {
         @Override
         public RootOid oidFor(Object pojo, ObjectSpecification spec) {
             final PersistenceSession persistenceSession = IsisContext.getPersistenceSession().get();
-            final Oid.State state = persistenceSession.isTransient(pojo) ? Oid.State.TRANSIENT : Oid.State.PERSISTENT;
-            final String identifier = persistenceSession.identifierFor(pojo, state);
-            return new RootOid(spec.getSpecId(), identifier, state);
+            final boolean isPersistent = !persistenceSession.isTransient(pojo);
+            if(isPersistent) {
+                final String identifier = persistenceSession.identifierFor(pojo);
+                return new RootOid(spec.getSpecId(), identifier, Oid.State.PERSISTENT);
+            } else {
+                final String identifier = UUID.randomUUID().toString();
+                return new RootOid(spec.getSpecId(), identifier, Oid.State.TRANSIENT);    
+            }
         }
-
+        
     }
-
 
     public static class OidForValues implements OidProvider {
 
@@ -106,8 +112,7 @@ public class OidProviders {
 
         @Override
         public RootOid oidFor(Object pojo, ObjectSpecification spec) {
-            final PersistenceSession persistenceSession = IsisContext.getPersistenceSession().get();
-            final String identifier = persistenceSession.identifierFor(pojo, Oid.State.TRANSIENT);
+            final String identifier = UUID.randomUUID().toString();
             return new RootOid(spec.getSpecId(), identifier, Oid.State.TRANSIENT);
         }
 
