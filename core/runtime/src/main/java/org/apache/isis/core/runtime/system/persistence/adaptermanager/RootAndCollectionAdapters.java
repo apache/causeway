@@ -96,7 +96,7 @@ final class RootAndCollectionAdapters {
     private void addCollectionAdapters() {
         for (final OneToManyAssociation otma : parentAdapter.getSpecification().getCollections(Contributed.EXCLUDED)) {
             final ParentedCollectionOid collectionOid = new ParentedCollectionOid((RootOid) rootAdapterOid, otma);
-            final ObjectAdapter collectionAdapter = context.lookupParentedCollectionAdapter(collectionOid);
+            final ObjectAdapter collectionAdapter = null;//FIXME context.lookupParentedCollectionAdapter(collectionOid);
             if (collectionAdapter != null) {
                 // collection adapters are lazily created and so there may not be one.
                 addCollectionAdapter(otma, collectionAdapter);

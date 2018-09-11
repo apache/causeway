@@ -27,7 +27,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -69,8 +68,9 @@ extends
      * mechanism and be used to set up the value objects and associations.
      * @since 2.0.0-M2
      */
-    void refreshRootInTransaction(Object domainObject);
-    
+    default void refreshRootInTransaction(final Object domainObject) {
+        getTransactionManager().executeWithinTransaction(()->refreshRoot(domainObject));
+    }
     
     /**
      * @param pojo a persistable object
@@ -88,10 +88,15 @@ extends
     /** whether pojo is recognized by the persistence layer, that is, it has an ObjectId
      * @since 2.0.0-M2*/
     boolean isRecognized(Object pojo);
+    
     /**@since 2.0.0-M2*/
     Object fetchPersistentPojo(RootOid rootOid);
+    
     /**@since 2.0.0-M2*/
-    Object fetchPersistentPojoInTransaction(final RootOid oid);
+    default Object fetchPersistentPojoInTransaction(final RootOid oid) {
+        return getTransactionManager().executeWithinTransaction(()->fetchPersistentPojo(oid));
+    }
+    
     /**@since 2.0.0-M2*/
     Map<RootOid, Object> fetchPersistentPojos(List<RootOid> rootOids);
     
@@ -163,11 +168,9 @@ extends
     // -- TODO remove ObjectAdapter references from API
     
     <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
-
-    void destroyObjectInTransaction(ObjectAdapter adapter);
-
     <T> ObjectAdapter firstMatchingQuery(final Query<T> query);
     
+    void destroyObjectInTransaction(ObjectAdapter adapter);
     void makePersistentInTransaction(ObjectAdapter adapter);
     
     // -- OTHERS

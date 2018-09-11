@@ -79,14 +79,6 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         } else {
             Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
             RootOid typedOid = (RootOid) oid;
-
-            // remove adapter if already in the adapter manager maps, because
-            // otherwise would (as a side-effect) update the version to that of the current.
-            adapter = objectAdapterContext.lookupAdapterFor(typedOid);
-            if(adapter != null) {
-                objectAdapterContext.removeAdapterFromCache(adapter);
-            }
-
             // recreate an adapter for the original OID (with correct version)
             adapter = persistenceSession.adapterFor(typedOid);
 

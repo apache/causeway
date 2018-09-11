@@ -132,9 +132,8 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             return serviceAdapter;
         }
         
-        // attempt to locate adapter for the Oid
-        ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(rootOid);
-        if (adapter == null) {
+        final ObjectAdapter adapter;
+        {
             // else recreate
             try {
                 final Object pojo;
@@ -169,14 +168,12 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
         
         rootOids.forEach(rootOid->{
          // attempt to locate adapter for the Oid
-            ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(rootOid);
+            ObjectAdapter adapter = null;
             // handle view models or transient
-            if (adapter == null) {
-                if (rootOid.isTransient() || rootOid.isViewModel()) {
-                    final Object pojo = recreatePojoTransientOrViewModel(rootOid);
-                    adapter = objectAdapterContext.addRecreatedPojoToCache(rootOid, pojo);
-                    syncVersion(concurrencyChecking, adapter, rootOid);
-                }
+            if (rootOid.isTransient() || rootOid.isViewModel()) {
+                final Object pojo = recreatePojoTransientOrViewModel(rootOid);
+                adapter = objectAdapterContext.addRecreatedPojoToCache(rootOid, pojo);
+                syncVersion(concurrencyChecking, adapter, rootOid);
             }
             if (adapter != null) {
                 adapterByOid.put(rootOid, adapter);

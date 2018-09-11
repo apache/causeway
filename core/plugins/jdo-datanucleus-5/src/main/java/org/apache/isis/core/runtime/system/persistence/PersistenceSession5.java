@@ -459,7 +459,9 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public Object fetchPersistentPojo(final RootOid rootOid) {
-
+        Objects.requireNonNull(rootOid);
+        LOG.debug("getObject; oid={}", rootOid);
+        
         Object result;
         try {
             final Class<?> cls = clsOf(rootOid);
@@ -487,20 +489,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if (result == null) {
             throw new ObjectNotFoundException(rootOid);
         }
-        return result;
-    }
-    
-    @Override
-    public Object fetchPersistentPojoInTransaction(final RootOid oid) {
         
-        Objects.requireNonNull(oid);
-
-        return transactionManager.executeWithinTransaction(()-> {
-            LOG.debug("getObject; oid={}", oid);
-
-            final Object pojo = fetchPersistentPojo(oid);
-            return objectAdapterContext.addRecreatedPojoToCache(oid, pojo).getObject();
-        });
+        return result;
     }
 
     @Override
@@ -576,6 +566,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             debugLogNotPersistentIgnoring(domainObject);
             return; // only resolve object that is representing persistent
         }
+        
+        debugLogRefreshImmediately(domainObject);
 
         try {
             persistenceManager.refresh(domainObject);
@@ -589,21 +581,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         // get an eager left-outer-join as the result of a refresh (sounds possible).
         initializeMapAndCheckConcurrency((Persistable) domainObject);
     }
-    
-    @Override
-    public void refreshRootInTransaction(final Object domainObject) {
-        
-        if(!isRepresentingPersistent(domainObject)) {
-            debugLogNotPersistentIgnoring(domainObject);
-            return; // only resolve object that is representing persistent
-        }
-        
-        getTransactionManager().executeWithinTransaction(()->{
-                debugLogRefreshImmediately(domainObject);
-                refreshRoot(domainObject);
-        });
-    }
-
     
     // -- makePersistent
 
@@ -779,67 +756,15 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         servicesInjector.injectInto(pojo);
 
         final Version datastoreVersion = getVersionIfAny(pc);
+        final RootOid originalOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
 
-        final RootOid originalOid;
-        final ObjectAdapter originalAdapter = objectAdapterContext.lookupAdapterFor(pojo);
-        final ObjectAdapter newAdapter;
+        final ObjectAdapter adapter = objectAdapterContext.addRecreatedPojoToCache(originalOid, pojo);
+        adapter.setVersion(datastoreVersion);
+
+        CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
+        objectAdapterContext.postLifecycleEventIfRequired(adapter, LoadedLifecycleEventFacet.class);
         
-        if (originalAdapter != null) {
-            ensureRootObject(pojo); //[ahuber] while already mapped has no side-effect
-            originalOid = (RootOid) originalAdapter.getOid();
-
-            final Version originalVersion = originalAdapter.getVersion();
-
-            // sync the pojo held by the adapter with that just loaded
-            newAdapter = objectAdapterContext.remapRecreatedPojo(originalAdapter, pojo);
-
-            // since there was already an adapter, do concurrency check
-            // (but don't set abort cause if checking is suppressed through thread-local)
-            final RootOid thisOid = originalOid;
-            final Version thisVersion = originalVersion;
-            final Version otherVersion = datastoreVersion;
-
-            if (    thisVersion != null &&
-                    otherVersion != null &&
-                    thisVersion.different(otherVersion)) {
-
-                if (ConcurrencyChecking.isCurrentlyEnabled()) {
-                    LOG.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
-                    final String currentUser = authenticationSession.getUserName();
-                    final ConcurrencyException abortCause = new ConcurrencyException(currentUser, thisOid,
-                            thisVersion, otherVersion);
-                    
-                    transactionManager.getCurrentTransaction().setAbortCause(abortCause);
-
-                } else {
-                    LOG.info("concurrency conflict detected but suppressed, on {} ({})", thisOid, otherVersion);
-                }
-            }
-            
-        } else {
-            originalOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
-
-            ObjectAdapter adapter;
-            
-            // it appears to be possible that there is already an adapter for this Oid,
-            // ie from ObjectStore#resolveImmediately()
-            adapter = objectAdapterContext.lookupAdapterFor(originalOid);
-            if (adapter != null) {
-                adapter = objectAdapterContext.remapRecreatedPojo(adapter, pojo);
-            } else {
-                adapter = objectAdapterContext.addRecreatedPojoToCache(originalOid, pojo);
-
-                CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
-                objectAdapterContext.postLifecycleEventIfRequired(adapter, LoadedLifecycleEventFacet.class);
-            }
-        
-            newAdapter = adapter;
-            
-        }
-        
-        newAdapter.setVersion(datastoreVersion);
-        
-        return objectAdapterContext.lookupAdapterFor(pojo);
+        return adapter;
     }
 
     @Override
@@ -862,7 +787,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
-        final ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(pojo);
+        final ObjectAdapter adapter = null;
         if (adapter == null) {
             // not expected.
             return;
@@ -923,8 +848,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
-        ObjectAdapter adapter = objectAdapterContext.lookupAdapterFor(pojo);
-        if (adapter == null) {
+        {
             // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
             // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet
             // mapped.
@@ -932,36 +856,13 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
             // DN would not be calling this callback if the pojo was not persistent.
 
-            adapter = objectAdapterContext.addPersistentToCache(pojo);
+            final ObjectAdapter adapter = objectAdapterContext.addPersistentToCache(pojo);
             if (adapter == null) {
                 throw new RuntimeException(
                         "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
                                 + pojo + "]");
             }
         }
-        if (adapter.isTransient()) {
-            // seen this happen in the case when there's a 1<->m bidirectional collection, and we're
-            // attaching the child object, which is being persisted by DN as a result of persistence-by-reachability,
-            // and it "helpfully" sets up the parent attribute on the child, causing this callback to fire.
-            //
-            // however, at the same time, Isis has only queued up a CreateObjectCommand for the transient object, but it
-            // hasn't yet executed, so thinks that the adapter is still transient.
-            return;
-        }
-
-        final boolean wasAlreadyEnlisted = changedObjectsServiceInternal.isEnlisted(adapter);
-
-        // we call this come what may;
-        // additional properties may now have been changed, and the changeKind for publishing might also be modified
-        changedObjectsServiceInternal.enlistUpdating(adapter);
-
-        if(!wasAlreadyEnlisted) {
-            // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so
-            CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
-            objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatingLifecycleEventFacet.class);
-        }
-
-        ensureRootObject(pojo);
     }
 
     /**

@@ -79,15 +79,10 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         if(pojo == null) {
             return null;
         }
-
-        final  ObjectAdapter existing = objectAdapterContext.lookupAdapterByPojo(pojo);
-        if (existing != null) {
-            return existing;
-        }
         
         final RootOid rootOid = oidFactory.oidFor(pojo);
         final ObjectAdapter newAdapter = objectAdapterContext.getFactories().createRootAdapter(pojo, rootOid);
-        return objectAdapterContext.mapAndInjectServices(newAdapter);
+        return objectAdapterContext.injectServices(newAdapter);
     }
     
     
@@ -97,18 +92,11 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         requires(parentAdapter, "parentAdapter");
         requires(collection, "collection");
 
-        final  ObjectAdapter existing = objectAdapterContext.lookupAdapterByPojo(pojo);
-        if (existing != null) {
-            return existing;
-        }
-
-        objectAdapterContext.ensureMapsConsistent(parentAdapter);
-
         // the List, Set etc. instance gets wrapped in its own adapter
         final ObjectAdapter newAdapter = objectAdapterContext.getFactories()
                 .createCollectionAdapter(pojo, parentAdapter, collection);
 
-        return objectAdapterContext.mapAndInjectServices(newAdapter);
+        return objectAdapterContext.injectServices(newAdapter);
     }
 
     @Override

@@ -52,9 +52,9 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
  * @since 2.0.0-M2
  */
 final public class ObjectAdapterContext {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext.class);
-    
+
     public static ObjectAdapterContext openContext(
             ServicesInjector servicesInjector, 
             AuthenticationSession authenticationSession, 
@@ -66,68 +66,9 @@ final public class ObjectAdapterContext {
         objectAdapterContext.open();
         return objectAdapterContext;
     }
-    
-    private final static class Cache {
-        private final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
-        private final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
-        
-        public void open() {
-            oidAdapterMap.open();
-            pojoAdapterMap.open();
-        }
-        
-        public void close() {
-            
-            try {
-                oidAdapterMap.close();
-            } catch(final Throwable ex) {
-                // ignore
-                LOG.error("close: oidAdapterMap#close() failed; continuing to avoid memory leakage");
-            }
 
-            try {
-                pojoAdapterMap.close();
-            } catch(final Throwable ex) {
-                // ignore
-                LOG.error("close: pojoAdapterMap#close() failed; continuing to avoid memory leakage");
-            }
-        }
-        
-        private ObjectAdapter lookupAdapterByPojo(Object pojo) {
-            final ObjectAdapter adapter = pojoAdapterMap.getAdapter(pojo);
-            return adapter;
-        }
-        
-        private ObjectAdapter lookupAdapterById(Oid oid) {
-            return oidAdapterMap.getAdapter(oid);
-        }
-        
-        private void addAdapter(ObjectAdapter adapter) {
-            if(adapter==null) {
-                return; // nothing to do
-            }
-            final Oid oid = adapter.getOid();
-            oidAdapterMap.add(oid, adapter);
-            pojoAdapterMap.add(adapter.getObject(), adapter);
-        }
-        
-        private void removeAdapter(ObjectAdapter adapter) {
-            if(adapter==null) {
-                return; // nothing to do
-            }
-            final Oid oid = adapter.getOid();
-            oidAdapterMap.remove(oid);
-            pojoAdapterMap.remove(adapter);
-        }
-        
-    }
-    
-    private final Cache cache = new Cache();
-    
     private final PersistenceSession persistenceSession; 
-    private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
-    private final ObjectAdapterContext_Consistency consistencyMixin;
     private final ObjectAdapterContext_ObjectAdapterProvider objectAdapterProviderMixin;
     private final ObjectAdapterContext_AdapterManager adapterManagerMixin;
     private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
@@ -137,14 +78,13 @@ final public class ObjectAdapterContext {
     private final ObjectAdapterContext_DependencyInjection dependencyInjectionMixin;
     final ObjectAdapterContext_ObjectCreation objectCreationMixin;
     private final ObjectAdapterContext_LifecycleEventSupport lifecycleEventMixin;
-    
+
     private ObjectAdapterContext(
             ServicesInjector servicesInjector, 
             AuthenticationSession authenticationSession, 
             SpecificationLoader specificationLoader, 
             PersistenceSession persistenceSession) {
-        
-        this.consistencyMixin = new ObjectAdapterContext_Consistency(this);
+
         this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, persistenceSession);
         this.adapterManagerMixin = new ObjectAdapterContext_AdapterManager(this, persistenceSession);
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
@@ -154,11 +94,10 @@ final public class ObjectAdapterContext {
         this.dependencyInjectionMixin = new ObjectAdapterContext_DependencyInjection(this, persistenceSession);
         this.objectCreationMixin = new ObjectAdapterContext_ObjectCreation(this, persistenceSession);
         this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(this, persistenceSession);
-        
+
         this.persistenceSession = persistenceSession;
-        this.servicesInjector = servicesInjector;
         this.specificationLoader = specificationLoader;
-        
+
         this.objectAdapterFactories = new ObjectAdapterContext_Factories(
                 authenticationSession, 
                 specificationLoader, 
@@ -166,7 +105,7 @@ final public class ObjectAdapterContext {
     }
 
     // -- DEBUG
-    
+
     void printContextInfo(String msg) {
         if(LOG.isDebugEnabled()) {
             String id = Integer.toHexString(this.hashCode());
@@ -174,91 +113,46 @@ final public class ObjectAdapterContext {
             LOG.debug(String.format("%s id=%s session='%s'", msg, id, session));
         }
     }
-    
+
     // -- LIFE-CYCLING
-    
+
     public void open() {
         printContextInfo("OPEN_");
-        cache.open();
     }
-    
+
     public void close() {
-        cache.close();
         printContextInfo("CLOSE");
     }
-    
-    // -- CACHING POJO
 
-    // package private // don't expose caching
-    ObjectAdapter lookupAdapterByPojo(Object pojo) {
-        return cache.lookupAdapterByPojo(pojo);
-    }
-    
-    // package private // don't expose caching
-    boolean containsAdapterForPojo(Object pojo) {
-        return lookupAdapterByPojo(pojo)!=null;
-    }
-    
-    // -- CACHING OID
-    
-    // package private // don't expose caching
-    ObjectAdapter lookupAdapterById(Oid oid) {
-        return cache.lookupAdapterById(oid);
-    }
-    
-    // -- CACHING BOTH
-
-    // package private // don't expose caching
-    void addAdapter(ObjectAdapter adapter) {
-        cache.addAdapter(adapter);
-    }
-    
-    // package private // don't expose caching
-    void removeAdapter(ObjectAdapter adapter) {
-        cache.removeAdapter(adapter);
-    }
-    
-    // -- CACHE CONSISTENCY
-    
-    // package private // don't expose caching
-    void ensureMapsConsistent(final ObjectAdapter adapter) {
-        consistencyMixin.ensureMapsConsistent(adapter);
-    }
-
-    // package private // don't expose caching
-    void ensureMapsConsistent(final Oid oid) {
-        consistencyMixin.ensureMapsConsistent(oid);
-    }
-    
     // -- NEW IDENTIFIER
-    
+
     public RootOid createPersistentOrViewModelOid(Object pojo) {
         return newIdentifierMixin.createPersistentOid(pojo);
     }
-    
+
     // -- SERVICE LOOKUP
-    
+
     public ObjectAdapter lookupServiceAdapterFor(RootOid rootOid) {
         return serviceLookupMixin.lookupServiceAdapterFor(rootOid);
     }
-    
+
     // -- BY-ID SUPPORT
-    
+
     public ObjectAdapterByIdProvider getObjectAdapterByIdProvider() {
         return objectAdapterByIdProviderMixin;
     }
-    
+
     // -- DEPENDENCY INJECTION
-    
+
     public Object instantiateAndInjectServices(ObjectSpecification objectSpec) {
         return dependencyInjectionMixin.instantiateAndInjectServices(objectSpec);
     }
-    
+
     // -- FACTORIES
-    
+
     // package private
     static interface ObjectAdapterFactories {
-        
+
         /**
          * Creates (but does not {@link #mapAndInjectServices(ObjectAdapter) map}) a new
          * root {@link ObjectAdapter adapter} for the supplied domain object.
@@ -267,7 +161,7 @@ final public class ObjectAdapterContext {
          * @see #createCollectionAdapter(Object, ParentedCollectionOid)
          */
         ObjectAdapter createRootAdapter(Object pojo, RootOid rootOid);
-        
+
         ObjectAdapter createCollectionAdapter(Object pojo, ParentedCollectionOid collectionOid);
 
         /**
@@ -284,104 +178,77 @@ final public class ObjectAdapterContext {
          */
         ObjectAdapter createCollectionAdapter(Object pojo, ObjectAdapter parentAdapter, OneToManyAssociation otma);
     }
-    
+
     private final ObjectAdapterFactories objectAdapterFactories;
-    
+
     // package private
     ObjectAdapterFactories getFactories() {
         return objectAdapterFactories;
     }
-    
+
     // -- ADAPTER MANAGER LEGACY
-    
+
     @Deprecated // don't expose caching
     public ObjectAdapter addRecreatedPojoToCache(Oid oid, Object recreatedPojo) {
         return adapterManagerMixin.addRecreatedPojoToCache(oid, recreatedPojo);
     }
-    
-    @Deprecated // don't expose caching
-    public ObjectAdapter mapAndInjectServices(final ObjectAdapter adapter) {
-        return adapterManagerMixin.mapAndInjectServices(adapter);
-    }
-    
-    @Deprecated // don't expose caching
-    public ObjectAdapter lookupAdapterFor(Object pojo) {
-        return adapterManagerMixin.lookupAdapterFor(pojo);
-    }
-    
-    @Deprecated // don't expose caching
-    public ObjectAdapter lookupAdapterFor(final Oid oid) {
-        Objects.requireNonNull(oid);
-        consistencyMixin.ensureMapsConsistent(oid);
-        return cache.lookupAdapterById(oid);
-    }
-    
-    // package private
-    ObjectAdapter lookupParentedCollectionAdapter(ParentedCollectionOid collectionOid) {
-        Objects.requireNonNull(collectionOid);
-        consistencyMixin.ensureMapsConsistent(collectionOid);
-        return cache.lookupAdapterById(collectionOid);
-    }
-    
-    // package private // don't expose caching
-    void removeAdapterFromCache(final ObjectAdapter adapter) {
-        adapterManagerMixin.removeAdapterFromCache(adapter);
+
+    @Deprecated
+    public ObjectAdapter injectServices(final ObjectAdapter adapter) {
+        return adapterManagerMixin.injectServices(adapter);
     }
     
     @Deprecated // don't expose caching
     public ObjectAdapter addPersistentToCache(final Object pojo) {
         return objectAdapterProviderMixin.addPersistentToCache(pojo);
     }
-    
+
     // -- OBJECT ADAPTER PROVIDER SUPPORT
-    
+
     public ObjectAdapterProvider getObjectAdapterProvider() {
         return objectAdapterProviderMixin;
     }
-    
+
     // -- MEMENTO SUPPORT
-    
+
     public static interface MementoRecreateObjectSupport {
         ObjectAdapter recreateObject(ObjectSpecification spec, Oid oid, Data data);
     }
-    
+
     public MementoRecreateObjectSupport mementoSupport() {
         return mementoSupportMixin;
     }
-    
+
     // -- LIFECYCLE EVENT SUPPORT
-    
+
     public void postLifecycleEventIfRequired(
             final ObjectAdapter adapter,
             final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
         lifecycleEventMixin.postLifecycleEventIfRequired(adapter, lifecycleEventFacetClass);
     }
-    
+
     // ------------------------------------------------------------------------------------------------
-    
+
     public ObjectAdapter disposableAdapterForViewModel(Object viewModelPojo) {
-            final ObjectSpecification objectSpecification = 
-                    specificationLoader.loadSpecification(viewModelPojo.getClass());
-            final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-            final RootOid newRootOid = RootOid.create(objectSpecId, UUID.randomUUID().toString());
-            final ObjectAdapter createdAdapter = adapterManagerMixin.createRootOrAggregatedAdapter(newRootOid, viewModelPojo);
-            return createdAdapter;
+        final ObjectSpecification objectSpecification = 
+                specificationLoader.loadSpecification(viewModelPojo.getClass());
+        final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
+        final RootOid newRootOid = RootOid.create(objectSpecId, UUID.randomUUID().toString());
+        final ObjectAdapter createdAdapter = adapterManagerMixin.createRootOrAggregatedAdapter(newRootOid, viewModelPojo);
+        return createdAdapter;
     }
-    
+
     // package private
     ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {
-        ObjectAdapter viewModelAdapter = adapterManagerMixin.lookupAdapterFor(viewModelPojo);
-        if(viewModelAdapter == null) {
-            final ObjectSpecification objectSpecification = 
-                    specificationLoader.loadSpecification(viewModelPojo.getClass());
-            final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-            final RootOid newRootOid = rootOidFactory.apply(objectSpecId);
+        final ObjectSpecification objectSpecification = 
+                specificationLoader.loadSpecification(viewModelPojo.getClass());
+        final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
+        final RootOid newRootOid = rootOidFactory.apply(objectSpecId);
 
-            viewModelAdapter = adapterManagerMixin.addRecreatedPojoToCache(newRootOid, viewModelPojo);
-        }
+        final ObjectAdapter viewModelAdapter = adapterManagerMixin.addRecreatedPojoToCache(newRootOid, viewModelPojo);
         return viewModelAdapter;
     }
-    
+
     /**
      * Note that there is no management of {@link Version}s here. That is
      * because the {@link PersistenceSession} is expected to manage this.
@@ -394,14 +261,12 @@ final public class ObjectAdapterContext {
 
         Objects.requireNonNull(newRootOid);
         Assert.assertFalse("expected to not be a parented collection", rootAdapter.isParentedCollection());
-        
+
         final RootOid transientRootOid = (RootOid) rootAdapter.getOid();
-        
+
         final RootAndCollectionAdapters rootAndCollectionAdapters = 
                 new RootAndCollectionAdapters(rootAdapter, this);
 
-        removeFromCache(rootAndCollectionAdapters);
-        
         final RootOid persistedRootOid;
         {
             if(newRootOid.isTransient()) {
@@ -421,10 +286,10 @@ final public class ObjectAdapterContext {
         if (LOG.isDebugEnabled()) {
             LOG.debug("replacing root adapter and re-adding into maps; oid is now: {} (was: {})", persistedRootOid.enString(), transientRootOid.enString());
         }
-        
+
         final ObjectAdapter adapterReplacement = rootAdapter.withOid(persistedRootOid); 
         replaceRootAdapter(adapterReplacement, rootAndCollectionAdapters);
-        
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("made persistent {}; was {}", adapterReplacement, transientRootOid);
         }
@@ -433,20 +298,17 @@ final public class ObjectAdapterContext {
     private void replaceRootAdapter(
             final ObjectAdapter adapterReplacement, 
             final RootAndCollectionAdapters rootAndCollectionAdapters) {
-        
-        addAdapter(adapterReplacement);
-        
+
         final RootOid persistedRootOid = (RootOid) adapterReplacement.getOid();
-        
+
         // associate the collection adapters with new Oids, and re-map
         LOG.debug("replacing Oids for collection adapter(s) and re-adding into maps");
-        
+
         rootAndCollectionAdapters.stream()
         .forEach(collectionAdapter->{
             final ParentedCollectionOid previousCollectionOid = (ParentedCollectionOid) collectionAdapter.getOid();
             final ParentedCollectionOid persistedCollectionOid = previousCollectionOid.asPersistent(persistedRootOid);
             Assert.assertTrue("expected equal", Objects.equals(collectionAdapter.getOid(), persistedCollectionOid));
-            addAdapter(collectionAdapter);
         });
 
         // some object store implementations may replace collection instances (eg ORM may replace with a cglib-enhanced
@@ -460,25 +322,12 @@ final public class ObjectAdapterContext {
             final Object collectionPojoActuallyOnPojo = getCollectionPojo(otma, adapterReplacement);
 
             if (collectionPojoActuallyOnPojo != collectionPojoWrappedByAdapter) {
-                cache.removeAdapter(collectionAdapter);
                 final ObjectAdapter newCollectionAdapter = collectionAdapter.withPojo(collectionPojoActuallyOnPojo);
                 Assert.assertTrue("expected same", 
                         Objects.equals(newCollectionAdapter.getObject(), collectionPojoActuallyOnPojo));
-                cache.addAdapter(collectionAdapter);
             }
         });
-        
-    }
 
-    private void removeFromCache(final RootAndCollectionAdapters rootAndCollectionAdapters) {
-        final ObjectAdapter rootAdapter = rootAndCollectionAdapters.getRootAdapter();
-        
-        LOG.debug("removing root adapter from oid map");
-        cache.removeAdapter(rootAdapter);
-    
-        LOG.debug("removing collection adapter(s) from oid map");
-        rootAndCollectionAdapters.stream()
-        .forEach(cache::removeAdapter);
     }
 
     private static Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
@@ -489,9 +338,7 @@ final public class ObjectAdapterContext {
     @Deprecated
     public ObjectAdapter remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
         final ObjectAdapter newAdapter = adapter.withPojo(pojo);
-        cache.removeAdapter(adapter);
-        cache.removeAdapter(newAdapter);
-        mapAndInjectServices(newAdapter);
+        injectServices(newAdapter);
         return newAdapter;
     }
 
