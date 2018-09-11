@@ -36,5 +36,11 @@ public interface Instance {
      */
     Specification getSpecification();
 
+    /**
+     * FIXME[ISIS-1976] introduced to experiment with slim OAs
+     * Returns the adapted domain object, the POJO, that this adapter represents
+     * with the framework.
+     */
+    Object getObject();
 
 }

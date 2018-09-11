@@ -147,7 +147,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             return this;
         }
         ParentedCollectionOid collectionOid = (ParentedCollectionOid) oid;
-        return persistenceSession.getAggregateRoot(collectionOid);
+        final Oid rootOid = collectionOid.getRootOid();
+        ObjectAdapter rootadapter = persistenceSession.adapterFor(rootOid);
+        return rootadapter;
     }
 
     // -- getVersion, setVersion, checkLock

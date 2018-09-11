@@ -64,6 +64,7 @@ public interface ObjectAdapter extends Instance {
      * Returns the adapted domain object, the POJO, that this adapter represents
      * with the framework.
      */
+    @Override
     Object getObject();
 
     /**

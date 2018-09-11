@@ -758,16 +758,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         persistenceManager.flush();
     }
 
-    // -- getAggregateRoot
-
-    @Override
-    public ObjectAdapter getAggregateRoot(final ParentedCollectionOid collectionOid) {
-        final Oid rootOid = collectionOid.getRootOid();
-        ObjectAdapter rootadapter = objectAdapterContext.lookupAdapterFor(rootOid);
-        return rootadapter;
-    }
-
-
     // -- FrameworkSynchronizer delegate methods
 
     @Override

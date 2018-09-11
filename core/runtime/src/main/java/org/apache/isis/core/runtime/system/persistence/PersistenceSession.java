@@ -168,8 +168,6 @@ extends
 
     <T> ObjectAdapter firstMatchingQuery(final Query<T> query);
     
-    ObjectAdapter getAggregateRoot(ParentedCollectionOid collectionOid);
-    
     void makePersistentInTransaction(ObjectAdapter adapter);
     
     // -- OTHERS
