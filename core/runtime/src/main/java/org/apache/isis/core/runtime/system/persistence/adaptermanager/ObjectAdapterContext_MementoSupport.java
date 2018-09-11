@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -73,7 +72,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         if (spec.isParentedOrFreeCollection()) {
 
             final Object recreatedPojo = objectAdapterContext.instantiateAndInjectServices(spec);
-            adapter = objectAdapterContext.addRecreatedPojoToCache(oid, recreatedPojo);
+            adapter = objectAdapterContext.recreatePojo(oid, recreatedPojo);
             adapter = populateCollection(adapter, (CollectionData) data);
 
         } else {
@@ -197,7 +196,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
 
     private void updateOneToManyAssociation(final ObjectAdapter objectAdapter, final OneToManyAssociation otma, final CollectionData collectionData) {
         final ObjectAdapter collection = otma.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
         final List<ObjectAdapter> original = _Lists.newArrayList();
         for (final ObjectAdapter adapter : facet.iterable(collection)) {
             original.add(adapter);

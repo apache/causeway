@@ -142,7 +142,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
                 } else {
                     pojo = persistenceSession.fetchPersistentPojo(rootOid);
                 }
-                adapter = objectAdapterContext.addRecreatedPojoToCache(rootOid, pojo);
+                adapter = objectAdapterContext.recreatePojo(rootOid, pojo);
             } catch(ObjectNotFoundException ex) {
                 throw ex; // just rethrow
             } catch(RuntimeException ex) {
@@ -172,7 +172,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             // handle view models or transient
             if (rootOid.isTransient() || rootOid.isViewModel()) {
                 final Object pojo = recreatePojoTransientOrViewModel(rootOid);
-                adapter = objectAdapterContext.addRecreatedPojoToCache(rootOid, pojo);
+                adapter = objectAdapterContext.recreatePojo(rootOid, pojo);
                 syncVersion(concurrencyChecking, adapter, rootOid);
             }
             if (adapter != null) {
@@ -191,7 +191,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             if(pojo != null) {
                 ObjectAdapter adapter;
                 try {
-                    adapter = objectAdapterContext.addRecreatedPojoToCache(rootOid, pojo);
+                    adapter = objectAdapterContext.recreatePojo(rootOid, pojo);
                     adapterByOid.put(rootOid, adapter);
                 } catch(ObjectNotFoundException ex) {
                     throw ex; // just rethrow

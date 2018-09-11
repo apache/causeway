@@ -116,15 +116,6 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         return objectAdapterContext.adapterForViewModel(viewModelPojo, rootOidFactory);
     }
     
-    protected ObjectAdapter addPersistentToCache(final Object pojo) {
-        if (persistenceSession.getPersistenceManager().getObjectId(pojo) == null) {
-            return null;
-        }
-        final RootOid oid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
-        final ObjectAdapter adapter = objectAdapterContext.addRecreatedPojoToCache(oid, pojo);
-        return adapter;
-    }
-    
     // -- DOMAIN OBJECT CREATION SUPPORT
     
     @Override

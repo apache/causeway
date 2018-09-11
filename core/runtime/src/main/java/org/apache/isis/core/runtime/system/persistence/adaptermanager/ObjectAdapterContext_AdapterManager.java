@@ -49,7 +49,7 @@ class ObjectAdapterContext_AdapterManager {
         this.servicesInjector = persistenceSession.getServicesInjector();
     }
     
-    ObjectAdapter addRecreatedPojoToCache(Oid oid, Object recreatedPojo) {
+    ObjectAdapter recreatePojo(Oid oid, Object recreatedPojo) {
         final ObjectAdapter createdAdapter = createRootOrAggregatedAdapter(oid, recreatedPojo);
         return injectServices(createdAdapter);
     }

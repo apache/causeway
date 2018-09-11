@@ -758,7 +758,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         final Version datastoreVersion = getVersionIfAny(pc);
         final RootOid originalOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
 
-        final ObjectAdapter adapter = objectAdapterContext.addRecreatedPojoToCache(originalOid, pojo);
+        final ObjectAdapter adapter = objectAdapterContext.recreatePojo(originalOid, pojo);
         adapter.setVersion(datastoreVersion);
 
         CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
@@ -856,7 +856,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
             // DN would not be calling this callback if the pojo was not persistent.
 
-            final ObjectAdapter adapter = objectAdapterContext.addPersistentToCache(pojo);
+            final ObjectAdapter adapter = objectAdapterContext.fetchPersistent(pojo);
             if (adapter == null) {
                 throw new RuntimeException(
                         "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["

@@ -78,6 +78,7 @@ final public class ObjectAdapterContext {
     private final ObjectAdapterContext_DependencyInjection dependencyInjectionMixin;
     final ObjectAdapterContext_ObjectCreation objectCreationMixin;
     private final ObjectAdapterContext_LifecycleEventSupport lifecycleEventMixin;
+    private final ServicesInjector servicesInjector;
 
     private ObjectAdapterContext(
             ServicesInjector servicesInjector, 
@@ -97,6 +98,7 @@ final public class ObjectAdapterContext {
 
         this.persistenceSession = persistenceSession;
         this.specificationLoader = specificationLoader;
+        this.servicesInjector = servicesInjector;
 
         this.objectAdapterFactories = new ObjectAdapterContext_Factories(
                 authenticationSession, 
@@ -189,19 +191,42 @@ final public class ObjectAdapterContext {
     // -- ADAPTER MANAGER LEGACY
 
     @Deprecated // don't expose caching
-    public ObjectAdapter addRecreatedPojoToCache(Oid oid, Object recreatedPojo) {
-        return adapterManagerMixin.addRecreatedPojoToCache(oid, recreatedPojo);
+    public ObjectAdapter fetchPersistent(final Object pojo) {
+        if (persistenceSession.getPersistenceManager().getObjectId(pojo) == null) {
+            return null;
+        }
+        final RootOid oid = createPersistentOrViewModelOid(pojo);
+        final ObjectAdapter adapter = recreatePojo(oid, pojo);
+        return adapter;
+    }
+    
+    @Deprecated
+    public ObjectAdapter recreatePojo(Oid oid, Object recreatedPojo) {
+        final ObjectAdapter createdAdapter = createRootOrAggregatedAdapter(oid, recreatedPojo);
+        return injectServices(createdAdapter);
     }
 
     @Deprecated
     public ObjectAdapter injectServices(final ObjectAdapter adapter) {
-        return adapterManagerMixin.injectServices(adapter);
+        Objects.requireNonNull(adapter);
+        final Object pojo = adapter.getObject();
+        servicesInjector.injectServicesInto(pojo);
+        return adapter;
     }
     
-    @Deprecated // don't expose caching
-    public ObjectAdapter addPersistentToCache(final Object pojo) {
-        return objectAdapterProviderMixin.addPersistentToCache(pojo);
+    @Deprecated
+    public ObjectAdapter createRootOrAggregatedAdapter(final Oid oid, final Object pojo) {
+        final ObjectAdapter createdAdapter;
+        if(oid instanceof RootOid) {
+            final RootOid rootOid = (RootOid) oid;
+            createdAdapter = getFactories().createRootAdapter(pojo, rootOid);
+        } else /*if (oid instanceof CollectionOid)*/ {
+            final ParentedCollectionOid collectionOid = (ParentedCollectionOid) oid;
+            createdAdapter = getFactories().createCollectionAdapter(pojo, collectionOid);
+        }
+        return createdAdapter;
     }
+    
 
     // -- OBJECT ADAPTER PROVIDER SUPPORT
 
@@ -245,7 +270,7 @@ final public class ObjectAdapterContext {
         final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
         final RootOid newRootOid = rootOidFactory.apply(objectSpecId);
 
-        final ObjectAdapter viewModelAdapter = adapterManagerMixin.addRecreatedPojoToCache(newRootOid, viewModelPojo);
+        final ObjectAdapter viewModelAdapter = adapterManagerMixin.recreatePojo(newRootOid, viewModelPojo);
         return viewModelAdapter;
     }
 
