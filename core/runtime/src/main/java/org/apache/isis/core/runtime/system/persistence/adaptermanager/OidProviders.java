@@ -32,6 +32,24 @@ import org.apache.isis.core.runtime.system.persistence.adaptermanager.factories.
 
 public class OidProviders {
 
+    
+    public static class GuardAgainstRootOid implements OidProvider {
+
+        @Override
+        public boolean isHandling(Object pojo, ObjectSpecification spec) {
+            return pojo instanceof RootOid;
+        }
+
+        @Override
+        public RootOid oidFor(Object pojo, ObjectSpecification spec) {
+            throw new IllegalArgumentException("Cannot create a RootOid for pojo, "
+                    + "when pojo is instance of RootOid. You might want to ask "
+                    + "ObjectAdapterByIdProvider for an ObjectAdapter instead.");
+        }
+
+    }
+    
+    
     public static class OidForServices implements OidProvider {
 
         @Override

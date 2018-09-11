@@ -70,7 +70,6 @@ final public class ObjectAdapterContext {
     private final PersistenceSession persistenceSession; 
     private final SpecificationLoader specificationLoader;
     private final ObjectAdapterContext_ObjectAdapterProvider objectAdapterProviderMixin;
-    private final ObjectAdapterContext_AdapterManager adapterManagerMixin;
     private final ObjectAdapterContext_MementoSupport mementoSupportMixin;
     private final ObjectAdapterContext_ServiceLookup serviceLookupMixin;
     private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
@@ -87,7 +86,6 @@ final public class ObjectAdapterContext {
             PersistenceSession persistenceSession) {
 
         this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, persistenceSession);
-        this.adapterManagerMixin = new ObjectAdapterContext_AdapterManager(this, persistenceSession);
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
         this.serviceLookupMixin = new ObjectAdapterContext_ServiceLookup(this, servicesInjector);
         this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(this, persistenceSession);
@@ -209,6 +207,9 @@ final public class ObjectAdapterContext {
     @Deprecated
     public ObjectAdapter injectServices(final ObjectAdapter adapter) {
         Objects.requireNonNull(adapter);
+        if(adapter.isValue()) {
+            return adapter; // guard against value objects
+        }
         final Object pojo = adapter.getObject();
         servicesInjector.injectServicesInto(pojo);
         return adapter;
@@ -259,7 +260,7 @@ final public class ObjectAdapterContext {
                 specificationLoader.loadSpecification(viewModelPojo.getClass());
         final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
         final RootOid newRootOid = RootOid.create(objectSpecId, UUID.randomUUID().toString());
-        final ObjectAdapter createdAdapter = adapterManagerMixin.createRootOrAggregatedAdapter(newRootOid, viewModelPojo);
+        final ObjectAdapter createdAdapter = createRootOrAggregatedAdapter(newRootOid, viewModelPojo);
         return createdAdapter;
     }
 
@@ -270,7 +271,7 @@ final public class ObjectAdapterContext {
         final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
         final RootOid newRootOid = rootOidFactory.apply(objectSpecId);
 
-        final ObjectAdapter viewModelAdapter = adapterManagerMixin.recreatePojo(newRootOid, viewModelPojo);
+        final ObjectAdapter viewModelAdapter = recreatePojo(newRootOid, viewModelPojo);
         return viewModelAdapter;
     }
 

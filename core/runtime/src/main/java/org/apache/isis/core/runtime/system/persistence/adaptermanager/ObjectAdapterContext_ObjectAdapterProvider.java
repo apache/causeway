@@ -65,6 +65,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         this.specificationLoader = servicesInjector.getSpecificationLoader();
         
         this.oidFactory = OidFactory.builder(pojo->specificationLoader.loadSpecification(pojo.getClass()))
+                .add(new OidProviders.GuardAgainstRootOid())
                 .add(new OidProviders.OidForServices())
                 .add(new OidProviders.OidForValues())
                 .add(new OidProviders.OidForViewModels())

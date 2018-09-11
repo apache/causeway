@@ -38,6 +38,7 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -96,7 +97,7 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
             return ps.fetchPersistentPojoInTransaction(oid);
         } else {
             
-            final ObjectAdapter adapter = adapterFor(oid);
+            final ObjectAdapter adapter = getPersistenceSession().adapterFor(oid, ConcurrencyChecking.NO_CHECK);
             if(adapter == null) {
                 return null;
             }            

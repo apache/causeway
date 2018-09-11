@@ -29,6 +29,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
@@ -128,7 +129,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
         //FIXME[ISIS-1976] remove guard
         final ObjectAdapter serviceAdapter = objectAdapterContext.lookupServiceAdapterFor(rootOid);
         if (serviceAdapter != null) {
-            _Exceptions.unexpectedCodeReach();
+            //throw _Exceptions.unexpectedCodeReach();
             return serviceAdapter;
         }
         
@@ -214,16 +215,15 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
         final ObjectSpecification spec =
                 specificationLoader.lookupBySpecId(rootOid.getObjectSpecId());
         final Object pojo;
-
         if(rootOid.isViewModel()) {
-
             final String memento = rootOid.getIdentifier();
             pojo = recreateViewModel(spec, memento);
-
         } else {
             pojo = objectAdapterContext.instantiateAndInjectServices(spec);
-
         }
+        
+        Ensure.ensure("unlikely", !(pojo instanceof Oid));
+        
         return pojo;
     }
     
