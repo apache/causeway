@@ -51,7 +51,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
  *  
  * @since 2.0.0-M2
  */
-public class ObjectAdapterContext {
+final public class ObjectAdapterContext {
     
     private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext.class);
     
@@ -441,17 +441,19 @@ public class ObjectAdapterContext {
         // associate the collection adapters with new Oids, and re-map
         LOG.debug("replacing Oids for collection adapter(s) and re-adding into maps");
         
-        for (final ObjectAdapter collectionAdapter : rootAndCollectionAdapters) {
+        rootAndCollectionAdapters.stream()
+        .forEach(collectionAdapter->{
             final ParentedCollectionOid previousCollectionOid = (ParentedCollectionOid) collectionAdapter.getOid();
             final ParentedCollectionOid persistedCollectionOid = previousCollectionOid.asPersistent(persistedRootOid);
             Assert.assertTrue("expected equal", Objects.equals(collectionAdapter.getOid(), persistedCollectionOid));
             addAdapter(collectionAdapter);
-        }
+        });
 
         // some object store implementations may replace collection instances (eg ORM may replace with a cglib-enhanced
         // proxy equivalent.  So, ensure that the collection adapters still wrap the correct pojos.
         LOG.debug("synchronizing collection pojos, remapping in pojo map if required");
-        for (final OneToManyAssociation otma : rootAndCollectionAdapters.getCollections()) {
+        rootAndCollectionAdapters.streamCollections()
+        .forEach(otma->{
             final ObjectAdapter collectionAdapter = rootAndCollectionAdapters.getCollectionAdapter(otma);
 
             final Object collectionPojoWrappedByAdapter = collectionAdapter.getObject();
@@ -464,7 +466,7 @@ public class ObjectAdapterContext {
                         Objects.equals(newCollectionAdapter.getObject(), collectionPojoActuallyOnPojo));
                 cache.addAdapter(collectionAdapter);
             }
-        }
+        });
         
     }
 
@@ -475,9 +477,8 @@ public class ObjectAdapterContext {
         cache.removeAdapter(rootAdapter);
     
         LOG.debug("removing collection adapter(s) from oid map");
-        for (final ObjectAdapter collectionAdapter : rootAndCollectionAdapters) {
-            cache.removeAdapter(collectionAdapter);
-        }
+        rootAndCollectionAdapters.stream()
+        .forEach(cache::removeAdapter);
     }
 
     private static Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {

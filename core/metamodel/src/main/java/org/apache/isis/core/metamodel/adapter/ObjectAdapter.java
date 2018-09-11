@@ -176,13 +176,16 @@ public interface ObjectAdapter extends Instance {
      * Whether this instance belongs to another object (meaning its
      * {@link #getOid()} will be a {@link ParentedCollectionOid}).
      */
-    boolean isParentedCollection();
-
+    default boolean isParentedCollection() {
+        return getOid() instanceof ParentedCollectionOid;
+    }
 
     /**
      * Whether this is a value (standalone, has no oid).
      */
-    boolean isValue();
+    default public boolean isValue() {
+        return getOid().isValue();
+    }
 
 
     public final class Util {

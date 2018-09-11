@@ -109,17 +109,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return oid;
     }
 
-    // -- isParentedCollection, isValue
-
-    @Override
-    public boolean isParentedCollection() {
-        return oid instanceof ParentedCollectionOid;
-    }
-
-    @Override
-    public boolean isValue() {
-        return oid.isValue();
-    }
 
     // -- isTransient, representsPersistent, isDestroyed
     

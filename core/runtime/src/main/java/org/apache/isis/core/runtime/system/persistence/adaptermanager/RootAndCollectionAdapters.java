@@ -19,16 +19,10 @@
 
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Stream;
 
-import com.google.common.collect.Maps;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
@@ -45,16 +39,13 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
  * Used for &quot;impact analysis&quot; when persisting transient root objects; all aggregated adapters
  * must also be persisted.
  */
-class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
+final class RootAndCollectionAdapters {
     
-    @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(RootAndCollectionAdapters.class);
-
     private final ObjectAdapterContext context;
     private final ObjectAdapter parentAdapter;
     private final RootOid rootAdapterOid;
 
-    private final Map<OneToManyAssociation, ObjectAdapter> collectionAdapters = Maps.newLinkedHashMap();
+    private final Map<OneToManyAssociation, ObjectAdapter> collectionAdapters = _Maps.newLinkedHashMap();
 
     public RootAndCollectionAdapters(
             final ObjectAdapter parentAdapter,
@@ -76,23 +67,22 @@ class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
      * collection adapter}s (does not include the {@link #getRootAdapter() root
      * adapter}.
      */
-    @Override
-    public Iterator<ObjectAdapter> iterator() {
-        return getCollectionAdapters().values().iterator();
+    public Stream<ObjectAdapter> stream() {
+        return collectionAdapters.values().stream();
     }
 
     /**
      * Which collections are present?
      * @return
      */
-    public Set<OneToManyAssociation> getCollections() {
-        return getCollectionAdapters().keySet();
+    public Stream<OneToManyAssociation> streamCollections() {
+        return collectionAdapters.keySet().stream();
     }
 
     /**
      * Corresponding adapter for each collection (values).
      *
-     * @see #getCollections()
+     * @see #streamCollections()
      */
     public ObjectAdapter getCollectionAdapter(final OneToManyAssociation otma) {
         return collectionAdapters.get(otma);
@@ -118,10 +108,6 @@ class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
         Assert.assertNotNull(otma);
         Assert.assertNotNull(collectionAdapter);
         collectionAdapters.put(otma, collectionAdapter);
-    }
-
-    private Map<OneToManyAssociation, ObjectAdapter> getCollectionAdapters() {
-        return Collections.unmodifiableMap(collectionAdapters);
     }
 
 
