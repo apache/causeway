@@ -19,17 +19,17 @@
 
 package org.apache.isis.core.metamodel.facets.object.value;
 
-import org.apache.isis.applib.adapters.Parser2;
+import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
-public class MaxLengthFacetUsingParser2 extends MaxLengthFacetAbstract{
+public class MaxLengthFacetUsingParser extends MaxLengthFacetAbstract{
 
-    private final Parser2<?> parser;
+    private final Parser<?> parser;
     private final ServicesInjector dependencyInjector;
 
-    public MaxLengthFacetUsingParser2(final Parser2<?> parser, final FacetHolder holder, final ServicesInjector dependencyInjector) {
+    public MaxLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final ServicesInjector dependencyInjector) {
         super(parser.maxLength(), holder);
         this.parser = parser;
         this.dependencyInjector = dependencyInjector;
