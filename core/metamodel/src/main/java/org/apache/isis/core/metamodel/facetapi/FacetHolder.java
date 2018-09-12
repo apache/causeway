@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.List;
-
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Anything in the metamodel (which also includes peers in the reflector) that
@@ -68,7 +67,7 @@ public interface FacetHolder {
      * @param predicate
      * @return
      */
-    List<Facet> getFacets(Predicate<Facet> predicate);
+    Stream<Facet> streamFacets();
 
     /**
      * Adds the facet, extracting its {@link Facet#facetType() type} as the key.

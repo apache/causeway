@@ -91,10 +91,10 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
         final boolean denyRefresh = fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH; 
                         
         if(rootOid.isViewModel()) {
-            //FIXME[ISIS-1976] if code is reachable requires separate view model handler
             //throw _Exceptions.unexpectedCodeReach();
+            //FIXME[ISIS-1976] if code is reachable requires separate view model handler
             
-            return getPersistenceSession().adapterForViewModel(rootOid, __->rootOid); // reuse rootOid
+            return getPersistenceSession().adapterForViewModel(rootOid, __->rootOid).getObject(); // reuse rootOid
             
         } else if(denyRefresh) {
             return ps.fetchPersistentPojoInTransaction(rootOid);

@@ -185,16 +185,13 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
 
                         final Predicate<ObjectAssociation> predicate = ObjectAssociation.Predicates.PROPERTIES
                                 .and((final ObjectAssociation association)->{
-                                    final List<Facet> facets = association.getFacets((final Facet facet)->{
-                                        return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
-                                    });
-                                    for (Facet facet : facets) {
-                                        final WhereValueFacet wawF = (WhereValueFacet) facet;
-                                        if (wawF.where().includes(whereContext)) {
-                                            return false;
-                                        }
-                                    }
-                                    return true;
+                                    final Stream<Facet> facets = association.streamFacets()
+                                            .filter((final Facet facet)->
+                                                facet instanceof WhereValueFacet && facet instanceof HiddenFacet);
+                                    return !facets
+                                    .map(facet->(WhereValueFacet) facet)
+                                    .anyMatch(wawF->wawF.where().includes(whereContext));
+                                    
                                 })
                                 .and(associationDoesNotReferenceParent(parentSpecIfAny));
 

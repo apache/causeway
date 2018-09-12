@@ -19,15 +19,14 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Lists;
 
 
 public final class FacetUtil {
@@ -40,8 +39,10 @@ public final class FacetUtil {
             return;
         }
         final FacetHolder facetHolder = facet.getFacetHolder();
-        final List<Facet> facets = facetHolder.getFacets(
-                each->facet.facetType() == each.facetType() && facet.getClass() == each.getClass() );
+        final List<Facet> facets = facetHolder.streamFacets()
+                .filter( each->facet.facetType() == each.facetType() && facet.getClass() == each.getClass() )
+                .collect(Collectors.toList());
+        
         if(facets.size() == 1) {
             final Facet existingFacet = facets.get(0);
             final Facet underlyingFacet = existingFacet.getUnderlyingFacet();
@@ -115,16 +116,10 @@ public final class FacetUtil {
      * Bit nasty, for use only by {@link FacetHolder}s that index their
      * {@link Facet}s in a Map.
      */
-    public static List<Facet> getFacets(final Map<Class<? extends Facet>, Facet> facetsByClass, final Predicate<Facet> predicate) {
-        final List<Facet> filteredFacets = _Lists.newArrayList();
-        final List<Facet> allFacets = new ArrayList<>(facetsByClass.values());
-        for (final Facet facet : allFacets) {
-            // facets that implement MultiTypedFacet will be held more than once.  The 'contains' check ensures they are only returned once, however.
-            if (predicate.test(facet) && !filteredFacets.contains(facet)) {
-                filteredFacets.add(facet);
-            }
-        }
-        return filteredFacets;
+    public static Stream<Facet> streamFacets(final Map<Class<? extends Facet>, Facet> facetsByClass) {
+        return facetsByClass.values()
+        .stream()
+        .distinct();
     }
 
     public static void removeFacet(final Map<Class<? extends Facet>, Facet> facetsByClass, final Facet facet) {
@@ -169,10 +164,8 @@ public final class FacetUtil {
             final Facet facet = source.getFacet(facetType);
 
         }
-        List<Facet> facets = source.getFacets(__->true);
-        for (Facet facet : facets) {
-            target.addFacet(facet);
-        }
+        source.streamFacets()
+        .forEach(target::addFacet);
     }
 
 }

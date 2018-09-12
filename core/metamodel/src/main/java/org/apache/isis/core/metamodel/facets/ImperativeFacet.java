@@ -19,15 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import static org.apache.isis.commons.internal.functions._Predicates.alwaysTrue;
-
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -134,19 +132,20 @@ public interface ImperativeFacet extends Facet {
         }
 
         public static Intent getIntent(final ObjectMember member, final Method method) {
-            final List<Facet> allFacets = member.getFacets(alwaysTrue());
             final List<ImperativeFacet> imperativeFacets = _Lists.newArrayList();
-            for (final Facet facet : allFacets) {
+            final Stream<Facet> allFacets = member.streamFacets();
+            allFacets.forEach(facet->{
                 final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 if (imperativeFacet == null) {
-                    continue;
+                    return;
                 }
                 final List<Method> methods = imperativeFacet.getMethods();
                 if (!methods.contains(method)) {
-                    continue;
+                    return;
                 }
                 imperativeFacets.add(imperativeFacet);
-            }
+            });
+            
             switch(imperativeFacets.size()) {
             case 0:
                 break;

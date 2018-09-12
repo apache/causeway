@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.List;
 
 import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
@@ -241,9 +243,9 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
-    public List<Facet> getFacets(final Predicate<Facet> predicate) {
+    public Stream<Facet> streamFacets() {
         final FacetHolder facetHolder = getFacetHolder();
-        return facetHolder != null ? facetHolder.getFacets(predicate) : Lists.<Facet> newArrayList();
+        return facetHolder != null ? facetHolder.streamFacets() : Stream.of();
     }
 
     @Override

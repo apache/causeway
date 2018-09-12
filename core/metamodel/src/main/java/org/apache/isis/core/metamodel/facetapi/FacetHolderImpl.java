@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * For base subclasses or, more likely, to help write tests.
@@ -99,8 +100,8 @@ public class FacetHolderImpl implements FacetHolder {
     }
 
     @Override
-    public List<Facet> getFacets(final Predicate<Facet> predicate) {
-        return FacetUtil.getFacets(facetsByClass, predicate);
+    public Stream<Facet> streamFacets() {
+        return FacetUtil.streamFacets(facetsByClass);
     }
 
 }

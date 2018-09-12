@@ -230,8 +230,8 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         context.checking(new Expectations() {
             {
-                allowing(mockPasswordMember).getFacets(with(any(Predicate.class)));
-                will(returnValue(facets));
+                allowing(mockPasswordMember).streamFacets();
+                will(returnValue(facets.stream()));
                 
                 allowing(mockPasswordMember).isVisible(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
                 will(returnValue(visibilityConsent));
@@ -275,8 +275,8 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         facets = Arrays.asList((Facet)new PropertySetterFacetViaSetterMethod(setPasswordMethod, mockPasswordMember));
         context.checking(new Expectations() {
             {
-                allowing(mockPasswordMember).getFacets(with(any(Predicate.class)));
-                will(returnValue(facets));
+                allowing(mockPasswordMember).streamFacets();
+                will(returnValue(facets.stream()));
 
                 oneOf(mockPasswordMember).set(mockEmployeeAdapter, mockPasswordAdapter, InteractionInitiatedBy.USER);
             }
@@ -293,8 +293,8 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         ));
         context.checking(new Expectations() {
             {
-                allowing(mockPasswordMember).getFacets(with(any(Predicate.class)));
-                will(returnValue(facets));
+                allowing(mockPasswordMember).streamFacets();
+                will(returnValue(facets.stream()));
                 
                 oneOf(mockPasswordMember).get(mockEmployeeAdapter, InteractionInitiatedBy.USER);
                 will(returnValue(mockPasswordAdapter));

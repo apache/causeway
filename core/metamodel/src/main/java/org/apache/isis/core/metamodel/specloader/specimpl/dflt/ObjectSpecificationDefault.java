@@ -23,6 +23,8 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -32,12 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.commons.internal.functions._Predicates;
-
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -377,26 +373,26 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private void cataloguePropertiesAndCollections(final Map<Method, ObjectMember> membersByMethod) {
         final Stream<ObjectAssociation> fields = streamAssociations(Contributed.EXCLUDED);
         fields.forEach(field->{
-            final List<Facet> facets = field.getFacets(ImperativeFacet.PREDICATE);
-            for (final Facet facet : facets) {
+            final Stream<Facet> facets = field.streamFacets().filter(ImperativeFacet.PREDICATE);
+            facets.forEach(facet->{
                 final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
                     membersByMethod.put(imperativeFacetMethod, field);
                 }
-            }
+            });
         });
     }
 
     private void catalogueActions(final Map<Method, ObjectMember> membersByMethod) {
         final Stream<ObjectAction> userActions = streamObjectActions(Contributed.INCLUDED);
         userActions.forEach(userAction->{
-            final List<Facet> facets = userAction.getFacets(ImperativeFacet.PREDICATE);
-            for (final Facet facet : facets) {
+            final Stream<Facet> facets = userAction.streamFacets().filter(ImperativeFacet.PREDICATE);
+            facets.forEach(facet->{
                 final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 for (final Method imperativeFacetMethod : imperativeFacet.getMethods()) {
                     membersByMethod.put(imperativeFacetMethod, userAction);
                 }
-            }
+            });
         });
     }
 

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
@@ -170,18 +171,13 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             return new Predicate<ObjectAssociation>() {
                 @Override
                 public boolean test(final ObjectAssociation association) {
-                    final List<Facet> facets = association.getFacets(new Predicate<Facet>() {
-                        @Override public boolean test(final Facet facet) {
-                            return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
-                        }
-                    });
-                    for (Facet facet : facets) {
-                        final WhereValueFacet wawF = (WhereValueFacet) facet;
-                        if (wawF.where().includes(where)) {
-                            return false;
-                        }
-                    }
-                    return true;
+                    final Stream<Facet> facets = association.streamFacets()
+                            .filter((final Facet facet)->
+                                facet instanceof WhereValueFacet && facet instanceof HiddenFacet);
+                    
+                    return !facets
+                    .map(facet->(WhereValueFacet) facet)
+                    .anyMatch(wawF->wawF.where().includes(where));
                 }
             };
         }
