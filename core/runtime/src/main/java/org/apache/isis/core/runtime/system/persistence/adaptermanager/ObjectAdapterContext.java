@@ -35,9 +35,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -284,70 +282,17 @@ final public class ObjectAdapterContext {
      */
     @Deprecated // expected to be moved
     public void remapAsPersistent(final ObjectAdapter rootAdapter, RootOid newRootOid, PersistenceSession session) {
-
         Objects.requireNonNull(newRootOid);
         Assert.assertFalse("expected to not be a parented collection", rootAdapter.isParentedCollection());
-
-        final RootOid transientRootOid = (RootOid) rootAdapter.getOid();
-
-//        final RootAndCollectionAdapters rootAndCollectionAdapters = 
-//                new RootAndCollectionAdapters(rootAdapter, this);
-
-        final RootOid persistedRootOid;
-        {
-            if(newRootOid.isTransient()) {
-                throw new IsisAssertException("hintRootOid must be persistent");
-            }
-            final ObjectSpecId hintRootOidObjectSpecId = newRootOid.getObjectSpecId();
-            final ObjectSpecId adapterObjectSpecId = rootAdapter.getSpecification().getSpecId();
-            if(!hintRootOidObjectSpecId.equals(adapterObjectSpecId)) {
-                throw new IsisAssertException("hintRootOid's objectType must be same as that of adapter " +
-                        "(was: '" + hintRootOidObjectSpecId + "'; adapter's is " + adapterObjectSpecId + "'");
-            }
-            // ok
-            persistedRootOid = newRootOid;
-        } 
-
-//        final ObjectAdapter adapterReplacement = rootAdapter.withOid(persistedRootOid); 
-//        replaceRootAdapter(adapterReplacement, rootAndCollectionAdapters);
-
-    }
-
-    private void replaceRootAdapter(
-            final ObjectAdapter adapterReplacement, 
-            final RootAndCollectionAdapters rootAndCollectionAdapters) {
-
-//        final RootOid persistedRootOid = (RootOid) adapterReplacement.getOid();
-
-        //FIXME[ISIS-1976] no longer used
-//        rootAndCollectionAdapters.stream()
-//        .forEach(collectionAdapter->{
-//            final ParentedCollectionOid previousCollectionOid = (ParentedCollectionOid) collectionAdapter.getOid();
-//            final ParentedCollectionOid persistedCollectionOid = previousCollectionOid.asPersistent(persistedRootOid);
-//            Assert.assertTrue("expected equal", Objects.equals(collectionAdapter.getOid(), persistedCollectionOid));
-//        });
-
-        // some object store implementations may replace collection instances (eg ORM may replace with a cglib-enhanced
-        // proxy equivalent.  So, ensure that the collection adapters still wrap the correct pojos.
-//        rootAndCollectionAdapters.streamCollections()
-//        .forEach(otma->{
-//            final ObjectAdapter collectionAdapter = rootAndCollectionAdapters.getCollectionAdapter(otma);
-//
-//            final Object collectionPojoWrappedByAdapter = collectionAdapter.getObject();
-//            final Object collectionPojoActuallyOnPojo = getCollectionPojo(otma, adapterReplacement);
-//
-//            if (collectionPojoActuallyOnPojo != collectionPojoWrappedByAdapter) {
-//                final ObjectAdapter newCollectionAdapter = collectionAdapter.withPojo(collectionPojoActuallyOnPojo);
-//                Assert.assertTrue("expected same", 
-//                        Objects.equals(newCollectionAdapter.getObject(), collectionPojoActuallyOnPojo));
-//            }
-//        });
-
-    }
-
-    private static Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
-        final PropertyOrCollectionAccessorFacet accessor = association.getFacet(PropertyOrCollectionAccessorFacet.class);
-        return accessor.getProperty(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
+        if(newRootOid.isTransient()) {
+            throw new IsisAssertException("hintRootOid must be persistent");
+        }
+        final ObjectSpecId hintRootOidObjectSpecId = newRootOid.getObjectSpecId();
+        final ObjectSpecId adapterObjectSpecId = rootAdapter.getSpecification().getSpecId();
+        if(!hintRootOidObjectSpecId.equals(adapterObjectSpecId)) {
+            throw new IsisAssertException("hintRootOid's objectType must be same as that of adapter " +
+                    "(was: '" + hintRootOidObjectSpecId + "'; adapter's is " + adapterObjectSpecId + "'");
+        }
     }
 
     @Deprecated
