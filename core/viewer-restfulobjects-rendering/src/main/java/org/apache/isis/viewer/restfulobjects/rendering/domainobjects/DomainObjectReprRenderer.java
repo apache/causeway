@@ -17,6 +17,8 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -272,7 +274,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private DomainObjectReprRenderer withMembers(final ObjectAdapter objectAdapter) {
         final JsonRepresentation appendTo =
                 mode.isUpdatePropertiesLinkArgs() ? representation : JsonRepresentation.newMap();
-        final List<ObjectAssociation> associations = objectAdapter.getSpecification().getAssociations(Contributed.INCLUDED);
+        final List<ObjectAssociation> associations = objectAdapter.getSpecification()
+                .streamAssociations(Contributed.INCLUDED)
+                .collect(Collectors.toList());
 
         addProperties(objectAdapter, appendTo, associations);
 
@@ -282,7 +286,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             }
 
             if (mode.isRegular()) {
-                final List<ObjectAction> actions = objectAdapter.getSpecification().getObjectActions(Contributed.INCLUDED);
+                final Stream<ObjectAction> actions = objectAdapter.getSpecification()
+                        .streamObjectActions(Contributed.INCLUDED);
+                
                 addActions(objectAdapter, actions, appendTo);
             }
         }
@@ -358,20 +364,26 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         }
     }
 
-    private void addActions(final ObjectAdapter objectAdapter, final List<ObjectAction> actions, final JsonRepresentation members) {
-        for (final ObjectAction action : actions) {
+    private void addActions(
+            final ObjectAdapter objectAdapter, 
+            final Stream<ObjectAction> actions, 
+            final JsonRepresentation members) {
+        
+        actions
+        .filter(action->{
             final Consent visibility = action.isVisible(objectAdapter, getInteractionInitiatedBy(), rendererContext.getWhere());
-            if (!visibility.isAllowed()) {
-                continue;
-            }
+            return visibility.isAllowed();
+        })
+        .forEach(action->{
             final LinkFollowSpecs linkFollowSpecs = getLinkFollowSpecs().follow("members["+action.getId()+"]");
-
-            final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(getRendererContext(), linkFollowSpecs, action.getId(), JsonRepresentation.newMap());
+            final ObjectActionReprRenderer renderer = 
+                    new ObjectActionReprRenderer(getRendererContext(), linkFollowSpecs, action.getId(), 
+                            JsonRepresentation.newMap());
 
             renderer.with(new ObjectAndAction(objectAdapter, action)).usingLinkTo(linkToBuilder);
-
             members.mapPut(action.getId(), renderer.render());
-        }
+        });
+
     }
 
     private void addPersistLinkIfTransientAndPersistable() {

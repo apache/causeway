@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import com.google.common.collect.Lists;
 
 import org.jmock.Expectations;

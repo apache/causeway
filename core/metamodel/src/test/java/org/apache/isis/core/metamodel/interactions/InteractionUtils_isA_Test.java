@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -82,22 +82,22 @@ public class InteractionUtils_isA_Test extends TestCase {
 
     public void testIsAWhenIs() {
         final Predicate<Facet> predicate = InteractionUtils.isA(FooFacet.class);
-        TestCase.assertTrue(predicate.apply(fooFacet));
+        TestCase.assertTrue(predicate.test(fooFacet));
     }
 
     public void testIsAWhenIsNot() {
         final Predicate<Facet> predicate = InteractionUtils.isA(FooFacet.class);
-        TestCase.assertFalse(predicate.apply(barFacet));
+        TestCase.assertFalse(predicate.test(barFacet));
     }
 
     public void testIsAWhenIsSubclass() {
         final Predicate<Facet> predicate = InteractionUtils.isA(FooFacet.class);
-        TestCase.assertTrue(predicate.apply(fooSubFacet));
+        TestCase.assertTrue(predicate.test(fooSubFacet));
     }
 
     public void testIsAWhenIsNotBecauseASuperclass() {
         final Predicate<Facet> predicate = InteractionUtils.isA(FooFacet.class);
-        TestCase.assertFalse(predicate.apply(fooSuperFacet));
+        TestCase.assertFalse(predicate.test(fooSuperFacet));
     }
 
 }

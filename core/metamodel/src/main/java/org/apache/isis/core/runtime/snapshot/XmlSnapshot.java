@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -477,7 +478,8 @@ public class XmlSnapshot implements Snapshot {
         final Place fieldPlace = new Place(object, xmlFieldElement);
 
         if (field instanceof OneToOneAssociation) {
-            if (field.getSpecification().getAssociations(Contributed.INCLUDED).size() == 0) {
+            
+            if (field.getSpecification().streamAssociations(Contributed.INCLUDED).limit(1).count() == 0L) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("includeField(Pl, Vec, Str): field is value; done");
                 }
@@ -632,7 +634,8 @@ public class XmlSnapshot implements Snapshot {
 
         isisMetaModel.setAttributesForClass(element, oidAsString(adapter).toString());
 
-        final List<ObjectAssociation> fields = nos.getAssociations(Contributed.INCLUDED);
+        final List<ObjectAssociation> fields = nos.streamAssociations(Contributed.INCLUDED)
+                .collect(Collectors.toList());
         if (LOG.isDebugEnabled()) {
             LOG.debug("objectToElement(NO): processing fields");
         }

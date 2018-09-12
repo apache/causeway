@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.adapter.version;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 
 public class ConcurrencyException extends IsisException {
 

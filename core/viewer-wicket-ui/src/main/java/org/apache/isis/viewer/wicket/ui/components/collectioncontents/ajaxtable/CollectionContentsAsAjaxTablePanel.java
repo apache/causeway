@@ -21,10 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -35,6 +33,9 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -83,7 +84,7 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
 
     private void buildGui() {
 
-        final List<IColumn<ObjectAdapter,String>> columns = Lists.newArrayList();
+        final List<IColumn<ObjectAdapter,String>> columns = _Lists.newArrayList();
 
         // bulkactions
         final BulkActionsProvider bulkActionsProvider = getBulkActionsProvider();
@@ -182,34 +183,30 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
                         getPersistenceSession(), getSpecificationLoader()).getSpecification()
                         : null;
 
-                        @SuppressWarnings("unchecked")
-                        final Predicate<ObjectAssociation> predicate = com.google.common.base.Predicates
-                        .and(ObjectAssociation.Predicates.PROPERTIES, new Predicate<ObjectAssociation>() {
-                            @Override
-                            public boolean apply(final ObjectAssociation association) {
-                                final List<Facet> facets = association.getFacets(new Predicate<Facet>() {
-                                    @Override public boolean apply(final Facet facet) {
+                        final Predicate<ObjectAssociation> predicate = ObjectAssociation.Predicates.PROPERTIES
+                                .and((final ObjectAssociation association)->{
+                                    final List<Facet> facets = association.getFacets((final Facet facet)->{
                                         return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
+                                    });
+                                    for (Facet facet : facets) {
+                                        final WhereValueFacet wawF = (WhereValueFacet) facet;
+                                        if (wawF.where().includes(whereContext)) {
+                                            return false;
+                                        }
                                     }
-                                });
-                                for (Facet facet : facets) {
-                                    final WhereValueFacet wawF = (WhereValueFacet) facet;
-                                    if (wawF.where().includes(whereContext)) {
-                                        return false;
-                                    }
-                                }
-                                return true;
-                            }
-                        },
-                                associationDoesNotReferenceParent(parentSpecIfAny));
+                                    return true;
+                                })
+                                .and(associationDoesNotReferenceParent(parentSpecIfAny));
 
-                        final List<? extends ObjectAssociation> propertyList = typeOfSpec.getAssociations(Contributed.INCLUDED,
-                                predicate);
-                        final Map<String, ObjectAssociation> propertyById = Maps.newLinkedHashMap();
-                        for (final ObjectAssociation property : propertyList) {
-                            propertyById.put(property.getId(), property);
-                        }
-                        List<String> propertyIds = Lists.newArrayList(propertyById.keySet());
+                        final Stream<? extends ObjectAssociation> propertyList = 
+                                typeOfSpec.streamAssociations(Contributed.INCLUDED)
+                                .filter(predicate);
+
+                        final Map<String, ObjectAssociation> propertyById = _Maps.newLinkedHashMap();
+                        propertyList.forEach(property->
+                            propertyById.put(property.getId(), property));
+
+                        List<String> propertyIds = _Lists.newArrayList(propertyById.keySet());
 
                         // optional SPI to reorder
                         final List<TableColumnOrderService> tableColumnOrderServices =
@@ -253,11 +250,11 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
 
     static Predicate<ObjectAssociation> associationDoesNotReferenceParent(final ObjectSpecification parentSpec) {
         if(parentSpec == null) {
-            return com.google.common.base.Predicates.alwaysTrue();
+            return __->true;
         }
         return new Predicate<ObjectAssociation>() {
             @Override
-            public boolean apply(ObjectAssociation association) {
+            public boolean test(ObjectAssociation association) {
                 final HiddenFacet facet = association.getFacet(HiddenFacet.class);
                 if(facet == null) {
                     return true;

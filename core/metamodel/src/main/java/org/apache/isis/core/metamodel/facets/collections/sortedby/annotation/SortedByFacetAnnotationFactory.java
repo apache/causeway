@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.sortedby.annotation;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -63,8 +64,9 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
 
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                List<OneToManyAssociation> objectCollections = objectSpec.getCollections(Contributed.EXCLUDED);
-                for (OneToManyAssociation objectCollection : objectCollections) {
+                final Stream<OneToManyAssociation> objectCollections = objectSpec.streamCollections(Contributed.EXCLUDED);
+                
+                objectCollections.forEach(objectCollection->{
                     final SortedByFacet facet = objectCollection.getFacet(SortedByFacet.class);
                     if(facet != null) {
                         final Class<? extends Comparator<?>> cls = facet.value();
@@ -75,7 +77,8 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
                                     facet.value().getName());
                         }
                     }
-                }
+                });
+                
                 return true;
             }
         };

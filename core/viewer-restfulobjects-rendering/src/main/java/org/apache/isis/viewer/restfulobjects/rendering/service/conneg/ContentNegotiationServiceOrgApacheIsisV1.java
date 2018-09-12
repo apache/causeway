@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -306,10 +307,11 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
         appendPropertiesTo(rendererContext, objectAdapter, rootRepresentation);
 
-        final List<OneToManyAssociation> collections = objectAdapter.getSpecification().getCollections(Contributed.INCLUDED);
         final Where where = rendererContext.getWhere();
-        for (final OneToManyAssociation collection : collections) {
-
+        final Stream<OneToManyAssociation> collections = objectAdapter.getSpecification()
+                .streamCollections(Contributed.INCLUDED);
+        
+        collections.forEach(collection->{
             final JsonRepresentation collectionRepresentation = JsonRepresentation.newArray();
 
             rootRepresentation.mapPut(collection.getId(), collectionRepresentation);
@@ -317,11 +319,12 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             final InteractionInitiatedBy interactionInitiatedBy = determineInteractionInitiatedByFrom(rendererContext);
             final Consent visibility = collection.isVisible(objectAdapter, interactionInitiatedBy, where);
             if (!visibility.isAllowed()) {
-                continue;
+                return;
             }
 
             appendCollectionTo(rendererContext, objectAdapter, collection, collectionRepresentation);
-        }
+        });
+        
     }
 
     private void appendPropertiesTo(
@@ -330,12 +333,13 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             final JsonRepresentation rootRepresentation) {
         final InteractionInitiatedBy interactionInitiatedBy = determineInteractionInitiatedByFrom(rendererContext);
         final Where where = rendererContext.getWhere();
-        List<OneToOneAssociation> properties = objectAdapter.getSpecification().getProperties(Contributed.INCLUDED);
-        for (final OneToOneAssociation property : properties) {
-
+        final Stream<OneToOneAssociation> properties = objectAdapter.getSpecification()
+                .streamProperties(Contributed.INCLUDED);
+        
+        properties.forEach(property->{
             final Consent visibility = property.isVisible(objectAdapter, interactionInitiatedBy, where);
             if (!visibility.isAllowed()) {
-                continue;
+                return;
             }
 
             final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
@@ -355,7 +359,8 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
             final JsonRepresentation value = propertyValueRepresentation.getRepresentation("value");
             rootRepresentation.mapPut(property.getId(), value);
-        }
+        });
+
     }
 
     private void appendCollectionTo(

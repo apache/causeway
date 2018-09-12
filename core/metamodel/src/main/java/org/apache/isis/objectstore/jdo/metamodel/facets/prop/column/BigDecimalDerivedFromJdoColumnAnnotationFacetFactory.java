@@ -20,6 +20,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
@@ -83,7 +84,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
             Integer existingLength = null;
             Integer existingScale = null;
             if(existingFacet != null && !existingFacet.isNoop()) {
-                existingLength = existingFacet.getLength();
+                existingLength = existingFacet.getPrecision();
                 existingScale = existingFacet.getScale();
             }
 
@@ -125,16 +126,16 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
                     return;
                 }
 
-                final List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
-                for (ObjectAssociation association : associations) {
-
-                    // skip checks if annotated with JDO @NotPersistent
-                    if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
-                        return;
-                    }
-
+                final Stream<ObjectAssociation> associations = objectSpec.streamAssociations(Contributed.EXCLUDED)
+                        .filter(ObjectAssociation.Predicates.PROPERTIES);
+                
+                associations
+                // skip checks if annotated with JDO @NotPersistent //FIXME[ISIS-1976] changed behavior, but think this makes more sense
+                .filter(association->!association.containsDoOpFacet(JdoNotPersistentFacet.class))
+                .forEach(association->{
                     validateBigDecimalValueFacet(association, validationFailures);
-                }
+                });
+                
             }
 
             private void validateBigDecimalValueFacet(ObjectAssociation association, ValidationFailures validationFailures) {
@@ -152,7 +153,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
 
                     if(underlying instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) {
 
-                        if(notNullButNotEqual(facet.getLength(), underlying.getLength())) {
+                        if(notNullButNotEqual(facet.getPrecision(), underlying.getPrecision())) {
                             validationFailures.add(
                                     "%s: @javax.jdo.annotations.Column(length=...) different from @javax.validation.constraint.Digits(...); should equal the sum of its integer and fraction attributes",
                                     association.getIdentifier().toClassAndNameIdentityString());

@@ -38,77 +38,82 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
  * <p>
  * Used for &quot;impact analysis&quot; when persisting transient root objects; all aggregated adapters
  * must also be persisted.
+ * @deprecated seems no longer required
  */
 final class RootAndCollectionAdapters {
     
-    private final ObjectAdapterContext context;
+    //private final ObjectAdapterContext context;
     private final ObjectAdapter parentAdapter;
-    private final RootOid rootAdapterOid;
+    //private final RootOid rootAdapterOid;
 
-    private final Map<OneToManyAssociation, ObjectAdapter> collectionAdapters = _Maps.newLinkedHashMap();
+    //private final Map<OneToManyAssociation, ObjectAdapter> collectionAdapters = _Maps.newLinkedHashMap();
 
     public RootAndCollectionAdapters(
             final ObjectAdapter parentAdapter,
             final ObjectAdapterContext context) {
         Assert.assertNotNull(parentAdapter);
-        this.rootAdapterOid = (RootOid) parentAdapter.getOid();
+        //this.rootAdapterOid = (RootOid) parentAdapter.getOid();
         this.parentAdapter = parentAdapter;
-        this.context = context;
-        addCollectionAdapters();
+        //this.context = context;
+//        addCollectionAdapters();
     }
 
     public ObjectAdapter getRootAdapter() {
         return parentAdapter;
     }
 
-    /**
-     * Iterate over the
-     * {@link #addCollectionAdapter(OneToManyAssociation, ObjectAdapter)
-     * collection adapter}s (does not include the {@link #getRootAdapter() root
-     * adapter}.
-     */
-    public Stream<ObjectAdapter> stream() {
-        return collectionAdapters.values().stream();
-    }
-
-    /**
-     * Which collections are present?
-     * @return
-     */
-    public Stream<OneToManyAssociation> streamCollections() {
-        return collectionAdapters.keySet().stream();
-    }
-
-    /**
-     * Corresponding adapter for each collection (values).
-     *
-     * @see #streamCollections()
-     */
-    public ObjectAdapter getCollectionAdapter(final OneToManyAssociation otma) {
-        return collectionAdapters.get(otma);
-    }
+//    /**
+//     * Iterate over the
+//     * {@link #addCollectionAdapter(OneToManyAssociation, ObjectAdapter)
+//     * collection adapter}s (does not include the {@link #getRootAdapter() root
+//     * adapter}.
+//     */
+//    public Stream<ObjectAdapter> stream() {
+//        return collectionAdapters.values().stream();
+//    }
+//
+//    /**
+//     * Which collections are present?
+//     * @return
+//     */
+//    public Stream<OneToManyAssociation> streamCollections() {
+//        return collectionAdapters.keySet().stream();
+//    }
+//
+//    /**
+//     * Corresponding adapter for each collection (values).
+//     *
+//     * @see #streamCollections()
+//     */
+//    public ObjectAdapter getCollectionAdapter(final OneToManyAssociation otma) {
+//        return collectionAdapters.get(otma);
+//    }
 
 
     ////////////////////////////////////////////////////////////////////////
     // Helpers
     ////////////////////////////////////////////////////////////////////////
 
-    private void addCollectionAdapters() {
-        for (final OneToManyAssociation otma : parentAdapter.getSpecification().getCollections(Contributed.EXCLUDED)) {
-            final ParentedCollectionOid collectionOid = new ParentedCollectionOid((RootOid) rootAdapterOid, otma);
-            final ObjectAdapter collectionAdapter = null;//FIXME context.lookupParentedCollectionAdapter(collectionOid);
-            if (collectionAdapter != null) {
-                // collection adapters are lazily created and so there may not be one.
-                addCollectionAdapter(otma, collectionAdapter);
-            }
-        }
-    }
+//    private void addCollectionAdapters() {
+//        
+//        final Stream<OneToManyAssociation> oneToManys = parentAdapter.getSpecification()
+//                .streamCollections(Contributed.EXCLUDED);
+//        
+//        oneToManys.forEach(otma->{
+//            final ParentedCollectionOid collectionOid = new ParentedCollectionOid((RootOid) rootAdapterOid, otma);
+//            final ObjectAdapter collectionAdapter = null;//FIXME context.lookupParentedCollectionAdapter(collectionOid);
+//            if (collectionAdapter != null) {
+//                // collection adapters are lazily created and so there may not be one.
+//                addCollectionAdapter(otma, collectionAdapter);
+//            } 
+//        });
+//    }
 
-    private void addCollectionAdapter(final OneToManyAssociation otma, final ObjectAdapter collectionAdapter) {
-        Assert.assertNotNull(otma);
-        Assert.assertNotNull(collectionAdapter);
-        collectionAdapters.put(otma, collectionAdapter);
-    }
+//    private void addCollectionAdapter(final OneToManyAssociation otma, final ObjectAdapter collectionAdapter) {
+//        Assert.assertNotNull(otma);
+//        Assert.assertNotNull(collectionAdapter);
+//        collectionAdapters.put(otma, collectionAdapter);
+//    }
 
 
 }

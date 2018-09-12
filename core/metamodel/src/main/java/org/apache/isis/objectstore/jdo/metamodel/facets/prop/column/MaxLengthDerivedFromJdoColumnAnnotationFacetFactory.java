@@ -19,6 +19,7 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
@@ -112,19 +113,21 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
                     return;
                 }
 
-                final List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
-                for (ObjectAssociation association : associations) {
-
+                final Stream<ObjectAssociation> associations = objectSpec
+                        .streamAssociations(Contributed.EXCLUDED)
+                        .filter(ObjectAssociation.Predicates.PROPERTIES);
+                
+              //FIXME[ISIS-1976] change in behavior possible bug
+                associations.forEach(association->{
                     // skip checks if annotated with JDO @NotPersistent
                     if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
                         return;
                     }
 
-                    MaxLengthFacet facet = association.getFacet(MaxLengthFacet.class);
-
-                    MaxLengthFacet underlying = (MaxLengthFacet) facet.getUnderlyingFacet();
+                    final MaxLengthFacet facet = association.getFacet(MaxLengthFacet.class);
+                    final MaxLengthFacet underlying = (MaxLengthFacet) facet.getUnderlyingFacet();
                     if(underlying == null) {
-                        continue;
+                        return;
                     }
 
                     if(facet instanceof MaxLengthFacetDerivedFromJdoColumn && underlying instanceof MaxLengthFacetForMaxLengthAnnotationOnProperty) {
@@ -141,7 +144,9 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
                                     association.getIdentifier().toClassAndNameIdentityString());
                         }
                     }
-                }
+                });
+                
+
             }
         };
     }

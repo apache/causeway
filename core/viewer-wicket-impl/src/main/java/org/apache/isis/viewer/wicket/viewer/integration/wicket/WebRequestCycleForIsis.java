@@ -212,13 +212,13 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
             final List<Throwable> causalChain = Throwables.getCausalChain(ex);
             final Optional<Throwable> hiddenIfAny = causalChain.stream()
-                    .filter(ObjectMember.HiddenException.isInstanceOf()::apply).findFirst();
+                    .filter(ObjectMember.HiddenException.isInstanceOf()).findFirst();
             if(hiddenIfAny.isPresent()) {
                 addMessage("hidden");
                 return respondGracefully(cycle);
             }
             final Optional<Throwable> disabledIfAny = causalChain.stream()
-                    .filter(ObjectMember.DisabledException.isInstanceOf()::apply).findFirst();
+                    .filter(ObjectMember.DisabledException.isInstanceOf()).findFirst();
             if(disabledIfAny.isPresent()) {
                 addTranslatedMessage(disabledIfAny.get().getMessage());
                 return respondGracefully(cycle);

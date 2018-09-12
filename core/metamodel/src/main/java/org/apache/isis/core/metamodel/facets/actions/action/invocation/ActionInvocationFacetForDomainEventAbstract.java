@@ -28,8 +28,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.base.Strings;
 
@@ -343,17 +345,21 @@ implements ImperativeFacet {
     // TODO: could improve this, currently have to go searching for the mixin
     private static String targetNameFor(ObjectAction owningAction, ObjectAdapter mixedInAdapter) {
         if(mixedInAdapter != null) {
-            ObjectSpecification onType = owningAction.getOnType();
-            ObjectSpecification mixedInSpec = mixedInAdapter.getSpecification();
-            List<ObjectAction> objectActions1 = mixedInSpec.getObjectActions(Contributed.INCLUDED);
-            for (ObjectAction objectAction : objectActions1) {
-                if(objectAction instanceof MixedInMember2) {
-                    MixedInMember2 action = (MixedInMember2) objectAction;
-                    if(action.getMixinType() == onType) {
-                        return action.getName();
-                    }
-                }
+            final ObjectSpecification onType = owningAction.getOnType();
+            final ObjectSpecification mixedInSpec = mixedInAdapter.getSpecification();
+            final Stream<ObjectAction> objectActions = mixedInSpec.streamObjectActions(Contributed.INCLUDED);
+            
+            final Optional<String> mixinName = objectActions
+            .filter(action->action instanceof MixedInMember2)
+            .map(action->(MixedInMember2) action)
+            .filter(action->action.getMixinType() == onType)
+            .findAny()
+            .map(MixedInMember2::getName);
+            
+            if(mixinName.isPresent()) {
+                return mixinName.get();
             }
+            
         }
         return CommandUtil.targetMemberNameFor(owningAction);
     }

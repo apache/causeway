@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
@@ -249,7 +249,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         final List<ObjectActionParameter> allParameters = getParameters();
         final List<ObjectActionParameter> selectedParameters = Lists.newArrayList();
         for (int i = 0; i < allParameters.size(); i++) {
-            if (predicate.apply(allParameters.get(i))) {
+            if (predicate.test(allParameters.get(i))) {
                 selectedParameters.add(allParameters.get(i));
             }
         }

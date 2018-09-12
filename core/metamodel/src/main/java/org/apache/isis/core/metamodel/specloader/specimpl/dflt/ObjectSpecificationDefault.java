@@ -30,8 +30,13 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NatureOfService;
-import com.google.common.base.Predicate;
+import org.apache.isis.commons.internal.functions._Predicates;
+
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;
@@ -284,32 +289,33 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id, final List<ObjectSpecification> parameters) {
-        final List<ObjectAction> actions =
-                getObjectActions(type, Contributed.INCLUDED,
-                        com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
+        final Stream<ObjectAction> actions =
+                streamObjectActions(type, Contributed.INCLUDED);
         return firstAction(actions, id, parameters);
     }
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id) {
-        final List<ObjectAction> actions =
-                getObjectActions(type, Contributed.INCLUDED,
-                        com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
+        final Stream<ObjectAction> actions =
+                streamObjectActions(type, Contributed.INCLUDED);
         return firstAction(actions, id);
     }
 
     @Override
     public ObjectAction getObjectAction(final String id) {
-        final List<ObjectAction> actions =
-                getObjectActions(ActionType.ALL, Contributed.INCLUDED,
-                        com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
+        final Stream<ObjectAction> actions =
+                streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
         return firstAction(actions, id);
     }
 
     private static ObjectAction firstAction(
-            final List<ObjectAction> candidateActions,
+            final Stream<ObjectAction> candidateActionStream,
             final String actionName,
             final List<ObjectSpecification> parameters) {
+        
+        final List<ObjectAction> candidateActions = candidateActionStream.collect(Collectors.toList());
+        
+        //FIXME[ISIS-1976] code smell
         outer: for (int i = 0; i < candidateActions.size(); i++) {
             final ObjectAction action = candidateActions.get(i);
             if (actionName != null && !actionName.equals(action.getId())) {
@@ -325,29 +331,32 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             }
             return action;
         }
-    return null;
-    }
-
-    private static ObjectAction firstAction(
-            final List<ObjectAction> candidateActions,
-            final String id) {
-        if (id == null) {
-            return null;
-        }
-        for (int i = 0; i < candidateActions.size(); i++) {
-            final ObjectAction action = candidateActions.get(i);
-            if (id.equals(action.getIdentifier().toNameParmsIdentityString())) {
-                return action;
-            }
-            if (id.equals(action.getIdentifier().toNameIdentityString())) {
-                return action;
-            }
-            continue;
-        }
         return null;
     }
 
+    private static ObjectAction firstAction(
+            final Stream<ObjectAction> candidateActions,
+            final String id) {
+        
+        if (id == null) {
+            return null;
+        }
+        
+        return candidateActions
+                .filter(action->{
+                    final Identifier identifier = action.getIdentifier();
 
+                    if (id.equals(identifier.toNameParmsIdentityString())) {
+                        return true;
+                    }
+                    if (id.equals(identifier.toNameIdentityString())) {
+                        return true;
+                    }
+                    return false;
+                })
+                .findFirst()
+                .orElse(null);
+    }
 
     // -- getMember, catalog... (not API)
 
@@ -366,10 +375,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private void cataloguePropertiesAndCollections(final Map<Method, ObjectMember> membersByMethod) {
-        final Predicate<ObjectAssociation> noop = com.google.common.base.Predicates.alwaysTrue();
-        final List<ObjectAssociation> fields = getAssociations(Contributed.EXCLUDED, noop);
-        for (int i = 0; i < fields.size(); i++) {
-            final ObjectAssociation field = fields.get(i);
+        final Stream<ObjectAssociation> fields = streamAssociations(Contributed.EXCLUDED);
+        fields.forEach(field->{
             final List<Facet> facets = field.getFacets(ImperativeFacet.PREDICATE);
             for (final Facet facet : facets) {
                 final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
@@ -377,13 +384,12 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                     membersByMethod.put(imperativeFacetMethod, field);
                 }
             }
-        }
+        });
     }
 
     private void catalogueActions(final Map<Method, ObjectMember> membersByMethod) {
-        final List<ObjectAction> userActions = getObjectActions(Contributed.INCLUDED);
-        for (int i = 0; i < userActions.size(); i++) {
-            final ObjectAction userAction = userActions.get(i);
+        final Stream<ObjectAction> userActions = streamObjectActions(Contributed.INCLUDED);
+        userActions.forEach(userAction->{
             final List<Facet> facets = userAction.getFacets(ImperativeFacet.PREDICATE);
             for (final Facet facet : facets) {
                 final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
@@ -391,12 +397,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                     membersByMethod.put(imperativeFacetMethod, userAction);
                 }
             }
-        }
+        });
     }
 
-
-
     // -- toString
+    
     @Override
     public String toString() {
         final ToString str = new ToString(this);

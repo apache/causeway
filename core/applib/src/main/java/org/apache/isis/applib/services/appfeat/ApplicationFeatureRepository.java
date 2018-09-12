@@ -18,25 +18,25 @@
  */
 package org.apache.isis.applib.services.appfeat;
 
-import java.util.List;
+import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
 public interface ApplicationFeatureRepository  {
 
     @Programmatic
-    List<String> packageNames();
+    Set<String> packageNames();
 
     @Programmatic
-    List<String> packageNamesContainingClasses(ApplicationMemberType memberType);
+    Set<String> packageNamesContainingClasses(ApplicationMemberType memberType);
 
     @Programmatic
-    List<String> classNamesContainedIn(String packageFqn, ApplicationMemberType memberType);
+    Set<String> classNamesContainedIn(String packageFqn, ApplicationMemberType memberType);
 
     @Programmatic
-    List<String> classNamesRecursivelyContainedIn(String packageFqn);
+    Set<String> classNamesRecursivelyContainedIn(String packageFqn);
 
     @Programmatic
-    List<String> memberNamesOf(String packageFqn, String className, ApplicationMemberType memberType);
+    Set<String> memberNamesOf(String packageFqn, String className, ApplicationMemberType memberType);
 
 }

@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.List;
 import java.util.Objects;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;

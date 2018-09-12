@@ -19,14 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import static org.apache.isis.commons.internal.functions._Predicates.alwaysTrue;
+
 import java.lang.reflect.Method;
 import java.util.List;
-
-import com.google.common.collect.Lists;
-
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -99,13 +100,7 @@ public interface ImperativeFacet extends Facet {
     public Intent getIntent(Method method);
 
 
-    public static Predicate<Facet> PREDICATE = new Predicate<Facet>() {
-        @Override
-        public boolean apply(final Facet facet) {
-            return ImperativeFacet.Util.isImperativeFacet(facet);
-        }
-    };
-
+    public static Predicate<Facet> PREDICATE = ImperativeFacet.Util::isImperativeFacet;
 
     // //////////////////////////////////////
 
@@ -139,8 +134,8 @@ public interface ImperativeFacet extends Facet {
         }
 
         public static Intent getIntent(final ObjectMember member, final Method method) {
-            final List<Facet> allFacets = member.getFacets(com.google.common.base.Predicates.<Facet>alwaysTrue());
-            final List<ImperativeFacet> imperativeFacets = Lists.newArrayList();
+            final List<Facet> allFacets = member.getFacets(alwaysTrue());
+            final List<ImperativeFacet> imperativeFacets = _Lists.newArrayList();
             for (final Facet facet : allFacets) {
                 final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
                 if (imperativeFacet == null) {

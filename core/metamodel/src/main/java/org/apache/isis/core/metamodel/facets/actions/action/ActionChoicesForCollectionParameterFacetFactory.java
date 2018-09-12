@@ -85,20 +85,21 @@ implements MetaModelValidatorRefiner {
                     private void validate(
                             final ObjectSpecification objectSpec,
                             final ValidationFailures validationFailures) {
-                        List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.INCLUDED);
-                        for (ObjectAction objectAction : objectActions) {
+                        objectSpec.streamObjectActions(Contributed.INCLUDED)
+                        .forEach(objectAction->{
                             if(objectAction instanceof ObjectActionMixedIn || objectAction instanceof ObjectActionContributee) {
                                 // we'll report only the mixin or contributor
-                                continue;
+                                return;
                             }
-                            List<ObjectActionParameter> parameters = objectAction.getParameters();
-                            for (int paramNum = 0; paramNum < parameters.size(); paramNum++) {
-                                ObjectActionParameter parameter = parameters.get(paramNum);
+
+                            int paramNum = 0;
+                            for (ObjectActionParameter parameter : objectAction.getParameters()) {
                                 if(parameter.getFeatureType() == FeatureType.ACTION_PARAMETER_COLLECTION) {
                                     validate(objectSpec, objectAction, parameter, paramNum, validationFailures);
                                 }
+                                paramNum++;
                             }
-                        }
+                        });
                     }
 
                     private void validate(

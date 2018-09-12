@@ -23,14 +23,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -131,21 +130,11 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         private Functions(){}
 
         public static Function<ObjectAssociation, String> toName() {
-            return new Function<ObjectAssociation, String>() {
-                @Override
-                public String apply(final ObjectAssociation oa) {
-                    return oa.getName();
-                }
-            };
+            return ObjectAssociation::getName;
         }
 
         public static Function<ObjectAssociation, String> toId() {
-            return new Function<ObjectAssociation, String>() {
-                @Override
-                public String apply(final ObjectAssociation oa) {
-                    return oa.getId();
-                }
-            };
+            return ObjectAssociation::getId;
         }
     }
 
@@ -159,20 +148,20 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         public final static Predicate<ObjectAssociation> PROPERTIES = new Predicate<ObjectAssociation>() {
             @Override
-            public boolean apply(final ObjectAssociation association) {
+            public boolean test(final ObjectAssociation association) {
                 return association.isOneToOneAssociation();
             }
         };
         public final static Predicate<ObjectAssociation> REFERENCE_PROPERTIES = new Predicate<ObjectAssociation>() {
             @Override
-            public boolean apply(final ObjectAssociation association) {
+            public boolean test(final ObjectAssociation association) {
                 return association.isOneToOneAssociation() &&
                         !association.getSpecification().containsDoOpFacet(ValueFacet.class);
             }
         };
         public final static Predicate<ObjectAssociation> COLLECTIONS = new Predicate<ObjectAssociation>() {
             @Override
-            public boolean apply(final ObjectAssociation property) {
+            public boolean test(final ObjectAssociation property) {
                 return property.isOneToManyAssociation();
             }
         };
@@ -180,9 +169,9 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         public static final Predicate<ObjectAssociation> staticallyVisible(final Where where) {
             return new Predicate<ObjectAssociation>() {
                 @Override
-                public boolean apply(final ObjectAssociation association) {
+                public boolean test(final ObjectAssociation association) {
                     final List<Facet> facets = association.getFacets(new Predicate<Facet>() {
-                        @Override public boolean apply(final Facet facet) {
+                        @Override public boolean test(final Facet facet) {
                             return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
                         }
                     });
@@ -236,7 +225,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
         public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(
                 final List<ObjectAssociation> associations) {
-            Map<String, List<ObjectAssociation>> associationsByGroup = Maps.newHashMap();
+            Map<String, List<ObjectAssociation>> associationsByGroup = _Maps.newHashMap();
             for(ObjectAssociation association: associations) {
                 addAssociationIntoGroup(associationsByGroup, association);
             }
@@ -252,7 +241,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             final MemberOrderFacet memberOrderFacet = association.getFacet(MemberOrderFacet.class);
             if(memberOrderFacet != null) {
                 final String untranslatedName = memberOrderFacet.untranslatedName();
-                if(!Strings.isNullOrEmpty(untranslatedName)) {
+                if(!_Strings.isNullOrEmpty(untranslatedName)) {
                     getFrom(associationsByGroup, untranslatedName).add(association);
                     return;
                 }
@@ -263,7 +252,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         private static List<ObjectAssociation> getFrom(Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {
             List<ObjectAssociation> list = associationsByGroup.get(groupName);
             if(list == null) {
-                list = Lists.newArrayList();
+                list = _Lists.newArrayList();
                 associationsByGroup.put(groupName, list);
             }
             return list;

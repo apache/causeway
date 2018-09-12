@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.interactions;
 
 import java.util.List;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -72,10 +72,10 @@ public final class InteractionUtils {
     static Predicate<Facet> isA(final Class<?> superClass) {
         return new Predicate<Facet>() {
             @Override
-            public boolean apply(final Facet facet) {
+            public boolean test(final Facet facet) {
                 if (facet instanceof DecoratingFacet) {
                     final DecoratingFacet<?> decoratingFacet = (DecoratingFacet<?>) facet;
-                    return apply(decoratingFacet.getDecoratedFacet());
+                    return test(decoratingFacet.getDecoratedFacet());
                 }
                 return superClass.isAssignableFrom(facet.getClass());
             }

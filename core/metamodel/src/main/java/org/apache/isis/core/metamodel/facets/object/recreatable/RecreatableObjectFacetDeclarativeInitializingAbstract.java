@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import java.util.List;
 import java.util.Set;
-import java.util.UUID;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.commons.internal.memento._Mementos;
@@ -73,8 +72,9 @@ extends RecreatableObjectFacetAbstract {
                     new RootOid(objectSpecId, mementoStr, Oid.State.VIEWMODEL)  );
 
         final ObjectSpecification spec = viewModelAdapter.getSpecification();
-        final List<OneToOneAssociation> properties = spec.getProperties(Contributed.EXCLUDED);
-        for (OneToOneAssociation property : properties) {
+        final Stream<OneToOneAssociation> properties = spec.streamProperties(Contributed.EXCLUDED);
+        
+        properties.forEach(property->{
             final String propertyId = property.getId();
 
             Object propertyValue = null;
@@ -87,7 +87,8 @@ extends RecreatableObjectFacetAbstract {
             if(propertyValue != null) {
                 property.set(viewModelAdapter, adapterProvider.adapterFor(propertyValue), InteractionInitiatedBy.FRAMEWORK);
             }
-        }
+        });
+        
     }
 
     @Override
@@ -101,15 +102,16 @@ extends RecreatableObjectFacetAbstract {
         final ObjectAdapter ownerAdapter = adapterProvider.disposableAdapterForViewModel(viewModelPojo);
         final ObjectSpecification spec = ownerAdapter.getSpecification();
         
-        final List<OneToOneAssociation> properties = spec.getProperties(Contributed.EXCLUDED);
-        for (OneToOneAssociation property : properties) {
+        final Stream<OneToOneAssociation> properties = spec.streamProperties(Contributed.EXCLUDED);
+        
+        properties.forEach(property->{
             // ignore read-only
             if(!property.containsDoOpFacet(PropertySetterFacet.class)) {
-                continue;
+                return;
             }
             // ignore those explicitly annotated as @NotPersisted
             if(property.isNotPersisted()) {
-                continue;
+                return;
             }
 
             // otherwise, include
@@ -121,7 +123,8 @@ extends RecreatableObjectFacetAbstract {
 
                 memento.put(property.getId(), propertyValue);
             }
-        }
+        });
+        
         return memento.asString();
     }
     

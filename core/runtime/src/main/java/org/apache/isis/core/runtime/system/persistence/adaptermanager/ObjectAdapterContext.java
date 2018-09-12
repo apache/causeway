@@ -290,8 +290,8 @@ final public class ObjectAdapterContext {
 
         final RootOid transientRootOid = (RootOid) rootAdapter.getOid();
 
-        final RootAndCollectionAdapters rootAndCollectionAdapters = 
-                new RootAndCollectionAdapters(rootAdapter, this);
+//        final RootAndCollectionAdapters rootAndCollectionAdapters = 
+//                new RootAndCollectionAdapters(rootAdapter, this);
 
         final RootOid persistedRootOid;
         {
@@ -308,51 +308,40 @@ final public class ObjectAdapterContext {
             persistedRootOid = newRootOid;
         } 
 
-        // associate root adapter with the new Oid, and remap
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("replacing root adapter and re-adding into maps; oid is now: {} (was: {})", persistedRootOid.enString(), transientRootOid.enString());
-        }
+//        final ObjectAdapter adapterReplacement = rootAdapter.withOid(persistedRootOid); 
+//        replaceRootAdapter(adapterReplacement, rootAndCollectionAdapters);
 
-        final ObjectAdapter adapterReplacement = rootAdapter.withOid(persistedRootOid); 
-        replaceRootAdapter(adapterReplacement, rootAndCollectionAdapters);
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("made persistent {}; was {}", adapterReplacement, transientRootOid);
-        }
     }
 
     private void replaceRootAdapter(
             final ObjectAdapter adapterReplacement, 
             final RootAndCollectionAdapters rootAndCollectionAdapters) {
 
-        final RootOid persistedRootOid = (RootOid) adapterReplacement.getOid();
+//        final RootOid persistedRootOid = (RootOid) adapterReplacement.getOid();
 
-        // associate the collection adapters with new Oids, and re-map
-        LOG.debug("replacing Oids for collection adapter(s) and re-adding into maps");
-
-        rootAndCollectionAdapters.stream()
-        .forEach(collectionAdapter->{
-            final ParentedCollectionOid previousCollectionOid = (ParentedCollectionOid) collectionAdapter.getOid();
-            final ParentedCollectionOid persistedCollectionOid = previousCollectionOid.asPersistent(persistedRootOid);
-            Assert.assertTrue("expected equal", Objects.equals(collectionAdapter.getOid(), persistedCollectionOid));
-        });
+        //FIXME[ISIS-1976] no longer used
+//        rootAndCollectionAdapters.stream()
+//        .forEach(collectionAdapter->{
+//            final ParentedCollectionOid previousCollectionOid = (ParentedCollectionOid) collectionAdapter.getOid();
+//            final ParentedCollectionOid persistedCollectionOid = previousCollectionOid.asPersistent(persistedRootOid);
+//            Assert.assertTrue("expected equal", Objects.equals(collectionAdapter.getOid(), persistedCollectionOid));
+//        });
 
         // some object store implementations may replace collection instances (eg ORM may replace with a cglib-enhanced
         // proxy equivalent.  So, ensure that the collection adapters still wrap the correct pojos.
-        LOG.debug("synchronizing collection pojos, remapping in pojo map if required");
-        rootAndCollectionAdapters.streamCollections()
-        .forEach(otma->{
-            final ObjectAdapter collectionAdapter = rootAndCollectionAdapters.getCollectionAdapter(otma);
-
-            final Object collectionPojoWrappedByAdapter = collectionAdapter.getObject();
-            final Object collectionPojoActuallyOnPojo = getCollectionPojo(otma, adapterReplacement);
-
-            if (collectionPojoActuallyOnPojo != collectionPojoWrappedByAdapter) {
-                final ObjectAdapter newCollectionAdapter = collectionAdapter.withPojo(collectionPojoActuallyOnPojo);
-                Assert.assertTrue("expected same", 
-                        Objects.equals(newCollectionAdapter.getObject(), collectionPojoActuallyOnPojo));
-            }
-        });
+//        rootAndCollectionAdapters.streamCollections()
+//        .forEach(otma->{
+//            final ObjectAdapter collectionAdapter = rootAndCollectionAdapters.getCollectionAdapter(otma);
+//
+//            final Object collectionPojoWrappedByAdapter = collectionAdapter.getObject();
+//            final Object collectionPojoActuallyOnPojo = getCollectionPojo(otma, adapterReplacement);
+//
+//            if (collectionPojoActuallyOnPojo != collectionPojoWrappedByAdapter) {
+//                final ObjectAdapter newCollectionAdapter = collectionAdapter.withPojo(collectionPojoActuallyOnPojo);
+//                Assert.assertTrue("expected same", 
+//                        Objects.equals(newCollectionAdapter.getObject(), collectionPojoActuallyOnPojo));
+//            }
+//        });
 
     }
 

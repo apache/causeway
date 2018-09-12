@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 /**
  * Analogous to {@link ObjectAssociation}.
@@ -174,7 +174,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             }
 
             @Override
-            public boolean apply(@Nullable final ObjectActionParameter objectActionParameter) {
+            public boolean test(@Nullable final ObjectActionParameter objectActionParameter) {
                 if (!(objectActionParameter instanceof OneToManyActionParameter)) {
                     return false;
                 }
@@ -205,7 +205,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             }
 
             @Override
-            public boolean apply(@Nullable final ObjectActionParameter objectActionParameter) {
+            public boolean test(@Nullable final ObjectActionParameter objectActionParameter) {
                 if (!(objectActionParameter instanceof OneToOneActionParameter)) {
                     return false;
                 }

@@ -37,7 +37,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import org.apache.isis.applib.annotation.Where;
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -130,9 +130,9 @@ public class ObjectAssociationPredicatesTest_visibleWhere {
     public void test() {
         final Predicate<ObjectAssociation> predicate = new Predicate<ObjectAssociation>() {
             @Override
-            public boolean apply(final ObjectAssociation association) {
+            public boolean test(final ObjectAssociation association) {
                 final List<Facet> facets = association.getFacets(new Predicate<Facet>() {
-                    @Override public boolean apply(final Facet facet) {
+                    @Override public boolean test(final Facet facet) {
                         return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
                     }
                 });
@@ -145,7 +145,7 @@ public class ObjectAssociationPredicatesTest_visibleWhere {
                 return true;
             }
         };
-        assertThat(predicate.apply(mockObjectAssociation), is(expectedVisibility));
+        assertThat(predicate.test(mockObjectAssociation), is(expectedVisibility));
     }
 
 }

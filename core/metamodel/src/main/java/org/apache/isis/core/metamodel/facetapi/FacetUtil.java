@@ -23,13 +23,12 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Lists;
 
-import com.google.common.collect.Lists;
-
-import com.google.common.base.Predicate;
 
 public final class FacetUtil {
 
@@ -41,12 +40,8 @@ public final class FacetUtil {
             return;
         }
         final FacetHolder facetHolder = facet.getFacetHolder();
-        final List<Facet> facets = facetHolder.getFacets(new Predicate<Facet>() {
-            @Override
-            public boolean apply(final Facet each) {
-                return facet.facetType() == each.facetType() && facet.getClass() == each.getClass();
-            }
-        });
+        final List<Facet> facets = facetHolder.getFacets(
+                each->facet.facetType() == each.facetType() && facet.getClass() == each.getClass() );
         if(facets.size() == 1) {
             final Facet existingFacet = facets.get(0);
             final Facet underlyingFacet = existingFacet.getUnderlyingFacet();
@@ -121,11 +116,11 @@ public final class FacetUtil {
      * {@link Facet}s in a Map.
      */
     public static List<Facet> getFacets(final Map<Class<? extends Facet>, Facet> facetsByClass, final Predicate<Facet> predicate) {
-        final List<Facet> filteredFacets = Lists.newArrayList();
+        final List<Facet> filteredFacets = _Lists.newArrayList();
         final List<Facet> allFacets = new ArrayList<>(facetsByClass.values());
         for (final Facet facet : allFacets) {
             // facets that implement MultiTypedFacet will be held more than once.  The 'contains' check ensures they are only returned once, however.
-            if (predicate.apply(facet) && !filteredFacets.contains(facet)) {
+            if (predicate.test(facet) && !filteredFacets.contains(facet)) {
                 filteredFacets.add(facet);
             }
         }
@@ -174,7 +169,7 @@ public final class FacetUtil {
             final Facet facet = source.getFacet(facetType);
 
         }
-        List<Facet> facets = source.getFacets(com.google.common.base.Predicates.<Facet>alwaysTrue());
+        List<Facet> facets = source.getFacets(__->true);
         for (Facet facet : facets) {
             target.addFacet(facet);
         }

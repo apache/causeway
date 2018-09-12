@@ -19,10 +19,13 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
-import com.google.common.base.Predicate;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -58,16 +61,20 @@ public interface ObjectActionContainer {
      */
     ObjectAction getObjectAction(String id);
 
+    default Stream<ObjectAction> streamObjectActions(Contributed contributed) {
+        return streamObjectActions(ActionType.ALL, contributed);
+    }
+    
     /**
      * Returns an array of actions of the specified type, including or excluding
      * contributed actions as required.
      */
-    List<ObjectAction> getObjectActions(ActionType type, Contributed contributee, Predicate<ObjectAction> predicate);
+    Stream<ObjectAction> streamObjectActions(ActionType type, Contributed contributee);
 
-    List<ObjectAction> getObjectActions(List<ActionType> types, Contributed contributee, Predicate<ObjectAction> predicate);
-
-    List<ObjectAction> getObjectActions(Contributed contributee);
-
+    default Stream<ObjectAction> streamObjectActions(Collection<ActionType> types, Contributed contributee) {
+        return stream(types)
+        .flatMap(type->streamObjectActions(type, contributee));
+    }
 
 
 }

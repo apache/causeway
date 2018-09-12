@@ -16,25 +16,19 @@
  */
 package org.apache.isis.core.metamodel.services.grid.bootstrap3;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
-
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -53,6 +47,11 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.applib.layout.grid.bootstrap3.Size;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
@@ -159,6 +158,14 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
     // //////////////////////////////////////
 
+    private static final class GridVisitorResult {
+        BS3Col colForUnreferencedActionsRef;
+        BS3Col colForUnreferencedCollectionsRef;
+        FieldSet fieldSetForUnreferencedActionsRef;
+        FieldSet fieldSetForUnreferencedPropertiesRef;
+        BS3TabGroup tabGroupForUnreferencedCollectionsRef;    
+    }
+    
     /**
      * Mandatory hook method defined in {@link GridSystemServiceAbstract superclass}, called by {@link #normalize(Grid, Class)}.
      */
@@ -176,10 +183,8 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 ObjectMember.Util.mapById(getOneToManyAssociations(objectSpec));
         final Map<String, ObjectAction> objectActionById =
                 ObjectMember.Util.mapById(
-                        FluentIterable
-                        .from(objectSpec.getObjectActions(Contributed.INCLUDED))
-                        .filter((Predicate) ObjectAction.Predicates.notBulkOnly())
-                        .toList());
+                        objectSpec.streamObjectActions(Contributed.INCLUDED)
+                        .filter(ObjectAction.Predicates.notBulkOnly()));
 
         final BS3Grid bs3Grid = (BS3Grid) grid;
 
@@ -191,12 +196,13 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         // find all row and col ids
         // ensure that all Ids are different
 
-        final List<String> gridIds = Lists.newArrayList();
-        final LinkedHashMap<String, BS3Row> rowIds = Maps.newLinkedHashMap();
-        final LinkedHashMap<String, BS3Col> colIds = Maps.newLinkedHashMap();
-        final LinkedHashMap<String, FieldSet> fieldSetIds = Maps.newLinkedHashMap();
+        final List<String> gridIds = _Lists.newArrayList();
+        final LinkedHashMap<String, BS3Row> rowIds = _Maps.newLinkedHashMap();
+        final LinkedHashMap<String, BS3Col> colIds = _Maps.newLinkedHashMap();
+        final LinkedHashMap<String, FieldSet> fieldSetIds = _Maps.newLinkedHashMap();
 
-        final AtomicReference<Boolean> duplicateIdDetected = new AtomicReference<>(false);
+        // fast (non-threadsafe) value reference
+        final boolean[] duplicateIdDetected = {false}; 
 
         bs3Grid.visit(new BS3Grid.VisitorAdapter(){
             @Override
@@ -207,7 +213,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 }
                 if(gridIds.contains(id)) {
                     bs3Row.setMetadataError("There is another element in the grid with this id");
-                    duplicateIdDetected.set(true);
+                    duplicateIdDetected[0] = true;
                     return;
                 }
                 rowIds.put(id, bs3Row);
@@ -222,7 +228,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 }
                 if(gridIds.contains(id)) {
                     bs3Col.setMetadataError("There is another element in the grid with this id");
-                    duplicateIdDetected.set(true);
+                    duplicateIdDetected[0] = true;
                     return;
                 }
                 colIds.put(id, bs3Col);
@@ -238,7 +244,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 }
                 if(gridIds.contains(id)) {
                     fieldSet.setMetadataError("There is another element in the grid with this id");
-                    duplicateIdDetected.set(true);
+                    duplicateIdDetected[0] = true;
                     return;
                 }
                 fieldSetIds.put(id, fieldSet);
@@ -246,7 +252,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             }
         });
 
-        if(duplicateIdDetected.get()) {
+        if(duplicateIdDetected[0]) {
             return false;
         }
 
@@ -254,32 +260,29 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         // ensure that there is exactly one col with the
         // unreferencedActions, unreferencedProperties and unreferencedCollections attribute set.
 
-        final AtomicReference<BS3Col> colForUnreferencedActionsRef = new AtomicReference<>();
-        final AtomicReference<BS3Col> colForUnreferencedCollectionsRef = new AtomicReference<>();
-        final AtomicReference<FieldSet> fieldSetForUnreferencedActionsRef = new AtomicReference<>();
-        final AtomicReference<FieldSet> fieldSetForUnreferencedPropertiesRef = new AtomicReference<>();
-        final AtomicReference<BS3TabGroup> tabGroupForUnreferencedCollectionsRef = new AtomicReference<>();
+        
+        final GridVisitorResult result = new GridVisitorResult();
 
         bs3Grid.visit(new BS3Grid.VisitorAdapter(){
 
             @Override
             public void visit(final BS3Col bs3Col) {
                 if(isSet(bs3Col.isUnreferencedActions())) {
-                    if(colForUnreferencedActionsRef.get() != null) {
+                    if(result.colForUnreferencedActionsRef != null) {
                         bs3Col.setMetadataError("More than one col with 'unreferencedActions' attribute set");
-                    } else if(fieldSetForUnreferencedActionsRef.get() != null) {
+                    } else if(result.fieldSetForUnreferencedActionsRef != null) {
                         bs3Col.setMetadataError("Already found a fieldset with 'unreferencedActions' attribute set");
                     } else {
-                        colForUnreferencedActionsRef.set(bs3Col);
+                        result.colForUnreferencedActionsRef=bs3Col;
                     }
                 }
                 if(isSet(bs3Col.isUnreferencedCollections())) {
-                    if(colForUnreferencedCollectionsRef.get() != null) {
+                    if(result.colForUnreferencedCollectionsRef != null) {
                         bs3Col.setMetadataError("More than one col with 'unreferencedCollections' attribute set");
-                    } else if(tabGroupForUnreferencedCollectionsRef.get() != null) {
+                    } else if(result.tabGroupForUnreferencedCollectionsRef != null) {
                         bs3Col.setMetadataError("Already found a tabgroup with 'unreferencedCollections' attribute set");
                     } else {
-                        colForUnreferencedCollectionsRef.set(bs3Col);
+                        result.colForUnreferencedCollectionsRef = bs3Col;
                     }
                 }
             }
@@ -287,19 +290,19 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             @Override
             public void visit(final FieldSet fieldSet) {
                 if(isSet(fieldSet.isUnreferencedActions())) {
-                    if(fieldSetForUnreferencedActionsRef.get() != null) {
+                    if(result.fieldSetForUnreferencedActionsRef != null) {
                         fieldSet.setMetadataError("More than one fieldset with 'unreferencedActions' attribute set");
-                    } else if(colForUnreferencedActionsRef.get() != null) {
+                    } else if(result.colForUnreferencedActionsRef != null) {
                         fieldSet.setMetadataError("Already found a column with 'unreferencedActions' attribute set");
                     } else {
-                        fieldSetForUnreferencedActionsRef.set(fieldSet);
+                        result.fieldSetForUnreferencedActionsRef = fieldSet;
                     }
                 }
                 if(isSet(fieldSet.isUnreferencedProperties())) {
-                    if(fieldSetForUnreferencedPropertiesRef.get() != null) {
+                    if(result.fieldSetForUnreferencedPropertiesRef != null) {
                         fieldSet.setMetadataError("More than one col with 'unreferencedProperties' attribute set");
                     } else {
-                        fieldSetForUnreferencedPropertiesRef.set(fieldSet);
+                        result.fieldSetForUnreferencedPropertiesRef = fieldSet;
                     }
                 }
             }
@@ -307,30 +310,30 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             @Override
             public void visit(final BS3TabGroup bs3TabGroup) {
                 if(isSet(bs3TabGroup.isUnreferencedCollections())) {
-                    if(tabGroupForUnreferencedCollectionsRef.get() != null) {
+                    if(result.tabGroupForUnreferencedCollectionsRef != null) {
                         bs3TabGroup.setMetadataError("More than one tabgroup with 'unreferencedCollections' attribute set");
-                    } else if(colForUnreferencedCollectionsRef.get() != null) {
+                    } else if(result.colForUnreferencedCollectionsRef != null) {
                         bs3TabGroup.setMetadataError("Already found a column with 'unreferencedCollections' attribute set");
                     } else {
-                        tabGroupForUnreferencedCollectionsRef.set(bs3TabGroup);
+                        result.tabGroupForUnreferencedCollectionsRef = bs3TabGroup;
                     }
                 }
             }
         });
 
-        if(colForUnreferencedActionsRef.get() == null && fieldSetForUnreferencedActionsRef.get() == null) {
+        if(result.colForUnreferencedActionsRef == null && result.fieldSetForUnreferencedActionsRef == null) {
             bs3Grid.getMetadataErrors().add("No column and also no fieldset found with the 'unreferencedActions' attribute set");
         }
-        if(fieldSetForUnreferencedPropertiesRef.get() == null) {
+        if(result.fieldSetForUnreferencedPropertiesRef == null) {
             bs3Grid.getMetadataErrors().add("No fieldset found with the 'unreferencedProperties' attribute set");
         }
-        if(colForUnreferencedCollectionsRef.get() == null && tabGroupForUnreferencedCollectionsRef.get() == null) {
+        if(result.colForUnreferencedCollectionsRef == null && result.tabGroupForUnreferencedCollectionsRef == null) {
             bs3Grid.getMetadataErrors().add("No column and also no tabgroup found with the 'unreferencedCollections' attribute set");
         }
 
-        if(     colForUnreferencedActionsRef.get() == null && fieldSetForUnreferencedActionsRef.get() == null ||
-                fieldSetForUnreferencedPropertiesRef.get() == null ||
-                colForUnreferencedCollectionsRef.get() == null && tabGroupForUnreferencedCollectionsRef.get() == null) {
+        if(     result.colForUnreferencedActionsRef == null && result.fieldSetForUnreferencedActionsRef == null ||
+                result.fieldSetForUnreferencedPropertiesRef == null ||
+                        result.colForUnreferencedCollectionsRef == null && result.tabGroupForUnreferencedCollectionsRef == null) {
             return false;
         }
 
@@ -347,22 +350,16 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         // catalog which associations are bound to an existing field set
         // so that (below) we can determine which missing property ids are not unbound vs which should be included
         // in the fieldset that they are bound to.
-        final Map<String, Set<String>> boundAssociationIdsByFieldSetId = Maps.newHashMap();
+        final Map<String, Set<String>> boundAssociationIdsByFieldSetId = _Maps.newHashMap();
 
         // all those explicitly in the grid
         for (FieldSet fieldSet : fieldSetIds.values()) {
             final String fieldSetId = fieldSet.getId();
             Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
             if(boundAssociationIds == null) {
-                boundAssociationIds = Sets.newLinkedHashSet();
-                boundAssociationIds.addAll(
-                        FluentIterable.from(fieldSet.getProperties()).transform(
-                                new Function<PropertyLayoutData, String>() {
-                                    @Override
-                                    public String apply(@Nullable final PropertyLayoutData propertyLayoutData) {
-                                        return propertyLayoutData.getId();
-                                    }
-                                }).toList());
+                boundAssociationIds = stream(fieldSet.getProperties())
+                        .map(PropertyLayoutData::getId)
+                        .collect(Collectors.toCollection(_Sets::newLinkedHashSet));
                 boundAssociationIdsByFieldSetId.put(fieldSetId, boundAssociationIds);
             }
         }
@@ -374,7 +371,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 if(fieldSetIds.containsKey(id)) {
                     Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(id);
                     if(boundAssociationIds == null) {
-                        boundAssociationIds = Sets.newLinkedHashSet();
+                        boundAssociationIds = _Sets.newLinkedHashSet();
                         boundAssociationIdsByFieldSetId.put(id, boundAssociationIds);
                     }
                     boundAssociationIds.add(otoa.getId());
@@ -384,7 +381,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
         if(!missingPropertyIds.isEmpty()) {
 
-            final List<String> unboundPropertyIds = Lists.newArrayList(missingPropertyIds);
+            final List<String> unboundPropertyIds = _Lists.newArrayList(missingPropertyIds);
 
             for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
                 final Set<String> boundPropertyIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
@@ -396,26 +393,20 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 final Set<String> associationIds =
                         boundAssociationIdsByFieldSetId.get(fieldSetId);
 
-                final List<OneToOneAssociation> associations = Lists.newArrayList(
-                        FluentIterable.from(associationIds)
-                        .transform(new Function<String, OneToOneAssociation>() {
-                            @Nullable @Override public OneToOneAssociation apply(final String propertyId) {
-                                return oneToOneAssociationById.get(propertyId);
-                            }
-                        })
-                        .filter(Predicates.<OneToOneAssociation>notNull())
-                        );
+                final List<OneToOneAssociation> associations = 
+                        associationIds.stream()
+                        .map(propertyId->oneToOneAssociationById.get(propertyId))
+                        .filter(_NullSafe::isPresent)
+                        .collect(Collectors.toList());
 
                 Collections.sort(associations, ObjectMember.Comparators.byMemberOrderSequence());
                 addPropertiesTo(fieldSet,
-                        FluentIterable.from(associations)
-                        .transform(ObjectAssociation.Functions.toId())
-                        .toList(),
+                        _Lists.transform(associations, ObjectAssociation::getId),
                         propertyLayoutDataById);
             }
 
             if(!unboundPropertyIds.isEmpty()) {
-                final FieldSet fieldSet = fieldSetForUnreferencedPropertiesRef.get();
+                final FieldSet fieldSet = result.fieldSetForUnreferencedPropertiesRef;
                 if(fieldSet != null) {
                     addPropertiesTo(fieldSet, unboundPropertyIds, propertyLayoutDataById);
                 }
@@ -433,23 +424,20 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
 
         if(!missingCollectionIds.isEmpty()) {
-            List<OneToManyAssociation> sortedCollections = Lists.newArrayList(
-                    FluentIterable.from(missingCollectionIds)
-                    .transform(new Function<String, OneToManyAssociation>() {
-                        @Nullable @Override public OneToManyAssociation apply(@Nullable final String collectionId) {
-                            return oneToManyAssociationById.get(collectionId);
-                        }
-                    })
-                    .toSortedList(ObjectMember.Comparators.byMemberOrderSequence())
-
-                    );
-            final ImmutableList<String> sortedMissingCollectionIds = FluentIterable.from(sortedCollections)
-                    .transform(ObjectAssociation.Functions.toId()).toList();
-            final BS3TabGroup bs3TabGroup = tabGroupForUnreferencedCollectionsRef.get();
+            final List<OneToManyAssociation> sortedCollections = 
+                    _Lists.transform(missingCollectionIds, oneToManyAssociationById::get);
+            {
+                sortedCollections.sort(ObjectMember.Comparators.byMemberOrderSequence());
+            }
+            
+            final List<String> sortedMissingCollectionIds = 
+                    _Lists.transform(sortedCollections, ObjectAssociation::getId);
+            
+            final BS3TabGroup bs3TabGroup = result.tabGroupForUnreferencedCollectionsRef;
             if(bs3TabGroup != null) {
                 addCollectionsTo(bs3TabGroup, sortedMissingCollectionIds, objectSpec);
             } else {
-                final BS3Col bs3Col = colForUnreferencedCollectionsRef.get();
+                final BS3Col bs3Col = result.colForUnreferencedCollectionsRef;
                 if(bs3Col != null) {
                     addCollectionsTo(bs3Col, sortedMissingCollectionIds, collectionLayoutDataById);
                 }
@@ -461,22 +449,18 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 surplusAndMissing(actionLayoutDataById.keySet(), objectActionById.keySet());
         final List<String> surplusActionIds = actionIdTuple.first;
         final List<String> possiblyMissingActionIds = actionIdTuple.second;
+        final List<String> associatedActionIds = _Lists.newArrayList();
 
-        final List<String> associatedActionIds = Lists.newArrayList();
+        final List<ObjectAction> sortedPossiblyMissingActions = 
+                _Lists.transform(possiblyMissingActionIds, objectActionById::get);
+        {
+            sortedPossiblyMissingActions
+                .sort(ObjectMember.Comparators.byMemberOrderSequence());
+        }
+                
 
-        List<ObjectAction> sortedPossiblyMissingActions = Lists.newArrayList(
-                FluentIterable.from(possiblyMissingActionIds)
-                .transform(new Function<String, ObjectAction>() {
-                    @Nullable @Override public ObjectAction apply(@Nullable final String actionId) {
-                        return objectActionById.get(actionId);
-                    }
-                })
-                .toSortedList(ObjectMember.Comparators.byMemberOrderSequence()));
-
-        List<String> sortedPossiblyMissingActionIds =
-                FluentIterable.from(sortedPossiblyMissingActions)
-                .transform(ObjectMember.Functions.getId())
-                .toList();
+        final List<String> sortedPossiblyMissingActionIds =
+                _Lists.transform(sortedPossiblyMissingActions, ObjectMember::getId);
 
         for (String actionId : sortedPossiblyMissingActionIds) {
             final ObjectAction oa = objectActionById.get(actionId);
@@ -549,7 +533,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
         // ... the missing actions are those in the second tuple, excluding those associated (via @MemberOrder#name)
         // to a property or collection.
-        final List<String> missingActionIds = Lists.newArrayList(sortedPossiblyMissingActionIds);
+        final List<String> missingActionIds = _Lists.newArrayList(sortedPossiblyMissingActionIds);
         missingActionIds.removeAll(associatedActionIds);
 
         for (String surplusActionId : surplusActionIds) {
@@ -557,11 +541,11 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         }
 
         if(!missingActionIds.isEmpty()) {
-            final BS3Col bs3Col = colForUnreferencedActionsRef.get();
+            final BS3Col bs3Col = result.colForUnreferencedActionsRef;
             if(bs3Col != null) {
                 addActionsTo(bs3Col, missingActionIds, actionLayoutDataById);
             } else {
-                final FieldSet fieldSet = fieldSetForUnreferencedActionsRef.get();
+                final FieldSet fieldSet = result.fieldSetForUnreferencedActionsRef;
                 if(fieldSet != null) {
                     addActionsTo(fieldSet, missingActionIds, actionLayoutDataById);
                 }
@@ -575,16 +559,12 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             final FieldSet fieldSet,
             final List<String> propertyIds,
             final LinkedHashMap<String, PropertyLayoutData> propertyLayoutDataById) {
-        final ImmutableList<String> existingIds = FluentIterable
-                .from(fieldSet.getProperties())
-                .transform(new Function<PropertyLayoutData, String>() {
-                    @Nullable
-                    @Override
-                    public String apply(@Nullable final PropertyLayoutData propertyLayoutData) {
-                        return propertyLayoutData.getId();
-                    }
-                })
-                .toList();
+        
+        final Set<String> existingIds =
+            stream(fieldSet.getProperties())
+            .map(PropertyLayoutData::getId)
+            .collect(Collectors.toSet());
+        
         for (final String propertyId : propertyIds) {
             if(!existingIds.contains(propertyId)) {
                 final PropertyLayoutData propertyLayoutData = new PropertyLayoutData(propertyId);
@@ -660,7 +640,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
             final ActionLayoutData actionLayoutData) {
         List<ActionLayoutData> actions = owner.getActions();
         if(actions == null) {
-            owner.setActions(actions = Lists.newArrayList());
+            owner.setActions(actions = _Lists.newArrayList());
         }
         actions.add(actionLayoutData);
         actionLayoutData.setOwner(owner);
@@ -671,7 +651,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
     }
 
     private static String asId(final String str) {
-        if(Strings.isNullOrEmpty(str)) {
+        if(_Strings.isNullOrEmpty(str)) {
             return str;
         }
         final char c = str.charAt(0);

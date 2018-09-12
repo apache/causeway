@@ -84,7 +84,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
             final FacetHolder holder,
             final Class<T> adaptedClass,
             final int typicalLength,
-            final Integer maxLength,
+            final int maxLength,
             final Immutability immutability,
             final EqualByContent equalByContent,
             final T defaultValue,

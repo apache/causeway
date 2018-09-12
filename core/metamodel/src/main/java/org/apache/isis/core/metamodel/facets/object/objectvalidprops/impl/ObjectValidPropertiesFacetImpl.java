@@ -46,15 +46,12 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
             final ObjectValidityContext context) {
         final StringBuilder buf = new StringBuilder();
         final ObjectAdapter adapter = context.getTarget();
-        for (final ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES)) {
-            // ignore hidden properties
-            if (property.isVisible(adapter, context.getInitiatedBy(), where).isVetoed()) {
-                continue;
-            }
-            // ignore disabled properties
-            if (property.isUsable(adapter, context.getInitiatedBy(), where).isVetoed()) {
-                continue;
-            }
+        
+        adapter.getSpecification().streamAssociations(Contributed.EXCLUDED)
+        .filter(ObjectAssociation.Predicates.PROPERTIES)
+        .filter(property->property.isVisible(adapter, context.getInitiatedBy(), where).isVetoed()) // ignore hidden properties
+        .filter(property->property.isUsable(adapter, context.getInitiatedBy(), where).isVetoed())  // ignore disabled properties
+        .forEach(property->{
             final OneToOneAssociation otoa = (OneToOneAssociation) property;
             final ObjectAdapter value = otoa.get(adapter, context.getInitiatedBy());
             if (otoa.isAssociationValid(adapter, value, context.getInitiatedBy()).isVetoed()) {
@@ -62,8 +59,8 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
                     buf.append(", ");
                 }
                 buf.append(property.getName());
-            }
-        }
+            }    
+        });
         if (buf.length() > 0) {
             return "Invalid properties: " + buf.toString();
         }

@@ -19,6 +19,7 @@
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -118,10 +119,11 @@ class ObjectAdapterContext_ObjectCreation {
     private ObjectAdapter initializePropertiesAndDoCallback(final ObjectAdapter adapter) {
 
         // initialize new object
-        final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED);
-        for (ObjectAssociation field : fields) {
-            field.toDefault(adapter);
-        }
+        final Stream<ObjectAssociation> fields = adapter.getSpecification()
+                .streamAssociations(Contributed.EXCLUDED);
+        fields
+            .forEach(field->field.toDefault(adapter));
+            
         final Object pojo = adapter.getObject();
         servicesInjector.injectServicesInto(pojo);
 

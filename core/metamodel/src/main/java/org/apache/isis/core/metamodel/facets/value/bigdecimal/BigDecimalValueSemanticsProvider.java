@@ -57,7 +57,7 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     public BigDecimalValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
+        super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
         format = determineNumberFormat("value.format.decimal");
     }
 
@@ -68,12 +68,6 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
     // //////////////////////////////////////////////////////////////////
     // Parser
     // //////////////////////////////////////////////////////////////////
-
-    @Deprecated
-    @Override
-    public Integer getLength() {
-        return getPrecision();
-    }
 
     @Override
     public Integer getPrecision() {

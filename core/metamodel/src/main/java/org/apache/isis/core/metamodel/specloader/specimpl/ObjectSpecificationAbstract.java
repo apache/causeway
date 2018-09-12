@@ -19,19 +19,18 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.Collection;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +39,8 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -125,25 +126,21 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final FacetProcessor facetProcessor;
 
 
-
-    private final List<ObjectAssociation> associations = Lists.newArrayList();
-    private final List<ObjectAction> objectActions = Lists.newArrayList();
+  //FIXME[ISIS-1976] SortedSet using ObjectMember.Comparators.byMemberOrderSequence()
+    private final List<ObjectAssociation> associations = _Lists.newArrayList(); 
+    private final List<ObjectAction> objectActions = _Lists.newArrayList();
     // partitions and caches objectActions by type; updated in sortCacheAndUpdateActions()
     private final Map<ActionType, List<ObjectAction>> objectActionsByType = createObjectActionsByType();
 
     private static Map<ActionType, List<ObjectAction>> createObjectActionsByType() {
-        final Map<ActionType, List<ObjectAction>> map = Maps.newHashMap();
+        final Map<ActionType, List<ObjectAction>> map = _Maps.newHashMap();
         for (final ActionType type : ActionType.values()) {
             map.put(type, Lists.<ObjectAction>newArrayList());
         }
         return map;
     }
 
-    private boolean contributeeAndMixedInAssociationsAdded;
-    private boolean contributeeAndMixedInActionsAdded;
-
-
-    private final List<ObjectSpecification> interfaces = Lists.newArrayList();
+    private final List<ObjectSpecification> interfaces = _Lists.newArrayList();
     private final SubclassList directSubclasses = new SubclassList();
     // built lazily
     private SubclassList transitiveSubclasses;
@@ -334,7 +331,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             for (final ActionType type : ActionType.values()) {
                 final List<ObjectAction> objectActionForType = objectActionsByType.get(type);
                 objectActionForType.clear();
-                objectActionForType.addAll(Collections2.filter(objectActions, ObjectAction.Predicates.ofType(type)));
+                objectActionForType.addAll(Collections2
+                        .filter(objectActions, ObjectAction.Predicates.ofType(type)::test));
             }
         }
     }
@@ -607,21 +605,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // -- Associations
     
     @Override
-    public List<ObjectAssociation> getAssociations(final Contributed contributed) {
-        // the "contributed.isIncluded()" guard is required because we cannot do this too early;
-        // there must be a session available
-        if(contributed.isIncluded() && !contributeeAndMixedInAssociationsAdded) {
-            synchronized (this.associations) {
-                List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
-                associations.addAll(createContributeeAssociations());
-                associations.addAll(createMixedInAssociations());
-                sortAndUpdateAssociations(associations);
-                contributeeAndMixedInAssociationsAdded = true;
-            }
-        }
-        final List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
-        return Lists.newArrayList(Iterables.filter(
-                associations, ContributeeMember.Predicates.regularElse(contributed)));
+    public Stream<ObjectAssociation> streamAssociations(final Contributed contributed) {
+        
+        guardAgainstTooEarly_assoz(contributed);
+        
+        return stream(this.associations)
+        .filter(ContributeeMember.Predicates.regularElse(contributed));
     }
 
 
@@ -692,115 +681,25 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     private ObjectAssociation getAssociationWithId(final String id) {
-        for (final ObjectAssociation objectAssociation : getAssociations(Contributed.INCLUDED)) {
-            if (objectAssociation.getId().equals(id)) {
-                return objectAssociation;
-            }
-        }
-        return null;
+        return streamAssociations(Contributed.INCLUDED)
+            .filter(objectAssociation->objectAssociation.getId().equals(id))
+            .findFirst()
+            .orElse(null);
     }
 
     @Override
-    public List<ObjectAssociation> getAssociations(Contributed contributed, final Predicate<ObjectAssociation> predicate) {
-        final List<ObjectAssociation> allAssociations = getAssociations(contributed);
-        return Lists.newArrayList(
-                FluentIterable.from(allAssociations)
-                .filter((Predicate) predicate)
-                .toSortedList(ObjectMember.Comparators.byMemberOrderSequence())
-                );
+    public Stream<ObjectAction> streamObjectActions(final ActionType type, final Contributed contributed) {
+        
+        guardAgainstTooEarly_contrib(contributed);
+        
+        return stream(objectActionsByType.get(type))
+                .filter(ContributeeMember.Predicates.regularElse(contributed));
     }
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    @Override
-    public List<OneToOneAssociation> getProperties(Contributed contributed) {
-        final List list = getAssociations(contributed, ObjectAssociation.Predicates.PROPERTIES);
-        return list;
-    }
-
-    @Override
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public List<OneToManyAssociation> getCollections(Contributed contributed) {
-        final List list = getAssociations(contributed, ObjectAssociation.Predicates.COLLECTIONS);
-        return list;
-    }
-
-
-
-    // -- getObjectActions
-    @Override
-    public List<ObjectAction> getObjectActions(
-            final List<ActionType> types,
-            final Contributed contributed,
-            final Predicate<ObjectAction> predicate) {
-
-        // update our list of actions if requesting for contributed actions
-        // and they have not yet been added
-        // the "contributed.isIncluded()" guard is required because we cannot do this too early;
-        // there must be a session available
-        if(contributed.isIncluded() && !contributeeAndMixedInActionsAdded) {
-            synchronized (this.objectActions) {
-                final List<ObjectAction> actions = Lists.newArrayList(this.objectActions);
-                final boolean containsMixin = containsDoOpFacet(MixinFacet.class);
-                final boolean containsDomainService = containsDoOpFacet(DomainServiceFacet.class);
-                final boolean isService = isService();
-                if (containsMixin || containsDomainService || isService) {
-                    // don't contribute to mixins themselves!
-                    // don't contribute to services either
-                    // - isService() is sufficient check for internal services registered directly with ServicesInjector
-                    // - checking for DomainServiceFacet is for application services (isService() may not have been called, for these)
-                } else {
-                    actions.addAll(createContributeeActions());
-                    actions.addAll(createMixedInActions());
-                }
-                sortCacheAndUpdateActions(actions);
-                contributeeAndMixedInActionsAdded = true;
-            }
-        }
-
-        final List<ObjectAction> actions = Lists.newArrayList();
-        for (final ActionType type : types) {
-            final Collection<ObjectAction> filterActions =
-                    Collections2.filter(objectActionsByType.get(type), (Predicate) predicate);
-            actions.addAll(filterActions);
-        }
-        return Lists.newArrayList(
-                Iterables.filter(
-                        actions,
-                        ContributeeMember.Predicates.regularElse(contributed)));
-    }
-
-    @Override
-    public List<ObjectAction> getObjectActions(
-            final Contributed contributed) {
-        return getObjectActions(ActionType.ALL, contributed,
-                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
-    }
-
-    @Override
-    public List<ObjectAction> getObjectActions(
-            final ActionType type,
-            final Contributed contributed,
-            final Predicate<ObjectAction> predicate) {
-        return getObjectActions(Collections.singletonList(type), contributed, predicate);
-    }
-
-
 
     // -- sorting
 
     protected List<ObjectAssociation> sortAssociations(final List<ObjectAssociation> associations) {
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associations);
-//TODO [ahuber] marked for removal (breaks legacy functionality) ...        
-//        final MemberGroupLayoutFacet memberGroupLayoutFacet = this.getFacet(MemberGroupLayoutFacet.class);
-//
-//        if(memberGroupLayoutFacet != null) {
-//            final List<String> groupOrder = Lists.newArrayList();
-//            groupOrder.addAll(memberGroupLayoutFacet.getLeft());
-//            groupOrder.addAll(memberGroupLayoutFacet.getMiddle());
-//            groupOrder.addAll(memberGroupLayoutFacet.getRight());
-//
-//            orderSet.reorderChildren(groupOrder);
-//        }
         final List<ObjectAssociation> orderedAssociations = Lists.newArrayList();
         sortAssociations(orderSet, orderedAssociations);
         return orderedAssociations;
@@ -877,46 +776,47 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         contributeeAssociationsToAppendTo.addAll(contributeeAssociations);
     }
 
+    private boolean canAdd(ObjectAction serviceAction) {
+        if (isAlwaysHidden(serviceAction)) {
+            return false;
+        }
+        final NotContributedFacet notContributed = serviceAction.getFacet(NotContributedFacet.class);
+        if(notContributed != null && notContributed.toAssociations()) {
+            return false;
+        }
+        if(!serviceAction.hasReturn()) {
+            return false;
+        }
+        if (serviceAction.getParameterCount() != 1 || contributeeParameterMatchOf(serviceAction) == -1) {
+            return false;
+        }
+        if(!(serviceAction instanceof ObjectActionDefault)) {
+            return false;
+        }
+        if(!serviceAction.getSemantics().isSafeInNature()) {
+            return false;
+        }
+        return true;
+    }
+    
     private List<ObjectAssociation> createContributeeAssociations(final Object servicePojo) {
         final Class<?> serviceClass = servicePojo.getClass();
         final ObjectSpecification specification = specificationLoader.loadSpecification(serviceClass);
-        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED,
-                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
-
-        final List<ObjectActionDefault> contributedActions = Lists.newArrayList();
-        for (final ObjectAction serviceAction : serviceActions) {
-            if (isAlwaysHidden(serviceAction)) {
-                continue;
-            }
-            final NotContributedFacet notContributed = serviceAction.getFacet(NotContributedFacet.class);
-            if(notContributed != null && notContributed.toAssociations()) {
-                continue;
-            }
-            if(!serviceAction.hasReturn()) {
-                continue;
-            }
-            if (serviceAction.getParameterCount() != 1 || contributeeParameterMatchOf(serviceAction) == -1) {
-                continue;
-            }
-            if(!(serviceAction instanceof ObjectActionDefault)) {
-                continue;
-            }
-            if(!serviceAction.getSemantics().isSafeInNature()) {
-                continue;
-            }
-            contributedActions.add((ObjectActionDefault) serviceAction);
-        }
-
-        return Lists.newArrayList(
-                Iterables.transform(
-                        contributedActions,
-                        createContributeeAssociationFunctor(servicePojo, this)
-                        ));
+        final Stream<ObjectAction> serviceActions = specification
+                .streamObjectActions(ActionType.USER, Contributed.INCLUDED);
+        
+        return serviceActions
+            .filter(this::canAdd)
+            .map(serviceAction->(ObjectActionDefault) serviceAction)
+            .map(createContributeeAssociationFunctor(servicePojo, this))
+            .collect(Collectors.toList());
+  
     }
 
     private Function<ObjectActionDefault, ObjectAssociation> createContributeeAssociationFunctor(
             final Object servicePojo,
             final ObjectSpecification contributeeType) {
+        
         return new Function<ObjectActionDefault, ObjectAssociation>(){
             @Override
             public ObjectAssociation apply(ObjectActionDefault input) {
@@ -926,7 +826,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 return association;
             }
 
-            ObjectAssociationAbstract createObjectAssociation(
+            private ObjectAssociationAbstract createObjectAssociation(
                     final ObjectActionDefault input,
                     final ObjectSpecification returnType) {
                 if (returnType.isNotCollection()) {
@@ -978,34 +878,30 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return;
         }
 
-        final List<ObjectActionDefault> mixinActions = objectActionsOf(specification);
+        final Stream<ObjectActionDefault> mixinActions = objectActionsOf(specification);
+        
+        mixinActions
+        .filter((ObjectActionDefault input) -> {
+            final NotContributedFacet notContributedFacet = input.getFacet(NotContributedFacet.class);
+            if (notContributedFacet == null || !notContributedFacet.toActions()) {
+                return false;
+            }
+            if(input.getParameterCount() != 0) {
+                return false;
+            }
+            if(!input.getSemantics().isSafeInNature()) {
+                return false;
+            }
+            return true;
+        })
+        .map(createMixedInAssociationFunctor(this, mixinType, mixinFacet.value()))
+        .forEach(toAppendTo::add);
 
-        final List<ObjectAssociation> mixedInAssociations = Lists.newArrayList(
-                Iterables.transform(
-                        Iterables.filter(mixinActions, new com.google.common.base.Predicate<ObjectActionDefault>() {
-                            @Override public boolean apply(final ObjectActionDefault input) {
-                                final NotContributedFacet notContributedFacet = input.getFacet(NotContributedFacet.class);
-                                if (notContributedFacet == null || !notContributedFacet.toActions()) {
-                                    return false;
-                                }
-                                if(input.getParameterCount() != 0) {
-                                    return false;
-                                }
-                                if(!input.getSemantics().isSafeInNature()) {
-                                    return false;
-                                }
-                                return true;
-                            }
-                        }),
-                        createMixedInAssociationFunctor(this, mixinType, mixinFacet.value())
-                        ));
-
-        toAppendTo.addAll(mixedInAssociations);
     }
 
-    private List objectActionsOf(final ObjectSpecification specification) {
-        return specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED,
-                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
+    private Stream<ObjectActionDefault> objectActionsOf(final ObjectSpecification specification) {
+        return specification.streamObjectActions(ActionType.ALL, Contributed.INCLUDED)
+                .map(a->(ObjectActionDefault)a);
     }
 
     private Function<ObjectActionDefault, ObjectAssociation> createMixedInAssociationFunctor(
@@ -1056,6 +952,20 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return contributeeActions;
     }
 
+    private boolean canAddContributee(final ObjectAction serviceAction) {
+        if (isAlwaysHidden(serviceAction)) {
+            return false;
+        }
+        final NotContributedFacet notContributed = serviceAction.getFacet(NotContributedFacet.class);
+        if(notContributed != null && notContributed.toActions()) {
+            return false;
+        }
+        if(!(serviceAction instanceof ObjectActionDefault)) {
+            return false;
+        }
+        return true;
+    }
+    
     private void addContributeeActionsIfAny(
             final Object servicePojo,
             final List<ObjectAction> contributeeActionsToAppendTo) {
@@ -1064,33 +974,28 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (specification == this) {
             return;
         }
-        final List<ObjectAction> contributeeActions = Lists.newArrayList();
-        final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED,
-                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
-        for (final ObjectAction serviceAction : serviceActions) {
-            if (isAlwaysHidden(serviceAction)) {
-                continue;
-            }
-            final NotContributedFacet notContributed = serviceAction.getFacet(NotContributedFacet.class);
-            if(notContributed != null && notContributed.toActions()) {
-                continue;
-            }
-            if(!(serviceAction instanceof ObjectActionDefault)) {
-                continue;
-            }
-            final ObjectActionDefault contributedAction = (ObjectActionDefault) serviceAction;
-
+        
+        final Stream<ObjectAction> serviceActions = specification
+                .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
+        
+        serviceActions
+        .filter(this::canAddContributee)
+        .map(serviceAction->(ObjectActionDefault) serviceAction)
+        .forEach(contributedAction->{
+            
             // see if qualifies by inspecting all parameters
             final int contributeeParam = contributeeParameterMatchOf(contributedAction);
-            if (contributeeParam != -1) {
-                ObjectActionContributee contributeeAction =
-                        new ObjectActionContributee(servicePojo, contributedAction, contributeeParam, this,
-                                servicesInjector);
-                facetProcessor.processMemberOrder(contributeeAction);
-                contributeeActions.add(contributeeAction);
+            if(contributeeParam == -1) {
+                return;
             }
-        }
-        contributeeActionsToAppendTo.addAll(contributeeActions);
+            
+            ObjectActionContributee contributeeAction =
+                    new ObjectActionContributee(servicePojo, contributedAction, contributeeParam, this,
+                            servicesInjector);
+            facetProcessor.processMemberOrder(contributeeAction);
+            contributeeActionsToAppendTo.add(contributeeAction);
+        });
+        
     }
 
     private boolean isAlwaysHidden(final FacetHolder holder) {
@@ -1138,6 +1043,21 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         return mixedInActions;
     }
+    
+    private boolean canAddMixin(ObjectAction mixinTypeAction) {
+        if (isAlwaysHidden(mixinTypeAction)) {
+            return false;
+        }
+        if(!(mixinTypeAction instanceof ObjectActionDefault)) {
+            return false;
+        }
+        final ObjectActionDefault mixinAction = (ObjectActionDefault) mixinTypeAction;
+        final NotContributedFacet notContributedFacet = mixinAction.getFacet(NotContributedFacet.class);
+        if(notContributedFacet != null && notContributedFacet.toActions()) {
+            return false;
+        }
+        return true;
+    }
 
     private void addMixedInActionsIfAny(
             final Class<?> mixinType,
@@ -1156,28 +1076,18 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return;
         }
 
-        final List<ObjectAction> actions = Lists.newArrayList();
-        final List<ObjectAction> mixinActions = mixinSpec.getObjectActions(ActionType.ALL, Contributed.INCLUDED,
-                com.google.common.base.Predicates.<ObjectAction>alwaysTrue());
-        for (final ObjectAction mixinTypeAction : mixinActions) {
-            if (isAlwaysHidden(mixinTypeAction)) {
-                continue;
-            }
-            if(!(mixinTypeAction instanceof ObjectActionDefault)) {
-                continue;
-            }
-            final ObjectActionDefault mixinAction = (ObjectActionDefault) mixinTypeAction;
-            final NotContributedFacet notContributedFacet = mixinAction.getFacet(NotContributedFacet.class);
-            if(notContributedFacet != null && notContributedFacet.toActions()) {
-                continue;
-            }
-
+        final Stream<ObjectAction> mixinActions = mixinSpec
+                .streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
+        
+        mixinActions
+        .filter(this::canAddMixin)
+        .forEach(mixinTypeAction->{
             ObjectActionMixedIn mixedInAction =
-                    new ObjectActionMixedIn(mixinType, mixinFacet.value(), mixinAction, this, servicesInjector);
+                    new ObjectActionMixedIn(mixinType, mixinFacet.value(), (ObjectActionDefault)mixinTypeAction, this, servicesInjector);
             facetProcessor.processMemberOrder(mixedInAction);
-            actions.add(mixedInAction);
-        }
-        mixedInActionsToAppendTo.addAll(actions);
+            mixedInActionsToAppendTo.add(mixedInAction);
+        });
+        
     }
 
 
@@ -1265,9 +1175,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return isViewModel() || isPersistenceCapable();
     }
 
-
-
-
     // -- toString
 
     @Override
@@ -1276,8 +1183,51 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         str.append("class", getFullIdentifier());
         return str.toString();
     }
+    
+    // -- GUARDS
+    
+    private boolean contributeeAndMixedInAssociationsAdded;
+    private boolean contributeeAndMixedInActionsAdded;
 
-
+    private void guardAgainstTooEarly_contrib(Contributed contributed) {
+        // update our list of actions if requesting for contributed actions
+        // and they have not yet been added
+        // the "contributed.isIncluded()" guard is required because we cannot do this too early;
+        // there must be a session available
+        if(contributed.isIncluded() && !contributeeAndMixedInActionsAdded) {
+            synchronized (this.objectActions) {
+                final List<ObjectAction> actions = _Lists.newArrayList(this.objectActions);
+                final boolean containsMixin = containsDoOpFacet(MixinFacet.class);
+                final boolean containsDomainService = containsDoOpFacet(DomainServiceFacet.class);
+                final boolean isService = isService();
+                if (containsMixin || containsDomainService || isService) {
+                    // don't contribute to mixins themselves!
+                    // don't contribute to services either
+                    // - isService() is sufficient check for internal services registered directly with ServicesInjector
+                    // - checking for DomainServiceFacet is for application services (isService() may not have been called, for these)
+                } else {
+                    actions.addAll(createContributeeActions());
+                    actions.addAll(createMixedInActions());
+                }
+                sortCacheAndUpdateActions(actions);
+                contributeeAndMixedInActionsAdded = true;
+            }
+        }
+    }
+    
+    private void guardAgainstTooEarly_assoz(Contributed contributed) {
+     // the "contributed.isIncluded()" guard is required because we cannot do this too early;
+        // there must be a session available
+        if(contributed.isIncluded() && !contributeeAndMixedInAssociationsAdded) {
+            synchronized (this.associations) {
+                List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
+                associations.addAll(createContributeeAssociations());
+                associations.addAll(createMixedInAssociations());
+                sortAndUpdateAssociations(associations);
+                contributeeAndMixedInAssociationsAdded = true;
+            }
+        }
+    }
 
     // -- Dependencies (injected in constructor)
     private ServicesInjector getServicesInjector() {

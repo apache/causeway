@@ -22,8 +22,7 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 /**
  * For base subclasses or, more likely, to help write tests.

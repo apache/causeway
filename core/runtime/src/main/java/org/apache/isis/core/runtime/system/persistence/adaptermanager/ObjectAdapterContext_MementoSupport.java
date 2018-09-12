@@ -19,6 +19,7 @@
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,19 +164,23 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
     
     private void updateFields(final ObjectAdapter object, final Data state) {
         final ObjectData od = (ObjectData) state;
-        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(Contributed.EXCLUDED);
-        for (final ObjectAssociation field : fields) {
+        final Stream<ObjectAssociation> fields = object.getSpecification().streamAssociations(Contributed.EXCLUDED);
+        
+        fields
+        .filter(field->{
             if (field.isNotPersisted()) {
                 if (field.isOneToManyAssociation()) {
-                    continue;
+                    return false;
                 }
                 if (field.containsFacet(PropertyOrCollectionAccessorFacet.class) && !field.containsFacet(PropertySetterFacet.class)) {
                     LOG.debug("ignoring not-settable field {}", field.getName());
-                    continue;
+                    return false;
                 }
             }
-            updateField(object, od, field);
-        }
+            return true;
+        })
+        .forEach(field->updateField(object, od, field));
+        
     }
 
     private void updateField(final ObjectAdapter objectAdapter, final ObjectData objectData, final ObjectAssociation objectAssoc) {

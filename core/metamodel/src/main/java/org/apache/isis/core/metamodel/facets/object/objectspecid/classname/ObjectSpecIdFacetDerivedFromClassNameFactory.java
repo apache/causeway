@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -164,12 +165,9 @@ MetaModelValidatorRefiner {
             }
 
             // don't check if domain service has only programmatic methods
-            final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.INCLUDED);
-            if(objectActions.isEmpty()) {
-                return false;
-            }
-
-            return true;
+            final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(Contributed.INCLUDED);
+            return objectActions.anyMatch(__->true); // return true if not empty
+            
         }
         return false;
     }

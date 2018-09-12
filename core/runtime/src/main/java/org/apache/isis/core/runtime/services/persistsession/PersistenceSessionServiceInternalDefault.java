@@ -86,18 +86,21 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
             final Bookmark bookmark,
             final BookmarkService.FieldResetPolicy fieldResetPolicy) {
         
-        final RootOid oid = RootOid.create(bookmark);
+        final RootOid rootOid = RootOid.create(bookmark);
         final PersistenceSession ps = getPersistenceSession();
         final boolean denyRefresh = fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH; 
                         
-        if(oid.isViewModel()) {
+        if(rootOid.isViewModel()) {
             //FIXME[ISIS-1976] if code is reachable requires separate view model handler
-            throw _Exceptions.unexpectedCodeReach();
+            //throw _Exceptions.unexpectedCodeReach();
+            
+            return getPersistenceSession().adapterForViewModel(rootOid, __->rootOid); // reuse rootOid
+            
         } else if(denyRefresh) {
-            return ps.fetchPersistentPojoInTransaction(oid);
+            return ps.fetchPersistentPojoInTransaction(rootOid);
         } else {
             
-            final ObjectAdapter adapter = getPersistenceSession().adapterFor(oid, ConcurrencyChecking.NO_CHECK);
+            final ObjectAdapter adapter = getPersistenceSession().adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
             if(adapter == null) {
                 return null;
             }            

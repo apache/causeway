@@ -20,11 +20,14 @@
 package org.apache.isis.viewer.wicket.ui.pages.home;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -90,13 +93,17 @@ public class HomePage extends PageAbstract {
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
         for (final ObjectAdapter serviceAdapter : serviceAdapters) {
             final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-            final List<ObjectAction> objectActions = serviceSpec.getObjectActions(Contributed.EXCLUDED);
-            for (final ObjectAction objectAction : objectActions) {
-                final ObjectAndAction oaa = objectAndActionIfHomePageAndUsable(serviceAdapter, objectAction);
-                if(oaa != null) {
-                    return oaa;
-                }
+            final Stream<ObjectAction> objectActions = serviceSpec.streamObjectActions(Contributed.EXCLUDED);
+            
+            final Optional<ObjectAndAction> homePageAction = objectActions
+            .map(objectAction->objectAndActionIfHomePageAndUsable(serviceAdapter, objectAction))
+            .filter(_NullSafe::isPresent)
+            .findAny();
+            
+            if(homePageAction.isPresent()) {
+                return homePageAction.get();
             }
+
         }
         return null;
     }
