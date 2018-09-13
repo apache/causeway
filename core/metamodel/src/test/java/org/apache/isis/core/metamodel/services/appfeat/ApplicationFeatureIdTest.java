@@ -21,8 +21,7 @@ package org.apache.isis.core.metamodel.services.appfeat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.TreeSet;
-
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -616,7 +615,7 @@ public class ApplicationFeatureIdTest {
 
                 ApplicationFeatureId.Predicates.
                         isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                        apply(null);
+                        test(null);
             }
 
             @Test
@@ -624,12 +623,12 @@ public class ApplicationFeatureIdTest {
                 assertThat(
                         ApplicationFeatureId.Predicates.
                                 isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                                apply(ApplicationFeatureId.newPackage("com.mycompany")),
+                                test(ApplicationFeatureId.newPackage("com.mycompany")),
                         is(false));
                 assertThat(
                         ApplicationFeatureId.Predicates.
                                 isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                                apply(ApplicationFeatureId.newMember("com.mycompany.Bar#foo")),
+                                test(ApplicationFeatureId.newMember("com.mycompany.Bar#foo")),
                         is(false));
             }
 
@@ -644,7 +643,7 @@ public class ApplicationFeatureIdTest {
                 assertThat(
                         ApplicationFeatureId.Predicates.
                                 isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                                apply(classFeature),
+                                test(classFeature),
                         is(false));
             }
             @Test
@@ -661,7 +660,7 @@ public class ApplicationFeatureIdTest {
                 assertThat(
                         ApplicationFeatureId.Predicates.
                                 isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                                apply(classFeature),
+                                test(classFeature),
                         is(false));
             }
             @Test
@@ -680,7 +679,7 @@ public class ApplicationFeatureIdTest {
                 assertThat(
                         ApplicationFeatureId.Predicates.
                                 isClassContaining(ApplicationMemberType.ACTION, mockApplicationFeatureRepository).
-                                apply(classFeature),
+                                test(classFeature),
                         is(true));
             }
         }

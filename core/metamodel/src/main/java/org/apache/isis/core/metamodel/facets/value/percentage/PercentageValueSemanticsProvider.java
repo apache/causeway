@@ -59,7 +59,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
     }
 
     public PercentageValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, Percentage.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
+        super(type(), holder, Percentage.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
 
         final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.percentage");
         if (formatRequired == null) {

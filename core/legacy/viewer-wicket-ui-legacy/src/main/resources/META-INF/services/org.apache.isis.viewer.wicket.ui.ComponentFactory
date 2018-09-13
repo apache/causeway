@@ -1,4 +1,0 @@
-org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisDatePanelFactory
-org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisDateTimePanelFactory
-org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisTimePanelFactory
-org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisTimeStampPanelFactory

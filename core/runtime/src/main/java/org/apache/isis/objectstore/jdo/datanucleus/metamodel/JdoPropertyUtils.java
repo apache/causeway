@@ -20,10 +20,11 @@ package org.apache.isis.objectstore.jdo.datanucleus.metamodel;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.jdo.annotations.PrimaryKey;
 
-import com.google.common.base.Predicate;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -52,11 +53,22 @@ public final class JdoPropertyUtils {
         return getPrimaryKeyPropertyFor(objectSpec) != null;
     }
 
-    private static OneToOneAssociation getPropertyFor(final ObjectSpecification objSpec, final String annotationName, final Predicate<ObjectAssociation> predicate) {
+    private static OneToOneAssociation getPropertyFor(
+            final ObjectSpecification objSpec, 
+            final String annotationName, 
+            final Predicate<ObjectAssociation> predicate) {
+        
         if (objSpec == null || !objSpec.containsFacet(JdoPersistenceCapableFacet.class)) {
             return null;
         }
-        final List<? extends ObjectAssociation> propertyList = objSpec.getAssociations(Contributed.EXCLUDED, predicate);
+        
+                
+        final List<ObjectAssociation> propertyList = objSpec
+                .streamAssociations(Contributed.EXCLUDED)
+                .filter(predicate)
+                .limit(2)
+                .collect(Collectors.toList());
+        
         if (propertyList.size() == 0) {
             return JdoPropertyUtils.getPropertyFor(objSpec.superclass(), annotationName, predicate);
         }

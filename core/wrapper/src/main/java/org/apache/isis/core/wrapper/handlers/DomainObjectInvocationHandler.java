@@ -24,7 +24,9 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -75,7 +77,6 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final SpecificationLoader specificationLoader;
     private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     private final ProxyContextHandler proxy;
@@ -118,7 +119,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         final ServicesInjector servicesInjector = isisSessionFactory.getServicesInjector();
 
         this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
-        this.specificationLoader = servicesInjector.getSpecificationLoader();
+        //this.specificationLoader = servicesInjector.getSpecificationLoader();
         this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
 
 
@@ -282,17 +283,16 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return null;
         }
         final ObjectSpecification specification = domainObjectAdapter.getSpecification();
-        final List<ObjectAction> objectActions = specification.getObjectActions(Contributed.INCLUDED);
-        for (final ObjectAction action : objectActions) {
-            if(action instanceof ObjectActionMixedIn) {
-                ObjectActionMixedIn mixedInAction = (ObjectActionMixedIn) action;
-                if(mixedInAction.hasMixinAction(objectAction)) {
-                    return mixedInAction;
-                }
-            }
-        }
+        final Stream<ObjectAction> objectActions = specification.streamObjectActions(Contributed.INCLUDED);
+        
+        return objectActions
+            .filter(action->action instanceof ObjectActionMixedIn)
+            .map(action->(ObjectActionMixedIn) action)
+            .filter(mixedInAction->mixedInAction.hasMixinAction(objectAction))
+            .findFirst()
+            .orElse(null);
+        
         // throw new RuntimeException("Unable to find the mixed-in action corresponding to " + objectAction.getIdentifier().toFullIdentityString());
-        return null;
     }
 
     public InteractionInitiatedBy getInteractionInitiatedBy() {
@@ -318,29 +318,37 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
             if (args.length == 1) {
                 // is this a contributed property/collection?
-                final List<ObjectAssociation> associations =
-                        objectSpec.getAssociations(Contributed.INCLUDED);
-                for (final ObjectAssociation association : associations) {
-                    if (association instanceof ContributeeMember) {
-                        final ContributeeMember contributeeMember = (ContributeeMember) association;
-                        if (contributeeMember.isContributedBy(objectAction)) {
-                            return contributeeMember;
-                        }
-                    }
+                final Stream<ObjectAssociation> associations =
+                        objectSpec.streamAssociations(Contributed.INCLUDED);
+                
+                
+                final Optional<ContributeeMember> contributeeMember = associations
+                .filter(association->association instanceof ContributeeMember)
+                .map(association->(ContributeeMember) association)
+                .filter(contributeeMember1->contributeeMember1.isContributedBy(objectAction))
+                .findAny();
+                
+                if(contributeeMember.isPresent()) {
+                    return contributeeMember.get();
                 }
             }
 
             // is this a contributed action?
-            final List<ObjectAction> actions =
-                    objectSpec.getObjectActions(Contributed.INCLUDED);
-            for (final ObjectAction action : actions) {
-                if (action instanceof ContributeeMember) {
-                    final ContributeeMember contributeeMember = (ContributeeMember) action;
-                    if (contributeeMember.isContributedBy(objectAction)) {
-                        return contributeeMember;
-                    }
+            {
+                final Stream<ObjectAction> actions =
+                        objectSpec.streamObjectActions(Contributed.INCLUDED);
+                
+                final Optional<ContributeeMember> contributeeMember = actions
+                        .filter(action->action instanceof ContributeeMember)
+                        .map(action->(ContributeeMember) action)
+                        .filter(contributeeMember1->contributeeMember1.isContributedBy(objectAction))
+                        .findAny();
+                
+                if(contributeeMember.isPresent()) {
+                    return contributeeMember.get();
                 }
             }
+            
         }
 
         return null;

@@ -74,7 +74,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
         
         final ThreadFactory threadFactory = (Runnable r) -> new Thread(group, r);
 
-        final int queueCapacity = 25;
+        final int queueCapacity = Integer.MAX_VALUE;
         final Supplier<BlockingQueue<Runnable>> workQueueFactory = 
                 ()->new LinkedBlockingQueue<>(queueCapacity);
         

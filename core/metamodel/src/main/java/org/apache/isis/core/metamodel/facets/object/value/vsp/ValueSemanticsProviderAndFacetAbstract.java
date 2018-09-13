@@ -27,7 +27,6 @@ import java.util.Locale;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.Parser2;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
@@ -45,11 +44,11 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbstract implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser2<T>, DefaultsProvider<T> {
+public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbstract implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
 
     private final Class<T> adaptedClass;
     private final int typicalLength;
-    private final Integer maxLength;
+    private final int maxLength;
     private final boolean immutable;
     private final boolean equalByContent;
     private final T defaultValue;
@@ -85,7 +84,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
             final FacetHolder holder,
             final Class<T> adaptedClass,
             final int typicalLength,
-            final Integer maxLength,
+            final int maxLength,
             final Immutability immutability,
             final EqualByContent equalByContent,
             final T defaultValue,
@@ -248,7 +247,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     }
 
     @Override
-    public final Integer maxLength() {
+    public final int maxLength() {
         return this.maxLength;
     }
 

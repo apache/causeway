@@ -28,8 +28,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.base.Strings;
 
@@ -83,7 +85,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
@@ -159,18 +160,10 @@ implements ImperativeFacet {
             final ObjectAdapter[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ObjectAdapter[] holder = new ObjectAdapter[1];
-
-        getPersistenceSessionServiceInternal().executeWithinTransaction(
-                new TransactionalClosure(){
-                    @Override
-                    public void execute() {
-                        holder[0] = doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy);
-
-                    }
-                }
-                );
-        return holder[0];
+        final ObjectAdapter holder = 
+                getPersistenceSessionServiceInternal().executeWithinTransaction(()->
+                    doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy));
+        return holder;
     }
 
     ObjectAdapter doInvoke(
@@ -352,17 +345,21 @@ implements ImperativeFacet {
     // TODO: could improve this, currently have to go searching for the mixin
     private static String targetNameFor(ObjectAction owningAction, ObjectAdapter mixedInAdapter) {
         if(mixedInAdapter != null) {
-            ObjectSpecification onType = owningAction.getOnType();
-            ObjectSpecification mixedInSpec = mixedInAdapter.getSpecification();
-            List<ObjectAction> objectActions1 = mixedInSpec.getObjectActions(Contributed.INCLUDED);
-            for (ObjectAction objectAction : objectActions1) {
-                if(objectAction instanceof MixedInMember2) {
-                    MixedInMember2 action = (MixedInMember2) objectAction;
-                    if(action.getMixinType() == onType) {
-                        return action.getName();
-                    }
-                }
+            final ObjectSpecification onType = owningAction.getOnType();
+            final ObjectSpecification mixedInSpec = mixedInAdapter.getSpecification();
+            final Stream<ObjectAction> objectActions = mixedInSpec.streamObjectActions(Contributed.INCLUDED);
+            
+            final Optional<String> mixinName = objectActions
+            .filter(action->action instanceof MixedInMember2)
+            .map(action->(MixedInMember2) action)
+            .filter(action->action.getMixinType() == onType)
+            .findAny()
+            .map(MixedInMember2::getName);
+            
+            if(mixinName.isPresent()) {
+                return mixinName.get();
             }
+            
         }
         return CommandUtil.targetMemberNameFor(owningAction);
     }

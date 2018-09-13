@@ -16,7 +16,7 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -36,25 +36,15 @@ public interface ContributeeMember extends ObjectMember {
          * Now generalized to handle {@link MixedInMember}s as well as {@link ContributeeMember}s.
          */
         public static <T extends ObjectMember> Predicate<T> regularElse(final Contributed contributed) {
-            return com.google.common.base.Predicates.or(regular(), is(contributed));
+            return (T input) -> regular().or(is(contributed)).test(input);
         }
 
         public static <T extends ObjectMember> Predicate<T> regular() {
-            return new Predicate<T>() {
-                @Override
-                public boolean apply(ObjectMember input) {
-                    return !(input instanceof ContributeeMember) && !(input instanceof MixedInMember);
-                }
-            };
+            return (T input) -> !(input instanceof ContributeeMember) && !(input instanceof MixedInMember);
         }
 
         public static <T extends ObjectMember> Predicate<T> is(final Contributed contributed) {
-            return new Predicate<T>() {
-                @Override
-                public boolean apply(ObjectMember input) {
-                    return contributed.isIncluded();
-                }
-            };
+            return (T input) -> contributed.isIncluded();
         }
 
     }

@@ -21,7 +21,9 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
@@ -145,7 +147,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         final List<ObjectActionParameter> parameters = this.getAction().getParameters(new Predicate<ObjectActionParameter>() {
 
             @Override
-            public boolean apply(final ObjectActionParameter t) {
+            public boolean test(final ObjectActionParameter t) {
                 return equalsShortIdentifier(t.getSpecification(), getSpecification());
             }
 
@@ -170,7 +172,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         final List<ObjectActionParameter> parameters = getAction().getParameters(new Predicate<ObjectActionParameter>() {
 
             @Override
-            public boolean apply(final ObjectActionParameter t) {
+            public boolean test(final ObjectActionParameter t) {
                 return equalsShortIdentifier(t.getSpecification(), getSpecification());
             }
 
@@ -241,9 +243,9 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
-    public List<Facet> getFacets(final Predicate<Facet> predicate) {
+    public Stream<Facet> streamFacets() {
         final FacetHolder facetHolder = getFacetHolder();
-        return facetHolder != null ? facetHolder.getFacets(predicate) : Lists.<Facet> newArrayList();
+        return facetHolder != null ? facetHolder.streamFacets() : Stream.of();
     }
 
     @Override

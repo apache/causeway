@@ -27,10 +27,11 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
+
+import java.util.function.Function;
+import java.util.function.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -338,19 +339,11 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
         private Functions(){}
 
-        public static final Function<ApplicationFeatureId, String> GET_CLASS_NAME = new Function<ApplicationFeatureId, String>() {
-            @Override
-            public String apply(final ApplicationFeatureId input) {
-                return input.getClassName();
-            }
-        };
+        public static final Function<ApplicationFeatureId, String> GET_CLASS_NAME = 
+                ApplicationFeatureId::getClassName;
 
-        public static final Function<ApplicationFeatureId, String> GET_MEMBER_NAME = new Function<ApplicationFeatureId, String>() {
-            @Override
-            public String apply(final ApplicationFeatureId input) {
-                return input.getMemberName();
-            }
-        };
+        public static final Function<ApplicationFeatureId, String> GET_MEMBER_NAME = 
+                ApplicationFeatureId::getMemberName;
 
     }
 
@@ -366,7 +359,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
                 final ApplicationMemberType memberType, final ApplicationFeatureRepositoryDefault applicationFeatures) {
             return new Predicate<ApplicationFeatureId>() {
                 @Override
-                public boolean apply(final ApplicationFeatureId input) {
+                public boolean test(final ApplicationFeatureId input) {
                     if(input.getType() != ApplicationFeatureType.CLASS) {
                         return false;
                     }
@@ -380,12 +373,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         }
 
         public static Predicate<ApplicationFeatureId> isClassRecursivelyWithin(final ApplicationFeatureId packageId) {
-            return new Predicate<ApplicationFeatureId>() {
-                @Override
-                public boolean apply(final ApplicationFeatureId input) {
-                    return input.getParentIds().contains(packageId);
-                }
-            };
+            return (ApplicationFeatureId input) -> input.getParentIds().contains(packageId);
         }
     }
 
@@ -446,25 +434,25 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     // -- equals, hashCode, compareTo, toString
 
     private final static Ordering<ApplicationFeatureId> byType = Ordering.natural()
-            .nullsFirst().onResultOf(new Function<ApplicationFeatureId, ApplicationFeatureType>() {
+            .nullsFirst().onResultOf(new com.google.common.base.Function<ApplicationFeatureId, ApplicationFeatureType>() {
                 @Nullable @Override public ApplicationFeatureType apply(@Nullable final ApplicationFeatureId input) {
                     return input != null ? input.getType() : null;
                 }
             });
     private final static Ordering<ApplicationFeatureId> byPackageName = Ordering.natural()
-            .nullsFirst().onResultOf(new Function<ApplicationFeatureId, String>() {
+            .nullsFirst().onResultOf(new com.google.common.base.Function<ApplicationFeatureId, String>() {
                 @Nullable @Override public String apply(@Nullable final ApplicationFeatureId input) {
                     return input != null ? input.getPackageName() : null;
                 }
             });
     private final static Ordering<ApplicationFeatureId> byClassName = Ordering.natural()
-            .nullsFirst().onResultOf(new Function<ApplicationFeatureId, String>() {
+            .nullsFirst().onResultOf(new com.google.common.base.Function<ApplicationFeatureId, String>() {
                 @Nullable @Override public String apply(@Nullable final ApplicationFeatureId input) {
                     return input != null ? input.getClassName(): null;
                 }
             });
     private final static Ordering<ApplicationFeatureId> byMemberName = Ordering.natural()
-            .nullsFirst().onResultOf(new Function<ApplicationFeatureId, String>() {
+            .nullsFirst().onResultOf(new com.google.common.base.Function<ApplicationFeatureId, String>() {
                 @Nullable @Override public String apply(@Nullable final ApplicationFeatureId input) {
                     return input != null ? input.getMemberName() : null;
                 }

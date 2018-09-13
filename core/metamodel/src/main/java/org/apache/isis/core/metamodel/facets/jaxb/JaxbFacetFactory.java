@@ -24,12 +24,14 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -48,8 +50,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-
-import com.google.common.collect.Lists;
 
 /**
  * just adds a validator
@@ -205,16 +205,18 @@ implements MetaModelValidatorRefiner {
                             typeValidator.validate(objectSpec, validationFailures);
                         }
 
-                        final List<OneToOneAssociation> properties = objectSpec.getProperties(Contributed.EXCLUDED);
-                        for (final OneToOneAssociation property : properties) {
-                            if (!property.containsDoOpFacet(PropertySetterFacet.class)) {
-                                // ignore derived
-                                continue;
-                            }
+                        final Stream<OneToOneAssociation> properties = objectSpec
+                                .streamProperties(Contributed.EXCLUDED);
+                        
+                        properties
+                        // ignore derived
+                        .filter(property->property.containsDoOpFacet(PropertySetterFacet.class))
+                        .forEach(property->{
                             for (final PropertyValidator adapterValidator : propertyValidators) {
                                 adapterValidator.validate(objectSpec, property, validationFailures);
                             }
-                        }
+                        });
+                        
                     }
                 });
         metaModelValidator.add(validator);
@@ -222,7 +224,7 @@ implements MetaModelValidatorRefiner {
 
     private List<TypeValidator> getTypeValidators(final IsisConfiguration configuration) {
 
-        final List<TypeValidator> typeValidators = Lists.newArrayList();
+        final List<TypeValidator> typeValidators = _Lists.newArrayList();
         if(configuration.getBoolean(ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_ABSTRACT, ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_NOT_ABSTRACT_DEFAULT)) {
             typeValidators.add(new JaxbViewModelNotAbstractValidator());
         }
@@ -236,7 +238,7 @@ implements MetaModelValidatorRefiner {
     }
 
     private List<PropertyValidator> getPropertyValidators(final IsisConfiguration configuration) {
-        final List<PropertyValidator> propertyValidators = Lists.newArrayList();
+        final List<PropertyValidator> propertyValidators = _Lists.newArrayList();
         if(configuration.getBoolean(ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_REFERENCE_TYPE_ADAPTER, ISIS_REFLECTOR_VALIDATOR_JAXB_VIEW_MODEL_REFERENCE_TYPE_ADAPTER_DEFAULT)) {
             propertyValidators.add(new PropertyValidatorForReferenceTypes());
         }

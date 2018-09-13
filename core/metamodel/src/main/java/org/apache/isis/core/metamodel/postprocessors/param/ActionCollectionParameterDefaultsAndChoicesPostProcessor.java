@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.postprocessors.param;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -62,15 +62,12 @@ ServicesInjectorAware {
 
         // all the actions of this type
         final List<ActionType> actionTypes = inferActionTypes();
-        List<ObjectAction> objectActions = objectSpecification.getObjectActions(actionTypes, Contributed.INCLUDED,
-                Predicates.alwaysTrue());
 
         // and all the collections of this type
-        final List<OneToManyAssociation> collections = objectSpecification.getCollections(Contributed.INCLUDED);
+        final Stream<OneToManyAssociation> collections = objectSpecification.streamCollections(Contributed.INCLUDED);
 
         // for each collection, ...
-        for (final OneToManyAssociation collection : collections) {
-
+        collections.forEach(collection->{
             // ... see if any of its actions has a collection parameter of the same type
             //
             // eg Order#getItems() and Order#removeItems(List<OrderItem>)
@@ -83,19 +80,17 @@ ServicesInjectorAware {
             final ObjectActionParameter.Predicates.ScalarParameter whetherScalarParamOfType =
                     new ObjectActionParameter.Predicates.ScalarParameter(specification);
 
-            final ImmutableList<ObjectAction> actionsAssociatedWithCollection = FluentIterable.from(objectActions)
+            objectSpecification.streamObjectActions(actionTypes, Contributed.INCLUDED)
                     .filter(ObjectAction.Predicates.associatedWith(collection))
-                    .toList();
-
-            for (final ObjectAction action : actionsAssociatedWithCollection) {
+                    .forEach(action->{
 
                 final List<ObjectActionParameter> parameters = action.getParameters();
 
                 final ImmutableList<ObjectActionParameter> compatibleCollectionParams = FluentIterable.from(parameters)
-                        .filter(whetherCollectionParamOfType).toList();
+                        .filter(whetherCollectionParamOfType::test).toList();
 
                 final ImmutableList<ObjectActionParameter> compatibleScalarParams = FluentIterable.from(parameters)
-                        .filter(whetherScalarParamOfType).toList();
+                        .filter(whetherScalarParamOfType::test).toList();
 
                 // for collection parameters, install an defaults facet (if there isn't one already)
                 // this will cause the UI to render the collection with toggleboxes
@@ -115,8 +110,9 @@ ServicesInjectorAware {
                 for (final ObjectActionParameter scalarParam : compatibleScalarParams) {
                     addChoicesFacetIfNoneAlready(collection, scalarParam);
                 }
-            }
-        }
+            });
+        });
+
     }
 
     private void addDefaultsFacetIfNoneAlready(final ObjectActionParameter collectionParam) {

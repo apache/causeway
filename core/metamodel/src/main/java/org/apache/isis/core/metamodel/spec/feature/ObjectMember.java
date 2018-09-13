@@ -20,15 +20,12 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -36,7 +33,9 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 
-import com.google.common.base.Predicate;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Provides reflective access to an action or a field on a domain object.
@@ -156,6 +155,7 @@ public interface ObjectMember extends ObjectFeature {
      * </p>
      */
     class AuthorizationException extends RuntimeException {
+        private static final long serialVersionUID = 1L;
 
         public AuthorizationException() {
             this(null);
@@ -170,6 +170,8 @@ public interface ObjectMember extends ObjectFeature {
     }
 
     class HiddenException extends AuthorizationException {
+        private static final long serialVersionUID = 1L;
+
         public HiddenException() {
             super(null);
         }
@@ -177,7 +179,7 @@ public interface ObjectMember extends ObjectFeature {
         public static Predicate<Throwable> isInstanceOf() {
             return new Predicate<Throwable>() {
                 @Override
-                public boolean apply(@Nullable final Throwable throwable) {
+                public boolean test(@Nullable final Throwable throwable) {
                     return throwable instanceof HiddenException;
                 }
             };
@@ -185,6 +187,7 @@ public interface ObjectMember extends ObjectFeature {
     }
 
     class DisabledException extends AuthorizationException {
+        private static final long serialVersionUID = 1L;
 
         public DisabledException(final String message) {
             super(message, null);
@@ -193,7 +196,7 @@ public interface ObjectMember extends ObjectFeature {
         public static Predicate<Throwable> isInstanceOf() {
             return new Predicate<Throwable>() {
                 @Override
-                public boolean apply(@Nullable final Throwable throwable) {
+                public boolean test(@Nullable final Throwable throwable) {
                     return throwable instanceof DisabledException;
                 }
             };
@@ -204,11 +207,7 @@ public interface ObjectMember extends ObjectFeature {
 
         private Functions(){}
         public static Function<ObjectMember, String> getId() {
-            return new Function<ObjectMember, String>() {
-                @Nullable @Override public String apply(@Nullable final ObjectMember oneToOneAssociation) {
-                    return oneToOneAssociation.getId();
-                }
-            };
+            return ObjectMember::getId;
         }
 
     }
@@ -217,17 +216,17 @@ public interface ObjectMember extends ObjectFeature {
 
         private Util(){}
 
-        public static <T extends ObjectMember> HashMap<String, T> mapById(final List<T> members) {
+        public static <T extends ObjectMember> Map<String, T> mapById(final Stream<T> members) {
 
             // fails if there are multiple members with the same id...
             //            return Maps.newHashMap(Maps.uniqueIndex(members, ObjectMember.Functions.getId()));
 
-            final HashMap<String, T> memberById = Maps.newLinkedHashMap();
-            for (T member : members) {
+            final Map<String, T> memberById = _Maps.newLinkedHashMap();
+            members.forEach(member->{
                 final String id = Functions.getId().apply(member);
                 // if there are multiple members with same id, just disregard
                 memberById.put(id, member);
-            }
+            });
             return memberById;
         }
     }

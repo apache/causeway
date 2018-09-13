@@ -21,11 +21,7 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import java.io.IOException;
 import java.io.Serializable;
-
-import com.google.common.base.Objects;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Objects;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
@@ -36,24 +32,19 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
 
-public class RootOid implements TypedOid, Serializable {
+public class RootOid implements Oid, Serializable {
 
     // -- fields
-    private final static Logger LOG = LoggerFactory.getLogger(RootOid.class);
-
-    private static final long serialVersionUID = 1L;
-
+    private final static long serialVersionUID = 1L;
     private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     private final ObjectSpecId objectSpecId;
     private final String identifier;
     private final State state;
-
+    private final int hashCode;
 
     // not part of equality check
     private Version version;
-
-    private int cachedHashCode;
 
 
     // -- Constructor, factory methods
@@ -130,14 +121,8 @@ public class RootOid implements TypedOid, Serializable {
         this.identifier = identifier;
         this.state = state;
         this.version = version;
-        initialized();
+        this.hashCode = calculateHash();
     }
-
-    private void initialized() {
-        cacheState();
-    }
-
-
 
     // -- Encodeable
     public RootOid(final DataInputExtended input) throws IOException {
@@ -147,16 +132,13 @@ public class RootOid implements TypedOid, Serializable {
         this.identifier = oid.identifier;
         this.state = oid.state;
         this.version = oid.version;
-        cacheState();
+        this.hashCode = calculateHash();
     }
 
     @Override
     public void encode(final DataOutputExtended output) throws IOException {
         output.writeUTF(enString());
     }
-
-
-
 
     // -- deString'able, enString
     public static RootOid deStringEncoded(final String urlEncodedOidStr) {
@@ -180,7 +162,6 @@ public class RootOid implements TypedOid, Serializable {
 
 
     // -- Properties
-    @Override
     public ObjectSpecId getObjectSpecId() {
         return objectSpecId;
     }
@@ -203,8 +184,6 @@ public class RootOid implements TypedOid, Serializable {
     public boolean isPersistent() {
         return state.isPersistent();
     }
-
-
 
     // -- Version
 
@@ -246,11 +225,8 @@ public class RootOid implements TypedOid, Serializable {
 
     // -- equals, hashCode
 
-    private void cacheState() {
-        cachedHashCode = 17;
-        cachedHashCode = 37 * cachedHashCode + objectSpecId.hashCode();
-        cachedHashCode = 37 * cachedHashCode + identifier.hashCode();
-        cachedHashCode = 37 * cachedHashCode + (isTransient() ? 0 : 1);
+    private int calculateHash() {
+        return Objects.hash(objectSpecId, identifier, state);
     }
 
     @Override
@@ -268,12 +244,14 @@ public class RootOid implements TypedOid, Serializable {
     }
 
     public boolean equals(final RootOid other) {
-        return Objects.equal(objectSpecId, other.getObjectSpecId()) && Objects.equal(identifier, other.getIdentifier()) && Objects.equal(isTransient(), other.isTransient());
+        return Objects.equals(objectSpecId, other.getObjectSpecId()) && 
+                Objects.equals(identifier, other.getIdentifier()) && 
+                Objects.equals(state, other.state);
     }
 
     @Override
     public int hashCode() {
-        return cachedHashCode;
+        return hashCode;
     }
 
 
@@ -284,7 +262,23 @@ public class RootOid implements TypedOid, Serializable {
         return enString();
     }
 
-
+    // -- ROOT-ID SUPPORT FOR VALUE
+    
+    private RootOid() { identifier=null; objectSpecId=null; state=null; hashCode=0;};
+    
+    private static final RootOid VALUE_OID = new RootOid() {
+        private static final long serialVersionUID = 2L;
+        @Override
+        public boolean isValue() {
+            return true;
+        }
+    };
+    
+    public static RootOid value() {
+        return VALUE_OID;
+    }
+    
+    // --
 
 
 }

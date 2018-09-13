@@ -52,7 +52,7 @@ public class JavaxValidationDigitsAnnotationFacetFactoryTest extends AbstractFac
         assertNotNull(facet);
         assertTrue(facet instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation);
         final BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation annotation = (BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) facet;
-        assertEquals(new Integer(18), annotation.getLength());
+        assertEquals(new Integer(18), annotation.getPrecision());
         assertEquals(new Integer(4), annotation.getScale());
     }
 
@@ -74,7 +74,7 @@ public class JavaxValidationDigitsAnnotationFacetFactoryTest extends AbstractFac
         assertNotNull(facet);
         assertTrue(facet instanceof BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation);
         final BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation annotation = (BigDecimalFacetOnParameterFromJavaxValidationDigitsAnnotation) facet;
-        assertEquals(new Integer(18), annotation.getLength());
+        assertEquals(new Integer(18), annotation.getPrecision());
         assertEquals(new Integer(4), annotation.getScale());
     }
 

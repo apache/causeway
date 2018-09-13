@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -52,8 +51,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 
-import com.google.common.base.Function;
-
 /**
  * Represents an entity or value (cf {@link java.lang.Class}) within the
  * metamodel.
@@ -65,8 +62,6 @@ import com.google.common.base.Function;
  * {@link ObjectSpecification}s as we need them, and then introspect them later.
  */
 public interface ObjectSpecification extends Specification, ObjectActionContainer, ObjectAssociationContainer, Hierarchical,  DefaultProvider {
-
-    public final static List<ObjectSpecification> EMPTY_LIST = Collections.emptyList();
 
     ObjectMember getMember(String memberId);
 
@@ -89,12 +84,8 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
         private Functions(){}
 
-        public static final Function<ObjectSpecification, String> FULL_IDENTIFIER = new Function<ObjectSpecification, String>() {
-            @Override
-            public String apply(final ObjectSpecification objectSpecification) {
-                return objectSpecification.getFullIdentifier();
-            }
-        };
+        public static final Function<ObjectSpecification, String> FULL_IDENTIFIER = 
+                ObjectSpecification::getFullIdentifier;
 
     }
 

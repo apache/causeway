@@ -19,29 +19,22 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.runtime.authentication.RegistrationDetails;
 
 public interface Registrar extends Authenticator, ApplicationScopedComponent {
 
-    static Predicate<Registrar> NON_NULL = new Predicate<Registrar>() {
-        @Override
-        public boolean apply(final Registrar input) {
-            return input != null;
-        }
-    };
+    static Predicate<Registrar> NON_NULL = _NullSafe::isPresent; 
 
-    static Function<Authenticator, Registrar> AS_REGISTRAR_ELSE_NULL = new Function<Authenticator, Registrar>() {
-        @Override
-        public Registrar apply(final Authenticator input) {
+    static Function<Authenticator, Registrar> AS_REGISTRAR_ELSE_NULL = (final Authenticator input) -> {
             if (input instanceof Registrar) {
                 return (Registrar) input;
             }
             return null;
-        }
     };
 
     /**

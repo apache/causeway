@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.enterprise.context.RequestScoped;
 
@@ -96,18 +98,11 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
         enlistForPublishing(adapter, PublishingChangeKind.CREATE);
 
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES)) {
-            final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
-            if(property.isNotPersisted()) {
-                continue;
-            }
-            if(enlistedObjectProperties.containsKey(aap)) {
-                // already enlisted, so ignore
-                return;
-            }
-            PreAndPostValues papv = PreAndPostValues.pre(IsisTransaction.Placeholder.NEW);
-            enlistedObjectProperties.put(aap, papv);
-        }
+        final Stream<ObjectAssociation> properties = adapter.getSpecification()
+                .streamAssociations(Contributed.EXCLUDED)
+                .filter(ObjectAssociation.Predicates.PROPERTIES);
+        
+        enlist(adapter, properties, aap->PreAndPostValues.pre(IsisTransaction.Placeholder.NEW));
     }
 
 
@@ -129,19 +124,12 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
         }
 
         enlistForPublishing(adapter, PublishingChangeKind.UPDATE);
-
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES)) {
-            final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
-            if(property.isNotPersisted()) {
-                continue;
-            }
-            if(enlistedObjectProperties.containsKey(aap)) {
-                // already enlisted, so ignore
-                continue;
-            }
-            PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
-            enlistedObjectProperties.put(aap, papv);
-        }
+        
+        final Stream<ObjectAssociation> properties = adapter.getSpecification()
+                .streamAssociations(Contributed.EXCLUDED)
+                .filter(ObjectAssociation.Predicates.PROPERTIES);
+        
+        enlist(adapter, properties, aap->PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
     /**
@@ -166,19 +154,13 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
         if(!enlisted) {
             return;
         }
+        
+        final Stream<ObjectAssociation> properties = adapter.getSpecification()
+                .streamAssociations(Contributed.EXCLUDED)
+                .filter(ObjectAssociation.Predicates.PROPERTIES);
+        
+        enlist(adapter, properties, aap->PreAndPostValues.pre(aap.getPropertyValue()));
 
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES)) {
-            final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
-            if(property.isNotPersisted()) {
-                continue;
-            }
-            if(enlistedObjectProperties.containsKey(aap)) {
-                // already enlisted, so ignore
-                return;
-            }
-            PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
-            enlistedObjectProperties.put(aap, papv);
-        }
     }
 
 
@@ -299,6 +281,19 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
     static String asString(Object object) {
         return object != null? object.toString(): null;
+    }
+    
+    private void enlist(
+            final ObjectAdapter adapter, 
+            final Stream<ObjectAssociation> properties, 
+            final Function<AdapterAndProperty, PreAndPostValues> pre) {
+        properties
+        .filter(property->!property.isNotPersisted())
+        .map(property->AdapterAndProperty.of(adapter, property))
+        .filter(aap->!enlistedObjectProperties.containsKey(aap)) // already enlisted, so ignore
+        .forEach(aap->{
+            enlistedObjectProperties.put(aap, pre.apply(aap));
+        });
     }
 
 

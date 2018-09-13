@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.commons.ensure;
 
+import java.util.Objects;
+
 public final class Assert {
 
     public static void assertFalse(final String message, final boolean flag) {
@@ -46,5 +48,11 @@ public final class Assert {
             throw new IsisAssertException(message + (target == null ? "" : (": " + target)));
         }
     }
-
+    
+    public static void assertEquals(final String message, Object left, Object right) {
+        if (!Objects.equals(left, right)) {
+            throw new IsisAssertException(message + String.format(": '%s' != '%s' ", ""+left, ""+right));
+        }
+    }
+    
 }

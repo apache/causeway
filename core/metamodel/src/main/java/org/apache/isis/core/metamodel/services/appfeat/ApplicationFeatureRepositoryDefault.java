@@ -18,16 +18,18 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -133,9 +135,14 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
             return;
         }
 
-        final List<ObjectAssociation> properties = spec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Predicates.PROPERTIES);
-        final List<ObjectAssociation> collections = spec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Predicates.COLLECTIONS);
-        final List<ObjectAction> actions = spec.getObjectActions(Contributed.INCLUDED);
+        final List<ObjectAssociation> properties = spec.streamAssociations(Contributed.INCLUDED)
+                .filter(ObjectAssociation.Predicates.PROPERTIES)
+                .collect(Collectors.toList());
+        final List<ObjectAssociation> collections = spec.streamAssociations(Contributed.INCLUDED)
+                .filter(ObjectAssociation.Predicates.COLLECTIONS)
+                .collect(Collectors.toList());
+        final List<ObjectAction> actions = spec.streamObjectActions(Contributed.INCLUDED)
+                .collect(Collectors.toList());
 
         if (properties.isEmpty() && collections.isEmpty() && actions.isEmpty()) {
             return;
@@ -480,62 +487,56 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     // -- packageNames, packageNamesContainingClasses, classNamesContainedIn, memberNamesOf
     @Override @Programmatic
-    public List<String> packageNames() {
+    public Set<String> packageNames() {
         initializeIfRequired();
-        return Lists.newArrayList(
-                Iterables.transform(
-                        allFeatures(ApplicationFeatureType.PACKAGE), ApplicationFeature.Functions.GET_FQN));
+        return stream(allFeatures(ApplicationFeatureType.PACKAGE))
+                .map(ApplicationFeature.Functions.GET_FQN)
+                .collect(Collectors.toSet());
     }
 
     @Override @Programmatic
-    public List<String> packageNamesContainingClasses(final ApplicationMemberType memberType) {
+    public Set<String> packageNamesContainingClasses(final ApplicationMemberType memberType) {
         initializeIfRequired();
         final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureType.PACKAGE);
-        return Lists.newArrayList(
-                Iterables.transform(
-                        Iterables.filter(
-                                packages,
-                                ApplicationFeature.Predicates.packageContainingClasses(memberType, this)
-                                ),
-                        ApplicationFeature.Functions.GET_FQN));
+        
+        return stream(packages)
+                .filter(ApplicationFeature.Predicates.packageContainingClasses(memberType, this))
+                .map(ApplicationFeature.Functions.GET_FQN)
+                .collect(Collectors.toSet());
     }
 
     @Override @Programmatic
-    public List<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberType memberType) {
+    public Set<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberType memberType) {
         initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
         final ApplicationFeature pkg = findPackage(packageId);
         if (pkg == null) {
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
         final SortedSet<ApplicationFeatureId> contents = pkg.getContents();
-        return Lists.newArrayList(
-                Iterables.transform(
-                        Iterables.filter(
-                                contents,
-                                ApplicationFeatureId.Predicates.isClassContaining(memberType, this)),
-                        ApplicationFeatureId.Functions.GET_CLASS_NAME));
+        return contents.stream()
+                .filter(ApplicationFeatureId.Predicates.isClassContaining(memberType, this))
+                .map(ApplicationFeatureId.Functions.GET_CLASS_NAME)
+                .collect(Collectors.toSet());
     }
 
     @Override @Programmatic
-    public List<String> classNamesRecursivelyContainedIn(final String packageFqn) {
+    public Set<String> classNamesRecursivelyContainedIn(final String packageFqn) {
         initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
         final ApplicationFeature pkg = findPackage(packageId);
         if (pkg == null) {
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
         final Set<ApplicationFeatureId> classIds = this.classFeatures.keySet();
-        return Lists.newArrayList(
-                Iterables.transform(
-                        Iterables.filter(
-                                classIds,
-                                ApplicationFeatureId.Predicates.isClassRecursivelyWithin(packageId)),
-                        ApplicationFeatureId.Functions.GET_CLASS_NAME));
+        return classIds.stream()
+                .filter(ApplicationFeatureId.Predicates.isClassRecursivelyWithin(packageId))
+                .map(ApplicationFeatureId.Functions.GET_CLASS_NAME)
+                .collect(Collectors.toSet());
     }
 
     @Override @Programmatic
-    public List<String> memberNamesOf(
+    public Set<String> memberNamesOf(
             final String packageFqn,
             final String className,
             final ApplicationMemberType memberType) {
@@ -543,12 +544,12 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         final ApplicationFeatureId classId = ApplicationFeatureId.newClass(packageFqn + "." + className);
         final ApplicationFeature cls = findClass(classId);
         if (cls == null) {
-            return Collections.emptyList();
+            return Collections.emptySet();
         }
         final SortedSet<ApplicationFeatureId> featureIds = cls.membersOf(memberType);
-        return Lists.newArrayList(
-                Iterables.transform(featureIds, ApplicationFeatureId.Functions.GET_MEMBER_NAME)
-                );
+        return featureIds.stream()
+                .map(ApplicationFeatureId.Functions.GET_MEMBER_NAME)
+                .collect(Collectors.toSet());
     }
 
 

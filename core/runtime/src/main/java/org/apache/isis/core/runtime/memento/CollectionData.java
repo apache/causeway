@@ -57,7 +57,7 @@ public class CollectionData extends Data {
     }
     
     /**
-     * TODO[ISIS-1976] only introduced for refactoring.
+     * FIXME[ISIS-1976] only introduced for refactoring.
      */
     @Deprecated
     public Data[] getElements() {

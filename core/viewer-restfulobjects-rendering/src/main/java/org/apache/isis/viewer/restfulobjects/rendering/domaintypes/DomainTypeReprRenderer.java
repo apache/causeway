@@ -17,6 +17,7 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.google.common.base.Strings;
@@ -95,8 +96,9 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
     private void addMembers() {
         final JsonRepresentation membersList = JsonRepresentation.newArray();
         representation.mapPut("members", membersList);
-        final List<ObjectAssociation> associations = objectSpecification.getAssociations(Contributed.EXCLUDED);
-        for (final ObjectAssociation association : associations) {
+        final Stream<ObjectAssociation> associations = objectSpecification.streamAssociations(Contributed.EXCLUDED);
+        
+        associations.forEach(association->{
             if (association.isOneToOneAssociation()) {
                 final OneToOneAssociation property = (OneToOneAssociation) association;
                 final LinkBuilder linkBuilder = PropertyDescriptionReprRenderer.newLinkToBuilder(getRendererContext(), Rel.PROPERTY, objectSpecification, property);
@@ -106,12 +108,16 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
                 final LinkBuilder linkBuilder = CollectionDescriptionReprRenderer.newLinkToBuilder(getRendererContext(), Rel.PROPERTY, objectSpecification, collection);
                 membersList.arrayAdd(linkBuilder.build());
             }
-        }
-        final List<ObjectAction> actions = objectSpecification.getObjectActions(Contributed.INCLUDED);
-        for (final ObjectAction action : actions) {
-            final LinkBuilder linkBuilder = ActionDescriptionReprRenderer.newLinkToBuilder(getRendererContext(), Rel.ACTION, objectSpecification, action);
-            membersList.arrayAdd(linkBuilder.build());
-        }
+        });
+        
+        final Stream<ObjectAction> actions = objectSpecification.streamObjectActions(Contributed.INCLUDED);
+        
+        actions.forEach(action->{
+            final LinkBuilder linkBuilder = ActionDescriptionReprRenderer
+                    .newLinkToBuilder(getRendererContext(), Rel.ACTION, objectSpecification, action);
+            membersList.arrayAdd(linkBuilder.build());            
+        });
+       
     }
 
     private JsonRepresentation getTypeActions() {

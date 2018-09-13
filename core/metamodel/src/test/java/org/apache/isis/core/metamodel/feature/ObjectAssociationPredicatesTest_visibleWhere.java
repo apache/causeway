@@ -37,7 +37,9 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import org.apache.isis.applib.annotation.Where;
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -107,8 +109,8 @@ public class ObjectAssociationPredicatesTest_visibleWhere {
             allowing(mockHiddenFacet).where();
             will(returnValue(where));
 
-            allowing(mockObjectAssociation).getFacets(with(any(Predicate.class)));
-            will(returnValue(Lists.newArrayList(mockHiddenFacet)));
+            allowing(mockObjectAssociation).streamFacets();
+            will(returnValue(Lists.newArrayList(mockHiddenFacet).stream()));
         }});
     }
 
@@ -130,12 +132,14 @@ public class ObjectAssociationPredicatesTest_visibleWhere {
     public void test() {
         final Predicate<ObjectAssociation> predicate = new Predicate<ObjectAssociation>() {
             @Override
-            public boolean apply(final ObjectAssociation association) {
-                final List<Facet> facets = association.getFacets(new Predicate<Facet>() {
-                    @Override public boolean apply(final Facet facet) {
-                        return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
-                    }
-                });
+            public boolean test(final ObjectAssociation association) {
+                final List<Facet> facets = association.streamFacets()
+                        .filter(new Predicate<Facet>() {
+                            @Override public boolean test(final Facet facet) {
+                                return facet instanceof WhereValueFacet && facet instanceof HiddenFacet;
+                            }
+                        })
+                        .collect(Collectors.toList());
                 for (Facet facet : facets) {
                     final WhereValueFacet wawF = (WhereValueFacet) facet;
                     if (wawF.where().includes(whereContext)) {
@@ -145,7 +149,7 @@ public class ObjectAssociationPredicatesTest_visibleWhere {
                 return true;
             }
         };
-        assertThat(predicate.apply(mockObjectAssociation), is(expectedVisibility));
+        assertThat(predicate.test(mockObjectAssociation), is(expectedVisibility));
     }
 
 }

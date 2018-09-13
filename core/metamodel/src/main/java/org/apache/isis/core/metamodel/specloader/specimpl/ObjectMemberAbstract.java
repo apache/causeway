@@ -22,7 +22,8 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.List;
 import java.util.Objects;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
@@ -152,8 +153,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     @Override
-    public List<Facet> getFacets(final Predicate<Facet> predicate) {
-        return getFacetHolder().getFacets(predicate);
+    public Stream<Facet> streamFacets() {
+        return getFacetHolder().streamFacets();
     }
 
     @Override

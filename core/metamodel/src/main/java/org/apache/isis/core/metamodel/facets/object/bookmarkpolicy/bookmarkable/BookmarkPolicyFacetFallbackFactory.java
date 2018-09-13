@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -62,14 +62,19 @@ public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract imp
 
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                final Class<?> cls = objectSpec.getCorrespondingClass();
 
-                final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
-                for (final ObjectAction objectAction : objectActions) {
+                final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(Contributed.EXCLUDED);
+                
+                objectActions
+                .filter(objectAction->{
                     final BookmarkPolicyFacet bookmarkFacet = objectAction.getFacet(BookmarkPolicyFacet.class);
-                    if(bookmarkFacet == null || bookmarkFacet.isNoop() || bookmarkFacet.value() == BookmarkPolicy.NEVER) {
-                        continue;
+                    if(bookmarkFacet == null || bookmarkFacet.isNoop() || 
+                            bookmarkFacet.value() == BookmarkPolicy.NEVER) {
+                        return false;
                     }
+                    return true;
+                })
+                .forEach(objectAction->{
                     final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
                     if(semanticsFacet == null || semanticsFacet.isNoop() || !semanticsFacet.value().isSafeInNature()) {
                         validationFailures.add(
@@ -77,7 +82,8 @@ public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract imp
                                         "Either add @Action(semantics=SemanticsOf.SAFE) or @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE), or remove @ActionLayout(bookmarking=...).",
                                         objectAction.getIdentifier().toClassAndNameIdentityString());
                     }
-                }
+                });
+                
                 return true;
             }
         }));

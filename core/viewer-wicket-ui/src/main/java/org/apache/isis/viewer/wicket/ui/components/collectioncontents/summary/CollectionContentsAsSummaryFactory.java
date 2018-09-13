@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.summary;
 
-import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -27,11 +28,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import com.google.common.base.Predicate;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
@@ -47,12 +47,10 @@ public class CollectionContentsAsSummaryFactory extends ComponentFactoryAbstract
 
     private static final String NAME = "summary";
 
-    final static Predicate<ObjectAssociation> OF_TYPE_BIGDECIMAL = new Predicate<ObjectAssociation>(){
-        @Override
-        public boolean apply(final ObjectAssociation objectAssoc) {
-            ObjectSpecification objectSpec = objectAssoc.getSpecification();
+    final static Predicate<ObjectAssociation> OF_TYPE_BIGDECIMAL = (final ObjectAssociation objectAssoc) -> {
+            final ObjectSpecification objectSpec = objectAssoc.getSpecification();
             return objectSpec.containsDoOpFacet(BigDecimalValueFacet.class);
-        }};
+        };
 
         // //////////////////////////////////////
 
@@ -67,8 +65,9 @@ public class CollectionContentsAsSummaryFactory extends ComponentFactoryAbstract
             }
             final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
             final ObjectSpecification elementSpec = entityCollectionModel.getTypeOfSpecification();
-            List<ObjectAssociation> associations = elementSpec.getAssociations(Contributed.EXCLUDED, OF_TYPE_BIGDECIMAL);
-            return appliesIf(!associations.isEmpty());
+            final Stream<ObjectAssociation> associations = elementSpec.streamAssociations(Contributed.EXCLUDED);
+            
+            return appliesIf(associations.anyMatch(OF_TYPE_BIGDECIMAL));
         }
 
         @Override

@@ -83,7 +83,7 @@ public class MetaModelValidatorToCheckObjectSpecIdsUnique extends MetaModelValid
             private String asCsv(final List<ObjectSpecification> specList) {
                 return Joiner.on(",").join(
                         FluentIterable.from(specList)
-                        .transform(ObjectSpecification.Functions.FULL_IDENTIFIER)
+                        .transform(ObjectSpecification.Functions.FULL_IDENTIFIER::apply)
                         .toList());
             }
 

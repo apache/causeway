@@ -36,13 +36,13 @@ public interface BigDecimalValueFacet extends Facet {
      */
     Integer getPrecision();
 
-    /**
+    /*
      * Same as {@link #getPrecision()}.
      *
      * @deprecated
      */
-    @Deprecated
-    Integer getLength();
+    //@Deprecated
+    //Integer getLength();
 
     /**
      * The number of digits to the right of the decimal place (fractional part) for this decimal.

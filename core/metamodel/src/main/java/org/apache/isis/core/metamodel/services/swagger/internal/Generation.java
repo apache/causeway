@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -166,8 +167,10 @@ class Generation {
     @SuppressWarnings("unused")
     private void debugTraverseAllSpecs(final Collection<ObjectSpecification> allSpecs) {
         for (final ObjectSpecification objectSpec :  allSpecs) {
-            objectSpec.getAssociations(Contributed.INCLUDED);
-            objectSpec.getObjectActions(Contributed.INCLUDED);
+            objectSpec.streamAssociations(Contributed.INCLUDED)
+                .collect(Collectors.toList());
+            objectSpec.streamObjectActions(Contributed.INCLUDED)
+                .collect(Collectors.toList());
         }
     }
 

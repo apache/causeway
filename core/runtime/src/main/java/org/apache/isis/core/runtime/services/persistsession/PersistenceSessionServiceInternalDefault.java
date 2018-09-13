@@ -20,9 +20,12 @@ package org.apache.isis.core.runtime.services.persistsession;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
+import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
@@ -36,6 +39,7 @@ import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -46,7 +50,6 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -71,29 +74,52 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
 
     @Override
     public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
-        return getPersistenceSession().createTransientInstance(spec);
+        return getPersistenceSession().newTransientInstance(spec);
     }
 
     @Override
     public ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento) {
-        return getPersistenceSession().createViewModelInstance(spec, memento);
+        return getPersistenceSession().recreateViewModelInstance(spec, memento);
     }
 
     @Override
     public Object lookup(
             final Bookmark bookmark,
             final BookmarkService.FieldResetPolicy fieldResetPolicy) {
-        return getPersistenceSession().lookup(bookmark, fieldResetPolicy);
+        
+        final RootOid rootOid = RootOid.create(bookmark);
+        final PersistenceSession ps = getPersistenceSession();
+        final boolean denyRefresh = fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH; 
+                        
+        if(rootOid.isViewModel()) {
+            final ObjectAdapter adapter = ps.adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
+            final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getObject, null);
+            
+            return pojo;
+            
+        } else if(denyRefresh) {
+            
+            final Object pojo = ps.fetchPersistentPojoInTransaction(rootOid);
+            return pojo;            
+            
+        } else {
+            final ObjectAdapter adapter = ps.adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
+            
+            final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getObject, null);
+            acceptIfPresent(pojo, ps::refreshRootInTransaction);
+            return pojo;
+        }
+        
     }
 
     @Override
     public Bookmark bookmarkFor(Object domainObject) {
         final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
-        final Oid oid = adapter.getOid();
-        if(oid == null) {
+        if(adapter.isValue()) {
             // values cannot be bookmarked
             return null;
         }
+        final Oid oid = adapter.getOid();
         if(!(oid instanceof RootOid)) {
             // must be root
             return null;
@@ -111,7 +137,7 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
 
     @Override
     public void resolve(final Object parent) {
-        getPersistenceSession().resolve(parent);
+        getPersistenceSession().refreshRootInTransaction(parent);
     }
 
     /**
@@ -172,8 +198,13 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
     }
 
     @Override
-    public void executeWithinTransaction(TransactionalClosure transactionalClosure) {
-        getTransactionManager().executeWithinTransaction(transactionalClosure);
+    public void executeWithinTransaction(Runnable task) {
+        getTransactionManager().executeWithinTransaction(task);
+    }
+    
+    @Override
+    public <T> T executeWithinTransaction(Supplier<T> task) {
+        return getTransactionManager().executeWithinTransaction(task);
     }
 
     @Override
@@ -208,5 +239,8 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
 
     @javax.inject.Inject
     IsisSessionFactory isisSessionFactory;
+
+
+
 
 }

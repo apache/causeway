@@ -19,10 +19,13 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -105,7 +108,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
             return null;
         }
 
-        final Collection<Authenticator> compatibleAuthenticators = Collections2.filter(authenticators, AuthenticatorFuncs.compatibleWith(request));
+        final Collection<Authenticator> compatibleAuthenticators = Collections2.filter(authenticators, AuthenticatorFuncs.compatibleWith(request)::test);
         if (compatibleAuthenticators.size() == 0) {
             throw new NoAuthenticatorException("No authenticator available for processing " + request.getClass().getName());
         }
@@ -193,8 +196,10 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     }
 
     private static List<Registrar> asAuthenticators(final List<Authenticator> authenticators2) {
-        final List<Registrar> registrars = Lists.transform(authenticators2, Registrar.AS_REGISTRAR_ELSE_NULL);
-        return Lists.newArrayList(Collections2.filter(registrars, Registrar.NON_NULL));
+        return stream(authenticators2)
+                .map(Registrar.AS_REGISTRAR_ELSE_NULL)
+                .filter(Registrar.NON_NULL)
+                .collect(Collectors.toList());
     }
 
     // //////////////////////////////////////////////////////////
