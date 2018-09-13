@@ -18,7 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.util;
 
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -57,6 +60,8 @@ public final class OidUtils {
         String oidStrUnencoded = UrlDecoderUtils.urlDecode(oidStrEncoded);
         return getObjectAdapter(rendererContext, oidStrUnencoded);
     }
+    
+    // -- HELPER
 
     private static ObjectAdapter getObjectAdapter(
             final RendererContext rendererContext,
@@ -67,9 +72,8 @@ public final class OidUtils {
         
         return ps.adapterFor(domainObject);
     }
-
     
-    private static Object domainObjectForAny(final PersistenceSession persistenceSession, RootOid rootOid) {
+    private static Object domainObjectForAny(final PersistenceSession persistenceSession, final RootOid rootOid) {
         
         final ObjectSpecId specId = rootOid.getObjectSpecId();
         final ObjectSpecification spec = persistenceSession.getServicesInjector()
@@ -82,29 +86,36 @@ public final class OidUtils {
 
         if(spec.containsFacet(ViewModelFacet.class)) {
 
-            // this is a hack; the RO viewer when rendering the URL for the view model loses the "view model" indicator
-            // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an
-            // oid in the wrong state.  The code below checks for this and recreates the oid with the current state of 'view model'
-            if(!rootOid.isViewModel()) {
-                rootOid = new RootOid(rootOid.getObjectSpecId(), rootOid.getIdentifier(), Oid.State.VIEWMODEL);
-            }
-
             try {
-                return persistenceSession.adapterFor(rootOid);
-            } catch(final ObjectNotFoundException ex) {
-                return null;
-            } catch(final PojoRecreationException ex) {
+                final RootOid fixedRootOid = ensureConsistentOidState(rootOid);
+                final ObjectAdapter adapter = persistenceSession
+                        .adapterFor(fixedRootOid, ConcurrencyChecking.NO_CHECK);
+                
+                final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getObject, null);
+                return pojo;
+                
+            } catch(final ObjectNotFoundException | PojoRecreationException ex) {
                 return null;
             }
         } else {
             try {
                 final Object domainObject = persistenceSession.fetchPersistentPojoInTransaction(rootOid);
-                //[ISIS-1976] changed behavior: predicate was objectAdapter.isTransient();
+                //TODO[ISIS-1976] changed behavior: predicate was objectAdapter.isTransient();
                 return persistenceSession.isTransient(domainObject) ? null : domainObject;
             } catch(final ObjectNotFoundException ex) {
                 return null;
             }
         }
+    }
+    
+    private static RootOid ensureConsistentOidState(RootOid rootOid) {
+        // this is a hack; the RO viewer when rendering the URL for the view model loses the "view model" indicator
+        // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an
+        // oid in the wrong state.  The code below checks for this and recreates the oid with the current state of 'view model'
+        if(!rootOid.isViewModel()) {
+            return new RootOid(rootOid.getObjectSpecId(), rootOid.getIdentifier(), Oid.State.VIEWMODEL);
+        }
+        return rootOid;
     }
     
 }
