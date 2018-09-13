@@ -23,12 +23,16 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-    <version>${revision}</version>
+    	<version>${revision}</version>
+    	<relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>isis-core-security-shiro</artifactId>
+    <artifactId>isis-core-plugins-security-shiro</artifactId>
 
-    <name>Apache Isis Security Shiro</name>
+    <name>Apache Isis Plugin for Security (Shiro)</name>
+	<description>
+        Authentication and Authorization using Apache Shiro.
+    </description>
 
     <properties>
         <jar-plugin.automaticModuleName>org.apache.isis.security.shiro</jar-plugin.automaticModuleName>

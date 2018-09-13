@@ -1432,19 +1432,20 @@ ${license.additional-notes}
                 <scope>test</scope>
             </dependency>
 
-            <!-- security implementation(s) -->
+            <!-- security support -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security</artifactId>
                 <version>${revision}</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-security-shiro</artifactId>
-                <version>${revision}</version>
-            </dependency>
 
             <!-- core plugins -->
+            
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-plugins-security-shiro</artifactId>
+                <version>${revision}</version>
+            </dependency>
             
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
@@ -2486,8 +2487,7 @@ ${license.additional-notes}
         <module>webserver</module>
 
         <module>security</module>
-        <module>security-shiro</module>
-
+        
         <module>unittestsupport</module>
         <module>specsupport</module>
         <module>integtestsupport</module>
@@ -2516,6 +2516,7 @@ ${license.additional-notes}
         <module>plugins/jaxrs-resteasy-4</module>
         <module>plugins/jdo-datanucleus-4</module>
         <module>plugins/jdo-datanucleus-5</module>
+        <module>plugins/security-shiro</module>
 
         <!-- to break cyclic dependencies some tests needed to be moved to their own modules -->
         <module>unittestsupport-test</module>
