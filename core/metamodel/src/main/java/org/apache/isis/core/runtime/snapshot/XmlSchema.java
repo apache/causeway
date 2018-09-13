@@ -19,8 +19,7 @@
 
 package org.apache.isis.core.runtime.snapshot;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.function.BiConsumer;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -48,6 +47,11 @@ public final class XmlSchema {
      * in the constructor.
      */
     public final static String DEFAULT_PREFIX = "app";
+    
+    public static interface ExtensionData<T> {
+        public int size();
+        public void visit(BiConsumer<Class<T>, T> elementConsumer);
+    }
 
     public XmlSchema() {
         this(IsisSchema.DEFAULT_URI_BASE, XmlSchema.DEFAULT_PREFIX);
@@ -172,12 +176,18 @@ public final class XmlSchema {
 
         addNamespace(xsSchemaElement, getPrefix(), getUri());
     }
+    
+
 
     /**
      * Creates an &lt;xs:element&gt; element defining the presence of the named
      * element representing a class
      */
-    Element createXsElementForNofClass(final Document xsdDoc, final Element element, final boolean addCardinality, final Hashtable extensions) {
+    <T> Element createXsElementForNofClass(
+            final Document xsdDoc, 
+            final Element element, 
+            final boolean addCardinality, 
+            final ExtensionData<T> extensions) {
 
         // gather details from XML element
         final String localName = element.getLocalName();
@@ -234,7 +244,7 @@ public final class XmlSchema {
      * The returned element should be appended to <code>xs:sequence</code>
      * element of the xs:element representing the type of the owning object.
      */
-    void addXsElementForAppExtensions(final Element parentXsElementElement, final Hashtable extensions) {
+    <T> void addXsElementForAppExtensions(final Element parentXsElementElement, final ExtensionData<T> extensions) {
 
         if (extensions.size() == 0) {
             return;
@@ -296,7 +306,10 @@ public final class XmlSchema {
      * The returned element should be appended to <code>xs:sequence</code>
      * element of the xs:element representing the type of the owning object.
      */
-    Element createXsElementForNofValue(final Element parentXsElementElement, final Element xmlValueElement, final Hashtable extensions) {
+    <T> Element createXsElementForNofValue(
+            final Element parentXsElementElement, 
+            final Element xmlValueElement, 
+            final ExtensionData<T> extensions) {
 
         // gather details from XML element
         final String datatype = xmlValueElement.getAttributeNS(IsisSchema.NS_URI, "datatype");
@@ -363,13 +376,14 @@ public final class XmlSchema {
         return xsFieldElementElement;
     }
 
-    private void addExtensionElements(final Element parentElement, final Hashtable extensions) {
-        for (final Enumeration e = extensions.keys(); e.hasMoreElements();) {
-            final Class<?> extensionClass = (Class<?>) e.nextElement();
-            final Object extensionObject = extensions.get(extensionClass);
+    private <T> void addExtensionElements(final Element parentElement, final ExtensionData<T> extensions) {
+        
+        extensions.visit((final Class<T> extensionClass, final T extensionObject)->{
+            
             // xs:element/xs:complexType/xs:sequence/xs:element/xs:complexType/xs:sequence/xs:element
             // name="%extensionClassShortName%"
-            final Element xsExtensionElementElement = xsMeta.createXsElementElement(helper.docFor(parentElement), "x-" + shortName(extensionClass.getName()));
+            final Element xsExtensionElementElement = xsMeta.createXsElementElement(
+                    helper.docFor(parentElement), "x-" + shortName(extensionClass.getName()));
             xsExtensionElementElement.setAttribute("default", extensionObject.toString()); // the
             // value
             xsExtensionElementElement.setAttribute("minOccurs", "0"); // doesn't
@@ -379,7 +393,8 @@ public final class XmlSchema {
             // (and
             // indeed won't)
             parentElement.appendChild(xsExtensionElementElement);
-        }
+        });
+       
     }
 
     /**
@@ -387,7 +402,11 @@ public final class XmlSchema {
      * element representing a reference to a class; appended to xs:sequence
      * element
      */
-    Element createXsElementForNofReference(final Element parentXsElementElement, final Element xmlReferenceElement, final String referencedClassName, final Hashtable extensions) {
+    <T> Element createXsElementForNofReference(
+            final Element parentXsElementElement, 
+            final Element xmlReferenceElement, 
+            final String referencedClassName, 
+            final ExtensionData<T> extensions) {
 
         // gather details from XML element
         final String fieldName = xmlReferenceElement.getLocalName();
@@ -467,7 +486,11 @@ public final class XmlSchema {
      * element representing a collection in a class; appended to xs:sequence
      * element
      */
-    Element createXsElementForNofCollection(final Element parentXsElementElement, final Element xmlCollectionElement, final String referencedClassName, final Hashtable extensions) {
+    <T> Element createXsElementForNofCollection(
+            final Element parentXsElementElement, 
+            final Element xmlCollectionElement, 
+            final String referencedClassName, 
+            final ExtensionData<T> extensions) {
 
         // gather details from XML element
         final String fieldName = xmlCollectionElement.getLocalName();

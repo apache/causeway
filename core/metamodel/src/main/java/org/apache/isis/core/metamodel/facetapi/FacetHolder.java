@@ -28,11 +28,14 @@ import java.util.stream.Stream;
  */
 public interface FacetHolder {
 
-    /**
-     * Get the list of all facet <i>types</i> that are supported by objects of
-     * this specification.
-     */
-    Class<? extends Facet>[] getFacetTypes();
+//FIXME[]    
+//    /**
+//     * Get the list of all facet <i>types</i> that are supported by objects of
+//     * this specification.
+//     */
+//    Class<? extends Facet>[] getFacetTypes();
+    
+    int getFacetCount();
 
     /**
      * Get the facet of the specified type (as per the type it reports from
@@ -102,5 +105,7 @@ public interface FacetHolder {
      * Remove the facet of the specified type.
      */
     void removeFacet(Class<? extends Facet> facetType);
+
+    
 
 }

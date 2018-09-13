@@ -19,8 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
-import org.apache.isis.applib.annotation.Where;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -74,8 +76,8 @@ public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implem
     protected abstract String hiddenReason(ObjectAdapter target, Where whereContext);
 
     @Override
-    public Class<? extends Facet>[] facetTypes() {
-        return new Class[]{facetType(), HiddenFacet.class};
+    public Stream<Class<? extends Facet>> facetTypes() {
+        return Stream.of(facetType(), HiddenFacet.class);
     }
 
     @Override
@@ -85,12 +87,8 @@ public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implem
 
     @Override
     public boolean containsFacetTypeOf(final Class<? extends Facet> requiredFacetType) {
-        for (final Class<? extends Facet> facetType : facetTypes()) {
-            if(facetType == requiredFacetType) {
-                return true;
-            }
-        }
-        return false;
+        return facetTypes()
+                .anyMatch(facetType->facetType == requiredFacetType);
     }
 
 

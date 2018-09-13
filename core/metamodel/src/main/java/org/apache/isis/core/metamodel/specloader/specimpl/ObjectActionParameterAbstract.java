@@ -235,11 +235,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return facetHolder != null ? facetHolder.getFacet(cls) : null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public Class<? extends Facet>[] getFacetTypes() {
+    public int getFacetCount() {
         final FacetHolder facetHolder = getFacetHolder();
-        return facetHolder != null ? facetHolder.getFacetTypes() : new Class[] {};
+        return facetHolder != null ? facetHolder.getFacetCount() : 0;
     }
 
     @Override

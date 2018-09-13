@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.value;
 
+import java.util.stream.Stream;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -150,9 +152,11 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
     // /////////////////////////////
     // MultiTypedFacet impl
     // /////////////////////////////
+    
     @Override
-    public Class<? extends Facet>[] facetTypes() {
-        return facetHolder.getFacetTypes();
+    public Stream<Class<? extends Facet>> facetTypes() {
+        return facetHolder.streamFacets()
+                .map(Facet::facetType);
     }
 
     @Override
@@ -162,12 +166,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
 
     @Override
     public boolean containsFacetTypeOf(final Class<? extends Facet> requiredFacetType) {
-        for (final Class<? extends Facet> facetType : facetTypes()) {
-            if(facetType == requiredFacetType) {
-                return true;
-            }
-        }
-        return false;
+        return facetHolder.containsFacet(requiredFacetType);
     }
 
     // /////////////////////////////////////////

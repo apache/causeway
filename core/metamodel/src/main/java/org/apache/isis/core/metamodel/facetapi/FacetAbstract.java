@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facetapi;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 
@@ -111,13 +112,9 @@ public abstract class FacetAbstract implements Facet {
         }
 
         final MultiTypedFacet thisAsMultiTyped = (MultiTypedFacet) this;
-        final Class<? extends Facet>[] facetTypes = thisAsMultiTyped.facetTypes();
-        for (final Class<? extends Facet> facetType : facetTypes) {
-            if(multiTypedFacet.containsFacetTypeOf(facetType)) {
-                return true;
-            }
-        }
-        return false;
+        final Stream<Class<? extends Facet>> facetTypes = thisAsMultiTyped.facetTypes();
+        return facetTypes
+                .anyMatch(facetType->multiTypedFacet.containsFacetTypeOf(facetType));
     }
 
     /**

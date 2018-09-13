@@ -18,14 +18,12 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -218,8 +216,8 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     // //////////////////////////////////////
 
     @Override
-    public Class<? extends Facet>[] getFacetTypes() {
-        return facetHolder.getFacetTypes();
+    public int getFacetCount() {
+        return facetHolder.getFacetCount();
     }
 
     @Override

@@ -19,14 +19,13 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.runtime.snapshot.XmlSchema.ExtensionData;
 
 
 public final class FacetUtil {
@@ -103,25 +102,6 @@ public final class FacetUtil {
         return addedFacets;
     }
 
-    /**
-     * Bit nasty, for use only by {@link FacetHolder}s that index their
-     * {@link Facet}s in a Map.
-     */
-    public static Class<? extends Facet>[] getFacetTypes(final Map<Class<? extends Facet>, Facet> facetsByClass) {
-        return _Casts.uncheckedCast(
-                facetsByClass.keySet().toArray(_Constants.emptyClasses)	);
-    }
-
-    /**
-     * Bit nasty, for use only by {@link FacetHolder}s that index their
-     * {@link Facet}s in a Map.
-     */
-    public static Stream<Facet> streamFacets(final Map<Class<? extends Facet>, Facet> facetsByClass) {
-        return facetsByClass.values()
-        .stream()
-        .distinct();
-    }
-
     public static void removeFacet(final Map<Class<? extends Facet>, Facet> facetsByClass, final Facet facet) {
         removeFacet(facetsByClass, facet.facetType());
     }
@@ -147,23 +127,38 @@ public final class FacetUtil {
         }
     }
 
-    public static Hashtable<Class<? extends Facet>, Facet> getFacetsByType(final FacetHolder facetHolder) {
-        final Hashtable<Class<? extends Facet>, Facet> facetByType = new Hashtable<Class<? extends Facet>, Facet>();
-        final Class<? extends Facet>[] facetsFor = facetHolder.getFacetTypes();
-        for (final Class<? extends Facet> facetType : facetsFor) {
-            final Facet facet = facetHolder.getFacet(facetType);
-            facetByType.put(facetType, facet);
-        }
-        return facetByType;
+    public static <T extends Facet> ExtensionData<T> getFacetsByType(final FacetHolder facetHolder) {
+        
+        return new ExtensionData<T>() {
+
+            @Override
+            public int size() {
+                return facetHolder.getFacetCount();
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void visit(BiConsumer<Class<T>, T> elementConsumer) {
+                facetHolder.streamFacets()
+                .forEach(facet->elementConsumer.accept((Class<T>)facet.facetType(), (T)facet));
+            }
+            
+        };
     }
+    
+    
+    
+//    public static Hashtable<Class<? extends Facet>, Facet> getFacetsByType(final FacetHolder facetHolder) {
+//        final Hashtable<Class<? extends Facet>, Facet> facetByType = new Hashtable<Class<? extends Facet>, Facet>();
+//        final Class<? extends Facet>[] facetsFor = facetHolder.getFacetTypes();
+//        for (final Class<? extends Facet> facetType : facetsFor) {
+//            final Facet facet = facetHolder.getFacet(facetType);
+//            facetByType.put(facetType, facet);
+//        }
+//        return facetByType;
+//    }
 
     public static void copyFacets(final FacetHolder source, final FacetHolder target) {
-        final Class<? extends Facet>[] facetTypes = source.getFacetTypes();
-        for (Class<? extends Facet> facetType : facetTypes) {
-            //TODO [ahuber] unused because of expected side effects?
-            final Facet facet = source.getFacet(facetType);
-
-        }
         source.streamFacets()
         .forEach(target::addFacet);
     }

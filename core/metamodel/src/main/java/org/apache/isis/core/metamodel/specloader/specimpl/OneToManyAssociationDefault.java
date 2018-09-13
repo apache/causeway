@@ -161,8 +161,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final PropertyOrCollectionAccessorFacet accessor = getFacet(PropertyOrCollectionAccessorFacet.class);
-        final Object collection = accessor.getProperty(ownerAdapter,
-                interactionInitiatedBy);
+        final Object collection = accessor.getProperty(ownerAdapter, interactionInitiatedBy);
         if (collection == null) {
             return null;
         }

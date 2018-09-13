@@ -19,10 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.List;
 import java.util.Objects;
-
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
@@ -148,8 +145,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     @Override
-    public Class<? extends Facet>[] getFacetTypes() {
-        return getFacetHolder().getFacetTypes();
+    public int getFacetCount() {
+        return getFacetHolder().getFacetCount();
     }
 
     @Override
