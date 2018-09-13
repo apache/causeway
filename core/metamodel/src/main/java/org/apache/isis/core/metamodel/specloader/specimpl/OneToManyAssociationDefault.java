@@ -191,7 +191,9 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         }
         if (readWrite()) {
             if (ownerAdapter.representsPersistent() && referencedAdapter.isTransient()) {
-                throw new IsisException("can't set a reference to a transient object from a persistent one: " + ownerAdapter.titleString(null) + " (persistent) -> " + referencedAdapter.titleString() + " (transient)");
+                throw new IsisException("can't set a reference to a transient object from a persistent one: "
+                        + ownerAdapter.titleString(null)
+                        + " (persistent) -> " + referencedAdapter.titleString() + " (transient)");
             }
             final CollectionAddToFacet facet = getFacet(CollectionAddToFacet.class);
             facet.add(ownerAdapter, referencedAdapter, interactionInitiatedBy);

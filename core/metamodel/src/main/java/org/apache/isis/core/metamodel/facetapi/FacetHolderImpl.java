@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facetapi;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -80,11 +80,12 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final int pagedStandalone = getPagedConfigSetting("standalone", PAGE_SIZE_STANDALONE_DEFAULT);
         final PagedFacetFromConfiguration pagedFacet = new PagedFacetFromConfiguration(pagedStandalone, facetHolder);
 
-        final Facet[] facets = new Facet[] { describedAsFacet,
-                // commenting these out, think this whole isNoop business is a little bogus
-                // new ImmutableFacetNever(holder),
-                titleFacet, pagedFacet};
-        FacetUtil.addFacets(facets);
+        FacetUtil.addFacet(describedAsFacet);
+        // commenting these out, think this whole isNoop business is a little bogus
+        //FacetUtil.addFacet(new ImmutableFacetNever(holder)); 
+        FacetUtil.addFacet(titleFacet);
+        FacetUtil.addFacet(pagedFacet);
+        
     }
 
     @Override

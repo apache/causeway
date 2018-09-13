@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.runtime.snapshot.XmlSchema.ExtensionData;
 
 
@@ -80,20 +79,6 @@ public final class FacetUtil {
      *
      * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
      */
-    public static boolean addFacets(final Facet[] facets) {
-        boolean addedFacets = false;
-        for (final Facet facet : facets) {
-            addedFacets = addFacet(facet) | addedFacets;
-        }
-        return addedFacets;
-    }
-
-    /**
-     * Attaches each {@link Facet} to its {@link Facet#getFacetHolder() facet
-     * holder}.
-     *
-     * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
-     */
     public static boolean addFacets(final List<Facet> facetList) {
         boolean addedFacets = false;
         for (final Facet facet : facetList) {
@@ -119,14 +104,6 @@ public final class FacetUtil {
         facetsByClass.put(facet.facetType(), facet);
     }
 
-    public static Facet[] toArray(final List<Facet> facetList) {
-        if (facetList == null) {
-            return new Facet[0];
-        } else {
-            return facetList.toArray(new Facet[] {});
-        }
-    }
-
     public static <T extends Facet> ExtensionData<T> getFacetsByType(final FacetHolder facetHolder) {
         
         return new ExtensionData<T>() {
@@ -145,18 +122,6 @@ public final class FacetUtil {
             
         };
     }
-    
-    
-    
-//    public static Hashtable<Class<? extends Facet>, Facet> getFacetsByType(final FacetHolder facetHolder) {
-//        final Hashtable<Class<? extends Facet>, Facet> facetByType = new Hashtable<Class<? extends Facet>, Facet>();
-//        final Class<? extends Facet>[] facetsFor = facetHolder.getFacetTypes();
-//        for (final Class<? extends Facet> facetType : facetsFor) {
-//            final Facet facet = facetHolder.getFacet(facetType);
-//            facetByType.put(facetType, facet);
-//        }
-//        return facetByType;
-//    }
 
     public static void copyFacets(final FacetHolder source, final FacetHolder target) {
         source.streamFacets()

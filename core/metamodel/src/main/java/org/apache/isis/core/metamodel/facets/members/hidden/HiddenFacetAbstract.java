@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -82,7 +84,7 @@ public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implem
 
     @Override
     public <T extends Facet> T getFacet(final Class<T> facet) {
-        return (T) this;
+        return uncheckedCast(this);
     }
 
     @Override
