@@ -74,8 +74,12 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         this.authenticationSession = authenticationSession;
         
         if (pojo instanceof ObjectAdapter) {
-            throw new IsisException("Adapter can't be used to adapt an adapter: " + pojo);
+            throw new IsisException("ObjectAdapter can't be used to wrap an ObjectAdapter: " + pojo);
         }
+        if (pojo instanceof Oid) {
+            throw new IsisException("ObjectAdapter can't be used to wrap an Oid: " + pojo);
+        }
+        
         this.pojo = pojo;
         this.oid = requires(oid, "oid");
     }

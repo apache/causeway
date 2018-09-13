@@ -20,6 +20,8 @@ package org.apache.isis.core.runtime.services.persistsession;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.Optional.ofNullable;
+import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -35,7 +37,6 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
@@ -91,22 +92,22 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
         final boolean denyRefresh = fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH; 
                         
         if(rootOid.isViewModel()) {
-            //throw _Exceptions.unexpectedCodeReach();
-            //FIXME[ISIS-1976] if code is reachable requires separate view model handler
+            final ObjectAdapter adapter = ps.adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
+            final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getObject, null);
             
-            return getPersistenceSession().adapterForViewModel(rootOid, __->rootOid).getObject(); // reuse rootOid
+            return pojo;
             
         } else if(denyRefresh) {
-            return ps.fetchPersistentPojoInTransaction(rootOid);
+            
+            final Object pojo = ps.fetchPersistentPojoInTransaction(rootOid);
+            return pojo;            
+            
         } else {
+            final ObjectAdapter adapter = ps.adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
             
-            final ObjectAdapter adapter = getPersistenceSession().adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
-            if(adapter == null) {
-                return null;
-            }            
-            
-            ps.refreshRootInTransaction(adapter.getObject());
-            return adapter.getObject();
+            final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getObject, null);
+            acceptIfPresent(pojo, ps::refreshRootInTransaction);
+            return pojo;
         }
         
     }
