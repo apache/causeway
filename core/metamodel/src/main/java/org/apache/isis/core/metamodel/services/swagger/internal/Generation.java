@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
@@ -177,11 +177,8 @@ class Generation {
     @SuppressWarnings("unused")
     private void debugAllLoadedClasses(final Collection<ObjectSpecification> allSpecs) {
         final ImmutableList<String> specs = FluentIterable.from(allSpecs)
-                .transform(new Function<ObjectSpecification, String>() {
-                    @Nullable @Override public String apply(@Nullable final ObjectSpecification objectSpecification) {
-                        return objectSpecification.getCorrespondingClass().getName();
-                    }
-                })
+                .transform((final ObjectSpecification objectSpecification)->
+                        objectSpecification.getCorrespondingClass().getName())
                 .toSortedList(Ordering.natural());
         final String all = Joiner.on(",").join(specs);
         System.out.println(all);

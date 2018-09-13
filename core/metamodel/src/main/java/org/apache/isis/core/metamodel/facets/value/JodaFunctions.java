@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.value;
 
 import java.util.Locale;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 import org.joda.time.format.DateTimeFormatter;
 

@@ -101,7 +101,7 @@ public final class ListExtensions {
     public static <T> Collection<T> filtered(final List<Object> extendee, final Class<T> type) {
         return Collections2.transform(
                 Collections2.filter(extendee, ClassPredicates.isOfType(type)::test),
-                ClassFunctions.castTo(type));
+                ClassFunctions.castTo(type)::apply);
     }
 
 

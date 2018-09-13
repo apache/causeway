@@ -17,12 +17,11 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -147,12 +146,13 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
     private void loadSpecificationsForServices() {
-        for (final Class<?> serviceClass : allServiceClasses()) {
+        streamServiceClasses()
+        .forEach(serviceClass->{
             final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
             final NatureOfService nature = domainService != null ? domainService.nature() : NatureOfService.DOMAIN;
             // will 'markAsService'
-            internalLoadSpecification(serviceClass, nature);
-        }
+            internalLoadSpecification(serviceClass, nature); 
+        });
     }
 
     private void loadSpecificationsForMixins() {
@@ -474,16 +474,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     // -- getServiceClasses, isServiceClass
 
     @Programmatic
-    public List<Class<?>> allServiceClasses() {
-        List<Class<?>> serviceClasses = Lists
-                .transform(this.servicesInjector.getRegisteredServices(), new Function<Object, Class<?>>(){
-                    @Override
-                    public Class<?> apply(Object o) {
-                        return o.getClass();
-                    }
-                });
-        // take a copy, to allow eg I18nFacetFactory to add in default implementations of missing services.
-        return Collections.unmodifiableList(Lists.newArrayList(serviceClasses));
+    public Stream<Class<?>> streamServiceClasses() {
+        return servicesInjector.streamRegisteredServiceTypes();
     }
 
     @Programmatic

@@ -464,7 +464,8 @@ public class ApplicationFeatureIdTest {
         public void members() throws Exception {
             feature1 = ApplicationFeatureId.newMember("com.mycompany.Bar#b");
 
-            assertThat(feature1.toString(), is(equalTo("ApplicationFeatureId{type=MEMBER, packageName=com.mycompany, memberName=b}")));
+            assertThat(feature1.toString(), is(equalTo("ApplicationFeatureId{type=MEMBER, "
+                    + "packageName=com.mycompany, className=Bar, memberName=b}")));
         }
 
         @Test

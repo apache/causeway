@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -88,8 +89,18 @@ public class DomainEventHelper {
                     event.setActionSemantics(objectAction.getSemantics());
 
                     final List<ObjectActionParameter> parameters = objectAction.getParameters();
-                    event.setParameterNames(immutableList(Iterables.transform(parameters, ObjectActionParameter.Functions.GET_NAME)));
-                    event.setParameterTypes(immutableList(Iterables.transform(parameters, ObjectActionParameter.Functions.GET_TYPE)));
+                    
+                    final List<String> parameterNames = parameters.stream()
+                            .map(ObjectActionParameter.Functions.GET_NAME)
+                            .collect(Collectors.toList());
+
+                    final List<Class<?>> parameterTypes = parameters.stream()
+                            .map(ObjectActionParameter.Functions.GET_TYPE)
+                            .collect(Collectors.toList());
+                    
+                    
+                    event.setParameterNames(Collections.unmodifiableList(parameterNames));
+                    event.setParameterTypes(Collections.unmodifiableList(parameterTypes));
                 }
             }
 

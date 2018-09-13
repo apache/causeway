@@ -18,30 +18,33 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.nullsFirst;
+
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.annotation.Nullable;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Objects;
-
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
 import com.google.common.io.BaseEncoding;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
+import org.apache.isis.applib.util.Equality;
+import org.apache.isis.applib.util.Hashing;
+import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
+import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 /**
@@ -57,6 +60,8 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
 
     // //////////////////////////////////////
+
+    private static final long serialVersionUID = 1L;
 
     // -- factory methods
     public static ApplicationFeatureId newFeature(final ApplicationFeatureType featureType, final String fullyQualifiedName) {
@@ -278,7 +283,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
             }
 
             final Iterable<String> split = Splitter.on(".").split(packageName);
-            final List<String> parts = Lists.newArrayList(split); // eg [aaa,bbb,ccc]
+            final List<String> parts = _Lists.newArrayList(split); // eg [aaa,bbb,ccc]
             parts.remove(parts.size()-1); // remove last, eg [aaa,bbb]
 
             final String parentPackageName = Joiner.on(".").join(parts); // eg aaa.bbb
@@ -388,6 +393,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         }
 
         static class ApplicationFeatureIdComparator implements Comparator<ApplicationFeatureId>, Serializable {
+            private static final long serialVersionUID = 1L;
 
             @Override
             public int compare(final ApplicationFeatureId o1, final ApplicationFeatureId o2) {
@@ -416,7 +422,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     }
 
     private static List<ApplicationFeatureId> pathIds(final ApplicationFeatureId id) {
-        final List<ApplicationFeatureId> featureIds = Lists.newArrayList();
+        final List<ApplicationFeatureId> featureIds = _Lists.newArrayList();
         return Collections.unmodifiableList(appendParents(id, featureIds));
     }
 
@@ -433,101 +439,58 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     // -- equals, hashCode, compareTo, toString
 
-    private final static Ordering<ApplicationFeatureId> byType = Ordering.natural()
-            .nullsFirst().onResultOf(new com.google.common.base.Function<ApplicationFeatureId, ApplicationFeatureType>() {
-                @Nullable @Override public ApplicationFeatureType apply(@Nullable final ApplicationFeatureId input) {
-                    return input != null ? input.getType() : null;
-                }
-            });
-    private final static Ordering<ApplicationFeatureId> byPackageName = Ordering.natural()
-            .nullsFirst().onResultOf(new com.google.common.base.Function<ApplicationFeatureId, String>() {
-                @Nullable @Override public String apply(@Nullable final ApplicationFeatureId input) {
-                    return input != null ? input.getPackageName() : null;
-                }
-            });
-    private final static Ordering<ApplicationFeatureId> byClassName = Ordering.natural()
-            .nullsFirst().onResultOf(new com.google.common.base.Function<ApplicationFeatureId, String>() {
-                @Nullable @Override public String apply(@Nullable final ApplicationFeatureId input) {
-                    return input != null ? input.getClassName(): null;
-                }
-            });
-    private final static Ordering<ApplicationFeatureId> byMemberName = Ordering.natural()
-            .nullsFirst().onResultOf(new com.google.common.base.Function<ApplicationFeatureId, String>() {
-                @Nullable @Override public String apply(@Nullable final ApplicationFeatureId input) {
-                    return input != null ? input.getMemberName() : null;
-                }
-            });
-    private final static Ordering<ApplicationFeatureId> applicationFeatureIdOrdering =
-            byType
-            .compound(byPackageName)
-            .compound(byClassName)
-            .compound(byMemberName)
-            .nullsFirst();
+    private final static Comparator<ApplicationFeatureId> byType =
+            comparing(ApplicationFeatureId::getType, nullsFirst(naturalOrder()));
+    private final static Comparator<ApplicationFeatureId> byPackageName =
+            comparing(ApplicationFeatureId::getPackageName, nullsFirst(naturalOrder()));
+    private final static Comparator<ApplicationFeatureId> byClassName =
+            comparing(ApplicationFeatureId::getClassName, nullsFirst(naturalOrder()));
+    private final static Comparator<ApplicationFeatureId> byMemberName =
+            comparing(ApplicationFeatureId::getMemberName, nullsFirst(naturalOrder()));
+    
+    private final static Comparator<ApplicationFeatureId> applicationFeatureIdOrdering =
+            Comparator.nullsFirst(byType)
+            .thenComparing(byPackageName)
+            .thenComparing(byClassName)
+            .thenComparing(byMemberName);
 
+    private final static Equality<ApplicationFeatureId> equality =
+            ObjectContracts.checkEquals(ApplicationFeatureId::getType)
+            .thenCheckEquals(ApplicationFeatureId::getPackageName)
+            .thenCheckEquals(ApplicationFeatureId::getClassName)
+            .thenCheckEquals(ApplicationFeatureId::getMemberName);
 
+     private final static Hashing<ApplicationFeatureId> hashing =
+            ObjectContracts.hashing(ApplicationFeatureId::getType)
+            .thenHashing(ApplicationFeatureId::getPackageName)
+            .thenHashing(ApplicationFeatureId::getClassName)
+            .thenHashing(ApplicationFeatureId::getMemberName);
+
+     private final static ToString<ApplicationFeatureId> toString =
+            ObjectContracts.toString("type", ApplicationFeatureId::getType)
+            .thenToString("packageName", ApplicationFeatureId::getPackageName)
+            .thenToStringOmmitIfAbsent("className", ApplicationFeatureId::getClassName)
+            .thenToStringOmmitIfAbsent("memberName", ApplicationFeatureId::getMemberName);
+
+    
     @Override
     public int compareTo(final ApplicationFeatureId other) {
-
-        // https://issues.apache.org/jira/browse/ISIS-1590
-        // not using our ObjectContracts helper for efficiency.
-
         return applicationFeatureIdOrdering.compare(this, other);
     }
 
     @Override
     public boolean equals(final Object o) {
-
-        // https://issues.apache.org/jira/browse/ISIS-1590
-        // not using our ObjectContracts helper for efficiency.
-
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        final ApplicationFeatureId that = (ApplicationFeatureId) o;
-
-        if (className != null ? !className.equals(that.className) : that.className != null) return false;
-        if (memberName != null ? !memberName.equals(that.memberName) : that.memberName != null) return false;
-        if (packageName != null ? !packageName.equals(that.packageName) : that.packageName != null) return false;
-        return type == that.type;
+        return equality.equals(this, o);
     }
 
     @Override
     public int hashCode() {
-
-        // https://issues.apache.org/jira/browse/ISIS-1590
-        // not using our ObjectContracts helper for efficiency.
-
-        int result = type != null ? type.hashCode() : 0;
-        result = 31 * result + (packageName != null ? packageName.hashCode() : 0);
-        result = 31 * result + (className != null ? className.hashCode() : 0);
-        result = 31 * result + (memberName != null ? memberName.hashCode() : 0);
-        return result;
+        return hashing.hashCode(this);
     }
 
     @Override
     public String toString() {
-
-        // https://issues.apache.org/jira/browse/ISIS-1590
-        // not using our ObjectContracts helper for efficiency.
-
-        final Objects.ToStringHelper stringHelper = Objects.toStringHelper(this);
-        switch (type) {
-        case PACKAGE:
-            stringHelper.add("type", getType());
-            stringHelper.add("packageName", getPackageName());
-            return stringHelper.toString();
-        case CLASS:
-            stringHelper.add("type", getType());
-            stringHelper.add("packageName", getPackageName());
-            stringHelper.add("className", getClassName());
-            return stringHelper.toString();
-        case MEMBER:
-            stringHelper.add("type", getType());
-            stringHelper.add("packageName", getPackageName());
-            stringHelper.add("memberName", getMemberName());
-            return stringHelper.toString();
-        }
-        throw new IllegalStateException("Unknown feature type " + type);
+        return toString.toString(this);
     }
 
 

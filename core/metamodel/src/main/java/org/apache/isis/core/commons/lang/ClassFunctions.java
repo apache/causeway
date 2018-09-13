@@ -20,7 +20,7 @@ package org.apache.isis.core.commons.lang;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 public final class ClassFunctions {
 

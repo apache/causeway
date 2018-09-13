@@ -18,11 +18,15 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
@@ -111,7 +115,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
                     return;
                 }
 
-                ImmutableList<String> modulePackageNames = modulePackageNamesFrom(appManifest);
+                final Set<String> modulePackageNames = modulePackageNamesFrom(appManifest);
 
                 final Set<String> domainObjectPackageNames = domainObjectClassNamesByPackage.keySet();
                 for (final String pkg : domainObjectPackageNames) {
@@ -127,18 +131,14 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
                 }
             }
 
-            private ImmutableList<String> modulePackageNamesFrom(final AppManifest appManifest) {
-                List<Class<?>> modules = appManifest.getModules();
-                return FluentIterable.from(modules)
-                        .transform(new Function<Class<?>, String>() {
-                            @Override
-                            public String apply(final Class<?> aClass) {
-                                return aClass.getPackage().getName();
-                            }
-                        }).toList();
+            private Set<String> modulePackageNamesFrom(final AppManifest appManifest) {
+                final List<Class<?>> modules = appManifest.getModules();
+                return modules.stream()
+                        .map(aClass->aClass.getPackage().getName())
+                        .collect(Collectors.toCollection(HashSet::new));
             }
 
-            private boolean isWithinSomeModule(final ImmutableList<String> modulePackageNames, final String pkg) {
+            private boolean isWithinSomeModule(final Set<String> modulePackageNames, final String pkg) {
                 for (final String modulePackageName : modulePackageNames) {
                     if(pkg.startsWith(modulePackageName)) {
                         return true;

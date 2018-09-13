@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.ignore.javalang;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.google.common.collect.Lists;
 
@@ -94,18 +95,17 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
 
         }
 
-        final List<Class<?>> serviceClasses = getSpecificationLoader().allServiceClasses();
-        for (Class<? extends Object> serviceClass : serviceClasses) {
-
-            // removeInjectMethods(processClassContext);
+        getSpecificationLoader().streamServiceClasses()
+        .forEach(serviceClass->{
+         // removeInjectMethods(processClassContext);
             Method[] methods2 = processClassContext.getCls().getMethods();
             for (Method method : methods2) {
                 if(injectorMethodEvaluator.isInjectorMethodFor(method, serviceClass)) {
                     processClassContext.removeMethod(method);
                 }
             }
-        }
-
+        });
+        
 
         removeSuperclassMethods(processClassContext.getCls(), processClassContext);
 

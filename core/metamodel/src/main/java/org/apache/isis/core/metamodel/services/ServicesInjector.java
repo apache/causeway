@@ -215,6 +215,14 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
     
     /**
+     * @return Stream of all currently registered service types.
+     */
+    public Stream<Class<?>> streamRegisteredServiceTypes() {
+        return serviceByConcreteType.get().keySet().stream();
+    }
+    
+    
+    /**
      * @return Stream of all currently registered service instances.
      */
     public Stream<Object> streamRegisteredServiceInstances() {
