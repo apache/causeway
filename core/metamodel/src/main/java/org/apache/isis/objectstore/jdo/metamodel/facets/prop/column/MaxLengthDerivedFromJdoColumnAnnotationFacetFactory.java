@@ -112,7 +112,7 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
                     
                     // skip checks if annotated with JDO @NotPersistent
                     if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
-                        return;
+                        continue;
                     }
                     
                     MaxLengthFacet facet = association.getFacet(MaxLengthFacet.class);
