@@ -20,8 +20,7 @@
 package org.apache.isis.core.metamodel.spec;
 
 import java.util.Comparator;
-
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
