@@ -104,18 +104,12 @@ extends RecreatableObjectFacetAbstract {
         
         final Stream<OneToOneAssociation> properties = spec.streamProperties(Contributed.EXCLUDED);
         
-        properties.forEach(property->{
-            // ignore read-only
-            if(!property.containsDoOpFacet(PropertySetterFacet.class)) {
-                return;
-            }
-            // ignore those explicitly annotated as @NotPersisted
-            if(property.isNotPersisted()) {
-                return;
-            }
-
-            // otherwise, include
-
+        properties
+        // ignore read-only
+        .filter(property->property.containsDoOpFacet(PropertySetterFacet.class)) 
+        // ignore those explicitly annotated as @NotPersisted
+        .filter(property->!property.isNotPersisted())
+        .forEach(property->{
             final ObjectAdapter propertyValueAdapter = property.get(ownerAdapter,
                     InteractionInitiatedBy.FRAMEWORK);
             if(propertyValueAdapter != null) {

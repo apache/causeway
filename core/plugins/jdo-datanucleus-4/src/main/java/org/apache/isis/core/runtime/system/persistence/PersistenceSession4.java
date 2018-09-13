@@ -855,9 +855,13 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
             // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
             // DN would not be calling this callback if the pojo was not persistent.
-            throw new RuntimeException(
-                    "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
-                            + pojo + "]");
+
+            final ObjectAdapter adapter = objectAdapterContext.fetchPersistent(pojo);
+            if (adapter == null) {
+                throw new RuntimeException(
+                        "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
+                                + pojo + "]");
+            }
         }
     }
 

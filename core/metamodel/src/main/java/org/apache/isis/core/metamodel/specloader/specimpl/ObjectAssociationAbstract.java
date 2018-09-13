@@ -58,10 +58,6 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
         final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
         return facet.getOnType();
     }
-    @Override
-    public abstract ObjectAdapter get(
-            final ObjectAdapter fromObject,
-            final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Return the specification of the object (or objects) that this field

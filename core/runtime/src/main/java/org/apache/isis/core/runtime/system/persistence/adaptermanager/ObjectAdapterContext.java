@@ -130,7 +130,8 @@ final public class ObjectAdapterContext {
 
     // -- SERVICE LOOKUP
 
-    public ObjectAdapter lookupServiceAdapterFor(RootOid rootOid) {
+    // package private
+    ObjectAdapter lookupServiceAdapterFor(RootOid rootOid) {
         return serviceLookupMixin.lookupServiceAdapterFor(rootOid);
     }
 
@@ -142,7 +143,7 @@ final public class ObjectAdapterContext {
 
     // -- DEPENDENCY INJECTION
 
-    public Object instantiateAndInjectServices(ObjectSpecification objectSpec) {
+    Object instantiateAndInjectServices(ObjectSpecification objectSpec) {
         return dependencyInjectionMixin.instantiateAndInjectServices(objectSpec);
     }
 
@@ -174,7 +175,7 @@ final public class ObjectAdapterContext {
          * Should only be called if the pojo is known not to be
          * {@link #lookupAdapterFor(Object) mapped}.
          */
-        ObjectAdapter createCollectionAdapter(Object pojo, ObjectAdapter parentAdapter, OneToManyAssociation otma);
+        ObjectAdapter createCollectionAdapter(Object pojo, RootOid parentOid, OneToManyAssociation otma);
     }
 
     private final ObjectAdapterFactories objectAdapterFactories;
@@ -252,15 +253,6 @@ final public class ObjectAdapterContext {
     }
 
     // ------------------------------------------------------------------------------------------------
-
-    public ObjectAdapter disposableAdapterForViewModel(Object viewModelPojo) {
-        final ObjectSpecification objectSpecification = 
-                specificationLoader.loadSpecification(viewModelPojo.getClass());
-        final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-        final RootOid newRootOid = RootOid.create(objectSpecId, UUID.randomUUID().toString());
-        final ObjectAdapter createdAdapter = createRootOrAggregatedAdapter(newRootOid, viewModelPojo);
-        return createdAdapter;
-    }
 
     // package private
     ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {

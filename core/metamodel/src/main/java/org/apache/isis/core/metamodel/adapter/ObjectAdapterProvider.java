@@ -59,8 +59,8 @@ public interface ObjectAdapterProvider {
      * @return collection adapter.
      */
     ObjectAdapter adapterFor(
-            final Object domainObject,
-            final ObjectAdapter parentAdapter,
+            Object domainObject,
+            RootOid parentOid,
             OneToManyAssociation collection);
 
     /**
@@ -79,8 +79,8 @@ public interface ObjectAdapterProvider {
     ObjectSpecification specificationForViewModel(Object viewModelPojo);
 
     ObjectAdapter adapterForViewModel(
-            final Object viewModelPojo, 
-            final Function<ObjectSpecId, RootOid> rootOidFactory);
+            Object viewModelPojo, 
+            Function<ObjectSpecId, RootOid> rootOidFactory);
     
 
     // -- DOMAIN OBJECT CREATION SUPPORT
@@ -122,9 +122,9 @@ public interface ObjectAdapterProvider {
         @Programmatic
         default ObjectAdapter adapterFor(
                 final Object pojo,
-                final ObjectAdapter parentAdapter,
+                final RootOid parentOid,
                 OneToManyAssociation collection) {
-            return getObjectAdapterProvider().adapterFor(pojo, parentAdapter, collection);
+            return getObjectAdapterProvider().adapterFor(pojo, parentOid, collection);
         }
 
         @Programmatic

@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -88,14 +89,14 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     
     
     @Override
-    public ObjectAdapter adapterFor(Object pojo, ObjectAdapter parentAdapter, OneToManyAssociation collection) {
+    public ObjectAdapter adapterFor(Object pojo, RootOid parentOid, OneToManyAssociation collection) {
 
-        requires(parentAdapter, "parentAdapter");
+        requires(parentOid, "parentOid");
         requires(collection, "collection");
 
         // the List, Set etc. instance gets wrapped in its own adapter
         final ObjectAdapter newAdapter = objectAdapterContext.getFactories()
-                .createCollectionAdapter(pojo, parentAdapter, collection);
+                .createCollectionAdapter(pojo, parentOid, collection);
 
         return objectAdapterContext.injectServices(newAdapter);
     }
@@ -109,7 +110,12 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     
     @Override
     public ObjectAdapter disposableAdapterForViewModel(Object viewModelPojo) {
-        return objectAdapterContext.disposableAdapterForViewModel(viewModelPojo);
+        final ObjectSpecification objectSpecification = 
+                specificationLoader.loadSpecification(viewModelPojo.getClass());
+        final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
+        final RootOid newRootOid = RootOid.create(objectSpecId, UUID.randomUUID().toString());
+        final ObjectAdapter createdAdapter = objectAdapterContext.createRootOrAggregatedAdapter(newRootOid, viewModelPojo);
+        return createdAdapter;
     }
 
     @Override
