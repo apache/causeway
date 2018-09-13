@@ -144,7 +144,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                     
                     // skip checks if annotated with JDO @NotPersistent
                     if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
-                        return;
+                        continue;
                     }
                     
                     validateMandatoryFacet(association, validationFailures);
