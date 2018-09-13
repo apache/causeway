@@ -139,7 +139,6 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                         .streamAssociations(Contributed.EXCLUDED)
                         .filter(ObjectAssociation.Predicates.PROPERTIES);
                 
-                //FIXME[ISIS-1976] change in behavior possible bug
                 associations
                 // skip checks if annotated with JDO @NotPersistent
                 .filter(association->!association.containsDoOpFacet(JdoNotPersistentFacet.class))

@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.Lists;
@@ -56,6 +55,7 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
@@ -305,29 +305,30 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private static ObjectAction firstAction(
-            final Stream<ObjectAction> candidateActionStream,
+            final Stream<ObjectAction> candidateActions,
             final String actionName,
             final List<ObjectSpecification> parameters) {
         
-        final List<ObjectAction> candidateActions = candidateActionStream.collect(Collectors.toList());
+        return candidateActions
+            .filter(action->actionName == null || actionName.equals(action.getId()))
+            .filter(action->isMatchingSignature(parameters, action.getParameters()))
+            .findAny()
+            .orElse(null);
+    }
+    
+    private static  boolean isMatchingSignature(
+            final List<ObjectSpecification> a,
+            final List<ObjectActionParameter> b) {
         
-        //FIXME[ISIS-1976] code smell
-        outer: for (int i = 0; i < candidateActions.size(); i++) {
-            final ObjectAction action = candidateActions.get(i);
-            if (actionName != null && !actionName.equals(action.getId())) {
-                continue outer;
-            }
-            if (action.getParameters().size() != parameters.size()) {
-                continue outer;
-            }
-            for (int j = 0; j < parameters.size(); j++) {
-                if (!parameters.get(j).isOfType(action.getParameters().get(j).getSpecification())) {
-                    continue outer;
-                }
-            }
-            return action;
+        if(a.size() != b.size()) {
+            return false;
         }
-        return null;
+        for (int j = 0; j < a.size(); j++) {
+            if (!a.get(j).isOfType(b.get(j).getSpecification())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static ObjectAction firstAction(

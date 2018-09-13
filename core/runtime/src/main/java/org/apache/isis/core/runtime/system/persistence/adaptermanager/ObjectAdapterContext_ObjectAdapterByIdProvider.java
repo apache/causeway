@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -108,7 +107,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
             final RootOid rootOid,
             final ConcurrencyChecking concurrencyChecking) {
                 
-        /* FIXME[ISIS-1976] 
+        /* FIXME[ISIS-1976] SPI for adapterFor(RootOid)
          * https://github.com/apache/isis/pull/121#discussion_r215889748
          * 
          * Eventually I'm hoping that this code will simplify and then become pluggable.

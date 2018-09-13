@@ -117,7 +117,6 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
                         .streamAssociations(Contributed.EXCLUDED)
                         .filter(ObjectAssociation.Predicates.PROPERTIES);
                 
-              //FIXME[ISIS-1976] change in behavior possible bug
                 associations.forEach(association->{
                     // skip checks if annotated with JDO @NotPersistent
                     if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {

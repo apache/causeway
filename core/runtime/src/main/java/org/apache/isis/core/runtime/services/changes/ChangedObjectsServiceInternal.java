@@ -102,7 +102,6 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
                 .streamAssociations(Contributed.EXCLUDED)
                 .filter(ObjectAssociation.Predicates.PROPERTIES);
         
-        //FIXME[ISIS-1976] changed behavior, but seems correct (previously returned too early)
         enlist(adapter, properties, aap->PreAndPostValues.pre(IsisTransaction.Placeholder.NEW));
     }
 
@@ -160,7 +159,6 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
                 .streamAssociations(Contributed.EXCLUDED)
                 .filter(ObjectAssociation.Predicates.PROPERTIES);
         
-        //FIXME[ISIS-1976] changed behavior, but seems correct (previously returned too early)
         enlist(adapter, properties, aap->PreAndPostValues.pre(aap.getPropertyValue()));
 
     }

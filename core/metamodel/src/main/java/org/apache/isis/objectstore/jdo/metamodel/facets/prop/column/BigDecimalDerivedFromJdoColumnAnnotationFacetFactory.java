@@ -130,7 +130,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
                         .filter(ObjectAssociation.Predicates.PROPERTIES);
                 
                 associations
-                // skip checks if annotated with JDO @NotPersistent //FIXME[ISIS-1976] changed behavior, but think this makes more sense
+                // skip checks if annotated with JDO @NotPersistent
                 .filter(association->!association.containsDoOpFacet(JdoNotPersistentFacet.class))
                 .forEach(association->{
                     validateBigDecimalValueFacet(association, validationFailures);

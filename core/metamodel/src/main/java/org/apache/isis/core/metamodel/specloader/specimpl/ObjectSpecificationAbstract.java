@@ -125,8 +125,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
 
-
-  //FIXME[ISIS-1976] SortedSet using ObjectMember.Comparators.byMemberOrderSequence()
     private final List<ObjectAssociation> associations = _Lists.newArrayList(); 
     private final List<ObjectAction> objectActions = _Lists.newArrayList();
     // partitions and caches objectActions by type; updated in sortCacheAndUpdateActions()
