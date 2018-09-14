@@ -186,6 +186,72 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>skinny-war</id>
+            <activation>
+                <property>
+                    <name>skinny-war</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven-war-plugin.version}</version>
+                        <configuration>
+                            <warName>${maven-war-plugin.warName}</warName>
+                            <packagingExcludes>
+                                %regex[WEB-INF/lib/(?!helloworld).*.jar]
+                            </packagingExcludes>
+                            <archive>
+                                <manifest>
+                                    <addClasspath>false</addClasspath>
+                                </manifest>
+                                <manifestEntries>
+                                    <Build-Time>${maven.build.timestamp}</Build-Time>
+                                    <Build-Host>${agent.name}</Build-Host>
+                                    <Build-User>${user.name}</Build-User>
+                                    <Build-Maven>Maven ${maven.version}</Build-Maven>
+                                    <Build-Java>${java.version}</Build-Java>
+                                    <Build-OS>${os.name}</Build-OS>
+                                    <Build-Label>${project.version}</Build-Label>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!--
+        using:
+        mvn -s .m2/settings.xml -D deploy-to-tomcat tomcat7:deploy-only
+         -->
+        <profile>
+            <id>deploy-to-tomcat</id>
+            <activation>
+                <property>
+                    <name>deploy-to-tomcat</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <configuration>
+                            <url>http://localhost:8080/manager/text</url>
+                            <server>tomcat-server</server>
+                            <path>/ROOT</path>
+                            <warFile>${project.build.directory}/${maven-war-plugin.warName}.war</warFile>
+                            <update>true</update>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
 </project>

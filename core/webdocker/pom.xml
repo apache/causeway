@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>isis-webdocker</artifactId>
+    <name>Apache Isis WebDocker</name>
+
+    <description>Assembles all of the </description>
+
+    <packaging>jar</packaging>
+
+    <properties>
+        <isis-maven-plugin.appManifest>
+            domainapp.application.manifest.DomainAppAppManifest
+        </isis-maven-plugin.appManifest>
+
+        <jetty-console-maven-plugin.backgroundImage>
+            ${basedir}/src/main/jettyconsole/isis-banner.png
+        </jetty-console-maven-plugin.backgroundImage>
+
+        <assembly-plugin.finalName>core-${revision}</assembly-plugin.finalName>
+
+        <docker-plugin.imageName>apacheisis/core</docker-plugin.imageName>
+        <docker-plugin.imageTag>${project.version}</docker-plugin.imageTag>
+        <docker-plugin.resource.zip>${assembly-plugin.finalName}.zip</docker-plugin.resource.zip>
+        <docker-plugin.resource.tomcat-users.xml>classes/catalina_home/conf/tomcat-users.xml</docker-plugin.resource.tomcat-users.xml>
+        <docker-plugin.resource.catalina.properties>classes/catalina_home/conf/catalina.properties</docker-plugin.resource.catalina.properties>
+        <docker-plugin.resource.manager.xml>classes/catalina_home/conf/Catalina/localhost/manager.xml</docker-plugin.resource.manager.xml>
+        <docker-plugin.resource.host-manager.xml>classes/catalina_home/conf/Catalina/localhost/host-manager.xml</docker-plugin.resource.host-manager.xml>
+
+        <docker-plugin.serverId>docker-hub</docker-plugin.serverId>
+        <docker-plugin.registryUrl>https://index.docker.io/v1/</docker-plugin.registryUrl>
+
+        <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
+        <docker-maven-plugin.version>1.0.0</docker-maven-plugin.version>
+
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/dependencies/lib</outputDirectory>
+                            <includeScope>compile</includeScope>
+                            <excludeTypes>pom</excludeTypes>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>assemble-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/assembly.xml</descriptor>
+                            </descriptors>
+                            <finalName>${assembly-plugin.finalName}</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.mavendeps</groupId>
+            <artifactId>isis-mavendeps-webapp</artifactId>
+            <type>pom</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-applib</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>jdbc-hsqldb</id>
+            <activation>
+                <property>
+                    <name>!skip.jdbc-hsqldb</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.hsqldb</groupId>
+                    <artifactId>hsqldb</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>mavenmixin-docker-install</id>
+            <activation>
+                <property>
+<!--
+                    <name>-Dskip.package-docker</name>
+-->
+                    <name>package-docker</name>
+                </property>
+            </activation>
+
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>${maven-deploy-plugin.version}</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>${docker-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>build-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <configuration>
+                                    <imageName>${docker-plugin.imageName}</imageName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>tag-image</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>tag</goal>
+                                </goals>
+                                <configuration>
+                                    <image>${docker-plugin.imageName}</image>
+                                    <newName>${docker-plugin.imageName}:${docker-plugin.imageTag}</newName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>push-image-tagged</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>push</goal>
+                                </goals>
+                                <configuration>
+                                    <imageName>${docker-plugin.imageName}:${docker-plugin.imageTag}</imageName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>push-image-latest</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>push</goal>
+                                </goals>
+                                <configuration>
+                                    <imageName>${docker-plugin.imageName}:latest</imageName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <dockerDirectory>${project.build.outputDirectory}/docker</dockerDirectory>
+                            <resources>
+                                <resource>
+                                    <targetPath>.</targetPath>
+                                    <directory>${project.build.directory}</directory>
+                                    <include>${docker-plugin.resource.zip}</include>
+                                    <include>${docker-plugin.resource.tomcat-users.xml}</include>
+                                    <include>${docker-plugin.resource.catalina.properties}</include>
+                                    <include>${docker-plugin.resource.manager.xml}</include>
+                                    <include>${docker-plugin.resource.host-manager.xml}</include>
+                                </resource>
+                            </resources>
+                            <serverId>${docker-plugin.serverId}</serverId>
+                            <registryUrl>${docker-plugin.registryUrl}</registryUrl>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>flatten</id>
+            <activation>
+                <property>
+                    <name>revision</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>flatten-maven-plugin</artifactId>
+                        <version>1.0.0</version>
+                        <executions>
+                            <execution>
+                                <id>flatten</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>flatten</goal>
+                                </goals>
+                                <configuration>
+                                    <flattenMode>defaults</flattenMode>
+                                    <updatePomFile>true</updatePomFile>
+                                    <pomElements>
+                                        <name>resolve</name>
+                                        <description>resolve</description>
+                                        <dependencies>resolve</dependencies>
+                                    </pomElements>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>flatten.clean</id>
+                                <phase>clean</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

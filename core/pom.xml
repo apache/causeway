@@ -2476,6 +2476,8 @@ ${license.additional-notes}
         <module>mavendeps/intellij</module>
         <module>mavendeps/webapp</module>
         <module>mavendeps/testing</module>
+
+        <module>webdocker</module>
     </modules>
 
 </project>
