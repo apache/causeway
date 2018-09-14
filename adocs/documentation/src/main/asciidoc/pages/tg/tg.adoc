@@ -4,7 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :numbered:
-
+include::../../__versions.adoc[]
 
 This is a half-day tutorial on developing domain-driven apps using Apache Isis.
 
@@ -30,12 +30,12 @@ Run the simpleapp archetype to build an empty Isis application.
 With the *nix bash shell, use:
 
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.16.2 \
+    -D archetypeVersion={isiscurr} \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \

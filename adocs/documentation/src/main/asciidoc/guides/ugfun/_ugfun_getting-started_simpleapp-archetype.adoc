@@ -4,6 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :toc:
+include::../../__versions.adoc[]
 
 The quickest way to get started building an application "for real" is to run the `simpleapp` archetype.
 Like the xref:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[helloworld archetype], this too will generate a very simple one-class domain model (an entity called `SimpleObject` with a couple of properties).
@@ -27,12 +28,12 @@ Create a new directory, and `cd` into that directory.
 
 To build the app from the latest stable release, then run the following command:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.16.2 \
+    -D archetypeVersion={isiscurr} \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \

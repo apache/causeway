@@ -4,7 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :toc: right
-include::__versions.adoc[]
+include::../../__versions.adoc[]
 
 
 The intent of an "interim" release is to allow a developer team to release their application based on a `-SNAPSHOT` version of the framework.
