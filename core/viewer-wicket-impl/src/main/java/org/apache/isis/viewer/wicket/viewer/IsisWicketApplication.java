@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import static java.util.Objects.requireNonNull;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collections;
@@ -126,6 +124,7 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
+import static java.util.Objects.requireNonNull;
 import net.ftlines.wicketsource.WicketSource;
 
 /**
@@ -401,7 +400,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             LOG.error("Failed to initialize", ex);
             throw ex;
         } finally {
-            ThreadPoolSupport.join(futures);
+            ThreadPoolSupport.getInstance().join(futures);
         }
     }
     

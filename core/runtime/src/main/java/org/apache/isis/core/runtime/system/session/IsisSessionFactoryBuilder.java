@@ -183,7 +183,7 @@ public class IsisSessionFactoryBuilder {
             // yet inject.
             _Context.putSingleton(IsisSessionFactory.class, isisSessionFactory);
 
-            final List<Callable<Object>> tasks = _Lists.<Callable<Object>>of(
+            final List<Callable<Object>> tasks = _Lists.of(
                     ()->{
                         // time to initialize...
                         specificationLoader.init();
@@ -217,7 +217,7 @@ public class IsisSessionFactoryBuilder {
             final List<Future<Object>> futures = ThreadPoolSupport.getInstance().invokeAll(tasks);
             
             // wait on this thread for tasks to complete
-            ThreadPoolSupport.join(futures); 
+            ThreadPoolSupport.getInstance().join(futures);
 
             isisSessionFactory.constructServices();
 
