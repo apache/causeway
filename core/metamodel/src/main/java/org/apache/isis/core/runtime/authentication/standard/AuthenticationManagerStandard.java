@@ -28,10 +28,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -45,7 +45,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
 
     private final Map<String, String> userByValidationCode = Maps.newHashMap();
 
-    private final List<Authenticator> authenticators = Lists.newArrayList();
+    private final List<Authenticator> authenticators = _Lists.newArrayList();
 
     private RandomCodeGenerator randomCodeGenerator;
     private final IsisConfiguration configuration;

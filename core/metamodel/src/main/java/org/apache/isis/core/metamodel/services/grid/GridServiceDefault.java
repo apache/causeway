@@ -19,7 +19,6 @@ package org.apache.isis.core.metamodel.services.grid;
 import java.util.List;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -136,7 +135,7 @@ public class GridServiceDefault implements GridService {
      */
     @Programmatic
     public String tnsAndSchemaLocation(final Grid grid) {
-        final List<String> parts = Lists.newArrayList();
+        final List<String> parts = _Lists.newArrayList();
 
         parts.add(COMPONENT_TNS);
         parts.add(COMPONENT_SCHEMA_LOCATION);

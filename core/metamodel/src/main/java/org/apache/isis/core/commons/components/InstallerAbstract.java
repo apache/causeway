@@ -19,11 +19,13 @@
 
 package org.apache.isis.core.commons.components;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public abstract class InstallerAbstract implements Installer {
@@ -85,15 +87,18 @@ public abstract class InstallerAbstract implements Installer {
      * Helper for subclasses implementing {@link #getTypes()}.
      */
     protected static List<Class<?>> listOf(final Class<?>... classes) {
-        return Collections.unmodifiableList(Lists.<Class<?>> newArrayList(classes));
+        return Collections.unmodifiableList(
+                stream(classes)
+                .collect(Collectors.toList())   );
     }
 
     /**
      * Helper for subclasses implementing {@link #getTypes()}.
      */
     protected static List<Class<?>> listOf(final List<Class<?>> classList, final Class<?>... classes) {
-        final List<Class<?>> arrayList = Lists.<Class<?>> newArrayList(classes);
-        arrayList.addAll(0, classList);
+        final List<Class<?>> arrayList = _Lists.<Class<?>> newArrayList(classList);
+        stream(classes)
+        .forEach(arrayList::add);
         return Collections.unmodifiableList(arrayList);
     }
 

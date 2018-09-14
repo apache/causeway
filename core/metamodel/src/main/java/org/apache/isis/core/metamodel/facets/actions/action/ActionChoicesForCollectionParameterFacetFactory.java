@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action;
 
-import java.util.List;
-
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;

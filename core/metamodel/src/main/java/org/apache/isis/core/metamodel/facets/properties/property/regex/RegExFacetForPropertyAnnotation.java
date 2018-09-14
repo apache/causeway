@@ -21,7 +21,9 @@ package org.apache.isis.core.metamodel.facets.properties.property.regex;
 
 import java.util.List;
 import java.util.regex.Pattern;
+
 import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;

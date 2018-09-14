@@ -20,10 +20,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -117,7 +116,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
         final List<ObjectActionParameter> serviceParameters = serviceAction.getParameters();
         final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
 
-        final List<ObjectActionParameter> contributeeParameters = Lists.newArrayList();
+        final List<ObjectActionParameter> contributeeParameters = _Lists.newArrayList();
         int contributeeParamNum = 0;
 
         for (int serviceParamNum = 0; serviceParamNum < serviceParameters.size(); serviceParamNum++ ) {
@@ -274,13 +273,13 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     // //////////////////////////////////////
 
     static <T> T[] addElementToArray(T[] array, final int n, final T element, final T[] type) {
-        List<T> list = Lists.newArrayList(Arrays.asList(array));
+        List<T> list = _Lists.newArrayList(Arrays.asList(array));
         list.add(n, element);
         return list.toArray(type);
     }
 
     static <T> T[] removeElementFromArray(T[] array, int n, T[] t) {
-        List<T> list = Lists.newArrayList(Arrays.asList(array));
+        List<T> list = _Lists.newArrayList(Arrays.asList(array));
         list.remove(n);
         return list.toArray(t);
     }

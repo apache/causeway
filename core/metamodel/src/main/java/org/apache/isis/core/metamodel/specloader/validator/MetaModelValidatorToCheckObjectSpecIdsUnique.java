@@ -23,9 +23,9 @@ import java.util.Map;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -60,7 +60,7 @@ public class MetaModelValidatorToCheckObjectSpecIdsUnique extends MetaModelValid
                 ObjectSpecId specId = objSpec.getSpecId();
                 List<ObjectSpecification> objectSpecifications = specsById.get(specId);
                 if(objectSpecifications == null) {
-                    objectSpecifications = Lists.newArrayList();
+                    objectSpecifications = _Lists.newArrayList();
                     specsById.put(specId, objectSpecifications);
                 }
                 objectSpecifications.add(objSpec);

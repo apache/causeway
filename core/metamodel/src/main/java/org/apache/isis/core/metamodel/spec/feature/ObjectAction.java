@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -38,6 +37,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -289,7 +289,7 @@ public interface ObjectAction extends ObjectMember {
         public static List<ObjectAction> findTopLevel(
                 final ObjectAdapter adapter,
                 final DeploymentCategory deploymentCategory) {
-            final List<ObjectAction> topLevelActions = Lists.newArrayList();
+            final List<ObjectAction> topLevelActions = _Lists.newArrayList();
 
             addTopLevelActions(adapter, ActionType.USER, topLevelActions);
             if(deploymentCategory.isPrototyping()) {
@@ -324,7 +324,7 @@ public interface ObjectAction extends ObjectMember {
         public static List<ObjectAction> findForAssociation(
                 final ObjectAdapter adapter,
                 final ObjectAssociation association, final DeploymentCategory deploymentCategory) {
-            final List<ObjectAction> associatedActions = Lists.newArrayList();
+            final List<ObjectAction> associatedActions = _Lists.newArrayList();
 
             addActions(adapter, ActionType.USER, association, associatedActions);
             if(deploymentCategory.isPrototyping()) {

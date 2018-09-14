@@ -56,7 +56,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 public class ApplicationFeatureRepositoryDefaultTest {
 
@@ -106,9 +106,9 @@ public class ApplicationFeatureRepositoryDefaultTest {
         @Test
         public void happyCase() throws Exception {
 
-            final List<ObjectAssociation> properties = Lists.<ObjectAssociation>newArrayList(mockProp);
-            final List<ObjectAssociation> collections = Lists.<ObjectAssociation>newArrayList(mockColl);
-            final List<ObjectAction> actions = Lists.newArrayList(mockAct, mockActThatIsHidden);
+            final List<ObjectAssociation> properties = _Lists.<ObjectAssociation>of(mockProp);
+            final List<ObjectAssociation> collections = _Lists.<ObjectAssociation>of(mockColl);
+            final List<ObjectAction> actions = _Lists.of(mockAct, mockActThatIsHidden);
 
             context.checking(new Expectations() {{
                 allowing(mockSpec).isAbstract();
@@ -174,7 +174,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 will(returnValue(SemanticsOf.SAFE));
 
                 allowing(mockServiceRegistry).getRegisteredServices();
-                will(returnValue(Lists.newArrayList()));
+                will(returnValue(_Lists.newArrayList()));
             }});
 
             // then
@@ -266,10 +266,10 @@ public class ApplicationFeatureRepositoryDefaultTest {
 
             context.checking(new Expectations() {{
                 allowing(mockServiceRegistry).getRegisteredServices();
-                will(returnValue(Lists.newArrayList()));
+                will(returnValue(_Lists.newArrayList()));
 
                 allowing(mockSpecificationLoader).allSpecifications();
-                will(returnValue(Lists.newArrayList()));
+                will(returnValue(_Lists.newArrayList()));
             }});
 
         }

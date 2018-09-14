@@ -17,6 +17,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.function.Predicate;
+
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;

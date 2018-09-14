@@ -19,8 +19,7 @@ package org.apache.isis.core.metamodel.facets.object.ignore.datanucleus;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -32,7 +31,7 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
  */
 public class RemoveDatanucleusPersistableTypesFacetFactory extends FacetFactoryAbstract {
 
-    private final List<RemoveMethodsFacetFactory.MethodAndParameterTypes> datanucleusPersistableMethodsToIgnore = Lists.newArrayList();
+    private final List<RemoveMethodsFacetFactory.MethodAndParameterTypes> datanucleusPersistableMethodsToIgnore = _Lists.newArrayList();
 
     public RemoveDatanucleusPersistableTypesFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);

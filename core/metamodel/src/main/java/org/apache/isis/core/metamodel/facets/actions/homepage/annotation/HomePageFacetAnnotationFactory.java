@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -69,7 +69,7 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
     private Visitor newValidatorVisitor() {
         return new MetaModelValidatorVisiting.SummarizingVisitor() {
 
-            private final List<String> annotated = Lists.newArrayList();
+            private final List<String> annotated = _Lists.newArrayList();
 
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
@@ -94,7 +94,7 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
             public void summarize(ValidationFailures validationFailures) {
                 if(annotated.size()>1) {
                     for (String actionId : annotated) {
-                        final List<String> others = Lists.newArrayList(annotated);
+                        final List<String> others = _Lists.newArrayList(annotated);
                         others.remove(actionId);
                         final String nonServiceNamesStr = Joiner.on(", ").join(others);
                         validationFailures.add(

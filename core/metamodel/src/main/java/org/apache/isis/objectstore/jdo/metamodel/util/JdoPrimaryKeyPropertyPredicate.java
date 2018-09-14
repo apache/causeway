@@ -19,9 +19,10 @@
 package org.apache.isis.objectstore.jdo.metamodel.util;
 
 
+import java.util.function.Predicate;
+
 import javax.jdo.annotations.PrimaryKey;
 
-import java.util.function.Predicate;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;

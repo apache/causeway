@@ -23,6 +23,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
+
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -53,10 +57,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember2;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
-import com.google.common.collect.Sets;
 
 public class DomainMemberDefault implements DomainMember {
 

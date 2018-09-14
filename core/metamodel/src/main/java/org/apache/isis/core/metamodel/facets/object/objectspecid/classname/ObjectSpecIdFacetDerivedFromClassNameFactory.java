@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlType;

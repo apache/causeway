@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
@@ -32,6 +31,7 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -464,7 +464,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
      */
     @Programmatic
     public Collection<ObjectSpecification> allSpecifications() {
-        return Lists.newArrayList(allCachedSpecifications());
+        return _Lists.newArrayList(allCachedSpecifications());
     }
 
     private Collection<ObjectSpecification> allCachedSpecifications() {

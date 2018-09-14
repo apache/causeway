@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +98,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final static Logger LOG = LoggerFactory.getLogger(ObjectSpecificationAbstract.class);
 
     private static class SubclassList {
-        private final List<ObjectSpecification> classes = Lists.newArrayList();
+        private final List<ObjectSpecification> classes = _Lists.newArrayList();
 
         public void addSubclass(final ObjectSpecification subclass) {
             if(classes.contains(subclass)) {
@@ -133,7 +132,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private static Map<ActionType, List<ObjectAction>> createObjectActionsByType() {
         final Map<ActionType, List<ObjectAction>> map = _Maps.newHashMap();
         for (final ActionType type : ActionType.values()) {
-            map.put(type, Lists.<ObjectAction>newArrayList());
+            map.put(type, _Lists.<ObjectAction>newArrayList());
         }
         return map;
     }
@@ -698,7 +697,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     protected List<ObjectAssociation> sortAssociations(final List<ObjectAssociation> associations) {
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associations);
-        final List<ObjectAssociation> orderedAssociations = Lists.newArrayList();
+        final List<ObjectAssociation> orderedAssociations = _Lists.newArrayList();
         sortAssociations(orderSet, orderedAssociations);
         return orderedAssociations;
     }
@@ -721,7 +720,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     protected static List<ObjectAction> sortActions(final List<ObjectAction> actions) {
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(actions);
-        final List<ObjectAction> orderedActions = Lists.newArrayList();
+        final List<ObjectAction> orderedActions = _Lists.newArrayList();
         sortActions(orderSet, orderedActions);
         return orderedActions;
     }
@@ -734,7 +733,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             }
             else if (element instanceof DeweyOrderSet) {
                 final DeweyOrderSet set = ((DeweyOrderSet) element);
-                final List<ObjectAction> actions = Lists.newArrayList();
+                final List<ObjectAction> actions = _Lists.newArrayList();
                 sortActions(set, actions);
                 actionsToAppendTo.addAll(actions);
             } else {
@@ -756,7 +755,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return Collections.emptyList();
         }
 
-        final List<ObjectAssociation> contributeeAssociations = Lists.newArrayList();
+        final List<ObjectAssociation> contributeeAssociations = _Lists.newArrayList();
         for (final Object servicePojo : getServicePojos()) {
             addContributeeAssociationsIfAny(servicePojo, contributeeAssociations);
         }
@@ -852,7 +851,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return Collections.emptyList();
         }
 
-        final List<ObjectAssociation> mixedInAssociations = Lists.newArrayList();
+        final List<ObjectAssociation> mixedInAssociations = _Lists.newArrayList();
 
         for (final Class<?> mixinType : mixinTypes) {
             addMixedInAssociationsIfAny(mixinType, mixedInAssociations);
@@ -942,7 +941,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (isService() || isValue()) {
             return Collections.emptyList();
         }
-        final List<ObjectAction> contributeeActions = Lists.newArrayList();
+        final List<ObjectAction> contributeeActions = _Lists.newArrayList();
 
         for (final Object servicePojo : getServicePojos()) {
             addContributeeActionsIfAny(servicePojo, contributeeActions);
@@ -1034,7 +1033,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return Collections.emptyList();
         }
 
-        final List<ObjectAction> mixedInActions = Lists.newArrayList();
+        final List<ObjectAction> mixedInActions = _Lists.newArrayList();
 
         for (final Class<?> mixinType : mixinTypes) {
             addMixedInActionsIfAny(mixinType, mixedInActions);
@@ -1218,7 +1217,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         // there must be a session available
         if(contributed.isIncluded() && !contributeeAndMixedInAssociationsAdded) {
             synchronized (this.associations) {
-                List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
+                List<ObjectAssociation> associations = _Lists.newArrayList(this.associations);
                 associations.addAll(createContributeeAssociations());
                 associations.addAll(createMixedInAssociations());
                 sortAndUpdateAssociations(associations);

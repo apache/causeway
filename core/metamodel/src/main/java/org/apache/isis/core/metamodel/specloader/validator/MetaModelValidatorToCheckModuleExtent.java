@@ -18,25 +18,20 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorComposite {
@@ -93,7 +88,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
                 } else {
                     List<String> classNames = domainObjectClassNamesByPackage.get(packageName);
                     if (classNames == null) {
-                        classNames = Lists.newArrayList();
+                        classNames = _Lists.newArrayList();
                         domainObjectClassNamesByPackage.put(packageName, classNames);
                     }
                     classNames.add(objSpec.getFullIdentifier());

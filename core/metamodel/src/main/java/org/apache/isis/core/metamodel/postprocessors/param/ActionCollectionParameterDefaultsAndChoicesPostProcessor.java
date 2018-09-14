@@ -24,8 +24,8 @@ import java.util.stream.Stream;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -150,7 +150,7 @@ ServicesInjectorAware {
     }
 
     private List<ActionType> inferActionTypes() {
-        final List<ActionType> actionTypes = Lists.newArrayList();
+        final List<ActionType> actionTypes = _Lists.newArrayList();
         actionTypes.add(ActionType.USER);
         final DeploymentCategory deploymentCategory = getDeploymentCategory();
         if ( !deploymentCategory.isProduction()) {

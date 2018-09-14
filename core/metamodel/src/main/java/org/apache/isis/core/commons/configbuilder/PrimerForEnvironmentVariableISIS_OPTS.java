@@ -24,8 +24,9 @@ import java.util.Map;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import org.apache.isis.commons.internal.collections._Lists;
 
 public class PrimerForEnvironmentVariableISIS_OPTS implements IsisConfigurationBuilder.Primer {
 
@@ -65,7 +66,7 @@ public class PrimerForEnvironmentVariableISIS_OPTS implements IsisConfigurationB
         if (env != null) {
             final List<String> keyAndValues = Splitter.on(separator).splitToList(env);
             for (String keyAndValue : keyAndValues) {
-                final List<String> parts = Lists.newArrayList(Splitter.on("=").splitToList(keyAndValue));
+                final List<String> parts = _Lists.newArrayList(Splitter.on("=").splitToList(keyAndValue));
 
                 if (parts.size() >= 2) {
                     String key = parts.get(0);

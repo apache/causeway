@@ -26,9 +26,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.exceptions.IsisException;
-
-import com.google.common.collect.Lists;
 
 public final class ArrayExtensions {
 
@@ -73,7 +72,7 @@ public final class ArrayExtensions {
 
     @SafeVarargs
     public static <T> T[] combine(final T[]... arrays) {
-        final List<T> combinedList = Lists.newArrayList();
+        final List<T> combinedList = _Lists.newArrayList();
         for (final T[] array : arrays) {
             Collections.addAll(combinedList, array);
         }
@@ -81,13 +80,13 @@ public final class ArrayExtensions {
     }
 
     public static <T> T[] appendT(final T[] array, final T obj) {
-        final List<T> combinedList = Lists.newArrayList();
+        final List<T> combinedList = _Lists.newArrayList();
         combinedList.add(obj);
         Collections.addAll(combinedList, array);
         return combinedList.toArray(array); // using array to specify the type
     }
     public static String[] append(final String[] extendee, final String... moreArgs) {
-        final List<String> argList = Lists.newArrayList();
+        final List<String> argList = _Lists.newArrayList();
         argList.addAll(Arrays.asList(extendee));
         argList.addAll(Arrays.asList(moreArgs));
         return argList.toArray(new String[] {});

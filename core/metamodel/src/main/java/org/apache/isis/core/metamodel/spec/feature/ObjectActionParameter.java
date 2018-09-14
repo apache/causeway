@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,9 +29,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Analogous to {@link ObjectAssociation}.

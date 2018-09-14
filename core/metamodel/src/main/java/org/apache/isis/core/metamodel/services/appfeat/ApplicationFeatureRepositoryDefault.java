@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -43,6 +42,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.config.ConfigurationService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -124,7 +124,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     private void createApplicationFeaturesFor(final Collection<ObjectSpecification> specifications) {
         // take copy to avoid ConcurrentModificationException
-        final List<ObjectSpecification> objectSpecifications = Lists.newArrayList(specifications);
+        final List<ObjectSpecification> objectSpecifications = _Lists.newArrayList(specifications);
         for (final ObjectSpecification spec : objectSpecifications) {
             createApplicationFeaturesFor(spec);
         }

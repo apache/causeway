@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.progmodel;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
-
 /**
  * Marker interface for deprecated facet factories, so that they can be ignored via a configuration property.
  *

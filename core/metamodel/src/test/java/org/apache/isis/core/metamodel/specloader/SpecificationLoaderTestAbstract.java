@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -94,7 +94,7 @@ public abstract class SpecificationLoaderTestAbstract {
 
         stubServicesInjector =
                 new ServicesInjector(
-                    Lists.newArrayList(
+                    _Lists.of(
                         mockAuthenticationSessionProvider,
                         stubConfiguration,
                         mockDeploymentCategoryProvider,

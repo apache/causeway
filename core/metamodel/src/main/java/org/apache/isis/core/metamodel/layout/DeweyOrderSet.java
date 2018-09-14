@@ -29,11 +29,10 @@ import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
@@ -171,7 +170,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
 
     // /////////////////////////////////////////////////////////////////////////
 
-    private final List<Object> elements = Lists.newArrayList();
+    private final List<Object> elements = _Lists.newArrayList();
     private final String groupFullName;
     private final String groupName;
     private final String groupPath;

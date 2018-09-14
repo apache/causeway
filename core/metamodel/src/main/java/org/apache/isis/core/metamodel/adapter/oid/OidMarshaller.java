@@ -25,10 +25,10 @@ import java.util.regex.Pattern;
 
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -167,7 +167,7 @@ public final class OidMarshaller {
         final String rootIdentifier = getGroup(matcher, 5);
 
         final String aggregateOidPart = getGroup(matcher, 6);
-        final List<AggregateOidPart> aggregateOidParts = Lists.newArrayList();
+        final List<AggregateOidPart> aggregateOidParts = _Lists.newArrayList();
         final Splitter nestingSplitter = Splitter.on(SEPARATOR_NESTING);
         final Splitter partsSplitter = Splitter.on(SEPARATOR);
         if(aggregateOidPart != null) {

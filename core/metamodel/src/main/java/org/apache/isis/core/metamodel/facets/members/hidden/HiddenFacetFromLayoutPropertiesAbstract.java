@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.members.hidden;
 
 import java.util.Properties;
+
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Where;

@@ -19,13 +19,9 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.interactions.AccessContext;
-import org.apache.isis.core.metamodel.interactions.InteractionContext;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeature {
 

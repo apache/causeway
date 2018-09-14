@@ -22,10 +22,9 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.function.Predicate;
 
 import com.google.common.base.Objects;
-import java.util.function.Predicate;
-import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +36,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -192,7 +192,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         final int parameterCount = getParameterCount();
         final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
 
-        final List<ObjectActionParameter> parameters = Lists.newArrayList();
+        final List<ObjectActionParameter> parameters = _Lists.newArrayList();
         for (int paramNum = 0; paramNum < parameterCount; paramNum++) {
             final FacetedMethodParameter paramPeer = paramPeers.get(paramNum);
 
@@ -212,7 +212,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     @Override
     public List<ObjectSpecification> getParameterTypes() {
-        final List<ObjectSpecification> parameterTypes = Lists.newArrayList();
+        final List<ObjectSpecification> parameterTypes = _Lists.newArrayList();
         final List<ObjectActionParameter> parameters = getParameters();
         for (final ObjectActionParameter parameter : parameters) {
             parameterTypes.add(parameter.getSpecification());
@@ -247,7 +247,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     @Override
     public List<ObjectActionParameter> getParameters(final Predicate<ObjectActionParameter> predicate) {
         final List<ObjectActionParameter> allParameters = getParameters();
-        final List<ObjectActionParameter> selectedParameters = Lists.newArrayList();
+        final List<ObjectActionParameter> selectedParameters = _Lists.newArrayList();
         for (int i = 0; i < allParameters.size(); i++) {
             if (predicate.test(allParameters.get(i))) {
                 selectedParameters.add(allParameters.get(i));

@@ -18,15 +18,15 @@
  */
 package org.apache.isis.core.metamodel.feature;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import com.google.common.collect.Lists;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -37,18 +37,13 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import org.apache.isis.applib.annotation.Where;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 public class ObjectAssociationPredicatesTest_visibleWhere {
@@ -110,23 +105,23 @@ public class ObjectAssociationPredicatesTest_visibleWhere {
             will(returnValue(where));
 
             allowing(mockObjectAssociation).streamFacets();
-            will(returnValue(Lists.newArrayList(mockHiddenFacet).stream()));
+            will(returnValue(_Lists.of(mockHiddenFacet).stream()));
         }});
     }
 
-    private Matcher<Class<? extends Facet>> subclassOf(final Class<?> cls) {
-        return new TypeSafeMatcher<Class<? extends Facet>>() {
-            @Override
-            protected boolean matchesSafely(final Class<? extends Facet> item) {
-                return cls.isAssignableFrom(cls);
-            }
-
-            @Override
-            public void describeTo(final Description description) {
-                description.appendText("subclass of " + cls.getName());
-            }
-        };
-    }
+//    private Matcher<Class<? extends Facet>> subclassOf(final Class<?> cls) {
+//        return new TypeSafeMatcher<Class<? extends Facet>>() {
+//            @Override
+//            protected boolean matchesSafely(final Class<? extends Facet> item) {
+//                return cls.isAssignableFrom(cls);
+//            }
+//
+//            @Override
+//            public void describeTo(final Description description) {
+//                description.appendText("subclass of " + cls.getName());
+//            }
+//        };
+//    }
 
     @Test
     public void test() {

@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
+
 import com.google.common.collect.Sets;
 
 public final class ValidationFailures implements Iterable<String> {

@@ -21,11 +21,10 @@ package org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.spec.Specification;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -93,7 +92,7 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
      * For benefit of subclasses.
      */
     protected static List<Specification> specificationsFor(final Class<?>[] values) {
-        final List<Specification> specifications = Lists.newArrayList();
+        final List<Specification> specifications = _Lists.newArrayList();
         for (final Class<?> value : values) {
             final Specification specification = newSpecificationElseNull(value);
             if (specification != null) {

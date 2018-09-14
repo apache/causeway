@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.collections.sortedby.annotation;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;

@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.value.timestampsql;
 
 import java.sql.Timestamp;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 

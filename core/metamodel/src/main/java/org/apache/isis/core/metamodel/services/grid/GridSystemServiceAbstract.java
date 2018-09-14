@@ -23,6 +23,11 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
+import com.google.common.base.Strings;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
@@ -47,6 +52,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -107,11 +113,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib.layout.grid.Grid> implements GridSystemService<G> {
 
@@ -392,9 +393,9 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
      * Returns a 2-element tuple of [first-second, second-first]
      */
     protected static <T> Tuple<List<T>> surplusAndMissing(final Collection<T> first, final Collection<T> second){
-        final List<T> firstNotSecond = Lists.newArrayList(first);
+        final List<T> firstNotSecond = _Lists.newArrayList(first);
         firstNotSecond.removeAll(second);
-        final List<T> secondNotFirst = Lists.newArrayList(second);
+        final List<T> secondNotFirst = _Lists.newArrayList(second);
         secondNotFirst.removeAll(first);
         return Tuple.of(firstNotSecond, secondNotFirst);
     }

@@ -25,7 +25,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -138,7 +137,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
         }
 
         private static List<String> componentsFor(final String sequence) {
-            return Lists.newArrayList(Splitter.on('.').split(sequence));
+            return _Lists.newArrayList(Splitter.on('.').split(sequence));
         }
     }
 

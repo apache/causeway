@@ -25,8 +25,8 @@ import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 public class HiddenObjectFacetViaMethod extends HiddenObjectFacetAbstract {
     private final Method method;

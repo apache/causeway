@@ -23,9 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -90,7 +89,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final List<Facet> facets = Lists.newArrayList();
+        final List<Facet> facets = _Lists.newArrayList();
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
 

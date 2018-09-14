@@ -19,13 +19,16 @@
 
 package org.apache.isis.core.commons.lang;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
+
+import org.apache.isis.commons.internal.collections._Lists;
 
 public final class ListExtensions {
     private static final String DEFAULT_DELIMITER = ",";
@@ -34,7 +37,7 @@ public final class ListExtensions {
     }
 
     public static <T> List<T> combineWith(final List<T> extendee, final List<T> list2) {
-        final List<T> combinedList = Lists.newArrayList();
+        final List<T> combinedList = _Lists.newArrayList();
         combinedList.addAll(extendee);
         combinedList.addAll(list2);
         return combinedList;
@@ -73,11 +76,13 @@ public final class ListExtensions {
     // //////////////////////////////////////
 
     public static <T> List<T> mutableCopy(final List<T> input) {
-        return Lists.newArrayList(input != null? input: Collections.<T>emptyList());
+        return stream(input)
+                .collect(Collectors.toList());
     }
 
     public static <T> List<T> mutableCopy(T[] arr) {
-        return mutableCopy(arr != null? Arrays.asList(arr): Collections.<T>emptyList()) ;
+        return stream(arr)
+                .collect(Collectors.toList());
     }
 
     public static <T> void insert(final List<T> list, final int insertionPoint, final T elementToInsert) {

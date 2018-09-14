@@ -26,9 +26,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
@@ -128,9 +125,9 @@ public class DomainEventHelper {
         }
     }
 
-    private static <T> List<T> immutableList(final Iterable<T> iterable) {
-        return Collections.unmodifiableList(Lists.newArrayList(iterable));
-    }
+//    private static <T> List<T> immutableList(final Iterable<T> iterable) {
+//        return Collections.unmodifiableList(_Lists.newArrayList(iterable));
+//    }
 
     @SuppressWarnings("unchecked")
     static <S> ActionDomainEvent<S> newActionDomainEvent(

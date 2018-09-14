@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.value.url;
 
 import java.net.URL;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 

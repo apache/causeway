@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
@@ -33,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -146,7 +146,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         // making that refactoring.
         //
         final Class<?>[] interfaceTypes = getCorrespondingClass().getInterfaces();
-        final List<ObjectSpecification> interfaceSpecList = Lists.newArrayList();
+        final List<ObjectSpecification> interfaceSpecList = _Lists.newArrayList();
         for (final Class<?> interfaceType : interfaceTypes) {
             final Class<?> substitutedInterfaceType = classSubstitutor.getClass(interfaceType);
             if (substitutedInterfaceType != null) {
@@ -203,7 +203,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // -- create associations and actions
     private List<ObjectAssociation> createAssociations() {
         final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods();
-        final List<ObjectAssociation> associations = Lists.newArrayList();
+        final List<ObjectAssociation> associations = _Lists.newArrayList();
         for (FacetedMethod facetedMethod : associationFacetedMethods) {
             final ObjectAssociation association = createAssociation(facetedMethod);
             if(association != null) {
@@ -226,7 +226,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private List<ObjectAction> createActions() {
         final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
-        final List<ObjectAction> actions = Lists.newArrayList();
+        final List<ObjectAction> actions = _Lists.newArrayList();
         for (FacetedMethod facetedMethod : actionFacetedMethods) {
             final ObjectAction action = createAction(facetedMethod);
             if(action != null) {

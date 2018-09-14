@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.services;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +51,7 @@ public class ServicesInjectorDefaultTest_validateServices {
 
         @Before
         public void setUp() throws Exception {
-            serviceList = Lists.newArrayList();
+            serviceList = _Lists.newArrayList();
             stubConfiguration = new IsisConfigurationDefault();
         }
 
