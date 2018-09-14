@@ -88,11 +88,9 @@
 [6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
 
         <!-- JDO API -->
-        
         <jdo-api.version>3.1</jdo-api.version>
         
         <!-- Isis Datanucleus JDO Plugin dn5 -->
-
 	    <dn5-jdo-api.version>3.2.0-m8</dn5-jdo-api.version>
         <dn5-core.version>5.1.11</dn5-core.version>
         <dn5-api-jdo.version>5.1.9</dn5-api-jdo.version>
@@ -2106,6 +2104,11 @@ ${license.additional-notes}
 
         <!-- TEST DEPENDENCIES -->
         <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit4</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
             <scope>test</scope>
@@ -2126,11 +2129,6 @@ ${license.additional-notes}
             <!-- support for unit tests that use JUnit 4 or JUnit 3 -->
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jmock</groupId>
-            <artifactId>jmock-junit4</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -2373,6 +2371,7 @@ ${license.additional-notes}
                 </plugins>
             </build>
         </profile>
+
         <profile>
             <id>src</id>
             <activation>
@@ -2389,6 +2388,7 @@ ${license.additional-notes}
                 </plugins>
             </build>
         </profile>
+
         <profile>
             <id>git</id>
             <activation>
@@ -2405,42 +2405,8 @@ ${license.additional-notes}
                 </plugins>
             </build>
         </profile>
+
         <profile>
-<<<<<<< HEAD
-            <!--
-            as per https://stackoverflow.com/a/28860520/56880
-            allows -Dgpg.passphrase= to be used rather than gpg.useagent
-            inherited from parent.
-            Note that this requires gpg v2.1+
-            -->
-            <id>gpg</id>
-            <activation>
-                <property>
-                    <name>gpg.passphrase</name>
-                </property>
-            </activation>
-            <properties>
-                <gpg.useagent>false</gpg.useagent>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>sign-release-artifacts</id>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                                <configuration>
-                                    <gpgArguments>
-                                        <arg>--pinentry-mode</arg>
-                                        <arg>loopback</arg>
-                                    </gpgArguments>
-                                </configuration>
-                            </execution>
-=======
             <id>flatten</id>
             <activation>
                 <property>
@@ -2475,7 +2441,46 @@ ${license.additional-notes}
                                     <goal>clean</goal>
                                 </goals>
                             </execution>
->>>>>>> master
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <!--
+            as per https://stackoverflow.com/a/28860520/56880
+            allows -Dgpg.passphrase= to be used rather than gpg.useagent
+            inherited from parent.
+            Note that this requires gpg v2.1+
+            -->
+            <id>gpg</id>
+            <activation>
+                <property>
+                    <name>gpg.passphrase</name>
+                </property>
+            </activation>
+            <properties>
+                <gpg.useagent>false</gpg.useagent>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-release-artifacts</id>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>

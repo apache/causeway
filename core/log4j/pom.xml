@@ -42,16 +42,8 @@
             <artifactId>log4j</artifactId>
         </dependency>
 
-<!-- replaced by javaee-api -->        
-<!-- to resolve log4j's optional dependency on javax.mail:mail:1.4 -->
-<!--     <dependency> -->
-<!--         <groupId>org.apache.geronimo.specs</groupId> -->
-<!--         <artifactId>geronimo-javamail_1.4_spec</artifactId> -->
-<!--         <optional>true</optional> -->
-<!--         <scope>provided</scope> -->
-<!--     </dependency> -->
-        
         <!-- JEE API -->
+        <!-- (replaces org.apache.geronimo.specs:geronimo-javamail_1.4_spec for javax.mail:mail) -->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>

@@ -131,14 +131,6 @@
             <artifactId>wicket-bootstrap-themes</artifactId>
         </dependency>
 
-<!-- replaced by javaee-api -->
-<!--    
-        <dependency> 
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-servlet_3.0_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
--->		
 
         <!-- LOGGING DEPENDENCIES - LOG4J -->
 
