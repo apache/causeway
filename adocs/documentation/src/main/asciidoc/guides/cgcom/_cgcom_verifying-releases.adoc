@@ -4,7 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :toc: right
-include::__versions.adoc[]
+include::../../__versions.adoc[]
 
 
 The release process consists of:
@@ -236,7 +236,7 @@ mvn archetype:generate  \
     -D archetypeCatalog=local \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=helloworld-archetype \
-    -D archetypeVersion={isisrel} \
+    -D archetypeVersion={isisnext} \
     -D groupId=com.mycompany \
     -D artifactId=myhelloworld \
     -D version=1.0-SNAPSHOT \
@@ -259,7 +259,7 @@ mvn archetype:generate  \
     -D archetypeCatalog=local \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion={isisrel} \
+    -D archetypeVersion={isisnext} \
     -D groupId=com.mycompany \
     -D artifactId=mysimpleapp \
     -D version=1.0-SNAPSHOT \

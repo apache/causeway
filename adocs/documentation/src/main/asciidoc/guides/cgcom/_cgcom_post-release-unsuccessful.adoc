@@ -4,7 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :toc: right
-include::__versions.adoc[]
+include::../../__versions.adoc[]
 
 
 The release process consists of:

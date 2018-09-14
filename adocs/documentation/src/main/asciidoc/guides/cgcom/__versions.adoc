@@ -1,3 +1,0 @@
-:isisprev: 1.16.2
-:isisrel: 1.16.3
-:isisdev: {isisrel}-SNAPSHOT

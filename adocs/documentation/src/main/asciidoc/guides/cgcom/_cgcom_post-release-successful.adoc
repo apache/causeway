@@ -4,7 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :toc: right
-include::__versions.adoc[]
+include::../../__versions.adoc[]
 
 
 The release process consists of:
@@ -190,7 +190,7 @@ popd
 
 [source,bash,subs="attributes+"]
 ----
-sh upd.sh {isisprev} {isisrel}
+sh upd.sh {isiscurr} {isisnext}
 ----
 
 The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.

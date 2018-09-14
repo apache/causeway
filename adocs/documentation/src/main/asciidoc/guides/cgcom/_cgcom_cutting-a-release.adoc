@@ -4,7 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :toc: right
-include::__versions.adoc[]
+include::../../__versions.adoc[]
 
 The release process consists of:
 
@@ -55,7 +55,7 @@ For example:
 ----
 export ISISTMP=/c/tmp                               # <1>
 export ISISDEV={isisdev}
-export ISISREL={isisrel}
+export ISISREL={isisnext}
 export ISISRC=RC1
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISJIRA=ISIS-9999                           # <2>
@@ -72,7 +72,7 @@ Obviously, alter `$ISISDEV` and `$ISISREL` as required, and bump `$ISISRC` for r
 
 [IMPORTANT]
 ====
-Note that the branch name is intentionally *not* the same any of the eventual tag names (eg `isis-{isisrel}` or `simpleapp-archetype-{isisrel}`).
+Note that the branch name is intentionally *not* the same any of the eventual tag names (eg `isis-{isisnext}` or `simpleapp-archetype-{isisnext}`).
 ====
 
 
@@ -99,7 +99,7 @@ This will normally have been done already during earlier development; but confir
 If it has not, make the change.
 
 Double check that the version number of the core POM (`core/pom.xml`) should reflect the branch name that you are now on.
-For example, if releasing version `{isisrel}`, the POM should read:
+For example, if releasing version `{isisnext}`, the POM should read:
 
 [source,xml,subs="attributes+"]
 ----
@@ -835,7 +835,7 @@ Use the following subject, eg:
 
 [source,bash,subs="attributes+"]
 ----
-[VOTE] Apache Isis Core release {isisrel} RC1
+[VOTE] Apache Isis Core release {isisnext} RC1
 ----
 
 And use the following body:
@@ -844,19 +844,19 @@ And use the following body:
 ----
 I've cut a release for Apache Isis Core and the two archetypes:
 
-* Core {isisrel}
-* HelloWorld Archetype {isisrel}
-* SimpleApp Archetype {isisrel}
+* Core {isisnext}
+* HelloWorld Archetype {isisnext}
+* SimpleApp Archetype {isisnext}
 
 The source code artifacts have been uploaded to staging repositories on repository.apache.org:
 
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/core/isis/{isisrel}/isis-{isisrel}-source-release.zip
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/helloworld-archetype/{isisrel}/helloworld-archetype-{isisrel}-source-release.zip
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/simpleapp-archetype/{isisrel}/simpleapp-archetype-{isisrel}-source-release.zip
+* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/core/isis/{isisnext}/isis-{isisnext}-source-release.zip
+* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/helloworld-archetype/{isisnext}/helloworld-archetype-{isisnext}-source-release.zip
+* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/simpleapp-archetype/{isisnext}/simpleapp-archetype-{isisnext}-source-release.zip
 
 For each zip there is a corresponding signature file (append .asc to the zip's url).
 
-In the source code repo the code has been tagged as isis-{isisrel}-RC1, helloworld-archetype-{isisrel}-RC1 and simpleapp-archetype-{isisrel}-RC1; see https://github.com/apache/isis/tags
+In the source code repo the code has been tagged as isis-{isisnext}-RC1, helloworld-archetype-{isisnext}-RC1 and simpleapp-archetype-{isisnext}-RC1; see https://github.com/apache/isis/tags
 
 For instructions on how to verify the release (build from binaries and/or use in Maven directly), see https://isis.apache.org/guides/cgcom/cgcom.html#_cgcom_verifying-releases
 
@@ -869,7 +869,7 @@ Please verify the release and cast your vote.  The vote will be open for a minim
 
 Remember to update:
 
-* the version number (`{isisrel}` or whatever)
+* the version number (`{isisnext}` or whatever)
 * the release candidate number (`RC1` or whatever)
 * the repository id, as provided by Nexus earlier (`orgapacheisis-10xx` or whatever)
 
