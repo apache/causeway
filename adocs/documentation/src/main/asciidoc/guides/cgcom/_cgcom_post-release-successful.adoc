@@ -4,6 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :toc: right
+include::__versions.adoc[]
 
 
 The release process consists of:
@@ -187,9 +188,9 @@ svn delete $fullname-$old_ver-$zip
 popd
 ----
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-sh upd.sh 1.16.2 1.16.3
+sh upd.sh {isisprev} {isisrel}
 ----
 
 The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
@@ -199,14 +200,14 @@ The script downloads the artifacts from the Nexus release repository, adds the a
 Double check that the files are correct; there is sometimes a small delay in the files becoming available in the release repository.
 It should be sufficient to check just the `md5` or `.asc` files that these look valid (aren't HTML 404 error pages):
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 vi `find . -name *.md5`
 ----
 
 Assuming all is good, commit the changes:
 
-[source]
+[source,subs="attributes+"]
 ----
 svn commit -m "publishing isis source releases to dist.apache.org"
 ----
@@ -281,7 +282,7 @@ Now we need to publish the website.
 * locate `template/document.html.erb` file, and remove `-SNAPSHOT` from the navbar:
 
 +
-[source,html]
+[source,html,subs="attributes+"]
 ----
 <p class="nav navbar-text navbar-right small">v2.0.0-M1</p>
 ----

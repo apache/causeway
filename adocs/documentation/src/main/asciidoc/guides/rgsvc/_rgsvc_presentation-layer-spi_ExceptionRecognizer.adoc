@@ -99,8 +99,7 @@ It will also handle any application exceptions raised by the system (subclasses 
 +
 which bundles up a number of more fine-grained implementations:
 +
-** `ExceptionRecognizerForSQLIntegrityConstraintViolationUnique
-OrIndexException`
+** `ExceptionRecognizerForSQLIntegrityConstraintViolationUniqueOrIndexException`
 ** `ExceptionRecognizerForJDOObjectNotFoundException`
 ** `ExceptionRecognizerForJDODataStoreException`
 

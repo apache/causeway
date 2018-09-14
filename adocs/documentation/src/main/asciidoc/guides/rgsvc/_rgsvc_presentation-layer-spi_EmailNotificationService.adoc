@@ -56,7 +56,8 @@ This implies a couple of additional constraints:
 
 * first, implementation class should also be annotated with `@com.google.inject.Singleton`
 
-* second, there may not be any Apache Isis session running. (If necessary, one can be created on the fly using `IsisContext.doInSession(...)`)
+* second, there may not be any Apache Isis session running.
+(If necessary, one can be created on the fly using `IsisContext.doInSession(...)`)
 
 
 == Related Services

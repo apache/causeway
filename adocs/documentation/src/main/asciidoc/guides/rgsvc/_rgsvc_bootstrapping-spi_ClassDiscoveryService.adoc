@@ -33,7 +33,7 @@ public interface ClassDiscoveryService  {
 
 == Implementation
 
-Isis provides an implementation of this service, namely `o.a.i.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections`.
+Apache Isis provides an implementation of this service, namely `o.a.i.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections`.
 
 [NOTE]
 ====

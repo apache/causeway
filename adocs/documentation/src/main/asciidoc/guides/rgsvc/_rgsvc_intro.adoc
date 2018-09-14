@@ -17,8 +17,7 @@ The diagram below shows these categories:
 image::{_imagesdir}reference-services/categories.png[width="600px",link="{_imagesdir}reference-services/categories.png"]
 
 
-A small number of domain services can be considered both API and SPI; a good example is the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:../ugvw/ugvw.adoc#_ugvw_features_user-registration[user registration]
-functionality supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer].
+A small number of domain services can be considered both API and SPI; a good example is the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:../ugvw/ugvw.adoc#_ugvw_features_user-registration[user registration] functionality supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer].
 The same is true of the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
 xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`] etc.
 
@@ -119,7 +118,7 @@ public class MyLocaleProvider implements LocaleProvider {
 <1> takes precedence over the default implementation.
 
 
-It's also quite common to want to decorate the existing implementation (ie have your own implementation delegate to the default); this is also possible and quite easy (if using `1.10.0` or later).
+It's also quite common to want to decorate the existing implementation (ie have your own implementation delegate to the default); this is also possible and quite easy.
 The idea is to have the framework inject all implementations of the service, and then to delegate to the first one that isn't "this" one:
 
 [source,java]
@@ -188,16 +187,14 @@ xref:../rgfis/rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceIn
 The internal service delegates in turn to any registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`]s (there may be more than one).
 
 * At the end of each transaction, details of all changed objects are published, again through the (internal) xref:../rgfis/rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] to any registered `PublisherService` implementations.
-Only domain objects specified to be published with
-xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] are published. +
+Only domain objects specified to be published with xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] are published. +
 +
 [NOTE]
 ====
 Note that it's possible for there to be more than one transaction per top-level interaction, by virtue of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`].
 ====
 
-* Also at the end of each transaction, details of all changed properties are passed to any registered
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s) by way of the (internal) xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] domain service.
+* Also at the end of each transaction, details of all changed properties are passed to any registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s) by way of the (internal) xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] domain service.
 
 Implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd[`cmd.xsd`] schema.
 This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).

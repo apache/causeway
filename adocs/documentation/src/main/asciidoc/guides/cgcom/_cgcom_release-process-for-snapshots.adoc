@@ -4,6 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :toc: right
+include::__versions.adoc[]
 
 
 Snapshot releases allows the current `-SNAPSHOT` version of the `core` modules  of the framework to be released to the Maven snapshot repository maintained by Apache Software Foundation.

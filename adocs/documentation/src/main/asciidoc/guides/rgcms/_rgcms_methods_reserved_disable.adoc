@@ -39,7 +39,8 @@ See also the similar methods to xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved
 An alternative design -- and one that could be easily argued is actually more flexible -- is to leverage domain events with vetoing subscribers.
 
 With this approach we define, for a given domain class, a base `PropertyDomainEvent`, `CollectionDomainEvent` and `ActionDomainEvent`.
-A good pattern is to make these nested static classes.  For example:
+A good pattern is to make these nested static classes.
+For example:
 
 [source,java]
 ----

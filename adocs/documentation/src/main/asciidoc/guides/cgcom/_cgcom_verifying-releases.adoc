@@ -4,6 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :toc: right
+include::__versions.adoc[]
 
 
 The release process consists of:
@@ -229,13 +230,13 @@ Assuming that everything builds ok, then test the archetypes (adjust version as 
 
 * First the `helloworld` archetype: +
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn archetype:generate  \
     -D archetypeCatalog=local \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=helloworld-archetype \
-    -D archetypeVersion=2.0.0-M1 \
+    -D archetypeVersion={isisrel} \
     -D groupId=com.mycompany \
     -D artifactId=myhelloworld \
     -D version=1.0-SNAPSHOT \
@@ -250,7 +251,7 @@ Adjust the version as necessary.
 
 * Next, the `simpleapp` archetype: +
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 cd ..
 
@@ -258,7 +259,7 @@ mvn archetype:generate  \
     -D archetypeCatalog=local \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=2.0.0-M1 \
+    -D archetypeVersion={isisrel} \
     -D groupId=com.mycompany \
     -D artifactId=mysimpleapp \
     -D version=1.0-SNAPSHOT \

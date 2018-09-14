@@ -66,6 +66,7 @@
 * *link:guides/dg/dg.html[Developers' Guide^]*
 ** link:guides/dg/dg.html#_dg_ide_intellij[IntelliJ^] & link:guides/dg/dg.html#_dg_ide_eclipse[Eclipse^]
 ** link:guides/dg/dg.html#_dg_contributing[Pull requests^]
+** link:guides/dg/dg.html#_dg_asciidoc-syntax[Asciidoc syntax^]
 
 * link:guides/cgcom/cgcom.html[Committers' Guide^]
 ** link:guides/cgcom/cgcom.html#_cgcom_cutting-a-release[Cutting^] & link:guides/cgcom/cgcom.html#_cgcom_verifying-releases[Verifying^]
@@ -111,6 +112,8 @@
 
 * https://github.com/isisaddons/isis-app-neoapp[Neo4J Example^] footnoteref:[ASF]
 * https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example^] footnoteref:[ASF]
+* https://github.com/andi-huber/isis-2-demo[Demo Showcase]footnoteref:[ASF]
+
 |====
 
 

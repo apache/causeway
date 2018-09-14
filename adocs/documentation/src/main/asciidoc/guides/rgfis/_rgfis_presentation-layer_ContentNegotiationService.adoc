@@ -194,14 +194,9 @@ If the property is not set, then the default depends on the xref:../rgcfg/rgcfg.
 
 == Registering the Services
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
-implementations of `ContentNegotiationService` service are automatically registered and injected (it is annotated with
-`@DomainService`) so no further configuration is required.
+Apache Isis' default implementations of `ContentNegotiationService` service are automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
-To use an alternative implementation, use
-xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 

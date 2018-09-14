@@ -1,0 +1,3 @@
+:isisprev: 2.0.0-M1
+:isisrel: 2.0.0-M2
+:isisdev: {isisrel}-SNAPSHOT

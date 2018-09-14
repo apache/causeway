@@ -101,8 +101,7 @@ If this is not required, then the `isis.reflector.facet.domainObjectLayoutAnnota
 On the other hand, if the `cssClassUiEvent` has been explicitly specified to some subclass, then an event will be posted.
 The framework provides `CssClassUiEvent.Doop` as such a subclass, so setting the `cssClassUiEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration property setting.
 
-And, conversely, the framework also provides `CssClassUiEvent.Noop`; if `cssClassUiEvent` attribute is set to this class,
-then no event will be posted.
+And, conversely, the framework also provides `CssClassUiEvent.Noop`; if `cssClassUiEvent` attribute is set to this class, then no event will be posted.
 
 
 

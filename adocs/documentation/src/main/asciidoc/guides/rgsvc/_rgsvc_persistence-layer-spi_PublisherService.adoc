@@ -79,18 +79,6 @@ log4j.additivity.org.apache.isis.applib.services.publish.PublisherServiceLogging
 ----
 
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module also provides an implementation (`o.ia.m.publishmq.dom.servicespi.PublisherServiceUsingActiveMq`).
-This implementation:
-
-* publishes each member execution as an event on an link:http://activemq.apache.org[ActiveMQ] message queue.
-* persists each execution as a `PublishedEvent` entity, allowing the event to be republished if necessary.
-* provides the ability to log additional `StatusMessage` entities, correlated on the transactionId, useful for diagnosing and monitoring the activity of subscribers of said message queues.
-
-
-This service can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
-
-The module also provide services that contribute to the UI.
-If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 
 == Usage
@@ -105,8 +93,18 @@ To indicate that:
 
 == Alternative Implementations
 
-The (non-ASF) link:http://platform.incode.org[Incode Platform^];s publishmq module provides an implementation of this service.
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module also provides an implementation (`o.ia.m.publishmq.dom.servicespi.PublisherServiceUsingActiveMq`).
+This implementation:
 
+* publishes each member execution as an event on an link:http://activemq.apache.org[ActiveMQ] message queue.
+* persists each execution as a `PublishedEvent` entity, allowing the event to be republished if necessary.
+* provides the ability to log additional `StatusMessage` entities, correlated on the transactionId, useful for diagnosing and monitoring the activity of subscribers of said message queues.
+
+
+This service can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
+
+The module also provide services that contribute to the UI.
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 
 
@@ -116,6 +114,7 @@ The (non-ASF) link:http://platform.incode.org[Incode Platform^];s publishmq modu
 This service supports two main use cases:
 
 * coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system.
+
 * profiling of interactions/transactions, eg to diagnose response/throughput issues.
 
 

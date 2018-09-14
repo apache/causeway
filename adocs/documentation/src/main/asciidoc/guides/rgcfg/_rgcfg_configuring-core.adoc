@@ -575,7 +575,6 @@ Note that properties and collections are still implicitly inferred by virtue of 
 (`true`)
 |Whether objects should be filtered for visibility. +
 
-
 See xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_filterVisibility[section below] for further discussion.
 
 
