@@ -89,7 +89,7 @@
 
         <!-- JDO API -->
         <jdo-api.version>3.1</jdo-api.version>
-        
+
         <!-- Isis Datanucleus JDO Plugin dn5 -->
 	    <dn5-jdo-api.version>3.2.0-m8</dn5-jdo-api.version>
         <dn5-core.version>5.1.11</dn5-core.version>
@@ -399,15 +399,6 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-        
-        <!--
-        <repository>
-            <id>datanucleus-nightly</id>
-            <url>http://www.datanucleus.org/downloads/maven2-nightly/</url>
-            <snapshots>
-              <enabled>true</enabled>
-            </snapshots>
-        </repository>-->
 
         <!-- required for RestEasy -->
         <repository>
