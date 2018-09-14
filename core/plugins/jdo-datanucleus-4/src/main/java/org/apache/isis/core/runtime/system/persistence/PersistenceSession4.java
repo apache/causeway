@@ -825,9 +825,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         if (rootOid.isTransient()) {
             // persisting
-            final RootOid persistentOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
-
-            objectAdapterContext.remapAsPersistent(adapter, persistentOid, this);
+            objectAdapterContext.asPersistent(adapter, this);
 
             CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
             objectAdapterContext.postLifecycleEventIfRequired(adapter, PersistedLifecycleEventFacet.class);

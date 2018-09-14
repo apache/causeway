@@ -70,7 +70,7 @@ public interface ImperativeFacet extends Facet {
      * </pre>
      */
     public List<Method> getMethods();
-
+    
     public static enum Intent {
         CHECK_IF_HIDDEN,
         CHECK_IF_DISABLED,

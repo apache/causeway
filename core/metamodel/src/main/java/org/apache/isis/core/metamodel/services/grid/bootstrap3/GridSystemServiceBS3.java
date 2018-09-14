@@ -24,11 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -83,7 +79,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
     public BS3Grid defaultGrid(final Class<?> domainClass) {
         final BS3Grid bs3Grid = new BS3Grid();
 
-        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
+//        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
         bs3Grid.setDomainClass(domainClass);
 
         final BS3Row headerRow = new BS3Row();

@@ -53,7 +53,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     @SuppressWarnings("unused")
     private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_ObjectAdapterProvider.class);
     private final ObjectAdapterContext objectAdapterContext;
-    private final PersistenceSession persistenceSession;
+//    private final PersistenceSession persistenceSession;
     private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader; 
     private final OidFactory oidFactory; 
@@ -61,7 +61,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     ObjectAdapterContext_ObjectAdapterProvider(ObjectAdapterContext objectAdapterContext,
             PersistenceSession persistenceSession) {
         this.objectAdapterContext = objectAdapterContext;
-        this.persistenceSession = persistenceSession;
+//        this.persistenceSession = persistenceSession;
         this.servicesInjector = persistenceSession.getServicesInjector();
         this.specificationLoader = servicesInjector.getSpecificationLoader();
         

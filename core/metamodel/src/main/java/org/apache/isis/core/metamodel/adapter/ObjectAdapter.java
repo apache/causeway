@@ -20,11 +20,13 @@
 package org.apache.isis.core.metamodel.adapter;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.ListExtensions;
@@ -193,32 +195,32 @@ public interface ObjectAdapter extends Instance {
 
         private Util() {}
 
-        public static Object unwrap(final ObjectAdapter adapter) {
+        public static Object unwrap(final Instance adapter) {
             return adapter != null ? adapter.getObject() : null;
         }
 
-        public static Object[] unwrap(final ObjectAdapter[] adapters) {
+        public static Object[] unwrap(final Instance[] adapters) {
             if (adapters == null) {
                 return null;
             }
             final Object[] unwrappedObjects = new Object[adapters.length];
             int i = 0;
-            for (final ObjectAdapter adapter : adapters) {
+            for (final Instance adapter : adapters) {
                 unwrappedObjects[i++] = unwrap(adapter);
             }
             return unwrappedObjects;
         }
 
-        public static List<Object> unwrap(final List<ObjectAdapter> adapters) {
+        public static List<Object> unwrap(final List<? extends Instance> adapters) {
             List<Object> objects = _Lists.newArrayList();
-            for (ObjectAdapter adapter : adapters) {
+            for (Instance adapter : adapters) {
                 objects.add(unwrap(adapter));
             }
             return objects;
         }
 
         @SuppressWarnings("unchecked")
-        public static <T> List<T> unwrapT(final List<ObjectAdapter> adapters) {
+        public static <T> List<T> unwrapT(final List<? extends Instance> adapters) {
             return (List<T>) unwrap(adapters);
         }
 
@@ -355,38 +357,39 @@ public interface ObjectAdapter extends Instance {
         private InvokeUtils() {
         }
 
-        public static void invokeAll(final List<Method> methods, final ObjectAdapter adapter) {
+        public static void invokeAll(final Collection<Method> methods, final Instance adapter) {
             MethodUtil.invoke(methods, Util.unwrap(adapter));
         }
 
-        public static Object invoke(final Method method, final ObjectAdapter adapter) {
+        public static Object invoke(final Method method, final Instance adapter) {
             return MethodExtensions.invoke(method, Util.unwrap(adapter));
         }
 
-        public static Object invoke(final Method method, final ObjectAdapter adapter, final Object arg0) {
+        public static Object invoke(final Method method, final Instance adapter, final Object arg0) {
             return MethodExtensions.invoke(method, Util.unwrap(adapter), new Object[] {arg0});
         }
 
-        public static Object invoke(final Method method, final ObjectAdapter adapter, final ObjectAdapter arg0Adapter) {
+        public static Object invoke(final Method method, final Instance adapter, final Instance arg0Adapter) {
             return invoke(method, adapter, Util.unwrap(arg0Adapter));
         }
 
-        public static Object invoke(final Method method, final ObjectAdapter adapter, final ObjectAdapter[] argumentAdapters) {
+        public static Object invoke(final Method method, final Instance adapter, final Instance[] argumentAdapters) {
             return MethodExtensions.invoke(method, Util.unwrap(adapter), Util.unwrap(argumentAdapters));
         }
 
-        public static Object invoke(final Method method, final ObjectAdapter adapter, final Map<Integer, ObjectAdapter> argumentAdapters) {
-            return invoke(method, adapter, asArray(argumentAdapters, method.getParameterTypes().length));
+        public static Object invokeC(final Method method, final Instance adapter, 
+                final Stream<Tuple2<Integer, ? extends Instance>> paramsAndIndexes) {
+            return invoke(method, adapter, asArray(paramsAndIndexes, method.getParameterTypes().length));
         }
 
-        private static ObjectAdapter[] asArray(Map<Integer, ObjectAdapter> argumentAdapters, int length) {
-            ObjectAdapter[] args = new ObjectAdapter[length];
-            for (final Map.Entry<Integer, ObjectAdapter> entry : argumentAdapters.entrySet()) {
-                final Integer paramNum = entry.getKey();
+        private static Instance[] asArray(final Stream<Tuple2<Integer, ? extends Instance>> paramsAndIndexes, int length) {
+            final Instance[] args = new Instance[length];
+            paramsAndIndexes.forEach(entry->{
+                final Integer paramNum = entry.get_1();
                 if(paramNum < length) {
-                    args[paramNum] = entry.getValue();
+                    args[paramNum] = entry.get_2();
                 }
-            }
+            });
             return args;
         }
 
@@ -402,23 +405,23 @@ public interface ObjectAdapter extends Instance {
          */
         public static Object invokeAutofit(
                 final Method method, 
-                final ObjectAdapter target, 
-                List<ObjectAdapter> argumentsIfAvailable, 
-                final ObjectAdapterProvider adapterProvider) {
+                final Instance target, 
+                List<? extends Instance> argumentsIfAvailable/*, 
+                final SpecificationLoader specLoader*/) {
             
-            final List<ObjectAdapter> args = _Lists.newArrayList();
+            final List<Instance> args = _Lists.newArrayList();
             if(argumentsIfAvailable != null) {
                 args.addAll(argumentsIfAvailable);
             }
 
-            adjust(method, args, adapterProvider);
+            adjust(method, args/*, specLoader*/);
 
-            final ObjectAdapter[] argArray = args.toArray(new ObjectAdapter[]{});
+            final Instance[] argArray = args.toArray(new Instance[]{});
             return invoke(method, target, argArray);
         }
 
         private static void adjust(
-                final Method method, final List<ObjectAdapter> args, final ObjectAdapterProvider adapterProvider) {
+                final Method method, final List<Instance> args /*, final SpecificationLoader specLoader*/) {
             
             final Class<?>[] parameterTypes = method.getParameterTypes();
             ListExtensions.adjust(args, parameterTypes.length);
@@ -427,42 +430,54 @@ public interface ObjectAdapter extends Instance {
                 final Class<?> cls = parameterTypes[i];
                 if(args.get(i) == null && cls.isPrimitive()) {
                     final Object object = ClassExtensions.toDefault(cls);
-                    final ObjectAdapter adapter = adapterProvider.adapterFor(object);
+                    
+                    final Instance adapter = new Instance() {
+                        
+                        @Override
+                        public Specification getSpecification() {
+                            return null; // not needed for primitives
+                        }
+                        
+                        @Override
+                        public Object getObject() {
+                            return object;
+                        }
+                    }; 
+                            
                     args.set(i, adapter);
                 }
             }
         }
 
-        /**
-         * Invokes the method, adjusting arguments as required.
-         *
-         * <p>
-         * That is:
-         * <ul>
-         * <li>if the method declares parameters but no arguments are provided, then will provide 'null' defaults for these.
-         * <li>if the method does not declare parameters but arguments were provided, then will ignore those argumens.
-         * </ul>
-         */
-        @SuppressWarnings("unused")
-        private static Object invokeWithDefaults(final Method method, final ObjectAdapter adapter, final ObjectAdapter[] argumentAdapters) {
-            final int numParams = method.getParameterTypes().length;
-            ObjectAdapter[] adapters;
-
-            if(argumentAdapters == null || argumentAdapters.length == 0) {
-                adapters = new ObjectAdapter[numParams];
-            } else if(numParams == 0) {
-                // ignore any arguments, even if they were supplied.
-                // eg used by contributee actions, but
-                // underlying service 'default' action declares no params
-                adapters = new ObjectAdapter[0];
-            } else if(argumentAdapters.length == numParams){
-                adapters = argumentAdapters;
-            } else {
-                throw new IllegalArgumentException("Method has " + numParams + " params but " + argumentAdapters.length + " arguments provided");
-            }
-
-            return invoke(method, adapter, adapters);
-        }
+//        /**
+//         * Invokes the method, adjusting arguments as required.
+//         *
+//         * <p>
+//         * That is:
+//         * <ul>
+//         * <li>if the method declares parameters but no arguments are provided, then will provide 'null' defaults for these.
+//         * <li>if the method does not declare parameters but arguments were provided, then will ignore those arguments.
+//         * </ul>
+//         */
+//        private static Object invokeWithDefaults(final Method method, final Instance adapter, final Instance[] argumentAdapters) {
+//            final int numParams = method.getParameterTypes().length;
+//            Instance[] adapters;
+//
+//            if(argumentAdapters == null || argumentAdapters.length == 0) {
+//                adapters = new Instance[numParams];
+//            } else if(numParams == 0) {
+//                // ignore any arguments, even if they were supplied.
+//                // eg used by contributee actions, but
+//                // underlying service 'default' action declares no params
+//                adapters = new Instance[0];
+//            } else if(argumentAdapters.length == numParams){
+//                adapters = argumentAdapters;
+//            } else {
+//                throw new IllegalArgumentException("Method has " + numParams + " params but " + argumentAdapters.length + " arguments provided");
+//            }
+//
+//            return invoke(method, adapter, adapters);
+//        }
     }
 
     public static class Functions {

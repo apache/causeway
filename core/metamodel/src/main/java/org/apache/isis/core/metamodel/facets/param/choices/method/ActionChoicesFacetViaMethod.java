@@ -110,8 +110,8 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
 
         final ObjectAdapter collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
 
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
+//        final AuthenticationSession authenticationSession = getAuthenticationSession();
+//        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,

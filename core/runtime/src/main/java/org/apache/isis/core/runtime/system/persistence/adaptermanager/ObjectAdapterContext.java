@@ -19,7 +19,6 @@
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.Objects;
-import java.util.UUID;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
@@ -187,7 +186,6 @@ final public class ObjectAdapterContext {
 
     // -- ADAPTER MANAGER LEGACY
 
-    @Deprecated // don't expose caching
     public ObjectAdapter fetchPersistent(final Object pojo) {
         if (persistenceSession.getPersistenceManager().getObjectId(pojo) == null) {
             return null;
@@ -197,13 +195,16 @@ final public class ObjectAdapterContext {
         return adapter;
     }
     
-    @Deprecated
     public ObjectAdapter recreatePojo(Oid oid, Object recreatedPojo) {
         final ObjectAdapter createdAdapter = createRootOrAggregatedAdapter(oid, recreatedPojo);
         return injectServices(createdAdapter);
     }
+    
+    public ObjectAdapter recreatedPojo(ObjectAdapter adapter, final Object pojo) {
+        final ObjectAdapter newAdapter = adapter.withPojo(pojo);
+        return injectServices(newAdapter);
+    }
 
-    @Deprecated
     public ObjectAdapter injectServices(final ObjectAdapter adapter) {
         Objects.requireNonNull(adapter);
         if(adapter.isValue()) {
@@ -214,7 +215,6 @@ final public class ObjectAdapterContext {
         return adapter;
     }
     
-    @Deprecated
     public ObjectAdapter createRootOrAggregatedAdapter(final Oid oid, final Object pojo) {
         final ObjectAdapter createdAdapter;
         if(oid instanceof RootOid) {
@@ -272,14 +272,16 @@ final public class ObjectAdapterContext {
      * @param newRootOid - allow a different persistent root oid to be provided.
      * @param session 
      */
-    @Deprecated // expected to be moved
-    public void remapAsPersistent(final ObjectAdapter rootAdapter, RootOid newRootOid, PersistenceSession session) {
-        Objects.requireNonNull(newRootOid);
+    public void asPersistent(final ObjectAdapter rootAdapter, PersistenceSession session) {
+        
+        final RootOid persistentOid = createPersistentOrViewModelOid(rootAdapter.getObject());
+        
+        Objects.requireNonNull(persistentOid);
         Assert.assertFalse("expected to not be a parented collection", rootAdapter.isParentedCollection());
-        if(newRootOid.isTransient()) {
+        if(persistentOid.isTransient()) {
             throw new IsisAssertException("hintRootOid must be persistent");
         }
-        final ObjectSpecId hintRootOidObjectSpecId = newRootOid.getObjectSpecId();
+        final ObjectSpecId hintRootOidObjectSpecId = persistentOid.getObjectSpecId();
         final ObjectSpecId adapterObjectSpecId = rootAdapter.getSpecification().getSpecId();
         if(!hintRootOidObjectSpecId.equals(adapterObjectSpecId)) {
             throw new IsisAssertException("hintRootOid's objectType must be same as that of adapter " +
@@ -287,12 +289,7 @@ final public class ObjectAdapterContext {
         }
     }
 
-    @Deprecated
-    public ObjectAdapter remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
-        final ObjectAdapter newAdapter = adapter.withPojo(pojo);
-        injectServices(newAdapter);
-        return newAdapter;
-    }
+
 
 
 
