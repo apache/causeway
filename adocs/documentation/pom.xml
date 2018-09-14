@@ -225,7 +225,7 @@
                                         <delete includeemptydirs="true">
                                             <fileset dir="${isis-site-latest.dir}" includes="**/*"/>
                                         </delete>
-p
+
                                         <echo message=""/>
                                         <echo message=""/>
                                         <mkdir 
