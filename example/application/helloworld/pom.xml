@@ -232,7 +232,9 @@
                         <version>${maven-war-plugin.version}</version>
                         <configuration>
                             <warName>${maven-war-plugin.warName}</warName>
-                            <packagingExcludes>%regex[WEB-INF/lib/(?!common-A|common-B).*.jar]</packagingExcludes>
+                            <packagingExcludes>
+                                %regex[WEB-INF/lib/(?!helloworld).*.jar]
+                            </packagingExcludes>
                             <archive>
                                 <manifest>
                                     <addClasspath>false</addClasspath>
