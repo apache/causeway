@@ -37,6 +37,7 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
@@ -90,6 +91,18 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
 
         return new DataNucleusApplicationComponents5(jdoObjectstoreConfig,
                         datanucleusProps, classesToBePersisted);
+    }
+
+    @Override
+    @Programmatic
+    public void catalogNamedQueries(final SpecificationLoader specificationLoader) {
+        final RegisterEntities registerEntities = new RegisterEntities();
+        final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
+        DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, specificationLoader);
+    }
+
+    private boolean shouldCreate(final DataNucleusApplicationComponents5 applicationComponents) {
+        return applicationComponents == null || applicationComponents.isStale();
     }
 
     private static void addDataNucleusPropertiesIfRequired(

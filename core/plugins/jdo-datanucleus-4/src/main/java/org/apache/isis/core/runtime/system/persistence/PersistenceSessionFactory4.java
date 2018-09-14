@@ -37,6 +37,7 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
@@ -81,17 +82,29 @@ PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledFlag {
         final RegisterEntities registerEntities = new RegisterEntities();
         final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
         
-            final IsisConfiguration jdoObjectstoreConfig = configuration.createSubset(
-                    JDO_OBJECTSTORE_CONFIG_PREFIX);
+        final IsisConfiguration jdoObjectstoreConfig = configuration.createSubset(
+                JDO_OBJECTSTORE_CONFIG_PREFIX);
 
-            final IsisConfiguration dataNucleusConfig = configuration.createSubset(DATANUCLEUS_CONFIG_PREFIX);
-            final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
-            addDataNucleusPropertiesIfRequired(datanucleusProps);
+        final IsisConfiguration dataNucleusConfig = configuration.createSubset(DATANUCLEUS_CONFIG_PREFIX);
+        final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
+        addDataNucleusPropertiesIfRequired(datanucleusProps);
 
         return new DataNucleusApplicationComponents4(jdoObjectstoreConfig,
                             datanucleusProps, classesToBePersisted);
     }
-    
+
+    @Override
+    @Programmatic
+    public void catalogNamedQueries(final SpecificationLoader specificationLoader) {
+        final RegisterEntities registerEntities = new RegisterEntities();
+        final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
+        DataNucleusApplicationComponents4.catalogNamedQueries(classesToBePersisted, specificationLoader);
+    }
+
+    private boolean shouldCreate(final DataNucleusApplicationComponents4 applicationComponents) {
+        return applicationComponents == null || applicationComponents.isStale();
+    }
+
     private static void addDataNucleusPropertiesIfRequired(
             final Map<String, String> props) {
 

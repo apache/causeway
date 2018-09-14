@@ -130,7 +130,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
 
                     // skip checks if annotated with JDO @NotPersistent
                     if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
-                        return;
+                        continue;
                     }
 
                     validateBigDecimalValueFacet(association, validationFailures);

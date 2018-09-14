@@ -103,7 +103,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
             }
             if(enlistedObjectProperties.containsKey(aap)) {
                 // already enlisted, so ignore
-                return;
+                continue;
             }
             PreAndPostValues papv = PreAndPostValues.pre(IsisTransaction.Placeholder.NEW);
             enlistedObjectProperties.put(aap, papv);
@@ -174,7 +174,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
             }
             if(enlistedObjectProperties.containsKey(aap)) {
                 // already enlisted, so ignore
-                return;
+                continue;
             }
             PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
             enlistedObjectProperties.put(aap, papv);
