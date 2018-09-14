@@ -24,13 +24,14 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-@WebFilter(servletNames= {"RestfulObjectsRestEasyDispatcher"})
+//@WebFilter(servletNames= {"RestfulObjectsRestEasyDispatcher"}) //[ahuber] to support 
+//Servlet 3.0 annotations @WebFilter, @WebListener or others 
+//with skinny war deployment requires additional configuration, so for now we disable this annotation
 public class IsisTransactionFilterForRestfulObjects implements Filter {
 
     @Override
@@ -67,8 +68,6 @@ public class IsisTransactionFilterForRestfulObjects implements Filter {
     public void destroy() {
     }
 
-
-    // REVIEW: ought to be able to obtain from thread or as a request attribute
     protected IsisSessionFactory isisSessionFactoryFrom(final ServletRequest request) {
         return IsisContext.getSessionFactory();
     }

@@ -80,7 +80,8 @@ final class WebModule_RestEasy implements WebModule  {
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
 
-        // add IsisSessionFilter
+        // add IsisSessionFilters
+        
         {
             final Dynamic filter = ctx.addFilter("IsisSessionFilterForRestfulObjects", IsisSessionFilter.class);
 
@@ -101,6 +102,14 @@ final class WebModule_RestEasy implements WebModule  {
                     getRestfulPath()+"swagger"); 
             
         }
+        
+        {
+            final Dynamic filter = ctx.addFilter("RestfulObjectsRestEasyDispatcher", 
+                    "org.apache.isis.viewer.restfulobjects.server.webapp.IsisTransactionFilterForRestfulObjects");
+            filter.addMappingForServletNames(null, true, RESTEASY_DISPATCHER); 
+        }
+        
+        
 
         // add RestEasy
         
