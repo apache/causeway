@@ -36,7 +36,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>2.0.0-M1</revision>
+        <revision>2.0.0-M2-SNAPSHOT</revision>
         <isis.version>${revision}</isis.version>
 
         <lombok.version>[1.18,)</lombok.version>

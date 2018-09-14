@@ -46,12 +46,8 @@
     <inceptionYear>2010</inceptionYear>
 
     <properties>
-<<<<<<< HEAD
         <revision>2.0.0-M2-SNAPSHOT</revision>
-=======
-        <revision>1.16.3-SNAPSHOT</revision>
         <isis.version>${revision}</isis.version>
->>>>>>> master
 
         <jar-plugin.automaticModuleName>org.apache.isis.core</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
