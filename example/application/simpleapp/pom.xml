@@ -37,10 +37,9 @@
 
     <properties>
         <revision>1.16.3-SNAPSHOT</revision>
-	
         <isis.version>${revision}</isis.version>
 
-        <lombok.version>1.18.0</lombok.version>
+        <lombok.version>[1.18,)</lombok.version>
 
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>
@@ -112,23 +111,23 @@
             <dependency>
                 <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-module-simple</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-module-simple</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
                 <type>test-jar</type>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-application</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-webapp</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- lombok -->

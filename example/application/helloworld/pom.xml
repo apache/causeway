@@ -140,6 +140,7 @@
             <artifactId>isis-core-applib</artifactId>
         </dependency>
 
+        <!-- OTHER DEPENDENCIES -->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
