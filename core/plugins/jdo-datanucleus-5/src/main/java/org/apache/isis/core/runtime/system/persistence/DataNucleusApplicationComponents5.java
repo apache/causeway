@@ -122,10 +122,20 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
 
     private static boolean isSchemaAwareStoreManager(Map<String,String> datanucleusProps) {
 
+        // this saves some time, but also avoids the (still undiagnosed) issue that instantiating the
+        // PMF can cause the ClassMetadata for the entity classes to be loaded in and cached prior to
+        // registering the CreateSchemaObjectFromClassData (to invoke 'create schema' first)
+        final String connectionUrl = datanucleusProps.get("javax.jdo.option.ConnectionURL");
+        if(connectionUrl != null) {
+            if (connectionUrl.startsWith("jdbc:hsqldb")) return true;
+            if (connectionUrl.startsWith("jdbc:sqlserver")) return true;
+        }
+
         // we create a throw-away instance of PMF so that we can probe whether DN has
         // been configured with a schema-aware store manager or not.
         final JDOPersistenceManagerFactory probePmf =
                 (JDOPersistenceManagerFactory) newPersistenceManagerFactory(datanucleusProps);
+
 
         try {
             final PersistenceNucleusContext nucleusContext = probePmf.getNucleusContext();

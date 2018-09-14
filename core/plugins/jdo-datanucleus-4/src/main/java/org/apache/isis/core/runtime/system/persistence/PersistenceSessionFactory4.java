@@ -69,6 +69,10 @@ PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledFlag {
     @Override
     public void init(final IsisConfigurationDefault configuration) {
         this.configuration = configuration;
+        // need to eagerly build, ... must be completed before catalogNamedQueries().
+        // Why? because that method causes entity classes to be loaded which register with DN's EnhancementHelper,
+        // which are then cached in DN.  It results in our CreateSchema listener not firing.
+        createDataNucleusApplicationComponents();
     }
 
     @Programmatic

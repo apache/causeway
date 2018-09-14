@@ -55,7 +55,7 @@ public class RegisterEntities {
 
     private Set<String> findEntityTypes() {
         
-        Set<String> entityTypes = new LinkedHashSet<String>();
+        Set<String> entityTypes = new LinkedHashSet<>();
 
         Set<Class<?>> persistenceCapableTypes = AppManifest.Registry.instance().getPersistenceCapableTypes();
 

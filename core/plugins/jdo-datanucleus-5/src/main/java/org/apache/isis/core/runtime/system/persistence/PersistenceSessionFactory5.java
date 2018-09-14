@@ -69,6 +69,10 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     @Override
     public void init(final IsisConfigurationDefault configuration) {
         this.configuration = configuration;
+        // need to eagerly build, ... must be completed before catalogNamedQueries().
+        // Why? because that method causes entity classes to be loaded which register with DN's EnhancementHelper,
+        // which are then cached in DN.  It results in our CreateSchema listener not firing.
+        createDataNucleusApplicationComponents();
     }
 
     @Programmatic
@@ -184,7 +188,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
             final ServicesInjector servicesInjector,
             final AuthenticationSession authenticationSession) {
 
-        Objects.requireNonNull(applicationComponents, "PersistenceSession5 requires initialization. "+this.hashCode());
+        Objects.requireNonNull(applicationComponents.get(), "PersistenceSession5 requires initialization. "+this.hashCode());
         
         final FixturesInstalledFlag fixturesInstalledFlag = this;
         
