@@ -18,7 +18,7 @@ Not all of the REST API exposed by the xref:../ugvro/ugvro.adoc#[Restful Objects
 
 
 [[__rgsvc_metadata-api_SwaggerService_api-and-implementation]]
-== API & Implementation
+== API
 
 The API defined by `SwaggerService` is:
 
@@ -43,7 +43,11 @@ xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-mod
 <3> Generate a Swagger spec that is the same as private case (above), but also including any xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[prototype] actions.
 <4> Swagger specs can be written either in JSON or YAML format.
 
-Isis provides a default implementation of the service, `o.a.i.core.metamodel.services.swagger.SwaggerServiceDefault`.
+
+
+== Implementation
+
+Apache Isis provides a default implementation of the service, `o.a.i.core.metamodel.services.swagger.SwaggerServiceDefault`.
 
 
 

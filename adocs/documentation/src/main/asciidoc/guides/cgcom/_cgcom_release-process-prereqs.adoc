@@ -4,6 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :toc: right
+include::__versions.adoc[]
 
 
 

@@ -57,6 +57,7 @@ public class QueryResultsCache {
 
 This class (`o.a.i.applib.services.queryresultscache.QueryResultsCache`) is also the implementation.
 
+To use an alternative implementation, subclass `QueryResultsCache` and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 

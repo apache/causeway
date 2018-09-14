@@ -9,7 +9,6 @@
 The `MetaModelService5` service (and its various supertypes) provides access to a number of aspects of Apache Isis' internal metamodel.
 
 
-
 [[_rgsvc_metadata-api_MetamodelService_api]]
 == API
 
@@ -18,7 +17,7 @@ The API defined by the service is:
 
 [source,java]
 ----
-public interface MetaModelService4 {
+public interface MetaModelService5 {
     Class<?> fromObjectType(String objectType);         // <1>
     String toObjectType(Class<?> domainType);           // <2>
     void rebuild(Class<?> domainType);                  // <3>

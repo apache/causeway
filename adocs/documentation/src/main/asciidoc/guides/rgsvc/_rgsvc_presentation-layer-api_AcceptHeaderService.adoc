@@ -38,6 +38,10 @@ The default implementation is provided by `o.a.i.v.ro.rendering.service.accepthe
 Note that the service will only return a list when the request is initiated through the xref:../ugvro/ugvro.adoc#[Restful Objects viewer].  Otherwise the service will return `null`.
 ====
 
+To use an alternative implementation, use
+xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+
 
 == Usage
 
@@ -63,7 +67,6 @@ The Restful Objects specification does this something similar with its own `x-ro
 this is used by the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] to determine how to
 map domain objects to view models/DTOs.
 ====
-
 
 
 

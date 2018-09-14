@@ -14,21 +14,21 @@ In fact, each event can be fired up to five times, with the event's `getEventPha
 
 * *hide* phase allows the subscriber to hide the member
 
-* *disable* phase allows the subscriber to disable the member. +
-
+* *disable* phase allows the subscriber to disable the member.
++
 For a property this makes it read-only; for an action this makes it "greyed out".
 (Collections are implicitly read-only).
 
 * *validate* phase allows the subscriber to validate the proposed change.
-
++
 For a property this means validating the proposed new value of the property; for an action this means validating the action parameter arguments.
 For example, a referential integrity restrict could be implemented here.
 
-* *executing* phase is prior to the actual property edit/action invocation, allowing the subscriber to perform side-effects. +
-
+* *executing* phase is prior to the actual property edit/action invocation, allowing the subscriber to perform side-effects.
++
 For example, a cascade delete could be implemented here.
 
-* *executed* phase is after the actual property edit/action invocation. +
+* *executed* phase is after the actual property edit/action invocation.
 +
 For example, a business audit event could be implemented here.
 

@@ -8,8 +8,9 @@
 
 The `CommandContext` service is a xref:../rgant/rgant.adoc#_rgant-RequestScoped[request-scoped] service that reifies the invocation of an action on a domain object into an object itself. This reified information is encapsulated within the `Command` object.
 
-By default, the `Command` is held in-memory only; once the action invocation has completed, the `Command` object is gone. The optional
- supporting xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] enables the implementation of `Command` to be pluggable. With an appropriate implementation (eg as provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`]) the `Command` may then be persisted.
+By default, the `Command` is held in-memory only; once the action invocation has completed, the `Command` object is gone.
+The optional supporting xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] enables the implementation of `Command` to be pluggable.
+With an appropriate implementation (eg as provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`]) the `Command` may then be persisted.
 
 The primary use case for persistent ``Command``s is in support of background commands; they act as a parent to any background commands that can be persisted either explicitly using the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`], or implicitly by way of the xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation.
 
@@ -19,9 +20,7 @@ There are a number of related use cases:
 * if a xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] or xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] (the latter now deprecated) is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
 * if a xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuderService[`AuditerService`] or xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_AuditService[`AuditingService`] (the latter now deprecated) is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the `transactionId` GUID
 
-However, while persistent ``Command``s _can_ be used for these use cases, it is recommended instead to use the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service and persistent implementations of the
-``Interaction`` object, eg as provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module.
+However, while persistent ``Command``s _can_ be used for these use cases, it is recommended instead to use the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service and persistent implementations of the ``Interaction`` object, eg as provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module.
 
 
 
@@ -31,7 +30,8 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`Intera
 == Screencast
 
 
-The link:https://www.youtube.com/watch?v=tqXUZkPB3EI[screencast] provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
+The link:https://www.youtube.com/watch?v=tqXUZkPB3EI[screencast] provides a run-through of the command (profiling) service, auditing service, publishing service (note: auditing service has since been replaced by `AuditerService`, and publishing service by `PublisherService`).
+It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
 
 
 [NOTE]
@@ -55,7 +55,11 @@ public class CommandContext {
 }
 ----
 
-This class (`o.a.i.applib.services.CommandContext`) is also the default implementation.  Under normal circumstances there shouldn't be any need to replace this implementation with another.
+This class (`o.a.i.applib.services.CommandContext`) is also the default implementation.
+
+Under normal circumstances there shouldn't be any need to replace this implementation with another.
+But if you do need to for some reason, then subclass and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+
 
 The `Command` type referenced above is in fact an interface, defined as:
 
@@ -139,7 +143,7 @@ The xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command()`] annotati
 [source,java]
 ----
 public class ToDoItem ... {
-    @Command(executeIn=ExecuteIn.BACKGROUND)
+    @Action(commandExecuteIn=CommandExecuteIn.BACKGROUND)
     public ToDoItem scheduleImplicitly() {
         completeSlowly(3000);
         return this;
@@ -149,19 +153,20 @@ public class ToDoItem ... {
 
 When a background command is invoked, the user is returned the command object itself (to provide a handle to the command being invoked).
 
-This requires that an implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] that persists the commands (such as the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's `CommandService`) is configured. It also requires that a scheduler is configured to execute the background commands, see xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]).
+This requires that an implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] that persists the commands (such as the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's `CommandService`) is configured.
+It also requires that a scheduler is configured to execute the background commands, see xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]).
 
 
 
 == Interacting with the services
 
-Typically domain objects will have little need to interact with the `CommandContext` and `Command` directly; what is
-more useful is that these are persisted in support of the various use cases identified above.
+Typically domain objects will have little need to interact with the `CommandContext` and `Command` directly; what is more useful is that these are persisted in support of the various use cases identified above.
 
-One case however where a domain object might want to obtain the `Command` is to determine whether it has been invoked in the foreground, or in the background. It can do this using the `getExecutedIn()` method:
+One case however where a domain object might want to obtain the `Command` is to determine whether it has been invoked in the foreground, or in the background.
+It can do this using the `getExecutedIn()` method:
 
-Although not often needed, this then allows the domain object to access the `Command` object through the
-`CommandContext` service.  To expand th above example:
+Although not often needed, this then allows the domain object to access the `Command` object through the `CommandContext` service.
+To expand the above example:
 
 
 [source,java]
@@ -184,7 +189,8 @@ public class ToDoItem ... {
 
 If run in the background, it might then notify the user (eg by email) if all work is done.
 
-This leads us onto a related point, distinguishing the current effective user vs the originating "real" user. When running in the foreground, the current user can be obtained from the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`], using:
+This leads us onto a related point, distinguishing the current effective user vs the originating "real" user.
+When running in the foreground, the current user can be obtained from the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`], using:
 
 [source,java]
 ----
@@ -206,21 +212,12 @@ String user = commandContext.getCommand().getUser();
 
 == Related Services
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service is very similar in nature to the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_InteactionContext[`InteactionContext`], in that the
-`Command` object accessed through it is very similar to the `Interaction` object obtained from the `InteractionContext`.
-The principle distinction is that while `Command` represents the __intention__ to invoke an action or edit a property,
-the `Interaction` (and contained ``Execution``s) represents the actual execution.
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service is very similar in nature to the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`], in that the `Command` object accessed through it is very similar to the `Interaction` object obtained from the `InteractionContext`.
+The principle distinction is that while `Command` represents the __intention__ to invoke an action or edit a property, the `Interaction` (and contained ``Execution``s) represents the actual execution.
 
-Most of the time a `Command` will be followed directly by its corresponding `Interaction`.  However, if the `Command`
-is annotated to run in the background (using xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#commandExecuteIn()`], or
-is explicitly created through the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`], then the actual
-interaction/execution is deferred until some other mechanism invokes the command (eg as described
-xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here]).  The persistence of background commands
-requires a configured xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]) to actually
-persist such commands for execution.
+Most of the time a `Command` will be followed directly by its corresponding `Interaction`.
+However, if the `Command` is annotated to run in the background (using xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#commandExecuteIn()`], or is explicitly created through the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`], then the actual interaction/execution is deferred until some other mechanism invokes the command (eg as described xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here]).
+The persistence of background commands requires a configured xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]) to actually persist such commands for execution.
 
-``Command``s - even if executed in the foreground - can also be persisted by way of the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`].  Implementations of `CommandService` and
-`BackgroundCommandService` are intended to go together, so that child ``Command``s persistent (to be executed in the
-background) can be associated with their parent ``Command``s (executed in the foreground, with the background `Command`
-created explicitly through the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`]).
+``Command``s - even if executed in the foreground - can also be persisted by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`].
+Implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that child ``Command``s persistent (to be executed in the background) can be associated with their parent ``Command``s (executed in the foreground, with the background `Command` created explicitly through the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`]).

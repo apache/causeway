@@ -265,13 +265,13 @@ for example:
 
 a hyperlink to the "man page" for an (API) domain service within the reference guide for domain services, where:
 
-* `xxx` is the domain service (eg `DomainObjectContainer`)
+* `xxx` is the domain service (eg `RepositoryService`)
 
 for example:
 
-`\xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]`
+`\xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]`
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]
 
 
 

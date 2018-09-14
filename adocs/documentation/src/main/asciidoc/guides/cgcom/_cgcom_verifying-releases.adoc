@@ -4,6 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :toc: right
+include::__versions.adoc[]
 
 
 The release process consists of:
@@ -87,7 +88,7 @@ To build Apache Isis core, first clean out the local repository cache:
 
 [source]
 ----
-rm -rf ~/m2/repository/org/apache/isis
+rm -rf ~/.m2/repository/org/apache/isis
 ----
 
 and then build using:
@@ -229,19 +230,20 @@ Assuming that everything builds ok, then test the archetypes (adjust version as 
 
 * First the `helloworld` archetype: +
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn archetype:generate  \
+    -D archetypeCatalog=local \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=helloworld-archetype \
-    -D archetypeVersion=2.0.0-M1 \
+    -D archetypeVersion={isisrel} \
     -D groupId=com.mycompany \
-    -D artifactId=myapp \
+    -D artifactId=myhelloworld \
     -D version=1.0-SNAPSHOT \
     -B \
     -o
 
-cd myapp
+cd myhelloworld
 mvn clean install jetty:run -o
 ----
 +
@@ -249,19 +251,22 @@ Adjust the version as necessary.
 
 * Next, the `simpleapp` archetype: +
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
+cd ..
+
 mvn archetype:generate  \
+    -D archetypeCatalog=local \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=2.0.0-M1 \
+    -D archetypeVersion={isisrel} \
     -D groupId=com.mycompany \
-    -D artifactId=myapp \
+    -D artifactId=mysimpleapp \
     -D version=1.0-SNAPSHOT \
     -B \
     -o
 
-cd myapp
+cd mysimpleapp
 mvn clean install -o && mvn -pl webapp jetty:run -o
 ----
 +

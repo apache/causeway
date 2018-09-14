@@ -103,5 +103,3 @@ which is rendered as:
 image::{_imagesdir}reference-services-spi/ErrorReportingService/kitchensink-example.png[width="860px",link="{_imagesdir}reference-services-spi/ErrorReportingService/kitchensink-example.png"]
 
 
-
-

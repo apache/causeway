@@ -55,9 +55,8 @@ The benefit is that subscribers can be more targeted as to the events that they 
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API
-or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured)
-using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
+The examples below are compatible with both.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -65,7 +64,8 @@ Subscribers can be either coarse-grained (if they subscribe to the top-level eve
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @com.google.common.eventbus.Subscribe
+    @org.axonframework.eventhandling.annotation.EventHandler // if using axon
+    @com.google.common.eventbus.Subscribe                    // if using guava
     public void on(TitleUiEvent ev) {
         if(ev.getSource() instanceof ToDoItemDto) { ... }
     }
@@ -78,7 +78,8 @@ or can be fine-grained (by subscribing to specific event subtypes):
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @com.google.common.eventbus.Subscribe
+    @org.axonframework.eventhandling.annotation.EventHandler // if using axon
+    @com.google.common.eventbus.Subscribe                    // if using guava
     public void on(ToDoItemDto.TitleUiEvent ev) {
         ...
     }
@@ -88,11 +89,6 @@ public class SomeSubscriber extends AbstractSubscriber {
 The subscriber should then use either `TitleUiEvent#setTranslatableTitle(...)` or `TitleUiEvent#setTitle(...)` to
 actually specify the title to be used.
 
-
-[TIP]
-====
-If the AxonFramework is being used, replace `@com.google.common.eventbus.Subscribe` with `@org.axonframework.eventhandling.annotation.EventHandler`.
-====
 
 
 
@@ -114,7 +110,5 @@ thn no event will be posted.
 
 == Raising events programmatically
 
-Normally events are only raised for interactions through the UI. However, events can be raised programmatically either
-by calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] API directly, or as a result
-of calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]'s
-`titleOf(...)` method.
+Normally events are only raised for interactions through the UI.
+However, events can be raised programmatically either by calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] API directly, or as a result of calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]'s `titleOf(...)` method.

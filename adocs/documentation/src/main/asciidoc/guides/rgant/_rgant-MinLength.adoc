@@ -13,8 +13,7 @@ For example:
 [source,java]
 ----
 public ToDoItem add(
-        @TypicalLength(20)
-        final ToDoItem toDoItem) {
+    final ToDoItem toDoItem) {
     getDependencies().add(toDoItem);
     return this;
 }
@@ -29,4 +28,3 @@ public List<ToDoItem> autoComplete0Add(
 ----
 
 
-The `@Parameter(minLength=...)`e can also be used (even though strictly speaking the search argument is not a parameter of the action).

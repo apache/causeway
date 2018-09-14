@@ -24,7 +24,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`o.a.i.applib.` +
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`o.a.i.applib.` +
 `services.audit` +
 `AuditerService`]
 |Create an audit record for every changed property of every changed object within a transaction.

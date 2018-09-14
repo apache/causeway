@@ -56,13 +56,13 @@ Note that the discriminator overrides the object type that may otherwise be infe
 `PersistenceCapable`]
 |Used to build Apache Isis' own internal identifier for objects. +
 
-If the `schema()` attribute is specified (and if xref:../rgant/rgant.adoc#_rgant-Discriminator[`@Discriminator`] _hasn't_ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] and elsewhere.
+If the `schema()` attribute is specified (and if xref:../rgant/rgant.adoc#\_rgant-Discriminator[`@Discriminator`] __hasn't__ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] and elsewhere.
 
 |Domain / persistence
 |Class
 
 
-|xref:../rgant/rgant.adoc#_rgant-PrimaryKey[`@javax.jdo.annotations.` +
+|xref:../rgant/rgant.adoc#\_rgant-PrimaryKey[`@javax.jdo.annotations.` +
 `PrimaryKey`]
 |Used to ensure Apache Isis does not overwrite application-defined primary keys, and to ensure is read-only in the UI.
 

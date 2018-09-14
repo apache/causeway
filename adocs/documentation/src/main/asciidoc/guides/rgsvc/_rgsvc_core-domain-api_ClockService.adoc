@@ -49,14 +49,21 @@ This class (`o.a.i.applib.services.clock.ClockService`) is also the default impl
 
 == Testing Support
 
-The default `ClockService` implementation in fact simply delegates to another class defined in the API, namely the `o.a.i.applib.clock.Clock`, an abstract singleton class.  It is not recommended that your code use the `Clock` directly, but you should understand how this all works:
+The default `ClockService` implementation in fact simply delegates to another class defined in the API, namely the `o.a.i.applib.clock.Clock`, an abstract singleton class.
+It is not recommended that your code use the `Clock` directly, but it's worth understanding how this all works.
 
-* there are two subclasses implementations `Clock`, namely `SystemClock` and `FixtureClock`.
-* the first implementation that is instantiated registers itself as the singleton.
-* if running in xref:../rgcfg/rgcfg.adoc#_rgcfg_deployment-types[production] (server) mode, then (unless another implementation has beaten it to the punch) the framework will instantiate the ``SystemClock`.  Once instantiated this cannot be replaced.
-* if running in xref:../rgcfg/rgcfg.adoc#_rgcfg_deployment-types[prototype] mode, then the framework will instead instantiate `FixtureClock`.  This _can_ be replaced if required.
+If running in xref:../rgcfg/rgcfg.adoc#_rgcfg_deployment-types[production] (server) mode, then the framework will (lazily) instantiate the ``SystemClock` when first required.
+This is a read-only clock that reads from the system time.
+The instance registers itself as the singleton and cannot be replaced.
 
-The `FixtureClock` will behave as the system clock, unless its is explicitly set using `FixtureClock#setDate(...)` or `FixtureClock#setTime(...)` and so forth.
+If running in xref:../rgcfg/rgcfg.adoc#_rgcfg_deployment-types[prototype] mode, though, then the framework will instead instantiate `FixtureClock`.
+This is a read-write clock that will behave as the system clock, unless it is explicitly set using eg, `FixtureClock#setDate(...)` or `FixtureClock#setTime(...)` etc.
+
+Moreover, `FixtureClock` singleton can be replaced with another implementation.
+And, it is sometimes useful to replace it using `TickingFixtureClock`, a subclass that is very similar to `FixtureClock` (in that the time can be changed) but which will continue to tick once set.
+
+To use `TickingFixtureClock` instead of `FixtureClock`, use the `TickingClockFixture` fixture script.
+
 
 
 
@@ -92,7 +99,6 @@ public class NntpClockServiceInitializer  {
 <1> enough to simply instantiate the `Clock`; it will register itself as singleton
 <2> connect to NNTP service using configuration properties from `isis.properties`
 <3> call to NNTP service here
-
 
 
 

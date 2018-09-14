@@ -40,11 +40,13 @@ Let's see how this is done.
 
 === Including or excluding facets
 
-Suppose that you wanted to completely remove support for the (already deprecated) `@ActionOrder` annotation. This would be done using:
+Suppose that you wanted to completely remove support for some existing facet, eg to support the "persisting()" and "persisted()" callback methods.
+This would be done using:
 
 [source,ini]
 ----
-isis.reflector.facets.exclude=org.apache.isis.core.metamodel.facets.object.actionorder.annotation.ActionOrderFacetAnnotationFactory
+isis.reflector.facets.exclude=\
+    org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackFacetFactory
 ----
 
 Or, suppose you wanted to use add some custom facet factory of your own, use:

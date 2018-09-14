@@ -46,7 +46,7 @@ Once you've sketched out your domain model, you can then "start-over" using your
 == Deploy on your own platform
 
 The programming model defined by Apache Isis deliberately minimizes the dependencies on the rest of the framework.
-In fact, the only hard dependency that the domain model classes have on Apache Isis is through the `org.apache.isis.applib` classes, mostly to pick up annotations such as `@Disabled`.
+In fact, the only hard dependency that the domain model classes have on Apache Isis is through the `org.apache.isis.applib` classes, mostly to pick up annotations such as `@Action` and `@Property`.
 So, if you have used Apache Isis for prototyping (discussed above), then note that it's quite feasible to take your domain model a the basis of your actual development effort; Apache Isis' annotations and programming conventions will help ensure that any subtle semantics you might have captured in your prototyping are not lost.
 
 If you go this route, your deployment platform will of course need to provide similar capabilities to Apache Isis.

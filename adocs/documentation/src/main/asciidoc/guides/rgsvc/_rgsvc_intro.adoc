@@ -10,40 +10,35 @@
 [[__rgsvc_intro_types-of-domain-services]]
 == Types of Domain Service
 
-The domain services also group into various broad categories.  Many support functionality of the various layers of the
-system (presentation layer, application layer, core domain, persistence layer); others exist to allow the domain objects
-to integrate with other bounded contexts, or provide various metadata (eg for development-time tooling).  The diagram
-below shows these categories:
+The domain services also group into various broad categories.
+Many support functionality of the various layers of the system (presentation layer, application layer, core domain, persistence layer); others exist to allow the domain objects to integrate with other bounded contexts, or provide various metadata (eg for development-time tooling).
+The diagram below shows these categories:
 
 image::{_imagesdir}reference-services/categories.png[width="600px",link="{_imagesdir}reference-services/categories.png"]
 
 
-A small number of domain services can be considered both API and SPI; a good example is the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`] that is of direct use for domain objects wishing to send out emails,
-but is also used by the framework to support the xref:../ugvw/ugvw.adoc#_ugvw_features_user-registration[user registration]
-functionality supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer].   The same is true of the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events,
-but is also used by the framework to automatically emit events for
+A small number of domain services can be considered both API and SPI; a good example is the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:../ugvw/ugvw.adoc#_ugvw_features_user-registration[user registration] functionality supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer].
+The same is true of the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for
 xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`] etc.
 
-For these hybrid services we have categorized the service as an "API" service.  This chapter therefore contains only
-the strictly SPI services.
+For these hybrid services we have categorized the service as an "API" service.
+This chapter therefore contains only the strictly SPI services.
 
-This rest of this guide is broken out into several chapters, one for each of the various types/categories of domain
-service.
+This rest of this guide is broken out into several chapters, one for each of the various types/categories of domain service.
 
 
 
 [[__rgsvc_intro_public-api]]
 == Public API vs Internal Services
 
-The vast majority of Apache Isis' domain services are defined in Apache Isis' applib (`o.a.i.core:isis-core-applib`
-module) as stable, public classes.  Importantly, this also minimizes the coupling between your code and Apache Isis,
-allowing you to easily mock out these services in your unit tests.
+The vast majority of Apache Isis' domain services are defined in Apache Isis' applib (`o.a.i.core:isis-core-applib` module) as stable, public classes.
+Importantly, this also minimizes the coupling between your code and Apache Isis, allowing you to easily mock out these services in your unit tests.
 
 
-The framework also defines a number of "internal" services.  These are not part of the framework's formal API, in that
-they use classes that are outside of the applib.  These internal framework services should be thought of as part of the
-internal design of the framework, and are liable to change from release to release.  The internal framework services 
-are documented in the xref:../rgfis/rgfis.adoc#[Framework Internal Services] guide.
+The framework also defines a number of "internal" services.
+These are not part of the framework's formal API, in that they use classes that are outside of the applib.
+These internal framework services should be thought of as part of the internal design of the framework, and are liable to change from release to release.
+The internal framework services are documented in the xref:../rgfis/rgfis.adoc#[Framework Internal Services] guide.
 
 
 
@@ -51,8 +46,7 @@ are documented in the xref:../rgfis/rgfis.adoc#[Framework Internal Services] gui
 [[__rgsvc_intro_using-the-services]]
 == Using the services
 
-Apache Isis includes an extensive number of domain services for your domain objects to use; simply define the service
-as an annotated field and Apache Isis will inject the service into your object.
+Apache Isis includes an extensive number of domain services for your domain objects to use; simply define the service as an annotated field and Apache Isis will inject the service into your object.
 
 For example:
 
@@ -78,13 +72,9 @@ public class Customer {
 For objects that are already persisted, the service is automatically injected just after the object is rehydrated by
 JDO/DataNucleus.
 
-For transient objects (instantiated programmatically), the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`]'s
-``instantiate()`` method (or the deprecated xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]'s
-``newTransientInstance()`` method) will automatically inject the services.
+For transient objects (instantiated programmatically), the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(...)`] or the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService#instantiate(...)`]'s will automatically inject the services.
 
-Alternatively the object can be instantiated simply using `new`, then services injected using
-xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`]'s ``injectServicesInto(...)`` method (or the deprecated
-xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]'s ``injectServicesInto(...)`` method).
+Alternatively the object can be instantiated simply using `new`, then services injected using xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`]'s ``injectServicesInto(...)`` method (or the deprecated xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]'s ``injectServicesInto(...)`` method).
 
 
 
@@ -92,23 +82,23 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObj
 [[__rgsvc_intro_overriding-the-services]]
 == Overriding the services
 
-The framework provides default implementations for many of the domain services.  This is convenient, but sometimes you
-will want to replace the default implementation with your own service implementation.
+The framework provides default implementations for many of the domain services.
+This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 
 The trick is to use the xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]
 attribute, specifying a low number (typically `"1"`).
 
 [NOTE]
 ====
-For a small number of domain services, all implementations are used (following the chain-of-responsibility pattern),
-not just the first one.  The services in question are:
+For a small number of domain services, all implementations are used (following the chain-of-responsibility pattern), not just the first one.
+The services in question are:
 xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`],
 xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`], and
 xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_RoutingService[`RoutingService`].
 ====
 
-For example, suppose you wanted to provide your own implementation of
-xref:../rgsvc/rgsvc.adoc#_rgsvc_api_LocaleProvider[`LocaleProvider`].  Here's how:
+For example, suppose you wanted to provide your own implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocaleProvider`].
+Here's how:
 
 [source,java]
 ----
@@ -128,9 +118,8 @@ public class MyLocaleProvider implements LocaleProvider {
 <1> takes precedence over the default implementation.
 
 
-It's also quite common to want to decorate the existing implementation (ie have your own implementation delegate to the
-default); this is also possible and quite easy (if using `1.10.0` or later).  The idea is to have the framework
-inject all implementations of the service, and then to delegate to the first one that isn't "this" one:
+It's also quite common to want to decorate the existing implementation (ie have your own implementation delegate to the default); this is also possible and quite easy.
+The idea is to have the framework inject all implementations of the service, and then to delegate to the first one that isn't "this" one:
 
 [source,java]
 ----
@@ -162,14 +151,11 @@ The above code could be improved by caching the delegateLocaleProvider once loca
 [[__rgsvc_intro_commands-and-events]]
 == Command and Events
 
-A good number of the domain services manage the execution of action invocations/property edits, along with the state
-of domain objects that are modified as a result of these.  These services capture information which can then be used
-for various purposes, most notably for auditing or for publishing events, or for deferring execution such that the
-execution be performed in the background at some later date.
+A good number of the domain services manage the execution of action invocations/property edits, along with the state of domain objects that are modified as a result of these.
+These services capture information which can then be used for various purposes, most notably for auditing or for publishing events, or for deferring execution such that the execution be performed in the background at some later date.
 
-The diagram below shows how these services fit together.  The outline boxes are services while the coloured boxes
-represent data structures - defined in the applib and therefore accessible to domain applications - which hold various
-information about the executions.
+The diagram below shows how these services fit together.
+The outline boxes are services while the coloured boxes represent data structures - defined in the applib and therefore accessible to domain applications - which hold various information about the executions.
 
 image::{_imagesdir}reference-services/commands-and-events.png[width="960px",link="{_imagesdir}reference-services/commands-and-events.png"]
 
@@ -179,68 +165,45 @@ To explain:
 * the (request-scoped) xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] captures the user's intention to
 invoke an action or edit a property; this is held by the `Command` object.
 
-* if a xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured, then this will be used to
-create the `Command` object implementation, generally so that it can then also be persisted. +
+* if a xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured, then this will be used to create the `Command` object implementation, generally so that it can then also be persisted.
 +
-If the action or property is annotated to be invoked in the background (using
-xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command...()`] or
-xref:../rgant/rgant.adoc#_rgant-Property_command[`@Property#command...()`]) then no further work is done. But,
-if the action/property is to be executed in the foreground, then the interaction continues.
+If the action or property is annotated to be invoked in the background (using xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#command...()`] or xref:../rgant/rgant.adoc#_rgant-Property_command[`@Property#command...()`]) then no further work is done.
+But, if the action/property is to be executed in the foreground, then the interaction continues.
 
-* the (request-scoped) xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] domain service acts as a
-factory for the ``Interaction`` object, which keeps track of the call-graph of executions (``Interaction.Execution``)
-of either action invocations or property edits.  In the majority of cases there is likely to be just a single top-level
-node of this graph, but for applications that use the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`]
-extensively each successive call results in a new child execution.
+* the (request-scoped) xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] domain service acts as a factory for the ``Interaction`` object, which keeps track of the call-graph of executions (``Interaction.Execution``) of either action invocations or property edits.
+In the majority of cases there is likely to be just a single top-level node of this graph, but for applications that use the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] extensively each successive call results in a new child execution.
 
-* before and after each action invocation/property edit, a xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent[domain event] is
-may be broadcast to all subscribers.  Whether this occurs depends on whether the action/property has been annotated
-(using xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`] or
-xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`]). +
+* before and after each action invocation/property edit, a xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent[domain event] is may be broadcast to all subscribers.
+Whether this occurs depends on whether the action/property has been annotated (using xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`] or xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`]).
 +
 (Note that susbcribers will also receive events for vetoing the action/property; this is not shown on the diagram).
 
-* As each execution progresses, and objects that are modified are "enlisted" into the (internal)
-xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain service.  Metrics as
-to which objects are merely loaded into memory are also captured using the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`] (not shown on the diagram).
+* As each execution progresses, and objects that are modified are "enlisted" into the (internal) xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain service.
+Metrics as to which objects are merely loaded into memory are also captured using the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`] (not shown on the diagram).
 
 * At the end of each execution, details of that execution are published through the (internal)
-xref:../rgfis/rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] domain service.  This is only done for
-actions/properties annotated appropriate (with xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`] or
-xref:../rgant/rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`]).  +
+xref:../rgfis/rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] domain service.  This is only done for actions/properties annotated appropriate (with xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`] or xref:../rgant/rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`]).
 +
-The internal service delegates in turn to any registered
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`] (deprecated) and also to any
-registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`]s (there may be more than one).
+The internal service delegates in turn to any registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`]s (there may be more than one).
 
-* At the end of each transaction, details of all changed objects are published, again through the (internal)
-xref:../rgfis/rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] to any registered `PublishingService`
-or `PublisherService` implementations.  Only domain objects specified to be published with
-xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] are published. +
+* At the end of each transaction, details of all changed objects are published, again through the (internal) xref:../rgfis/rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] to any registered `PublishingService` or `PublisherService` implementations.
+Only domain objects specified to be published with xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] are published. +
 +
 [NOTE]
 ====
-Note that it's possible for there to be more than one transaction per top-level interaction, by virtue of the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`].
+Note that it's possible for there to be more than one transaction per top-level interaction, by virtue of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`].
 ====
 
-* Also at the end of each transaction, details of all changed properties are passed to any registered
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] or
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] (the latter deprecated) by way of the (internal)
-xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] domain service.
+* Also at the end of each transaction, details of all changed properties are passed to any registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] or xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] (the latter deprecated) by way of the (internal) xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] domain service.
 
-Implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can use the `Command#getMemento()`
-method to obtain a XML equivalent of that `Command`, reified using the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd[`cmd.xsd`]
-schema. This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).
+Implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can use the `Command#getMemento()` method to obtain a XML equivalent of that `Command`, reified using the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd[`cmd.xsd`] schema.
+This can be converted back into a `CommandDto` using the `CommandDtoUtils` utility class (part of the applib).
 
-Similarly, implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] can use the
-`InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single
-execution or for the entire call-graph.  This can be converted into XML in a similar fashion.
+Similarly, implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] can use the `InteractionDtoUtils` utility class to obtain a `InteractionDto` representing the interaction, either just for a single execution or for the entire call-graph.
+This can be converted into XML in a similar fashion.
 
-Likewise, the `PublishedObjects` class passed to the `PublisherService` at the end of the interaction provides the
-`PublishedObjects#getDto()` method which returns a `ChangesDto` instance.  This can be converted into XML using the
-`ChangesDtoUtils` utility class.
+Likewise, the `PublishedObjects` class passed to the `PublisherService` at the end of the interaction provides the `PublishedObjects#getDto()` method which returns a `ChangesDto` instance.
+This can be converted into XML using the `ChangesDtoUtils` utility class.
 
 One final point: multiple xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] implementations are supported because different implementations may have different responsibilities.
 For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module is responsible for publishing messages onto an ActiveMQ event bus, for inter-system communication.

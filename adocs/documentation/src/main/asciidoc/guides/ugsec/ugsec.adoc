@@ -82,7 +82,7 @@ When ``Interaction``s are persisted (eg by way of (non-ASF) link:http://platform
 traceability.
 The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module provides an implementation of the `AuditerService`.
 
-For earlier versions of the framework the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can be used to capture actions, while the (deprecated) xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] used to capture data modified.
+For xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can be also be used to capture actions.
 ====
 
 

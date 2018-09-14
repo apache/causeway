@@ -12,7 +12,7 @@ This can appear in several contexts, including:
 
 * as the value of `Bookmark#getObjectType()` and in the `toString()` value of `Bookmark`
  (see xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`])
- ** and thus in the "table-of-two-halves" pattern, as per the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s poly module
+** and thus in the "table-of-two-halves" pattern, as per the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s poly module
 * in the serialization of `OidDto` in the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd[command] and xref:../rgcms/rgcms.adoc#_rgcms_schema-ixn[interaction] schemas
 * in the URLs of the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer]
 * in the URLs of the xref:../ugvw/ugvw.adoc#[Wicket viewer] (in general and in particular if xref:../ugvw/ugvw.adoc#_ugvw_features_hints-and-copy-url[copying URLs])
@@ -39,9 +39,9 @@ public class Order {
 
 The rules of precedence are:
 
-1. xref:../rgant/rgant.adoc#_rgant-Discriminator[`@Discriminator`]
+1. xref:../rgant/rgant.adoc#_rgant_Discriminator[`@Discriminator`]
 2. `@DomainObject#objectType`, or xref:../rgant/rgant.adoc#_rgant_aaa_deprecated[`@ObjectType`] (deprecated)
-3. xref:../rgant/rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`], if at least the `schema` attribute is defined.  +
+3. xref:../rgant/rgant.adoc#_rgant_PersistenceCapable[`@PersistenceCapable`], if at least the `schema` attribute is defined.
 +
 If both `schema` and `table` are defined, then the value is "`schema.table`".
 If only `schema` is defined, then the value is "`schema.className`".

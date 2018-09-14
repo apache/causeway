@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The CQRS architectural pattern (it stands for "Command Query Responsbility Separation") is the idea that the domain objects that mutate the state of the system - to which commands are sent and which then execute - should be separated from the mechanism by which the state of the system is queried (rendered).
+The CQRS architectural pattern (it stands for "Command Query Responsibility Separation") is the idea that the domain objects that mutate the state of the system - to which commands are sent and which then execute - should be separated from the mechanism by which the state of the system is queried (rendered).
 The former are sometimes called the "write (domain) model", the latter the "read model".
 
 In the canonical version of this pattern there are separate datastores.
@@ -31,7 +31,7 @@ There are other reasons though why a separate read model might make sense, such 
 In these cases Apache Isis can often provide a reasonable alternative, namely to map domain entities against RDBMS views, either materialized views or dynamic.
 In such cases there is still only a single physical datastore, and so transactional integrity is retained.
 
-Or, the CQRS architecture can be more fully implemented with Apache Isis by introducing a separate read model, synchronized using the xref:../rgsvc/rgsvc.adoc#_rgsvc_api_PublishingService[`PublishingService`], or using xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscribers]  on the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].
+Or, the CQRS architecture can be more fully implemented with Apache Isis by introducing a separate read model, synchronized using the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`], or using xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscribers]  on the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].
 One can then use xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view models] to surface the data in the external read datastore.
 
 With respect to commands, Apache Isis does of course support the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] which allows each business action to be reified into a `Command`.

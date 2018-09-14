@@ -32,7 +32,7 @@ This is disabled by default; if enabled, this configuration property will treat 
 
 * `isis.reflector.validator.noParamsOnly` +
 +
-When searching for  xref:../guides/rgcms/rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:../guides/rgcms/rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] supporting methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
+When searching for  link:https://isis.apache.org/versions/1.14.0/guides/rgcms/rgcms.html#_rgcms_methods_prefixes_disable[`disableXxx()`] or link:https://isis.apache.org/versions/1.14.0/guides/rgcms/rgcms.html#_rgcms_methods_prefixes_hide[`hideXxx()`] supporting methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
 +
 This is disabled by default; if enabled then this makes for a simpler programming model.
 

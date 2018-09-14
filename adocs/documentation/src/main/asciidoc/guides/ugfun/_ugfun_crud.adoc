@@ -17,13 +17,9 @@ These (and some other services) replace the now deprecated xref:../rgsvc/rgsvc.a
 
 
 include::_ugfun_crud_instantiating.adoc[leveloffset=+1]
-
 include::_ugfun_crud_persisting.adoc[leveloffset=+1]
-
 include::_ugfun_crud_finding.adoc[leveloffset=+1]
-
 include::_ugfun_crud_updating.adoc[leveloffset=+1]
-
 include::_ugfun_crud_deleting.adoc[leveloffset=+1]
 
 

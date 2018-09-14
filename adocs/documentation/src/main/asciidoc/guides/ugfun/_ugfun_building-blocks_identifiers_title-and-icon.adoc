@@ -19,7 +19,7 @@ The title is usually just a simple string, but the framework also allows for the
 == Icon
 
 Sometimes it's helpful for the icon to represent more than just the object's type; it might also indicate the state of an object.
-For example, a shipped `Order` might have a slightly different icon to a yet-to-be-shipped `Order`; or an overdue `Loan` might be distinguished separately from a
+For example, a shipped `Order` might have a slightly different icon to a yet-to-be-shipped `Order`; or a library book that is `loaned out` might be distinguished from one that is `available`.
 
 == CSS Class
 

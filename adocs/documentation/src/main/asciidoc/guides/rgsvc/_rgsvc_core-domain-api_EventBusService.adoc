@@ -47,6 +47,8 @@ public abstract class EventBusService {
 
 
 
+To use an alternative implementation, implement the `EventBusService` domain service and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+
 
 
 
@@ -390,6 +392,7 @@ If you have written your own implementation of the `EventBusServiceImplementatio
 ----
 isis.services.eventbus.implementation=com.mycompany.isis.MyEventBusServiceImplementation
 ----
+
 
 
 

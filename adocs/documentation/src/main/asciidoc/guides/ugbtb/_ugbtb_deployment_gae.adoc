@@ -17,7 +17,7 @@ All entities must have a `@PrimaryKey`. Within GAE, the type of this key matters
 
 For an entity to be an aggregate root, (ie a root of an GAE entity group), its key must be a `Long`, eg:
 
-Any collection that holds this entity type (eg `ToDoItem#dependencies` holding a collection of `ToDoItem`s) should then be annotated with `@Unowned` (a GAE annotation).
+Any collection that holds this entity type (eg `ToDoItem#dependencies` holding a collection of ``ToDoItem``s) should then be annotated with `@Unowned` (a GAE annotation).
 
 If on the other hand you want the object to be owned (through a 1:m relationship somewhere) by some other root, then use a String:
 

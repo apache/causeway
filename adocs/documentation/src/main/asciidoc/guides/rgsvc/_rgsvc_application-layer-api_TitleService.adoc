@@ -20,7 +20,7 @@ The API of `TitleService` is:
 
 [source,java]
 ----
-public interface PresentationService {
+public interface TitleService {
     String titleOf(Object domainObject);                // <1>
     String iconNameOf(Object domainObject);             // <2>
 }

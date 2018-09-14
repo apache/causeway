@@ -31,12 +31,9 @@ It is also possible to annotate reference properties; in this case the
 title will return the title of the referenced object (rather than, say,
 its string representation).
 
-An additional convention for `@Title` properties is that they are hidden
-in tables (in other words, it implies `@Hidden(where=Where.ALL_TABLES)`.
-For viewers that support this annotation (for example, the Wicket
-viewer), this convention excludes any properties whose value is already
-present in the title column. This convention can be overridden using
-`@Hidden(where=Where.NOWHERE)`.
+An additional convention for `@Title` properties is that they are hidden in tables (in other words, it implies `@Property(where=Where.ALL_TABLES)`.
+For viewers that support this annotation (for example, the Wicket viewer), this convention excludes any properties whose value is already present in the title column.
+This convention can be overridden using `@Property(where=Where.NOWHERE)`.
 
 == Lombok support
 

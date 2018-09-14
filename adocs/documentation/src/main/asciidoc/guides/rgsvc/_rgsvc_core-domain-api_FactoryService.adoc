@@ -20,12 +20,14 @@ The API of `FactoryService` is:
 [source,java]
 ----
 public interface FactoryService {
-    <T> T instantiate(final Class<T> ofType);       // <1>
-    <T> T mixin();                                  // <2>
+    <T> T instantiate(Class<T> domainClass);           // <1>
+    <T> T mixin(Class<T> mixinClass, Object mixedIn);  // <2>
 }
 ----
 <1> create a new non-persisted domain entity.  Any services will be automatically injected into the service.
-<2> programmatically instantiate a mixin, as annotated with xref:../rgant/rgant.adoc#_rgant-Mixin[`@Mixin`] or xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`].
+The class must have a no-arg constructor.
+<2> programmatically instantiate a mixin, for example as annotated with xref:../rgant/rgant.adoc#_rgant-Mixin[`@Mixin`].
+The class must have a 1-arg constructor of the appropriate type.
 
 
 The object is created in memory, but is not persisted.  The benefits of using this method (instead of simply using the Java `new` keyword) are:
@@ -62,6 +64,4 @@ The core framework provides a default implementation of this service (`o.a.i.cor
 
 The xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`] is often used in conjunction with the `FactoryService`, to persist domain objects after they have been instantiated and populated.
 
-An alternative to using the factory service is to simply instantiate the object ("new is the new new") and then use the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] service to inject other domain services into the
-instantiated object.
+An alternative to using the factory service is to simply instantiate the object ("new is the new new") and then use the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] service to inject other domain services into the instantiated object.

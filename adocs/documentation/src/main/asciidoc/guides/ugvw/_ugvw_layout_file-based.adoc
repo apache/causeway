@@ -374,7 +374,7 @@ There are four "styles":
 * minimal
 
 
-Ignorig the "current" style (which merely downloads the currently cached layout), the other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained elsewhere, either from annotations in the metamodel or from an earlier `.layout.json` file if present.
+Ignoring the "current" style (which merely downloads the currently cached layout), the other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained from annotations in the metamodel.
 The table below summarises the choices:
 
 .Table caption

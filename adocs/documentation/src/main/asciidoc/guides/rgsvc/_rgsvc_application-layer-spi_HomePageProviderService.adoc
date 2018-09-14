@@ -27,4 +27,3 @@ public interface HomePageProviderService {
 The default implementation is provided by `o.a.i.core.runtime.services.homepage.HomePageProviderServiceDefault`.
 
 
-

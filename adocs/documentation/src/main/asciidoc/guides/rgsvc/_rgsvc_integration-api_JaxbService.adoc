@@ -42,7 +42,9 @@ reference multiple other XSD schemas.  In particular, many JAXB domain objects w
 xref:../rgcms/rgcms.adoc#_rgcms_schema[common Isis schemas] (for example the `OidDto` class that represents a reference to
 a persistent entity).  The enum indicates whether these schemas should be included or excluded from the map.
 
-Isis provides a default implementation of the service, `o.a.i.schema.services.jaxb.JaxbServiceDefault`.
+Apache Isis provides a default implementation of the service, `o.a.i.schema.services.jaxb.JaxbServiceDefault`.
+
+To use an alternative implementation, implement `JaxbService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 
@@ -52,6 +54,5 @@ This service is provided as a convenience for applications, but is also used int
 xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated
 xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view models].  The functionality to download XML and XSD schemas is also
 exposed in the UI through mixins to xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] interface.
-
 
 

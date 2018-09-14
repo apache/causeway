@@ -254,10 +254,16 @@ table.CodeRay td.code>pre{padding:0}
     <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Versions<span class="caret"></span></a>
      <ul class="dropdown-menu">
       <li><a href="documentation.html">1.16.2 (current)</a></li>
+      <!--
       <li role="separator" class="divider"></li>
-      <li><a href="versions/SNAPSHOT/documentation.html">1.16.3-M1-SNAPSHOT</a></li>
+      <li><a href="versions/SNAPSHOT/documentation.html">2.0.0-M2-SNAPSHOT</a></li>
+      -->
+      <li role="separator" class="divider"></li>
+      <li class="dropdown-header">2.0.0 Milestones</li>
+      <li><a href="versions/2.0.0-M1/documentation.html">2.0.0-M1</a></li>
       <li role="separator" class="divider"></li>
       <li class="dropdown-header">Archive</li>
+      <li><a href="versions/1.16.2/documentation.html">1.16.2</a></li>
       <li><a href="versions/1.16.1/documentation.html">1.16.1</a></li>
       <li><a href="versions/1.16.0/documentation.html">1.16.0</a></li>
       <li><a href="versions/1.15.1/documentation.html">1.15.1</a></li>
@@ -628,11 +634,19 @@ table.CodeRay td.code>pre{padding:0}
         <div class="col-sm-12">
          <h4>Getting started</h4>
          <br/>
-         <p>Start developing your own Apache Isis application using either the minimal <a href="guides/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype">helloworld archetype</a> or alternatively with the more structured <a href="guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype">simpleapp archetype</a>.  With the *nix bash shell, use:</p>
+         <p>Start developing your own Apache Isis application using either the minimal <a href="guides/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype">helloworld archetype</a> or alternatively with the more structured <a href="guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype">simpleapp archetype</a>.
+          </p>
         </div>
        </div>
        <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
+          To use the current production 1.x version (from a *nix bash shell):
+         <br/>
+         <br/>
+        </div>
+       </div>
+       <div class="row">
+        <div class="col-sm-5">
          <div class=panel>
                 <pre>
 mvn archetype:generate  \
@@ -645,7 +659,10 @@ mvn archetype:generate  \
     -B</pre>
          </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-1">
+         <p>or</p>
+        </div>
+        <div class="col-sm-5">
          <div class=panel>
                 <pre>
 mvn archetype:generate  \
@@ -658,10 +675,52 @@ mvn archetype:generate  \
     -B</pre>
          </div>
         </div>
+        <div class="col-sm-1">
+        </div>
        </div>
        <div class="row">
         <div class="col-sm-12">
-          <p>Adjust as necessary if using Windows `cmd.exe` or Powershell.</p>
+         To use the beta 2.x milestone release, use:
+         <br/>
+         <br/>
+        </div>
+       </div>
+       <div class="row">
+        <div class="col-sm-5">
+         <div class=panel>
+                <pre>
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis.archetype \
+    -D archetypeArtifactId=helloworld-archetype \
+    -D archetypeVersion=2.0.0-M1 \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp \
+    -D version=1.0-SNAPSHOT \
+    -B</pre>
+         </div>
+        </div>
+        <div class="col-sm-1">
+         <p>or</p>
+        </div>
+        <div class="col-sm-5">
+         <div class=panel>
+                <pre>
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis.archetype \
+    -D archetypeArtifactId=simpleapp-archetype \
+    -D archetypeVersion=2.0.0-M1 \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp \
+    -D version=1.0-SNAPSHOT \
+    -B</pre>
+         </div>
+        </div>
+        <div class="col-sm-1">
+        </div>
+       </div>
+       <div class="row">
+        <div class="col-sm-12">
+          <p>Adjust as necessary if using Windows.</p>
         </div>
        </div>
 
@@ -685,31 +744,31 @@ mvn archetype:generate  \
          <div class="tutorial-carousel">
 
           <div>
-           <img src="images/index-screenshots/010-sign-in.png"></img>
+           <img src="images/index-screenshots/010-sign-in.png"/>
           </div>
           <div>
-           <img src="images/index-screenshots/020-object-layout.png"></img>
+           <img src="images/index-screenshots/020-object-layout.png"/>
           </div>
           <div>
-           <img src="images/index-screenshots/030-declarative-business-rules.png"></img>
+           <img src="images/index-screenshots/030-declarative-business-rules.png"/>
           </div>
           <div>
-           <img src="images/index-screenshots/040-imperative-business-rules.png"></img>
+           <img src="images/index-screenshots/040-imperative-business-rules.png"/>
           </div>
           <div>
-           <img src="images/index-screenshots/050-action-with-args.png"></img>
+           <img src="images/index-screenshots/050-action-with-args.png"/>
           </div>
           <div>
-           <img src="images/index-screenshots/060-action-with-args-autocomplete.png"></img>
+           <img src="images/index-screenshots/060-action-with-args-autocomplete.png"/>
           </div>
           <div>
-           <img src="images/index-screenshots/070-jdo.png"></img>
+           <img src="images/index-screenshots/070-jdo.png"/>
           </div>
           <div>
-           <img src="images/index-screenshots/080-rest-api.png"></img>
+           <img src="images/index-screenshots/080-rest-api.png"/>
           </div>
           <div>
-           <img src="images/index-screenshots/090-integtesting.png"></img>
+           <img src="images/index-screenshots/090-integtesting.png"/>
           </div>
          </div>
          <div>

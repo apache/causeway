@@ -2339,7 +2339,7 @@ ${license.additional-notes}
             <id>git</id>
             <activation>
                 <property>
-                    <name>!skip.git</name>
+                    <name>git</name>
                 </property>
             </activation>
             <build>

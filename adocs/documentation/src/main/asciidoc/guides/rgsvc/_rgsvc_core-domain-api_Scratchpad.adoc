@@ -32,6 +32,7 @@ This class (`o.a.i.applib.services.scratchpad.Scratchpad`) is also the implement
 And, as you can see, the service is just a request-scoped wrapper around a `java.util.Map`.
 
 
+To use an alternative implementation, subclass and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 

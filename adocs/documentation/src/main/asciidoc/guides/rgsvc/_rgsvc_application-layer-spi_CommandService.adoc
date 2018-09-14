@@ -82,7 +82,6 @@ The typical way to indicate that an action should be reified into a `Command` is
 
 
 
-
 == Alternative Implementations
 
 The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`CommandService`), and also provides a number of related domain services (`CommandJdoRepository` and `CommandServiceJdoContributions`).
@@ -101,7 +100,7 @@ This is closely related to the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer
 The implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that persistent parent `Command`s can be associated with their child background `Command`s.
 
 The services provided by this module combines very well with the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`].
-The `CommandService` captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditingService3` captures the _effect_ of that interaction in terms of changed state.
+The `CommandService` captures the __cause__ of an interaction (an action was invoked, a property was edited), while the `AuditingService3` captures the __effect__ of that interaction in terms of changed state.
 
 You may also want to configure the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`].
 

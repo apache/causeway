@@ -50,9 +50,8 @@ The benefit is that subscribers can be more targeted as to the events that they 
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API
-or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured)
-using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
+The examples below are compatible with both.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -60,7 +59,8 @@ Subscribers can be either coarse-grained (if they subscribe to the top-level eve
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @com.google.common.eventbus.Subscribe
+    @org.axonframework.eventhandling.annotation.EventHandler // if using axon
+    @com.google.common.eventbus.Subscribe                    // if using guava
     public void on(ObjectUpdatedEvent ev) {
         if(ev.getSource() instanceof ToDoItem) { ... }
     }
@@ -73,7 +73,8 @@ or can be fine-grained (by subscribing to specific event subtypes):
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @com.google.common.eventbus.Subscribe
+    @org.axonframework.eventhandling.annotation.EventHandler // if using axon
+    @com.google.common.eventbus.Subscribe                    // if using guava
     public void on(ToDoItem.ObjectUpdatedEvent ev) {
         ...
     }
@@ -81,10 +82,7 @@ public class SomeSubscriber extends AbstractSubscriber {
 ----
 
 
-[TIP]
-====
-If the AxonFramework is being used, replace `@com.google.common.eventbus.Subscribe` with `@org.axonframework.eventhandling.annotation.EventHandler`.
-====
+
 
 
 

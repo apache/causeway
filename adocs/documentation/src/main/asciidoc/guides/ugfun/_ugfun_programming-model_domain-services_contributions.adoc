@@ -28,7 +28,7 @@ We suggest naming such classes `XxxContributions`, eg:
 public class OrderContributions {
     @Action(semantics=SemanticsOf.SAFE)
     @ActionLayout(contributed=Contributed.AS_ASSOCIATION)       // <2>
-    @CollectionLayout(render=RenderType.EAGERLY)
+    @CollectionLayout(defaultView="table")
     public List<Order> orders(Customer customer) {              // <3>
         return container.allMatches(...);
     }

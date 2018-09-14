@@ -497,7 +497,7 @@ Then, manually add in a `&lt;wot:pubkeyAddress&gt;` element within `&lt;wot:PubK
 </wot:hasKey>
 ----
 
-ie, referencing your publically exported public key
+ie, referencing your publicly exported public key
 
 Finally, commit your changes.
 

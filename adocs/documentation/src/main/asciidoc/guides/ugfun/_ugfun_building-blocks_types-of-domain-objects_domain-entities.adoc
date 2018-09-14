@@ -15,7 +15,7 @@ From the end-users' perspective, when they talk of "order" they almost always me
 Eric Evans' link:http://books.google.com/books/about/Domain_Driven_Design.html?id=hHBf4YxMnWMC[Domain Driven Design] has a lot to say about aggregate roots and their responsibilities: in particular that it is the responsibility of the aggregate root to maintain the invariants of its component pieces, and that roots may only reference other roots.
 There's good logic here: requiring only root-to-root relationships reduces the number of moving parts that the developer has to think about.
 
-On the other hand, this constraint can substantially complicate matters when mapping domain layer to the persistenec layer.
+On the other hand, this constraint can substantially complicate matters when mapping domain layer to the persistence layer.
 DDD tends to de-emphasise such matters: it aims to be completely agnostic about the persistence layer, with the responsibilities for managing relationships moved (pretty much by definition) into the domain layer.
 
 As a framework though Apache Isis is less dogmatic about such things.

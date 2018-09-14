@@ -38,10 +38,9 @@ enum Style {
 }
 ----
 
-The `CURRENT` style corresponds to the layout already loaded for the domain class, typically from an already persisted
-`layout.xml` file.  The other three styles allow the developer to choose how much metadata is to be specified in the
-XML, and how much (if any) will be obtained elsewhere, typically from annotations in the metamodel (but also from
-`.layout.json` file if present).  The table below summarises the choices:
+The `CURRENT` style corresponds to the layout already loaded for the domain class, typically from an already persisted `layout.xml` file.
+The other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained elsewhere, typically from annotations in the metamodel (but also from `.layout.json` file if present).
+The table below summarises the choices:
 
 .Table caption
 [cols="<.>,^.>,^.>,^.>", options="header"]

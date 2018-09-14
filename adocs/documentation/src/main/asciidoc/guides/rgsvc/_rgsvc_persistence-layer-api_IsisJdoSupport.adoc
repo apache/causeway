@@ -6,7 +6,7 @@
 
 
 The `IsisJdoSupport` service provides a number of general purpose methods for working with the JDO/DataNucleus objectstore.
-In general these act at a lower-level of abstraction than the APIs normally used (specifically, those of xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]), but nevertheless deal with some of the most common use cases.
+In general these act at a lower-level of abstraction than the APIs normally used (specifically, those of xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]), but nevertheless deal with some of the most common use cases.
 For service also provides access to the underlying JDO `PersistenceManager` for full control.
 
 The following sections discuss the functionality provided by the service, broken out into categories.

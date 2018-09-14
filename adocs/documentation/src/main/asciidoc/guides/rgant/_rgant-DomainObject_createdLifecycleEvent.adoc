@@ -5,16 +5,21 @@
 :_imagesdir: images/
 
 
-Whenever a domain object is instantiated or otherwise becomes known to the framework, a "created" lifecycle event is fired.  This is typically when the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer[`DomainObjectContainer`]'s xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api[`newTransientInstance()`] is called;
-it will also happen if the object is simply instantiated with `new(...)`, and then the container's
-xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_services-api[`injectServicesInto(...)`] method is called.
+Whenever a domain object is instantiated or otherwise becomes known to the framework, a "created" lifecycle event is fired.
+This is typically when the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`]'s `instantiate()` method is called.
 
-Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and can
-use the event to obtain a reference to the object just created.  The subscriber could then, for example, update the
-object, eg looking up state from some external datastore.
+Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and can use the event to obtain a reference to the object just created.
+The subscriber could then, for example, update the object, eg looking up state from some external datastore.
+
+[TIP]
+====
+It's possible to instantiate objects without firing this lifecycle; just instantiate using its regular constructor, and then use the ``ServiceRegistry``'s
+xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`injectServicesInto(...)`] to manually inject any required domain services.
+====
 
 
-By default the event raised is `ObjectCreatedEvent.Default`. For example:
+By default the event raised is `ObjectCreatedEvent.Default`.
+For example:
 
 [source,java]
 ----
@@ -24,8 +29,8 @@ public class ToDoItemDto {
 }
 ----
 
-The purpose of the `createdLifecycleEvent()` attribute is to allows a custom subclass to be emitted instead.  A similar
-attribute is available for other lifecycle events.
+The purpose of the `createdLifecycleEvent()` attribute is to allows a custom subclass to be emitted instead.
+A similar attribute is available for other lifecycle events.
 
 For example:
 
@@ -48,9 +53,8 @@ The benefit is that subscribers can be more targeted as to the events that they 
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API
-or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured)
-using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
+The examples below are compatible with both.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -58,7 +62,8 @@ Subscribers can be either coarse-grained (if they subscribe to the top-level eve
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @com.google.common.eventbus.Subscribe
+    @org.axonframework.eventhandling.annotation.EventHandler // if using axon
+    @com.google.common.eventbus.Subscribe                    // if using guava
     public void on(ObjectCreatedEvent ev) {
         if(ev.getSource() instanceof ToDoItem) { ... }
     }
@@ -71,7 +76,8 @@ or can be fine-grained (by subscribing to specific event subtypes):
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @com.google.common.eventbus.Subscribe
+    @org.axonframework.eventhandling.annotation.EventHandler // if using axon
+    @com.google.common.eventbus.Subscribe                    // if using guava
     public void on(ToDoItem.ObjectCreatedEvent ev) {
         ...
     }
@@ -79,29 +85,19 @@ public class SomeSubscriber extends AbstractSubscriber {
 ----
 
 
-[TIP]
-====
-If the AxonFramework is being used, replace `@com.google.common.eventbus.Subscribe` with `@org.axonframework.eventhandling.annotation.EventHandler`.
-====
-
-
-
 
 
 == Default, Doop and Noop events
 
-If the `createdLifecycleEvent` attribute is not explicitly specified (is left as its default value, `ObjectCreatedEvent.Default`),
-then the framework will, by default, post an event.
+If the `createdLifecycleEvent` attribute is not explicitly specified (is left as its default value, `ObjectCreatedEvent.Default`), then the framework will, by default, post an event.
 
-If this is not required, then the `isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault`
-configuration property can be set to "false"; this will disable posting.
+If this is not required, then the `isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault` configuration property can be set to "false"; this will disable posting.
 
 On the other hand, if the `createdLifecycleEvent` has been explicitly specified to some subclass, then an event will be posted.
 The framework provides `ObjectCreatedEvent.Doop` as such a subclass, so setting the `createdLifecycleEvent` attribute to this class
 will ensure that the event to be posted, irrespective of the configuration property setting.
 
-And, conversely, the framework also provides `ObjectCreatedEvent.Noop`; if `createdLifecycleEvent` attribute is set to this class,
-then no event will be posted.
+And, conversely, the framework also provides `ObjectCreatedEvent.Noop`; if `createdLifecycleEvent` attribute is set to this class, then no event will be posted.
 
 
 

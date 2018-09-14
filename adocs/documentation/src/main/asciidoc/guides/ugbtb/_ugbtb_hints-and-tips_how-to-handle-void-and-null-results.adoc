@@ -36,7 +36,7 @@ public class RoutingServiceUsingBreadcrumbs extends RoutingServiceDefault {
         if(original != null) {                                                  // <2>
             return original;
         }
-        container.flush();                                                      // <3>
+        repositoryService.flush();                                              // <3>
 
         final BreadcrumbModelProvider wicketSession =                           // <4>
             (BreadcrumbModelProvider) AuthenticatedWebSession.get();
@@ -62,7 +62,7 @@ public class RoutingServiceUsingBreadcrumbs extends RoutingServiceDefault {
     @Inject
     HomePageProviderService homePageProviderService;
     @Inject
-    DomainObjectContainer container;
+    RepositoryService repositoryService;
 }
 ----
 <1> override the default imlpementation

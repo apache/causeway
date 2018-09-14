@@ -6,7 +6,7 @@
 
 
 The domain service actions can be arranged across menu items using the `menubars.layout.xml` file.
-Not only is this easier to work with, it also can be reloaded dynamically (if in prototype mode), substantially redu.
+Not only is this easier to work with, it also can be reloaded dynamically (if in prototype mode), substantially reducing the edit compile run cycle.
 
 As for xref:ugvw.adoc#_ugvw_layout_file-based[file-based object layouts], this offers a number of benefits:
 

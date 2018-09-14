@@ -56,4 +56,4 @@ If you're running on Java 8, then note that it's possible to write Isis applicat
 
 
 The framework also supports i18n: locale-specific names and descriptions.
-for more information, see the xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[beyond-the-basics] guide.
+For more information, see the xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[beyond-the-basics] guide.

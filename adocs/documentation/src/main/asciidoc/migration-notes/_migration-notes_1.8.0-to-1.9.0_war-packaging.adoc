@@ -6,7 +6,7 @@
 
 
 
-As discussed in xref:../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] and elsewhere, the `org.apache.isis.WebServer` provides the ability to run your app from an embedded jetty.
+As discussed in link:https://isis.apache.org/versions/1.9.0/guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] and elsewhere, the `org.apache.isis.WebServer` provides the ability to run your app from an embedded jetty.
 This is great for prototyping.
 The class resides in the `isis-core-webserver` module, which also has the dependency on jetty.
 
@@ -37,4 +37,4 @@ To do this, locate the `maven-war-plugin` module definition (under `<build>/<plu
 ----
 
 
-For future projects the xref:../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated with this change.
+For future projects the link:https://isis.apache.org/versions/1.9.0/guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated with this change.

@@ -5,7 +5,8 @@
 :_imagesdir: images/
 
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.  And the role of this wrapper is to simulate the UI.
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.
+And the role of this wrapper is to simulate the UI.
 
 [NOTE]
 ====
@@ -18,7 +19,8 @@ It does this by allowing through method invocations that would be allowed if the
 
 The mechanics are as follows:
 
-. the integration test calls the `WrapperFactory` to obtain a wrapper for the domain object under test.  This is usually done in the test's `setUp()` method.
+. the integration test calls the `WrapperFactory` to obtain a wrapper for the domain object under test.
+This is usually done in the test's `setUp()` method.
 
 . the test calls the methods on the wrapper rather than the domain object itself
 
@@ -26,9 +28,11 @@ The mechanics are as follows:
 
 . (like a viewer), the wrapper then performs the "see it/use it/do it" checks, checking that the member is visible, that it is enabled and (if there are arguments) that the arguments are valid
 
-. if the business rule checks pass, then the underlying member is invoked.  Otherwise an exception is thrown.
+. if the business rule checks pass, then the underlying member is invoked.
+Otherwise an exception is thrown.
 
-The type of exception depends upon what sort of check failed.  It's straightforward enough: if the member is invisible then a `HiddenException` is thrown; if it's not usable then you'll get a `DisabledException`, if the args are not valid then catch an `InvalidException`.
+The type of exception depends upon what sort of check failed.
+It's straightforward enough: if the member is invisible then a `HiddenException` is thrown; if it's not usable then you'll get a `DisabledException`, if the args are not valid then catch an `InvalidException`.
 
 image::{_imagesdir}testing/wrapper-factory.png[width="600px",link="{_imagesdir}testing/wrapper-factory.png"]
 
@@ -76,13 +80,15 @@ We're not sure that's any easier (in fact we're certain it looks rather obscure)
 
 == Using the wrapper
 
-As the wrapper is intended to simulate the UI, only those methods that correspond to the "primary" methods of the domain object's members are allowed to be called.  That means:
+As the wrapper is intended to simulate the UI, only those methods that correspond to the "primary" methods of the domain object's members are allowed to be called.
+That means:
 
 * for *_object properties_* the test can call the getter or setter method
 
-* for *_object collections_* the test can call the getter.  +
+* for *_object collections_* the test can call the getter.
 +
-If there is a supporting `addTo...()` or `removeFrom...()` method, then these can be called.  It can also call `add(...)` or `remove(...)` on the collection (returned by the gettter) itself. +
+If there is a supporting `addTo...()` or `removeFrom...()` method, then these can be called.
+It can also call `add(...)` or `remove(...)` on the collection (returned by the gettter) itself.
 +
 [NOTE]
 ====
@@ -91,11 +97,14 @@ In this respect the wrapper is more functional than the xref:../ugvw/ugvw.adoc#[
 
 * for *_object actions_* the test can call the action method itself.
 
-As a convenience, we also allow the test to call any `default...()`,`choices...()` or `autoComplete...()` method.  These are often useful for obtaining a valid value to use.
+As a convenience, we also allow the test to call any `default...()`,`choices...()` or `autoComplete...()` method.
+These are often useful for obtaining a valid value to use.
 
-What the test can't call is any of the remaining supporting methods, such as `hide...()`, `disable...()` or `validate...()`.  That's because their value is implied by the exception being thrown.
+What the test can't call is any of the remaining supporting methods, such as `hide...()`, `disable...()` or `validate...()`.
+That's because their value is implied by the exception being thrown.
 
-The wrapper _does_ also allow the object's `title()` method or its  `toString()` , however this is little use for objects whose title is built up using the `@Title` annotation.  Instead, we recommend that your test verifies an object's title by calling `DomainObjectContainer#titleOf(...)` method.
+The wrapper _does_ also allow the object's `title()` method or its  `toString()` , however this is little use for objects whose title is built up using the `@Title` annotation.
+Instead, we recommend that your test verifies an object's title by calling `TitleService#titleOf(...)` method.
 
 
 
@@ -118,7 +127,8 @@ public class ToDoItem ... {
 }
 ----
 
-then invoking the action through the proxy will cause the event (`CompletedEvent` above) to be fired to any subscribers.  A test might therefore look like:
+then invoking the action through the proxy will cause the event (`CompletedEvent` above) to be fired to any subscribers.
+A test might therefore look like:
 
 [source,java]
 ----

@@ -167,6 +167,13 @@ public class PropertyEdit extends Execution {
 <1> The object used as the new value of the property.  Could be `null` if the property is being cleared.
 
 
+=== Alternate Implementations
+
+Apache Isis' default implementation of `InteractionContext` class is automatically registered (it is annotated with `@DomainService`).
+
+
+
+
 
 == Interacting with the services
 

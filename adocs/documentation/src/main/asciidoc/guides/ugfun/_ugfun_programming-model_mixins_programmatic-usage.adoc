@@ -10,17 +10,13 @@
 When a domain object is rendered, the framework will automatically instantiate all required mixins and delegate to them dynamically.
 If writing integration tests or fixtures, or (sometimes) just regular domain logic, then you may need to instantiate mixins directly.
 
-For this you can use the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_DomainObjectContainer_object-creation-api[`DomainObjectContainer#mixin(...)` method.
+For this you can use the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#mixin(...)` method.
 
 For example:
 
 [source,java]
 ----
-DocumentHolder_documents mixin = container.mixin(DocumentHolder_documents.class, customer);
+DocumentHolder_documents mixin = factoryService.mixin(DocumentHolder_documents.class, customer);
 ----
 
 The xref:../ugtst/ugtst.adoc#__ugtst_integ-test-support_bootstrapping_IntegrationTestAbstract[`IntegrationTestAbstract`] and xref:../rgcms/rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] classes both provide a `mixin(...)` convenience method.
-
-
-
-

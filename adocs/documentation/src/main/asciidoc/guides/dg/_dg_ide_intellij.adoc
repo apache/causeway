@@ -290,10 +290,17 @@ image::{_imagesdir}intellij-idea/110-running-the-app/020-datanucleus-enhancer-go
 
 The `-o` flag in the goal means run off-line; this will run faster.
 
-WARNING: if you forget to set up the enhancer goal, or don't run it on the correct (dom) module, then you will get all sorts of errors when you startup.  These usually manifest themselves as class cast exception in DataNucleus.
+[WARNING]
+====
+If you forget to set up the enhancer goal, or don't run it on the correct (dom) module, then you will get all sorts of errors when you startup.  These usually manifest themselves as class cast exception in DataNucleus.
+====
 
 You should now be able to run the app using `Run > Run Configuration`.  The same configuration can also be used to debug the app if you so need.
 
+[TIP]
+====
+Under windows you may get 'Standard error from the DataNucleus tool + org.datanucleus.enhancer.DataNucleusEnhancer : The command line is too long' although 'fork=false' is set in pom.xml. Can be worked around via setting '-Dfork=false' before or after 'datanucleus:enhance -o'.
+====
 
 [[__dg_ide_intellij_running_unit-tests]]
 === Running the Unit Tests

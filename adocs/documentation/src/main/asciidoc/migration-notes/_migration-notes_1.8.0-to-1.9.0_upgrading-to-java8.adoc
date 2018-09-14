@@ -40,7 +40,8 @@ under `build/pluginManagement/plugins`, add (or update) `maven-compiler-plugin`:
 
 [TIP]
 ====
-The `-parameters` argument causes the Java compiler to capture the names of method parameters in the `.class` files.  Apache Isis can be configured to use this, thereby avoiding the requirement to annotate every parameter with `@ParameterLayout(named=...)` or `@Named()`.  The necessary configuration is provided in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension.
+The `-parameters` argument causes the Java compiler to capture the names of method parameters in the `.class` files.  Apache Isis can be configured to use this, thereby avoiding the requirement to annotate every parameter with `@ParameterLayout(named=...)`.  The necessary configuration is provided in the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension.
+
 ====
 
 We also recommend that you add the `maven-enforcer-plugin` (if not used already).  Again, this resides under `<build>/<pluginManagement>/<plugins>`:

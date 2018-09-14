@@ -5,21 +5,19 @@
 :_imagesdir: images/
 
 
-The `BackgroundService2` domain service (and its various supertypes), and also the companion
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService2`] SPI service, enable commands to be persisted such that they may be invoked in the background.
+The `BackgroundService2` domain service (and its various supertypes), and also the companion xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService2`] SPI service, enable commands to be persisted such that they may be invoked in the background.
 
 The `BackgroundService2` is responsible for capturing a memento representing the command in a typesafe way, and persisting it rather than executing it directly.
 
 The default `BackgroundServiceDefault` implementation works by using a proxy wrapper around the target so that it can capture the action to invoke and its arguments.
+
 This is done using xref:../rgfis/rgfis.adoc#_rgfis_application-layer_CommandDtoServiceInternal[`CommandDtoServiceInternal`].
 
 The persistence delegates the persistence of the memento to an appropriate implementation of the companion `BackgroundCommandService2`.
 One such implementation of `BackgroundCommandService` is provided by (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module.
 
 The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them.
-The `BackgroundCommandExecution` abstract class (discussed
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService_BackgroundCommandExecution[below]) provides infrastructure to do this;
-the concrete implementation of this class depends on the configured `BackgroundCommandService` (in order to query for the persisted (background) ``Command``s.
+The `BackgroundCommandExecution` abstract class (discussed xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService_BackgroundCommandExecution[below]) provides infrastructure to do this; the concrete implementation of this class depends on the configured `BackgroundCommandService` (in order to query for the persisted (background) ``Command``s.
 
 
 
@@ -39,6 +37,7 @@ public interface BackgroundService2 {
 
 The default implementation is provided by core (`o.a.i.core.runtime.services.background.BackgroundServiceDefault`).
 
+To provide an alternative implementation, subclass and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Usage

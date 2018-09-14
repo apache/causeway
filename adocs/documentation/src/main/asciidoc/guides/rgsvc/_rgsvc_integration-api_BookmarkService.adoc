@@ -57,6 +57,10 @@ public interface BookmarkService2 {
 
 The core framework provides a default implementation of this API, namely `o.a.i.core.metamodel.services.bookmarks.BookmarkServiceInternalDefault`
 
+To use an alternative implementation, implement `BookmarkService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+
+
+
 
 == `BookmarkHolder`
 
@@ -97,7 +101,7 @@ A more sophisticated implementation could look inside the passed `ev` argument a
 
 == Usage by other services
 
-Bookmarks are used by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's implementation of  xref:../rgsvc/rgsvc.adoc#_rgsvc_api_BackgroundCommandService[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
+Bookmarks are used by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's implementation of  xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
 
 Bookmarks are also used by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s auditing module's implementation of
 xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`].

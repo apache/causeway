@@ -59,5 +59,3 @@ The alternative is to use the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_Fa
 The core framework provides a default implementation of this service (`o.a.i.core.runtime.services.registry.ServiceRegistryDefault`).
 
 
-
-

@@ -158,9 +158,8 @@ The common schema also defines two types representing values: the `valueDto` com
 Used for the return value of action invocations, and for the new value in property edits.
 
 
-These type definitions are just building blocks, also used within the xref:../rgcms/rgcms.adoc#_rgcms_schema-aim[action iInvocation memento] schema.
-The first, `valueDto` is The second, `valueType`, enumerates the different types of vales, eg of a
-formal parameter to an action.
+These type definitions are just building blocks.
+The first, `valueDto` is The second, `valueType`, enumerates the different types of vales, eg of a formal parameter to an action.
 
 
 [IMPORTANT]

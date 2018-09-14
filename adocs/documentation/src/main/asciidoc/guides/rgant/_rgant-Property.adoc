@@ -132,7 +132,6 @@ public class Customer {
     @javax.jdo.annotations.Column(allowsNull="true")                // <2>
     @Property(
         maxLength=30,
-        minLength=5,
         mustSatisfy=EmailSpecification.class,
         regexPattern = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+",
         regexPatternFlags=Pattern.CASE_INSENSITIVE
