@@ -2368,7 +2368,7 @@ ${license.additional-notes}
             <id>flatten</id>
             <activation>
                 <property>
-                    <name>revision</name>
+                    <name>!skip.flatten</name>
                 </property>
             </activation>
             <build>
