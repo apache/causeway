@@ -431,19 +431,7 @@ public interface ObjectAdapter extends Instance {
                 if(args.get(i) == null && cls.isPrimitive()) {
                     final Object object = ClassExtensions.toDefault(cls);
                     
-                    final Instance adapter = new Instance() {
-                        
-                        @Override
-                        public Specification getSpecification() {
-                            return null; // not needed for primitives
-                        }
-                        
-                        @Override
-                        public Object getObject() {
-                            return object;
-                        }
-                    }; 
-                            
+                    final Instance adapter = Instance.of((ObjectSpecification)null, object);
                     args.set(i, adapter);
                 }
             }

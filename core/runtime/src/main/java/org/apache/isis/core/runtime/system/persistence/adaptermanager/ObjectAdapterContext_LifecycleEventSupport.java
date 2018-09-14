@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEv
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -72,7 +73,7 @@ class ObjectAdapterContext_LifecycleEventSupport {
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
     void postLifecycleEventIfRequired(
-            final ObjectAdapter adapter,
+            final Instance adapter,
             final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
         final LifecycleEventFacet facet = adapter.getSpecification().getFacet(lifecycleEventFacetClass);
         if(facet != null) {

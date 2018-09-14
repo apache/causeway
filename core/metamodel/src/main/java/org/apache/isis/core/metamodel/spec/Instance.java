@@ -19,6 +19,11 @@
 
 package org.apache.isis.core.metamodel.spec;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
+import java.util.function.Supplier;
+
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
@@ -42,5 +47,35 @@ public interface Instance {
      * with the framework.
      */
     Object getObject();
+    
+    // -- FACTORIES
+    
+    public static Instance of(Specification specification, Object pojo) {
+        return new Instance() {
+            @Override
+            public Specification getSpecification() {
+                return specification;
+            }
+            @Override
+            public Object getObject() {
+                return pojo;
+            }
+        };
+    }
+    
+    public static Instance of(Supplier<Specification> specificationSupplier, Object pojo) {
+        requires(specificationSupplier, "specificationSupplier");
+        return new Instance() {
+            private final _Lazy<Specification> specification = _Lazy.of(specificationSupplier);
+            @Override
+            public Specification getSpecification() {
+                return specification.get();
+            }
+            @Override
+            public Object getObject() {
+                return pojo;
+            }
+        };
+    }
 
 }

@@ -56,11 +56,8 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
@@ -74,11 +71,10 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFa
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
@@ -787,14 +783,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
-        final ObjectAdapter adapter = null;
-        if (adapter == null) {
-            // not expected.
-            return;
-        }
-
-        final RootOid isisOid = (RootOid) adapter.getOid();
-        if (isisOid.isTransient()) {
+        if (isTransient(pojo)) {
+            final Instance adapter = Instance.of(
+                    ()->getSpecificationLoader().loadSpecification(pojo.getClass()),
+                    pojo);
+            
             // persisting
             // previously this was performed in the DataNucleusSimplePersistAlgorithm.
             CallbackFacet.Util.callCallback(adapter, PersistingCallbackFacet.class);
