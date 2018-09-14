@@ -185,7 +185,7 @@ public class IsisSessionFactoryBuilder {
             IsisContext.setSessionFactory(isisSessionFactory);
 
 
-            final List<Future<Object>> futures = ThreadPoolSupport.invokeAll(
+            final List<Future<Object>> futures = ThreadPoolSupport.getInstance().invokeAll(
                     new Callable<Object>() {
                         @Override
                         public Object call() {
@@ -259,7 +259,7 @@ public class IsisSessionFactoryBuilder {
 
             );
 
-            ThreadPoolSupport.joinGatherFailures(futures);
+            ThreadPoolSupport.getInstance().joinGatherFailures(futures);
 
             persistenceSessionFactory.catalogNamedQueries(specificationLoader);
 

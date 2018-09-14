@@ -433,12 +433,12 @@ public class IsisWicketApplication
             LOG.error("Failed to initialize", ex);
             throw ex;
         } finally {
-            ThreadPoolSupport.join(futures);
+            ThreadPoolSupport.getInstance().join(futures);
         }
     }
 
     protected List<Future<Object>> startBackgroundInitializationThreads() {
-        return ThreadPoolSupport.invokeAll(
+        return ThreadPoolSupport.getInstance().invokeAll(
                 new Callable<Object>() {
                     @Override
                     public Object call() throws Exception {
