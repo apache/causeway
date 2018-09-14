@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
@@ -201,7 +200,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
     private void loadSpecificationsForServices() {
-        final Properties metadataProperties = new Properties();
 
         List<Class<?>> classes = allServiceClasses();
         for (final Class<?> serviceClass : classes) {
@@ -211,13 +209,12 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             ObjectSpecification objectSpecification = internalLoadSpecification(serviceClass, nature);
 
             facetProcessorObjectSpecId.process(
-                    serviceClass, metadataProperties,
+                    serviceClass,
                     MethodRemoverConstants.NULL, objectSpecification);
         }
     }
 
     private void loadSpecificationsForMixins() {
-        final Properties metadataProperties = new Properties();
 
         final Set<Class<?>> mixinTypes = AppManifest.Registry.instance().getMixinTypes();
         if(mixinTypes == null) {
@@ -226,7 +223,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         for (final Class<?> mixinType : mixinTypes) {
             ObjectSpecification objectSpecification = internalLoadSpecification(mixinType);
             facetProcessorObjectSpecId.process(
-                    mixinType, metadataProperties,
+                    mixinType,
                     MethodRemoverConstants.NULL, objectSpecification);
 
         }
