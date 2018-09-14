@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -74,6 +75,8 @@ public abstract class SpecificationLoaderTestAbstract {
     // is loaded by subclasses
     protected ObjectSpecification specification;
 
+    SpecificationLoader specificationLoader;
+
 
     @Before
     public void setUp() throws Exception {
@@ -104,16 +107,20 @@ public abstract class SpecificationLoaderTestAbstract {
                         mockDeploymentCategoryProvider),
                     stubConfiguration);
 
-        final SpecificationLoader specificationLoader =
-                new SpecificationLoader(
-                        stubConfiguration, new ProgrammingModelFacetsJava5(stubConfiguration),
-                        new MetaModelValidatorDefault(), stubServicesInjector);
+        specificationLoader = new SpecificationLoader(
+                stubConfiguration, new ProgrammingModelFacetsJava5(stubConfiguration),
+                new MetaModelValidatorDefault(), stubServicesInjector);
 
         stubServicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);
 
         specificationLoader.init();
         
         specification = loadSpecification(specificationLoader);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        specificationLoader.shutdown();
     }
 
     protected abstract ObjectSpecification loadSpecification(SpecificationLoader reflector);
