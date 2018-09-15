@@ -34,6 +34,7 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
@@ -187,7 +188,7 @@ public class IsisSessionFactoryBuilder {
             _Context.putSingleton(IsisSessionFactory.class, isisSessionFactory);
 
             // execute tasks using a threadpool
-            final List<Future<Object>> futures = ThreadPoolSupport.getInstance().invokeAll(
+            final List<Future<Object>> futures = ThreadPoolSupport.getInstance().invokeAll(_Lists.of(
                     new Callable<Object>() {
                         @Override
                         public Object call() {
@@ -258,7 +259,7 @@ public class IsisSessionFactoryBuilder {
                             return "CommandDtoUtils.init()";
                         }
                     }
-                ); 
+                )); 
 
 
             // wait on this thread for tasks to complete

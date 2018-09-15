@@ -36,14 +36,13 @@ import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.commons.reflection.Reflect;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -156,7 +155,7 @@ public final class Annotations  {
             return Collections.emptyList();
         }
 
-        final List<AnnotationAndDepth<T>> annotationAndDepths = Lists.newArrayList();
+        final List<AnnotationAndDepth<T>> annotationAndDepths = _Lists.newArrayList();
         for (final Annotation annotation : cls.getAnnotations()) {
             append(annotation, annotationClass, annotationAndDepths);
         }
@@ -192,7 +191,7 @@ public final class Annotations  {
             final Annotation annotation,
             final Class<T> annotationClass,
             final List<AnnotationAndDepth<T>> annotationAndDepths) {
-        appendWithDepth(annotation, annotationClass, annotationAndDepths, 0, Lists.newArrayList());
+        appendWithDepth(annotation, annotationClass, annotationAndDepths, 0, _Lists.newArrayList());
     }
 
     private static <T extends Annotation> void appendWithDepth(
@@ -299,7 +298,7 @@ public final class Annotations  {
             return Collections.emptyList();
         }
 
-        final List<AnnotationAndDepth<T>> annotationAndDepths = Lists.newArrayList();
+        final List<AnnotationAndDepth<T>> annotationAndDepths = _Lists.newArrayList();
         for (final Annotation annotation : method.getAnnotations()) {
             append(annotation, annotationClass, annotationAndDepths);
         }
@@ -368,7 +367,7 @@ public final class Annotations  {
     public static <T extends Annotation> List<Evaluator<T>> getEvaluators(
             final Class<?> cls,
             final Class<T> annotationClass) {
-        final List<Evaluator<T>> evaluators = Lists.newArrayList();
+        final List<Evaluator<T>> evaluators = _Lists.newArrayList();
         visitEvaluators(cls, annotationClass, evaluators::add);
 
         // search implemented interfaces
@@ -399,7 +398,7 @@ public final class Annotations  {
             final Class<T> annotationClass,
             final Predicate<Evaluator<T>> filter) {
 
-        final List<Evaluator<T>> evaluators = Lists.newArrayList();
+        final List<Evaluator<T>> evaluators = _Lists.newArrayList();
         visitEvaluatorsWhile(cls, annotationClass, __->evaluators.isEmpty(), evaluator->{
             if(filter.test(evaluator)) {
                 evaluators.add(evaluator);
@@ -679,7 +678,7 @@ public final class Annotations  {
             return Collections.emptyList();
         }
 
-        final List<AnnotationAndDepth<T>> annotationAndDepths = Lists.newArrayList();
+        final List<AnnotationAndDepth<T>> annotationAndDepths = _Lists.newArrayList();
         final Annotation[] parameterAnnotations = method.getParameterAnnotations()[paramNum];
         for (Annotation annotation : parameterAnnotations) {
             append(annotation, annotationClass, annotationAndDepths);

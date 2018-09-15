@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
 
 /**

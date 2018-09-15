@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -35,7 +36,6 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -84,12 +84,14 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
         feedback.setOutputMarkupId(true);
         addOrReplace(feedback);
 
-        List<ObjectAssociation> numberAssociations = elementSpec.getAssociations(Contributed.EXCLUDED, CollectionContentsAsSummaryFactory.OF_TYPE_BIGDECIMAL);
+        final Stream<ObjectAssociation> numberAssociations = elementSpec
+                .streamAssociations(Contributed.EXCLUDED)
+                .filter(CollectionContentsAsSummaryFactory.OF_TYPE_BIGDECIMAL);
 
-        RepeatingView repeating = new RepeatingView(ID_REPEATING_SUMMARY);
+        final RepeatingView repeating = new RepeatingView(ID_REPEATING_SUMMARY);
         addOrReplace(repeating);
 
-        for (ObjectAssociation numberAssociation : numberAssociations) {
+        numberAssociations.forEach(numberAssociation->{
             AbstractItem item = new AbstractItem(repeating.newChildId());
 
             repeating.add(item);
@@ -104,7 +106,8 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
             addItem(item, ID_AVG, summary.getAverage());
             addItem(item, ID_MIN, summary.getMin());
             addItem(item, ID_MAX, summary.getMax());
-        }
+        });
+        
     }
 
     public static class Summary {
@@ -131,7 +134,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
                     values.add(null);
                     continue;
                 }
-                final Object valueObj = ObjectAdapterUtils.unwrapObject(valueAdapter);
+                final Object valueObj = ObjectAdapter.Util.unwrap(valueAdapter);
                 if (valueObj == null) {
                     values.add(null);
                     continue;

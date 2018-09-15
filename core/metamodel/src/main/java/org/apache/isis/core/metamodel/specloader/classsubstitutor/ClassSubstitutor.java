@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 
 import java.util.Set;
 
+import com.google.common.collect.Sets;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.lang.ClassUtil;
-
-import com.google.common.collect.Sets;
 
 /**
  * Provides capability to translate or ignore classes.

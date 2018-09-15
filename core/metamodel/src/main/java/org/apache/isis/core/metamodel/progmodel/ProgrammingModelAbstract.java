@@ -23,8 +23,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
@@ -34,8 +33,8 @@ import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 public abstract class ProgrammingModelAbstract implements ProgrammingModel {
 
-    private final List<FacetFactory> facetFactories = Lists.newArrayList();
-    private final List<Object> facetFactoryInstancesOrClasses = Lists.newLinkedList();
+    private final List<FacetFactory> facetFactories = _Lists.newArrayList();
+    private final List<Object> facetFactoryInstancesOrClasses = _Lists.newLinkedList();
 
     public static final String KEY_IGNORE_DEPRECATED = "isis.reflector.facets.ignoreDeprecated";
 
@@ -127,7 +126,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
                     return;
                 }
             } else if (facetFactoryInstanceOrClass instanceof Class) {
-                if(DeprecatedMarker.class.isAssignableFrom((Class)facetFactoryInstanceOrClass)) {
+                if(DeprecatedMarker.class.isAssignableFrom((Class<?>)facetFactoryInstanceOrClass)) {
                     return;
                 }
             }

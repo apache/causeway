@@ -19,22 +19,22 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
-import com.google.common.base.Predicate;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * For base subclasses or, more likely, to help write tests.
  */
 public class FacetHolderImpl implements FacetHolder {
 
-    private final Map<Class<? extends Facet>, Facet> facetsByClass = new HashMap<Class<? extends Facet>, Facet>();
+    private final Map<Class<? extends Facet>, Facet> facetsByClass = new HashMap<>();
 
     @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
-        return getFacet(facetType) != null;
+        return facetsByClass.containsKey(facetType);
     }
 
     @Override
@@ -55,11 +55,9 @@ public class FacetHolderImpl implements FacetHolder {
     }
 
     @Override
-    public void addFacet(final MultiTypedFacet facet) {
-        final Class<? extends Facet>[] facetTypes = facet.facetTypes();
-        for (final Class<? extends Facet> facetType : facetTypes) {
-            addFacet(facetType, facet.getFacet(facetType));
-        }
+    public void addFacet(final MultiTypedFacet mtFacet) {
+        mtFacet.facetTypes()
+        .forEach(facetType->addFacet(facetType, mtFacet.getFacet(facetType)));
     }
 
     private void addFacet(final Class<? extends Facet> facetType, final Facet facet) {
@@ -89,19 +87,20 @@ public class FacetHolderImpl implements FacetHolder {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T extends Facet> T getFacet(final Class<T> facetType) {
-        return (T) facetsByClass.get(facetType);
+        return uncheckedCast(facetsByClass.get(facetType));
     }
 
     @Override
-    public Class<? extends Facet>[] getFacetTypes() {
-        return FacetUtil.getFacetTypes(facetsByClass);
+    public Stream<Facet> streamFacets() {
+        return facetsByClass.values()
+                .stream()
+                .distinct(); //FIXME[ISIS-1976] not sure why this is required for MultiTypedFacet support as was in legacy code
     }
-
+    
     @Override
-    public List<Facet> getFacets(final Predicate<Facet> predicate) {
-        return FacetUtil.getFacets(facetsByClass, predicate);
+    public int getFacetCount() {
+        return facetsByClass.size();
     }
-
+    
 }

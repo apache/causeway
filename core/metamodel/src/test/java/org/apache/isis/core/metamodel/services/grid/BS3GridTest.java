@@ -24,7 +24,7 @@ import java.util.Map;
 import javax.xml.bind.Marshaller;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.junit.After;
 import org.junit.Before;
@@ -85,7 +85,7 @@ public class BS3GridTest {
 
         final ActionLayoutData deleteActionLayoutData = new ActionLayoutData();
         deleteActionLayoutData.setId("delete");
-        headerCol.setActions(Lists.<ActionLayoutData>newArrayList());
+        headerCol.setActions(_Lists.<ActionLayoutData>newArrayList());
         headerCol.getActions().add(deleteActionLayoutData);
 
         // content
@@ -112,7 +112,7 @@ public class BS3GridTest {
 
         // containing a fieldset
         final FieldSet leftPropGroup = new FieldSet("General");
-        tabLeftCol.setFieldSets(Lists.<FieldSet>newArrayList());
+        tabLeftCol.setFieldSets(_Lists.<FieldSet>newArrayList());
         tabLeftCol.getFieldSets().add(leftPropGroup);
         leftPropGroup.setName("General");
 
@@ -124,7 +124,7 @@ public class BS3GridTest {
         // and its associated action
         final ActionLayoutData updateNameActionLayoutData = new ActionLayoutData();
         updateNameActionLayoutData.setId("updateName");
-        namePropertyLayoutData.setActions(Lists.<ActionLayoutData>newArrayList());
+        namePropertyLayoutData.setActions(_Lists.<ActionLayoutData>newArrayList());
         namePropertyLayoutData.getActions().add(updateNameActionLayoutData);
 
         // and the tab also has a right col...
@@ -134,7 +134,7 @@ public class BS3GridTest {
 
         // containing a collection
         final CollectionLayoutData similarToColl = new CollectionLayoutData();
-        tabRightCol.setCollections(Lists.<CollectionLayoutData>newArrayList());
+        tabRightCol.setCollections(_Lists.<CollectionLayoutData>newArrayList());
         tabRightCol.getCollections().add(similarToColl);
         similarToColl.setId("similarTo");
 

@@ -19,6 +19,7 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
@@ -63,8 +64,6 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
             return;
         }
 
-        final List<Column> annotations = Annotations.getAnnotations(processMethodContext.getMethod(), Column.class);
-
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         final MandatoryFacet existingFacet = holder.getFacet(MandatoryFacet.class);
@@ -82,6 +81,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
             }
         }
 
+        final List<Column> annotations = Annotations.getAnnotations(processMethodContext.getMethod(), Column.class);
         final Column annotation = annotations.isEmpty() ? null : annotations.get(0);
         boolean required = whetherRequired(processMethodContext, annotation);
         MandatoryFacet facet = annotation != null
@@ -135,16 +135,15 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                     return;
                 }
 
-                final List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
-                for (ObjectAssociation association : associations) {
-
-                    // skip checks if annotated with JDO @NotPersistent
-                    if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
-                        continue;
-                    }
-
-                    validateMandatoryFacet(association, validationFailures);
-                }
+                final Stream<ObjectAssociation> associations = objectSpec
+                        .streamAssociations(Contributed.EXCLUDED)
+                        .filter(ObjectAssociation.Predicates.PROPERTIES);
+                
+                associations
+                // skip checks if annotated with JDO @NotPersistent
+                .filter(association->!association.containsDoOpFacet(JdoNotPersistentFacet.class))
+                .forEach(association->validateMandatoryFacet(association, validationFailures));
+                
             }
 
             private void validateMandatoryFacet(ObjectAssociation association, ValidationFailures validationFailures) {

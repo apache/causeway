@@ -24,10 +24,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.commons.internal.base._Strings;
-
-import com.google.common.base.Strings;
 
 public final class StringExtensions {
 

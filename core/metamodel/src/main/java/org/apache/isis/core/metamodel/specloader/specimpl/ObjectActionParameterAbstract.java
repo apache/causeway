@@ -20,13 +20,13 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
@@ -145,7 +145,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         final List<ObjectActionParameter> parameters = this.getAction().getParameters(new Predicate<ObjectActionParameter>() {
 
             @Override
-            public boolean apply(final ObjectActionParameter t) {
+            public boolean test(final ObjectActionParameter t) {
                 return equalsShortIdentifier(t.getSpecification(), getSpecification());
             }
 
@@ -170,7 +170,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         final List<ObjectActionParameter> parameters = getAction().getParameters(new Predicate<ObjectActionParameter>() {
 
             @Override
-            public boolean apply(final ObjectActionParameter t) {
+            public boolean test(final ObjectActionParameter t) {
                 return equalsShortIdentifier(t.getSpecification(), getSpecification());
             }
 
@@ -233,17 +233,16 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return facetHolder != null ? facetHolder.getFacet(cls) : null;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public Class<? extends Facet>[] getFacetTypes() {
+    public int getFacetCount() {
         final FacetHolder facetHolder = getFacetHolder();
-        return facetHolder != null ? facetHolder.getFacetTypes() : new Class[] {};
+        return facetHolder != null ? facetHolder.getFacetCount() : 0;
     }
 
     @Override
-    public List<Facet> getFacets(final Predicate<Facet> predicate) {
+    public Stream<Facet> streamFacets() {
         final FacetHolder facetHolder = getFacetHolder();
-        return facetHolder != null ? facetHolder.getFacets(predicate) : Lists.<Facet> newArrayList();
+        return facetHolder != null ? facetHolder.streamFacets() : Stream.of();
     }
 
     @Override
@@ -294,7 +293,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final List<ObjectAdapter> adapters = Lists.newArrayList();
+        final List<ObjectAdapter> adapters = _Lists.newArrayList();
         final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
 
         if (facet != null) {
@@ -347,7 +346,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             final ObjectAdapter target,
             final List<ObjectAdapter> args,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final List<ObjectAdapter> adapters = Lists.newArrayList();
+        final List<ObjectAdapter> adapters = _Lists.newArrayList();
         final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
 
         if (facet != null) {

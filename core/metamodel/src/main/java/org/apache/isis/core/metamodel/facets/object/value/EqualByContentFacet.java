@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.value;
 
 import org.apache.isis.core.metamodel.facets.MarkerFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 
 /**
  * Indicates that the instances of this class are equal-by-content.

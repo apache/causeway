@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.runtime.threadpool;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -35,8 +35,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
-
-import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,16 +123,6 @@ public final class ThreadPoolSupport implements AutoCloseable {
     }
 
     /**
-     * Executes specified {@code callables} on the default executor.
-     * See {@link ThreadPoolExecutor#invokeAll(java.util.Collection)}
-     * @param callables nullable
-     * @return non-null
-     */
-    public List<Future<Object>> invokeAll(final Callable<Object>... callables) {
-        return invokeAll(Arrays.asList(callables));
-    }
-
-    /**
      * Executes specified {@code callables} on the sequential executor in sequence, one by one.
      * @param callables nullable
      * @return non-null
@@ -142,16 +130,6 @@ public final class ThreadPoolSupport implements AutoCloseable {
     public List<Future<Object>> invokeAllSequential(@Nullable final List<Callable<Object>> callables) {
         return invokeAll(sequentialExecutor, callables);
     }
-
-    /**
-     * Executes specified {@code callables} on the sequential executor in sequence, one by one.
-     * @param callables nullable
-     * @return non-null
-     */
-    public List<Future<Object>> invokeAllSequential(final Callable<Object>... callables) {
-        return invokeAllSequential(Arrays.asList(callables));
-    }
-
 
     /**
      * Waits if necessary for the computation to complete. (Suppresses checked exceptions.)
@@ -183,7 +161,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
 
         final long t0 = System.currentTimeMillis();
         try{
-            final List<Object> returnValues = Lists.newArrayList();
+            final List<Object> returnValues = _Lists.newArrayList();
             for (Future<Object> future : futures) {
                 final Object result;
                 try {
@@ -262,7 +240,5 @@ public final class ThreadPoolSupport implements AutoCloseable {
             }
         };
     }
-
-    private static boolean isEmpty(Collection<?> x) { return x==null || x.size() == 0; }
-
+    
 }

@@ -23,9 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -80,16 +79,17 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final int pagedStandalone = getPagedConfigSetting("standalone", PAGE_SIZE_STANDALONE_DEFAULT);
         final PagedFacetFromConfiguration pagedFacet = new PagedFacetFromConfiguration(pagedStandalone, facetHolder);
 
-        final Facet[] facets = new Facet[] { describedAsFacet,
-                // commenting these out, think this whole isNoop business is a little bogus
-                // new ImmutableFacetNever(holder),
-                titleFacet, pagedFacet};
-        FacetUtil.addFacets(facets);
+        FacetUtil.addFacet(describedAsFacet);
+        // commenting these out, think this whole isNoop business is a little bogus
+        //FacetUtil.addFacet(new ImmutableFacetNever(holder)); 
+        FacetUtil.addFacet(titleFacet);
+        FacetUtil.addFacet(pagedFacet);
+        
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final List<Facet> facets = Lists.newArrayList();
+        final List<Facet> facets = _Lists.newArrayList();
 
         final FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
 

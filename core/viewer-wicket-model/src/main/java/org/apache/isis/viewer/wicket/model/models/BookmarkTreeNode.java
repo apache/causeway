@@ -21,12 +21,14 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -197,29 +199,40 @@ public class BookmarkTreeNode implements Serializable {
 
     private boolean addToGraphIfParented(BookmarkableModel<?> candidateBookmarkableModel) {
 
-        boolean whetherAdded = false;
+        final boolean whetherAdded[] = {false}; // simply a fast non-thread-safe value reference
+        
         // TODO: this ought to be move into a responsibility of BookmarkableModel, perhaps, rather than downcasting
         if(candidateBookmarkableModel instanceof EntityModel) {
             EntityModel entityModel = (EntityModel) candidateBookmarkableModel;
             final ObjectAdapter candidateAdapter = entityModel.getObject();
-            final List<ObjectAssociation> properties = candidateAdapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.REFERENCE_PROPERTIES);
-            for (ObjectAssociation objectAssoc : properties) {
-                final ObjectAdapter possibleParentAdapter = objectAssoc.get(candidateAdapter, InteractionInitiatedBy.USER);
-                if(possibleParentAdapter == null) {
-                    continue;
-                }
-                final Oid possibleParentOid = possibleParentAdapter.getOid();
-                if(possibleParentOid == null) {
-                    continue;
-                }
-                final String possibleParentOidStr = possibleParentOid.enStringNoVersion();
-                if(Objects.equal(this.oidNoVerStr, possibleParentOidStr)) {
+            final Stream<ObjectAssociation> properties = candidateAdapter.getSpecification()
+                    .streamAssociations(Contributed.EXCLUDED)
+                    .filter(ObjectAssociation.Predicates.REFERENCE_PROPERTIES);
+            
+            properties
+            .map(objectAssoc->{
+                final ObjectAdapter parentAdapter = 
+                        objectAssoc.get(candidateAdapter, InteractionInitiatedBy.USER);
+                return parentAdapter;
+            })
+            .filter(_NullSafe::isPresent)
+            .map(parentAdapter->{
+                final Oid parentOid = parentAdapter.getOid();
+                return parentOid;
+            })
+            .filter(_NullSafe::isPresent)
+            .map(parentOid->{
+                final String parentOidStr = parentOid.enStringNoVersion();
+                return parentOidStr;
+            })
+            .forEach(parentOidStr->{
+                if(Objects.equal(this.oidNoVerStr, parentOidStr)) {
                     this.addChild(candidateBookmarkableModel);
-                    whetherAdded = true;
+                    whetherAdded[0] = true;
                 }
-            }
+            });
         }
-        return whetherAdded;
+        return whetherAdded[0];
     }
 
     public void appendGraphTo(List<BookmarkTreeNode> list) {

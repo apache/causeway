@@ -24,8 +24,6 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.jmock.auto.Mock;
@@ -33,6 +31,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -92,7 +91,7 @@ public class TitleFacetViaTitleAnnotationTest {
 
         TitleAnnotationFacetFactory.sort(evaluatorList);
 
-        final List<TitleComponent> components = Lists.transform(evaluatorList, TitleComponent.FROM_EVALUATORS);
+        final List<TitleComponent> components = _Lists.transform(evaluatorList, TitleComponent.FROM_EVALUATORS);
         final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterManager);
         final NormalDomainObject normalPojo = new NormalDomainObject();
         final Sequence sequence = context.sequence("in-title-element-order");
@@ -122,7 +121,7 @@ public class TitleFacetViaTitleAnnotationTest {
         final List<Annotations.Evaluator<Title>> evaluators = Annotations
                 .getEvaluators(DomainObjectWithProblemInItsAnnotatedTitleMethod.class, Title.class);
 
-        final List<TitleComponent> components = Lists.transform(evaluators, TitleComponent.FROM_EVALUATORS);
+        final List<TitleComponent> components = _Lists.transform(evaluators, TitleComponent.FROM_EVALUATORS);
         final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterManager);
         final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo = new DomainObjectWithProblemInItsAnnotatedTitleMethod();
         context.checking(new Expectations() {

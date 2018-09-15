@@ -30,7 +30,6 @@ import java.nio.charset.StandardCharsets;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,10 +48,12 @@ import org.apache.isis.core.commons.lang.StringExtensions;
  * Serves static web-resources by class-path or file-system lookup.
  * Also handles HTML-templates, where template's placeholders get replaced by their values.
  */
-@WebServlet(
-        urlPatterns = { 
-                "*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.js", "*.html", "*.swf" }
-        )
+//@WebServlet(
+//        urlPatterns = { 
+//                "*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.js", "*.html", "*.swf" }
+//        )
+//[ahuber] to support Servlet 3.0 annotations @WebFilter, @WebListener or others 
+//with skinny war deployment requires additional configuration, so for now we disable this annotation
 public class ResourceServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResourceServlet.class);

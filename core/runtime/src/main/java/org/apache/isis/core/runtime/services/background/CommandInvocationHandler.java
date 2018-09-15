@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.command.Command;
@@ -131,18 +132,18 @@ class CommandInvocationHandler<T> implements InvocationHandler {
     private ObjectAction findMixedInAction(final ObjectAction action, final Object domainObject) {
         final String actionId = action.getId();
         final ObjectSpecification domainSpec = getObjectAdapterProvider().adapterFor(domainObject).getSpecification();
-        List<ObjectAction> objectActions = domainSpec.getObjectActions(Contributed.INCLUDED);
-        for (ObjectAction objectAction : objectActions) {
-            if(objectAction instanceof ObjectActionMixedIn) {
-                ObjectActionMixedIn objectActionMixedIn = (ObjectActionMixedIn) objectAction;
-                if(objectActionMixedIn.hasMixinAction(action)) {
-                    return objectActionMixedIn;
-                }
-            }
-        }
-
-        throw new IllegalArgumentException(String.format(
-                "Unable to find mixin action '%s' for %s", actionId, domainSpec.getFullIdentifier()));
+        final Stream<ObjectAction> objectActions = domainSpec.streamObjectActions(Contributed.INCLUDED);
+        
+        return objectActions
+            .filter(objectAction->objectAction instanceof ObjectActionMixedIn)
+            .map(objectAction->(ObjectActionMixedIn) objectAction)
+            .filter(objectActionMixedIn->objectActionMixedIn.hasMixinAction(action))
+            .findFirst()
+            .orElseThrow(()->
+                new IllegalArgumentException(String.format(
+                    "Unable to find mixin action '%s' for %s", actionId, domainSpec.getFullIdentifier()))
+            );
+             
     }
 
     private ObjectAdapter[] adaptersFor(final Object[] args) {

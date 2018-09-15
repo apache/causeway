@@ -22,12 +22,12 @@ package org.apache.isis.core.runtime.authentication;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 public abstract class AuthenticationRequestAbstract implements AuthenticationRequest {
 
     private final String name;
-    private final List<String> roles = Lists.newArrayList();
+    private final List<String> roles = _Lists.newArrayList();
 
     public AuthenticationRequestAbstract(final String name) {
         this.name = name;

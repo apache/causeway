@@ -23,6 +23,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -160,12 +161,11 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final PropertyOrCollectionAccessorFacet accessor = getFacet(PropertyOrCollectionAccessorFacet.class);
-        final Object collection = accessor.getProperty(ownerAdapter,
-                interactionInitiatedBy);
+        final Object collection = accessor.getProperty(ownerAdapter, interactionInitiatedBy);
         if (collection == null) {
             return null;
         }
-        return getObjectAdapterProvider().adapterFor(collection, ownerAdapter, this);
+        return getObjectAdapterProvider().adapterFor(collection, (RootOid)ownerAdapter.getOid(), this);
     }
 
     @Override
@@ -191,7 +191,9 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         }
         if (readWrite()) {
             if (ownerAdapter.representsPersistent() && referencedAdapter.isTransient()) {
-                throw new IsisException("can't set a reference to a transient object from a persistent one: " + ownerAdapter.titleString(null) + " (persistent) -> " + referencedAdapter.titleString() + " (transient)");
+                throw new IsisException("can't set a reference to a transient object from a persistent one: "
+                        + ownerAdapter.titleString(null)
+                        + " (persistent) -> " + referencedAdapter.titleString() + " (transient)");
             }
             final CollectionAddToFacet facet = getFacet(CollectionAddToFacet.class);
             facet.add(ownerAdapter, referencedAdapter, interactionInitiatedBy);

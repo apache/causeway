@@ -21,11 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.collection;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import com.google.common.base.Predicates;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -43,6 +42,8 @@ import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsHe
  * See also {@link BulkActionsHelper}.
  */
 public class AssociatedWithActionsHelper implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private final EntityCollectionModel collectionModel;
 
     public AssociatedWithActionsHelper(final EntityCollectionModel collectionModel) {
@@ -60,13 +61,11 @@ public class AssociatedWithActionsHelper implements Serializable {
         final ObjectSpecification objectSpec = getObjectSpecification(isisSessionFactory);
 
         final List<ActionType> actionTypes = inferActionTypes(isisSessionFactory);
-        List<ObjectAction> objectActions = objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, Predicates.alwaysTrue());
+        final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(actionTypes, Contributed.INCLUDED);
 
-        return FluentIterable.from(objectActions)
-                .filter(ObjectAction.Predicates.associatedWithAndWithCollectionParameterFor(
-                        collection
-                        ))
-                .toList();
+        return objectActions
+                .filter(ObjectAction.Predicates.associatedWithAndWithCollectionParameterFor(collection))
+                .collect(Collectors.toList());
     }
 
     private ObjectSpecification getObjectSpecification(final IsisSessionFactory isisSessionFactory) {
@@ -79,7 +78,7 @@ public class AssociatedWithActionsHelper implements Serializable {
     }
 
     private static List<ActionType> inferActionTypes(final IsisSessionFactory isisSessionFactory) {
-        final List<ActionType> actionTypes = Lists.newArrayList();
+        final List<ActionType> actionTypes = _Lists.newArrayList();
         actionTypes.add(ActionType.USER);
         final DeploymentCategory deploymentCategory = isisSessionFactory.getDeploymentCategory();
         if ( !deploymentCategory.isProduction()) {

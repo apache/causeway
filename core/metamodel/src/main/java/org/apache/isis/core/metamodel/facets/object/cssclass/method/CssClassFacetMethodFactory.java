@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.cssclass.method;
 
 import java.lang.reflect.Method;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

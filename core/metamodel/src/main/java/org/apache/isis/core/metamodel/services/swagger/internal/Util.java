@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.services.swagger.internal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.commons.internal.base._Casts;
@@ -32,8 +34,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-
-import com.google.common.base.Predicate;
 
 import io.swagger.models.Response;
 
@@ -96,7 +96,7 @@ public final class Util {
     static Predicate<ObjectAssociation> associationsWith(final SwaggerService.Visibility visibility) {
         return new Predicate<ObjectAssociation>() {
             @Override
-            public boolean apply(final ObjectAssociation objectAssociation) {
+            public boolean test(final ObjectAssociation objectAssociation) {
                 return !visibility.isPublic() || isVisibleForPublic(objectAssociation);
             }
         };
@@ -114,15 +114,14 @@ public final class Util {
         return associationsOf(objectSpecification, ObjectAssociation.Predicates.COLLECTIONS, visibility);
     }
 
-    static <T extends ObjectAssociation> List<T> associationsOf(
+    private static <T extends ObjectAssociation> List<T> associationsOf(
             final ObjectSpecification objectSpecification,
             final Predicate<ObjectAssociation> associationPredicate, final SwaggerService.Visibility visibility) {
+        
         final List<ObjectAssociation> list =
-                objectSpecification.getAssociations(
-                        Contributed.INCLUDED,
-                        com.google.common.base.Predicates.and(
-                                associationPredicate,
-                                associationsWith(visibility) ));
+                objectSpecification.streamAssociations(Contributed.INCLUDED)
+                .filter(associationPredicate.and(associationsWith(visibility)))
+                .collect(Collectors.toList());
 
         return _Casts.uncheckedCast(list);
     }
@@ -133,13 +132,12 @@ public final class Util {
             final ClassExcluder classExcluder) {
         final List<ActionType> actionTypes = actionTypesFor(visibility);
 
-        return objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, new Predicate<ObjectAction>() {
-            @Override
-            public boolean apply(final ObjectAction objectAction) {
-                return !classExcluder.exclude(objectAction) &&
-                        !visibility.isPublic() || isVisibleForPublic(objectAction);
-            }
-        });
+        return objectSpec.streamObjectActions(actionTypes, Contributed.INCLUDED)
+                .filter(objectAction->
+                    !classExcluder.exclude(objectAction) &&
+                            !visibility.isPublic() || isVisibleForPublic(objectAction)
+                )
+                .collect(Collectors.toList());
     }
 
     static String roSpec(final String section) {

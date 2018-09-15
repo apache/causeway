@@ -71,6 +71,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.ApplicationSettings;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -400,11 +401,11 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     }
     
     protected List<Future<Object>> startBackgroundInitializationThreads() {
-        return ThreadPoolSupport.getInstance().invokeAll(
+        return ThreadPoolSupport.getInstance().invokeAll(_Lists.of(
                 Executors.callable(this::configureWebJars),
                 Executors.callable(this::configureWicketBootstrap),
                 Executors.callable(this::configureWicketSelect2)
-            );
+            ));
     }
 
     /**

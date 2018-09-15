@@ -29,10 +29,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.util.ToString;
@@ -148,7 +148,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     @Override
     public UserMemento createUserMemento() {
-        final List<RoleMemento> roles = Lists.newArrayList();
+        final List<RoleMemento> roles = _Lists.newArrayList();
         for (final String roleName : getRoles()) {
             roles.add(new RoleMemento(roleName));
         }

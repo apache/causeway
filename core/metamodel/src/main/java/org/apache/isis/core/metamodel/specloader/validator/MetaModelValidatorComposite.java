@@ -21,13 +21,12 @@ package org.apache.isis.core.metamodel.specloader.validator;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
 
-    private final List<MetaModelValidator> validators = Lists.newArrayList();
+    private final List<MetaModelValidator> validators = _Lists.newArrayList();
 
 
     public MetaModelValidatorComposite add(final MetaModelValidator validator) {

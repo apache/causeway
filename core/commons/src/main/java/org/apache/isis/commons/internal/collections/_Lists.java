@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -145,6 +146,25 @@ public final class _Lists {
                 ()->Collectors.<T, LinkedList<T>>toCollection(LinkedList::new) );
     }
 
+    // -- COPY ON WRITE LIST
+
+    public static <T> CopyOnWriteArrayList<T> newCopyOnWriteArrayList() {
+        return new CopyOnWriteArrayList<T>();
+    }
+
+    public static <T> CopyOnWriteArrayList<T> newCopyOnWriteArrayList(@Nullable Collection<T> collection) {
+        if(collection==null) {
+            return newCopyOnWriteArrayList();
+        }
+        return new CopyOnWriteArrayList<T>(collection);
+    }
+
+    public static <T> CopyOnWriteArrayList<T> newCopyOnWriteArrayList(@Nullable Iterable<T> iterable) {
+        return _Collections.collectFromIterable(iterable, _Lists::newCopyOnWriteArrayList,
+                ()->Collectors.<T, CopyOnWriteArrayList<T>>toCollection(CopyOnWriteArrayList::new) );
+    }
+
+    
     // -- TRANSFORMATION
 
     public static <T, R> List<R> transform(@Nullable List<T> input, Function<T, R> mapper) {

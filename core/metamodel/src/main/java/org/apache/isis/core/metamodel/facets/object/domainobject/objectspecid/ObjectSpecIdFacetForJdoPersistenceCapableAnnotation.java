@@ -20,7 +20,9 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid;
 
 import java.util.Locale;
+
 import com.google.common.base.Strings;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;

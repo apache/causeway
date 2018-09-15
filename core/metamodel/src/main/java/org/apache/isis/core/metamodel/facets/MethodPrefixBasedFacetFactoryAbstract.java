@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -78,8 +79,8 @@ implements MethodPrefixBasedFacetFactory {
                         MethodPrefixBasedFacetFactoryAbstract.ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY,
                         MethodPrefixBasedFacetFactoryAbstract.ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
 
-                final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
-                for (final ObjectAction objectAction : objectActions) {
+                final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(Contributed.EXCLUDED);
+                objectActions.forEach(objectAction->{
                     for (final String prefix : prefixes) {
                         String actionId = objectAction.getId();
 
@@ -93,16 +94,17 @@ implements MethodPrefixBasedFacetFactory {
                                     + "' config property)"
                                     : "";
 
-                                    String message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
-                                    validationFailures.add(
-                                            message,
-                                            objectSpec.getIdentifier().getClassName(),
-                                            actionId,
-                                            prefix,
-                                            explanation);
+                            final String message = "%s#%s: has prefix %s, is probably intended as a supporting method for a property, collection or action%s.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic";
+                            validationFailures.add(
+                                    message,
+                                    objectSpec.getIdentifier().getClassName(),
+                                    actionId,
+                                    prefix,
+                                    explanation);
                         }
                     }
-                }
+                });
+               
                 return true;
             }
         }));

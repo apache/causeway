@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ActionUsabilityEvent;
@@ -26,8 +28,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
 /**
  * See {@link InteractionContext} for overview; analogous to

@@ -23,7 +23,6 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 public abstract class AbstractIsisSessionTemplate {
 
@@ -57,11 +56,8 @@ public abstract class AbstractIsisSessionTemplate {
     protected void doExecute(final Object context) {
         final PersistenceSession persistenceSession = getPersistenceSession();
         final IsisTransactionManager transactionManager = getTransactionManager(persistenceSession);
-        transactionManager.executeWithinTransaction(new TransactionalClosure() {
-            @Override
-            public void execute() {
-                doExecuteWithTransaction(context);
-            }
+        transactionManager.executeWithinTransaction(()->{
+            doExecuteWithTransaction(context);
         });
     }
 
@@ -78,7 +74,7 @@ public abstract class AbstractIsisSessionTemplate {
 
     // //////////////////////////////////////
 
-//TODO[ISIS-1976] not used !?
+//FIXME[ISIS-1976] not used !?
 //    protected final ObjectAdapter adapterFor(final Object targetObject) {
 //        if(targetObject instanceof OidDto) {
 //            final OidDto oidDto = (OidDto) targetObject;

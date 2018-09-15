@@ -47,7 +47,7 @@ public class MarkupValueSemanticsProvider extends ValueSemanticsProviderAndFacet
     }
 
     public MarkupValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, Markup.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
+        super(type(), holder, Markup.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
     }
 
     // //////////////////////////////////////////////////////////////////

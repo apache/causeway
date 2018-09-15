@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFacetForPropertyLayoutAnnotation;
 
 public class NamedFacetForParameterLayoutAnnotation extends NamedFacetAbstract {
 

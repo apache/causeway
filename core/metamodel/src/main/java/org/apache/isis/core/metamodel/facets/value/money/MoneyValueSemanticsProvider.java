@@ -32,8 +32,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Money> implements MoneyValueFacet {
@@ -79,7 +79,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     }
 
     public MoneyValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, Money.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
+        super(type(), holder, Money.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
 
         final String property = ConfigurationConstants.ROOT + "value.money.currency";
         defaultCurrencyCode = getConfiguration().getString(property, LOCAL_CURRENCY_CODE);

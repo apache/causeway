@@ -19,9 +19,10 @@
 package org.apache.isis.objectstore.jdo.metamodel.util;
 
 
+import java.util.function.Predicate;
+
 import javax.jdo.annotations.PrimaryKey;
 
-import com.google.common.base.Predicate;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -39,7 +40,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.JdoPrima
  */
 public final class JdoPrimaryKeyPropertyPredicate implements Predicate<ObjectAssociation> {
     @Override
-    public boolean apply(final ObjectAssociation noa) {
+    public boolean test(final ObjectAssociation noa) {
         return noa.isOneToOneAssociation() &&
                 noa.containsFacet(JdoPrimaryKeyFacet.class) &&
                 noa.containsFacet(PropertyOrCollectionAccessorFacet.class);

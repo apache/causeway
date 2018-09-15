@@ -19,14 +19,12 @@
 
 package org.apache.isis.core.metamodel.testspec;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.Lists;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
-import com.google.common.base.Predicate;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -49,13 +47,11 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSpecification {
 
     private ObjectAction action;
-    public List<ObjectAssociation> fields = Lists.newArrayList();
+    public List<ObjectAssociation> fields = _Lists.newArrayList();
     private final String name;
     private List<ObjectSpecification> subclasses = Collections.emptyList();
     private String title;
@@ -131,38 +127,8 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public List<ObjectAssociation> getAssociations(final Contributed contributed) {
-        return fields;
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<OneToOneAssociation> getProperties(final Contributed contributed) {
-        @SuppressWarnings("rawtypes")
-        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
-        return new ArrayList<OneToOneAssociation>(list);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public List<OneToManyAssociation> getCollections(final Contributed contributed) {
-        @SuppressWarnings("rawtypes")
-        final List list = getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.COLLECTIONS);
-        return new ArrayList<>(list);
-    }
-
-    @Override
-    public List<ObjectAssociation> getAssociations(final Contributed contributed, final Predicate<ObjectAssociation> predicate) {
-        final List<ObjectAssociation> allFields = getAssociations(Contributed.EXCLUDED);
-
-        final List<ObjectAssociation> selectedFields = Lists.newArrayList();
-        for (int i = 0; i < allFields.size(); i++) {
-            if (predicate.apply(allFields.get(i))) {
-                selectedFields.add(allFields.get(i));
-            }
-        }
-
-        return selectedFields;
+    public Stream<ObjectAssociation> streamAssociations(final Contributed contributed) {
+        return fields.stream();
     }
 
     @Override
@@ -364,21 +330,14 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public List<ObjectAction> getObjectActions(final Contributed contributed) {
+    public Stream<ObjectAction> streamObjectActions(final Contributed contributed) {
         return null;
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ActionType type, final Contributed contributed, final Predicate<ObjectAction> predicate) {
+    public Stream<ObjectAction> streamObjectActions(final ActionType type, final Contributed contributed) {
         return null;
     }
-
-    @Override
-    public List<ObjectAction> getObjectActions(final List<ActionType> types, final Contributed contributed, final Predicate<ObjectAction> predicate) {
-        return null;
-    }
-
-
 
     // /////////////////////////////////////////////////////////
     // view models and wizards

@@ -27,6 +27,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.spec.Instance;
 
 public class PersistedCallbackFacetViaMethod extends PersistedCallbackFacetAbstract implements ImperativeFacet {
 
@@ -53,7 +54,7 @@ public class PersistedCallbackFacetViaMethod extends PersistedCallbackFacetAbstr
     }
 
     @Override
-    public void invoke(final ObjectAdapter adapter) {
+    public void invoke(final Instance adapter) {
         ObjectAdapter.InvokeUtils.invokeAll(methods, adapter);
     }
 

@@ -24,9 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
@@ -88,8 +86,18 @@ public class DomainEventHelper {
                     event.setActionSemantics(objectAction.getSemantics());
 
                     final List<ObjectActionParameter> parameters = objectAction.getParameters();
-                    event.setParameterNames(immutableList(Iterables.transform(parameters, ObjectActionParameter.Functions.GET_NAME)));
-                    event.setParameterTypes(immutableList(Iterables.transform(parameters, ObjectActionParameter.Functions.GET_TYPE)));
+                    
+                    final List<String> parameterNames = parameters.stream()
+                            .map(ObjectActionParameter.Functions.GET_NAME)
+                            .collect(Collectors.toList());
+
+                    final List<Class<?>> parameterTypes = parameters.stream()
+                            .map(ObjectActionParameter.Functions.GET_TYPE)
+                            .collect(Collectors.toList());
+                    
+                    
+                    event.setParameterNames(Collections.unmodifiableList(parameterNames));
+                    event.setParameterTypes(Collections.unmodifiableList(parameterTypes));
                 }
             }
 
@@ -117,9 +125,9 @@ public class DomainEventHelper {
         }
     }
 
-    private static <T> List<T> immutableList(final Iterable<T> iterable) {
-        return Collections.unmodifiableList(Lists.newArrayList(iterable));
-    }
+//    private static <T> List<T> immutableList(final Iterable<T> iterable) {
+//        return Collections.unmodifiableList(_Lists.newArrayList(iterable));
+//    }
 
     @SuppressWarnings("unchecked")
     static <S> ActionDomainEvent<S> newActionDomainEvent(

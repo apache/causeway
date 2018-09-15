@@ -88,9 +88,11 @@
 [6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
 
         <!-- JDO API -->
+        
         <jdo-api.version>3.1</jdo-api.version>
-
+        
         <!-- Isis Datanucleus JDO Plugin dn5 -->
+
 	    <dn5-jdo-api.version>3.2.0-m8</dn5-jdo-api.version>
         <dn5-core.version>5.1.11</dn5-core.version>
         <dn5-api-jdo.version>5.1.9</dn5-api-jdo.version>
@@ -399,7 +401,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-
+        
         <!-- required for RestEasy -->
         <repository>
             <id>jboss</id>
@@ -1392,19 +1394,20 @@ ${license.additional-notes}
                 <scope>test</scope>
             </dependency>
 
-            <!-- security implementation(s) -->
+            <!-- security support -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security</artifactId>
                 <version>${isis.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-security-shiro</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
 
             <!-- core plugins -->
+            
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-plugins-security-shiro</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
             
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
@@ -2362,7 +2365,6 @@ ${license.additional-notes}
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>src</id>
             <activation>
@@ -2379,7 +2381,6 @@ ${license.additional-notes}
                 </plugins>
             </build>
         </profile>
-
         <profile>
             <id>git</id>
             <activation>
@@ -2490,8 +2491,7 @@ ${license.additional-notes}
         <module>webserver</module>
 
         <module>security</module>
-        <module>security-shiro</module>
-
+        
         <module>unittestsupport</module>
         <module>specsupport</module>
         <module>integtestsupport</module>
@@ -2520,6 +2520,7 @@ ${license.additional-notes}
         <module>plugins/jaxrs-resteasy-4</module>
         <module>plugins/jdo-datanucleus-4</module>
         <module>plugins/jdo-datanucleus-5</module>
+        <module>plugins/security-shiro</module>
 
         <!-- to break cyclic dependencies some tests needed to be moved to their own modules -->
         <module>unittestsupport-test</module>

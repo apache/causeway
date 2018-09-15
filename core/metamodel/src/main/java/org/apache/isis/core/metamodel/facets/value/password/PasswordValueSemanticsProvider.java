@@ -47,7 +47,7 @@ PasswordValueFacet {
     }
 
     public PasswordValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, Password.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE,
+        super(type(), holder, Password.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE,
                 context);
     }
 

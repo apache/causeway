@@ -22,10 +22,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.apache.isis.core.commons.lang.Wormhole;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.spec.Instance;
 
 public class UpdatingCallbackFacetViaMethod extends UpdatingCallbackFacetAbstract implements ImperativeFacet {
 
@@ -52,13 +54,8 @@ public class UpdatingCallbackFacetViaMethod extends UpdatingCallbackFacetAbstrac
     }
 
     @Override
-    public void invoke(final ObjectAdapter adapter) {
-        Wormhole.invoke(new Runnable() {
-            @Override
-            public void run() {
-                ObjectAdapter.InvokeUtils.invokeAll(methods, adapter);
-            }
-        });
+    public void invoke(final Instance adapter) {
+        Wormhole.invoke(()->ObjectAdapter.InvokeUtils.invokeAll(methods, adapter));
     }
 
     @Override

@@ -791,7 +791,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
     public boolean isScalarTypeSubtypeOf(final Class<?> requiredClass) {
         final Class<?> scalarType = getTypeOfSpecification().getCorrespondingClass();
-        return _NullSafe.stream(requiredClass)
+        return _NullSafe.streamNullable(requiredClass)
                 .anyMatch(x -> x.isAssignableFrom(scalarType));
     }
 

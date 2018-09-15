@@ -18,6 +18,7 @@ package org.apache.isis.core.metamodel.services.persistsession;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
@@ -29,7 +30,6 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider.Delegating {
     
@@ -148,8 +148,6 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
     @Programmatic
     void remove(ObjectAdapter adapter);
 
-
-
     // -- allMatchingQuery, firstMatchingQuery
     /**
      * Provided by <tt>PersistenceSession</tt> when used by framework.
@@ -170,6 +168,10 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
     @Programmatic
     <T> ObjectAdapter firstMatchingQuery(Query<T> query);
 
-    void executeWithinTransaction(TransactionalClosure transactionalClosure);
+    @Programmatic
+    void executeWithinTransaction(Runnable task);
+    
+    @Programmatic
+    <T> T executeWithinTransaction(Supplier<T> task);
 
 }

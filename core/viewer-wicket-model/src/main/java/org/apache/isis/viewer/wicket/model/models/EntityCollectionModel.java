@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
@@ -97,18 +99,18 @@ UiHintContainer {
 
                 final PersistenceSession persistenceSession = model.getPersistenceSession();
 
-                final List<RootOid> rootOids =
-                        _Lists.transform(model.mementoList, ObjectAdapterMemento.Functions.toOid());
-
+                final Stream<RootOid> rootOids = stream(model.mementoList)
+                        .map(ObjectAdapterMemento.Functions.toOid());
+                
                 final Map<RootOid, ObjectAdapter> adaptersByOid = persistenceSession.adaptersFor(rootOids);
                 final Collection<ObjectAdapter> adapterList = adaptersByOid.values();
-                return _NullSafe.stream(adapterList)
+                return stream(adapterList)
                         .filter(_NullSafe::isPresent)
                         .collect(Collectors.toList());
             }
 
             private Iterable<ObjectAdapter> loadOneByOne(final EntityCollectionModel model) {
-                return _NullSafe.stream(model.mementoList)
+                return stream(model.mementoList)
                         .map(ObjectAdapterMemento.Functions.fromMemento(
                                 ConcurrencyChecking.NO_CHECK,
                                 model.getPersistenceSession(),

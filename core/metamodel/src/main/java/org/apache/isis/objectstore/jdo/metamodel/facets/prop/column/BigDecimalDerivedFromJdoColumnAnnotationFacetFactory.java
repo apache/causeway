@@ -20,6 +20,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
@@ -32,15 +33,15 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits.BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentFacet;
 
@@ -83,7 +84,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
             Integer existingLength = null;
             Integer existingScale = null;
             if(existingFacet != null && !existingFacet.isNoop()) {
-                existingLength = existingFacet.getLength();
+                existingLength = existingFacet.getPrecision();
                 existingScale = existingFacet.getScale();
             }
 
@@ -125,16 +126,16 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
                     return;
                 }
 
-                final List<ObjectAssociation> associations = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
-                for (ObjectAssociation association : associations) {
-
-                    // skip checks if annotated with JDO @NotPersistent
-                    if(association.containsDoOpFacet(JdoNotPersistentFacet.class)) {
-                        continue;
-                    }
-
+                final Stream<ObjectAssociation> associations = objectSpec.streamAssociations(Contributed.EXCLUDED)
+                        .filter(ObjectAssociation.Predicates.PROPERTIES);
+                
+                associations
+                // skip checks if annotated with JDO @NotPersistent
+                .filter(association->!association.containsDoOpFacet(JdoNotPersistentFacet.class))
+                .forEach(association->{
                     validateBigDecimalValueFacet(association, validationFailures);
-                }
+                });
+                
             }
 
             private void validateBigDecimalValueFacet(ObjectAssociation association, ValidationFailures validationFailures) {
@@ -152,7 +153,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactory extends FacetF
 
                     if(underlying instanceof BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation) {
 
-                        if(notNullButNotEqual(facet.getLength(), underlying.getLength())) {
+                        if(notNullButNotEqual(facet.getPrecision(), underlying.getPrecision())) {
                             validationFailures.add(
                                     "%s: @javax.jdo.annotations.Column(length=...) different from @javax.validation.constraint.Digits(...); should equal the sum of its integer and fraction attributes",
                                     association.getIdentifier().toClassAndNameIdentityString());
