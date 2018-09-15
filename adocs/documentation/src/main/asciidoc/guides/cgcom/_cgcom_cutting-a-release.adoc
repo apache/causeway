@@ -4,7 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 :toc: right
-
+include::__versions.adoc[]
 
 The release process consists of:
 
@@ -51,11 +51,11 @@ In most cases a JIRA ticket will have been created at the beginning of the previ
 We use environment variables to parameterize as many of the steps as possible.
 For example:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 export ISISTMP=/c/tmp                               # <1>
-export ISISDEV=2.0.0-M2-SNAPSHOT
-export ISISREL=2.0.0-M1
+export ISISDEV={isisdev}
+export ISISREL={isisrel}
 export ISISRC=RC1
 export ISISBRANCH=release-$ISISREL-$ISISRC
 export ISISJIRA=ISIS-9999                           # <2>
@@ -72,7 +72,7 @@ Obviously, alter `$ISISDEV` and `$ISISREL` as required, and bump `$ISISRC` for r
 
 [IMPORTANT]
 ====
-Note that the branch name is intentionally *not* the same any of the eventual tag names (eg `isis-2.0.0-M1` or `simpleapp-archetype-2.0.0-M1`).
+Note that the branch name is intentionally *not* the same any of the eventual tag names (eg `isis-{isisrel}` or `simpleapp-archetype-{isisrel}`).
 ====
 
 
@@ -84,7 +84,7 @@ Set the HEAD of your local git repo to the commit to be released.
 This will usually be the tip of the origin's `master` branch.
 Then, create a release branch for the version number being released; eg:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 git checkout master
 git pull --ff-only
@@ -99,18 +99,18 @@ This will normally have been done already during earlier development; but confir
 If it has not, make the change.
 
 Double check that the version number of the core POM (`core/pom.xml`) should reflect the branch name that you are now on.
-For example, if releasing version `2.0.0-M1`, the POM should read:
+For example, if releasing version `{isisrel}`, the POM should read:
 
-[source,xml]
+[source,xml,subs="attributes+"]
 ----
 <groupId>org.apache.isis.core</groupId>
 <artifactId>isis</artifactId>
-<version>2.0.0-M1-SNAPSHOT</version>
+<version>{isisdev}</version>
 ----
 
 Also, check that there are no snapshot dependencies:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 grep SNAPSHOT `/bin/find . -name pom.xml | grep -v target | grep -v mothball | sort`
 ----
@@ -134,17 +134,17 @@ So, instead, we perform the edit of ${revision}` manually before.
 
 In the three `pom.xml` files (for `core` and the two archetypes) the property is defined:
 
-[source,xml]
+[source,xml,subs="attributes+"]
 ----
 <properties>
-    <revision>2.0.0-M1-SNAPSHOT</revision>
+    <revision>{isisdev}</revision>
     ...
 </properties>
 ----
 
 Change all of these to the release version, using:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" core/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/simpleapp/pom.xml
@@ -162,7 +162,7 @@ After release, there is a xref:cgcom.adoc#__cgcom_cutting-a-release_bump-revisio
 First, we release `core`.
 Switch to the appropriate directory:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 cd core
 ----
@@ -172,7 +172,7 @@ cd core
 
 Set additional environment variables for the core "artifact":
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 export ISISART=isis
 export ISISCOR="Y"
@@ -190,7 +190,7 @@ The parent `pom.xml` of each releasable module specifies the RAT Maven plugin, w
 
 To run the RAT tool, use:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=50 -o && \
 for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done || \
@@ -236,7 +236,7 @@ This is stored in the `src/main/appended-resources/supplemental-models.xml` file
 
 To capture the missing license information, use:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn license:download-licenses && \
 groovy ../scripts/checkmissinglicenses.groovy
@@ -247,7 +247,7 @@ The script then searches for these `licenses.xml` files, and compares them again
 
 For example, the output could be something like:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 licenses to add to supplemental-models.xml:
 
@@ -269,7 +269,7 @@ If any missing entries are listed or are spurious, then update `supplemental-mod
 
 Commit any changes from the preceding steps:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 git commit -am "$ISISJIRA: updates to pom.xml etc for release"
 ----
@@ -281,7 +281,7 @@ git commit -am "$ISISJIRA: updates to pom.xml etc for release"
 Perform one last sanity check on the codebase.
 Delete all Isis artifacts from your local Maven repo, then build using the `-o` offline flag:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 rm -rf ~/.m2/repository/org/apache/isis
 mvn clean install -o
@@ -298,10 +298,11 @@ We therefore just use `mvn deploy` directly, activating the (inherited) `apache-
 
 To build and deploy and tag, we use:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn -P apache-release \
     clean deploy      \
+    -Dgit \
     -Dgpg.passphrase="this is not really my passphrase"
 
 git tag $ISISART-$ISISREL
@@ -338,7 +339,7 @@ The fix is simple: just copy `mvn.cmd` to `mvn.bat`.
 
 Switch to the directory containing the `simpleapp` example:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 cd ../example/application/simpleapp
 ----
@@ -348,7 +349,7 @@ cd ../example/application/simpleapp
 
 Set additional environment variables for the `simpleapp-archetype` artifact:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 export ISISART=simpleapp-archetype
 export ISISPAR=$ISISREL                 # <1>
@@ -369,7 +370,7 @@ Double check that the app:
 
 * builds:
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn clean install
 ----
@@ -381,14 +382,14 @@ mvn clean install
 
 * can be run using the mvn jetty plugin:
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn -pl webapp jetty:run
 ----
 
 * can be packaged and run using the mvn jetty-console plugin:
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn install -Dmavenmixin-jettyconsole
 mvn antrun:run -Dmavenmixin-jettyconsole
@@ -396,7 +397,7 @@ mvn antrun:run -Dmavenmixin-jettyconsole
 
 * can be deployed as a WAR
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 cp webapp/target/simpleapp.war $CATALINA_HOME/webapps/ROOT.war
 pushd $CATALINA_HOME/bin
@@ -414,7 +415,7 @@ popd
 
 * can be packaged and run using Docker:
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn install -Dmavenmixin-docker -D docker-plugin.imageName=test/simpleapp
 docker container run -p 8080:8080 --name simpleapp -d test/simpleapp
@@ -449,7 +450,7 @@ The Kitematic UI tool is handy for viewing and interacting with running containe
 
 To tidy up, kill and remove the container:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 docker container kill simpleapp
 docker container rm simpleapp
@@ -470,7 +471,7 @@ env | grep ISIS | sort
 
 Then, run the script (which also builds the archetype once generated) and switch to the archetype's directory:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 sh ../../../scripts/recreate-archetype.sh $ISISJIRA
 cd `pwd|sed 's/application/archetype/'`
@@ -486,7 +487,7 @@ The script automatically commits changes; if you wish use `git log` and
 _In a different session_, create a new app from the archetype.
 First set up environment variables:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 export ISISTMP=/c/tmp    # or as required
 export ISISCPN=simpleapp
@@ -495,7 +496,7 @@ env | grep ISIS | sort
 
 Then generate a new app from the archetype:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 rm -rf $ISISTMP/test-$ISISCPN
 
@@ -533,7 +534,7 @@ We therefore now just use `mvn deploy` directly, activating the (inherited) `apa
 
 To build and deploy and tag, we use:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn -P apache-release \
     clean deploy      \
@@ -561,7 +562,7 @@ We now repeat the archetype release procedure, this time for the `helloworld` ex
 
 Start by switching to the directory containing the `helloworld` example:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 cd ../../../example/application/helloworld
 ----
@@ -571,7 +572,7 @@ cd ../../../example/application/helloworld
 
 Update additional environment variables for the `helloworld-archetype` artifact:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 export ISISART=helloworld-archetype
 export ISISPAR=$ISISREL
@@ -609,7 +610,7 @@ mvn jetty:run
 
 * can be deployed as a WAR
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 cp target/helloworld.war $CATALINA_HOME/webapps/ROOT.war
 pushd $CATALINA_HOME/bin
@@ -619,7 +620,7 @@ tail -f ../logs/catalina.out
 +
 quit using:
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 sh shutdown.sh
 popd
@@ -637,7 +638,7 @@ Make sure you are in the correct directory and environment variables are correct
 
 To recreate the *helloworld* archetype:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 cd example/application/helloworld
 env | grep ISIS | sort
@@ -645,7 +646,7 @@ env | grep ISIS | sort
 
 Then, run the script (which also builds the archetype once generated) and then switch to the archetype's directory:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 sh ../../../scripts/recreate-archetype.sh $ISISJIRA
 cd `pwd|sed 's/application/archetype/'`
@@ -662,7 +663,7 @@ If you wish use `git log` and `git diff` (or a tool such as SourceTree) to revie
 _In a different session_, create a new app from the archetype.
 First set up environment variables:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 export ISISTMP=/c/tmp    # or as required
 export ISISCPN=helloworld
@@ -671,7 +672,7 @@ env | grep ISIS | sort
 
 Then generate a new app from the archetype:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 rm -rf $ISISTMP/test-$ISISCPN
 
@@ -687,7 +688,7 @@ mvn archetype:generate  \
 
 Build the newly generated app and test:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 cd myapp
 mvn clean install -o
@@ -701,7 +702,7 @@ Back in the original session, we upload (deploy) the archetype to the staging re
 
 To build and deploy and tag, we use:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 mvn -P apache-release \
     clean deploy      \
@@ -779,7 +780,7 @@ With the release now deployed we now need to bump the revision up to the next de
 
 In the root of the Apache Isis repo, we do this for all three ``pom.xml``s with:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" core/pom.xml
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/simpleapp/pom.xml
@@ -793,14 +794,14 @@ git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's to ${I
 
 Push the release branch to origin:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 git push -u origin $ISISBRANCH
 ----
 
 and also push tags for both core and the archetype:
 
-[source]
+[source,bash,subs="attributes+"]
 ----
 git push origin refs/tags/isis-$ISISREL:refs/tags/isis-$ISISREL-$ISISRC
 git push origin refs/tags/simpleapp-archetype-$ISISREL:refs/tags/simpleapp-archetype-$ISISREL-$ISISRC
@@ -832,30 +833,30 @@ Adapt as required:
 
 Use the following subject, eg:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-[VOTE] Apache Isis Core release 2.0.0-M1 RC1
+[VOTE] Apache Isis Core release {isisrel} RC1
 ----
 
 And use the following body:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 I've cut a release for Apache Isis Core and the two archetypes:
 
-* Core 2.0.0-M1
-* HelloWorld Archetype 2.0.0-M1
-* SimpleApp Archetype 2.0.0-M1
+* Core {isisrel}
+* HelloWorld Archetype {isisrel}
+* SimpleApp Archetype {isisrel}
 
 The source code artifacts have been uploaded to staging repositories on repository.apache.org:
 
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/core/isis/2.0.0-M1/isis-2.0.0-M1-source-release.zip
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/helloworld-archetype/2.0.0-M1/helloworld-archetype-2.0.0-M1-source-release.zip
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/simpleapp-archetype/2.0.0-M1/simpleapp-archetype-2.0.0-M1-source-release.zip
+* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/core/isis/{isisrel}/isis-{isisrel}-source-release.zip
+* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/helloworld-archetype/{isisrel}/helloworld-archetype-{isisrel}-source-release.zip
+* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/simpleapp-archetype/{isisrel}/simpleapp-archetype-{isisrel}-source-release.zip
 
 For each zip there is a corresponding signature file (append .asc to the zip's url).
 
-In the source code repo the code has been tagged as isis-2.0.0-M1-RC1, helloworld-archetype-2.0.0-M1-RC1 and simpleapp-archetype-2.0.0-M1-RC1; see https://github.com/apache/isis/tags
+In the source code repo the code has been tagged as isis-{isisrel}-RC1, helloworld-archetype-{isisrel}-RC1 and simpleapp-archetype-{isisrel}-RC1; see https://github.com/apache/isis/tags
 
 For instructions on how to verify the release (build from binaries and/or use in Maven directly), see https://isis.apache.org/guides/cgcom/cgcom.html#_cgcom_verifying-releases
 
@@ -868,7 +869,7 @@ Please verify the release and cast your vote.  The vote will be open for a minim
 
 Remember to update:
 
-* the version number (`2.0.0-M1` or whatever)
+* the version number (`{isisrel}` or whatever)
 * the release candidate number (`RC1` or whatever)
 * the repository id, as provided by Nexus earlier (`orgapacheisis-10xx` or whatever)
 

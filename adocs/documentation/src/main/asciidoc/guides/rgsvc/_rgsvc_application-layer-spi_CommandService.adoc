@@ -78,8 +78,7 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`Background
 
 All of these can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
-If contributions are not required in the UI, these can be suppressed either using security or by implementing a
-xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 
 

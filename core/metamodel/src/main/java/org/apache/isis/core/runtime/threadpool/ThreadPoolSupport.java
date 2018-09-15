@@ -32,6 +32,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -53,6 +54,9 @@ public final class ThreadPoolSupport implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(ThreadPoolSupport.class);
 
+    private final static int KEEP_ALIVE_TIME_SECS = 5;
+    private final static int QUEUE_CAPACITY = 5000;
+
     private final ThreadGroup group;
     private final ThreadPoolExecutor concurrentExecutor;
     private final ThreadPoolExecutor sequentialExecutor;
@@ -70,24 +74,26 @@ public final class ThreadPoolSupport implements AutoCloseable {
 
         final int corePoolSize = Runtime.getRuntime().availableProcessors();
         final int maximumPoolSize = Runtime.getRuntime().availableProcessors();
-        final int keepAliveTimeSecs = 5;
-        
+
         final ThreadFactory threadFactory = (Runnable r) -> new Thread(group, r);
 
-        final int queueCapacity = Integer.MAX_VALUE;
-        final Supplier<BlockingQueue<Runnable>> workQueueFactory = 
-                ()->new LinkedBlockingQueue<>(queueCapacity);
+        final Supplier<BlockingQueue<Runnable>> workQueueFactory =
+                ()->new LinkedBlockingQueue<>(QUEUE_CAPACITY);
         
         
         concurrentExecutor = new ThreadPoolExecutor(
                 corePoolSize,
                 maximumPoolSize,
-                keepAliveTimeSecs, TimeUnit.SECONDS,
+                KEEP_ALIVE_TIME_SECS,
+                TimeUnit.SECONDS,
                 workQueueFactory.get(),
                 threadFactory);
         
-        sequentialExecutor = new ThreadPoolExecutor(1, 1, // fixed size = 1
-                keepAliveTimeSecs, TimeUnit.MILLISECONDS,
+        sequentialExecutor = new ThreadPoolExecutor(
+                1,
+                1,
+                KEEP_ALIVE_TIME_SECS,
+                TimeUnit.SECONDS,
                 workQueueFactory.get(),
                 threadFactory);
         
@@ -124,13 +130,13 @@ public final class ThreadPoolSupport implements AutoCloseable {
     public List<Future<Object>> invokeAllSequential(@Nullable final List<Callable<Object>> callables) {
         return invokeAll(sequentialExecutor, callables);
     }
-    
+
     /**
      * Waits if necessary for the computation to complete. (Suppresses checked exceptions.)
      * @param futures
      * @return list of computation results.
      */
-    public static List<Object> join(@Nullable final List<Future<Object>> futures) {
+    public List<Object> join(@Nullable final List<Future<Object>> futures) {
         if (futures == null) {
             return null;
         }
@@ -148,31 +154,91 @@ public final class ThreadPoolSupport implements AutoCloseable {
         }
     }
 
+    public List<Object> joinGatherFailures(final List<Future<Object>> futures) {
+        if (futures == null) {
+            return null;
+        }
+
+        final long t0 = System.currentTimeMillis();
+        try{
+            final List<Object> returnValues = _Lists.newArrayList();
+            for (Future<Object> future : futures) {
+                final Object result;
+                try {
+                    result = future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    throw new RuntimeException(e);
+                }
+                returnValues.add(result);
+            }
+            return returnValues;
+        } finally {
+            final long t1 = System.currentTimeMillis();
+            LOG.info("join'ing {} tasks: waited {} milliseconds ", futures.size(), (t1-t0));
+        }
+    }
+
+
     /**
      * Waits if necessary for the computation to complete. (Suppresses checked exceptions.)
      * @param future
      * @return the computation result
      */
-    public static Object join(final Future<Object> future) {
+    public Object join(final Future<Object> future) {
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
             // ignore
+            return null;
         }
-        return null;
     }
 
-    // -- HELPER
+    // -- HELPERS
     
     private List<Future<Object>> invokeAll(ThreadPoolExecutor executor, @Nullable final List<Callable<Object>> callables) {
         if(isEmpty(callables)) {
             return Collections.emptyList();
         }
         try {
-            return executor.invokeAll(callables);
+            return executor.invokeAll(timed(executor, callables));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
+    private static List<Callable<Object>> timed(
+            final ThreadPoolExecutor executor,
+            final List<Callable<Object>> callables) {
+        final long queuedAt = System.currentTimeMillis();
+        return callables.stream()
+                .map(__ -> timed(__, executor.getQueue().size(), queuedAt))
+                .collect(Collectors.toList());
+    }
+
+    private static Callable<Object> timed(
+            final Callable<Object> callable,
+            final int queueSize,
+            final long queuedAt) {
+
+        return () -> {
+            final long startedAt = System.currentTimeMillis();
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("START: workQueue.size: {}, waited for: {}ms, {}",
+                        queueSize,
+                        startedAt - queuedAt,
+                        callable.toString());
+            }
+            try {
+                return callable.call();
+            } finally {
+                final long completedAt = System.currentTimeMillis();
+                if(LOG.isDebugEnabled()) {
+                    LOG.debug("END: completed in: {}ms, {}",
+                            completedAt - startedAt,
+                            callable.toString());
+                }
+            }
+        };
+    }
+    
 }

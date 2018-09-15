@@ -6,7 +6,8 @@
 
 
 
-The framework provides default implementations for many of the xref:../rgsvc/rgsvc.adoc#[domain services].  This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
+The framework provides default implementations for many of the xref:../rgsvc/rgsvc.adoc#[domain services].
+This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 
 For example, suppose you wanted to provide your own implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocaleProvider`].
 The trick is to use the xref:../rgant/rgant.adoc#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`] attribute, specifying a low number (typically `"1"`).

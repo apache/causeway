@@ -13,6 +13,7 @@ Similarly, rendering a collection causes a `CollectionDomainEvent` to be fired, 
 In fact, each event can be fired up to five times, with the event's `getEventPhase()` method indicating to the subscriber the phase:
 
 * *hide* phase allows the subscriber to hide the member
+
 * *disable* phase allows the subscriber to disable the member.
 +
 For a property this makes it read-only; for an action this makes it "greyed out".

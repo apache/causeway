@@ -5,9 +5,8 @@
 :_imagesdir: images/
 
 
-Existing projects written against v1.9.0 should run against v1.10.0 with only a few minor changes.  If you *do* encounter
-any difficulties then let us know via the link:https://isis.apache.org/versions/1.10.0/support.html#[users mailing list], so we can support you and document
-issues here.
+Existing projects written against v1.9.0 should run against v1.10.0 with only a few minor changes.
+If you *do* encounter any difficulties then let us know via the link:https://isis.apache.org/versions/1.10.0/support.html#[users mailing list], so we can support you and document issues here.
 
 
 == Remove references to `isis-viewer-wicket` parent pom.

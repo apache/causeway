@@ -6,13 +6,8 @@
 
 
 
-The `publishing()` attribute determines whether and how a modified object instance is published via the registered
-implementation of
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
-This attribute is also supported
-for xref:../rgant/rgant.adoc#_rgant-Action_publishing[actions], where it controls whether action invocations are published as
-events, and for xref:../rgant/rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`], where it controls whether
-property edits are published as events.
+The `publishing()` attribute determines whether and how a modified object instance is published via the registered implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+This attribute is also supported for xref:../rgant/rgant.adoc#_rgant-Action_publishing[actions], where it controls whether action invocations are published as events, and for xref:../rgant/rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`], where it controls whether property edits are published as events.
 
 A common use case is to notify external "downstream" systems of changes in the state of the Isis application.
 

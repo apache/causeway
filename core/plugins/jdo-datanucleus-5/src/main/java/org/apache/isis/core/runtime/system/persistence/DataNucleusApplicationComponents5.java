@@ -25,6 +25,17 @@ import java.util.Set;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Maps;
+
+import org.datanucleus.PersistenceNucleusContext;
+import org.datanucleus.PropertyNames;
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
+import org.datanucleus.metadata.MetaDataListener;
+import org.datanucleus.metadata.MetaDataManager;
+import org.datanucleus.store.StoreManager;
+import org.datanucleus.store.schema.SchemaAwareStoreManager;
+
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -36,16 +47,6 @@ import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusLifeCycleHelper;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPropertiesAware;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryFacet;
-import org.datanucleus.PersistenceNucleusContext;
-import org.datanucleus.PropertyNames;
-import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
-import org.datanucleus.metadata.MetaDataListener;
-import org.datanucleus.metadata.MetaDataManager;
-import org.datanucleus.store.StoreManager;
-import org.datanucleus.store.schema.SchemaAwareStoreManager;
-
-import com.google.common.base.Joiner;
-import com.google.common.collect.Maps;
 
 public class DataNucleusApplicationComponents5 implements ApplicationScopedComponent {
 
@@ -121,10 +122,20 @@ public class DataNucleusApplicationComponents5 implements ApplicationScopedCompo
 
     private static boolean isSchemaAwareStoreManager(Map<String,String> datanucleusProps) {
 
+        // this saves some time, but also avoids the (still undiagnosed) issue that instantiating the
+        // PMF can cause the ClassMetadata for the entity classes to be loaded in and cached prior to
+        // registering the CreateSchemaObjectFromClassData (to invoke 'create schema' first)
+        final String connectionUrl = datanucleusProps.get("javax.jdo.option.ConnectionURL");
+        if(connectionUrl != null) {
+            if (connectionUrl.startsWith("jdbc:hsqldb")) return true;
+            if (connectionUrl.startsWith("jdbc:sqlserver")) return true;
+        }
+
         // we create a throw-away instance of PMF so that we can probe whether DN has
         // been configured with a schema-aware store manager or not.
         final JDOPersistenceManagerFactory probePmf =
                 (JDOPersistenceManagerFactory) newPersistenceManagerFactory(datanucleusProps);
+
 
         try {
             final PersistenceNucleusContext nucleusContext = probePmf.getNucleusContext();

@@ -25,5 +25,3 @@ include::_ugvw_features_user-registration.adoc[leveloffset=+1]
 
 
 
-
-

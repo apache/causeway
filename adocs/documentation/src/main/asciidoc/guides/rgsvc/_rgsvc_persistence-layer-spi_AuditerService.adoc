@@ -67,6 +67,17 @@ log4j.additivity.org.apache.isis.applib.services.audit.AuditerServiceLogging=fal
 ----
 
 
+
+
+== Usage
+
+The typical way to indicate that an object should be audited is to annotate it with the xref:../rgant/rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
+
+
+== Alternative Implementations
+
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module provides an implementation of this service (`AuditerService`), and also provides a number of related domain services (`AuditingServiceMenu`, `AuditingServiceRepository` and `AuditingServiceContributions`).
+
 The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module also provides an implementation, `org.isisaddons.module.audit.dom.AuditerServiceUsingJdo`.
 This creates an audit record for each changed property (ie every time that `AuditerService#audit(...)` is called.
 
@@ -78,23 +89,11 @@ the secondary menu bar.
 * `AuditingServiceRepository` service to to search for persisted `AuditEntry``s.
 None of its actions are visible in the user interface (they are all `@Programmatic`).
 
-* `AuditingServiceContributions` which contrbutes collections to the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[ `HasTransactionId`] interface.
+* `AuditingServiceContributions` which contributes collections to the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[ `HasTransactionId`] interface.
 This will therefore display all audit entries that occurred in a given request/transaction, in other words whenever a command, a published event or another audit entry is displayed.
 
 
 These services can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
-
-If menu items or contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
-
-
-
-== Usage
-
-The typical way to indicate that an object should be audited is to annotate it with the xref:../rgant/rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
-
-
-== Alternative Implementations
-
 
 If menu items or contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 

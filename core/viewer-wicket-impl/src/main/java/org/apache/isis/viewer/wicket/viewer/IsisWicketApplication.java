@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import static java.util.Objects.requireNonNull;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collections;
@@ -28,7 +26,6 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Function;
@@ -90,9 +87,6 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
-import org.apache.isis.schema.utils.ChangesDtoUtils;
-import org.apache.isis.schema.utils.CommandDtoUtils;
-import org.apache.isis.schema.utils.InteractionDtoUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -126,6 +120,7 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
+import static java.util.Objects.requireNonNull;
 import net.ftlines.wicketsource.WicketSource;
 
 /**
@@ -401,20 +396,16 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             LOG.error("Failed to initialize", ex);
             throw ex;
         } finally {
-            ThreadPoolSupport.join(futures);
+            ThreadPoolSupport.getInstance().join(futures);
         }
     }
     
     protected List<Future<Object>> startBackgroundInitializationThreads() {
-        return ThreadPoolSupport.getInstance().invokeAll(_Lists.<Callable<Object>>of(
-
+        return ThreadPoolSupport.getInstance().invokeAll(_Lists.of(
                 Executors.callable(this::configureWebJars),
                 Executors.callable(this::configureWicketBootstrap),
-                Executors.callable(this::configureWicketSelect2),
-                Executors.callable(ChangesDtoUtils::init),
-                Executors.callable(InteractionDtoUtils::init),
-                Executors.callable(CommandDtoUtils::init)
-                ));
+                Executors.callable(this::configureWicketSelect2)
+            ));
     }
 
     /**

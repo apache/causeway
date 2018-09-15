@@ -135,7 +135,8 @@ public class MyAppApplication extends IsisWicketApplication {
 As explained above, in most cases Apache Isis' Wicket viewer will search for the first `ComponentFactory` that can render an element, and use it.
 In the case of (either standalone or parented) collections, though, Apache Isis will show all available views.
 
-For example, out-of-the-box Apache Isis provides a table view, a summary view (totals/sums/averages of any data), and a collapsed view. These are selected by clicking on the toolbar by each collection.
+For example, out-of-the-box Apache Isis provides a table view, a summary view (totals/sums/averages of any data), and a collapsed view.
+These are selected by clicking on the toolbar by each collection.
 
 Additional views though could render the objects in the collection as a variety of ways.
 Indeed, some third-party implementations in the (non-ASF) link:http://platform.incode.org[Incode Platform^] already exist, including:

@@ -20,8 +20,10 @@ public interface FactoryService {
     <T> T mixin(Class<T> mixinClass, Object mixedIn);  // <2>
 }
 ----
-<1> create a new non-persisted domain entity.  Any services will be automatically injected into the service.  The class must have a no-arg constructor.
-<2> programmatically instantiate a mixin, eg as annotated with xref:../rgant/rgant.adoc#_rgant-Mixin[`@Mixin`].  The class must have a 1-arg constructor of the appropriate type.
+<1> create a new non-persisted domain entity.  Any services will be automatically injected into the service.
+The class must have a no-arg constructor.
+<2> programmatically instantiate a mixin, for example as annotated with xref:../rgant/rgant.adoc#_rgant-Mixin[`@Mixin`].
+The class must have a 1-arg constructor of the appropriate type.
 
 
 The object is created in memory, but is not persisted.  The benefits of using this method (instead of simply using the Java `new` keyword) are:

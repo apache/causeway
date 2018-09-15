@@ -20,6 +20,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.IsisJdoRuntimePlugin;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public interface PersistenceSessionFactory {
 
@@ -29,6 +30,8 @@ public interface PersistenceSessionFactory {
             AuthenticationSession authenticationSession);
 
     void init(IsisConfigurationDefault configuration);
+
+    void catalogNamedQueries(final SpecificationLoader specificationLoader);
 
     boolean isInitialized();
 

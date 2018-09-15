@@ -29,7 +29,7 @@
 
     <groupId>org.apache.isis.docs</groupId>
     <artifactId>isis-documentation</artifactId>
-    <version>2.0.0-M1-SNAPSHOT</version>
+    <version>2.0.0-M2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Apache Isis Docs</name>
@@ -225,7 +225,7 @@
                                         <delete includeemptydirs="true">
                                             <fileset dir="${isis-site-latest.dir}" includes="**/*"/>
                                         </delete>
-p
+
                                         <echo message=""/>
                                         <echo message=""/>
                                         <mkdir 

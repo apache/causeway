@@ -57,6 +57,10 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderDefault2;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
+import org.apache.isis.schema.utils.ChangesDtoUtils;
+import org.apache.isis.schema.utils.CommandDtoUtils;
+import org.apache.isis.schema.utils.InteractionDtoUtils;
+
 
 public class IsisSessionFactoryBuilder {
 
@@ -169,7 +173,6 @@ public class IsisSessionFactoryBuilder {
             // instantiate the IsisSessionFactory
             isisSessionFactory = new IsisSessionFactory(deploymentCategory, servicesInjector, appManifest);
 
-
             // now, add the IsisSessionFactory itself into ServicesInjector, so it can be @javax.inject.Inject'd
             // into any internal domain services
             servicesInjector.addFallbackIfRequired(IsisSessionFactory.class, isisSessionFactory);
@@ -181,43 +184,88 @@ public class IsisSessionFactoryBuilder {
 
             // ... and make IsisSessionFactory available via the IsisContext static for those places where we cannot
             // yet inject.
+
             _Context.putSingleton(IsisSessionFactory.class, isisSessionFactory);
 
-            final List<Callable<Object>> tasks = _Lists.<Callable<Object>>of(
-                    ()->{
-                        // time to initialize...
-                        specificationLoader.init();
-                        // we need to do this before checking if the metamodel is valid.
-                        //
-                        // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
-                        // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
-                        // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
-                        // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
-                        // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
-                        // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
-                        // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
-                        //
-                        // also, required so that can still call isisSessionFactory#doInSession
-                        //
-                        // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
-                        // (including the metamodel invalid page)
-                        // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
-                        // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
-                        authenticationManager.init(deploymentCategory);
-                        authorizationManager.init(deploymentCategory);
-                        return null;
-                    },
-                    ()->{
-                        persistenceSessionFactory.init(configuration);
-                        return null;
-                    }
-                ); 
-
             // execute tasks using a threadpool
-            final List<Future<Object>> futures = ThreadPoolSupport.getInstance().invokeAll(tasks);
-            
+            final List<Future<Object>> futures = ThreadPoolSupport.getInstance().invokeAll(_Lists.of(
+                    new Callable<Object>() {
+                        @Override
+                        public Object call() {
+
+                            // time to initialize...
+                            specificationLoader.init();
+
+                            // we need to do this before checking if the metamodel is valid.
+                            //
+                            // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
+                            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
+                            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
+                            // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
+                            // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
+                            // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
+                            // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
+                            //
+                            // also, required so that can still call isisSessionFactory#doInSession
+                            //
+                            // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
+                            // (including the metamodel invalid page)
+                            // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
+                            // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
+
+                            authenticationManager.init(deploymentCategory);
+                            authorizationManager.init(deploymentCategory);
+
+                            return null;
+                        }
+                        public String toString() {
+                            return "SpecificationLoader#init()";
+                        }
+
+                    },
+                    new Callable<Object>() {
+                        @Override public Object call() {
+                            persistenceSessionFactory.init(configuration);
+                            return null;
+                        }
+                        public String toString() {
+                            return "persistenceSessionFactory#init(...)";
+                        }
+                    },
+                    new Callable<Object>() {
+                        @Override public Object call() throws Exception {
+                            ChangesDtoUtils.init();
+                            return null;
+                        }
+                        public String toString() {
+                            return "ChangesDtoUtils.init()";
+                        }
+                    },
+                    new Callable<Object>() {
+                        @Override public Object call() throws Exception {
+                            InteractionDtoUtils.init();
+                            return null;
+                        }
+                        public String toString() {
+                            return "InteractionDtoUtils.init()";
+                        }
+                    },
+                    new Callable<Object>() {
+                        @Override public Object call() throws Exception {
+                            CommandDtoUtils.init();
+                            return null;
+                        }
+                        public String toString() {
+                            return "CommandDtoUtils.init()";
+                        }
+                    }
+                )); 
+
+
             // wait on this thread for tasks to complete
-            ThreadPoolSupport.join(futures); 
+            ThreadPoolSupport.getInstance().joinGatherFailures(futures);
+
+            persistenceSessionFactory.catalogNamedQueries(specificationLoader);
 
             isisSessionFactory.constructServices();
 

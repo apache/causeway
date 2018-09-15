@@ -54,7 +54,7 @@ Note that the discriminator overrides the object type that may otherwise be infe
 
 |xref:../rgant/rgant.adoc#_rgant-PersistenceCapable[`@javax.jdo.annotations.` +
 `PersistenceCapable`]
-|Used to build Apache Isis' own internal identifier for objects.
+|Used to build Apache Isis' own internal identifier for objects. +
 
 If the `schema()` attribute is specified (and if xref:../rgant/rgant.adoc#\_rgant-Discriminator[`@Discriminator`] __hasn't__ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] and elsewhere.
 

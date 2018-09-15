@@ -47,7 +47,7 @@ xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-mod
 
 == Implementation
 
-Isis provides a default implementation of the service, `o.a.i.core.metamodel.services.swagger.SwaggerServiceDefault`.
+Apache Isis provides a default implementation of the service, `o.a.i.core.metamodel.services.swagger.SwaggerServiceDefault`.
 
 
 

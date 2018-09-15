@@ -166,7 +166,7 @@ One case however where a domain object might want to obtain the `Command` is to 
 It can do this using the `getExecutedIn()` method:
 
 Although not often needed, this then allows the domain object to access the `Command` object through the `CommandContext` service.
-To expand th above example:
+To expand the above example:
 
 
 [source,java]

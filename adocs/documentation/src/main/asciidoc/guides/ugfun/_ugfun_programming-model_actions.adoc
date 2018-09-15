@@ -255,13 +255,8 @@ public Order updateDiscount(
     return this;
 }
 ----
-<<<<<<< HEAD
 <1> Specifies the property precision using xref:../rgant/rgant.adoc#_rgant_Column_scale[`@Column#scale()`]
 <2> Specifies the corresponding parameter precision using xref:../rgant/rgant.adoc#_rgant-Digits[`@Digits#fraction()`].
-=======
-<1> Specifies the property precision using xref:../rgant/rgant.adoc#_rgant-Column_scale[`@Column#scale()`]
-<2> Specifies the corresponding parameter precision using xref:../rgant/rgant.adoc#_rgant-Digits_fraction[`@Digits#fraction()`].
->>>>>>> maint-1.16.1
 
 See also xref:../ugfun/ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[properties vs parameters].
 

@@ -10,6 +10,6 @@ In and of itself it provides no new behaviour.
 
 [TIP]
 ====
-As an alternative, consider simply annotating the view model class with {@link org.apache.isis.applib.annotation.ViewModel} annotation.
+As an alternative, consider simply annotating the view model class with the {@link org.apache.isis.applib.annotation.ViewModel} annotation.
 ====
 

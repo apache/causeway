@@ -45,17 +45,10 @@
         <compiler-plugin.target>1.8</compiler-plugin.target>
         <compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
 
-        <!-- override incode-build -->
-        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
-
         <!-- override incode-build (see dn5-xxx.version in isis-core-plugins-jdo-datanucleus-5) -->
         <datanucleus-api-jdo.version>5.1.9</datanucleus-api-jdo.version>
         <datanucleus-core.version>5.1.11</datanucleus-core.version>
-        <datanucleus-api-jdo.version>5.1.9</datanucleus-api-jdo.version>
-        <datanucleus-jodatime.version>5.1.0-release</datanucleus-jodatime.version>
         <hsqldb.version>2.3.4</hsqldb.version>
-
-        <failOnMissingWebXml>false</failOnMissingWebXml>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

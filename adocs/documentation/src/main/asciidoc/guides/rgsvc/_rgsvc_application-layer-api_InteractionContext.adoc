@@ -168,8 +168,7 @@ public class PropertyEdit extends Execution {
 
 === Alternate Implementations
 
-Apache Isis' default
-implementation of `InteractionContext` class is automatically registered (it is annotated with `@DomainService`).
+Apache Isis' default implementation of `InteractionContext` class is automatically registered (it is annotated with `@DomainService`).
 
 
 
