@@ -28,51 +28,27 @@
         <welcome-file>about/index.html</welcome-file>
     </welcome-file-list>
 
-	<listener>
-		<listener-class>org.apache.isis.core.webapp.IsisWebAppContextListener</listener-class>
-	</listener>
-	
-	<context-param>
-		<param-name>isis.viewer.wicket.app</param-name>
-		<param-value>domainapp.webapp.DomainApplication</param-value>
-	</context-param>
+    <!-- can be removed with axon >= 3.5 -->
+    <persistence-context-ref>
+        <persistence-context-ref-name>org.axonframework.common.jpa.ContainerManagedEntityManagerProvider/entityManager</persistence-context-ref-name>
+        <persistence-unit-name>noop</persistence-unit-name>
+    </persistence-context-ref>
 
-	<!-- this config value wins over that provided via environment variable PROTOTYPING=true/false -->
-	<!-- 	<context-param> -->
-	<!-- 		<param-name>isis.viewer.wicket.mode</param-name> -->
-	<!-- 		<param-value>development</param-value> -->
-	<!-- 	</context-param> -->
+    <listener>
+        <listener-class>org.apache.isis.core.webapp.IsisWebAppContextListener</listener-class>
+    </listener>
 
-
-    <!-- which configuration directory to read overloaded property files from -->
-    <!-- 
-    By default the framework will read configuration properties from the WEB-INF
-    directory (where this web.xml file resides).
-
-    If you want to read configuration files from some other external directory,
-    and the location of that external directory is the same/standardized for all
-    locations where you intend to deploy the WAR file, you can uncomment the
-    'isis.config.dir' context parameter, below, and set it to that standardized
-    location, eg:
 
     <context-param>
-        <param-name>isis.config.dir</param-name>
-        <param-value>/usr/local/conf</param-value>
+        <param-name>isis.viewer.wicket.app</param-name>
+        <param-value>domainapp.webapp.DomainApplication</param-value>
     </context-param>
 
-    If however the location of the external directory changes from one deployment
-    to another (eg system testing, UAT, production etc) then you should be
-    able to override the context parameter through the servlet container's own
-    (proprietary) configuration files.
+    <!-- this config value wins over that provided via environment variable PROTOTYPING=true/false -->
+<!-- 	<context-param> -->
+<!-- 		<param-name>isis.viewer.wicket.mode</param-name> -->
+<!-- 		<param-value>development</param-value> -->
+<!-- 	</context-param> -->
 
-    For example, if deploying to Tomcat, you can edit $CATALINA_BASE/conf/context.xml,
-    and add:
-
-    <Parameter name="isis.config.dir"
-               value="/usr/local/conf/systest"
-               override="false"/>
-
-    For more detail see: http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Context_Parameters
-    -->
 
 </web-app>

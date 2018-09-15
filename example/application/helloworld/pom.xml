@@ -43,15 +43,18 @@
         <compiler-plugin.target>1.8</compiler-plugin.target>
         <compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
 
-		<!-- workaround for DN enhancer failing with already registered bundle in case
-        	the mixin at https://github.com/danhaywood/java-mavenmixin-datanucleusenhance/blob/master/pom.xml
-        	has different DN versions than Isis' core.
-        	-->
-        <mavenmixin-datanucleusenhance.version>0.0.5</mavenmixin-datanucleusenhance.version>
-	    <datanucleus-maven-plugin.version>5.0.2</datanucleus-maven-plugin.version>
-	    <datanucleus-core.version>5.1.11</datanucleus-core.version>
-	    <datanucleus-api-jdo.version>5.1.9</datanucleus-api-jdo.version>
-	    <datanucleus-jodatime.version>5.1.0-release</datanucleus-jodatime.version>
+        <!-- override incode-build -->
+        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+
+        <!-- override incode-build (see dn5-xxx.version in isis-core-plugins-jdo-datanucleus-5) -->
+        <datanucleus-api-jdo.version>5.1.9</datanucleus-api-jdo.version>
+        <datanucleus-core.version>5.1.11</datanucleus-core.version>
+        <datanucleus-api-jdo.version>5.1.9</datanucleus-api-jdo.version>
+        <datanucleus-jodatime.version>5.1.0-release</datanucleus-jodatime.version>
+        <hsqldb.version>2.3.4</hsqldb.version>
+
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -60,6 +63,13 @@
 
     <build>
         <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+            </resource>
             <resource>
                 <filtering>false</filtering>
                 <directory>src/main/java</directory>
@@ -148,30 +158,30 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-applib</artifactId>
         </dependency>
-        
-	
-        <!-- ISIS CORE PLUGINS -->      
+
+
+        <!-- ISIS CORE PLUGINS -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-discovery-reflections</artifactId>
         </dependency>
-    
-      	<dependency>
+
+        <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-eventbus-axon</artifactId>
         </dependency>
-    
-    	<dependency>
+
+        <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-jaxrs-resteasy-3</artifactId>
         </dependency>
@@ -237,7 +247,9 @@
                         <version>${maven-war-plugin.version}</version>
                         <configuration>
                             <warName>${maven-war-plugin.warName}</warName>
-                            <packagingExcludes>%regex[WEB-INF/lib/(?!common-A|common-B).*.jar]</packagingExcludes>
+                            <packagingExcludes>
+                                %regex[WEB-INF/lib/(?!helloworld).*.jar]
+                            </packagingExcludes>
                             <archive>
                                 <manifest>
                                     <addClasspath>false</addClasspath>
