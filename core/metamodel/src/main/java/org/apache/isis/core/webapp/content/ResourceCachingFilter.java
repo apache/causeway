@@ -36,6 +36,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
+
 //@WebFilter(
 //        initParams = { @WebInitParam(name = "CacheTime", value = "86400") }, 
 //        urlPatterns = { 
@@ -144,6 +146,11 @@ public class ResourceCachingFilter implements Filter {
         httpDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
+    @Override
+    public void destroy() {
+        // nothing to do
+    }
+    
     /**
      * Do filter.
      *
@@ -178,13 +185,35 @@ public class ResourceCachingFilter implements Filter {
             httpResponse.addHeader(EXPIRES_HEADER, httpDateFormat.format(new Date(now + (this.cacheTime * MILLISECONDS_IN_SECOND))));
         }
         httpRequest.setAttribute(REQUEST_ATTRIBUTE, true);
-
-        chain.doFilter(servletRequest, servletResponse);
+        
+        // try to suppress java.io.IOException of kind 'client connection abort'
+        // 1) the TCP protocol (by design) does not provide a means to check, whether a
+        //    connection has been closed by the client
+        // 2) the exception thrown and the exception message text are specific to the
+        //    servlet-engine implementation, so we can only guess here
+        try {
+            chain.doFilter(servletRequest, servletResponse);    
+        } catch (IOException e) {
+            FluentException.of(e)
+            .suppressIf(this::isConnectionAbortException);
+        }
     }
 
-    @Override
-    public void destroy() {
-        // nothing to do
+    // -- HELPER
+
+    private boolean isConnectionAbortException(IOException e) {
+        // tomcat 9
+        if(e.getMessage().contains("An established connection was aborted by the software in your host machine")) {
+            return true;
+        }
+        // payara 4
+        if(e.getMessage().contains("Connection is closed")) {
+            return true;
+        }
+
+        return false;
     }
+
+
 
 }
