@@ -1,0 +1,358 @@
+[[ad]]
+= Architecture and Design
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+:numbered:
+:generate_pdf:
+
+
+This guide describes the internal architecture and design of the framework.
+
+[[__ad_modules]]
+== Maven modules
+
+[monotree]
+----
+> adocs/
+>> documentation/
+>> template/
+> core/               # see 'core', below
+> example/            # see 'archetypes', below
+> scripts/
+----
+
+
+=== core
+
+The core modules ....
+
+All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
+
+[monotree]
+----
+> core/
+>> .m2/                              # used in gitlab CI
+>> applib/                           # isis-core-applib
+>> commons/                          # isis-core-commons
+>> integtestsupport/                 # isis-core-integtestsupport
+>> log4j/                            # isis-core-log4j
+>> maven-plugin/                     # see 'maven plugins', below
+>> mavendeps/                        # see 'mavendeps', below
+>> runtime/                          # isis-core-runtime
+>> schema/                           # isis-core-schema
+>> security/                         # isis-core-security
+>> security-shiro/                   # isis-core-security-shiro
+>> specsupport/                      # isis-core-specsupport
+>> unittestsupport/                  # isis-core-unittestsupport
+>> unittestsupport-test/             # isis-core-unittestsupport-test
+>> viewer-restfulobjects-applib/     # isis-core-viewer-restfulobjects-applib
+>> viewer-restfulobjects-rendering/  # isis-core-viewer-restfulobjects-rendering
+>> viewer-restfulobjects-server/     # isis-core-viewer-restfulobjects-server
+>> viewer-wicket-applib/             # isis-core-viewer-wicket-applib
+>> viewer-wicket-impl/               # isis-core-viewer-wicket-impl
+>> viewer-wicket-model/              # isis-core-viewer-wicket-model
+>> viewer-wicket-ui/                 # isis-core-viewer-wicket-ui
+>> webdocker/                        # isis-webdocker
+>> webserver/                        # isis-core-webserver
+>> wrapper/                          # isis-core-wrapper
+----
+
+.core maven modules
+[cols="2a,4a", options="header"]
+|===
+
+| Module
+| Description
+
+| `isis-core-applib`
+| Core application library.
+
+| `isis-core-commons`
+| Commons library
+
+
+| `isis-core-integtestsupport`
+|
+
+| `isis-core-log4j`
+|
+
+| `isis-maven-plugin`
+|
+
+| `isis-core-metamodel`
+|
+
+| `isis-core-runtime`
+|
+
+| `isis-core-schema`
+|
+
+| `isis-core-security`
+|
+
+| `isis-core-security-shiro`
+|
+
+| `isis-core-specsupport`
+|
+
+| `isis-core-unittestsupport`
+|
+
+| `isis-core-unittestsupport-test`
+|
+
+| `isis-core-viewer-restfulobjects-applib`
+|
+
+| `isis-core-viewer-restfulobjects-rendering`
+|
+
+| `isis-core-viewer-restfulobjects-server`
+|
+
+| `isis-core-viewer-wicket-applib`
+|
+
+| `isis-core-viewer-wicket-impl`
+|
+
+| `isis-core-viewer-wicket-model`
+|
+
+| `isis-core-viewer-wicket-ui`
+|
+
+| `isis-webdocker`
+|
+
+| `isis-core-webserver`
+|
+
+| `isis-core-wrapper`
+|
+
+
+|===
+
+
+
+
+=== core/mavendeps
+
+The `core/mavendeps` modules ...
+
+All of these have the same Maven `groupId`, namely `org.apache.isis.mavendeps`.
+
+.mavendeps Modules
+[monotree]
+----
+> core
+>> mavendeps/
+>>> isis-mavendeps-intellij/    # isis-mavendeps-intellij
+>>> isis-mavendeps-testing/     # isis-mavendeps-testing
+>>> isis-mavendeps-webapp/      # isis-mavendeps-webapp
+----
+
+.core/mavendeps maven modules
+[cols="2a,4a", options="header"]
+|===
+
+| Module
+| Description
+
+| `isis-mavendeps-intellij`
+| Defunct.
+
+| `isis-mavendeps-testing`
+|
+
+| `isis-mavendeps-webapp`
+|
+
+|===
+
+
+
+
+=== core/mavenplugins
+
+There is a single Maven plugin module.
+Its Maven `groupId` is `org.apache.isis.tools`.
+
+.Plugin Modules
+[monotree]
+----
+> core/
+>> maven-plugin/                # isis-maven-plugin
+----
+
+
+[cols="2a,4a", options="header"]
+|===
+| Module
+| Description
+
+| `isis-maven-plugin`
+|
+
+
+|===
+
+
+
+=== archetypes
+
+[monotree]
+----
+> example/
+>> application/
+>>> helloworld/     # org.apache.isis.example.application:helloworld
+>>> simpleapp/      # org.apache.isis.example.application:simpleapp
+>>>> application/   # org.apache.isis.example.application:simpleapp-application
+>>>> module-simple/ # org.apache.isis.example.application:simpleapp-module-simple
+>>>> webapp/        # org.apache.isis.example.application:simpleapp-webapp
+>> archetype/
+>>> helloworld/     # org.apache.isis.archetype:helloworld-archetype
+>>> simpleapp/      # org.apache.isis.archetype:simpleapp-archetype
+----
+
+[cols="2a,4a", options="header"]
+|===
+| Module
+| Description
+
+| `helloworld`
+|
+
+| `simpleapp`
+|
+
+| `simpleapp-application`
+|
+
+| `simpleapp-module-simple`
+|
+
+| `simpleapp-webapp`
+|
+
+| `helloworld-archetype`
+|
+
+| `simpleapp-archetype`
+|
+
+|===
+
+
+
+[[__ad_metamodel]]
+== Metamodel
+
+The metamodel...
+
+
+
+[plantuml,_images/metamodel,png]
+--
+hide empty members
+'hide methods
+
+skinparam class {
+	BackgroundColor<<desc>> Cyan
+	BackgroundColor<<ppt>> LightGreen
+	BackgroundColor<<mi>> LightPink
+	BackgroundColor<<role>> LightYellow
+	BackgroundColor<<strategy>> White
+	BackgroundColor<<api>> White
+	BackgroundColor<<spi>> White
+	BackgroundColor<<internal>> LightGrey
+	BackgroundColor<<value>> White
+}
+
+
+package metamodel {
+
+    class Object\nSpecId<<value>> {
+        +type
+    }
+
+    class Object\nSpecification<<desc>> {
+        +objectSpecId
+        ....
+        -fullyQualifiedClassName
+    }
+
+    class Object\nMember {
+
+    }
+
+    class Object\nAction {
+
+    }
+
+    class Object\nAssociation {
+
+    }
+
+    class OneToOne\nAssociation {
+
+    }
+
+    class OneToMany\nAssociation {
+
+    }
+
+    interface FacetHolder {
+    }
+
+    class Object\nActionParameter {
+    }
+
+    class OneToOne\nActionParameter {
+    }
+
+    interface Facet {
+    }
+
+    class OneToMany\nActionParameter {
+    }
+}
+
+package runtime {
+    class Object\nAdapter {
+        +getSpecification()
+    }
+    class Oid {
+
+    }
+}
+
+
+
+Object\nSpecification -up-> Object\nSpecId
+Object\nSpecification -down-> "*" Object\nMember
+Object\nMember ^-down- Object\nAssociation
+Object\nMember ^-down- Object\nAction
+Object\nAssociation ^-down- OneToOne\nAssociation
+Object\nAssociation ^-down- OneToMany\nAssociation
+Object\nActionParameter ^-down- OneToOne\nActionParameter
+Object\nActionParameter ^-down- OneToMany\nActionParameter
+Object\nAction -left-> "*" Object\nActionParameter
+
+FacetHolder ^-.right- Object\nSpecification
+FacetHolder ^-.right- Object\nMember
+FacetHolder ^-.- Object\nActionParameter
+FacetHolder -left-> "*" Facet
+
+
+Object\nAdapter  -up-> Oid
+
+Oid -left-> Object\nSpecId
+
+--
+
