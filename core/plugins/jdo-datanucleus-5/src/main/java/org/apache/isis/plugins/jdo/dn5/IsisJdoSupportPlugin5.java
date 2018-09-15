@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apacha.isis.plugins.jdo.dn4;
+package org.apache.isis.plugins.jdo.dn5;
 
 import java.lang.reflect.Method;
 
@@ -23,9 +23,9 @@ import javax.annotation.Nullable;
 import org.apache.isis.core.metamodel.IsisJdoMetamodelPlugin;
 import org.apache.isis.core.metamodel.IsisJdoRuntimePlugin;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory4;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory5;
 
-public class IsisJdoSupportPlugin4 implements IsisJdoMetamodelPlugin, IsisJdoRuntimePlugin {
+public class IsisJdoSupportPlugin5 implements IsisJdoMetamodelPlugin, IsisJdoRuntimePlugin {
 
     @Override
     public boolean isPersistenceEnhanced(@Nullable Class<?> cls) {
@@ -42,7 +42,7 @@ public class IsisJdoSupportPlugin4 implements IsisJdoMetamodelPlugin, IsisJdoRun
 
     @Override
     public PersistenceSessionFactory getPersistenceSessionFactory(/*ConfigurationServiceInternal isisConfiguration*/) {
-        return new PersistenceSessionFactory4(/*isisConfiguration*/);
+        return new PersistenceSessionFactory5(/*isisConfiguration*/);
     }
 
 }
