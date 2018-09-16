@@ -23,10 +23,8 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
-
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
@@ -166,19 +164,18 @@ class Generation {
     @SuppressWarnings("unused")
     private void debugTraverseAllSpecs(final Collection<ObjectSpecification> allSpecs) {
         for (final ObjectSpecification objectSpec :  allSpecs) {
-            objectSpec.getAssociations(Contributed.INCLUDED);
-            objectSpec.getObjectActions(Contributed.INCLUDED);
+            objectSpec.streamAssociations(Contributed.INCLUDED)
+                .collect(Collectors.toList());
+            objectSpec.streamObjectActions(Contributed.INCLUDED)
+                .collect(Collectors.toList());
         }
     }
 
     @SuppressWarnings("unused")
     private void debugAllLoadedClasses(final Collection<ObjectSpecification> allSpecs) {
         final ImmutableList<String> specs = FluentIterable.from(allSpecs)
-                .transform(new Function<ObjectSpecification, String>() {
-                    @Nullable @Override public String apply(@Nullable final ObjectSpecification objectSpecification) {
-                        return objectSpecification.getCorrespondingClass().getName();
-                    }
-                })
+                .transform((final ObjectSpecification objectSpecification)->
+                        objectSpecification.getCorrespondingClass().getName())
                 .toSortedList(Ordering.natural());
         final String all = Joiner.on(",").join(specs);
         System.out.println(all);

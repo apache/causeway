@@ -27,6 +27,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.spec.Instance;
 
 /**
  * @deprecated - THIS CAN NEVER BE CALLED (BY JDO OBJECTSTORE AT LEAST)
@@ -57,7 +58,7 @@ public class LoadingCallbackFacetViaMethod extends LoadingCallbackFacetAbstract 
     }
 
     @Override
-    public void invoke(final ObjectAdapter adapter) {
+    public void invoke(final Instance adapter) {
         ObjectAdapter.InvokeUtils.invokeAll(methods, adapter);
     }
 

@@ -25,7 +25,6 @@ import com.google.common.base.Strings;
 
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -54,12 +53,10 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         if (Strings.isNullOrEmpty(value)) {
             return null;
         }
-        final Oid oid = RootOid.deStringEncoded(value);
+        final RootOid oid = RootOid.deStringEncoded(value);
         
-        //FIXME[ISIS-1976]
-        //final ObjectAdapter adapter = getPersistenceSession().lookupAdapterFor(oid);
-        //return ObjectAdapterMemento.createOrNull(adapter);
-        throw _Exceptions.notImplemented();
+        final ObjectAdapter adapter = getPersistenceSession().adapterFor(oid);
+        return ObjectAdapterMemento.createOrNull(adapter);
     }
 
     /**

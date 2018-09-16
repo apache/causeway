@@ -20,9 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.objectspecid.classname;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServiceUtil;
 
 public class ObjectSpecIdFacetDerivedFromDomainServiceAnnotationElseGetId extends ObjectSpecIdFacetAbstract {
 

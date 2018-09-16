@@ -22,6 +22,7 @@ package org.apache.isis.core.commons.lang;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
@@ -30,10 +31,8 @@ public class MethodUtil {
 
     private MethodUtil(){}
 
-    public static void invoke(final List<Method> methods, final Object object) {
-        for (final Method method : methods) {
-            MethodExtensions.invoke(method, object);
-        }
+    public static void invoke(final Collection<Method> methods, final Object object) {
+        methods.forEach(method->MethodExtensions.invoke(method, object));
     }
 
     /**

@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import java.util.Properties;
-
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 

@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -43,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
-import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
@@ -62,7 +61,7 @@ public class FacetProcessor implements ServicesInjectorAware {
      * {@link FacetFactory Facet factories}, in order they were
      * {@link #registerFactory(FacetFactory) registered}.
      */
-    private final List<FacetFactory> factories = Lists.newArrayList();
+    private final List<FacetFactory> factories = _Lists.newArrayList();
 
     /**
      * All method prefixes to check in {@link #recognizes(Method)}.
@@ -388,7 +387,7 @@ public class FacetProcessor implements ServicesInjectorAware {
         if (cachedMethodPrefixes != null) {
             return;
         }
-        cachedMethodPrefixes = Lists.newArrayList();
+        cachedMethodPrefixes = _Lists.newArrayList();
         for (final FacetFactory facetFactory : factories) {
             if (facetFactory instanceof MethodPrefixBasedFacetFactory) {
                 final MethodPrefixBasedFacetFactory methodPrefixBasedFacetFactory = (MethodPrefixBasedFacetFactory) facetFactory;
@@ -401,7 +400,7 @@ public class FacetProcessor implements ServicesInjectorAware {
         if (cachedMethodFilteringFactories != null) {
             return;
         }
-        cachedMethodFilteringFactories = Lists.newArrayList();
+        cachedMethodFilteringFactories = _Lists.newArrayList();
         for (final FacetFactory factory : factories) {
             if (factory instanceof MethodFilteringFacetFactory) {
                 final MethodFilteringFacetFactory methodFilteringFacetFactory = (MethodFilteringFacetFactory) factory;
@@ -414,7 +413,7 @@ public class FacetProcessor implements ServicesInjectorAware {
         if (cachedContributeeMemberFacetFactories != null) {
             return;
         }
-        cachedContributeeMemberFacetFactories = Lists.newArrayList();
+        cachedContributeeMemberFacetFactories = _Lists.newArrayList();
         for (final FacetFactory factory : factories) {
             if (factory instanceof ContributeeMemberFacetFactory) {
                 final ContributeeMemberFacetFactory memberOrderingFacetFactory = (ContributeeMemberFacetFactory) factory;
@@ -427,7 +426,7 @@ public class FacetProcessor implements ServicesInjectorAware {
         if (cachedPropertyOrCollectionIdentifyingFactories != null) {
             return;
         }
-        cachedPropertyOrCollectionIdentifyingFactories = Lists.newArrayList();
+        cachedPropertyOrCollectionIdentifyingFactories = _Lists.newArrayList();
         for (FacetFactory factory : factories) {
             if (factory instanceof PropertyOrCollectionIdentifyingFacetFactory) {
                 final PropertyOrCollectionIdentifyingFacetFactory identifyingFacetFactory = (PropertyOrCollectionIdentifyingFacetFactory) factory;
@@ -439,7 +438,7 @@ public class FacetProcessor implements ServicesInjectorAware {
     private static <K, T> List<T> getList(final Map<K, List<T>> map, final K key) {
         List<T> list = map.get(key);
         if (list == null) {
-            list = Lists.newArrayList();
+            list = _Lists.newArrayList();
             map.put(key, list);
         }
         return list;

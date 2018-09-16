@@ -21,6 +21,8 @@ package org.apache.isis.commons.internal.functions;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+import org.apache.isis.commons.internal.base._NullSafe;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -49,6 +51,21 @@ public final class _Predicates {
      */
     public static <T> Predicate<T> sameAs(T operand) {
         return arg-> arg == operand;
+    }
+
+    /**
+     * 
+     * @return a Predicate that always tests true
+     */
+    public static <T> Predicate<T> alwaysTrue() {
+        return __->true;
+    }
+
+    /**
+     * @return a Predicate that tests for the operand to be not null
+     */
+    public static <T> Predicate<T> isPresent() {
+        return _NullSafe::isPresent;
     }
     
 }

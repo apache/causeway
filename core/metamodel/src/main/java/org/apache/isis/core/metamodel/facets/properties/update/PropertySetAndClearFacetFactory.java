@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.update;
 
 import java.lang.reflect.Method;
+
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;

@@ -57,7 +57,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
     private static final Logger LOG = LoggerFactory.getLogger(ThreadPoolSupport.class);
 
     private final static int KEEP_ALIVE_TIME_SECS = 5;
-    private final static int QUEUE_CAPACITY = 5000;
+    private final static int QUEUE_CAPACITY = Integer.MAX_VALUE;
 
     private final ThreadGroup group;
     private final ThreadPoolExecutor concurrentExecutor;
@@ -81,8 +81,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
 
         final Supplier<BlockingQueue<Runnable>> workQueueFactory =
                 ()->new LinkedBlockingQueue<>(QUEUE_CAPACITY);
-        
-        
+
         concurrentExecutor = new ThreadPoolExecutor(
                 corePoolSize,
                 maximumPoolSize,

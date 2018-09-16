@@ -56,11 +56,12 @@ implements PersistenceQueryProcessor<T> {
             if(pojo instanceof Persistable) {
                 // an entity
                 adapter = persistenceSession.initializeMapAndCheckConcurrency((Persistable) pojo);
+                Assert.assertNotNull(adapter);
             } else {
                 // a value type
                 adapter = persistenceSession.adapterFor(pojo);
+                Assert.assertNotNull(adapter);
             }
-            Assert.assertNotNull(adapter);
             adapters.add(adapter);
         }
         return adapters;

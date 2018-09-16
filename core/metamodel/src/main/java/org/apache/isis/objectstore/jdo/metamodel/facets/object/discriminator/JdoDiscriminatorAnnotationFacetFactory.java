@@ -20,6 +20,7 @@
 package org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator;
 
 import javax.jdo.annotations.Discriminator;
+
 import com.google.common.base.Strings;
 
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;

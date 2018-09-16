@@ -22,8 +22,8 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -57,9 +57,11 @@ public class BulkActionsHelper implements Serializable {
         final ObjectSpecification objectSpec = getObjectSpecification(isisSessionFactory);
 
         final List<ActionType> actionTypes = inferActionTypes(isisSessionFactory);
-        List<ObjectAction> objectActions = objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, Predicates.<ObjectAction>alwaysTrue());
+        final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(actionTypes, Contributed.INCLUDED);
 
-        return objectActions.stream().filter(ObjectAction.Predicates.bulk()::apply).collect(Collectors.toList());
+        return objectActions
+                .filter(ObjectAction.Predicates.bulk())
+                .collect(Collectors.toList());
     }
 
     private ObjectSpecification getObjectSpecification(final IsisSessionFactory isisSessionFactory) {

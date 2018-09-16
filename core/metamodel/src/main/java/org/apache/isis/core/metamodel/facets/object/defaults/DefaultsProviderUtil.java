@@ -24,7 +24,6 @@ import com.google.common.base.Strings;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassUtil;
-import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public final class DefaultsProviderUtil {

@@ -24,7 +24,7 @@ package org.apache.isis.applib.adapters;
  * objects.
  *
  * <p>
- * Specifically, this interface embodies three related capabilties:
+ * Specifically, this interface embodies three related capabilities:
  * <ul>
  * <li>to parse a string representation and convert to an object.
  * <li>to provide a string representation of the object, for use as its title.
@@ -113,5 +113,13 @@ public interface Parser<T> {
      * <tt>May 2, 2007</tt>, but its editable form might be <tt>20070502</tt>.
      */
     String parseableTitleOf(T existing);
+    
+    /**
+     * The max length of objects that can be parsed (if any).
+     * A return type of -1 corresponds to unlimited.
+     */
+    default int maxLength() {
+        return -1;
+    }
 
 }

@@ -77,7 +77,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
             final InteractionInitiatedBy interactionInitiatedBy) {
         final Object choices =
                 ObjectAdapter.InvokeUtils.invokeAutofit(
-                        method, adapter, argumentsIfAvailable, getObjectAdapterProvider());
+                        method, adapter, argumentsIfAvailable);
         if (choices == null) {
             return _Constants.emptyObjects;
         }

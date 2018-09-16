@@ -18,9 +18,9 @@
  */
 package org.apache.isis.core.commons.lang;
 
-import javax.annotation.Nullable;
+import java.util.function.Function;
 
-import com.google.common.base.Function;
+import javax.annotation.Nullable;
 
 public final class ClassFunctions {
 

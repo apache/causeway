@@ -16,7 +16,7 @@
  */
 package org.apache.isis.applib.util;
 
-import java.util.Iterator;
+import java.util.BitSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -36,13 +36,21 @@ public class ToString<T> {
     public static <T> ToString<T> toString(String name, Function<? super T, ?> getter) {
         Objects.requireNonNull(name);
         Objects.requireNonNull(getter);
-        return new ToString<>(name, getter);
+        return new ToString<>(name, getter, false);
+    }
+    
+    public static <T> ToString<T> toStringOmmitIfAbsent(String name, Function<? super T, ?> getter) {
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(getter);
+        return new ToString<>(name, getter, true);
     }
 
     private final List<String> names = _Lists.newArrayList();
     private final List<Function<? super T, ?>> getters = _Lists.newArrayList();
+    private final BitSet ommitIfAbsent = new BitSet();
 
-    private ToString(String name, Function<? super T, ?> getter) {
+    private ToString(String name, Function<? super T, ?> getter, boolean ommitIfAbsent) {
+        addBit(ommitIfAbsent);
         names.add(name);
         getters.add(getter);
     }
@@ -50,6 +58,16 @@ public class ToString<T> {
     public ToString<T> thenToString(String name, Function<? super T, ?> getter){
         Objects.requireNonNull(name);
         Objects.requireNonNull(getter);
+        addBit(false);
+        names.add(name);
+        getters.add(getter);
+        return this;
+    }
+    
+    public ToString<T> thenToStringOmmitIfAbsent(String name, Function<? super T, ?> getter){
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(getter);
+        addBit(true);
         names.add(name);
         getters.add(getter);
         return this;
@@ -71,19 +89,33 @@ public class ToString<T> {
 
         Objects.requireNonNull(valueToStringFunction);
 
-        final Iterator<String> nameIterator = names.iterator();
+        final int[] index = {-1}; // value reference
 
         return String.format("%s{%s}",
 
+                //ommitIfAbsent.toString(),
                 target.getClass().getSimpleName(),
 
                 getters.stream()
+                .peek(__->index[0]++)
                 .map(getter->getter.apply(target))
+                .filter(value->value!=null || !ommitIfAbsent.get(index[0]))
                 .map(valueToStringFunction)
-                .map(valueLiteral->nameIterator.next()+"="+valueLiteral)
+                .map(valueLiteral->names.get(index[0])+"="+valueLiteral)
                 .collect(Collectors.joining(", "))
 
                 );
+    }
+    
+    // -- HELPER
+    
+    private void addBit(boolean bit) {
+        final int index = names.size();
+        if(bit) {
+            ommitIfAbsent.set(index);
+        } else {
+            ommitIfAbsent.clear(index);
+        }
     }
 
 }

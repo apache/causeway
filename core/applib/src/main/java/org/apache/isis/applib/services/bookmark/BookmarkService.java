@@ -85,7 +85,7 @@ public interface BookmarkService {
         /**
          * Required in order to recreate view models.
          */
-        DONT_RESET
+        DONT_REFRESH
     }
 
 

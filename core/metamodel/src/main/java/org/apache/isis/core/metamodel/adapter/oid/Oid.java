@@ -59,16 +59,15 @@ public interface Oid extends Encodable {
     boolean isViewModel();
 
     boolean isPersistent();
+    
+    default boolean isValue() {
+        return false;
+    }
 
     public static enum State {
-        PERSISTENT("P"),
-        TRANSIENT("T"),
-        VIEWMODEL("V");
-
-        private final String code;
-        private State(final String code) {
-            this.code = code;
-        }
+        PERSISTENT,
+        TRANSIENT,
+        VIEWMODEL;
 
         public boolean isTransient() {
             return this == TRANSIENT;
@@ -78,10 +77,6 @@ public interface Oid extends Encodable {
         }
         public boolean isPersistent() {
             return this == PERSISTENT;
-        }
-
-        public String getCode() {
-            return code;
         }
 
         public static State from(final Bookmark bookmark) {

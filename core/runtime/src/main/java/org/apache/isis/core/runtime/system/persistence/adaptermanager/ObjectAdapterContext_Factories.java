@@ -53,11 +53,6 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
     }
 
     @Override
-    public ObjectAdapter createStandaloneAdapter(final Object pojo) {
-        return createAdapter(pojo, null);
-    }
-
-    @Override
     public ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
         assert rootOid != null;
         return createAdapter(pojo, rootOid);
@@ -74,15 +69,13 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
     @Override
     public ObjectAdapter createCollectionAdapter(
             final Object pojo,
-            final ObjectAdapter parentAdapter,
+            final RootOid parentOid,
             final OneToManyAssociation otma) {
 
         Assert.assertNotNull(pojo);
 
-        final Oid parentOid = parentAdapter.getOid();
-
         // persistence of collection follows the parent
-        final ParentedCollectionOid collectionOid = new ParentedCollectionOid((RootOid) parentOid, otma);
+        final ParentedCollectionOid collectionOid = new ParentedCollectionOid(parentOid, otma);
         final ObjectAdapter collectionAdapter = createCollectionAdapter(pojo, collectionOid);
 
         // we copy over the type onto the adapter itself

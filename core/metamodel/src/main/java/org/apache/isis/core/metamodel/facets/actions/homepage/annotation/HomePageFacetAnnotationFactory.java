@@ -20,9 +20,12 @@
 package org.apache.isis.core.metamodel.facets.actions.homepage.annotation;
 
 import java.util.List;
+import java.util.stream.Stream;
+
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -66,22 +69,24 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
     private Visitor newValidatorVisitor() {
         return new MetaModelValidatorVisiting.SummarizingVisitor() {
 
-            private final List<String> annotated = Lists.newArrayList();
+            private final List<String> annotated = _Lists.newArrayList();
 
             @Override
             public boolean visit(ObjectSpecification objectSpec, ValidationFailures validationFailures) {
-                final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
-                for (ObjectAction objectAction : objectActions) {
-                    if(objectAction.containsFacet(HomePageFacet.class)) {
-                        final String fullIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();
+                final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(Contributed.EXCLUDED);
+                
+                objectActions
+                .filter(objectAction->objectAction.containsFacet(HomePageFacet.class))
+                .forEach(objectAction->{
+                    
+                    final String fullIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();
 
-                        // TODO: it would good to flag if the facet is found on any non-services, however
-                        // ObjectSpecification.isService(...) can only be trusted once a PersistenceSession exists.
-                        // this ought to be improved upon at some point...
-                        annotated.add(fullIdentifier);
-
-                    }
-                }
+                    // TODO: it would good to flag if the facet is found on any non-services, however
+                    // ObjectSpecification.isService(...) can only be trusted once a PersistenceSession exists.
+                    // this ought to be improved upon at some point...
+                    annotated.add(fullIdentifier);
+                });
+ 
                 return true; // keep searching
             }
 
@@ -89,7 +94,7 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
             public void summarize(ValidationFailures validationFailures) {
                 if(annotated.size()>1) {
                     for (String actionId : annotated) {
-                        final List<String> others = Lists.newArrayList(annotated);
+                        final List<String> others = _Lists.newArrayList(annotated);
                         others.remove(actionId);
                         final String nonServiceNamesStr = Joiner.on(", ").join(others);
                         validationFailures.add(

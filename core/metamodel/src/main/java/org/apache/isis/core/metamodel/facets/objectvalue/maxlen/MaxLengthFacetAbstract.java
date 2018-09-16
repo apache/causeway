@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.spec.ObjectAdapterUtils;
 
 public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract implements MaxLengthFacet {
 
@@ -44,7 +43,7 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
      */
     @Override
     public boolean exceeds(final ObjectAdapter adapter) {
-        final String str = ObjectAdapterUtils.unwrapObjectAsString(adapter);
+        final String str = ObjectAdapter.Util.unwrapAsString(adapter);
         if (str == null) {
             return false;
         }

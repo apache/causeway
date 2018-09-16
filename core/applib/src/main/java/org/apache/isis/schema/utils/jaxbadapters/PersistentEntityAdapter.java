@@ -29,7 +29,7 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
 
         final Bookmark bookmark = Bookmark.from(oidDto);
 
-        return bookmarkService.lookup(bookmark, BookmarkService.FieldResetPolicy.DONT_RESET);
+        return bookmarkService.lookup(bookmark, BookmarkService.FieldResetPolicy.DONT_REFRESH);
     }
 
     @Override

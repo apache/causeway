@@ -22,12 +22,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
@@ -355,21 +355,20 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             }
         }
 
-        for (final ObjectAction objectAction : serviceSpec.getObjectActions(
-                actionType, Contributed.INCLUDED, Predicates.<ObjectAction>alwaysTrue())) {
-
-            // skip if annotated to not be included in repository menu using legacy mechanism
-            if (objectAction.getFacet(NotInServiceMenuFacet.class) != null) {
-                continue;
-            }
-
+        final Stream<ObjectAction> objectActions = serviceSpec.streamObjectActions(actionType, Contributed.INCLUDED);
+        
+        objectActions
+        // skip if annotated to not be included in repository menu using legacy mechanism
+        .filter(objectAction->objectAction.getFacet(NotInServiceMenuFacet.class) == null)
+        .forEach(objectAction->{
             final MemberOrderFacet memberOrderFacet = objectAction.getFacet(MemberOrderFacet.class);
             String serviceName = memberOrderFacet != null? memberOrderFacet.name(): null;
             if(Strings.isNullOrEmpty(serviceName)){
                 serviceName = serviceSpec.getFacet(NamedFacet.class).value();
             }
             serviceActions.add(new ServiceAndAction(serviceName, serviceAdapter, objectAction));
-        }
+        });
+       
     }
 
     private static Predicate<ObjectAdapter> with(final DomainServiceLayout.MenuBar menuBar) {

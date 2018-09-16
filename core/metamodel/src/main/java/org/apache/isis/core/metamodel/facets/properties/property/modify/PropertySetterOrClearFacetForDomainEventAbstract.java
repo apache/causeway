@@ -48,7 +48,6 @@ import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
@@ -161,16 +160,9 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final ObjectAdapter newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        getPersistenceSessionServiceInternal().executeWithinTransaction(
-                new TransactionalClosure(){
-                    @Override
-                    public void execute() {
-                        doSetOrClearProperty(style, owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
-                    }
-                }
-                );
-
-
+        getPersistenceSessionServiceInternal().executeWithinTransaction(()->{
+            doSetOrClearProperty(style, owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
+        });
 
     }
 

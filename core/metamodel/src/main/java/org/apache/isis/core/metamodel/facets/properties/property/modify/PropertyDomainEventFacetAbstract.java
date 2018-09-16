@@ -19,13 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
+import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
+import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;

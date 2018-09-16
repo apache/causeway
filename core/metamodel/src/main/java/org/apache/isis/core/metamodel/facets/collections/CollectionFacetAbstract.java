@@ -25,8 +25,8 @@ import java.util.Iterator;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 
 public abstract class CollectionFacetAbstract extends FacetAbstract implements CollectionFacet {
 

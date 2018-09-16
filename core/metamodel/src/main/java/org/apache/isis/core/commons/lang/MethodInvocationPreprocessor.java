@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.commons.lang;
 
+import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -27,7 +29,6 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 
@@ -46,7 +47,7 @@ public class MethodInvocationPreprocessor {
     public static Object invoke(Method method, Object targetPojo, Object[] executionParameters)
             throws IllegalAccessException, InvocationTargetException {
 
-        if (_NullSafe.isEmpty(executionParameters)) {
+        if (isEmpty(executionParameters)) {
             return method.invoke(targetPojo, executionParameters);
         }
 
@@ -60,10 +61,15 @@ public class MethodInvocationPreprocessor {
             ++i;
         }
 
-        return method.invoke(targetPojo, adaptedExecutionParameters);
+        try {
+            return method.invoke(targetPojo, adaptedExecutionParameters);
+        } catch (IllegalArgumentException e) {
+            throw verboseArgumentException(parameterTypes, adaptedExecutionParameters, e);
+        }
     }
 
     // -- OBJECT ADAPTER
+
 
     /**
      * Replaces obj (if required) to be conform with the parameterType
@@ -110,5 +116,24 @@ public class MethodInvocationPreprocessor {
         return obj;
     }
 
+    private static IllegalArgumentException verboseArgumentException(
+            Class<?>[] parameterTypes, 
+            Object[] adaptedExecutionParameters,
+            IllegalArgumentException e) {
+        
+        final StringBuilder sb = new StringBuilder();
+        
+        for(int j=0;j<parameterTypes.length;++j) {
+            final Class<?> parameterType = parameterTypes[j];
+            final Object parameterValue = adaptedExecutionParameters[j];
+        
+            sb.append(String.format("expected-param-type[%d]: %s, got %s\n", 
+                    j, parameterType.getName(), parameterValue.getClass().getName()));
+        }
+        
+        // re-throw more verbose
+        return new IllegalArgumentException(sb.toString(), e);
+    }
 
+    
 }

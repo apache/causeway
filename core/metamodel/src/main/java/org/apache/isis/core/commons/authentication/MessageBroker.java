@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 public class MessageBroker implements Serializable {
 
@@ -32,8 +32,8 @@ public class MessageBroker implements Serializable {
 
     // -- constructor, fields
 
-    private final List<String> messages = Lists.newArrayList();
-    private final List<String> warnings = Lists.newArrayList();
+    private final List<String> messages = _Lists.newArrayList();
+    private final List<String> warnings = _Lists.newArrayList();
     private String applicationError;
 
     public MessageBroker() {

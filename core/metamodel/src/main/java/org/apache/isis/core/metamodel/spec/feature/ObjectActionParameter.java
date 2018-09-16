@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 import javax.annotation.Nullable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,9 +29,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 
 /**
  * Analogous to {@link ObjectAssociation}.
@@ -130,16 +130,12 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
 
     public static class Functions {
-        public static final Function<ObjectActionParameter, String> GET_NAME = new Function<ObjectActionParameter, String>() {
-            @Override public String apply(final ObjectActionParameter input) {
-                return input.getName();
-            }
-        };
-        public static final Function<ObjectActionParameter, Class<?>> GET_TYPE = new Function<ObjectActionParameter, Class<?>>() {
-            @Override public Class<?> apply(final ObjectActionParameter input) {
-                return input.getSpecification().getCorrespondingClass();
-            }
-        };
+        public static final Function<ObjectActionParameter, String> GET_NAME =
+                ObjectActionParameter::getName;
+        
+        public static final Function<ObjectActionParameter, Class<?>> GET_TYPE = 
+                (final ObjectActionParameter input) ->
+                    input.getSpecification().getCorrespondingClass();
 
         private Functions(){}
 
@@ -174,7 +170,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             }
 
             @Override
-            public boolean apply(@Nullable final ObjectActionParameter objectActionParameter) {
+            public boolean test(@Nullable final ObjectActionParameter objectActionParameter) {
                 if (!(objectActionParameter instanceof OneToManyActionParameter)) {
                     return false;
                 }
@@ -205,7 +201,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             }
 
             @Override
-            public boolean apply(@Nullable final ObjectActionParameter objectActionParameter) {
+            public boolean test(@Nullable final ObjectActionParameter objectActionParameter) {
                 if (!(objectActionParameter instanceof OneToOneActionParameter)) {
                     return false;
                 }

@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.properties.autocomplete;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
 
 public abstract class PropertyAutoCompleteFacetAbstract extends FacetAbstract implements PropertyAutoCompleteFacet {
 

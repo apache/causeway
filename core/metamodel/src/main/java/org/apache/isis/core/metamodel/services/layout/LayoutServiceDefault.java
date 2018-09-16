@@ -26,7 +26,6 @@ import java.util.zip.ZipOutputStream;
 
 import javax.xml.bind.Marshaller;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
 
@@ -99,13 +98,11 @@ public class LayoutServiceDefault implements LayoutService2 {
     public byte[] toZip(final Style style) {
         final Collection<ObjectSpecification> allSpecs = specificationLoader.allSpecifications();
         final Collection<ObjectSpecification> domainObjectSpecs = Collections2
-                .filter(allSpecs, new Predicate<ObjectSpecification>(){
-                    @Override
-                    public boolean apply(final ObjectSpecification input) {
-                        return  !input.isAbstract() &&
+                .filter(allSpecs,(final ObjectSpecification input) ->
+                        !input.isAbstract() &&
                                 (input.containsDoOpFacet(JdoPersistenceCapableFacet.class) ||
-                                        input.containsDoOpFacet(ViewModelFacet.class));
-                    }});
+                                        input.containsDoOpFacet(ViewModelFacet.class))
+                    );
         final byte[] bytes;
         try {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();

@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
+import java.util.function.Predicate;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -164,7 +164,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
-                will(returnValue(Lists.newArrayList(objectActionParameter)));
+                will(returnValue(_Lists.of(objectActionParameter)));
             }
         });
 
@@ -183,7 +183,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
-                will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
+                will(returnValue(_Lists.of(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
             }
         });
 
@@ -202,7 +202,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
                 will(returnValue(null));
 
                 oneOf(parentAction).getParameters(with(Expectations.<Predicate<ObjectActionParameter>>anything()));
-                will(returnValue(Lists.newArrayList(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
+                will(returnValue(_Lists.of(stubObjectActionParameterString, objectActionParameter, stubObjectActionParameterString2)));
             }
         });
 

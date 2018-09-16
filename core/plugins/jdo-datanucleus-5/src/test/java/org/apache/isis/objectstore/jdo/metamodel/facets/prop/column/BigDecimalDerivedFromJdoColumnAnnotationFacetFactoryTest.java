@@ -64,7 +64,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends Ab
         final BigDecimalValueFacet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof BigDecimalFacetDerivedFromJdoColumn);
-        assertThat(facet.getLength(), is(12));
+        assertThat(facet.getPrecision(), is(12));
         assertThat(facet.getScale(), is(3));
     }
 
@@ -76,7 +76,7 @@ public class BigDecimalDerivedFromJdoColumnAnnotationFacetFactoryTest extends Ab
         final BigDecimalValueFacet facet = facetedMethod.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof BigDecimalFacetDerivedFromJdoColumn);
-        assertThat(facet.getLength(), is(18));
+        assertThat(facet.getPrecision(), is(18));
     }
 
     public void testAnnotationDefaultsScaleIfMissing() throws Exception {

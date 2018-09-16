@@ -19,6 +19,7 @@
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -72,21 +72,13 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         
         if (spec.isParentedOrFreeCollection()) {
 
-            final Object recreatedPojo = persistenceSession.instantiateAndInjectServices(spec);
-            adapter = objectAdapterContext.addRecreatedPojoToCache(oid, recreatedPojo);
+            final Object recreatedPojo = objectAdapterContext.instantiateAndInjectServices(spec);
+            adapter = objectAdapterContext.recreatePojo(oid, recreatedPojo);
             adapter = populateCollection(adapter, (CollectionData) data);
 
         } else {
             Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
             RootOid typedOid = (RootOid) oid;
-
-            // remove adapter if already in the adapter manager maps, because
-            // otherwise would (as a side-effect) update the version to that of the current.
-            adapter = objectAdapterContext.lookupAdapterFor(typedOid);
-            if(adapter != null) {
-                objectAdapterContext.removeAdapterFromCache(adapter);
-            }
-
             // recreate an adapter for the original OID (with correct version)
             adapter = persistenceSession.adapterFor(typedOid);
 
@@ -172,19 +164,23 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
     
     private void updateFields(final ObjectAdapter object, final Data state) {
         final ObjectData od = (ObjectData) state;
-        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(Contributed.EXCLUDED);
-        for (final ObjectAssociation field : fields) {
+        final Stream<ObjectAssociation> fields = object.getSpecification().streamAssociations(Contributed.EXCLUDED);
+        
+        fields
+        .filter(field->{
             if (field.isNotPersisted()) {
                 if (field.isOneToManyAssociation()) {
-                    continue;
+                    return false;
                 }
                 if (field.containsFacet(PropertyOrCollectionAccessorFacet.class) && !field.containsFacet(PropertySetterFacet.class)) {
                     LOG.debug("ignoring not-settable field {}", field.getName());
-                    continue;
+                    return false;
                 }
             }
-            updateField(object, od, field);
-        }
+            return true;
+        })
+        .forEach(field->updateField(object, od, field));
+        
     }
 
     private void updateField(final ObjectAdapter objectAdapter, final ObjectData objectData, final ObjectAssociation objectAssoc) {
@@ -205,7 +201,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
 
     private void updateOneToManyAssociation(final ObjectAdapter objectAdapter, final OneToManyAssociation otma, final CollectionData collectionData) {
         final ObjectAdapter collection = otma.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
         final List<ObjectAdapter> original = _Lists.newArrayList();
         for (final ObjectAdapter adapter : facet.iterable(collection)) {
             original.add(adapter);

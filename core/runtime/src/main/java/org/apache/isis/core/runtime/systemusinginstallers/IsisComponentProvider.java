@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -232,7 +233,7 @@ public abstract class IsisComponentProvider {
                     "If an appManifest is provided then it must return a non-empty set of modules");
         }
 
-        return Iterables.transform(modules, ClassFunctions.packageNameOf());
+        return _Lists.transform(modules, ClassFunctions.packageNameOf());
     }
 
     protected String classNamesFrom(final List<?> objectsOrClasses) {
