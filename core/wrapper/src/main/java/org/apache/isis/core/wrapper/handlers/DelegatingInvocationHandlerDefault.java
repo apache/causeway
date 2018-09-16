@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -56,8 +57,8 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
 
         try {
             equalsMethod = delegate.getClass().getMethod("equals", new Class[] { Object.class });
-            hashCodeMethod = delegate.getClass().getMethod("hashCode", new Class[] {});
-            toStringMethod = delegate.getClass().getMethod("toString", new Class[] {});
+            hashCodeMethod = delegate.getClass().getMethod("hashCode", _Constants.emptyClasses);
+            toStringMethod = delegate.getClass().getMethod("toString", _Constants.emptyClasses);
         } catch (final NoSuchMethodException e) {
             // ///CLOVER:OFF
             throw new RuntimeException("An Object method could not be found: " + e.getMessage());
@@ -81,7 +82,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
 
     protected void resolveIfRequired(final Object domainObject) {
         if (resolveObjectChangedEnabled) {
-            getPersistenceSession().resolve(domainObject);
+            getPersistenceSession().refreshRootInTransaction(domainObject);
         }
     }
 

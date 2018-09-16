@@ -20,9 +20,10 @@ package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -116,17 +117,13 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
                         return;
                     }
 
-                    final List<String> associationNames = Lists.newArrayList();
-
-                    final List<ObjectAssociation> associations = thisSpec.getAssociations(Contributed.EXCLUDED);
-                    for (ObjectAssociation association: associations) {
-                        final String associationName = association.getName();
+                    final Stream<ObjectAssociation> associations = thisSpec.streamAssociations(Contributed.EXCLUDED);
+                    
+                    final List<String> associationNames = associations
+                        .map(ObjectAssociation::getName)
                         // it's okay to have an "association" called "Id" (corresponding to getId() method)
-                        if("Id".equalsIgnoreCase(associationName)) {
-                            continue;
-                        }
-                        associationNames.add(associationName);
-                    }
+                        .filter(associationName->!"Id".equalsIgnoreCase(associationName))
+                        .collect(Collectors.toList());
 
                     if(associationNames.isEmpty()) {
                         return;

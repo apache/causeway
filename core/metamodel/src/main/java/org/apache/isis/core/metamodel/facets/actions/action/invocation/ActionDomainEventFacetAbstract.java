@@ -19,16 +19,16 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
-import java.util.Map;
-
-import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
-import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
+import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
+import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -42,8 +42,8 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class ActionDomainEventFacetAbstract
 extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
@@ -120,8 +120,15 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
     }
 
     private static ObjectAdapter[] argumentAdaptersFrom(final InteractionContext<? extends InteractionEvent> ic) {
-        final Map<Integer, ObjectAdapter> contributeeAsMap = ic.getContributeeAsMap();
-        return contributeeAsMap.isEmpty() ? null : new ObjectAdapter[]{contributeeAsMap.get(0)};
+        final Tuple2<Integer, ObjectAdapter> contributee = ic.getContributeeWithParamIndex();
+        
+        if(contributee!=null) {
+            int paramIndex = contributee.get_1(); 
+            ObjectAdapter adapter = contributee.get_2();
+            return new ObjectAdapter[]{paramIndex==0 ? adapter : null};
+        }
+        
+        return null;
     }
 
     @Override
@@ -147,13 +154,13 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
         return null;
     }
 
-    protected Class eventType() {
+    protected Class<?> eventType() {
         return value();
     }
 
     public Class<? extends ActionDomainEvent<?>> getEventType() {
         //noinspection unchecked
-        return eventType();
+        return _Casts.uncheckedCast(eventType());
     }
 
 }

@@ -20,6 +20,8 @@ package org.apache.isis.core.metamodel.services.appfeat;
 
 import java.util.Comparator;
 import java.util.SortedSet;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -30,11 +32,7 @@ import org.apache.isis.applib.util.Equality;
 import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 /**
  * Canonical application feature, identified by {@link ApplicationFeatureId},
@@ -47,11 +45,20 @@ import com.google.common.collect.Sets;
  */
 public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
-    public static abstract class PropertyDomainEvent<T> extends IsisApplibModule.PropertyDomainEvent<ApplicationFeature, T> {}
+    public static abstract class PropertyDomainEvent<T> 
+    extends IsisApplibModule.PropertyDomainEvent<ApplicationFeature, T> {
+        private static final long serialVersionUID = 1L;
+    }
 
-    public static abstract class CollectionDomainEvent<T> extends IsisApplibModule.CollectionDomainEvent<ApplicationFeature, T> {}
+    public static abstract class CollectionDomainEvent<T> 
+    extends IsisApplibModule.CollectionDomainEvent<ApplicationFeature, T> {
+        private static final long serialVersionUID = 1L;
+    }
 
-    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<ApplicationFeature> {}
+    public static abstract class ActionDomainEvent 
+    extends IsisApplibModule.ActionDomainEvent<ApplicationFeature> {
+        private static final long serialVersionUID = 1L;
+    }
 
     // -- constants
 
@@ -193,7 +200,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
 
     // -- packages: Contents
-    private final SortedSet<ApplicationFeatureId> contents = Sets.newTreeSet();
+    private final SortedSet<ApplicationFeatureId> contents = _Sets.newTreeSet();
 
     @Programmatic
     public SortedSet<ApplicationFeatureId> getContents() {
@@ -210,7 +217,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
 
     // -- classes: Properties, Collections, Actions
-    private final SortedSet<ApplicationFeatureId> properties = Sets.newTreeSet();
+    private final SortedSet<ApplicationFeatureId> properties = _Sets.newTreeSet();
 
     @Programmatic
     public SortedSet<ApplicationFeatureId> getProperties() {
@@ -219,7 +226,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
 
 
-    private final SortedSet<ApplicationFeatureId> collections = Sets.newTreeSet();
+    private final SortedSet<ApplicationFeatureId> collections = _Sets.newTreeSet();
     @Programmatic
     public SortedSet<ApplicationFeatureId> getCollections() {
         ApplicationFeatureType.ensureClass(this.getFeatureId());
@@ -227,7 +234,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     }
 
 
-    private final SortedSet<ApplicationFeatureId> actions = Sets.newTreeSet();
+    private final SortedSet<ApplicationFeatureId> actions = _Sets.newTreeSet();
 
     @Programmatic
     public SortedSet<ApplicationFeatureId> getActions() {
@@ -262,12 +269,8 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
     public static class Functions {
         private Functions(){}
 
-        public static final Function<? super ApplicationFeature, ? extends String> GET_FQN = new Function<ApplicationFeature, String>() {
-            @Override
-            public String apply(final ApplicationFeature input) {
-                return input.getFeatureId().getFullyQualifiedName();
-            }
-        };
+        public static final Function<ApplicationFeature, String> GET_FQN = 
+                (ApplicationFeature input)->input.getFeatureId().getFullyQualifiedName();
 
     }
 
@@ -275,21 +278,14 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
         private Predicates(){}
 
         public static Predicate<ApplicationFeature> packageContainingClasses(
-                final ApplicationMemberType memberType, final ApplicationFeatureRepositoryDefault applicationFeatures) {
-            return new Predicate<ApplicationFeature>() {
-                @Override
-                public boolean apply(final ApplicationFeature input) {
-                    // all the classes in this package
-                    final Iterable<ApplicationFeatureId> classIds =
-                            Iterables.filter(input.getContents(),
-                                    ApplicationFeatureId.Predicates.isClassContaining(memberType, applicationFeatures));
-                    return classIds.iterator().hasNext();
-                }
-            };
+                final ApplicationMemberType memberType, 
+                final ApplicationFeatureRepositoryDefault applicationFeatures) {
+            
+            return (final ApplicationFeature input) ->
+                    input.getContents().stream() // all the classes in this package
+                    .anyMatch(ApplicationFeatureId.Predicates.isClassContaining(memberType, applicationFeatures));
         }
     }
-
-
 
     // -- equals, hashCode, compareTo, toString
 

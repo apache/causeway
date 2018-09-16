@@ -20,6 +20,7 @@ import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
@@ -298,26 +299,29 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
     private static ObjectAction findActionElseNull(
             final ObjectSpecification specification,
             final String actionId) {
-        final List<ObjectAction> objectActions = specification.getObjectActions(Contributed.INCLUDED);
-        for (final ObjectAction objectAction : objectActions) {
-            if(objectAction.getIdentifier().toClassAndNameIdentityString().equals(actionId)) {
-                return objectAction;
-            }
-        }
-        return null;
+        final Stream<ObjectAction> objectActions = specification.streamObjectActions(Contributed.INCLUDED);
+        
+        return objectActions
+            .filter(objectAction->objectAction.getIdentifier().toClassAndNameIdentityString().equals(actionId))
+            .findAny()
+            .orElse(null);
     }
 
     private static OneToOneAssociation findOneToOneAssociationElseNull(
             final ObjectSpecification specification,
             final String propertyId) {
-        final List<ObjectAssociation> associations = specification.getAssociations(Contributed.INCLUDED);
-        for (final ObjectAssociation association : associations) {
-            if( association.getIdentifier().toClassAndNameIdentityString().equals(propertyId) &&
-                    association instanceof OneToOneAssociation) {
-                return (OneToOneAssociation) association;
-            }
-        }
-        return null;
+        
+        final Stream<ObjectAssociation> associations = specification.streamAssociations(Contributed.INCLUDED);
+        
+        return associations
+            .filter(association->
+                association.getIdentifier().toClassAndNameIdentityString().equals(propertyId) &&
+                        association instanceof OneToOneAssociation
+            )
+            .findAny()
+            .map(association->(OneToOneAssociation) association)
+            .orElse(null);
+        
     }
 
     private ObjectAdapter[] argAdaptersFor(final ActionDto actionDto) {

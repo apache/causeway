@@ -20,6 +20,10 @@
 package org.apache.isis.core.runtime.system.transaction;
 
 import java.util.UUID;
+import java.util.function.Supplier;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -31,8 +35,6 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class IsisTransactionManager implements SessionScopedComponent {
 
@@ -126,18 +128,19 @@ public class IsisTransactionManager implements SessionScopedComponent {
      *  started here, or will ensure that an already-in-progress transaction cannot commit.
      * </p>
      */
-    public void executeWithinTransaction(final TransactionalClosure closure) {
-        executeWithinTransaction(null, closure);
+    public void executeWithinTransaction(final Runnable task) {
+        executeWithinTransaction(null, task);
     }
+    
     public void executeWithinTransaction(
             final Command existingCommandIfAny,
-            final TransactionalClosure closure) {
+            final Runnable task) {
         final boolean initiallyInTransaction = inTransaction();
         if (!initiallyInTransaction) {
             startTransaction(existingCommandIfAny);
         }
         try {
-            closure.execute();
+            task.run();
             if (!initiallyInTransaction) {
                 endTransaction();
             }
@@ -172,18 +175,19 @@ public class IsisTransactionManager implements SessionScopedComponent {
      *  started here, or will ensure that an already-in-progress transaction cannot commit.
      *  </p>
      */
-    public <Q> Q executeWithinTransaction(final TransactionalClosureWithReturn<Q> closure) {
-        return executeWithinTransaction(null, closure);
+    public <Q> Q executeWithinTransaction(final Supplier<Q> task) {
+        return executeWithinTransaction(null, task);
     }
+    
     public <Q> Q executeWithinTransaction(
             final Command existingCommandIfAny,
-            final TransactionalClosureWithReturn<Q> closure) {
+            final Supplier<Q> task) {
         final boolean initiallyInTransaction = inTransaction();
         if (!initiallyInTransaction) {
             startTransaction(existingCommandIfAny);
         }
         try {
-            final Q retVal = closure.execute();
+            final Q retVal = task.get();
             if (!initiallyInTransaction) {
                 endTransaction();
             }

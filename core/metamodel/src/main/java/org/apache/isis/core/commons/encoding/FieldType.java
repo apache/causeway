@@ -31,9 +31,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.commons.internal.context._Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.isis.commons.internal.context._Context;
 
 /**
  * Typesafe writing and reading of fields, providing some level of integrity

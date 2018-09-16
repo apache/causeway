@@ -56,7 +56,7 @@ implements TreeNodeValueFacet {
     }
 
     public TreeNodeValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, VALUE_TYPE, TYPICAL_LENGTH, null, Immutability.IMMUTABLE,
+        super(type(), holder, VALUE_TYPE, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE,
                 EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
     }
 

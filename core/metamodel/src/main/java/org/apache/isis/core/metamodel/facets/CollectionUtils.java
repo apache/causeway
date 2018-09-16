@@ -35,7 +35,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.isis.commons.internal.base._Casts;
@@ -67,7 +66,7 @@ public final class CollectionUtils {
     private final static Map<Class<?>, Function<Iterable<Object>, Object>> factoriesByType = _With.hashMap(
             map-> {
                 // specific list implementations
-                map.put(CopyOnWriteArrayList.class, Lists::newCopyOnWriteArrayList);
+                map.put(CopyOnWriteArrayList.class, _Lists::newCopyOnWriteArrayList);
                 map.put(LinkedList.class, _Lists::newLinkedList);
                 map.put(ArrayList.class, _Lists::newArrayList);
                 map.put(AbstractList.class, _Lists::newArrayList);

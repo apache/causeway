@@ -19,9 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import java.util.List;
-
-import com.google.common.base.Predicate;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 
@@ -39,32 +37,36 @@ public interface ObjectAssociationContainer {
     /**
      * Return all the fields that exist in an object of this specification,
      * although they need not all be accessible or visible.
-     */
-    List<ObjectAssociation> getAssociations(Contributed contributed);
-
-    /**
-     * Return all {@link ObjectAssociation}s matching the supplied filter.
      *
      * To get the statically visible fields (where any invisible and
-     * unauthorised fields have been removed) use
+     * unauthorized fields have been removed) use
      * <tt>ObjectAssociationFilters#staticallyVisible(...)</tt>
      *
-     * @see Predicates
      */
-    List<ObjectAssociation> getAssociations(Contributed contributed, Predicate<ObjectAssociation> predicate);
+    Stream<ObjectAssociation> streamAssociations(Contributed contributed);
 
     /**
      * All {@link ObjectAssociation association}s that represent
      * {@link OneToOneAssociation properties}.
+     * 
      */
-    List<OneToOneAssociation> getProperties(Contributed contributed);
-
+    default Stream<OneToOneAssociation> streamProperties(Contributed contributed) {
+        return streamAssociations(contributed)
+                .filter(ObjectAssociation.Predicates.PROPERTIES)
+                .map(x->(OneToOneAssociation)x);
+    }
+    
     /**
      * All {@link ObjectAssociation association}s that represents
      * {@link OneToManyAssociation collections}.
      *
      * @return
+     * 
      */
-    List<OneToManyAssociation> getCollections(Contributed contributed);
+    default Stream<OneToManyAssociation> streamCollections(Contributed contributed){
+        return streamAssociations(contributed)
+                .filter(ObjectAssociation.Predicates.COLLECTIONS)
+                .map(x->(OneToManyAssociation)x);
+    }
 
 }

@@ -54,7 +54,7 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
 
     public BigIntegerValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
 
-        super(type(), holder, BigInteger.class, TYPICAL_LENGTH, null, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
+        super(type(), holder, BigInteger.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
         format = determineNumberFormat("value.format.int");
     }
 

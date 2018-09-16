@@ -21,6 +21,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
+
+import com.google.common.base.Strings;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -45,6 +51,8 @@ import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -105,11 +113,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib.layout.grid.Grid> implements GridSystemService<G> {
 
@@ -207,7 +210,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
         final Map<String, OneToManyAssociation> oneToManyAssociationById =
                 ObjectMember.Util.mapById(getOneToManyAssociations(objectSpec));
         final Map<String, ObjectAction> objectActionById =
-                ObjectMember.Util.mapById(objectSpec.getObjectActions(Contributed.INCLUDED));
+                ObjectMember.Util.mapById(objectSpec.streamObjectActions(Contributed.INCLUDED));
 
 
         final AtomicInteger propertySequence = new AtomicInteger(0);
@@ -355,14 +358,20 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
         });
     }
 
-
-    protected static List<OneToOneAssociation> getOneToOneAssociations(final ObjectSpecification objectSpec) {
-        List associations = objectSpec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Predicates.PROPERTIES);
-        return associations;
+    protected static Stream<OneToOneAssociation> getOneToOneAssociations(final ObjectSpecification objectSpec) {
+        @SuppressWarnings("rawtypes")
+        Stream associations = objectSpec
+                .streamAssociations(Contributed.INCLUDED)
+                .filter(ObjectAssociation.Predicates.PROPERTIES);
+        return _Casts.uncheckedCast(associations);
     }
-    protected static List<OneToManyAssociation> getOneToManyAssociations(final ObjectSpecification objectSpec) {
-        List associations = objectSpec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Predicates.COLLECTIONS);
-        return associations;
+
+    protected static Stream<OneToManyAssociation> getOneToManyAssociations(final ObjectSpecification objectSpec) {
+        @SuppressWarnings("rawtypes")
+        Stream associations = objectSpec
+                .streamAssociations(Contributed.INCLUDED)
+                .filter(ObjectAssociation.Predicates.COLLECTIONS);
+        return _Casts.uncheckedCast(associations);
     }
 
 
@@ -384,9 +393,9 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
      * Returns a 2-element tuple of [first-second, second-first]
      */
     protected static <T> Tuple<List<T>> surplusAndMissing(final Collection<T> first, final Collection<T> second){
-        final List<T> firstNotSecond = Lists.newArrayList(first);
+        final List<T> firstNotSecond = _Lists.newArrayList(first);
         firstNotSecond.removeAll(second);
-        final List<T> secondNotFirst = Lists.newArrayList(second);
+        final List<T> secondNotFirst = _Lists.newArrayList(second);
         secondNotFirst.removeAll(first);
         return Tuple.of(firstNotSecond, secondNotFirst);
     }

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
@@ -31,7 +31,7 @@ public final class AuthenticatorFuncs {
     public static Predicate<Authenticator> compatibleWith(final AuthenticationRequest request) {
         return new Predicate<Authenticator>() {
             @Override
-            public boolean apply(final Authenticator authenticator) {
+            public boolean test(final Authenticator authenticator) {
                 return authenticator.canAuthenticate(request.getClass());
             }
         };

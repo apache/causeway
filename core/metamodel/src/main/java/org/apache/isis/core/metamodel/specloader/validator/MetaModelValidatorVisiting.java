@@ -22,8 +22,7 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
@@ -53,7 +52,7 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
 
     private void validateAll(final ValidationFailures validationFailures) {
 
-        final List<ObjectSpecification> specsValidated = Lists.newArrayList();
+        final List<ObjectSpecification> specsValidated = _Lists.newArrayList();
 
         while(validateSpecs(specsValidated, validationFailures)) {
             // validate in a loop, because the act of validating might cause additional specs to be uncovered

@@ -27,13 +27,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodUtil;
@@ -164,14 +162,6 @@ public class FacetedMethodsBuilder {
 
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("finalizing inspector {}", this);
-        }
-    }
-
     // ////////////////////////////////////////////////////////////////////////////
     // Class and stuff immediately derived from class
     // ////////////////////////////////////////////////////////////////////////////
@@ -214,15 +204,6 @@ public class FacetedMethodsBuilder {
 
     }
 
-    // REVIEW: good news - looks like this hacky code is unused and so can be deleted.
-    private static boolean isPrimitiveOrJdkOrJodaOrGuava(final Class<?> cls) {
-        if(cls.isPrimitive()) {
-            return true;
-        }
-        final String className = cls.getName();
-        return className.startsWith("java.") || className.startsWith("javax.") || className.startsWith("org.joda") || className.startsWith("com.google.common");
-    }
-
     // ////////////////////////////////////////////////////////////////////////////
     // introspect associations
     // ////////////////////////////////////////////////////////////////////////////
@@ -245,14 +226,14 @@ public class FacetedMethodsBuilder {
         final Set<Method> associationCandidateMethods = getFacetProcessor().findAssociationCandidateAccessors(methods, new HashSet<Method>());
 
         // Ensure all return types are known
-        final List<Class<?>> typesToLoad = Lists.newArrayList();
+        final List<Class<?>> typesToLoad = _Lists.newArrayList();
         for (final Method method : associationCandidateMethods) {
             specificationTraverser.traverseTypes(method, typesToLoad);
         }
         getSpecificationLoader().loadSpecifications(typesToLoad, introspectedClass);
 
         // now create FacetedMethods for collections and for properties
-        final List<FacetedMethod> associationFacetedMethods = Lists.newArrayList();
+        final List<FacetedMethod> associationFacetedMethods = _Lists.newArrayList();
 
         findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(associationFacetedMethods);
         findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(associationFacetedMethods);
@@ -261,7 +242,7 @@ public class FacetedMethodsBuilder {
     }
 
     private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFacetedMethods(final List<FacetedMethod> associationPeers) {
-        final List<Method> collectionAccessors = Lists.newArrayList();
+        final List<Method> collectionAccessors = _Lists.newArrayList();
         getFacetProcessor().findAndRemoveCollectionAccessors(methodRemover, collectionAccessors);
         createCollectionFacetedMethodsFromAccessors(collectionAccessors, associationPeers);
     }
@@ -271,7 +252,7 @@ public class FacetedMethodsBuilder {
      * this will pick up the remaining reference properties.
      */
     private void findAndRemovePropertyAccessorsAndCreateCorrespondingFacetedMethods(final List<FacetedMethod> fields) {
-        final List<Method> propertyAccessors = Lists.newArrayList();
+        final List<Method> propertyAccessors = _Lists.newArrayList();
         getFacetProcessor().findAndRemovePropertyAccessors(methodRemover, propertyAccessors);
 
         findAndRemovePrefixedNonVoidMethods(MethodScope.OBJECT, GET_PREFIX, Object.class, 0, propertyAccessors);
@@ -379,7 +360,7 @@ public class FacetedMethodsBuilder {
             LOG.debug("  looking for action methods");
         }
 
-        final List<FacetedMethod> actionFacetedMethods = Lists.newArrayList();
+        final List<FacetedMethod> actionFacetedMethods = _Lists.newArrayList();
 
         for (int i = 0; i < methods.size(); i++) {
             final Method method = methods.get(i);

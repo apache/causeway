@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.memento;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterLegacy;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
@@ -103,20 +103,28 @@ public class Memento implements Serializable {
         final Oid adapterOid = clone(adapter.getOid());
         transientObjects.add(adapterOid);
         final ObjectSpecification cls = adapter.getSpecification();
-        final List<ObjectAssociation> associations = cls.getAssociations(Contributed.EXCLUDED);
         final ObjectData data = new ObjectData(adapterOid, cls.getFullIdentifier());
-        for (int i = 0; i < associations.size(); i++) {
-            if (associations.get(i).isNotPersisted()) {
-                if (associations.get(i).isOneToManyAssociation()) {
-                    continue;
+        
+        final Stream<ObjectAssociation> associations = cls.streamAssociations(Contributed.EXCLUDED);
+        
+        associations
+        .filter(association->{
+            if (association.isNotPersisted()) {
+                if (association.isOneToManyAssociation()) {
+                    return false;
                 }
-                if (associations.get(i).containsFacet(PropertyOrCollectionAccessorFacet.class) && !associations.get(i).containsFacet(PropertySetterFacet.class)) {
-                    LOG.debug("ignoring not-settable field {}", associations.get(i).getName());
-                    continue;
+                if (association.containsFacet(PropertyOrCollectionAccessorFacet.class) && 
+                        !association.containsFacet(PropertySetterFacet.class)) {
+                    LOG.debug("ignoring not-settable field {}", association.getName());
+                    return false;
                 }
             }
-            createAssociationData(adapter, data, associations.get(i));
-        }
+            return true;
+        })
+        .forEach(association->{
+            createAssociationData(adapter, data, association);
+        });
+        
         return data;
     }
 

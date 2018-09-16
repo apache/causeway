@@ -19,6 +19,8 @@
 package org.apache.isis.core.runtime.services.homepage;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,13 +55,16 @@ public class HomePageProviderServiceDefault implements HomePageProviderService {
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
         for (final ObjectAdapter serviceAdapter : serviceAdapters) {
             final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
-            final List<ObjectAction> objectActions = serviceSpec.getObjectActions(Contributed.EXCLUDED);
-            for (final ObjectAction objectAction : objectActions) {
-                final Object homePage = homePageIfUsable(serviceAdapter, objectAction);
-                if(homePage != null) {
-                    return homePage;
-                }
+            final Stream<ObjectAction> objectActions = serviceSpec.streamObjectActions(Contributed.EXCLUDED);
+            
+            final Optional<Object> homePage = objectActions
+            .map(objectAction->homePageIfUsable(serviceAdapter, objectAction))
+            .findAny();
+            
+            if(homePage.isPresent()) {
+                return homePage.get();
             }
+            
         }
         return null;
     }

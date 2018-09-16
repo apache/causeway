@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.commons.lang;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 public final class ClassPredicates {
 
@@ -27,7 +27,7 @@ public final class ClassPredicates {
     public static final <T> Predicate<Object> isOfType(final Class<T> type) {
         return new Predicate<Object>() {
             @Override
-            public boolean apply(Object input) {
+            public boolean test(Object input) {
                 return type.isAssignableFrom(input.getClass());
             }
         };

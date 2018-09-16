@@ -57,10 +57,8 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
 
     @Override
     public Object getDefault(final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable) {
-        return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable, getObjectAdapterProvider());
+        return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable);
     }
-
-
 
     @Override
     protected String toStringValues() {

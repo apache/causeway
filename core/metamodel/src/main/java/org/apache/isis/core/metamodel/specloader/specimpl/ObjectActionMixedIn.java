@@ -19,10 +19,10 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.List;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -134,7 +134,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         final List<ObjectActionParameter> mixinActionParameters = mixinAction.getParameters();
         final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
 
-        final List<ObjectActionParameter> mixedInParameters = Lists.newArrayList();
+        final List<ObjectActionParameter> mixedInParameters = _Lists.newArrayList();
 
         for(int paramNum = 0; paramNum < mixinActionParameters.size(); paramNum++) {
 

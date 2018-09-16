@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.joda.time.LocalDate;
@@ -33,6 +32,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -105,7 +105,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     };
 
 
-    private final static List<DateTimeFormatter> PARSE_FORMATTERS = Lists.newArrayList();
+    private final static List<DateTimeFormatter> PARSE_FORMATTERS = _Lists.newArrayList();
     static {
         PARSE_FORMATTERS.add(DateTimeFormat.forStyle("L-"));
         PARSE_FORMATTERS.add(DateTimeFormat.forStyle("M-"));

@@ -33,18 +33,18 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
 
-@WebFilter(
-        initParams = { @WebInitParam(name = "CacheTime", value = "86400") }, 
-        urlPatterns = { 
-                "*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.js", "*.html", "*.swf" }
-)
+//@WebFilter(
+//        initParams = { @WebInitParam(name = "CacheTime", value = "86400") }, 
+//        urlPatterns = { 
+//                "*.css", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.svg", "*.js", "*.html", "*.swf" }
+//)
+//[ahuber] to support Servlet 3.0 annotations @WebFilter, @WebListener or others 
+//with skinny war deployment requires additional configuration, so for now we disable this annotation
 public class ResourceCachingFilter implements Filter {
 
     /**
@@ -113,7 +113,9 @@ public class ResourceCachingFilter implements Filter {
     private String[][] mReplyHeaders = { {} };
 
     /** The cache time in seconds. */
-    private Long cacheTime = 0L;
+    private long cacheTime = 0L;
+    
+    private final static DateFormat httpDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
 
     /**
      * Initializes the Servlet filter with the cache time and sets up the
@@ -130,9 +132,9 @@ public class ResourceCachingFilter implements Filter {
         final String cacheTime = pConfig.getInitParameter(CACHE_TIME_PARAM_NAME);
         this.cacheTime = Long.parseLong(cacheTime != null ? cacheTime : CACHE_TIME_PARAM_NAME_DEFAULT);
         if (this.cacheTime > 0L) {
-            newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, MAX_AGE_VALUE + this.cacheTime.longValue() });
-            newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, PRE_CHECK_VALUE + this.cacheTime.longValue() });
-            newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, POST_CHECK_VALUE + this.cacheTime.longValue() });
+            newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, MAX_AGE_VALUE + this.cacheTime });
+            newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, PRE_CHECK_VALUE + this.cacheTime });
+            newReplyHeaders.add(new String[] { CACHE_CONTROL_HEADER, POST_CHECK_VALUE + this.cacheTime });
         } else {
             newReplyHeaders.add(new String[] { PRAGMA_HEADER, NO_CACHE_VALUE });
             newReplyHeaders.add(new String[] { EXPIRES_HEADER, ZERO_STRING_VALUE });
@@ -141,8 +143,14 @@ public class ResourceCachingFilter implements Filter {
         }
         this.mReplyHeaders = new String[newReplyHeaders.size()][2];
         newReplyHeaders.toArray(this.mReplyHeaders);
+        httpDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
+    @Override
+    public void destroy() {
+        // nothing to do
+    }
+    
     /**
      * Do filter.
      *
@@ -173,33 +181,22 @@ public class ResourceCachingFilter implements Filter {
         }
         if (this.cacheTime > 0L) {
             final long now = System.currentTimeMillis();
-            final DateFormat httpDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US);
-            httpDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
             httpResponse.addHeader(LAST_MODIFIED_HEADER, httpDateFormat.format(new Date(now)));
-            httpResponse.addHeader(EXPIRES_HEADER, httpDateFormat.format(new Date(now + (this.cacheTime.longValue() * MILLISECONDS_IN_SECOND))));
+            httpResponse.addHeader(EXPIRES_HEADER, httpDateFormat.format(new Date(now + (this.cacheTime * MILLISECONDS_IN_SECOND))));
         }
         httpRequest.setAttribute(REQUEST_ATTRIBUTE, true);
-
+        
         // try to suppress java.io.IOException of kind 'client connection abort'
         // 1) the TCP protocol (by design) does not provide a means to check, whether a
         //    connection has been closed by the client
         // 2) the exception thrown and the exception message text are specific to the
         //    servlet-engine implementation, so we can only guess here
         try {
-            chain.doFilter(servletRequest, servletResponse);
+            chain.doFilter(servletRequest, servletResponse);    
         } catch (IOException e) {
             FluentException.of(e)
             .suppressIf(this::isConnectionAbortException);
         }
-    }
-
-    /**
-     * Destroy all humans!
-     *
-     * @see javax.servlet.Filter#destroy()
-     */
-    @Override
-    public void destroy() {
     }
 
     // -- HELPER
@@ -216,5 +213,7 @@ public class ResourceCachingFilter implements Filter {
 
         return false;
     }
+
+
 
 }

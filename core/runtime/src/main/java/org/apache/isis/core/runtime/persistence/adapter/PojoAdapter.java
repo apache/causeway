@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.runtime.persistence.adapter;
 
-import java.util.function.Function;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,13 +54,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     private final SpecificationLoader specificationLoader;
     private final PersistenceSession persistenceSession;
 
-    /**
-     * can be {@link #replacePojo(Object) replace}d.
-     */
     private final Object pojo;
-    /**
-     * can be {@link #replaceOid(Oid) replace}d.
-     */
     private final Oid oid;
 
     /**
@@ -80,10 +74,14 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         this.authenticationSession = authenticationSession;
         
         if (pojo instanceof ObjectAdapter) {
-            throw new IsisException("Adapter can't be used to adapt an adapter: " + pojo);
+            throw new IsisException("ObjectAdapter can't be used to wrap an ObjectAdapter: " + pojo);
         }
+        if (pojo instanceof Oid) {
+            throw new IsisException("ObjectAdapter can't be used to wrap an Oid: " + pojo);
+        }
+        
         this.pojo = pojo;
-        this.oid = oid;
+        this.oid = requires(oid, "oid");
     }
     
     // -- getSpecification
@@ -115,17 +113,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return oid;
     }
 
-    // -- isParentedCollection, isValue
-
-    @Override
-    public boolean isParentedCollection() {
-        return oid instanceof ParentedCollectionOid;
-    }
-
-    @Override
-    public boolean isValue() {
-        return oid == null;
-    }
 
     // -- isTransient, representsPersistent, isDestroyed
     
@@ -164,7 +151,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             return this;
         }
         ParentedCollectionOid collectionOid = (ParentedCollectionOid) oid;
-        return persistenceSession.getAggregateRoot(collectionOid);
+        final Oid rootOid = collectionOid.getRootOid();
+        ObjectAdapter rootadapter = persistenceSession.adapterFor(rootOid);
+        return rootadapter;
     }
 
     // -- getVersion, setVersion, checkLock

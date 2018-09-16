@@ -22,8 +22,11 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.enterprise.context.RequestScoped;
+import javax.ws.rs.HEAD;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -96,18 +99,11 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
         enlistForPublishing(adapter, PublishingChangeKind.CREATE);
 
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES)) {
-            final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
-            if(property.isNotPersisted()) {
-                continue;
-            }
-            if(enlistedObjectProperties.containsKey(aap)) {
-                // already enlisted, so ignore
-                continue;
-            }
-            PreAndPostValues papv = PreAndPostValues.pre(IsisTransaction.Placeholder.NEW);
-            enlistedObjectProperties.put(aap, papv);
-        }
+        final Stream<ObjectAssociation> properties = adapter.getSpecification()
+                .streamAssociations(Contributed.EXCLUDED)
+                .filter(ObjectAssociation.Predicates.PROPERTIES);
+        
+        enlist(adapter, properties, aap->PreAndPostValues.pre(IsisTransaction.Placeholder.NEW));
     }
 
 
@@ -129,19 +125,12 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
         }
 
         enlistForPublishing(adapter, PublishingChangeKind.UPDATE);
-
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES)) {
-            final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
-            if(property.isNotPersisted()) {
-                continue;
-            }
-            if(enlistedObjectProperties.containsKey(aap)) {
-                // already enlisted, so ignore
-                continue;
-            }
-            PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
-            enlistedObjectProperties.put(aap, papv);
-        }
+        
+        final Stream<ObjectAssociation> properties = adapter.getSpecification()
+                .streamAssociations(Contributed.EXCLUDED)
+                .filter(ObjectAssociation.Predicates.PROPERTIES);
+        
+        enlist(adapter, properties, aap->PreAndPostValues.pre(aap.getPropertyValue()));
     }
 
     /**
@@ -166,19 +155,13 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
         if(!enlisted) {
             return;
         }
+        
+        final Stream<ObjectAssociation> properties = adapter.getSpecification()
+                .streamAssociations(Contributed.EXCLUDED)
+                .filter(ObjectAssociation.Predicates.PROPERTIES);
+        
+        enlist(adapter, properties, aap->PreAndPostValues.pre(aap.getPropertyValue()));
 
-        for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES)) {
-            final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
-            if(property.isNotPersisted()) {
-                continue;
-            }
-            if(enlistedObjectProperties.containsKey(aap)) {
-                // already enlisted, so ignore
-                continue;
-            }
-            PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
-            enlistedObjectProperties.put(aap, papv);
-        }
     }
 
 
@@ -228,35 +211,32 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
     }
 
     private Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> capturePostValuesAndDrain(final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties) {
-        return ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Callable<Set<Map.Entry<AdapterAndProperty, PreAndPostValues>>>() {
-            @Override
-            public Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> call() {
-                final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = Maps.newLinkedHashMap();
+        return ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(() -> {
+            final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = Maps.newLinkedHashMap();
 
-                while(!changedObjectProperties.isEmpty()) {
+            while(!changedObjectProperties.isEmpty()) {
 
-                    final Set<AdapterAndProperty> keys = Sets.newLinkedHashSet(changedObjectProperties.keySet());
-                    for (final AdapterAndProperty aap : keys) {
+                final Set<AdapterAndProperty> keys = Sets.newLinkedHashSet(changedObjectProperties.keySet());
+                for (final AdapterAndProperty aap : keys) {
 
-                        final PreAndPostValues papv = changedObjectProperties.remove(aap);
+                    final PreAndPostValues papv = changedObjectProperties.remove(aap);
 
-                        final ObjectAdapter adapter = aap.getAdapter();
-                        if(adapter.isDestroyed()) {
-                            // don't touch the object!!!
-                            // JDO, for example, will complain otherwise...
-                            papv.setPost(IsisTransaction.Placeholder.DELETED);
-                        } else {
-                            papv.setPost(aap.getPropertyValue());
-                        }
-
-                        // if we encounter the same objectProperty again, this will simply overwrite it
-                        processedObjectProperties.put(aap, papv);
+                    final ObjectAdapter adapter = aap.getAdapter();
+                    if(adapter.isDestroyed()) {
+                        // don't touch the object!!!
+                        // JDO, for example, will complain otherwise...
+                        papv.setPost(IsisTransaction.Placeholder.DELETED);
+                    } else {
+                        papv.setPost(aap.getPropertyValue());
                     }
-                }
 
-                return Collections.unmodifiableSet(
-                        Sets.filter(processedObjectProperties.entrySet(), PreAndPostValues.Predicates.SHOULD_AUDIT));            }
-        });
+                    // if we encounter the same objectProperty again, this will simply overwrite it
+                    processedObjectProperties.put(aap, papv);
+                }
+            }
+
+            return Collections.unmodifiableSet(
+                    Sets.filter(processedObjectProperties.entrySet(), PreAndPostValues.Predicates.SHOULD_AUDIT));            });
     }
 
     protected boolean shouldIgnore(final ObjectAdapter adapter) {
@@ -299,6 +279,19 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
     static String asString(Object object) {
         return object != null? object.toString(): null;
+    }
+    
+    private void enlist(
+            final ObjectAdapter adapter, 
+            final Stream<ObjectAssociation> properties, 
+            final Function<AdapterAndProperty, PreAndPostValues> pre) {
+        properties
+        .filter(property->!property.isNotPersisted())
+        .map(property->AdapterAndProperty.of(adapter, property))
+        .filter(aap->!enlistedObjectProperties.containsKey(aap)) // already enlisted, so ignore
+        .forEach(aap->{
+            enlistedObjectProperties.put(aap, pre.apply(aap));
+        });
     }
 
 

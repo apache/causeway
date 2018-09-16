@@ -21,8 +21,7 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import java.io.IOException;
 import java.io.Serializable;
-
-import com.google.common.base.Objects;
+import java.util.Objects;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
@@ -40,7 +39,7 @@ public final class ParentedCollectionOid implements Serializable, Oid {
     private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     private final String name;
-    private int cachedHashCode;
+    private final int hashCode;
 
     private final RootOid parentOid;
 
@@ -56,7 +55,7 @@ public final class ParentedCollectionOid implements Serializable, Oid {
         Assert.assertNotNull("rootOid required", rootOid);
         this.parentOid = rootOid;
         this.name = name;
-        cacheState();
+        this.hashCode = calculateHash();
     }
 
 
@@ -122,6 +121,7 @@ public final class ParentedCollectionOid implements Serializable, Oid {
     private ParentedCollectionOid(ParentedCollectionOid oid) throws IOException {
         this.parentOid = oid.getRootOid();
         this.name = oid.name;
+        this.hashCode = calculateHash();
     }
 
 
@@ -169,23 +169,18 @@ public final class ParentedCollectionOid implements Serializable, Oid {
     }
 
     public boolean equals(final ParentedCollectionOid other) {
-        return Objects.equal(other.getRootOid(), getRootOid()) && Objects.equal(other.name, name);
+        return Objects.equals(other.getRootOid(), getRootOid()) && Objects.equals(other.name, name);
     }
 
 
     @Override
     public int hashCode() {
-        cacheState();
-        return cachedHashCode;
+        return hashCode;
     }
 
-    private void cacheState() {
-        int hashCode = 17;
-        hashCode = 37 * hashCode + getRootOid().hashCode();
-        hashCode = 37 * hashCode + name.hashCode();
-        cachedHashCode = hashCode;
+    private int calculateHash() {
+        return Objects.hash(getRootOid(), name);
     }
-
 
 
     // /////////////////////////////////////////////////////////

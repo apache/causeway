@@ -88,6 +88,7 @@ public interface WebModule {
         
         return Stream.of(
                 new WebModule_Shiro(), // filters before all others
+                new WebModule_StaticResources(),
                 new WebModule_Wicket(),
                 new WebModule_FallbackBootstrapper(), // not required if the Wicket module is in use
                 new WebModule_RestEasy(), // default REST provider

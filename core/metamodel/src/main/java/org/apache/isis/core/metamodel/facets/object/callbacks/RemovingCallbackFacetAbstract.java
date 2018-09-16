@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacetAbstract;
 
 public abstract class RemovingCallbackFacetAbstract extends CallbackFacetAbstract implements RemovingCallbackFacet {
 

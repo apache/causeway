@@ -29,8 +29,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.EncodingException;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -38,9 +41,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.datejodalocal.JodaLocalDateValueFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class Jdk8LocalDateValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<LocalDate> implements Jdk8LocalDateValueFacet {
 
@@ -106,7 +106,7 @@ public class Jdk8LocalDateValueSemanticsProvider extends ValueSemanticsProviderA
     };
 
 
-    private final static List<TimeParser> PARSE_FORMATTERS = Lists.newArrayList();
+    private final static List<TimeParser> PARSE_FORMATTERS = _Lists.newArrayList();
     static {
         PARSE_FORMATTERS.add(parserOfStyle("L-"));
         PARSE_FORMATTERS.add(parserOfStyle("M-"));

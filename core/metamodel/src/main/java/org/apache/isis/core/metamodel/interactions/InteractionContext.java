@@ -19,12 +19,11 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import java.util.Map;
-
-import com.google.common.collect.ImmutableMap;
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
+import org.apache.isis.commons.internal.base._Tuples;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
@@ -140,10 +139,11 @@ public abstract class InteractionContext<T extends InteractionEvent> {
         this.contributee = contributee;
     }
 
-    public Map<Integer, ObjectAdapter> getContributeeAsMap() {
-        return contributee != null
-                ? ImmutableMap.<Integer, ObjectAdapter>of(contributeeParam, contributee)
-                        : ImmutableMap.<Integer, ObjectAdapter>of();
+    public @Nullable _Tuples.Tuple2<Integer, ObjectAdapter> getContributeeWithParamIndex() {
+        if(contributee==null) {
+            return null;
+        }
+        return _Tuples.pair(contributeeParam, contributee);
     }
 
     // //////////////////////////////////////

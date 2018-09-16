@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.services.persistsession;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -32,7 +33,6 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -108,8 +108,15 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
     }
 
     @Override
-    public void executeWithinTransaction(TransactionalClosure transactionalClosure) {
-        transactionalClosure.execute();
+    public void executeWithinTransaction(Runnable task) {
+        //[ahuber] was task.run();
+        throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
+    }
+    
+    @Override
+    public <T> T executeWithinTransaction(Supplier<T> task) {
+        //[ahuber] was return task.get();
+        throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
 
     @Override
@@ -146,6 +153,8 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
     public TransactionState getTransactionState() {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
+
+
 
 
 

@@ -20,13 +20,13 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -36,8 +36,9 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -288,7 +289,7 @@ public interface ObjectAction extends ObjectMember {
         public static List<ObjectAction> findTopLevel(
                 final ObjectAdapter adapter,
                 final DeploymentCategory deploymentCategory) {
-            final List<ObjectAction> topLevelActions = Lists.newArrayList();
+            final List<ObjectAction> topLevelActions = _Lists.newArrayList();
 
             addTopLevelActions(adapter, ActionType.USER, topLevelActions);
             if(deploymentCategory.isPrototyping()) {
@@ -304,22 +305,26 @@ public interface ObjectAction extends ObjectMember {
 
             final ObjectSpecification adapterSpec = adapter.getSpecification();
 
-            @SuppressWarnings({ "unchecked" })
-            Predicate<ObjectAction> predicate = com.google.common.base.Predicates
-            .and(ObjectAction.Predicates.memberOrderNotAssociationOf(adapterSpec),
-                    ObjectAction.Predicates.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
-                    ObjectAction.Predicates.notBulkOnly(), ObjectAction.Predicates.excludeWizardActions(adapterSpec));
+            Predicate<ObjectAction> predicate =
+                    ObjectAction.Predicates.memberOrderNotAssociationOf(adapterSpec)
+                    .and(ObjectAction.Predicates.dynamicallyVisible(adapter, 
+                            InteractionInitiatedBy.USER, Where.ANYWHERE))
+                    .and(ObjectAction.Predicates.notBulkOnly())
+                    .and(ObjectAction.Predicates.excludeWizardActions(adapterSpec));
 
-            final List<ObjectAction> userActions = adapterSpec.getObjectActions(actionType, Contributed.INCLUDED,
-                    predicate);
-            topLevelActions.addAll(userActions);
+            final Stream<ObjectAction> userActions = 
+                    adapterSpec.streamObjectActions(actionType, Contributed.INCLUDED)
+                    .filter(predicate);
+            userActions
+            .forEach(topLevelActions::add);
+
         }
 
 
         public static List<ObjectAction> findForAssociation(
                 final ObjectAdapter adapter,
                 final ObjectAssociation association, final DeploymentCategory deploymentCategory) {
-            final List<ObjectAction> associatedActions = Lists.newArrayList();
+            final List<ObjectAction> associatedActions = _Lists.newArrayList();
 
             addActions(adapter, ActionType.USER, association, associatedActions);
             if(deploymentCategory.isPrototyping()) {
@@ -338,21 +343,22 @@ public interface ObjectAction extends ObjectMember {
             return associatedActions;
         }
 
-        static List<ObjectAction> addActions(
+        static void addActions(
                 final ObjectAdapter adapter,
                 final ActionType type,
                 final ObjectAssociation association, final List<ObjectAction> associatedActions) {
             final ObjectSpecification objectSpecification = adapter.getSpecification();
 
-            @SuppressWarnings({ "unchecked" })
-            Predicate<ObjectAction> predicate = com.google.common.base.Predicates
-            .and(ObjectAction.Predicates.memberOrderOf(association), ObjectAction.Predicates.notBulkOnly(),
-                    ObjectAction.Predicates.excludeWizardActions(objectSpecification));
+            Predicate<ObjectAction> predicate = 
+                ObjectAction.Predicates.memberOrderOf(association)
+                .and(ObjectAction.Predicates.notBulkOnly())
+                .and(ObjectAction.Predicates.excludeWizardActions(objectSpecification));
 
-            final List<ObjectAction> userActions = objectSpecification.getObjectActions(type, Contributed.INCLUDED,
-                    predicate);
-            associatedActions.addAll(userActions);
-            return userActions;
+            final Stream<ObjectAction> userActions = 
+                    objectSpecification.streamObjectActions(type, Contributed.INCLUDED)
+                    .filter(predicate);
+            userActions
+            .forEach(associatedActions::add);
         }
 
         public static PromptStyle promptStyleFor(final ObjectAction objectAction) {
@@ -388,12 +394,10 @@ public interface ObjectAction extends ObjectMember {
 
             final ObjectSpecification collectionTypeOfSpec = collection.getSpecification();
 
-            return com.google.common.base.Predicates.and(
-                    new AssociatedWith(collection),
-                    new HasParameterMatching(
+            return new AssociatedWith(collection)
+                    .and(new HasParameterMatching(
                             new ObjectActionParameter.Predicates.CollectionParameter(collectionTypeOfSpec)
-                            )
-                    );
+                            ));
         }
 
         public static class AssociatedWith implements Predicate<ObjectAction> {
@@ -406,7 +410,7 @@ public interface ObjectAction extends ObjectMember {
             }
 
             @Override
-            public boolean apply(final ObjectAction objectAction) {
+            public boolean test(final ObjectAction objectAction) {
                 final AssociatedWithFacet associatedWithFacet = objectAction.getFacet(AssociatedWithFacet.class);
                 if(associatedWithFacet == null) {
                     return false;
@@ -428,27 +432,22 @@ public interface ObjectAction extends ObjectMember {
             }
 
             @Override
-            public boolean apply(final ObjectAction objectAction) {
+            public boolean test(final ObjectAction objectAction) {
                 return FluentIterable
                         .from(objectAction.getParameters())
-                        .anyMatch(parameterPredicate);
+                        .anyMatch(parameterPredicate::test);
             }
         }
 
-        public static com.google.common.base.Predicate ofType(final ActionType type) {
-            return new Predicate<ObjectAction>() {
-                @Override
-                public boolean apply(ObjectAction oa) {
-                    return oa.getType() == type;
-                }
-            };
+        public static Predicate<ObjectAction> ofType(final ActionType type) {
+            return (ObjectAction oa) -> oa.getType() == type;
         }
 
-        public static com.google.common.base.Predicate bulk() {
+        public static Predicate<ObjectAction> bulk() {
             return new Predicate<ObjectAction>() {
 
                 @Override
-                public boolean apply(ObjectAction oa) {
+                public boolean test(ObjectAction oa) {
 
                     final BulkFacet bulkFacet = oa.getFacet(BulkFacet.class);
                     if(bulkFacet == null || bulkFacet.isNoop() || bulkFacet.value() == InvokeOn.OBJECT_ONLY) {
@@ -476,51 +475,37 @@ public interface ObjectAction extends ObjectMember {
                 final ObjectAdapter target,
                 final InteractionInitiatedBy interactionInitiatedBy,
                 final Where where) {
-            return new Predicate<ObjectAction>() {
-                @Override
-                public boolean apply(final ObjectAction objectAction) {
+            return (ObjectAction objectAction) -> {
                     final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
                     return visible.isAllowed();
-                }
             };
         }
 
         public static Predicate<ObjectAction> notBulkOnly() {
-            return new Predicate<ObjectAction>() {
-
-                @Override
-                public boolean apply(ObjectAction t) {
+            return (ObjectAction t) -> {
                     BulkFacet facet = t.getFacet(BulkFacet.class);
                     return facet == null || facet.value() != InvokeOn.COLLECTION_ONLY;
-                }
             };
         }
 
         public static Predicate<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
-            return com.google.common.base.Predicates.not(wizardActions(objectSpecification));
-            // return wizardActions(objectSpecification);
+            return wizardActions(objectSpecification).negate();
         }
 
         private static Predicate<ObjectAction> wizardActions(final ObjectSpecification objectSpecification) {
-            return new Predicate<ObjectAction>() {
-                @Override
-                public boolean apply(ObjectAction input) {
+            return (ObjectAction input) -> {
                     if (objectSpecification == null) {
                         return false;
                     }
                     final WizardFacet wizardFacet = objectSpecification.getFacet(WizardFacet.class);
                     return wizardFacet != null && wizardFacet.isWizardAction(input);
-                }
             };
         }
 
         public static Predicate<ObjectAction> memberOrderOf(ObjectAssociation association) {
             final String assocName = association.getName();
             final String assocId = association.getId();
-            return new Predicate<ObjectAction>() {
-
-                @Override
-                public boolean apply(ObjectAction t) {
+            return (ObjectAction t) -> {
                     final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
                     if (memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
                         return false;
@@ -530,38 +515,29 @@ public interface ObjectAction extends ObjectMember {
                         return false;
                     }
                     return memberOrderName.equalsIgnoreCase(assocName) || memberOrderName.equalsIgnoreCase(assocId);
-                }
             };
         }
 
         public static Predicate<ObjectAction> memberOrderNotAssociationOf(final ObjectSpecification adapterSpec) {
 
-            final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
+            final Set<String> associationNamesAndIds = _Sets.newHashSet(); 
+            
+            adapterSpec.streamAssociations(Contributed.INCLUDED)
+            .forEach(ass->{
+                associationNamesAndIds.add(_Strings.lower(ass.getName()));
+                associationNamesAndIds.add(_Strings.lower(ass.getId()));
+            });
 
-            final List<String> associationNames = _NullSafe.stream(associations)
-                    .map(ObjectAssociation::getName)
-                    .map(_Strings::lower)
-                    .collect(Collectors.toList());
-
-            final List<String> associationIds = _NullSafe.stream(associations)
-                    .map(ObjectAssociation::getId)
-                    .map(_Strings::lower)
-                    .collect(Collectors.toList());
-
-            return new Predicate<ObjectAction>() {
-
-                @Override
-                public boolean apply(ObjectAction t) {
-                    final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
-                    if (memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
-                        return true;
-                    }
-                    String memberOrderName = memberOrderFacet.name().toLowerCase();
-                    if (Strings.isNullOrEmpty(memberOrderName)) {
-                        return false;
-                    }
-                    return !associationNames.contains(memberOrderName) && !associationIds.contains(memberOrderName);
+            return (ObjectAction t) -> {
+                final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
+                if (memberOrderFacet == null || _Strings.isNullOrEmpty(memberOrderFacet.name())) {
+                    return true;
                 }
+                final String memberOrderName = memberOrderFacet.name().toLowerCase();
+                if (_Strings.isNullOrEmpty(memberOrderName)) {
+                    return false;
+                }
+                return !associationNamesAndIds.contains(memberOrderName);
             };
         }
     }

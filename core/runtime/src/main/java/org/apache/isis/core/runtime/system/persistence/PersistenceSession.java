@@ -22,99 +22,93 @@ import java.util.Map;
 import javax.jdo.PersistenceManager;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.applib.services.bookmark.BookmarkService.FieldResetPolicy;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-public interface PersistenceSession extends ObjectAdapterProvider.Delegating, TransactionalResource, SessionScopedComponent {
+public interface PersistenceSession 
+extends 
+    ObjectAdapterProvider.Delegating,
+    ObjectAdapterByIdProvider.Delegating,
+    TransactionalResource, 
+    SessionScopedComponent {
 
-    // -- CONSTANTS
-
-    public static final String SERVICE_IDENTIFIER = "1";
-
-    /**
-     * @see #isFixturesInstalled()
-     */
-    public static final String INSTALL_FIXTURES_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_INSTALL_FIXTURES_KEY;
-    public static final boolean INSTALL_FIXTURES_DEFAULT = false;
-
-    // [ahuber] could as well be 'protected', not referenced from other then implementing classes
-    public static final String ROOT_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_ROOT_KEY;
-
-    /**
-     * Append regular <a href="http://www.datanucleus.org/products/accessplatform/persistence_properties.html">datanucleus properties</a> to this key
-     */
-    public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
-
-    //---
-
-    MementoRecreateObjectSupport mementoSupport();
-
-    ObjectAdapter adapterFor(RootOid rootOid, ConcurrencyChecking concurrencyChecking);
-    Map<RootOid, ObjectAdapter> adaptersFor(List<RootOid> rootOids, ConcurrencyChecking concurrencyChecking);
-    ObjectAdapter adapterForAny(RootOid rootOid);
-    <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
+    // -------------------------------------------------------------------------------------------------
+    // -- STABLE API (DRAFT)
+    // -------------------------------------------------------------------------------------------------
     
-    /**
-     * As per {@link #adapterFor(RootOid, ConcurrencyChecking)}, with
-     * {@link ConcurrencyChecking#NO_CHECK no checking}.
-     *
-     * <p>
-     * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
-     * know that the oid does indeed represent an object you know exists.
-     * </p>
-     */
-    default ObjectAdapter adapterFor(final RootOid rootOid) {
-        return adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
-    }
-    
-    default Map<RootOid, ObjectAdapter> adaptersFor(List<RootOid> rootOids) {
-        return adaptersFor(rootOids, ConcurrencyChecking.NO_CHECK);
-    }
-
-    // --
-
-    void close();
-
-    ObjectAdapter createTransientInstance(ObjectSpecification spec);
-
-    ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
-
-    void destroyObjectInTransaction(ObjectAdapter adapter);
-
-    void execute(List<PersistenceCommand> persistenceCommandList);
-    <T> ObjectAdapter firstMatchingQuery(final Query<T> query);
-
-    boolean flush();
-
-    ObjectAdapter getAggregateRoot(ParentedCollectionOid collectionOid);
-
     IsisConfiguration getConfiguration();
+    IsisTransactionManager getTransactionManager();
+    ServicesInjector getServicesInjector();
+    
+    void open();
+    void close();
+    
+    default boolean flush() {
+        return getTransactionManager().flushTransaction();
+    }
 
-    PersistenceManager getPersistenceManager();
+    /**
+     * Forces a reload (refresh in JDO terminology) of the domain object
+     */
+    void refreshRoot(Object domainObject);
+
+
+    /**
+     * Re-initializes the fields of an object. If the object is unresolved then
+     * the object's missing data should be retrieved from the persistence
+     * mechanism and be used to set up the value objects and associations.
+     * @since 2.0.0-M2
+     */
+    default void refreshRootInTransaction(final Object domainObject) {
+        getTransactionManager().executeWithinTransaction(()->refreshRoot(domainObject));
+    }
     
     /**
-     * @param pojo
-     * @param type
+     * @param pojo a persistable object
      * @return String representing an object's id.
      * @since 2.0.0-M2
      */
-    String identifierFor(Object pojo, State type);
+    String identifierFor(Object pojo);
+    
+    /**@since 2.0.0-M2*/
+    boolean isTransient(Object pojo);
+    /**@since 2.0.0-M2*/
+    boolean isRepresentingPersistent(Object pojo);
+    /**@since 2.0.0-M2*/
+    boolean isDestroyed(Object pojo);
+    /** whether pojo is recognized by the persistence layer, that is, it has an ObjectId
+     * @since 2.0.0-M2*/
+    boolean isRecognized(Object pojo);
+    
+    /**@since 2.0.0-M2*/
+    Object fetchPersistentPojo(RootOid rootOid);
 
+    /**@since 2.0.0-M2*/
+    default Object fetchPersistentPojoInTransaction(final RootOid oid) {
+        return getTransactionManager().executeWithinTransaction(()->fetchPersistentPojo(oid));
+    }
+
+    /**@since 2.0.0-M2*/
+    Map<RootOid, Object> fetchPersistentPojos(List<RootOid> rootOids);
+
+
+
+
+    // -------------------------------------------------------------------------------------------------
+    // -- JDO SPECIFIC
+    // -------------------------------------------------------------------------------------------------
+    
+    PersistenceManager getPersistenceManager();
     /**
      * Convenient equivalent to {@code getPersistenceManager()}.
      * @return
@@ -122,19 +116,7 @@ public interface PersistenceSession extends ObjectAdapterProvider.Delegating, Tr
     default PersistenceManager pm() {
         return getPersistenceManager();
     }
-
-    ServicesInjector getServicesInjector();
-
-    IsisTransactionManager getTransactionManager();
-
-    Object instantiateAndInjectServices(ObjectSpecification spec);
-
-    boolean isFixturesInstalled();
-
-    Object lookup(Bookmark bookmark, FieldResetPolicy fieldResetPolicy);
-
-    void makePersistentInTransaction(ObjectAdapter adapter);
-
+    
     /**
      * Not type safe. For type-safe queries use <br/><br/> {@code pm().newNamedQuery(cls, queryName)}
      * @param cls
@@ -163,18 +145,40 @@ public interface PersistenceSession extends ObjectAdapterProvider.Delegating, Tr
     default <T> javax.jdo.Query newJdoQuery(Class<T> cls, String filter){
         return pm().newQuery(cls, filter);
     }
+    
+    // -------------------------------------------------------------------------------------------------
+    // -- API NOT STABLE YET - SUBJECT TO REFACTORING
+    // -------------------------------------------------------------------------------------------------
+    
+    // -- SERVICE SUPPORT
 
-    void open();
+    static final String SERVICE_IDENTIFIER = "1";
 
-    void refreshRoot(ObjectAdapter adapter);
-
-    void resolve(Object parent);
-
-    boolean isTransient(Object pojo);
-    boolean isRepresentingPersistent(Object pojo);
-    boolean isDestroyed(Object pojo);
-
-
-
+    // -- FIXTURE SUPPORT
+    
+    /**
+     * @see #isFixturesInstalled()
+     */
+    static final String INSTALL_FIXTURES_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_INSTALL_FIXTURES_KEY;
+    static final boolean INSTALL_FIXTURES_DEFAULT = false;
+    
+    boolean isFixturesInstalled();
+    
+    // -- MEMENTO SUPPORT
+    
+    MementoRecreateObjectSupport mementoSupport();
+    
+    // -- TODO remove ObjectAdapter references from API
+    
+    <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
+    <T> ObjectAdapter firstMatchingQuery(final Query<T> query);
+    
+    void destroyObjectInTransaction(ObjectAdapter adapter);
+    void makePersistentInTransaction(ObjectAdapter adapter);
+    
+    // -- OTHERS
+    
+    void execute(List<PersistenceCommand> persistenceCommandList);
+    
 
 }

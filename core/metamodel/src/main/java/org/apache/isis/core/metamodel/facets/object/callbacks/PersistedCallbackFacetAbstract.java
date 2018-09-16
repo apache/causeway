@@ -21,8 +21,6 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacetAbstract;
 
 public abstract class PersistedCallbackFacetAbstract extends CallbackFacetAbstract implements PersistedCallbackFacet {
 

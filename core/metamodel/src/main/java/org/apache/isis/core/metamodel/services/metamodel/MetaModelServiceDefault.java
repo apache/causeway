@@ -21,6 +21,11 @@ package org.apache.isis.core.metamodel.services.metamodel;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
@@ -32,6 +37,7 @@ import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
@@ -47,10 +53,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.Lists;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -89,9 +91,13 @@ public class MetaModelServiceDefault implements MetaModelService {
         specificationLookup.invalidateCache(domainType);
         gridService.remove(domainType);
         final ObjectSpecification objectSpecification = specificationLookup.loadSpecification(domainType);
+        //FIXME[ISIS-1976] the following might be optimized away by the JVM, since the results are not used
+        
         // ensure the spec is fully rebuilt
-        objectSpecification.getObjectActions(Contributed.INCLUDED);
-        objectSpecification.getAssociations(Contributed.INCLUDED);
+        objectSpecification.streamObjectActions(Contributed.INCLUDED)
+            .collect(Collectors.toList());
+        objectSpecification.streamAssociations(Contributed.INCLUDED)
+            .collect(Collectors.toList());
         specificationLookup.postProcess(objectSpecification);
     }
 
@@ -105,33 +111,41 @@ public class MetaModelServiceDefault implements MetaModelService {
 
         final Collection<ObjectSpecification> specifications = specificationLookup.allSpecifications();
 
-        final List<DomainMember> rows = Lists.newArrayList();
+        final List<DomainMember> rows = _Lists.newArrayList();
         for (final ObjectSpecification spec : specifications) {
             if (exclude(spec)) {
                 continue;
             }
-            final List<ObjectAssociation> properties = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.PROPERTIES);
-            for (final ObjectAssociation property : properties) {
-                final OneToOneAssociation otoa = (OneToOneAssociation) property;
-                if (exclude(otoa)) {
-                    continue;
-                }
-                rows.add(new DomainMemberDefault(spec, otoa));
+            
+            {
+                final Stream<ObjectAssociation> properties = 
+                        spec.streamAssociations(Contributed.EXCLUDED)
+                        .filter(ObjectAssociation.Predicates.PROPERTIES);
+                
+                properties
+                .map(property->(OneToOneAssociation) property)
+                .filter(otoa->!exclude(otoa))
+                .forEach(otoa->rows.add(new DomainMemberDefault(spec, otoa)));
             }
-            final List<ObjectAssociation> associations = spec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Predicates.COLLECTIONS);
-            for (final ObjectAssociation collection : associations) {
-                final OneToManyAssociation otma = (OneToManyAssociation) collection;
-                if (exclude(otma)) {
-                    continue;
-                }
-                rows.add(new DomainMemberDefault(spec, otma));
+            
+            {
+                final Stream<ObjectAssociation> associations = 
+                        spec.streamAssociations(Contributed.EXCLUDED)
+                        .filter(ObjectAssociation.Predicates.COLLECTIONS);
+            
+                associations
+                .map(collection->(OneToManyAssociation) collection)
+                .filter(otma->!exclude(otma))
+                .forEach(otma->rows.add(new DomainMemberDefault(spec, otma)));
             }
-            final List<ObjectAction> actions = spec.getObjectActions(Contributed.INCLUDED);
-            for (final ObjectAction action : actions) {
-                if (exclude(action)) {
-                    continue;
-                }
-                rows.add(new DomainMemberDefault(spec, action));
+                
+            {
+                final Stream<ObjectAction> actions = 
+                        spec.streamObjectActions(Contributed.INCLUDED);
+                
+                actions
+                .filter(action->!exclude(action))
+                .forEach(action->rows.add(new DomainMemberDefault(spec, action)));
             }
         }
 

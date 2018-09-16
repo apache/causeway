@@ -19,17 +19,13 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
-import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.runtime.snapshot.XmlSchema.ExtensionData;
 
-import com.google.common.collect.Lists;
-
-import com.google.common.base.Predicate;
 
 public final class FacetUtil {
 
@@ -41,12 +37,10 @@ public final class FacetUtil {
             return;
         }
         final FacetHolder facetHolder = facet.getFacetHolder();
-        final List<Facet> facets = facetHolder.getFacets(new Predicate<Facet>() {
-            @Override
-            public boolean apply(final Facet each) {
-                return facet.facetType() == each.facetType() && facet.getClass() == each.getClass();
-            }
-        });
+        final List<Facet> facets = facetHolder.streamFacets()
+                .filter( each->facet.facetType() == each.facetType() && facet.getClass() == each.getClass() )
+                .collect(Collectors.toList());
+        
         if(facets.size() == 1) {
             final Facet existingFacet = facets.get(0);
             final Facet underlyingFacet = existingFacet.getUnderlyingFacet();
@@ -85,51 +79,12 @@ public final class FacetUtil {
      *
      * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
      */
-    public static boolean addFacets(final Facet[] facets) {
-        boolean addedFacets = false;
-        for (final Facet facet : facets) {
-            addedFacets = addFacet(facet) | addedFacets;
-        }
-        return addedFacets;
-    }
-
-    /**
-     * Attaches each {@link Facet} to its {@link Facet#getFacetHolder() facet
-     * holder}.
-     *
-     * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
-     */
     public static boolean addFacets(final List<Facet> facetList) {
         boolean addedFacets = false;
         for (final Facet facet : facetList) {
             addedFacets = addFacet(facet) | addedFacets;
         }
         return addedFacets;
-    }
-
-    /**
-     * Bit nasty, for use only by {@link FacetHolder}s that index their
-     * {@link Facet}s in a Map.
-     */
-    public static Class<? extends Facet>[] getFacetTypes(final Map<Class<? extends Facet>, Facet> facetsByClass) {
-        return _Casts.uncheckedCast(
-                facetsByClass.keySet().toArray(_Constants.emptyClasses)	);
-    }
-
-    /**
-     * Bit nasty, for use only by {@link FacetHolder}s that index their
-     * {@link Facet}s in a Map.
-     */
-    public static List<Facet> getFacets(final Map<Class<? extends Facet>, Facet> facetsByClass, final Predicate<Facet> predicate) {
-        final List<Facet> filteredFacets = Lists.newArrayList();
-        final List<Facet> allFacets = new ArrayList<>(facetsByClass.values());
-        for (final Facet facet : allFacets) {
-            // facets that implement MultiTypedFacet will be held more than once.  The 'contains' check ensures they are only returned once, however.
-            if (predicate.apply(facet) && !filteredFacets.contains(facet)) {
-                filteredFacets.add(facet);
-            }
-        }
-        return filteredFacets;
     }
 
     public static void removeFacet(final Map<Class<? extends Facet>, Facet> facetsByClass, final Facet facet) {
@@ -149,35 +104,28 @@ public final class FacetUtil {
         facetsByClass.put(facet.facetType(), facet);
     }
 
-    public static Facet[] toArray(final List<Facet> facetList) {
-        if (facetList == null) {
-            return new Facet[0];
-        } else {
-            return facetList.toArray(new Facet[] {});
-        }
-    }
+    public static <T extends Facet> ExtensionData<T> getFacetsByType(final FacetHolder facetHolder) {
+        
+        return new ExtensionData<T>() {
 
-    public static Hashtable<Class<? extends Facet>, Facet> getFacetsByType(final FacetHolder facetHolder) {
-        final Hashtable<Class<? extends Facet>, Facet> facetByType = new Hashtable<Class<? extends Facet>, Facet>();
-        final Class<? extends Facet>[] facetsFor = facetHolder.getFacetTypes();
-        for (final Class<? extends Facet> facetType : facetsFor) {
-            final Facet facet = facetHolder.getFacet(facetType);
-            facetByType.put(facetType, facet);
-        }
-        return facetByType;
+            @Override
+            public int size() {
+                return facetHolder.getFacetCount();
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public void visit(BiConsumer<Class<T>, T> elementConsumer) {
+                facetHolder.streamFacets()
+                .forEach(facet->elementConsumer.accept((Class<T>)facet.facetType(), (T)facet));
+            }
+            
+        };
     }
 
     public static void copyFacets(final FacetHolder source, final FacetHolder target) {
-        final Class<? extends Facet>[] facetTypes = source.getFacetTypes();
-        for (Class<? extends Facet> facetType : facetTypes) {
-            //TODO [ahuber] unused because of expected side effects?
-            final Facet facet = source.getFacet(facetType);
-
-        }
-        List<Facet> facets = source.getFacets(com.google.common.base.Predicates.<Facet>alwaysTrue());
-        for (Facet facet : facets) {
-            target.addFacet(facet);
-        }
+        source.streamFacets()
+        .forEach(target::addFacet);
     }
 
 }

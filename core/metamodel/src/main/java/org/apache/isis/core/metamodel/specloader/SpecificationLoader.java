@@ -17,15 +17,15 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.stream.Stream;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import javax.ws.rs.HEAD;
+
 import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
@@ -35,6 +35,7 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -177,7 +178,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
         final Collection<ObjectSpecification> objectSpecifications = allSpecifications();
 
-        final List<Callable<Object>> callables = Lists.newArrayList();
+        final List<Callable<Object>> callables = _Lists.newArrayList();
         for (final ObjectSpecification specification : objectSpecifications) {
             Callable<Object> callable = new Callable<Object>() {
                 @Override
@@ -200,18 +201,16 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
     private void loadSpecificationsForServices() {
-
-        List<Class<?>> classes = allServiceClasses();
-        for (final Class<?> serviceClass : classes) {
+        streamServiceClasses()
+        .forEach(serviceClass->{
             final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
             final NatureOfService nature = domainService != null ? domainService.nature() : NatureOfService.DOMAIN;
             // will 'markAsService'
             ObjectSpecification objectSpecification = internalLoadSpecification(serviceClass, nature);
-
             facetProcessorObjectSpecId.process(
                     serviceClass,
                     MethodRemoverConstants.NULL, objectSpecification);
-        }
+        });
     }
 
     private void loadSpecificationsForMixins() {
@@ -528,7 +527,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
      */
     @Programmatic
     public Collection<ObjectSpecification> allSpecifications() {
-        return Lists.newArrayList(allCachedSpecifications());
+        return _Lists.newArrayList(allCachedSpecifications());
     }
 
     private Collection<ObjectSpecification> allCachedSpecifications() {
@@ -538,16 +537,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     // -- getServiceClasses, isServiceClass
 
     @Programmatic
-    public List<Class<?>> allServiceClasses() {
-        List<Class<?>> serviceClasses = Lists
-                .transform(this.servicesInjector.getRegisteredServices(), new Function<Object, Class<?>>(){
-                    @Override
-                    public Class<?> apply(Object o) {
-                        return o.getClass();
-                    }
-                });
-        // take a copy, to allow eg I18nFacetFactory to add in default implementations of missing services.
-        return Collections.unmodifiableList(Lists.newArrayList(serviceClasses));
+    public Stream<Class<?>> streamServiceClasses() {
+        return servicesInjector.streamRegisteredServiceTypes();
     }
 
     @Programmatic

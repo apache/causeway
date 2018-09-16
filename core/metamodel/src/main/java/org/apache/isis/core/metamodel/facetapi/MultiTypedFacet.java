@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
+import java.util.stream.Stream;
+
 /**
  * A Class that provides multiple facet implementations, either directly or
  * through a delegate.
@@ -34,7 +36,7 @@ public interface MultiTypedFacet extends Facet {
      * implementation.
      *
      */
-    public Class<? extends Facet>[] facetTypes();
+    public Stream<Class<? extends Facet>> facetTypes();
 
     public <T extends Facet> T getFacet(Class<T> facet);
 

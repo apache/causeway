@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.value.imageawt;
 
 import java.awt.Image;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProviderFactory;
 

@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.List;
-
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Anything in the metamodel (which also includes peers in the reflector) that
@@ -29,11 +28,14 @@ import com.google.common.base.Predicate;
  */
 public interface FacetHolder {
 
-    /**
-     * Get the list of all facet <i>types</i> that are supported by objects of
-     * this specification.
-     */
-    Class<? extends Facet>[] getFacetTypes();
+//FIXME[]    
+//    /**
+//     * Get the list of all facet <i>types</i> that are supported by objects of
+//     * this specification.
+//     */
+//    Class<? extends Facet>[] getFacetTypes();
+    
+    int getFacetCount();
 
     /**
      * Get the facet of the specified type (as per the type it reports from
@@ -68,7 +70,7 @@ public interface FacetHolder {
      * @param predicate
      * @return
      */
-    List<Facet> getFacets(Predicate<Facet> predicate);
+    Stream<Facet> streamFacets();
 
     /**
      * Adds the facet, extracting its {@link Facet#facetType() type} as the key.
@@ -103,5 +105,7 @@ public interface FacetHolder {
      * Remove the facet of the specified type.
      */
     void removeFacet(Class<? extends Facet> facetType);
+
+    
 
 }

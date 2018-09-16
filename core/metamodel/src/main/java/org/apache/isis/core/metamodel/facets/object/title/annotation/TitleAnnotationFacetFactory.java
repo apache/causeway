@@ -25,9 +25,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -69,7 +69,8 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
         }
 
         sort(evaluators);
-        final List<TitleFacetViaTitleAnnotation.TitleComponent> titleComponents = Lists.transform(evaluators, TitleFacetViaTitleAnnotation.TitleComponent.FROM_EVALUATORS);
+        final List<TitleFacetViaTitleAnnotation.TitleComponent> titleComponents = 
+                _Lists.transform(evaluators, TitleFacetViaTitleAnnotation.TitleComponent.FROM_EVALUATORS);
         FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, adapterProvider));
     }
 
@@ -136,7 +137,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
         }
 
         private static List<String> componentsFor(final String sequence) {
-            return Lists.newArrayList(Splitter.on('.').split(sequence));
+            return _Lists.newArrayList(Splitter.on('.').split(sequence));
         }
     }
 

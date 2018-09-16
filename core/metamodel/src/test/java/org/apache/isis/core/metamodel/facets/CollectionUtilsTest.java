@@ -34,7 +34,7 @@ import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -61,7 +61,7 @@ public class CollectionUtilsTest {
     @Test
     public void whenLinkedList() throws Exception {
 
-        List<Class<?>> collectionTypes = Lists.<Class<?>>newArrayList(
+        List<Class<?>> collectionTypes = _Lists.<Class<?>>of(
                 LinkedList.class,
                 ArrayList.class,
                 CopyOnWriteArrayList.class,

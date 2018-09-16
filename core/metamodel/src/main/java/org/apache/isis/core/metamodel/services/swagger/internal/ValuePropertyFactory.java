@@ -27,18 +27,15 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
+import com.google.common.collect.Maps;
 
-import org.apache.isis.commons.internal.context._Plugin;
-import org.apache.isis.core.metamodel.services.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.context._Plugin;
+import org.apache.isis.core.metamodel.services.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
 
 import io.swagger.models.properties.BooleanProperty;
 import io.swagger.models.properties.ByteArrayProperty;
@@ -121,12 +118,8 @@ public class ValuePropertyFactory {
             final StringProperty property = new StringProperty();
             final Object[] enumConstants = cls.getEnumConstants();
 
-            final List<String> enumNames = Lists.newArrayList(
-                    Iterables.transform(Arrays.asList(enumConstants), new Function<Object, String>() {
-                        @Nullable @Override public String apply(@Nullable final Object input) {
-                            return ((Enum<?>)input).name();
-                        }
-                    }));
+            final List<String> enumNames = _Lists.transform(
+                    Arrays.asList(enumConstants), input->((Enum<?>)input).name());
             property.setEnum(enumNames);
             return property;
         }

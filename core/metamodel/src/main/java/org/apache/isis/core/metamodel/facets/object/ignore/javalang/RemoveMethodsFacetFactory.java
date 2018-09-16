@@ -23,9 +23,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -58,7 +57,7 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
 
     private final InjectorMethodEvaluator injectorMethodEvaluator = new InjectorMethodEvaluatorDefault();
 
-    private final List<MethodAndParameterTypes> javaLangObjectMethodsToIgnore = Lists.newArrayList();
+    private final List<MethodAndParameterTypes> javaLangObjectMethodsToIgnore = _Lists.newArrayList();
 
 
     public RemoveMethodsFacetFactory() {
@@ -94,18 +93,17 @@ public class RemoveMethodsFacetFactory extends FacetFactoryAbstract {
 
         }
 
-        final List<Class<?>> serviceClasses = getSpecificationLoader().allServiceClasses();
-        for (Class<? extends Object> serviceClass : serviceClasses) {
-
-            // removeInjectMethods(processClassContext);
+        getSpecificationLoader().streamServiceClasses()
+        .forEach(serviceClass->{
+         // removeInjectMethods(processClassContext);
             Method[] methods2 = processClassContext.getCls().getMethods();
             for (Method method : methods2) {
                 if(injectorMethodEvaluator.isInjectorMethodFor(method, serviceClass)) {
                     processClassContext.removeMethod(method);
                 }
             }
-        }
-
+        });
+        
 
         removeSuperclassMethods(processClassContext.getCls(), processClassContext);
 

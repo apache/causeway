@@ -33,10 +33,5 @@ public abstract class BigDecimalValueFacetAbstract extends FacetAbstract impleme
     public abstract Integer getPrecision();
 
     @Override
-    public final Integer getLength() {
-        return getPrecision();
-    }
-
-    @Override
     public abstract Integer getScale();
 }

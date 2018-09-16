@@ -19,10 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.object.value;
 
+import java.util.stream.Stream;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.Parser2;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -130,13 +131,9 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
                 facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder, this.servicesInjector));
                 facetHolder.addFacet(new TitleFacetUsingParser(parser, holder, this.servicesInjector));
                 facetHolder.addFacet(new TypicalLengthFacetUsingParser(parser, holder, this.servicesInjector));
-                if(parser instanceof Parser2) {
-                    @SuppressWarnings("rawtypes")
-                    final Parser2 parser2 = (Parser2) parser;
-                    final Integer maxLength = parser2.maxLength();
-                    if(maxLength != null) {
-                        facetHolder.addFacet(new MaxLengthFacetUsingParser2(parser2, holder, this.servicesInjector));
-                    }
+                final int maxLength = parser.maxLength();
+                if(maxLength >=0) {
+                    facetHolder.addFacet(new MaxLengthFacetUsingParser(parser, holder, this.servicesInjector));
                 }
             }
 
@@ -155,9 +152,11 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
     // /////////////////////////////
     // MultiTypedFacet impl
     // /////////////////////////////
+    
     @Override
-    public Class<? extends Facet>[] facetTypes() {
-        return facetHolder.getFacetTypes();
+    public Stream<Class<? extends Facet>> facetTypes() {
+        return facetHolder.streamFacets()
+                .map(Facet::facetType);
     }
 
     @Override
@@ -167,12 +166,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
 
     @Override
     public boolean containsFacetTypeOf(final Class<? extends Facet> requiredFacetType) {
-        for (final Class<? extends Facet> facetType : facetTypes()) {
-            if(facetType == requiredFacetType) {
-                return true;
-            }
-        }
-        return false;
+        return facetHolder.containsFacet(requiredFacetType);
     }
 
     // /////////////////////////////////////////

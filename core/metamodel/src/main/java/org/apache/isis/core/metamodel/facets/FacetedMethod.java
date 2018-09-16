@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -34,8 +35,6 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import com.google.common.collect.Lists;
 
 /**
  * non-final only so it can be mocked if need be.
@@ -110,7 +109,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
 
         final Class<?>[] parameterTypes = actionMethod.getParameterTypes();
         final Type[] genericParameterTypes = actionMethod.getGenericParameterTypes();
-        final List<FacetedMethodParameter> actionParams = Lists.newArrayList();
+        final List<FacetedMethodParameter> actionParams = _Lists.newArrayList();
 
         for (int paramNum = 0; paramNum < parameterTypes.length; paramNum++) {
 

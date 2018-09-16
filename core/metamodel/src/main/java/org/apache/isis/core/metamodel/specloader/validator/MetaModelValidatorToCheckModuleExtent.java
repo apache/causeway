@@ -18,21 +18,20 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorComposite {
@@ -89,7 +88,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
                 } else {
                     List<String> classNames = domainObjectClassNamesByPackage.get(packageName);
                     if (classNames == null) {
-                        classNames = Lists.newArrayList();
+                        classNames = _Lists.newArrayList();
                         domainObjectClassNamesByPackage.put(packageName, classNames);
                     }
                     classNames.add(objSpec.getFullIdentifier());
@@ -111,7 +110,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
                     return;
                 }
 
-                ImmutableList<String> modulePackageNames = modulePackageNamesFrom(appManifest);
+                final Set<String> modulePackageNames = modulePackageNamesFrom(appManifest);
 
                 final Set<String> domainObjectPackageNames = domainObjectClassNamesByPackage.keySet();
                 for (final String pkg : domainObjectPackageNames) {
@@ -127,18 +126,14 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
                 }
             }
 
-            private ImmutableList<String> modulePackageNamesFrom(final AppManifest appManifest) {
-                List<Class<?>> modules = appManifest.getModules();
-                return FluentIterable.from(modules)
-                        .transform(new Function<Class<?>, String>() {
-                            @Override
-                            public String apply(final Class<?> aClass) {
-                                return aClass.getPackage().getName();
-                            }
-                        }).toList();
+            private Set<String> modulePackageNamesFrom(final AppManifest appManifest) {
+                final List<Class<?>> modules = appManifest.getModules();
+                return modules.stream()
+                        .map(aClass->aClass.getPackage().getName())
+                        .collect(Collectors.toCollection(HashSet::new));
             }
 
-            private boolean isWithinSomeModule(final ImmutableList<String> modulePackageNames, final String pkg) {
+            private boolean isWithinSomeModule(final Set<String> modulePackageNames, final String pkg) {
                 for (final String modulePackageName : modulePackageNames) {
                     if(pkg.startsWith(modulePackageName)) {
                         return true;

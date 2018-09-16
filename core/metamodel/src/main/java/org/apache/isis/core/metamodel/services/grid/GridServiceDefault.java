@@ -18,7 +18,7 @@ package org.apache.isis.core.metamodel.services.grid;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
+import com.google.common.base.Joiner;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -28,11 +28,8 @@ import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.commons.internal.base._Casts;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -138,7 +135,7 @@ public class GridServiceDefault implements GridService {
      */
     @Programmatic
     public String tnsAndSchemaLocation(final Grid grid) {
-        final List<String> parts = Lists.newArrayList();
+        final List<String> parts = _Lists.newArrayList();
 
         parts.add(COMPONENT_TNS);
         parts.add(COMPONENT_SCHEMA_LOCATION);
@@ -173,16 +170,14 @@ public class GridServiceDefault implements GridService {
     protected List<GridSystemService<?>> gridSystemServices() {
 
         if (filteredGridSystemServices == null) {
-            List<GridSystemService<?>> services = Lists.newArrayList();
+            List<GridSystemService<?>> services = _Lists.newArrayList();
 
             for (GridSystemService<?> gridSystemService : this.gridSystemServices) {
                 final Class<?> gridImplementation = gridSystemService.gridImplementation();
-                final boolean notSeenBefore = FluentIterable.from(services).filter(new Predicate<GridSystemService<?>>() {
-                    @Override public boolean apply(@Nullable final GridSystemService<?> systemService) {
-                        return systemService.gridImplementation() == gridImplementation;
-                    }
-                }).isEmpty();
-                if(notSeenBefore) {
+                final boolean seenBefore = _NullSafe.stream(services)
+                        .anyMatch((GridSystemService<?> systemService) -> 
+                            systemService.gridImplementation() == gridImplementation);
+                if(!seenBefore) {
                     services.add(gridSystemService);
                 }
             }

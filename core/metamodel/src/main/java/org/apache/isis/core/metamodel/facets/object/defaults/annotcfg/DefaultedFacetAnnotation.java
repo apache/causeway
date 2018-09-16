@@ -24,9 +24,9 @@ import com.google.common.base.Strings;
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultsProviderUtil;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
 

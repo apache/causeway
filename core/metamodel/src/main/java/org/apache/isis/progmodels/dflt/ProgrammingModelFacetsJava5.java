@@ -20,8 +20,7 @@ package org.apache.isis.progmodels.dflt;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
@@ -419,9 +418,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
     @Override
     public List<ObjectSpecificationPostProcessor> getPostProcessors() {
-        return Lists.<ObjectSpecificationPostProcessor>newArrayList(
-                new ActionCollectionParameterDefaultsAndChoicesPostProcessor()
-                );
+        return _Lists.singleton(
+                new ActionCollectionParameterDefaultsAndChoicesPostProcessor() );
     }
 
     // -- HELPER

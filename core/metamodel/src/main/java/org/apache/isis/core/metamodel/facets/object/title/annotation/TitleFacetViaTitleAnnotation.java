@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
 import java.util.List;
+import java.util.function.Function;
 
-import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
 
@@ -42,13 +42,8 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     private final ObjectAdapterProvider adapterProvider;
 
     public static class TitleComponent {
-        public static final Function<? super Annotations.Evaluator<Title>, ? extends TitleComponent> FROM_EVALUATORS = new Function<Annotations.Evaluator<Title>, TitleComponent>() {
-            @Override
-            public TitleComponent apply(final Annotations.Evaluator<Title> titleEvaluator) {
-                return TitleComponent.of(titleEvaluator);
-            }
-        };
-
+        public static final Function<Annotations.Evaluator<Title>, TitleComponent> FROM_EVALUATORS = 
+            titleEvaluator -> TitleComponent.of(titleEvaluator);
 
         private final String prepend;
         private final String append;

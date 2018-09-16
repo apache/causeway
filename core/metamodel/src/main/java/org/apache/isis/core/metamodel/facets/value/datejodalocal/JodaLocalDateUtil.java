@@ -23,11 +23,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-import com.google.common.collect.Iterables;
-
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormatter;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.JodaFunctions;
 
@@ -40,7 +39,7 @@ public final class JodaLocalDateUtil  {
             List<DateTimeFormatter> parseFormatters) {
         final Locale locale = Locale.getDefault();
 
-        Iterable<DateTimeFormatter> elements = Iterables.transform(parseFormatters, JodaFunctions.withLocale(locale));
+        Iterable<DateTimeFormatter> elements = _Lists.transform(parseFormatters, JodaFunctions.withLocale(locale));
         LocalDate parsedDate = parseDate(dateStr, elements);
         return parsedDate;
     }
