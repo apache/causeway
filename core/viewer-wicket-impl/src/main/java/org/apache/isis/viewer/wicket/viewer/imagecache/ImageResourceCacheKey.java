@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.ClassUtil;
 
 final class ImageResourceCacheKey implements Serializable {
@@ -73,7 +73,7 @@ final class ImageResourceCacheKey implements Serializable {
     List<ImageResourceCacheKey> resourcePaths(final List<String> suffices) {
 
         ImageResourceCacheKey key;
-        final List<ImageResourceCacheKey> resourcePaths = Lists.newArrayList();
+        final List<ImageResourceCacheKey> resourcePaths = _Lists.newArrayList();
 
 
         boolean generated = false;

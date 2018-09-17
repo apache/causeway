@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;
@@ -37,7 +36,7 @@ public class DefaultViewFacetForCollectionXml extends DefaultViewFacetAbstract {
             return null;
         }
 
-        final String defaultView = Strings.emptyToNull(collectionLayout.getDefaultView());
+        final String defaultView = _Strings.emptyToNull(collectionLayout.getDefaultView());
         return defaultView != null ? new DefaultViewFacetForCollectionXml(defaultView, holder) : null;
     }
 }

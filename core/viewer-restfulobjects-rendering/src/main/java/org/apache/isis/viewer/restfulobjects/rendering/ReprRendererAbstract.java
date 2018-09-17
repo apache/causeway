@@ -23,7 +23,7 @@ import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -205,8 +205,8 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
 
         // TODO: have removed UpdateNotifier, plan is to re-introduce using the IsisTransaction enlisted objects
         // (which would also allow newly-created objects to be shown)
-        final List<ObjectAdapter> changedObjects = Lists.newArrayList(); // updateNotifier.getChangedObjects();
-        final List<ObjectAdapter> disposedObjects = Lists.newArrayList(); // updateNotifier.getDisposedObjects();
+        final List<ObjectAdapter> changedObjects = _Lists.newArrayList(); // updateNotifier.getChangedObjects();
+        final List<ObjectAdapter> disposedObjects = _Lists.newArrayList(); // updateNotifier.getDisposedObjects();
 
         addToExtensions("changed", changedObjects);
         addToExtensions("disposed", disposedObjects);

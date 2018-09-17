@@ -22,12 +22,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -38,6 +34,8 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -95,7 +93,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
     private List<Component> buildGui() {
 
-        final List<Component> childComponents = Lists.newArrayList();
+        final List<Component> childComponents = _Lists.newArrayList();
 
         setOutputMarkupPlaceholderTag(true);
         setOutputMarkupId(true);
@@ -106,7 +104,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         final ImmutableList<ObjectAssociation> associations = getObjectAssociations();
 
-        final List<LinkAndLabel> memberGroupActions = Lists.newArrayList();
+        final List<LinkAndLabel> memberGroupActions = _Lists.newArrayList();
         final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
         div.addOrReplace(propertyRv);
 
@@ -120,7 +118,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         WebMarkupContainer panelHeading = new WebMarkupContainer("panelHeading");
         div.addOrReplace(panelHeading);
-        if(Strings.isNullOrEmpty(groupName)) {
+        if(_Strings.isNullOrEmpty(groupName)) {
             panelHeading.setVisibilityAllowed(false);
         } else {
             panelHeading.addOrReplace(new Label(ID_MEMBER_GROUP_NAME, groupName));
@@ -172,15 +170,10 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         //
 
         return FluentIterable.from(properties)
-                .filter(new Predicate<PropertyLayoutData>() {
-                    @Override
-                    public boolean apply(final PropertyLayoutData propertyLayoutData) {
+                .filter((final PropertyLayoutData propertyLayoutData) -> {
                         return propertyLayoutData.getMetadataError() == null;
-                    }
                 })
-                .transform(new Function<PropertyLayoutData, ObjectAssociation>() {
-                    @Override
-                    public ObjectAssociation apply(final PropertyLayoutData propertyLayoutData) {
+                .transform((final PropertyLayoutData propertyLayoutData)->{
                         ObjectSpecification adapterSpecification = adapter.getSpecification();
                         try {
                             // this shouldn't happen, but has been reported (https://issues.apache.org/jira/browse/ISIS-1574),
@@ -189,10 +182,8 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
                         } catch (ObjectSpecificationException e) {
                             return null;
                         }
-                    }
                 })
-                .filter(new Predicate<ObjectAssociation>() {
-                    @Override public boolean apply(@Nullable final ObjectAssociation objectAssociation) {
+                .filter((@Nullable final ObjectAssociation objectAssociation) -> {
                         if(objectAssociation == null) {
                             return false;
                         }
@@ -204,7 +195,6 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
                             }
                         }
                         return true;
-                    }
                 })
                 .toList();
     }

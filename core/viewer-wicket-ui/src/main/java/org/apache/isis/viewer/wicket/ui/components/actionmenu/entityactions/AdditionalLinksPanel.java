@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.List;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
@@ -154,7 +154,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                         link.addOrReplace(viewTitleLabel);
 
                         final String cssClassFa = linkAndLabel.getCssClassFa();
-                        if (Strings.isNullOrEmpty(cssClassFa)) {
+                        if (_Strings.isNullOrEmpty(cssClassFa)) {
                             viewTitleLabel.add(new CssClassAppender("menuLinkSpacer"));
                         } else {
                             final CssClassFaPosition position = linkAndLabel.getCssClassFaPosition();

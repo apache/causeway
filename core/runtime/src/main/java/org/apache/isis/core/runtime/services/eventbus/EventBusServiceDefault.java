@@ -25,12 +25,11 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.plugins.eventbus.EventBusPlugin;
 import org.apache.isis.core.runtime.services.RequestScopedService;
-
-import com.google.common.base.Strings;
 
 /**
  * Holds common runtime logic for EventBusService implementations.
@@ -86,7 +85,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
     }
 
     private static String getNormalized(final String implementation) {
-        if(Strings.isNullOrEmpty(implementation)) {
+        if(_Strings.isNullOrEmpty(implementation)) {
             return EVENT_BUS_IMPLEMENTATION_DEFAULT;
         } else {
             final String implementationTrimmed = implementation.trim();
@@ -104,7 +103,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
 
     private static boolean getElseFalse(final Map<String, String> properties, final String key) {
         final String value = properties.get(key);
-        return !Strings.isNullOrEmpty(value) && Boolean.parseBoolean(value);
+        return !_Strings.isNullOrEmpty(value) && Boolean.parseBoolean(value);
     }
 
 

@@ -94,6 +94,13 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
+            <exclusions>
+<!--             	work in progress, ultimately we want to remove guava dependency -->            
+<!--             	<exclusion> -->
+<!--             		<groupId>com.google.guava</groupId> -->
+<!--             		<artifactId>guava</artifactId> -->
+<!--             	</exclusion> -->
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -104,6 +111,12 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-core</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<groupId>com.google.guava</groupId>
+            		<artifactId>guava</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

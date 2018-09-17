@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -49,7 +49,7 @@ public class CssIdAppender extends AttributeAppender {
     public static void appendCssIdTo(
             final ComponentTag tag,
             final String cssId) {
-        if(Strings.isNullOrEmpty(cssId)) {
+        if(_Strings.isNullOrEmpty(cssId)) {
             return;
         }
         tag.append("id", cssId, " ");
@@ -61,7 +61,7 @@ public class CssIdAppender extends AttributeAppender {
     public static void appendCssIdTo(
             final MarkupContainer markupContainer,
             final String cssClass) {
-        if(Strings.isNullOrEmpty(cssClass)) {
+        if(_Strings.isNullOrEmpty(cssClass)) {
             return;
         }
         markupContainer.add(new CssIdAppender(cssClass));

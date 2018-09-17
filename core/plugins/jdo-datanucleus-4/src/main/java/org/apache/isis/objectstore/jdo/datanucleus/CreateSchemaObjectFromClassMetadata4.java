@@ -34,7 +34,7 @@ import org.datanucleus.store.encryption.ConnectionEncryptionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * Implementation note: the methods in this class are <tt>protected</tt> to allow for easy subclassing.
@@ -57,7 +57,7 @@ public class CreateSchemaObjectFromClassMetadata4 implements MetaDataListener, D
     public void loaded(final AbstractClassMetaData cmd) {
 
         final String schemaName = cmd.getSchema();
-        if(Strings.isNullOrEmpty(schemaName)) {
+        if(_Strings.isNullOrEmpty(schemaName)) {
             return;
         }
 
@@ -69,7 +69,7 @@ public class CreateSchemaObjectFromClassMetadata4 implements MetaDataListener, D
         final String userName = properties.get("javax.jdo.option.ConnectionUserName");
         final String password = getConnectionPassword();
 
-        if(Strings.isNullOrEmpty(driverName) || Strings.isNullOrEmpty(url)) {
+        if(_Strings.isNullOrEmpty(driverName) || _Strings.isNullOrEmpty(url)) {
             LOG.warn("Unable to create schema due to missing configuration javax.jdo.option.Connection*");
             return;
         }
@@ -102,7 +102,7 @@ public class CreateSchemaObjectFromClassMetadata4 implements MetaDataListener, D
      */
     protected boolean skip(final AbstractClassMetaData cmd, final Statement statement) throws SQLException {
         final String schemaName = cmd.getSchema();
-        if(Strings.isNullOrEmpty(schemaName)) {
+        if(_Strings.isNullOrEmpty(schemaName)) {
             return true;
         }
         final String sql = buildSqlToCheck(cmd);

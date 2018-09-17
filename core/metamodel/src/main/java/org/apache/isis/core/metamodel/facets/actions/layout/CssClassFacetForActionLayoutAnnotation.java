@@ -20,11 +20,9 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.List;
-import java.util.Objects;
-
-import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
@@ -37,8 +35,7 @@ public class CssClassFacetForActionLayoutAnnotation extends CssClassFacetAbstrac
 
         return actionLayouts.stream()
                 .map(ActionLayout::cssClass)
-                .map(Strings::emptyToNull)
-                .filter(Objects::nonNull)
+                .filter(_Strings::isNotEmpty)
                 .findFirst()
                 .map(cssClass -> new CssClassFacetForActionLayoutAnnotation(cssClass, holder))
                 .orElse(null);

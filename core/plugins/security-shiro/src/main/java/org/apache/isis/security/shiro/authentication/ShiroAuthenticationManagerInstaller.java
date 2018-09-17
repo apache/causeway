@@ -20,8 +20,7 @@ package org.apache.isis.security.shiro.authentication;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
@@ -38,6 +37,6 @@ extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 
     @Override
     protected List<Authenticator> createAuthenticators() {
-        return Lists.<Authenticator> newArrayList(new ShiroAuthenticatorOrAuthorizor(getConfiguration()));
+        return _Lists.<Authenticator> of(new ShiroAuthenticatorOrAuthorizor(getConfiguration()));
     }
 }

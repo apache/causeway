@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
@@ -38,8 +40,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.factories.OidFactory;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * package private mixin for ObjectAdapterContext

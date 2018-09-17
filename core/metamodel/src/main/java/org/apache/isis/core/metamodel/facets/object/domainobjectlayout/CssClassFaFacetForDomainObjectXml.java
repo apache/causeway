@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
@@ -33,7 +32,7 @@ public class CssClassFaFacetForDomainObjectXml extends CssClassFaFacetAbstract {
         if(domainObjectLayout == null) {
             return null;
         }
-        final String cssClassFa = Strings.emptyToNull(domainObjectLayout.getCssClassFa());
+        final String cssClassFa = _Strings.emptyToNull(domainObjectLayout.getCssClassFa());
         CssClassFaPosition cssClassFaPosition = CssClassFaPosition.from(domainObjectLayout.getCssClassFaPosition());
         return cssClassFa != null ? new CssClassFaFacetForDomainObjectXml(cssClassFa, cssClassFaPosition, holder) : null;
     }

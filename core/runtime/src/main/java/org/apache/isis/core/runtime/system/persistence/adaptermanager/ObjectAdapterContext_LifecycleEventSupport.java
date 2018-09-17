@@ -18,28 +18,15 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
-import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.Instance;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 

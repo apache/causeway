@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.node.NullNode;
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -174,7 +174,7 @@ public class DomainTypeReprRenderer extends ReprRendererAbstract<DomainTypeReprR
 
     protected void putExtensionsDescriptionIfAvailable() {
         final String description = objectSpecification.getDescription();
-        if (!Strings.isNullOrEmpty(description)) {
+        if (!_Strings.isNullOrEmpty(description)) {
             getExtensions().mapPut("description", description);
         }
     }

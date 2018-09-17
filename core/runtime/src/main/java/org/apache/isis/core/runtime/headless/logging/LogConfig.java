@@ -18,12 +18,12 @@
  */
 package org.apache.isis.core.runtime.headless.logging;
 
+import static org.slf4j.event.Level.INFO;
+
 import java.io.PrintStream;
 
 import org.slf4j.Logger;
 import org.slf4j.event.Level;
-
-import static org.slf4j.event.Level.INFO;
 
 public class LogConfig {
     private final String loggingPropertyFile;

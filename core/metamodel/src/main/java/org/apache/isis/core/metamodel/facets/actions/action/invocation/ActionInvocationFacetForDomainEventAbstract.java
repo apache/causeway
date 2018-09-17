@@ -33,8 +33,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.base.Strings;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +54,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -365,7 +364,7 @@ implements ImperativeFacet {
     }
 
     private static String trim(String message, final int maxLen) {
-        if(!Strings.isNullOrEmpty(message)) {
+        if(!_Strings.isNullOrEmpty(message)) {
             message = message.substring(0, Math.min(message.length(), maxLen));
             if(message.length() == maxLen) {
                 message += " ...";

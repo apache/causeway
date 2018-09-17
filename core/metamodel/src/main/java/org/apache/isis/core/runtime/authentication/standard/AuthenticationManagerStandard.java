@@ -28,10 +28,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Collections2;
-import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;

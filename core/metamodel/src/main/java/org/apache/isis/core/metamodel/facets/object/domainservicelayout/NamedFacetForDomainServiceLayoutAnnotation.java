@@ -20,11 +20,9 @@ package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
 
 import java.util.List;
-import java.util.Objects;
-
-import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
@@ -38,8 +36,7 @@ public class NamedFacetForDomainServiceLayoutAnnotation extends NamedFacetAbstra
 
         return domainServiceLayouts.stream()
                 .map(DomainServiceLayout::named)
-                .map(Strings::emptyToNull)
-                .filter(Objects::nonNull)
+                .filter(_Strings::isNotEmpty)
                 .findFirst()
                 .map(named -> new NamedFacetForDomainServiceLayoutAnnotation(named, holder))
                 .orElse(null);

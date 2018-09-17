@@ -26,7 +26,6 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
-import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 
 public final class SystemConstants {
 

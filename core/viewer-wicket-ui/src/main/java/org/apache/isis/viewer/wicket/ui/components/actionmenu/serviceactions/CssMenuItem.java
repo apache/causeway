@@ -21,8 +21,8 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -158,7 +158,7 @@ class CssMenuItem implements Serializable {
     }
 
     private final String name;
-    private final List<CssMenuItem> subMenuItems = Lists.newArrayList();
+    private final List<CssMenuItem> subMenuItems = _Lists.newArrayList();
     private CssMenuItem parent;
 
     private AbstractLink link;
@@ -446,7 +446,7 @@ class CssMenuItem implements Serializable {
             link.add(new CssClassAppender(this.actionIdentifier));
 
             String cssClassFa = getCssClassFa();
-            if (!Strings.isNullOrEmpty(cssClassFa)) {
+            if (!_Strings.isNullOrEmpty(cssClassFa)) {
                 label.add(new CssClassFaBehavior(cssClassFa, getCssClassFaPosition()));
             }
 

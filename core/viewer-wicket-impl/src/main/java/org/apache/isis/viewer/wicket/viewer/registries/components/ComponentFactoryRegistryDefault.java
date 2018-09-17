@@ -27,7 +27,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.google.common.base.Supplier;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.inject.Singleton;
@@ -57,7 +57,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
         componentFactoriesByType = Multimaps.newListMultimap(new HashMap<ComponentType, Collection<ComponentFactory>>(), new Supplier<List<ComponentFactory>>() {
             @Override
             public List<ComponentFactory> get() {
-                return Lists.newArrayList();
+                return _Lists.newArrayList();
             }
         });
 
@@ -132,7 +132,7 @@ public class ComponentFactoryRegistryDefault implements ComponentFactoryRegistry
     @Override
     public List<ComponentFactory> findComponentFactories(final ComponentType componentType, final IModel<?> model) {
         final Collection<ComponentFactory> componentFactoryList = componentFactoriesByType.get(componentType);
-        final List<ComponentFactory> matching = Lists.newArrayList();
+        final List<ComponentFactory> matching = _Lists.newArrayList();
         for (final ComponentFactory componentFactory : componentFactoryList) {
             final ApplicationAdvice appliesTo = componentFactory.appliesTo(componentType, model);
             if (appliesTo.applies()) {

@@ -86,7 +86,7 @@ implements ImperativeFacet {
                             interactionInitiatedBy);
             final Object visibleObjects =
                     CollectionUtils.copyOf(
-                            _Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
+                            _Lists.map(visibleAdapters, ObjectAdapter.Functions.getObject()),
                             method.getReturnType());
             if (visibleObjects != null) {
                 return visibleObjects;

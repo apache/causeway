@@ -39,7 +39,7 @@ public final class JodaLocalDateTimeUtil  {
             List<DateTimeFormatter> parseFormatters) {
         final Locale locale = Locale.getDefault();
 
-        Iterable<DateTimeFormatter> elements = _Lists.transform(parseFormatters, JodaFunctions.withLocale(locale));
+        Iterable<DateTimeFormatter> elements = _Lists.map(parseFormatters, JodaFunctions.withLocale(locale));
         return parseDateTime(dateStr, elements);
     }
 

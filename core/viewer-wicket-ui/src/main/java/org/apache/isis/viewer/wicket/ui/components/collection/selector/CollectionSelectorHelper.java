@@ -25,7 +25,7 @@ import java.util.Objects;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -73,7 +73,7 @@ public class CollectionSelectorHelper implements Serializable {
 
     private List<ComponentFactory> locateComponentFactories(ComponentFactoryRegistry componentFactoryRegistry) {
         final List<ComponentFactory> componentFactories = componentFactoryRegistry.findComponentFactories(ComponentType.COLLECTION_CONTENTS, model);
-        List<ComponentFactory> otherFactories = Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
+        List<ComponentFactory> otherFactories = _Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
             @Override
             public boolean apply(final ComponentFactory input) {
                 return input.getClass() != CollectionContentsMultipleViewsPanelFactory.class;
@@ -163,7 +163,7 @@ public class CollectionSelectorHelper implements Serializable {
     static List<ComponentFactory> orderAjaxTableToEnd(List<ComponentFactory> componentFactories) {
         int ajaxTableIdx = findAjaxTable(componentFactories);
         if (ajaxTableIdx >= 0) {
-            List<ComponentFactory> orderedFactories = Lists.newArrayList(componentFactories);
+            List<ComponentFactory> orderedFactories = _Lists.newArrayList(componentFactories);
             ComponentFactory ajaxTableFactory = orderedFactories.remove(ajaxTableIdx);
             orderedFactories.add(ajaxTableFactory);
             return orderedFactories;

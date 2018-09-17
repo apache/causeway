@@ -20,7 +20,7 @@ package org.apache.isis.core.runtime.services;
 
 import java.util.*;
 import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -103,7 +103,7 @@ public class DeweyOrderComparatorTest {
     }
 
     private static List<String> ofL(String... str) {
-        return Lists.newArrayList(ofS(str));
+        return _Lists.newArrayList(ofS(str));
     }
 
     private static void assertThatSorting(Collection<String> input, List<String> expected) {

@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.SortedSet;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
-import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.isis.applib.services.metamodel.DomainMember;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -212,7 +212,7 @@ public class DomainMemberDefault implements DomainMember {
     }
 
     private static void addIfNotEmpty(final String str, final SortedSet<String> set) {
-        if(!Strings.isNullOrEmpty(str)) {
+        if(!_Strings.isNullOrEmpty(str)) {
             set.add(str);
         }
     }

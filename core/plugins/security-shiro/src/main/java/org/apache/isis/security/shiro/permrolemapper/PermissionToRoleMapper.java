@@ -16,11 +16,11 @@
  */
 package org.apache.isis.security.shiro.permrolemapper;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface PermissionToRoleMapper {
 
-    Map<String, List<String>> getPermissionsByRole();
+    Map<String, Set<String>> getPermissionsByRole();
 
 }

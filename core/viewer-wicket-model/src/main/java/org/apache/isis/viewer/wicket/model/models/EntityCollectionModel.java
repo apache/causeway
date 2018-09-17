@@ -177,7 +177,7 @@ UiHintContainer {
                 }
 
                 final List<ObjectAdapter> adapterList =
-                        _Lists.transform(objectList,
+                        _Lists.map(objectList,
                                 entityCollectionModel.getPersistenceSession()::adapterFor);
 
                 return adapterList;

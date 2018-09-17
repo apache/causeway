@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.collection;
 import java.io.Serializable;
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -72,7 +72,7 @@ BulkActionsProvider {
             final EntityCollectionModel collectionModel) {
         super(id, collectionModel);
 
-        final List<LinkAndLabel> entityActionLinks = Lists.newArrayList();
+        final List<LinkAndLabel> entityActionLinks = _Lists.newArrayList();
 
         final OneToManyAssociation otma = collectionModel.getCollectionMemento().getCollection(collectionModel.getSpecificationLoader());
         final EntityModel entityModel = collectionModel.getEntityModel();

@@ -70,7 +70,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
 
         sort(evaluators);
         final List<TitleFacetViaTitleAnnotation.TitleComponent> titleComponents = 
-                _Lists.transform(evaluators, TitleFacetViaTitleAnnotation.TitleComponent.FROM_EVALUATORS);
+                _Lists.map(evaluators, TitleFacetViaTitleAnnotation.TitleComponent.FROM_EVALUATORS);
         FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, adapterProvider));
     }
 

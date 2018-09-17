@@ -27,12 +27,11 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
-
-import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
+
+import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
 
 /**
  * Package private mixin for WebModule implementing WebModule.

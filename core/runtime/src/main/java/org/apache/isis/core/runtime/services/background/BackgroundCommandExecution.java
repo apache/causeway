@@ -18,15 +18,15 @@ package org.apache.isis.core.runtime.services.background;
 
 import java.util.List;
 
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandExecutorService;
-import org.apache.isis.applib.services.command.CommandWithDto;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.command.CommandExecutorService;
+import org.apache.isis.applib.services.command.CommandWithDto;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 /**
  * Intended to be used as a base class for executing queued up {@link Command background action}s.
@@ -57,7 +57,7 @@ public abstract class BackgroundCommandExecution extends CommandExecutionAbstrac
 
         final PersistenceSession persistenceSession = getPersistenceSession();
         final IsisTransactionManager transactionManager = getTransactionManager(persistenceSession);
-        final List<Command> commands = Lists.newArrayList();
+        final List<Command> commands = _Lists.newArrayList();
         transactionManager.executeWithinTransaction(() -> {
             commands.addAll(findBackgroundCommandsToExecute());
         });

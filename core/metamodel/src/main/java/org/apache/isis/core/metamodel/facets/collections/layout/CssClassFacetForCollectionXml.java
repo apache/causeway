@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
@@ -32,7 +31,7 @@ public class CssClassFacetForCollectionXml extends CssClassFacetAbstract {
         if(collectionLayout == null) {
             return null;
         }
-        final String cssClass = Strings.emptyToNull(collectionLayout.getCssClass());
+        final String cssClass = _Strings.emptyToNull(collectionLayout.getCssClass());
         return cssClass != null ? new CssClassFacetForCollectionXml(cssClass, holder) : null;
     }
 

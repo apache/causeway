@@ -22,9 +22,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +41,8 @@ import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -258,7 +257,9 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 commandWithDto.setCompletedAt(completedAt);
 
                 if(exceptionIfAny != null) {
-                    commandWithDto.setException(Throwables.getStackTraceAsString(exceptionIfAny));
+                    commandWithDto.setException(_Exceptions.
+                            streamStacktraceLines(exceptionIfAny, 500)
+                            .collect(Collectors.joining("\n")));
                 }
     }
 
@@ -326,7 +327,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
     private ObjectAdapter[] argAdaptersFor(final ActionDto actionDto) {
         final List<ParamDto> params = paramDtosFrom(actionDto);
-        final List<ObjectAdapter> args = Lists.newArrayList(
+        final List<ObjectAdapter> args = _Lists.newArrayList(
                 params.stream()
                 .map(paramDto -> {
                     final Object arg = CommonDtoUtils.getValue(paramDto);

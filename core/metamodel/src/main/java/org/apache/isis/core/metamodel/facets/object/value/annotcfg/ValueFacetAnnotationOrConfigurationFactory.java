@@ -19,11 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -93,7 +92,7 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
 
         // otherwise, try to create from configuration, if present
         final String semanticsProviderName = ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(cls, getConfiguration());
-        if (!Strings.isNullOrEmpty(semanticsProviderName)) {
+        if (!_Strings.isNullOrEmpty(semanticsProviderName)) {
             final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder, servicesInjector);
             if (facet.isValid()) {
                 return facet;

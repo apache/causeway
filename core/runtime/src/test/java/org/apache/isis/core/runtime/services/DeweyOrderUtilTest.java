@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.services;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -102,7 +102,7 @@ public class DeweyOrderUtilTest {
     }
 
     private static List<Map.Entry<String, Object>> ofL(String[]... str) {
-        return Lists.newArrayList(ofS(str));
+        return _Lists.newArrayList(ofS(str));
     }
 
 

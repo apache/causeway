@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
@@ -32,7 +31,7 @@ public class CssClassFacetForActionXml extends CssClassFacetAbstract {
         if(actionLayout == null) {
             return null;
         }
-        final String cssClass = Strings.emptyToNull(actionLayout.getCssClass());
+        final String cssClass = _Strings.emptyToNull(actionLayout.getCssClass());
         return cssClass != null ? new CssClassFacetForActionXml(cssClass, holder) : null;
     }
 

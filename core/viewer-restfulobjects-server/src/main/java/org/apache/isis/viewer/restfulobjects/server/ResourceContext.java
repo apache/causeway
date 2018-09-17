@@ -32,7 +32,7 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.isis.applib.annotation.Where;
@@ -195,7 +195,7 @@ public class ResourceContext implements RendererContext6 {
     }
 
     static String stripQuotes(final String str) {
-        if(Strings.isNullOrEmpty(str)) {
+        if(_Strings.isNullOrEmpty(str)) {
             return str;
         }
         if(str.startsWith("\"") && str.endsWith("\"")) {

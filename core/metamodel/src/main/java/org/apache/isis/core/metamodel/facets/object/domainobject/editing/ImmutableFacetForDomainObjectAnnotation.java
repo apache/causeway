@@ -21,10 +21,9 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
 import java.util.List;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -80,7 +79,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
 
     @Override
     public String disabledReason(final ObjectAdapter targetAdapter) {
-        return !Strings.isNullOrEmpty(reason)
+        return !_Strings.isNullOrEmpty(reason)
                 ? reason
                         : super.disabledReason(targetAdapter);
     }

@@ -20,25 +20,25 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.Lists;
+import java.util.Set;
 
 import org.apache.shiro.config.Ini;
 import org.junit.Test;
+
+import org.apache.isis.commons.internal.collections._Sets;
 
 public class PermissionToRoleMapperFromIniTest {
 
     @Test
     public void test() {
         final Ini ini = Ini.fromResourcePath("classpath:org/apache/isis/security/shiro/permrolemapper/my.ini");
-        final Map<String, List<String>> permissionsByRole = 
+        final Map<String, Set<String>> permissionsByRole = 
                 new PermissionToRoleMapperFromIni(ini).getPermissionsByRole();
         
-        assertThat(permissionsByRole.get("role1"), is(equalTo((List<String>)Lists.newArrayList("foo","bar"))));
-        assertThat(permissionsByRole.get("role2"), is(equalTo((List<String>)Lists.newArrayList("fiz:x","bip:bop:*"))));
-        assertThat(permissionsByRole.get("role3"), is(equalTo((List<String>)Lists.newArrayList("*"))));
+        assertThat(permissionsByRole.get("role1"), is(equalTo((Set<String>)_Sets.of("foo","bar"))));
+        assertThat(permissionsByRole.get("role2"), is(equalTo((Set<String>)_Sets.of("fiz:x","bip:bop:*"))));
+        assertThat(permissionsByRole.get("role3"), is(equalTo((Set<String>)_Sets.of("*"))));
         assertThat(permissionsByRole.size(), is(3));
     }
 

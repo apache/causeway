@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -92,7 +92,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly(valueAdapter) || !followHref.isTerminated();
 
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(valueAdapter);
-        final List<JsonRepresentation> list = Lists.newArrayList();
+        final List<JsonRepresentation> list = _Lists.newArrayList();
         for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
 
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, elementAdapter);

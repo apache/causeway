@@ -20,11 +20,8 @@ package org.apache.isis.viewer.restfulobjects.rendering.util;
 
 import java.util.List;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 public final class FollowSpecUtil {
 
@@ -32,19 +29,11 @@ public final class FollowSpecUtil {
     }
 
     public final static List<List<PathNode>> asFollowSpecs(final List<List<String>> links) {
-        return Lists.newArrayList(Iterables.transform(links, new Function<List<String>, List<PathNode>>() {
-
-            @Override
-            public List<PathNode> apply(List<String> pathParts) {
-                return Lists.newArrayList(Iterables.transform(pathParts, new Function<String, PathNode>(){
-
-                    @Override
-                    public PathNode apply(String input) {
-                        return PathNode.parse(input);
-                    }
-                }
-                        ));
-            }
-        }));
+        
+        final List<List<PathNode>> unmodifiable = _Lists.map(links, (List<String> pathParts) -> {
+            return _Lists.newArrayList(_Lists.map(pathParts, (String input)->PathNode.parse(input)));
+        });
+        
+        return _Lists.newArrayList(unmodifiable);
     }
 }

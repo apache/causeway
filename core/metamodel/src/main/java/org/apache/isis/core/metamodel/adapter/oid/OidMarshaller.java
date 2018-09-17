@@ -24,10 +24,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -173,7 +173,7 @@ public final class OidMarshaller {
         if(aggregateOidPart != null) {
             final Iterable<String> tildaSplitIter = nestingSplitter.split(aggregateOidPart);
             for(String str: tildaSplitIter) {
-                if(Strings.isNullOrEmpty(str)) {
+                if(_Strings.isNullOrEmpty(str)) {
                     continue; // leading "~"
                 }
                 final Iterator<String> colonSplitIter = partsSplitter.split(str).iterator();
@@ -237,7 +237,7 @@ public final class OidMarshaller {
             return null;
         }
         final String val = matcher.group(group);
-        return Strings.emptyToNull(val);
+        return _Strings.emptyToNull(val);
     }
 
 
@@ -272,7 +272,7 @@ public final class OidMarshaller {
             return "";
         }
         final String versionUser = version.getUser();
-        return SEPARATOR_VERSION + version.getSequence() + SEPARATOR + Strings.nullToEmpty(versionUser) + SEPARATOR + nullToEmpty(version.getUtcTimestamp());
+        return SEPARATOR_VERSION + version.getSequence() + SEPARATOR + _Strings.nullToEmpty(versionUser) + SEPARATOR + nullToEmpty(version.getUtcTimestamp());
     }
 
     private static String nullToEmpty(Object obj) {

@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
@@ -81,7 +81,7 @@ public class ObjectAdapterMemento implements Serializable {
     public static ObjectAdapterMemento createForList(
             final Collection<ObjectAdapterMemento> list,
             final ObjectSpecId objectSpecId) {
-        return list != null ? createForList(Lists.newArrayList(list), objectSpecId) :  null;
+        return list != null ? createForList(_Lists.newArrayList(list), objectSpecId) :  null;
     }
 
     enum Sort {
@@ -132,7 +132,7 @@ public class ObjectAdapterMemento implements Serializable {
                     final ConcurrencyChecking concurrencyChecking, final PersistenceSession persistenceSession,
                     final SpecificationLoader specificationLoader) {
                 final List<Object> listOfPojos =
-                        _Lists.transform(oam.list, Functions.toPojo(persistenceSession, specificationLoader));
+                        _Lists.map(oam.list, Functions.toPojo(persistenceSession, specificationLoader));
 
                 return persistenceSession.adapterFor(listOfPojos);
             }

@@ -26,8 +26,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Collections2;
-
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 
 public final class ListExtensions {
@@ -104,9 +103,10 @@ public final class ListExtensions {
     }
 
     public static <T> Collection<T> filtered(final List<Object> extendee, final Class<T> type) {
-        return Collections2.transform(
-                Collections2.filter(extendee, ClassPredicates.isOfType(type)::test),
-                ClassFunctions.castTo(type)::apply);
+        return _NullSafe.stream(extendee)
+                .filter(ClassPredicates.isOfType(type))
+                .map(ClassFunctions.castTo(type))
+                .collect(Collectors.toList());
     }
 
 

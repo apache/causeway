@@ -23,8 +23,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-import com.google.common.base.Strings;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +50,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -489,7 +488,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
             try {
                 // try...finally because CSS class may vary by object, and we pass in only null
                 final String cssClass = cssClassFacet.cssClass(null);
-                if(!Strings.isNullOrEmpty(cssClass)) {
+                if(!_Strings.isNullOrEmpty(cssClass)) {
                     hasCssClass.setCssClass(cssClass);
                 }
             } catch(Exception ignore) {
@@ -505,7 +504,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
         if (isDoOp(cssClassFaFacet)) {
             final String cssClassFa = cssClassFaFacet.value();
             final CssClassFaPosition position = cssClassFaFacet.getPosition();
-            if(!Strings.isNullOrEmpty(cssClassFa)) {
+            if(!_Strings.isNullOrEmpty(cssClassFa)) {
                 hasCssClassFa.setCssClassFa(cssClassFa);
                 hasCssClassFa.setCssClassFaPosition(position.toActionLayoutPosition());
             }
@@ -518,7 +517,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
         final DefaultViewFacet defaultViewFacet = facetHolder.getFacet(DefaultViewFacet.class);
         if(isDoOp(defaultViewFacet)) {
             final String defaultView = defaultViewFacet.value();
-            if(!Strings.isNullOrEmpty(defaultView)) {
+            if(!_Strings.isNullOrEmpty(defaultView)) {
                 collectionLayoutData.setDefaultView(defaultView);
             }
         }
@@ -530,7 +529,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
         final DescribedAsFacet describedAsFacet = facetHolder.getFacet(DescribedAsFacet.class);
         if(isDoOp(describedAsFacet)) {
             final String describedAs = describedAsFacet.value();
-            if(!Strings.isNullOrEmpty(describedAs)) {
+            if(!_Strings.isNullOrEmpty(describedAs)) {
                 hasDescribedAs.setDescribedAs(describedAs);
             }
         }
@@ -578,7 +577,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
         final NamedFacet namedFacet = facetHolder.getFacet(NamedFacet.class);
         if(isDoOp(namedFacet)) {
             final String named = namedFacet.value();
-            if(!Strings.isNullOrEmpty(named)){
+            if(!_Strings.isNullOrEmpty(named)){
                 hasNamed.setNamed(named);
             }
             final boolean escaped = namedFacet.escaped();
@@ -606,7 +605,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
         final PluralFacet pluralFacet = facetHolder.getFacet(PluralFacet.class);
         if(isDoOp(pluralFacet)) {
             final String plural = pluralFacet.value();
-            if(!Strings.isNullOrEmpty(plural)) {
+            if(!_Strings.isNullOrEmpty(plural)) {
                 domainObjectLayoutData.setPlural(plural);
             }
         }

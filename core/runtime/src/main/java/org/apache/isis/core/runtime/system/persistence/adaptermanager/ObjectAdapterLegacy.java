@@ -20,12 +20,11 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -56,7 +55,7 @@ public class ObjectAdapterLegacy {
             if(targetObject instanceof CollectionDto) {
                 final CollectionDto collectionDto = (CollectionDto) targetObject;
                 final List<ValueDto> valueDtoList = collectionDto.getValue();
-                final List<Object> pojoList = Lists.newArrayList();
+                final List<Object> pojoList = _Lists.newArrayList();
                 for (final ValueDto valueDto : valueDtoList) {
                     ValueType valueType = collectionDto.getType();
                     final Object valueOrOidDto = CommonDtoUtils.getValue(valueDto, valueType);

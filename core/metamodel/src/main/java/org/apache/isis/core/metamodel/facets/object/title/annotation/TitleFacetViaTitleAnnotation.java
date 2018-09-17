@@ -20,15 +20,14 @@
 package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
-
-import com.google.common.base.Objects;
-import com.google.common.base.Strings;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -118,16 +117,16 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
                 }
                 // ignore context, if provided
                 final ObjectAdapter titlePartAdapter = adapterProvider.adapterFor(titlePart);
-                if(Objects.equal(contextAdapter, titlePartAdapter)) {
+                if(Objects.equals(contextAdapter, titlePartAdapter)) {
                     continue;
                 }
                 String title = titleOf(titlePartAdapter);
-                if (Strings.isNullOrEmpty(title)) {
+                if (_Strings.isNullOrEmpty(title)) {
                     // ... use the toString() otherwise
                     // (mostly for benefit of testing...)
                     title = titlePart.toString().trim();
                 }
-                if(Strings.isNullOrEmpty(title)) {
+                if(_Strings.isNullOrEmpty(title)) {
                     continue;
                 }
                 stringBuilder.append(component.getPrepend());

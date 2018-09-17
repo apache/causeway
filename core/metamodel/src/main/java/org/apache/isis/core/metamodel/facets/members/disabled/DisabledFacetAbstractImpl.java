@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -65,7 +64,7 @@ public abstract class DisabledFacetAbstractImpl extends DisabledFacetAbstract {
 
     private String disabledReasonElse(
             final String defaultReason) {
-        return !Strings.isNullOrEmpty(reason) ? reason : defaultReason;
+        return !_Strings.isNullOrEmpty(reason) ? reason : defaultReason;
     }
 
     /**

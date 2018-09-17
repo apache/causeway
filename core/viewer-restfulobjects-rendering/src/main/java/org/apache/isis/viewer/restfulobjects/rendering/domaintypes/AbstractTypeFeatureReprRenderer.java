@@ -16,7 +16,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
@@ -99,7 +99,7 @@ public abstract class AbstractTypeFeatureReprRenderer<R extends ReprRendererAbst
 
     protected void putExtensionsDescriptionIfAvailable() {
         final String description = getObjectFeature().getDescription();
-        if (!Strings.isNullOrEmpty(description)) {
+        if (!_Strings.isNullOrEmpty(description)) {
             getExtensions().mapPut("description", description);
         }
     }

@@ -19,19 +19,19 @@
 
 package org.apache.isis.core.runtime.services;
 
-import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
-import com.google.common.base.Function;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-import org.apache.isis.commons.internal.collections._Sets;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Sets;
 
 final class ServicesInstallerUtils  {
 
@@ -82,11 +82,12 @@ final class ServicesInstallerUtils  {
     }
 
     static List<Object> instantiateServicesFrom(SortedMap<String, SortedSet<String>> positionedServices, final ServiceInstantiator serviceInstantiator) {
-        LinkedHashSet<String> serviceNameList = flatten(positionedServices);
+        final LinkedHashSet<String> serviceNameList = flatten(positionedServices);
 
-        final Collection<Object> filter = Collections2.filter(
-                Collections2.transform(serviceNameList, instantiator(serviceInstantiator)), Predicates.notNull());
-        return Lists.newArrayList(filter);
+        return _NullSafe.stream(serviceNameList)
+        .map(instantiator(serviceInstantiator))
+        .filter(_NullSafe::isPresent)
+        .collect(Collectors.toList());
     }
 
     private static Function<String, Object> instantiator(final ServiceInstantiator serviceInstantiator) {

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import com.google.common.collect.Maps;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.WildcardPermission;
@@ -61,7 +61,7 @@ public class IsisPermission extends WildcardPermission {
         String permissionGroup = vetoingPermission.getPermissionGroup();
         List<IsisPermission> vetoingPermissions = IsisPermission.VETOING_PERMISSIONS.get().get(permissionGroup);
         if(vetoingPermissions == null) {
-            vetoingPermissions = Lists.newArrayList();
+            vetoingPermissions = _Lists.newArrayList();
             IsisPermission.VETOING_PERMISSIONS.get().put(permissionGroup, vetoingPermissions);
         }
         vetoingPermissions.add(vetoingPermission);

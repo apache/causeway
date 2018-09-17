@@ -23,8 +23,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -32,26 +32,26 @@ public class UtilTest_parse {
 
     @Test
     public void testParse() {
-        Map<String, List<String>> perms = Util.parse("user_role = *:ToDoItemsJdo:*:*,*:ToDoItem:*:*;self-install_role = *:ToDoItemsFixturesService:install:*;admin_role = *");
+        Map<String, Set<String>> perms = Util.parse("user_role = *:ToDoItemsJdo:*:*,*:ToDoItem:*:*;self-install_role = *:ToDoItemsFixturesService:install:*;admin_role = *");
         assertThat(perms, is(not(nullValue())));
-        List<String> list = perms.get("user_role");
-        assertThat(list, is(not(nullValue())));
-        assertThat(list.size(), is(2));
-        assertThat(list.get(0), is("*:ToDoItemsJdo:*:*"));
-        assertThat(list.get(1), is("*:ToDoItem:*:*"));
+        Set<String> set = perms.get("user_role");
+        assertThat(set, is(not(nullValue())));
+        assertThat(set.size(), is(2));
+        assertThat(set.contains("*:ToDoItemsJdo:*:*"), is(true));
+        assertThat(set.contains("*:ToDoItem:*:*"), is(true));
 
-        list = perms.get("self-install_role");
-        assertThat(list, is(not(nullValue())));
-        assertThat(list.size(), is(1));
-        assertThat(list.get(0), is("*:ToDoItemsFixturesService:install:*"));
+        set = perms.get("self-install_role");
+        assertThat(set, is(not(nullValue())));
+        assertThat(set.size(), is(1));
+        assertThat(set.contains("*:ToDoItemsFixturesService:install:*"), is(true));
 
-        list = perms.get("admin_role");
-        assertThat(list, is(not(nullValue())));
-        assertThat(list.size(), is(1));
-        assertThat(list.get(0), is("*"));
+        set = perms.get("admin_role");
+        assertThat(set, is(not(nullValue())));
+        assertThat(set.size(), is(1));
+        assertThat(set.contains("*"), is(true));
 
-        list = perms.get("non-existent_role");
-        assertThat(list, is(nullValue()));
+        set = perms.get("non-existent_role");
+        assertThat(set, is(nullValue()));
     }
 
 }

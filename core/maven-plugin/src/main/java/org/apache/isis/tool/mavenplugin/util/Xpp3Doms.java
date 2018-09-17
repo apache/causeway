@@ -18,7 +18,7 @@
  */
 package org.apache.isis.tool.mavenplugin.util;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 

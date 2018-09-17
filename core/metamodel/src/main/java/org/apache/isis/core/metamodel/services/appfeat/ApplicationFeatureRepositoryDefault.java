@@ -30,8 +30,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.isis.commons.internal.collections._Maps;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -43,6 +41,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.config.ConfigurationService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;

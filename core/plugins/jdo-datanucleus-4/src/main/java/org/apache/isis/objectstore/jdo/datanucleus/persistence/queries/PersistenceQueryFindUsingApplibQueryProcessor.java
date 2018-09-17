@@ -34,7 +34,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.metamodel.JdoPropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import com.google.common.collect.Maps;
 
 public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
@@ -85,7 +85,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
 
         try {
             final List<?> results = (List<?>) jdoQuery.execute();
-            return Lists.newArrayList(results);
+            return _Lists.newArrayList(results);
         } finally {
             jdoQuery.closeAll();
         }
@@ -122,7 +122,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
                     cardinality == QueryCardinality.MULTIPLE
                     ? results
                             : firstIfAnyOf(results);
-            return Lists.newArrayList(resultsToReturn);
+            return _Lists.newArrayList(resultsToReturn);
         } finally {
             jdoQuery.closeAll();
         }

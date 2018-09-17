@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
 import java.util.List;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -94,7 +94,7 @@ public final class ObjectAdapterToggleboxColumn extends ColumnAbstract<ObjectAda
         return toggle;
     }
 
-    private final List<ContainedToggleboxPanel> rowToggles = Lists.newArrayList();
+    private final List<ContainedToggleboxPanel> rowToggles = _Lists.newArrayList();
 
     @Override
     public void populateItem(final Item<ICellPopulator<ObjectAdapter>> cellItem, final String componentId, final IModel<ObjectAdapter> rowModel) {

@@ -21,12 +21,12 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.base.Strings;
+import java.util.function.Function;
+import org.apache.isis.commons.internal.base._Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -92,7 +92,7 @@ public final class ServiceActionUtil {
                 listItem.add(tooltipBehavior);
             } else {
 
-                if(!Strings.isNullOrEmpty(menuItem.getDescription())) {
+                if(!_Strings.isNullOrEmpty(menuItem.getDescription())) {
                     //XXX ISIS-1625, tooltips for menu actions
                     listItem.add(new AttributeModifier("title", Model.of(menuItem.getDescription())));
 
@@ -115,14 +115,14 @@ public final class ServiceActionUtil {
             leafItem.add(subMenuItemLink);
 
             String cssClassFa = menuItem.getCssClassFa();
-            if (Strings.isNullOrEmpty(cssClassFa)) {
+            if (_Strings.isNullOrEmpty(cssClassFa)) {
                 subMenuItemLink.add(new CssClassAppender("menuLinkSpacer"));
             } else {
                 menuItemLabel.add(new CssClassFaBehavior(cssClassFa, menuItem.getCssClassFaPosition()));
             }
 
             String cssClass = menuItem.getCssClass();
-            if (!Strings.isNullOrEmpty(cssClass)) {
+            if (!_Strings.isNullOrEmpty(cssClass)) {
                 subMenuItemLink.add(new CssClassAppender(cssClass));
             }
         } else {
@@ -160,7 +160,7 @@ public final class ServiceActionUtil {
     }
 
     static List<CssMenuItem> withSeparators(List<CssMenuItem> subMenuItems) {
-        final List<CssMenuItem> itemsWithSeparators = Lists.newArrayList();
+        final List<CssMenuItem> itemsWithSeparators = _Lists.newArrayList();
         for (CssMenuItem menuItem : subMenuItems) {
             if(menuItem.requiresSeparator()) {
                 if(!itemsWithSeparators.isEmpty()) {
@@ -218,16 +218,11 @@ public final class ServiceActionUtil {
         // menuBar in question, whereas the "Other" menu may reference a service which is defined for some other menubar
         final List<ObjectAdapter> serviceAdapters = IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().getServices();
         final ImmutableMap<ObjectAdapter, String> oidByServiceAdapter = FluentIterable.from(serviceAdapters)
-                .toMap(new Function<ObjectAdapter, String>() {
-                    @Override
-                    public String apply(final ObjectAdapter objectAdapter) {
-                        return objectAdapter.getOid().enStringNoVersion();
-                    }
-                });
+                .toMap((final ObjectAdapter objectAdapter) -> objectAdapter.getOid().enStringNoVersion());
         final ImmutableBiMap<String, ObjectAdapter> serviceAdapterByOid = ImmutableBiMap
                 .copyOf(oidByServiceAdapter).inverse();
 
-        final List<CssMenuItem> menuItems = Lists.newArrayList();
+        final List<CssMenuItem> menuItems = _Lists.newArrayList();
         for (final BS3Menu menu : menuBar.getMenus()) {
 
             final CssMenuItem serviceMenu = CssMenuItem.newMenuItem(menu.getNamed()).build();

@@ -22,8 +22,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapab
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 
-import com.google.common.base.Strings;
-
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -51,11 +50,11 @@ public class JdoPersistenceCapableAnnotationFacetFactory extends FacetFactoryAbs
             return;
         }
         String annotationSchemaAttribute = annotation.schema();
-        if(Strings.isNullOrEmpty(annotationSchemaAttribute)) {
+        if(_Strings.isNullOrEmpty(annotationSchemaAttribute)) {
             annotationSchemaAttribute = null;
         }
         String annotationTableAttribute = annotation.table();
-        if (Strings.isNullOrEmpty(annotationTableAttribute)) {
+        if (_Strings.isNullOrEmpty(annotationTableAttribute)) {
             annotationTableAttribute = cls.getSimpleName();
         }
 

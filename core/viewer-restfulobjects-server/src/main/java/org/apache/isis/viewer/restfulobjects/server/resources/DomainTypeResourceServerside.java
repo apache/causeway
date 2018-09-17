@@ -28,7 +28,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;
@@ -307,7 +307,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             final String argsParamName) {
 
         // simple style; simple return
-        if (!Strings.isNullOrEmpty(domainTypeStr)) {
+        if (!_Strings.isNullOrEmpty(domainTypeStr)) {
             return domainTypeStr;
         }
 

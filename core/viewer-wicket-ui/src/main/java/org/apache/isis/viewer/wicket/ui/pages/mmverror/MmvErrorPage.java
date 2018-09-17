@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.pages.mmverror;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
@@ -80,7 +80,7 @@ public class MmvErrorPage extends WebPage {
     private static final String ID_ERROR_MESSAGE = "errorMessage";
 
     public MmvErrorPage(Set<String> validationErrors) {
-        this(Model.ofList(Lists.newArrayList(validationErrors)));
+        this(Model.ofList(_Lists.newArrayList(validationErrors)));
     }
 
     public MmvErrorPage(final IModel<List<String>> model) {

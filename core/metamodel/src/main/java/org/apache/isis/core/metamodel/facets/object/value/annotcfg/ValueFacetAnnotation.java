@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
@@ -33,7 +32,7 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
     private static String semanticsProviderName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
         final Value annotation = annotatedClass.getAnnotation(Value.class);
         final String semanticsProviderName = annotation.semanticsProviderName();
-        if (!Strings.isNullOrEmpty(semanticsProviderName)) {
+        if (!_Strings.isNullOrEmpty(semanticsProviderName)) {
             return semanticsProviderName;
         }
         return ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(annotatedClass, configuration);

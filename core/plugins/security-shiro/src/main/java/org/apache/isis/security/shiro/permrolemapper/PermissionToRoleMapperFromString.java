@@ -16,23 +16,22 @@
  */
 package org.apache.isis.security.shiro.permrolemapper;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import com.google.common.collect.Maps;
-
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.security.shiro.util.Util;
 
 public class PermissionToRoleMapperFromString implements PermissionToRoleMapper {
 
-    private final Map<String,List<String>> permissionsByRole = Maps.newLinkedHashMap();
+    private final Map<String, Set<String>> permissionsByRole = _Maps.newLinkedHashMap();
 
     public PermissionToRoleMapperFromString(String permissionsByRoleStr) {
         permissionsByRole.putAll(Util.parse(permissionsByRoleStr));
     }
 
     @Override
-    public Map<String, List<String>> getPermissionsByRole() {
+    public Map<String, Set<String>> getPermissionsByRole() {
         return permissionsByRole;
     }
 

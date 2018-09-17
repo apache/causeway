@@ -29,16 +29,14 @@ import java.util.stream.Collectors;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
 
 public abstract class Parser<T> {
 
@@ -381,24 +379,16 @@ public abstract class Parser<T> {
                 if (str == null) {
                     return Collections.emptyList();
                 }
-                final List<String> strings = Lists.newArrayList(Splitter.on(",").split(str));
-                return Lists.transform(strings, new Function<String, com.google.common.net.MediaType>() {
-
-                    @Override
-                    public com.google.common.net.MediaType apply(final String input) {
+                final List<String> strings = _Lists.newArrayList(Splitter.on(",").split(str));
+                return _Lists.map(strings, (final String input) -> {
                         return com.google.common.net.MediaType.parse(input);
-                    }
                 });
             }
 
             @Override
             public String asString(final List<com.google.common.net.MediaType> listOfMediaTypes) {
-                final List<String> strings = Lists.transform(listOfMediaTypes, new Function<com.google.common.net.MediaType, String>() {
-                    @Override
-                    public String apply(final com.google.common.net.MediaType input) {
-                        return input.toString();
-                    }
-                });
+                final List<String> strings = _Lists.map(listOfMediaTypes, 
+                        (final com.google.common.net.MediaType input)->input.toString());
                 return Joiner.on(",").join(strings);
             }
         };

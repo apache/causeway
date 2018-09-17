@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import com.google.common.io.Files;
 
 import org.apache.maven.plugin.MojoFailureException;
@@ -144,7 +144,7 @@ public class IsisMojoXsd extends IsisMojoAbstract {
 
     String xsdDirNameFor(final String namespaceUri) {
         final String sanitized = sanitize(namespaceUri);
-        final String sanitizedElseUnnamed = Strings.isNullOrEmpty(sanitized) ? ("unnamed-" + (unnamed++)) : sanitized;
+        final String sanitizedElseUnnamed = _Strings.isNullOrEmpty(sanitized) ? ("unnamed-" + (unnamed++)) : sanitized;
         return sanitizedElseUnnamed;
     }
 

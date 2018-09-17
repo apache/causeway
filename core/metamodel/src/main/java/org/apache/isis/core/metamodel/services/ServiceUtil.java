@@ -22,9 +22,8 @@ package org.apache.isis.core.metamodel.services;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.exceptions.IsisException;
 
 public final class ServiceUtil {
@@ -65,7 +64,7 @@ public final class ServiceUtil {
         final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
         if(domainService != null) {
             serviceType = domainService.objectType();
-            if(!Strings.isNullOrEmpty(serviceType)) {
+            if(!_Strings.isNullOrEmpty(serviceType)) {
                 return serviceType;
             }
         }

@@ -25,9 +25,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
-
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -133,7 +132,7 @@ public class CssClassFacetOnActionFromConfiguredRegexFactory extends FacetFactor
             final Map<String,String> cssClassByRegex = _Maps.newLinkedHashMap();
             while (regexToCssClasses.hasMoreTokens()) {
                 String regexToCssClass = regexToCssClasses.nextToken().trim();
-                if (Strings.isNullOrEmpty(regexToCssClass)) {
+                if (_Strings.isNullOrEmpty(regexToCssClass)) {
                     continue;
                 }
                 final Matcher matcher = CSS_CLASS_REGEX_PATTERN.matcher(regexToCssClass);

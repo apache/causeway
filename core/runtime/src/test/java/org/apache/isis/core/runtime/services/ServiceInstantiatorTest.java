@@ -16,6 +16,10 @@
  */
 package org.apache.isis.core.runtime.services;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
@@ -26,23 +30,17 @@ import java.util.concurrent.TimeUnit;
 
 import javax.enterprise.context.RequestScoped;
 
-import com.google.common.base.Predicates;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
-
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 public class ServiceInstantiatorTest {
 
@@ -146,7 +144,7 @@ public class ServiceInstantiatorTest {
 
 		final Consumer consumer = serviceInstantiator.createInstance(Consumer.class);
 
-		final List<Integer> allTheNumbers = Collections.synchronizedList(Lists.<Integer>newArrayList());
+		final List<Integer> allTheNumbers = Collections.synchronizedList(_Lists.<Integer>newArrayList());
 
 		final int n = 100;
 		for (int i = 0; i < n; i++) {
@@ -183,7 +181,7 @@ public class ServiceInstantiatorTest {
 
 		((RequestScopedService)consumer).__isis_endRequest();
 
-		assertEquals(0, FluentIterable.from(allTheNumbers).filter(Predicates.<Integer>notNull()).size());
+		assertEquals(0, _NullSafe.stream(allTheNumbers).filter(_NullSafe::isPresent).count());
 	}
 
 	public static class SingletonCalculator {

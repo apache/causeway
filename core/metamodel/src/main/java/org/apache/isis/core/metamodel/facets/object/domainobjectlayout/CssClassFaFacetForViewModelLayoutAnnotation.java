@@ -18,9 +18,8 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 import java.util.List;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.annotation.ViewModelLayout;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
@@ -32,7 +31,7 @@ public class CssClassFaFacetForViewModelLayoutAnnotation extends CssClassFaFacet
 
         class Annot {
             private Annot(final ViewModelLayout viewModelLayout) {
-                this.cssClassFa = Strings.emptyToNull(viewModelLayout.cssClassFa());
+                this.cssClassFa = _Strings.emptyToNull(viewModelLayout.cssClassFa());
                 this.cssClassFaPosition = CssClassFaPosition.from(viewModelLayout.cssClassFaPosition());
             }
             String cssClassFa;

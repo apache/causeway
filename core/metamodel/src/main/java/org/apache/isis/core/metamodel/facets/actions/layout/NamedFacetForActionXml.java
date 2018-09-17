@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
@@ -32,7 +31,7 @@ public class NamedFacetForActionXml extends NamedFacetAbstract {
         if(actionLayout == null) {
             return null;
         }
-        final String named = Strings.emptyToNull(actionLayout.getNamed());
+        final String named = _Strings.emptyToNull(actionLayout.getNamed());
         Boolean escaped = actionLayout.getNamedEscaped();
         return named != null ? new NamedFacetForActionXml(named, (escaped == null || escaped), holder) : null;
     }

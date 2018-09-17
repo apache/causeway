@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.runtime.services.email;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.junit.Test;
 
@@ -42,7 +42,7 @@ public class EmailServiceDefaultTest_actually {
     @Test
     public void when_not_null_but_no_override() throws Exception {
 
-        final String[] actually = EmailServiceDefault.actually(Lists.newArrayList("joey@tribiani.com", "rachel@green.com"), null);
+        final String[] actually = EmailServiceDefault.actually(_Lists.of("joey@tribiani.com", "rachel@green.com"), null);
 
         assertThat(actually, is(not(nullValue())));
         assertThat(actually.length, is(2));
@@ -51,7 +51,7 @@ public class EmailServiceDefaultTest_actually {
     @Test
     public void when_not_null_but_with_override() throws Exception {
 
-        final String[] actually = EmailServiceDefault.actually(Lists.newArrayList("joey@tribiani.com", "rachel@green.com"), "ross@geller.com");
+        final String[] actually = EmailServiceDefault.actually(_Lists.of("joey@tribiani.com", "rachel@green.com"), "ross@geller.com");
 
         assertThat(actually, is(not(nullValue())));
         assertThat(actually.length, is(1));

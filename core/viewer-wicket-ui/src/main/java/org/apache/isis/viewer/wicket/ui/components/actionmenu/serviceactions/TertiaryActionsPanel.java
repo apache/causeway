@@ -33,7 +33,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * A panel responsible to render the application actions as menu in a navigation bar.
@@ -81,7 +81,7 @@ public class TertiaryActionsPanel extends Panel {
     }
 
     protected List<CssMenuItem> flatten(List<CssMenuItem> menuItems) {
-        List<CssMenuItem> subMenuItems = Lists.newArrayList();
+        List<CssMenuItem> subMenuItems = _Lists.newArrayList();
         for (CssMenuItem menuItem : menuItems) {
             subMenuItems.addAll(menuItem.getSubMenuItems());
         }

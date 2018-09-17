@@ -30,7 +30,7 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import com.google.common.io.CharSource;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
@@ -93,7 +93,7 @@ public class TranslationsResolverWicket implements TranslationsResolver {
         final CharSource charSource = Resources.asCharSource(url, Charsets.UTF_8);
         final ImmutableList<String> strings = charSource.readLines();
         return Collections.unmodifiableList(
-                Lists.newArrayList(
+                _Lists.newArrayList(
                         Iterables.filter(strings, new Predicate<String>() {
                             @Override
                             public boolean apply(final String input) {

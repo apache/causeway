@@ -23,14 +23,12 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
@@ -40,6 +38,7 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -124,19 +123,14 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         // actions
         // (rendering depends on whether also showing the icon/title)
         final List<ActionLayoutData> actionLayoutDatas = bs3Col.getActions();
-        final List<ObjectAction> visibleActions =
-                FluentIterable.from(actionLayoutDatas)
-                .filter(new Predicate<ActionLayoutData>() {
-                    @Override public boolean apply(final ActionLayoutData actionLayoutData) {
+        final List<ObjectAction> visibleActions = _Lists.transform(actionLayoutDatas, stream->stream
+                .filter((final ActionLayoutData actionLayoutData) -> {
                         return actionLayoutData.getMetadataError() == null;
-                    }
                 })
-                .transform(new Function<ActionLayoutData, ObjectAction>() {
-                    @Nullable @Override public ObjectAction apply(@Nullable final ActionLayoutData actionLayoutData) {
+                .map((@Nullable final ActionLayoutData actionLayoutData) -> {
                         return getModel().getTypeOfSpecification().getObjectAction(actionLayoutData.getId());
-                    }
                 })
-                .filter(Predicates.<ObjectAction>notNull())
+                .filter(_NullSafe::isPresent));
                 //
                 // visibility needs to be determined at point of rendering, by ActionLink itself
                 //
@@ -147,7 +141,7 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
                 //        return visibility.isAllowed();
                 //    }
                 //})
-                .toList();
+                
         final List<LinkAndLabel> entityActionLinks =
                 LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(getModel(), visibleActions, null);
 
@@ -164,7 +158,7 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
 
 
         // rows
-        final List<BS3Row> rows = Lists.newArrayList(this.bs3Col.getRows());
+        final List<BS3Row> rows = _Lists.newArrayList(this.bs3Col.getRows());
         if(!rows.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(ID_ROWS, rows);
             div.add(rowsRv);

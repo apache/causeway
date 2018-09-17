@@ -22,23 +22,24 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.collect.Lists;
+import java.util.Set;
 
 import org.junit.Test;
+
+import org.apache.isis.commons.internal.collections._Lists;
 
 public class PermissionToRoleMapperFromStringTest {
 
     @Test
     public void test() {
-        final Map<String, List<String>> permissionsByRole = new PermissionToRoleMapperFromString(
+        final Map<String, Set<String>> permissionsByRole = new PermissionToRoleMapperFromString(
                 "role1 = foo,bar;"
                 + "role2 = fiz:x,bip:bop:* ;"
                 + "role3 = *").getPermissionsByRole();
         
-        assertThat(permissionsByRole.get("role1"), is(equalTo((List<String>)Lists.newArrayList("foo","bar"))));
-        assertThat(permissionsByRole.get("role2"), is(equalTo((List<String>)Lists.newArrayList("fiz:x","bip:bop:*"))));
-        assertThat(permissionsByRole.get("role3"), is(equalTo((List<String>)Lists.newArrayList("*"))));
+        assertThat(permissionsByRole.get("role1"), is(equalTo((List<String>)_Lists.of("foo","bar"))));
+        assertThat(permissionsByRole.get("role2"), is(equalTo((List<String>)_Lists.of("fiz:x","bip:bop:*"))));
+        assertThat(permissionsByRole.get("role3"), is(equalTo((List<String>)_Lists.of("*"))));
         assertThat(permissionsByRole.size(), is(3));
     }
 

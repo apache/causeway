@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.panels;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
@@ -71,7 +71,7 @@ public final class PanelUtil {
             return null;
         }
         String simpleName = cls.getSimpleName();
-        if(Strings.isNullOrEmpty(simpleName)) {
+        if(_Strings.isNullOrEmpty(simpleName)) {
             return null; // eg inner classes
         }
         String string;

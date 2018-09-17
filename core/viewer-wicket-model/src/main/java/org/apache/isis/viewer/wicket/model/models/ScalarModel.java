@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
@@ -927,7 +927,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
     /**
      * Additional links to render (if any)
      */
-    private List<LinkAndLabel> linkAndLabels = Lists.newArrayList();
+    private List<LinkAndLabel> linkAndLabels = _Lists.newArrayList();
 
     @Override
     public List<LinkAndLabel> getLinks() {

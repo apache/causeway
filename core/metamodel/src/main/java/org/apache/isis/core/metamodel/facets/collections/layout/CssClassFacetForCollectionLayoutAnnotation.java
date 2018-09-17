@@ -20,11 +20,9 @@
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.List;
-import java.util.Objects;
-
-import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
@@ -35,8 +33,7 @@ public class CssClassFacetForCollectionLayoutAnnotation extends CssClassFacetAbs
 
         return collectionLayouts.stream()
                 .map(CollectionLayout::cssClass)
-                .map(Strings::emptyToNull)
-                .filter(Objects::nonNull)
+                .filter(_Strings::isNotEmpty)
                 .findFirst()
                 .map(cssClass -> new CssClassFacetForCollectionLayoutAnnotation(cssClass, holder))
                 .orElse(null);

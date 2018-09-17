@@ -51,7 +51,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
@@ -80,7 +80,7 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         init(RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
         final List<ObjectAdapter> serviceAdapters =
-                Lists.newArrayList(
+                _Lists.newArrayList(
                         Iterables.filter(
                                 getResourceContext().getServiceAdapters(), NATURE_OF_MENU));
 

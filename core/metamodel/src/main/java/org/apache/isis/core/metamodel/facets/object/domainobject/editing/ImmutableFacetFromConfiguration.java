@@ -19,8 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
-import com.google.common.base.Strings;
-
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -38,7 +37,7 @@ public class ImmutableFacetFromConfiguration extends ImmutableFacetAbstract {
 
     @Override
     public String disabledReason(final ObjectAdapter targetAdapter) {
-        return !Strings.isNullOrEmpty(reason)
+        return !_Strings.isNullOrEmpty(reason)
                 ? reason
                         : super.disabledReason(targetAdapter);
     }

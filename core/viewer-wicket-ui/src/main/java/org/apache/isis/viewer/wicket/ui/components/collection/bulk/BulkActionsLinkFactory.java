@@ -57,7 +57,7 @@ import org.apache.wicket.markup.html.link.Link;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
@@ -101,7 +101,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                             .collect(Collectors.toList());
 
                     final List<Object> domainObjects =
-                            _Lists.transform(toggledAdapters, ObjectAdapter.Functions.getObject());
+                            _Lists.map(toggledAdapters, ObjectAdapter.Functions.getObject());
 
                     final ActionInvocationContext actionInvocationContext = getServicesInjector().lookupService(ActionInvocationContext.class);
                     if (actionInvocationContext != null) {
@@ -182,7 +182,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
             private void recover() {
                 // resync with the objectstore
-                final List<ObjectAdapterMemento> toggleMementosList = Lists.newArrayList(model.getToggleMementosList());
+                final List<ObjectAdapterMemento> toggleMementosList = _Lists.newArrayList(model.getToggleMementosList());
                 for (ObjectAdapterMemento oam : toggleMementosList) {
                     // just requesting the adapter will sync the OAM's version with the objectstore
                     oam.getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader());
@@ -205,7 +205,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
             }
 
             private List<ObjectAdapter> persistentAdaptersWithin(List<ObjectAdapter> adapters) {
-                return Lists.newArrayList(Iterables.filter(adapters, new Predicate<ObjectAdapter>() {
+                return _Lists.newArrayList(Iterables.filter(adapters, new Predicate<ObjectAdapter>() {
                     @Override
                     public boolean apply(ObjectAdapter input) {
                         return !input.isTransient() && !input.isDestroyed();

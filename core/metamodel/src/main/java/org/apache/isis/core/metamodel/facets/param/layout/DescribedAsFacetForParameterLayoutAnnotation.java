@@ -20,11 +20,9 @@
 package org.apache.isis.core.metamodel.facets.param.layout;
 
 import java.util.List;
-import java.util.Objects;
-
-import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
@@ -37,8 +35,7 @@ public class DescribedAsFacetForParameterLayoutAnnotation extends DescribedAsFac
 
         return parameterLayouts.stream()
                 .map(ParameterLayout::describedAs)
-                .map(Strings::emptyToNull)
-                .filter(Objects::nonNull)
+                .filter(_Strings::isNotEmpty)
                 .findFirst()
                 .map(describedAs -> new DescribedAsFacetForParameterLayoutAnnotation(describedAs, holder))
                 .orElse(null);

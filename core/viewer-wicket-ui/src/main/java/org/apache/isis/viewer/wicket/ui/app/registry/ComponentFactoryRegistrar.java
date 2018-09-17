@@ -23,7 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -37,7 +37,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 public interface ComponentFactoryRegistrar {
 
     public static class ComponentFactoryList implements Iterable<ComponentFactory> {
-        private final List<ComponentFactory> componentFactories = Lists.newArrayList();
+        private final List<ComponentFactory> componentFactories = _Lists.newArrayList();
 
         public void add(ComponentFactory componentFactory) {
             componentFactories.add(componentFactory);

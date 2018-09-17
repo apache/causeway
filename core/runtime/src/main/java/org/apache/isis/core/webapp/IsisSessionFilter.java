@@ -24,7 +24,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -35,11 +38,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.base.Function;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.StringExtensions;
@@ -141,12 +143,8 @@ public class IsisSessionFilter implements Filter {
      */
     public static final String IGNORE_EXTENSIONS_KEY = "ignoreExtensions";
 
-    private static final Function<String, Pattern> STRING_TO_PATTERN = new Function<String, Pattern>() {
-        @Override
-        public Pattern apply(final String input) {
+    private static final Function<String, Pattern> STRING_TO_PATTERN = (final String input) -> {
             return Pattern.compile(".*\\." + input);
-        }
-
     };
 
     /**
@@ -274,7 +272,7 @@ public class IsisSessionFilter implements Filter {
             } else {
                 // default whenNotAuthenticated and allow access through to the logonPage
                 whenNotAuthenticated = WhenNoSession.RESTRICTED;
-                this.restrictedPaths = Lists.newArrayList(logonPage);
+                this.restrictedPaths = _Lists.of(logonPage);
                 return;
             }
         }
@@ -285,7 +283,7 @@ public class IsisSessionFilter implements Filter {
             if (restrictedPathsStr == null) {
                 throw new IllegalStateException(String.format("Require an init-param of '%s' key to be set.", RESTRICTED_KEY));
             }
-            this.restrictedPaths = Lists.newArrayList(Splitter.on(",").split(restrictedPathsStr));
+            this.restrictedPaths = _Lists.newArrayList(Splitter.on(",").split(restrictedPathsStr));
         }
 
     }
@@ -301,16 +299,17 @@ public class IsisSessionFilter implements Filter {
     }
 
     private void lookupIgnoreExtensions(final FilterConfig config) {
-        ignoreExtensions = Collections.unmodifiableCollection(parseIgnorePatterns(config));
+        ignoreExtensions = Collections.unmodifiableCollection(parseIgnorePatterns(config)
+                .collect(Collectors.toList()));
     }
 
-    private static Collection<Pattern> parseIgnorePatterns(final FilterConfig config) {
+    private Stream<Pattern> parseIgnorePatterns(final FilterConfig config) {
         final String ignoreExtensionsStr = config.getInitParameter(IGNORE_EXTENSIONS_KEY);
         if (ignoreExtensionsStr != null) {
-            final List<String> ignoreExtensions = Lists.newArrayList(Splitter.on(",").split(ignoreExtensionsStr));
-            return Collections2.transform(ignoreExtensions, STRING_TO_PATTERN);
+            final Stream<String> ignoreExtensions = _Strings.splitThenStream(ignoreExtensionsStr, ","); 
+            return ignoreExtensions.map(STRING_TO_PATTERN);
         }
-        return Lists.newArrayList();
+        return Stream.empty();
     }
 
 

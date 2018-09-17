@@ -21,8 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid;
 
 import java.util.Locale;
 
-import com.google.common.base.Strings;
-
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacetAbstract;
@@ -38,7 +37,7 @@ public class ObjectSpecIdFacetForJdoPersistenceCapableAnnotation extends ObjectS
             return null;
         }
         final String schema = persistenceCapableFacet.getSchema();
-        if(Strings.isNullOrEmpty(schema)) {
+        if(_Strings.isNullOrEmpty(schema)) {
             return null;
         }
         final String objectType = schema.toLowerCase(Locale.ROOT) + "." + persistenceCapableFacet.getTable();

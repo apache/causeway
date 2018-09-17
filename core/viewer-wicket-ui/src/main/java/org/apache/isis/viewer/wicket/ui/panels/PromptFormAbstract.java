@@ -54,7 +54,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapter>
 & ParentEntityModelProvider
@@ -70,7 +70,7 @@ implements ScalarModelSubscriber2 {
 
     private static final String ID_FEEDBACK = "feedback";
 
-    protected final List<ScalarPanelAbstract2> paramPanels = Lists.newArrayList();
+    protected final List<ScalarPanelAbstract2> paramPanels = _Lists.newArrayList();
 
     private final Component parentPanel;
     private final WicketViewerSettings settings;

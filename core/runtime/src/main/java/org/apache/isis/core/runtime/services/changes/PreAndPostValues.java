@@ -19,8 +19,8 @@
 package org.apache.isis.core.runtime.services.changes;
 
 import java.util.Map;
+import java.util.Objects;
 
-import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
 
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -105,6 +105,6 @@ public class PreAndPostValues {
             return true;
         }
         // else - for updated objects - audit only if the property value has changed
-        return !Objects.equal(getPre(), getPost());
+        return !Objects.equals(getPre(), getPost());
     }
 }

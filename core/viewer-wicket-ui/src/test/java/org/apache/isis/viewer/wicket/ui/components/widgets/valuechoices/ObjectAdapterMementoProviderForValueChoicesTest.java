@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.jmock.Expectations;
 import org.junit.Assert;
@@ -54,7 +54,7 @@ public class ObjectAdapterMementoProviderForValueChoicesTest {
         mockMemento1 = mock("mockMemento1");
         mockMemento2 = mock("mockMemento2");
 
-        mementos = Lists.newArrayList(
+        mementos = _Lists.of(
                 mockMemento1, mockMemento2
         );
 

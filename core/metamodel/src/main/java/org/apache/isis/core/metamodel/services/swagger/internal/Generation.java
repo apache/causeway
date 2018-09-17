@@ -26,15 +26,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
-import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
@@ -475,7 +475,7 @@ class Generation {
                 .parameter(
                         new QueryParameter()
                         .name(parameter.getId())
-                        .description(Util.roSpec("2.9.1") + (!Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
+                        .description(Util.roSpec("2.9.1") + (!_Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
                         .required(false)
                         .type("string")
                         );
@@ -594,7 +594,7 @@ class Generation {
                 .parameter(
                         new QueryParameter()
                         .name(parameter.getId())
-                        .description(Util.roSpec("2.9.1") + (!Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
+                        .description(Util.roSpec("2.9.1") + (!_Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
                         .required(false)
                         .type("string")
                         );

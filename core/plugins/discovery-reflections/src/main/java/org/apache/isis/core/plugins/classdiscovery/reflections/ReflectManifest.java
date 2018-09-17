@@ -25,8 +25,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.reflections.vfs.SystemDir;
 import org.reflections.vfs.Vfs;
 
@@ -67,7 +65,7 @@ class ReflectManifest {
         private final List<String> fileEndings;
 
         private EmptyIfFileEndingsUrlType(final String... fileEndings) {
-            this.fileEndings = Lists.newArrayList(fileEndings);
+            this.fileEndings = Arrays.asList(fileEndings);
         }
 
         @Override

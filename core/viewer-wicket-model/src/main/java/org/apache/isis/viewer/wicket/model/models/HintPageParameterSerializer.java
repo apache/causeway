@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -69,7 +69,7 @@ class HintPageParameterSerializer implements Serializable {
             getHintStore().removeAll(objectAdapterMemento.asHintingBookmark());
             return;
         }
-        List<ComponentHintKey> newComponentHintKeys = Lists.newArrayList();
+        List<ComponentHintKey> newComponentHintKeys = _Lists.newArrayList();
         for (String namedKey : namedKeys) {
             if (namedKey.startsWith(PREFIX)) {
                 String value = pageParameters.get(namedKey).toString(null);

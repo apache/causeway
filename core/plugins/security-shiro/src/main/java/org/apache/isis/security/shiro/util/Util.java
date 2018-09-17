@@ -20,34 +20,36 @@ package org.apache.isis.security.shiro.util;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import com.google.common.base.Function;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Maps;
 
 public class Util {
 
-    private static final Function<String, String> TRIM = new Function<String,String>() {
-        @Override
-        public String apply(String str) {
-            return str.trim();
-        }
-    };
-
-    public static Map<String, List<String>> parse(String permissionsByRoleStr) {
-        Map<String,List<String>> perms = Maps.newHashMap();
-        for(String roleAndPermsStr: Splitter.on(";").split(permissionsByRoleStr)) {
-            final Iterable<String> split = Splitter.on("=").split(roleAndPermsStr);
-            final String[] roleAndPerms = Iterables.toArray(split, String.class);
-            if(roleAndPerms.length != 2) {
-                continue;
+    public static Map<String, Set<String>> parse(String permissionsByRoleStr) {
+        final Map<String, Set<String>> permsByRole = _Maps.newHashMap();
+        
+        _Strings.splitThenStream(permissionsByRoleStr, ";")
+        .forEach(roleAndPermsStr->{
+            
+            final List<String> roleAndPerms = _Strings.splitThenStream(roleAndPermsStr, "=")
+                    .collect(Collectors.toList());
+            
+            if(roleAndPerms.size() != 2) {
+                return;
             }
-            final String role = roleAndPerms[0].trim();
-            final String permStr = roleAndPerms[1].trim();
-            perms.put(role, Lists.newArrayList(Iterables.transform(Splitter.on(",").split(permStr), TRIM)));
-        }
-        return perms;
+            final String role = roleAndPerms.get(0).trim();
+            final String permStr = roleAndPerms.get(0).trim();
+            
+            final Set<String> perms = _Strings.splitThenStream(permStr, ",")
+                    .map(String::trim)
+                    .collect(Collectors.toSet());
+            
+            permsByRole.put(role, perms);
+        });
+        
+        return permsByRole;
     }
 }

@@ -22,11 +22,6 @@ import java.util.concurrent.Callable;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicates;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -35,6 +30,8 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
@@ -106,10 +103,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     final List<ObjectAdapterMemento> selectedMementos =
                             toggledMementosProviderIfAny.getToggles();
 
-                    final ImmutableList<Object> selectedPojos = FluentIterable.from(selectedMementos)
-                            .transform(new Function<ObjectAdapterMemento, Object>() {
-                                @Nullable @Override
-                                public Object apply(@Nullable final ObjectAdapterMemento input) {
+                    final List<Object> selectedPojos = _Lists.transform(selectedMementos, stream->stream
+                            .map((@Nullable final ObjectAdapterMemento input) -> {
                                     if(input == null) {
                                         return null;
                                     }
@@ -117,10 +112,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                                             ConcurrencyChecking.NO_CHECK,
                                             persistenceSession, specificationLoader);
                                     return objectAdapter != null ? objectAdapter.getObject() : null;
-                                }
                             })
-                            .filter(Predicates.notNull())
-                            .toList();
+                            .filter(_NullSafe::isPresent)
+                            );
 
                     final ActionPrompt actionPrompt = ActionParameterDefaultsFacetFromAssociatedCollection.withSelected(
                             selectedPojos,

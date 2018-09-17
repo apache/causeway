@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.google.common.collect.Lists;
+
+import org.apache.isis.commons.internal.collections._Lists;
 
 class Block {
 
@@ -43,7 +44,7 @@ class Block {
 
     State state = State.CONTEXT;
 
-    List<String> contextList = Lists.newArrayList();
+    List<String> contextList = _Lists.newArrayList();
     String msgid = null;
     String msgid_plural = null;
     String msgstr = null; // either from msgstr or msgstr[0] if there is a plural

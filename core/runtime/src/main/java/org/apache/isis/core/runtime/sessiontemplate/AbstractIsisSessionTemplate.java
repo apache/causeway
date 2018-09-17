@@ -83,7 +83,7 @@ public abstract class AbstractIsisSessionTemplate {
 //        if(targetObject instanceof CollectionDto) {
 //            final CollectionDto collectionDto = (CollectionDto) targetObject;
 //            final List<ValueDto> valueDtoList = collectionDto.getValue();
-//            final List<Object> pojoList = Lists.newArrayList();
+//            final List<Object> pojoList = _Lists.newArrayList();
 //            for (final ValueDto valueDto : valueDtoList) {
 //                ValueType valueType = collectionDto.getType();
 //                final Object valueOrOidDto = CommonDtoUtils.getValue(valueDto, valueType);

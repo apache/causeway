@@ -21,18 +21,15 @@ package org.apache.isis.core.runtime.system;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
  * Whether running on client or server side etc.
  */
 public class DeploymentType {
 
-    private static List<DeploymentType> deploymentTypes = Lists.newArrayList();
+    private static List<DeploymentType> deploymentTypes = _Lists.newArrayList();
 
     public static DeploymentType SERVER = new DeploymentType("SERVER", DeploymentCategory.PRODUCTION);
     public static DeploymentType SERVER_EXPLORATION = new DeploymentType("SERVER_EXPLORATION", DeploymentCategory.EXPLORING);

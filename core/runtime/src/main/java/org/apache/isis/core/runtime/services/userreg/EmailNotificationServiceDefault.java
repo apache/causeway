@@ -18,6 +18,9 @@
  */
 package org.apache.isis.core.runtime.services.userreg;
 
+import static java.util.regex.Pattern.compile;
+import static java.util.regex.Pattern.quote;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
@@ -40,9 +43,6 @@ import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
-
-import static java.util.regex.Pattern.compile;
-import static java.util.regex.Pattern.quote;
 
 /**
  * A service that sends email notifications when specific events occur

@@ -22,7 +22,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.concurrent.Callable;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Localizer;
@@ -60,7 +60,7 @@ public class LocalizerForIsis extends Localizer {
                     throws MissingResourceException {
 
         final String translated = translate(key, component);
-        if(!Strings.isNullOrEmpty(translated) && !translated.equals(key)) {
+        if(!_Strings.isNullOrEmpty(translated) && !translated.equals(key)) {
             return translated;
         }
         return super.getString(key, component, model, locale, style, defaultValue);

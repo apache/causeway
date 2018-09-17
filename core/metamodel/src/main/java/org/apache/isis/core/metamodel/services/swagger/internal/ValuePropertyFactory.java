@@ -27,13 +27,12 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import org.apache.isis.commons.internal.collections._Maps;
-
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.core.metamodel.services.swagger.internal.ValuePropertyPlugin.ValuePropertyCollector;
 
@@ -118,7 +117,7 @@ public class ValuePropertyFactory {
             final StringProperty property = new StringProperty();
             final Object[] enumConstants = cls.getEnumConstants();
 
-            final List<String> enumNames = _Lists.transform(
+            final List<String> enumNames = _Lists.map(
                     Arrays.asList(enumConstants), input->((Enum<?>)input).name());
             property.setEnum(enumNames);
             return property;

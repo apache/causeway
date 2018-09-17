@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.WithTransactionScope;
@@ -40,10 +43,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyO
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.services.auditing.AuditingServiceInternal;
 import org.apache.isis.core.runtime.services.persistsession.PersistenceSessionServiceInternalDefault;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.Lists;
 
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
@@ -373,7 +372,7 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         do {
             // this algorithm ensures that we never execute the same command twice,
             // and also allow new commands to be added to end
-            final List<PersistenceCommand> persistenceCommandList = Lists.newArrayList(persistenceCommands);
+            final List<PersistenceCommand> persistenceCommandList = _Lists.newArrayList(persistenceCommands);
 
             if(!persistenceCommandList.isEmpty()) {
                 // so won't be processed again if a flush is encountered subsequently

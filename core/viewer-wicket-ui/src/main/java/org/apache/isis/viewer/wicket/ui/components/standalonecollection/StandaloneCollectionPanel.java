@@ -21,9 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.standalonecollection;
 
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -31,6 +28,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
@@ -185,12 +183,8 @@ implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvi
 
         final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions(getIsisSessionFactory());
 
-        List<LinkAndLabel> linkAndLabels = Lists.transform(bulkActions, new Function<ObjectAction, LinkAndLabel>(){
-            @Override
-            public LinkAndLabel apply(ObjectAction objectAction) {
-                return linkFactory.newLink(objectAction, ID_ADDITIONAL_LINK, null);
-            }
-        });
+        final List<LinkAndLabel> linkAndLabels = _Lists.map(bulkActions, (ObjectAction objectAction) ->
+                linkFactory.newLink(objectAction, ID_ADDITIONAL_LINK, null));
 
         AdditionalLinksPanel.addAdditionalLinks(
                 outerDiv, ID_ADDITIONAL_LINKS, linkAndLabels, AdditionalLinksPanel.Style.INLINE_LIST);

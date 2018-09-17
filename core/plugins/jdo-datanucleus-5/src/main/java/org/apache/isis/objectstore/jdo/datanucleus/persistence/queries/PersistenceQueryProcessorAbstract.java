@@ -29,7 +29,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
 import org.datanucleus.enhancement.Persistable;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQuery>
 implements PersistenceQueryProcessor<T> {
@@ -48,7 +48,7 @@ implements PersistenceQueryProcessor<T> {
      * to be called.
      */
     protected List<ObjectAdapter> loadAdapters(final List<?> pojos) {
-        final List<ObjectAdapter> adapters = Lists.newArrayList();
+        final List<ObjectAdapter> adapters = _Lists.newArrayList();
         for (final Object pojo : pojos) {
             // ought not to be necessary, however for some queries it seems that the
             // lifecycle listener is not called

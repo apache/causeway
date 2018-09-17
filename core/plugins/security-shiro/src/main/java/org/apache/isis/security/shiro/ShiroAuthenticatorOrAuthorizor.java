@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
@@ -196,7 +196,7 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
      * somewhere other than Shiro's {@link RealmSecurityManager}.
      */
     protected List<String> getRoles(final Subject subject, final AuthenticationToken token) {
-        final List<String> roles = Lists.newArrayList();
+        final List<String> roles = _Lists.newArrayList();
 
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {

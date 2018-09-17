@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.errors;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -52,7 +52,7 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
     @Override
     protected void respond(AjaxRequestTarget target) {
         String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
-        if(!Strings.isNullOrEmpty(feedbackMsg)) {
+        if(!_Strings.isNullOrEmpty(feedbackMsg)) {
             target.appendJavaScript(feedbackMsg);
         }
     }
@@ -68,7 +68,7 @@ public class JGrowlBehaviour extends AbstractDefaultAjaxBehavior {
         response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(JGrowlBehaviour.class, "js/bootstrap-growl.js")));
 
         String feedbackMsg = JGrowlUtil.asJGrowlCalls(getMessageBroker());
-        if(!Strings.isNullOrEmpty(feedbackMsg)) {
+        if(!_Strings.isNullOrEmpty(feedbackMsg)) {
             response.render(OnDomReadyHeaderItem.forScript(feedbackMsg));
         }
     }

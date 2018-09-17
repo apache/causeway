@@ -103,6 +103,29 @@ public final class _Strings {
     // -- BASIC UNARY OPERATORS
 
     /**
+     * @param input
+     * @return null if the {@code input} is null or empty, the {@code input} otherwise 
+     */
+    public static @Nullable String emptyToNull(@Nullable String input) {
+        if(isEmpty(input)) {
+            return null;
+        }
+        return input;
+    }
+    
+    /**
+     * @param input
+     * @return the empty string if the {@code input} is null, the {@code input} otherwise 
+     */
+    public static String nullToEmpty(@Nullable String input) {
+        if(input==null) {
+            return "";
+        }
+        return input;
+    }
+    
+    
+    /**
      * Trims the input.
      * @param input
      * @return null if the {@code input} is null
@@ -394,6 +417,8 @@ public final class _Strings {
         requires(fileExtension, "fileExtension");
         return suffix(fileName, prefix(fileExtension, "."));
     }
+
+
 
 
 

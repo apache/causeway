@@ -18,20 +18,23 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
-import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
-
 import java.util.List;
-import com.google.common.collect.Lists;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.ResourceReference;
+
+import org.apache.isis.commons.internal.collections._Lists;
+
+import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
 /**
  * A JavaScript reference that loads <a href="https://github.com/ivaynberg/select2/">Select2.js</a>
  * <p>Depends on JQuery.</p>
  */
 public class Select2JsReference extends WebjarsJavaScriptResourceReference {
+    private static final long serialVersionUID = 1L;
 
     public Select2JsReference() {
         super("/select2/current/select2.js");
@@ -40,6 +43,6 @@ public class Select2JsReference extends WebjarsJavaScriptResourceReference {
     @Override
     public List<HeaderItem> getDependencies() {
         ResourceReference jQueryReference = Application.get().getJavaScriptLibrarySettings().getJQueryReference();
-        return Lists.<HeaderItem>newArrayList(JavaScriptHeaderItem.forReference(jQueryReference));
+        return _Lists.<HeaderItem>of(JavaScriptHeaderItem.forReference(jQueryReference));
     }
 }

@@ -22,8 +22,7 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.google.common.collect.Collections2;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -53,9 +52,7 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     public Collection<ObjectAdapter> collection(final ObjectAdapter collectionAdapter) {
         final Collection<?> pojoCollection = pojoCollection(collectionAdapter);
         
-        //TODO [ahuber] java doc states, this is a live view, don't know if this is needed, 
-        // or if a copy is sufficient
-        return Collections2.transform(pojoCollection, adapterProvider::adapterFor);
+        return _Lists.map(pojoCollection, adapterProvider::adapterFor);
                 
     }
 

@@ -18,6 +18,13 @@
  */
 package org.apache.isis.core.runtime.headless;
 
+import java.util.List;
+
+import javax.jdo.PersistenceManagerFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.AppManifestAbstract2;
@@ -28,15 +35,10 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.headless.logging.LeveledLogger;
+import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.jdo.PersistenceManagerFactory;
-import java.util.List;
 
 public class IsisSystemBootstrapper {
 

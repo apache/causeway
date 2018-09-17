@@ -27,7 +27,6 @@ import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import org.apache.isis.commons.internal.collections._Maps;
 import com.google.common.io.Resources;
 
 import org.slf4j.Logger;
@@ -43,6 +42,7 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 
 @DomainService(

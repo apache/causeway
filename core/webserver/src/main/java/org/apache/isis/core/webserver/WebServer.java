@@ -26,7 +26,7 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -132,7 +132,7 @@ public class WebServer {
     }
 
     private static List<OptionHandler> standardHandlers() {
-        return Lists.newArrayList(
+        return _Lists.of(
                 new OptionHandlerConfiguration(),
                 new OptionHandlerFixture(),
                 new OptionHandlerAppManifest(),
@@ -202,7 +202,7 @@ public class WebServer {
      * Set of locations to search for config files.
      */
     private static List<ResourceStreamSource> resourceStreamSources() {
-        final List<ResourceStreamSource> rssList = Lists.newArrayList();
+        final List<ResourceStreamSource> rssList = _Lists.newArrayList();
         rssList.addAll(Arrays.asList(
                 ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY),
                 ResourceStreamSourceFileSystem.create(ConfigurationConstants.WEBINF_FULL_DIRECTORY),

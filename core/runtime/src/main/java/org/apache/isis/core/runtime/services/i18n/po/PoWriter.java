@@ -20,12 +20,15 @@ package org.apache.isis.core.runtime.services.i18n.po;
 
 import java.util.SortedMap;
 import java.util.SortedSet;
+
 import com.google.common.collect.Maps;
-import org.apache.isis.commons.internal.collections._Sets;
+
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 class PoWriter extends PoAbstract {

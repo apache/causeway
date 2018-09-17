@@ -23,7 +23,7 @@ import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;

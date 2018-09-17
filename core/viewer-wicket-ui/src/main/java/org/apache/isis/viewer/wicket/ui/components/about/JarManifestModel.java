@@ -33,7 +33,7 @@ import java.util.jar.Manifest;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.lang.CloseableExtensions;
@@ -47,7 +47,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
 
     private String aboutMessage;
 
-    private final List<JarManifestAttributes> manifests = Lists.newArrayList();
+    private final List<JarManifestAttributes> manifests = _Lists.newArrayList();
 
     /**
      * @param aboutMessage
@@ -80,7 +80,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
         } catch (IOException e) {
             return;
         }
-        final List<JarManifest> jarManifests = Lists.newArrayList();
+        final List<JarManifest> jarManifests = _Lists.newArrayList();
         while (resEnum.hasMoreElements()) {
             URL url = (URL)resEnum.nextElement();
             JarManifest jarManifest = new JarManifest(url);
@@ -108,7 +108,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
     }
 
     private static class JarManifest implements Comparable<JarManifest> {
-        private final List<JarManifestAttributes> attributes = Lists.newArrayList();
+        private final List<JarManifestAttributes> attributes = _Lists.newArrayList();
 
         private final URL url;
 
@@ -160,7 +160,7 @@ public class JarManifestModel extends ModelAbstract<JarManifestModel> {
         strippedPath = stripSuffix(strippedPath, "!");
 
         // split the path into parts, and reverse
-        List<String> parts = Lists.newArrayList(Splitter.on(CharMatcher.anyOf("/\\")).split(strippedPath));
+        List<String> parts = _Lists.newArrayList(Splitter.on(CharMatcher.anyOf("/\\")).split(strippedPath));
         Collections.reverse(parts);
 
         // searching from the end, return the jar name if possible

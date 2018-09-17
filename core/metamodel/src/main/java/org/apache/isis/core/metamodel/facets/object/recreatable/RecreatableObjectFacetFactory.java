@@ -26,10 +26,9 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.isis.commons.internal.collections._Maps;
-
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;

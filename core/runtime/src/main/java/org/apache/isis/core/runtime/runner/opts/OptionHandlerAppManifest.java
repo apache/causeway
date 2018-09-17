@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
+import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_LONG_OPT;
+import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_OPT;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
@@ -31,9 +34,6 @@ import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.system.SystemConstants;
-
-import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_LONG_OPT;
-import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_OPT;
 
 public class OptionHandlerAppManifest extends OptionHandlerAbstract {
 

@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -43,10 +43,10 @@ public class BreadcrumbModel implements Serializable {
 
     private final Map<String, Bookmark> bookmarkByOidStr = Maps.newHashMap();
     private final Map<Bookmark, String> oidStrByBookmark = Maps.newHashMap();
-    private final List<Bookmark> list = Lists.newArrayList();
+    private final List<Bookmark> list = _Lists.newArrayList();
 
     public List<EntityModel> getList() {
-        List<EntityModel> entityModels = Lists.newArrayList();
+        List<EntityModel> entityModels = _Lists.newArrayList();
         for (Bookmark bookmark : list) {
             EntityModel entityModel = toEntityModel(bookmark);
             entityModels.add(entityModel);

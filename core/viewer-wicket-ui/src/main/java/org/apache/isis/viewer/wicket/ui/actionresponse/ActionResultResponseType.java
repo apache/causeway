@@ -21,13 +21,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.google.common.collect.Lists;
-
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.request.IRequestHandler;
 
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -230,7 +229,7 @@ public enum ActionResultResponseType {
         final Collection<Object> coll = (Collection<Object>) resultAdapter.getObject();
         return coll instanceof List
                 ? (List<Object>)coll
-                        : Lists.<Object>newArrayList(coll);
+                        : _Lists.<Object>newArrayList(coll);
     }
 
 

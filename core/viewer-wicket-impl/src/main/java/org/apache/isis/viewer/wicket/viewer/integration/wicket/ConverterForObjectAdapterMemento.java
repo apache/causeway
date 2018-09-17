@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import java.util.Locale;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.wicket.util.convert.IConverter;
 
@@ -50,7 +50,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
      */
     @Override
     public ObjectAdapterMemento convertToObject(final String value, final Locale locale) {
-        if (Strings.isNullOrEmpty(value)) {
+        if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
         final RootOid oid = RootOid.deStringEncoded(value);

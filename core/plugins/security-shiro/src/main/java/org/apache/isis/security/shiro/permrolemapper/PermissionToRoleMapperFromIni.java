@@ -16,12 +16,10 @@
  */
 package org.apache.isis.security.shiro.permrolemapper;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Maps.EntryTransformer;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.realm.text.IniRealm;
@@ -29,24 +27,26 @@ import org.apache.shiro.util.PermissionUtils;
 
 public class PermissionToRoleMapperFromIni implements PermissionToRoleMapper {
 
-    private final Map<String, List<String>> permissionsByRole;
+    private final Map<String, Set<String>> permissionsByRole;
 
     /**
      * Using the same logic as in {@link IniRealm}.
      */
     public PermissionToRoleMapperFromIni(Ini ini) {
-        Map<String,String> section = ini.getSection(IniRealm.ROLES_SECTION_NAME);
-        this.permissionsByRole = Maps.transformEntries(section, new EntryTransformer<String,String,List<String>>() {
-
-            @Override
-            public List<String> transformEntry(String key, String value) {
-                return Lists.newArrayList(PermissionUtils.toPermissionStrings(value));
-            }
-        });
+        final Map<String, String> section = ini.getSection(IniRealm.ROLES_SECTION_NAME);
+        this.permissionsByRole = Collections.unmodifiableMap(
+                
+                section.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey, 
+                        entry->PermissionUtils.toPermissionStrings(entry.getValue())))
+                
+                );
     }
 
     @Override
-    public Map<String, List<String>> getPermissionsByRole() {
+    public Map<String, Set<String>> getPermissionsByRole() {
         return permissionsByRole;
     }
 }

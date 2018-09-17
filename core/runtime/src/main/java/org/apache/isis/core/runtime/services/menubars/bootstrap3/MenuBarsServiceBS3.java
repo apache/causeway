@@ -22,17 +22,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import org.apache.isis.commons.internal.collections._Sets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +44,10 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
@@ -150,7 +148,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             return null;
         }
 
-        final List<BS3Menu> menusWithUnreferencedActionsFlagSet = Lists.newArrayList();
+        final List<BS3Menu> menusWithUnreferencedActionsFlagSet = _Lists.newArrayList();
         menuBars.visit(new BS3MenuBars.VisitorAdapter(){
             @Override public void visit(final BS3Menu menu) {
                 if(isSet(menu.isUnreferencedActions())) {
@@ -185,10 +183,8 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                 isisSessionFactory.getCurrentSession().getPersistenceSession().getServices();
 
         final List<ObjectAdapter> visibleServiceAdapters =
-                FluentIterable.from(
-                        serviceAdapters)
-                .filter(new Predicate<ObjectAdapter>() {
-                    @Override public boolean apply(final ObjectAdapter objectAdapter) {
+                _Lists.filter(serviceAdapters,
+                (final ObjectAdapter objectAdapter) -> {
                         if (objectAdapter == null) {
                             return false;
                         }
@@ -207,8 +203,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
                         }
                         final NatureOfService natureOfService = facet.getNatureOfService();
                         return natureOfService == null || natureOfService != NatureOfService.DOMAIN;
-                    }
-                }).toList();
+                });
 
         append(visibleServiceAdapters, menuBars.getPrimary(), DomainServiceLayout.MenuBar.PRIMARY);
         append(visibleServiceAdapters, menuBars.getSecondary(), DomainServiceLayout.MenuBar.SECONDARY);
@@ -230,10 +225,10 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             final BS3MenuBar menuBar,
             final DomainServiceLayout.MenuBar menuBarPos) {
 
-        List<ServiceAndAction> serviceActions = Lists.newArrayList();
+        List<ServiceAndAction> serviceActions = _Lists.newArrayList();
 
         // cf ServiceActionsModel & ServiceActionUtil#buildMenu in Wicket viewer
-        for (final ObjectAdapter serviceAdapter : FluentIterable.from(serviceAdapters).filter(with(menuBarPos))) {
+        for (final ObjectAdapter serviceAdapter : _Lists.filter(serviceAdapters, with(menuBarPos))) {
             collateServiceActions(serviceAdapter, ActionType.USER, serviceActions);
             collateServiceActions(serviceAdapter, ActionType.PROTOTYPE, serviceActions);
         }
@@ -252,7 +247,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             final Set<String> serviceNamesInOrder,
             final Map<String, List<ServiceAndAction>> serviceActionsByName) {
 
-        final List<BS3Menu> menus = Lists.newArrayList();
+        final List<BS3Menu> menus = _Lists.newArrayList();
         for (String serviceName : serviceNamesInOrder) {
 
             BS3Menu menu = new BS3Menu(serviceName);
@@ -313,7 +308,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
      */
     private static Map<String, List<ServiceAndAction>> groupByServiceName(
             final List<ServiceAndAction> serviceActions) {
-        final Map<String, List<ServiceAndAction>> serviceActionsByName = Maps.newTreeMap();
+        final Map<String, List<ServiceAndAction>> serviceActionsByName = _Maps.newTreeMap();
 
         // map available services
         ObjectAdapter lastServiceAdapter = null;
@@ -324,7 +319,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             final ObjectAdapter serviceAdapter = serviceAction.serviceAdapter;
 
             if(serviceActionsForName == null) {
-                serviceActionsForName = Lists.newArrayList();
+                serviceActionsForName = _Lists.newArrayList();
                 serviceActionsByName.put(serviceAction.serviceName, serviceActionsForName);
             } else {
                 // capture whether this action is from a different service; if so, add a separator before it
@@ -363,7 +358,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         .forEach(objectAction->{
             final MemberOrderFacet memberOrderFacet = objectAction.getFacet(MemberOrderFacet.class);
             String serviceName = memberOrderFacet != null? memberOrderFacet.name(): null;
-            if(Strings.isNullOrEmpty(serviceName)){
+            if(_Strings.isNullOrEmpty(serviceName)){
                 serviceName = serviceSpec.getFacet(NamedFacet.class).value();
             }
             serviceActions.add(new ServiceAndAction(serviceName, serviceAdapter, objectAction));
@@ -372,30 +367,26 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     }
 
     private static Predicate<ObjectAdapter> with(final DomainServiceLayout.MenuBar menuBar) {
-        return new Predicate<ObjectAdapter>() {
-            @Override
-            public boolean apply(ObjectAdapter input) {
+        return (ObjectAdapter input) -> {
                 final DomainServiceLayoutFacet facet =
                         input.getSpecification().getFacet(DomainServiceLayoutFacet.class);
                 return facet != null && facet.getMenuBar() == menuBar;
-            }
         };
     }
 
 
     private String tnsAndSchemaLocation() {
-        final List<String> parts = Lists.newArrayList();
-
-        parts.add(MB3_TNS);
-        parts.add(MB3_SCHEMA_LOCATION);
-
-        parts.add(COMPONENT_TNS);
-        parts.add(COMPONENT_SCHEMA_LOCATION);
-
-        parts.add(LINKS_TNS);
-        parts.add(LINKS_SCHEMA_LOCATION);
-
-        return Joiner.on(" ").join(parts);
+        
+        return Stream.of(
+                MB3_TNS, 
+                MB3_SCHEMA_LOCATION,
+                
+                COMPONENT_TNS, 
+                COMPONENT_SCHEMA_LOCATION,
+                
+                LINKS_TNS,
+                LINKS_SCHEMA_LOCATION)
+        .collect(Collectors.joining(" "));
     }
 
 

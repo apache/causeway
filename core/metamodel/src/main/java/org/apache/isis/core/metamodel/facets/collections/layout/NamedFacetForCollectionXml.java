@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
@@ -32,7 +31,7 @@ public class NamedFacetForCollectionXml extends NamedFacetAbstract {
         if(collectionLayout == null) {
             return null;
         }
-        final String named = Strings.emptyToNull(collectionLayout.getNamed());
+        final String named = _Strings.emptyToNull(collectionLayout.getNamed());
         final Boolean escaped = collectionLayout.getNamedEscaped();
         return named != null ? new NamedFacetForCollectionXml(named, escaped == null || escaped, holder) : null;
     }

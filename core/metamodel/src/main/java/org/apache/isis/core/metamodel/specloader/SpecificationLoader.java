@@ -24,10 +24,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
-import javax.ws.rs.HEAD;
-
-import org.apache.isis.commons.internal.collections._Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +32,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;

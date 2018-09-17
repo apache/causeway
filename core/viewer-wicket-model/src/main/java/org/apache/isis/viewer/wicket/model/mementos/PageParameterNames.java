@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
+import java.util.function.Function;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -113,12 +113,7 @@ public enum PageParameterNames {
     }
 
     public List<String> getListFrom(PageParameters pageParameters) {
-        return Lists.transform(pageParameters.getValues(this.toString()), new Function<StringValue, String>() {
-            @Override
-            public String apply(StringValue input) {
-                return input.toString();
-            }
-        });
+        return _Lists.map(pageParameters.getValues(this.toString()), (StringValue input)->input.toString());
     }
 
 

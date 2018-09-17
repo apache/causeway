@@ -19,17 +19,18 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
+import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_LONG_OPT;
+import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_OPT;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.runner.Constants;
-
-import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_LONG_OPT;
-import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_OPT;
 
 public class OptionHandlerFixture extends OptionHandlerFixtureAbstract {
 

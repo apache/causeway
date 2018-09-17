@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib.services.jdosupport;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -27,27 +29,29 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.datastore.JDOConnection;
 
+import com.google.common.collect.Maps;
+
+import org.datanucleus.api.jdo.JDOPersistenceManager;
+import org.datanucleus.query.typesafe.BooleanExpression;
+import org.datanucleus.query.typesafe.TypesafeQuery;
+
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.datanucleus.api.jdo.JDOPersistenceManager;
-import org.datanucleus.query.typesafe.BooleanExpression;
-import org.datanucleus.query.typesafe.TypesafeQuery;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 
 /**
@@ -113,7 +117,7 @@ public class IsisJdoSupportDN4 implements IsisJdoSupport_v3_1 {
     }
 
     private static List<Map<String, Object>> executeSql(final java.sql.Connection connection, final String sql) {
-        final List<Map<String,Object>> rows = Lists.newArrayList();
+        final List<Map<String,Object>> rows = _Lists.newArrayList();
 
         try(Statement statement = connection.createStatement()) {
             final ResultSet rs = statement.executeQuery(sql);
@@ -152,7 +156,7 @@ public class IsisJdoSupportDN4 implements IsisJdoSupport_v3_1 {
     public void deleteAll(final Class<?>... pcClasses) {
         for (final Class<?> pcClass : pcClasses) {
             final Extent<?> extent = getJdoPersistenceManager().getExtent(pcClass);
-            final List<Object> instances = Lists.newArrayList(extent.iterator());
+            final List<Object> instances = stream(extent).collect(Collectors.toList()); 
 
             // temporarily disable concurrency checking while this method is performed
             try {
@@ -190,7 +194,7 @@ public class IsisJdoSupportDN4 implements IsisJdoSupport_v3_1 {
 
     private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
         final List<T> elements = query.executeList();
-        final List<T> list = Lists.newArrayList(elements);
+        final List<T> list = _Lists.newArrayList(elements);
         query.closeAll();
         return list;
     }

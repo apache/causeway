@@ -39,9 +39,13 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
+
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -74,18 +78,14 @@ extends ObjectAdapterMementoProviderAbstract implements ObjectAdapterMementoProv
 
     @Override
     public Collection<ObjectAdapterMemento> toChoices(final Collection<String> ids) {
-        final Function<String, ObjectAdapterMemento> function = new Function<String, ObjectAdapterMemento>() {
-
-            @Override
-            public ObjectAdapterMemento apply(final String input) {
+        final Function<String, ObjectAdapterMemento> function = (final String input) -> {
                 if(NULL_PLACEHOLDER.equals(input)) {
                     return null;
                 }
                 final RootOid oid = RootOid.deString(input);
                 return ObjectAdapterMemento.createPersistent(oid);
-            }
         };
-        return Lists.newArrayList(Collections2.transform(ids, function));
+        return _NullSafe.stream(ids).map(function).collect(Collectors.toList());
     }
 
 

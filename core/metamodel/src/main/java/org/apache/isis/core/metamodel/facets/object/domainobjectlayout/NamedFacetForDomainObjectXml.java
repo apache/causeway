@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
@@ -32,7 +31,7 @@ public class NamedFacetForDomainObjectXml extends NamedFacetAbstract {
         if(domainObjectLayout == null) {
             return null;
         }
-        final String named = Strings.emptyToNull(domainObjectLayout.getNamed());
+        final String named = _Strings.emptyToNull(domainObjectLayout.getNamed());
         Boolean escaped = domainObjectLayout.getNamedEscaped();
         return named != null ? new NamedFacetForDomainObjectXml(named, (escaped == null || escaped), holder) : null;
     }

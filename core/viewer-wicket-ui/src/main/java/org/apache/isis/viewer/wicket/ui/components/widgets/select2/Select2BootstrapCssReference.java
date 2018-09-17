@@ -26,7 +26,7 @@ import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.request.resource.CssResourceReference;
 import org.wicketstuff.select2.ApplicationSettings;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * A CSS reference that loads <a href="https://github.com/ivaynberg/select2/">Select2.css</a>
@@ -34,6 +34,7 @@ import com.google.common.collect.Lists;
  * <p>Depends on select2.css.</p>
  */
 public class Select2BootstrapCssReference extends CssResourceReference {
+    private static final long serialVersionUID = 1L;
 
     public Select2BootstrapCssReference() {
         super(Select2BootstrapCssReference.class, "select2-bootstrap.css");
@@ -42,6 +43,6 @@ public class Select2BootstrapCssReference extends CssResourceReference {
     @Override
     public List<HeaderItem> getDependencies() {
         CssReferenceHeaderItem select2CssReference = CssHeaderItem.forReference(new CssResourceReference(ApplicationSettings.class, "res/css/select2.css"));
-        return Lists.<HeaderItem>newArrayList(select2CssReference);
+        return _Lists.<HeaderItem>of(select2CssReference);
     }
 }

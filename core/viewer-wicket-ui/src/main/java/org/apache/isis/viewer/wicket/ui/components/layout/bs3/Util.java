@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.layout.bs3;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.wicket.MarkupContainer;
 
@@ -38,7 +38,7 @@ public class Util {
         }
     }
     public static void appendCssClass(final MarkupContainer markupContainer, final BS3ElementAbstract element, final String existingCssClass) {
-        final String cssClass = existingCssClass + (!Strings.isNullOrEmpty(element.getCssClass())? (" " + element.getCssClass()): "");
+        final String cssClass = existingCssClass + (!_Strings.isNullOrEmpty(element.getCssClass())? (" " + element.getCssClass()): "");
         CssClassAppender.appendCssClassTo(markupContainer, cssClass);
     }
 }

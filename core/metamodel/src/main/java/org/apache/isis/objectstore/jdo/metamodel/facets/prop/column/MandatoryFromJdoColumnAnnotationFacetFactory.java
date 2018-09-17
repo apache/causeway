@@ -24,8 +24,7 @@ import java.util.stream.Stream;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
-import com.google.common.base.Strings;
-
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -105,7 +104,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
 
         final String allowsNull = annotation != null ? annotation.allowsNull() : null;
 
-        if(Strings.isNullOrEmpty(allowsNull)) {
+        if(_Strings.isNullOrEmpty(allowsNull)) {
             final Class<?> returnType = processMethodContext.getMethod().getReturnType();
             // per JDO spec
             return returnType != null && returnType.isPrimitive();

@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import org.apache.isis.commons.internal.collections._Sets;
 
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;

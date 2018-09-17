@@ -20,12 +20,11 @@ package org.apache.isis.core.metamodel.spec.feature;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import com.google.common.base.Objects;
-import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 
 import org.apache.isis.applib.Identifier;
@@ -420,8 +419,8 @@ public interface ObjectAction extends ObjectMember {
                     return false;
                 }
                 final String memberOrderNameLowerCase = associatedMemberName.toLowerCase();
-                return memberName != null && Objects.equal(memberName.toLowerCase(), memberOrderNameLowerCase) ||
-                        memberId   != null && Objects.equal(memberId.toLowerCase(), memberOrderNameLowerCase);
+                return memberName != null && Objects.equals(memberName.toLowerCase(), memberOrderNameLowerCase) ||
+                        memberId   != null && Objects.equals(memberId.toLowerCase(), memberOrderNameLowerCase);
             }
         }
 
@@ -507,11 +506,11 @@ public interface ObjectAction extends ObjectMember {
             final String assocId = association.getId();
             return (ObjectAction t) -> {
                     final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
-                    if (memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
+                    if (memberOrderFacet == null || _Strings.isNullOrEmpty(memberOrderFacet.name())) {
                         return false;
                     }
                     final String memberOrderName = memberOrderFacet.name().toLowerCase();
-                    if (Strings.isNullOrEmpty(memberOrderName)) {
+                    if (_Strings.isNullOrEmpty(memberOrderName)) {
                         return false;
                     }
                     return memberOrderName.equalsIgnoreCase(assocName) || memberOrderName.equalsIgnoreCase(assocId);

@@ -25,8 +25,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.ext.Provider;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.SetMultimap;
 import com.google.common.net.MediaType;
@@ -35,6 +33,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
+import org.apache.isis.commons.internal.collections._Lists;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -74,19 +73,16 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
             List<javax.ws.rs.core.MediaType> acceptableMediaTypes = requestContext.getAcceptableMediaTypes();
 
             final List<MediaType> mediaTypes =
-                    Lists.newArrayList(
-                            Lists.transform(acceptableMediaTypes, new Function<javax.ws.rs.core.MediaType, MediaType>() {
-                                @Nullable @Override
-                                public MediaType apply(
+                    _Lists.newArrayList(
+                            _Lists.map(acceptableMediaTypes, (
                                         @Nullable
-                                        final javax.ws.rs.core.MediaType input) {
+                                        final javax.ws.rs.core.MediaType input) -> {
                                     if (input == null) {
                                         return null;
                                     }
                                     final MediaType mediaType = MediaType.create(input.getType(), input.getSubtype());
                                     final SetMultimap<String, String> parameters = Multimaps.forMap(input.getParameters());
                                     return mediaType.withParameters(parameters);
-                                }
                             })
                             );
             setMediaTypes(mediaTypes);

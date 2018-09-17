@@ -19,12 +19,12 @@
 
 package org.apache.isis.core.metamodel.spec;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * Represents an instance of some element of the meta-model.

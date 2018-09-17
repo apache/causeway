@@ -23,17 +23,19 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.databind.node.NullNode;
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
+
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -70,12 +72,9 @@ public final class JsonValueEncoder {
         }
 
         public List<ObjectSpecId> getSpecIds() {
-            return Lists.newArrayList(Iterables.transform(Arrays.asList(classes), new Function<Class<?>, ObjectSpecId>() {
-                @Override
-                public ObjectSpecId apply(Class<?> cls) {
-                    return new ObjectSpecId(cls.getName());
-                }
-            }));
+            return _NullSafe.stream(classes)
+            .map((Class<?> cls) ->new ObjectSpecId(cls.getName()))
+            .collect(Collectors.toList());
         }
 
         /**

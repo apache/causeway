@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.isis.applib.annotation.Where;
@@ -139,7 +139,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
             // legacy of ...
             //            dnPersistableMethods.addAll(
-            //                    Lists.newArrayList(
+            //                    _Lists.newArrayList(
             //                            Iterables.transform(
             //                                    Arrays.asList(Persistable.class.getDeclaredMethods()),
             //                                    new Function<Method, String>() {
@@ -625,7 +625,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final Object contributee = args[contributeeParamPosition];
             contributeeAdapter = adapterFor(contributee);
 
-            final List<Object> argCopy = Lists.newArrayList(args);
+            final List<Object> argCopy = _Lists.of(args);
             argCopy.remove(contributeeParamPosition);
             contributeeArgs = argCopy.toArray();
         } else {

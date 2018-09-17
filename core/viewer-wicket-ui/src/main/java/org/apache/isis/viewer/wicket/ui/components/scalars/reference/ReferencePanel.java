@@ -56,7 +56,7 @@ import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Settings;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 /**
  * Panel for rendering scalars which of are of reference type (as opposed to
@@ -349,11 +349,11 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
 
     // called by setProviderAndCurrAndPending
     private List<ObjectAdapterMemento> obtainChoiceMementos(final ObjectAdapter[] argsIfAvailable) {
-        final List<ObjectAdapter> choices = Lists.newArrayList();
+        final List<ObjectAdapter> choices = _Lists.newArrayList();
         if(getModel().hasChoices()) {
             choices.addAll(getModel().getChoices(argsIfAvailable, getAuthenticationSession(), getDeploymentCategory()));
         }
-        return _Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter());
+        return _Lists.map(choices, ObjectAdapterMemento.Functions.fromAdapter());
     }
 
     // called by setProviderAndCurrAndPending

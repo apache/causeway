@@ -21,10 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicates;
-import com.google.common.collect.FluentIterable;
-
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -88,16 +86,11 @@ public final class LinkAndLabelUtil {
 
         final ActionLinkFactory linkFactory = new EntityActionLinkFactory(parentEntityModel, scalarModelForAssociationIfAny);
 
-        return FluentIterable.from(objectActions)
-                .transform(new Function<ObjectAction, LinkAndLabel>() {
-
-                    @Override
-                    public LinkAndLabel apply(ObjectAction objectAction) {
+        return _Lists.transform(objectActions, stream -> stream
+                .map((ObjectAction objectAction) -> {
                         return linkFactory.newLink(objectAction, AdditionalLinksPanel.ID_ADDITIONAL_LINK,toggledMementosProviderIfAny);
-                    }
                 })
-                .filter(Predicates.<LinkAndLabel>notNull())
-                .toList();
+                .filter(_NullSafe::isPresent));
     }
 
 }

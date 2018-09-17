@@ -18,7 +18,7 @@ package domainapp.modules.simple.dom.impl;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -97,7 +97,7 @@ public class SimpleObjects_Test {
         public void happyCase() {
 
             // given
-            final List<SimpleObject> all = Lists.newArrayList();
+            final List<SimpleObject> all = _Lists.newArrayList();
 
             context.checking(new Expectations() {
                 {

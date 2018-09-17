@@ -24,7 +24,7 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import com.google.common.collect.Ordering;
 
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxFallbackDefaultDataTable;
@@ -111,7 +111,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
 
         final ObjectAssociation sortProperty = lookupAssociationFor(sort);
         if(sortProperty == null) {
-            return Lists.newArrayList(adapters);
+            return _Lists.newArrayList(adapters);
         }
 
         final Ordering<ObjectAdapter> ordering =

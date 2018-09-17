@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -336,8 +336,8 @@ implements FormExecutor {
 
 
     private void addComponentsToRedraw(final AjaxRequestTarget target) {
-        final List<Component> componentsToRedraw = Lists.newArrayList();
-        final List<Component> componentsNotToRedraw = Lists.newArrayList();
+        final List<Component> componentsToRedraw = _Lists.newArrayList();
+        final List<Component> componentsNotToRedraw = _Lists.newArrayList();
 
         final Page page = target.getPage();
         page.visitChildren(new IVisitor<Component, Object>() {

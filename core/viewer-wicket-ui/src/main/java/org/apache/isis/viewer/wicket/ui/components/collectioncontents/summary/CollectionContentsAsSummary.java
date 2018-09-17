@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
@@ -115,8 +115,8 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
         private BigDecimal sum = BigDecimal.ZERO;
         private BigDecimal min = null;
         private BigDecimal max = null;
-        private final List<String> titles = Lists.newArrayList();
-        private final List<BigDecimal> values = Lists.newArrayList();
+        private final List<String> titles = _Lists.newArrayList();
+        private final List<BigDecimal> values = _Lists.newArrayList();
         private BigDecimal average;
         private String propertyName;
 
@@ -176,7 +176,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
         }
 
         private static List<Number> asNumbers(List<BigDecimal> values) {
-            return Lists.newArrayList(Iterables.transform(values, BIGDECIMAL_TO_NUMBER));
+            return _Lists.newArrayList(Iterables.transform(values, BIGDECIMAL_TO_NUMBER));
         }
 
         private static final com.google.common.base.Function<BigDecimal, Number> BIGDECIMAL_TO_NUMBER = new com.google.common.base.Function<BigDecimal, Number>(){

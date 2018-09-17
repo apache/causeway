@@ -26,8 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
@@ -50,7 +50,7 @@ public class AuthenticationSessionStrategyHeader extends AuthenticationSessionSt
         final String user = httpServletRequest.getHeader(HEADER_ISIS_USER);
         final List<String> roles = rolesFrom(httpServletRequest);
 
-        if (Strings.isNullOrEmpty(user)) {
+        if (_Strings.isNullOrEmpty(user)) {
             return null;
         }
         return new SimpleSession(user, roles);
@@ -61,6 +61,6 @@ public class AuthenticationSessionStrategyHeader extends AuthenticationSessionSt
         if (rolesStr == null) {
             return Collections.emptyList();
         }
-        return Lists.newArrayList(Splitter.on(",").split(rolesStr));
+        return _Lists.newArrayList(Splitter.on(",").split(rolesStr));
     }
 }

@@ -23,7 +23,7 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
@@ -41,7 +41,7 @@ public class LinkAndLabel implements Serializable {
     public static List<LinkAndLabel> positioned(
             final List<LinkAndLabel> entityActionLinks,
             final ActionLayout.Position position) {
-        return Lists.newArrayList(Iterables.filter(entityActionLinks, Predicates.positioned(position)));
+        return _Lists.newArrayList(Iterables.filter(entityActionLinks, Predicates.positioned(position)));
     }
 
     public static LinkAndLabel newLinkAndLabel(

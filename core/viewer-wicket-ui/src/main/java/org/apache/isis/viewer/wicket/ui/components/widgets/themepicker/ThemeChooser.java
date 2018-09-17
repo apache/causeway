@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -220,7 +220,7 @@ public class ThemeChooser extends Panel {
                 }
             });
 
-            enabledThemes = Lists.newArrayList(enabled);
+            enabledThemes = _Lists.newArrayList(enabled);
         } else {
             enabledThemes = allThemes;
         }

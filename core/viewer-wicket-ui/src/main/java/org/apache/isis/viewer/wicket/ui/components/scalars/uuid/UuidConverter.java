@@ -20,7 +20,7 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
@@ -37,7 +37,7 @@ public class UuidConverter implements IConverter<UUID>
     public UUID convertToObject(String value, Locale locale)
             throws ConversionException {
 
-        if(Strings.isNullOrEmpty(value)) {
+        if(_Strings.isNullOrEmpty(value)) {
             return null;
         }
 

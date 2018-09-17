@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.members.order;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -63,7 +62,7 @@ public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstrac
             final String defaultValue,
             final TranslationService translationService,
             final FacetHolder holder) {
-        final boolean nullOrEmpty = Strings.isNullOrEmpty(name);
+        final boolean nullOrEmpty = _Strings.isNullOrEmpty(name);
         if (nullOrEmpty) {
             return defaultValue;
         } else {
@@ -74,7 +73,7 @@ public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstrac
     }
 
     private static String valueElse(final String name, final String defaultValue) {
-        final boolean nullOrEmpty = Strings.isNullOrEmpty(name);
+        final boolean nullOrEmpty = _Strings.isNullOrEmpty(name);
         if (nullOrEmpty) {
             return defaultValue;
         } else {

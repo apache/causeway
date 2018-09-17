@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.IPageFactory;
@@ -279,7 +279,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
             });
 
     protected IRequestablePage errorPageFor(Exception ex) {
-        List<ExceptionRecognizer> exceptionRecognizers = Lists.newArrayList();
+        List<ExceptionRecognizer> exceptionRecognizers = _Lists.newArrayList();
         exceptionRecognizers.add(pageExpiredExceptionRecognizer);
 
         if(inIsisSession()) {

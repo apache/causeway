@@ -25,13 +25,13 @@ import java.util.Set;
 import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 
 public class RegisterEntities {
@@ -63,7 +63,7 @@ public class RegisterEntities {
             throw new IllegalStateException("AppManifest is required");
         }
 
-        final List<String> classNamesNotEnhanced = Lists.newArrayList();
+        final List<String> classNamesNotEnhanced = _Lists.newArrayList();
         for (Class<?> persistenceCapableType : persistenceCapableTypes) {
             if(ignore(persistenceCapableType)) {
                 continue;

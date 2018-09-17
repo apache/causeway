@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -354,7 +354,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     // //////////////////////////////////////
 
-    private final List<ScalarModelSubscriber> subscribers = Lists.newArrayList();
+    private final List<ScalarModelSubscriber> subscribers = _Lists.newArrayList();
 
     public void notifyOnChange(final ScalarModelSubscriber subscriber) {
         subscribers.add(subscriber);

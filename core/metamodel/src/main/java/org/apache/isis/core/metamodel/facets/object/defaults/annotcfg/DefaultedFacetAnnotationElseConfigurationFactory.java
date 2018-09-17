@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.defaults.annotcfg;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.annotation.Defaulted;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -55,7 +54,7 @@ public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFacto
 
         // otherwise, try to create from configuration, if present
         final String providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(cls, getConfiguration());
-        if (!Strings.isNullOrEmpty(providerName)) {
+        if (!_Strings.isNullOrEmpty(providerName)) {
             final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder, servicesInjector);
             if (facet.isValid()) {
                 return facet;

@@ -21,20 +21,19 @@ package org.apache.isis.core.runtime.services.publish;
 
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimaps;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.RepresentsInteractionMemberExecution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.schema.chg.v1.ChangesDto;
@@ -204,15 +203,11 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
 
         final Collection<ObjectAdapter> adapters = adaptersByChange.get(kind);
         if(adapters != null) {
-            final ImmutableList<OidDto> oidDtos = FluentIterable.from(adapters)
-                    .transform(new Function<ObjectAdapter, OidDto>() {
-                        @Override
-                        public OidDto apply(final ObjectAdapter objectAdapter) {
+            final List<OidDto> oidDtos = _Lists.map(adapters, 
+                    (final ObjectAdapter objectAdapter) -> {
                             final RootOid rootOid = (RootOid) objectAdapter.getOid();
                             return rootOid.asOidDto();
-                        }
-                    })
-                    .toList();
+                    });
             oidsDto.getOid().addAll(oidDtos);
         }
         return oidsDto;

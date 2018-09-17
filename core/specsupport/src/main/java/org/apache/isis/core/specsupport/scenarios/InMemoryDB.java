@@ -26,7 +26,7 @@ import org.jmock.api.Invocation;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import com.google.common.collect.Maps;
 
 /**
@@ -204,7 +204,7 @@ public class InMemoryDB {
 
     @SuppressWarnings("unchecked")
     public <T> List<T> find(Class<T> cls, Predicate<T> predicate) {
-        final List<T> list = Lists.newArrayList();
+        final List<T> list = _Lists.newArrayList();
         for (EntityId entityId : objectsById.keySet()) {
             if(cls.isAssignableFrom(entityId.getType())) {
                 final T object = (T) objectsById.get(entityId);

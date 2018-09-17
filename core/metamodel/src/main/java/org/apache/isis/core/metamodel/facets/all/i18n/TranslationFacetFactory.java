@@ -19,9 +19,8 @@
 package org.apache.isis.core.metamodel.facets.all.i18n;
 
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -116,7 +115,7 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
     }
 
     private boolean isNullOrEmptyWhenTrimmed(final String originalText) {
-        return originalText == null || Strings.isNullOrEmpty(originalText.trim());
+        return originalText == null || _Strings.isNullOrEmpty(originalText.trim());
     }
 
     // //////////////////////////////////////

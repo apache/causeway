@@ -22,11 +22,10 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -205,7 +204,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
     void processCommand(final ProcessMethodContext processMethodContext) {
 
-        final Class<?> cls = processMethodContext.getCls();
+        //final Class<?> cls = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
         final List<Action> actions = Annotations.getAnnotations(method, Action.class);
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
@@ -295,7 +294,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         final Action action = actions.isEmpty() ? null : actions.get(0);
         if (action != null) {
             final String associateWith = action.associateWith();
-            if(!Strings.isNullOrEmpty(associateWith)) {
+            if(!_Strings.isNullOrEmpty(associateWith)) {
                 final String associateWithSequence = action.associateWithSequence();
                 FacetUtil.addFacet(
                         new MemberOrderFacetForActionAnnotation(associateWith, associateWithSequence, holder));

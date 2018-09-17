@@ -40,8 +40,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.isis.commons.internal.collections._Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -52,6 +50,7 @@ import org.w3c.dom.NodeList;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService.Snapshot;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;

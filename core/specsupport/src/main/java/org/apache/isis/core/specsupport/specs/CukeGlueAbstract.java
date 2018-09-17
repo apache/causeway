@@ -33,8 +33,8 @@ import org.jmock.Sequence;
 import org.jmock.States;
 import org.jmock.internal.ExpectationBuilder;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
+import java.util.Objects;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import cucumber.api.java.Before;
 
@@ -188,7 +188,7 @@ public abstract class CukeGlueAbstract {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static void assertTableEquals(final List listOfExpecteds, final Iterable iterableOfActuals) {
-        final List<Object> listOfActuals = Lists.newArrayList(iterableOfActuals);
+        final List<Object> listOfActuals = _Lists.newArrayList(iterableOfActuals);
         assertThat(listOfActuals.size(), is(listOfExpecteds.size()));
 
         final StringBuilder buf = new StringBuilder();
@@ -203,7 +203,7 @@ public abstract class CukeGlueAbstract {
                 final Object actualProp = getProperty(actual, propertyName );
                 final Object expectedProp = getProperty(expected, propertyName);
 
-                if(!Objects.equal(actualProp, expectedProp)) {
+                if(!Objects.equals(actualProp, expectedProp)) {
                     buf.append("#" + i + ": " + propertyName + ": " + expectedProp + " vs " + actualProp).append("\n");
                 }
             }

@@ -25,9 +25,8 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
-
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -115,7 +114,7 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
             final Map<String, String> faIconByRegex = _Maps.newLinkedHashMap();
             while (regexToFaIcons.hasMoreTokens()) {
                 String regexToFaIcon = regexToFaIcons.nextToken().trim();
-                if (Strings.isNullOrEmpty(regexToFaIcon)) {
+                if (_Strings.isNullOrEmpty(regexToFaIcon)) {
                     continue;
                 }
                 final Matcher matcher = FA_ICON_REGEX_PATTERN.matcher(regexToFaIcon);

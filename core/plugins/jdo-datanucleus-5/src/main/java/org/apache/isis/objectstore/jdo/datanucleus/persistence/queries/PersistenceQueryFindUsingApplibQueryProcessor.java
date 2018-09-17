@@ -24,7 +24,7 @@ import java.util.Map;
 
 import javax.jdo.Query;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
@@ -86,7 +86,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
 
         try {
             final List<?> results = (List<?>) jdoQuery.execute();
-            return Lists.newArrayList(results);
+            return _Lists.newArrayList(results);
         } finally {
             jdoQuery.closeAll();
         }
@@ -123,7 +123,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
                     cardinality == QueryCardinality.MULTIPLE
                     ? results
                             : firstIfAnyOf(results);
-            return Lists.newArrayList(resultsToReturn);
+            return _Lists.newArrayList(resultsToReturn);
         } finally {
             jdoQuery.closeAll();
         }

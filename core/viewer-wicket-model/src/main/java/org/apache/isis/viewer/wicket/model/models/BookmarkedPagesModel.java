@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
+import java.util.Objects;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -40,7 +40,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     private static final String MAX_SIZE_KEY = "isis.viewer.wicket.bookmarkedPages.maxSize";
     private static final int MAX_SIZE_DEFAULT_VALUE = 15;
 
-    private final List<BookmarkTreeNode> rootNodes = Lists.newArrayList();
+    private final List<BookmarkTreeNode> rootNodes = _Lists.newArrayList();
 
     private transient PageParameters current;
 
@@ -89,9 +89,9 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
     @Override
     protected List<BookmarkTreeNode> load() {
-        List<BookmarkTreeNode> depthFirstGraph = Lists.newArrayList();
+        List<BookmarkTreeNode> depthFirstGraph = _Lists.newArrayList();
 
-        List<BookmarkTreeNode> sortedNodes = Lists.newArrayList(rootNodes);
+        List<BookmarkTreeNode> sortedNodes = _Lists.newArrayList(rootNodes);
         Collections.sort(sortedNodes, new BookmarkTreeNodeComparator(getSpecificationLoader()));
 
         for (BookmarkTreeNode rootNode : sortedNodes) {
@@ -101,7 +101,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
     }
 
     public boolean isCurrent(PageParameters pageParameters) {
-        return Objects.equal(current, pageParameters);
+        return Objects.equals(current, pageParameters);
     }
 
     private static void cleanUpGarbage(List<BookmarkTreeNode> rootNodes) {

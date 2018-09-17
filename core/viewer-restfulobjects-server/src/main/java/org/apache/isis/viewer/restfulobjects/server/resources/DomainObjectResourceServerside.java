@@ -33,7 +33,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import com.google.common.io.Resources;
 
 import org.apache.isis.applib.annotation.Where;
@@ -204,7 +204,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         String getImageName() {
             final StringBuilder buf = new StringBuilder(domainClass.getSimpleName());
-            if(!Strings.isNullOrEmpty(modifier)) {
+            if(!_Strings.isNullOrEmpty(modifier)) {
                 buf.append("-").append(modifier);
             }
             buf.append(".png");

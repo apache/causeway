@@ -20,8 +20,7 @@ package org.apache.isis.core.runtime.snapshot;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -50,7 +49,7 @@ public class XmlSnapshotBuilder {
         private final String annotation;
     }
 
-    private final List<XmlSnapshotBuilder.PathAndAnnotation> paths = Lists.newArrayList();
+    private final List<XmlSnapshotBuilder.PathAndAnnotation> paths = _Lists.newArrayList();
 
     public XmlSnapshotBuilder(final Object domainObject) {
         this.domainObject = domainObject;

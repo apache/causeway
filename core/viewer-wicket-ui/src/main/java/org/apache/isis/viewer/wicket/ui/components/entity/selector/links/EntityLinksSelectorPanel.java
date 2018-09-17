@@ -24,7 +24,7 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -145,7 +145,7 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
             Components.permanentlyHide(markupContainer, ID_ADDITIONAL_LINKS);
             return;
         }
-        linkAndLabels = Lists.newArrayList(linkAndLabels); // copy, to serialize any lazy evaluation
+        linkAndLabels = _Lists.newArrayList(linkAndLabels); // copy, to serialize any lazy evaluation
 
         AdditionalLinksPanel.addAdditionalLinks(
                 markupContainer, ID_ADDITIONAL_LINKS,
@@ -374,7 +374,7 @@ public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
 
     private List<ComponentFactory> findOtherComponentFactories(final EntityModel model, final ComponentFactory ignoreFactory) {
         final List<ComponentFactory> componentFactories = getComponentFactoryRegistry().findComponentFactories(componentType, model);
-        ArrayList<ComponentFactory> otherFactories = Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
+        ArrayList<ComponentFactory> otherFactories = _Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
             @Override
             public boolean apply(final ComponentFactory input) {
                 return input != ignoreFactory;

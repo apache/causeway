@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.apache.wicket.Session;
 import org.apache.wicket.util.convert.IConverter;
@@ -85,7 +85,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
     @Override
     public void query(final String term, final int page, final org.wicketstuff.select2.Response<ObjectAdapterMemento> response) {
 
-        final List<ObjectAdapterMemento> mementos = Lists.newArrayList(obtainMementos(term));
+        final List<ObjectAdapterMemento> mementos = _Lists.newArrayList(obtainMementos(term));
         // if not mandatory, and the list doesn't contain null already, then add it in.
         if(!scalarModel.isRequired() && !mementos.contains(null)) {
             mementos.add(0, null);
@@ -104,7 +104,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
      * @return A list of all matching choices
      */
     protected final List<ObjectAdapterMemento> obtainMementos(String term, Collection<ObjectAdapterMemento> choicesMementos) {
-        List<ObjectAdapterMemento> matches = Lists.newArrayList();
+        List<ObjectAdapterMemento> matches = _Lists.newArrayList();
         if (Strings.isEmpty(term)) {
             matches.addAll(choicesMementos);
         } else {

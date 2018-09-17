@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Maps;
-
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

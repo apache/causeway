@@ -27,28 +27,28 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 
 import javax.annotation.PreDestroy;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceMenuOrder;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
 import org.apache.isis.core.plugins.classdiscovery.ClassDiscoveryPlugin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
@@ -130,7 +130,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
             if(packagePrefixes == null) {
                 this.packagePrefixes = PACKAGE_PREFIX_STANDARD;
                 String packagePrefixes = getConfiguration().getString(PACKAGE_PREFIX_KEY);
-                if(!Strings.isNullOrEmpty(packagePrefixes)) {
+                if(!_Strings.isNullOrEmpty(packagePrefixes)) {
                     this.packagePrefixes = this.packagePrefixes + "," + packagePrefixes;
                 }
             }
@@ -151,15 +151,6 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     private Predicate<Class<?>> instantiatable() {
         return and(not(nullClass()), not(abstractClass()));
-    }
-
-    private static Function<String,String> trim() {
-        return new Function<String,String>(){
-            @Override
-            public String apply(final String input) {
-                return input.trim();
-            }
-        };
     }
 
     private static Predicate<Class<?>> nullClass() {
@@ -218,7 +209,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
             domainServiceTypes = discovery.getTypesAnnotatedWith(DomainService.class);
         }
 
-        final List<Class<?>> domainServiceClasses = Lists.newArrayList(Iterables.filter(domainServiceTypes, instantiatable()));
+        final List<Class<?>> domainServiceClasses = _Lists.newArrayList(Iterables.filter(domainServiceTypes, instantiatable()));
         for (final Class<?> cls : domainServiceClasses) {
 
             final String order = DomainServiceMenuOrder.orderOf(cls);
@@ -245,21 +236,26 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     }
 
     private static List<String> asList(final String csv) {
-        return Lists.newArrayList(Iterables.transform(Splitter.on(",").split(csv), trim()));
+        return _Strings.splitThenStream(csv, ",")
+        .map(String::trim)
+        .collect(Collectors.toList());
     }
 
 
     // -- domain events
     public static abstract class PropertyDomainEvent<T>
     extends org.apache.isis.applib.events.domain.PropertyDomainEvent<ServicesInstallerFromAnnotation, T> {
+        private static final long serialVersionUID = 1L;
     }
 
     public static abstract class CollectionDomainEvent<T>
     extends org.apache.isis.applib.events.domain.CollectionDomainEvent<ServicesInstallerFromAnnotation, T> {
+        private static final long serialVersionUID = 1L;
     }
 
     public static abstract class ActionDomainEvent
     extends org.apache.isis.applib.events.domain.ActionDomainEvent<ServicesInstallerFromAnnotation> {
+        private static final long serialVersionUID = 1L;
     }
 
 

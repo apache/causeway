@@ -38,7 +38,7 @@ public class ContainedToggleboxPanel extends PanelAbstract<Model<Boolean>> {
     private static final String ID_TOGGLEBOX = "togglebox";
 
     private final AjaxCheckBox checkbox;
-    //    private final List<Component> componentsToRerender = Lists.newArrayList();
+    //    private final List<Component> componentsToRerender = _Lists.newArrayList();
 
     public ContainedToggleboxPanel(final String id) {
         super(id);

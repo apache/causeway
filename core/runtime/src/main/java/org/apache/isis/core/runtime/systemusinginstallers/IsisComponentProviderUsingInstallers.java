@@ -21,12 +21,11 @@ package org.apache.isis.core.runtime.systemusinginstallers;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -41,8 +40,8 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.system.SystemConstants;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 
 public class IsisComponentProviderUsingInstallers extends IsisComponentProvider {
 
@@ -133,12 +132,12 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
         // -- constructor, fields
 
         private final IsisConfiguration isisConfiguration;
-        private final List<Installer> installerList = Lists.newArrayList();
+        private final List<Installer> installerList = _Lists.newArrayList();
 
         public InstallerLookup(final IsisConfiguration isisConfiguration) throws InstanceCreationException {
             this.isisConfiguration = isisConfiguration;
 
-            final List<String> installerClassNames = Lists.newArrayList(
+            final List<String> installerClassNames = _Lists.of(
                     "org.apache.isis.core.security.authentication.BypassAuthenticationManagerInstaller", // bypass
                     "org.apache.isis.security.shiro.authentication.ShiroAuthenticationManagerInstaller", // shiro
                     "org.apache.isis.core.security.authorization.BypassAuthorizationManagerInstaller",   // bypass

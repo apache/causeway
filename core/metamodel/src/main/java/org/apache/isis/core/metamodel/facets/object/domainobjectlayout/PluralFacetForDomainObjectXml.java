@@ -18,9 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
@@ -31,7 +30,7 @@ public class PluralFacetForDomainObjectXml extends PluralFacetAbstract {
         if(domainObjectLayout == null) {
             return null;
         }
-        final String plural = Strings.emptyToNull(domainObjectLayout.getPlural());
+        final String plural = _Strings.emptyToNull(domainObjectLayout.getPlural());
         return plural != null ? new PluralFacetForDomainObjectXml(plural, holder) : null;
     }
 

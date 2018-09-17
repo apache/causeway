@@ -20,11 +20,9 @@
 package org.apache.isis.core.metamodel.facets.param.parameter.fileaccept;
 
 import java.util.List;
-import java.util.Objects;
-
-import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacetAbstract;
@@ -37,8 +35,7 @@ public class FileAcceptFacetForParameterAnnotation extends FileAcceptFacetAbstra
 
         return parameters.stream()
                 .map(Parameter::fileAccept)
-                .map(Strings::emptyToNull)
-                .filter(Objects::nonNull)
+                .filter(_Strings::isNotEmpty)
                 .findFirst()
                 .map(fileAccept -> new FileAcceptFacetForParameterAnnotation(fileAccept, holder))
                 .orElse(null);

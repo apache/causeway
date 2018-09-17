@@ -22,8 +22,7 @@ package org.apache.isis.core.metamodel.facets.param.parameter.regex;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Strings;
-
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
@@ -43,7 +42,7 @@ public class RegExFacetForPatternAnnotationOnParameter extends RegExFacetAbstrac
         }
 
         return patterns.stream()
-                .filter(pattern -> Strings.emptyToNull(pattern.regexp()) != null)
+                .filter(pattern -> _Strings.emptyToNull(pattern.regexp()) != null)
                 .findFirst()
                 .map(pattern ->
                 new RegExFacetForPatternAnnotationOnParameter(

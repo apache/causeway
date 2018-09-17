@@ -22,18 +22,17 @@ package org.apache.isis.core.runtime.fixtures;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
-import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.fixtures.CompositeFixture;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.fixtures.LogonFixture;
+import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
+import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -54,7 +53,7 @@ public class FixturesInstallerDelegate {
         this.isisSessionFactory = isisSessionFactory;
     }
 
-    private final List<Object> fixtures = Lists.newArrayList();
+    private final List<Object> fixtures = _Lists.newArrayList();
 
     /**
      * Automatically flattens any {@link List}s, recursively (depth-first) if

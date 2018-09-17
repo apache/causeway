@@ -22,7 +22,7 @@ package org.apache.isis.core.wrapper.handlers;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.applib.services.wrapper.events.CollectionMethodEvent;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
@@ -30,8 +30,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvocationHandlerDefault<C> {
 
-    private final List<Method> interceptedMethods = Lists.newArrayList();
-    private final List<Method> vetoedMethods = Lists.newArrayList();
+    private final List<Method> interceptedMethods = _Lists.newArrayList();
+    private final List<Method> vetoedMethods = _Lists.newArrayList();
 
     private final String collectionName;
     private final OneToManyAssociation oneToManyAssociation;

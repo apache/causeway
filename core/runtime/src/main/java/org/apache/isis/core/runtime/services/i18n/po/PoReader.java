@@ -24,10 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.isis.commons.internal.collections._Sets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +32,9 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 
 class PoReader extends PoAbstract {
 
@@ -144,14 +144,14 @@ class PoReader extends PoAbstract {
         // search for translation with a context
         final ContextAndMsgId key = new ContextAndMsgId(context, msgId, type);
         final String translation = lookupTranslation(translationsByKey, key);
-        if (!Strings.isNullOrEmpty(translation)) {
+        if (!_Strings.isNullOrEmpty(translation)) {
             return translation;
         }
 
         // else search for translation without a context
         final ContextAndMsgId keyNoContext = new ContextAndMsgId("", msgId, type);
         final String translationNoContext = lookupTranslation(translationsByKey, keyNoContext);
-        if (!Strings.isNullOrEmpty(translationNoContext)) {
+        if (!_Strings.isNullOrEmpty(translationNoContext)) {
             return translationNoContext;
         }
 
@@ -220,9 +220,9 @@ class PoReader extends PoAbstract {
         final String country = locale.getCountry().toUpperCase(Locale.ROOT);
         final String language = locale.getLanguage().toLowerCase(Locale.ROOT);
 
-        final List<String> candidates = Lists.newArrayList();
-        if(!Strings.isNullOrEmpty(language)) {
-            if(!Strings.isNullOrEmpty(country)) {
+        final List<String> candidates = _Lists.newArrayList();
+        if(!_Strings.isNullOrEmpty(language)) {
+            if(!_Strings.isNullOrEmpty(country)) {
                 candidates.add(basename + DASH       + language + UNDERSCORE + country+ ".po");
                 candidates.add(basename + DASH       + language + DASH       + country+ ".po");
                 candidates.add(basename + UNDERSCORE + language + UNDERSCORE + country+ ".po");

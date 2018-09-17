@@ -16,8 +16,6 @@
  */
 package org.apache.isis.core.runtime.services.command;
 
-import java.util.UUID;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;

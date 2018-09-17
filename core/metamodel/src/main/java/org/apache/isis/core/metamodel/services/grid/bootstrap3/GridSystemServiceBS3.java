@@ -93,38 +93,14 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         final BS3Row propsRow = new BS3Row();
         bs3Grid.getRows().add(propsRow);
 
-//TODO [ahuber] marked for removal (breaks legacy functionality) ...
-//        final MemberGroupLayoutFacet memberGroupLayoutFacet =
-//                objectSpec.getFacet(MemberGroupLayoutFacet.class);
-//        if(memberGroupLayoutFacet != null) {
-//            // if have @MemberGroupLayout (or equally, a .layout.json file)
-//            final MemberGroupLayout.ColumnSpans columnSpans = memberGroupLayoutFacet.getColumnSpans();
-//            addFieldSetsToColumn(propsRow, columnSpans.getLeft(), memberGroupLayoutFacet.getLeft(), true);
-//            addFieldSetsToColumn(propsRow, columnSpans.getMiddle(), memberGroupLayoutFacet.getMiddle(), false);
-//            addFieldSetsToColumn(propsRow, columnSpans.getRight(), memberGroupLayoutFacet.getRight(), false);
-//
-//            final BS3Col col = new BS3Col();
-//            final int collectionSpan = columnSpans.getCollections();
-//            col.setUnreferencedCollections(true);
-//            col.setSpan(collectionSpan > 0? collectionSpan: 12);
-//            propsRow.getCols().add(col);
-//
-//            // will already be sorted per @MemberOrder
-//            final List<OneToManyAssociation> collections = objectSpec.getCollections(Contributed.INCLUDED);
-//            for (OneToManyAssociation collection : collections) {
-//                col.getCollections().add(new CollectionLayoutData(collection.getId()));
-//            }
-//        } else 
-        {
+        // if no layout hints other than @MemberOrder
+        addFieldSetsToColumn(propsRow, 4, Arrays.asList("General"), true);
 
-            // if no layout hints other than @MemberOrder
-            addFieldSetsToColumn(propsRow, 4, Arrays.asList("General"), true);
-
-            final BS3Col col = new BS3Col();
-            col.setUnreferencedCollections(true);
-            col.setSpan(12);
-            propsRow.getCols().add(col);
-        }
+        final BS3Col col = new BS3Col();
+        col.setUnreferencedCollections(true);
+        col.setSpan(12);
+        propsRow.getCols().add(col);
+            
         return bs3Grid;
     }
 
@@ -397,7 +373,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
                 Collections.sort(associations, ObjectMember.Comparators.byMemberOrderSequence());
                 addPropertiesTo(fieldSet,
-                        _Lists.transform(associations, ObjectAssociation::getId),
+                        _Lists.map(associations, ObjectAssociation::getId),
                         propertyLayoutDataById);
             }
 
@@ -421,13 +397,13 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
 
         if(!missingCollectionIds.isEmpty()) {
             final List<OneToManyAssociation> sortedCollections = 
-                    _Lists.transform(missingCollectionIds, oneToManyAssociationById::get);
+                    _Lists.map(missingCollectionIds, oneToManyAssociationById::get);
             {
                 sortedCollections.sort(ObjectMember.Comparators.byMemberOrderSequence());
             }
             
             final List<String> sortedMissingCollectionIds = 
-                    _Lists.transform(sortedCollections, ObjectAssociation::getId);
+                    _Lists.map(sortedCollections, ObjectAssociation::getId);
             
             final BS3TabGroup bs3TabGroup = result.tabGroupForUnreferencedCollectionsRef;
             if(bs3TabGroup != null) {
@@ -448,7 +424,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
         final List<String> associatedActionIds = _Lists.newArrayList();
 
         final List<ObjectAction> sortedPossiblyMissingActions = 
-                _Lists.transform(possiblyMissingActionIds, objectActionById::get);
+                _Lists.map(possiblyMissingActionIds, objectActionById::get);
         {
             sortedPossiblyMissingActions
                 .sort(ObjectMember.Comparators.byMemberOrderSequence());
@@ -456,7 +432,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 
 
         final List<String> sortedPossiblyMissingActionIds =
-                _Lists.transform(sortedPossiblyMissingActions, ObjectMember::getId);
+                _Lists.map(sortedPossiblyMissingActions, ObjectMember::getId);
 
         for (String actionId : sortedPossiblyMissingActionIds) {
             final ObjectAction oa = objectActionById.get(actionId);

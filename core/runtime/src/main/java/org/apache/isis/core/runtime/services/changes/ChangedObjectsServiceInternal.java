@@ -21,12 +21,10 @@ package org.apache.isis.core.runtime.services.changes;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.HEAD;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -37,6 +35,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.WithTransactionScope;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -212,11 +212,11 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
     private Set<Map.Entry<AdapterAndProperty, PreAndPostValues>> capturePostValuesAndDrain(final Map<AdapterAndProperty, PreAndPostValues> changedObjectProperties) {
         return ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(() -> {
-            final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = Maps.newLinkedHashMap();
+            final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = _Maps.newLinkedHashMap();
 
             while(!changedObjectProperties.isEmpty()) {
 
-                final Set<AdapterAndProperty> keys = Sets.newLinkedHashSet(changedObjectProperties.keySet());
+                final Set<AdapterAndProperty> keys = _Sets.newLinkedHashSet(changedObjectProperties.keySet());
                 for (final AdapterAndProperty aap : keys) {
 
                     final PreAndPostValues papv = changedObjectProperties.remove(aap);

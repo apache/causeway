@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.isis.commons.internal.collections._Maps;
-
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent;
@@ -38,6 +36,7 @@ import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

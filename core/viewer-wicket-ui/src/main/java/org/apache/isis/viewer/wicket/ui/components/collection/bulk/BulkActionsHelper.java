@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -69,7 +69,7 @@ public class BulkActionsHelper implements Serializable {
     }
 
     private List<ActionType> inferActionTypes(final IsisSessionFactory isisSessionFactory) {
-        final List<ActionType> actionTypes = Lists.newArrayList();
+        final List<ActionType> actionTypes = _Lists.newArrayList();
         actionTypes.add(ActionType.USER);
         final DeploymentCategory deploymentCategory = isisSessionFactory.getDeploymentCategory();
         if ( !deploymentCategory.isProduction()) {

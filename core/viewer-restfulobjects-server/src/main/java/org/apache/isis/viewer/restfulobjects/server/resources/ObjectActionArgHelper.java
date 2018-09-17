@@ -18,7 +18,7 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.util.List;
 import java.util.Map;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -52,7 +52,7 @@ public class ObjectActionArgHelper {
     public List<ObjectAdapter> parseAndValidateArguments(final JsonRepresentation arguments) {
         final List<JsonRepresentation> argList = argListFor(action, arguments);
 
-        final List<ObjectAdapter> argAdapters = Lists.newArrayList();
+        final List<ObjectAdapter> argAdapters = _Lists.newArrayList();
         final List<ObjectActionParameter> parameters = action.getParameters();
         boolean valid = true;
         for (int i = 0; i < argList.size(); i++) {
@@ -93,7 +93,7 @@ public class ObjectActionArgHelper {
     }
 
     private static List<JsonRepresentation> argListFor(final ObjectAction action, final JsonRepresentation arguments) {
-        final List<JsonRepresentation> argList = Lists.newArrayList();
+        final List<JsonRepresentation> argList = _Lists.newArrayList();
 
         // ensure that we have no arguments that are not parameters
         arguments.streamMapEntries()

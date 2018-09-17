@@ -21,8 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.List;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -296,7 +296,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             if(linkAndLabelAsIfEdit != null) {
                 // irrespective of whether the property is itself editable, if the action is annotated as
                 // INLINE_AS_IF_EDIT then we never render it as an action
-                linkAndLabels = Lists.newArrayList(linkAndLabels);
+                linkAndLabels = _Lists.newArrayList(linkAndLabels);
                 linkAndLabels.remove(linkAndLabelAsIfEdit);
             }
 
@@ -364,7 +364,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
     private void addCssFromMetaModel() {
         final String cssForMetaModel = getModel().getCssClass();
-        if (!Strings.isNullOrEmpty(cssForMetaModel)) {
+        if (!_Strings.isNullOrEmpty(cssForMetaModel)) {
             CssClassAppender.appendCssClassTo(this, CssClassAppender.asCssStyle(cssForMetaModel));
         }
 
@@ -434,7 +434,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         }
     }
 
-    private final List<ScalarModelSubscriber2> subscribers = Lists.newArrayList();
+    private final List<ScalarModelSubscriber2> subscribers = _Lists.newArrayList();
 
     public void notifyOnChange(final ScalarModelSubscriber2 subscriber) {
         subscribers.add(subscriber);
@@ -550,7 +550,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         final ScalarModel model = getModel();
         if(model.isRequired() && model.isEnabled()) {
             final String label = scalarName.getDefaultModelObjectAsString();
-            if(!Strings.isNullOrEmpty(label)) {
+            if(!_Strings.isNullOrEmpty(label)) {
                 scalarName.add(new CssClassAppender("mandatory"));
             }
         }

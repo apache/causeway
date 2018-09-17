@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -37,7 +36,7 @@ public final class ParserUtil {
     public static String parserNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
         final String key = PARSER_NAME_KEY_PREFIX + type.getCanonicalName() + PARSER_NAME_KEY_SUFFIX;
         final String parserName = configuration.getString(key);
-        return !Strings.isNullOrEmpty(parserName) ? parserName : null;
+        return !_Strings.isNullOrEmpty(parserName) ? parserName : null;
     }
 
     @SuppressWarnings("unchecked")

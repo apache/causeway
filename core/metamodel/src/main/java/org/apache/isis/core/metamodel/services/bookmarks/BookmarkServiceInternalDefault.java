@@ -27,8 +27,6 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import org.apache.isis.commons.internal.collections._Maps;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -40,6 +38,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.tree.TreeState;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;

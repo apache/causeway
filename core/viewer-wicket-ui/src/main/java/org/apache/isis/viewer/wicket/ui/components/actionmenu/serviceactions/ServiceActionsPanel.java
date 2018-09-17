@@ -22,7 +22,9 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
@@ -39,6 +41,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
@@ -91,10 +94,8 @@ public class ServiceActionsPanel extends Panel {
                     }
                 };
                 final List<CssMenuItem> childItems = menuItem.getSubMenuItems();
-                final String cssForServices = Joiner.on(" ").join(
-                        FluentIterable.from(childItems)
-                        .transform(new Function<CssMenuItem, String>() {
-                            @Nullable @Override public String apply(final CssMenuItem input) {
+                final String cssForServices = _NullSafe.stream(childItems) 
+                        .map((final CssMenuItem input) -> {
                                 final String actionIdentifier = input.getActionIdentifier();
                                 if (actionIdentifier != null) {
                                     // busrules-busrulesobjects-findbyname
@@ -105,19 +106,16 @@ public class ServiceActionsPanel extends Panel {
                                 } else {
                                     return null;
                                 }
-                            }
                         })
-                        .filter(new Predicate<String>() {
-                            @Override public boolean apply(@Nullable final String input) {
+                        .filter((@Nullable final String input) -> {
                                 return input != null;
-                            }
                         })
-                        .transform(new Function<String, String>() {
-                            @Override public String apply(final String input) {
+                        .map((final String input) -> {
                                 return "isis-" + input;
-                            }
                         })
-                        .toSet());
+                        .distinct()
+                        .collect(Collectors.joining(" "));
+
                 listItem.add(new CssClassAppender(cssForServices));
 
                 topMenu.add(subMenuItemsView);

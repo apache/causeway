@@ -23,7 +23,7 @@ import java.util.List;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.services.error.ErrorReportingService;
@@ -143,7 +143,7 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     }
 
     private static List<StackTraceDetail> asStackTrace(Throwable ex) {
-        List<StackTraceDetail> stackTrace = Lists.newArrayList();
+        List<StackTraceDetail> stackTrace = _Lists.newArrayList();
         List<Throwable> causalChain = Throwables.getCausalChain(ex);
         boolean firstTime = true;
         for(Throwable cause: causalChain) {
@@ -160,11 +160,11 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     }
 
     private static List<List<StackTraceDetail>> asStackTraces(Throwable ex) {
-        List<List<StackTraceDetail>> stackTraces = Lists.newArrayList();
+        List<List<StackTraceDetail>> stackTraces = _Lists.newArrayList();
 
         List<Throwable> causalChain = Throwables.getCausalChain(ex);
         for(Throwable cause: causalChain) {
-            List<StackTraceDetail> stackTrace = Lists.newArrayList();
+            List<StackTraceDetail> stackTrace = _Lists.newArrayList();
             append(cause, stackTrace);
             stackTraces.add(stackTrace);
         }

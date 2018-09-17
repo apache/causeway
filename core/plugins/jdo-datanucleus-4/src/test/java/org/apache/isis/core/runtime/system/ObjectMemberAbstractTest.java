@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.runtime.system;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.datanucleus.enhancement.Persistable;
 import org.jmock.Expectations;
@@ -102,7 +102,7 @@ public class ObjectMemberAbstractTest {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         stubConfiguration = new IsisConfigurationDefault();
-        stubServicesInjector = new ServicesInjector(Lists.<Object>newArrayList(
+        stubServicesInjector = new ServicesInjector(_Lists.<Object>of(
                 mockSpecificationLoader, mockSpecificationLoader, mockPersistenceSessionServiceInternal), stubConfiguration);
 
         context.checking(new Expectations() {{

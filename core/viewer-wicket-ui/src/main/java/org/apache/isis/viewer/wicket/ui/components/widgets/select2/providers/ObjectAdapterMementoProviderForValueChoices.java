@@ -41,7 +41,7 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -82,7 +82,7 @@ extends ObjectAdapterMementoProviderAbstract implements ObjectAdapterMementoProv
                 return ids.contains(id);
             }
         };
-        return Lists.newArrayList(FluentIterable.from(mementos).filter(lookupOam).toList());
+        return _Lists.newArrayList(FluentIterable.from(mementos).filter(lookupOam).toList());
     }
 
 }

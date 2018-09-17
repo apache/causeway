@@ -33,7 +33,6 @@ import java.util.function.Predicate;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
 import com.google.common.io.BaseEncoding;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -44,6 +43,7 @@ import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
@@ -195,7 +195,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
         }
 
         final StringBuilder buf = new StringBuilder();
-        if(!Strings.isNullOrEmpty(getPackageName())) {
+        if(!_Strings.isNullOrEmpty(getPackageName())) {
             buf.append(getPackageName()).append(".");
         }
         buf.append(getClassName());

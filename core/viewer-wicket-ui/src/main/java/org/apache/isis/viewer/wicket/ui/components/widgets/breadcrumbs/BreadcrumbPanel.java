@@ -21,7 +21,7 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -97,8 +97,8 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
 
             @Override
             public void query(String term, int page, Response<EntityModel> response) {
-                final List<EntityModel> breadCrumbList = Lists.newArrayList(breadcrumbModel.getList());
-                final List<EntityModel> checkedList = Lists.newArrayList(
+                final List<EntityModel> breadCrumbList = _Lists.newArrayList(breadcrumbModel.getList());
+                final List<EntityModel> checkedList = _Lists.newArrayList(
                         Iterables.filter(breadCrumbList, new Predicate<EntityModel>() {
                             @Override
                             public boolean apply(final EntityModel input) {

@@ -24,8 +24,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-import com.google.common.collect.Lists;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -34,6 +32,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -77,7 +76,7 @@ public class ObjectActionLayoutXmlDefaultTest {
         stubConfiguration = new IsisConfigurationDefault();
 
         stubServicesInjector =
-                new ServicesInjector(Lists.newArrayList(
+                new ServicesInjector(_Lists.of(
                         mockAuthenticationSessionProvider,
                         mockSpecificationLoader,
                         mockPersistenceSessionServiceInternal,

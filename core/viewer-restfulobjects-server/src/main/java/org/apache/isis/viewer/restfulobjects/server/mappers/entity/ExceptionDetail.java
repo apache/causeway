@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 @XmlRootElement(
         name = "exceptionDetail"
@@ -54,7 +54,7 @@ public class ExceptionDetail {
 
     @XmlElementWrapper()
     @XmlElement(name="element")
-    private List<String> stackTrace = Lists.newArrayList();
+    private List<String> stackTrace = _Lists.newArrayList();
     private ExceptionDetail causedBy;
 
     public ExceptionDetail() {

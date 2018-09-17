@@ -19,11 +19,9 @@
 
 package org.apache.isis.core.metamodel.postprocessors.param;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
-
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -86,11 +84,13 @@ ServicesInjectorAware {
 
                 final List<ObjectActionParameter> parameters = action.getParameters();
 
-                final ImmutableList<ObjectActionParameter> compatibleCollectionParams = FluentIterable.from(parameters)
-                        .filter(whetherCollectionParamOfType::test).toList();
+                final List<ObjectActionParameter> compatibleCollectionParams =
+                        Collections.unmodifiableList(
+                                _Lists.filter(parameters, whetherCollectionParamOfType));
 
-                final ImmutableList<ObjectActionParameter> compatibleScalarParams = FluentIterable.from(parameters)
-                        .filter(whetherScalarParamOfType::test).toList();
+                final List<ObjectActionParameter> compatibleScalarParams = 
+                        Collections.unmodifiableList(
+                                _Lists.filter(parameters, whetherScalarParamOfType));
 
                 // for collection parameters, install an defaults facet (if there isn't one already)
                 // this will cause the UI to render the collection with toggleboxes

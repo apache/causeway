@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.buttons;
 
 import java.util.List;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -42,7 +42,7 @@ public class ContainedButtonPanel extends PanelAbstract<Model<String>> {
     private static final String ID_BUTTON = "button";
 
     private final Button button;
-    private final List<Component> componentsToRerender = Lists.newArrayList();
+    private final List<Component> componentsToRerender = _Lists.newArrayList();
 
     public ContainedButtonPanel(final String id, final String caption) {
         super(id, Model.of(caption));

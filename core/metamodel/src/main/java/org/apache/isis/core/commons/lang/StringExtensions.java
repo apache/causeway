@@ -24,8 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.commons.internal.base._Strings;
 
@@ -138,7 +136,7 @@ public final class StringExtensions {
      * Simply forces first char to be lower case.
      */
     public static String asLowerFirst(final String extendee) {
-        if (Strings.isNullOrEmpty(extendee)) {
+        if (_Strings.isNullOrEmpty(extendee)) {
             return extendee;
         }
         if (extendee.length() == 1) {
@@ -292,13 +290,13 @@ public final class StringExtensions {
     }
 
     public static String combinePath(final String extendee, final String suffix) {
-        if (Strings.isNullOrEmpty(extendee) && Strings.isNullOrEmpty(suffix)) {
+        if (_Strings.isNullOrEmpty(extendee) && _Strings.isNullOrEmpty(suffix)) {
             return "";
         }
-        if (Strings.isNullOrEmpty(extendee)) {
+        if (_Strings.isNullOrEmpty(extendee)) {
             return suffix;
         }
-        if (Strings.isNullOrEmpty(suffix)) {
+        if (_Strings.isNullOrEmpty(suffix)) {
             return extendee;
         }
         if (extendee.endsWith("/") || suffix.startsWith("/")) {

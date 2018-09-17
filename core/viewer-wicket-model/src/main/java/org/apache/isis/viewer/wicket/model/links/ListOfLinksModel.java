@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.model.links;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
@@ -34,7 +34,7 @@ public class ListOfLinksModel extends LoadableDetachableModel<List<LinkAndLabel>
 
     public ListOfLinksModel(List<LinkAndLabel> links) {
         // copy, in case supplied list is a non-serializable guava list using lazy evaluation;
-        this.links = Lists.newArrayList(links);
+        this.links = _Lists.newArrayList(links);
     }
 
     @Override

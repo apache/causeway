@@ -24,11 +24,15 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -49,10 +53,6 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.Lists;
 
 /**
  * Is the factory of {@link IsisSession}s, also holding a reference to the current session using
@@ -158,7 +158,7 @@ implements ApplicationScopedComponent, AppManifestProvider {
             final List<Object> services = servicesInjector.getRegisteredServices();
             // take a copy of all services to avoid occasional concurrent modification exceptions
             // that can sometimes occur in the loop
-            final List<Object> copyOfServices = Lists.newArrayList(services);
+            final List<Object> copyOfServices = _Lists.newArrayList(services);
             final TitleService titleService = servicesInjector.lookupServiceElseFail(TitleService.class);
             for (Object service : copyOfServices) {
                 @SuppressWarnings("unused")

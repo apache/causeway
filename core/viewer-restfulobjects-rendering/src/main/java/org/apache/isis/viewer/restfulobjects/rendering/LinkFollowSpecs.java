@@ -25,7 +25,7 @@ import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
 import org.apache.isis.viewer.restfulobjects.rendering.util.FollowSpecUtil;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 public final class LinkFollowSpecs {
 
@@ -62,8 +62,8 @@ public final class LinkFollowSpecs {
         }
         final PathNode candidate = PathNode.parse(path);
         if (mode == Mode.FOLLOWING) {
-            List<List<PathNode>> remainingPathSpecs = Lists.newArrayList();
-            List<PathNode> firstSpecs = Lists.newArrayList();
+            List<List<PathNode>> remainingPathSpecs = _Lists.newArrayList();
+            List<PathNode> firstSpecs = _Lists.newArrayList();
             for(List<PathNode> spec: pathSpecs) {
                 if(spec.isEmpty()) {
                     continue;

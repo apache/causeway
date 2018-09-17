@@ -18,6 +18,8 @@
  */
 package org.apache.isis.security.shiro;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -33,10 +35,6 @@ import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 import javax.naming.ldap.LdapContext;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import org.apache.isis.commons.internal.collections._Sets;
-
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.config.Ini;
@@ -46,6 +44,8 @@ import org.apache.shiro.realm.ldap.LdapUtils;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.StringUtils;
 
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapper;
 import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromIni;
 import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromString;
@@ -182,7 +182,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
      */
     private String userObjectClass;
 
-    private final Map<String, String> rolesByGroup = Maps.newLinkedHashMap();
+    private final Map<String, String> rolesByGroup = _Maps.newLinkedHashMap();
 
     private PermissionToRoleMapper permissionToRoleMapper;
 
@@ -284,7 +284,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
             Set<String> extractedAttributeP, Set<String> permissionByAttributeP)
                     throws NamingException {
         final NamingEnumeration<? extends Attribute> attributeEnum = group.getAttributes().getAll();
-        Map<String, Set<String>> keyValues = Maps.newHashMap();
+        Map<String, Set<String>> keyValues = _Maps.newHashMap();
         while (attributeEnum.hasMore()) {
             final Attribute attr = attributeEnum.next();
             if (extractedAttributeP.contains(attr.getID())) {
@@ -362,7 +362,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
     private Set<String> permsFor(Set<String> roleNames) {
         Set<String> perms = _Sets.newLinkedHashSet(); // preserve order
         for (String role : roleNames) {
-            List<String> permsForRole = getPermissionsByRole().get(role);
+            Set<String> permsForRole = getPermissionsByRole().get(role);
             if (permsForRole != null) {
                 perms.addAll(permsForRole);
             }
@@ -408,7 +408,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
      * Retrieves permissions by role set using either
      * {@link #setPermissionsByRole(String)} or {@link #setResourcePath(String)}.
      */
-    private Map<String, List<String>> getPermissionsByRole() {
+    private Map<String, Set<String>> getPermissionsByRole() {
         if (permissionToRoleMapper == null) {
             throw new IllegalStateException("Permissions by role not yet set.");
         }
@@ -468,22 +468,22 @@ public class IsisLdapRealm extends JndiLdapRealm {
 
     public void setPermissionByUserAttribute(String permissionByUserAttr) {
         String[] list = permissionByUserAttr.split(",");
-        this.permissionByUserAttribute.addAll(Lists.newArrayList(list));
+        stream(list).forEach(this.permissionByUserAttribute::add);
     }
 
     public void setPermissionByGroupAttribute(String permissionByGroupAttribute) {
         String[] list = permissionByGroupAttribute.split(",");
-        this.permissionByGroupAttribute.addAll(Lists.newArrayList(list));
+        stream(list).forEach(this.permissionByGroupAttribute::add);
     }
 
     public void setUserExtractedAttribute(String userExtractedAttribute) {
         String[] list = userExtractedAttribute.split(",");
-        this.userExtractedAttribute.addAll(Lists.newArrayList(list));
+        stream(list).forEach(this.userExtractedAttribute::add);
     }
 
     public void setGroupExtractedAttribute(String groupExtractedAttribute) {
         String[] list = groupExtractedAttribute.split(",");
-        this.groupExtractedAttribute.addAll(Lists.newArrayList(list));
+        stream(list).forEach(this.groupExtractedAttribute::add);
     }
 
     public void setSearchUserBase(String searchUserBase) {

@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.fasterxml.jackson.databind.node.NullNode;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -217,7 +217,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         if (choiceAdapters == null || choiceAdapters.length == 0) {
             return null;
         }
-        final List<Object> list = Lists.newArrayList();
+        final List<Object> list = _Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the member, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = objectMember.getSpecification();

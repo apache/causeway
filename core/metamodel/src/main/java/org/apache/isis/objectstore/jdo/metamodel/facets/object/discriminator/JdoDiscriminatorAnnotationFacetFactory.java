@@ -21,8 +21,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator;
 
 import javax.jdo.annotations.Discriminator;
 
-import com.google.common.base.Strings;
-
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -54,7 +53,7 @@ public class JdoDiscriminatorAnnotationFacetFactory extends FacetFactoryAbstract
             return;
         }
         String annotationValueAttribute = annotation.value();
-        if(!Strings.isNullOrEmpty(annotationValueAttribute)) {
+        if(!_Strings.isNullOrEmpty(annotationValueAttribute)) {
             FacetUtil.addFacet(new ObjectSpecIdFacetInferredFromJdoDiscriminatorValueAnnotation(annotationValueAttribute, processClassContext.getFacetHolder()));
         } else {
             final FacetHolder facetHolder = processClassContext.getFacetHolder();

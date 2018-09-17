@@ -20,13 +20,12 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.List;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import java.util.function.Predicate;
+
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
-
 /**
  * Backing model for actions of application services menu bar (typically, as
  * displayed along the top or side of the page).
@@ -53,18 +52,15 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
 
     @Override
     protected List<ObjectAdapter> load() {
-        return Lists.newArrayList(Iterables.filter(getServiceAdapters(), with(menuBar)));
+        return _Lists.filter(getServiceAdapters(), with(menuBar));
     }
 
     private static Predicate<ObjectAdapter> with(final DomainServiceLayout.MenuBar menuBar) {
-        return new Predicate<ObjectAdapter>() {
-            @Override
-            public boolean apply(ObjectAdapter input) {
+        return (ObjectAdapter input) -> {
                 final DomainServiceLayoutFacet facet = input.getSpecification().getFacet
                         (DomainServiceLayoutFacet.class);
                 return (facet != null && facet.getMenuBar() == menuBar) ||
                         (facet == null && menuBar == DomainServiceLayout.MenuBar.PRIMARY);
-            }
         };
     }
 

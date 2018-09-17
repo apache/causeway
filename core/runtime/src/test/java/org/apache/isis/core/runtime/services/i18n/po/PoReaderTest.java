@@ -20,7 +20,7 @@ package org.apache.isis.core.runtime.services.i18n.po;
 
 import java.util.List;
 import java.util.Locale;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -76,7 +76,7 @@ public class PoReaderTest {
             poReader = new PoReader(mockTranslationServicePo) {
                 @Override
                 protected List<String> readPo(final Locale locale) {
-                    final List<String> lines = Lists.newArrayList();
+                    final List<String> lines = _Lists.newArrayList();
                     lines.add(String.format("#: %s", context));
                     lines.add(String.format("msgid \"%s\"", msgId));
                     lines.add(String.format("msgstr \"%s\"", msgStr));
@@ -105,7 +105,7 @@ public class PoReaderTest {
             poReader = new PoReader(mockTranslationServicePo) {
                 @Override
                 protected List<String> readPo(final Locale locale) {
-                    final List<String> lines = Lists.newArrayList();
+                    final List<String> lines = _Lists.newArrayList();
                     lines.add(String.format("#: %s", context1));
                     lines.add(String.format("#: %s", context2));
                     lines.add(String.format("msgid \"%s\"", msgId));
@@ -143,7 +143,7 @@ public class PoReaderTest {
             poReader = new PoReader(mockTranslationServicePo) {
                 @Override
                 protected List<String> readPo(final Locale locale) {
-                    final List<String> lines = Lists.newArrayList();
+                    final List<String> lines = _Lists.newArrayList();
                     lines.add(String.format("#: %s", context1));
                     lines.add(String.format("msgid \"%s\"", msgid1));
                     lines.add(String.format("msgstr \"%s\"", msgstr1));
@@ -187,7 +187,7 @@ public class PoReaderTest {
             poReader = new PoReader(mockTranslationServicePo) {
                 @Override
                 protected List<String> readPo(final Locale locale) {
-                    final List<String> lines = Lists.newArrayList();
+                    final List<String> lines = _Lists.newArrayList();
                     lines.add(String.format("#: %s", context));
                     lines.add(String.format("msgid \"%s\"", msgid));
                     lines.add(String.format("msgid_plural \"%s\"", msgid_plural));
@@ -220,7 +220,7 @@ public class PoReaderTest {
             poReader = new PoReader(mockTranslationServicePo) {
                 @Override
                 protected List<String> readPo(final Locale locale) {
-                    return Lists.newArrayList();
+                    return _Lists.newArrayList();
                 }
             };
 

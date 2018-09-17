@@ -23,8 +23,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
+import java.util.Objects;
+import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -44,7 +44,7 @@ public class BookmarkTreeNode implements Serializable {
 
     private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
-    private final List<BookmarkTreeNode> children = Lists.newArrayList();
+    private final List<BookmarkTreeNode> children = _Lists.newArrayList();
     private final int depth;
 
     private final RootOid oidNoVer;
@@ -149,7 +149,7 @@ public class BookmarkTreeNode implements Serializable {
 
         // match only on the oid string
         final String candidateOidStr = oidStrFrom(candidateEntityModel);
-        boolean inGraph = Objects.equal(this.oidNoVerStr, candidateOidStr);
+        boolean inGraph = Objects.equals(this.oidNoVerStr, candidateOidStr);
         if(inGraph) {
             this.setTitle(candidateEntityModel.getTitle());
         }
@@ -181,7 +181,7 @@ public class BookmarkTreeNode implements Serializable {
 
         // check if target object of the action is the same (the oid str)
         final String candidateOidStr = oidStrFrom(candidateActionModel);
-        if(!Objects.equal(this.oidNoVerStr, candidateOidStr)) {
+        if(!Objects.equals(this.oidNoVerStr, candidateOidStr)) {
             return false;
         }
 
@@ -189,7 +189,7 @@ public class BookmarkTreeNode implements Serializable {
         List<String> thisArgs = PageParameterNames.ACTION_ARGS.getListFrom(pageParameters);
         PageParameters candidatePageParameters = candidateActionModel.getPageParameters();
         List<String> candidateArgs = PageParameterNames.ACTION_ARGS.getListFrom(candidatePageParameters);
-        if(!Objects.equal(thisArgs, candidateArgs)) {
+        if(!Objects.equals(thisArgs, candidateArgs)) {
             return false;
         }
 
@@ -226,7 +226,7 @@ public class BookmarkTreeNode implements Serializable {
                 return parentOidStr;
             })
             .forEach(parentOidStr->{
-                if(Objects.equal(this.oidNoVerStr, parentOidStr)) {
+                if(Objects.equals(this.oidNoVerStr, parentOidStr)) {
                     this.addChild(candidateBookmarkableModel);
                     whetherAdded[0] = true;
                 }

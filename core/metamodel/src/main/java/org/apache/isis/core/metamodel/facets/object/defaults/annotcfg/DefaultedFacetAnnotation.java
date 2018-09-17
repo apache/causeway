@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.defaults.annotcfg;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.annotation.Defaulted;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetAbstract;
@@ -33,7 +32,7 @@ public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
     private static String providerName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
         final Defaulted annotation = annotatedClass.getAnnotation(Defaulted.class);
         final String providerName = annotation.defaultsProviderName();
-        if (!Strings.isNullOrEmpty(providerName)) {
+        if (!_Strings.isNullOrEmpty(providerName)) {
             return providerName;
         }
         return DefaultsProviderUtil.defaultsProviderNameFromConfiguration(annotatedClass, configuration);

@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import com.google.common.base.Strings;
-
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
@@ -32,7 +31,7 @@ public class DescribedAsFacetForDomainObjectXml extends DescribedAsFacetAbstract
         if(domainObjectLayout == null) {
             return null;
         }
-        final String describedAs = Strings.emptyToNull(domainObjectLayout.getDescribedAs());
+        final String describedAs = _Strings.emptyToNull(domainObjectLayout.getDescribedAs());
         return describedAs != null ? new DescribedAsFacetForDomainObjectXml(describedAs, holder) : null;
     }
 

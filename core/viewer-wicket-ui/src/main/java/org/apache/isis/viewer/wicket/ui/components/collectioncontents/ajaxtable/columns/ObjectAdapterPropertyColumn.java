@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
@@ -82,7 +82,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
     @Override
     public String getCssClass() {
         final String cssClass = super.getCssClass();
-        return (!Strings.isNullOrEmpty(cssClass) ? (cssClass + " ") : "") +
+        return (!_Strings.isNullOrEmpty(cssClass) ? (cssClass + " ") : "") +
                 CssClassAppender.asCssStyle("isis-" + parentTypeName.replace(".","-") + "-" + propertyExpression);
     }
 

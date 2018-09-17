@@ -444,7 +444,7 @@ public class ServicesInjector implements ApplicationScopedComponent {
     @Programmatic
     public <T> List<T> lookupServices(final Class<T> serviceClass) {
         locateAndCache(serviceClass);
-        return Collections.unmodifiableList((List<T>) servicesAssignableToType.get(serviceClass));
+        return _Lists.unmodifiable((List<T>) servicesAssignableToType.get(serviceClass));
     };
 
     private void locateAndCache(final Class<?> serviceClass) {

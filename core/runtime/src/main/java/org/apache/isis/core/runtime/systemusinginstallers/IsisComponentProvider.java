@@ -23,8 +23,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+
+import com.google.common.base.Joiner;
+import com.google.common.collect.Iterables;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -32,7 +38,9 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -56,13 +64,6 @@ import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import org.apache.isis.commons.internal.collections._Sets;
 
 /**
  *
@@ -130,7 +131,7 @@ public abstract class IsisComponentProvider {
         final Iterable<String> modulePackages = modulePackageNamesFrom(appManifest);
         final AppManifest.Registry registry = AppManifest.Registry.instance();
 
-        final List<String> moduleAndFrameworkPackages = Lists.newArrayList();
+        final List<String> moduleAndFrameworkPackages = _Lists.newArrayList();
         moduleAndFrameworkPackages.addAll(AppManifest.Registry.FRAMEWORK_PROVIDED_SERVICES);
         Iterables.addAll(moduleAndFrameworkPackages, modulePackages);
 
@@ -161,12 +162,9 @@ public abstract class IsisComponentProvider {
 
         // for a tiny bit of efficiency, we append a '.' to each package name here, outside the loops
         List<String> packagesWithDotSuffix =
-                FluentIterable.from(moduleAndFrameworkPackages).transform(new Function<String, String>() {
-                    @Nullable @Override
-                    public String apply(@Nullable final String s) {
+                _Lists.map(moduleAndFrameworkPackages, (@Nullable final String s) -> {
                         return s != null ? s + "." : null;
-                    }
-                }).toList();
+                });
 
         registry.setDomainServiceTypes(within(packagesWithDotSuffix, domainServiceTypes));
         registry.setPersistenceCapableTypes(within(packagesWithDotSuffix, persistenceCapableTypes));
@@ -233,15 +231,19 @@ public abstract class IsisComponentProvider {
                     "If an appManifest is provided then it must return a non-empty set of modules");
         }
 
-        return _Lists.transform(modules, ClassFunctions.packageNameOf());
+        return _Lists.map(modules, ClassFunctions.packageNameOf());
     }
 
     protected String classNamesFrom(final List<?> objectsOrClasses) {
         if (objectsOrClasses == null) {
             return null;
         }
-        final Iterable<String> fixtureClassNames = Iterables.transform(objectsOrClasses, classNameOf());
-        return Joiner.on(',').join(fixtureClassNames);
+        
+        final Stream<String> fixtureClassNames = _NullSafe.stream(objectsOrClasses)
+                .map(classNameOf());
+                
+        return fixtureClassNames.collect(Collectors.joining(","));
+                
     }
 
     private static Function<Object, String> classNameOf() {

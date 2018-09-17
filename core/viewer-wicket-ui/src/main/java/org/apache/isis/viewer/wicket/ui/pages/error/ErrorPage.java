@@ -21,16 +21,12 @@ package org.apache.isis.viewer.wicket.ui.pages.error;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 
 import org.apache.isis.applib.services.error.ErrorDetails;
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
@@ -65,7 +61,7 @@ public class ErrorPage extends PageAbstract {
             final List<String> stackDetailList = transform(stackTrace);
 
             final List<List<StackTraceDetail>> stackTraces = exceptionModel.getStackTraces();
-            final List<List<String>> stackDetailLists = Lists.newArrayList();
+            final List<List<String>> stackDetailLists = _Lists.newArrayList();
             for (List<StackTraceDetail> trace : stackTraces) {
                 stackDetailLists.add(transform(trace));
             }
@@ -86,11 +82,7 @@ public class ErrorPage extends PageAbstract {
     }
 
     protected List<String> transform(final List<StackTraceDetail> stackTrace) {
-        return Lists.transform(stackTrace, new Function<StackTraceDetail, String>() {
-            @Nullable @Override public String apply(final StackTraceDetail stackTraceDetail) {
-                return stackTraceDetail.getLine();
-            }
-        });
+        return _Lists.map(stackTrace, (final StackTraceDetail stackTraceDetail) -> stackTraceDetail.getLine());
     }
 
 }

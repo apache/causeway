@@ -54,7 +54,7 @@ public final class UrlEncodingUtils {
     }
 
     public static List<String> urlDecode(final List<String> values) {
-        return _Lists.transform(values, FUNCTION);
+        return _Lists.map(values, FUNCTION);
     }
 
     public static String[] urlDecode(final String[] values) {

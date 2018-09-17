@@ -21,10 +21,9 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
-
-import com.google.common.base.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -225,7 +224,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         final List<ObjectActionParameter> allParameters = getParameters();
         for (int i = 0; i < allParameters.size(); i++) {
             final ObjectActionParameter param = allParameters.get(i);
-            if (Objects.equal(paramId, param.getId())) {
+            if (Objects.equals(paramId, param.getId())) {
                 return param;
             }
         }
@@ -237,7 +236,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         final List<ObjectActionParameter> allParameters = getParameters();
         for (int i = 0; i < allParameters.size(); i++) {
             final ObjectActionParameter param = allParameters.get(i);
-            if (Objects.equal(paramName, param.getName())) {
+            if (Objects.equals(paramName, param.getName())) {
                 return param;
             }
         }

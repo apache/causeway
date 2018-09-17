@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.node.NullNode;
-import com.google.common.collect.Lists;
+import org.apache.isis.commons.internal.collections._Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -140,7 +140,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     private ObjectActionReprRenderer addParameterDetails() {
         boolean gsoc2013 = getRendererContext().getConfiguration().getBoolean("isis.viewer.restfulobjects.gsoc2013.legacyParamDetails", false);
         if(gsoc2013) {
-            final List<Object> parameters = Lists.newArrayList();
+            final List<Object> parameters = _Lists.newArrayList();
             for (int i = 0; i < objectMember.getParameterCount(); i++) {
                 final ObjectActionParameter param = objectMember.getParameters().get(i);
                 final Object paramDetails = paramDetails(param, getInteractionInitiatedBy());
@@ -183,7 +183,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         if (choiceAdapters == null || choiceAdapters.length == 0) {
             return null;
         }
-        final List<Object> list = Lists.newArrayList();
+        final List<Object> list = _Lists.newArrayList();
         for (final ObjectAdapter choiceAdapter : choiceAdapters) {
             // REVIEW: previously was using the spec of the parameter, but think instead it should be the spec of the adapter itself
             // final ObjectSpecification choiceSpec = param.getSpecification();

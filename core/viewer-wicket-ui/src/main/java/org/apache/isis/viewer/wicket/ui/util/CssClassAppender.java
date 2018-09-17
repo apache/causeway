@@ -19,7 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
-import com.google.common.base.Strings;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.ComponentTag;
@@ -48,7 +48,7 @@ public class CssClassAppender extends AttributeAppender {
     public static void appendCssClassTo(
             final ComponentTag tag,
             final String cssClass) {
-        if(Strings.isNullOrEmpty(cssClass)) {
+        if(_Strings.isNullOrEmpty(cssClass)) {
             return;
         }
         tag.append("class", cssClass, " ");
@@ -60,7 +60,7 @@ public class CssClassAppender extends AttributeAppender {
     public static void appendCssClassTo(
             final MarkupContainer markupContainer,
             final String cssClass) {
-        if(Strings.isNullOrEmpty(cssClass)) {
+        if(_Strings.isNullOrEmpty(cssClass)) {
             return;
         }
         markupContainer.add(new CssClassAppender(cssClass));

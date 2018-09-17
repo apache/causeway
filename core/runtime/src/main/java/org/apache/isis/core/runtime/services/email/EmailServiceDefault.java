@@ -25,8 +25,6 @@ import java.util.Properties;
 import javax.activation.DataSource;
 import javax.annotation.PostConstruct;
 
-import com.google.common.base.Strings;
-
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.ImageHtmlEmail;
@@ -38,6 +36,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.email.EmailService;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
 /**
@@ -168,7 +167,7 @@ public class EmailServiceDefault implements EmailService {
     public boolean isConfigured() {
         final String senderEmailAddress = getSenderEmailAddress();
         final String senderEmailPassword = getSenderEmailPassword();
-        return !Strings.isNullOrEmpty(senderEmailAddress) && !Strings.isNullOrEmpty(senderEmailPassword);
+        return !_Strings.isNullOrEmpty(senderEmailAddress) && !_Strings.isNullOrEmpty(senderEmailPassword);
     }
     // endregion
 
@@ -261,7 +260,7 @@ public class EmailServiceDefault implements EmailService {
     // region > helper methods
 
     static String[] actually(final List<String> original, final String overrideIfAny) {
-        final List<String> addresses = Strings.isNullOrEmpty(overrideIfAny)
+        final List<String> addresses = _Strings.isNullOrEmpty(overrideIfAny)
                 ? original == null
                 ? Collections.<String>emptyList()
                         : original

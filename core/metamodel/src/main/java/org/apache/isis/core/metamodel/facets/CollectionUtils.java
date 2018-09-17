@@ -35,8 +35,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
-import org.apache.isis.commons.internal.collections._Sets;
-
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.collections._Arrays;

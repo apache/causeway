@@ -20,8 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
 import java.sql.Timestamp;
-
-import com.google.common.base.Objects;
+import java.util.Objects;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
@@ -256,7 +255,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
                         // reading the actual value from the target object, playing it safe...
                         final Object actualNewValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
-                        if (!Objects.equal(oldValue, actualNewValue)) {
+                        if (!Objects.equals(oldValue, actualNewValue)) {
 
                             // ... post the executed event
                             domainEventHelper.postEventForProperty(
