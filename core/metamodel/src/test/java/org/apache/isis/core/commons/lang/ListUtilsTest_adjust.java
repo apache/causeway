@@ -20,18 +20,18 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-
-import org.apache.isis.commons.internal.collections._Lists;
 
 public class ListUtilsTest_adjust {
     
     
     @Test
     public void sameLength() throws Exception {
-        final List<Integer> list = _Lists.of(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
+        final List<Integer> list = Arrays.asList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
         ListExtensions.adjust(list, 3);
         
         assertThat(list.size(), is(3));
@@ -42,7 +42,7 @@ public class ListUtilsTest_adjust {
     
     @Test
     public void ifLonger() throws Exception {
-        final List<Integer> list = _Lists.of(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
+        final List<Integer> list = new ArrayList<>(Arrays.asList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE));
         ListExtensions.adjust(list, 4);
         
         assertThat(list.size(), is(4));
@@ -54,7 +54,7 @@ public class ListUtilsTest_adjust {
     
     @Test
     public void ifShorter() throws Exception {
-        final List<Integer> list = _Lists.of(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
+        final List<Integer> list = new ArrayList<>(Arrays.asList(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE));
         ListExtensions.adjust(list, 2);
         
         assertThat(list.size(), is(2));

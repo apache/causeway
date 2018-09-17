@@ -24,7 +24,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.stream.Stream;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -54,15 +54,13 @@ public class JavaCollectionFacetTest {
     @Mock
     private Collection<ObjectAdapter> mockWrappedCollection;
     @Mock
-    private Iterator<ObjectAdapter> mockIterator;
-    @Mock
-    private ObjectAdapterProvider mockAdapterManager;
+    private ObjectAdapterProvider mockOAProvider;
 
     @Before
     public void setUp() throws Exception {
-        mockAdapterManager = context.mock(ObjectAdapterProvider.class);
+        mockOAProvider = context.mock(ObjectAdapterProvider.class);
 
-        facet = new JavaCollectionFacet(mockFacetHolder, mockAdapterManager);
+        facet = new JavaCollectionFacet(mockFacetHolder, mockOAProvider);
     }
 
     @After
@@ -77,11 +75,9 @@ public class JavaCollectionFacetTest {
                 oneOf(mockCollection).getObject();
                 will(returnValue(mockWrappedCollection));
 
-                oneOf(mockWrappedCollection).iterator();
-                will(returnValue(mockIterator));
+                oneOf(mockWrappedCollection).stream();
+                will(returnValue(Stream.empty()));
 
-                oneOf(mockIterator).hasNext();
-                will(returnValue(false));
             }
         });
         assertThat(facet.firstElement(mockCollection), is(nullValue()));

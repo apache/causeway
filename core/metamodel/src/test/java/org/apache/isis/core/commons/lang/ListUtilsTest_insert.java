@@ -30,7 +30,7 @@ public class ListUtilsTest_insert {
     
     @Test
     public void insert_whenInsertionPointAtBeginning() throws Exception {
-        final List<Integer> list = _Lists.of(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
+        final List<Integer> list = _Lists.newArrayList(_Lists.of(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE));
         ListExtensions.insert(list, 0, Integer.valueOf(10));
         
         assertThat(list.size(), is(4));
@@ -42,7 +42,7 @@ public class ListUtilsTest_insert {
     
     @Test
     public void insert_whenInsertionPointInMiddle() throws Exception {
-        final List<Integer> list = _Lists.of(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
+        final List<Integer> list = _Lists.newArrayList(_Lists.of(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE));
         ListExtensions.insert(list, 1, Integer.valueOf(10));
         
         assertThat(list.size(), is(4));
@@ -54,7 +54,7 @@ public class ListUtilsTest_insert {
 
     @Test
     public void insert_whenInsertionPointAtEnd() throws Exception {
-        final List<Integer> list = _Lists.of(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
+        final List<Integer> list = _Lists.newArrayList(_Lists.of(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE));
         ListExtensions.insert(list, 3, Integer.valueOf(10));
         
         assertThat(list.size(), is(4));
@@ -66,7 +66,7 @@ public class ListUtilsTest_insert {
     
     @Test
     public void insert_whenInsertionPointBeyondEnd() throws Exception {
-        final List<Integer> list = _Lists.of(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE);
+        final List<Integer> list = _Lists.newArrayList(_Lists.of(Integer.valueOf(0), Integer.MAX_VALUE, Integer.MIN_VALUE));
         ListExtensions.insert(list, 4, Integer.valueOf(10));
         
         assertThat(list.size(), is(5));

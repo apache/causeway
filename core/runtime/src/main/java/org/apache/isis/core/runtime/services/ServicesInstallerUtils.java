@@ -91,12 +91,7 @@ final class ServicesInstallerUtils  {
     }
 
     private static Function<String, Object> instantiator(final ServiceInstantiator serviceInstantiator) {
-        return new Function<String, Object>() {
-            @Override
-            public Object apply(String serviceName) {
-                return instantiateService(serviceName, serviceInstantiator);
-            }
-        };
+        return (String serviceName) -> instantiateService(serviceName, serviceInstantiator);
     }
 
 }
