@@ -23,11 +23,11 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 public final class ValidationFailures implements Iterable<String> {
 
-    private final Set<String> messages = Sets.newLinkedHashSet();
+    private final Set<String> messages = _Sets.newLinkedHashSet();
 
     public void add(final String pattern, final Object... arguments) {
         final String message = String.format(pattern, arguments);
@@ -48,7 +48,7 @@ public final class ValidationFailures implements Iterable<String> {
         if (!occurred()) {
             return;
         }
-        final SortedSet<String> sortedMessages = Sets.newTreeSet(messages);
+        final SortedSet<String> sortedMessages = _Sets.newTreeSet(messages);
         throw new MetaModelInvalidException(sortedMessages);
     }
 

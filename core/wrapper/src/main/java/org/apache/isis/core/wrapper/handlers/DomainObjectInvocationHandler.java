@@ -29,7 +29,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.DisabledException;
@@ -103,7 +103,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
      */
     protected Method __isis_executionMode;
 
-    protected final Set<String> jdoMethodsProvidedByEnhancement = Sets.newHashSet();
+    protected final Set<String> jdoMethodsProvidedByEnhancement = _Sets.newHashSet();
 
     public DomainObjectInvocationHandler(
             final T delegate,

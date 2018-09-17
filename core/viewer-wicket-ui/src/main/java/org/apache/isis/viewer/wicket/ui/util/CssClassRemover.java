@@ -23,7 +23,7 @@ import java.util.Set;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -45,7 +45,7 @@ public class CssClassRemover extends AttributeModifier {
     protected String newValue(String currentValue, String valueToRemove) {
         if (currentValue == null) return "";
 
-        Set<String> classes = Sets.newHashSet(Splitter.on(" ").split(currentValue));
+        Set<String> classes = _Sets.newHashSet(Splitter.on(" ").split(currentValue));
         classes.remove(valueToRemove);
         return Joiner.on(" ").join(classes);
     }

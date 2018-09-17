@@ -21,7 +21,7 @@ package org.apache.isis.core.runtime.services.i18n.po;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ class PoWriter extends PoAbstract {
 
     private static class Block {
         private final String msgId;
-        private final SortedSet<String> contexts = Sets.newTreeSet();
+        private final SortedSet<String> contexts = _Sets.newTreeSet();
         private String msgIdPlural;
 
         private Block(final String msgId) {

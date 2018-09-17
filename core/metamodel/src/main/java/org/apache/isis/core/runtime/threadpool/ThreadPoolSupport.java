@@ -36,8 +36,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import com.google.common.collect.Lists;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -182,7 +180,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
 
         final long t0 = System.currentTimeMillis();
         try{
-            final List<Object> returnValues = Lists.newArrayList();
+            final List<Object> returnValues = _Lists.newArrayList();
             for (Future<Object> future : futures) {
                 final Object result;
                 try {

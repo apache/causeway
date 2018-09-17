@@ -18,18 +18,18 @@
  */
 package org.apache.isis.core.runtime.systemusinginstallers;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+
 import java.util.Arrays;
 import java.util.Set;
-
-import com.google.common.collect.Sets;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.runtime.systemusinginstallers.fixture.budget.SomeServiceToInclude;
 import org.apache.isis.core.runtime.systemusinginstallers.fixture.budgetassignment.SomeServiceNotToInclude;
-
-import static org.hamcrest.CoreMatchers.*;
 
 public class IsisComponentProvider_within_Test {
 
@@ -41,7 +41,7 @@ public class IsisComponentProvider_within_Test {
                 SomeServiceNotToInclude.class.getPackage().getName()  + ".";
 
         final Set<Class<?>> within = IsisComponentProvider.within(Arrays.asList(budgetPackageWithDot),
-                Sets.newHashSet(SomeServiceToInclude.class, SomeServiceNotToInclude.class));
+                _Sets.of(SomeServiceToInclude.class, SomeServiceNotToInclude.class));
 
         Assert.assertThat(within.size(), is(equalTo(1)));
     }

@@ -41,7 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 //import javassist.util.proxy.MethodFilter;
 //import javassist.util.proxy.MethodHandler;
@@ -221,7 +221,7 @@ public final class ServiceInstantiator {
         return proxyFactory.createInstance(handler, false);
     }
 
-    private Set<Class<?>> cached = Sets.newHashSet();
+    private Set<Class<?>> cached = _Sets.newHashSet();
     private Map<Class<?>, Method> postConstructMethodsByServiceClass = Maps.newConcurrentMap();
     private Map<Class<?>, Method> preDestroyMethodsByServiceClass = Maps.newConcurrentMap();
 

@@ -20,13 +20,13 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -41,6 +41,7 @@ import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -209,7 +210,8 @@ public class ThemeChooser extends Panel {
 
         final String[] enabledThemesArray = getConfiguration().getList(ENABLED_THEMES_KEY);
         if (enabledThemesArray.length > 0) {
-            final HashSet<String> enabledThemesSet = Sets.newHashSet(enabledThemesArray);
+            final Set<String> enabledThemesSet = _NullSafe.stream(enabledThemesArray)
+                    .collect(Collectors.toSet());
 
             Iterable<String> enabled = Iterables.filter(allThemes, new Predicate<String>() {
                 @Override

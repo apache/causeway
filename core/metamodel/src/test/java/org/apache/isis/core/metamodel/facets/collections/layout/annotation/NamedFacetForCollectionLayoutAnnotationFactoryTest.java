@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.collections.layout.annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.SortedSet;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -51,7 +51,7 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
             @SuppressWarnings("unused")
             @CollectionLayout(named = "1st names")
             public SortedSet<String> getFirstNames() {
-                return Sets.newTreeSet();
+                return _Sets.newTreeSet();
             }
         }
         final Method method = findMethod(Customer.class, "getFirstNames");
@@ -76,7 +76,7 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
             @SuppressWarnings("unused")
             @CollectionLayout(named = "1st names", namedEscaped = false)
             public Set<String> getFirstNames() {
-                return Sets.newTreeSet();
+                return _Sets.newTreeSet();
             }
         }
         final Method method = findMethod(Customer.class, "getFirstNames");

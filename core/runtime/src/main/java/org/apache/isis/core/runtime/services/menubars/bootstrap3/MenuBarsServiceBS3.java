@@ -32,7 +32,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -289,7 +289,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     private static Set<String> serviceNamesInOrder(
             final List<ObjectAdapter> serviceAdapters,
             final List<ServiceAndAction> serviceActions) {
-        final Set<String> serviceNameOrder = Sets.newLinkedHashSet();
+        final Set<String> serviceNameOrder = _Sets.newLinkedHashSet();
 
         // first, order as defined in isis.properties
         for (ObjectAdapter serviceAdapter : serviceAdapters) {

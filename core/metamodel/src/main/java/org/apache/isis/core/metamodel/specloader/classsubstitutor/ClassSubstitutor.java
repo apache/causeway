@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 
 import java.util.Set;
 
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.lang.ClassUtil;
@@ -86,8 +86,8 @@ public class ClassSubstitutor {
 
     // -- helpers
 
-    private final Set<Class<?>> classesToIgnore = Sets.newHashSet();
-    private final Set<String> classNamesToIgnore = Sets.newHashSet();
+    private final Set<Class<?>> classesToIgnore = _Sets.newHashSet();
+    private final Set<String> classNamesToIgnore = _Sets.newHashSet();
 
     /**
      * For any classes registered as ignored, {@link #getClass(Class)} will

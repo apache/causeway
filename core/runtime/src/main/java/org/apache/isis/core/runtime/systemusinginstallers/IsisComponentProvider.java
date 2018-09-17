@@ -62,7 +62,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 /**
  *
@@ -140,7 +140,7 @@ public abstract class IsisComponentProvider {
         final Set<Class<?>> persistenceCapableTypes = PersistenceCapableTypeFinder.find(discovery);
         final Set<Class<? extends FixtureScript>> fixtureScriptTypes = discovery.getSubTypesOf(FixtureScript.class);
 
-        final Set<Class<?>> mixinTypes = Sets.newHashSet();
+        final Set<Class<?>> mixinTypes = _Sets.newHashSet();
         mixinTypes.addAll(discovery.getTypesAnnotatedWith(Mixin.class));
 
         final Set<Class<?>> domainObjectTypes = discovery.getTypesAnnotatedWith(DomainObject.class);
@@ -178,7 +178,7 @@ public abstract class IsisComponentProvider {
     static <T> Set<Class<? extends T>> within(
             final List<String> packagesWithDotSuffix,
             final Set<Class<? extends T>> classes) {
-        Set<Class<? extends T>> classesWithin = Sets.newLinkedHashSet();
+        Set<Class<? extends T>> classesWithin = _Sets.newLinkedHashSet();
         for (Class<? extends T> clz : classes) {
             final String className = clz.getName();
             if(containedWithin(packagesWithDotSuffix, className)) {

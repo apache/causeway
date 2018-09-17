@@ -27,7 +27,7 @@ import java.util.Set;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -254,7 +254,7 @@ class PoReader extends PoAbstract {
         }
     }
 
-    private final Set<String> loggedInfoMessages = Sets.newConcurrentHashSet();
+    private final Set<String> loggedInfoMessages = _Sets.newConcurrentHashSet();
 
 
 }

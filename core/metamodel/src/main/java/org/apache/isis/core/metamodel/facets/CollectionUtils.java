@@ -35,7 +35,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._With;
@@ -72,7 +72,7 @@ public final class CollectionUtils {
                 map.put(AbstractList.class, _Lists::newArrayList);
 
                 // specific set implementations
-                map.put(CopyOnWriteArraySet.class, Sets::newCopyOnWriteArraySet);
+                map.put(CopyOnWriteArraySet.class, _Sets::newCopyOnWriteArraySet);
                 map.put(LinkedHashSet.class, _Sets::newLinkedHashSet);
                 map.put(HashSet.class, _Sets::newHashSet);
                 map.put(TreeSet.class, _Sets::newTreeSet);

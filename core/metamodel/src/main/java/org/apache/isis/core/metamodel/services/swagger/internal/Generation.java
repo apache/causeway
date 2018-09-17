@@ -30,7 +30,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -75,8 +75,8 @@ class Generation {
     private final Tagger tagger;
     private final ClassExcluder classExcluder;
 
-    private final Set<String> references = Sets.newLinkedHashSet();
-    private final Set<String> definitions = Sets.newLinkedHashSet();
+    private final Set<String> references = _Sets.newLinkedHashSet();
+    private final Set<String> definitions = _Sets.newLinkedHashSet();
     private Swagger swagger;
 
     public Generation(
@@ -854,7 +854,7 @@ class Generation {
     }
 
     Set<String> getReferencesWithoutDefinition() {
-        LinkedHashSet<String> referencesCopy = Sets.newLinkedHashSet(references);
+        LinkedHashSet<String> referencesCopy = _Sets.newLinkedHashSet(references);
         referencesCopy.removeAll(definitions);
         return referencesCopy;
     }

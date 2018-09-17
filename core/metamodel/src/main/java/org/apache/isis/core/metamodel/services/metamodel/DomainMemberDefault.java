@@ -25,7 +25,7 @@ import java.util.SortedSet;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.core.commons.lang.StringExtensions;
@@ -152,7 +152,7 @@ public class DomainMemberDefault implements DomainMember {
             return "";
         default:
             final List<ObjectActionParameter> parameters = this.action.getParameters();
-            final SortedSet<String> interpretations = Sets.newTreeSet();
+            final SortedSet<String> interpretations = _Sets.newTreeSet();
             for (ObjectActionParameter param : parameters) {
                 final ActionParameterChoicesFacet facet = param.getFacet(ActionParameterChoicesFacet.class);
                 addIfNotEmpty(interpretFacet(facet), interpretations);
@@ -169,7 +169,7 @@ public class DomainMemberDefault implements DomainMember {
             return "";
         } else {
             final List<ObjectActionParameter> parameters = this.action.getParameters();
-            final SortedSet<String> interpretations = Sets.newTreeSet();
+            final SortedSet<String> interpretations = _Sets.newTreeSet();
             for (ObjectActionParameter param : parameters) {
                 final ActionParameterAutoCompleteFacet facet = param.getFacet(ActionParameterAutoCompleteFacet.class);
                 addIfNotEmpty(interpretFacet(facet), interpretations);
@@ -184,7 +184,7 @@ public class DomainMemberDefault implements DomainMember {
             return "";
         } else {
             final List<ObjectActionParameter> parameters = this.action.getParameters();
-            final SortedSet<String> interpretations = Sets.newTreeSet();
+            final SortedSet<String> interpretations = _Sets.newTreeSet();
             for (ObjectActionParameter param : parameters) {
                 final ActionParameterDefaultsFacet facet = param.getFacet(ActionParameterDefaultsFacet.class);
                 addIfNotEmpty(interpretFacet(facet), interpretations);
@@ -196,7 +196,7 @@ public class DomainMemberDefault implements DomainMember {
         if(memberType == MemberType.PROPERTY) {
             return interpretRowAndFacet(PropertyValidateFacet.class);
         } else if(memberType == MemberType.COLLECTION) {
-            final SortedSet<String> interpretations = Sets.newTreeSet();
+            final SortedSet<String> interpretations = _Sets.newTreeSet();
             addIfNotEmpty(interpretRowAndFacet(CollectionValidateAddToFacet.class), interpretations);
             addIfNotEmpty(interpretRowAndFacet(CollectionValidateRemoveFromFacet.class), interpretations);
             return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : "";

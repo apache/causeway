@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentHashMap.KeySetView;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -182,6 +183,24 @@ public final class _Sets {
     public static <T> KeySetView<T, Boolean> newConcurrentHashSet(@Nullable Iterable<T> iterable) {
         return _Collections.collectFromIterable(iterable, _Sets::newConcurrentHashSet,
                 ()->Collectors.<T, KeySetView<T, Boolean>>toCollection(ConcurrentHashMap::newKeySet) );
+    }
+    
+    // -- COPY ON WRITE ARRAY SET
+
+    public static <T> CopyOnWriteArraySet<T> newCopyOnWriteArraySet() {
+        return new CopyOnWriteArraySet<T>();
+    }
+
+    public static <T> CopyOnWriteArraySet<T> newCopyOnWriteArraySet(@Nullable Collection<T> collection) {
+        if(collection==null) {
+            return newCopyOnWriteArraySet();
+        }
+        return new CopyOnWriteArraySet<T>(collection);
+    }
+
+    public static <T> CopyOnWriteArraySet<T> newCopyOnWriteArraySet(@Nullable Iterable<T> iterable) {
+        return _Collections.collectFromIterable(iterable, _Sets::newCopyOnWriteArraySet,
+                ()->Collectors.<T, CopyOnWriteArraySet<T>>toCollection(CopyOnWriteArraySet::new) );
     }
 
 

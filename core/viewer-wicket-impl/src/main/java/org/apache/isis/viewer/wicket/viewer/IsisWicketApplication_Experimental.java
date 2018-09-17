@@ -21,7 +21,7 @@ package org.apache.isis.viewer.wicket.viewer;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -83,7 +83,7 @@ final class IsisWicketApplication_Experimental {
     private Set<CssResourceReference> cssResourceReferencesForAllComponents() {
         // TODO mgrigorov: ISIS-537 temporary disabled to not mess up with Bootstrap styles
         //        Collection<ComponentFactory> componentFactories = getComponentFactoryRegistry().listComponentFactories();
-        return Sets.newLinkedHashSet(
+        return _Sets.newLinkedHashSet(
                 //                Iterables.concat(
                 //                        Iterables.transform(
                 //                                componentFactories,

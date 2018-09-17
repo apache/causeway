@@ -29,7 +29,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 class DeweyOrderUtil  {
 
@@ -45,7 +45,7 @@ class DeweyOrderUtil  {
     private DeweyOrderUtil() {}
 
     static <V> List<Map.Entry<String, V>> deweySorted(Map<String, V> map) {
-        Set<Map.Entry<String, V>> set = Sets.newLinkedHashSet();
+        Set<Map.Entry<String, V>> set = _Sets.newLinkedHashSet();
         for (Map.Entry<String, V> entry : map.entrySet()) {
             set.add(entry);
         }
@@ -64,7 +64,7 @@ class DeweyOrderUtil  {
             }
         });
 
-        final SortedSet<Parsed<V>> parseds = Sets.newTreeSet(parsedIter);
+        final SortedSet<Parsed<V>> parseds = _Sets.newTreeSet(parsedIter);
         final Iterable<Map.Entry<String, V>> transform = Iterables.transform(parseds, DeweyOrderUtil.<V>toMapEntry());
         return Lists.newArrayList(transform);
     }

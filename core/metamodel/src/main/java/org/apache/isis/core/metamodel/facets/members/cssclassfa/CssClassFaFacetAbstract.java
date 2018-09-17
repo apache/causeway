@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -54,7 +54,7 @@ public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract impl
      */
     static String sanitize(final String value) {
         final Iterable<String> classes = Splitter.on(WHITESPACE).split(value.trim());
-        final Set<String> cssClassesSet = Sets.newLinkedHashSet();
+        final Set<String> cssClassesSet = _Sets.newLinkedHashSet();
         cssClassesSet.add("fa");
         cssClassesSet.add("fa-fw");
         for (final String cssClass : classes) {

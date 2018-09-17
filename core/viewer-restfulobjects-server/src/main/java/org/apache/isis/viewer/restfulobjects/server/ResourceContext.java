@@ -33,7 +33,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -306,7 +306,7 @@ public class ResourceContext implements RendererContext6 {
     }
 
     // -- canEagerlyRender
-    private Set<Oid> rendered = Sets.newHashSet();
+    private Set<Oid> rendered = _Sets.newHashSet();
     @Override
     public boolean canEagerlyRender(ObjectAdapter objectAdapter) {
         final Oid oid = objectAdapter.getOid();

@@ -29,7 +29,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ final class ServicesInstallerUtils  {
     private ServicesInstallerUtils (){}
 
     static <V extends Comparable<V>> LinkedHashSet<V> flatten(SortedMap<String, SortedSet<V>> positionedServices) {
-        final LinkedHashSet<V> serviceList = Sets.newLinkedHashSet();
+        final LinkedHashSet<V> serviceList = _Sets.newLinkedHashSet();
         final Set<String> keys = positionedServices.keySet();
         for (String position : keys) {
             final SortedSet<V> list = positionedServices.get(position);
@@ -57,7 +57,7 @@ final class ServicesInstallerUtils  {
         }
         SortedSet<String> serviceList = positionedServices.get(position);
         if(serviceList == null) {
-            serviceList = Sets.newTreeSet();
+            serviceList = _Sets.newTreeSet();
             positionedServices.put(position, serviceList);
         }
         serviceList.add(service);

@@ -30,7 +30,7 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -77,7 +77,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
     public static DeweyOrderSet createOrderSet(final List<? extends IdentifiedHolder> identifiedHolders) {
 
         final SortedMap<String, SortedSet<IdentifiedHolder>> sortedMembersByGroup = _Maps.newTreeMap();
-        final SortedSet<IdentifiedHolder> nonAnnotatedGroup = Sets.newTreeSet(new MemberIdentifierComparator());
+        final SortedSet<IdentifiedHolder> nonAnnotatedGroup = _Sets.newTreeSet(new MemberIdentifierComparator());
 
         // spin over all the members and put them into a Map of SortedSets
         // any non-annotated members go into additional nonAnnotatedGroup set.

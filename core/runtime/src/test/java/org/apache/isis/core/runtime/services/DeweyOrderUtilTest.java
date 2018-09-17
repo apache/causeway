@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -91,7 +91,7 @@ public class DeweyOrderUtilTest {
 
 
     private static Set<Map.Entry<String, Object>> ofS(String[]... str) {
-        final Set seq = Sets.<Map.Entry<String,Object>>newLinkedHashSet();
+        final Set<Map.Entry<String,Object>> seq = _Sets.newLinkedHashSet();
         for (String[] strings : str) {
             if(strings.length != 2) {
                 throw new IllegalArgumentException("array must have 2 elements");

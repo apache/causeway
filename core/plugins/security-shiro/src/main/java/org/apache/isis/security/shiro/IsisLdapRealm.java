@@ -35,7 +35,7 @@ import javax.naming.ldap.LdapContext;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import org.apache.isis.commons.internal.collections._Sets;
 
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -153,24 +153,24 @@ public class IsisLdapRealm extends JndiLdapRealm {
     /**
      * For Group Extracted attribute name with mapping name in parenthesis. Ex: street,country
      */
-    protected Set<String> groupExtractedAttribute = Sets.newConcurrentHashSet();
+    protected Set<String> groupExtractedAttribute = _Sets.newConcurrentHashSet();
 
     /**
      * For User Extracted attribute name with mapping name in parenthesis. Ex: street,country
      */
-    protected Set<String> userExtractedAttribute = Sets.newConcurrentHashSet();
+    protected Set<String> userExtractedAttribute = _Sets.newConcurrentHashSet();
 
     /**
      * For Group Mapping of attributes. Ex:
      * attribute:Folder.{street}:Read,attribute:Portfolio.{country}:*
      */
-    protected Set<String> permissionByGroupAttribute = Sets.newConcurrentHashSet();
+    protected Set<String> permissionByGroupAttribute = _Sets.newConcurrentHashSet();
 
     /**
      * For User Mapping of attributes. Ex:
      * attribute:Folder.{street}:Read,attribute:Portfolio.{country}:*
      */
-    protected Set<String> permissionByUserAttribute = Sets.newConcurrentHashSet();
+    protected Set<String> permissionByUserAttribute = _Sets.newConcurrentHashSet();
 
     /**
      * For search ldap on user
@@ -224,7 +224,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
     private Set<String>
     getPermissionForRole(String username, LdapContext ldapContext)
             throws NamingException {
-        final Set<String> permissions = Sets.newLinkedHashSet();
+        final Set<String> permissions = _Sets.newLinkedHashSet();
 
         Set<String> groups = groupFor(username, ldapContext);
         final NamingEnumeration<SearchResult> searchResultEnum = ldapContext.search(searchBase,
@@ -240,7 +240,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
 
     protected Set<String> groupFor(final String userName, final LdapContext ldapCtx)
             throws NamingException {
-        final Set<String> roleNames = Sets.newLinkedHashSet();
+        final Set<String> roleNames = _Sets.newLinkedHashSet();
         final NamingEnumeration<SearchResult> searchResultEnum = ldapCtx.search(searchBase,
                 "objectClass=" + groupObjectClass, SUBTREE_SCOPE);
         while (searchResultEnum.hasMore()) {
@@ -269,7 +269,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
 
     private Collection<String> permUser(String username, LdapContext systemLdapCtx)
             throws NamingException {
-        final Set<String> permissions = Sets.newLinkedHashSet();
+        final Set<String> permissions = _Sets.newLinkedHashSet();
         final NamingEnumeration<SearchResult> searchResultEnum = systemLdapCtx.search(
                 searchUserBase, "objectClass=" + userObjectClass, SUBTREE_SCOPE);
         while (searchResultEnum.hasMore()) {
@@ -323,7 +323,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
     }
 
     private Set<String> rolesFor(final String userName, final LdapContext ldapCtx) throws NamingException {
-        final Set<String> roleNames = Sets.newLinkedHashSet();
+        final Set<String> roleNames = _Sets.newLinkedHashSet();
         final NamingEnumeration<SearchResult> searchResultEnum = ldapCtx.search(searchBase, "objectClass=" + groupObjectClass, SUBTREE_SCOPE);
         while (searchResultEnum.hasMore()) {
             final SearchResult group = searchResultEnum.next();
@@ -360,7 +360,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
     }
 
     private Set<String> permsFor(Set<String> roleNames) {
-        Set<String> perms = Sets.newLinkedHashSet(); // preserve order
+        Set<String> perms = _Sets.newLinkedHashSet(); // preserve order
         for (String role : roleNames) {
             List<String> permsForRole = getPermissionsByRole().get(role);
             if (permsForRole != null) {
