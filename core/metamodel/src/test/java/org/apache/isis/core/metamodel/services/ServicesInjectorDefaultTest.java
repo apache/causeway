@@ -20,12 +20,17 @@
 package org.apache.isis.core.metamodel.services;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
@@ -93,6 +98,12 @@ public class ServicesInjectorDefaultTest {
         });
 
         injector.injectServicesInto(mockDomainObject);
+    }
+    
+    @Test
+    public void shouldStreamRegisteredServices() {
+        List<Class<?>> registeredServices = injector.streamRegisteredServiceTypes().collect(Collectors.toList());
+        Assert.assertEquals(3, registeredServices.size());
     }
 
 }

@@ -32,6 +32,7 @@ import javax.enterprise.context.RequestScoped;
 
 import org.jmock.auto.Mock;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -65,13 +66,13 @@ public class ServiceInstantiatorTest {
 		assertThat(calculator.add(3,4), is(7));
 	}
 
-	@Test
+	@Test @Ignore("test is in core/unittestsupport-test")
 	public void requestScoped_instantiate() {
 		AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
 		assertThat(calculator instanceof RequestScopedService, is(true));
 	}
 
-	@Test
+	@Test @Ignore("test is in core/unittestsupport-test")
 	public void requestScoped_justOneThread() {
 		AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
 		try {
@@ -84,7 +85,7 @@ public class ServiceInstantiatorTest {
 		}
 	}
 
-	@Test
+	@Test @Ignore("test is in core/unittestsupport-test")
 	public void requestScoped_multipleThreads() throws InterruptedException, BrokenBarrierException {
 
 		final AccumulatingCalculator calculator = serviceInstantiator.createInstance(AccumulatingCalculator.class);
@@ -138,7 +139,7 @@ public class ServiceInstantiatorTest {
 		assertThat(totals[2], is(30));
 	}
 
-	@Test
+	@Test @Ignore("test is in core/unittestsupport-test")
 	public void requestScoped_childThreads() throws InterruptedException  {
 
 		final Consumer consumer = serviceInstantiator.createInstance(Consumer.class);

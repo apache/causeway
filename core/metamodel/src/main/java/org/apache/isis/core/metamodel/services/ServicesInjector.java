@@ -123,30 +123,30 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
     // -- REPLACE SERVICES
-
-    /**
-     * Update an individual service.
-     *
-     * <p>
-     * There should already be a service {@link #getRegisteredServices() registered} of the specified type.
-     *
-     * @return <tt>true</tt> if a service of the specified type was found and updated, <tt>false</tt> otherwise.
-     * @param existingService
-     * @param replacementService
-     */
-    public <T> void replaceService(final T existingService, final T replacementService) {
-
-        if(!services.remove(existingService)) {
-            throw new IllegalArgumentException("Service to be replaced was not found (" + existingService + ")");
-        }
-
-        services.add(replacementService);
-
-        // invalidate
-        servicesAssignableToType.clear();
-        serviceByConcreteType.clear();
-        autowire();
-    }
+//FIXME[ISIS-1976] not used
+//    /**
+//     * Update an individual service.
+//     *
+//     * <p>
+//     * There should already be a service {@link #getRegisteredServices() registered} of the specified type.
+//     *
+//     * @return <tt>true</tt> if a service of the specified type was found and updated, <tt>false</tt> otherwise.
+//     * @param existingService
+//     * @param replacementService
+//     */
+//    public <T> void replaceService(final T existingService, final T replacementService) {
+//
+//        if(!services.remove(existingService)) {
+//            throw new IllegalArgumentException("Service to be replaced was not found (" + existingService + ")");
+//        }
+//
+//        services.add(replacementService);
+//
+//        // invalidate
+//        servicesAssignableToType.clear();
+//        serviceByConcreteType.clear();
+//        autowire();
+//    }
 
     public boolean isRegisteredService(final Class<?> cls) {
         return serviceByConcreteType.get().containsKey(cls);
