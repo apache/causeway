@@ -29,7 +29,7 @@ import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 import com.google.common.collect.Sets;
 
 import org.apache.isis.commons.internal.collections._Lists;
@@ -76,7 +76,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
 
     public static DeweyOrderSet createOrderSet(final List<? extends IdentifiedHolder> identifiedHolders) {
 
-        final SortedMap<String, SortedSet<IdentifiedHolder>> sortedMembersByGroup = Maps.newTreeMap();
+        final SortedMap<String, SortedSet<IdentifiedHolder>> sortedMembersByGroup = _Maps.newTreeMap();
         final SortedSet<IdentifiedHolder> nonAnnotatedGroup = Sets.newTreeSet(new MemberIdentifierComparator());
 
         // spin over all the members and put them into a Map of SortedSets
@@ -101,7 +101,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
         // iteration will be in alphabetical order (ie parent groups before
         // their children).
         final Set<String> groupNames = sortedMembersByGroup.keySet();
-        final SortedMap<String, DeweyOrderSet> orderSetsByGroup = Maps.newTreeMap();
+        final SortedMap<String, DeweyOrderSet> orderSetsByGroup = _Maps.newTreeMap();
 
         for (final String string : groupNames) {
             final String groupName = string;
@@ -316,7 +316,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
     // ///////////////////////// reorderChildren //////////////////////
 
     public void reorderChildren(List<String> requiredOrder) {
-        final LinkedHashMap<String,DeweyOrderSet> orderSets = Maps.newLinkedHashMap();
+        final LinkedHashMap<String,DeweyOrderSet> orderSets = _Maps.newLinkedHashMap();
 
         // remove all OrderSets from elements
         // though remembering the order they were encountered

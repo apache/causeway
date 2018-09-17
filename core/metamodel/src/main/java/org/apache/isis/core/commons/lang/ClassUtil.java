@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.commons.internal.context._Context;
 
@@ -88,7 +88,7 @@ public final class ClassUtil {
         defaultByPrimitiveType.put(boolean.class, false);
     }
 
-    public static Map<String, Class<?>> primitives = Maps.newHashMap();
+    public static Map<String, Class<?>> primitives = _Maps.newHashMap();
 
     static {
         @SuppressWarnings({ "rawtypes" })

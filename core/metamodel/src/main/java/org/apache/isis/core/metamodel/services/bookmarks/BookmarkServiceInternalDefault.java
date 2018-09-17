@@ -27,7 +27,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -164,7 +164,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
 
     private void cacheServicesByClassNameIfNecessary() {
         if (servicesByClassName == null) {
-            final Map<String,Object> servicesByClassName = Maps.newHashMap();
+            final Map<String,Object> servicesByClassName = _Maps.newHashMap();
             final List<Object> registeredServices = serviceRegistry.getRegisteredServices();
             for (Object registeredService : registeredServices) {
                 final String serviceClassName = registeredService.getClass().getName();

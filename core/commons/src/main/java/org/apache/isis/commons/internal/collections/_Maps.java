@@ -23,9 +23,11 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.util.AbstractMap;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
@@ -113,6 +115,17 @@ public final class _Maps {
     public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
         return new ConcurrentHashMap<K, V>();
     }
+
+    // -- TREE MAP
+
+    public static <K, V> TreeMap<K, V> newTreeMap() {
+        return new TreeMap<K, V>();
+    }
+
+    public static <K, V> TreeMap<K, V> newTreeMap(Comparator<? super K> comparator) {
+        return new TreeMap<K, V>(comparator);
+    }
+    
 
     // --
 

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -365,7 +365,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private HashMap<Method, ObjectMember> catalogueMembers() {
-        final HashMap<Method, ObjectMember> membersByMethod = Maps.newHashMap();
+        final HashMap<Method, ObjectMember> membersByMethod = _Maps.newHashMap();
         cataloguePropertiesAndCollections(membersByMethod);
         catalogueActions(membersByMethod);
         return membersByMethod;

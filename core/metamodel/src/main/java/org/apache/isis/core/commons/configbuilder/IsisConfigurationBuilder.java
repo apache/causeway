@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -36,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -76,8 +75,8 @@ public final class IsisConfigurationBuilder {
     /* package */ final IsisConfigurationDefault configuration;
     private boolean locked;
 
-    private final Set<String> configurationResourcesFound = Sets.newLinkedHashSet();
-    private final Set<String> configurationResourcesNotFound = Sets.newLinkedHashSet();
+    private final Set<String> configurationResourcesFound = _Sets.newLinkedHashSet();
+    private final Set<String> configurationResourcesNotFound = _Sets.newLinkedHashSet();
 
     public IsisConfigurationBuilder() {
         this(ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY));

@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 import javax.ws.rs.HEAD;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -229,7 +229,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
     private void cacheBySpecId() {
-        final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
+        final Map<ObjectSpecId, ObjectSpecification> specById = _Maps.newHashMap();
         for (final ObjectSpecification objSpec : allCachedSpecifications()) {
             final ObjectSpecId objectSpecId = objSpec.getSpecId();
             if (objectSpecId == null) {

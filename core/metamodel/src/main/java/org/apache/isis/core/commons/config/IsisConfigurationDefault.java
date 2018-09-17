@@ -28,14 +28,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.config.ConfigurationProperty;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -460,7 +459,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
 
     @Override
     public Map<String,String> asMap() {
-        final Map<String, String> map = Maps.newHashMap();
+        final Map<String, String> map = _Maps.newHashMap();
         for(String propertyName: this.asIterable()) {
             final String propertyValue = this.getPropertyElseNull(propertyName);
             map.put(propertyName, propertyValue);

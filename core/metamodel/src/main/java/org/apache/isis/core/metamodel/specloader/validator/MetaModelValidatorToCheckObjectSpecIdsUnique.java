@@ -23,7 +23,7 @@ import java.util.Map;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -51,7 +51,7 @@ public class MetaModelValidatorToCheckObjectSpecIdsUnique extends MetaModelValid
 
     private void addValidatorToEnsureUniqueObjectIds() {
 
-        final Map<ObjectSpecId, List<ObjectSpecification>> specsById = Maps.newHashMap();
+        final Map<ObjectSpecId, List<ObjectSpecification>> specsById = _Maps.newHashMap();
 
         MetaModelValidatorVisiting.SummarizingVisitor ensureUniqueObjectIds = new MetaModelValidatorVisiting.SummarizingVisitor(){
 

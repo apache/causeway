@@ -27,8 +27,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.base.Objects;
+import java.util.Objects;
 
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
@@ -95,7 +94,7 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
 
     @Override
     public boolean hasUserNameOf(final String userName) {
-        return Objects.equal(userName, getUserName());
+        return Objects.equals(userName, getUserName());
     }
 
 

@@ -22,7 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 public class PrimerForSystemProperties implements IsisConfigurationBuilder.Primer {
 
@@ -39,7 +39,7 @@ public class PrimerForSystemProperties implements IsisConfigurationBuilder.Prime
     }
 
     private static Map<String, String> fromProperties(final Properties properties) {
-        final LinkedHashMap<String, String> map = Maps.newLinkedHashMap();
+        final LinkedHashMap<String, String> map = _Maps.newLinkedHashMap();
         for (final Map.Entry<Object, Object> entry : properties.entrySet()) {
             final Object key = entry.getKey();
             final Object value = entry.getValue();

@@ -23,7 +23,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +39,8 @@ public class ServiceInitializer {
 
     private final Map<String, String> props;
 
-    private Map<Object, Method> postConstructMethodsByService = Maps.newLinkedHashMap();
-    private Map<Object, Method> preDestroyMethodsByService = Maps.newLinkedHashMap();
+    private Map<Object, Method> postConstructMethodsByService = _Maps.newLinkedHashMap();
+    private Map<Object, Method> preDestroyMethodsByService = _Maps.newLinkedHashMap();
 
     public ServiceInitializer(
             final IsisConfiguration configuration,

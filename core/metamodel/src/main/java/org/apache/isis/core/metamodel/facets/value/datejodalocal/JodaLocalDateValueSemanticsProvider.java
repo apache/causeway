@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
@@ -88,7 +88,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
      * Keys represent the values which can be configured, and which are used for the rendering of dates.
      *
      */
-    private static Map<String, DateTimeFormatter> NAMED_TITLE_FORMATTERS = Maps.newHashMap();
+    private static Map<String, DateTimeFormatter> NAMED_TITLE_FORMATTERS = _Maps.newHashMap();
     static {
         NAMED_TITLE_FORMATTERS.put("iso_encoding", DateTimeFormat.forPattern("yyyyMMdd"));
         NAMED_TITLE_FORMATTERS.put("iso", DateTimeFormat.forPattern("yyyy-MM-dd"));

@@ -40,7 +40,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -823,7 +823,7 @@ public class XmlSnapshot implements Snapshot {
     }
 
 
-    private final Map<ObjectAdapter, String> viewModelFakeOids = Maps.newHashMap();
+    private final Map<ObjectAdapter, String> viewModelFakeOids = _Maps.newHashMap();
 
     private String oidAsString(final ObjectAdapter adapter) {
         if(adapter.getObject() instanceof ViewModel) {

@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -43,7 +43,7 @@ import org.apache.isis.core.runtime.authentication.RegistrationDetails;
 
 public class AuthenticationManagerStandard implements AuthenticationManager {
 
-    private final Map<String, String> userByValidationCode = Maps.newHashMap();
+    private final Map<String, String> userByValidationCode = _Maps.newHashMap();
 
     private final List<Authenticator> authenticators = _Lists.newArrayList();
 

@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.commons.internal.base._Casts;
@@ -56,7 +56,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
     private final static ThreadLocal<Map<String, String>> FORMATS = new ThreadLocal<Map<String, String>>() {
         @Override
         protected java.util.Map<String, String> initialValue() {
-            return Maps.newHashMap();
+            return _Maps.newHashMap();
         }
     };
 

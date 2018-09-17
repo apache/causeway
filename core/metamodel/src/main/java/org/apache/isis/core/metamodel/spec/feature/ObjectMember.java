@@ -218,7 +218,7 @@ public interface ObjectMember extends ObjectFeature {
         public static <T extends ObjectMember> Map<String, T> mapById(final Stream<T> members) {
 
             // fails if there are multiple members with the same id...
-            //            return Maps.newHashMap(Maps.uniqueIndex(members, ObjectMember.Functions.getId()));
+            //            return _Maps.newHashMap(Maps.uniqueIndex(members, ObjectMember.Functions.getId()));
 
             final Map<String, T> memberById = _Maps.newLinkedHashMap();
             members.forEach(member->{

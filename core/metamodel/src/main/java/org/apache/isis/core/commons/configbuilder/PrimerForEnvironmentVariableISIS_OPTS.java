@@ -24,9 +24,9 @@ import java.util.Map;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
-import com.google.common.collect.Maps;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 
 public class PrimerForEnvironmentVariableISIS_OPTS implements IsisConfigurationBuilder.Primer {
 
@@ -62,7 +62,7 @@ public class PrimerForEnvironmentVariableISIS_OPTS implements IsisConfigurationB
     }
 
     private static Map<String, String> fromEnv(final String env, final String separator) {
-        final LinkedHashMap<String, String> map = Maps.newLinkedHashMap();
+        final LinkedHashMap<String, String> map = _Maps.newLinkedHashMap();
         if (env != null) {
             final List<String> keyAndValues = Splitter.on(separator).splitToList(env);
             for (String keyAndValue : keyAndValues) {

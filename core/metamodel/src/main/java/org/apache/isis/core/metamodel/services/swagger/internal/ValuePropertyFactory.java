@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -52,7 +52,7 @@ import io.swagger.models.properties.UUIDProperty;
 
 public class ValuePropertyFactory {
 
-    private final Map<Class<?>, Factory> propertyFactoryByClass = Maps.newHashMap();
+    private final Map<Class<?>, Factory> propertyFactoryByClass = _Maps.newHashMap();
 
     public static interface Factory extends Supplier<Property> {};
 

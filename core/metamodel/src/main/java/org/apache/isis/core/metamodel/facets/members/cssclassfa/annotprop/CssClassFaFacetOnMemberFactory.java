@@ -26,7 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -109,10 +109,10 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     }
 
     private static Map<Pattern, String> buildFaIconByPattern(String cssClassFaPatterns) {
-        final Map<Pattern, String> faIconByPattern = Maps.newLinkedHashMap();
+        final Map<Pattern, String> faIconByPattern = _Maps.newLinkedHashMap();
         if (cssClassFaPatterns != null) {
             final StringTokenizer regexToFaIcons = new StringTokenizer(cssClassFaPatterns, ConfigurationConstants.LIST_SEPARATOR);
-            final Map<String, String> faIconByRegex = Maps.newLinkedHashMap();
+            final Map<String, String> faIconByRegex = _Maps.newLinkedHashMap();
             while (regexToFaIcons.hasMoreTokens()) {
                 String regexToFaIcon = regexToFaIcons.nextToken().trim();
                 if (Strings.isNullOrEmpty(regexToFaIcon)) {

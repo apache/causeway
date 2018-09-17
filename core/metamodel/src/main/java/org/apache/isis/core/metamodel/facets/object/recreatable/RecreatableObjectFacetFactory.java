@@ -26,7 +26,7 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
@@ -125,7 +125,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
     // //////////////////////////////////////
 
-    private final Map<Class<?>, Optional<Method>> postConstructMethods = Maps.newHashMap();
+    private final Map<Class<?>, Optional<Method>> postConstructMethods = _Maps.newHashMap();
 
     @Override
     public Method postConstructMethodFor(final Object pojo) {

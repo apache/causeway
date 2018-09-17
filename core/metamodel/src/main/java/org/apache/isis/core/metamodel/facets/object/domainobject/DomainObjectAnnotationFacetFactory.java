@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
@@ -476,7 +476,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
                     return;
                 }
 
-                final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
+                final Map<ObjectSpecId, ObjectSpecification> specById = _Maps.newHashMap();
                 for (final ObjectSpecification otherSpec : getSpecificationLoader().allSpecifications()) {
 
                     if(thisSpec == otherSpec) {
@@ -526,7 +526,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
     // //////////////////////////////////////
 
-    private final Map<Class<?>, Optional<Method>> postConstructMethods = Maps.newHashMap();
+    private final Map<Class<?>, Optional<Method>> postConstructMethods = _Maps.newHashMap();
 
     @Override
     public Method postConstructMethodFor(final Object pojo) {

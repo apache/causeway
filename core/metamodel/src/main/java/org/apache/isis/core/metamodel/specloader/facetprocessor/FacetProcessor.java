@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.ListExtensions;
@@ -55,7 +55,7 @@ public class FacetProcessor implements ServicesInjectorAware {
     /**
      * Class<FacetFactory> => FacetFactory
      */
-    private final Map<Class<? extends FacetFactory>, FacetFactory> factoryByFactoryType = Maps.newHashMap();
+    private final Map<Class<? extends FacetFactory>, FacetFactory> factoryByFactoryType = _Maps.newHashMap();
 
     /**
      * {@link FacetFactory Facet factories}, in order they were
@@ -373,7 +373,7 @@ public class FacetProcessor implements ServicesInjectorAware {
         if (factoryListByFeatureType != null) {
             return;
         }
-        factoryListByFeatureType = Maps.newHashMap();
+        factoryListByFeatureType = _Maps.newHashMap();
         for (final FacetFactory factory : factories) {
             final List<FeatureType> featureTypes = factory.getFeatureTypes();
             for (final FeatureType featureType : featureTypes) {

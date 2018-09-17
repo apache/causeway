@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.specloader;
 import java.util.Collection;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -107,7 +107,7 @@ public class SpecificationCacheDefaultTest {
 
     @Test
     public void getByObjectType_whenSet() {
-        Map<ObjectSpecId, ObjectSpecification> specByObjectType = Maps.newHashMap();
+        Map<ObjectSpecId, ObjectSpecification> specByObjectType = _Maps.newHashMap();
         specByObjectType.put(ObjectSpecId.of("CUS"), customerSpec);
         
         specificationCache.setCacheBySpecId(specByObjectType);

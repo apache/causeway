@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -60,7 +60,7 @@ public class ServiceInitializerTest {
     
     @Before
     public void setUp() throws Exception {
-        props = Maps.<String,String>newHashMap();
+        props = _Maps.newHashMap();
         context.checking(new Expectations() {
             {
                 allowing(configuration).asMap();

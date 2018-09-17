@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
@@ -63,7 +63,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
 
     private void addValidatorToCheckModuleExtent() {
 
-        final Map<String, List<String>> domainObjectClassNamesByPackage = Maps.newTreeMap();
+        final Map<String, List<String>> domainObjectClassNamesByPackage = _Maps.newTreeMap();
 
         MetaModelValidatorVisiting.SummarizingVisitor visitor = new MetaModelValidatorVisiting.SummarizingVisitor(){
 

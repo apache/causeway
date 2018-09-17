@@ -27,7 +27,7 @@ import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 import com.google.common.io.Resources;
 
 import org.slf4j.Logger;
@@ -55,10 +55,10 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
 
     // for better logging messages (used only in prototyping mode)
-    private final Map<Class<?>, String> badXmlByClass = Maps.newHashMap();
+    private final Map<Class<?>, String> badXmlByClass = _Maps.newHashMap();
 
     // cache (used only in prototyping mode)
-    private final Map<String, Grid> gridByXml = Maps.newHashMap();
+    private final Map<String, Grid> gridByXml = _Maps.newHashMap();
 
     private JAXBContext jaxbContext;
 

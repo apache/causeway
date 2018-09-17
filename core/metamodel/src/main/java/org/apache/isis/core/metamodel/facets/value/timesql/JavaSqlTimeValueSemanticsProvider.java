@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
  *
  */
 public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstract<java.sql.Time> {
-    private static Map<String, DateFormat> formats = Maps.newHashMap();
+    private static Map<String, DateFormat> formats = _Maps.newHashMap();
 
     static {
         initFormats(formats);

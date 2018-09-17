@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
-    private static final Map<String, DateFormat> FORMATS = Maps.newHashMap();
+    private static final Map<String, DateFormat> FORMATS = _Maps.newHashMap();
 
     static {
         FORMATS.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd"));

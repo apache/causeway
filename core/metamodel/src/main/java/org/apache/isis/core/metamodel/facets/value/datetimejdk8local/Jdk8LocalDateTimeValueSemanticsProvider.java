@@ -27,7 +27,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.ISODateTimeFormat;
@@ -90,7 +90,7 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
      * Keys represent the values which can be configured, and which are used for the rendering of dates.
      *
      */
-    private static Map<String, TimeFormatter> NAMED_TITLE_FORMATTERS = Maps.newHashMap();
+    private static Map<String, TimeFormatter> NAMED_TITLE_FORMATTERS = _Maps.newHashMap();
     static {
         NAMED_TITLE_FORMATTERS.put("iso_encoding", formatterOf(ISODateTimeFormat.basicDateTime()));
         NAMED_TITLE_FORMATTERS.put("iso", formatterOf(ISODateTimeFormat.basicDateTimeNoMillis()));

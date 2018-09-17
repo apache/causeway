@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 class SpecificationCacheDefault {
 
-    private final Map<String, ObjectSpecification> specByClassName = Maps.newHashMap();
+    private final Map<String, ObjectSpecification> specByClassName = _Maps.newHashMap();
     private Map<ObjectSpecId, String> classNameBySpecId;
 
     public ObjectSpecification get(final String className) {
@@ -67,7 +67,7 @@ class SpecificationCacheDefault {
      * xxxallxxx most specs have been loaded.
      */
     void setCacheBySpecId(final Map<ObjectSpecId, ObjectSpecification> specById) {
-        this.classNameBySpecId = Maps.newHashMap();
+        this.classNameBySpecId = _Maps.newHashMap();
 
         for (ObjectSpecId objectSpecId : specById.keySet()) {
             final ObjectSpecification objectSpec = specById.get(objectSpecId);

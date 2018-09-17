@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.specloader;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public final class InjectorMethodEvaluatorDefault implements InjectorMethodEvalu
 
     private final static Logger LOG = LoggerFactory.getLogger(InjectorMethodEvaluatorDefault.class);
 
-    private final Map<Method, Map<Class<?>, Boolean>> isInjectorMethod = Maps.newConcurrentMap();
+    private final Map<Method, Map<Class<?>, Boolean>> isInjectorMethod = _Maps.newConcurrentHashMap();
 
     @Override
     public boolean isInjectorMethodFor(
@@ -46,7 +46,7 @@ public final class InjectorMethodEvaluatorDefault implements InjectorMethodEvalu
 
         Map<Class<?>, Boolean> classBooleanMap = isInjectorMethod.get(method);
         if(classBooleanMap == null) {
-            classBooleanMap = Maps.newConcurrentMap();
+            classBooleanMap = _Maps.newConcurrentHashMap();
             isInjectorMethod.put(method, classBooleanMap);
         }
         Boolean result = classBooleanMap.get(serviceClass);
