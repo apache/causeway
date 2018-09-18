@@ -1405,11 +1405,6 @@ ${license.additional-notes}
             <!-- also for benefit of application developers, using scope=import -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-viewer-wicket-applib</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-wicket-model</artifactId>
                 <version>${isis.version}</version>
             </dependency>
@@ -2439,7 +2434,6 @@ ${license.additional-notes}
         <module>viewer-restfulobjects-rendering</module>
         <module>viewer-restfulobjects-server</module>
 
-        <module>viewer-wicket-applib</module>
         <module>viewer-wicket-model</module>
         <module>viewer-wicket-ui</module>
         <module>viewer-wicket-impl</module>
