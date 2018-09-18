@@ -2487,7 +2487,6 @@ ${license.additional-notes}
         <module>log4j</module>
         <module>metamodel</module>
         <module>runtime</module>
-        <module>wrapper</module>
         <module>webserver</module>
 
         <module>security</module>

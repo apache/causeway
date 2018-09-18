@@ -48,6 +48,7 @@ import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -242,7 +243,7 @@ public class WrapperFactoryDefault implements WrapperFactory {
             final ExecutionMode wrapperMode = wrapperObject.__isis_executionMode();
             if(wrapperMode != mode) {
                 final Object underlyingDomainObject = wrapperObject.__isis_wrapped();
-                return (T)createProxy(underlyingDomainObject, mode, isisSessionFactory);
+                return _Casts.uncheckedCast(createProxy(underlyingDomainObject, mode, isisSessionFactory));
             }
             return domainObject;
         }
