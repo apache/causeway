@@ -103,11 +103,6 @@
             <artifactId>simpleapp-module-simple</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-wrapper</artifactId>
-        </dependency>
-
         <!-- test -->
         <dependency>
             <groupId>${project.groupId}</groupId>

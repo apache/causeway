@@ -1204,22 +1204,6 @@ ${license.additional-notes}
                 <scope>test</scope>
             </dependency>
 	        
-	        <!-- applib-legacy -->
-	        <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-applib-legacy</artifactId>
-                <version>${revision}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-applib-legacy</artifactId>
-                <version>${revision}</version>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-            
             <!-- provides @Nullable -->
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
@@ -1275,22 +1259,6 @@ ${license.additional-notes}
                 <scope>test</scope>
             </dependency>
             
-            <!-- metamodel legacy -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-metamodel-legacy</artifactId>
-                <version>${revision}</version>
-                <type>jar</type>
-                <scope>compile</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-metamodel-legacy</artifactId>
-                <version>${revision}</version>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-
             <!-- runtime -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
@@ -1305,34 +1273,6 @@ ${license.additional-notes}
                 <scope>test</scope>
             </dependency>
             
-            <!-- runtime legacy -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-runtime-legacy</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-runtime-legacy</artifactId>
-                <version>${revision}</version>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-            
-            <!-- wrapper -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-wrapper</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-			<dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-wrapper</artifactId>
-                <version>${revision}</version>
-                <type>test-jar</type>
-                <scope>test</scope>
-            </dependency>
-
             <!-- webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
