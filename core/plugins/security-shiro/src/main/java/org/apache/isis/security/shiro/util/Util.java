@@ -18,6 +18,7 @@
  */
 package org.apache.isis.security.shiro.util;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,17 +32,22 @@ public class Util {
     public static Map<String, Set<String>> parse(String permissionsByRoleStr) {
         final Map<String, Set<String>> permsByRole = _Maps.newHashMap();
         
+        final List<String> roleAndPerms = new ArrayList<>(2);
+        
         _Strings.splitThenStream(permissionsByRoleStr, ";")
         .forEach(roleAndPermsStr->{
             
-            final List<String> roleAndPerms = _Strings.splitThenStream(roleAndPermsStr, "=")
-                    .collect(Collectors.toList());
+            roleAndPerms.clear();
+            
+            _Strings.splitThenStream(roleAndPermsStr, "=")
+                    .map(String::trim)
+                    .forEach(roleAndPerms::add);
             
             if(roleAndPerms.size() != 2) {
                 return;
             }
-            final String role = roleAndPerms.get(0).trim();
-            final String permStr = roleAndPerms.get(1).trim();
+            final String role = roleAndPerms.get(0);
+            final String permStr = roleAndPerms.get(1);
             
             final Set<String> perms = _Strings.splitThenStream(permStr, ",")
                     .map(String::trim)
