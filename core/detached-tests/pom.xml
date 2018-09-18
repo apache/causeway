@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis.core</groupId>
+		<artifactId>isis</artifactId>
+		<version>${revision}</version>
+	</parent>
+
+	<artifactId>isis-core-detached-tests</artifactId>
+	<name>Apache Isis Detached Tests (tests only)</name>
+
+	<properties>
+		<jar-plugin.automaticModuleName>org.apache.isis.core.detached-tests</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/core/detached-tests</git-plugin.propertiesDir>
+	</properties>
+
+	<description>
+		To break cyclic dependencies some tests needed to be detached from their originating module and moved here.
+		And some tests require presence of core-plugins on the class-path, these also moved here. 
+	</description>
+
+	<dependencies>
+	
+		<!-- core plugin loading -->
+		<dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-commons</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-unittestsupport</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-wrapper</artifactId>
+			<scope>test</scope>
+		</dependency>
+        
+        <!-- core plugins required to run this module's own tests -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-discovery-reflections</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+		<!-- JUPITER -->
+		<dependency>
+			<!-- JUnit API for writing tests and extensions -->
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+		</dependency>
+		<dependency>
+			<!-- implementation of the JUnit Jupiter test engine -->
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+		</dependency>
+		<dependency>
+			<!-- support for unit tests that use JUnit 4 or JUnit 3 -->
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+		</dependency>
+		<dependency>
+			<!-- JUnit 4 compile dependency in unittestsupport's src/main/java folder, non-transitive -->
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.picocontainer</groupId>
+			<artifactId>picocontainer</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-junit4</artifactId>
+		</dependency>
+		
+		<!-- JDO API (non transient, provided by plugin) -->
+		<dependency>
+			<groupId>javax.jdo</groupId>
+			<artifactId>jdo-api</artifactId>
+			<version>${jdo-api.version}</version>
+			<!-- provided by plugins -->
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>flatten</id>
+			<activation>
+				<property>
+					<name>!skip.flatten</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>flatten-maven-plugin</artifactId>
+						<version>1.0.0</version>
+						<executions>
+							<execution>
+								<id>flatten</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>flatten</goal>
+								</goals>
+								<configuration>
+									<flattenMode>defaults</flattenMode>
+									<updatePomFile>true</updatePomFile>
+									<pomElements>
+										<name>resolve</name>
+										<description>resolve</description>
+										<dependencies>resolve</dependencies>
+									</pomElements>
+								</configuration>
+							</execution>
+							<execution>
+								<id>flatten.clean</id>
+								<phase>clean</phase>
+								<goals>
+									<goal>clean</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>
