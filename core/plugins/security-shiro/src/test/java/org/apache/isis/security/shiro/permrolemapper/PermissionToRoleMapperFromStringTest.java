@@ -20,13 +20,12 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
 
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 
 public class PermissionToRoleMapperFromStringTest {
 
@@ -37,9 +36,9 @@ public class PermissionToRoleMapperFromStringTest {
                 + "role2 = fiz:x,bip:bop:* ;"
                 + "role3 = *").getPermissionsByRole();
         
-        assertThat(permissionsByRole.get("role1"), is(equalTo((List<String>)_Lists.of("foo","bar"))));
-        assertThat(permissionsByRole.get("role2"), is(equalTo((List<String>)_Lists.of("fiz:x","bip:bop:*"))));
-        assertThat(permissionsByRole.get("role3"), is(equalTo((List<String>)_Lists.of("*"))));
+        assertThat(permissionsByRole.get("role1"), is(equalTo((Set<String>)_Sets.of("foo","bar"))));
+        assertThat(permissionsByRole.get("role2"), is(equalTo((Set<String>)_Sets.of("fiz:x","bip:bop:*"))));
+        assertThat(permissionsByRole.get("role3"), is(equalTo((Set<String>)_Sets.of("*"))));
         assertThat(permissionsByRole.size(), is(3));
     }
 

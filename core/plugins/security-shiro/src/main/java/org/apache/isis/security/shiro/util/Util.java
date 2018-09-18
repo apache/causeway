@@ -41,7 +41,7 @@ public class Util {
                 return;
             }
             final String role = roleAndPerms.get(0).trim();
-            final String permStr = roleAndPerms.get(0).trim();
+            final String permStr = roleAndPerms.get(1).trim();
             
             final Set<String> perms = _Strings.splitThenStream(permStr, ",")
                     .map(String::trim)
