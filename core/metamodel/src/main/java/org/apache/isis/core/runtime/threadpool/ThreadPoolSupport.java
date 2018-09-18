@@ -127,7 +127,8 @@ public final class ThreadPoolSupport implements AutoCloseable {
      * @param callables nullable
      * @return non-null
      */
-    public List<Future<Object>> invokeAll(final Callable<Object>... callables) {
+    @SafeVarargs
+    public final List<Future<Object>> invokeAll(final Callable<Object>... callables) {
         return invokeAll(Arrays.asList(callables));
     }
 
@@ -145,7 +146,8 @@ public final class ThreadPoolSupport implements AutoCloseable {
      * @param callables nullable
      * @return non-null
      */
-    public List<Future<Object>> invokeAllSequential(final Callable<Object>... callables) {
+    @SafeVarargs
+    public final List<Future<Object>> invokeAllSequential(final Callable<Object>... callables) {
         return invokeAllSequential(Arrays.asList(callables));
     }
 

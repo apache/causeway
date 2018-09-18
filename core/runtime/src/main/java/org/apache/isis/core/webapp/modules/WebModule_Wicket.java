@@ -59,14 +59,21 @@ final class WebModule_Wicket implements WebModule  {
         if(!isAvailable()) {
             return;
         }
+
+        
         
         final IsisWebAppConfigProvider configProvider = IsisWebAppConfigProvider.getInstance();
-        
         pathConfigValue = 
                 configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.basePath", "/wicket");
         
-        modeConfigValue = 
-                configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.mode", "deployment");
+        {
+            //TODO[ahuber] once this class is moved to viewer-wicket-impl, we can utilize
+            // IsisWicketApplication's method of determining the deployment code.
+            final String modeFromEnvironment = "true".equalsIgnoreCase(System.getenv("PROTOTYPING"))
+                    ? "development" : "deployment";
+            modeConfigValue = 
+                    configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.mode", modeFromEnvironment);
+        }
         
         appConfigValue = 
                 configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.app", 

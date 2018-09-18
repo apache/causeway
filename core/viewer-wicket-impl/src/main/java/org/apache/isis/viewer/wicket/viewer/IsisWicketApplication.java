@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collections;
@@ -119,7 +121,6 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
-import static java.util.Objects.requireNonNull;
 import net.ftlines.wicketsource.WicketSource;
 
 /**
@@ -546,10 +547,13 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
      */
     protected DeploymentTypeWicketAbstract determineDeploymentType(IsisConfigurationDefault configuration) {
         
-        //TODO[ahuber] we need to get rid of this static processing, 
-        // once wicket is only one of multiple viewer options 
+        // in order of highest precedence first  
         final String deploymentTypeConfigValue = configuration.getString("isis.deploymentType");
         final String wicketModeConfigValue = configuration.getString("isis.viewer.wicket.mode");
+        final String modeFromEnvironment = "true".equalsIgnoreCase(System.getenv("PROTOTYPING"))
+                ? "PROTOTYPING" : null;
+        // --
+        
         
         final boolean isPrototype;
         
@@ -558,6 +562,8 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         } else if(deploymentTypeConfigValue!=null) {
             final DeploymentType deploymentType = DeploymentType.lookup(deploymentTypeConfigValue);
             isPrototype = !deploymentType.getDeploymentCategory().isProduction();
+        } else if(modeFromEnvironment!=null) {
+            isPrototype = true;
         } else {
             isPrototype = false; // defaulting to production
         }
