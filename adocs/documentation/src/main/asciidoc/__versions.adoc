@@ -2,3 +2,4 @@
 :isisnext: 2.0.0-M2
 :isisnextafter: 2.0.0-M3
 :isisdev: {isisnext}-SNAPSHOT
+:isisdevafter: {isisnextafter}-SNAPSHOT
