@@ -2,3 +2,4 @@
 :isisnext: 1.16.3
 :isisnextafter: 1.16.4
 :isisdev: {isisnext}-SNAPSHOT
+:isisdevafter: {isisnextafter}-SNAPSHOT

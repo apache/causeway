@@ -24,14 +24,14 @@ Post the results to the `dev@isis.a.o` mailing list.
 
 For example, use the following subject for a vote on Apache Isis Core:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-[RESULT] [VOTE] Apache Isis Core release 2.0.0-M1
+[RESULT] [VOTE] Apache Isis Core release {isisnext}
 ----
 
 using the body (alter last line as appropriate):
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 The vote has completed with the following result :
 
@@ -51,29 +51,29 @@ Tidy up remote branches in the git repo:
 
 * delete the remote branch, for example: +
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git push --delete origin release-2.0.0-M1-RC1
+git push --delete origin release-{isisnext}-RC1
 ----
 
 
 * delete the remote origin server's tags, for example: +
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git push --delete origin isis-2.0.0-M1-RC1
-git push --delete origin helloworld-archetype-2.0.0-M1-RC1
-git push --delete origin simpleapp-archetype-2.0.0-M1-RC1
+git push --delete origin isis-{isisnext}-RC1
+git push --delete origin helloworld-archetype-{isisnext}-RC1
+git push --delete origin simpleapp-archetype-{isisnext}-RC1
 ----
 
 
 * delete the tags that were created locally, for example: +
 +
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
-git tag -d isis-2.0.0-M1
-git tag -d helloworld-archetype-2.0.0-M1
-git tag -d simpleapp-archetype-2.0.0-M1
+git tag -d isis-{isisnext}
+git tag -d helloworld-archetype-{isisnext}
+git tag -d simpleapp-archetype-{isisnext}
 ----
 
 

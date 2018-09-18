@@ -21,7 +21,8 @@ endif::env-github[]
 
 This directory contains the source documentation that constitutes both the Apache Isis' documentation (meaning the website and the users' guide, the reference guide and contributors' guide)   It is written using http://www.methods.co.nz/asciidoc/[Asciidoc], specifically the link:http://asciidoctor.org/[Asciidoctor] implementation.
 
-The website is created by running build tools (documented below) which create the HTML version of the site and guides.  You can therefore easily check the documentation before raising a pull request
+The website is created by running build tools (documented below) which create the HTML version of the site and guides.
+You can therefore easily check the documentation before raising a pull request
 
 So, if you want to contribute documentation - either just to fix a typo, or to write a how-to or longer article - then fork the repo, write or modify the the `.adoc` source file, and raise a pull request.
 
@@ -69,76 +70,16 @@ To (re)build the documentation locally prior to release, use:
 
 [source]
 ----
-mvn clean compile
+sh preview-html.sh
 ----
 
-The site will be generated at `target/site/index.html`.
-
-You could then use a web server such as Python's SimpleHTTPServer to preview (so that all Javascript works correctly). However, instead we recommend using instant preview, described next.
-
-
-== Instant Rebuild (using Ruby)
-
-The ruby script, `monitor.rb` emulates the `mvn site` command, regenerating any changed Asciidoctor files to the relevant `target/site` directory. If any included files are changed then it rebuilds the parent (per the above naming convention). 
-
-To setup:
-
-* download and install ruby 2.0.0, from link:http://rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]
-* download devkit for the Ruby 2.0 installation, also from link:http://rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]. Then follow the link:https://github.com/oneclick/rubyinstaller/wiki/Development-Kit[installation instructions] on their wiki
-
-
-[NOTE]
-====
-We use Ruby 2.0 rather than 2.1 because the wdm gem (required to monitor the filesystem if running on Windows) is not currently compatible with Ruby 2.1.
-====
-
-To install:
-
-[source,bash]
-----
-gem install bundler
-bundle install
-----
-
-To run, we typically just use:
-
-[source,bash]
-----
-ruby monitor.rb
-----
-
-This will start monitoring all files under `src/main/asciidoc`, and start up a web server on port 4000 so you can review results.  If any `.adoc` changes, then the appropriate HTML will be regenerated.  And, if any new assets (CSS, images etc) are added, they will be copied across.
-
-It often makes sense to combine this with `mvn`:
-
-[source,bash]
-----
-mvn clean install && ruby monitor.rb
-----
-
-This directory contains a tiny script, `r.sh`, that executes exactly the above line.
-
-The `monitor.rb` script has a couple of other options, use `-h` flag for usage:
-
-[source,bash]
-----
-ruby monitor.rb -h
-----
-
-which should print:
-
-[source]
-----
-usage: monitor.rb [options]
-    -p, --port       port (default: 4000)
-    -b, --browser    launch browser
-    -h, --help       help
-----
+The site will be generated at `target/site/index.html`, and then uses Python to start a webserver and a browser pointing at the site.
 
 
 
 
 == Publish procedure
 
-Only Apache Isis committers can publish to link:http://isis.apache.org[isis.apache.org].  See the link:http://isis.apache.org/guides/cgcom.html#_cg_asciidoc[committers' guide] (including a longer version of this page) for details.
+Only Apache Isis committers can publish to link:http://isis.apache.org[isis.apache.org].
+See the link:http://isis.apache.org/guides/cgcom.html#_cg_asciidoc[committers' guide] for details.
 
