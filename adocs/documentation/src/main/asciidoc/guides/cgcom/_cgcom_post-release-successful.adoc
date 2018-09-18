@@ -260,7 +260,7 @@ In the main `isis` repo (ie containing the asciidoc source):
 * Paste in the JIRA-generated release notes generated above, adding to top of `adocs/documentation/src/main/asciidoc/release-notes.adoc`.
 Also add a summary line for the release.
 
-* Update the link:../../__versions.adoc[__versions.adoc] file that declares the current and next releases.
+* Update the xref:../../__versions.adoc#[`__versions.adoc`] file that declares the current and next releases.
 
 * Update the xref:../../downloads.adoc#[downloads page] with a link to the source release zip file (under https://dist.apache.org/repos/dist/release/isis[https://dist.apache.org/repos/dist/release/isis])
 

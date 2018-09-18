@@ -128,10 +128,8 @@ Also defines registries of pages and components, as well as a number of domain s
 | `isis-core-viewer-wicket-ui`
 | UI components that render the moduls.
 
-//| `isis-webdocker`
-//| Creates a Docker image for Tomcat that also contains the Apache Isis libraries, thereby enabling "skinny war" support.
-
-// commented out because only added in 1.16.3-SNAPSHOT
+| `isis-webdocker`
+| Creates a Docker image for Tomcat that also contains the Apache Isis libraries, thereby enabling "skinny war" support.
 
 | `isis-core-webserver`
 | For development within an IDE, provides a utility class to bootstrap the application (using Jetty).
