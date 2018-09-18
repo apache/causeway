@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.wicket.Component;
+
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
@@ -55,7 +57,6 @@ import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.Util.LowestCommonSuperclassFinder;
-import org.apache.wicket.Component;
 
 /**
  * Model representing a collection of entities, either {@link Type#STANDALONE
@@ -185,8 +186,11 @@ UiHintContainer {
 
             @SuppressWarnings("unchecked")
             private List<Object> asIterable(final ObjectAdapter collectionAsAdapter) {
+                if(collectionAsAdapter==null) {
+                    return Collections.emptyList();
+                }
                 final Iterable<Object> objects = (Iterable<Object>) collectionAsAdapter.getObject();
-                return _Lists.newArrayList(objects);
+                return stream(objects).collect(Collectors.toList());
             }
 
             @Override

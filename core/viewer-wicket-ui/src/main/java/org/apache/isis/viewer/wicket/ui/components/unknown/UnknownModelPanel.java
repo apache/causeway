@@ -42,14 +42,12 @@ public class UnknownModelPanel extends PanelAbstract<IModel<?>> {
     }
 
     private String buildMessage() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("??? ");
+        final StringBuilder buf = new StringBuilder();
         if(getModel() != null) {
             buildMessageForModel(buf, getModel());
         } else {
-            buf.append("model is NULL");
+            buf.append("??? model is NULL");
         }
-        //buf.append(getModel().toString());
         return buf.toString();
     }
 
@@ -59,9 +57,14 @@ public class UnknownModelPanel extends PanelAbstract<IModel<?>> {
             EntityModel entityModel = (EntityModel) model;
             ObjectAdapter objectAdapter = entityModel.getObject();
             if(objectAdapter != null) {
-                buf.append("objectAdapter oid: " + objectAdapter.getOid());
+                if(objectAdapter.getOid().isValue()) {
+                    //FIXME[ISIS-1976] should be properly intercepted by another Panel and not fall through to the unknowns                     
+                    buf.append("FIXME[ISIS-1976] VALUE '" + objectAdapter.getObject()+"'");
+                } else {
+                    buf.append("??? objectAdapter oid: " + objectAdapter.getOid());    
+                }
             } else {
-                buf.append("objectAdapter is NULL");
+                buf.append("??? objectAdapter is NULL");
             }
         }
 

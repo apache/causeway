@@ -19,11 +19,14 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Objects;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.url.UrlDecoderUtil;
@@ -108,14 +111,13 @@ public class RootOid implements Oid, Serializable {
 
     public RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state, final Version version) {
 
-        assert objectSpecId != null;
-        assert identifier != null;
+        requires(objectSpecId, "objectSpecId");
+        requires(identifier, "identifier");
+        requires(state, "state");
 
         // too slow...
         // Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))), "identifier '" + identifier + "' contains a '#' symbol");
         // Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("@"))), "identifier '" + identifier + "' contains an '@' symbol");
-
-        assert state != null;
 
         this.objectSpecId = objectSpecId;
         this.identifier = identifier;
@@ -131,6 +133,11 @@ public class RootOid implements Oid, Serializable {
         this.objectSpecId = oid.objectSpecId;
         this.identifier = oid.identifier;
         this.state = oid.state;
+        
+        requires(objectSpecId, "objectSpecId");
+        requires(identifier, "identifier");
+        requires(state, "state");
+        
         this.version = oid.version;
         this.hashCode = calculateHash();
     }
@@ -268,10 +275,16 @@ public class RootOid implements Oid, Serializable {
     
     private static final RootOid VALUE_OID = new RootOid() {
         private static final long serialVersionUID = 2L;
-        @Override
-        public boolean isValue() {
-            return true;
-        }
+        @Override public boolean isValue() { return true; }
+//        @Override public boolean isTransient() { return false; }
+//        @Override public boolean isPersistent() { return false; }
+//        @Override public boolean isViewModel() { return false; }
+        
+        @Override public boolean isTransient() { throw _Exceptions.unexpectedCodeReach(); }
+        @Override public boolean isPersistent() { throw _Exceptions.unexpectedCodeReach(); }
+        @Override public boolean isViewModel() { throw _Exceptions.unexpectedCodeReach(); }
+        @Override public String toString() { return "VALUE_OID"; }
+        
     };
     
     public static RootOid value() {

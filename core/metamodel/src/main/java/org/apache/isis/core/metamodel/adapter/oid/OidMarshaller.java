@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -246,11 +247,13 @@ public final class OidMarshaller {
     // -- marshal
     @Programmatic
     public final String marshal(RootOid rootOid) {
+        Ensure.ensure("can not marshal values", !rootOid.isValue());
         return marshalNoVersion(rootOid) + marshal(rootOid.getVersion());
     }
 
     @Programmatic
     public final String marshalNoVersion(RootOid rootOid) {
+        Ensure.ensure("can not marshal values", !rootOid.isValue());
         final String transientIndicator = rootOid.isTransient()? TRANSIENT_INDICATOR : "";
         final String viewModelIndicator = rootOid.isViewModel()? VIEWMODEL_INDICATOR : "";
         return transientIndicator + viewModelIndicator + rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();

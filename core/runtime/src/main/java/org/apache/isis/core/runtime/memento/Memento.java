@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -33,7 +34,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -89,7 +89,7 @@ public class Memento implements Serializable {
     }
 
     private Data createCollectionData(final ObjectAdapter adapter) {
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(adapter);
+        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(adapter);
         final Data[] collData = new Data[facet.size(adapter)];
         int i = 0;
         for (final ObjectAdapter ref : facet.iterable(adapter)) {
@@ -151,9 +151,9 @@ public class Memento implements Serializable {
             return null;
         }
 
-        Oid refOid = clone(referencedAdapter.getOid());
+        final Oid refOid = clone(referencedAdapter.getOid());
 
-        if (refOid == null) {
+        if (refOid == null || refOid.isValue()) {
             return createStandaloneData(referencedAdapter);
         }
 
@@ -170,8 +170,9 @@ public class Memento implements Serializable {
 
     private static <T extends Oid> T clone(final T oid) {
         if(oid == null) { return null; }
+        if(oid.isValue()) { return oid; } // immutable, so just reuse
         final String oidStr = oid.enString();
-        return (T) OID_MARSHALLER.unmarshal(oidStr, oid.getClass());
+        return _Casts.uncheckedCast(OID_MARSHALLER.unmarshal(oidStr, oid.getClass()));
     }
 
     private Data createStandaloneData(final ObjectAdapter adapter) {

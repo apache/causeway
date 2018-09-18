@@ -170,6 +170,7 @@ BulkActionsProvider {
     }
 
     private static class MyToggledMementosProvider implements ToggledMementosProvider, Serializable {
+        private static final long serialVersionUID = 1L;
         private final EntityCollectionModel collectionModel;
         private final BulkActionsProvider bulkActionsProvider;
         private final CollectionPanel collectionPanel;

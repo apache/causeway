@@ -23,15 +23,12 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -59,7 +56,7 @@ public class CollectionSelectorHelper implements Serializable {
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
             final ComponentFactoryRegistry componentFactoryRegistry) {
-        this(model, componentFactoryRegistry, ComponentHintKey.<String>noop());
+        this(model, componentFactoryRegistry, ComponentHintKey.noop());
     }
 
     public CollectionSelectorHelper(
@@ -68,17 +65,14 @@ public class CollectionSelectorHelper implements Serializable {
             final ComponentHintKey componentHintKey) {
         this.model = model;
         this.componentFactories = locateComponentFactories(componentFactoryRegistry);
-        this.componentHintKey = componentHintKey != null ? componentHintKey : ComponentHintKey.<String>noop();
+        this.componentHintKey = componentHintKey != null ? componentHintKey : ComponentHintKey.noop();
     }
 
     private List<ComponentFactory> locateComponentFactories(ComponentFactoryRegistry componentFactoryRegistry) {
         final List<ComponentFactory> componentFactories = componentFactoryRegistry.findComponentFactories(ComponentType.COLLECTION_CONTENTS, model);
-        List<ComponentFactory> otherFactories = _Lists.newArrayList(Collections2.filter(componentFactories, new Predicate<ComponentFactory>() {
-            @Override
-            public boolean apply(final ComponentFactory input) {
-                return input.getClass() != CollectionContentsMultipleViewsPanelFactory.class;
-            }
-        }));
+        final List<ComponentFactory> otherFactories = _Lists.filter(componentFactories, 
+                (final ComponentFactory input) ->
+                    input.getClass() != CollectionContentsMultipleViewsPanelFactory.class);
         return ordered(otherFactories);
     }
 

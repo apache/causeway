@@ -75,7 +75,10 @@ implements ImperativeFacet {
             final ObjectAdapter owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
-
+        if(collectionOrArray == null) {
+            return null;
+        }
+        
         final ObjectAdapter collectionAdapter = getObjectAdapterProvider().adapterFor(collectionOrArray);
 
         boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
