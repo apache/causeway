@@ -359,6 +359,3 @@ Its Maven `groupId` is `org.apache.isis.tools`.
 
 
 
-[[__ad_plugins]]
-== Plugins
-
