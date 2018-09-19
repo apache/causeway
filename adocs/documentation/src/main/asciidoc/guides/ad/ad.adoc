@@ -35,6 +35,7 @@ All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
 >> .m2/                              # used in gitlab CI
 >> applib/                           # isis-core-applib
 >> commons/                          # isis-core-commons
+>> detached-tests/                   # isis-core-detached-tests
 >> integtestsupport/                 # isis-core-integtestsupport
 >> legacy/                           # legacy, see below
 >> log4j/                            # isis-core-log4j
@@ -44,20 +45,16 @@ All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
 >> runtime/                          # isis-core-runtime
 >> schema/                           # isis-core-schema
 >> security/                         # isis-core-security
->> security-shiro/                   # isis-core-security-shiro
 >> specsupport/                      # isis-core-specsupport
 >> unittestsupport/                  # isis-core-unittestsupport
->> unittestsupport-test/             # isis-core-unittestsupport-test
 >> viewer-restfulobjects-applib/     # isis-core-viewer-restfulobjects-applib
 >> viewer-restfulobjects-rendering/  # isis-core-viewer-restfulobjects-rendering
 >> viewer-restfulobjects-server/     # isis-core-viewer-restfulobjects-server
->> viewer-wicket-applib/             # isis-core-viewer-wicket-applib
 >> viewer-wicket-impl/               # isis-core-viewer-wicket-impl
 >> viewer-wicket-model/              # isis-core-viewer-wicket-model
 >> viewer-wicket-ui/                 # isis-core-viewer-wicket-ui
 >> webdocker/                        # isis-webdocker
 >> webserver/                        # isis-core-webserver
->> wrapper/                          # isis-core-wrapper
 ----
 
 .core maven modules
@@ -71,11 +68,10 @@ All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
 | Core application library.
 
 | `isis-core-commons`
-| Commons library
+| Framework internal API, not 'public' API and not meant to be used with domain code. The internal API is subject to change without notice. 
 
-
-| `isis-core-detached-test`
-|
+| `isis-core-detached-tests`
+| To break cyclic dependencies some (JUnit) tests needed to be detached from their originating module and moved here.
 
 | `isis-core-integtestsupport`
 | Integration test support.
@@ -90,7 +86,7 @@ Application integration tests typically extend from adapter superclasses defined
 See the xref:ad.adoc#__ad_metamodel[section below] which also includes a simplified UML diagram of these classes.
 
 | `isis-core-runtime`
-| The classes that make up runtime management and persistence of domain objects, as well as framework for security (concepts of authentication or authorisation).
+| The classes that make up runtime management and persistence of domain objects, as well as framework for security (concepts of authentication or authorisation). Also provides an implementation of the `WrapperFactory` domain service.
 
 
 | `isis-core-schema`
@@ -100,9 +96,6 @@ See the xref:ad.adoc#__ad_metamodel[section below] which also includes a simplif
 | Defines a "bypass" implementation of security, for prototyping only.
 
 Using this implementation, any user/password is accepted and
-
-| `isis-core-security-shiro`
-| Defines an implementation of security authentication which delegates to Apache Shiro.
 
 | `isis-core-specsupport`
 | Application BDD specs typically inherit from classes defined in this module.
@@ -123,9 +116,6 @@ These implementations provide support for the representations defined by Restful
 
 These parse the input, delegate to the runtime for a response, and hand control to the rendering module to generate a representation.
 
-| `isis-core-viewer-wicket-applib`
-| Currently just defines `WicketDeveloperUtilitiesService`, for clearing the cache.
-
 | `isis-core-viewer-wicket-impl`
 | The top-level integration with Wicket, for example defining the Apache Isis-specific implementations/subclasses of the Wicket APIs for application, web session, localizer and request cycle.
 
@@ -143,9 +133,6 @@ Also defines registries of pages and components, as well as a number of domain s
 
 | `isis-core-webserver`
 | For development within an IDE, provides a utility class to bootstrap the application (using Jetty).
-
-| `isis-core-wrapper`
-| Provides an implementation of the `WrapperFactory` domain service.
 
 
 
@@ -172,6 +159,7 @@ All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
 >>> jaxrs-resteasy-4/       # isis-core-plugins-jaxrs-resteasy-4
 >>> jdo-datanucleus-4/      # isis-core-plugins-jdo-datanucleus-4
 >>> jdo-datanucleus-5/      # isis-core-plugins-jdo-datanucleus-5
+>>> security-shiro/         # isis-core-plugins-security-shiro
 ----
 
 .core/mavendeps maven modules
@@ -181,31 +169,34 @@ All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
 | Module
 | Description
 | `isis-core-plugins-codegen-bytebuddy`
-|
+| Framework support for Java byte code generation at runtime utilizing ByteBuddy.
 
 | `isis-core-plugins-codegen-javassist`
-|
+| Framework support for Java byte code generation at runtime utilizing Javassist. 
 
 | `isis-core-plugins-discovery-reflections`
-|
+| Framework support for Java class hierarchy discovery utilizing reflections.org.
 
 | `isis-core-plugins-eventbus-axon`
-|
+| Integrates axon-framework's eventbus.
 
 | `isis-core-plugins-eventbus-guava`
-|
+| Integrates guava's eventbus.
 
 | `isis-core-plugins-jaxrs-resteasy-3`
-|
+| Framework support for RESTful viewer utilizing JBoss RestEasy version 3.x. (JEE 7 compliant)
 
 | `isis-core-plugins-jaxrs-resteasy-4`
-|
+| Framework support for RESTful viewer utilizing JBoss RestEasy version 4.x. (JEE 8 compliant)
 
 | `isis-core-plugins-jdo-datanucleus-4`
-|
+| Framework support for JDO utilizing DataNucleus 4.x.
 
 | `isis-core-plugins-jdo-datanucleus-5`
-|
+| Framework support for JDO utilizing DataNucleus 5.x.
+
+| `isis-core-plugins-security-shiro`
+| Defines an implementation of security authentication which delegates to Apache Shiro.
 
 |===
 
@@ -286,13 +277,7 @@ All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
 ----
 > core/
 >> legacy/
->>> applib-legacy/              # isis-core-applib-legacy
->>> integtestsupport-legacy/    # isis-core-integtestsupport-legacy
->>> metamodel-legacy/           # isis-core-metamodel-legacy
->>> runtime-legacy/             # isis-core-runtime-legacy
 >>> transition-1-2/             # isis-core-transition-1-2
->>> unittestsupport-legacy/     # isis-core-unittestsupport-legacy
->>> viewer-wicket-ui-legacy/    # isis-core-viewer-wicket-ui-legacy
 ----
 
 
@@ -303,26 +288,9 @@ All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
 | Description
 
 
-| `isis-core-applib-legacy`
-|
-
-| `isis-core-integtestsupport-legacy`
-|
-
-| `isis-core-metamodel-legacy`
-|
-
-| `isis-core-runtime-legacy`
-|
-
 | `isis-core-transition-1-2`
-|
+| Provides a compatibility layer for applications that migrate from Apache Isis 1.x to 2.x. API (Some of the Java interfaces and built-in domain-services that got removed with version 2 can be found here.)
 
-| `isis-core-unittestsupport-legacy`
-|
-
-| `isis-core-viewer-wicket-ui-legacy`
-|
 
 |===
 
