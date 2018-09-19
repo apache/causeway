@@ -71,7 +71,7 @@
 * link:guides/cgcom/cgcom.html[Committers' Guide^]
 ** link:guides/cgcom/cgcom.html#_cgcom_cutting-a-release[Cutting^] & link:guides/cgcom/cgcom.html#_cgcom_verifying-releases[Verifying^]
 
-* link:guides/ad/ad.html[Architecture & Design^]
+* Source files: link:guides/ad/ad.html[Architecture & Design^]
 
 3+|For bug reports and feature requests see: *link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban board^]* (JIRA)
 
@@ -112,7 +112,6 @@
 
 * https://github.com/isisaddons/isis-app-neoapp[Neo4J Example^] footnoteref:[ASF]
 * https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example^] footnoteref:[ASF]
-* https://github.com/andi-huber/isis-2-demo[Demo Showcase]footnoteref:[ASF]
 
 |====
 
