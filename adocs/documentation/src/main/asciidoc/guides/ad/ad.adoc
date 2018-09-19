@@ -326,47 +326,47 @@ package metamodel {
         -fullyQualifiedClassName
     }
 
-    class Object\nMember {
+    class Object\nMember<<desc>> {
 
     }
 
-    class Object\nAction {
+    class Object\nAction<<desc>> {
 
     }
 
-    class Object\nAssociation {
+    class Object\nAssociation<<desc>> {
 
     }
 
-    class OneToOne\nAssociation {
+    class OneToOne\nAssociation<<desc>> {
 
     }
 
-    class OneToMany\nAssociation {
+    class OneToMany\nAssociation<<desc>> {
 
     }
 
-    interface FacetHolder {
+    interface FacetHolder<<desc>> {
     }
 
-    class Object\nActionParameter {
+    class Object\nActionParameter<<desc>> {
     }
 
-    class OneToOne\nActionParameter {
+    class OneToOne\nActionParameter<<desc>> {
     }
 
-    interface Facet {
+    interface Facet<<desc>> {
     }
 
-    class OneToMany\nActionParameter {
+    class OneToMany\nActionParameter<<desc>> {
     }
 }
 
 package runtime {
-    class Object\nAdapter {
+    class Object\nAdapter<<ppt>> {
         +getSpecification()
     }
-    class Oid {
+    class Oid<<value>> {
 
     }
 }
