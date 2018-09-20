@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -35,12 +37,12 @@ import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.functions._Predicates;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
@@ -273,7 +275,17 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
         final boolean escaped = facet == null || facet.escaped();
 
         final String parentTypeName = property.getOnType().getSpecId().asString();
-        return new ObjectAdapterPropertyColumn(getModel().getType(), Model.of(property.getName()), property.getId(), property.getId(), escaped, parentTypeName);
+        final String describedAs = mapIfPresentElse(property.getFacet(DescribedAsFacet.class), 
+                DescribedAsFacet::value, null);
+        
+        return new ObjectAdapterPropertyColumn(
+                getModel().getType(), 
+                Model.of(property.getName()), 
+                property.getId(), 
+                property.getId(), 
+                escaped, 
+                parentTypeName,
+                describedAs);
     }
 
 

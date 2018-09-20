@@ -15,26 +15,27 @@
  * specific language governing permissions and limitations
  * under the License. */
 
-package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
+package org.apache.isis.viewer.wicket.ui.util;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
 
-class Tooltips {
+public class Tooltips {
 
-    public static void addTooltip(ListItem<CssMenuItem> listItem, AbstractLink menuItemLink, String tooltipText) {
+    public static void addTooltip(Component target, Component linkIfAny, String tooltipText) {
         //TODO seems TooltipBehavior does not work on menu actions
         //TooltipBehavior tooltipBehavior = new TooltipBehavior(
         //   Model.of(menuItem.getDisabledReason()), createTooltipConfig() );
         //listItem.add(tooltipBehavior);
         //--
         
-        listItem.add(new AttributeModifier("title", Model.of(tooltipText)));
+        target.add(new AttributeModifier("title", Model.of(tooltipText)));
 //        // XXX ISIS-1615, prevent bootstrap from changing the HTML link's 'title' attribute on client-side;
 //        // bootstrap will not touch the 'title' attribute once the HTML link has a 'data-original-title' attribute
-        menuItemLink.add(new AttributeModifier("data-original-title", ""));
+        if(linkIfAny!=null) {
+            linkIfAny.add(new AttributeModifier("data-original-title", ""));
+        }
 //        //--
     }
 
