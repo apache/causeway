@@ -245,11 +245,6 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
 
     @Override
     public boolean isUsableInAnyRole(Identifier identifier) {
-        
-        if((""+identifier).startsWith("domainapp.modules.simple.dom.impl.SimpleObject")) {
-            return false;
-        }
-        
         return isPermitted(identifier, "w");
     }
 
