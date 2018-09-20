@@ -188,7 +188,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         final String disableReasonIfAny = scalarModel.whetherDisabled();
         if (disableReasonIfAny != null) {
-            if("Always disabled".equals(disableReasonIfAny)) {
+            if(disableReasonIfAny.contains("Always disabled")) {
                 onInitializeWhenViewMode();
             } else {
                 onInitializeWhenDisabled(disableReasonIfAny.toString());
