@@ -245,10 +245,16 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
 
     @Override
     public boolean isUsableInAnyRole(Identifier identifier) {
+        
+        if((""+identifier).startsWith("domainapp.modules.simple.dom.impl.SimpleObject")) {
+            return false;
+        }
+        
         return isPermitted(identifier, "w");
     }
 
     private boolean isPermitted(Identifier identifier, String qualifier) {
+        
         RealmSecurityManager securityManager = getSecurityManager();
         if(securityManager == null) {
             // since a security manager will always be present for regular web requests, presumably the user

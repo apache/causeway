@@ -86,13 +86,13 @@ public final class ServiceActionUtil {
                 listItem.add(new CssClassAppender("disabled"));
                 subMenuItemLink.setEnabled(false);
                 
-                Tooltips.addTooltip(listItem, subMenuItemLink, menuItem.getDisabledReason());
+                Tooltips.addTooltip(listItem, menuItem.getDisabledReason());
                 
                 
             } else {
 
                 if(!_Strings.isNullOrEmpty(menuItem.getDescription())) {
-                    Tooltips.addTooltip(listItem, subMenuItemLink, menuItem.getDescription());
+                    Tooltips.addTooltip(listItem, menuItem.getDescription());
                 }
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions

@@ -45,6 +45,7 @@ import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 /**
  * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
@@ -66,6 +67,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected final Class<T> cls;
 
     protected static class ReplaceDisabledTagWithReadonlyTagBehaviour extends Behavior {
+        private static final long serialVersionUID = 1L;
+
         @Override public void onComponentTag(final Component component, final ComponentTag tag) {
             super.onComponentTag(component, tag);
             if(component.isEnabled()) {
@@ -131,7 +134,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
-            scalarIfRegularFormGroup.add(new AttributeModifier("title", Model.of(describedAs)));
+            Tooltips.addTooltip(scalarIfRegularFormGroup, describedAs);
         }
 
         return scalarIfRegularFormGroup;
@@ -305,7 +308,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
 
-        setTitleAttribute("");
+        setTooltip("No editing.");
     }
 
     @Override
@@ -317,7 +320,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         inlinePromptLink.setEnabled(false);
 
-        setTitleAttribute(disableReason);
+        setTooltip(disableReason);
     }
 
     @Override
@@ -325,16 +328,18 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         super.onInitializeWhenEnabled();
         textField.setEnabled(true);
         inlinePromptLink.setEnabled(true);
-        setTitleAttribute("");
+        clearTooltip();
     }
 
-    private void setTitleAttribute(final String titleAttribute) {
-        AttributeModifier title = new AttributeModifier("title", Model.of(titleAttribute));
-        textField.add(title);
-        inlinePromptLink.add(title);
+    private void setTooltip(final String tooltip) {
+        Tooltips.addTooltip(textField, tooltip);
+        Tooltips.addTooltip(inlinePromptLink, tooltip);
     }
-
-
+    
+    private void clearTooltip() {
+        Tooltips.clearTooltip(textField);
+        Tooltips.clearTooltip(inlinePromptLink);
+    }
 
     // //////////////////////////////////////
 

@@ -17,35 +17,69 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
-import org.apache.wicket.AttributeModifier;
+import static org.apache.isis.commons.internal.functions._Predicates.alwaysTrue;
+
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.CssResourceReference;
+
+import org.apache.isis.commons.internal.base._Strings;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.OpenTrigger;
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig.Placement;
 
 public class Tooltips {
 
-    public static void addTooltip(Component target, Component linkIfAny, String tooltipText) {
-        //TODO seems TooltipBehavior does not work on menu actions
-        //TooltipBehavior tooltipBehavior = new TooltipBehavior(
-        //   Model.of(menuItem.getDisabledReason()), createTooltipConfig() );
-        //listItem.add(tooltipBehavior);
-        //--
-        
-        target.add(new AttributeModifier("title", Model.of(tooltipText)));
-//        // XXX ISIS-1615, prevent bootstrap from changing the HTML link's 'title' attribute on client-side;
-//        // bootstrap will not touch the 'title' attribute once the HTML link has a 'data-original-title' attribute
-        if(linkIfAny!=null) {
-            linkIfAny.add(new AttributeModifier("data-original-title", ""));
+    /**
+     * To include the tooltip-css when a page is rendered.
+     * @param response
+     */
+    public static void renderHead(IHeaderResponse response) {
+        response.render(CssHeaderItem.forReference(new CssResourceReference(Tooltips.class, "isis-tooltips.css"))); 
+    }
+    
+    public static void addTooltip(Component target, Model<String> tooltipTextModel) {
+        if(tooltipTextModel==null) {
+            return;
         }
-//        //--
+        final String tooltipText = tooltipTextModel.getObject();
+        addTooltip(target, tooltipText);
     }
 
+    public static void addTooltip(Component target, String tooltipText) {
+        
+        if(_Strings.isNullOrEmpty(tooltipText)) {
+            return;
+        }
+        
+        final TooltipBehavior tooltipBehavior = new TooltipBehavior(
+                Model.of(tooltipText), createTooltipConfig() );
+        
+        target.add(new AttributeAppender("class", " isis-component-with-tooltip"));    
+        target.add(tooltipBehavior);
+    }
     
-//    private static TooltipConfig createTooltipConfig() {
-//        return new TooltipConfig()
-//                .withTrigger(OpenTrigger.hover)
-//                .withPlacement(Placement.bottom);
-//        
-//    }
+    public static void clearTooltip(Component target) {
+        target.getBehaviors(TooltipBehavior.class).removeIf(alwaysTrue());
+    }
     
+    // -- HELPER
+
+    private static TooltipConfig createTooltipConfig() {
+        return new TooltipConfig()
+                .withTrigger(OpenTrigger.hover)
+                .withPlacement(Placement.bottom)
+                .withAnimation(true);
+        
+
+    }
+
+   
+
 
 }

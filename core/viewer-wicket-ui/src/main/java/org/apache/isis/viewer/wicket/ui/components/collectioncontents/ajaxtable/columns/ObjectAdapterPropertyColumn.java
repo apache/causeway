@@ -81,7 +81,7 @@ public final class ObjectAdapterPropertyColumn extends ColumnAbstract<ObjectAdap
         final Label label = new Label(componentId, getDisplayModel());
         label.setEscapeModelStrings(escaped);
         if(describedAs!=null) {
-            Tooltips.addTooltip(label, null, describedAs);
+            Tooltips.addTooltip(label, describedAs);
         }
         return label;
     }

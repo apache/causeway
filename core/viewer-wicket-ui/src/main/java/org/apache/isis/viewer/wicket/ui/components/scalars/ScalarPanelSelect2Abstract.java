@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.List;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -46,6 +45,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForChoices;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
 
@@ -65,10 +65,10 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         return select2;
     }
 
-    private Label createScalarName(final String id) {
-        final String labelCaption = getRendering().getLabelCaption(select2.component());
-        return createScalarName(id, labelCaption);
-    }
+//    private Label createScalarName(final String id) {
+//        final String labelCaption = getRendering().getLabelCaption(select2.component());
+//        return createScalarName(id, labelCaption);
+//    }
 
     protected FormGroup createFormGroupAndName(
             final FormComponent<?> component,
@@ -76,7 +76,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         final FormGroup formGroup = new FormGroup(formGroupId, component);
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
-            formGroup.add(new AttributeModifier("title", Model.of(describedAs)));
+            Tooltips.addTooltip(formGroup, describedAs);
         }
         formGroup.add(component);
 

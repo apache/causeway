@@ -25,7 +25,6 @@ import java.util.List;
 import javax.inject.Provider;
 
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
@@ -50,6 +49,7 @@ import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 /**
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
@@ -133,7 +133,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
 
             final String description = association.getDescription();
             if(description != null) {
-                labelComponent.add(new AttributeAppender("title", Model.of(description)));
+                Tooltips.addTooltip(labelComponent, description);
             }
 
             final List<LinkAndLabel> links = entityCollectionModel.getLinks();
@@ -179,6 +179,8 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
     }
 
     private class SelectorDropDownPanelProvider implements Provider<Component>, Serializable {
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Component get() {
             return selectorDropdownPanel;

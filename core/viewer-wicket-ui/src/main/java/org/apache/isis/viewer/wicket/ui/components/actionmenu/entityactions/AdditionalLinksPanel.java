@@ -21,9 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions;
 
 import java.util.List;
 
-import org.apache.isis.commons.internal.base._Strings;
-
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -33,6 +30,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
@@ -41,6 +39,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLi
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
@@ -90,6 +89,8 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
         final List<LinkAndLabel> linkAndLabels = getModel().getObject();
 
         final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST) {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public boolean isVisible() {
                 for (LinkAndLabel linkAndLabel : linkAndLabels) {
@@ -116,52 +117,48 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 final LinkAndLabel linkAndLabel = item.getModelObject();
 
                 final AbstractLink link = linkAndLabel.getLink();
-                final AttributeModifier attributeModifier = link instanceof ActionLink
-                        ? new AttributeModifier("title", new Model<String>() {
+                final Model<String> tooltipModel = link instanceof ActionLink
+                        ? new Model<String>() {
+                            private static final long serialVersionUID = 1L;
                             @Override
                             public String getObject() {
                                 final ActionLink actionLink = (ActionLink) link;
                                 final String reasonDisabledIfAny = actionLink.getReasonDisabledIfAny();
                                 return first(reasonDisabledIfAny, linkAndLabel.getDescriptionIfAny());
                             }
-                        })
-                                : new AttributeModifier("title",
-                                        first(linkAndLabel.getReasonDisabledIfAny(), linkAndLabel.getDescriptionIfAny()));
+                        } 
+                        : Model.of(first(linkAndLabel.getReasonDisabledIfAny(), linkAndLabel.getDescriptionIfAny()));
+                
+                Tooltips.addTooltip(link, tooltipModel);
 
-                        item.add(attributeModifier);
+                final Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
+                if(linkAndLabel.isBlobOrClob()) {
+                    link.add(new CssClassAppender("noVeil"));
+                }
+                if(linkAndLabel.isPrototype()) {
+                    link.add(new CssClassAppender("prototype"));
+                }
+                link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
 
-                        // ISIS-1615, prevent bootstrap from changing the HTML link's 'title' attribute on client-side;
-                        // bootstrap will not touch the 'title' attribute once the HTML link has a 'data-original-title' attribute
-                        link.add(new AttributeModifier("data-original-title", ""));
+                SemanticsOf semantics = linkAndLabel.getSemantics();
+                if (linkAndLabel.getParameters().isNoParameters() && linkAndLabel.getReasonDisabledIfAny() == null) {
+                    addConfirmationDialogIfAreYouSureSemantics(link, semantics);
+                }
 
-                        final Label viewTitleLabel = new Label(ID_ADDITIONAL_LINK_TITLE, linkAndLabel.getLabel());
-                        if(linkAndLabel.isBlobOrClob()) {
-                            link.add(new CssClassAppender("noVeil"));
-                        }
-                        if(linkAndLabel.isPrototype()) {
-                            link.add(new CssClassAppender("prototype"));
-                        }
-                        link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
+                final String cssClass = linkAndLabel.getCssClass();
+                CssClassAppender.appendCssClassTo(link, cssClass);
 
-                        SemanticsOf semantics = linkAndLabel.getSemantics();
-                        if (linkAndLabel.getParameters().isNoParameters() && linkAndLabel.getReasonDisabledIfAny() == null) {
-                            addConfirmationDialogIfAreYouSureSemantics(link, semantics);
-                        }
+                link.addOrReplace(viewTitleLabel);
 
-                        final String cssClass = linkAndLabel.getCssClass();
-                        CssClassAppender.appendCssClassTo(link, cssClass);
+                final String cssClassFa = linkAndLabel.getCssClassFa();
+                if (_Strings.isNullOrEmpty(cssClassFa)) {
+                    viewTitleLabel.add(new CssClassAppender("menuLinkSpacer"));
+                } else {
+                    final CssClassFaPosition position = linkAndLabel.getCssClassFaPosition();
+                    viewTitleLabel.add(new CssClassFaBehavior(cssClassFa, position));
+                }
 
-                        link.addOrReplace(viewTitleLabel);
-
-                        final String cssClassFa = linkAndLabel.getCssClassFa();
-                        if (_Strings.isNullOrEmpty(cssClassFa)) {
-                            viewTitleLabel.add(new CssClassAppender("menuLinkSpacer"));
-                        } else {
-                            final CssClassFaPosition position = linkAndLabel.getCssClassFaPosition();
-                            viewTitleLabel.add(new CssClassFaBehavior(cssClassFa, position));
-                        }
-
-                        item.addOrReplace(link);
+                item.addOrReplace(link);
             }
         };
 

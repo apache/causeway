@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -45,6 +44,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 /**
  * {@link PanelAbstract Panel} representing the icon and title of an entity,
@@ -139,7 +139,7 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
             link.addOrReplace(this.label = newLabel(ID_ENTITY_TITLE, titleAbbreviated(title)));
 
             String entityTypeName = adapterIfAny.getSpecification().getSingularName();
-            link.add(new AttributeModifier("title", entityTypeName + ": " + title));
+            Tooltips.addTooltip(link, entityTypeName + ": " + title);
         }
 
         return link;
@@ -151,6 +151,8 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
 
         return new BookmarkablePageLink<Void>(ID_ENTITY_LINK, pageClass, pageParameters) {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public boolean isVisible() {
                 return EntityIconAndTitlePanel.this.getModel().getObject() != null;

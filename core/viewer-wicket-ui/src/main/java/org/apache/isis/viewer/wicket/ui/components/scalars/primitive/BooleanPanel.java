@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.ComponentTag;
@@ -36,6 +35,7 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
@@ -75,7 +75,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
 
         final String describedAs = getModel().getDescribedAs();
         if(describedAs != null) {
-            scalarIfRegularFormGroup.add(new AttributeModifier("title", Model.of(describedAs)));
+            Tooltips.addTooltip(scalarIfRegularFormGroup, describedAs);
         }
 
 
@@ -142,6 +142,9 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
                 getModel().setObject(adapter);
             }
         }) {
+
+            private static final long serialVersionUID = 1L;
+
             @Override
             public CheckBoxXConfig getConfig() {
                 return config;
@@ -183,6 +186,9 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
 
     private static CheckBoxXConfig configFor(final boolean required, final CheckBoxXConfig.Sizes size) {
         final CheckBoxXConfig config = new CheckBoxXConfig() {
+
+            private static final long serialVersionUID = 1L;
+
             {
                 // so can tab to the checkbox
                 // not part of the API, so have to use this object initializer

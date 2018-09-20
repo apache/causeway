@@ -54,6 +54,7 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 class CssMenuItem implements Serializable {
 
@@ -431,7 +432,7 @@ class CssMenuItem implements Serializable {
             link.add(label);
 
             if (this.description != null) {
-                label.add(new AttributeModifier("title", Model.of(description)));
+                Tooltips.addTooltip(link, description);
             }
             if (this.blobOrClob) {
                 link.add(new CssClassAppender("noVeil"));
@@ -451,7 +452,7 @@ class CssMenuItem implements Serializable {
             }
 
             if (!this.isEnabled()) {
-                link.add(new AttributeModifier("title", Model.of(this.getDisabledReason())));
+                Tooltips.addTooltip(link, this.getDisabledReason());
                 link.add(new CssClassAppender("disabled"));
 
                 link.setEnabled(false);
@@ -465,7 +466,7 @@ class CssMenuItem implements Serializable {
             // hide link...
             Components.permanentlyHide(markupContainer, ID_MENU_LINK);
             // ... and show label, along with disabled reason
-            label.add(new AttributeModifier("title", Model.of(this.getDisabledReason())));
+            Tooltips.addTooltip(link, this.getDisabledReason());
             label.add(new AttributeModifier("class", Model.of("disabled")));
 
             markupContainer.add(label);
