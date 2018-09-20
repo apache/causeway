@@ -36,12 +36,12 @@ class PoWriter extends PoAbstract {
     public static Logger LOG = LoggerFactory.getLogger(PoWriter.class);
 
     private static class Block {
-        private final String msgId;
+        //private final String msgId;
         private final SortedSet<String> contexts = _Sets.newTreeSet();
         private String msgIdPlural;
 
-        private Block(final String msgId) {
-            this.msgId = msgId;
+        private Block(/*final String msgId*/) {
+            //this.msgId = msgId;
         }
     }
 
@@ -122,7 +122,9 @@ class PoWriter extends PoAbstract {
             return null;
         }
         final Block block = blockFor(msgId);
-        block.contexts.add(context);
+        synchronized(block) {
+            block.contexts.add(context);
+        }
 
         return msgId;
     }
@@ -134,8 +136,10 @@ class PoWriter extends PoAbstract {
             return null;
         }
         final Block block = blockFor(msgId);
-        block.contexts.add(context);
-        block.msgIdPlural = msgIdPlural;
+        synchronized(block) {
+            block.contexts.add(context);
+            block.msgIdPlural = msgIdPlural;    
+        }
 
         return null;
     }
@@ -143,7 +147,7 @@ class PoWriter extends PoAbstract {
     private synchronized Block blockFor(final String msgId) {
         Block block = blocksByMsgId.get(msgId);
         if(block == null) {
-            block = new Block(msgId);
+            block = new Block(/*msgId*/);
             blocksByMsgId.put(msgId, block);
         }
         return block;
