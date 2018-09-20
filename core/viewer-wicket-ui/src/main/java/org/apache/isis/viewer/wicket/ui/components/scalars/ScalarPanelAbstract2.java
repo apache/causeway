@@ -167,7 +167,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         setOutputMarkupId(true);
 
     }
-
+    
     private void buildGuiAndCallHooks() {
 
         try {
@@ -186,16 +186,22 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         final ScalarModel scalarModel = getModel();
 
-        if (scalarModel.isViewMode()) {
-            onInitializeWhenViewMode();
-        } else {
-            final String disableReasonIfAny = scalarModel.whetherDisabled();
-            if (disableReasonIfAny != null) {
-                onInitializeWhenDisabled(disableReasonIfAny);
+        final String disableReasonIfAny = scalarModel.whetherDisabled();
+        if (disableReasonIfAny != null) {
+            if("Always disabled".equals(disableReasonIfAny)) {
+                onInitializeWhenViewMode();
             } else {
+                onInitializeWhenDisabled(disableReasonIfAny.toString());
+            }
+        } else {
+            if (scalarModel.isViewMode()) {
+                onInitializeWhenViewMode();
+            } else {        
                 onInitializeWhenEnabled();
             }
         }
+        
+
     }
 
     /**

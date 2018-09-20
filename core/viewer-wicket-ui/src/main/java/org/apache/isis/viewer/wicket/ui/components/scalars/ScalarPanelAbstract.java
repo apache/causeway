@@ -21,8 +21,6 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.util.List;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -35,6 +33,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
@@ -177,14 +176,18 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         }
 
         final ScalarModel scalarModel = getModel();
+        
         final String disableReasonIfAny = scalarModel.whetherDisabled();
-
-        if (scalarModel.isViewMode()) {
-            onBeforeRenderWhenViewMode();
-        } else {
-            if (disableReasonIfAny != null) {
-                onBeforeRenderWhenDisabled(disableReasonIfAny);
+        if (disableReasonIfAny != null) {
+            if("Always disabled".equals(disableReasonIfAny)) {
+                onBeforeRenderWhenViewMode();
             } else {
+                onBeforeRenderWhenDisabled(disableReasonIfAny.toString());
+            }
+        } else {
+            if (scalarModel.isViewMode()) {
+                onBeforeRenderWhenViewMode();
+            } else {        
                 onBeforeRenderWhenEnabled();
             }
         }

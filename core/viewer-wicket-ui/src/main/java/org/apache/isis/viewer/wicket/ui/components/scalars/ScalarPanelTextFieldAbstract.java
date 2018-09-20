@@ -36,6 +36,7 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
@@ -294,7 +295,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected IModel<String> obtainInlinePromptModel() {
         IModel<T> model = textField.getModel();
         // must be "live", for ajax updates.
-        return (IModel<String>) model;
+        return _Casts.uncheckedCast(model);
     }
 
 
@@ -308,7 +309,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
 
-        setTooltip("No editing.");
+        clearTooltip();
     }
 
     @Override

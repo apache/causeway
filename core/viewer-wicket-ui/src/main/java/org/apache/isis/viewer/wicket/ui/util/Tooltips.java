@@ -17,8 +17,6 @@
 
 package org.apache.isis.viewer.wicket.ui.util;
 
-import static org.apache.isis.commons.internal.functions._Predicates.alwaysTrue;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -65,7 +63,8 @@ public class Tooltips {
     }
     
     public static void clearTooltip(Component target) {
-        target.getBehaviors(TooltipBehavior.class).removeIf(alwaysTrue());
+        target.getBehaviors(TooltipBehavior.class)
+        .forEach(target::remove);
     }
     
     // -- HELPER
