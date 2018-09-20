@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.homepage.HomePageProviderService;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -59,6 +60,7 @@ public class HomePageProviderServiceDefault implements HomePageProviderService {
             
             final Optional<Object> homePage = objectActions
             .map(objectAction->homePageIfUsable(serviceAdapter, objectAction))
+            .filter(_NullSafe::isPresent)
             .findAny();
             
             if(homePage.isPresent()) {
