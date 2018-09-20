@@ -36,13 +36,10 @@ class PoWriter extends PoAbstract {
     public static Logger LOG = LoggerFactory.getLogger(PoWriter.class);
 
     private static class Block {
-        //private final String msgId;
         private final SortedSet<String> contexts = _Sets.newTreeSet();
         private String msgIdPlural;
 
-        private Block(/*final String msgId*/) {
-            //this.msgId = msgId;
-        }
+        private Block() { }
     }
 
     private final SortedMap<String, Block> blocksByMsgId = Maps.newTreeMap();

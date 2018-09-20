@@ -41,15 +41,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <asciidoctor.maven.plugin.version>1.5.3</asciidoctor.maven.plugin.version>
-        <asciidoctorj.pdf.version>1.5.0-alpha.11</asciidoctorj.pdf.version>
-        <asciidoctorj.version>1.5.4.1</asciidoctorj.version>
-        <asciidoctorj.diagram.version>1.5.0</asciidoctorj.diagram.version>
+        <asciidoctor.maven.plugin.version>1.5.6</asciidoctor.maven.plugin.version>
+        <asciidoctorj.pdf.version>1.5.0-alpha.16</asciidoctorj.pdf.version>
+        <asciidoctorj.version>1.5.6</asciidoctorj.version>
+        <asciidoctorj.diagram.version>1.5.4.1</asciidoctorj.diagram.version>
         <incode-asciidoctor-extension-monotree.version>0.0.2</incode-asciidoctor-extension-monotree.version>
-        <jruby.version>9.1.8.0</jruby.version>
-        <!--
-        <jruby.version>1.7.21</jruby.version>
-        -->
+        <jruby.version>1.7.26</jruby.version>
 
         <build.dir>${project.basedir}/target/site</build.dir>
 
@@ -57,9 +54,9 @@
     </properties>
 
     <scm>
-        <connection>scm:git:https://git-wip-us.apache.org/repos/asf/isis.git</connection>
-        <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/isis.git</developerConnection>
-        <url>https://git-wip-us.apache.org/repos/asf/isis.git</url>
+        <connection>scm:git:https://github.com/apache/isis.git</connection>
+        <developerConnection>scm:git:https://github.com/apache/isis.git</developerConnection>
+        <url>https://github.com/apache/isis.git</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -80,25 +77,6 @@
     <build>
         <pluginManagement>
             <plugins>
-                <!--
-                <plugin>
-                    <groupId>de.saumya.mojo</groupId>
-                    <artifactId>gem-maven-plugin</artifactId>
-                    <version>1.0.5</version>
-                    <configuration>
-                        <jrubyVersion>${jruby.version}</jrubyVersion>
-                        <gemHome>${project.build.directory}/gems</gemHome>
-                        <gemPath>${project.build.directory}/gems</gemPath>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>initialize</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                -->
                 <plugin>
                     <groupId>org.asciidoctor</groupId>
                     <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -152,26 +130,7 @@
         </pluginManagement>
     </build>
 
-<!--
-    <dependencies>
-        <dependency>
-            <groupId>rubygems</groupId>
-            <artifactId>asciidoctor-diagram</artifactId>
-            <version>1.2.1</version>
-            <type>gem</type>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>rubygems</groupId>
-                    <artifactId>asciidoctor</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
--->
-
     <profiles>
-
         <profile>
             <id>pdf</id>
             <activation>
@@ -197,6 +156,13 @@
                                     <sourceDirectory>src/main/asciidoc/guides</sourceDirectory>
                                     <outputDirectory>${project.reporting.outputDirectory}/guides</outputDirectory>
 
+                                    <!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 'coderay'
+                                                                for source highlighting -->
+                                    <!-- Due to a known issue on windows, it is recommended to use 'coderay' until an new version of 'rouge' is released.
+                                            see discussions: https://github.com/asciidoctor/asciidoctor-maven-examples/pull/58
+                                                             https://github.com/asciidoctor/asciidoctorj-pdf/issues/3
+                                                             https://github.com/jneen/rouge/issues/661
+                                    -->
                                     <sourceHighlighter>coderay</sourceHighlighter>
                                     <preserveDirectories>true</preserveDirectories>
                                     <relativeBaseDir>true</relativeBaseDir>
@@ -205,6 +171,9 @@
                                     <attributes>
                                         <sourcedir>${project.build.sourceDirectory}</sourcedir>
                                         <imagesdir/>
+
+                                        <pdf-stylesdir>${project.basedir}/src/main/theme</pdf-stylesdir>
+                                        <pdf-style>custom</pdf-style>
 
                                         <icons>font</icons>
                                         <pagenums/>

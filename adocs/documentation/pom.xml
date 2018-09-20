@@ -41,14 +41,13 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <asciidoctor.maven.plugin.version>1.5.3</asciidoctor.maven.plugin.version>
-        <asciidoctorj.pdf.version>1.5.0-alpha.11</asciidoctorj.pdf.version>
-        <asciidoctorj.version>1.5.4.1</asciidoctorj.version>
-        <asciidoctorj.diagram.version>1.5.0</asciidoctorj.diagram.version>
+        <asciidoctor.maven.plugin.version>1.5.6</asciidoctor.maven.plugin.version>
+        <asciidoctorj.version>1.5.6</asciidoctorj.version>
+        <asciidoctorj.diagram.version>1.5.4.1</asciidoctorj.diagram.version>
         <incode-asciidoctor-extension-monotree.version>0.0.2</incode-asciidoctor-extension-monotree.version>
         <incode-asciidoctor-extension-improvethisdoc.version>0.0.4</incode-asciidoctor-extension-improvethisdoc.version>
 
-        <jruby.version>9.1.8.0</jruby.version>
+        <jruby.version>1.7.26</jruby.version>
 
         <build.dir>${project.basedir}/target/site</build.dir>
 
@@ -131,6 +130,16 @@
                         <requires>
                             <require>asciidoctor-diagram</require>
                         </requires>
+                        <attributes>
+                            <!-- Example below shows how to specify in this pom instead of System's PATH,
+                                 the location of dot command of Graphviz, required by PlantUML libraries -->
+                            <!-- Windows:
+                                <graphvizdot>C:\Program Files (x86)\Graphviz2.38\bin\dot.exe</graphvizdot>
+                            -->
+                            <!-- *nix :
+                                <graphvizdot>/usr/local/bin/dot</graphvizdot>
+                            -->
+                        </attributes>
                     </configuration>
                 </plugin>
             </plugins>

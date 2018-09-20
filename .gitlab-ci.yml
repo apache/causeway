@@ -61,9 +61,6 @@ build-package-push:
     - >
       mvn --batch-mode \
           install \
-          -Dskip.isis-validate \
-          -Dskip.isis-swagger \
-          -DskipTests \
           -Drevision=$REVISION \
           -Disis.version=$REVISION \
           $CORE_ADDITIONAL_OPTS \
