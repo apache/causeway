@@ -28,7 +28,7 @@
         <welcome-file>about/index.html</welcome-file>
     </welcome-file-list>
 
-    <!-- can be removed with axon >= 3.5 -->
+    <!-- can be removed with axon >= 3.4 | see https://github.com/AxonFramework/AxonFramework/issues/534 -->
     <persistence-context-ref>
         <persistence-context-ref-name>org.axonframework.common.jpa.ContainerManagedEntityManagerProvider/entityManager</persistence-context-ref-name>
         <persistence-unit-name>noop</persistence-unit-name>
