@@ -150,9 +150,9 @@
 
         <jetty.version>9.4.3.v20170317</jetty.version>
 
-        <wicket.version>8.0.0</wicket.version>
-        <wicketstuff.version>8.0.0</wicketstuff.version>
-        <wicket-bootstrap.version>2.0.2</wicket-bootstrap.version>
+        <wicket.version>8.1.0</wicket.version>
+        <wicketstuff.version>8.1.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
+        <wicket-bootstrap.version>2.0.3</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
         <wicket-source.version>7.0.0</wicket-source.version>
 
 <!-- [ahuber] update to newer versions just does not work as a drop in replacement
