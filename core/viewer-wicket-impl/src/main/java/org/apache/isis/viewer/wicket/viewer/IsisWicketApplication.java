@@ -549,17 +549,13 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         
         // in order of highest precedence first  
         final String deploymentTypeConfigValue = configuration.getString("isis.deploymentType");
-        final String wicketModeConfigValue = configuration.getString("isis.viewer.wicket.mode");
         final String modeFromEnvironment = "true".equalsIgnoreCase(System.getenv("PROTOTYPING"))
                 ? "PROTOTYPING" : null;
         // --
         
-        
         final boolean isPrototype;
         
-        if(wicketModeConfigValue!=null) {
-            isPrototype = "development".equalsIgnoreCase(wicketModeConfigValue);
-        } else if(deploymentTypeConfigValue!=null) {
+        if(deploymentTypeConfigValue!=null) {
             final DeploymentType deploymentType = DeploymentType.lookup(deploymentTypeConfigValue);
             isPrototype = !deploymentType.getDeploymentCategory().isProduction();
         } else if(modeFromEnvironment!=null) {

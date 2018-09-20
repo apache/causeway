@@ -101,6 +101,12 @@ public interface WebModule {
     static final class ContextUtil {
         
         /**
+         * This key was deprecated from config, but we still use it for reference. It is auto-populated 
+         * such that it can be looked up, to see what viewers have been discovered by the framework.
+         */
+        private final static String ISIS_VIEWERS = "isis.viewers";
+        
+        /**
          * Tell other modules that a bootstrapper is present.
          * @param ctx
          * @param bootstrapper
@@ -123,13 +129,13 @@ public interface WebModule {
          * @param viewerName
          */
         public static void registerViewer(ServletContext ctx, String viewerName) {
-            String viewers = (String) ctx.getAttribute("isis.viewers");
+            String viewers = (String) ctx.getAttribute(ISIS_VIEWERS);
             if(isEmpty(viewers)) {
                 viewers = viewerName;
             } else {
                 viewers = viewers + "," + viewerName;
             }
-            ctx.setAttribute("isis.viewers", viewers);
+            ctx.setAttribute(ISIS_VIEWERS, viewers);
         }
         
         /**
@@ -137,9 +143,9 @@ public interface WebModule {
          * @param ctx
          */
         public static void commitViewers(ServletContext ctx) {
-            String viewers = (String) ctx.getAttribute("isis.viewers");
+            String viewers = (String) ctx.getAttribute(ISIS_VIEWERS);
             if(!isEmpty(viewers)) {
-                ctx.setInitParameter("isis.viewers", viewers);    
+                ctx.setInitParameter(ISIS_VIEWERS, viewers);    
             }
         }
         

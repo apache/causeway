@@ -45,7 +45,7 @@ final class WebModule_Wicket implements WebModule  {
     private final static String WICKET_FILTER_NAME = "WicketFilter";
     
     private String pathConfigValue;
-    private String modeConfigValue;
+    private String deploymentMode;
     private String appConfigValue;
 
     @Override
@@ -60,8 +60,6 @@ final class WebModule_Wicket implements WebModule  {
             return;
         }
 
-        
-        
         final IsisWebAppConfigProvider configProvider = IsisWebAppConfigProvider.getInstance();
         pathConfigValue = 
                 configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.basePath", "/wicket");
@@ -69,10 +67,8 @@ final class WebModule_Wicket implements WebModule  {
         {
             //TODO[ahuber] once this class is moved to viewer-wicket-impl, we can utilize
             // IsisWicketApplication's method of determining the deployment code.
-            final String modeFromEnvironment = "true".equalsIgnoreCase(System.getenv("PROTOTYPING"))
+            deploymentMode = "true".equalsIgnoreCase(System.getenv("PROTOTYPING"))
                     ? "development" : "deployment";
-            modeConfigValue = 
-                    configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.mode", modeFromEnvironment);
         }
         
         appConfigValue = 
@@ -86,7 +82,6 @@ final class WebModule_Wicket implements WebModule  {
 
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
-        ctx.setInitParameter("isis.viewers", "wicket,restfulobjects");
 
         final Filter filter;
         try {
@@ -140,7 +135,7 @@ final class WebModule_Wicket implements WebModule  {
     }
 
     private String getWicketMode() {
-        return requireNonNull(modeConfigValue, "This web-module needs to be prepared first.");
+        return requireNonNull(deploymentMode, "This web-module needs to be prepared first.");
     }
 
     private String getApplicationClassName() {
