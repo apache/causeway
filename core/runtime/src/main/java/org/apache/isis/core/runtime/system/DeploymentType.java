@@ -32,9 +32,7 @@ public class DeploymentType {
     private static List<DeploymentType> deploymentTypes = _Lists.newArrayList();
 
     public static DeploymentType SERVER = new DeploymentType("SERVER", DeploymentCategory.PRODUCTION);
-    public static DeploymentType SERVER_EXPLORATION = new DeploymentType("SERVER_EXPLORATION", DeploymentCategory.EXPLORING);
     public static DeploymentType SERVER_PROTOTYPE = new DeploymentType("SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING);
-    public static DeploymentType UNIT_TESTING = new DeploymentType("UNIT_TESTING", DeploymentCategory.PRODUCTION);
 
     /**
      * Look up {@link DeploymentType} by their {@link #name()}.

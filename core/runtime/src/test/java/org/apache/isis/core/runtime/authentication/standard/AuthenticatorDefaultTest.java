@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -30,9 +33,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.system.DeploymentType;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 @RunWith(JMock.class)
 public class AuthenticatorDefaultTest {
@@ -67,7 +67,7 @@ public class AuthenticatorDefaultTest {
 
     @Test
     public void getDeploymentCategory() throws Exception {
-        final DeploymentCategory deploymentCategory = DeploymentType.SERVER_EXPLORATION.getDeploymentCategory();
+        final DeploymentCategory deploymentCategory = DeploymentType.SERVER_PROTOTYPE.getDeploymentCategory();
         authenticator.init(deploymentCategory);
         assertThat(authenticator.getDeploymentCategory(), is(deploymentCategory));
     }

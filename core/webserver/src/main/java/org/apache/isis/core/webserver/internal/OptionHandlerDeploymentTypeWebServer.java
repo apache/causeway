@@ -20,7 +20,6 @@
 package org.apache.isis.core.webserver.internal;
 
 import static org.apache.isis.core.runtime.runner.Constants.TYPE_SERVER;
-import static org.apache.isis.core.runtime.runner.Constants.TYPE_SERVER_EXPLORATION;
 import static org.apache.isis.core.runtime.runner.Constants.TYPE_SERVER_PROTOTYPE;
 
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerDeploymentType;
@@ -28,7 +27,7 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 
 public class OptionHandlerDeploymentTypeWebServer extends OptionHandlerDeploymentType {
 
-    private static final String TYPES = TYPE_SERVER_EXPLORATION + "; " + TYPE_SERVER_PROTOTYPE + " (default); " + TYPE_SERVER;
+    private static final String TYPES = TYPE_SERVER_PROTOTYPE + " (default); " + TYPE_SERVER;
 
     public OptionHandlerDeploymentTypeWebServer() {
         super(DeploymentType.SERVER_PROTOTYPE, TYPES);
