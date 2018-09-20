@@ -20,11 +20,14 @@ package org.apache.isis.core.runtime.services.i18n.po;
 
 import java.util.SortedMap;
 import java.util.SortedSet;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
 import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
@@ -33,13 +36,10 @@ class PoWriter extends PoAbstract {
     public static Logger LOG = LoggerFactory.getLogger(PoWriter.class);
 
     private static class Block {
-        private final String msgId;
         private final SortedSet<String> contexts = Sets.newTreeSet();
         private String msgIdPlural;
 
-        private Block(final String msgId) {
-            this.msgId = msgId;
-        }
+        private Block() { }
     }
 
     private final SortedMap<String, Block> blocksByMsgId = Maps.newTreeMap();
@@ -48,7 +48,7 @@ class PoWriter extends PoAbstract {
         super(translationServicePo, TranslationService.Mode.WRITE);
     }
 
-    //region > shutdown
+    // -- shutdown
 
     @Override
     void shutdown() {
@@ -109,16 +109,19 @@ class PoWriter extends PoAbstract {
         buf.append("\"Plural-Forms: nplurals=2; plural=n != 1;\\n\"").append("\n");
         buf.append("\n\n");
     }
-    //endregion
 
 
+
+    @Override
     public String translate(final String context, final String msgId) {
 
         if(msgId == null) {
             return null;
         }
         final Block block = blockFor(msgId);
-        block.contexts.add(context);
+        synchronized(block) {
+            block.contexts.add(context);
+        }
 
         return msgId;
     }
@@ -130,8 +133,10 @@ class PoWriter extends PoAbstract {
             return null;
         }
         final Block block = blockFor(msgId);
-        block.contexts.add(context);
-        block.msgIdPlural = msgIdPlural;
+        synchronized(block) {
+            block.contexts.add(context);
+            block.msgIdPlural = msgIdPlural;    
+        }
 
         return null;
     }
@@ -139,7 +144,7 @@ class PoWriter extends PoAbstract {
     private synchronized Block blockFor(final String msgId) {
         Block block = blocksByMsgId.get(msgId);
         if(block == null) {
-            block = new Block(msgId);
+            block = new Block(/*msgId*/);
             blocksByMsgId.put(msgId, block);
         }
         return block;
