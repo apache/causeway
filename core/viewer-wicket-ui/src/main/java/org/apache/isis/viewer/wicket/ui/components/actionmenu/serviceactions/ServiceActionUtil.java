@@ -21,14 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
 
-import java.util.function.Function;
-import org.apache.isis.commons.internal.base._Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
-import org.apache.isis.commons.internal.collections._Lists;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -36,7 +32,6 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,10 +42,12 @@ import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
@@ -59,7 +56,6 @@ import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
@@ -88,17 +84,14 @@ public final class ServiceActionUtil {
             if (!menuItem.isEnabled()) {
                 listItem.add(new CssClassAppender("disabled"));
                 subMenuItemLink.setEnabled(false);
-                TooltipBehavior tooltipBehavior = new TooltipBehavior(Model.of(menuItem.getDisabledReason()));
-                listItem.add(tooltipBehavior);
+                
+                Tooltips.addTooltip(listItem, subMenuItemLink, menuItem.getDisabledReason());
+                
+                
             } else {
 
                 if(!_Strings.isNullOrEmpty(menuItem.getDescription())) {
-                    //XXX ISIS-1625, tooltips for menu actions
-                    listItem.add(new AttributeModifier("title", Model.of(menuItem.getDescription())));
-
-                    // ISIS-1615, prevent bootstrap from changing the HTML link's 'title' attribute on client-side;
-                    // bootstrap will not touch the 'title' attribute once the HTML link has a 'data-original-title' attribute
-                    subMenuItemLink.add(new AttributeModifier("data-original-title", ""));
+                    Tooltips.addTooltip(listItem, subMenuItemLink, menuItem.getDescription());
                 }
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
@@ -193,6 +186,8 @@ public final class ServiceActionUtil {
         final List<CssMenuItem> menuItems = separatorStrategy.applySeparatorStrategy(subMenuItem);
         ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems",
                 menuItems) {
+             private static final long serialVersionUID = 1L;
+
             @Override
             protected void populateItem(ListItem<CssMenuItem> listItem) {
                 CssMenuItem subMenuItem = listItem.getModelObject();
@@ -281,9 +276,9 @@ public final class ServiceActionUtil {
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 
         final String context = IsisSessionFactoryBuilder.class.getName();
-        final String areYouSure = translationService.translate(context, IsisSystem.MSG_ARE_YOU_SURE);
-        final String confirm = translationService.translate(context, IsisSystem.MSG_CONFIRM);
-        final String cancel = translationService.translate(context, IsisSystem.MSG_CANCEL);
+        final String areYouSure = translationService.translate(context, SystemConstants.MSG_ARE_YOU_SURE);
+        final String confirm = translationService.translate(context, SystemConstants.MSG_CONFIRM);
+        final String cancel = translationService.translate(context, SystemConstants.MSG_CANCEL);
 
         confirmationConfig
         .withTitle(areYouSure)

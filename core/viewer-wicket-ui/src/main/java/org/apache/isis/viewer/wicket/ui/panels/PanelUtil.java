@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.panels;
 
-import org.apache.isis.commons.internal.base._Strings;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
@@ -30,8 +28,9 @@ import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
@@ -105,9 +104,9 @@ public final class PanelUtil {
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 
         final String context = IsisSessionFactoryBuilder.class.getName();
-        final String areYouSure = translationService.translate(context, IsisSystem.MSG_ARE_YOU_SURE);
-        final String confirm = translationService.translate(context, IsisSystem.MSG_CONFIRM);
-        final String cancel = translationService.translate(context, IsisSystem.MSG_CANCEL);
+        final String areYouSure = translationService.translate(context, SystemConstants.MSG_ARE_YOU_SURE);
+        final String confirm = translationService.translate(context, SystemConstants.MSG_CONFIRM);
+        final String cancel = translationService.translate(context, SystemConstants.MSG_CANCEL);
 
         confirmationConfig
         .withTitle(areYouSure)

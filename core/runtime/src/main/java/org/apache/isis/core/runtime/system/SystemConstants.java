@@ -28,6 +28,10 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 
 public final class SystemConstants {
+    
+    public static final String MSG_ARE_YOU_SURE = "Are you sure?";
+    public static final String MSG_CONFIRM = "Confirm";
+    public static final String MSG_CANCEL = "Cancel";
 
     /**
      * Key used to lookup {@link DeploymentType} (eg via command line) in
@@ -37,8 +41,6 @@ public final class SystemConstants {
      * Use {@link DeploymentType#lookup(String)} to decode.
      */
     public static final String DEPLOYMENT_TYPE_KEY = ConfigurationConstants.ROOT + "deploymentType";
-
-
 
 
     /**

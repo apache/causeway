@@ -27,7 +27,7 @@ public class MessageRegistry {
     public MessageRegistry(){}
 
     public List<String> listMessages() {
-        return Arrays.asList(IsisSystem.MSG_ARE_YOU_SURE, IsisSystem.MSG_CONFIRM, IsisSystem.MSG_CANCEL);
+        return Arrays.asList(SystemConstants.MSG_ARE_YOU_SURE, SystemConstants.MSG_CONFIRM, SystemConstants.MSG_CANCEL);
     }
 
 
