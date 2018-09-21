@@ -92,6 +92,11 @@
 * link:guides/ugfun/resources/core-concepts/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis^] (Pawson)
 * https://cwiki.apache.org/confluence/display/ISIS/Index[Apache Isis Wiki^]
 
+Other academia:
+
+* https://esc.fnwi.uva.nl/thesis/centraal/files/f270412620.pdf[CLIsis: An interface for Visually Impaired Users] (Masters dissertation, Ginn)
+* https://esc.fnwi.uva.nl/thesis/centraal/files/f1051832702.pdf[Using blockchain to validate audit trail data in private business applications] (Masters dissertation, Kalis)
+
 |*Who uses Apache Isis?*
 
 * link:pages/powered-by/powered-by.html[Powered By^]

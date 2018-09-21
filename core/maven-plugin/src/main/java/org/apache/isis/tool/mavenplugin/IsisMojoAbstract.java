@@ -21,6 +21,7 @@ package org.apache.isis.tool.mavenplugin;
 import java.io.IOException;
 import java.util.Set;
 
+import org.apache.log4j.Level;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -33,6 +34,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
+import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
@@ -53,6 +55,8 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+
+        new IsisLoggingConfigurer(Level.INFO).configureLogging(".", new String[]{});
 
         final ContextForMojo context = new ContextForMojo(mavenProject, getLog());
 
