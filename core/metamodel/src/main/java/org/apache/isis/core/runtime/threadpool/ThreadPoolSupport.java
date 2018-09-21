@@ -68,8 +68,8 @@ public final class ThreadPoolSupport {
     private ThreadPoolSupport() {
         group = new ThreadGroup(ThreadPoolSupport.class.getName());
 
-        final int corePoolSize = Math.min(Runtime.getRuntime().availableProcessors(), MIN_CORE_POOL_SIZE);
-        final int maximumPoolSize = Math.min(Runtime.getRuntime().availableProcessors(), MIN_MAX_POOL_SIZE);
+        final int corePoolSize = Math.max(Runtime.getRuntime().availableProcessors(), MIN_CORE_POOL_SIZE);
+        final int maximumPoolSize = Math.max(Runtime.getRuntime().availableProcessors(), MIN_MAX_POOL_SIZE);
 
         ThreadFactory threadFactory = new ThreadFactory() {
             @Override
