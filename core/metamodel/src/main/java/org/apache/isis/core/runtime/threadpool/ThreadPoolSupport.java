@@ -57,9 +57,6 @@ public final class ThreadPoolSupport implements AutoCloseable {
     private final static int KEEP_ALIVE_TIME_SECS = 5;
     private final static int QUEUE_CAPACITY = Integer.MAX_VALUE;
 
-    private static final int MIN_CORE_POOL_SIZE = 4;
-    private static final int MIN_MAX_POOL_SIZE = 4;
-
     private final ThreadGroup group;
     private final ThreadPoolExecutor concurrentExecutor;
     private final ThreadPoolExecutor sequentialExecutor;
@@ -74,9 +71,8 @@ public final class ThreadPoolSupport implements AutoCloseable {
     private ThreadPoolSupport() {
 
         group = new ThreadGroup(ThreadPoolSupport.class.getName());
-
-        final int corePoolSize = Math.max(Runtime.getRuntime().availableProcessors(), MIN_CORE_POOL_SIZE);
-        final int maximumPoolSize = Math.max(Runtime.getRuntime().availableProcessors(), MIN_MAX_POOL_SIZE);
+        
+        final ThreadPoolSizeAdvisor advisor = ThreadPoolSizeAdvisor.get();
 
         final ThreadFactory threadFactory = (Runnable r) -> new Thread(group, r);
 
@@ -84,8 +80,8 @@ public final class ThreadPoolSupport implements AutoCloseable {
                 ()->new LinkedBlockingQueue<>(QUEUE_CAPACITY);
 
         concurrentExecutor = new ThreadPoolExecutor(
-                corePoolSize,
-                maximumPoolSize,
+                advisor.corePoolSize(),
+                advisor.maximumPoolSize(),
                 KEEP_ALIVE_TIME_SECS,
                 TimeUnit.SECONDS,
                 workQueueFactory.get(),
