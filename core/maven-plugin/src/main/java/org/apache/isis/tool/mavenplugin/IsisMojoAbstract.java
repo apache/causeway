@@ -55,7 +55,7 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
 
     public void execute() throws MojoExecutionException, MojoFailureException {
 
-        new IsisLoggingConfigurer(Level.DEBUG).configureLogging(".", new String[]{});
+        new IsisLoggingConfigurer(Level.INFO).configureLogging(".", new String[]{});
 
         final ContextForMojo context = new ContextForMojo(mavenProject, getLog());
 
