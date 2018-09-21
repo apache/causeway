@@ -213,7 +213,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             callables.add(callable);
         }
         ThreadPoolSupport threadPoolSupport = ThreadPoolSupport.getInstance();
-        List<Future<Object>> futures = threadPoolSupport.invokeAllSequential(callables);
+        List<Future<Object>> futures = threadPoolSupport.invokeAll(callables);
         threadPoolSupport.joinGatherFailures(futures);
 
     }
