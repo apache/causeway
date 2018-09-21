@@ -19,6 +19,11 @@
 
 package org.apache.isis.core.runtime.threadpool;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,12 +38,14 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
 
@@ -59,7 +66,6 @@ public final class ThreadPoolSupport implements AutoCloseable {
 
     private final ThreadGroup group;
     private final ThreadPoolExecutor concurrentExecutor;
-    private final ThreadPoolExecutor sequentialExecutor;
 
     /**
      * @return the application-scoped singleton ThreadPoolSupport instance
@@ -68,7 +74,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
         return _Context.computeIfAbsent(ThreadPoolSupport.class, __-> new ThreadPoolSupport());
     }
     
-    private ThreadPoolSupport() {
+    ThreadPoolSupport() {
 
         group = new ThreadGroup(ThreadPoolSupport.class.getName());
         
@@ -87,14 +93,6 @@ public final class ThreadPoolSupport implements AutoCloseable {
                 workQueueFactory.get(),
                 threadFactory);
         
-        sequentialExecutor = new ThreadPoolExecutor(
-                1,
-                1,
-                KEEP_ALIVE_TIME_SECS,
-                TimeUnit.SECONDS,
-                workQueueFactory.get(),
-                threadFactory);
-        
     }
     
     /*
@@ -102,12 +100,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
      */
     @Override
     public void close() throws Exception {
-        try {
-            concurrentExecutor.shutdown();
-        } finally {
-            // in case the previous throws, continue execution here
-            sequentialExecutor.shutdown();            
-        }
+        concurrentExecutor.shutdown();
     }
 
     /**
@@ -132,16 +125,26 @@ public final class ThreadPoolSupport implements AutoCloseable {
     }
 
     /**
-     * Executes specified {@code callables} on the sequential executor in sequence, one by one.
+     * Wraps specified {@code callables} into a single task, which is then executed on the default executor.    
+     * The single task itself executes specified {@code callables} in sequence, one by one.
      * @param callables nullable
      * @return non-null
      */
     public List<Future<Object>> invokeAllSequential(@Nullable final List<Callable<Object>> callables) {
-        return invokeAll(sequentialExecutor, callables);
+        if(_NullSafe.isEmpty(callables)) {
+            return emptyList();
+        }
+        final Future<List<Object>> commonFuture = 
+                uncheckedCast(invokeAll(singletonList(toSingleTask(callables))).get(0));
+
+        return IntStream.range(0, callables.size())
+        .mapToObj(index->new FutureWithIndexIntoFutureOfList<Object>(commonFuture, index))
+        .collect(toList());
     }
 
     /**
-     * Executes specified {@code callables} on the sequential executor in sequence, one by one.
+     * Wraps specified {@code callables} into a single task, which is then executed on the default executor.    
+     * The single task itself executes specified {@code callables} in sequence, one by one.
      * @param callables nullable
      * @return non-null
      */
@@ -212,6 +215,11 @@ public final class ThreadPoolSupport implements AutoCloseable {
             return null;
         }
     }
+    
+    @Override
+    public String toString() {
+        return concurrentExecutor.toString();
+    }
 
     // -- HELPERS
     
@@ -231,7 +239,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
             final List<Callable<Object>> callables) {
         final long queuedAt = System.currentTimeMillis();
         return callables.stream()
-                .map(__ -> timed(__, executor.getQueue().size(), queuedAt))
+                .map(callable -> timed(callable, executor.getQueue().size(), queuedAt))
                 .collect(Collectors.toList());
     }
 
@@ -261,6 +269,16 @@ public final class ThreadPoolSupport implements AutoCloseable {
         };
     }
 
+    private Callable<Object> toSingleTask(final List<Callable<Object>> callables) {
+        return () -> {
+            final List<Object> resultList = _Lists.newArrayList();
+            for(Callable<Object> callable : callables) {
+                resultList.add(callable.call()); // any exceptions thrown are propagated
+            }
+            return resultList;
+        };
+    }
+    
     private static boolean isEmpty(Collection<?> x) { return x==null || x.size() == 0; }
 
 }
