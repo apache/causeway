@@ -19,11 +19,13 @@
 
 package org.apache.isis.commons.internal.base;
 
+import static org.apache.isis.commons.internal.base._NullSafe.size;
 import static org.apache.isis.commons.internal.base._Strings_SplitIterator.splitIterator;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -69,6 +71,17 @@ public final class _Strings {
     
     public static KeyValuePair pair(final String key, final String value){
         return _Strings_KeyValuePair.of(key, value);
+    }
+    
+    // -- FILLING
+    
+    public static String of(int length, char c) {
+        if(length<=0) {
+            return "";
+        }
+        final char[] chars = new char[length];
+        Arrays.fill(chars, c);
+        return String.valueOf(chars);
     }
 
     // -- BASIC PREDICATES
@@ -217,31 +230,17 @@ public final class _Strings {
      * @return
      */
     public static String padStart(@Nullable String str, int minLength, char c) {
-        if(minLength==0) {
-            return "";
+        if(minLength<=0) {
+            return str;
         }
-        if(minLength<0) {
-            throw new IllegalArgumentException("minLength can't be negative, got: " + minLength);
-        }
-
-        final int len = str!=null ? str.length() : 0;
+        final int len = size(str);
         if(len>=minLength) {
             return str;
         }
 
         final int fillCount = minLength - len;
 
-        return _With.stringBuilder(sb->{
-
-            for(int i=0; i<fillCount; ++i) {
-                sb.append(c);
-            }
-
-            if(len>0) {
-                sb.append(str);
-            }
-
-        }).toString();
+        return of(fillCount, c) + nullToEmpty(str);
     }
 
     /**
@@ -253,31 +252,17 @@ public final class _Strings {
      * @return
      */
     public static String padEnd(@Nullable String str, int minLength, char c) {
-        if(minLength==0) {
-            return "";
+        if(minLength<=0) {
+            return str;
         }
-        if(minLength<0) {
-            throw new IllegalArgumentException("minLength can't be negative, got: " + minLength);
-        }
-
-        final int len = str!=null ? str.length() : 0;
+        final int len = size(str);
         if(len>=minLength) {
             return str;
         }
 
         final int fillCount = minLength - len;
 
-        return _With.stringBuilder(sb->{
-
-            if(len>0) {
-                sb.append(str);
-            }
-
-            for(int i=0; i<fillCount; ++i) {
-                sb.append(c);
-            }
-
-        }).toString();
+        return nullToEmpty(str) + of(fillCount, c);
     }
 
     // -- SPLITTING

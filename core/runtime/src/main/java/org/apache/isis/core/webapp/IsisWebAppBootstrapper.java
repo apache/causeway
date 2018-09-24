@@ -35,11 +35,9 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 
 /**
@@ -72,12 +70,12 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
                     IsisWebAppConfigProvider.getInstance().getConfigurationBuilder(servletContext);
             isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
 
-            final DeploymentType deploymentType = determineDeploymentType(servletContext, isisConfigurationBuilder);
+            final DeploymentType deploymentType = DeploymentType.get(); 
+                    
             addConfigurationResourcesForDeploymentType(isisConfigurationBuilder, deploymentType);
 
             final IsisConfigurationDefault isisConfiguration = isisConfigurationBuilder.getConfiguration();
-            final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();
-            final IsisInjectModule isisModule = new IsisInjectModule(deploymentCategory, isisConfiguration);
+            final IsisInjectModule isisModule = new IsisInjectModule(isisConfiguration);
             final Injector injector = Guice.createInjector(isisModule);
             injector.injectMembers(this);
 
@@ -86,46 +84,6 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             throw e;
         }
         LOG.info("server started");
-    }
-
-    /**
-     * Checks {@link IsisConfigurationBuilder configuration} for
-     * {@value SystemConstants#DEPLOYMENT_TYPE_KEY}, (that is, from the command
-     * line), but otherwise searches in the {@link ServletContext}, first for
-     * {@value WebAppConstants#DEPLOYMENT_TYPE_KEY} and also
-     * {@value SystemConstants#DEPLOYMENT_TYPE_KEY}.
-     * <p>
-     * If no setting is found, defaults to {@link WebAppConstants#DEPLOYMENT_TYPE_DEFAULT}.
-     */
-    protected DeploymentType determineDeploymentType(
-            final ServletContext servletContext,
-            final IsisConfigurationBuilder isisConfigurationBuilder) {
-        String deploymentTypeStr = determineDeploymentTypeStr(servletContext, isisConfigurationBuilder);
-        return DeploymentType.lookup(deploymentTypeStr);
-    }
-
-    private String determineDeploymentTypeStr(
-            final ServletContext servletContext,
-            final IsisConfigurationBuilder isisConfigurationBuilder) {
-
-        String deploymentTypeStr;
-
-        deploymentTypeStr = servletContext.getInitParameter(WebAppConstants.DEPLOYMENT_TYPE_KEY);
-        if (deploymentTypeStr != null) {
-            return deploymentTypeStr;
-        }
-
-        deploymentTypeStr = servletContext.getInitParameter(SystemConstants.DEPLOYMENT_TYPE_KEY);
-        if (deploymentTypeStr != null) {
-            return deploymentTypeStr;
-        }
-
-        deploymentTypeStr = isisConfigurationBuilder.peekAt(SystemConstants.DEPLOYMENT_TYPE_KEY);
-        if (deploymentTypeStr != null) {
-            return deploymentTypeStr;
-        }
-
-        return WebAppConstants.DEPLOYMENT_TYPE_DEFAULT;
     }
 
     protected void addConfigurationResourcesForDeploymentType(

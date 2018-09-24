@@ -20,7 +20,6 @@
 package org.apache.isis.core.runtime.runner;
 
 import org.apache.isis.core.runtime.logging.LoggingConstants;
-import org.apache.isis.core.runtime.system.DeploymentType;
 
 public final class Constants {
 
@@ -29,8 +28,6 @@ public final class Constants {
 
     public static final String TYPE_OPT = "t";
     public static final String TYPE_LONG_OPT = "type";
-    public static final String TYPE_SERVER_PROTOTYPE = DeploymentType.SERVER_PROTOTYPE.friendlyName();
-    public static final String TYPE_SERVER = DeploymentType.SERVER.friendlyName();
 
     public static final String CONFIGURATION_OPT = "c";
     public static final String CONFIGURATION_LONG_OPT = "config";

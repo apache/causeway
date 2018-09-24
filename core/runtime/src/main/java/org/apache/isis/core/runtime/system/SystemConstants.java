@@ -34,16 +34,6 @@ public final class SystemConstants {
     public static final String MSG_CANCEL = "Cancel";
 
     /**
-     * Key used to lookup {@link DeploymentType} (eg via command line) in
-     * {@link IsisConfiguration}.
-     *
-     * <p>
-     * Use {@link DeploymentType#lookup(String)} to decode.
-     */
-    public static final String DEPLOYMENT_TYPE_KEY = ConfigurationConstants.ROOT + "deploymentType";
-
-
-    /**
      * Key used to lookup {@link AppManifest} (if any) from the {@link IsisConfiguration}.
      */
     public static final String APP_MANIFEST_KEY = ConfigurationConstants.ROOT + "appManifest";

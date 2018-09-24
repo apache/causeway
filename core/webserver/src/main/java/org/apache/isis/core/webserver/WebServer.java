@@ -19,6 +19,13 @@
 
 package org.apache.isis.core.webserver;
 
+import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_PORT_DEFAULT;
+import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_PORT_KEY;
+import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT;
+import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY;
+import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_DEFAULT;
+import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY;
+
 import java.io.File;
 import java.net.URI;
 import java.util.Arrays;
@@ -26,14 +33,13 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
@@ -53,16 +59,8 @@ import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureFromEnvironm
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerHelp;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerSystemProperties;
 import org.apache.isis.core.webapp.WebAppConstants;
-import org.apache.isis.core.webserver.internal.OptionHandlerDeploymentTypeWebServer;
 import org.apache.isis.core.webserver.internal.OptionHandlerPort;
 import org.apache.isis.core.webserver.internal.OptionHandlerStartupMode;
-
-import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_PORT_DEFAULT;
-import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_PORT_KEY;
-import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT;
-import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY;
-import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_DEFAULT;
-import static org.apache.isis.core.webserver.WebServerConstants.EMBEDDED_WEB_SERVER_STARTUP_MODE_KEY;
 
 public class WebServer {
 
@@ -140,8 +138,7 @@ public class WebServer {
                 new OptionHandlerFixtureFromEnvironmentVariable(),
                 new OptionHandlerSystemProperties(),
                 new OptionHandlerHelp(),
-                new OptionHandlerPort(),
-                new OptionHandlerDeploymentTypeWebServer()
+                new OptionHandlerPort()
                 );
     }
 

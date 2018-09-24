@@ -23,11 +23,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -67,6 +69,14 @@ public interface IsisContext {
         return _Context.getDefaultClassLoader();
     }
 
+    /**
+     * @return pre-bootstrapping configuration
+     */
+    public static IsisSystemEnvironment getEnvironment() {
+        return _Context.getOrElse(IsisSystemEnvironment.class, IsisSystemEnvironment::getDefault);
+    }
+    
+    
     // -- LIFE-CYCLING
 
     /**
@@ -75,7 +85,6 @@ public interface IsisContext {
      */
     public static void clear() {
         _Context.clear();
-        resetLogging();
     }
 
     // -- CONVENIENT SHORTCUTS
@@ -113,6 +122,10 @@ public interface IsisContext {
         return getSessionFactory().getServicesInjector();
     }
 
+    public static String getVersion() {
+        return "2.0.0-M2";
+    }
+    
     public static void dumpConfig() {
 
         final IsisConfiguration configuration;
@@ -125,30 +138,19 @@ public interface IsisContext {
 
         final Map<String, String> map = new TreeMap<>(configuration.asMap());
 
-        System.out.println("=============================================");
-        System.out.println("=                ISIS 2.0.0                 =");
-        System.out.println("=============================================");
+        String head = String.format("ISIS %s (%s) ", getVersion(), DeploymentType.get().name());
+        final int fillCount = 46-head.length();
+        final int fillLeft = fillCount/2;
+        final int fillRight = fillCount-fillLeft;
+        head = _Strings.padStart("", fillLeft, ' ') + head + _Strings.padEnd("", fillRight, ' ');
+        
+        System.out.println("================================================");
+        System.out.println("="+head+"=");
+        System.out.println("================================================");
         map.forEach((k,v)->{
             System.out.println(k+" -> "+v);
         });
-        System.out.println("=============================================");
+        System.out.println("================================================");
     }
-
-    // -- HELPER
-
-    /**
-     * TODO [andi-huber] not sure if required, initial idea was to force log4j
-     * re-configuration on an undeploy/deploy cycle
-     */
-    static void resetLogging() {
-        try {
-            org.apache.log4j.BasicConfigurator.resetConfiguration();
-            org.apache.log4j.Logger.getRootLogger().removeAllAppenders();
-        } catch (Exception e) {
-            // at least we tried
-        }
-    }
-
-
 
 }

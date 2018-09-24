@@ -752,12 +752,7 @@ implements InstallableFixture {
 
         private String pad(final String key) {
             traceHighwatermark = Math.max(key.length(), traceHighwatermark);
-            return pad(key, roundup(traceHighwatermark, 20));
-        }
-
-
-        private static String pad(final String str, final int padTo) {
-            return _Strings.padEnd(str, padTo, ' ');
+            return _Strings.padEnd(key, roundup(traceHighwatermark, 20), ' ');
         }
 
         static int roundup(final int n, final int roundTo) {

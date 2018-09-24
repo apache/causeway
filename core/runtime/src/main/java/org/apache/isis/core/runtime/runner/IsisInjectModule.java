@@ -34,6 +34,7 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.SystemConstants;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
@@ -78,10 +79,9 @@ public class IsisInjectModule extends AbstractModule {
     private final IsisConfigurationDefault isisConfiguration;
 
     public IsisInjectModule(
-            final DeploymentCategory deploymentCategory,
             final IsisConfigurationDefault isisConfiguration) {
         this.isisConfiguration = isisConfiguration;
-        this.deploymentCategory = deploymentCategory;
+        this.deploymentCategory = IsisContext.getEnvironment().getDeploymentCategory();
     }
 
     /**

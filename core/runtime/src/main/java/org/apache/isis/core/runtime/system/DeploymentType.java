@@ -22,18 +22,29 @@ package org.apache.isis.core.runtime.system;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
  * Whether running on client or server side etc.
  */
-public class DeploymentType {
+final public class DeploymentType {
 
-    private static List<DeploymentType> deploymentTypes = _Lists.newArrayList();
+    private static List<DeploymentType> deploymentTypes = _Lists.of(
+            new DeploymentType("SERVER", DeploymentCategory.PRODUCTION),
+            new DeploymentType("SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING)
+            );
 
-    public static DeploymentType SERVER = new DeploymentType("SERVER", DeploymentCategory.PRODUCTION);
-    public static DeploymentType SERVER_PROTOTYPE = new DeploymentType("SERVER_PROTOTYPE", DeploymentCategory.PROTOTYPING);
-
+    public static DeploymentType get() {
+        final DeploymentCategory deploymentCategory = IsisContext.getEnvironment().getDeploymentCategory();
+        return deploymentTypes.stream()
+                .filter(dt->dt.getDeploymentCategory() == deploymentCategory)
+                .findFirst()
+                .orElseThrow(_Exceptions::unexpectedCodeReach);
+    }
+    
+    
     /**
      * Look up {@link DeploymentType} by their {@link #name()}.
      *
@@ -56,11 +67,10 @@ public class DeploymentType {
     private final String name;
     private final DeploymentCategory deploymentCategory;
 
-    public DeploymentType(
+    private DeploymentType(
             final String name, final DeploymentCategory category) {
         this.deploymentCategory = category;
         this.name = name;
-        deploymentTypes.add(this);
     }
 
     public DeploymentCategory getDeploymentCategory() {
@@ -95,5 +105,9 @@ public class DeploymentType {
     public String toString() {
         return name();
     }
+
+    
+    
+    
 
 }

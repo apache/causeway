@@ -32,7 +32,6 @@ import org.junit.runner.RunWith;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.system.DeploymentType;
 
 @RunWith(JMock.class)
 public class AuthenticatorDefaultTest {
@@ -67,7 +66,7 @@ public class AuthenticatorDefaultTest {
 
     @Test
     public void getDeploymentCategory() throws Exception {
-        final DeploymentCategory deploymentCategory = DeploymentType.SERVER_PROTOTYPE.getDeploymentCategory();
+        final DeploymentCategory deploymentCategory = DeploymentCategory.PROTOTYPING;
         authenticator.init(deploymentCategory);
         assertThat(authenticator.getDeploymentCategory(), is(deploymentCategory));
     }

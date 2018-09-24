@@ -105,9 +105,6 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketLogoutPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
-import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
-import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapter;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjectAdapterMemento;
@@ -258,7 +255,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         // --- prepare the configuration prior to init()
         
         isisConfiguration = prepareConfiguration();
-        deploymentType = determineDeploymentType(isisConfiguration);
         
         super.internalInit();
 
@@ -323,8 +319,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             //
             // create IsisSessionFactory
             //
-            final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();
-            final IsisInjectModule isisModule = newIsisModule(deploymentCategory, configuration);
+            final IsisInjectModule isisModule = newIsisModule(configuration);
             final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
             initWicketComponentInjection(injector);
 
@@ -543,33 +538,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     // //////////////////////////////////////
 
     /**
-     * Made protected visibility for easy (informal) pluggability.
-     */
-    protected DeploymentTypeWicketAbstract determineDeploymentType(IsisConfigurationDefault configuration) {
-        
-        // in order of highest precedence first  
-        final String deploymentTypeConfigValue = configuration.getString("isis.deploymentType");
-        final String modeFromEnvironment = "true".equalsIgnoreCase(System.getenv("PROTOTYPING"))
-                ? "PROTOTYPING" : null;
-        // --
-        
-        final boolean isPrototype;
-        
-        if(deploymentTypeConfigValue!=null) {
-            final DeploymentType deploymentType = DeploymentType.lookup(deploymentTypeConfigValue);
-            isPrototype = !deploymentType.getDeploymentCategory().isProduction();
-        } else if(modeFromEnvironment!=null) {
-            isPrototype = true;
-        } else {
-            isPrototype = false; // defaulting to production
-        }
-        
-        return isPrototype ? new WicketServerPrototype() : new WicketServer();
-    }
-
-    // //////////////////////////////////////
-
-    /**
      * Override if required
      */
     protected Module newIsisWicketModule() {
@@ -753,21 +721,17 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     // //////////////////////////////////////
 
-    private DeploymentTypeWicketAbstract deploymentType;
-    
-    @Override
-    public RuntimeConfigurationType getConfigurationType() {
-        requireNonNull(deploymentType, 
-                "Applications needs to be prepared before accessing this field.");
-        return deploymentType.getConfigurationType();
+    @Override //[ahuber] final on purpose! to switch DeploymentType, do this consistent with IsisContext.
+    public final RuntimeConfigurationType getConfigurationType() {
+        return DeploymentType.get().isPrototyping()
+                ? RuntimeConfigurationType.DEVELOPMENT
+                        : RuntimeConfigurationType.DEPLOYMENT;
     }
     
     // //////////////////////////////////////
 
-    protected IsisInjectModule newIsisModule(
-            final DeploymentCategory deploymentCategory,
-            final IsisConfigurationDefault isisConfiguration) {
-        return new IsisInjectModule(deploymentCategory, isisConfiguration);
+    protected IsisInjectModule newIsisModule(final IsisConfigurationDefault isisConfiguration) {
+        return new IsisInjectModule(isisConfiguration);
     }
 
     // //////////////////////////////////////

@@ -21,19 +21,8 @@ package org.apache.isis.core.webapp;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.system.DeploymentType;
 
 public final class WebAppConstants {
-
-    /**
-     * Name of context-param (<tt>ServletContext#getInitParameter(String)</tt>)
-     * to specify the deployment type.
-     */
-    public static final String DEPLOYMENT_TYPE_KEY = "deploymentType";
-    /**
-     * Deployment type to use if there is none {@link #DEPLOYMENT_TYPE_KEY specified}.
-     */
-    public static final String DEPLOYMENT_TYPE_DEFAULT = DeploymentType.SERVER.name();
 
     /**
      * Key under which the {@link org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder} is
