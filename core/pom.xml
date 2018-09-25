@@ -58,8 +58,8 @@
         <testsToExclude>**/*IntegrationTest.java</testsToExclude>
 
         <!-- remaining properties should not need to be overridden -->
-        <compileSource>1.8</compileSource>
-        <compileTarget>1.8</compileTarget>
+        <compileSource>8</compileSource>
+        <compileTarget>8</compileTarget>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <surefire-plugin.argLine>-Xms1024m -Xmx1024m</surefire-plugin.argLine>
@@ -592,7 +592,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.7.0</version>
+                    <version>3.8.0</version>
                     <configuration>
                         <showDeprecation>false</showDeprecation>
                         <showWarnings>false</showWarnings>
