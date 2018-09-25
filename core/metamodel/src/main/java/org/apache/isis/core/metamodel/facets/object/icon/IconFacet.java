@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.icon;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.Instance;
 
 /*
  * Icon for an object a class (for example, by placing an appropriately named image
@@ -40,5 +40,5 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface IconFacet extends Facet {
 
-    public String iconName(final ObjectAdapter object);
+    public String iconName(final Instance object);
 }

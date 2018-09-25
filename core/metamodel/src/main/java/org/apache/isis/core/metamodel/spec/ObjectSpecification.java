@@ -61,32 +61,28 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
  * first, and then later work out its internals. Hence we create
  * {@link ObjectSpecification}s as we need them, and then introspect them later.
  */
-public interface ObjectSpecification extends Specification, ObjectActionContainer, ObjectAssociationContainer, Hierarchical,  DefaultProvider {
+public interface ObjectSpecification extends Specification, ObjectActionContainer, 
+ObjectAssociationContainer, Hierarchical,  DefaultProvider {
 
     ObjectMember getMember(String memberId);
 
-    class Comparators{
+    final class Comparators{
         private Comparators(){}
-        public final static Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME = new Comparator<ObjectSpecification>() {
-            @Override
-            public int compare(final ObjectSpecification o1, final ObjectSpecification o2) {
-                return o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
-            }
-        };
-        public final static Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE = new Comparator<ObjectSpecification>() {
-            @Override
-            public int compare(final ObjectSpecification s1, final ObjectSpecification s2) {
-                return s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
-            }
-        };
+        
+        public final static Comparator<ObjectSpecification> FULLY_QUALIFIED_CLASS_NAME = 
+                (final ObjectSpecification o1, final ObjectSpecification o2) -> 
+                    o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
+        
+        public final static Comparator<ObjectSpecification> SHORT_IDENTIFIER_IGNORE_CASE = 
+                (final ObjectSpecification s1, final ObjectSpecification s2) -> 
+                    s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
     }
-    class Functions {
-
+    
+    final class Functions {
         private Functions(){}
 
         public static final Function<ObjectSpecification, String> FULL_IDENTIFIER = 
                 ObjectSpecification::getFullIdentifier;
-
     }
 
     /**
@@ -175,10 +171,10 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Returns the name of an icon to use for the specified object.
      *
      * <p>
-     * Corresponds to the {@link IconFacet#iconName(ObjectAdapter)) icon name}
+     * Corresponds to the {@link IconFacet#iconName(Instance)) icon name}
      * returned by the {@link IconFacet}; is not necessarily immutable.
      */
-    String getIconName(ObjectAdapter object);
+    String getIconName(Instance object);
 
     /**
      * Returns this object's navigable parent, if any.

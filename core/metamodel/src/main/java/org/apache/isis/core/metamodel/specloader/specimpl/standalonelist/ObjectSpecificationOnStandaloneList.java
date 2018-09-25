@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.Objec
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -122,7 +123,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     }
 
     @Override
-    public String getIconName(final ObjectAdapter object) {
+    public String getIconName(final Instance object) {
         return ICON_NAME;
     }
 

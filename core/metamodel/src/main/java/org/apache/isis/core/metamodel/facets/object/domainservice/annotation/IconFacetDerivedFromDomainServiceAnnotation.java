@@ -19,9 +19,9 @@
 package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
+import org.apache.isis.core.metamodel.spec.Instance;
 
 
 public class IconFacetDerivedFromDomainServiceAnnotation extends IconFacetAbstract {
@@ -34,7 +34,7 @@ public class IconFacetDerivedFromDomainServiceAnnotation extends IconFacetAbstra
     }
 
     @Override
-    public String iconName(ObjectAdapter object) {
+    public String iconName(Instance object) {
         return repositoryFor.getName();
     }
 }

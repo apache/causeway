@@ -21,25 +21,23 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.IconUiEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends IconFacetAbstract {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent.class);
+    //private static final Logger LOG = LoggerFactory.getLogger(IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent.class);
 
     public static Facet create(
             final List<DomainObjectLayout> domainObjectLayouts,
@@ -79,7 +77,7 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
     }
 
     @Override
-    public String iconName(final ObjectAdapter owningAdapter) {
+    public String iconName(final Instance owningAdapter) {
 
         final IconUiEvent<Object> iconUiEvent = newIconUiEvent(owningAdapter);
 
@@ -99,14 +97,14 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
         return iconName; // could be null
     }
 
-    private IconUiEvent<Object> newIconUiEvent(final ObjectAdapter owningAdapter) {
+    private IconUiEvent<Object> newIconUiEvent(final Instance owningAdapter) {
         final Object domainObject = owningAdapter.getObject();
-        return newIconUiEvent(domainObject);
+        return newIconUiEventForPojo(domainObject);
     }
 
-    private IconUiEvent<Object> newIconUiEvent(final Object domainObject) {
+    private IconUiEvent<Object> newIconUiEventForPojo(final Object domainObject) {
         try {
-            final IconUiEvent<Object> iconUiEvent = (IconUiEvent<Object>) iconUiEventClass.newInstance();
+            final IconUiEvent<Object> iconUiEvent = _Casts.uncheckedCast(iconUiEventClass.newInstance());
             iconUiEvent.setSource(domainObject);
             return iconUiEvent;
         } catch (InstantiationException | IllegalAccessException ex) {
