@@ -350,7 +350,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public boolean isViewModelCloneable(final ObjectAdapter targetAdapter) {
+    public boolean isViewModelCloneable(final Instance targetAdapter) {
         return false;
     }
 

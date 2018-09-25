@@ -94,7 +94,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     }
 
     @Override
-    public boolean isViewModelCloneable(ObjectAdapter targetAdapter) {
+    public boolean isViewModelCloneable(Instance targetAdapter) {
         return false;
     }
 

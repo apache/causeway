@@ -335,7 +335,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
 
     boolean isViewModel();
     boolean isMixin();
-    boolean isViewModelCloneable(ObjectAdapter targetAdapter);
+    boolean isViewModelCloneable(Instance targetAdapter);
     boolean isWizard();
 
     boolean isPersistenceCapable();
