@@ -30,8 +30,9 @@ import com.google.inject.Singleton;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 
 import images.Images;
@@ -60,8 +61,15 @@ public class ImageResourceCacheClassPath implements ImageResourceCache {
     }
 
     @Override
-    public ResourceReference resourceReferenceFor(final ObjectAdapter adapter) {
-        return resourceReferenceFor(adapter.getSpecification(), adapter.getIconName());
+    public ResourceReference resourceReferenceFor(final Instance adapter) {
+        final Specification spec = adapter.getSpecification();
+        if(spec!=null && spec instanceof ObjectSpecification) {
+            final ObjectSpecification objSpec = (ObjectSpecification) spec;
+            return resourceReferenceFor(objSpec, objSpec.getIconName(adapter));
+        } else {
+            return fallbackResource;    
+        }
+        
     }
 
     @Override

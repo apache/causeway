@@ -23,7 +23,7 @@ import java.io.Serializable;
 
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public interface ImageResourceCache extends Serializable {
 
-    ResourceReference resourceReferenceFor(ObjectAdapter adapter);
+    ResourceReference resourceReferenceFor(Instance adapter);
 
     ResourceReference resourceReferenceForSpec(ObjectSpecification objectSpecification);
 
