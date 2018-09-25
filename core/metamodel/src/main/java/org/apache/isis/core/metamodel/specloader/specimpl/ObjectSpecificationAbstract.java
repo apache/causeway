@@ -374,7 +374,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     @Override
-    public String getCssClass(final ObjectAdapter reference) {
+    public String getCssClass(final Instance reference) {
         return cssClassFacet == null ? null : cssClassFacet.cssClass(reference);
     }
 

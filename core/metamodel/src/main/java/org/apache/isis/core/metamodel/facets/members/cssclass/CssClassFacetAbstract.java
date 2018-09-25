@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclass;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.Instance;
 
 public abstract class CssClassFacetAbstract extends FacetAbstract implements CssClassFacet {
 
@@ -38,7 +38,7 @@ public abstract class CssClassFacetAbstract extends FacetAbstract implements Css
     }
 
     @Override
-    public String cssClass(final ObjectAdapter objectAdapter) {
+    public String cssClass(final Instance objectAdapter) {
         return value;
     }
 }

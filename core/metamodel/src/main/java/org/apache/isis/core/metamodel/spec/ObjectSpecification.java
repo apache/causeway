@@ -188,12 +188,12 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * Returns the CSS class name to use for the specified object.
      *
      * <p>
-     * Corresponds to the {@link org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet#cssClass(org.apache.isis.core.metamodel.adapter.ObjectAdapter)} value}
+     * Corresponds to the {@link org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet#cssClass(org.apache.isis.core.metamodel.spec.Instance)} value}
      * returned by the {@link org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet}.
      *
      * @param objectAdapter - to evaluate (may be <tt>null</tt> if called by deprecated {@link #getCssClass}).
      */
-    String getCssClass(ObjectAdapter objectAdapter);
+    String getCssClass(Instance objectAdapter);
 
     boolean isAbstract();
 

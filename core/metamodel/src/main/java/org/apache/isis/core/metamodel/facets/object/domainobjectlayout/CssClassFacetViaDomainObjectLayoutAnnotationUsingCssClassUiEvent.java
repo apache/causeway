@@ -21,27 +21,25 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent extends FacetAbstract implements
 CssClassFacet {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent.class);
+    //private static final Logger LOG = LoggerFactory.getLogger(CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent.class);
 
     public static Facet create(
             final List<DomainObjectLayout> domainObjectLayouts,
@@ -79,7 +77,7 @@ CssClassFacet {
     }
 
     @Override
-    public String cssClass(final ObjectAdapter owningAdapter) {
+    public String cssClass(final Instance owningAdapter) {
 
         final CssClassUiEvent<Object> cssClassUiEvent = newCssClassUiEvent(owningAdapter);
 
@@ -99,14 +97,14 @@ CssClassFacet {
         return cssClass;
     }
 
-    private CssClassUiEvent<Object> newCssClassUiEvent(final ObjectAdapter owningAdapter) {
+    private CssClassUiEvent<Object> newCssClassUiEvent(final Instance owningAdapter) {
         final Object domainObject = owningAdapter.getObject();
-        return newCssClassUiEvent(domainObject);
+        return newCssClassUiEventForPojo(domainObject);
     }
 
-    private CssClassUiEvent<Object> newCssClassUiEvent(final Object domainObject) {
+    private CssClassUiEvent<Object> newCssClassUiEventForPojo(final Object domainObject) {
         try {
-            final CssClassUiEvent<Object> cssClassUiEvent = (CssClassUiEvent<Object>) cssClassUiEventClass.newInstance();
+            final CssClassUiEvent<Object> cssClassUiEvent = _Casts.uncheckedCast(cssClassUiEventClass.newInstance());
             cssClassUiEvent.setSource(domainObject);
             return cssClassUiEvent;
         } catch (InstantiationException | IllegalAccessException ex) {
