@@ -20,13 +20,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
@@ -91,7 +89,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         final LinkFollowSpecs followHref = linkFollower.follow("href");
         boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly(valueAdapter) || !followHref.isTerminated();
 
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(valueAdapter);
+        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(valueAdapter);
         final List<JsonRepresentation> list = _Lists.newArrayList();
         for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
 

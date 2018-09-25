@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -375,7 +374,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             return;
         }
 
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(valueAdapter);
+        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(valueAdapter);
         final Iterable<ObjectAdapter> iterable = facet.iterable(valueAdapter);
         appendIterableTo(rendererContext, iterable, representation);
     }

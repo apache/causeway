@@ -24,7 +24,6 @@ import org.w3c.dom.Element;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 
 /**
  * Utility methods relating to the Isis meta model.
@@ -175,7 +174,7 @@ final class IsisSchema {
     void setIsisCollection(final Element element, final String prefix, final String fullyQualifiedClassName, final ObjectAdapter collection) {
         setAttribute(element, "feature", FEATURE_COLLECTION);
         setAttribute(element, "type", prefix + ":" + fullyQualifiedClassName);
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
         setAttribute(element, "size", "" + facet.size(collection));
     }
 
