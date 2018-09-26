@@ -80,6 +80,7 @@ public class PojoAdapterTest {
                 allowing(version).getUtcTimestamp();
                 allowing(version).sequence();
                 allowing(version).getUser();
+                allowing(version).hasTimestamp();
                 
                 allowing(version).getTime();
                 will(returnValue(new Date()));
@@ -121,7 +122,12 @@ public class PojoAdapterTest {
     @Test(expected=ConcurrencyException.class)
     public void checkLock_whenVersionsDifferent() throws Exception {
 
-        adapter = PojoAdapterBuilder.create().with(mockSpecificationLoader).withTitleString("some pojo").with(mockVersion).with(mockAuthenticationSession).build();
+        adapter = PojoAdapterBuilder.create()
+                .with(mockSpecificationLoader)
+                .withTitleString("some pojo")
+                .with(mockVersion)
+                .with(mockAuthenticationSession)
+                .build();
         
         context.checking(new Expectations() {
             {
