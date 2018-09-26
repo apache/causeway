@@ -35,8 +35,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetObjectOnly;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
@@ -49,7 +47,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeF
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
@@ -74,7 +71,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         processHidden(processMethodContext);
         processRestrictTo(processMethodContext);
         processSemantics(processMethodContext);
-        processBulk(processMethodContext);
 
         // must come after processing semantics
         processCommand(processMethodContext);
@@ -182,22 +178,6 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         final List<Action> actions = Annotations.getAnnotations(method, Action.class);
         ActionSemanticsFacet facet =
                 ActionSemanticsFacetForActionAnnotation.create(actions, holder);
-
-        FacetUtil.addFacet(facet);
-    }
-
-    void processBulk(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final List<Action> actions = Annotations.getAnnotations(method, Action.class);
-        final FacetHolder holder = processMethodContext.getFacetHolder();
-
-        // check for @Action(invokeOn=...)
-        BulkFacet facet = BulkFacetForActionAnnotation.create(actions, holder);
-
-        // fallback
-        if(facet == null) {
-            facet = new BulkFacetObjectOnly(holder);
-        }
 
         FacetUtil.addFacet(facet);
     }

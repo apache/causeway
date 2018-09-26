@@ -42,6 +42,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.commons.reflection.Reflect;
@@ -210,7 +211,7 @@ public final class Annotations  {
 
         // directly annotated
         if(annotationClass.isAssignableFrom(annotationType)) {
-            annotationAndDepths.add(new AnnotationAndDepth<>((T) annotation, depth));
+            annotationAndDepths.add(new AnnotationAndDepth<>(_Casts.uncheckedCast(annotation), depth));
         }
 
         // if meta-annotation

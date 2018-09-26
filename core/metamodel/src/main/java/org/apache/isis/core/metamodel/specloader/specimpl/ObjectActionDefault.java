@@ -25,12 +25,8 @@ import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
@@ -48,7 +44,6 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
@@ -73,7 +68,7 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
 
 public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectAction {
 
-    private final static Logger LOG = LoggerFactory.getLogger(ObjectActionDefault.class);
+    //private final static Logger LOG = LoggerFactory.getLogger(ObjectActionDefault.class);
 
     public static ActionType getType(final String typeStr) {
         final ActionType type = ActionType.valueOf(typeStr);
@@ -549,24 +544,24 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
 
-    /**
-     * Internal API
-     */
-    @Override
-    public void setupBulkActionInvocationContext(final ObjectAdapter targetAdapter) {
-
-        final Object targetPojo = ObjectAdapter.Util.unwrap(targetAdapter);
-
-        final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
-        if (bulkFacet != null) {
-            final org.apache.isis.applib.services.actinvoc.ActionInvocationContext actionInvocationContext = getActionInvocationContext();
-            if (actionInvocationContext != null && actionInvocationContext.getInvokedOn() == null) {
-
-                actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
-                actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
-            }
-        }
-    }
+//    /**
+//     * Internal API
+//     */
+//    @Override
+//    public void setupBulkActionInvocationContext(final ObjectAdapter targetAdapter) {
+//
+//        final Object targetPojo = ObjectAdapter.Util.unwrap(targetAdapter);
+//
+//        final BulkFacet bulkFacet = getFacetHolder().getFacet(BulkFacet.class);
+//        if (bulkFacet != null) {
+//            final org.apache.isis.applib.services.actinvoc.ActionInvocationContext actionInvocationContext = getActionInvocationContext();
+//            if (actionInvocationContext != null && actionInvocationContext.getInvokedOn() == null) {
+//
+//                actionInvocationContext.setInvokedOn(InvokedOn.OBJECT);
+//                actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
+//            }
+//        }
+//    }
 
     @Override
     public boolean isPrototype() {
@@ -611,9 +606,6 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     }
 
-
-
-
     // -- toString
 
     @Override
@@ -635,17 +627,5 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         sb.append("}]");
         return sb.toString();
     }
-
-
-
-    // -- services (lookup)
-
-
-    protected org.apache.isis.applib.services.actinvoc.ActionInvocationContext getActionInvocationContext() {
-        return lookupService(org.apache.isis.applib.services.actinvoc.ActionInvocationContext.class);
-    }
-
-
-
 
 }

@@ -201,8 +201,6 @@ implements ImperativeFacet {
             // otherwise, go ahead and execute action in the 'foreground'
             final ObjectAdapter mixinElseRegularAdapter = mixedInAdapter != null ? mixedInAdapter : targetAdapter;
 
-            owningAction.setupBulkActionInvocationContext(mixinElseRegularAdapter);
-
             final Object mixinElseRegularPojo = ObjectAdapter.Util.unwrap(mixinElseRegularAdapter);
 
             final List<ObjectAdapter> argumentAdapterList = Arrays.asList(argumentAdapters);

@@ -21,9 +21,13 @@ package org.apache.isis.viewer.wicket.ui.components.collection.bulk;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.link.Link;
+
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.InvokedOn;
-import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -52,12 +56,6 @@ import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseType;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.markup.html.link.Link;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import org.apache.isis.commons.internal.collections._Lists;
 
 public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
@@ -100,17 +98,8 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                                     concurrencyChecking, getPersistenceSession(), getSpecificationLoader()))
                             .collect(Collectors.toList());
 
-                    final List<Object> domainObjects =
-                            _Lists.map(toggledAdapters, ObjectAdapter.Functions.getObject());
-
-                    final ActionInvocationContext actionInvocationContext = getServicesInjector().lookupService(ActionInvocationContext.class);
-                    if (actionInvocationContext != null) {
-                        actionInvocationContext.setInvokedOn(InvokedOn.COLLECTION);
-                        actionInvocationContext.setDomainObjects(domainObjects);
-                    }
-
                     ObjectAdapter lastReturnedAdapter = null;
-                    int i=0;
+                    
                     for(final ObjectAdapter adapter : toggledAdapters) {
 
                         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);

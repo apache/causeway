@@ -30,11 +30,17 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.UUID;
 
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
-import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
@@ -62,7 +68,6 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetForActionAnnotation;
 import org.apache.isis.core.metamodel.facets.actions.action.publishing.PublishedActionFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.typeof.TypeOfFacetForActionAnnotation;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
@@ -70,13 +75,6 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 
 @SuppressWarnings({"hiding", "serial"})
 public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
@@ -284,6 +282,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         public void withDefaultEvent() {
 
             class Customer {
+                @SuppressWarnings("unused")
                 public void someAction() {
                 }
             }
@@ -406,6 +405,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         public void whenNotPresent() {
 
             class Customer {
+                @SuppressWarnings("unused")
                 public void someAction() {
                 }
             }
@@ -478,6 +478,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         public void whenNoAnnotation() {
 
             class Customer {
+                @SuppressWarnings("unused")
                 public void someAction() {
                 }
             }
@@ -494,82 +495,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             final ActionSemanticsFacet facet = facetedMethod.getFacet(ActionSemanticsFacet.class);
             Assert.assertNotNull(facet);
             assertThat(facet.value(), is(SemanticsOf.NON_IDEMPOTENT));
-        }
-
-    }
-
-    @Deprecated
-    public static class Bulk extends ActionAnnotationFacetFactoryTest {
-
-        @Test @Ignore // deprecated use
-        public void whenObjectOnly() {
-
-            class Customer {
-                @Action(invokeOn = InvokeOn.OBJECT_ONLY)
-                public void someAction() {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            actionMethod = findMethod(cls, "someAction");
-
-            // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processBulk(processMethodContext);
-
-            // then
-            final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
-            assertNull(facet); 
-
-        }
-
-        @Test @Ignore // deprecated use
-        public void whenCollectionOnly() {
-
-            class Customer {
-                @Action(invokeOn = InvokeOn.COLLECTION_ONLY)
-                public void someAction() {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            actionMethod = findMethod(cls, "someAction");
-
-            // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processBulk(processMethodContext);
-
-            // then
-            final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
-            Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(InvokeOn.COLLECTION_ONLY));
-
-        }
-
-        @Test @Ignore // deprecated use
-        public void whenObjectAndCollection() {
-
-            class Customer {
-                @Action(invokeOn = InvokeOn.OBJECT_AND_COLLECTION)
-                public void someAction() {
-                }
-            }
-
-            // given
-            final Class<?> cls = Customer.class;
-            actionMethod = findMethod(cls, "someAction");
-
-            // when
-            final ProcessMethodContext processMethodContext = new ProcessMethodContext(cls, null, actionMethod, mockMethodRemover, facetedMethod);
-            facetFactory.processBulk(processMethodContext);
-
-            // then
-            final BulkFacet facet = facetedMethod.getFacet(BulkFacet.class);
-            Assert.assertNotNull(facet);
-            assertThat(facet.value(), is(InvokeOn.OBJECT_AND_COLLECTION));
-
         }
 
     }
@@ -1116,9 +1041,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         @Test
         public void whenDeprecatedTypeOfAnnotationOnActionNotReturningCollection() {
 
-            class Order {
-            }
             class Customer {
+                @SuppressWarnings("unused")
                 public Customer someAction() {
                     return null;
                 }
@@ -1143,6 +1067,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             class Order {
             }
             class Customer {
+                @SuppressWarnings("rawtypes")
                 @Action(typeOf = Order.class)
                 public Collection someAction() {
                     return null;
@@ -1195,6 +1120,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             class Order {
             }
             class Customer {
+                @SuppressWarnings("unused")
                 public Order[] someAction() {
                     return null;
                 }
@@ -1221,6 +1147,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             class Order {
             }
             class Customer {
+                @SuppressWarnings("unused")
                 public Collection<Order> someAction() {
                     return null;
                 }

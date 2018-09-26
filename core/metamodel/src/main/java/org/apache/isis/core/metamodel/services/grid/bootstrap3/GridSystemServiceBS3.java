@@ -155,8 +155,7 @@ public class GridSystemServiceBS3 extends GridSystemServiceAbstract<BS3Grid> {
                 ObjectMember.Util.mapById(getOneToManyAssociations(objectSpec));
         final Map<String, ObjectAction> objectActionById =
                 ObjectMember.Util.mapById(
-                        objectSpec.streamObjectActions(Contributed.INCLUDED)
-                        .filter(ObjectAction.Predicates.notBulkOnly()));
+                        objectSpec.streamObjectActions(Contributed.INCLUDED));
 
         final BS3Grid bs3Grid = (BS3Grid) grid;
 

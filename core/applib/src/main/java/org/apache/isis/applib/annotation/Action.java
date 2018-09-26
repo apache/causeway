@@ -89,9 +89,7 @@ public @interface Action {
      */
     Where hidden() default Where.NOT_SPECIFIED;
 
-
     // //////////////////////////////////////
-
 
     /**
      * The action semantics, either {@link SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached}, {@link SemanticsOf#SAFE safe} (query-only),
@@ -100,34 +98,7 @@ public @interface Action {
      */
     SemanticsOf semantics() default SemanticsOf.NOT_SPECIFIED;
 
-
     // //////////////////////////////////////
-
-
-    /**
-     * Whether an action can be invoked on a single object and/or on many objects in a collection.
-     *
-     * <p>
-     * Actions to be invoked on collection (currently) have a number of constraints:
-     * <ul>
-     * <li>It must take no arguments
-     * <li>It cannot be hidden (any annotations or supporting methods to that effect will be
-     *     ignored).
-     * <li>It cannot be disabled (any annotations or supporting methods to that effect will be
-     *     ignored).
-     * </ul>
-     *
-     * <p>
-     * Has no meaning if annotated on an action of a domain service.
-     * </p>
-     *
-     * @deprecated - instead of bulk actions, use view models with collection parameters and {@link Action#associateWith()}.
-     */
-    @Deprecated
-    InvokeOn invokeOn() default InvokeOn.NOT_SPECIFIED;
-
-    // //////////////////////////////////////
-
 
     /**
      * Whether the action invocation should be reified into a {@link org.apache.isis.applib.services.command.Command} object.
@@ -161,7 +132,7 @@ public @interface Action {
      * </p>
      *
      * <p>
-     *     Tprocessor itself is used by {@link ContentMappingServiceForCommandDto} and
+     *     The processor itself is used by {@link ContentMappingServiceForCommandDto} and
      *     {@link ContentMappingServiceForCommandsDto} to dynamically transform the DTOs.
      * </p>
      */

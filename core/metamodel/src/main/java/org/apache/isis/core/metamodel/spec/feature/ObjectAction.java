@@ -29,7 +29,6 @@ import com.google.common.collect.FluentIterable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
@@ -44,7 +43,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
@@ -194,13 +192,13 @@ public interface ObjectAction extends ObjectMember {
 
 
 
-    // -- setupBulkActionInvocationContext
-    /**
-     * internal API, called by {@link ActionInvocationFacet} if the action is actually executed (ie in the foreground).
-     */
-    void setupBulkActionInvocationContext(
-            final ObjectAdapter targetAdapter);
-
+//    // -- setupBulkActionInvocationContext
+//    /**
+//     * internal API, called by {@link ActionInvocationFacet} if the action is actually executed (ie in the foreground).
+//     */
+//    void setupBulkActionInvocationContext(
+//            final ObjectAdapter targetAdapter);
+//
 
 
 
@@ -308,7 +306,7 @@ public interface ObjectAction extends ObjectMember {
                     ObjectAction.Predicates.memberOrderNotAssociationOf(adapterSpec)
                     .and(ObjectAction.Predicates.dynamicallyVisible(adapter, 
                             InteractionInitiatedBy.USER, Where.ANYWHERE))
-                    .and(ObjectAction.Predicates.notBulkOnly())
+//                    .and(ObjectAction.Predicates.notBulkOnly())
                     .and(ObjectAction.Predicates.excludeWizardActions(adapterSpec));
 
             final Stream<ObjectAction> userActions = 
@@ -350,7 +348,7 @@ public interface ObjectAction extends ObjectMember {
 
             Predicate<ObjectAction> predicate = 
                 ObjectAction.Predicates.memberOrderOf(association)
-                .and(ObjectAction.Predicates.notBulkOnly())
+//                .and(ObjectAction.Predicates.notBulkOnly())
                 .and(ObjectAction.Predicates.excludeWizardActions(objectSpecification));
 
             final Stream<ObjectAction> userActions = 
@@ -442,33 +440,33 @@ public interface ObjectAction extends ObjectMember {
             return (ObjectAction oa) -> oa.getType() == type;
         }
 
-        public static Predicate<ObjectAction> bulk() {
-            return new Predicate<ObjectAction>() {
-
-                @Override
-                public boolean test(ObjectAction oa) {
-
-                    final BulkFacet bulkFacet = oa.getFacet(BulkFacet.class);
-                    if(bulkFacet == null || bulkFacet.isNoop() || bulkFacet.value() == InvokeOn.OBJECT_ONLY) {
-                        return false;
-                    }
-                    if (oa.getParameterCount() != 0) {
-                        return false;
-                    }
-
-                    // currently don't support returning Blobs or Clobs
-                    // (because haven't figured out how to rerender the current page, but also to do a download)
-                    ObjectSpecification returnSpec = oa.getReturnType();
-                    if (returnSpec != null) {
-                        Class<?> returnType = returnSpec.getCorrespondingClass();
-                        if (returnType == Blob.class || returnType == Clob.class) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-            };
-        }
+//        public static Predicate<ObjectAction> bulk() {
+//            return new Predicate<ObjectAction>() {
+//
+//                @Override
+//                public boolean test(ObjectAction oa) {
+//
+//                    final BulkFacet bulkFacet = oa.getFacet(BulkFacet.class);
+//                    if(bulkFacet == null || bulkFacet.isNoop() || bulkFacet.value() == InvokeOn.OBJECT_ONLY) {
+//                        return false;
+//                    }
+//                    if (oa.getParameterCount() != 0) {
+//                        return false;
+//                    }
+//
+//                    // currently don't support returning Blobs or Clobs
+//                    // (because haven't figured out how to rerender the current page, but also to do a download)
+//                    ObjectSpecification returnSpec = oa.getReturnType();
+//                    if (returnSpec != null) {
+//                        Class<?> returnType = returnSpec.getCorrespondingClass();
+//                        if (returnType == Blob.class || returnType == Clob.class) {
+//                            return false;
+//                        }
+//                    }
+//                    return true;
+//                }
+//            };
+//        }
 
         public static Predicate<ObjectAction> dynamicallyVisible(
                 final ObjectAdapter target,
@@ -480,12 +478,12 @@ public interface ObjectAction extends ObjectMember {
             };
         }
 
-        public static Predicate<ObjectAction> notBulkOnly() {
-            return (ObjectAction t) -> {
-                    BulkFacet facet = t.getFacet(BulkFacet.class);
-                    return facet == null || facet.value() != InvokeOn.COLLECTION_ONLY;
-            };
-        }
+//        public static Predicate<ObjectAction> notBulkOnly() {
+//            return (ObjectAction t) -> {
+//                    BulkFacet facet = t.getFacet(BulkFacet.class);
+//                    return facet == null || facet.value() != InvokeOn.COLLECTION_ONLY;
+//            };
+//        }
 
         public static Predicate<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
             return wizardActions(objectSpecification).negate();

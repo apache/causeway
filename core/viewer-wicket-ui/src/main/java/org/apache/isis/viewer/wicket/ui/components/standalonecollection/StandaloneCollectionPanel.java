@@ -41,7 +41,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
-import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
@@ -69,7 +68,6 @@ implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvi
 
     private final ActionPromptModalWindow actionPromptModalWindow;
     private final CollectionSelectorPanel selectorDropdownPanel;
-    private final BulkActionsHelper bulkActionsHelper;
 
     private boolean additionalLinksAdded;
 
@@ -124,8 +122,6 @@ implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvi
 
         final ComponentFactoryRegistry componentFactoryRegistry = getComponentFactoryRegistry();
         componentFactoryRegistry.addOrReplaceComponent(outerDiv, ComponentType.COLLECTION_CONTENTS, entityCollectionModel);
-
-        bulkActionsHelper = new BulkActionsHelper(entityCollectionModel);
     }
 
     // -- ActionPromptModalWindowProvider
@@ -145,10 +141,9 @@ implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvi
     public ObjectAdapterToggleboxColumn getToggleboxColumn() {
 
         if (toggleboxColumn == null) {
-            final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions(getIsisSessionFactory());
 
             final EntityCollectionModel entityCollectionModel = getModel();
-            if(bulkActions.isEmpty() || entityCollectionModel.isParented()) {
+            if(entityCollectionModel.isParented()) {
                 return null;
             }
 
@@ -174,27 +169,7 @@ implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvi
 
     @Override
     public void configureBulkActions(final ObjectAdapterToggleboxColumn toggleboxColumn) {
-
-        if(additionalLinksAdded) {
-            return;
-        }
-        final BulkActionsLinkFactory linkFactory =
-                new BulkActionsLinkFactory(getModel(), toggleboxColumn);
-
-        final List<ObjectAction> bulkActions = bulkActionsHelper.getBulkActions(getIsisSessionFactory());
-
-        final List<LinkAndLabel> linkAndLabels = _Lists.map(bulkActions, (ObjectAction objectAction) ->
-                linkFactory.newLink(objectAction, ID_ADDITIONAL_LINK, null));
-
-        AdditionalLinksPanel.addAdditionalLinks(
-                outerDiv, ID_ADDITIONAL_LINKS, linkAndLabels, AdditionalLinksPanel.Style.INLINE_LIST);
-        additionalLinksAdded = true;
-
     }
-
-
-
-
 
 
     // -- CollectionSelectorProvider
