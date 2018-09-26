@@ -73,7 +73,7 @@ class ObjectAdapterContext_NewIdentifier {
         final String identifier = persistenceSession.identifierFor(pojo);
         
         final ObjectSpecId objectSpecId = spec.getSpecId();
-        return new RootOid(objectSpecId, identifier, Oid.State.PERSISTENT);
+        return RootOid.of(objectSpecId, identifier, Oid.State.PERSISTENT);
     }
     
 }

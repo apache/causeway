@@ -41,7 +41,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -166,7 +166,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 will(returnValue(mockAuthenticationSessionProvider));
 
                 allowing(mockEmployeeAdapter).getOid();
-                will(returnValue(RootOid.create(ObjectSpecId.of("EMP"), "1")));
+                will(returnValue(Factory.persistentOf(ObjectSpecId.of("EMP"), "1")));
 
                 allowing(mockEmployeeSpec).getCorrespondingClass();
                 will(returnValue(Employee.class));

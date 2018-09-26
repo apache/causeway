@@ -69,7 +69,8 @@ extends RecreatableObjectFacetAbstract {
         final ObjectAdapter viewModelAdapter = adapterProvider.adapterForViewModel(
                 viewModelPojo, 
                 (ObjectSpecId objectSpecId)->
-                    new RootOid(objectSpecId, mementoStr, Oid.State.VIEWMODEL)  );
+                    Oid.Factory.viewmodelOf(objectSpecId, mementoStr) );
+                    
 
         final ObjectSpecification spec = viewModelAdapter.getSpecification();
         final Stream<OneToOneAssociation> properties = spec.streamProperties(Contributed.EXCLUDED);

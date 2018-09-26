@@ -26,7 +26,7 @@ import java.util.Date;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -65,7 +65,7 @@ public class PojoAdapterTest {
     public void setUp() throws Exception {
         domainObject = new RuntimeTestPojo();
         
-        adapter = new PojoAdapter(domainObject, RootOid.create(ObjectSpecId.of("CUS"), "1"), mockAuthenticationSession,
+        adapter = new PojoAdapter(domainObject, Factory.persistentOf(ObjectSpecId.of("CUS"), "1"), mockAuthenticationSession,
                 mockSpecificationLoader, mockPersistenceSession);
         adapter.setVersion(mockVersion);
         
@@ -92,7 +92,7 @@ public class PojoAdapterTest {
 
     @Test
     public void getOid_initially() {
-        assertEquals(RootOid.create(ObjectSpecId.of("CUS"), "1"), adapter.getOid());
+        assertEquals(Factory.persistentOf(ObjectSpecId.of("CUS"), "1"), adapter.getOid());
     }
 
     @Test

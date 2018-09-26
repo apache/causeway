@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -113,7 +114,7 @@ public final class OidUtils {
         // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an
         // oid in the wrong state.  The code below checks for this and recreates the oid with the current state of 'view model'
         if(!rootOid.isViewModel()) {
-            return new RootOid(rootOid.getObjectSpecId(), rootOid.getIdentifier(), Oid.State.VIEWMODEL);
+            return RootOid.of(rootOid.getObjectSpecId(), rootOid.getIdentifier(), Oid.State.VIEWMODEL);
         }
         return rootOid;
     }

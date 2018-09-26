@@ -27,6 +27,7 @@ import com.google.common.collect.Maps;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -161,7 +162,7 @@ public class BreadcrumbModel implements Serializable {
     }
 
     protected EntityModel toEntityModel(final Bookmark bookmark) {
-        RootOid rootOid = RootOid.create(bookmark);
+        RootOid rootOid = Factory.ofBookmark(bookmark);
         ObjectAdapterMemento oam = ObjectAdapterMemento.createPersistent(rootOid);
         return new EntityModel(oam);
     }

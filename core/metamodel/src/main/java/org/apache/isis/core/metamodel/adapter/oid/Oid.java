@@ -24,6 +24,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 
 /**
@@ -110,7 +111,48 @@ public interface Oid extends Encodable {
         }
     }
 
+    // -- FACTORIES
+    
+    /** for convenience*/
+    public static final class Factory {
+        
+        public static RootOid ofBookmark(final Bookmark bookmark) {
+            return RootOid.of(ObjectSpecId.of(bookmark.getObjectType()), 
+                    bookmark.getIdentifier(), State.from(bookmark), Version.empty());
+        }
 
+        public static RootOid viewmodelOf(ObjectSpecId objectSpecId, String mementoStr) {
+            return RootOid.of(objectSpecId, mementoStr, State.VIEWMODEL, Version.empty());
+        }
+        
+        public static RootOid transientOf(final ObjectSpecId objectSpecId, final String identifier) {
+            return RootOid.of(objectSpecId, identifier, State.TRANSIENT, Version.empty());
+        }
+
+        public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier) {
+            return Factory.persistentOf(objectSpecId, identifier, null);
+        }
+
+        public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence) {
+            return Factory.persistentOf(objectSpecId, identifier, versionSequence, null, null);
+        }
+
+        public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser) {
+            return Factory.persistentOf(objectSpecId, identifier, versionSequence, versionUser, null);
+        }
+
+        public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final Long versionUtcTimestamp) {
+            return Factory.persistentOf(objectSpecId, identifier, versionSequence, null, versionUtcTimestamp);
+        }
+
+        public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser, final Long versionUtcTimestamp) {
+            return RootOid.of(objectSpecId, identifier, State.PERSISTENT, 
+                    Version.Factory.ifPresent(versionSequence, versionUser, versionUtcTimestamp));
+        }
+
+
+        
+    }
 
 
 }

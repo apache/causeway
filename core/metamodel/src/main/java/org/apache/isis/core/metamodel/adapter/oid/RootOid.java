@@ -50,65 +50,9 @@ public class RootOid implements Oid, Serializable {
     private Version version;
 
 
-    // -- Constructor, factory methods
-    public static RootOid createTransient(final ObjectSpecId objectSpecId, final String identifier) {
-        return new RootOid(objectSpecId, identifier, State.TRANSIENT);
+    public static RootOid of(final ObjectSpecId objectSpecId, final String identifier, final State state) {
+        return of(objectSpecId, identifier, state, Version.empty());
     }
-
-    public static RootOid create(final Bookmark bookmark) {
-        return new RootOid(ObjectSpecId.of(bookmark.getObjectType()), bookmark.getIdentifier(), State.from(bookmark));
-    }
-
-    public static RootOid create(final ObjectSpecId objectSpecId, final String identifier) {
-        return create(objectSpecId, identifier, null);
-    }
-
-    public static RootOid create(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence) {
-        return create(objectSpecId, identifier, versionSequence, null, null);
-    }
-
-    public static RootOid create(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser) {
-        return create(objectSpecId, identifier, versionSequence, versionUser, null);
-    }
-
-    public static RootOid create(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final Long versionUtcTimestamp) {
-        return create(objectSpecId, identifier, versionSequence, null, versionUtcTimestamp);
-    }
-
-    public static RootOid create(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser, final Long versionUtcTimestamp) {
-        return new RootOid(objectSpecId, identifier, State.PERSISTENT, 
-                Version.Factory.ifPresent(versionSequence, versionUser, versionUtcTimestamp));
-    }
-
-    public RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state) {
-        this(objectSpecId, identifier, state, (Version)null);
-    }
-
-    public RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state, final Long versionSequence) {
-        this(objectSpecId, identifier, state, versionSequence, null, null);
-    }
-
-    /**
-     * If specify version sequence, can optionally specify the user that changed the object.  This is used for informational purposes only.
-     */
-    public RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state, final Long versionSequence, final String versionUser) {
-        this(objectSpecId, identifier, state, versionSequence, versionUser, null);
-    }
-
-    /**
-     * If specify version sequence, can optionally specify utc timestamp that the oid was changed.  This is used for informational purposes only.
-     */
-    public RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state, final Long versionSequence, final Long versionUtcTimestamp) {
-        this(objectSpecId, identifier, state, versionSequence, null, versionUtcTimestamp);
-    }
-
-    /**
-     * If specify version sequence, can optionally specify user and/or utc timestamp that the oid was changed.  This is used for informational purposes only.
-     */
-    public RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state, final Long versionSequence, final String versionUser, final Long versionUtcTimestamp) {
-        this(objectSpecId, identifier, state, Version.Factory.ifPresent(versionSequence, versionUser, versionUtcTimestamp));
-    }
-
     
     public static RootOid of(final ObjectSpecId objectSpecId, final String identifier, final State state, final Version version) {
         return new RootOid(objectSpecId, identifier, state, version);

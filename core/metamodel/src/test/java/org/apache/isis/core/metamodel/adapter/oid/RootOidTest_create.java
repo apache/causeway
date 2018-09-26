@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -32,7 +33,7 @@ public class RootOidTest_create {
     @Test
     public void create() throws Exception {
         ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        RootOid oid = RootOid.create(objectSpecId, "123");
+        RootOid oid = Factory.persistentOf(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
         assertThat(oid.getVersion(), is(nullValue()));
@@ -43,7 +44,7 @@ public class RootOidTest_create {
     @Test
     public void createTransient() throws Exception {
         ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        RootOid oid = RootOid.createTransient(objectSpecId, "123");
+        RootOid oid = Factory.transientOf(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
         assertThat(oid.getVersion(), is(nullValue()));
@@ -55,7 +56,7 @@ public class RootOidTest_create {
     @Test
     public void createWithVersion() throws Exception {
         ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        RootOid oid = RootOid.create(objectSpecId, "123", 456L);
+        RootOid oid = Factory.persistentOf(objectSpecId, "123", 456L);
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
         assertThat(oid.getVersion().getSequence(), is(456L));
@@ -66,7 +67,7 @@ public class RootOidTest_create {
     @Test
     public void createTransientNoVersion() throws Exception {
         ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        RootOid oid = RootOid.createTransient(objectSpecId, "123");
+        RootOid oid = Factory.transientOf(objectSpecId, "123");
         assertThat(oid.getObjectSpecId(), is(objectSpecId));
         assertThat(oid.getIdentifier(), is("123"));
         assertThat(oid.getVersion(), is(nullValue()));

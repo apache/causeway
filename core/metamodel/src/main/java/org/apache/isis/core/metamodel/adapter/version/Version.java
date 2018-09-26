@@ -57,6 +57,10 @@ public final class Version implements Serializable, Encodable {
 
     // -- FACTORIES
 
+    public static Version empty() {
+        return Factory.EMPTY_VERSION;
+    }
+    
     public static Version of(long sequence, @Nullable String user) {
         return of(sequence, user, Factory.EMPTY_TIMESTAMP);
     }
@@ -64,7 +68,7 @@ public final class Version implements Serializable, Encodable {
     public static Version of(long sequence, @Nullable String user, long utcTimestamp) {
         return new Version(sequence, user, utcTimestamp);
     }
-
+    
 
     // -- constructor, fields
     private final long sequence;
@@ -226,6 +230,8 @@ public final class Version implements Serializable, Encodable {
         }
         
     }
+
+
 
 
 

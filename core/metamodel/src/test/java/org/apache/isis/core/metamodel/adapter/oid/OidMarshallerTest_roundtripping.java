@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -33,7 +34,7 @@ public class OidMarshallerTest_roundtripping {
     
     @Test
     public void rootOid_withNoVersion() {
-        RootOid oid = RootOid.create(ObjectSpecId.of("CUS"), "123");
+        RootOid oid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123");
         
         final String enString = oid.enString();
         final RootOid deString = RootOid.deString(enString);
@@ -42,7 +43,7 @@ public class OidMarshallerTest_roundtripping {
 
     @Test
     public void rootOid_withVersion() {
-        RootOid oid = RootOid.create(ObjectSpecId.of("CUS"), "123", 90807L);
+        RootOid oid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123", 90807L);
         
         final String enString = oid.enString();
         final RootOid deString = RootOid.deString(enString);
@@ -54,7 +55,7 @@ public class OidMarshallerTest_roundtripping {
 
     @Test
     public void collectionOid_withNoVersion() {
-        RootOid parentOid = RootOid.create(ObjectSpecId.of("CUS"), "123");
+        RootOid parentOid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123");
         ParentedCollectionOid oid = new ParentedCollectionOid(parentOid, "items");
         
         final String enString = oid.enString();
@@ -64,7 +65,7 @@ public class OidMarshallerTest_roundtripping {
 
     @Test
     public void collectionOid_withVersion() {
-        RootOid parentOid = RootOid.create(ObjectSpecId.of("CUS"), "123", 90807L);
+        RootOid parentOid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123", 90807L);
         ParentedCollectionOid oid = new ParentedCollectionOid(parentOid, "items");
         
         final String enString = oid.enString();

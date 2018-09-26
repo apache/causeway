@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -87,7 +88,7 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
             final Bookmark bookmark,
             final BookmarkService.FieldResetPolicy fieldResetPolicy) {
         
-        final RootOid rootOid = RootOid.create(bookmark);
+        final RootOid rootOid = Factory.ofBookmark(bookmark);
         final PersistenceSession ps = getPersistenceSession();
         final boolean denyRefresh = fieldResetPolicy == BookmarkService.FieldResetPolicy.DONT_REFRESH; 
                         

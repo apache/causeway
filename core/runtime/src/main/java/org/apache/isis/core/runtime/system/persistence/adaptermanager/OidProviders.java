@@ -60,7 +60,7 @@ public class OidProviders {
         @Override
         public RootOid oidFor(Object pojo, ObjectSpecification spec) {
             final String identifier = PersistenceSession.SERVICE_IDENTIFIER;
-            return new RootOid(spec.getSpecId(), identifier, Oid.State.PERSISTENT);
+            return RootOid.of(spec.getSpecId(), identifier, Oid.State.PERSISTENT);
         }
 
     }
@@ -82,10 +82,10 @@ public class OidProviders {
             final boolean isRecognized = persistenceSession.isRecognized(pojo);
             if(isRecognized) {
                 final String identifier = persistenceSession.identifierFor(pojo);
-                return new RootOid(spec.getSpecId(), identifier, Oid.State.PERSISTENT);
+                return RootOid.of(spec.getSpecId(), identifier, Oid.State.PERSISTENT);
             } else {
                 final String identifier = UUID.randomUUID().toString();
-                return new RootOid(spec.getSpecId(), identifier, Oid.State.TRANSIENT);    
+                return RootOid.of(spec.getSpecId(), identifier, Oid.State.TRANSIENT);    
             }
         }
         
@@ -116,7 +116,7 @@ public class OidProviders {
         public RootOid oidFor(Object pojo, ObjectSpecification spec) {
             final ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
             final String identifier = recreatableObjectFacet.memento(pojo);
-            return new RootOid(spec.getSpecId(), identifier, Oid.State.VIEWMODEL);
+            return RootOid.of(spec.getSpecId(), identifier, Oid.State.VIEWMODEL);
         }
 
     }
@@ -131,7 +131,7 @@ public class OidProviders {
         @Override
         public RootOid oidFor(Object pojo, ObjectSpecification spec) {
             final String identifier = UUID.randomUUID().toString();
-            return new RootOid(spec.getSpecId(), identifier, Oid.State.TRANSIENT);
+            return RootOid.of(spec.getSpecId(), identifier, Oid.State.TRANSIENT);
         }
 
     }

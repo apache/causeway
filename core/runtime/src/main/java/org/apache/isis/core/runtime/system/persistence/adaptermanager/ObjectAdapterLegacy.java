@@ -27,6 +27,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -80,7 +81,7 @@ public class ObjectAdapterLegacy {
         }
 
         private static ObjectAdapter adapterFor(final Bookmark bookmark) {
-            final RootOid rootOid = RootOid.create(bookmark);
+            final RootOid rootOid = Factory.ofBookmark(bookmark);
             return adapterFor(rootOid);
         }
 

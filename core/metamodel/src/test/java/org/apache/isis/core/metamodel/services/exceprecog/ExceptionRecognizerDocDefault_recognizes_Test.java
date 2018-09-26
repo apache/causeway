@@ -23,7 +23,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -54,7 +54,7 @@ public class ExceptionRecognizerDocDefault_recognizes_Test {
     
     @Test
     public void whenConcurrencyException_is_recognized() throws Exception {
-        ex = new ConcurrencyException("foo", RootOid.create(ObjectSpecId.of("CUS"), "123"));
+        ex = new ConcurrencyException("foo", Factory.persistentOf(ObjectSpecId.of("CUS"), "123"));
         assertThat(excepRecognizer.recognize(ex), is(not(nullValue())));
     }
 

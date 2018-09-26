@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -620,7 +621,7 @@ public class ObjectAdapterMemento implements Serializable {
         }
 
         public static Function<ObjectAdapterMemento, RootOid> toOid() {
-            return objectAdapterMemento->RootOid.create(objectAdapterMemento.asBookmark());
+            return objectAdapterMemento->Factory.ofBookmark(objectAdapterMemento.asBookmark());
         }
 
     }

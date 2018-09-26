@@ -23,6 +23,7 @@ import java.util.Iterator;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -67,13 +68,13 @@ public class PojoAdapterBuilder {
         TRANSIENT {
             @Override
             RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
-                return RootOid.createTransient(objectSpecId, identifier);
+                return Factory.transientOf(objectSpecId, identifier);
             }
         },
         PERSISTENT {
             @Override
             RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
-                return RootOid.create(objectSpecId, identifier);
+                return Factory.persistentOf(objectSpecId, identifier);
             }
         },
         VALUE {

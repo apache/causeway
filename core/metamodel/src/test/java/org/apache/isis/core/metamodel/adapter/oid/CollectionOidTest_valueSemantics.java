@@ -27,8 +27,8 @@ import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 
 public class CollectionOidTest_valueSemantics extends ValueTypeContractTestAbstract<ParentedCollectionOid> {
 
-    private final RootOid parent = new RootOid(ObjectSpecId.of("CUS"), "123", State.PERSISTENT);
-    private final RootOid otherParent = new RootOid(ObjectSpecId.of("CUS"), "124", State.PERSISTENT);
+    private final RootOid parent = RootOid.of(ObjectSpecId.of("CUS"), "123", State.PERSISTENT);
+    private final RootOid otherParent = RootOid.of(ObjectSpecId.of("CUS"), "124", State.PERSISTENT);
 
     @Override
     protected List<ParentedCollectionOid> getObjectsWithSameValue() {
