@@ -197,7 +197,7 @@ public final class _NullSafe {
     public static boolean isEmpty(long[] array){ return array==null || array.length == 0;}
     public static boolean isEmpty(short[] array){ return array==null || array.length == 0;}
     public static <T> boolean isEmpty(T[] array){ return array==null || array.length == 0;}
-
+    
     // -- SIZE/LENGTH CHECKS
 
     public static int size(String x){ return x!=null ? x.length() : 0; }
@@ -229,5 +229,7 @@ public final class _NullSafe {
         }
         return map.getOrDefault(key, defaultValue);
     }
+
+
 
 }

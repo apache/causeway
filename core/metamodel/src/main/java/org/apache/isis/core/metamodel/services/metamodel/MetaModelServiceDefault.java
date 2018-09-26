@@ -70,7 +70,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(objectType == null) {
             return null;
         }
-        final ObjectSpecId objectSpecId = new ObjectSpecId(objectType);
+        final ObjectSpecId objectSpecId = ObjectSpecId.of(objectType);
         final ObjectSpecification objectSpecification = specificationLookup.lookupBySpecId(objectSpecId);
         return objectSpecification != null? objectSpecification.getCorrespondingClass(): null;
     }

@@ -52,7 +52,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
             final ServicesInjector servicesInjector,
             final FacetProcessor facetProcessor) {
         super(FreeStandingList.class, NAME, servicesInjector, facetProcessor);
-        this.specId = new ObjectSpecId(getCorrespondingClass().getName());
+        this.specId = ObjectSpecId.of(getCorrespondingClass().getName());
     }
 
 

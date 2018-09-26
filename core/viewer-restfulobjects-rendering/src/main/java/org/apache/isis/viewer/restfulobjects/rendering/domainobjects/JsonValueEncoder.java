@@ -73,7 +73,7 @@ public final class JsonValueEncoder {
 
         public List<ObjectSpecId> getSpecIds() {
             return _NullSafe.stream(classes)
-            .map((Class<?> cls) ->new ObjectSpecId(cls.getName()))
+            .map((Class<?> cls) ->ObjectSpecId.of(cls.getName()))
             .collect(Collectors.toList());
         }
 

@@ -19,7 +19,6 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 import javax.jdo.listener.InstanceLifecycleEvent;
 
@@ -45,13 +44,17 @@ public class Utils {
         Object jdoVersion = pojo.dnGetVersion();
         if(jdoVersion instanceof Long) {
             final Long longVersion = (Long) jdoVersion;
-            return Version.create(longVersion, authenticationSession.getUserName(), (Date) null);
+            return Version.Factory.ifPresent(longVersion, authenticationSession.getUserName());
         }
         if(jdoVersion instanceof java.sql.Timestamp) {
             final Timestamp timestampVersion = (Timestamp) jdoVersion;
-            return Version.create(timestampVersion.getTime(), authenticationSession.getUserName(), (Date) null);
+            return Version.of(timestampVersion.getTime(), authenticationSession.getUserName());
         }
         return null;
+        
     }
+    
+    
+    
 
 }

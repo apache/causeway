@@ -27,12 +27,12 @@ public class ObjectSpecIdTest_valueSemantics extends ValueTypeContractTestAbstra
 
     @Override
     protected List<ObjectSpecId> getObjectsWithSameValue() {
-        return Arrays.asList(new ObjectSpecId("CUS"), new ObjectSpecId("CUS"), new ObjectSpecId("CUS"));
+        return Arrays.asList(ObjectSpecId.of("CUS"), ObjectSpecId.of("CUS"), ObjectSpecId.of("CUS"));
     }
 
     @Override
     protected List<ObjectSpecId> getObjectsWithDifferentValue() {
-        return Arrays.asList(new ObjectSpecId("bUS"), new ObjectSpecId("CUt"));
+        return Arrays.asList(ObjectSpecId.of("bUS"), ObjectSpecId.of("CUt"));
     }
 
 }

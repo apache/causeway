@@ -19,9 +19,13 @@
 
 package org.apache.isis.core.metamodel.adapter.version;
 
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
@@ -42,55 +46,38 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
  * indicate that the two Version objects are different.
  *
  * <p>
- * The user's name and a timestamp should alos be kept so that when an message
+ * The user's name and a timestamp should also be kept so that when an message
  * is passed to the user it can be of the form "user has change object at time"
  */
-public class Version implements Serializable, Encodable {
+public final class Version implements Serializable, Encodable {
 
     private static final long serialVersionUID = 1L;
 
     private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
-    // -- factory methods
+    // -- FACTORIES
 
-    public static Version create(final Long sequence) {
-        return create(sequence, null, (Long)null);
+    public static Version of(long sequence, @Nullable String user) {
+        return of(sequence, user, Factory.EMPTY_TIMESTAMP);
     }
-
-    public static Version create(String sequence, String user, String utcTimestamp) {
-        if(sequence == null) {
-            return null;
-        }
-        return create(Long.parseLong(sequence), user, utcTimestamp != null?Long.parseLong(utcTimestamp):null);
-    }
-
-    public static Version create(final Long sequence, final String user, final Date time) {
-        return create(sequence, user, time !=null? time.getTime(): null);
-    }
-
-    public static Version create(Long sequence, String user, Long utcTimestamp) {
-        if(sequence == null) {
-            return null;
-        }
+    
+    public static Version of(long sequence, @Nullable String user, long utcTimestamp) {
         return new Version(sequence, user, utcTimestamp);
     }
 
 
-
     // -- constructor, fields
-    private final Long sequence;
+    private final long sequence;
     private final String user;
-    private final Long utcTimestamp;
+    private final long utcTimestamp;
 
-    private Version(Long sequence, String user, Long utcTimestamp) {
+    private Version(long sequence, @Nullable String user, long utcTimestamp) {
         this.sequence = sequence;
         this.user = user;
         this.utcTimestamp = utcTimestamp;
     }
 
-
-
-    // -- encodable
+    // -- Encodable
 
     public Version(final DataInputExtended input) throws IOException {
         this(input.readLong(), input.readUTF(), input.readLong());
@@ -103,8 +90,6 @@ public class Version implements Serializable, Encodable {
         output.writeUTF(user);
         output.writeLong(utcTimestamp);
     }
-
-
 
     // -- getters
     /**
@@ -123,7 +108,7 @@ public class Version implements Serializable, Encodable {
      * <p>
      * May be null.
      */
-    public String getUser() {
+    public @Nullable String getUser() {
         return user;
     }
 
@@ -131,11 +116,11 @@ public class Version implements Serializable, Encodable {
      * The time of the last change, as UTC milliseconds.
      *
      * <p>
-     * May be null.
+     * May be zero.
      *
      * @see #getTime()
      */
-    public Long getUtcTimestamp() {
+    public long getUtcTimestamp() {
         return utcTimestamp;
     }
 
@@ -147,11 +132,9 @@ public class Version implements Serializable, Encodable {
      *
      * @see #getUtcTimestamp()
      */
-    public Date getTime() {
-        return utcTimestamp != null? new Date(this.utcTimestamp): null;
+    public @Nullable Date getTime() {
+        return utcTimestamp!=Factory.EMPTY_TIMESTAMP ? new Date(this.utcTimestamp) : null;
     }
-
-
 
     // -- enString
 
@@ -159,16 +142,11 @@ public class Version implements Serializable, Encodable {
         return OID_MARSHALLER.marshal(this);
     }
 
-
-
     // -- equals, hashCode
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((sequence == null) ? 0 : sequence.hashCode());
-        return result;
+        return Long.hashCode(sequence);
     }
 
     @Override
@@ -180,12 +158,7 @@ public class Version implements Serializable, Encodable {
         if (getClass() != obj.getClass())
             return false;
         Version other = (Version) obj;
-        if (sequence == null) {
-            if (other.sequence != null)
-                return false;
-        } else if (!sequence.equals(other.sequence))
-            return false;
-        return true;
+        return sequence == other.sequence;
     }
 
     /**
@@ -200,8 +173,6 @@ public class Version implements Serializable, Encodable {
         return !equals(version);
     }
 
-
-
     // -- sequence
 
     @Override
@@ -215,6 +186,47 @@ public class Version implements Serializable, Encodable {
     public String sequence() {
         return Long.toString(sequence, 16);
     }
+
+    // -- SPECIAL CASES
+    
+    /** for convenience*/
+    public static final class Factory {
+        
+        private final static Version EMPTY_VERSION = null;
+        private final static long EMPTY_TIMESTAMP = 0L;
+    
+        public static @Nullable Version ifPresent(@Nullable Long sequence, String user, @Nullable Long utcTimestamp) {
+            return mapIfPresentElse(sequence, __->
+                of(sequence.longValue(), user, timestampOfNullable(utcTimestamp)), EMPTY_VERSION);
+        }
+        
+        public static @Nullable Version ifPresent(@Nullable Long sequence, String user, long utcTimestamp) {
+            return mapIfPresentElse(sequence, __->
+                of(sequence.longValue(), user, utcTimestamp), EMPTY_VERSION);
+        }
+        
+        public static @Nullable Version ifPresent(@Nullable Long sequence, String user) {
+            return mapIfPresentElse(sequence, __->
+                of(sequence.longValue(), user, EMPTY_TIMESTAMP), EMPTY_VERSION);
+        }
+        
+        public static @Nullable Version parse(@Nullable String sequence, String user, @Nullable String utcTimestamp) {
+            return mapIfPresentElse(sequence, __->
+                of(Long.parseLong(sequence), user, parseTimeStamp(utcTimestamp)), EMPTY_VERSION); 
+        }
+        
+        // -- HELPER
+        
+        private static long parseTimeStamp(@Nullable String utcTimestamp) {
+            return utcTimestamp != null ? Long.parseLong(utcTimestamp) : EMPTY_TIMESTAMP;
+        }
+        
+        private static long timestampOfNullable(@Nullable Long utcTimestamp) {
+            return utcTimestamp != null ? utcTimestamp.longValue() : EMPTY_TIMESTAMP;
+        }
+        
+    }
+
 
 
 

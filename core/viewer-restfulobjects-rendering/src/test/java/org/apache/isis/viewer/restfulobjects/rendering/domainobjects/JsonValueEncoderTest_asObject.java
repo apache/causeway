@@ -229,7 +229,7 @@ public class JsonValueEncoderTest_asObject {
         context.checking(new Expectations() {
             {
                 allowing(mockObjectSpec).getSpecId();
-                will(returnValue(new ObjectSpecId(result.getName())));
+                will(returnValue(ObjectSpecId.of(result.getName())));
             }
         });
     }

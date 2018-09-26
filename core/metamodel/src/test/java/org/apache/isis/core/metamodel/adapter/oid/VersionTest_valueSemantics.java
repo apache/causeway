@@ -30,17 +30,17 @@ public class VersionTest_valueSemantics extends ValueTypeContractTestAbstract<Ve
     @Override
     protected List<Version> getObjectsWithSameValue() {
         return Arrays.asList(
-                    Version.create(123L, null, (Long)null), 
-                    Version.create(123L, "jimmy", (Long)null), 
-                    Version.create(123L, null, new Date().getTime())
+                    Version.of(123L, null), 
+                    Version.of(123L, "jimmy"), 
+                    Version.of(123L, null, new Date().getTime())
                 ); 
     }
 
     @Override
     protected List<Version> getObjectsWithDifferentValue() {
         return Arrays.asList(
-                    Version.create(124L, null, (Long)null), 
-                    Version.create(125L, null, (Long)null) 
+                    Version.of(124L, null), 
+                    Version.of(125L, null) 
                 );
     }
 

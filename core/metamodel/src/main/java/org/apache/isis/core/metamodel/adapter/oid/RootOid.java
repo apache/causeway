@@ -76,8 +76,8 @@ public class RootOid implements Oid, Serializable {
     }
 
     public static RootOid create(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser, final Long versionUtcTimestamp) {
-        return new RootOid(objectSpecId, identifier, State.PERSISTENT, Version.create(versionSequence,
-                versionUser, versionUtcTimestamp));
+        return new RootOid(objectSpecId, identifier, State.PERSISTENT, 
+                Version.Factory.ifPresent(versionSequence, versionUser, versionUtcTimestamp));
     }
 
     public RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state) {
@@ -106,10 +106,15 @@ public class RootOid implements Oid, Serializable {
      * If specify version sequence, can optionally specify user and/or utc timestamp that the oid was changed.  This is used for informational purposes only.
      */
     public RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state, final Long versionSequence, final String versionUser, final Long versionUtcTimestamp) {
-        this(objectSpecId, identifier, state, Version.create(versionSequence, versionUser, versionUtcTimestamp));
+        this(objectSpecId, identifier, state, Version.Factory.ifPresent(versionSequence, versionUser, versionUtcTimestamp));
     }
 
-    public RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state, final Version version) {
+    
+    public static RootOid of(final ObjectSpecId objectSpecId, final String identifier, final State state, final Version version) {
+        return new RootOid(objectSpecId, identifier, state, version);
+    }
+    
+    private RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state, final Version version) {
 
         requires(objectSpecId, "objectSpecId");
         requires(identifier, "identifier");

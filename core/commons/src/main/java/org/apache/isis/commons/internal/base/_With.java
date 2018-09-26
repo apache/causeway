@@ -214,7 +214,27 @@ public final class _With<T> {
      */
     public static <T> T requires(@Nullable T obj, String paramName) {
         if (obj == null) {
-            throw new NullPointerException(String.format("Parameter '%s' is required to be non-null.", paramName));
+            throw new NullPointerException(String.format("Parameter '%s' is required to be present (not null).", paramName));
+        }
+        return obj;
+    }
+    
+    // -- PARAMETER NON-EMPTY CHECK(S)
+
+    /**
+     * Allows for convenient named parameter non-empty-check.
+     * @param obj target for the non-empty-check
+     * @param paramName to use for the exception message, when the non-empty-check fails 
+     * @return {@code obj}
+     * @throws NullPointerException if {@code obj} is {@code null}
+     * @throws IllegalArgumentException if {@code obj} is 'empty'
+     */
+    public static String requiresNotEmpty(@Nullable String obj, String paramName) {
+        if (obj == null) {
+            throw new NullPointerException(String.format("Parameter '%s' is required to be present (not null).", paramName));
+        }
+        if (obj.length()==0) {
+            throw new IllegalArgumentException(String.format("Parameter '%s' is required to be present and not empty.", paramName));
         }
         return obj;
     }
@@ -284,6 +304,7 @@ public final class _With<T> {
     public static StringBuilder stringBuilder(Consumer<StringBuilder> initializer) {
         return create(StringBuilder::new, initializer);
     }
+
 
 
 

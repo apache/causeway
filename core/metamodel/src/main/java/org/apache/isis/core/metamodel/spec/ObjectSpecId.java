@@ -18,7 +18,10 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
+
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 
@@ -36,11 +39,11 @@ public final class ObjectSpecId implements Serializable {
     private final String specId;
 
     public static ObjectSpecId of(String specId) {
+        requiresNotEmpty(specId, "specId");
         return new ObjectSpecId(specId);
     }
 
-    public ObjectSpecId(String specId) {
-        assert !(specId == null || "".equals(specId));
+    private ObjectSpecId(String specId) {
         this.specId = specId;
     }
 
@@ -50,27 +53,22 @@ public final class ObjectSpecId implements Serializable {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((specId == null) ? 0 : specId.hashCode());
-        return result;
+        return specId.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        ObjectSpecId other = (ObjectSpecId) obj;
-        if (specId == null) {
-            if (other.specId != null)
-                return false;
-        } else if (!specId.equals(other.specId))
-            return false;
-        return true;
+        }
+        final ObjectSpecId other = (ObjectSpecId) obj;
+        return Objects.equals(specId, other.specId);
     }
 
     @Override

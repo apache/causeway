@@ -401,7 +401,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
         context.checking(new Expectations() {
             {
                 oneOf(mockObjectSpec).getSpecId();
-                will(returnValue(new ObjectSpecId(cls.getName())));
+                will(returnValue(ObjectSpecId.of(cls.getName())));
             }
         });
     }

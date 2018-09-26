@@ -25,18 +25,18 @@ public class ObjectSpecIdTest_constructor {
     @Test
     public void happyCase() throws Exception {
         @SuppressWarnings("unused")
-        final ObjectSpecId objectSpecId = new ObjectSpecId("CUS");
+        final ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
     }
 
-    @Test(expected=AssertionError.class)
+    @Test(expected=IllegalArgumentException.class)
     public void cannotBeEmpty() throws Exception {
-        new ObjectSpecId("");
+        ObjectSpecId.of("");
     }
 
 
-    @Test(expected=AssertionError.class)
+    @Test(expected=NullPointerException.class)
     public void cannotBeNull() throws Exception {
-        new ObjectSpecId(null);
+        ObjectSpecId.of(null);
     }
 
 

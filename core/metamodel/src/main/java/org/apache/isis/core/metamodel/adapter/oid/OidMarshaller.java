@@ -189,12 +189,12 @@ public final class OidMarshaller {
         final String versionSequence = getGroup(matcher, 10);
         final String versionUser = getGroup(matcher, 11);
         final String versionUtcTimestamp = getGroup(matcher, 12);
-        final Version version = Version.create(versionSequence, versionUser, versionUtcTimestamp);
+        final Version version = Version.Factory.parse(versionSequence, versionUser, versionUtcTimestamp);
 
         if(collectionName == null) {
             if(aggregateOidParts.isEmpty()) {
                 ensureCorrectType(oidStr, requestedType, RootOid.class);
-                return (T) new RootOid(ObjectSpecId.of(rootObjectType), rootIdentifier, state, version);
+                return (T) RootOid.of(ObjectSpecId.of(rootObjectType), rootIdentifier, state, version);
             } else {
                 throw new RuntimeException("Aggregated Oids are no longer supported");
             }

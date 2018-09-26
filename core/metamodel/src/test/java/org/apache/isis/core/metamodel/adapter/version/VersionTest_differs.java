@@ -29,19 +29,20 @@ public class VersionTest_differs {
 
     private Version version1, version2;
 
+    private final static String EMPTY_USERNAME = null;
 
     @Test
     public void whenEqual() throws Exception {
-        version1 = Version.create(123L);
-        version2 = Version.create(123L);
+        version1 = Version.of(123L, EMPTY_USERNAME);
+        version2 = Version.of(123L, EMPTY_USERNAME);
         assertThat(version1.different(version2), is(false));
     }
 
     
     @Test
     public void whenNotEqual() throws Exception {
-        version1 = Version.create(123L);
-        version2 = Version.create(124L);
+        version1 = Version.of(123L, EMPTY_USERNAME);
+        version2 = Version.of(124L, EMPTY_USERNAME);
         assertThat(version1.different(version2), is(true));
     }
 
