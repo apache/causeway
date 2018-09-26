@@ -68,13 +68,6 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
         return bookmark != null? lookup(bookmark, fieldResetPolicy): null;
     }
 
-    @Programmatic
-    @Override
-    public Object lookup(final BookmarkHolder bookmarkHolder) {
-        return lookup(bookmarkHolder, FieldResetPolicy.RESET);
-    }
-
-
     private Object lookupInternal(
             final Bookmark bookmark,
             final FieldResetPolicy fieldResetPolicy) {
@@ -105,15 +98,6 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
         return lookupInternal(bookmark, fieldResetPolicy);
     }
 
-
-
-    @Programmatic
-    @Override
-    public Object lookup(final Bookmark bookmark) {
-        return lookup(bookmark, FieldResetPolicy.RESET);
-    }
-
-
     @SuppressWarnings("unchecked")
     @Programmatic
     @Override
@@ -123,13 +107,6 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
             Class<T> cls) {
         return (T) lookup(bookmark, fieldResetPolicy);
     }
-
-    @Programmatic
-    @Override
-    public <T> T lookup(final Bookmark bookmark, Class<T> cls) {
-        return (T) lookup(bookmark, FieldResetPolicy.RESET, cls);
-    }
-
 
     @Programmatic
     @Override
@@ -184,7 +161,7 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
 
         if(Bookmark.class.isAssignableFrom(value.getClass())) {
             final Bookmark valueBookmark = (Bookmark) value;
-            return _Casts.uncheckedCast(lookup(valueBookmark));
+            return _Casts.uncheckedCast(lookup(valueBookmark, FieldResetPolicy.RESET));
         }
 
         return _Casts.uncheckedCast(value);

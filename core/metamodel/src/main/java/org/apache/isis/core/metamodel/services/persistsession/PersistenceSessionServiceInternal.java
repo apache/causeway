@@ -62,18 +62,6 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      * Provided by <tt>PersistenceSession</tt> when used by framework.
      *
      * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt>.
-     *
-     * @deprecated - left over from manual object resolving.
-     */
-    @Deprecated
-    @Programmatic
-    void resolve(Object parent, Object field);
-
-    /**
-     * Provided by <tt>PersistenceSession</tt> when used by framework.
-     *
-     * <p>
      * Called by <tt>BookmarkServicesDefault</tt>.
      * @return
      */
@@ -85,8 +73,6 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
 
     @Programmatic
     Bookmark bookmarkFor(Class<?> cls, String identifier);
-
-
 
     // -- beginTran, flush, commit, currentTransaction
 

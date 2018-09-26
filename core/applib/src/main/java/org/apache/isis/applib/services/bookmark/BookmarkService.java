@@ -19,7 +19,6 @@
 package org.apache.isis.applib.services.bookmark;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 
 /**
  * This service enables a serializable &quot;bookmark&quot; to be created for an entity.
@@ -31,27 +30,6 @@ import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
  * </p>
  */
 public interface BookmarkService {
-
-    /**
-     * @deprecated - use {@link BookmarkService#lookup(BookmarkHolder, BookmarkService.FieldResetPolicy)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    Object lookup(BookmarkHolder bookmarkHolder);
-
-    /**
-     * @deprecated - use {@link BookmarkService#lookup(Bookmark, BookmarkService.FieldResetPolicy)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    Object lookup(Bookmark bookmark);
-
-    /**
-     * @deprecated - use {@link BookmarkService#lookup(Bookmark, BookmarkService.FieldResetPolicy, Class)} instead.
-     */
-    @Deprecated
-    @Programmatic
-    <T> T lookup(Bookmark bookmark, Class<T> cls);
 
     @Programmatic
     Bookmark bookmarkFor(Object domainObject);

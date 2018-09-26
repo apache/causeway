@@ -141,17 +141,6 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
         getPersistenceSession().refreshRootInTransaction(parent);
     }
 
-    /**
-     * @deprecated - left over from manual object resolving.
-     */
-    @Deprecated
-    @Override
-    public void resolve(final Object parent, final Object field) {
-        if (field == null) {
-            resolve(parent);
-        }
-    }
-
     @Override
     public void beginTran() {
         beginTran(null);

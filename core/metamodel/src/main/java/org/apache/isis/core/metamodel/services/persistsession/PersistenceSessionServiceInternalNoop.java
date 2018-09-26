@@ -73,11 +73,6 @@ public class PersistenceSessionServiceInternalNoop implements PersistenceSession
     }
 
     @Override
-    public void resolve(final Object parent, final Object field) {
-        throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
-    }
-
-    @Override
     public void resolve(final Object parent) {
         throw new UnsupportedOperationException("Not supported by this implementation of PersistenceSessionServiceInternal");
     }
