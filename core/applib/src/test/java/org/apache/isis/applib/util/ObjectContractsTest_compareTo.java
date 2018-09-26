@@ -40,7 +40,6 @@ public class ObjectContractsTest_compareTo extends ComparableContractTest_compar
     /**
      * as per {@link InvoiceItem#compareTo(InvoiceItem)}
      */
-    @SuppressWarnings("unchecked")
     @Override
     protected List<List<org.apache.isis.applib.util.InvoiceItem>> orderedTuples() {
         return listOf(

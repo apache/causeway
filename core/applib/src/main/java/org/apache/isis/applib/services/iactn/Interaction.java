@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
@@ -305,8 +305,7 @@ public class Interaction implements HasTransactionId {
         }
     }
 
-
-    private final Map<String, AtomicInteger> maxBySequence = _Maps.newHashMap();
+    private final Map<String, LongAdder> maxBySequence = _Maps.newHashMap();
 
     /**
      * Generates numbers in a named sequence.  The name of the sequence can be arbitrary, though note that the
@@ -315,17 +314,16 @@ public class Interaction implements HasTransactionId {
      */
     @Programmatic
     public int next(final String sequenceId) {
-        AtomicInteger next = maxBySequence.get(sequenceId);
-        if(next == null) {
-            next = new AtomicInteger(0);
-            maxBySequence.put(sequenceId, next);
-        } else {
-            next.incrementAndGet();
-        }
-        return next.get();
+        final LongAdder adder = maxBySequence.computeIfAbsent(sequenceId, this::newAdder);
+        adder.increment();
+        return adder.intValue();
     }
-
-
+    
+    private LongAdder newAdder(String ignore) {
+        final LongAdder adder = new LongAdder();
+        adder.decrement();
+        return adder;
+    }
 
     /**
      * Represents an action invocation/property edit as a node in a call-stack execution graph, with sub-interactions

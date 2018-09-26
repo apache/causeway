@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  * public API.
  *
  * <p>
- * The class is genericized so that the {@link #createInteractionEvent() factory
+ * The class is generic so that the {@link #createInteractionEvent() factory
  * method} can return the correct subclass without having to downcast.
  */
 public abstract class InteractionContext<T extends InteractionEvent> {

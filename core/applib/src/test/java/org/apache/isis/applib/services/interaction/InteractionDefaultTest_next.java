@@ -24,13 +24,14 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import org.apache.isis.applib.services.command.CommandDefault;
+import org.apache.isis.applib.services.iactn.Interaction;
 
 public class InteractionDefaultTest_next {
 
     @Test
     public void test() {
-        CommandDefault interaction = new CommandDefault();
+        final Interaction interaction = new Interaction();
+        
         assertThat(interaction.next("foo"), is(0));
         assertThat(interaction.next("foo"), is(1));
         assertThat(interaction.next("bar"), is(0));
