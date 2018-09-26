@@ -107,17 +107,6 @@ public class DomainEventHelper {
                 event.setReturnValue(ObjectAdapter.Util.unwrap(resultAdapter));
             }
 
-            // associate event with command...
-            if(command != null) {
-                event.setCommand(command);
-            }
-            // ... and associate command with event
-            if(command != null) {
-                if(phase.isExecuting()) {
-                    command.pushActionDomainEvent(event);
-                }
-            }
-
             getEventBusService().post(event);
             return event;
         } catch (Exception e) {

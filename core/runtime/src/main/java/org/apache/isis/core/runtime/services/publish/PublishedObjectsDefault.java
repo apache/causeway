@@ -73,22 +73,18 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
         this.changesByAdapter = changesByAdapter;
     }
 
-
     // -- transactionId, sequence completedAt, user
     @Programmatic
-    @Override
     public UUID getTransactionId() {
+        return getUniqueId();
+    }
+
+    @Programmatic
+    @Override
+    public UUID getUniqueId() {
         return transactionUuid;
     }
-
-    /**
-     * Unused; the {@link #getTransactionId()} is set in the constructor.
-     */
-    @Override
-    public void setTransactionId(final UUID transactionId) {
-        this.transactionUuid = transactionId;
-    }
-
+    
     @Programmatic
     @Override
     public int getSequence() {

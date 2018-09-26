@@ -131,7 +131,7 @@ public abstract class ResourceAbstract {
 
 
     protected void setCommandExecutor(Command.Executor executor) {
-        getServicesInjector().lookupServiceElseFail(CommandContext.class).getCommand().setExecutor(executor);
+        getServicesInjector().lookupServiceElseFail(CommandContext.class).getCommand().internal().setExecutor(executor);
     }
 
     // //////////////////////////////////////////////////////////////

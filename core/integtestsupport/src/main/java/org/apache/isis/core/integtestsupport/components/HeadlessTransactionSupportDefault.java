@@ -68,7 +68,7 @@ public class HeadlessTransactionSupportDefault implements HeadlessTransactionSup
         // specify that this command (if any) is being executed by a 'USER'
         final CommandContext commandContext = getService(CommandContext.class);
         Command command = commandContext.getCommand();
-        command.setExecutor(Command.Executor.USER);
+        command.internal().setExecutor(Command.Executor.USER);
     }
 
     /**

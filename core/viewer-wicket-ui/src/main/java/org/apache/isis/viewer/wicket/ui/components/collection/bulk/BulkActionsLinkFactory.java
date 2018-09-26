@@ -117,7 +117,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                         final Command command;
                         if (commandContext != null) {
                             command = commandContext.getCommand();
-                            command.setExecutor(Executor.USER);
+                            command.internal().setExecutor(Executor.USER);
                         }
 
                         int numParameters = objectAction.getParameterCount();

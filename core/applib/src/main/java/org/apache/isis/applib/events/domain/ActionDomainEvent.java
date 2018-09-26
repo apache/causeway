@@ -21,8 +21,6 @@ package org.apache.isis.applib.events.domain;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
 
@@ -75,26 +73,26 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public ActionDomainEvent() {
     }
 
-    // -- command
-    private Command command;
-
-    /**
-     * @deprecated - use {@link CommandContext#getCommand()} to obtain the current {@link Command}.
-     */
-    @Deprecated
-    public Command getCommand() {
-        return command;
-    }
-
-    /**
-     * Not API - set by the framework.
-     *
-     * @deprecated - the corresponding {@link #getCommand()} should not be called, instead use {@link CommandContext#getCommand()} to obtain the current {@link Command}.
-     */
-    @Deprecated
-    public void setCommand(Command command) {
-        this.command = command;
-    }
+//    // -- command
+//    private Command command;
+//
+//    /**
+//     * @deprecated - use {@link CommandContext#getCommand()} to obtain the current {@link Command}.
+//     */
+//    @Deprecated
+//    public Command getCommand() {
+//        return command;
+//    }
+//
+//    /**
+//     * Not API - set by the framework.
+//     *
+//     * @deprecated - the corresponding {@link #getCommand()} should not be called, instead use {@link CommandContext#getCommand()} to obtain the current {@link Command}.
+//     */
+//    @Deprecated
+//    public void setCommand(Command command) {
+//        this.command = command;
+//    }
 
 
     // -- actionSemantics

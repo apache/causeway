@@ -23,32 +23,12 @@ import java.util.UUID;
  * Mix-in interface for objects (usually created by service implementations) that are be persistable,
  * and so can be associated together using a unique identifier.
  *
- * <p>
- *     Prior to 1.13.0, this identifier was the GUID of the Isis transaction in which the object was created (hence
- *     the name).  As of 1.13.0, this identifier actually is for the request/interaction in which the object was
- *     created, so is misnamed.
- * </p>
  */
-public interface HasTransactionId {
+public interface HasUniqueId {
 
     /**
-     * The unique identifier (a GUID) of the request/interaction.
+     * The unique identifier (a GUID) of the request/interaction/transaction.
      */
-    UUID getTransactionId();
+    UUID getUniqueId();
 
-    void setTransactionId(final UUID transactionId);
-
-    class TransactionIdType {
-
-        private TransactionIdType() {}
-
-        public static class Meta {
-
-            public static final int MAX_LEN = 36;
-
-            private Meta() {}
-
-        }
-
-    }
 }

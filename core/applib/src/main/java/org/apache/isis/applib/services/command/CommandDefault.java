@@ -17,32 +17,21 @@
 package org.apache.isis.applib.services.command;
 
 import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.ToString;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
 
 public class CommandDefault implements Command {
 
     // -- constructor
 
     public CommandDefault() {
-        setExecutor(Executor.OTHER);
+        this.executor = Executor.OTHER;
     }
-
-
 
     // -- actionIdentifier (property)
 
@@ -52,13 +41,6 @@ public class CommandDefault implements Command {
         return actionIdentifier;
     }
 
-    @Override
-    public void setMemberIdentifier(String actionIdentifier) {
-        this.actionIdentifier = actionIdentifier;
-    }
-
-
-
     // -- targetClass (property)
 
     private String targetClass;
@@ -66,13 +48,6 @@ public class CommandDefault implements Command {
     public String getTargetClass() {
         return targetClass;
     }
-
-    @Override
-    public void setTargetClass(String targetClass) {
-        this.targetClass = targetClass;
-    }
-
-
 
     // -- targetAction (property)
 
@@ -82,13 +57,6 @@ public class CommandDefault implements Command {
         return targetAction;
     }
 
-    @Override
-    public void setTargetAction(String targetAction) {
-        this.targetAction = targetAction;
-    }
-
-
-
     // -- arguments (property)
 
     private String arguments;
@@ -96,13 +64,6 @@ public class CommandDefault implements Command {
     public String getArguments() {
         return arguments;
     }
-
-    @Override
-    public void setArguments(String arguments) {
-        this.arguments = arguments;
-    }
-
-
 
     // -- memento (property)
 
@@ -112,12 +73,6 @@ public class CommandDefault implements Command {
     public String getMemento() {
         return memento;
     }
-    @Override
-    public void setMemento(String memento) {
-        this.memento = memento;
-    }
-
-
 
     // -- target (property)
 
@@ -126,12 +81,6 @@ public class CommandDefault implements Command {
     public Bookmark getTarget() {
         return target;
     }
-    @Override
-    public void setTarget(Bookmark target) {
-        this.target = target;
-    }
-
-
 
     // -- timestamp (property)
 
@@ -141,13 +90,6 @@ public class CommandDefault implements Command {
         return timestamp;
     }
 
-    @Override
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
-    }
-
-
-
     // -- startedAt (property)
 
     private Timestamp startedAt;
@@ -155,12 +97,6 @@ public class CommandDefault implements Command {
     public Timestamp getStartedAt() {
         return startedAt;
     }
-    @Override
-    public void setStartedAt(Timestamp startedAt) {
-        this.startedAt = startedAt;
-    }
-
-
 
     // -- completedAt (property)
 
@@ -171,13 +107,6 @@ public class CommandDefault implements Command {
         return completedAt;
     }
 
-    @Override
-    public void setCompletedAt(final Timestamp completed) {
-        this.completedAt = completed;
-    }
-
-
-
     // -- user (property)
 
     private String user;
@@ -185,46 +114,6 @@ public class CommandDefault implements Command {
     public String getUser() {
         return user;
     }
-
-    @Override
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-
-
-    // -- actionDomainEvent (peek/pop/flush)
-
-    private final LinkedList<ActionDomainEvent<?>> actionDomainEvents = _Lists.newLinkedList();
-
-    @Override
-    public ActionDomainEvent<?> peekActionDomainEvent() {
-        return actionDomainEvents.isEmpty()? null: actionDomainEvents.getLast();
-    }
-
-    @Override
-    public void pushActionDomainEvent(ActionDomainEvent<?> event) {
-        if(peekActionDomainEvent() == event) {
-            return;
-        }
-        this.actionDomainEvents.add(event);
-    }
-
-    @Override
-    public ActionDomainEvent<?> popActionDomainEvent() {
-        return !actionDomainEvents.isEmpty() ? actionDomainEvents.removeLast() : null;
-    }
-
-    @Override
-    @Programmatic
-    public List<ActionDomainEvent<?>> flushActionDomainEvents() {
-        final List<ActionDomainEvent<?>> events =
-                Collections.unmodifiableList(_Lists.newArrayList(actionDomainEvents));
-        actionDomainEvents.clear();
-        return events;
-    }
-
-
 
     // -- executor (property)
 
@@ -235,16 +124,6 @@ public class CommandDefault implements Command {
         return executor;
     }
 
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     */
-    @Override
-    public void setExecutor(Executor nature) {
-        this.executor = nature;
-    }
-
-
-
     // -- executionType (property)
 
     private CommandExecuteIn executionType;
@@ -253,17 +132,6 @@ public class CommandDefault implements Command {
     public CommandExecuteIn getExecuteIn() {
         return executionType;
     }
-
-    /**
-     * <b>NOT API</b>: intended to be called only by the framework.
-     */
-    @Override
-    public void setExecuteIn(CommandExecuteIn executionType) {
-        this.executionType = executionType;
-    }
-
-
-
 
     // -- parent (property)
 
@@ -274,14 +142,6 @@ public class CommandDefault implements Command {
         return parent;
     }
 
-    @Override
-    public void setParent(Command parent) {
-        this.parent = parent;
-    }
-
-
-
-
     // -- result (property)
 
     private Bookmark result;
@@ -290,12 +150,6 @@ public class CommandDefault implements Command {
     public Bookmark getResult() {
         return result;
     }
-    @Override
-    public void setResult(final Bookmark result) {
-        this.result = result;
-    }
-
-
 
     // -- exceptionStackTrace (property)
 
@@ -305,28 +159,16 @@ public class CommandDefault implements Command {
     public String getException() {
         return exceptionStackTrace;
     }
-    @Override
-    public void setException(final String exceptionStackTrace) {
-        this.exceptionStackTrace = exceptionStackTrace;
-    }
-
-
 
     // -- transactionId (property)
 
-    private UUID transactionId;
+    private UUID interactionId;
 
     @Override
-    public UUID getTransactionId() {
-        return transactionId;
+    public UUID getUniqueId() {
+        return interactionId;
     }
-    @Override
-    public void setTransactionId(UUID transactionId) {
-        this.transactionId = transactionId;
-    }
-
-
-
+    
 
     // -- persistence
 
@@ -337,13 +179,6 @@ public class CommandDefault implements Command {
         return persistence;
     }
 
-    @Override
-    public void setPersistence(CommandPersistence persistence) {
-        this.persistence = persistence;
-    }
-
-
-
     // -- persistHint
 
     private boolean persistHint;
@@ -353,33 +188,6 @@ public class CommandDefault implements Command {
         return persistHint;
     }
 
-    @Override
-    public void setPersistHint(boolean persistHint) {
-        this.persistHint = persistHint;
-    }
-
-
-
-
-    // -- next
-
-    private final Map<String, AtomicInteger> sequenceByName = _Maps.newHashMap();
-
-    @Deprecated
-    @Override
-    public int next(String sequenceAbbr) {
-        AtomicInteger next = sequenceByName.get(sequenceAbbr);
-        if(next == null) {
-            next = new AtomicInteger(0);
-            sequenceByName.put(sequenceAbbr, next);
-        } else {
-            next.incrementAndGet();
-        }
-        return next.get();
-    }
-
-
-
     // -- toString
 
     private final static ToString<CommandDefault> toString = ObjectContracts
@@ -387,14 +195,91 @@ public class CommandDefault implements Command {
             .thenToString("user", CommandDefault::getUser)
             .thenToString("memberIdentifier", CommandDefault::getMemberIdentifier)
             .thenToString("target", CommandDefault::getTarget)
-            .thenToString("transactionId", CommandDefault::getTransactionId);
-
+            .thenToString("transactionId", CommandDefault::getUniqueId);
 
     @Override
     public String toString() {
         return toString.toString(this);
     }
 
+    
+    // -- FRAMEWORK INTERNATA
+    
+    private final Command.Internal INTERNAL = new Command.Internal() {
+        @Override
+        public void setMemberIdentifier(String actionIdentifier) {
+            CommandDefault.this.actionIdentifier = actionIdentifier;
+        }
+        @Override
+        public void setTargetClass(String targetClass) {
+            CommandDefault.this.targetClass = targetClass;
+        }
+        @Override
+        public void setTargetAction(String targetAction) {
+            CommandDefault.this.targetAction = targetAction;
+        }
+        @Override
+        public void setArguments(String arguments) {
+            CommandDefault.this.arguments = arguments;
+        }
+        @Override
+        public void setMemento(String memento) {
+            CommandDefault.this.memento = memento;
+        }
+        @Override
+        public void setTarget(Bookmark target) {
+            CommandDefault.this.target = target;
+        }
+        @Override
+        public void setTimestamp(Timestamp timestamp) {
+            CommandDefault.this.timestamp = timestamp;
+        }
+        @Override
+        public void setStartedAt(Timestamp startedAt) {
+            CommandDefault.this.startedAt = startedAt;
+        }
+        @Override
+        public void setCompletedAt(final Timestamp completed) {
+            CommandDefault.this.completedAt = completed;
+        }
+        @Override
+        public void setUser(String user) {
+            CommandDefault.this.user = user;
+        }
+        @Override
+        public void setParent(Command parent) {
+            CommandDefault.this.parent = parent;
+        }
+        @Override
+        public void setResult(final Bookmark result) {
+            CommandDefault.this.result = result;
+        }
+        @Override
+        public void setException(final String exceptionStackTrace) {
+            CommandDefault.this.exceptionStackTrace = exceptionStackTrace;
+        }
+        @Override
+        public void setPersistence(CommandPersistence persistence) {
+            CommandDefault.this.persistence = persistence;
+        }
+        @Override
+        public void setPersistHint(boolean persistHint) {
+            CommandDefault.this.persistHint = persistHint;
+        }
+        @Override
+        public void setExecutor(Executor executor) {
+            CommandDefault.this.executor = executor;
+        }
+        @Override
+        public void setInteractionId(UUID transactionId) {
+            CommandDefault.this.interactionId = interactionId;
+        }
+    };
+    
+    @Override
+    public Command.Internal internal() {
+        return INTERNAL;
+    }
 
 
 

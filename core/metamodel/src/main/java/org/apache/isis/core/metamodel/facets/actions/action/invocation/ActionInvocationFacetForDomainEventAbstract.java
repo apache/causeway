@@ -236,7 +236,7 @@ implements ImperativeFacet {
                         final Timestamp startedAt = getClockService().nowAsJavaSqlTimestamp();
                         execution.setStartedAt(startedAt);
                         if(command.getStartedAt() == null) {
-                            command.setStartedAt(startedAt);
+                            command.internal().setStartedAt(startedAt);
                         }
 
 
@@ -453,7 +453,7 @@ implements ImperativeFacet {
             if(getRepositoryService().isPersistent(domainObject)) {
                 BookmarkService bookmarkService = getBookmarkService();
                 Bookmark bookmark = bookmarkService.bookmarkFor(domainObject);
-                command.setResult(bookmark);
+                command.internal().setResult(bookmark);
             }
             break;
         default:

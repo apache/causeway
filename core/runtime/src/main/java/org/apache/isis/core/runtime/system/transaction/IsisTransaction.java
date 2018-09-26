@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
@@ -202,16 +201,8 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
 
     @Override
     @Programmatic
-    public final UUID getTransactionId() {
+    public final UUID getUniqueId() {
         return interactionId;
-    }
-
-    /**
-     * Just throws an exception (the issue is that {@link HasTransactionId} really ought not to expose the setter).
-     */
-    @Override
-    public void setTransactionId(UUID transactionId) {
-        throw new IllegalStateException("Transaction Id cannot be set on Transaction object");
     }
 
     @Override

@@ -27,7 +27,7 @@ import java.util.UUID;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -78,16 +78,13 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
 
 
-    class SomeTransactionalId implements HasTransactionId {
+    class SomeTransactionalId implements HasUniqueId {
 
         @Override
-        public UUID getTransactionId() {
+        public UUID getUniqueId() {
             return null;
         }
-
-        @Override
-        public void setTransactionId(final UUID transactionId) {
-        }
+        
     }
 
     protected void allowingConfigurationToReturn(final String name, final String value) {
@@ -130,7 +127,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             allowingConfigurationToReturn("isis.services.audit.objects", "all");
 
-            facetFactory.processAuditing(new ProcessClassContext(HasTransactionId.class, mockMethodRemover, facetHolder));
+            facetFactory.processAuditing(new ProcessClassContext(HasUniqueId.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(AuditableFacet.class);
             Assert.assertNull(facet);
@@ -281,7 +278,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             allowingConfigurationToReturn("isis.services.publish.objects", "all");
 
-            facetFactory.process(new ProcessClassContext(HasTransactionId.class, mockMethodRemover, facetHolder));
+            facetFactory.process(new ProcessClassContext(HasUniqueId.class, mockMethodRemover, facetHolder));
 
             final Facet facet = facetHolder.getFacet(PublishedObjectFacet.class);
             Assert.assertNull(facet);

@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.eventbus.EventBusService;
@@ -78,24 +78,22 @@ import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCal
  *
  */
 @Value
-public class Interaction implements HasTransactionId {
+public class Interaction implements HasUniqueId {
 
     // -- transactionId (property)
 
-    private UUID transactionId;
+    private UUID interactionId;
 
     @Programmatic
     @Override
-    public UUID getTransactionId() {
-        return transactionId;
+    public UUID getUniqueId() {
+        return interactionId;
     }
 
     @Programmatic
-    @Override
-    public void setTransactionId(final UUID transactionId) {
-        this.transactionId = transactionId;
+    public void setUniqueId(final UUID transactionId) {
+        this.interactionId = transactionId;
     }
-
 
     // -- push/pop/current/get/clear Execution(s)
 

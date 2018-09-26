@@ -171,11 +171,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
         final String userName = userService.getUser().getName();
 
-        command.setTimestamp(timestamp);
-        command.setUser(userName);
-        command.setTransactionId(transactionId);
+        command.internal().setTimestamp(timestamp);
+        command.internal().setUser(userName);
+        command.internal().setInteractionId(transactionId);
 
-        interaction.setTransactionId(transactionId);
+        interaction.setUniqueId(transactionId);
 
         commandContext.setCommand(command);
         interactionContext.setInteraction(interaction);
@@ -302,7 +302,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                 completedAt = clockService.nowAsJavaSqlTimestamp();
             }
 
-            command.setCompletedAt(completedAt);
+            command.internal().setCompletedAt(completedAt);
         }
 
         // ensureCommandsPersistedIfDirtyXactn
@@ -310,13 +310,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         // ensure that any changed objects means that the command should be persisted
         if(command.getMemberIdentifier() != null) {
             if(metricsService.numberObjectsDirtied() > 0) {
-                command.setPersistHint(true);
+                command.internal().setPersistHint(true);
             }
         }
 
         commandService.complete(command);
-
-        command.flushActionDomainEvents();
 
         interaction.clear();
     }

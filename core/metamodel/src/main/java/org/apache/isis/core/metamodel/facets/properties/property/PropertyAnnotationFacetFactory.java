@@ -27,7 +27,7 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
-import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -198,7 +198,6 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
     void processCommand(final ProcessMethodContext processMethodContext) {
 
-        final Class<?> cls = processMethodContext.getCls();
         final Method method = processMethodContext.getMethod();
         final List<Property> properties = Annotations.getAnnotations(method, Property.class);
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
@@ -208,7 +207,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
-        if(HasTransactionId.class.isAssignableFrom(processMethodContext.getCls())) {
+        if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
             // do not install on any implementation of HasTransactionId
             // (ie commands, audit entries, published events).
             return;
@@ -230,7 +229,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
-        if(HasTransactionId.class.isAssignableFrom(processMethodContext.getCls())) {
+        if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
             // do not install on any implementation of HasTransactionId
             // (ie commands, audit entries, published events).
             return;

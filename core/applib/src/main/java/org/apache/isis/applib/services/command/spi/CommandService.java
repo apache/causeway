@@ -26,7 +26,7 @@ public interface CommandService {
 
     /**
      * Simply instantiate the appropriate instance of the {@link Command}.  Its members will be populated automatically
-     * by the framework (the {@link Command}'s {@link Command#getTimestamp()}, {@link Command#getUser()} and {@link Command#getTransactionId()}).
+     * by the framework (the {@link Command}'s {@link Command#getTimestamp()}, {@link Command#getUser()} and {@link Command#getUniqueId()}).
      */
     @Programmatic
     Command create();

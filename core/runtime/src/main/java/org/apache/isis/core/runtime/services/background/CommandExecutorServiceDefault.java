@@ -133,12 +133,12 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         org.apache.isis.applib.annotation.CommandExecuteIn executeIn = commandWithDto.getExecuteIn();
 
-        LOG.info("Executing: {} {} {} {}", executeIn, commandWithDto.getMemberIdentifier(), commandWithDto.getTimestamp(), commandWithDto.getTransactionId());
+        LOG.info("Executing: {} {} {} {}", executeIn, commandWithDto.getMemberIdentifier(), commandWithDto.getTimestamp(), commandWithDto.getUniqueId());
 
         RuntimeException exceptionIfAny = null;
 
         try {
-            commandWithDto.setExecutor(Command.Executor.BACKGROUND);
+            commandWithDto.internal().setExecutor(Command.Executor.BACKGROUND);
 
             // responsibility for setting the Command#startedAt is in the ActionInvocationFacet or
             // PropertySetterFacet, but this is run if the domain object was found.  If the domain object is
@@ -151,7 +151,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                     ? currentExecution.getStartedAt()
                             : clockService.nowAsJavaSqlTimestamp();
 
-                    commandWithDto.setStartedAt(startedAt);
+                    commandWithDto.internal().setStartedAt(startedAt);
 
                     final CommandDto dto = commandWithDto.asDto();
 
@@ -192,7 +192,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                             // REVIEW: this doesn't really make sense if >1 action
                             if(resultAdapter != null) {
                                 Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
-                                commandWithDto.setResult(resultBookmark);
+                                commandWithDto.internal().setResult(resultBookmark);
                             }
                         }
                     } else {
@@ -244,7 +244,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
         if (commandWithDto.getStartedAt() == null) {
             // if attempting to commit the xactn threw an error, we will (I think?) have lost this info, so need to
             // capture
-            commandWithDto.setStartedAt(
+            commandWithDto.internal().setStartedAt(
                     priorExecution != null
                     ? priorExecution.getStartedAt()
                             : clockService.nowAsJavaSqlTimestamp());
@@ -254,10 +254,10 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
                 priorExecution != null
                 ? priorExecution.getCompletedAt()
                         : clockService.nowAsJavaSqlTimestamp();  // close enough...
-                commandWithDto.setCompletedAt(completedAt);
+                commandWithDto.internal().setCompletedAt(completedAt);
 
                 if(exceptionIfAny != null) {
-                    commandWithDto.setException(_Exceptions.
+                    commandWithDto.internal().setException(_Exceptions.
                             streamStacktraceLines(exceptionIfAny, 500)
                             .collect(Collectors.joining("\n")));
                 }

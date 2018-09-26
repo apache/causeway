@@ -20,7 +20,6 @@
 package org.apache.isis.core.runtime.services.ixn;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -59,8 +58,6 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
             final List<ObjectAdapter> argumentAdapters) {
 
         final Interaction interaction = interactionContext.getInteraction();
-        final UUID transactionId = interaction.getTransactionId();
-
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
         final Object targetPojo = targetAdapter.getObject();
@@ -76,8 +73,6 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         commandDtoServiceInternal.addActionArgs(
                 objectAction, actionDto, argumentAdapters.toArray(new ObjectAdapter[]{}));
         final List<ParamDto> parameterDtos = CommandDtoUtils.parametersFor(actionDto).getParameter();
-
-        final String transactionIdStr = transactionId.toString();
 
         return InteractionDtoUtils.newActionInvocation(
                 nextEventSequence, targetBookmark, targetTitle,

@@ -435,12 +435,12 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
             return;
         }
 
-        command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
-        command.setTargetAction(CommandUtil.targetMemberNameFor(this));
-        command.setArguments(arguments);
+        command.internal().setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
+        command.internal().setTargetAction(CommandUtil.targetMemberNameFor(this));
+        command.internal().setArguments(arguments);
 
         final Bookmark targetBookmark = CommandUtil.bookmarkFor(targetAdapter);
-        command.setTarget(targetBookmark);
+        command.internal().setTarget(targetBookmark);
     }
 
     protected void setupCommandMemberIdentifier() {
@@ -458,7 +458,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
             return;
         }
 
-        command.setMemberIdentifier(CommandUtil.memberIdentifierFor(this));
+        command.internal().setMemberIdentifier(CommandUtil.memberIdentifierFor(this));
     }
 
     protected void setupCommandDtoAndExecutionContext(final CommandDto dto) {
@@ -478,17 +478,17 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         // memento
 
         final String mementoXml = CommandDtoUtils.toXml(dto);
-        command.setMemento(mementoXml);
+        command.internal().setMemento(mementoXml);
 
         // copy over the command execution 'context' (if available)
         final CommandFacet commandFacet = getFacetHolder().getFacet(CommandFacet.class);
         if(commandFacet != null && !commandFacet.isDisabled()) {
-            command.setExecuteIn(commandFacet.executeIn());
-            command.setPersistence(commandFacet.persistence());
+            //command.internal().setExecuteIn(commandFacet.executeIn());
+            command.internal().setPersistence(commandFacet.persistence());
         } else {
             // if no facet, assume do want to execute right now, but only persist (eventually) if hinted.
-            command.setExecuteIn(org.apache.isis.applib.annotation.CommandExecuteIn.FOREGROUND);
-            command.setPersistence(org.apache.isis.applib.annotation.CommandPersistence.IF_HINTED);
+            //command.internal().setExecuteIn(org.apache.isis.applib.annotation.CommandExecuteIn.FOREGROUND);
+            command.internal().setPersistence(org.apache.isis.applib.annotation.CommandPersistence.IF_HINTED);
         }
     }
 

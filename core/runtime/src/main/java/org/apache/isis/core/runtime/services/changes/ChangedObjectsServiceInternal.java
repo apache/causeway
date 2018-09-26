@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
-import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.applib.services.WithTransactionScope;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -242,7 +242,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
     protected boolean shouldIgnore(final ObjectAdapter adapter) {
         final ObjectSpecification adapterSpec = adapter.getSpecification();
         final Class<?> adapterClass = adapterSpec.getCorrespondingClass();
-        return HasTransactionId.class.isAssignableFrom(adapterClass);
+        return HasUniqueId.class.isAssignableFrom(adapterClass);
     }
 
 

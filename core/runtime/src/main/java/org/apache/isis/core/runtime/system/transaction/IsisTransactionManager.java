@@ -235,10 +235,10 @@ public class IsisTransactionManager implements SessionScopedComponent {
             final Command command;
             if (existingCommandIfAny != null) {
                 commandContext.setCommand(existingCommandIfAny);
-                interaction.setTransactionId(existingCommandIfAny.getTransactionId());
+                interaction.setUniqueId(existingCommandIfAny.getUniqueId());
             }
             command = commandContext.getCommand();
-            final UUID transactionId = command.getTransactionId();
+            final UUID transactionId = command.getUniqueId();
 
             this.currentTransaction = new IsisTransaction(transactionId,
                     interaction.next(Interaction.Sequence.TRANSACTION.id()), /*authenticationSession,*/ servicesInjector);

@@ -126,7 +126,7 @@ implements FormExecutor {
             final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
             if (commandContext != null) {
                 command = commandContext.getCommand();
-                command.setExecutor(Command.Executor.USER);
+                command.internal().setExecutor(Command.Executor.USER);
             }
 
 
@@ -230,7 +230,7 @@ implements FormExecutor {
 
             // irrespective, capture error in the Command, and propagate
             if (command != null) {
-                command.setException(Throwables.getStackTraceAsString(ex));
+                command.internal().setException(Throwables.getStackTraceAsString(ex));
             }
 
             // throwing an exception will get caught by WebRequestCycleForIsis#onException(...)

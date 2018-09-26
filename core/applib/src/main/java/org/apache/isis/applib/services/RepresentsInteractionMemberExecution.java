@@ -20,7 +20,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.schema.ixn.v1.InteractionDto;
 
 /**
- * Extends {@link HasTransactionId}, where the {@link HasTransactionId#getTransactionId()} is interpreted as an
+ * Extends {@link HasUniqueId}, where the {@link HasUniqueId#getUniqueId()} is interpreted as an
  * interaction (cf {@link InteractionDto}) that has at least one member execution (cf
  * {@link org.apache.isis.schema.ixn.v1.MemberExecutionDto}) and may (by way of {@link WrapperFactory}) contain
  * several.
@@ -29,7 +29,7 @@ import org.apache.isis.schema.ixn.v1.InteractionDto;
  *     Examples could include SPI services that persist published events and status messages.
  * </p>
  */
-public interface RepresentsInteractionMemberExecution extends HasTransactionId {
+public interface RepresentsInteractionMemberExecution extends HasUniqueId {
 
     int getSequence();
 }

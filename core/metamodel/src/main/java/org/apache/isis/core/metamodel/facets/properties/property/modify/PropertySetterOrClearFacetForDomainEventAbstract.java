@@ -57,7 +57,6 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
     private final PropertyOrCollectionAccessorFacet getterFacet;
     private final PropertySetterFacet setterFacet;
     private final PropertyClearFacet clearFacet;
-    private final PropertyDomainEventFacetAbstract propertyDomainEventFacet;
 
     private final ServicesInjector servicesInjector;
     private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
@@ -76,7 +75,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
         this.clearFacet = clearFacet;
-        this.propertyDomainEventFacet = propertyDomainEventFacet;
+        //this.propertyDomainEventFacet = propertyDomainEventFacet;
         this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
         this.servicesInjector = servicesInjector;
         this.domainEventHelper = new DomainEventHelper(servicesInjector);
@@ -229,7 +228,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                         final Timestamp startedAt = getClockService().nowAsJavaSqlTimestamp();
                         execution.setStartedAt(startedAt);
                         if(command.getStartedAt() == null) {
-                            command.setStartedAt(startedAt);
+                            command.internal().setStartedAt(startedAt);
                         }
 
                         // ... post the executing event

@@ -97,7 +97,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
             final Map<ObjectAdapter, PublishingChangeKind> changeKindByPublishedAdapter) {
 
         final Command command = commandContext.getCommand();
-        final UUID transactionUuid = command.getTransactionId();
+        final UUID transactionUuid = command.getUniqueId();
 
         final String userName = userService.getUser().getName();
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();

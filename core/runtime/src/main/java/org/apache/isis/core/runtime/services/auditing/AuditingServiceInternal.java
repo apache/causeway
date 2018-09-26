@@ -107,7 +107,7 @@ public class AuditingServiceInternal {
         final String targetClass = CommandUtil.targetClassNameFor(adapter);
 
         Transaction transaction = transactionService.currentTransaction();
-        final UUID transactionId = transaction.getTransactionId();
+        final UUID transactionId = transaction.getUniqueId();
         final int sequence = transaction.getSequence();
 
         for (AuditerService auditerService : auditerServices) {

@@ -153,8 +153,8 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
     protected UUID determineTransactionId() {
         Command command = commandContext.getCommand();
-        if (command != null && command.getTransactionId() != null) {
-            return command.getTransactionId();
+        if (command != null && command.getUniqueId() != null) {
+            return command.getUniqueId();
         } else {
             return UUID.randomUUID();
         }

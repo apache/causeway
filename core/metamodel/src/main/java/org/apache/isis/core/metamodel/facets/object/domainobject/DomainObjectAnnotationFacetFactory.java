@@ -35,7 +35,7 @@ import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectRemovingEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
-import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -118,7 +118,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
         // this rule originally implemented only in AuditableFacetFromConfigurationFactory
         // but think should apply in general
         //
-        if(HasTransactionId.class.isAssignableFrom(cls)) {
+        if(HasUniqueId.class.isAssignableFrom(cls)) {
             // do not install on any implementation of HasTransactionId
             // (ie commands, audit entries, published events).
             return;
@@ -142,7 +142,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
         //
         // this rule inspired by a similar rule for auditing, see above
         //
-        if(HasTransactionId.class.isAssignableFrom(cls)) {
+        if(HasUniqueId.class.isAssignableFrom(cls)) {
             // do not install on any implementation of HasTransactionId
             // (ie commands, audit entries, published events).
             return;

@@ -38,7 +38,7 @@ import org.apache.isis.applib.annotation.InvokeOn;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -139,18 +139,16 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         }
     }
 
-    class SomeTransactionalId implements HasTransactionId {
+    class SomeTransactionalId implements HasUniqueId {
         public void someAction() {
         }
 
         @Override
-        public UUID getTransactionId() {
+        public UUID getUniqueId() {
             return null;
         }
 
-        @Override
-        public void setTransactionId(final UUID transactionId) {
-        }
+        
     }
 
     public static class Invocation extends ActionAnnotationFacetFactoryTest {

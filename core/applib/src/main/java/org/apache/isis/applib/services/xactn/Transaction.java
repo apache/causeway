@@ -20,16 +20,16 @@
 package org.apache.isis.applib.services.xactn;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.HasUniqueId;
 
 /**
  * Representation of the current transaction, which conceptually wraps the underlying objectstore transaction.
  */
-public interface Transaction extends HasTransactionId {
+public interface Transaction extends HasUniqueId {
 
 
     /**
-     * The {@link HasTransactionId#getTransactionId()} is (as of 1.13.0) actually an identifier for the request/
+     * The {@link HasUniqueId#getUniqueId()} is (as of 1.13.0) actually an identifier for the request/
      * interaction, and there can actually be multiple transactions within such a request/interaction.  The sequence
      * (0-based) is used to distinguish such.
      */

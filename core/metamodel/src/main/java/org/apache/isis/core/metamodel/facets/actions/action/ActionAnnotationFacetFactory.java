@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
-import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -214,7 +214,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         //
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         //
-        if(HasTransactionId.class.isAssignableFrom(processMethodContext.getCls())) {
+        if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
             // do not install on any implementation of HasTransactionId
             // (ie commands, audit entries, published events).
             return;
@@ -236,7 +236,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         // this rule inspired by a similar rule for auditing and publishing, see DomainObjectAnnotationFacetFactory
         // and for commands, see above
         //
-        if(HasTransactionId.class.isAssignableFrom(processMethodContext.getCls())) {
+        if(HasUniqueId.class.isAssignableFrom(processMethodContext.getCls())) {
             // do not install on any implementation of HasTransactionId
             // (ie commands, audit entries, published events).
             return;
