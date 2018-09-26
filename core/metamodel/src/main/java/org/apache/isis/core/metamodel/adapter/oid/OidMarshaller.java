@@ -204,8 +204,8 @@ public final class OidMarshaller {
             final String parentOidStr = oidStrWithoutCollectionName + marshal(version);
 
             RootOid parentOid = this.unmarshal(parentOidStr, RootOid.class);
-            ensureCorrectType(oidStr, requestedType, ParentedCollectionOid.class);
-            return (T)new ParentedCollectionOid(parentOid, collectionName);
+            ensureCorrectType(oidStr, requestedType, ParentedOid.class);
+            return (T) ParentedOid.ofName(parentOid, collectionName);
         }
     }
 
@@ -260,13 +260,13 @@ public final class OidMarshaller {
     }
 
     @Programmatic
-    public final String marshal(ParentedCollectionOid collectionOid) {
+    public final String marshal(ParentedOid collectionOid) {
         return marshalNoVersion(collectionOid) + marshal(collectionOid.getVersion());
     }
 
     @Programmatic
-    public String marshalNoVersion(ParentedCollectionOid collectionOid) {
-        return collectionOid.getRootOid().enStringNoVersion() + SEPARATOR_COLLECTION + collectionOid.getName();
+    public String marshalNoVersion(ParentedOid collectionOid) {
+        return collectionOid.getParentOid().enStringNoVersion() + SEPARATOR_COLLECTION + collectionOid.getName();
     }
 
     @Programmatic

@@ -21,10 +21,11 @@ package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 
 import java.util.Iterator;
 
+import com.google.common.base.Splitter;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -32,8 +33,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession4;
-
-import com.google.common.base.Splitter;
 
 public class PojoAdapterBuilder {
 
@@ -95,7 +94,7 @@ public class PojoAdapterBuilder {
         }, COLLECTION {
             @Override
             Oid oidFor(RootOid rootOid, ObjectSpecId objectSpecId, String collectionId) {
-                return new ParentedCollectionOid(rootOid, collectionId);
+                return Oid.Factory.collectionOfName(rootOid, collectionId);
             }
         }, VALUE {
             @Override

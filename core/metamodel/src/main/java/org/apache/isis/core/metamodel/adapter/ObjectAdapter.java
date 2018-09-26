@@ -33,7 +33,7 @@ import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.MethodUtil;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -167,7 +167,7 @@ public interface ObjectAdapter extends Instance {
 
     /**
      * Returns either itself (if this is a root) or the parented collections, the
-     * adapter corresponding to their {@link ParentedCollectionOid#getRootOid() root oid}.
+     * adapter corresponding to their {@link ParentedOid#getParentOid() root oid}.
      */
     ObjectAdapter getAggregateRoot();
 
@@ -177,10 +177,10 @@ public interface ObjectAdapter extends Instance {
 
     /**
      * Whether this instance belongs to another object (meaning its
-     * {@link #getOid()} will be a {@link ParentedCollectionOid}).
+     * {@link #getOid()} will be a {@link ParentedOid}).
      */
     default boolean isParentedCollection() {
-        return getOid() instanceof ParentedCollectionOid;
+        return getOid() instanceof ParentedOid;
     }
 
     /**

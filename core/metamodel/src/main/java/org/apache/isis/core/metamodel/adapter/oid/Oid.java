@@ -25,11 +25,12 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 
 /**
  * An immutable identifier for either a root object (subtype {@link RootOid}) or
- * a parented collection (subtype {@link ParentedCollectionOid}).
+ * a parented collection (subtype {@link ParentedOid}).
  *
  * <p>
  * Note that value objects (strings, ints, {@link Value}s etc) do not have an {@link Oid}.
@@ -52,8 +53,8 @@ public interface Oid extends Encodable {
      * or a view model object, or for a persistent object.
      *
      * <p>
-     * In the case of an {@link ParentedCollectionOid}, is determined by the state
-     * of its {@link ParentedCollectionOid#getRootOid() root}'s {@link RootOid#isTransient() state}.
+     * In the case of an {@link ParentedOid}, is determined by the state
+     * of its {@link ParentedOid#getParentOid() root}'s {@link RootOid#isTransient() state}.
      */
     boolean isTransient();
 
@@ -150,6 +151,15 @@ public interface Oid extends Encodable {
                     Version.Factory.ifPresent(versionSequence, versionUser, versionUtcTimestamp));
         }
 
+        // -- PARENTED COLLECTIONS
+        
+        public static ParentedOid collectionOfOneToMany(RootOid parentRootOid, OneToManyAssociation otma) {
+            return ParentedOid.ofName(parentRootOid, otma.getId());
+        }
+
+        public static ParentedOid collectionOfName(RootOid parentRootOid, String name) {
+            return ParentedOid.ofName(parentRootOid, name);
+        }
 
         
     }

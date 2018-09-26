@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
@@ -157,18 +157,18 @@ final public class ObjectAdapterContext {
          * root {@link ObjectAdapter adapter} for the supplied domain object.
          *
          * @see #createStandaloneAdapter(Object)
-         * @see #createCollectionAdapter(Object, ParentedCollectionOid)
+         * @see #createCollectionAdapter(Object, ParentedOid)
          */
         ObjectAdapter createRootAdapter(Object pojo, RootOid rootOid);
 
-        ObjectAdapter createCollectionAdapter(Object pojo, ParentedCollectionOid collectionOid);
+        ObjectAdapter createCollectionAdapter(Object pojo, ParentedOid collectionOid);
 
         /**
          * Creates an {@link ObjectAdapter adapter} to represent a collection
          * of the parent.
          *
          * <p>
-         * The returned adapter will have a {@link ParentedCollectionOid}; its version
+         * The returned adapter will have a {@link ParentedOid}; its version
          * and its persistence are the same as its owning parent.
          *
          * <p>
@@ -222,7 +222,7 @@ final public class ObjectAdapterContext {
             final RootOid rootOid = (RootOid) oid;
             createdAdapter = getFactories().createRootAdapter(pojo, rootOid);
         } else /*if (oid instanceof CollectionOid)*/ {
-            final ParentedCollectionOid collectionOid = (ParentedCollectionOid) oid;
+            final ParentedOid collectionOid = (ParentedOid) oid;
             createdAdapter = getFactories().createCollectionAdapter(pojo, collectionOid);
         }
         return createdAdapter;

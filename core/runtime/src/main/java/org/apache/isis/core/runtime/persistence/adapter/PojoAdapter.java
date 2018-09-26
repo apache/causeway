@@ -30,7 +30,7 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -150,8 +150,8 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         if(!isParentedCollection()) {
             return this;
         }
-        ParentedCollectionOid collectionOid = (ParentedCollectionOid) oid;
-        final Oid rootOid = collectionOid.getRootOid();
+        ParentedOid collectionOid = (ParentedOid) oid;
+        final Oid rootOid = collectionOid.getParentOid();
         ObjectAdapter rootadapter = persistenceSession.adapterFor(rootOid);
         return rootadapter;
     }

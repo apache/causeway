@@ -22,7 +22,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -61,7 +61,7 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
     @Override
     public ObjectAdapter createCollectionAdapter(
             final Object pojo,
-            ParentedCollectionOid collectionOid) {
+            ParentedOid collectionOid) {
         assert collectionOid != null;
         return createAdapter(pojo, collectionOid);
     }
@@ -75,7 +75,7 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
         Assert.assertNotNull(pojo);
 
         // persistence of collection follows the parent
-        final ParentedCollectionOid collectionOid = new ParentedCollectionOid(parentOid, otma);
+        final ParentedOid collectionOid = Oid.Factory.collectionOfOneToMany(parentOid, otma);
         final ObjectAdapter collectionAdapter = createCollectionAdapter(pojo, collectionOid);
 
         // we copy over the type onto the adapter itself
