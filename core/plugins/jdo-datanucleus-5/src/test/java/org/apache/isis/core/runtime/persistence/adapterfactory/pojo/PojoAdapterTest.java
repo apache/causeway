@@ -80,6 +80,7 @@ public class PojoAdapterTest {
                 allowing(version).getUtcTimestamp();
                 allowing(version).sequence();
                 allowing(version).getUser();
+                allowing(version).hasTimestamp();
                 
                 allowing(version).getTime();
                 will(returnValue(new Date()));
