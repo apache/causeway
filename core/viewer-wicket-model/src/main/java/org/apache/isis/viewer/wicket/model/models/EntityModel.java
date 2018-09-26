@@ -33,7 +33,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -59,8 +59,6 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
 public class EntityModel extends BookmarkableModel<ObjectAdapter> implements ObjectAdapterModel, UiHintContainer {
 
     private static final long serialVersionUID = 1L;
-
-    private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     // //////////////////////////////////////////////////////////
     // factory methods for PageParameters
@@ -218,7 +216,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     }
 
     private static RootOid rootOidFrom(final PageParameters pageParameters) {
-        return OID_MARSHALLER.unmarshal(oidStr(pageParameters), RootOid.class);
+        return Oid.unmarshaller().unmarshal(oidStr(pageParameters), RootOid.class);
     }
 
 

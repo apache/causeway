@@ -39,7 +39,6 @@ public class RootOid implements Oid, Serializable {
 
     // -- fields
     private final static long serialVersionUID = 1L;
-    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     private final ObjectSpecId objectSpecId;
     private final String identifier;
@@ -78,7 +77,7 @@ public class RootOid implements Oid, Serializable {
     // -- Encodeable
     public RootOid(final DataInputExtended input) throws IOException {
         final String oidStr = input.readUTF();
-        final RootOid oid = OID_MARSHALLER.unmarshal(oidStr, RootOid.class);
+        final RootOid oid = Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
         this.objectSpecId = oid.objectSpecId;
         this.identifier = oid.identifier;
         this.state = oid.state;
@@ -103,17 +102,17 @@ public class RootOid implements Oid, Serializable {
     }
 
     public static RootOid deString(final String oidStr) {
-        return OID_MARSHALLER.unmarshal(oidStr, RootOid.class);
+        return Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
     }
 
     @Override
     public String enString() {
-        return OID_MARSHALLER.marshal(this);
+        return Oid.marshaller().marshal(this);
     }
 
     @Override
     public String enStringNoVersion() {
-        return OID_MARSHALLER.marshalNoVersion(this);
+        return Oid.marshaller().marshalNoVersion(this);
     }
 
 

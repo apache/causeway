@@ -111,7 +111,43 @@ public interface Oid extends Encodable {
             }
         }
     }
+    
+    // -- MARSHALLING
+    
+    public static interface Marshaller {
 
+        String marshal(Version version);
+
+        String marshalNoVersion(ParentedOid parentedOid);
+
+        String marshal(ParentedOid parentedOid);
+
+        String marshalNoVersion(RootOid rootOid);
+
+        String marshal(RootOid rootOid);
+
+        String joinAsOid(String domainType, String instanceId);
+        
+    }
+    
+    public static Marshaller marshaller() {
+        return Oid_Marshaller.INSTANCE;
+    }
+    
+    // -- UN-MARSHALLING
+
+    public static interface Unmarshaller {
+        
+        <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType);
+
+        String splitInstanceId(String oidStr);
+        
+    }
+    
+    public static Unmarshaller unmarshaller() {
+        return Oid_Marshaller.INSTANCE;
+    }
+    
     // -- FACTORIES
     
     /** for convenience*/
@@ -163,6 +199,10 @@ public interface Oid extends Encodable {
 
         
     }
+
+
+
+    
 
 
 }

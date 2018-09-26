@@ -19,19 +19,16 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 public class OidMarshallerTest_roundtripping {
 
-    @SuppressWarnings("unused")
-	private OidMarshaller oidMarshaller = OidMarshaller.INSTANCE;
-    
     @Test
     public void rootOid_withNoVersion() {
         RootOid oid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123");

@@ -21,14 +21,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.internal.collections._Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
@@ -39,8 +39,6 @@ public class BreadcrumbModel implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final int MAX_SIZE = 5;
-
-    private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     private final Map<String, Bookmark> bookmarkByOidStr = Maps.newHashMap();
     private final Map<Bookmark, String> oidStrByBookmark = Maps.newHashMap();
@@ -96,7 +94,7 @@ public class BreadcrumbModel implements Serializable {
             return null;
         }
         try {
-            final RootOid unmarshal = OID_MARSHALLER.unmarshal(oidStr, RootOid.class);
+            final RootOid unmarshal = Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
             return unmarshal.enStringNoVersion();
         } catch(Exception ex) {
             return null;

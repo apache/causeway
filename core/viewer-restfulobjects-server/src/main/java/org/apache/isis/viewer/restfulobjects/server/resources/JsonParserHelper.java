@@ -18,8 +18,9 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
@@ -35,8 +36,6 @@ import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
  * {@link org.apache.isis.core.metamodel.spec.ObjectSpecification type}.
  */
 public class JsonParserHelper {
-
-    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     private final static Pattern OBJECT_OID = Pattern.compile(".*objects\\/([^/]+)\\/(.+)");
 
@@ -147,7 +146,7 @@ public class JsonParserHelper {
         }
         String domainType = matcher.group(1);
         String instanceId = matcher.group(2);
-        return OID_MARSHALLER.joinAsOid(domainType, instanceId);
+        return Oid.marshaller().joinAsOid(domainType, instanceId);
     }
 
     private static String resourceFor(final ObjectSpecification objectSpec) {

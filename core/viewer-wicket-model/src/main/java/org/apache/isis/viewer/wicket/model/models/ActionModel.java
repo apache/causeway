@@ -51,7 +51,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -76,8 +76,6 @@ import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 public class ActionModel extends BookmarkableModel<ObjectAdapter> implements FormExecutorContext {
 
     private static final long serialVersionUID = 1L;
-
-    private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     private static final String NULL_ARG = "$nullArg$";
     private static final Pattern KEY_VALUE_PATTERN = Pattern.compile("([^=]+)=(.+)");
@@ -288,7 +286,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     private static RootOid oidFor(final PageParameters pageParameters) {
         final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-        return OID_MARSHALLER.unmarshal(oidStr, RootOid.class);
+        return Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
     }
 
 

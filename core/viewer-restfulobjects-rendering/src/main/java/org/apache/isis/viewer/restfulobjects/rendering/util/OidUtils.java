@@ -20,12 +20,9 @@ package org.apache.isis.viewer.restfulobjects.rendering.util;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 
 public final class OidUtils {
-
-    private static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     private OidUtils() {
     }
@@ -42,7 +39,7 @@ public final class OidUtils {
     public static String getInstanceId(final ObjectAdapter objectAdapter) {
         String oidStr = getOidStr(objectAdapter);
         // REVIEW: it's a bit hokey to join these together just to split them out again.
-        return oidStr != null ? OID_MARSHALLER.splitInstanceId(oidStr): null;
+        return oidStr != null ? Oid.unmarshaller().splitInstanceId(oidStr): null;
     }
 
 

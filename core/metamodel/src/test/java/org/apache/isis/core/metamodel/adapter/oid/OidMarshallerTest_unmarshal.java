@@ -57,11 +57,11 @@ import static org.junit.Assert.assertThat;
 */
 public class OidMarshallerTest_unmarshal {
 
-    private OidMarshaller oidMarshaller;
+   private Oid_Marshaller oidMarshaller;
     
     @Before
     public void setUp() throws Exception {
-        oidMarshaller = OidMarshaller.INSTANCE;
+        oidMarshaller = Oid_Marshaller.INSTANCE;
     }
     
     @Test

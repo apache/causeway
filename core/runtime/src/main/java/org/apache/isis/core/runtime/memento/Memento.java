@@ -31,7 +31,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -57,8 +56,6 @@ public class Memento implements Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(Memento.class);
     private final static long serialVersionUID = 1L;
-
-    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
 
     private final List<Oid> transientObjects = _Lists.newArrayList();
 
@@ -172,7 +169,7 @@ public class Memento implements Serializable {
         if(oid == null) { return null; }
         if(oid.isValue()) { return oid; } // immutable, so just reuse
         final String oidStr = oid.enString();
-        return _Casts.uncheckedCast(OID_MARSHALLER.unmarshal(oidStr, oid.getClass()));
+        return _Casts.uncheckedCast(Oid.unmarshaller().unmarshal(oidStr, oid.getClass()));
     }
 
     private Data createStandaloneData(final ObjectAdapter adapter) {

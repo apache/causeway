@@ -21,7 +21,6 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -33,9 +32,10 @@ import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -87,7 +87,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
                     final PageParameters pageParameters = choice.getPageParametersWithoutUiHints();
                     final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
                     final RootOid result = RootOid.deString(oidStr);
-                    return OidMarshaller.INSTANCE.marshal(result);
+                    return Oid.marshaller().marshal(result);
                 } catch (Exception ex) {
                     breadcrumbModel.remove(choice);
                     return null;

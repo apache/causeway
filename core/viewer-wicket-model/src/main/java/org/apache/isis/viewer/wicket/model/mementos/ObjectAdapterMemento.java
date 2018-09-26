@@ -25,8 +25,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -35,7 +33,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -51,7 +48,6 @@ public class ObjectAdapterMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
     /**
      * Factory method
      */
@@ -230,7 +226,7 @@ public class ObjectAdapterMemento implements Serializable {
                     final ObjectAdapterMemento oam,
                     ConcurrencyChecking concurrencyChecking,
                     final PersistenceSession persistenceSession, final SpecificationLoader specificationLoader) {
-                RootOid oid = OID_MARSHALLER.unmarshal(oam.persistentOidStr, RootOid.class);
+                RootOid oid = Oid.unmarshaller().unmarshal(oam.persistentOidStr, RootOid.class);
                 try {
                     final ObjectAdapter adapter = persistenceSession.adapterFor(oid, concurrencyChecking);
                     return adapter;

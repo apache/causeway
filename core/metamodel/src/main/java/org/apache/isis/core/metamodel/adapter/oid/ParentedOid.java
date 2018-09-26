@@ -36,8 +36,6 @@ public final class ParentedOid implements Serializable, Oid {
 
     private static final long serialVersionUID = 1L;
 
-    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
-
     private final String name;
     private final int hashCode;
 
@@ -90,18 +88,18 @@ public final class ParentedOid implements Serializable, Oid {
     // /////////////////////////////////////////////////////////
 
     public static ParentedOid deString(String oidStr) {
-        return OID_MARSHALLER.unmarshal(oidStr, ParentedOid.class);
+        return Oid.unmarshaller().unmarshal(oidStr, ParentedOid.class);
     }
 
 
     @Override
     public String enString() {
-        return OID_MARSHALLER.marshal(this);
+        return Oid.marshaller().marshal(this);
     }
 
     @Override
     public String enStringNoVersion() {
-        return OID_MARSHALLER.marshalNoVersion(this);
+        return Oid.marshaller().marshalNoVersion(this);
     }
 
 

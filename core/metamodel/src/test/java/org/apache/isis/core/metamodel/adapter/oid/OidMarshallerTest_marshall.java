@@ -29,11 +29,11 @@ import static org.junit.Assert.assertThat;
 
 public class OidMarshallerTest_marshall {
 
-    private OidMarshaller oidMarshaller;
+    private Oid_Marshaller oidMarshaller;
     
     @Before
     public void setUp() throws Exception {
-        oidMarshaller = OidMarshaller.INSTANCE;
+        oidMarshaller = Oid_Marshaller.INSTANCE;
     }
     
     @Test

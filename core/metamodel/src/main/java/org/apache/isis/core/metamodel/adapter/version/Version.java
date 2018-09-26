@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.lang.DateExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 /**
  * An instance of this class is held by each {@link ObjectAdapter} and is used
@@ -53,7 +53,7 @@ public final class Version implements Serializable, Encodable {
 
     private static final long serialVersionUID = 1L;
 
-    private final static OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
+    private final static Oid.Marshaller OID_MARSHALLER = Oid.marshaller();
 
     // -- FACTORIES
 
