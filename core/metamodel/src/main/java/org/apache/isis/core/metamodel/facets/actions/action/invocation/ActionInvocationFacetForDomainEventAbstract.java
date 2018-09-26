@@ -49,6 +49,7 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.services.metamodel.MetaModelService.Mode;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.xactn.TransactionService;
@@ -440,7 +441,7 @@ implements ImperativeFacet {
         }
 
         final Class<?> domainType = resultAdapter.getSpecification().getCorrespondingClass();
-        final MetaModelService.Sort sort = getMetaModelService().sortOf(domainType);
+        final MetaModelService.Sort sort = getMetaModelService().sortOf(domainType, Mode.STRICT);
         switch (sort) {
         case JDO_ENTITY:
             final Object domainObject = resultAdapter.getObject();

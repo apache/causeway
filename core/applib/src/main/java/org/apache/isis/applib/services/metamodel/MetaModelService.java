@@ -62,20 +62,6 @@ public interface MetaModelService {
     @Programmatic
     List<DomainMember> export();
 
-    /**
-     * @deprecated - use {@link #sortOf(Class, MetaModelService.Mode)}
-     */
-    @Deprecated
-    @Programmatic
-    Sort sortOf(Class<?> domainType);
-
-    /**
-     * @deprecated - use {@link #sortOf(Bookmark, MetaModelService.Mode)}
-     */
-    @Deprecated
-    @Programmatic
-    Sort sortOf(Bookmark bookmark);
-
     @Programmatic
     Sort sortOf(Class<?> domainType, Mode mode);
 

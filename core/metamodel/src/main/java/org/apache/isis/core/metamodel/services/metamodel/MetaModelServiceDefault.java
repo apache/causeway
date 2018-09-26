@@ -177,15 +177,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         return className.startsWith("java") || className.startsWith("org.joda");
     }
 
-
-
     // //////////////////////////////////////
-
-    @Override
-    public Sort sortOf(final Class<?> domainType) {
-        return sortOf(domainType, Mode.STRICT);
-    }
-
 
     @Override
     public Sort sortOf(
@@ -221,11 +213,6 @@ public class MetaModelServiceDefault implements MetaModelService {
                 objectSpec.getFullIdentifier(),
                 domainType.getName()
                 ));
-    }
-
-    @Override
-    public Sort sortOf(final Bookmark bookmark) {
-        return sortOf(bookmark, Mode.STRICT);
     }
 
     @Override
