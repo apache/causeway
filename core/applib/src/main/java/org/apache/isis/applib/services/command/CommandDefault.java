@@ -31,6 +31,7 @@ public class CommandDefault implements Command {
 
     public CommandDefault() {
         this.executor = Executor.OTHER;
+        this.uniqueId = UUID.randomUUID();
     }
 
     // -- actionIdentifier (property)
@@ -162,13 +163,12 @@ public class CommandDefault implements Command {
 
     // -- transactionId (property)
 
-    private UUID interactionId;
+    private UUID uniqueId;
 
     @Override
     public UUID getUniqueId() {
-        return interactionId;
+        return uniqueId;
     }
-    
 
     // -- persistence
 
@@ -269,10 +269,6 @@ public class CommandDefault implements Command {
         @Override
         public void setExecutor(Executor executor) {
             CommandDefault.this.executor = executor;
-        }
-        @Override
-        public void setInteractionId(UUID transactionId) {
-            CommandDefault.this.interactionId = interactionId;
         }
     };
     

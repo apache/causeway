@@ -29,7 +29,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 import javax.annotation.Nullable;
 import javax.jdo.FetchGroup;
@@ -165,7 +164,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
 
         final Command command = createCommand();
-        final UUID transactionId = UUID.randomUUID();
         final Interaction interaction = factoryService.instantiate(Interaction.class);
 
         final Timestamp timestamp = clockService.nowAsJavaSqlTimestamp();
@@ -173,9 +171,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         command.internal().setTimestamp(timestamp);
         command.internal().setUser(userName);
-        command.internal().setInteractionId(transactionId);
 
-        interaction.setUniqueId(transactionId);
+        interaction.setUniqueId(command.getUniqueId());
 
         commandContext.setCommand(command);
         interactionContext.setInteraction(interaction);

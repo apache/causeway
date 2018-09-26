@@ -17,7 +17,6 @@
 package org.apache.isis.applib.services.command;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
@@ -424,11 +423,6 @@ public interface Command extends HasUniqueId {
          */
         void setPersistHint(boolean persistHint);
         
-        /**
-         * Sets the unique identifier (a GUID) of the request/interaction.
-         */
-        void setInteractionId(final UUID interactionId);
-
     }
     
     /**
