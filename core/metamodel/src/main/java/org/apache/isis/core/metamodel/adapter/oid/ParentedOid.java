@@ -19,176 +19,28 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.Objects;
 
-import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
-import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.commons.url.UrlDecoderUtil;
 
 /**
  * Used as the {@link Oid} for collections.
  */
-public final class ParentedOid implements Serializable, Oid {
+public interface ParentedOid extends Serializable, Oid {
 
-    private static final long serialVersionUID = 1L;
+    RootOid getParentOid();
 
-    private final String name;
-    private final int hashCode;
+    String getName();
 
-    private final RootOid parentRootOid;
-
-    // package private to support testing
-    static ParentedOid ofName(RootOid parentRootOid, String name) {
-        return new ParentedOid(parentRootOid, name);
+    // -- DECODE FROM STRING
+    
+    public static ParentedOid deStringEncoded(final String urlEncodedOidStr) {
+        final String oidStr = UrlDecoderUtil.urlDecode(urlEncodedOidStr);
+        return deString(oidStr);
     }
     
-    private ParentedOid(RootOid parentRootOid, String name) {
-        requires(parentRootOid, "parentRootOid");
-        this.parentRootOid = parentRootOid;
-        this.name = name;
-        this.hashCode = calculateHash();
+    public static ParentedOid deString(String enString) {
+        return Oid.unmarshaller().unmarshal(enString, ParentedOid.class);
     }
-
-    public RootOid getParentOid() {
-        return parentRootOid;
-    }
-
-    @Override
-    public Version getVersion() {
-        return parentRootOid.getVersion();
-    }
-
-    @Override
-    public void setVersion(Version version) {
-        parentRootOid.setVersion(version);
-    }
-
-    @Override
-    public boolean isTransient() {
-        return getParentOid().isTransient();
-    }
-
-    @Override
-    public boolean isViewModel() {
-        return getParentOid().isViewModel();
-    }
-
-    @Override
-    public boolean isPersistent() {
-        return getParentOid().isPersistent();
-    }
-
-
-    // /////////////////////////////////////////////////////////
-    // enstring
-    // /////////////////////////////////////////////////////////
-
-    public static ParentedOid deString(String oidStr) {
-        return Oid.unmarshaller().unmarshal(oidStr, ParentedOid.class);
-    }
-
-
-    @Override
-    public String enString() {
-        return Oid.marshaller().marshal(this);
-    }
-
-    @Override
-    public String enStringNoVersion() {
-        return Oid.marshaller().marshalNoVersion(this);
-    }
-
-
-    // /////////////////////////////////////////////////////////
-    // encodeable
-    // /////////////////////////////////////////////////////////
-
-
-    public ParentedOid(DataInputExtended inputStream) throws IOException {
-        this(ParentedOid.deString(inputStream.readUTF()));
-    }
-
-    private ParentedOid(ParentedOid oid) throws IOException {
-        this.parentRootOid = oid.getParentOid();
-        this.name = oid.name;
-        this.hashCode = calculateHash();
-    }
-
-
-    @Override
-    public void encode(DataOutputExtended outputStream) throws IOException {
-        outputStream.writeUTF(enString());
-    }
-
-    // /////////////////////////////////////////////////////////
-    // Properties
-    // /////////////////////////////////////////////////////////
-
-    public String getName() {
-        return name;
-    }
-
-
-    // /////////////////////////////////////////////////////////
-    // toString
-    // /////////////////////////////////////////////////////////
-
-    @Override
-    public String toString() {
-        return enString();
-    }
-
-
-
-    // /////////////////////////////////////////////////////////
-    // Value semantics
-    // /////////////////////////////////////////////////////////
-
-    @Override
-    public boolean equals(final Object other) {
-        if (other == this) {
-            return true;
-        }
-        if (other == null) {
-            return false;
-        }
-        if (getClass() != other.getClass()) {
-            return false;
-        }
-        return equals((ParentedOid) other);
-    }
-
-    public boolean equals(final ParentedOid other) {
-        return Objects.equals(other.getParentOid(), getParentOid()) && Objects.equals(other.name, name);
-    }
-
-
-    @Override
-    public int hashCode() {
-        return hashCode;
-    }
-
-    private int calculateHash() {
-        return Objects.hash(getParentOid(), name);
-    }
-
-
-    // /////////////////////////////////////////////////////////
-    // asPersistent
-    // /////////////////////////////////////////////////////////
-
-    /**
-     * When the RootOid is persisted, all its &quot;children&quot;
-     * need updating similarly.
-     */
-    public ParentedOid asPersistent(RootOid newParentRootOid) {
-        return new ParentedOid(newParentRootOid, name);
-    }
-
-
 
 }

@@ -19,83 +19,25 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.Objects;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.commons.encoding.DataInputExtended;
-import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.url.UrlDecoderUtil;
-import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.schema.common.v1.BookmarkObjectState;
 import org.apache.isis.schema.common.v1.OidDto;
 
-public class RootOid implements Oid, Serializable {
+public interface RootOid extends Oid, Serializable {
 
-    // -- fields
-    private final static long serialVersionUID = 1L;
+    ObjectSpecId getObjectSpecId();
 
-    private final ObjectSpecId objectSpecId;
-    private final String identifier;
-    private final State state;
-    private final int hashCode;
+    String getIdentifier();
 
-    // not part of equality check
-    private Version version;
+    Bookmark asBookmark();
 
-
-    public static RootOid of(final ObjectSpecId objectSpecId, final String identifier, final State state) {
-        return of(objectSpecId, identifier, state, Version.empty());
-    }
+    OidDto asOidDto();
     
-    public static RootOid of(final ObjectSpecId objectSpecId, final String identifier, final State state, final Version version) {
-        return new RootOid(objectSpecId, identifier, state, version);
-    }
+    // -- DECODE FROM STRING
     
-    private RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state, final Version version) {
-
-        requires(objectSpecId, "objectSpecId");
-        requires(identifier, "identifier");
-        requires(state, "state");
-
-        // too slow...
-        // Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("#"))), "identifier '" + identifier + "' contains a '#' symbol");
-        // Ensure.ensureThatArg(identifier, is(not(IsisMatchers.contains("@"))), "identifier '" + identifier + "' contains an '@' symbol");
-
-        this.objectSpecId = objectSpecId;
-        this.identifier = identifier;
-        this.state = state;
-        this.version = version;
-        this.hashCode = calculateHash();
-    }
-
-    // -- Encodeable
-    public RootOid(final DataInputExtended input) throws IOException {
-        final String oidStr = input.readUTF();
-        final RootOid oid = Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
-        this.objectSpecId = oid.objectSpecId;
-        this.identifier = oid.identifier;
-        this.state = oid.state;
-        
-        requires(objectSpecId, "objectSpecId");
-        requires(identifier, "identifier");
-        requires(state, "state");
-        
-        this.version = oid.version;
-        this.hashCode = calculateHash();
-    }
-
-    @Override
-    public void encode(final DataOutputExtended output) throws IOException {
-        output.writeUTF(enString());
-    }
-
-    // -- deString'able, enString
     public static RootOid deStringEncoded(final String urlEncodedOidStr) {
         final String oidStr = UrlDecoderUtil.urlDecode(urlEncodedOidStr);
         return deString(oidStr);
@@ -104,142 +46,5 @@ public class RootOid implements Oid, Serializable {
     public static RootOid deString(final String oidStr) {
         return Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
     }
-
-    @Override
-    public String enString() {
-        return Oid.marshaller().marshal(this);
-    }
-
-    @Override
-    public String enStringNoVersion() {
-        return Oid.marshaller().marshalNoVersion(this);
-    }
-
-
-    // -- Properties
-    public ObjectSpecId getObjectSpecId() {
-        return objectSpecId;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    @Override
-    public boolean isTransient() {
-        return state.isTransient();
-    }
-
-    @Override
-    public boolean isViewModel() {
-        return state.isViewModel();
-    }
-
-    @Override
-    public boolean isPersistent() {
-        return state.isPersistent();
-    }
-
-    // -- Version
-
-    @Override
-    public Version getVersion() {
-        return version;
-    }
-
-    @Override
-    public void setVersion(final Version version) {
-        this.version = version;
-    }
-
-
-    // -- asBookmark, asOidDto
-    public Bookmark asBookmark() {
-        final String objectType = state.asBookmarkObjectState().getCode() + getObjectSpecId().asString();
-        final String identifier = getIdentifier();
-        return new Bookmark(objectType, identifier);
-    }
-
-    public OidDto asOidDto() {
-
-        final OidDto oidDto = new OidDto();
-
-        oidDto.setType(getObjectSpecId().asString());
-        oidDto.setId(getIdentifier());
-
-        final Bookmark.ObjectState objectState = state.asBookmarkObjectState();
-        final BookmarkObjectState bookmarkState = objectState.toBookmarkState();
-        // persistent is assumed if not specified...
-        oidDto.setObjectState(
-                bookmarkState != BookmarkObjectState.PERSISTENT ? bookmarkState : null);
-
-        return oidDto;
-    }
-
-
-
-    // -- equals, hashCode
-
-    private int calculateHash() {
-        return Objects.hash(objectSpecId, identifier, state);
-    }
-
-    @Override
-    public boolean equals(final Object other) {
-        if (other == null) {
-            return false;
-        }
-        if (other == this) {
-            return true;
-        }
-        if (getClass() != other.getClass()) {
-            return false;
-        }
-        return equals((RootOid) other);
-    }
-
-    public boolean equals(final RootOid other) {
-        return Objects.equals(objectSpecId, other.getObjectSpecId()) && 
-                Objects.equals(identifier, other.getIdentifier()) && 
-                Objects.equals(state, other.state);
-    }
-
-    @Override
-    public int hashCode() {
-        return hashCode;
-    }
-
-
-
-    // -- toString
-    @Override
-    public String toString() {
-        return enString();
-    }
-
-    // -- ROOT-ID SUPPORT FOR VALUE
-    
-    private RootOid() { identifier=null; objectSpecId=null; state=null; hashCode=0;};
-    
-    private static final RootOid VALUE_OID = new RootOid() {
-        private static final long serialVersionUID = 2L;
-        @Override public boolean isValue() { return true; }
-//        @Override public boolean isTransient() { return false; }
-//        @Override public boolean isPersistent() { return false; }
-//        @Override public boolean isViewModel() { return false; }
-        
-        @Override public boolean isTransient() { throw _Exceptions.unexpectedCodeReach(); }
-        @Override public boolean isPersistent() { throw _Exceptions.unexpectedCodeReach(); }
-        @Override public boolean isViewModel() { throw _Exceptions.unexpectedCodeReach(); }
-        @Override public String toString() { return "VALUE_OID"; }
-        
-    };
-    
-    public static RootOid value() {
-        return VALUE_OID;
-    }
-    
-    // --
-
 
 }

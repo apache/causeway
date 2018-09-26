@@ -110,7 +110,7 @@ public final class OidUtils {
         // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an
         // oid in the wrong state.  The code below checks for this and recreates the oid with the current state of 'view model'
         if(!rootOid.isViewModel()) {
-            return RootOid.of(rootOid.getObjectSpecId(), rootOid.getIdentifier(), Oid.State.VIEWMODEL);
+            return Oid.Factory.viewmodelOf(rootOid.getObjectSpecId(), rootOid.getIdentifier());
         }
         return rootOid;
     }

@@ -94,7 +94,7 @@ public class PojoAdapterBuilder {
         }, COLLECTION {
             @Override
             Oid oidFor(RootOid rootOid, ObjectSpecId objectSpecId, String collectionId) {
-                return Oid.Factory.collectionOfName(rootOid, collectionId);
+                return Oid.Factory.parentedOfName(rootOid, collectionId);
             }
         }, VALUE {
             @Override

@@ -60,7 +60,7 @@ public class OidProviders {
         @Override
         public RootOid oidFor(Object pojo, ObjectSpecification spec) {
             final String identifier = PersistenceSession.SERVICE_IDENTIFIER;
-            return RootOid.of(spec.getSpecId(), identifier, Oid.State.PERSISTENT);
+            return Oid.Factory.persistentOf(spec.getSpecId(), identifier);
         }
 
     }
@@ -82,10 +82,10 @@ public class OidProviders {
             final boolean isRecognized = persistenceSession.isRecognized(pojo);
             if(isRecognized) {
                 final String identifier = persistenceSession.identifierFor(pojo);
-                return RootOid.of(spec.getSpecId(), identifier, Oid.State.PERSISTENT);
+                return Oid.Factory.persistentOf(spec.getSpecId(), identifier);
             } else {
                 final String identifier = UUID.randomUUID().toString();
-                return RootOid.of(spec.getSpecId(), identifier, Oid.State.TRANSIENT);    
+                return Oid.Factory.transientOf(spec.getSpecId(), identifier);    
             }
         }
         
@@ -100,7 +100,7 @@ public class OidProviders {
 
         @Override
         public RootOid oidFor(Object pojo, ObjectSpecification spec) {
-            return RootOid.value();
+            return Oid.Factory.value();
         }
 
     }
@@ -116,7 +116,7 @@ public class OidProviders {
         public RootOid oidFor(Object pojo, ObjectSpecification spec) {
             final ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
             final String identifier = recreatableObjectFacet.memento(pojo);
-            return RootOid.of(spec.getSpecId(), identifier, Oid.State.VIEWMODEL);
+            return Oid.Factory.viewmodelOf(spec.getSpecId(), identifier);
         }
 
     }
@@ -131,7 +131,7 @@ public class OidProviders {
         @Override
         public RootOid oidFor(Object pojo, ObjectSpecification spec) {
             final String identifier = UUID.randomUUID().toString();
-            return RootOid.of(spec.getSpecId(), identifier, Oid.State.TRANSIENT);
+            return Oid.Factory.transientOf(spec.getSpecId(), identifier);
         }
 
     }

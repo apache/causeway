@@ -21,28 +21,27 @@ package org.apache.isis.core.metamodel.adapter.oid;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 
 public class CollectionOidTest_valueSemantics extends ValueTypeContractTestAbstract<ParentedOid> {
 
-    private final RootOid parent = RootOid.of(ObjectSpecId.of("CUS"), "123", State.PERSISTENT);
-    private final RootOid otherParent = RootOid.of(ObjectSpecId.of("CUS"), "124", State.PERSISTENT);
+    private final RootOid parent = Oid.Factory.persistentOf(ObjectSpecId.of("CUS"), "123");
+    private final RootOid otherParent = Oid.Factory.persistentOf(ObjectSpecId.of("CUS"), "124");
 
     @Override
     protected List<ParentedOid> getObjectsWithSameValue() {
         return Arrays.asList(
-                ParentedOid.ofName(parent, "456"),
-                ParentedOid.ofName(parent, "456"),
-                ParentedOid.ofName(parent, "456"));
+                Oid.Factory.parentedOfName(parent, "456"),
+                Oid.Factory.parentedOfName(parent, "456"),
+                Oid.Factory.parentedOfName(parent, "456"));
     }
 
     @Override
     protected List<ParentedOid> getObjectsWithDifferentValue() {
         return Arrays.asList(
-                ParentedOid.ofName(otherParent, "456"),
-                ParentedOid.ofName(parent, "457"));
+                Oid.Factory.parentedOfName(otherParent, "456"),
+                Oid.Factory.parentedOfName(parent, "457"));
     }
 
 }

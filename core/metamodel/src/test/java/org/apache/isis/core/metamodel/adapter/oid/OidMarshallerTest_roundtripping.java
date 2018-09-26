@@ -53,7 +53,7 @@ public class OidMarshallerTest_roundtripping {
     @Test
     public void collectionOid_withNoVersion() {
         RootOid parentOid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123");
-        ParentedOid oid = ParentedOid.ofName(parentOid, "items");
+        ParentedOid oid = Factory.parentedOfName(parentOid, "items");
         
         final String enString = oid.enString();
         final ParentedOid deString = ParentedOid.deString(enString);
@@ -63,10 +63,10 @@ public class OidMarshallerTest_roundtripping {
     @Test
     public void collectionOid_withVersion() {
         RootOid parentOid = Factory.persistentOf(ObjectSpecId.of("CUS"), "123", 90807L);
-        ParentedOid oid = ParentedOid.ofName(parentOid, "items");
+        ParentedOid oid = Factory.parentedOfName(parentOid, "items");
         
         final String enString = oid.enString();
-        final ParentedOid deString = ParentedOid.deString(enString);
+        final ParentedOid deString = Oid.unmarshaller().unmarshal(enString, ParentedOid.class);
         assertThat(deString, is(oid));
         assertThat(deString.getParentOid().getVersion(), is(parentOid.getVersion())); // assert separately because not part of equality check
     }

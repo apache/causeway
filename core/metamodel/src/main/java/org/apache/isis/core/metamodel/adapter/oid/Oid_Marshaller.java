@@ -195,7 +195,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
             if(aggregateOidParts.isEmpty()) {
                 ensureCorrectType(oidStr, requestedType, RootOid.class);
                 return _Casts.uncheckedCast(
-                        RootOid.of(ObjectSpecId.of(rootObjectType), rootIdentifier, state, version));
+                        Oid_Root.of(ObjectSpecId.of(rootObjectType), rootIdentifier, state, version));
             } else {
                 throw new RuntimeException("Aggregated Oids are no longer supported");
             }
@@ -206,7 +206,7 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
             RootOid parentOid = this.unmarshal(parentOidStr, RootOid.class);
             ensureCorrectType(oidStr, requestedType, ParentedOid.class);
-            return _Casts.uncheckedCast( ParentedOid.ofName(parentOid, collectionName) );
+            return _Casts.uncheckedCast( Oid_Parented.ofName(parentOid, collectionName) );
         }
     }
 

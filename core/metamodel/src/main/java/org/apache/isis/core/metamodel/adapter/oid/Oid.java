@@ -26,6 +26,8 @@ import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.schema.common.v1.BookmarkObjectState;
+import org.apache.isis.schema.common.v1.OidDto;
 
 
 /**
@@ -63,7 +65,7 @@ public interface Oid extends Encodable {
     boolean isPersistent();
     
     default boolean isValue() {
-        return false;
+        return false; // default, only overridden by Oid_Value
     }
 
     public static enum State {
@@ -110,6 +112,29 @@ public interface Oid extends Encodable {
                 throw _Exceptions.unmatchedCase(this);
             }
         }
+        
+        public Bookmark bookmarkOf(RootOid rootOid) {
+            final String objectType = asBookmarkObjectState().getCode() + rootOid.getObjectSpecId().asString();
+            final String identifier = rootOid.getIdentifier();
+            return new Bookmark(objectType, identifier);
+        }
+
+        public OidDto toOidDto(RootOid rootOid) {
+
+            final OidDto oidDto = new OidDto();
+
+            oidDto.setType(rootOid.getObjectSpecId().asString());
+            oidDto.setId(rootOid.getIdentifier());
+
+            final Bookmark.ObjectState objectState = asBookmarkObjectState();
+            final BookmarkObjectState bookmarkState = objectState.toBookmarkState();
+            // persistent is assumed if not specified...
+            oidDto.setObjectState(
+                    bookmarkState != BookmarkObjectState.PERSISTENT ? bookmarkState : null);
+
+            return oidDto;
+        }
+        
     }
     
     // -- MARSHALLING
@@ -153,17 +178,21 @@ public interface Oid extends Encodable {
     /** for convenience*/
     public static final class Factory {
         
+        public static RootOid value() {
+            return Oid_Value.INSTANCE;
+        }
+        
         public static RootOid ofBookmark(final Bookmark bookmark) {
-            return RootOid.of(ObjectSpecId.of(bookmark.getObjectType()), 
+            return Oid_Root.of(ObjectSpecId.of(bookmark.getObjectType()), 
                     bookmark.getIdentifier(), State.from(bookmark), Version.empty());
         }
 
         public static RootOid viewmodelOf(ObjectSpecId objectSpecId, String mementoStr) {
-            return RootOid.of(objectSpecId, mementoStr, State.VIEWMODEL, Version.empty());
+            return Oid_Root.of(objectSpecId, mementoStr, State.VIEWMODEL, Version.empty());
         }
         
         public static RootOid transientOf(final ObjectSpecId objectSpecId, final String identifier) {
-            return RootOid.of(objectSpecId, identifier, State.TRANSIENT, Version.empty());
+            return Oid_Root.of(objectSpecId, identifier, State.TRANSIENT, Version.empty());
         }
 
         public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier) {
@@ -183,18 +212,18 @@ public interface Oid extends Encodable {
         }
 
         public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser, final Long versionUtcTimestamp) {
-            return RootOid.of(objectSpecId, identifier, State.PERSISTENT, 
+            return Oid_Root.of(objectSpecId, identifier, State.PERSISTENT, 
                     Version.Factory.ifPresent(versionSequence, versionUser, versionUtcTimestamp));
         }
 
         // -- PARENTED COLLECTIONS
         
         public static ParentedOid collectionOfOneToMany(RootOid parentRootOid, OneToManyAssociation otma) {
-            return ParentedOid.ofName(parentRootOid, otma.getId());
+            return Oid_Parented.ofName(parentRootOid, otma.getId());
         }
 
-        public static ParentedOid collectionOfName(RootOid parentRootOid, String name) {
-            return ParentedOid.ofName(parentRootOid, name);
+        public static ParentedOid parentedOfName(RootOid parentRootOid, String name) {
+            return Oid_Parented.ofName(parentRootOid, name);
         }
 
         

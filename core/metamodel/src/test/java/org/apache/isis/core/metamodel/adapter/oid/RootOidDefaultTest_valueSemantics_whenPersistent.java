@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.adapter.oid;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 
@@ -30,17 +29,17 @@ public class RootOidDefaultTest_valueSemantics_whenPersistent extends ValueTypeC
     @Override
     protected List<RootOid> getObjectsWithSameValue() {
         return Arrays.asList(
-                RootOid.of(ObjectSpecId.of("CUS"), "123", State.PERSISTENT),
-                RootOid.of(ObjectSpecId.of("CUS"), "123", State.PERSISTENT),
-                RootOid.of(ObjectSpecId.of("CUS"), "123", State.PERSISTENT));
+                Oid.Factory.persistentOf(ObjectSpecId.of("CUS"), "123"),
+                Oid.Factory.persistentOf(ObjectSpecId.of("CUS"), "123"),
+                Oid.Factory.persistentOf(ObjectSpecId.of("CUS"), "123"));
     }
 
     @Override
     protected List<RootOid> getObjectsWithDifferentValue() {
         return Arrays.asList(
-                RootOid.of(ObjectSpecId.of("CUS"), "123", State.TRANSIENT),
-                RootOid.of(ObjectSpecId.of("CUS"), "124", State.PERSISTENT),
-                RootOid.of(ObjectSpecId.of("CUX"), "123", State.PERSISTENT));
+                Oid.Factory.transientOf(ObjectSpecId.of("CUS"), "123"),
+                Oid.Factory.persistentOf(ObjectSpecId.of("CUS"), "124"),
+                Oid.Factory.persistentOf(ObjectSpecId.of("CUX"), "123"));
     }
 
 }
