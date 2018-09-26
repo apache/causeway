@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
  * The user's name and a timestamp should also be kept so that when an message
  * is passed to the user it can be of the form "user has change object at time"
  */
-public final class Version implements Serializable, Encodable {
+public class Version implements Serializable, Encodable {
 
     private static final long serialVersionUID = 1L;
 
