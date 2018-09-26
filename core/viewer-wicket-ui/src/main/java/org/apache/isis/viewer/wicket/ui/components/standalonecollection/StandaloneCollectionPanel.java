@@ -28,20 +28,16 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
-import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
@@ -61,15 +57,11 @@ implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvi
     private static final String ID_ACTION_NAME = "actionName";
 
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
-    private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
-    private static final String ID_ADDITIONAL_LINK = "additionalLink";
-
     private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
 
     private final ActionPromptModalWindow actionPromptModalWindow;
     private final CollectionSelectorPanel selectorDropdownPanel;
 
-    private boolean additionalLinksAdded;
 
     private MarkupContainer outerDiv = this;
 
