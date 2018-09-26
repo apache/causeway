@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
@@ -630,7 +631,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
         final RenderedAdjustedFacet renderedAdjustedFacet = facetHolder.getFacet(RenderedAdjustedFacet.class);
         if(isDoOp(renderedAdjustedFacet)) {
             final int adjusted = renderedAdjustedFacet.value();
-            propertyLayoutData.setRenderedAsDayBefore(adjusted != 0);
+            propertyLayoutData.setRenderDay(adjusted != 0 ? RenderDay.AS_DAY_BEFORE : RenderDay.AS_DAY);
         }
     }
 

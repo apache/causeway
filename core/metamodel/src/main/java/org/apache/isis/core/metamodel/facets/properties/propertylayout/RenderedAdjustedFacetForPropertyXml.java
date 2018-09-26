@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import org.apache.isis.applib.annotation.RenderDay;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
@@ -30,8 +31,9 @@ public class RenderedAdjustedFacetForPropertyXml extends RenderedAdjustedFacetAb
         if(propertyLayout == null) {
             return null;
         }
-        final Boolean renderedAsDayBefore = propertyLayout.getRenderedAsDayBefore();
-        return renderedAsDayBefore != null && renderedAsDayBefore ? new RenderedAdjustedFacetForPropertyXml(holder) : null;
+        final RenderDay renderDay = propertyLayout.getRenderDay();
+        return renderDay != null && renderDay == RenderDay.AS_DAY_BEFORE 
+                ? new RenderedAdjustedFacetForPropertyXml(holder) : null;
     }
 
     public static final int ADJUST_BY = -1;

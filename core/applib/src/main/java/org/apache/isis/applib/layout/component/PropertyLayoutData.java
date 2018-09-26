@@ -187,24 +187,6 @@ HasCssClass, HasDescribedAs, HasHidden, HasNamed  {
         this.promptStyle = promptStyle;
     }
 
-
-
-    /**
-     * @deprecated - use {@link #getRenderDay()} instead.
-     */
-    @Deprecated
-    @XmlAttribute(required = false)
-    public Boolean getRenderedAsDayBefore() {
-        return getRenderDay() != null ? getRenderDay() == RenderDay.AS_DAY_BEFORE : null;
-    }
-
-    public void setRenderedAsDayBefore(Boolean renderedAsDayBefore) {
-        if(getRenderDay() == null && renderedAsDayBefore != null) {
-            setRenderDay(renderedAsDayBefore ? RenderDay.AS_DAY_BEFORE : RenderDay.AS_DAY);
-        }
-    }
-
-
     private RenderDay renderDay;
 
     @XmlAttribute(required = false)
