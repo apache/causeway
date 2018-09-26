@@ -167,9 +167,7 @@ public class Memento implements Serializable {
 
     private static <T extends Oid> T clone(final T oid) {
         if(oid == null) { return null; }
-        if(oid.isValue()) { return oid; } // immutable, so just reuse
-        final String oidStr = oid.enString();
-        return _Casts.uncheckedCast(Oid.unmarshaller().unmarshal(oidStr, oid.getClass()));
+        return _Casts.uncheckedCast(oid.copy()); 
     }
 
     private Data createStandaloneData(final ObjectAdapter adapter) {

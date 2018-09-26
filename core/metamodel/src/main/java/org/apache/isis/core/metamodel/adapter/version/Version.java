@@ -69,7 +69,17 @@ public final class Version implements Serializable, Encodable {
         return new Version(sequence, user, utcTimestamp);
     }
     
+    // -- LOGIC FOR EMPTY
+    
+    public static boolean isEmpty(Version version) {
+        return version == Factory.EMPTY_VERSION;
+    }
+    
+    public boolean hasTimestamp() {
+        return utcTimestamp!=Factory.EMPTY_TIMESTAMP;
+    }
 
+    
     // -- constructor, fields
     private final long sequence;
     private final String user;
@@ -230,6 +240,8 @@ public final class Version implements Serializable, Encodable {
         }
         
     }
+
+
 
 
 

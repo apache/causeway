@@ -157,9 +157,7 @@ public interface Oid extends Encodable {
         
     }
 
-
-
-    
+    Oid copy();
 
 
 }

@@ -46,5 +46,6 @@ public interface RootOid extends Oid, Serializable {
     public static RootOid deString(final String oidStr) {
         return Oid.unmarshaller().unmarshal(oidStr, RootOid.class);
     }
+    
 
 }

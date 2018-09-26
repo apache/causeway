@@ -38,35 +38,35 @@ public class VersionTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
     
     @Mock
-    private DataInputExtended extended;
+    private DataInputExtended input;
 
     @Mock
-    private DataOutputExtended outputExtended;
+    private DataOutputExtended output;
 
     @Mock
     private Version version;;
 
     @Before
     public void setUp() throws Exception {
-        context.ignoring(extended);
+        context.ignoring(input);
     }
     
     @Test
     public void instantiate_usingDataInputExtended() throws Exception {
-        new Version(extended);
+        new Version(input);
     }
 
     @Test
     public void encode() throws Exception {
-        context.ignoring(outputExtended);
+        context.ignoring(output);
         
-        final Version oidVersion = new Version(extended);
-        oidVersion.encode(outputExtended);
+        final Version oidVersion = new Version(input);
+        oidVersion.encode(output);
     }
 
     @Test
     public void sequence_and_toString() throws Exception {
-        final Version testVersion = new Version(extended);
+        final Version testVersion = new Version(input);
         
         assertTrue(testVersion.sequence().length() > 0);
         assertTrue(testVersion.getSequence() == 0);

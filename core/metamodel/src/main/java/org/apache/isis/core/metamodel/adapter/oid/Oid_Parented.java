@@ -187,6 +187,11 @@ final class Oid_Parented implements ParentedOid {
         return new Oid_Parented(newParentRootOid, name);
     }
 
+    @Override
+    public Oid copy() {
+        return ofName((RootOid) parentRootOid.copy(), name);
+    }
+
 
 
 }

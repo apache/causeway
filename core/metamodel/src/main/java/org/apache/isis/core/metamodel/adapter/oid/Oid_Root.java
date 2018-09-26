@@ -198,4 +198,10 @@ final class Oid_Root implements RootOid {
         return enString();
     }
 
+    @Override
+    public Oid copy() {
+        // these are all immutable ...
+        return of(objectSpecId, identifier, state, version);
+    }
+
 }

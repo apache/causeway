@@ -225,10 +225,14 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
     }
 
 
-    private <T> void ensureCorrectType(String oidStr, Class<T> requestedType, final Class<? extends Oid> actualType) {
+    private <T> void ensureCorrectType(String oidStr, Class<T> requestedType, 
+            final Class<? extends Oid> actualType) {
+        
         if(!requestedType.isAssignableFrom(actualType)) {
-            throw new IllegalArgumentException("OID '" + oidStr + "' does not represent a " +
-                    actualType.getSimpleName());
+            throw new IllegalArgumentException(
+                    String.format("OID '%s' was unmarshealled to type '%s' which cannot be assigned "
+                            + "to requested type '%s'",
+                            oidStr, actualType.getSimpleName(), requestedType.getSimpleName()) );
         }
     }
 
@@ -269,16 +273,15 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
     @Override
     public final String marshal(Version version) {
-        if(version == null) {
+        if(Version.isEmpty(version)) {
             return "";
         }
         final String versionUser = version.getUser();
-        return SEPARATOR_VERSION + version.getSequence() + SEPARATOR + _Strings.nullToEmpty(versionUser) + SEPARATOR + nullToEmpty(version.getUtcTimestamp());
+        return SEPARATOR_VERSION + version.getSequence() + SEPARATOR 
+                + _Strings.nullToEmpty(versionUser) + SEPARATOR + 
+                (version.hasTimestamp() ? version.getUtcTimestamp() : "");
     }
 
-    private static String nullToEmpty(Object obj) {
-        return obj == null? "": "" + obj;
-    }
 
 
 }
