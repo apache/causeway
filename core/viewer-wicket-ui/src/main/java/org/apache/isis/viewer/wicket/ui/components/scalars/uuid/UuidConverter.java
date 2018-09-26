@@ -18,20 +18,21 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.uuid;
 
 import java.util.Locale;
 import java.util.UUID;
-import java.util.regex.Pattern;
-
-import org.apache.isis.commons.internal.base._Strings;
 
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
+
+import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * The {@link IConverter} implementation that our {@link UuidTextField} delegates to for converting strings into values.
  */
 public class UuidConverter implements IConverter<UUID>
 {
-    private final static Pattern pattern = Pattern.compile(
-            "[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}");
+    private static final long serialVersionUID = 1L;
+
+//    private final static Pattern pattern = Pattern.compile(
+//            "[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}");
 
     @Override
     public UUID convertToObject(String value, Locale locale)

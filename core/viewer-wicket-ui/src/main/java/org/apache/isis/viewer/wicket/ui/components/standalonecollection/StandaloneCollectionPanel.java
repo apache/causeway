@@ -65,9 +65,6 @@ implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvi
 
     private MarkupContainer outerDiv = this;
 
-    /**
-     * note that the bulk actions components are added in {@link #configureBulkActions(org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn)}.
-     */
     public StandaloneCollectionPanel(final String id, final EntityCollectionModel entityCollectionModel) {
         super(id, entityCollectionModel);
 
