@@ -118,11 +118,21 @@
 <div id='header'>
     <div class="swagger-ui-wrap">
     <a id="logo" href="http://swagger.io"><img class="logo__img" alt="swagger" height="30" width="30" src="images/logo_small.png" /><span class="logo__title">swagger</span></a>
+    
+    	
+    
         <form id='api_selector'>
+        
+        	<a href="${restful-base}/" target="blank" title="You might need to login.">Direct API Link (Login)</a>
+        	<span> &nbsp; &nbsp; &nbsp;</span>	
+        
             <div class='input'>
+            
+            <!-- does not work anyway 
                 <div class='input'><input placeholder="user" id="input_user" name="user" type="text" size="10"/></div>
                 <div class='input'><input placeholder="pass" id="input_pass" name="pass" type="password" size="10"/></div>
-
+			-->
+			
 				API Select:
 
                 <select id="input_baseUrl" name="baseUrl" style="height: 26px;">
@@ -133,8 +143,6 @@
             </div>
             <div class='input' style="display:none;"><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
             <div class='input'><a id="explore" href="#" data-sw-translate>Reload</a></div>
-            
-            <a href="${restful-base}/" target="blank" title="You might need to login.">Direct API Link</a>
             
         </form>
 
