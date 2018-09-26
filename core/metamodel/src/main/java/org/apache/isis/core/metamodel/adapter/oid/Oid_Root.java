@@ -39,22 +39,22 @@ final class Oid_Root implements RootOid {
 
     private final ObjectSpecId objectSpecId;
     private final String identifier;
-    private final Oid.State state;
+    private final Oid_State state;
     private final int hashCode;
 
     // not part of equality check
     private Version version;
 
 
-    public static Oid_Root of(final ObjectSpecId objectSpecId, final String identifier, final State state) {
+    public static Oid_Root of(final ObjectSpecId objectSpecId, final String identifier, final Oid_State state) {
         return of(objectSpecId, identifier, state, Version.empty());
     }
     
-    public static Oid_Root of(final ObjectSpecId objectSpecId, final String identifier, final State state, final Version version) {
+    public static Oid_Root of(final ObjectSpecId objectSpecId, final String identifier, final Oid_State state, final Version version) {
         return new Oid_Root(objectSpecId, identifier, state, version);
     }
     
-    private Oid_Root(final ObjectSpecId objectSpecId, final String identifier, final State state, final Version version) {
+    private Oid_Root(final ObjectSpecId objectSpecId, final String identifier, final Oid_State state, final Version version) {
 
         requires(objectSpecId, "objectSpecId");
         requires(identifier, "identifier");

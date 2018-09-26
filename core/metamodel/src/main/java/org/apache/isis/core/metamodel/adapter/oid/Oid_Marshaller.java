@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
@@ -155,13 +154,13 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
         }
 
         final String isTransientOrViewModelStr = getGroup(matcher, 3);
-        final State state;
+        final Oid_State state;
         if("!".equals(isTransientOrViewModelStr)) {
-            state = State.TRANSIENT;
+            state = Oid_State.TRANSIENT;
         } else if("*".equals(isTransientOrViewModelStr)) {
-            state = State.VIEWMODEL;
+            state = Oid_State.VIEWMODEL;
         } else {
-            state = State.PERSISTENT;
+            state = Oid_State.PERSISTENT;
         }
 
         final String rootObjectType = getGroup(matcher, 4);

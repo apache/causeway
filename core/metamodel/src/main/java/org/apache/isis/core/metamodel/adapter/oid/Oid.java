@@ -21,13 +21,10 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.schema.common.v1.BookmarkObjectState;
-import org.apache.isis.schema.common.v1.OidDto;
 
 
 /**
@@ -66,75 +63,6 @@ public interface Oid extends Encodable {
     
     default boolean isValue() {
         return false; // default, only overridden by Oid_Value
-    }
-
-    public static enum State {
-        PERSISTENT,
-        TRANSIENT,
-        VIEWMODEL;
-
-        public boolean isTransient() {
-            return this == TRANSIENT;
-        }
-        public boolean isViewModel() {
-            return this == VIEWMODEL;
-        }
-        public boolean isPersistent() {
-            return this == PERSISTENT;
-        }
-
-        public static State from(final Bookmark bookmark) {
-            final Bookmark.ObjectState objectState = bookmark.getObjectState();
-            return from(objectState);
-        }
-
-        public static State from(final Bookmark.ObjectState objectState) {
-            switch (objectState) {
-            case VIEW_MODEL:
-                return VIEWMODEL;
-            case TRANSIENT:
-                return TRANSIENT;
-            case PERSISTENT:
-                return PERSISTENT;
-            default:
-                throw _Exceptions.unmatchedCase(objectState);
-            }
-        }
-        public Bookmark.ObjectState asBookmarkObjectState() {
-            switch (this) {
-            case VIEWMODEL:
-                return Bookmark.ObjectState.VIEW_MODEL;
-            case TRANSIENT:
-                return Bookmark.ObjectState.TRANSIENT;
-            case PERSISTENT:
-                return Bookmark.ObjectState.PERSISTENT;
-            default:
-                throw _Exceptions.unmatchedCase(this);
-            }
-        }
-        
-        public Bookmark bookmarkOf(RootOid rootOid) {
-            final String objectType = asBookmarkObjectState().getCode() + rootOid.getObjectSpecId().asString();
-            final String identifier = rootOid.getIdentifier();
-            return new Bookmark(objectType, identifier);
-        }
-
-        public OidDto toOidDto(RootOid rootOid) {
-
-            final OidDto oidDto = new OidDto();
-
-            oidDto.setType(rootOid.getObjectSpecId().asString());
-            oidDto.setId(rootOid.getIdentifier());
-
-            final Bookmark.ObjectState objectState = asBookmarkObjectState();
-            final BookmarkObjectState bookmarkState = objectState.toBookmarkState();
-            // persistent is assumed if not specified...
-            oidDto.setObjectState(
-                    bookmarkState != BookmarkObjectState.PERSISTENT ? bookmarkState : null);
-
-            return oidDto;
-        }
-        
     }
     
     // -- MARSHALLING
@@ -184,15 +112,15 @@ public interface Oid extends Encodable {
         
         public static RootOid ofBookmark(final Bookmark bookmark) {
             return Oid_Root.of(ObjectSpecId.of(bookmark.getObjectType()), 
-                    bookmark.getIdentifier(), State.from(bookmark), Version.empty());
+                    bookmark.getIdentifier(), Oid_State.from(bookmark), Version.empty());
         }
 
         public static RootOid viewmodelOf(ObjectSpecId objectSpecId, String mementoStr) {
-            return Oid_Root.of(objectSpecId, mementoStr, State.VIEWMODEL, Version.empty());
+            return Oid_Root.of(objectSpecId, mementoStr, Oid_State.VIEWMODEL, Version.empty());
         }
         
         public static RootOid transientOf(final ObjectSpecId objectSpecId, final String identifier) {
-            return Oid_Root.of(objectSpecId, identifier, State.TRANSIENT, Version.empty());
+            return Oid_Root.of(objectSpecId, identifier, Oid_State.TRANSIENT, Version.empty());
         }
 
         public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier) {
@@ -212,7 +140,7 @@ public interface Oid extends Encodable {
         }
 
         public static RootOid persistentOf(final ObjectSpecId objectSpecId, final String identifier, final Long versionSequence, final String versionUser, final Long versionUtcTimestamp) {
-            return Oid_Root.of(objectSpecId, identifier, State.PERSISTENT, 
+            return Oid_Root.of(objectSpecId, identifier, Oid_State.PERSISTENT, 
                     Version.Factory.ifPresent(versionSequence, versionUser, versionUtcTimestamp));
         }
 
