@@ -56,6 +56,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemove
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
@@ -114,7 +115,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             ) {
                 @Override
                 public Object getProperty(
-                        final ObjectAdapter inObject,
+                        final Instance inObject,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                     return null;
                 }

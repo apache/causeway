@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -85,7 +86,8 @@ public class ObjectAssociationAbstractTest {
             will(returnValue(mockPersistenceSessionServiceInternal));
         }});
 
-        objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, objectSpecification, mockServicesInjector) {
+        objectAssociation = new ObjectAssociationAbstract(
+                facetedMethod, FeatureType.PROPERTY, objectSpecification, mockServicesInjector) {
 
             @Override
             public ObjectAdapter get(
@@ -93,7 +95,7 @@ public class ObjectAssociationAbstractTest {
                     final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
-
+            
             @Override
             public boolean isEmpty(final ObjectAdapter adapter, final InteractionInitiatedBy interactionInitiatedBy) {
                 return false;
@@ -150,6 +152,8 @@ public class ObjectAssociationAbstractTest {
             public int getAutoCompleteMinLength() {
                 return 0;
             }
+
+
         };
     }
 

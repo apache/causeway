@@ -64,7 +64,10 @@ import org.apache.isis.schema.utils.CommandDtoUtils;
 
 public abstract class ObjectMemberAbstract implements ObjectMember {
 
-    public static ObjectSpecification getSpecification(final SpecificationLoader specificationLookup, final Class<?> type) {
+    public static ObjectSpecification getSpecification(
+            final SpecificationLoader specificationLookup, 
+            final Class<?> type) {
+        
         return type == null ? null : specificationLookup.loadSpecification(type);
     }
 
@@ -73,7 +76,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final FacetedMethod facetedMethod;
     private final FeatureType featureType;
     private final SpecificationLoader specificationLoader;
-    private final ServicesInjector servicesInjector;
+    protected final ServicesInjector servicesInjector;
     private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
 

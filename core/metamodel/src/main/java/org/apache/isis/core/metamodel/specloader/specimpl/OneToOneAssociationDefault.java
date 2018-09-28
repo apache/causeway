@@ -53,6 +53,7 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v1.CommandDto;
@@ -150,7 +151,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
         return getObjectAdapterProvider().adapterFor(referencedPojo);
     }
-
+    
     @Override
     public boolean isEmpty(final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return get(ownerAdapter, interactionInitiatedBy) == null;
@@ -354,6 +355,8 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         str.append("type", getSpecification().getShortIdentifier());
         return str.toString();
     }
+
+
 
 
 

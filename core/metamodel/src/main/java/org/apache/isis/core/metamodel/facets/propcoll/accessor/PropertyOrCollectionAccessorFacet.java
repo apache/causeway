@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.propcoll.accessor;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -46,7 +46,7 @@ public interface PropertyOrCollectionAccessorFacet extends Facet {
      * @param interactionInitiatedBy
      */
     public Object getProperty(
-            final ObjectAdapter inObject,
+            final Instance inObject,
             final InteractionInitiatedBy interactionInitiatedBy);
 
     ObjectSpecification getOnType();

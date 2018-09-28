@@ -167,7 +167,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         }
         return getObjectAdapterProvider().adapterFor(collection, (RootOid)ownerAdapter.getOid(), this);
     }
-
+    
     @Override
     public boolean isEmpty(final ObjectAdapter parentAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         // REVIEW should we be able to determine if a collection is empty
@@ -176,8 +176,6 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
         return facet.size(collection) == 0;
     }
-
-
 
     // -- add, clear
 

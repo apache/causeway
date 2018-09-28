@@ -18,6 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.property;
 
+import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -68,13 +73,9 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetAbstract;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-
-import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -124,7 +125,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             ) {
                 @Override
                 public Object getProperty(
-                        final ObjectAdapter inObject,
+                        final Instance inObject,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                     return null;
                 }

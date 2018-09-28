@@ -48,12 +48,6 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
     }
 
     @Override
-    public ObjectAdapter get(
-            final ObjectAdapter fromObject) {
-        return get(fromObject, InteractionInitiatedBy.USER);
-    }
-
-    @Override
     public ObjectSpecification getOnType() {
         final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
         return facet.getOnType();

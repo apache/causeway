@@ -95,6 +95,7 @@ extends RecreatableObjectFacetAbstract {
         final _Mementos.Memento memento = _Mementos.create(codec, serializer);
 
         final ObjectAdapter ownerAdapter = adapterProvider.disposableAdapterForViewModel(viewModelPojo);
+        // holds a pseudo rootOid 
         final ObjectSpecification spec = ownerAdapter.getSpecification();
         
         final Stream<OneToOneAssociation> properties = spec.streamProperties(Contributed.EXCLUDED);

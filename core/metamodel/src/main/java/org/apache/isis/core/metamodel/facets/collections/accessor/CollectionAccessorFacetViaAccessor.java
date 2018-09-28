@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -72,7 +73,7 @@ implements ImperativeFacet {
 
     @Override
     public Object getProperty(
-            final ObjectAdapter owningAdapter,
+            final Instance owningAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         if(collectionOrArray == null) {

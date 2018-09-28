@@ -31,7 +31,7 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -113,7 +113,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         final ObjectSpecification objectSpecification = 
                 specificationLoader.loadSpecification(viewModelPojo.getClass());
         final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-        final RootOid newRootOid = Factory.persistentOf(objectSpecId, UUID.randomUUID().toString());
+        final RootOid newRootOid = Oid.Factory.persistentOf(objectSpecId, UUID.randomUUID().toString());
         final ObjectAdapter createdAdapter = objectAdapterContext.createRootOrAggregatedAdapter(newRootOid, viewModelPojo);
         return createdAdapter;
     }

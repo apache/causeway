@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
@@ -50,7 +51,9 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     /**
      * As per {@link #get(ObjectAdapter, InteractionInitiatedBy)}, with {@link InteractionInitiatedBy#USER}.
      */
-    ObjectAdapter get(final ObjectAdapter owner);
+    public default ObjectAdapter get(ObjectAdapter owner) {
+        return get(owner, InteractionInitiatedBy.USER);
+    }
 
     /**
      * Returns the referenced {@link ObjectAdapter} for the owning
@@ -62,6 +65,8 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      */
     @Override
     ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy);
+    
+    //Instance get(final Instance owner, final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Return the default for this property.
