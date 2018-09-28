@@ -21,16 +21,12 @@ package org.apache.isis.viewer.wicket.ui.components.standalonecollection;
 
 import java.util.List;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -38,18 +34,16 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
-import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
-import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionModel>
-implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvider, ActionPromptProvider {
+implements CollectionCountProvider, CollectionSelectorProvider, ActionPromptProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -118,46 +112,6 @@ implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvi
     @Override
     public ActionPromptModalWindow getActionPrompt() {
         return actionPromptModalWindow;
-    }
-
-
-
-    // -- BulkActionsProvider
-
-    ObjectAdapterToggleboxColumn toggleboxColumn;
-
-    @Override
-    public ObjectAdapterToggleboxColumn getToggleboxColumn() {
-
-        if (toggleboxColumn == null) {
-
-            final EntityCollectionModel entityCollectionModel = getModel();
-            if(entityCollectionModel.isParented()) {
-                return null;
-            }
-
-            toggleboxColumn = new ObjectAdapterToggleboxColumn();
-            final OnSelectionHandler handler = new OnSelectionHandler() {
-
-                private static final long serialVersionUID = 1L;
-
-                @Override
-                public void onSelected(
-                        final Component context,
-                        final ObjectAdapter selectedAdapter,
-                        final AjaxRequestTarget ajaxRequestTarget) {
-                    getModel().toggleSelectionOn(selectedAdapter);
-                }
-
-            };
-            toggleboxColumn.setOnSelectionHandler(handler);
-        }
-
-        return toggleboxColumn;
-    }
-
-    @Override
-    public void configureBulkActions(final ObjectAdapterToggleboxColumn toggleboxColumn) {
     }
 
 
