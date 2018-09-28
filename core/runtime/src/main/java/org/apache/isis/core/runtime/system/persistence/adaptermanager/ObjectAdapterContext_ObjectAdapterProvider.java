@@ -22,7 +22,6 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -120,8 +119,8 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     }
 
     @Override
-    public ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {
-        return objectAdapterContext.adapterForViewModel(viewModelPojo, rootOidFactory);
+    public ObjectAdapter adapterForViewModel(Object viewModelPojo, String mementoString) {
+        return objectAdapterContext.adapterForViewModel(viewModelPojo, mementoString);
     }
     
     // -- DOMAIN OBJECT CREATION SUPPORT

@@ -19,7 +19,6 @@
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.Objects;
-import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -254,11 +253,12 @@ final public class ObjectAdapterContext {
     // ------------------------------------------------------------------------------------------------
 
     // package private
-    ObjectAdapter adapterForViewModel(Object viewModelPojo, Function<ObjectSpecId, RootOid> rootOidFactory) {
+    ObjectAdapter adapterForViewModel(Object viewModelPojo, String mementoString) {
+       
         final ObjectSpecification objectSpecification = 
                 specificationLoader.loadSpecification(viewModelPojo.getClass());
         final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-        final RootOid newRootOid = rootOidFactory.apply(objectSpecId);
+        final RootOid newRootOid = Oid.Factory.viewmodelOf(objectSpecId, mementoString);
 
         final ObjectAdapter viewModelAdapter = recreatePojo(newRootOid, viewModelPojo);
         return viewModelAdapter;

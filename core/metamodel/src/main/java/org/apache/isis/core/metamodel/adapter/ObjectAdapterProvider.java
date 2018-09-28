@@ -21,14 +21,12 @@ package org.apache.isis.core.metamodel.adapter;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 import java.util.List;
-import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
@@ -78,9 +76,7 @@ public interface ObjectAdapterProvider {
     
     ObjectSpecification specificationForViewModel(Object viewModelPojo);
 
-    ObjectAdapter adapterForViewModel(
-            Object viewModelPojo, 
-            Function<ObjectSpecId, RootOid> rootOidFactory);
+    ObjectAdapter adapterForViewModel(Object viewModelPojo, String mementoStr);
     
 
     // -- DOMAIN OBJECT CREATION SUPPORT
@@ -138,10 +134,8 @@ public interface ObjectAdapterProvider {
         }
 
         @Programmatic
-        default ObjectAdapter adapterForViewModel(
-                final Object viewModelPojo, 
-                final Function<ObjectSpecId, RootOid> rootOidFactory) {
-            return getObjectAdapterProvider().adapterForViewModel(viewModelPojo, rootOidFactory);
+        default ObjectAdapter adapterForViewModel(final Object viewModelPojo, final String mementoString) {
+            return getObjectAdapterProvider().adapterForViewModel(viewModelPojo, mementoString);
         }
         
         @Programmatic
