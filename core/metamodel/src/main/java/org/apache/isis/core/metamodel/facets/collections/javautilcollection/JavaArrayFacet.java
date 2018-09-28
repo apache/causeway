@@ -22,9 +22,6 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 import static org.apache.isis.commons.internal.collections._Arrays.toArray;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;

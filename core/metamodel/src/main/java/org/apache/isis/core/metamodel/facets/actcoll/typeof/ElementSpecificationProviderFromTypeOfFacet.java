@@ -21,14 +21,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ElementSpecificationProviderFromTypeOfFacet implements ElementSpecificationProvider {
 
-    public static ElementSpecificationProvider createFrom(final TypeOfFacet typeOfFacet) {
-        if (typeOfFacet == null) {
-            return null;
-        }
-        final ObjectSpecification spec = typeOfFacet.valueSpec();
-        return new ElementSpecificationProviderFromTypeOfFacet(spec);
-    }
-
     private final ObjectSpecification spec;
 
     public ElementSpecificationProviderFromTypeOfFacet(final ObjectSpecification spec) {

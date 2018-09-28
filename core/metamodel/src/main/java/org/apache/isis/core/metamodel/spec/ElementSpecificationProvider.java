@@ -16,6 +16,9 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+
 /**
  * A mechanism to provide the {@link ObjectSpecification type} of a
  * (stand-alone) collection.
@@ -27,4 +30,13 @@ package org.apache.isis.core.metamodel.spec;
 public interface ElementSpecificationProvider {
 
     public ObjectSpecification getElementType();
+    
+    /** for convenience */
+    public static ElementSpecificationProvider of(final TypeOfFacet typeOfFacet) {
+        if (typeOfFacet == null) {
+            return null;
+        }
+        final ObjectSpecification spec = typeOfFacet.valueSpec();
+        return new ElementSpecificationProviderFromTypeOfFacet(spec);
+    }
 }
