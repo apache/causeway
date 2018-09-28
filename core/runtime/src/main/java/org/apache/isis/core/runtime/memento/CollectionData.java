@@ -20,19 +20,21 @@
 package org.apache.isis.core.runtime.memento;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 public class CollectionData extends Data {
 
     private final static long serialVersionUID = 1L;
-    final Data[] elements;
+    private final Data[] elements;
 
     public CollectionData(final Oid oid, final String className, final Data[] elements) {
         super(oid, className);
         this.elements = elements;
-        initialized();
     }
 
     @Override
@@ -41,28 +43,19 @@ public class CollectionData extends Data {
         output.writeEncodables(elements);
     }
 
-    public void initialized() {
-        // nothing to do
-    }
-
     @Override
     public String toString() {
-        final StringBuffer str = new StringBuffer("(");
-        for (int i = 0; i < elements.length; i++) {
-            str.append((i > 0) ? "," : "");
-            str.append(elements[i]);
-        }
-        str.append(")");
-        return str.toString();
+        return "(" + streamElements()
+            .map(data->""+data)
+            .collect(Collectors.joining(",")) + ")";
     }
     
-    /**
-     * FIXME[ISIS-1976] only introduced for refactoring.
-     */
-    @Deprecated
-    public Data[] getElements() {
-        return elements;
+    public Stream<Data> streamElements() {
+        return _NullSafe.stream(elements);
     }
     
-
+    public int getElementCount() {
+        return _NullSafe.size(elements);
+    }
+    
 }

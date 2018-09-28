@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -58,7 +59,7 @@ public interface CollectionFacet extends Facet {
      * Set the contents of this collection.
      * @return a possibly new instance
      */
-    ObjectAdapter init(ObjectAdapter collectionAdapter, ObjectAdapter[] elements);
+    ObjectAdapter init(ObjectAdapter collectionAdapter, Stream<ObjectAdapter> elements, int elementCount);
 
     /**
      * Convenience method that returns the {@link TypeOfFacet} on this facet's

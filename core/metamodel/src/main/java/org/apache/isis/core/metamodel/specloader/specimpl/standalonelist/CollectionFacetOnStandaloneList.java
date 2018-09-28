@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl.standalonelist;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -64,8 +65,8 @@ public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
      * Does nothing.
      */
     @Override
-    public ObjectAdapter init(final ObjectAdapter collection, final ObjectAdapter[] initData) {
-        return collection;
+    public ObjectAdapter init(ObjectAdapter collectionAdapter, Stream<ObjectAdapter> elements, int elementCount) {
+        return collectionAdapter;
     }
 
 }

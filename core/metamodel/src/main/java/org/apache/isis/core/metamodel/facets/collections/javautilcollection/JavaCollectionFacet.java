@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -38,13 +39,14 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     }
     
     @Override
-    public ObjectAdapter init(final ObjectAdapter collection, final ObjectAdapter[] initData) {
+    public ObjectAdapter init(
+            final ObjectAdapter collection, 
+            final Stream<ObjectAdapter> initData,
+            final int elementCount) {
+        
         final Collection<? super Object> pojoCollection = pojoCollection(collection);
         pojoCollection.clear();
-        for (final ObjectAdapter element : initData) {
-            final Object pojo = element.getObject();
-            pojoCollection.add(pojo);
-        }
+        initData.forEach(pojoCollection::add);
         return collection;
     }
     

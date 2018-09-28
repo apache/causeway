@@ -20,10 +20,12 @@
 package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
+import static org.apache.isis.commons.internal.collections._Arrays.toArray;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -43,12 +45,14 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
     @Override
-    public ObjectAdapter init(final ObjectAdapter arrayAdapter, final ObjectAdapter[] initData) {
-        final int length = initData.length;
-        final Object[] array = new Object[length];
-        for (int i = 0; i < length; i++) {
-            array[i] = initData[i].getObject();
-        }
+    public ObjectAdapter init(
+            final ObjectAdapter arrayAdapter, 
+            final Stream<ObjectAdapter> initData, 
+            final int elementCount) {
+        
+        final Object[] array = initData
+            .map(ObjectAdapter::getObject)
+            .collect(toArray(Object.class, elementCount));
         return arrayAdapter.withPojo(array);  
     }
 

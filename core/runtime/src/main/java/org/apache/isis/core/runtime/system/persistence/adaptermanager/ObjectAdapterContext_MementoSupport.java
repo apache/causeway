@@ -131,13 +131,11 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
     }
     
     private ObjectAdapter populateCollection(final ObjectAdapter collectionAdapter, final CollectionData state) {
-        final ObjectAdapter[] initData = new ObjectAdapter[state.getElements().length];
-        int i = 0;
-        for (final Data elementData : state.getElements()) {
-            initData[i++] = recreateReference(elementData);
-        }
+        final Stream<ObjectAdapter> initData = state.streamElements()
+            .map((final Data elementData) -> recreateReference(elementData));
+        
         final CollectionFacet facet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
-        return facet.init(collectionAdapter, initData);
+        return facet.init(collectionAdapter, initData, state.getElementCount());
     }
     
     private void updateFieldsAndResolveState(final ObjectAdapter objectAdapter, final Data data) {
@@ -207,8 +205,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             original.add(adapter);
         }
 
-        final Data[] elements = collectionData.getElements();
-        for (final Data data : elements) {
+        collectionData.streamElements().forEach((final Data data) -> {
             final ObjectAdapter elementAdapter = recreateReference(data);
             if (!facet.contains(collection, elementAdapter)) {
                 if (LOG.isDebugEnabled()) {
@@ -218,7 +215,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             } else {
                 otma.removeElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
             }
-        }
+        });
 
         for (final ObjectAdapter element : original) {
             if (LOG.isDebugEnabled()) {
