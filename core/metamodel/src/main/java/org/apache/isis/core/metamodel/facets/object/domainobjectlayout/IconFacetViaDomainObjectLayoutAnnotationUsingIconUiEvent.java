@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends IconFacetAbstract {
@@ -77,7 +77,7 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
     }
 
     @Override
-    public String iconName(final Instance owningAdapter) {
+    public String iconName(final ManagedObject owningAdapter) {
 
         final IconUiEvent<Object> iconUiEvent = newIconUiEvent(owningAdapter);
 
@@ -97,7 +97,7 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
         return iconName; // could be null
     }
 
-    private IconUiEvent<Object> newIconUiEvent(final Instance owningAdapter) {
+    private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter) {
         final Object domainObject = owningAdapter.getObject();
         return newIconUiEventForPojo(domainObject);
     }

@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.collections.validate;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Validate that an object can be added to a collection.
@@ -36,5 +36,5 @@ public interface CollectionValidateAddToFacet extends Facet, ValidatingInteracti
     /**
      * Reason the object cannot be added, or <tt>null</tt> if okay.
      */
-    public String invalidReason(ObjectAdapter target, ObjectAdapter proposedArgument);
+    public String invalidReason(ManagedObject target, ManagedObject proposedArgument);
 }

@@ -26,15 +26,16 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+import javax.annotation.meta.When;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Provides reflective access to an action or a field on a domain object.
@@ -76,7 +77,7 @@ public interface ObjectMember extends ObjectFeature {
      * @param where
      */
     Consent isVisible(
-            final ObjectAdapter target,
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where);
 
@@ -93,7 +94,7 @@ public interface ObjectMember extends ObjectFeature {
      * @param where
      */
     Consent isUsable(
-            final ObjectAdapter target,
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where);
 

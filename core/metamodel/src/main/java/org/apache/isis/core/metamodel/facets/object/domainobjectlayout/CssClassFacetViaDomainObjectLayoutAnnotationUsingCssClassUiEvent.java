@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent extends FacetAbstract implements
@@ -77,7 +77,7 @@ CssClassFacet {
     }
 
     @Override
-    public String cssClass(final Instance owningAdapter) {
+    public String cssClass(final ManagedObject owningAdapter) {
 
         final CssClassUiEvent<Object> cssClassUiEvent = newCssClassUiEvent(owningAdapter);
 
@@ -97,7 +97,7 @@ CssClassFacet {
         return cssClass;
     }
 
-    private CssClassUiEvent<Object> newCssClassUiEvent(final Instance owningAdapter) {
+    private CssClassUiEvent<Object> newCssClassUiEvent(final ManagedObject owningAdapter) {
         final Object domainObject = owningAdapter.getObject();
         return newCssClassUiEventForPojo(domainObject);
     }

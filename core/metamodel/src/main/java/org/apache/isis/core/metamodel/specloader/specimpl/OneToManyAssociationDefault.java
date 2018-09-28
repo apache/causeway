@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
@@ -75,7 +76,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(
-            final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+            final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         return new CollectionVisibilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
@@ -83,7 +84,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     @Override
     public UsabilityContext<?> createUsableInteractionContext(
-            final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+            final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         return new CollectionUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }

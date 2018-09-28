@@ -19,7 +19,14 @@
 
 package org.apache.isis.core.runtime.system;
 
-import org.apache.isis.commons.internal.collections._Lists;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import org.datanucleus.enhancement.Persistable;
 import org.jmock.Expectations;
@@ -29,6 +36,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -51,6 +59,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -59,15 +68,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdap
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class ObjectMemberAbstractTest {
 
@@ -164,7 +164,7 @@ public class ObjectMemberAbstractTest {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetAbstract(Where.ANYWHERE, testMember) {
             @Override
-            public String hiddenReason(final ObjectAdapter target, final Where whereContext) {
+            public String hiddenReason(final ManagedObject target, final Where whereContext) {
                 return null;
             }
         });
@@ -261,14 +261,14 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
 
     @Override
     public UsabilityContext<?> createUsableInteractionContext(
-            final ObjectAdapter target, final InteractionInitiatedBy interactionInitiatedBy,
+            final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         return new PropertyUsabilityContext(target, getIdentifier(), interactionInitiatedBy, where);
     }
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(
-            final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+            final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         return new PropertyVisibilityContext(targetObjectAdapter, getIdentifier(), interactionInitiatedBy,
                 where);

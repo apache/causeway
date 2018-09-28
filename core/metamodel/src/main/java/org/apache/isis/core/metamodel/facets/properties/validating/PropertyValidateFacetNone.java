@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.validating;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class PropertyValidateFacetNone extends PropertyValidateFacetAbstract {
 
@@ -35,7 +35,7 @@ public class PropertyValidateFacetNone extends PropertyValidateFacetAbstract {
      * Subclasses should override as required.
      */
     @Override
-    public String invalidReason(final ObjectAdapter inObject, final ObjectAdapter value) {
+    public String invalidReason(final ManagedObject inObject, final ManagedObject value) {
         return null;
     }
 

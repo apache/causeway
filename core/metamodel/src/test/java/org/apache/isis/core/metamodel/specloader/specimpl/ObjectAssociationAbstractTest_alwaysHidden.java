@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -121,14 +121,14 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
 
             @Override
             public UsabilityContext<?> createUsableInteractionContext(
-                    final ObjectAdapter target, final InteractionInitiatedBy interactionInitiatedBy,
+                    final ManagedObject target, final InteractionInitiatedBy interactionInitiatedBy,
                     final Where where) {
                 return null;
             }
 
             @Override
             public VisibilityContext<?> createVisibleInteractionContext(
-                    final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+                    final ManagedObject targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
                     final Where where) {
                 return null;
             }
@@ -223,7 +223,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             final boolean noop) {
         HiddenFacet facet = new HiddenFacetAbstract(HiddenFacet.class, where, holder) {
             @Override
-            protected String hiddenReason(final ObjectAdapter target, final Where whereContext) {
+            protected String hiddenReason(final ManagedObject target, final Where whereContext) {
                 return null;
             }
 

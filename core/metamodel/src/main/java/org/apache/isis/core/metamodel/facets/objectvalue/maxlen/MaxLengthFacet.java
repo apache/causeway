@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.maxlen;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Whether the (string) property or a parameter's length must not exceed a
@@ -36,6 +36,6 @@ public interface MaxLengthFacet extends SingleIntValueFacet, ValidatingInteracti
     /**
      * Whether the provided string exceeds the maximum length.
      */
-    public boolean exceeds(ObjectAdapter adapter);
+    public boolean exceeds(ManagedObject adapter);
 
 }

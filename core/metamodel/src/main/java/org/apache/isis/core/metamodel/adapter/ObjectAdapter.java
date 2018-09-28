@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 
@@ -54,21 +55,21 @@ import org.apache.isis.core.metamodel.spec.Specification;
  * domain objects and those objects are represented within the NOF through these
  * adapter, and not directly.
  */
-public interface ObjectAdapter extends Instance {
+public interface ObjectAdapter extends ManagedObject {
 
-    /**
-     * Refines {@link Instance#getSpecification()}.
-     */
-    @Override
-    ObjectSpecification getSpecification();
-
-    /**
-     * Returns the adapted domain object, the POJO, that this adapter represents
-     * with the framework.
-     */
-    @Override
-    Object getObject();
-
+//    /**
+//     * Refines {@link Instance#getSpecification()}.
+//     */
+//    @Override
+//    ObjectSpecification getSpecification();
+//
+//    /**
+//     * Returns the adapted domain object, the POJO, that this adapter represents
+//     * with the framework.
+//     */
+//    @Override
+//    Object getObject();
+    
     /**
      * Returns the title to display this object with, usually obtained from
      * the wrapped {@link #getObject() domain object}.
@@ -195,36 +196,36 @@ public interface ObjectAdapter extends Instance {
 
         private Util() {}
 
-        public static Object unwrap(final Instance adapter) {
+        public static Object unwrap(final ManagedObject adapter) {
             return adapter != null ? adapter.getObject() : null;
         }
 
-        public static Object[] unwrap(final Instance[] adapters) {
+        public static Object[] unwrap(final ManagedObject[] adapters) {
             if (adapters == null) {
                 return null;
             }
             final Object[] unwrappedObjects = new Object[adapters.length];
             int i = 0;
-            for (final Instance adapter : adapters) {
+            for (final ManagedObject adapter : adapters) {
                 unwrappedObjects[i++] = unwrap(adapter);
             }
             return unwrappedObjects;
         }
 
-        public static List<Object> unwrap(final List<? extends Instance> adapters) {
+        public static List<Object> unwrap(final List<? extends ManagedObject> adapters) {
             List<Object> objects = _Lists.newArrayList();
-            for (Instance adapter : adapters) {
+            for (ManagedObject adapter : adapters) {
                 objects.add(unwrap(adapter));
             }
             return objects;
         }
 
         @SuppressWarnings("unchecked")
-        public static <T> List<T> unwrapT(final List<? extends Instance> adapters) {
+        public static <T> List<T> unwrapT(final List<? extends ManagedObject> adapters) {
             return (List<T>) unwrap(adapters);
         }
 
-        public static String unwrapAsString(final ObjectAdapter adapter) {
+        public static String unwrapAsString(final ManagedObject adapter) {
             final Object obj = unwrap(adapter);
             if (obj == null) {
                 return null;
@@ -239,11 +240,11 @@ public interface ObjectAdapter extends Instance {
             return adapter != null ? adapter.titleString(null) : "";
         }
 
-        public static boolean exists(final ObjectAdapter adapter) {
+        public static boolean exists(final ManagedObject adapter) {
             return adapter != null && adapter.getObject() != null;
         }
 
-        public static boolean wrappedEqual(final ObjectAdapter adapter1, final ObjectAdapter adapter2) {
+        public static boolean wrappedEqual(final ManagedObject adapter1, final ManagedObject adapter2) {
             final boolean defined1 = exists(adapter1);
             final boolean defined2 = exists(adapter2);
             if (defined1 && !defined2) {
@@ -268,9 +269,9 @@ public interface ObjectAdapter extends Instance {
             if (obj1.equals(obj2)) {
                 return true;
             }
-            if (obj1 instanceof ObjectAdapter && obj2 instanceof ObjectAdapter) {
-                final ObjectAdapter adapterObj1 = (ObjectAdapter) obj1;
-                final ObjectAdapter adapterObj2 = (ObjectAdapter) obj2;
+            if (obj1 instanceof ManagedObject && obj2 instanceof ManagedObject) {
+                final ManagedObject adapterObj1 = (ManagedObject) obj1;
+                final ManagedObject adapterObj2 = (ManagedObject) obj2;
                 return nullSafeEquals(adapterObj1.getObject(), adapterObj2.getObject());
             }
             return false;
@@ -357,33 +358,33 @@ public interface ObjectAdapter extends Instance {
         private InvokeUtils() {
         }
 
-        public static void invokeAll(final Collection<Method> methods, final Instance adapter) {
+        public static void invokeAll(final Collection<Method> methods, final ManagedObject adapter) {
             MethodUtil.invoke(methods, Util.unwrap(adapter));
         }
 
-        public static Object invoke(final Method method, final Instance adapter) {
+        public static Object invoke(final Method method, final ManagedObject adapter) {
             return MethodExtensions.invoke(method, Util.unwrap(adapter));
         }
 
-        public static Object invoke(final Method method, final Instance adapter, final Object arg0) {
+        public static Object invoke(final Method method, final ManagedObject adapter, final Object arg0) {
             return MethodExtensions.invoke(method, Util.unwrap(adapter), new Object[] {arg0});
         }
 
-        public static Object invoke(final Method method, final Instance adapter, final Instance arg0Adapter) {
+        public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject arg0Adapter) {
             return invoke(method, adapter, Util.unwrap(arg0Adapter));
         }
 
-        public static Object invoke(final Method method, final Instance adapter, final Instance[] argumentAdapters) {
+        public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject[] argumentAdapters) {
             return MethodExtensions.invoke(method, Util.unwrap(adapter), Util.unwrap(argumentAdapters));
         }
 
-        public static Object invokeC(final Method method, final Instance adapter, 
-                final Stream<Tuple2<Integer, ? extends Instance>> paramsAndIndexes) {
+        public static Object invokeC(final Method method, final ManagedObject adapter, 
+                final Stream<Tuple2<Integer, ? extends ManagedObject>> paramsAndIndexes) {
             return invoke(method, adapter, asArray(paramsAndIndexes, method.getParameterTypes().length));
         }
 
-        private static Instance[] asArray(final Stream<Tuple2<Integer, ? extends Instance>> paramsAndIndexes, int length) {
-            final Instance[] args = new Instance[length];
+        private static ManagedObject[] asArray(final Stream<Tuple2<Integer, ? extends ManagedObject>> paramsAndIndexes, int length) {
+            final ManagedObject[] args = new ManagedObject[length];
             paramsAndIndexes.forEach(entry->{
                 final Integer paramNum = entry.get_1();
                 if(paramNum < length) {
@@ -405,23 +406,23 @@ public interface ObjectAdapter extends Instance {
          */
         public static Object invokeAutofit(
                 final Method method, 
-                final Instance target, 
-                List<? extends Instance> argumentsIfAvailable/*, 
+                final ManagedObject target, 
+                List<? extends ManagedObject> argumentsIfAvailable/*, 
                 final SpecificationLoader specLoader*/) {
             
-            final List<Instance> args = _Lists.newArrayList();
+            final List<ManagedObject> args = _Lists.newArrayList();
             if(argumentsIfAvailable != null) {
                 args.addAll(argumentsIfAvailable);
             }
 
             adjust(method, args/*, specLoader*/);
 
-            final Instance[] argArray = args.toArray(new Instance[]{});
+            final ManagedObject[] argArray = args.toArray(new ManagedObject[]{});
             return invoke(method, target, argArray);
         }
 
         private static void adjust(
-                final Method method, final List<Instance> args /*, final SpecificationLoader specLoader*/) {
+                final Method method, final List<ManagedObject> args /*, final SpecificationLoader specLoader*/) {
             
             final Class<?>[] parameterTypes = method.getParameterTypes();
             ListExtensions.adjust(args, parameterTypes.length);
@@ -431,7 +432,7 @@ public interface ObjectAdapter extends Instance {
                 if(args.get(i) == null && cls.isPrimitive()) {
                     final Object object = ClassExtensions.toDefault(cls);
                     
-                    final Instance adapter = Instance.of((ObjectSpecification)null, object);
+                    final ManagedObject adapter = ManagedObject.of((ObjectSpecification)null, object);
                     args.set(i, adapter);
                 }
             }

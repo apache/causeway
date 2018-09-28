@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract implements MandatoryFacet {
 
@@ -56,7 +57,7 @@ public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract impleme
      * If not specified or, if a string, then zero length.
      */
     @Override
-    public final boolean isRequiredButNull(final ObjectAdapter adapter) {
+    public final boolean isRequiredButNull(final ManagedObject adapter) {
         if(!isInvertedSemantics()) {
             final Object object = ObjectAdapter.Util.unwrap(adapter);
             if (object == null) {

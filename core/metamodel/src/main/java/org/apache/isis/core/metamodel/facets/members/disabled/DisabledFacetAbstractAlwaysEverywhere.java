@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class DisabledFacetAbstractAlwaysEverywhere extends DisabledFacetAbstract {
 
@@ -33,7 +33,7 @@ public abstract class DisabledFacetAbstractAlwaysEverywhere extends DisabledFace
      * Always returns <i>Always disabled</i>.
      */
     @Override
-    public String disabledReason(final ObjectAdapter target) {
+    public String disabledReason(final ManagedObject target) {
         return "Always disabled";
     }
 

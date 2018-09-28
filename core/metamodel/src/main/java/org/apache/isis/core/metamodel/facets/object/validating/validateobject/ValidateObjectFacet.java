@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.object.validating.validateobject;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Mechanism for determining whether this object is in a valid state, for
@@ -50,6 +50,6 @@ public interface ValidateObjectFacet extends Facet, ValidatingInteractionAdvisor
      * <p>
      * . If the object is actually valid, should return <tt>null</tt>.
      */
-    public String invalidReason(ObjectAdapter adapter);
+    public String invalidReason(ManagedObject adapter);
 
 }

@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.AccessEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to {@link AccessEvent}
@@ -34,7 +34,7 @@ public abstract class AccessContext<T extends AccessEvent> extends InteractionCo
     public AccessContext(
             final InteractionContextType interactionType,
             final Identifier identifier,
-            final ObjectAdapter target,
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(interactionType, interactionInitiatedBy, identifier, target);
     }

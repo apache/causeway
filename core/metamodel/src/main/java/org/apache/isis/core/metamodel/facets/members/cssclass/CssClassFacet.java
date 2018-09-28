@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.members.cssclass;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * The css class of a class, a property, collection, or an action.
@@ -32,6 +32,6 @@ public interface CssClassFacet extends Facet {
      *
      * @param objectAdapter - to evaluate.  May be <tt>null</tt> in exceptional circumstances (specifically: the {@link org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson#asJson(org.apache.isis.core.metamodel.spec.ObjectSpecification)} which generates <tt>xxx.layout.json</tt> for a spec without recourse to any given object).
      */
-    public String cssClass(final Instance objectAdapter);
+    public String cssClass(final ManagedObject objectAdapter);
 
 }

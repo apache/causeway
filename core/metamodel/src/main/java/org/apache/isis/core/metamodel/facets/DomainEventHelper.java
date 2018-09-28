@@ -37,6 +37,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
@@ -57,9 +58,9 @@ public class DomainEventHelper {
             final ActionDomainEvent<?> existingEvent,
             final ObjectAction objectAction,
             final IdentifiedHolder identified,
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter mixedInAdapter,
-            final ObjectAdapter[] argumentAdapters,
+            final ManagedObject targetAdapter,
+            final ManagedObject mixedInAdapter,
+            final ManagedObject[] argumentAdapters,
             final Command command,
             final ObjectAdapter resultAdapter) {
 
@@ -176,7 +177,7 @@ public class DomainEventHelper {
             final Class eventType,
             final PropertyDomainEvent<?, ?> existingEvent,
             final IdentifiedHolder identified,
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final Object oldValue,
             final Object newValue) {
 
@@ -266,7 +267,7 @@ public class DomainEventHelper {
             final Class eventType,
             final CollectionDomainEvent<?, ?> existingEvent,
             final IdentifiedHolder identified,
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final CollectionDomainEvent.Of of,
             final Object reference) {
         try {

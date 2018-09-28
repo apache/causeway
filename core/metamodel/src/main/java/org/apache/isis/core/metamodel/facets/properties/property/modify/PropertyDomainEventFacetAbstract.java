@@ -26,7 +26,6 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
@@ -37,6 +36,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class PropertyDomainEventFacetAbstract
@@ -124,7 +124,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
 
     private static Object proposedFrom(ValidityContext<? extends ValidityEvent> ic) {
         final ProposedHolder ph = (ProposedHolder) ic;
-        final ObjectAdapter proposedAdapter = ph.getProposed();
+        final ManagedObject proposedAdapter = ph.getProposed();
         return proposedAdapter != null? proposedAdapter.getObject(): null;
     }
 

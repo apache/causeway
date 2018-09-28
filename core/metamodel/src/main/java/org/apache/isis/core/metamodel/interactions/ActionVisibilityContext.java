@@ -24,9 +24,9 @@ import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.ActionVisibilityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 /**
@@ -38,7 +38,7 @@ public class ActionVisibilityContext extends VisibilityContext<ActionVisibilityE
     private final ObjectAction objectAction;
 
     public ActionVisibilityContext(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final ObjectAction objectAction,
             final Identifier identifier,
             final InteractionInitiatedBy interactionInitiatedBy,

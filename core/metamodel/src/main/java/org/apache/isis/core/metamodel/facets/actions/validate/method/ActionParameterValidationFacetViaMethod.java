@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionParameterValidationFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class ActionParameterValidationFacetViaMethod extends ActionParameterValidationFacetAbstract implements ImperativeFacet {
 
@@ -58,7 +59,7 @@ public class ActionParameterValidationFacetViaMethod extends ActionParameterVali
     }
 
     @Override
-    public String invalidReason(final ObjectAdapter owningAdapter, final ObjectAdapter proposedArgumentAdapter) {
+    public String invalidReason(final ManagedObject owningAdapter, final ManagedObject proposedArgumentAdapter) {
         final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, proposedArgumentAdapter);
         if(returnValue instanceof String) {
             return (String) returnValue;

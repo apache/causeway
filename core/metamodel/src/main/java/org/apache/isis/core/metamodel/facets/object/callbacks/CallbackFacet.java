@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetMulti;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * A {@link Facet} that represents some type of lifecycle callback on the object
@@ -30,14 +30,14 @@ import org.apache.isis.core.metamodel.spec.Instance;
  */
 public interface CallbackFacet extends Facet, ImperativeFacetMulti {
 
-    public void invoke(Instance object);
+    public void invoke(ManagedObject object);
 
     public static final class Util {
 
         private Util() {
         }
 
-        public static void callCallback(final Instance object, final Class<? extends Facet> cls) {
+        public static void callCallback(final ManagedObject object, final Class<? extends Facet> cls) {
             final CallbackFacet facet = (CallbackFacet) object.getSpecification().getFacet(cls);
             if (facet != null) {
                 try {

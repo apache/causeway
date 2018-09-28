@@ -55,6 +55,7 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -225,7 +226,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
     protected abstract VisibilityContext<?> createVisibleInteractionContext(
-            final ObjectAdapter targetObjectAdapter,
+            final ManagedObject targetObjectAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where);
 
@@ -247,14 +248,14 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      */
     @Override
     public Consent isVisible(
-            final ObjectAdapter target,
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return isVisibleResult(target, interactionInitiatedBy, where).createConsent();
     }
 
     private InteractionResult isVisibleResult(
-            final ObjectAdapter target,
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         final VisibilityContext<?> ic = createVisibleInteractionContext(target, interactionInitiatedBy, where);
@@ -274,7 +275,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
     protected abstract UsabilityContext<?> createUsableInteractionContext(
-            final ObjectAdapter target,
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where);
 
@@ -284,14 +285,14 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      */
     @Override
     public Consent isUsable(
-            final ObjectAdapter target,
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         return isUsableResult(target, interactionInitiatedBy, where).createConsent();
     }
 
     private InteractionResult isUsableResult(
-            final ObjectAdapter target,
+            final ManagedObject target,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
         final UsabilityContext<?> ic = createUsableInteractionContext(target, interactionInitiatedBy, where);
@@ -328,7 +329,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      */
     protected ObjectAdapter mixinAdapterFor(
             final Class<?> mixinType,
-            final ObjectAdapter mixedInAdapter) {
+            final ManagedObject mixedInAdapter) {
         final ObjectSpecification objectSpecification = getSpecificationLoader().loadSpecification(mixinType);
         final MixinFacet mixinFacet = objectSpecification.getFacet(MixinFacet.class);
         final Object mixinPojo = mixinFacet.instantiate(mixedInAdapter.getObject());

@@ -16,6 +16,10 @@
  * under the License. */
 package org.apache.isis.core.metamodel.facets.collections.collection;
 
+import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -56,12 +60,8 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemove
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacetAbstract;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -115,7 +115,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             ) {
                 @Override
                 public Object getProperty(
-                        final Instance inObject,
+                        final ManagedObject inObject,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                     return null;
                 }

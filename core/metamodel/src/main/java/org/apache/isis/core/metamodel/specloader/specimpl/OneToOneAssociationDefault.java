@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.cmd.v1.CommandDto;
@@ -79,7 +79,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(
-            final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+            final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         return new PropertyVisibilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
@@ -87,7 +87,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     @Override
     public UsabilityContext<?> createUsableInteractionContext(
-            final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+            final ManagedObject ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         return new PropertyUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
@@ -96,8 +96,8 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     // -- Validity
     private ValidityContext<?> createValidateInteractionContext(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter proposedToReferenceAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject proposedToReferenceAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return new PropertyModifyContext(ownerAdapter, getIdentifier(), proposedToReferenceAdapter,
                 interactionInitiatedBy);
@@ -105,15 +105,15 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
 
     @Override
     public Consent isAssociationValid(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter proposedAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject proposedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return isAssociationValidResult(ownerAdapter, proposedAdapter, interactionInitiatedBy).createConsent();
     }
 
     private InteractionResult isAssociationValidResult(
-            final ObjectAdapter ownerAdapter,
-            final ObjectAdapter proposedToReferenceAdapter,
+            final ManagedObject ownerAdapter,
+            final ManagedObject proposedToReferenceAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final ValidityContext<?> validityContext =
                 createValidateInteractionContext(
@@ -149,6 +149,21 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
             return null;
         }
 
+        return getObjectAdapterProvider().adapterFor(referencedPojo);
+    }
+    
+
+    @Override
+    public ManagedObject get2(ManagedObject ownerAdapter, InteractionInitiatedBy interactionInitiatedBy) {
+        
+        final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
+        final Object referencedPojo =
+                facet.getProperty(ownerAdapter, interactionInitiatedBy);
+
+        if (referencedPojo == null) {
+            return null;
+        }
+        
         return getObjectAdapterProvider().adapterFor(referencedPojo);
     }
     
@@ -355,6 +370,7 @@ public class OneToOneAssociationDefault extends ObjectAssociationAbstract implem
         str.append("type", getSpecification().getShortIdentifier());
         return str.toString();
     }
+
 
 
 

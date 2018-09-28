@@ -28,7 +28,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -41,7 +40,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -146,7 +145,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public String getIconName(final Instance reference) {
+    public String getIconName(final ManagedObject reference) {
         return null;
     }
 
@@ -156,7 +155,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 	}
     
     @Override
-    public String getCssClass(final Instance reference) {
+    public String getCssClass(final ManagedObject reference) {
         return null;
     }
 
@@ -212,8 +211,8 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public String getTitle(
-            final ObjectAdapter contextAdapterIfAny,
-            final ObjectAdapter targetAdapter) {
+            final ManagedObject contextAdapterIfAny,
+            final ManagedObject targetAdapter) {
         return title;
     }
 
@@ -273,7 +272,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Consent isValid(final ObjectAdapter targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+    public Consent isValid(final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return null;
     }
 
@@ -309,19 +308,18 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public ObjectValidityContext createValidityInteractionContext(
-            final ObjectAdapter targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+            ManagedObject targetAdapter, InteractionInitiatedBy interactionInitiatedBy) {
         return null;
     }
 
     @Override
-    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public ObjectTitleContext createTitleInteractionContext(
+            AuthenticationSession session, InteractionInitiatedBy invocationMethod, ManagedObject targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public InteractionResult isValidResult(
-            final ObjectAdapter targetAdapter,
-            final InteractionInitiatedBy interactionInitiatedBy) {
+    public InteractionResult isValidResult(ManagedObject targetAdapter, InteractionInitiatedBy interactionInitiatedBy) {
         return null;
     }
 
@@ -350,7 +348,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public boolean isViewModelCloneable(final Instance targetAdapter) {
+    public boolean isViewModelCloneable(final ManagedObject targetAdapter) {
         return false;
     }
 

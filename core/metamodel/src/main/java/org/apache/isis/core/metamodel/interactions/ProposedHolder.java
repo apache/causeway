@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Implemented by some of the {@link InteractionContext} subclasses, making it
@@ -34,5 +34,5 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface ProposedHolder {
 
-    ObjectAdapter getProposed();
+    ManagedObject getProposed();
 }

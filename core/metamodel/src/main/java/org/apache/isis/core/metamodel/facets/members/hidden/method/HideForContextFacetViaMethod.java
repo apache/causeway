@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class HideForContextFacetViaMethod extends HideForContextFacetAbstract implements ImperativeFacet {
 
@@ -55,7 +56,7 @@ public class HideForContextFacetViaMethod extends HideForContextFacetAbstract im
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        final ObjectAdapter target = ic.getTarget();
+        final ManagedObject target = ic.getTarget();
         if (target == null) {
             return null;
         }

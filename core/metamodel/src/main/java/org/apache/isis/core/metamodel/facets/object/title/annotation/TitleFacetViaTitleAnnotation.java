@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
@@ -86,11 +87,11 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     }
 
     @Override
-    public String title(final ObjectAdapter targetAdapter) {
+    public String title(final ManagedObject targetAdapter) {
         return title(null, targetAdapter);
     }
 
-    private String titleOf(final ObjectAdapter adapter) {
+    private String titleOf(final ManagedObject adapter) {
         if (adapter == null) {
             return null;
         }
@@ -106,7 +107,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     }
 
     @Override
-    public String title(ObjectAdapter contextAdapter, ObjectAdapter targetAdapter) {
+    public String title(ManagedObject contextAdapter, ManagedObject targetAdapter) {
         final StringBuilder stringBuilder = new StringBuilder();
 
         try {

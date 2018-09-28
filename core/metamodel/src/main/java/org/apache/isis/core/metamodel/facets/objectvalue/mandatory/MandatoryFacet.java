@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.mandatory;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Whether a property or a parameter is mandatory (not optional).
@@ -47,10 +47,10 @@ public interface MandatoryFacet extends MarkerFacet, ValidatingInteractionAdviso
      * If the value has been provided, <i>or</i> if the property or parameter is
      * not required, then will return <tt>false</tt>.
      */
-    boolean isRequiredButNull(ObjectAdapter adapter);
+    boolean isRequiredButNull(ManagedObject adapter);
 
     /**
-     * Indicates that the implementation is overridding the usual semantics, in
+     * Indicates that the implementation is overriding the usual semantics, in
      * other words that the {@link FacetHolder} to which this {@link Facet} is
      * attached is <i>not</i> mandatory.
      */

@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Tuples.Tuple2;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -42,6 +41,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -119,13 +119,13 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
         return ((ActionInteractionContext) ic).getObjectAction();
     }
 
-    private static ObjectAdapter[] argumentAdaptersFrom(final InteractionContext<? extends InteractionEvent> ic) {
-        final Tuple2<Integer, ObjectAdapter> contributee = ic.getContributeeWithParamIndex();
+    private static ManagedObject[] argumentAdaptersFrom(final InteractionContext<? extends InteractionEvent> ic) {
+        final Tuple2<Integer, ManagedObject> contributee = ic.getContributeeWithParamIndex();
         
         if(contributee!=null) {
             int paramIndex = contributee.get_1(); 
-            ObjectAdapter adapter = contributee.get_2();
-            return new ObjectAdapter[]{paramIndex==0 ? adapter : null};
+            ManagedObject adapter = contributee.get_2();
+            return new ManagedObject[]{paramIndex==0 ? adapter : null};
         }
         
         return null;

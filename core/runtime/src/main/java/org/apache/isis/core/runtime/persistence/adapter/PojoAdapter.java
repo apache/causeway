@@ -56,6 +56,11 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     private final Object pojo;
     private final Oid oid;
+    
+    @Override
+    public Object getPojo() {
+        return pojo;
+    }
 
     /**
      * only for standalone or parented collections.

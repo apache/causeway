@@ -20,12 +20,12 @@
 package org.apache.isis.core.metamodel.facets.object.validating.validateobject;
 
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class ValidateObjectFacetAbstract extends FacetAbstract implements ValidateObjectFacet {
 
@@ -42,7 +42,7 @@ public abstract class ValidateObjectFacetAbstract extends FacetAbstract implemen
         if (!(vc instanceof ObjectValidityContext)) {
             return null;
         }
-        final ObjectAdapter toValidate = vc.getTarget();
+        final ManagedObject toValidate = vc.getTarget();
         return toValidate != null ? invalidReason(toValidate) : null;
     }
 

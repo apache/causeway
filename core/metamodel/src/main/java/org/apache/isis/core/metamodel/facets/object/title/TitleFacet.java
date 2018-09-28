@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.object.title;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Mechanism for obtaining the title of an instance of a class, used to label
@@ -40,7 +40,7 @@ public interface TitleFacet extends Facet {
     /**
      * Provide a title for the target object.
      */
-    String title(final ObjectAdapter targetAdapter);
+    String title(final ManagedObject targetAdapter);
 
     /**
      * Provide a title for the target object, in the context of the context object.
@@ -50,6 +50,6 @@ public interface TitleFacet extends Facet {
      * context object would be the parent.  Thus, the title might be shortened so that it does not
      * needlessly incorporate the title of the parent (context) object.
      */
-    String title(final ObjectAdapter contextAdapter, final ObjectAdapter targetAdapter);
+    String title(final ManagedObject contextAdapter, final ManagedObject targetAdapter);
 
 }

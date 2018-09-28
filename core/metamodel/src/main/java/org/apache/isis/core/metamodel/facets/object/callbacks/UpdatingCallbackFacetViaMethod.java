@@ -27,7 +27,7 @@ import org.apache.isis.core.commons.lang.Wormhole;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class UpdatingCallbackFacetViaMethod extends UpdatingCallbackFacetAbstract implements ImperativeFacet {
 
@@ -54,7 +54,7 @@ public class UpdatingCallbackFacetViaMethod extends UpdatingCallbackFacetAbstrac
     }
 
     @Override
-    public void invoke(final Instance adapter) {
+    public void invoke(final ManagedObject adapter) {
         Wormhole.invoke(()->ObjectAdapter.InvokeUtils.invokeAll(methods, adapter));
     }
 

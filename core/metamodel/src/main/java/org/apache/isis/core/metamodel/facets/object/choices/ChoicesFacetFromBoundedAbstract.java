@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -88,7 +89,7 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
         if (!(context instanceof ObjectValidityContext)) {
             return null;
         }
-        final ObjectAdapter target = context.getTarget();
+        final ManagedObject target = context.getTarget();
         if(target == null) {
             return null;
         }
@@ -109,14 +110,14 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
 
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> context) {
-        final ObjectAdapter target = context.getTarget();
+        final ManagedObject target = context.getTarget();
         return disabledReason(target);
     }
 
     /**
      * Optional hook method for subclasses to override.
      */
-    public String disabledReason(final ObjectAdapter inObject) {
+    public String disabledReason(final ManagedObject inObject) {
         return "Bounded";
     }
 

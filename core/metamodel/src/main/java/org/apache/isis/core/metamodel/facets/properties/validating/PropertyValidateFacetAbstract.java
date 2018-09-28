@@ -20,13 +20,13 @@
 package org.apache.isis.core.metamodel.facets.properties.validating;
 
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class PropertyValidateFacetAbstract extends FacetAbstract implements PropertyValidateFacet {
 
@@ -44,7 +44,7 @@ public abstract class PropertyValidateFacetAbstract extends FacetAbstract implem
             return null;
         }
         final PropertyModifyContext propertyModifyContext = (PropertyModifyContext) context;
-        ObjectAdapter proposed = propertyModifyContext.getProposed();
+        ManagedObject proposed = propertyModifyContext.getProposed();
         if(proposed == null) {
             // skip validation if null value and optional property.
             MandatoryFacet mandatoryFacet = getFacetHolder().getFacet(MandatoryFacet.class);

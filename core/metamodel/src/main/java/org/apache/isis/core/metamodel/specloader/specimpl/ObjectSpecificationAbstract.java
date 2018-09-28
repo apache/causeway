@@ -44,7 +44,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.util.ToString;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -79,7 +78,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
@@ -349,8 +348,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Override
     public String getTitle(
-            ObjectAdapter contextAdapterIfAny,
-            ObjectAdapter targetAdapter) {
+            ManagedObject contextAdapterIfAny,
+            ManagedObject targetAdapter) {
         if (titleFacet != null) {
             final String titleString = titleFacet.title(contextAdapterIfAny, targetAdapter);
             if (!_Strings.isEmpty(titleString)) {
@@ -362,7 +361,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
 
     @Override
-    public String getIconName(final Instance reference) {
+    public String getIconName(final ManagedObject reference) {
         return iconFacet == null ? null : iconFacet.iconName(reference);
     }
 
@@ -374,7 +373,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     @Override
-    public String getCssClass(final Instance reference) {
+    public String getCssClass(final ManagedObject reference) {
         return cssClassFacet == null ? null : cssClassFacet.cssClass(reference);
     }
 
@@ -533,7 +532,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     // -- createTitleInteractionContext
     @Override
-    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInitiatedBy interactionMethod, final ObjectAdapter targetObjectAdapter) {
+    public ObjectTitleContext createTitleInteractionContext(
+            final AuthenticationSession session, 
+            final InteractionInitiatedBy interactionMethod, 
+            final ManagedObject targetObjectAdapter) {
+        
         return new ObjectTitleContext(targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString(null),
                 interactionMethod);
     }
@@ -1092,13 +1095,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     // -- validity
     @Override
-    public Consent isValid(final ObjectAdapter targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+    public Consent isValid(final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
     }
 
     @Override
     public InteractionResult isValidResult(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final ObjectValidityContext validityContext =
                 createValidityInteractionContext(
@@ -1112,7 +1115,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      */
     @Override
     public ObjectValidityContext createValidityInteractionContext(
-            final ObjectAdapter targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+            final ManagedObject targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return new ObjectValidityContext(targetAdapter, getIdentifier(), interactionInitiatedBy);
     }
 

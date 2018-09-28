@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault implements MixedInMember {
@@ -155,7 +156,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
     @Override
     public Consent isVisible(
-            final ObjectAdapter mixedInAdapter,
+            final ManagedObject mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
@@ -168,7 +169,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
 
     @Override
     public Consent isUsable(
-            final ObjectAdapter mixedInAdapter,
+            final ManagedObject mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 

@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class CssClassFacetMethod extends FacetAbstract implements CssClassFacet {
 
@@ -43,7 +43,7 @@ public class CssClassFacetMethod extends FacetAbstract implements CssClassFacet 
     }
 
     @Override
-    public String cssClass(final Instance owningAdapter) {
+    public String cssClass(final ManagedObject owningAdapter) {
         if(owningAdapter == null) {
             return "";
         }

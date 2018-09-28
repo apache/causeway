@@ -20,11 +20,11 @@
 package org.apache.isis.core.metamodel.facets.object.immutable;
 
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class ImmutableFacetAbstract extends FacetAbstract implements ImmutableFacet {
 
@@ -41,7 +41,7 @@ public abstract class ImmutableFacetAbstract extends FacetAbstract implements Im
      */
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        final ObjectAdapter target = ic.getTarget();
+        final ManagedObject target = ic.getTarget();
         switch (ic.getInteractionType()) {
         case PROPERTY_MODIFY:
         case COLLECTION_ADD_TO:
@@ -53,7 +53,7 @@ public abstract class ImmutableFacetAbstract extends FacetAbstract implements Im
     }
 
     public String disabledReason(
-            final ObjectAdapter targetAdapter) {
+            final ManagedObject targetAdapter) {
         return "Always immmutable";
     }
 

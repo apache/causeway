@@ -19,10 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.actions.validate;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * The mechanism by which the set of parameters of the action can be validated
@@ -43,5 +43,5 @@ public interface ActionValidationFacet extends Facet, ValidatingInteractionAdvis
     /**
      * Reason why the validation has failed, or <tt>null</tt> if okay.
      */
-    public String invalidReason(ObjectAdapter target, ObjectAdapter[] arguments);
+    public String invalidReason(ManagedObject target, ManagedObject[] arguments);
 }

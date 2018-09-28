@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
@@ -121,7 +122,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
 
     @Override
     public Consent isVisible(
-            final ObjectAdapter contributee,
+            final ManagedObject contributee,
             final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         final VisibilityContext<?> ic = ((ObjectMemberAbstract)serviceAction).createVisibleInteractionContext(
@@ -132,7 +133,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
 
     @Override
     public Consent isUsable(
-            final ObjectAdapter contributee,
+            final ManagedObject contributee,
             final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
         final UsabilityContext<?> ic = ((ObjectMemberAbstract)serviceAction).createUsableInteractionContext(
                 getServiceAdapter(), interactionInitiatedBy, where);

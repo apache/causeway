@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhereValueFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Disable a property, collection or action.
@@ -38,10 +38,10 @@ public interface DisabledFacet extends WhereValueFacet, DisablingInteractionAdvi
      * The reason why the (feature of the) target object is currently disabled,
      * or <tt>null</tt> if enabled.
      */
-    public String disabledReason(ObjectAdapter target);
+    public String disabledReason(ManagedObject target);
 
     /**
-     * Indicates that the implementation is overridding the usual semantics, in
+     * Indicates that the implementation is overriding the usual semantics, in
      * other words that the {@link FacetHolder} to which this {@link Facet} is
      * attached is <i>not</i> mandatory.
      */

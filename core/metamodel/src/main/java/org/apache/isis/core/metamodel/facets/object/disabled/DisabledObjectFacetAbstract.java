@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.object.disabled;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class DisabledObjectFacetAbstract extends FacetAbstract implements DisabledObjectFacet {
 
@@ -42,11 +42,11 @@ public abstract class DisabledObjectFacetAbstract extends FacetAbstract implemen
         if (!(ic instanceof UsabilityContext)) {
             return null;
         }
-        final ObjectAdapter toDisable = ic.getTarget();
+        final ManagedObject toDisable = ic.getTarget();
         final Identifier identifier = ic.getIdentifier();
         return toDisable != null ? disabledReason(toDisable, identifier) : null;
     }
 
-    protected abstract String disabledReason(ObjectAdapter toDisable, Identifier identifier);
+    protected abstract String disabledReason(ManagedObject toDisable, Identifier identifier);
 
 }

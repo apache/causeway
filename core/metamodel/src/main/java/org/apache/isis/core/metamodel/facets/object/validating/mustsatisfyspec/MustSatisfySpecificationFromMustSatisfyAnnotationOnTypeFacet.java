@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.spec.Specification;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -34,6 +33,7 @@ import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * @deprecated
@@ -69,7 +69,7 @@ public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet extend
             return null;
         }
         final ProposedHolder proposedHolder = (ProposedHolder) validityContext;
-        final ObjectAdapter targetNO = proposedHolder.getProposed();
+        final ManagedObject targetNO = proposedHolder.getProposed();
         final Object targetObject = targetNO.getObject();
         return specificationEvaluator.evaluation()
                 .evaluate(specifications, targetObject)

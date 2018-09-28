@@ -23,9 +23,9 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Authorises the user in the current session view and use members of an object.
@@ -48,7 +48,7 @@ public interface AuthorizationManager extends ApplicationScopedComponent {
      * display of the action will be suppress if this returns false.
      */
     @Programmatic
-    boolean isVisible(AuthenticationSession session, ObjectAdapter target, Identifier identifier);
+    boolean isVisible(AuthenticationSession session, ManagedObject target, Identifier identifier);
 
     /**
      * Returns true when the use represented by the specified session is
@@ -57,5 +57,5 @@ public interface AuthorizationManager extends ApplicationScopedComponent {
      * false.
      */
     @Programmatic
-    boolean isUsable(AuthenticationSession session, ObjectAdapter target, Identifier identifier);
+    boolean isUsable(AuthenticationSession session, ManagedObject target, Identifier identifier);
 }

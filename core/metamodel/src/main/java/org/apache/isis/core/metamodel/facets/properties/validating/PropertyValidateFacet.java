@@ -19,11 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.properties.validating;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * The mechanism by which the proposed value of a property can be validated,
@@ -46,5 +46,5 @@ public interface PropertyValidateFacet extends Facet, ValidatingInteractionAdvis
      * <p>
      * Should return <tt>null</tt> if the value is in fact valid.
      */
-    public String invalidReason(ObjectAdapter targetObject, ObjectAdapter proposedValue);
+    public String invalidReason(ManagedObject targetObject, ManagedObject proposedValue);
 }

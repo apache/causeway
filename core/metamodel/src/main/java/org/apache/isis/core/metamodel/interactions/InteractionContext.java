@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Represents an interaction between the framework and (a {@link Facet} of) the
@@ -61,18 +62,18 @@ public abstract class InteractionContext<T extends InteractionEvent> {
     private final InteractionContextType interactionType;
     private final Identifier identifier;
     private final InteractionInitiatedBy interactionInitiatedBy;
-    private final ObjectAdapter target;
+    private final ManagedObject target;
 
     private int contributeeParam = -1; // no contributee
-    private ObjectAdapter contributee = null;
+    private ManagedObject contributee = null;
 
-    private ObjectAdapter mixedInAdapter = null; // for mixin members only, obviously
+    private ManagedObject mixedInAdapter = null; // for mixin members only, obviously
 
     public InteractionContext(
             final InteractionContextType interactionType,
             final InteractionInitiatedBy invocationMethod,
             final Identifier identifier,
-            final ObjectAdapter target) {
+            final ManagedObject target) {
         this.interactionType = interactionType;
         this.interactionInitiatedBy = invocationMethod;
         this.identifier = identifier;
@@ -128,18 +129,18 @@ public abstract class InteractionContext<T extends InteractionEvent> {
     /**
      * The target object that this interaction is with.
      */
-    public ObjectAdapter getTarget() {
+    public ManagedObject getTarget() {
         return target;
     }
 
     // //////////////////////////////////////
 
-    public void putContributee(int contributeeParam, ObjectAdapter contributee) {
+    public void putContributee(int contributeeParam, ManagedObject contributee) {
         this.contributeeParam = contributeeParam;
         this.contributee = contributee;
     }
 
-    public @Nullable _Tuples.Tuple2<Integer, ObjectAdapter> getContributeeWithParamIndex() {
+    public @Nullable _Tuples.Tuple2<Integer, ManagedObject> getContributeeWithParamIndex() {
         if(contributee==null) {
             return null;
         }
@@ -148,11 +149,11 @@ public abstract class InteractionContext<T extends InteractionEvent> {
 
     // //////////////////////////////////////
 
-    public void setMixedIn(final ObjectAdapter mixedInAdapter) {
+    public void setMixedIn(final ManagedObject mixedInAdapter) {
         this.mixedInAdapter = mixedInAdapter;
     }
 
-    public ObjectAdapter getMixedIn() {
+    public ManagedObject getMixedIn() {
         return mixedInAdapter;
     }
 

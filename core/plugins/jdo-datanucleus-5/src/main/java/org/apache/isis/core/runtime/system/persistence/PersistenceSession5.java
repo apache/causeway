@@ -73,7 +73,7 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEv
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
@@ -778,7 +778,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
         if (isTransient(pojo)) {
-            final Instance adapter = Instance.of(
+            final ManagedObject adapter = ManagedObject.of(
                     ()->getSpecificationLoader().loadSpecification(pojo.getClass()),
                     pojo);
             

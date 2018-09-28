@@ -73,7 +73,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacetAbstract;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetAbstract;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
@@ -125,7 +125,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             ) {
                 @Override
                 public Object getProperty(
-                        final Instance inObject,
+                        final ManagedObject inObject,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                     return null;
                 }

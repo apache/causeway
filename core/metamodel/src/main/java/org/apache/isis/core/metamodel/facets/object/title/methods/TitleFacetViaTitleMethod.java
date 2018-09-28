@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements ImperativeFacet {
 
@@ -63,7 +64,7 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
     }
 
     @Override
-    public String title(final ObjectAdapter owningAdapter) {
+    public String title(final ManagedObject owningAdapter) {
         try {
             final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
             if(returnValue instanceof String) {

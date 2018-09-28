@@ -25,7 +25,6 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,6 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstract implements MustSatisfySpecificationFacet {
 
@@ -78,7 +78,7 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
             return null;
         }
         final ProposedHolder proposedHolder = (ProposedHolder) validityContext;
-        final ObjectAdapter proposedAdapter = proposedHolder.getProposed();
+        final ManagedObject proposedAdapter = proposedHolder.getProposed();
         if(proposedAdapter == null) {
             return null;
         }

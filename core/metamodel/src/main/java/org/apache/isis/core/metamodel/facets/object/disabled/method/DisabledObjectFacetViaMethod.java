@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.object.disabled.DisabledObjectFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract implements ImperativeFacet {
 
@@ -61,7 +62,7 @@ public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract im
     }
 
     @Override
-    public String disabledReason(final ObjectAdapter owningAdapter, final Identifier identifier) {
+    public String disabledReason(final ManagedObject owningAdapter, final Identifier identifier) {
         final Type type = identifier.getType();
         final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, type);
         if(returnValue instanceof String) {

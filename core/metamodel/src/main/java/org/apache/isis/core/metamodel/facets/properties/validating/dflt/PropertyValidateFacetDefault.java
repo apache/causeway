@@ -20,11 +20,11 @@
 package org.apache.isis.core.metamodel.facets.properties.validating.dflt;
 
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Non checking property validation facet that provides default behaviour for
@@ -42,7 +42,7 @@ public class PropertyValidateFacetDefault extends FacetAbstract implements Prope
     }
 
     @Override
-    public String invalidReason(final ObjectAdapter target, final ObjectAdapter proposedValue) {
+    public String invalidReason(final ManagedObject target, final ManagedObject proposedValue) {
         return null;
     }
 

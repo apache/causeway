@@ -20,11 +20,11 @@
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class DisabledFacetOnPropertyDerivedFromRecreatableObject extends DisabledFacetAbstract {
 
@@ -37,7 +37,7 @@ public class DisabledFacetOnPropertyDerivedFromRecreatableObject extends Disable
     }
 
     @Override
-    public String disabledReason(final ObjectAdapter target) {
+    public String disabledReason(final ManagedObject target) {
         final ViewModelFacet facet = target.getSpecification().getFacet(ViewModelFacet.class);
         final boolean cloneable = facet.isCloneable(target.getObject());
         if (!cloneable) {

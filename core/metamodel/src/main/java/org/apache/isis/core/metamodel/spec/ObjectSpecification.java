@@ -165,7 +165,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * <p>
      * @see TitleFacet#title(ObjectAdapter, ObjectAdapter)
      */
-    String getTitle(ObjectAdapter contextAdapterIfAny, ObjectAdapter targetAdapter);
+    String getTitle(ManagedObject contextAdapterIfAny, ManagedObject targetAdapter);
 
     /**
      * Returns the name of an icon to use for the specified object.
@@ -174,7 +174,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * Corresponds to the {@link IconFacet#iconName(Instance)) icon name}
      * returned by the {@link IconFacet}; is not necessarily immutable.
      */
-    String getIconName(Instance object);
+    String getIconName(ManagedObject object);
 
     /**
      * Returns this object's navigable parent, if any.
@@ -193,7 +193,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      *
      * @param objectAdapter - to evaluate (may be <tt>null</tt> if called by deprecated {@link #getCssClass}).
      */
-    String getCssClass(Instance objectAdapter);
+    String getCssClass(ManagedObject objectAdapter);
 
     boolean isAbstract();
 
@@ -205,7 +205,8 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * Create an {@link InteractionContext} representing an attempt to read the
      * object's title.
      */
-    ObjectTitleContext createTitleInteractionContext(AuthenticationSession session, InteractionInitiatedBy invocationMethod, ObjectAdapter targetObjectAdapter);
+    ObjectTitleContext createTitleInteractionContext(
+            AuthenticationSession session, InteractionInitiatedBy invocationMethod, ManagedObject targetObjectAdapter);
 
     // //////////////////////////////////////////////////////////////
     // ValidityContext, Validity
@@ -213,7 +214,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
 
     // internal API
     ObjectValidityContext createValidityInteractionContext(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
@@ -221,7 +222,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * so can be persisted); represented as a {@link Consent}.
      */
     Consent isValid(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
@@ -229,7 +230,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * so can be persisted); represented as a {@link InteractionResult}.
      */
     InteractionResult isValidResult(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy);
 
     // //////////////////////////////////////////////////////////////
@@ -335,7 +336,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
 
     boolean isViewModel();
     boolean isMixin();
-    boolean isViewModelCloneable(Instance targetAdapter);
+    boolean isViewModelCloneable(ManagedObject targetAdapter);
     boolean isWizard();
 
     boolean isPersistenceCapable();

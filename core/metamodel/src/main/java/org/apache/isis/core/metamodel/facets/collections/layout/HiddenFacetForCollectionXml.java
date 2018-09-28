@@ -21,10 +21,10 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class HiddenFacetForCollectionXml extends HiddenFacetAbstract {
 
@@ -41,7 +41,7 @@ public class HiddenFacetForCollectionXml extends HiddenFacetAbstract {
     }
 
     @Override
-    public String hiddenReason(final ObjectAdapter targetAdapter, final Where whereContext) {
+    public String hiddenReason(final ManagedObject targetAdapter, final Where whereContext) {
         if(!where().includes(whereContext)) {
             return null;
         }

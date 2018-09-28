@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.facets.members.disabled;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhereValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationContributee;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationContributee;
 
@@ -73,7 +73,7 @@ public abstract class DisabledFacetAbstract extends WhereValueFacetAbstract impl
             // otherwise ends up vetoing the invocation of the contributing action
             return null;
         }
-        final ObjectAdapter target = ic.getTarget();
+        final ManagedObject target = ic.getTarget();
         final String disabledReason = disabledReason(target);
         if (disabledReason != null) {
             return disabledReason;

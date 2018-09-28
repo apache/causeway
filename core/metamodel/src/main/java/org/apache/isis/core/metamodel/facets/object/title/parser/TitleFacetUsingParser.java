@@ -20,11 +20,11 @@
 package org.apache.isis.core.metamodel.facets.object.title.parser;
 
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
 
@@ -44,7 +44,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
     }
 
     @Override
-    public String title(final ObjectAdapter adapter) {
+    public String title(final ManagedObject adapter) {
         if (adapter == null) {
             return null;
         }
@@ -57,14 +57,14 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
     }
 
     @Override
-    public String title(ObjectAdapter contextAdapter, ObjectAdapter targetAdapter) {
+    public String title(ManagedObject contextAdapter, ManagedObject targetAdapter) {
         return title(targetAdapter);
     }
 
     /**
      * not API
      */
-    public String title(final ObjectAdapter adapter, final String usingMask) {
+    public String title(final ManagedObject adapter, final String usingMask) {
         if (adapter == null) {
             return null;
         }

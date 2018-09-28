@@ -27,6 +27,7 @@ import org.apache.isis.applib.services.wrapper.events.ObjectVisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link org.apache.isis.core.metamodel.interactions.InteractionContext} for overview; analogous to
@@ -48,7 +49,7 @@ public class ObjectVisibilityContext extends VisibilityContext<ObjectVisibilityE
     }
 
     @Override
-    public ObjectAdapter getProposed() {
+    public ManagedObject getProposed() {
         return getTarget();
     }
 

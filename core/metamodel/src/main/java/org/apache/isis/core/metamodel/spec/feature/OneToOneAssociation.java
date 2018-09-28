@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.spec.feature;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Provides reflective access to a field on a domain object that is used to
@@ -45,9 +46,13 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
      * the specified object, represented as a {@link Consent}.
      */
     Consent isAssociationValid(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter proposedAdapter,
+            final ManagedObject targetAdapter,
+            final ManagedObject proposedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy);
+
+
+    //FIXME[ISIS-1976] only temporary for refactoring - remove
+    ManagedObject get2(ManagedObject adapter, InteractionInitiatedBy initiatedBy);
 
 
 }

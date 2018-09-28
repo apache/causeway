@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.fallback;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class TitleFacetNone extends TitleFacetAbstract {
 
@@ -30,7 +30,7 @@ public class TitleFacetNone extends TitleFacetAbstract {
     }
 
     @Override
-    public String title(final ObjectAdapter object) {
+    public String title(final ManagedObject object) {
         return null;
     }
 

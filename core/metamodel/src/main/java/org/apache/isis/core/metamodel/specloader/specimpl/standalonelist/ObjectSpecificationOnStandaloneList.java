@@ -21,14 +21,13 @@ package org.apache.isis.core.metamodel.specloader.specimpl.standalonelist;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetOnStandaloneList;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -94,7 +93,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     }
 
     @Override
-    public boolean isViewModelCloneable(Instance targetAdapter) {
+    public boolean isViewModelCloneable(ManagedObject targetAdapter) {
         return false;
     }
 
@@ -118,12 +117,12 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     // -- Title and Icon
     
     @Override
-    public String getTitle(ObjectAdapter contextAdapterIfAny, ObjectAdapter targetAdapter) {
+    public String getTitle(ManagedObject contextAdapterIfAny, ManagedObject targetAdapter) {
         return ((FreeStandingList) targetAdapter.getObject()).titleString();
     }
 
     @Override
-    public String getIconName(final Instance object) {
+    public String getIconName(final ManagedObject object) {
         return ICON_NAME;
     }
 
@@ -151,9 +150,6 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     public ObjectAction getObjectAction(final String nameParmsIdentityString) {
         return null;
     }
-
-
-
 
 
 }

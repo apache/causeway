@@ -20,11 +20,11 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class ImmutableFacetFromConfiguration extends ImmutableFacetAbstract {
 
@@ -36,7 +36,7 @@ public class ImmutableFacetFromConfiguration extends ImmutableFacetAbstract {
     }
 
     @Override
-    public String disabledReason(final ObjectAdapter targetAdapter) {
+    public String disabledReason(final ManagedObject targetAdapter) {
         return !_Strings.isNullOrEmpty(reason)
                 ? reason
                         : super.disabledReason(targetAdapter);

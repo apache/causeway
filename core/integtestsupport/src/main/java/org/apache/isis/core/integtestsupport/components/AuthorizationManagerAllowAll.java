@@ -21,8 +21,8 @@ package org.apache.isis.core.integtestsupport.components;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 
 public class AuthorizationManagerAllowAll implements AuthorizationManager {
@@ -36,12 +36,12 @@ public class AuthorizationManagerAllowAll implements AuthorizationManager {
     }
 
     @Override
-    public boolean isUsable(final AuthenticationSession session, final ObjectAdapter target, final Identifier identifier) {
+    public boolean isUsable(final AuthenticationSession session, final ManagedObject target, final Identifier identifier) {
         return true;
     }
 
     @Override
-    public boolean isVisible(final AuthenticationSession session, final ObjectAdapter target, final Identifier identifier) {
+    public boolean isVisible(final AuthenticationSession session, final ManagedObject target, final Identifier identifier) {
         return true;
     }
 

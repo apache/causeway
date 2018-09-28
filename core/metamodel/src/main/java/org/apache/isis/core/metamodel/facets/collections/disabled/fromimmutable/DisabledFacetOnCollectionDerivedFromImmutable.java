@@ -20,10 +20,10 @@
 package org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class DisabledFacetOnCollectionDerivedFromImmutable extends DisabledFacetAbstract {
 
@@ -32,7 +32,7 @@ public class DisabledFacetOnCollectionDerivedFromImmutable extends DisabledFacet
     }
 
     @Override
-    public String disabledReason(final ObjectAdapter target) {
+    public String disabledReason(final ManagedObject target) {
         return "Immutable";
     }
 

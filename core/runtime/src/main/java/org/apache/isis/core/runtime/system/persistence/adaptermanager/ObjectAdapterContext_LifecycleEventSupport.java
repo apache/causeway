@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
@@ -60,7 +61,7 @@ class ObjectAdapterContext_LifecycleEventSupport {
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
     void postLifecycleEventIfRequired(
-            final Instance adapter,
+            final ManagedObject adapter,
             final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
         final LifecycleEventFacet facet = adapter.getSpecification().getFacet(lifecycleEventFacetClass);
         if(facet != null) {

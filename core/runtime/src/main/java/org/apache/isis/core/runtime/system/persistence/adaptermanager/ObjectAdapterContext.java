@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -245,7 +245,7 @@ final public class ObjectAdapterContext {
     // -- LIFECYCLE EVENT SUPPORT
 
     public void postLifecycleEventIfRequired(
-            final Instance adapter,
+            final ManagedObject adapter,
             final Class<? extends LifecycleEventFacet> lifecycleEventFacetClass) {
         lifecycleEventMixin.postLifecycleEventIfRequired(adapter, lifecycleEventFacetClass);
     }

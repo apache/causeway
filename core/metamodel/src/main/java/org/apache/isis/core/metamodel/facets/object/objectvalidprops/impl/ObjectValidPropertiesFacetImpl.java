@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -45,7 +46,7 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
     public String invalidReason(
             final ObjectValidityContext context) {
         final StringBuilder buf = new StringBuilder();
-        final ObjectAdapter adapter = context.getTarget();
+        final ManagedObject adapter = context.getTarget();
         
         adapter.getSpecification().streamAssociations(Contributed.EXCLUDED)
         .filter(ObjectAssociation.Predicates.PROPERTIES)
@@ -53,7 +54,7 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
         .filter(property->property.isUsable(adapter, context.getInitiatedBy(), where).isVetoed())  // ignore disabled properties
         .forEach(property->{
             final OneToOneAssociation otoa = (OneToOneAssociation) property;
-            final ObjectAdapter value = otoa.get(adapter, context.getInitiatedBy());
+            final ManagedObject value = otoa.get2(adapter, context.getInitiatedBy());
             if (otoa.isAssociationValid(adapter, value, context.getInitiatedBy()).isVetoed()) {
                 if (buf.length() > 0) {
                     buf.append(", ");

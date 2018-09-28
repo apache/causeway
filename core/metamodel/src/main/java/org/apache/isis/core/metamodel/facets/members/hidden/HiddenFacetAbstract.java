@@ -26,12 +26,12 @@ import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhereValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * This implements {@link org.apache.isis.core.metamodel.facetapi.MultiTypedFacet} so that each concrete implementation
@@ -75,7 +75,7 @@ public abstract class HiddenFacetAbstract extends WhereValueFacetAbstract implem
      * The reason why the (feature of the) target object is currently hidden, or
      * <tt>null</tt> if visible.
      */
-    protected abstract String hiddenReason(ObjectAdapter target, Where whereContext);
+    protected abstract String hiddenReason(ManagedObject target, Where whereContext);
 
     @Override
     public Stream<Class<? extends Facet>> facetTypes() {

@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.object.hidden.HiddenObjectFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class HiddenObjectFacetViaMethod extends HiddenObjectFacetAbstract {
     private final Method method;
@@ -38,12 +39,12 @@ public class HiddenObjectFacetViaMethod extends HiddenObjectFacetAbstract {
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        final ObjectAdapter toValidate = ic.getTarget();
+        final ManagedObject toValidate = ic.getTarget();
         return toValidate != null ? hiddenReason(toValidate) : null;
     }
 
     @Override
-    public String hiddenReason(final ObjectAdapter target) {
+    public String hiddenReason(final ManagedObject target) {
         if (target == null) {
             return null;
         }

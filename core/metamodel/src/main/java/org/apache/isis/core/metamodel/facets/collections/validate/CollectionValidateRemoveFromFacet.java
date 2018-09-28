@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.collections.validate;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * Validate that an object can be removed to a collection.
@@ -35,5 +35,5 @@ public interface CollectionValidateRemoveFromFacet extends Facet, ValidatingInte
     /**
      * Reason the object cannot be removed, or <tt>null</tt> if okay.
      */
-    public String invalidReason(ObjectAdapter inObject, ObjectAdapter value);
+    public String invalidReason(ManagedObject inObject, ManagedObject value);
 }

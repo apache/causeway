@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class DisableForContextFacetViaMethod extends DisableForContextFacetAbstract implements ImperativeFacet {
 
@@ -67,7 +68,7 @@ public class DisableForContextFacetViaMethod extends DisableForContextFacetAbstr
      */
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        final ObjectAdapter target = ic.getTarget();
+        final ManagedObject target = ic.getTarget();
         if (target == null) {
             return null;
         }

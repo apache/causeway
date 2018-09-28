@@ -23,9 +23,9 @@ import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -33,12 +33,12 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
  */
 public class PropertyModifyContext extends ValidityContext<PropertyModifyEvent> implements ProposedHolder {
 
-    private final ObjectAdapter proposed;
+    private final ManagedObject proposed;
 
     public PropertyModifyContext(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final Identifier id,
-            final ObjectAdapter proposed,
+            final ManagedObject proposed,
             final InteractionInitiatedBy interactionInitiatedBy) {
         super(InteractionContextType.PROPERTY_MODIFY, targetAdapter, id, interactionInitiatedBy);
 
@@ -49,7 +49,7 @@ public class PropertyModifyContext extends ValidityContext<PropertyModifyEvent> 
      * The (proposed) new value for a property.
      */
     @Override
-    public ObjectAdapter getProposed() {
+    public ManagedObject getProposed() {
         return proposed;
     }
 

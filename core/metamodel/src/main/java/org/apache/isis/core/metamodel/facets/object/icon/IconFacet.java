@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.icon;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /*
  * Icon for an object a class (for example, by placing an appropriately named image
@@ -40,5 +40,5 @@ import org.apache.isis.core.metamodel.spec.Instance;
  */
 public interface IconFacet extends Facet {
 
-    public String iconName(final Instance object);
+    public String iconName(final ManagedObject object);
 }

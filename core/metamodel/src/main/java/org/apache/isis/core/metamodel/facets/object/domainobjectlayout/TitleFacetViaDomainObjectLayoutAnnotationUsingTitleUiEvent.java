@@ -31,12 +31,12 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
@@ -89,7 +89,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
     }
 
     @Override
-    public String title(final ObjectAdapter owningAdapter) {
+    public String title(final ManagedObject owningAdapter) {
 
         final TitleUiEvent<Object> titleUiEvent = newTitleUiEvent(owningAdapter);
 
@@ -112,7 +112,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
         return title;
     }
 
-    private TitleUiEvent<Object> newTitleUiEvent(final ObjectAdapter owningAdapter) {
+    private TitleUiEvent<Object> newTitleUiEvent(final ManagedObject owningAdapter) {
         final Object domainObject = owningAdapter.getObject();
         return newTitleUiEvent(domainObject);
     }

@@ -20,11 +20,11 @@
 package org.apache.isis.core.metamodel.facets.object.hidden;
 
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class HiddenObjectFacetAbstract extends FacetAbstract implements HiddenObjectFacet {
 
@@ -41,10 +41,10 @@ public abstract class HiddenObjectFacetAbstract extends FacetAbstract implements
         if (!(ic instanceof VisibilityContext)) {
             return null;
         }
-        final ObjectAdapter toValidate = ic.getTarget();
+        final ManagedObject toValidate = ic.getTarget();
         return toValidate != null ? hiddenReason(toValidate) : null;
     }
 
-    protected abstract String hiddenReason(ObjectAdapter toHide);
+    protected abstract String hiddenReason(ManagedObject toHide);
 
 }

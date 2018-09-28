@@ -23,9 +23,9 @@ import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ObjectTitleEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -36,7 +36,7 @@ public class ObjectTitleContext extends AccessContext<ObjectTitleEvent> {
     private final String title;
 
     public ObjectTitleContext(
-            final ObjectAdapter targetAdapter,
+            final ManagedObject targetAdapter,
             final Identifier identifier,
             final String title,
             final InteractionInitiatedBy interactionInitiatedBy) {

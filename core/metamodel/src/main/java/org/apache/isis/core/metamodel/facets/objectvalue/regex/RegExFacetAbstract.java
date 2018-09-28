@@ -22,12 +22,12 @@ package org.apache.isis.core.metamodel.facets.objectvalue.regex;
 import javax.validation.constraints.Pattern;
 
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract implements RegExFacet {
 
@@ -89,7 +89,7 @@ public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract impl
             return null;
         }
         final ProposedHolder proposedHolder = (ProposedHolder) context;
-        final ObjectAdapter proposedArgument = proposedHolder.getProposed();
+        final ManagedObject proposedArgument = proposedHolder.getProposed();
         if (proposedArgument == null) {
             return null;
         }
