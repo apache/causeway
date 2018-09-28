@@ -19,15 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.collections.modify;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -40,26 +40,23 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  */
 public interface CollectionFacet extends Facet {
 
-    int size(ObjectAdapter collection);
+    int size(ManagedObject collectionAdapter);
 
-    Iterable<ObjectAdapter> iterable(ObjectAdapter collectionAdapter);
+    <T extends ManagedObject> Stream<T> stream(T collectionAdapter);
 
-    Iterator<ObjectAdapter> iterator(ObjectAdapter collectionAdapter);
+    default <T extends ManagedObject> T firstElement(T collectionAdapter) {
+        return stream(collectionAdapter).findFirst().orElse(null);
+    }
 
-    /**
-     * Returns an unmodifiable {@link Collection} of {@link ObjectAdapter}s.
-     */
-    Collection<ObjectAdapter> collection(ObjectAdapter collectionAdapter);
-
-    ObjectAdapter firstElement(ObjectAdapter collectionAdapter);
-
-    boolean contains(ObjectAdapter collectionAdapter, ObjectAdapter element);
+    boolean contains(ManagedObject collectionAdapter, ManagedObject element);
 
     /**
      * Set the contents of this collection.
      * @return a possibly new instance
      */
-    ObjectAdapter init(ObjectAdapter collectionAdapter, Stream<ObjectAdapter> elements, int elementCount);
+    //<T extends ManagedObject> T init(T collectionAdapter, Stream<T> elements, int elementCount);
+    <T extends ManagedObject> Object populatePojo(
+            Object emptyCollectionPojo, ObjectSpecification collectionSpec, Stream<T> elements, int elementCount);
 
     /**
      * Convenience method that returns the {@link TypeOfFacet} on this facet's
@@ -67,27 +64,33 @@ public interface CollectionFacet extends Facet {
      */
     TypeOfFacet getTypeOfFacet();
 
-
     public static class Utils {
 
-        public static CollectionFacet getCollectionFacetFromSpec(final ObjectAdapter objectRepresentingCollection) {
+        public static CollectionFacet getCollectionFacetFromSpec(final ManagedObject objectRepresentingCollection) {
             final ObjectSpecification collectionSpec = objectRepresentingCollection.getSpecification();
             return collectionSpec.getFacet(CollectionFacet.class);
         }
 
-        public static int size(final ObjectAdapter collection) {
+        public static int size(final ManagedObject collection) {
             final CollectionFacet facet = getCollectionFacetFromSpec(collection);
             return facet.size(collection);
         }
 
-        public static List<ObjectAdapter> convertToAdapterList(final ObjectAdapter collection) {
-            final CollectionFacet facet = getCollectionFacetFromSpec(collection);
-            final List<ObjectAdapter> adapters = new ArrayList<ObjectAdapter>();
-            for (final ObjectAdapter adapter : facet.iterable(collection)) {
-                adapters.add(adapter);
-            }
-            return adapters;
+        public static <T extends ManagedObject> Stream<T> streamAdapters(final T collectionAdapter) {
+            final CollectionFacet facet = getCollectionFacetFromSpec(collectionAdapter);
+            return Utils.<T>downCast(facet.stream(collectionAdapter));
+        }
+        
+        public static <T extends ManagedObject> List<T> toAdapterList(final T collectionAdapter) {
+            return streamAdapters(collectionAdapter)
+                    .collect(Collectors.toList());
+        }
+        
+        private static <T extends ManagedObject> Stream<T> downCast(final Stream<ManagedObject> stream) {
+            final Function<ManagedObject, T> uncheckedCast = _Casts::uncheckedCast;
+            return stream.map(uncheckedCast);
         }
 
     }
+    
 }

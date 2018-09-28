@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -322,7 +323,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
         final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
         return collectionFacet != null
-                ? collectionFacet.collection(returnedAdapter)
+                ? collectionFacet.stream(returnedAdapter).collect(Collectors.toList())
                         : null;
     }
 

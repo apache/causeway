@@ -91,7 +91,7 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
     private ObjectAdapter createAdapter(
             final Object pojo,
             final Oid oid) {
-        return new PojoAdapter(
+        return PojoAdapter.of(
                 pojo, oid,
                 authenticationSession,
                 specificationLoader, session);

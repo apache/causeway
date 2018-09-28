@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -99,8 +100,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
             return Collections.emptyList();
         }
 
-        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter);
-        final Iterable<ObjectAdapter> adapterList = facet.iterable(resultAdapter);
+        final Stream<ObjectAdapter> adapterList = CollectionFacet.Utils.streamAdapters(resultAdapter) ;
 
         return ObjectAdapter.Util.visibleAdapters(adapterList, interactionInitiatedBy);
     }

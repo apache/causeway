@@ -319,12 +319,12 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
         final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.MULTIPLE);
-        return CollectionFacet.Utils.convertToAdapterList(instances);
+        return CollectionFacet.Utils.toAdapterList(instances);
     }
     @Override
     public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
         final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.SINGLE);
-        final List<ObjectAdapter> list = CollectionFacet.Utils.convertToAdapterList(instances);
+        final List<ObjectAdapter> list = CollectionFacet.Utils.toAdapterList(instances);
         return list.size() > 0 ? list.get(0) : null;
     }
 
@@ -354,7 +354,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         final List<ObjectAdapter> instances = transactionManager.executeWithinTransaction(
                 ()->processPersistenceQuery(processor, persistenceQuery) );
         final ObjectSpecification specification = persistenceQuery.getSpecification();
-        final FreeStandingList results = new FreeStandingList(specification, instances);
+        final FreeStandingList results = FreeStandingList.of(specification, instances);
         return adapterFor(results);
     }
 

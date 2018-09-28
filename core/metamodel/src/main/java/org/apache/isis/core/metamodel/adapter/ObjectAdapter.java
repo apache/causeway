@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
@@ -34,13 +35,11 @@ import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.MethodUtil;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -70,23 +69,23 @@ public interface ObjectAdapter extends ManagedObject {
 //    @Override
 //    Object getObject();
     
-    /**
-     * Returns the title to display this object with, usually obtained from
-     * the wrapped {@link #getObject() domain object}.
-     *
-     * @deprecated - use {@link #titleString(ObjectAdapter)}
-     */
-    @Deprecated
-    String titleString();
-
-    /**
-     * Returns the title to display this object with, rendered within the context
-     * of some other adapter.
-     *
-     * <p>
-     * @see TitleFacet#title(ObjectAdapter, ObjectAdapter)
-     */
-    String titleString(ObjectAdapter contextAdapter);
+//    /**
+//     * Returns the title to display this object with, usually obtained from
+//     * the wrapped {@link #getObject() domain object}.
+//     *
+//     * @deprecated - use {@link #titleString(ObjectAdapter)}
+//     */
+//    @Deprecated
+//    String titleString();
+//
+//    /**
+//     * Returns the title to display this object with, rendered within the context
+//     * of some other adapter.
+//     *
+//     * <p>
+//     * @see TitleFacet#title(ObjectAdapter, ObjectAdapter)
+//     */
+//    String titleString(ObjectAdapter contextAdapter);
 
     /**
      * Return an {@link Instance} of the specified {@link Specification} with
@@ -288,8 +287,8 @@ public interface ObjectAdapter extends ManagedObject {
                 final ObjectAdapter collectionAdapter,
                 final InteractionInitiatedBy interactionInitiatedBy) {
 
-            final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collectionAdapter);
-            Iterable<ObjectAdapter> objectAdapters = facet.iterable(collectionAdapter);
+            final Stream<ObjectAdapter> objectAdapters = 
+                    CollectionFacet.Utils.streamAdapters(collectionAdapter);
 
             return visibleAdapters(objectAdapters, interactionInitiatedBy);
         }
@@ -298,6 +297,7 @@ public interface ObjectAdapter extends ManagedObject {
          * as per {@link #visibleAdapters(ObjectAdapter, InteractionInitiatedBy)}.
          *  @param objectAdapters - iterable over the respective adapters of a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
          * @param interactionInitiatedBy
+         * @deprecated use stream variant instead
          */
         public static List<ObjectAdapter> visibleAdapters(
                 final Iterable<ObjectAdapter> objectAdapters,
@@ -312,6 +312,16 @@ public interface ObjectAdapter extends ManagedObject {
             }
             return adapters;
         }
+        
+        public static List<ObjectAdapter> visibleAdapters(
+                final Stream<ObjectAdapter> objectAdapters,
+                final InteractionInitiatedBy interactionInitiatedBy) {
+            
+            return objectAdapters
+                .filter(adapter->isVisible(adapter, interactionInitiatedBy))
+                .collect(Collectors.toList());
+        }
+        
 
         /**
          * @param adapter - an adapter around the domain object whose visibility is being checked
@@ -478,22 +488,6 @@ public interface ObjectAdapter extends ManagedObject {
         }
 
     }
-
-    /**
-     * 
-     * @param newOid
-     * @return a copy of this adapter, having a new RootOid 
-     * @since 2.0.0-M2
-     */
-    ObjectAdapter withOid(RootOid newOid);
-
-    /**
-     * 
-     * @param newPojo
-     * @return a copy of this adapter, having a new Pojo 
-     * @since 2.0.0-M2
-     */
-    ObjectAdapter withPojo(Object newPojo);
 
 
 }

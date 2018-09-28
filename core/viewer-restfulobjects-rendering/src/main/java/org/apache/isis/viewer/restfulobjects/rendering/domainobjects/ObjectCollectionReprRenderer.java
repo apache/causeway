@@ -19,6 +19,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -89,10 +90,11 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
         final LinkFollowSpecs followHref = linkFollower.follow("href");
         boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly(valueAdapter) || !followHref.isTerminated();
 
-        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(valueAdapter);
+        final Stream<ObjectAdapter> elementAdapters = CollectionFacet.Utils.streamAdapters(valueAdapter);
+        
         final List<JsonRepresentation> list = _Lists.newArrayList();
-        for (final ObjectAdapter elementAdapter : facet.iterable(valueAdapter)) {
-
+        
+        elementAdapters.forEach(elementAdapter->{
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, elementAdapter);
             if(eagerlyRender) {
                 final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), followHref, JsonRepresentation.newMap()
@@ -106,7 +108,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
             }
 
             list.add(valueLinkBuilder.build());
-        }
+        });
 
         representation.mapPut("value", list);
     }

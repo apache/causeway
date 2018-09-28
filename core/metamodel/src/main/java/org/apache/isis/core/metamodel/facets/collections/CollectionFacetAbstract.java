@@ -19,46 +19,26 @@
 
 package org.apache.isis.core.metamodel.facets.collections;
 
-import java.util.Collection;
-import java.util.Iterator;
-
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class CollectionFacetAbstract extends FacetAbstract implements CollectionFacet {
 
     public CollectionFacetAbstract(final FacetHolder holder) {
         super(CollectionFacet.class, holder, Derivation.NOT_DERIVED);
     }
-
-    @Override
-    public final boolean contains(final ObjectAdapter collectionAdapter, final ObjectAdapter candidateObjectAdapter) {
-        final Collection<ObjectAdapter> collection = collection(collectionAdapter);
-        return collection.contains(candidateObjectAdapter);
-    }
-
-    @Override
-    public final Iterator<ObjectAdapter> iterator(final ObjectAdapter collectionAdapter) {
-        final Collection<ObjectAdapter> collection = collection(collectionAdapter);
-        return collection.iterator();
-    }
-
-    @Override
-    public Iterable<ObjectAdapter> iterable(final ObjectAdapter collectionAdapter) {
-        return new Iterable<ObjectAdapter>() {
-            @Override
-            public Iterator<ObjectAdapter> iterator() {
-                return CollectionFacetAbstract.this.iterator(collectionAdapter);
-            }
-        };
-    }
-
+    
     @Override
     public final TypeOfFacet getTypeOfFacet() {
         return getFacetHolder().getFacet(TypeOfFacet.class);
     }
-
+    
+    @Override
+    public boolean contains(ManagedObject collectionAdapter, ManagedObject element) {
+        return stream(collectionAdapter).anyMatch(x->x.equals(element));
+    }
+    
 }

@@ -20,30 +20,41 @@
 package org.apache.isis.core.metamodel.spec;
 
 import java.util.AbstractList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.isis.core.commons.util.ToString;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
  * A list returned from an action, ie not associated or owned by any entity.
  */
-public class FreeStandingList extends AbstractList<ObjectAdapter> {
+public class FreeStandingList extends AbstractList<ManagedObject> {
 
-    private final List<ObjectAdapter> instances;
+    private final List<ManagedObject> instances;
     private final ObjectSpecification instanceSpecification;
 
-    public FreeStandingList(final ObjectSpecification instanceSpecification, final List<ObjectAdapter> instances) {
-        this.instanceSpecification = instanceSpecification;
-        this.instances = Collections.unmodifiableList(instances);
+    public static <T extends ManagedObject> FreeStandingList of(
+            final ObjectSpecification instanceSpecification, 
+            final List<T> instances) {
+        
+        return new FreeStandingList(instanceSpecification, instances.stream()
+                .map(x->(T)x)
+                .collect(Collectors.toList()));
     }
-
+    
+    private FreeStandingList(
+            final ObjectSpecification instanceSpecification, 
+            final List<ManagedObject> instances) {
+        
+        this.instanceSpecification = instanceSpecification;
+        this.instances = instances;
+    }
+    
     /**
      * Required implementation of {@link AbstractList}.
      */
     @Override
-    public ObjectAdapter get(final int index) {
+    public ManagedObject get(final int index) {
         return instances.get(index);
     }
 

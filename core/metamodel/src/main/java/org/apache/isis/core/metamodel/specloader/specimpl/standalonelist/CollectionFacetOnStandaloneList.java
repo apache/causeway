@@ -22,10 +22,13 @@ package org.apache.isis.core.metamodel.specloader.specimpl.standalonelist;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
 
@@ -33,13 +36,16 @@ public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
         super(holder);
     }
 
-    /**
-     * Expected to be called with a {@link ObjectAdapter} wrapping a
-     * {@link FreeStandingList}.
-     */
     @Override
-    public List<ObjectAdapter> collection(final ObjectAdapter wrappedObjectList) {
-        return (FreeStandingList) wrappedObjectList.getObject();
+    public <T extends ManagedObject> Stream<T> stream(T wrappedObjectList) {
+        final List<ManagedObject> list = collection(wrappedObjectList);
+        return list.stream()
+                .map(x->(T)x);
+    }
+    
+    @Override
+    public boolean contains(ManagedObject collectionAdapter, ManagedObject element) {
+        return collection(collectionAdapter).contains(element);
     }
 
     /**
@@ -47,26 +53,24 @@ public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
      * {@link FreeStandingList}.
      */
     @Override
-    public ObjectAdapter firstElement(final ObjectAdapter wrappedInstanceCollectionVector) {
-        final List<ObjectAdapter> icv = collection(wrappedInstanceCollectionVector);
-        return icv.size() > 0 ? icv.get(0) : null;
-    }
-
-    /**
-     * Expected to be called with a {@link ObjectAdapter} wrapping a
-     * {@link FreeStandingList}.
-     */
-    @Override
-    public int size(final ObjectAdapter wrappedInstanceCollectionVector) {
+    public int size(final ManagedObject wrappedInstanceCollectionVector) {
         return collection(wrappedInstanceCollectionVector).size();
     }
 
-    /**
-     * Does nothing.
-     */
     @Override
-    public ObjectAdapter init(ObjectAdapter collectionAdapter, Stream<ObjectAdapter> elements, int elementCount) {
-        return collectionAdapter;
+    public <T extends ManagedObject> Object populatePojo(
+            Object emptyCollectionPojo,
+            ObjectSpecification collectionSpec,
+            Stream<T> elements, 
+            int elementCount) {
+        
+        throw _Exceptions.unexpectedCodeReach();
     }
 
+    // -- HELPER
+    
+    private List<ManagedObject> collection(final ManagedObject wrappedObjectList) {
+        return (FreeStandingList) wrappedObjectList.getObject();
+    }
+    
 }

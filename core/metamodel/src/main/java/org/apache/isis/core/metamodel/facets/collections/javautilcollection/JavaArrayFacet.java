@@ -31,6 +31,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class JavaArrayFacet extends CollectionFacetAbstract {
 
@@ -41,59 +43,44 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
         this.adapterProvider = adapterProvider;
     }
 
-    /**
-     * Expected to be called with a {@link ObjectAdapter} wrapping an array.
-     */
     @Override
-    public ObjectAdapter init(
-            final ObjectAdapter arrayAdapter, 
-            final Stream<ObjectAdapter> initData, 
-            final int elementCount) {
+    public <T extends ManagedObject> Object populatePojo(
+            Object emptyCollectionPojo, 
+            ObjectSpecification collectionSpec,
+            Stream<T> initData, 
+            int elementCount) {
+        
+        //final Class<?> correspondingClass = collectionSpec.getCorrespondingClass();
         
         final Object[] array = initData
-            .map(ObjectAdapter::getObject)
-            .collect(toArray(Object.class, elementCount));
-        return arrayAdapter.withPojo(array);  
+                .map(ManagedObject::getPojo)
+                //.collect(toArray(correspondingClass.getComponentType(), elementCount));
+                .collect(toArray(Object.class, elementCount));
+        return array;
     }
 
-    /**
-     * Expected to be called with a {@link ObjectAdapter} wrapping an array.
-     */
     @Override
-    public Collection<ObjectAdapter> collection(final ObjectAdapter arrayAdapter) {
+    public <T extends ManagedObject> Stream<T> stream(T arrayAdapter) {
         final Object[] array = pojoArray(arrayAdapter);
         if(isEmpty(array)) {
-            return Collections.emptyList();
+            return Stream.of();
         }
-        final ArrayList<ObjectAdapter> objectCollection = new ArrayList<ObjectAdapter>(array.length);
-        for (final Object element : array) {
-            final ObjectAdapter elementAdapter = getObjectAdapterProvider().adapterFor(element);
-            objectCollection.add(elementAdapter);
-        }
-        return objectCollection;
+        return Stream.of(array)
+                .map(getObjectAdapterProvider()::adapterFor)
+                .map(x->(T)x);
     }
-
+    
     /**
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
     @Override
-    public ObjectAdapter firstElement(final ObjectAdapter arrayAdapter) {
-        final Object[] array = pojoArray(arrayAdapter);
-        if(isEmpty(array)) {
-            return null;
-        }
-        return array.length > 0 ? getObjectAdapterProvider().adapterFor(array[0]) : null;
-    }
-
-    /**
-     * Expected to be called with a {@link ObjectAdapter} wrapping an array.
-     */
-    @Override
-    public int size(final ObjectAdapter arrayAdapter) {
+    public int size(final ManagedObject arrayAdapter) {
         return pojoArray(arrayAdapter).length;
     }
 
-    private Object[] pojoArray(final ObjectAdapter arrayAdapter) {
+    // -- HELPER
+    
+    private Object[] pojoArray(final ManagedObject arrayAdapter) {
         return (Object[]) arrayAdapter.getObject();
     }
 
@@ -104,5 +91,11 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     private ObjectAdapterProvider getObjectAdapterProvider() {
         return adapterProvider;
     }
+
+
+
+
+
+
 
 }

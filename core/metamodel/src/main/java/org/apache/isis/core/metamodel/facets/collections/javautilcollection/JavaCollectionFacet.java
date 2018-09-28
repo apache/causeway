@@ -20,14 +20,16 @@
 package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.stream.Stream;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class JavaCollectionFacet extends CollectionFacetAbstract {
 
@@ -39,42 +41,46 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     }
     
     @Override
-    public ObjectAdapter init(
-            final ObjectAdapter collection, 
-            final Stream<ObjectAdapter> initData,
-            final int elementCount) {
+    public <T extends ManagedObject> Object populatePojo(
+            Object emptyCollectionPojo, 
+            ObjectSpecification collectionSpec,
+            Stream<T> initData, 
+            int elementCount) {
         
-        final Collection<? super Object> pojoCollection = pojoCollection(collection);
+        final Collection<? super Object> pojoCollection = _Casts.uncheckedCast(emptyCollectionPojo);
         pojoCollection.clear();
         initData.forEach(pojoCollection::add);
-        return collection;
+        return pojoCollection;
     }
     
     @Override
-    public Collection<ObjectAdapter> collection(final ObjectAdapter collectionAdapter) {
-        final Collection<?> pojoCollection = pojoCollection(collectionAdapter);
-        
-        return _Lists.map(pojoCollection, adapterProvider::adapterFor);
-                
-    }
-
-    @Override
-    public ObjectAdapter firstElement(final ObjectAdapter collection) {
-        final Iterator<ObjectAdapter> iterator = iterator(collection);
-        return iterator.hasNext() ? iterator.next() : null;
-    }
-
-    @Override
-    public int size(final ObjectAdapter collection) {
+    public int size(final ManagedObject collection) {
         return pojoCollection(collection).size();
     }
 
+    @Override
+    public <T extends ManagedObject> Stream<T> stream(T collectionAdapter) {
+        return pojoCollection(collectionAdapter)
+                .stream()
+                .map(adapterProvider::adapterFor)
+                .map(x->(T)x);
+    }
+    
     /**
      * The underlying collection of objects (not {@link ObjectAdapter}s).
      */
     @SuppressWarnings("unchecked")
-    private Collection<? super Object> pojoCollection(final ObjectAdapter collectionAdapter) {
+    private Collection<? super Object> pojoCollection(final ManagedObject collectionAdapter) {
         return (Collection<? super Object>) collectionAdapter.getObject();
+    }
+
+    // -- HELPER
+
+    private Collection<ManagedObject> collection(final ManagedObject collectionAdapter) {
+        final Collection<?> pojoCollection = pojoCollection(collectionAdapter);
+        
+        return _Lists.map(pojoCollection, adapterProvider::adapterFor);
+                
     }
 
 }

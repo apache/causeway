@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -248,8 +247,10 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             rootRepresentation = JsonRepresentation.newArray();
 
             final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
-            final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
-            appendIterableTo(rendererContext, collectionAdapters, rootRepresentation);
+            
+            final Stream<ObjectAdapter> collectionAdapters = CollectionFacet.Utils.streamAdapters(returnedAdapter);
+            
+            appendStreamTo(rendererContext, collectionAdapters, rootRepresentation);
 
             // $$ro representation will be an object in the list with a single property named "$$ro"
             if(!suppressRO) {
@@ -374,22 +375,21 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             return;
         }
 
-        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(valueAdapter);
-        final Iterable<ObjectAdapter> iterable = facet.iterable(valueAdapter);
-        appendIterableTo(rendererContext, iterable, representation);
+        final Stream<ObjectAdapter> adapters = CollectionFacet.Utils.streamAdapters(valueAdapter);
+        appendStreamTo(rendererContext, adapters, representation);
     }
 
-    private void appendIterableTo(
+    private void appendStreamTo(
             final RepresentationService.Context2 rendererContext,
-            final Iterable<ObjectAdapter> iterable,
+            final Stream<ObjectAdapter> adapters,
             final JsonRepresentation collectionRepresentation) {
-        for (final ObjectAdapter elementAdapter : iterable) {
-
+        
+        adapters.forEach(elementAdapter->{
             JsonRepresentation elementRepresentation = JsonRepresentation.newMap();
             appendPropertiesTo(rendererContext, elementAdapter, elementRepresentation);
 
             collectionRepresentation.arrayAdd(elementRepresentation);
-        }
+        });
     }
 
     private static InteractionInitiatedBy determineInteractionInitiatedByFrom(

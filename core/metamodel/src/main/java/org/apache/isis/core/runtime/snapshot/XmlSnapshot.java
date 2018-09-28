@@ -511,21 +511,25 @@ public class XmlSnapshot implements Snapshot {
 
             final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
             final ObjectAdapter collection = oneToManyAssociation.get(fieldPlace.getObject(), InteractionInitiatedBy.FRAMEWORK);
-            final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
-
+            
             if (LOG.isDebugEnabled()) {
-                LOG.debug("includeField(Pl, Vec, Str): 1->M: {}", log("collection.size", "" + facet.size(collection)));
+                LOG.debug("includeField(Pl, Vec, Str): 1->M: {}", log("collection.size", "" + CollectionFacet.Utils.size(collection)));
             }
-            boolean allFieldsNavigated = true;
-            for (final ObjectAdapter referencedObject : facet.iterable(collection)) {
-                final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names, annotation);
+            
+            final boolean[] allFieldsNavigated = {true}; // fast non-thread-safe value reference
+            
+            CollectionFacet.Utils.streamAdapters(collection)
+            .forEach(referencedObject->{
+                final boolean appendedXml = 
+                        appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names, annotation);
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("includeField(Pl, Vec, Str): 1->M: + invoked appendXmlThenIncludeRemaining for {}{}",log("referencedObj", referencedObject), andlog("returned", "" + appendedXml));
                 }
-                allFieldsNavigated = allFieldsNavigated && appendedXml;
-            }
+                allFieldsNavigated[0] = allFieldsNavigated[0] && appendedXml;
+            });
+            
             LOG.debug("includeField(Pl, Vec, Str): {}", log("returning", "" + allFieldsNavigated));
-            return allFieldsNavigated;
+            return allFieldsNavigated[0];
         }
 
         return false; // fall through, shouldn't get here but just in

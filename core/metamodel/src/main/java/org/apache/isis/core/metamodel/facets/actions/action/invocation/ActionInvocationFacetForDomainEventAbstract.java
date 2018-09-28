@@ -493,19 +493,19 @@ implements ImperativeFacet {
         final Object result = resultAdapter.getObject();
 
         if(result instanceof Collection || result.getClass().isArray()) {
-            final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter);
-
-            final Iterable<ObjectAdapter> adapterList = facet.iterable(resultAdapter);
+            
+            final Stream<ObjectAdapter> adapters = CollectionFacet.Utils.streamAdapters(resultAdapter);
+            
             final List<ObjectAdapter> visibleAdapters =
-                    ObjectAdapter.Util.visibleAdapters(
-                            adapterList,
-                            interactionInitiatedBy);
+                    ObjectAdapter.Util.visibleAdapters(adapters, interactionInitiatedBy);
+            
             final Object visibleObjects =
                     CollectionUtils.copyOf(
                             stream(visibleAdapters)
                             .map(ObjectAdapter.Functions.getObject())
                             .collect(Collectors.toList()),
                             method.getReturnType());
+            
             if (visibleObjects != null) {
                 return getObjectAdapterProvider().adapterFor(visibleObjects);
             }

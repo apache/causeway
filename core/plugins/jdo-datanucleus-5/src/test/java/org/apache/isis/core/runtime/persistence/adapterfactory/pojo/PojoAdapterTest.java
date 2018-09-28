@@ -65,8 +65,13 @@ public class PojoAdapterTest {
     public void setUp() throws Exception {
         domainObject = new RuntimeTestPojo();
         
-        adapter = new PojoAdapter(domainObject, Factory.persistentOf(ObjectSpecId.of("CUS"), "1"), mockAuthenticationSession,
-                mockSpecificationLoader, mockPersistenceSession);
+        adapter = PojoAdapter.of(
+                domainObject, 
+                Factory.persistentOf(ObjectSpecId.of("CUS"), "1"),
+                mockAuthenticationSession,
+                mockSpecificationLoader, 
+                mockPersistenceSession);
+        
         adapter.setVersion(mockVersion);
         
         allowUnimportantMethodCallsOn(mockVersion);

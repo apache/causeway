@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -86,12 +87,11 @@ public class Memento implements Serializable {
     }
 
     private Data createCollectionData(final ObjectAdapter adapter) {
-        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(adapter);
-        final Data[] collData = new Data[facet.size(adapter)];
-        int i = 0;
-        for (final ObjectAdapter ref : facet.iterable(adapter)) {
-            collData[i++] = createReferenceData(ref);
-        }
+        
+        final Data[] collData = CollectionFacet.Utils.streamAdapters(adapter)
+            .map(ref->createReferenceData(ref))
+            .collect(_Arrays.toArray(Data.class, CollectionFacet.Utils.size(adapter)));
+        
         final String elementTypeSpecName = adapter.getSpecification().getFullIdentifier();
         return new CollectionData(clone(adapter.getOid()), elementTypeSpecName, collData);
     }

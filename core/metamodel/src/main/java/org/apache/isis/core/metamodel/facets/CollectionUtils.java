@@ -34,6 +34,7 @@ import java.util.TreeSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._With;
@@ -53,12 +54,13 @@ public final class CollectionUtils {
     public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final ObjectAdapterProvider adapterProvider) {
         final ObjectAdapter collection = adapterProvider.adapterFor(option);
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
-        final Object[] optionArray = new Object[facet.size(collection)];
-        int j = 0;
-        for (final ObjectAdapter nextElement : facet.iterable(collection)) {
-            optionArray[j++] = nextElement != null? nextElement.getObject(): null;
-        }
-        return optionArray;
+        
+        final Stream<ObjectAdapter> objectAdapters = 
+                CollectionFacet.Utils.streamAdapters(collection);
+        
+        return objectAdapters
+            .map(nextElement->nextElement != null? nextElement.getObject(): null)
+            .collect(_Arrays.toArray(Object.class, facet.size(collection)));
     }
 
     private final static Map<Class<?>, Function<Iterable<Object>, Object>> factoriesByType = _With.hashMap(

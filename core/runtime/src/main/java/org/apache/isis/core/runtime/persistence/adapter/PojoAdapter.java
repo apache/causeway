@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.InstanceAbstract;
@@ -44,7 +43,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
-public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
+public final class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     private final static Logger LOG = LoggerFactory.getLogger(PojoAdapter.class);
 
@@ -57,17 +56,21 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     private final Object pojo;
     private final Oid oid;
     
-    @Override
-    public Object getPojo() {
-        return pojo;
-    }
-
     /**
      * only for standalone or parented collections.
      */
     private ElementSpecificationProvider elementSpecificationProvider;
+    
+    public static PojoAdapter of(
+            final Object pojo,
+            final Oid oid,
+            final AuthenticationSession authenticationSession,
+            final SpecificationLoader specificationLoader,
+            final PersistenceSession persistenceSession) {
+        return new PojoAdapter(pojo, oid, authenticationSession, specificationLoader, persistenceSession);
+    }
 
-    public PojoAdapter(
+    private PojoAdapter(
             final Object pojo,
             final Oid oid,
             final AuthenticationSession authenticationSession,
@@ -87,6 +90,11 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         
         this.pojo = pojo;
         this.oid = requires(oid, "oid");
+    }
+    
+    @Override
+    public Object getPojo() {
+        return pojo;
     }
     
     // -- getSpecification
@@ -218,71 +226,71 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
 
     // -- titleString
-    /**
-     * Returns the title from the underlying business object.
-     *
-     * <p>
-     * If the object has not yet been resolved the specification will be asked
-     * for a unresolved title, which could of been persisted by the persistence
-     * mechanism. If either of the above provides null as the title then this
-     * method will return a title relating to the name of the object type, e.g.
-     * "A Customer", "A Product".
-     */
-    @Override
-    public String titleString() {
-        return titleString(null);
-    }
+//    /**
+//     * Returns the title from the underlying business object.
+//     *
+//     * <p>
+//     * If the object has not yet been resolved the specification will be asked
+//     * for a unresolved title, which could of been persisted by the persistence
+//     * mechanism. If either of the above provides null as the title then this
+//     * method will return a title relating to the name of the object type, e.g.
+//     * "A Customer", "A Product".
+//     */
+//    @Override
+//    public String titleString() {
+//        return titleString(null);
+//    }
 
-    @Override
-    public String titleString(ObjectAdapter contextAdapterIfAny) {
-        if (getSpecification().isParentedOrFreeCollection()) {
-            final CollectionFacet facet = getSpecification().getFacet(CollectionFacet.class);
-            return collectionTitleString(facet);
-        } else {
-            return objectTitleString(contextAdapterIfAny);
-        }
-    }
-
-    private String objectTitleString(ObjectAdapter contextAdapterIfAny) {
-        if (getObject() instanceof String) {
-            return (String) getObject();
-        }
-        final ObjectSpecification specification = getSpecification();
-        String title = specification.getTitle(contextAdapterIfAny, this);
-
-        if (title == null) {
-            title = getDefaultTitle();
-        }
-        return title;
-    }
-
-    private String collectionTitleString(final CollectionFacet facet) {
-        final int size = facet.size(this);
-        final ObjectSpecification elementSpecification = getElementSpecification();
-        if (elementSpecification == null || elementSpecification.getFullIdentifier().equals(Object.class.getName())) {
-            switch (size) {
-            case -1:
-                return "Objects";
-            case 0:
-                return "No objects";
-            case 1:
-                return "1 object";
-            default:
-                return size + " objects";
-            }
-        } else {
-            switch (size) {
-            case -1:
-                return elementSpecification.getPluralName();
-            case 0:
-                return "No " + elementSpecification.getPluralName();
-            case 1:
-                return "1 " + elementSpecification.getSingularName();
-            default:
-                return size + " " + elementSpecification.getPluralName();
-            }
-        }
-    }
+//    @Override
+//    public String titleString(ObjectAdapter contextAdapterIfAny) {
+//        if (getSpecification().isParentedOrFreeCollection()) {
+//            final CollectionFacet facet = getSpecification().getFacet(CollectionFacet.class);
+//            return collectionTitleString(facet);
+//        } else {
+//            return objectTitleString(contextAdapterIfAny);
+//        }
+//    }
+//
+//    private String objectTitleString(ObjectAdapter contextAdapterIfAny) {
+//        if (getObject() instanceof String) {
+//            return (String) getObject();
+//        }
+//        final ObjectSpecification specification = getSpecification();
+//        String title = specification.getTitle(contextAdapterIfAny, this);
+//
+//        if (title == null) {
+//            title = getDefaultTitle();
+//        }
+//        return title;
+//    }
+//
+//    private String collectionTitleString(final CollectionFacet facet) {
+//        final int size = facet.size(this);
+//        final ObjectSpecification elementSpecification = getElementSpecification();
+//        if (elementSpecification == null || elementSpecification.getFullIdentifier().equals(Object.class.getName())) {
+//            switch (size) {
+//            case -1:
+//                return "Objects";
+//            case 0:
+//                return "No objects";
+//            case 1:
+//                return "1 object";
+//            default:
+//                return size + " objects";
+//            }
+//        } else {
+//            switch (size) {
+//            case -1:
+//                return elementSpecification.getPluralName();
+//            case 0:
+//                return "No " + elementSpecification.getPluralName();
+//            case 1:
+//                return "1 " + elementSpecification.getSingularName();
+//            default:
+//                return size + " " + elementSpecification.getPluralName();
+//            }
+//        }
+//    }
 
     @Override
     public String toString() {
@@ -298,9 +306,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return str.toString();
     }
 
-    protected String getDefaultTitle() {
-        return "A" + (" " + getSpecification().getSingularName()).toLowerCase();
-    }
+//    protected String getDefaultTitle() {
+//        return "A" + (" " + getSpecification().getSingularName()).toLowerCase();
+//    }
 
     protected void toString(final ToString str) {
         str.append(aggregateResolveStateCode());
@@ -381,15 +389,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     public Instance getInstance(final Specification specification) {
         throw new UnsupportedOperationException();
     }
-
-    @Override
-    public ObjectAdapter withOid(RootOid newOid) {
-        return new PojoAdapter(pojo, newOid, authenticationSession, specificationLoader, persistenceSession);
-    }
     
-    @Override
-    public ObjectAdapter withPojo(Object newPojo) {
-        return new PojoAdapter(newPojo, oid, authenticationSession, specificationLoader, persistenceSession);
-    }
 
 }

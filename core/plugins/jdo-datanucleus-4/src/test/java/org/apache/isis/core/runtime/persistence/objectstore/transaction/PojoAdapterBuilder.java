@@ -125,7 +125,8 @@ public class PojoAdapterBuilder {
         return this;
     }
 
-    public PojoAdapterBuilder withOid(String oidAndTitle) {
+    //test only
+    PojoAdapterBuilder withOid(String oidAndTitle) {
         final Iterator<String> iterator = Splitter.on("|").split(oidAndTitle).iterator();
         if(!iterator.hasNext()) { return this; }
         withObjectType(iterator.next());
@@ -191,15 +192,8 @@ public class PojoAdapterBuilder {
     public PojoAdapter build() {
         final RootOid rootOid = persistence.createOid(objectSpecId, identifier);
         final Oid oid = type.oidFor(rootOid, objectSpecId, aggregatedId);
-        final PojoAdapter pojoAdapter = new PojoAdapter(pojo, oid, authenticationSession,
-                specificationLoader, persistenceSession) {
-            @Override
-            public ObjectSpecification getSpecification() { return objectSpec != null? objectSpec: super.getSpecification(); }
-            @Override
-            public String titleString() {
-                return titleString != null? titleString: super.titleString();
-            }
-        };
+        final PojoAdapter pojoAdapter = PojoAdapter.of(pojo, oid, authenticationSession,
+                specificationLoader, persistenceSession);
         if(persistence == Persistence.PERSISTENT && version != null) {
             pojoAdapter.setVersion(version);
         }

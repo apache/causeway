@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -72,10 +71,12 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         
         if (spec.isParentedOrFreeCollection()) {
 
-            final Object recreatedPojo = objectAdapterContext.instantiateAndInjectServices(spec);
-            adapter = objectAdapterContext.recreatePojo(oid, recreatedPojo);
-            adapter = populateCollection(adapter, (CollectionData) data);
+            final Object emptyCollectionPojo = objectAdapterContext.instantiateAndInjectServices(spec);
+            
+            final Object collectionPojo = populateCollection(emptyCollectionPojo, spec, (CollectionData) data);
+            adapter = objectAdapterContext.recreatePojo(oid, collectionPojo);
 
+            
         } else {
             Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
             RootOid typedOid = (RootOid) oid;
@@ -130,12 +131,16 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         }
     }
     
-    private ObjectAdapter populateCollection(final ObjectAdapter collectionAdapter, final CollectionData state) {
+    private Object populateCollection(
+            final Object emptyCollectionPojo, 
+            final ObjectSpecification collectionSpec, 
+            final CollectionData state) {
+        
         final Stream<ObjectAdapter> initData = state.streamElements()
             .map((final Data elementData) -> recreateReference(elementData));
         
-        final CollectionFacet facet = collectionAdapter.getSpecification().getFacet(CollectionFacet.class);
-        return facet.init(collectionAdapter, initData, state.getElementCount());
+        final CollectionFacet facet = collectionSpec.getFacet(CollectionFacet.class);
+        return facet.populatePojo(emptyCollectionPojo, collectionSpec, initData, state.getElementCount());
     }
     
     private void updateFieldsAndResolveState(final ObjectAdapter objectAdapter, final Data data) {
@@ -200,10 +205,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
     private void updateOneToManyAssociation(final ObjectAdapter objectAdapter, final OneToManyAssociation otma, final CollectionData collectionData) {
         final ObjectAdapter collection = otma.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
-        final List<ObjectAdapter> original = _Lists.newArrayList();
-        for (final ObjectAdapter adapter : facet.iterable(collection)) {
-            original.add(adapter);
-        }
+        final List<ObjectAdapter> original = CollectionFacet.Utils.toAdapterList(collection); 
 
         collectionData.streamElements().forEach((final Data data) -> {
             final ObjectAdapter elementAdapter = recreateReference(data);

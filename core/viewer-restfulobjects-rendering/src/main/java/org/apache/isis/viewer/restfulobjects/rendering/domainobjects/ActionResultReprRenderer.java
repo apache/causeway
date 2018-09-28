@@ -135,9 +135,9 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
         case LIST:
 
-            final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
-            final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
-
+            final Collection<ObjectAdapter> collectionAdapters =
+                CollectionFacet.Utils.toAdapterList(returnedAdapter);
+            
             final ListReprRenderer listReprRenderer =
                     new ListReprRenderer(rendererContext, null, representation).withElementRel(Rel.ELEMENT);
             listReprRenderer.with(collectionAdapters)
