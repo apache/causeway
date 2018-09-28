@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -468,46 +470,46 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Override
     public <Q extends Facet> Q getFacet(final Class<Q> facetType) {
-        final Q facet = super.getFacet(facetType);
-        if (isNotANoopFacet(facet)) {
-            return facet;
-        }
-        Q noopFacet = facet; // might be null
-        if (interfaces() != null) {
-            final List<ObjectSpecification> interfaces = interfaces();
-            for (int i = 0; i < interfaces.size(); i++) {
-                final ObjectSpecification interfaceSpec = interfaces.get(i);
-                if (interfaceSpec == null) {
-                    // HACK: shouldn't happen, but occurring on occasion when
-                    // running
-                    // XATs under JUnit4. Some sort of race condition?
-                    continue;
-                }
-                final Q interfaceFacet = interfaceSpec.getFacet(facetType);
-                if (isNotANoopFacet(interfaceFacet)) {
-                    return interfaceFacet;
-                }
-                if (noopFacet == null) {
-                    noopFacet = interfaceFacet; // might be null
-                }
-            }
-        }
+
+        // lookup facet holder's facet
+        final Stream<Q> facets1 = _NullSafe.streamNullable(super.getFacet(facetType));
+        
+        // lookup all interfaces
+        final Stream<Q> facets2 = _NullSafe.stream(interfaces)
+                .filter(_NullSafe::isPresent) // just in case
+                .map(interfaceSpec->interfaceSpec.getFacet(facetType));
+        
         // search up the inheritance hierarchy
-        final ObjectSpecification superSpec = superclass();
-        if (superSpec != null) {
-            final Q superClassFacet = superSpec.getFacet(facetType);
-            if (isNotANoopFacet(superClassFacet)) {
-                return superClassFacet;
+        final Stream<Q> facets3 = _NullSafe.streamNullable(superclass()) 
+                .map(superSpec->superSpec.getFacet(facetType));
+        
+        final Stream<Q> facetsCombined = Stream.concat(Stream.concat(facets1, facets2), facets3);
+        
+        final NotANoopFacetFilter<Q> notANoopFacetFilter = new NotANoopFacetFilter<>();
+        
+        return facetsCombined
+        .filter(notANoopFacetFilter)
+        .findFirst()
+        .orElse(notANoopFacetFilter.noopFacet);
+    }
+
+    private static class NotANoopFacetFilter<Q extends Facet> implements Predicate<Q> {
+        Q noopFacet;
+
+        @Override
+        public boolean test(Q facet) {
+            if(facet==null) {
+                return false;
             }
-            // TODO: should we perhaps default the noopFacet here as we do in the previous two cases?
+            if(!facet.isNoop()) {
+                return true;
+            }
+            if(noopFacet == null) {
+                noopFacet = facet;
+            }
+            return false;
         }
-        return noopFacet;
     }
-
-    private boolean isNotANoopFacet(final Facet facet) {
-        return facet != null && !facet.isNoop();
-    }
-
 
 
     // -- DefaultValue - unused

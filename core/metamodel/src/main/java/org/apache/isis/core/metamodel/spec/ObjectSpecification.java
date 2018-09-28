@@ -342,5 +342,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
     boolean isPersistenceCapable();
     boolean isPersistenceCapableOrViewModel();
 
+    
+
 
 }
