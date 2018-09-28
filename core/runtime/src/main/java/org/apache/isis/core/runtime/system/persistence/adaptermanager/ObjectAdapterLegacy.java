@@ -20,9 +20,6 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -41,8 +38,6 @@ import org.apache.isis.schema.utils.CommonDtoUtils;
  * Interim class, expected to be removed with https://issues.apache.org/jira/browse/ISIS-1976 
  */
 public class ObjectAdapterLegacy {
-    
-    static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterLegacy.class);
     
     // -- CommandExecutorServiceDefault --------------------------------------------------------
     

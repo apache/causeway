@@ -114,7 +114,7 @@ final public class ObjectAdapterContext {
 
     // -- LIFE-CYCLING
 
-    public void open() {
+    private void open() {
         printContextInfo("OPEN_");
     }
 
@@ -143,6 +143,7 @@ final public class ObjectAdapterContext {
 
     // -- DEPENDENCY INJECTION
 
+    // package private
     Object instantiateAndInjectServices(ObjectSpecification objectSpec) {
         return dependencyInjectionMixin.instantiateAndInjectServices(objectSpec);
     }
@@ -200,13 +201,9 @@ final public class ObjectAdapterContext {
         final ObjectAdapter createdAdapter = createRootOrAggregatedAdapter(oid, recreatedPojo);
         return injectServices(createdAdapter);
     }
-    
-    public ObjectAdapter recreatedPojo(ObjectAdapter adapter, final Object pojo) {
-        final ObjectAdapter newAdapter = adapter.withPojo(pojo);
-        return injectServices(newAdapter);
-    }
 
-    public ObjectAdapter injectServices(final ObjectAdapter adapter) {
+    // package private
+    ObjectAdapter injectServices(final ObjectAdapter adapter) {
         Objects.requireNonNull(adapter);
         if(adapter.isValue()) {
             return adapter; // guard against value objects
@@ -216,7 +213,8 @@ final public class ObjectAdapterContext {
         return adapter;
     }
     
-    public ObjectAdapter createRootOrAggregatedAdapter(final Oid oid, final Object pojo) {
+    // package private
+    ObjectAdapter createRootOrAggregatedAdapter(final Oid oid, final Object pojo) {
         final ObjectAdapter createdAdapter;
         if(oid instanceof RootOid) {
             final RootOid rootOid = (RootOid) oid;

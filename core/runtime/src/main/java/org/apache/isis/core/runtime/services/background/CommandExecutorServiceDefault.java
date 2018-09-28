@@ -146,7 +146,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
             // thrown then we would have a command with only completedAt, which is inconsistent.
             // Therefore instead we copy down from the backgroundInteraction (similar to how we populate the
             // completedAt at the end)
-            final Interaction.Execution currentExecution = interaction.getCurrentExecution();
+            final Interaction.Execution<?, ?> currentExecution = interaction.getCurrentExecution();
 
             final Timestamp startedAt = currentExecution != null
                     ? currentExecution.getStartedAt()
@@ -241,7 +241,7 @@ public class CommandExecutorServiceDefault implements CommandExecutorService {
 
         // it's possible that there is no priorExecution, specifically if there was an exception
         // when performing the action invocation/property edit.  We therefore need to guard that case.
-        final Interaction.Execution priorExecution = interaction.getPriorExecution();
+        final Interaction.Execution<?, ?> priorExecution = interaction.getPriorExecution();
         if (commandWithDto.getStartedAt() == null) {
             // if attempting to commit the xactn threw an error, we will (I think?) have lost this info, so need to
             // capture

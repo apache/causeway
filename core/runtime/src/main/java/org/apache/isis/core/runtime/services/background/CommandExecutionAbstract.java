@@ -16,9 +16,6 @@
  */
 package org.apache.isis.core.runtime.services.background;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.command.CommandExecutorService;
 import org.apache.isis.applib.services.command.CommandWithDto;
 import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
@@ -28,7 +25,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
  */
 public abstract class CommandExecutionAbstract extends AbstractIsisSessionTemplate {
 
-    private final static Logger LOG = LoggerFactory.getLogger(CommandExecutionAbstract.class);
+    //private final static Logger LOG = LoggerFactory.getLogger(CommandExecutionAbstract.class);
 
     private final CommandExecutorService.SudoPolicy sudoPolicy;
 

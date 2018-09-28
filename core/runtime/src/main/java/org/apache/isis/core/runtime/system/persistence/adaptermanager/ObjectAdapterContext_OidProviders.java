@@ -30,10 +30,10 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.factories.OidFactory.OidProvider;
 
-public class OidProviders {
+class ObjectAdapterContext_OidProviders {
 
     
-    public static class GuardAgainstRootOid implements OidProvider {
+    static class GuardAgainstRootOid implements OidProvider {
 
         @Override
         public boolean isHandling(Object pojo, ObjectSpecification spec) {
@@ -50,7 +50,7 @@ public class OidProviders {
     }
     
     
-    public static class OidForServices implements OidProvider {
+    static class OidForServices implements OidProvider {
 
         @Override
         public boolean isHandling(Object pojo, ObjectSpecification spec) {
@@ -65,7 +65,7 @@ public class OidProviders {
 
     }
 
-    public static class OidForPersistent implements OidProvider {
+    static class OidForPersistent implements OidProvider {
 
         private final IsisJdoMetamodelPlugin isisJdoMetamodelPlugin = IsisJdoMetamodelPlugin.get();
 
@@ -91,7 +91,7 @@ public class OidProviders {
         
     }
 
-    public static class OidForValues implements OidProvider {
+    static class OidForValues implements OidProvider {
 
         @Override
         public boolean isHandling(Object pojo, ObjectSpecification spec) {
@@ -105,7 +105,7 @@ public class OidProviders {
 
     }
     
-    public static class OidForViewModels implements OidProvider {
+    static class OidForViewModels implements OidProvider {
 
         @Override
         public boolean isHandling(Object pojo, ObjectSpecification spec) {
@@ -121,7 +121,7 @@ public class OidProviders {
 
     }
     
-    public static class OidForOthers implements OidProvider {
+    static class OidForOthers implements OidProvider {
 
         @Override
         public boolean isHandling(Object pojo, ObjectSpecification spec) {
