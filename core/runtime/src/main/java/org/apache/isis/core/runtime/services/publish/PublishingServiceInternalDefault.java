@@ -113,8 +113,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
     @Override
     @Programmatic
-    public void publishAction(
-            final Interaction.Execution execution) {
+    public void publishAction(final Interaction.Execution<?,?> execution) {
 
         if(suppress) {
             return;
@@ -125,8 +124,7 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
 
     @Override
-    public void publishProperty(
-            final Interaction.Execution execution) {
+    public void publishProperty(final Interaction.Execution<?,?> execution) {
 
         if(suppress) {
             return;

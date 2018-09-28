@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-public class ObjectActionContributee extends ObjectActionDefault implements ContributeeMember2 {
+public class ObjectActionContributee extends ObjectActionDefault implements ContributeeMember {
 
     private final Object servicePojo;
     private final ObjectActionDefault serviceAction;

@@ -18,6 +18,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.function.Predicate;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -29,7 +30,18 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 public interface ContributeeMember extends ObjectMember {
 
 
-    class Predicates {
+    boolean isContributedBy(ObjectAction serviceAction);
+
+    /**
+     * Which parameter of the original contributed action was contributed to (zero-based).
+     */
+    int getContributeeParamPosition();
+    
+    ObjectSpecification getServiceContributedBy();
+    
+    // -- UTILITY
+    
+    public static class Predicates {
 
         private Predicates(){}
 
@@ -49,11 +61,5 @@ public interface ContributeeMember extends ObjectMember {
         }
 
     }
-
-    boolean isContributedBy(ObjectAction serviceAction);
-
-    /**
-     * Which parameter of the original contributed action was contributed to (zero-based).
-     */
-    int getContributeeParamPosition();
+    
 }

@@ -1,9 +1,8 @@
 
 for 2.0.0-M2
 
-
 remove:
-- @MemberGroupLayout
+- [REMOVED] @MemberGroupLayout
 - contributed domain services (use mixins instead)
 - org.apache.isis.applib.clock
   - Clock singleton
@@ -11,8 +10,8 @@ remove:
 - AbstractFixtureSusa
 - org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava
 
-- org.apache.isis.applib.services.memento  (19 usages found)
-  - MementoService.java - remove entire service (previously to support view models, but now @ViewModel and JAXB)
+- [DONE] org.apache.isis.applib.services.memento  (19 usages found)
+  - [REMOVED] MementoService.java - remove entire service (previously to support view models, but now @ViewModel and JAXB)
 
 to change:
 - automatically wrap domain services (perhaps behind a config property)
@@ -24,8 +23,8 @@ support for legacy implementation of UrlEncodingService
 
 inline paraname8 from incode platform
 
-remove isis-core-wicket-applib 
-- contains only WicketDeveloperUtilitiesService, which is hidden anyway and seems to not be required.
+[DONE] remove isis-core-wicket-applib 
+- [DONE] contains only WicketDeveloperUtilitiesService, which is hidden anyway and seems to not be required.
 
 update .xsd for layout, make render optional and deprecated.    
    
@@ -37,29 +36,14 @@ update .xsd for layout, make render optional and deprecated.
 
 move ContentMappingServiceForCommandDto and ContentMappingServiceForCommandsDto from applib.conmap to applib.services.conmap.commands
 
-IsisContext:
-- remove this, causes a stack trace...
-
-    // -- HELPER
-
-    /**
-     * TODO [andi-huber] not sure if required, initial idea was to force log4j
-     * re-configuration on an undeploy/deploy cycle
-     */
-    static void resetLogging() {
-        try {
-            org.apache.log4j.BasicConfigurator.resetConfiguration();
-            org.apache.log4j.Logger.getRootLogger().removeAllAppenders();
-        } catch (Exception e) {
-            // at least we tried
-        }
-    }
+[DONE] IsisContext:
+- [REMOVED] resetLogging()
 
 TitleFacetViaAnnotation may not work if on a field, due to DN lazy loading.
 
 
-remove AbstractService from applib.
-remove AbstractViewModel from applib.
+[REMOVED] remove AbstractService from applib.
+[REMOVED] remove AbstractViewModel from applib.
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

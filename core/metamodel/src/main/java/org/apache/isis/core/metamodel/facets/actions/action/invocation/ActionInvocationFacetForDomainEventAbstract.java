@@ -84,7 +84,7 @@ import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInter
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
+import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
@@ -348,11 +348,11 @@ implements ImperativeFacet {
             final Stream<ObjectAction> objectActions = mixedInSpec.streamObjectActions(Contributed.INCLUDED);
             
             final Optional<String> mixinName = objectActions
-            .filter(action->action instanceof MixedInMember2)
-            .map(action->(MixedInMember2) action)
+            .filter(action->action instanceof MixedInMember)
+            .map(action->(MixedInMember) action)
             .filter(action->action.getMixinType() == onType)
             .findAny()
-            .map(MixedInMember2::getName);
+            .map(MixedInMember::getName);
             
             if(mixinName.isPresent()) {
                 return mixinName.get();

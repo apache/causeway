@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
-public class OneToOneAssociationContributee extends OneToOneAssociationDefault implements ContributeeMember2 {
+public class OneToOneAssociationContributee extends OneToOneAssociationDefault implements ContributeeMember {
 
     private final Object servicePojo;
     private final ObjectAction serviceAction;
@@ -149,7 +149,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
         return getPersistenceSessionService().adapterFor(servicePojo);
     }
 
-    // -- Contributee2 impl - getServiceContributedBy()
+    // -- Contributee impl - getServiceContributedBy()
     @Override
     public ObjectSpecification getServiceContributedBy() {
         return getServiceAdapter().getSpecification();

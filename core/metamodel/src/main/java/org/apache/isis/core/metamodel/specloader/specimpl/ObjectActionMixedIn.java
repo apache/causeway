@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember2 {
+public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember {
 
     /**
      * The type of the mixin (providing the action), eg annotated with {@link org.apache.isis.applib.annotation.Mixin}.

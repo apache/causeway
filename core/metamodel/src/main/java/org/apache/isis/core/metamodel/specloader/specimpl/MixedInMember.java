@@ -17,6 +17,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 /**
@@ -28,12 +29,8 @@ public interface MixedInMember extends ObjectMember {
      * The id if it was originally {@link Mixin#DEFAULT_METHOD_NAME the default member name}.
      */
     String getOriginalId();
-
-    // not actually required, as of yet
-    // boolean isMixinOf(ObjectAction mixinAction);
-
-    // not actually required, as of yet
-    // ObjectSpecification getMixin();
+    
+    ObjectSpecification getMixinType();
 
 }
 

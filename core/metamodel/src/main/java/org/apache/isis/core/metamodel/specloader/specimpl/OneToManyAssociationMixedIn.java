@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInter
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault implements MixedInMember2 {
+public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault implements MixedInMember {
 
     /**
      * The type of the mixin (providing the action), eg annotated with {@link org.apache.isis.applib.annotation.Mixin}.
@@ -54,10 +54,10 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
      */
     private final ObjectActionDefault mixinAction;
 
-    /**
-     * The domain object type being mixed in to (being supplemented).
-     */
-    private final ObjectSpecification mixedInType;
+//    /**
+//     * The domain object type being mixed in to (being supplemented).
+//     */
+//    private final ObjectSpecification mixedInType;
 
 
     /**
@@ -92,7 +92,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
-        this.mixedInType = mixedInType;
+//        this.mixedInType = mixedInType;
 
         //
         // ensure the mixedIn collection cannot be modified, and derive its TypeOfFaccet

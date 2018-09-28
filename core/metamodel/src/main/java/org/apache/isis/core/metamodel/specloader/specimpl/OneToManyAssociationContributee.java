@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-public class OneToManyAssociationContributee extends OneToManyAssociationDefault implements ContributeeMember2 {
+public class OneToManyAssociationContributee extends OneToManyAssociationDefault implements ContributeeMember {
 
     private final Object servicePojo;
     private final ObjectAction serviceAction;

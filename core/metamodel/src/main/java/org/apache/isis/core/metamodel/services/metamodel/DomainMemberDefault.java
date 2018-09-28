@@ -54,9 +54,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
-import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember2;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
-import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember2;
 
 public class DomainMemberDefault implements DomainMember {
 
@@ -117,8 +115,8 @@ public class DomainMemberDefault implements DomainMember {
     }
 
     @Override public String getContributedBy() {
-        if(member instanceof ContributeeMember2) {
-            final ObjectSpecification serviceContributedBy = ((ContributeeMember2) member).getServiceContributedBy();
+        if(member instanceof ContributeeMember) {
+            final ObjectSpecification serviceContributedBy = ((ContributeeMember) member).getServiceContributedBy();
             return serviceContributedBy.getCorrespondingClass().getSimpleName();
         }
         return "";
@@ -129,8 +127,8 @@ public class DomainMemberDefault implements DomainMember {
     }
 
     @Override public String getMixin() {
-        if(member instanceof MixedInMember2) {
-            final MixedInMember2 mixedInMember = (MixedInMember2) this.member;
+        if(member instanceof MixedInMember) {
+            final MixedInMember mixedInMember = (MixedInMember) this.member;
 
             final ObjectSpecification mixinType = mixedInMember.getMixinType();
             return mixinType.getCorrespondingClass().getSimpleName();

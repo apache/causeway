@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault implements MixedInMember2 {
+public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault implements MixedInMember {
 
     /**
      * The type of the mixin (providing the action), eg annotated with {@link org.apache.isis.applib.annotation.Mixin}.

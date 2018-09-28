@@ -28,10 +28,10 @@ public interface PublishingServiceInternal {
 
     @Programmatic
     void publishAction(
-            final Interaction.Execution execution);
+            final Interaction.Execution<?,?> execution);
 
     @Programmatic
-    void publishProperty(final Interaction.Execution execution);
+    void publishProperty(final Interaction.Execution<?,?> execution);
 
 
     interface Block<T> {
