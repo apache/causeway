@@ -121,8 +121,10 @@ public interface ManagedObject extends Instance {
     
     /**
      * Used only for (standalone or parented) collections.
-     * @return
+     * @deprecated use {@link ObjectSpecification#getElementSpecification()} instead, 
+     * (proposed for removal, to keep the API slim)
      */
+    @Deprecated
     default public ObjectSpecification getElementSpecification() {
         return getSpecification().getElementSpecification();
     }
