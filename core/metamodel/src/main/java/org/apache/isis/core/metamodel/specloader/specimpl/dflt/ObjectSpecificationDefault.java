@@ -50,6 +50,7 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -86,6 +87,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final boolean isService;
+
+    private ObjectSpecification elementSpecification;
 
 
     public ObjectSpecificationDefault(
@@ -407,6 +410,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return str.toString();
     }
 
+    @Override
+    public ObjectSpecification getElementSpecification() {
+        return elementSpecification;
+    }
 
+    @Override
+    public void setElementSpecificationProvider(ElementSpecificationProvider provider) {
+        this.elementSpecification = provider.getElementType();
+    }
 
 }

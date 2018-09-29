@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.base._Lazy;
@@ -119,9 +117,15 @@ public interface ManagedObject extends Instance {
 
     }
     
-    // -- COLLECTIN SUPPORT
+    // -- COLLECTION SUPPORT
     
-    ObjectSpecification getElementSpecification();
+    /**
+     * Used only for (standalone or parented) collections.
+     * @return
+     */
+    default public ObjectSpecification getElementSpecification() {
+        return getSpecification().getElementSpecification();
+    }
     
     // -- GLUE CODE
     
@@ -131,7 +135,10 @@ public interface ManagedObject extends Instance {
     
     // -- FACTORIES
     
-    public static ManagedObject of(ObjectSpecification specification, Object pojo) {
+    public static ManagedObject of(
+            final ObjectSpecification specification, 
+            final Object pojo) {
+        
         return new ManagedObject() {
             @Override
             public ObjectSpecification getSpecification() {
@@ -141,18 +148,16 @@ public interface ManagedObject extends Instance {
             public Object getPojo() {
                 return pojo;
             }
-            @Override
-            public ObjectSpecification getElementSpecification() {
-                // TODO Auto-generated method stub
-                return null;
-            }
         };
     }
     
-    public static ManagedObject of(Supplier<ObjectSpecification> specificationSupplier, Object pojo) {
-        requires(specificationSupplier, "specificationSupplier");
+    public static ManagedObject of(
+            final Supplier<ObjectSpecification> specificationSupplier, 
+            final Object pojo) {
+        
         return new ManagedObject() {
             private final _Lazy<ObjectSpecification> specification = _Lazy.of(specificationSupplier);
+            
             @Override
             public ObjectSpecification getSpecification() {
                 return specification.get();
@@ -161,15 +166,8 @@ public interface ManagedObject extends Instance {
             public Object getPojo() {
                 return pojo;
             }
-            @Override
-            public ObjectSpecification getElementSpecification() {
-                // TODO Auto-generated method stub
-                return null;
-            }
         };
     }
-
-
     
 
 }

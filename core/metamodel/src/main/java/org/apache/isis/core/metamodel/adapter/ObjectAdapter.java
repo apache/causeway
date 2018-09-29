@@ -110,26 +110,24 @@ public interface ObjectAdapter extends ManagedObject {
      */
     Instance getInstance(Specification specification);
 
-    /**
-     * For (stand-alone) collections, returns the element type.
-     *
-     * <p>
-     * For owned (aggregated) collections, the element type can be determined
-     * from the <tt>TypeOfFacet</tt> associated with the
-     * <tt>ObjectAssociation</tt> representing the collection.
-     *
-     * @see #setElementSpecificationProvider(ElementSpecificationProvider)
-     */
-    ObjectSpecification getElementSpecification();
-
-    /**
-     * For (stand-alone) collections, returns the element type.
-     *
-     * @see #getElementSpecification()
-     */
-    void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider);
-
-
+//    /**
+//     * For (stand-alone) collections, returns the element type.
+//     *
+//     * <p>
+//     * For owned (aggregated) collections, the element type can be determined
+//     * from the <tt>TypeOfFacet</tt> associated with the
+//     * <tt>ObjectAssociation</tt> representing the collection.
+//     *
+//     * @see #setElementSpecificationProvider(ElementSpecificationProvider)
+//     */
+//    ObjectSpecification getElementSpecification();
+//
+//    /**
+//     * For (stand-alone) collections, returns the element type.
+//     *
+//     * @see #getElementSpecification()
+//     */
+//    void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider);
 
 
     /**

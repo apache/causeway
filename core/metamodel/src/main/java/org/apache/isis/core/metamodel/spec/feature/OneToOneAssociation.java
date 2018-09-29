@@ -52,6 +52,7 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
 
 
     //FIXME[ISIS-1976] only temporary for refactoring - remove
+    @Deprecated
     ManagedObject get2(ManagedObject adapter, InteractionInitiatedBy initiatedBy);
 
 

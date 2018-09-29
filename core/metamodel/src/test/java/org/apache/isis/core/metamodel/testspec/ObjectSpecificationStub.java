@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -61,6 +62,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     private ObjectSpecId specId;
 
     private ServicesInjector servicesInjector;
+    private ObjectSpecification elementSpecification;
 
     public ObjectSpecificationStub(final Class<?> type) {
         this(type.getName());
@@ -375,6 +377,16 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     @Override
     public String toString() {
         return getFullIdentifier();
+    }
+
+    @Override
+    public ObjectSpecification getElementSpecification() {
+        return elementSpecification;
+    }
+
+    @Override
+    public void setElementSpecificationProvider(ElementSpecificationProvider provider) {
+        this.elementSpecification = provider.getElementType();
     }
 
 }

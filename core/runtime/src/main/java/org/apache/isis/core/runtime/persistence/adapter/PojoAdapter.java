@@ -56,10 +56,10 @@ public final class PojoAdapter extends InstanceAbstract implements ObjectAdapter
     private final Object pojo;
     private final Oid oid;
     
-    /**
-     * only for standalone or parented collections.
-     */
-    private ElementSpecificationProvider elementSpecificationProvider;
+//    /**
+//     * only for standalone or parented collections.
+//     */
+//    private ElementSpecificationProvider elementSpecificationProvider;
     
     public static PojoAdapter of(
             final Object pojo,
@@ -356,28 +356,28 @@ public final class PojoAdapter extends InstanceAbstract implements ObjectAdapter
 
 
 
-    // -- elementSpecification
-
-    @Override
-    public ObjectSpecification getElementSpecification() {
-        if (elementSpecificationProvider == null) {
-            return null;
-        }
-        return elementSpecificationProvider.getElementType();
-    }
-
-    /**
-     * Called whenever there is a {@link org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet} present.
-     *
-     * <p>
-     *     Specifically, if an action which has been annotated (is copied by {@link org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet action invocation facet}), and for a parented collection
-     *     (is copied by the {@link PersistenceSession5} when {@link PersistenceSession5#adapterFor(Object, ObjectAdapter, OneToManyAssociation) creating} an adapter for a collection.
-     * </p>
-     */
-    @Override
-    public void setElementSpecificationProvider(final ElementSpecificationProvider elementSpecificationProvider) {
-        this.elementSpecificationProvider = elementSpecificationProvider;
-    }
+//    // -- elementSpecification
+//
+//    @Override
+//    public ObjectSpecification getElementSpecification() {
+//        if (elementSpecificationProvider == null) {
+//            return null;
+//        }
+//        return elementSpecificationProvider.getElementType();
+//    }
+//
+//    /**
+//     * Called whenever there is a {@link org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet} present.
+//     *
+//     * <p>
+//     *     Specifically, if an action which has been annotated (is copied by {@link org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet action invocation facet}), and for a parented collection
+//     *     (is copied by the {@link PersistenceSession5} when {@link PersistenceSession5#adapterFor(Object, ObjectAdapter, OneToManyAssociation) creating} an adapter for a collection.
+//     * </p>
+//     */
+//    @Override
+//    public void setElementSpecificationProvider(final ElementSpecificationProvider elementSpecificationProvider) {
+//        this.elementSpecificationProvider = elementSpecificationProvider;
+//    }
 
 
     // -- getInstance (unsupported for this impl)

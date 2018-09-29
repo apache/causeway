@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultTo
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetOnStandaloneList;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -44,6 +45,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     private static final String NAME = "Instances";
     private static final String DESCRIBED_AS = "Typed instances";
     private static final String ICON_NAME = "instances";
+    private ObjectSpecification elementSpecification;
 
     // -- constructor
 
@@ -149,6 +151,16 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     @Override
     public ObjectAction getObjectAction(final String nameParmsIdentityString) {
         return null;
+    }
+
+    @Override
+    public ObjectSpecification getElementSpecification() {
+        return elementSpecification;
+    }
+
+    @Override
+    public void setElementSpecificationProvider(ElementSpecificationProvider provider) {
+        this.elementSpecification = provider.getElementType();
     }
 
 

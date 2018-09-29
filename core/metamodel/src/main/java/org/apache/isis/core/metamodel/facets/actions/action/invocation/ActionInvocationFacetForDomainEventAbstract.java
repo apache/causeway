@@ -425,7 +425,7 @@ implements ImperativeFacet {
 
         // copy over TypeOfFacet if required
         final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
-        clonedAdapter.setElementSpecificationProvider(ElementSpecificationProvider.of(typeOfFacet));
+        clonedAdapter.getSpecification().setElementSpecificationProvider(ElementSpecificationProvider.of(typeOfFacet));
 
         return clonedAdapter;
     }

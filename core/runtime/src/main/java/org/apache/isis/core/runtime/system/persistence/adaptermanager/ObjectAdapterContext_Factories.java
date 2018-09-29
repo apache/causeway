@@ -83,7 +83,8 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
         // the adapter
         // to look this up on the fly?]
         final TypeOfFacet facet = otma.getFacet(TypeOfFacet.class);
-        collectionAdapter.setElementSpecificationProvider(ElementSpecificationProvider.of(facet));
+        collectionAdapter.getSpecification()
+        .setElementSpecificationProvider(ElementSpecificationProvider.of(facet));
 
         return collectionAdapter;
     }

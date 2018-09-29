@@ -67,7 +67,8 @@ public enum ActionResultResponseType {
                         .getAction(IsisContext.getSessionFactory().getSpecificationLoader())
                         .getFacet(TypeOfFacet.class);
                 if (typeOfFacet != null) {
-                    resultAdapter.setElementSpecificationProvider(ElementSpecificationProvider.of(typeOfFacet));
+                    resultAdapter.getSpecification()
+                    .setElementSpecificationProvider(ElementSpecificationProvider.of(typeOfFacet));
                 }
             }
 
