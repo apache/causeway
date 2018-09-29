@@ -34,12 +34,10 @@ import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.InstanceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
@@ -55,11 +53,6 @@ public final class PojoAdapter extends InstanceAbstract implements ObjectAdapter
 
     private final Object pojo;
     private final Oid oid;
-    
-//    /**
-//     * only for standalone or parented collections.
-//     */
-//    private ElementSpecificationProvider elementSpecificationProvider;
     
     public static PojoAdapter of(
             final Object pojo,
@@ -223,75 +216,6 @@ public final class PojoAdapter extends InstanceAbstract implements ObjectAdapter
         return version == null || otherVersion == null || otherVersion.different(version);
     }
 
-
-
-    // -- titleString
-//    /**
-//     * Returns the title from the underlying business object.
-//     *
-//     * <p>
-//     * If the object has not yet been resolved the specification will be asked
-//     * for a unresolved title, which could of been persisted by the persistence
-//     * mechanism. If either of the above provides null as the title then this
-//     * method will return a title relating to the name of the object type, e.g.
-//     * "A Customer", "A Product".
-//     */
-//    @Override
-//    public String titleString() {
-//        return titleString(null);
-//    }
-
-//    @Override
-//    public String titleString(ObjectAdapter contextAdapterIfAny) {
-//        if (getSpecification().isParentedOrFreeCollection()) {
-//            final CollectionFacet facet = getSpecification().getFacet(CollectionFacet.class);
-//            return collectionTitleString(facet);
-//        } else {
-//            return objectTitleString(contextAdapterIfAny);
-//        }
-//    }
-//
-//    private String objectTitleString(ObjectAdapter contextAdapterIfAny) {
-//        if (getObject() instanceof String) {
-//            return (String) getObject();
-//        }
-//        final ObjectSpecification specification = getSpecification();
-//        String title = specification.getTitle(contextAdapterIfAny, this);
-//
-//        if (title == null) {
-//            title = getDefaultTitle();
-//        }
-//        return title;
-//    }
-//
-//    private String collectionTitleString(final CollectionFacet facet) {
-//        final int size = facet.size(this);
-//        final ObjectSpecification elementSpecification = getElementSpecification();
-//        if (elementSpecification == null || elementSpecification.getFullIdentifier().equals(Object.class.getName())) {
-//            switch (size) {
-//            case -1:
-//                return "Objects";
-//            case 0:
-//                return "No objects";
-//            case 1:
-//                return "1 object";
-//            default:
-//                return size + " objects";
-//            }
-//        } else {
-//            switch (size) {
-//            case -1:
-//                return elementSpecification.getPluralName();
-//            case 0:
-//                return "No " + elementSpecification.getPluralName();
-//            case 1:
-//                return "1 " + elementSpecification.getSingularName();
-//            default:
-//                return size + " " + elementSpecification.getPluralName();
-//            }
-//        }
-//    }
-
     @Override
     public String toString() {
         final ToString str = new ToString(this);
@@ -305,10 +229,6 @@ public final class PojoAdapter extends InstanceAbstract implements ObjectAdapter
         str.appendAsHex("pojo-hash", pojo.hashCode());
         return str.toString();
     }
-
-//    protected String getDefaultTitle() {
-//        return "A" + (" " + getSpecification().getSingularName()).toLowerCase();
-//    }
 
     protected void toString(final ToString str) {
         str.append(aggregateResolveStateCode());
@@ -343,7 +263,6 @@ public final class PojoAdapter extends InstanceAbstract implements ObjectAdapter
         return "S"; // standalone adapter (value)
     }
 
-
     // -- iconName
 
     /**
@@ -353,32 +272,6 @@ public final class PojoAdapter extends InstanceAbstract implements ObjectAdapter
     public String getIconName() {
         return getSpecification().getIconName(this);
     }
-
-
-
-//    // -- elementSpecification
-//
-//    @Override
-//    public ObjectSpecification getElementSpecification() {
-//        if (elementSpecificationProvider == null) {
-//            return null;
-//        }
-//        return elementSpecificationProvider.getElementType();
-//    }
-//
-//    /**
-//     * Called whenever there is a {@link org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet} present.
-//     *
-//     * <p>
-//     *     Specifically, if an action which has been annotated (is copied by {@link org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet action invocation facet}), and for a parented collection
-//     *     (is copied by the {@link PersistenceSession5} when {@link PersistenceSession5#adapterFor(Object, ObjectAdapter, OneToManyAssociation) creating} an adapter for a collection.
-//     * </p>
-//     */
-//    @Override
-//    public void setElementSpecificationProvider(final ElementSpecificationProvider elementSpecificationProvider) {
-//        this.elementSpecificationProvider = elementSpecificationProvider;
-//    }
-
 
     // -- getInstance (unsupported for this impl)
 

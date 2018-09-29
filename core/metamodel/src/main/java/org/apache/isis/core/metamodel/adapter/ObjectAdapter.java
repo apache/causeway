@@ -43,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -55,37 +54,6 @@ import org.apache.isis.core.metamodel.spec.Specification;
  * adapter, and not directly.
  */
 public interface ObjectAdapter extends ManagedObject {
-
-//    /**
-//     * Refines {@link Instance#getSpecification()}.
-//     */
-//    @Override
-//    ObjectSpecification getSpecification();
-//
-//    /**
-//     * Returns the adapted domain object, the POJO, that this adapter represents
-//     * with the framework.
-//     */
-//    @Override
-//    Object getObject();
-    
-//    /**
-//     * Returns the title to display this object with, usually obtained from
-//     * the wrapped {@link #getObject() domain object}.
-//     *
-//     * @deprecated - use {@link #titleString(ObjectAdapter)}
-//     */
-//    @Deprecated
-//    String titleString();
-//
-//    /**
-//     * Returns the title to display this object with, rendered within the context
-//     * of some other adapter.
-//     *
-//     * <p>
-//     * @see TitleFacet#title(ObjectAdapter, ObjectAdapter)
-//     */
-//    String titleString(ObjectAdapter contextAdapter);
 
     /**
      * Return an {@link Instance} of the specified {@link Specification} with
@@ -109,26 +77,6 @@ public interface ObjectAdapter extends ManagedObject {
      * @return
      */
     Instance getInstance(Specification specification);
-
-//    /**
-//     * For (stand-alone) collections, returns the element type.
-//     *
-//     * <p>
-//     * For owned (aggregated) collections, the element type can be determined
-//     * from the <tt>TypeOfFacet</tt> associated with the
-//     * <tt>ObjectAssociation</tt> representing the collection.
-//     *
-//     * @see #setElementSpecificationProvider(ElementSpecificationProvider)
-//     */
-//    ObjectSpecification getElementSpecification();
-//
-//    /**
-//     * For (stand-alone) collections, returns the element type.
-//     *
-//     * @see #getElementSpecification()
-//     */
-//    void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider);
-
 
     /**
      * Returns the name of an icon to use if this object is to be displayed
@@ -446,35 +394,6 @@ public interface ObjectAdapter extends ManagedObject {
             }
         }
 
-//        /**
-//         * Invokes the method, adjusting arguments as required.
-//         *
-//         * <p>
-//         * That is:
-//         * <ul>
-//         * <li>if the method declares parameters but no arguments are provided, then will provide 'null' defaults for these.
-//         * <li>if the method does not declare parameters but arguments were provided, then will ignore those arguments.
-//         * </ul>
-//         */
-//        private static Object invokeWithDefaults(final Method method, final Instance adapter, final Instance[] argumentAdapters) {
-//            final int numParams = method.getParameterTypes().length;
-//            Instance[] adapters;
-//
-//            if(argumentAdapters == null || argumentAdapters.length == 0) {
-//                adapters = new Instance[numParams];
-//            } else if(numParams == 0) {
-//                // ignore any arguments, even if they were supplied.
-//                // eg used by contributee actions, but
-//                // underlying service 'default' action declares no params
-//                adapters = new Instance[0];
-//            } else if(argumentAdapters.length == numParams){
-//                adapters = argumentAdapters;
-//            } else {
-//                throw new IllegalArgumentException("Method has " + numParams + " params but " + argumentAdapters.length + " arguments provided");
-//            }
-//
-//            return invoke(method, adapter, adapters);
-//        }
     }
 
     public static class Functions {

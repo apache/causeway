@@ -26,12 +26,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 
 /**
- * Represents an instance of some element of the meta-model.
+ * Represents an instance of some element of the meta-model managed by the framework.
  *
- * <p>
- * Currently the only sub-interface is {@link ObjectAdapter}. However, the
- * intention is for associations, actions and action parameters to also inherit
- * from this interface.
  */
 public interface ManagedObject extends Instance {
 
