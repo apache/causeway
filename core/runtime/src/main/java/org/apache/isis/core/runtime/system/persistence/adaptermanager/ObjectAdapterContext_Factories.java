@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
@@ -54,7 +54,7 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
 
     @Override
     public ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
-        assert rootOid != null;
+        requires(rootOid, "rootOid");
         return createAdapter(pojo, rootOid);
     }
 
@@ -62,7 +62,7 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
     public ObjectAdapter createCollectionAdapter(
             final Object pojo,
             ParentedOid collectionOid) {
-        assert collectionOid != null;
+        requires(collectionOid, "collectionOid");
         return createAdapter(pojo, collectionOid);
     }
 
@@ -75,16 +75,17 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
         Assert.assertNotNull(pojo);
 
         // persistence of collection follows the parent
-        final ParentedOid collectionOid = Oid.Factory.collectionOfOneToMany(parentOid, otma);
+        final ParentedOid collectionOid = Oid.Factory.parentedOfOneToMany(parentOid, otma);
         final ObjectAdapter collectionAdapter = createCollectionAdapter(pojo, collectionOid);
 
+        //FIXME[ISIS-1976] marked for removal
         // we copy over the type onto the adapter itself
         // [not sure why this is really needed, surely we have enough info in
         // the adapter
         // to look this up on the fly?]
-        final TypeOfFacet facet = otma.getFacet(TypeOfFacet.class);
-        collectionAdapter.getSpecification()
-        .setElementSpecificationProvider(ElementSpecificationProvider.of(facet));
+//        final TypeOfFacet facet = otma.getFacet(TypeOfFacet.class);
+//        collectionAdapter.getSpecification()
+//        .setElementSpecificationProvider(ElementSpecificationProvider.of(facet));
 
         return collectionAdapter;
     }

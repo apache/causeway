@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -94,8 +95,7 @@ extends RecreatableObjectFacetAbstract {
 
         final _Mementos.Memento memento = _Mementos.create(codec, serializer);
 
-        final ObjectAdapter ownerAdapter = adapterProvider.disposableAdapterForViewModel(viewModelPojo);
-        // holds a pseudo rootOid 
+        final ManagedObject ownerAdapter = adapterProvider.disposableAdapterForViewModel(viewModelPojo);
         final ObjectSpecification spec = ownerAdapter.getSpecification();
         
         final Stream<OneToOneAssociation> properties = spec.streamProperties(Contributed.EXCLUDED);
@@ -106,12 +106,10 @@ extends RecreatableObjectFacetAbstract {
         // ignore those explicitly annotated as @NotPersisted
         .filter(property->!property.isNotPersisted())
         .forEach(property->{
-            final ObjectAdapter propertyValueAdapter = property.get(ownerAdapter,
-                    InteractionInitiatedBy.FRAMEWORK);
-            if(propertyValueAdapter != null) {
-                final Object propertyValue = propertyValueAdapter.getObject();
-
-                memento.put(property.getId(), propertyValue);
+            final ManagedObject propertyValue = 
+                    property.get2(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
+            if(propertyValue != null) {
+                memento.put(property.getId(), propertyValue.getPojo());
             }
         });
         

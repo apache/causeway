@@ -27,6 +27,7 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
@@ -72,7 +73,7 @@ public interface ObjectAdapterProvider {
      * @param viewModelPojo domain object
      * @return  
      */
-    ObjectAdapter disposableAdapterForViewModel(Object viewModelPojo);
+    ManagedObject disposableAdapterForViewModel(Object viewModelPojo);
     
     ObjectSpecification specificationForViewModel(Object viewModelPojo);
 
@@ -124,7 +125,7 @@ public interface ObjectAdapterProvider {
         }
 
         @Programmatic
-        default ObjectAdapter disposableAdapterForViewModel(final Object viewModelPojo) {
+        default ManagedObject disposableAdapterForViewModel(final Object viewModelPojo) {
             return getObjectAdapterProvider().disposableAdapterForViewModel(viewModelPojo);
         }
         

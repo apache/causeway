@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl.dflt;
 
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.lang.StringExtensions;
@@ -38,6 +41,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -88,9 +92,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private final FacetedMethodsBuilder facetedMethodsBuilder;
     private final boolean isService;
 
-    private ObjectSpecification elementSpecification;
-
-
     public ObjectSpecificationDefault(
             final Class<?> correspondingClass,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
@@ -103,10 +104,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         this.isService = natureOfServiceIfAny != null;
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
     }
-
-
-
-
 
     // -- introspectTypeHierarchyAndMembers
     @Override
@@ -410,14 +407,22 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return str.toString();
     }
 
+    // -- ELEMENT SPECIFICATION
+    
+    private final _Lazy<ObjectSpecification> elementSpecification = _Lazy.of(this::lookupElementSpecification); 
+    
     @Override
     public ObjectSpecification getElementSpecification() {
-        return elementSpecification;
+        return elementSpecification.get();
     }
-
-    @Override
-    public void setElementSpecificationProvider(ElementSpecificationProvider provider) {
-        this.elementSpecification = provider.getElementType();
+    
+    private ObjectSpecification lookupElementSpecification() {
+        return mapIfPresentElse(
+                getFacet(TypeOfFacet.class), 
+                typeOfFacet -> ElementSpecificationProvider.of(typeOfFacet).getElementType(), 
+                null);
     }
+    
+    // --
 
 }

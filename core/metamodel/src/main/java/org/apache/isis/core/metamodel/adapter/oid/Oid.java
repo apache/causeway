@@ -146,7 +146,7 @@ public interface Oid extends Encodable {
 
         // -- PARENTED COLLECTIONS
         
-        public static ParentedOid collectionOfOneToMany(RootOid parentRootOid, OneToManyAssociation otma) {
+        public static ParentedOid parentedOfOneToMany(RootOid parentRootOid, OneToManyAssociation otma) {
             return Oid_Parented.ofName(parentRootOid, otma.getId());
         }
 

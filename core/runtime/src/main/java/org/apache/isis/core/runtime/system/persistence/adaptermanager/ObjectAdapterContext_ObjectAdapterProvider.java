@@ -21,7 +21,6 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -31,10 +30,9 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -109,13 +107,15 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     }
     
     @Override
-    public ObjectAdapter disposableAdapterForViewModel(Object viewModelPojo) {
-        final ObjectSpecification objectSpecification = 
-                specificationLoader.loadSpecification(viewModelPojo.getClass());
-        final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-        final RootOid newRootOid = Oid.Factory.persistentOf(objectSpecId, UUID.randomUUID().toString());
-        final ObjectAdapter createdAdapter = objectAdapterContext.createRootOrAggregatedAdapter(newRootOid, viewModelPojo);
-        return createdAdapter;
+    public ManagedObject disposableAdapterForViewModel(final Object viewModelPojo) {
+        return ManagedObject.of(()->specificationLoader.loadSpecification(viewModelPojo.getClass()), viewModelPojo);
+//FIXME[ISIS-1976] -marked for removal        
+//        final ObjectSpecification objectSpecification = 
+//                specificationLoader.loadSpecification(viewModelPojo.getClass());
+//        final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
+//        final RootOid newRootOid = Oid.Factory.persistentOf(objectSpecId, UUID.randomUUID().toString());
+//        final ObjectAdapter createdAdapter = objectAdapterContext.createRootOrAggregatedAdapter(newRootOid, viewModelPojo);
+//        return createdAdapter;
     }
 
     @Override

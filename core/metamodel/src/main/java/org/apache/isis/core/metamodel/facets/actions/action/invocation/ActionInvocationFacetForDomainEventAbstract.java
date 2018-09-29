@@ -56,9 +56,11 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.MethodInvocationPreprocessor;
@@ -415,18 +417,28 @@ implements ImperativeFacet {
     private ObjectAdapter cloneIfViewModelElse(final ObjectAdapter adapter, final ObjectAdapter dfltAdapter) {
 
         if (!adapter.getSpecification().isViewModelCloneable(adapter)) {
-            return  dfltAdapter;
+            return dfltAdapter;
         }
 
         final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
         final Object clone = viewModelFacet.clone(adapter.getObject());
 
         final ObjectAdapter clonedAdapter = getObjectAdapterProvider().adapterFor(clone);
-
-        // copy over TypeOfFacet if required
-        final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
-        clonedAdapter.getSpecification().setElementSpecificationProvider(ElementSpecificationProvider.of(typeOfFacet));
-
+        {
+            //FIXME[ISIS-1976] marked for removal
+            
+            // copy over TypeOfFacet if required
+            final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
+            ObjectSpecification expected = _With.mapIfPresentElse(
+                    ElementSpecificationProvider.of(typeOfFacet),
+                    provider->provider.getElementType(),
+                    null
+                    );
+            ObjectSpecification actual = clonedAdapter.getSpecification().getElementSpecification();
+            Assert.assertEquals("expected same", expected, actual);
+        
+            //clonedAdapter.getSpecification().setElementSpecificationProvider(ElementSpecificationProvider.of(typeOfFacet));
+        }
         return clonedAdapter;
     }
 

@@ -202,8 +202,6 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * @since 2.0.0-M2
      */
     ObjectSpecification getElementSpecification();
-    void setElementSpecificationProvider(ElementSpecificationProvider provider);
-
 
     // //////////////////////////////////////////////////////////////
     // TitleContext

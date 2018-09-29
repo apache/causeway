@@ -19,9 +19,13 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl.standalonelist;
 
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
 import java.util.List;
 
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetOnStandaloneList;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -45,7 +49,6 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     private static final String NAME = "Instances";
     private static final String DESCRIBED_AS = "Typed instances";
     private static final String ICON_NAME = "instances";
-    private ObjectSpecification elementSpecification;
 
     // -- constructor
 
@@ -153,15 +156,23 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         return null;
     }
 
+    // -- ELEMENT SPECIFICATION
+    
+    private final _Lazy<ObjectSpecification> elementSpecification = _Lazy.of(this::lookupElementSpecification); 
+    
     @Override
     public ObjectSpecification getElementSpecification() {
-        return elementSpecification;
+        return elementSpecification.get();
     }
-
-    @Override
-    public void setElementSpecificationProvider(ElementSpecificationProvider provider) {
-        this.elementSpecification = provider.getElementType();
+    
+    private ObjectSpecification lookupElementSpecification() {
+        return mapIfPresentElse(
+                getFacet(TypeOfFacet.class), 
+                typeOfFacet -> ElementSpecificationProvider.of(typeOfFacet).getElementType(), 
+                null);
     }
+    
+    // --
 
 
 }
