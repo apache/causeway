@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 import static org.apache.isis.commons.internal.collections._Arrays.toArray;
 
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -42,16 +43,13 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
 
     @Override
     public <T extends ManagedObject> Object populatePojo(
-            Object emptyCollectionPojo, 
+            Supplier<Object> emptyCollectionPojoFactory, 
             ObjectSpecification collectionSpec,
             Stream<T> initData, 
             int elementCount) {
         
-        //final Class<?> correspondingClass = collectionSpec.getCorrespondingClass();
-        
         final Object[] array = initData
                 .map(ManagedObject::getPojo)
-                //.collect(toArray(correspondingClass.getComponentType(), elementCount));
                 .collect(toArray(Object.class, elementCount));
         return array;
     }
@@ -63,7 +61,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
             return Stream.of();
         }
         return Stream.of(array)
-                .map(getObjectAdapterProvider()::adapterFor)
+                .map(getObjectAdapterProvider()::adapterFor) //FIXME[ISIS-1976] we always generate an OA here
                 .map(x->(T)x);
     }
     

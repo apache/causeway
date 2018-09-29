@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl.standalonelist;
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
@@ -59,7 +60,7 @@ public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
 
     @Override
     public <T extends ManagedObject> Object populatePojo(
-            Object emptyCollectionPojo,
+            Supplier<Object> emptyCollectionPojoFactory,
             ObjectSpecification collectionSpec,
             Stream<T> elements, 
             int elementCount) {

@@ -19,6 +19,7 @@
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -71,9 +72,10 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         
         if (spec.isParentedOrFreeCollection()) {
 
-            final Object emptyCollectionPojo = objectAdapterContext.instantiateAndInjectServices(spec);
+            final Supplier<Object> emptyCollectionPojoFactory = 
+                    ()->objectAdapterContext.instantiateAndInjectServices(spec);
             
-            final Object collectionPojo = populateCollection(emptyCollectionPojo, spec, (CollectionData) data);
+            final Object collectionPojo = populateCollection(emptyCollectionPojoFactory, spec, (CollectionData) data);
             adapter = objectAdapterContext.recreatePojo(oid, collectionPojo);
 
             
@@ -132,7 +134,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
     }
     
     private Object populateCollection(
-            final Object emptyCollectionPojo, 
+            final Supplier<Object> emptyCollectionPojoFactory, 
             final ObjectSpecification collectionSpec, 
             final CollectionData state) {
         
@@ -140,7 +142,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             .map((final Data elementData) -> recreateReference(elementData));
         
         final CollectionFacet facet = collectionSpec.getFacet(CollectionFacet.class);
-        return facet.populatePojo(emptyCollectionPojo, collectionSpec, initData, state.getElementCount());
+        return facet.populatePojo(emptyCollectionPojoFactory, collectionSpec, initData, state.getElementCount());
     }
     
     private void updateFieldsAndResolveState(final ObjectAdapter objectAdapter, final Data data) {

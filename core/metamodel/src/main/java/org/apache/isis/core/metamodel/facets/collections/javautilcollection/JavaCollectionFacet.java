@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._Casts;
@@ -42,13 +43,13 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     
     @Override
     public <T extends ManagedObject> Object populatePojo(
-            Object emptyCollectionPojo, 
+            Supplier<Object> emptyCollectionPojoFactory, 
             ObjectSpecification collectionSpec,
             Stream<T> initData, 
             int elementCount) {
         
-        final Collection<? super Object> pojoCollection = _Casts.uncheckedCast(emptyCollectionPojo);
-        pojoCollection.clear();
+        final Collection<? super Object> pojoCollection = _Casts.uncheckedCast(emptyCollectionPojoFactory.get());
+        pojoCollection.clear(); // just in case
         initData.forEach(pojoCollection::add);
         return pojoCollection;
     }
@@ -62,7 +63,7 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     public <T extends ManagedObject> Stream<T> stream(T collectionAdapter) {
         return pojoCollection(collectionAdapter)
                 .stream()
-                .map(adapterProvider::adapterFor)
+                .map(adapterProvider::adapterFor) //FIXME[ISIS-1976] we always generate an OA here
                 .map(x->(T)x);
     }
     
@@ -74,13 +75,6 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
         return (Collection<? super Object>) collectionAdapter.getObject();
     }
 
-    // -- HELPER
 
-    private Collection<ManagedObject> collection(final ManagedObject collectionAdapter) {
-        final Collection<?> pojoCollection = pojoCollection(collectionAdapter);
-        
-        return _Lists.map(pojoCollection, adapterProvider::adapterFor);
-                
-    }
 
 }

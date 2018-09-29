@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.modify;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,21 +43,40 @@ public interface CollectionFacet extends Facet {
 
     int size(ManagedObject collectionAdapter);
 
+    /**
+     * @param collectionAdapter
+     * @return Stream of specified {@code collectionAdapter}'s elements 
+     * (typically the elements of a collection or array)
+     * @since 2.0.0-M2
+     */
     <T extends ManagedObject> Stream<T> stream(T collectionAdapter);
 
     default <T extends ManagedObject> T firstElement(T collectionAdapter) {
         return stream(collectionAdapter).findFirst().orElse(null);
     }
 
+    /**
+     * @deprecated implementations do not scale well with the size of the collection 
+     */
+    @Deprecated
     boolean contains(ManagedObject collectionAdapter, ManagedObject element);
 
     /**
-     * Set the contents of this collection.
+     * Set the contents of the collection (POJO) as provided by the optional supplier.
+     * <p>
+     * 
+     * @param emptyCollectionPojoFactory empty collection or array factory
+     * @param collectionSpec
+     * @param elements
+     * @param elementCount
      * @return a possibly new instance
+     * @since 2.0.0-M2
      */
-    //<T extends ManagedObject> T init(T collectionAdapter, Stream<T> elements, int elementCount);
     <T extends ManagedObject> Object populatePojo(
-            Object emptyCollectionPojo, ObjectSpecification collectionSpec, Stream<T> elements, int elementCount);
+            Supplier<Object> emptyCollectionPojoFactory, 
+            ObjectSpecification collectionSpec, 
+            Stream<T> elements, 
+            int elementCount);
 
     /**
      * Convenience method that returns the {@link TypeOfFacet} on this facet's
