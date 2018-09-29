@@ -56,12 +56,6 @@ public interface CollectionFacet extends Facet {
     }
 
     /**
-     * @deprecated implementations do not scale well with the size of the collection 
-     */
-    @Deprecated
-    boolean contains(ManagedObject collectionAdapter, ManagedObject element);
-
-    /**
      * Set the contents of the collection (POJO) as provided by the optional supplier.
      * <p>
      * 

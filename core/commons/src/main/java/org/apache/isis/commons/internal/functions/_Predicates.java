@@ -67,5 +67,13 @@ public final class _Predicates {
     public static <T> Predicate<T> isPresent() {
         return _NullSafe::isPresent;
     }
+
+    /**
+     * Negates the specified {@code predicate}. (Obsolete with Java-11) 
+     * @param predicate
+     */
+    public static <T> Predicate<T> not(Predicate<T> predicate) {
+        return null;
+    }
     
 }

@@ -43,11 +43,6 @@ public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
         return list.stream()
                 .map(x->(T)x);
     }
-    
-    @Override
-    public boolean contains(ManagedObject collectionAdapter, ManagedObject element) {
-        return collection(collectionAdapter).contains(element);
-    }
 
     /**
      * Expected to be called with a {@link ObjectAdapter} wrapping a

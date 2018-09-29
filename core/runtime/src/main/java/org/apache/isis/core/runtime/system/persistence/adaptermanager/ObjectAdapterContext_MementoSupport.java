@@ -18,8 +18,12 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
-import java.util.List;
+import static org.apache.isis.commons.internal.functions._Predicates.not;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -204,29 +208,36 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         }
     }
 
-    private void updateOneToManyAssociation(final ObjectAdapter objectAdapter, final OneToManyAssociation otma, final CollectionData collectionData) {
+    private void updateOneToManyAssociation(
+            final ObjectAdapter objectAdapter, 
+            final OneToManyAssociation otma, 
+            final CollectionData collectionData) {
+        
         final ObjectAdapter collection = otma.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
-        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
-        final List<ObjectAdapter> original = CollectionFacet.Utils.toAdapterList(collection); 
-
-        collectionData.streamElements().forEach((final Data data) -> {
-            final ObjectAdapter elementAdapter = recreateReference(data);
-            if (!facet.contains(collection, elementAdapter)) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("  association {} changed, added {}", otma, elementAdapter.getOid());
-                }
-                otma.addElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
-            } else {
-                otma.removeElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
+        final Set<ObjectAdapter> original = CollectionFacet.Utils.streamAdapters(collection)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+        final Set<ObjectAdapter> incoming = collectionData.streamElements()
+                .map(this::recreateReference)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+                
+        incoming.stream()
+        .filter(original::contains)
+        .forEach(elementAdapter->{
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("  association {} changed, added {}", otma, elementAdapter.getOid());
             }
+            otma.addElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
+        });
+        
+        original.stream()
+        .filter(not(incoming::contains))
+        .forEach(elementAdapter->{
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("  association {} changed, removed {}", otma, elementAdapter.getOid());
+            }
+            otma.removeElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
         });
 
-        for (final ObjectAdapter element : original) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("  association {} changed, removed {}", otma, element.getOid());
-            }
-            otma.removeElement(objectAdapter, element, InteractionInitiatedBy.FRAMEWORK);
-        }
     }
 
     private void updateOneToOneAssociation(final ObjectAdapter objectAdapter, final OneToOneAssociation otoa, final Data assocData) {

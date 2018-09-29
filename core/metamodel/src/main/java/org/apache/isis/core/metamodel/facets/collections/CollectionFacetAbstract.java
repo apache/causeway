@@ -23,7 +23,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public abstract class CollectionFacetAbstract extends FacetAbstract implements CollectionFacet {
 
@@ -34,11 +33,6 @@ public abstract class CollectionFacetAbstract extends FacetAbstract implements C
     @Override
     public final TypeOfFacet getTypeOfFacet() {
         return getFacetHolder().getFacet(TypeOfFacet.class);
-    }
-    
-    @Override
-    public boolean contains(ManagedObject collectionAdapter, ManagedObject element) {
-        return stream(collectionAdapter).anyMatch(x->x.equals(element));
     }
     
 }
