@@ -77,16 +77,6 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
         // persistence of collection follows the parent
         final ParentedOid collectionOid = Oid.Factory.parentedOfOneToMany(parentOid, otma);
         final ObjectAdapter collectionAdapter = createCollectionAdapter(pojo, collectionOid);
-
-        //FIXME[ISIS-1976] marked for removal
-        // we copy over the type onto the adapter itself
-        // [not sure why this is really needed, surely we have enough info in
-        // the adapter
-        // to look this up on the fly?]
-//        final TypeOfFacet facet = otma.getFacet(TypeOfFacet.class);
-//        collectionAdapter.getSpecification()
-//        .setElementSpecificationProvider(ElementSpecificationProvider.of(facet));
-
         return collectionAdapter;
     }
 

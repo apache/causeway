@@ -56,11 +56,9 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.MethodInvocationPreprocessor;
@@ -73,7 +71,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -82,7 +79,6 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
-import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -424,21 +420,6 @@ implements ImperativeFacet {
         final Object clone = viewModelFacet.clone(adapter.getObject());
 
         final ObjectAdapter clonedAdapter = getObjectAdapterProvider().adapterFor(clone);
-        {
-            //FIXME[ISIS-1976] marked for removal
-            
-            // copy over TypeOfFacet if required
-            final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
-            ObjectSpecification expected = _With.mapIfPresentElse(
-                    ElementSpecificationProvider.of(typeOfFacet),
-                    provider->provider.getElementType(),
-                    null
-                    );
-            ObjectSpecification actual = clonedAdapter.getSpecification().getElementSpecification();
-            Assert.assertEquals("expected same", expected, actual);
-        
-            //clonedAdapter.getSpecification().setElementSpecificationProvider(ElementSpecificationProvider.of(typeOfFacet));
-        }
         return clonedAdapter;
     }
 

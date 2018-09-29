@@ -109,13 +109,6 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     @Override
     public ManagedObject disposableAdapterForViewModel(final Object viewModelPojo) {
         return ManagedObject.of(()->specificationLoader.loadSpecification(viewModelPojo.getClass()), viewModelPojo);
-//FIXME[ISIS-1976] -marked for removal        
-//        final ObjectSpecification objectSpecification = 
-//                specificationLoader.loadSpecification(viewModelPojo.getClass());
-//        final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-//        final RootOid newRootOid = Oid.Factory.persistentOf(objectSpecId, UUID.randomUUID().toString());
-//        final ObjectAdapter createdAdapter = objectAdapterContext.createRootOrAggregatedAdapter(newRootOid, viewModelPojo);
-//        return createdAdapter;
     }
 
     @Override

@@ -27,7 +27,6 @@ import org.apache.wicket.request.IRequestHandler;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -60,20 +59,6 @@ public enum ActionResultResponseType {
     COLLECTION {
         @Override
         public ActionResultResponse interpretResult(final ActionModel actionModel, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
-            if(resultAdapter.getElementSpecification() == null) {
-                
-                //FIXME[ISIS-1976] marked for removal
-                _Exceptions.throwUnexpectedCodeReach();
-                
-//                final TypeOfFacet typeOfFacet = actionModel.getActionMemento()
-//                        .getAction(IsisContext.getSessionFactory().getSpecificationLoader())
-//                        .getFacet(TypeOfFacet.class);
-//                if (typeOfFacet != null) {
-//                    resultAdapter.getSpecification()
-//                    .setElementSpecificationProvider(ElementSpecificationProvider.of(typeOfFacet));
-//                }
-            }
-
             final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter, actionModel.getIsisSessionFactory());
             // take a copy of the actionModel, because the original can get mutated (specifically: its arguments cleared)
             final ActionModel actionModelCopy = actionModel.copy();
