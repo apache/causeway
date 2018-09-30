@@ -70,7 +70,7 @@ implements CollectionAddToFacet {
             return;
         }
 
-        final Object referencedObject = ObjectAdapter.Util.unwrap(referencedObjectAdapter);
+        final Object referencedObject = ObjectAdapter.Util.unwrapPojo(referencedObjectAdapter);
 
         // get hold of underlying collection
         final Object collection = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);

@@ -72,8 +72,8 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
-                final Object[] arguments = ObjectAdapter.Util.unwrap(argumentAdapters);
+                final Object source = ObjectAdapter.Util.unwrapPojo(targetAdapter);
+                final Object[] arguments = ObjectAdapter.Util.unwrapPojoArray(argumentAdapters);
                 final Identifier identifier = identified.getIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
 
@@ -105,7 +105,7 @@ public class DomainEventHelper {
             event.setEventPhase(phase);
 
             if(phase.isExecuted()) {
-                event.setReturnValue(ObjectAdapter.Util.unwrap(resultAdapter));
+                event.setReturnValue(ObjectAdapter.Util.unwrapPojo(resultAdapter));
             }
 
             getEventBusService().post(event);
@@ -183,7 +183,7 @@ public class DomainEventHelper {
 
         try {
             final PropertyDomainEvent<?, ?> event;
-            final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
+            final Object source = ObjectAdapter.Util.unwrapPojo(targetAdapter);
             final Identifier identifier = identified.getIdentifier();
 
             if(existingEvent != null && phase.isExecuted()) {
@@ -277,7 +277,7 @@ public class DomainEventHelper {
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
+                final Object source = ObjectAdapter.Util.unwrapPojo(targetAdapter);
                 final Identifier identifier = identified.getIdentifier();
                 event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
             }

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ParseValueEvent;
@@ -51,8 +51,8 @@ public class ParseValueContext extends ValidityContext<ParseValueEvent> implemen
 
     @Override
     public ParseValueEvent createInteractionEvent() {
-        final String proposedPojo = (String) unwrap(getProposed());
-        return new ParseValueEvent(unwrap(getTarget()), getIdentifier(), proposedPojo);
+        final String proposedPojo = (String) unwrapPojo(getProposed());
+        return new ParseValueEvent(unwrapPojo(getTarget()), getIdentifier(), proposedPojo);
     }
 
 }

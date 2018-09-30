@@ -59,7 +59,7 @@ public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstrac
             final InteractionInitiatedBy interactionInitiatedBy) {
         @SuppressWarnings("unchecked")
         final Collection<? super Object> collection = (Collection<? super Object>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
-        final Object elementPojo = ObjectAdapter.Util.unwrap(elementAdapter);
+        final Object elementPojo = ObjectAdapter.Util.unwrapPojo(elementAdapter);
         collection.add(elementPojo);
     }
 

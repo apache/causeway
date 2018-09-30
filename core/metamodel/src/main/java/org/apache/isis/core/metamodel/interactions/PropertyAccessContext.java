@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.PropertyAccessEvent;
@@ -54,7 +54,7 @@ public class PropertyAccessContext extends AccessContext<PropertyAccessEvent> {
 
     @Override
     public PropertyAccessEvent createInteractionEvent() {
-        return new PropertyAccessEvent(unwrap(getTarget()), getIdentifier(), unwrap(getValue()));
+        return new PropertyAccessEvent(unwrapPojo(getTarget()), getIdentifier(), unwrapPojo(getValue()));
     }
 
 }

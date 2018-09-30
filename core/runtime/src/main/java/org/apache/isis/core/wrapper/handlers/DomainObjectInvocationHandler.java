@@ -425,7 +425,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         final InteractionInitiatedBy interactionInitiatedBy = getInteractionInitiatedBy();
         final ObjectAdapter currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
-        final Object currentReferencedObj = ObjectAdapter.Util.unwrap(currentReferencedAdapter);
+        final Object currentReferencedObj = ObjectAdapter.Util.unwrapPojo(currentReferencedAdapter);
 
         final PropertyAccessEvent ev = new PropertyAccessEvent(getDelegate(), property.getIdentifier(), currentReferencedObj);
         notifyListeners(ev);
@@ -493,7 +493,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         final InteractionInitiatedBy interactionInitiatedBy = getInteractionInitiatedBy();
         final ObjectAdapter currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
 
-        final Object currentReferencedObj = ObjectAdapter.Util.unwrap(currentReferencedAdapter);
+        final Object currentReferencedObj = ObjectAdapter.Util.unwrapPojo(currentReferencedAdapter);
 
         final CollectionAccessEvent ev = new CollectionAccessEvent(getDelegate(), collection.getIdentifier());
 
@@ -668,7 +668,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                     targetAdapter, mixedInAdapter, argAdapters,
                     interactionInitiatedBy);
 
-            return ObjectAdapter.Util.unwrap(returnedAdapter);
+            return ObjectAdapter.Util.unwrapPojo(returnedAdapter);
         }
 
         return null;

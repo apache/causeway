@@ -59,12 +59,12 @@ public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract impleme
     @Override
     public final boolean isRequiredButNull(final ManagedObject adapter) {
         if(!isInvertedSemantics()) {
-            final Object object = ObjectAdapter.Util.unwrap(adapter);
+            final Object object = ObjectAdapter.Util.unwrapPojo(adapter);
             if (object == null) {
                 return true;
             }
             // special case string handling.
-            final String str = ObjectAdapter.Util.unwrapAsString(adapter);
+            final String str = ObjectAdapter.Util.unwrapPojoStringElse(adapter, null);
             return str != null && str.length() == 0;
         } else {
             return false;

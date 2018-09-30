@@ -133,7 +133,7 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
                 ObjectAdapter.Util.visibleAdapters(allInstancesAdapter, interactionInitiatedBy);
 
         return _NullSafe.stream(adapters)
-                .map(ObjectAdapter.Functions.getObject()) // pojos
+                .map(ObjectAdapter.Util::unwrapPojo)
                 .collect(_Arrays.toArray(Object.class, _NullSafe.size(adapters)));
     }
 

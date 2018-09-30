@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ObjectTitleEvent;
@@ -46,7 +46,7 @@ public class ObjectTitleContext extends AccessContext<ObjectTitleEvent> {
 
     @Override
     public ObjectTitleEvent createInteractionEvent() {
-        return new ObjectTitleEvent(unwrap(getTarget()), getIdentifier(), getTitle());
+        return new ObjectTitleEvent(unwrapPojo(getTarget()), getIdentifier(), getTitle());
     }
 
     private String getTitle() {

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.CollectionAccessEvent;
@@ -42,7 +42,7 @@ public class CollectionAccessContext extends AccessContext<CollectionAccessEvent
 
     @Override
     public CollectionAccessEvent createInteractionEvent() {
-        return new CollectionAccessEvent(unwrap(getTarget()), getIdentifier());
+        return new CollectionAccessEvent(unwrapPojo(getTarget()), getIdentifier());
     }
 
 }

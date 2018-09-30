@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
@@ -45,7 +45,7 @@ public class ObjectVisibilityContext extends VisibilityContext<ObjectVisibilityE
 
     @Override
     public ObjectVisibilityEvent createInteractionEvent() {
-        return new ObjectVisibilityEvent(unwrap(getTarget()), getIdentifier());
+        return new ObjectVisibilityEvent(unwrapPojo(getTarget()), getIdentifier());
     }
 
     @Override

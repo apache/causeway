@@ -200,8 +200,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
         } else {
 
-            final Object target = ObjectAdapter.Util.unwrap(targetAdapter);
-            final Object argValue = ObjectAdapter.Util.unwrap(newValueAdapter);
+            final Object target = ObjectAdapter.Util.unwrapPojo(targetAdapter);
+            final Object argValue = ObjectAdapter.Util.unwrapPojo(newValueAdapter);
 
             final String targetMember = CommandUtil.targetMemberNameFor(owningProperty);
             final String targetClass = CommandUtil.targetClassNameFor(targetAdapter);
@@ -233,7 +233,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
 
                         // ... post the executing event
                         final Object oldValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
-                        final Object newValue = ObjectAdapter.Util.unwrap(newValueAdapter);
+                        final Object newValue = ObjectAdapter.Util.unwrapPojo(newValueAdapter);
 
                         final PropertyDomainEvent<?, ?> event =
                                 domainEventHelper.postEventForProperty(

@@ -44,7 +44,7 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
      */
     @Override
     public boolean exceeds(final ManagedObject adapter) {
-        final String str = ObjectAdapter.Util.unwrapAsString(adapter);
+        final String str = ObjectAdapter.Util.unwrapPojoStringElse(adapter, null);
         if (str == null) {
             return false;
         }

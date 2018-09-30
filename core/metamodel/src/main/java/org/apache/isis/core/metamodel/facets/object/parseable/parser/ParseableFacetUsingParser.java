@@ -86,7 +86,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
             validate(parseValueContext);
         }
 
-        final Object context = ObjectAdapter.Util.unwrap(contextAdapter);
+        final Object context = ObjectAdapter.Util.unwrapPojo(contextAdapter);
 
         getDependencyInjector().injectServicesInto(parser);
 
@@ -127,7 +127,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public String parseableTitle(final ObjectAdapter contextAdapter) {
-        final Object pojo = ObjectAdapter.Util.unwrap(contextAdapter);
+        final Object pojo = ObjectAdapter.Util.unwrapPojo(contextAdapter);
 
         getDependencyInjector().injectServicesInto(parser);
         return ((Parser)parser).parseableTitleOf(pojo);

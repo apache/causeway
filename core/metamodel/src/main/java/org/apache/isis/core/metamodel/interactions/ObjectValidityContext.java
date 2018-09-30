@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ObjectValidityEvent;
@@ -42,7 +42,7 @@ public class ObjectValidityContext extends ValidityContext<ObjectValidityEvent> 
 
     @Override
     public ObjectValidityEvent createInteractionEvent() {
-        return new ObjectValidityEvent(unwrap(getTarget()), getIdentifier());
+        return new ObjectValidityEvent(unwrapPojo(getTarget()), getIdentifier());
     }
 
     @Override

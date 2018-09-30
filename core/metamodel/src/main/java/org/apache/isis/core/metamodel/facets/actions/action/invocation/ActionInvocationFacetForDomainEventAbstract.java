@@ -200,10 +200,10 @@ implements ImperativeFacet {
             // otherwise, go ahead and execute action in the 'foreground'
             final ObjectAdapter mixinElseRegularAdapter = mixedInAdapter != null ? mixedInAdapter : targetAdapter;
 
-            final Object mixinElseRegularPojo = ObjectAdapter.Util.unwrap(mixinElseRegularAdapter);
+            final Object mixinElseRegularPojo = ObjectAdapter.Util.unwrapPojo(mixinElseRegularAdapter);
 
             final List<ObjectAdapter> argumentAdapterList = Arrays.asList(argumentAdapters);
-            final List<Object> argumentPojos = ObjectAdapter.Util.unwrap(argumentAdapterList);
+            final List<Object> argumentPojos = ObjectAdapter.Util.unwrapPojoList(argumentAdapterList);
 
             final String targetMember = targetNameFor(owningAction, mixedInAdapter);
             final String targetClass = CommandUtil.targetClassNameFor(mixinElseRegularAdapter);
@@ -264,7 +264,7 @@ implements ImperativeFacet {
                                 command,
                                 resultAdapterPossiblyCloned);
 
-                        return ObjectAdapter.Util.unwrap(resultAdapterPossiblyCloned);
+                        return ObjectAdapter.Util.unwrapPojo(resultAdapterPossiblyCloned);
 
                     } catch (Exception e) {
 
@@ -495,7 +495,7 @@ implements ImperativeFacet {
             final Object visibleObjects =
                     CollectionUtils.copyOf(
                             stream(visibleAdapters)
-                            .map(ObjectAdapter.Functions.getObject())
+                            .map(ObjectAdapter.Util::unwrapPojo)
                             .collect(Collectors.toList()),
                             method.getReturnType());
             

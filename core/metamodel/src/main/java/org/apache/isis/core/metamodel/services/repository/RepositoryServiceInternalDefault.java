@@ -168,7 +168,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     <T> List<T> submitQuery(final Query<T> query) {
         final List<ObjectAdapter> allMatching = persistenceSessionServiceInternal.allMatchingQuery(query);
-        return ObjectAdapter.Util.unwrapT(allMatching);
+        return ObjectAdapter.Util.unwrapTypedPojoList(allMatching);
     }
 
 

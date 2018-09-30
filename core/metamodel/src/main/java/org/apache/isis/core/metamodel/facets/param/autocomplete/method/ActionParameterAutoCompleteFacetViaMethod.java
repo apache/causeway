@@ -98,7 +98,7 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
                         collectionAdapter,
                         interactionInitiatedBy);
         final List<Object> visibleObjects =
-                _Lists.map(visibleAdapters, ObjectAdapter.Functions.getObject());
+                _Lists.map(visibleAdapters, ObjectAdapter.Util::unwrapPojo);
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
         return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getObjectAdapterProvider());

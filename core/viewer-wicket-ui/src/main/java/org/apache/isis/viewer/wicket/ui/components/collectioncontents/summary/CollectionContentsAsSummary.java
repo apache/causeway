@@ -134,7 +134,7 @@ public class CollectionContentsAsSummary extends PanelAbstract<EntityCollectionM
                     values.add(null);
                     continue;
                 }
-                final Object valueObj = ObjectAdapter.Util.unwrap(valueAdapter);
+                final Object valueObj = ObjectAdapter.Util.unwrapPojo(valueAdapter);
                 if (valueObj == null) {
                     values.add(null);
                     continue;

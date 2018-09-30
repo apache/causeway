@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.adapter;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -107,47 +106,47 @@ public interface ObjectAdapter extends ManagedObject {
 
         private Util() {}
 
-        public static Object unwrap(final ManagedObject adapter) {
+        public static Object unwrapPojo(final ManagedObject adapter) {
             return adapter != null ? adapter.getPojo() : null;
         }
 
-        public static Object[] unwrap(final ManagedObject[] adapters) {
+        public static Object[] unwrapPojoArray(final ManagedObject[] adapters) {
             if (adapters == null) {
                 return null;
             }
             final Object[] unwrappedObjects = new Object[adapters.length];
             int i = 0;
             for (final ManagedObject adapter : adapters) {
-                unwrappedObjects[i++] = unwrap(adapter);
+                unwrappedObjects[i++] = unwrapPojo(adapter);
             }
             return unwrappedObjects;
         }
 
-        public static List<Object> unwrap(final List<? extends ManagedObject> adapters) {
+        public static List<Object> unwrapPojoList(final List<? extends ManagedObject> adapters) {
             List<Object> objects = _Lists.newArrayList();
             for (ManagedObject adapter : adapters) {
-                objects.add(unwrap(adapter));
+                objects.add(unwrapPojo(adapter));
             }
             return objects;
         }
 
         @SuppressWarnings("unchecked")
-        public static <T> List<T> unwrapT(final List<? extends ManagedObject> adapters) {
-            return (List<T>) unwrap(adapters);
+        public static <T> List<T> unwrapTypedPojoList(final List<? extends ManagedObject> adapters) {
+            return (List<T>) unwrapPojoList(adapters);
         }
 
-        public static String unwrapAsString(final ManagedObject adapter) {
-            final Object obj = unwrap(adapter);
+        public static String unwrapPojoStringElse(final ManagedObject adapter, String orElse) {
+            final Object obj = unwrapPojo(adapter);
             if (obj == null) {
                 return null;
             }
             if (!(obj instanceof String)) {
-                return null;
+                return orElse;
             }
             return (String) obj;
         }
 
-        public static String titleString(final ObjectAdapter adapter) {
+        public static String titleString(final ManagedObject adapter) {
             return adapter != null ? adapter.titleString(null) : "";
         }
 
@@ -281,23 +280,23 @@ public interface ObjectAdapter extends ManagedObject {
         }
 
         public static void invokeAll(final Collection<Method> methods, final ManagedObject adapter) {
-            MethodUtil.invoke(methods, Util.unwrap(adapter));
+            MethodUtil.invoke(methods, Util.unwrapPojo(adapter));
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter) {
-            return MethodExtensions.invoke(method, Util.unwrap(adapter));
+            return MethodExtensions.invoke(method, Util.unwrapPojo(adapter));
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final Object arg0) {
-            return MethodExtensions.invoke(method, Util.unwrap(adapter), new Object[] {arg0});
+            return MethodExtensions.invoke(method, Util.unwrapPojo(adapter), new Object[] {arg0});
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject arg0Adapter) {
-            return invoke(method, adapter, Util.unwrap(arg0Adapter));
+            return invoke(method, adapter, Util.unwrapPojo(arg0Adapter));
         }
 
         public static Object invoke(final Method method, final ManagedObject adapter, final ManagedObject[] argumentAdapters) {
-            return MethodExtensions.invoke(method, Util.unwrap(adapter), Util.unwrap(argumentAdapters));
+            return MethodExtensions.invoke(method, Util.unwrapPojo(adapter), Util.unwrapPojoArray(argumentAdapters));
         }
 
         public static Object invokeC(final Method method, final ManagedObject adapter, 
@@ -358,16 +357,6 @@ public interface ObjectAdapter extends ManagedObject {
                     args.set(i, adapter);
                 }
             }
-        }
-
-    }
-
-    public static class Functions {
-
-        private Functions(){}
-
-        public static Function<ObjectAdapter, Object> getObject() {
-            return Util::unwrap;
         }
 
     }

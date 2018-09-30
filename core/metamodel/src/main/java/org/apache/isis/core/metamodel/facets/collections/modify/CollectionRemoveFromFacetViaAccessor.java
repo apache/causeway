@@ -61,7 +61,7 @@ public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFa
             final InteractionInitiatedBy interactionInitiatedBy) {
         @SuppressWarnings("unchecked")
         final Collection<? super Object> collection = (Collection<? super Object>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
-        collection.remove(ObjectAdapter.Util.unwrap(elementAdapter));
+        collection.remove(ObjectAdapter.Util.unwrapPojo(elementAdapter));
     }
 
     @Override

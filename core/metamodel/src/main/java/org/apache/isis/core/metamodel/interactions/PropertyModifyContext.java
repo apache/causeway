@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
@@ -55,7 +55,7 @@ public class PropertyModifyContext extends ValidityContext<PropertyModifyEvent> 
 
     @Override
     public PropertyModifyEvent createInteractionEvent() {
-        return new PropertyModifyEvent(unwrap(getTarget()), getIdentifier(), unwrap(getProposed()));
+        return new PropertyModifyEvent(unwrapPojo(getTarget()), getIdentifier(), unwrapPojo(getProposed()));
     }
 
 }

@@ -50,7 +50,7 @@ public class CollectionAddToContext extends ValidityContext<CollectionAddToEvent
 
     @Override
     public CollectionAddToEvent createInteractionEvent() {
-        return new CollectionAddToEvent(ObjectAdapter.Util.unwrap(getTarget()), getIdentifier(), ObjectAdapter.Util.unwrap(getProposed()));
+        return new CollectionAddToEvent(ObjectAdapter.Util.unwrapPojo(getTarget()), getIdentifier(), ObjectAdapter.Util.unwrapPojo(getProposed()));
     }
 
 }

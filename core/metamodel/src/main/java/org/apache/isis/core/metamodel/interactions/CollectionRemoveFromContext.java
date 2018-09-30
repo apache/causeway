@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.CollectionRemoveFromEvent;
@@ -52,7 +52,7 @@ public class CollectionRemoveFromContext extends ValidityContext<CollectionRemov
 
     @Override
     public CollectionRemoveFromEvent createInteractionEvent() {
-        return new CollectionRemoveFromEvent(unwrap(getTarget()), getIdentifier(), unwrap(getProposed()));
+        return new CollectionRemoveFromEvent(unwrapPojo(getTarget()), getIdentifier(), unwrapPojo(getProposed()));
     }
 
 }

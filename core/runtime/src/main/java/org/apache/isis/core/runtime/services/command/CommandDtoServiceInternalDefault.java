@@ -169,7 +169,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
         final Class<?> valueType = valueSpec.getCorrespondingClass();
 
         final ValueWithTypeDto newValue = CommonDtoUtils.newValueWithTypeDto(
-                valueType, ObjectAdapter.Util.unwrap(valueAdapter), bookmarkService);
+                valueType, ObjectAdapter.Util.unwrapPojo(valueAdapter), bookmarkService);
         propertyDto.setNewValue(newValue);
     }
 

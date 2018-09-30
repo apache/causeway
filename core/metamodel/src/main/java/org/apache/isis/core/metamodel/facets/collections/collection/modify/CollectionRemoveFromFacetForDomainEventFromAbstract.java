@@ -72,7 +72,7 @@ implements CollectionRemoveFromFacet {
         }
 
 
-        final Object referencedObject = ObjectAdapter.Util.unwrap(referencedObjectAdapter);
+        final Object referencedObject = ObjectAdapter.Util.unwrapPojo(referencedObjectAdapter);
 
         // get hold of underlying collection
         // passing null through for authenticationSession/deploymentType means to avoid any visibility filtering.

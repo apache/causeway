@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrapPojo;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
@@ -74,7 +74,7 @@ public class ActionArgValidityContext extends ValidityContext<ActionArgumentEven
 
     @Override
     public ActionArgumentEvent createInteractionEvent() {
-        return new ActionArgumentEvent(unwrap(getTarget()), getIdentifier(), unwrap(getArgs()), getPosition());
+        return new ActionArgumentEvent(unwrapPojo(getTarget()), getIdentifier(), ObjectAdapter.Util.unwrapPojoArray(getArgs()), getPosition());
     }
 
 }
