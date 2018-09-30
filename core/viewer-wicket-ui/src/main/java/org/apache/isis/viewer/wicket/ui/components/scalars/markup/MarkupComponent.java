@@ -58,10 +58,10 @@ public class MarkupComponent extends WebComponent {
 
             final ObjectAdapter objAdapter = (ObjectAdapter) modelObject;
 
-            if(objAdapter.getObject()==null)
+            if(objAdapter.getPojo()==null)
                 return fallback;
 
-            final Object value = objAdapter.getObject();
+            final Object value = objAdapter.getPojo();
 
             if(!(value instanceof Markup))
                 return fallback;

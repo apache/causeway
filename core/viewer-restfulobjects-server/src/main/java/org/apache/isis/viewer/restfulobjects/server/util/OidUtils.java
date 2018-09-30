@@ -88,7 +88,7 @@ public final class OidUtils {
                 final ObjectAdapter adapter = persistenceSession
                         .adapterFor(fixedRootOid, ConcurrencyChecking.NO_CHECK);
                 
-                final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getObject, null);
+                final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
                 return pojo;
                 
             } catch(final ObjectNotFoundException | PojoRecreationException ex) {

@@ -123,12 +123,6 @@ public interface ManagedObject {
         return getSpecification().getElementSpecification();
     }
     
-    // -- GLUE CODE
-    
-    default Object getObject() {
-        return getPojo();
-    }
-    
     // -- FACTORIES
     
     public static ManagedObject of(

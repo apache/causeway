@@ -417,7 +417,7 @@ implements ImperativeFacet {
         }
 
         final ViewModelFacet viewModelFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
-        final Object clone = viewModelFacet.clone(adapter.getObject());
+        final Object clone = viewModelFacet.clone(adapter.getPojo());
 
         final ObjectAdapter clonedAdapter = getObjectAdapterProvider().adapterFor(clone);
         return clonedAdapter;
@@ -437,7 +437,7 @@ implements ImperativeFacet {
         final MetaModelService.Sort sort = getMetaModelService().sortOf(domainType, Mode.STRICT);
         switch (sort) {
         case JDO_ENTITY:
-            final Object domainObject = resultAdapter.getObject();
+            final Object domainObject = resultAdapter.getPojo();
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             if(!getRepositoryService().isPersistent(domainObject)) {
                 getTransactionService().flushTransaction();
@@ -483,7 +483,7 @@ implements ImperativeFacet {
             return resultAdapter;
         }
 
-        final Object result = resultAdapter.getObject();
+        final Object result = resultAdapter.getPojo();
 
         if(result instanceof Collection || result.getClass().isArray()) {
             
@@ -531,7 +531,7 @@ implements ImperativeFacet {
     }
 
     private static Object unwrap(final ObjectAdapter adapter) {
-        return adapter == null ? null : adapter.getObject();
+        return adapter == null ? null : adapter.getPojo();
     }
 
     @Override

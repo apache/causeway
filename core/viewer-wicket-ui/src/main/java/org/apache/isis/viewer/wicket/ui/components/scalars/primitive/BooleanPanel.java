@@ -116,7 +116,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
             @Override public String getObject() {
                 final ScalarModel model = getModel();
                 final ObjectAdapter adapter = model.getObject();
-                final Boolean bool = adapter != null ? (Boolean) adapter.getObject() : null;
+                final Boolean bool = adapter != null ? (Boolean) adapter.getPojo() : null;
                 return bool == null? "(not set)" : bool ? "Yes" : "No";
             }
         };
@@ -133,7 +133,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
             public Boolean getObject() {
                 final ScalarModel model = getModel();
                 final ObjectAdapter adapter = model.getObject();
-                return adapter != null? (Boolean) adapter.getObject(): null;
+                return adapter != null? (Boolean) adapter.getPojo(): null;
             }
 
             @Override

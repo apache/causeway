@@ -98,7 +98,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
     public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
 
         final ProposedHolder catc = (ProposedHolder) ic;
-        final Object proposed = catc.getProposed().getObject();
+        final Object proposed = catc.getProposed().getPojo();
 
         final CollectionDomainEvent.Of of =
                 ic instanceof CollectionAddToContext

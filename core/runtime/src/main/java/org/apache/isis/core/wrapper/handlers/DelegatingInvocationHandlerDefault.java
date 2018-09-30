@@ -77,7 +77,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     }
 
     protected void resolveIfRequired(final ObjectAdapter targetAdapter) {
-        resolveIfRequired(targetAdapter.getObject());
+        resolveIfRequired(targetAdapter.getPojo());
     }
 
     protected void resolveIfRequired(final Object domainObject) {

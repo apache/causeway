@@ -286,7 +286,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
         final DomainObjectList list = new DomainObjectList(title, elementSpec.getSpecId().asString(), actionOwningType, actionId, actionArguments);
         for (final ObjectAdapter adapter : collectionAdapters) {
-            list.getObjects().add(adapter.getObject());
+            list.getObjects().add(adapter.getPojo());
         }
         return list;
     }

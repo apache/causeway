@@ -48,7 +48,7 @@ class WhereAmIModelDefault implements WhereAmIModel {
         overrideFromConfigIfNew(startOfChain.getPersistenceSession().getConfiguration());
 
         final ObjectAdapter adapter = startOfChain.getObject();
-        final Object startNode = adapter.getObject();
+        final Object startNode = adapter.getPojo();
 
         ParentChain.of(IsisContext.getSessionFactory().getSpecificationLoader()::loadSpecification)
         .streamParentChainOf(startNode, maxChainLength)

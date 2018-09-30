@@ -76,7 +76,7 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     // -- HELPER
     
     private Object[] pojoArray(final ManagedObject arrayAdapter) {
-        return (Object[]) arrayAdapter.getObject();
+        return (Object[]) arrayAdapter.getPojo();
     }
 
     // /////////////////////////////////////////////////////

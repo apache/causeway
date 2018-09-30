@@ -97,7 +97,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
      * Potential hook to allow a domain object to be mapped.
      */
     protected Object objectOf(final ObjectAdapter objectAdapter) {
-        return objectAdapter.getObject();
+        return objectAdapter.getPojo();
     }
 
     protected Object returnedObjectOf(final ObjectAndActionInvocation objectAndActionInvocation) {

@@ -78,7 +78,7 @@ public class MarkupValueSemanticsProvider extends ValueSemanticsProviderAndFacet
         if (object == null) {
             return "";
         }
-        final Markup markup = (Markup) object.getObject();
+        final Markup markup = (Markup) object.getPojo();
         return markup.asString();
     }
 

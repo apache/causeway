@@ -58,7 +58,7 @@ public class ObjectAdapterLegacy {
                     // converting from adapter and back means we handle both
                     // collections of references and of values
                     final ObjectAdapter objectAdapter = adapterFor(valueOrOidDto);
-                    Object pojo = objectAdapter != null ? objectAdapter.getObject() : null;
+                    Object pojo = objectAdapter != null ? objectAdapter.getPojo() : null;
                     pojoList.add(pojo);
                 }
                 return adapterFor(pojoList);

@@ -119,7 +119,7 @@ class ObjectAdapterContext_ObjectCreation {
         fields
             .forEach(field->field.toDefault(adapter));
             
-        final Object pojo = adapter.getObject();
+        final Object pojo = adapter.getPojo();
         servicesInjector.injectServicesInto(pojo);
 
         CallbackFacet.Util.callCallback(adapter, CreatedCallbackFacet.class);

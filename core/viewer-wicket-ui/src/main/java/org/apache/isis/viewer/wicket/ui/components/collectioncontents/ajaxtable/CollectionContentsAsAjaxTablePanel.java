@@ -238,7 +238,7 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
         if(parentObjectAdapterMemento != null) {
             final ObjectAdapter parentObjectAdapter = parentObjectAdapterMemento
                     .getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader());
-            final Object parent = parentObjectAdapter.getObject();
+            final Object parent = parentObjectAdapter.getPojo();
             final String collectionId = getModel().getCollectionMemento().getId();
 
             return tableColumnOrderService.orderParented(parent, collectionId, collectionType, propertyIds);

@@ -78,7 +78,7 @@ public enum ActionResultResponseType {
     VALUE_CLOB {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
-            final Object value = resultAdapter.getObject();
+            final Object value = resultAdapter.getPojo();
             IRequestHandler handler = ActionModel.downloadHandler(value);
             return ActionResultResponse.withHandler(handler);
         }
@@ -86,7 +86,7 @@ public enum ActionResultResponseType {
     VALUE_BLOB {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
-            final Object value = resultAdapter.getObject();
+            final Object value = resultAdapter.getPojo();
             IRequestHandler handler = ActionModel.downloadHandler(value);
             return ActionResultResponse.withHandler(handler);
         }
@@ -94,7 +94,7 @@ public enum ActionResultResponseType {
     VALUE_URL_AJAX {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
-            final URL url = (URL)resultAdapter.getObject();
+            final URL url = (URL)resultAdapter.getPojo();
             return ActionResultResponse.openUrlInBrowser(target, url);
         }
 
@@ -103,7 +103,7 @@ public enum ActionResultResponseType {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
             // open URL server-side redirect
-            final Object value = resultAdapter.getObject();
+            final Object value = resultAdapter.getPojo();
             IRequestHandler handler = ActionModel.redirectHandler(value);
             return ActionResultResponse.withHandler(handler);
         }
@@ -187,7 +187,7 @@ public enum ActionResultResponseType {
         if (resultSpec.isNotCollection()) {
             if (resultSpec.getFacet(ValueFacet.class) != null) {
 
-                final Object value = resultAdapter.getObject();
+                final Object value = resultAdapter.getPojo();
                 if(value instanceof Clob) {
                     return ActionResultResponseType.VALUE_CLOB;
                 }
@@ -215,7 +215,7 @@ public enum ActionResultResponseType {
 
     @SuppressWarnings("unchecked")
     private static List<Object> asList(final ObjectAdapter resultAdapter) {
-        final Collection<Object> coll = (Collection<Object>) resultAdapter.getObject();
+        final Collection<Object> coll = (Collection<Object>) resultAdapter.getPojo();
         return coll instanceof List
                 ? (List<Object>)coll
                         : _Lists.<Object>newArrayList(coll);

@@ -91,7 +91,7 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
 
     @Override
     public Long longValue(final ObjectAdapter object) {
-        return (Long) (object == null ? null : object.getObject());
+        return (Long) (object == null ? null : object.getPojo());
     }
 
     @Override

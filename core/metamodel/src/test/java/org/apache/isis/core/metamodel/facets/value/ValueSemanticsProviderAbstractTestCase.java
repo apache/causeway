@@ -119,7 +119,7 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     protected void allowMockAdapterToReturn(final Object pojo) {
         context.checking(new Expectations() {
             {
-                allowing(mockAdapter).getObject();
+                allowing(mockAdapter).getPojo();
                 will(returnValue(pojo));
             }
         });

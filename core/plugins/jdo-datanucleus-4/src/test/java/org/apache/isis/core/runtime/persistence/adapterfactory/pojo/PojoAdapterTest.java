@@ -98,7 +98,7 @@ public class PojoAdapterTest {
 
     @Test
     public void getObject_initially() {
-        assertEquals(domainObject, adapter.getObject());
+        assertEquals(domainObject, adapter.getPojo());
     }
 
     @Test

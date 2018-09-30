@@ -111,7 +111,7 @@ public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbs
 
     @Override
     public java.net.URL urlValue(final ObjectAdapter object) {
-        return object == null ? null : (java.net.URL) object.getObject();
+        return object == null ? null : (java.net.URL) object.getPojo();
     }
 
     @Override

@@ -111,7 +111,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                                     final ObjectAdapter objectAdapter = input.getObjectAdapter(
                                             ConcurrencyChecking.NO_CHECK,
                                             persistenceSession, specificationLoader);
-                                    return objectAdapter != null ? objectAdapter.getObject() : null;
+                                    return objectAdapter != null ? objectAdapter.getPojo() : null;
                             })
                             .filter(_NullSafe::isPresent)
                             );

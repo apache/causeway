@@ -142,7 +142,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
             final String parameterName = actionParameter.getName();
             final Class<?> paramType = actionParameter.getSpecification().getCorrespondingClass();
             final ObjectAdapter argAdapter = argAdapters[paramNum];
-            final Object arg = argAdapter != null? argAdapter.getObject(): null;
+            final Object arg = argAdapter != null? argAdapter.getPojo(): null;
             final ParamsDto parameters = CommandDtoUtils.parametersFor(actionDto);
             final List<ParamDto> parameterList = parameters.getParameter();
 

@@ -155,7 +155,7 @@ public abstract class ResourceAbstract {
     protected ObjectAdapter getServiceAdapter(final String serviceId) {
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
         for (final ObjectAdapter serviceAdapter : serviceAdapters) {
-            final Object servicePojo = serviceAdapter.getObject();
+            final Object servicePojo = serviceAdapter.getPojo();
             final String id = ServiceUtil.id(servicePojo);
             if (serviceId.equals(id)) {
                 return serviceAdapter;

@@ -189,7 +189,7 @@ UiHintContainer {
                 if(collectionAsAdapter==null) {
                     return Collections.emptyList();
                 }
-                final Iterable<Object> objects = (Iterable<Object>) collectionAsAdapter.getObject();
+                final Iterable<Object> objects = (Iterable<Object>) collectionAsAdapter.getPojo();
                 return stream(objects).collect(Collectors.toList());
             }
 
@@ -479,7 +479,7 @@ UiHintContainer {
     }
 
     private static Iterable<Object> asIterable(final ObjectAdapter resultAdapter) {
-        return _Casts.uncheckedCast(resultAdapter.getObject());
+        return _Casts.uncheckedCast(resultAdapter.getPojo());
     }
 
     private static Stream<Object> streamElementsOf(final ObjectAdapter resultAdapter) {

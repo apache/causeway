@@ -114,7 +114,7 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
         if (!ObjectAdapter.Util.exists(adapter)) {
             return false;
         }
-        final Object object = adapter.getObject();
+        final Object object = adapter.getPojo();
         final Boolean objectAsBoolean = (Boolean) object;
         return objectAsBoolean.booleanValue();
     }

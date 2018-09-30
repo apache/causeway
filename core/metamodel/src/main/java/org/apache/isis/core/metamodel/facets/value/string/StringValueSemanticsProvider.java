@@ -109,7 +109,7 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacet
 
     @Override
     public String stringValue(final ObjectAdapter object) {
-        return object == null ? "" : (String) object.getObject();
+        return object == null ? "" : (String) object.getPojo();
     }
 
     @Override

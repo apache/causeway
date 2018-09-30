@@ -101,7 +101,7 @@ public class MustSatisfySpecificationValidatingInteractionTest {
             	oneOf(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));
 
-                oneOf(mockProposedObjectAdapter).getObject();
+                oneOf(mockProposedObjectAdapter).getPojo();
                 will(returnValue(mockProposedObject));
             }
         });

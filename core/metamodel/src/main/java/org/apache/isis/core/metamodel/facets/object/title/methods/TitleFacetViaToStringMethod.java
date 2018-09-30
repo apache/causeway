@@ -53,7 +53,7 @@ public class TitleFacetViaToStringMethod extends TitleFacetAbstract implements I
 
     @Override
     public String title(final ManagedObject object) {
-        return object.getObject().toString();
+        return object.getPojo().toString();
     }
 
     @Override

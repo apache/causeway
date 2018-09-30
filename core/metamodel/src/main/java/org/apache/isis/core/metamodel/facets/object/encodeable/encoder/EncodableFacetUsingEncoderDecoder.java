@@ -66,7 +66,7 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
     @Override
     public String toEncodedString(final ObjectAdapter adapter) {
         getDependencyInjector().injectServicesInto(encoderDecoder);
-        return adapter == null ? ENCODED_NULL: encode(encoderDecoder, adapter.getObject());
+        return adapter == null ? ENCODED_NULL: encode(encoderDecoder, adapter.getPojo());
     }
 
     private static <T> String encode(final EncoderDecoder<T> encoderDecoder, final Object pojo) {

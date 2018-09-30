@@ -98,7 +98,7 @@ CssClassFacet {
     }
 
     private CssClassUiEvent<Object> newCssClassUiEvent(final ManagedObject owningAdapter) {
-        final Object domainObject = owningAdapter.getObject();
+        final Object domainObject = owningAdapter.getPojo();
         return newCssClassUiEventForPojo(domainObject);
     }
 

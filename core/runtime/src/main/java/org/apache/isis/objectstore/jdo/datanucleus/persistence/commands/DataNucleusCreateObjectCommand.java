@@ -49,7 +49,7 @@ public class DataNucleusCreateObjectCommand extends AbstractDataNucleusObjectCom
             // lifecycle callback, so in essence there's nothing to be done.
             return;
         }
-        final Object domainObject = adapter.getObject();
+        final Object domainObject = adapter.getPojo();
 
         getPersistenceManager().makePersistent(domainObject);
     }

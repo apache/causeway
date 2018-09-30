@@ -67,7 +67,7 @@ public class StandaloneData extends Data {
     public StandaloneData(final ObjectAdapter adapter) {
         super(null, adapter.getSpecification().getFullIdentifier());
 
-        final Object object = adapter.getObject();
+        final Object object = adapter.getPojo();
         if (object instanceof Serializable) {
             this.objectAsSerializable = (Serializable) object;
             initialized();

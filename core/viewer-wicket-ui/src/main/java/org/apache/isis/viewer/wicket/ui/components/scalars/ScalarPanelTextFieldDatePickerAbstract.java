@@ -105,7 +105,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
         return new Model<String>() {
             @Override public String getObject() {
                 ObjectAdapter object = scalarModel.getObject();
-                final T value = object != null ? (T) object.getObject() : null;
+                final T value = object != null ? (T) object.getPojo() : null;
                 final String str =
                         value != null
                         ? converter.convertToString(value, getLocaleProvider().getLocale())

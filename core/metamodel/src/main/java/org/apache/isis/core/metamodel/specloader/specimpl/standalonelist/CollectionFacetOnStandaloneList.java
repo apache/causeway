@@ -66,7 +66,7 @@ public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
     // -- HELPER
     
     private List<ManagedObject> collection(final ManagedObject wrappedObjectList) {
-        return (FreeStandingList) wrappedObjectList.getObject();
+        return (FreeStandingList) wrappedObjectList.getPojo();
     }
     
 }

@@ -75,7 +75,7 @@ public class ObjectAdapterUtilsTest {
     private void expectAdapterWillReturn(final Object domainObject) {
         context.checking(new Expectations() {
             {
-                allowing(mockObjectAdapter).getObject();
+                allowing(mockObjectAdapter).getPojo();
                 will(returnValue(domainObject));
             }
         });

@@ -66,7 +66,7 @@ class ObjectAdapterContext_LifecycleEventSupport {
         if(facet != null) {
             final Class<? extends AbstractLifecycleEvent<?>> eventType = facet.getEventType();
             final Object instance = InstanceUtil.createInstance(eventType);
-            final Object pojo = adapter.getObject();
+            final Object pojo = adapter.getPojo();
             postEvent((AbstractLifecycleEvent) instance, pojo);
         }
     }

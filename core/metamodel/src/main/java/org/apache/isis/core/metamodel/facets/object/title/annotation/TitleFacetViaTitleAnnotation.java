@@ -112,7 +112,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
         try {
             for (final TitleComponent component : this.components) {
-                final Object titlePart = component.getTitleEvaluator().value(targetAdapter.getObject());
+                final Object titlePart = component.getTitleEvaluator().value(targetAdapter.getPojo());
                 if (titlePart == null) {
                     continue;
                 }

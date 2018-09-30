@@ -63,7 +63,7 @@ public class NavigableParentFacetMethodTest {
 
         mockery.checking(new Expectations() {
             {
-                allowing(mockOwningAdapter).getObject();
+                allowing(mockOwningAdapter).getPojo();
                 will(returnValue(pojo));
             }
         });
@@ -76,7 +76,7 @@ public class NavigableParentFacetMethodTest {
 
     @Test
     public void testNavigableParentThrowsException() {
-        final Object parent = facet.navigableParent(mockOwningAdapter.getObject());
+        final Object parent = facet.navigableParent(mockOwningAdapter.getPojo());
         assertThat(parent, is(nullValue()));
     }
 

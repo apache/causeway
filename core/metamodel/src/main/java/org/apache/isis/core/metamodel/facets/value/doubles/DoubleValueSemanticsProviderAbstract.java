@@ -95,7 +95,7 @@ public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemantic
 
     @Override
     public Double doubleValue(final ObjectAdapter object) {
-        return (Double) (object == null ? null : object.getObject());
+        return (Double) (object == null ? null : object.getPojo());
     }
 
     @Override

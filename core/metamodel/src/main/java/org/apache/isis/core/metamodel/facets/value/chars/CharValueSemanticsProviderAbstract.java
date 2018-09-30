@@ -86,7 +86,7 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
 
     @Override
     public Character charValue(final ObjectAdapter object) {
-        return object == null ? null : (Character) object.getObject();
+        return object == null ? null : (Character) object.getPojo();
     }
 
     @Override

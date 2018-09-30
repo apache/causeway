@@ -94,7 +94,7 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
                         
         if(rootOid.isViewModel()) {
             final ObjectAdapter adapter = ps.adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
-            final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getObject, null);
+            final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
             
             return pojo;
             
@@ -106,7 +106,7 @@ public class PersistenceSessionServiceInternalDefault implements PersistenceSess
         } else {
             final ObjectAdapter adapter = ps.adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
             
-            final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getObject, null);
+            final Object pojo = mapIfPresentElse(adapter, ObjectAdapter::getPojo, null);
             acceptIfPresent(pojo, ps::refreshRootInTransaction);
             return pojo;
         }

@@ -48,7 +48,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
         if (adapter == null) {
             return null;
         }
-        final Object object = adapter.getObject();
+        final Object object = adapter.getPojo();
         if (object == null) {
             return null;
         }
@@ -68,7 +68,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
         if (adapter == null) {
             return null;
         }
-        final Object object = adapter.getObject();
+        final Object object = adapter.getPojo();
         if (object == null) {
             return null;
         }

@@ -65,7 +65,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
                         ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader());
         final IConverter<Object> converter = findConverter(objectAdapter);
         return converter != null
-                ? converter.convertToString(objectAdapter.getObject(), getLocale())
+                ? converter.convertToString(objectAdapter.getPojo(), getLocale())
                         : objectAdapter.titleString(null);
     }
 

@@ -40,7 +40,7 @@ public class DataNucleusDeleteObjectCommand extends AbstractDataNucleusObjectCom
         if (LOG.isDebugEnabled()) {
             LOG.debug("destroy object - executing command for {}", onAdapter());
         }
-        getPersistenceManager().deletePersistent(onAdapter().getObject());
+        getPersistenceManager().deletePersistent(onAdapter().getPojo());
     }
 
     @Override

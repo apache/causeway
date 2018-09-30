@@ -220,7 +220,7 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
                 @Override
                 protected IRequestHandler getRequestHandler() {
                     ObjectAdapter resultAdapter = actionModel.execute();
-                    final Object value = resultAdapter.getObject();
+                    final Object value = resultAdapter.getPojo();
                     return ActionModel.redirectHandler(value);
                 }
             };
@@ -239,7 +239,7 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
                 @Override
                 protected IRequestHandler getRequestHandler() {
                     final ObjectAdapter resultAdapter = actionModel.execute();
-                    final Object value = resultAdapter!=null ? resultAdapter.getObject() : null;
+                    final Object value = resultAdapter!=null ? resultAdapter.getPojo() : null;
 
                     final IRequestHandler handler = ActionModel.downloadHandler(value);
 

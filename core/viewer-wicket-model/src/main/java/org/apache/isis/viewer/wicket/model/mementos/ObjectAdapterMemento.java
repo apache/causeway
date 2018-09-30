@@ -55,7 +55,7 @@ public class ObjectAdapterMemento implements Serializable {
         if (adapter == null) {
             return null;
         }
-        final Object object = adapter.getObject();
+        final Object object = adapter.getPojo();
         if(object == null) {
             return null;
         }
@@ -371,7 +371,7 @@ public class ObjectAdapterMemento implements Serializable {
     private Bookmark bookmark;
 
     /**
-     * Only populated for {@link ObjectAdapter#getObject() domain object}s that implement {@link HintStore.HintIdProvider}.
+     * Only populated for {@link ObjectAdapter#getPojo() domain object}s that implement {@link HintStore.HintIdProvider}.
      */
     private String hintId;
 
@@ -437,8 +437,8 @@ public class ObjectAdapterMemento implements Serializable {
 
         persistentOidStr = oid.enString();
         bookmark = oid.asBookmark();
-        if(adapter.getObject() instanceof HintStore.HintIdProvider) {
-            HintStore.HintIdProvider provider = (HintStore.HintIdProvider) adapter.getObject();
+        if(adapter.getPojo() instanceof HintStore.HintIdProvider) {
+            HintStore.HintIdProvider provider = (HintStore.HintIdProvider) adapter.getPojo();
             this.hintId = provider.hintId();
         }
         type = Type.PERSISTENT;
@@ -612,7 +612,7 @@ public class ObjectAdapterMemento implements Serializable {
                 if(objectAdapter == null) {
                     return null;
                 }
-                return objectAdapter.getObject();
+                return objectAdapter.getPojo();
             };
         }
 

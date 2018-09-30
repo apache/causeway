@@ -124,7 +124,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
 
     @Override
     public Float floatValue(final ObjectAdapter object) {
-        final Percentage per = (Percentage) object.getObject();
+        final Percentage per = (Percentage) object.getPojo();
         return new Float(per.floatValue());
     }
 

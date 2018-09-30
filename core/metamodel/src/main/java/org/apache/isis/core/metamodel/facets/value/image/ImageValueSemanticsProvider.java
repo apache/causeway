@@ -38,7 +38,7 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
     }
 
     private Image image(final ObjectAdapter object) {
-        return (Image) object.getObject();
+        return (Image) object.getPojo();
     }
 
     @Override

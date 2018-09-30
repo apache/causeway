@@ -462,7 +462,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
                         WHERE_FOR_ACTION_INVOCATION);
 
         final List<RoutingService> routingServices = getServicesInjector().lookupServices(RoutingService.class);
-        final Object result = resultAdapter != null ? resultAdapter.getObject() : null;
+        final Object result = resultAdapter != null ? resultAdapter.getPojo() : null;
         for (RoutingService routingService : routingServices) {
             final boolean canRoute = routingService.canRoute(result);
             if(canRoute) {

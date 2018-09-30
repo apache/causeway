@@ -159,7 +159,7 @@ public class XmlSnapshot implements Snapshot {
             throw new IsisException(e);
         }
 
-        for (final String path : getPathsFor(rootAdapter.getObject())) {
+        for (final String path : getPathsFor(rootAdapter.getPojo())) {
             include(path);
         }
 
@@ -829,7 +829,7 @@ public class XmlSnapshot implements Snapshot {
     private final Map<ObjectAdapter, String> viewModelFakeOids = _Maps.newHashMap();
 
     private String oidAsString(final ObjectAdapter adapter) {
-        if(adapter.getObject() instanceof ViewModel) {
+        if(adapter.getPojo() instanceof ViewModel) {
             // return a fake oid for view models;
             // a snapshot may be being used to create the memento/OID
             String fakeOid = viewModelFakeOids.get(adapter);

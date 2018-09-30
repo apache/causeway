@@ -64,7 +64,7 @@ public class CssClassFacetMethodTest {
 
         mockery.checking(new Expectations() {
             {
-                allowing(mockOwningAdapter).getObject();
+                allowing(mockOwningAdapter).getPojo();
                 will(returnValue(pojo));
             }
         });

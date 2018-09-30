@@ -117,7 +117,7 @@ public interface ObjectAdapter extends ManagedObject {
         private Util() {}
 
         public static Object unwrap(final ManagedObject adapter) {
-            return adapter != null ? adapter.getObject() : null;
+            return adapter != null ? adapter.getPojo() : null;
         }
 
         public static Object[] unwrap(final ManagedObject[] adapters) {
@@ -161,7 +161,7 @@ public interface ObjectAdapter extends ManagedObject {
         }
 
         public static boolean exists(final ManagedObject adapter) {
-            return adapter != null && adapter.getObject() != null;
+            return adapter != null && adapter.getPojo() != null;
         }
 
         public static boolean wrappedEqual(final ManagedObject adapter1, final ManagedObject adapter2) {
@@ -176,7 +176,7 @@ public interface ObjectAdapter extends ManagedObject {
             if (!defined1 && !defined2) {
                 return true;
             } // both null
-            return adapter1.getObject().equals(adapter2.getObject());
+            return adapter1.getPojo().equals(adapter2.getPojo());
         }
 
         public static boolean nullSafeEquals(final Object obj1, final Object obj2) {
@@ -192,7 +192,7 @@ public interface ObjectAdapter extends ManagedObject {
             if (obj1 instanceof ManagedObject && obj2 instanceof ManagedObject) {
                 final ManagedObject adapterObj1 = (ManagedObject) obj1;
                 final ManagedObject adapterObj2 = (ManagedObject) obj2;
-                return nullSafeEquals(adapterObj1.getObject(), adapterObj2.getObject());
+                return nullSafeEquals(adapterObj1.getPojo(), adapterObj2.getPojo());
             }
             return false;
         }

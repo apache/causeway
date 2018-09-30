@@ -382,7 +382,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                         scalarModel.getSpecificationLoader());
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
-                    final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getObject(),
+                    final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getPojo(),
                             InteractionInitiatedBy.USER
                             );
                     return invalidReasonIfAny;
@@ -810,7 +810,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
             return;
         }
 
-        final Object pojo = adapter.getObject();
+        final Object pojo = adapter.getPojo();
         if(pojo == null) {
             super.setObject(null);
             return;
@@ -1073,7 +1073,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
         final ViewModelFacet recreatableObjectFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
         if(recreatableObjectFacet != null) {
-            final Object viewModel = adapter.getObject();
+            final Object viewModel = adapter.getPojo();
             final boolean cloneable = recreatableObjectFacet.isCloneable(viewModel);
             if(cloneable) {
                 final Object newViewModel = recreatableObjectFacet.clone(viewModel);

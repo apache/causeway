@@ -332,7 +332,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
             final ManagedObject mixedInAdapter) {
         final ObjectSpecification objectSpecification = getSpecificationLoader().loadSpecification(mixinType);
         final MixinFacet mixinFacet = objectSpecification.getFacet(MixinFacet.class);
-        final Object mixinPojo = mixinFacet.instantiate(mixedInAdapter.getObject());
+        final Object mixinPojo = mixinFacet.instantiate(mixedInAdapter.getPojo());
         return getObjectAdapterProvider().adapterFor(mixinPojo);
     }
 

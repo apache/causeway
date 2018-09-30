@@ -101,15 +101,9 @@ public final class PojoAdapter implements ObjectAdapter {
     }
 
     private ObjectSpecification loadSpecification() {
-        final Class<?> aClass = getObject().getClass();
+        final Class<?> aClass = getPojo().getClass();
         final ObjectSpecification specification = specificationLoader.loadSpecification(aClass);
         return specification;
-    }
-
-    // -- getObject, replacePojo
-    @Override
-    public Object getObject() {
-        return pojo;
     }
 
     // -- getOid
@@ -117,7 +111,6 @@ public final class PojoAdapter implements ObjectAdapter {
     public Oid getOid() {
         return oid;
     }
-
 
     // -- isTransient, representsPersistent, isDestroyed
     
@@ -240,7 +233,7 @@ public final class PojoAdapter implements ObjectAdapter {
         }
         str.setAddComma();
         if (!objectSpecification.isMemoized()) {
-            str.append("class", getObject().getClass().getName());
+            str.append("class", getPojo().getClass().getName());
         } else {
             str.append("specification", getSpecification().getShortIdentifier());
         }

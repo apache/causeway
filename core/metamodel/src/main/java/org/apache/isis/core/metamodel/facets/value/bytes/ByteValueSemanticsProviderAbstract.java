@@ -90,7 +90,7 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
 
     @Override
     public Byte byteValue(final ObjectAdapter object) {
-        return (Byte) object.getObject();
+        return (Byte) object.getPojo();
     }
 
     @Override

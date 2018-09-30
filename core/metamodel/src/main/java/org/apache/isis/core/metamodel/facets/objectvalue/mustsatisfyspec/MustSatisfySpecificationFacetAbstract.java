@@ -82,7 +82,7 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
         if(proposedAdapter == null) {
             return null;
         }
-        final Object proposedObject = proposedAdapter.getObject();
+        final Object proposedObject = proposedAdapter.getPojo();
         return specificationEvaluator.evaluation()
                 .evaluate(specifications, proposedObject)
                 .getReason();

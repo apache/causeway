@@ -91,7 +91,7 @@ public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderA
 
     @Override
     public Float floatValue(final ObjectAdapter object) {
-        return object == null ? null : (Float) object.getObject();
+        return object == null ? null : (Float) object.getPojo();
     }
 
     @Override

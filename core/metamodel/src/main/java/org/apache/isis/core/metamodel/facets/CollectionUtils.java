@@ -59,7 +59,7 @@ public final class CollectionUtils {
                 CollectionFacet.Utils.streamAdapters(collection);
         
         return objectAdapters
-            .map(nextElement->nextElement != null? nextElement.getObject(): null)
+            .map(nextElement->nextElement != null? nextElement.getPojo(): null)
             .collect(_Arrays.toArray(Object.class, facet.size(collection)));
     }
 

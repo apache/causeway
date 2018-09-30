@@ -97,7 +97,7 @@ public class TitleFacetViaTitleAnnotationTest {
         final Sequence sequence = context.sequence("in-title-element-order");
         context.checking(new Expectations() {
             {
-                allowing(mockObjectAdapter).getObject();
+                allowing(mockObjectAdapter).getPojo();
                 will(returnValue(normalPojo));
 
                 allowing(mockAdapterManager).adapterFor("Normal");
@@ -126,7 +126,7 @@ public class TitleFacetViaTitleAnnotationTest {
         final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo = new DomainObjectWithProblemInItsAnnotatedTitleMethod();
         context.checking(new Expectations() {
             {
-                allowing(mockObjectAdapter).getObject();
+                allowing(mockObjectAdapter).getPojo();
                 will(returnValue(screwedPojo));
             }
         });

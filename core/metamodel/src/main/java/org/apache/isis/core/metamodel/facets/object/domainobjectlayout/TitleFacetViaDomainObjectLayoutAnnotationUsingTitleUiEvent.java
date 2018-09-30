@@ -113,7 +113,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
     }
 
     private TitleUiEvent<Object> newTitleUiEvent(final ManagedObject owningAdapter) {
-        final Object domainObject = owningAdapter.getObject();
+        final Object domainObject = owningAdapter.getPojo();
         return newTitleUiEvent(domainObject);
     }
 

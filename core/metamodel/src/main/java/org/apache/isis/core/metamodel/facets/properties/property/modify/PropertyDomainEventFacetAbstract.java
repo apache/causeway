@@ -125,7 +125,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
     private static Object proposedFrom(ValidityContext<? extends ValidityEvent> ic) {
         final ProposedHolder ph = (ProposedHolder) ic;
         final ManagedObject proposedAdapter = ph.getProposed();
-        return proposedAdapter != null? proposedAdapter.getObject(): null;
+        return proposedAdapter != null? proposedAdapter.getPojo(): null;
     }
 
     private Class<?> eventType() {

@@ -90,7 +90,7 @@ PasswordValueFacet {
 
     @Override
     public boolean checkPassword(final ObjectAdapter object, final String password) {
-        return password(object.getObject()).checkPassword(password);
+        return password(object.getPojo()).checkPassword(password);
     }
 
     @Override
@@ -105,7 +105,7 @@ PasswordValueFacet {
 
     private Password password(final Object object) {
         if (object instanceof ObjectAdapter) {
-            return (Password) ((ObjectAdapter) object).getObject();
+            return (Password) ((ObjectAdapter) object).getPojo();
         } else {
             return (Password) object;
         }

@@ -170,7 +170,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         context.checking(new Expectations() {
             {
-                allowing(mockObjectAdapter).getObject();
+                allowing(mockObjectAdapter).getPojo();
                 will(returnValue(customer));
             }
         });
@@ -246,7 +246,7 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         context.checking(new Expectations() {
             {
-                allowing(mockObjectAdapter).getObject();
+                allowing(mockObjectAdapter).getPojo();
                 will(returnValue(customer));
             }
         });

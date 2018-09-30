@@ -77,10 +77,10 @@ public class MarkupPanelFactories {
                 return ApplicationAdvice.DOES_NOT_APPLY;
             final ValueModel valueModel = (ValueModel) model;
             final ObjectAdapter adapter = valueModel.getObject();
-            if(adapter==null || adapter.getObject()==null)
+            if(adapter==null || adapter.getPojo()==null)
                 return ApplicationAdvice.DOES_NOT_APPLY;
 
-            return appliesIf( adapter.getObject() instanceof Markup );
+            return appliesIf( adapter.getPojo() instanceof Markup );
         }
 
         @Override

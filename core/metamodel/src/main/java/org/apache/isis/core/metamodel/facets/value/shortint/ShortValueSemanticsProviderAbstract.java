@@ -96,7 +96,7 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
 
     @Override
     public Short shortValue(final ObjectAdapter object) {
-        return (Short) (object == null ? null : object.getObject());
+        return (Short) (object == null ? null : object.getPojo());
     }
 
     // /////// toString ///////

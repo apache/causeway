@@ -193,7 +193,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
 
     @Override
     public float getAmount(final ObjectAdapter object) {
-        final Money money = (Money) object.getObject();
+        final Money money = (Money) object.getPojo();
         if (money == null) {
             return 0.0f;
         } else {
@@ -203,7 +203,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
 
     @Override
     public String getCurrencyCode(final ObjectAdapter object) {
-        final Money money = (Money) object.getObject();
+        final Money money = (Money) object.getPojo();
         if (money == null) {
             return "";
         } else {

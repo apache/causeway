@@ -60,7 +60,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
         final Interaction interaction = interactionContext.getInteraction();
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
-        final Object targetPojo = targetAdapter.getObject();
+        final Object targetPojo = targetAdapter.getPojo();
         final Bookmark targetBookmark = bookmarkService.bookmarkFor(targetPojo);
 
         final String actionIdentifier = objectAction.getIdentifier().toClassAndNameIdentityString();
@@ -106,7 +106,7 @@ public class InteractionDtoServiceInternalDefault implements InteractionDtoServi
 
         final int nextEventSequence = interaction.next(Interaction.Sequence.INTERACTION.id());
 
-        final Object targetPojo = targetAdapter.getObject();
+        final Object targetPojo = targetAdapter.getPojo();
         final Bookmark targetBookmark = bookmarkService.bookmarkFor(targetPojo);
 
         final String propertyIdentifier = property.getIdentifier().toClassAndNameIdentityString();

@@ -170,10 +170,10 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
                 allowing(mockEmployeeAdapter).getSpecification();
                 will(returnValue(mockEmployeeSpec));
 
-                allowing(mockEmployeeAdapter).getObject();
+                allowing(mockEmployeeAdapter).getPojo();
                 will(returnValue(employeeDO));
 
-                allowing(mockPasswordAdapter).getObject();
+                allowing(mockPasswordAdapter).getPojo();
                 will(returnValue(passwordValue));
 
                 allowing(mockPasswordMember).getIdentifier();

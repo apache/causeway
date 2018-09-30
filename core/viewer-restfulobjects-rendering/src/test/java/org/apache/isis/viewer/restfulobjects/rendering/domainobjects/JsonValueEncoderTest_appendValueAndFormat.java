@@ -409,7 +409,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     private void allowingObjectAdapterToReturn(final Object pojo) {
         context.checking(new Expectations() {
             {
-                oneOf(mockObjectAdapter).getObject();
+                oneOf(mockObjectAdapter).getPojo();
                 will(returnValue(pojo));
             }
         });

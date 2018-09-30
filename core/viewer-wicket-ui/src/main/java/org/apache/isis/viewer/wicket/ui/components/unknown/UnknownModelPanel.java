@@ -59,7 +59,7 @@ public class UnknownModelPanel extends PanelAbstract<IModel<?>> {
             if(objectAdapter != null) {
                 if(objectAdapter.getOid().isValue()) {
                     //FIXME[ISIS-1976] should be properly intercepted by another Panel and not fall through to the unknowns                     
-                    buf.append("FIXME[ISIS-1976] VALUE '" + objectAdapter.getObject()+"'");
+                    buf.append("FIXME[ISIS-1976] VALUE '" + objectAdapter.getPojo()+"'");
                 } else {
                     buf.append("??? objectAdapter oid: " + objectAdapter.getOid());    
                 }

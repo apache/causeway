@@ -207,7 +207,7 @@ final public class ObjectAdapterContext {
         if(adapter.isValue()) {
             return adapter; // guard against value objects
         }
-        final Object pojo = adapter.getObject();
+        final Object pojo = adapter.getPojo();
         servicesInjector.injectServicesInto(pojo);
         return adapter;
     }
@@ -273,7 +273,7 @@ final public class ObjectAdapterContext {
      */
     public void asPersistent(final ObjectAdapter rootAdapter, PersistenceSession session) {
         
-        final RootOid persistentOid = createPersistentOrViewModelOid(rootAdapter.getObject());
+        final RootOid persistentOid = createPersistentOrViewModelOid(rootAdapter.getPojo());
         
         Objects.requireNonNull(persistentOid);
         Assert.assertFalse("expected to not be a parented collection", rootAdapter.isParentedCollection());

@@ -39,7 +39,7 @@ public class DisabledFacetOnPropertyDerivedFromRecreatableObject extends Disable
     @Override
     public String disabledReason(final ManagedObject target) {
         final ViewModelFacet facet = target.getSpecification().getFacet(ViewModelFacet.class);
-        final boolean cloneable = facet.isCloneable(target.getObject());
+        final boolean cloneable = facet.isCloneable(target.getPojo());
         if (!cloneable) {
             return "Non-cloneable view models are read-only";
         }

@@ -92,7 +92,7 @@ public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String
     @Override
     public ObjectAdapter mixedIn(ObjectAdapter mixinAdapter, final Policy policy) {
 
-        final Object mixin = mixinAdapter.getObject();
+        final Object mixin = mixinAdapter.getPojo();
 
         final Field[] declaredFields = mixinType.getDeclaredFields();
         for (final Field declaredField : declaredFields) {

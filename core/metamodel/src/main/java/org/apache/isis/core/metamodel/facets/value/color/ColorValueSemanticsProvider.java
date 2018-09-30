@@ -108,7 +108,7 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
         if (object == null) {
             return 0;
         }
-        final Color color = (Color) object.getObject();
+        final Color color = (Color) object.getPojo();
         return color.intValue();
     }
 

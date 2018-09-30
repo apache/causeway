@@ -175,8 +175,8 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     private static Ordering<ObjectAdapter> ORDERING_BY_NATURAL = new Ordering<ObjectAdapter>(){
         @Override
         public int compare(final ObjectAdapter p, final ObjectAdapter q) {
-            final Object pPojo = p.getObject();
-            final Object qPojo = q.getObject();
+            final Object pPojo = p.getPojo();
+            final Object qPojo = q.getPojo();
             if(!(pPojo instanceof Comparable) || !(qPojo instanceof Comparable)) {
                 return 0;
             }

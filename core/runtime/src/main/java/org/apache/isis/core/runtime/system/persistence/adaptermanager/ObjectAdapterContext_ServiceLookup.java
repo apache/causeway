@@ -96,7 +96,7 @@ class ObjectAdapterContext_ServiceLookup {
         .map(objectAdapterContext.getObjectAdapterProvider()::adapterFor)
         .forEach(serviceAdapter->{
             Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
-            lookupResource.servicesById.put((RootOid)serviceAdapter.getOid() , serviceAdapter.getObject());
+            lookupResource.servicesById.put((RootOid)serviceAdapter.getOid() , serviceAdapter.getPojo());
         });
         
         objectAdapterContext.printContextInfo("took (µs) "+watch.stop().getMicros());

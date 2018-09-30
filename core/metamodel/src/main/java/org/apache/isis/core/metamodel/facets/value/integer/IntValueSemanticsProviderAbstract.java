@@ -91,7 +91,7 @@ public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsPr
 
     @Override
     public Integer integerValue(final ObjectAdapter object) {
-        return (Integer) (object == null ? null : object.getObject());
+        return (Integer) (object == null ? null : object.getPojo());
     }
 
     @Override

@@ -259,7 +259,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         if(facet == null) {
             return false;
         }
-        final Object pojo = targetAdapter.getObject();
+        final Object pojo = targetAdapter.getPojo();
         return facet.isCloneable(pojo);
     }
 

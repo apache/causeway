@@ -269,7 +269,7 @@ class IsisToWicketTreeAdapter {
 
         private Object unwrap(TreeModel model) {
             Objects.requireNonNull(model);
-            return model.getObject().getObject();
+            return model.getObject().getPojo();
         }
 
         private PersistenceSession persistenceSession() {
@@ -338,7 +338,7 @@ class IsisToWicketTreeAdapter {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private static ITreeProvider<TreeModel> toITreeProvider(ModelAbstract<ObjectAdapter> model) {
 
-        final TreeNode treeNode = (TreeNode) model.getObject().getObject();
+        final TreeNode treeNode = (TreeNode) model.getObject().getPojo();
         final Class<? extends TreeAdapter> treeAdapterClass = treeNode.getTreeAdapterClass();
         final TreeModelTreeAdapter wrappingTreeAdapter = new TreeModelTreeAdapter(treeAdapterClass);
 
@@ -384,7 +384,7 @@ class IsisToWicketTreeAdapter {
                         String.format("Tree creation: could not recreate TreeModel from Oid: '%s'", id));
             }
 
-            final Object pojo = objAdapter.getObject();
+            final Object pojo = objAdapter.getPojo();
             if(pojo==null) {
                 throw new NoSuchElementException(
                         String.format("Tree creation: could not recreate Pojo from Oid: '%s'", id));
@@ -424,7 +424,7 @@ class IsisToWicketTreeAdapter {
      */
     @SuppressWarnings({ "rawtypes" })
     private static TreeExpansionModel toIModelRepresentingCollapseExpandState(ModelAbstract<ObjectAdapter> model) {
-        final TreeNode treeNode = (TreeNode) model.getObject().getObject();
+        final TreeNode treeNode = (TreeNode) model.getObject().getPojo();
         final TreeState treeState = treeNode.getTreeState();
         return TreeExpansionModel.of(treeState.getExpandedNodePaths());
     }

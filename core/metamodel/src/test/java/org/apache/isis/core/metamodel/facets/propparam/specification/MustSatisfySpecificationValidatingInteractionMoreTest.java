@@ -113,7 +113,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
             	oneOf(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));
 
-                oneOf(mockProposedObjectAdapter).getObject();
+                oneOf(mockProposedObjectAdapter).getPojo();
                 will(returnValue("This starts with an upper case letter and so is okay"));
             }
         });
@@ -129,7 +129,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
             	oneOf(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));
 
-                oneOf(mockProposedObjectAdapter).getObject();
+                oneOf(mockProposedObjectAdapter).getPojo();
                 will(returnValue("this starts with an lower case letter and so is not okay"));
             }
         });

@@ -101,7 +101,7 @@ public class AdapterAndProperty {
 
     Object getPropertyValue() {
         ObjectAdapter referencedAdapter = property.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
-        return referencedAdapter == null ? null : referencedAdapter.getObject();
+        return referencedAdapter == null ? null : referencedAdapter.getPojo();
     }
 
 

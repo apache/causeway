@@ -256,7 +256,7 @@ public class Jdk8LocalDateTimeValueSemanticsProvider extends ValueSemanticsProvi
 
     @Override
     public final LocalDateTime dateValue(final ObjectAdapter object) {
-        return (LocalDateTime) (object == null ? null : object.getObject());
+        return (LocalDateTime) (object == null ? null : object.getPojo());
     }
 
     @Override

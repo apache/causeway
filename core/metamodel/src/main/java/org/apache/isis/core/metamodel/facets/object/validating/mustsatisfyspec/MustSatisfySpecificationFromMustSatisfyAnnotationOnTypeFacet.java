@@ -70,7 +70,7 @@ public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet extend
         }
         final ProposedHolder proposedHolder = (ProposedHolder) validityContext;
         final ManagedObject targetNO = proposedHolder.getProposed();
-        final Object targetObject = targetNO.getObject();
+        final Object targetObject = targetNO.getPojo();
         return specificationEvaluator.evaluation()
                 .evaluate(specifications, targetObject)
                 .getReason();

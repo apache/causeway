@@ -42,7 +42,7 @@ public class CollectionUsabilityContext extends UsabilityContext<CollectionUsabi
 
     @Override
     public CollectionUsabilityEvent createInteractionEvent() {
-        return new CollectionUsabilityEvent(getTarget().getObject(), getIdentifier());
+        return new CollectionUsabilityEvent(getTarget().getPojo(), getIdentifier());
     }
 
 }

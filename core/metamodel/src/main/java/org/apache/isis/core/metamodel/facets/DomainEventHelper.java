@@ -79,7 +79,7 @@ public class DomainEventHelper {
 
                 // copy over if have
                 if(mixedInAdapter != null ) {
-                    event.setMixedIn(mixedInAdapter.getObject());
+                    event.setMixedIn(mixedInAdapter.getPojo());
                 }
 
                 if(objectAction != null) {

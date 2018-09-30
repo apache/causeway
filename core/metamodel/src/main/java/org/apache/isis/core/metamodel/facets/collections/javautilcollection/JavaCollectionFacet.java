@@ -72,7 +72,7 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
      */
     @SuppressWarnings("unchecked")
     private Collection<? super Object> pojoCollection(final ManagedObject collectionAdapter) {
-        return (Collection<? super Object>) collectionAdapter.getObject();
+        return (Collection<? super Object>) collectionAdapter.getPojo();
     }
 
 

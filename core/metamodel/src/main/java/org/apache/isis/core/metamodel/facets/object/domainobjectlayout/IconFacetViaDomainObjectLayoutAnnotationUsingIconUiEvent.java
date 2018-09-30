@@ -98,7 +98,7 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
     }
 
     private IconUiEvent<Object> newIconUiEvent(final ManagedObject owningAdapter) {
-        final Object domainObject = owningAdapter.getObject();
+        final Object domainObject = owningAdapter.getPojo();
         return newIconUiEventForPojo(domainObject);
     }
 

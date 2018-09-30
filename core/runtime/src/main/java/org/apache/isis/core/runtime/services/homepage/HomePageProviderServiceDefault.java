@@ -103,7 +103,7 @@ public class HomePageProviderServiceDefault implements HomePageProviderService {
                 InteractionInitiatedBy.USER,
                 WHERE_FOR_ACTION_INVOCATION);
 
-        return objectAdapter != null ? objectAdapter.getObject(): null;
+        return objectAdapter != null ? objectAdapter.getPojo(): null;
     }
 
     // REVIEW: should provide this rendering context, rather than hardcoding.

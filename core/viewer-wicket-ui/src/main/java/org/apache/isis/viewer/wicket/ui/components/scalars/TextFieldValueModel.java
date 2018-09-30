@@ -55,7 +55,7 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
 
     @SuppressWarnings("unchecked")
     private T asT(final ObjectAdapter objectAdapter) {
-        return (T) (objectAdapter != null? objectAdapter.getObject(): null);
+        return (T) (objectAdapter != null? objectAdapter.getPojo(): null);
     }
 
     @Override

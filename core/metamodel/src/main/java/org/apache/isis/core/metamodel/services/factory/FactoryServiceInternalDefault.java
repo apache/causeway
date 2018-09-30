@@ -48,7 +48,7 @@ public class FactoryServiceInternalDefault implements FactoryService {
     public <T> T instantiate(final Class<T> domainClass) {
         final ObjectSpecification spec = specificationLoader.loadSpecification(domainClass);
         final ObjectAdapter adapter = doCreateTransientInstance(spec);
-        return (T) adapter.getObject();
+        return (T) adapter.getPojo();
     }
 
     /**

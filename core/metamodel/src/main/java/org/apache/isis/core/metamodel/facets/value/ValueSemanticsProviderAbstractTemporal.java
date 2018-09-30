@@ -322,7 +322,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
 
     @Override
     public final Date dateValue(final ObjectAdapter object) {
-        return object == null ? null : dateValue(object.getObject());
+        return object == null ? null : dateValue(object.getPojo());
     }
 
     @Override

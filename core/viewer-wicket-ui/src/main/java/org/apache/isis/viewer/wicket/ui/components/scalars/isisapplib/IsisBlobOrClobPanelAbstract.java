@@ -149,7 +149,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
             return null;
         }
 
-        final Object object = adapter.getObject();
+        final Object object = adapter.getPojo();
         if(!(object instanceof Blob)) {
             return null;
         }
@@ -242,7 +242,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     @SuppressWarnings("unchecked")
     private T getBlobOrClob(final ScalarModel model) {
         ObjectAdapter adapter = model.getObject();
-        return adapter != null? (T) adapter.getObject(): null;
+        return adapter != null? (T) adapter.getPojo(): null;
     }
 
     public IsisBlobOrClobPanelAbstract(String id, ScalarModel scalarModel) {

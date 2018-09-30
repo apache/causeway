@@ -64,7 +64,7 @@ public class ObjectActionArgHelper {
 
                 // validate individual arg
                 final ObjectActionParameter parameter = parameters.get(i);
-                final Object argPojo = argAdapter!=null?argAdapter.getObject():null;
+                final Object argPojo = argAdapter!=null?argAdapter.getPojo():null;
                 final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, InteractionInitiatedBy.USER
                         );
                 if (reasonNotValid != null) {

@@ -72,7 +72,7 @@ public class JavaCollectionFacetTest {
     public void firstElementForEmptyCollectionIsNull() {
         context.checking(new Expectations() {
             {
-                oneOf(mockCollection).getObject();
+                oneOf(mockCollection).getPojo();
                 will(returnValue(mockWrappedCollection));
 
                 oneOf(mockWrappedCollection).stream();

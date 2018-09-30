@@ -272,7 +272,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockEmployeeSpec).getMember(employeeClearNameMethod);
                 will(returnValue(employeeNameMember));
 
-                allowing(mockEmployeeAdapter).getObject();
+                allowing(mockEmployeeAdapter).getPojo();
                 will(returnValue(employeeDO));
 
                 allowing(mockEmployeeAdapter).representsPersistent();
@@ -461,7 +461,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockAdapterManager).adapterFor("Smith");
                 will(returnValue(mockAdapterForStringSmith));
 
-                allowing(mockAdapterForStringSmith).getObject();
+                allowing(mockAdapterForStringSmith).getPojo();
                 will(returnValue("Smith"));
             }
         });
@@ -473,7 +473,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockAdapterManager).adapterFor("Jones");
                 will(returnValue(mockAdapterForStringJones));
                 
-                allowing(mockAdapterForStringJones).getObject();
+                allowing(mockAdapterForStringJones).getPojo();
                 will(returnValue("Jones"));
                 
                 allowing(mockAdapterForStringJones).isTransient();

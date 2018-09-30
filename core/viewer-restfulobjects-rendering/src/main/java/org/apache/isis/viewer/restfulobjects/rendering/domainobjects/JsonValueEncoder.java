@@ -90,7 +90,7 @@ public final class JsonValueEncoder {
         }
 
         public Object asObject(ObjectAdapter objectAdapter, String format) {
-            return objectAdapter.getObject();
+            return objectAdapter.getPojo();
         }
     }
 
@@ -824,7 +824,7 @@ public final class JsonValueEncoder {
     }
 
     private static Object unwrapAsObjectElseNullNode(ObjectAdapter objectAdapter) {
-        return objectAdapter != null? objectAdapter.getObject(): NullNode.getInstance();
+        return objectAdapter != null? objectAdapter.getPojo(): NullNode.getInstance();
     }
 
 

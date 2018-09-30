@@ -95,7 +95,7 @@ public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
 
     @Override
     public UUID uuidValue(final ObjectAdapter object) {
-        return object == null ? null : (UUID) object.getObject();
+        return object == null ? null : (UUID) object.getPojo();
     }
 
     @Override

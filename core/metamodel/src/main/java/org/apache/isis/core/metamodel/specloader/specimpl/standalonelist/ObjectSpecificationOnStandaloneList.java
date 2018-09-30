@@ -123,7 +123,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     
     @Override
     public String getTitle(ManagedObject contextAdapterIfAny, ManagedObject targetAdapter) {
-        return ((FreeStandingList) targetAdapter.getObject()).titleString();
+        return ((FreeStandingList) targetAdapter.getPojo()).titleString();
     }
 
     @Override
