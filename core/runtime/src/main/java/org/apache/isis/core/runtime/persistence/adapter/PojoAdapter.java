@@ -24,6 +24,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
@@ -35,13 +36,12 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.Instance;
-import org.apache.isis.core.metamodel.spec.InstanceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
-public final class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
+public final class PojoAdapter implements ObjectAdapter {
 
     private final static Logger LOG = LoggerFactory.getLogger(PojoAdapter.class);
 
@@ -91,17 +91,18 @@ public final class PojoAdapter extends InstanceAbstract implements ObjectAdapter
     }
     
     // -- getSpecification
+    
+    final _Lazy<ObjectSpecification> objectSpecification = _Lazy.of(this::loadSpecification);
 
     /**
      * Downcasts {@link #getSpecification()}.
      */
     @Override
     public ObjectSpecification getSpecification() {
-        return (ObjectSpecification) super.getSpecification();
+        return objectSpecification.get();
     }
 
-    @Override
-    protected ObjectSpecification loadSpecification() {
+    private ObjectSpecification loadSpecification() {
         final Class<?> aClass = getObject().getClass();
         final ObjectSpecification specification = specificationLoader.loadSpecification(aClass);
         return specification;
@@ -240,7 +241,7 @@ public final class PojoAdapter extends InstanceAbstract implements ObjectAdapter
             str.append(":-");
         }
         str.setAddComma();
-        if (getSpecificationNoLoad() == null) {
+        if (!objectSpecification.isMemoized()) {
             str.append("class", getObject().getClass().getName());
         } else {
             str.append("specification", getSpecification().getShortIdentifier());
