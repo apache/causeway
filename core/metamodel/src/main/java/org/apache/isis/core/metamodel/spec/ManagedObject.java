@@ -29,13 +29,11 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
  * Represents an instance of some element of the meta-model managed by the framework.
  *
  */
-public interface ManagedObject extends Instance {
+public interface ManagedObject {
 
     /**
-     * Returns the specification that details the structure (meta-model) of this object.<br>
-     * Note: Refines {@link Instance#getSpecification()}.
+     * Returns the specification that details the structure (meta-model) of this object.
      */
-    @Override
     ObjectSpecification getSpecification();
 
     /**

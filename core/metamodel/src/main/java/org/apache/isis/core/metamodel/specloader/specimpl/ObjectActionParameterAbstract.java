@@ -55,7 +55,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
-import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -86,7 +86,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
 
     /**
-     * Gets the proposed value of the {@link Instance} (downcast as a
+     * Gets the proposed value of the {@link ManagedObject} (downcast as a
      * {@link MutableProposedHolder}, wrapping the proposed value into a
      * {@link ObjectAdapter}.
      */

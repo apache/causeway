@@ -43,10 +43,8 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.Specification;
 
 /**
  * Adapters to domain objects, where the application is written in terms of
@@ -54,29 +52,6 @@ import org.apache.isis.core.metamodel.spec.Specification;
  * adapter, and not directly.
  */
 public interface ObjectAdapter extends ManagedObject {
-
-    /**
-     * Return an {@link Instance} of the specified {@link Specification} with
-     * respect to this {@link ObjectAdapter}.
-     *
-     * <p>
-     * If called with {@link ObjectSpecification}, then just returns
-     * <tt>this</tt>). If called for other subinterfaces, then should provide an
-     * appropriate {@link Instance} implementation.
-     *
-     * <p>
-     * Designed to be called in a double-dispatch design from
-     * {@link Specification#getInstance(ObjectAdapter)}.
-     *
-     * <p>
-     * Note: this method will throw an {@link UnsupportedOperationException}
-     * unless the extended <tt>PojoAdapterXFactory</tt> is configured. (That is,
-     * only <tt>PojoAdapterX</tt> provides support for this; the regular
-     * <tt>PojoAdapter</tt> does not currently.
-     *
-     * @return
-     */
-    Instance getInstance(Specification specification);
 
     /**
      * Returns the name of an icon to use if this object is to be displayed

@@ -19,12 +19,13 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
+import javax.enterprise.inject.Instance;
+
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
-import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.Specification;
 
 /**
- * Mix-in for {@link Instance} implementations, where can hold a proposed new
+ * Mix-in for {@link ManagedObject} implementations, where can hold a proposed new
  * value different from the underlying value.
  *
  * <p>

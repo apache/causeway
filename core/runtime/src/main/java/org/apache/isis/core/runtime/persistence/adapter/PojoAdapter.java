@@ -35,9 +35,7 @@ import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
@@ -272,16 +270,6 @@ public final class PojoAdapter implements ObjectAdapter {
     @Override
     public String getIconName() {
         return getSpecification().getIconName(this);
-    }
-
-    // -- getInstance (unsupported for this impl)
-
-    /**
-     * Not supported by this implementation.
-     */
-    @Override
-    public Instance getInstance(final Specification specification) {
-        throw new UnsupportedOperationException();
     }
     
 
