@@ -54,15 +54,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 public interface ObjectAdapter extends ManagedObject {
 
     /**
-     * Returns the name of an icon to use if this object is to be displayed
-     * graphically.
-     *
-     * <p>
-     * May return <code>null</code> if no icon is specified.
-     */
-    String getIconName();
-
-    /**
      * Checks the version of this adapter to make sure that it does not differ
      * from the specified version.
      *

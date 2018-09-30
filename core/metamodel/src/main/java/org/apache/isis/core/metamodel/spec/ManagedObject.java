@@ -111,7 +111,7 @@ public interface ManagedObject {
 
     }
     
-    // -- COLLECTION SUPPORT
+    // -- SHORTCUT - ELEMENT SPECIFICATION
     
     /**
      * Used only for (standalone or parented) collections.
@@ -121,6 +121,21 @@ public interface ManagedObject {
     @Deprecated
     default public ObjectSpecification getElementSpecification() {
         return getSpecification().getElementSpecification();
+    }
+    
+    // -- SHORTCUT - ICON NAME
+
+    /**
+     * Returns the name of an icon to use if this object is to be displayed
+     * graphically.
+     * <p>
+     * May return <code>null</code> if no icon is specified.
+     * @deprecated use {@link ObjectSpecification#getIconName(ManagedObject))} instead, 
+     * (proposed for removal, to keep the API slim)
+     */
+    @Deprecated
+    default public String getIconName() {
+        return getSpecification().getIconName(this);
     }
     
     // -- FACTORIES

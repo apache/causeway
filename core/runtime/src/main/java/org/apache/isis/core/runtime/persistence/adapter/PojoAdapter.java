@@ -92,9 +92,6 @@ public final class PojoAdapter implements ObjectAdapter {
     
     final _Lazy<ObjectSpecification> objectSpecification = _Lazy.of(this::loadSpecification);
 
-    /**
-     * Downcasts {@link #getSpecification()}.
-     */
     @Override
     public ObjectSpecification getSpecification() {
         return objectSpecification.get();
@@ -254,16 +251,5 @@ public final class PojoAdapter implements ObjectAdapter {
         }
         return "S"; // standalone adapter (value)
     }
-
-    // -- iconName
-
-    /**
-     * Returns the name of the icon to use to represent this object.
-     */
-    @Override
-    public String getIconName() {
-        return getSpecification().getIconName(this);
-    }
-    
 
 }
