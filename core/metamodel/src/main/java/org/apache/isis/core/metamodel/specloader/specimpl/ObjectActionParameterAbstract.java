@@ -27,10 +27,10 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -92,17 +92,19 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
      */
     @Override
     public ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy) {
-        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
-        final Object proposed = proposedHolder.getProposed();
-        return getObjectAdapterProvider().adapterFor(proposed);
+        throw _Exceptions.unexpectedCodeReach();
+        //FIXME[ISIS-1976] marked for removal (must be dead code, since MutableProposedHolder has no implementation)
+//        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
+//        final Object proposed = proposedHolder.getProposed();
+//        return getObjectAdapterProvider().adapterFor(proposed);
     }
 
-    protected MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
-        if (!(owner instanceof MutableProposedHolder)) {
-            throw new IllegalArgumentException("Instance should implement MutableProposedHolder");
-        }
-        return (MutableProposedHolder) owner;
-    }
+//    protected MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
+//        if (!(owner instanceof MutableProposedHolder)) {
+//            throw new IllegalArgumentException("Instance should implement MutableProposedHolder");
+//        }
+//        return (MutableProposedHolder) owner;
+//    }
 
     /**
      * Parameter number, 0-based.
