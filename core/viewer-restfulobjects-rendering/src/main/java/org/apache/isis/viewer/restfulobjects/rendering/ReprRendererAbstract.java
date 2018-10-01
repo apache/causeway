@@ -20,12 +20,13 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.commons.internal.collections._Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -223,8 +224,8 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         }
     }
 
-    protected List<ObjectAdapter> getServiceAdapters() {
-        return rendererContext.getPersistenceSession().getServices();
+    protected Stream<ObjectAdapter> streamServiceAdapters() {
+        return rendererContext.getPersistenceSession().streamServices();
     }
 
 }

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtime.services.homepage;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -30,6 +29,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.homepage.HomePageProviderService;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -53,8 +53,15 @@ public class HomePageProviderServiceDefault implements HomePageProviderService {
     @Programmatic
     @Override
     public Object homePage() {
-        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-        for (final ObjectAdapter serviceAdapter : serviceAdapters) {
+        return homePage.get();
+    }
+    
+    private final _Lazy<Object> homePage = _Lazy.of(this::lookupHomePage);
+
+    private Object lookupHomePage() {
+        final Stream<ObjectAdapter> serviceAdapters = getPersistenceSession().streamServices();
+        
+        return serviceAdapters.map(serviceAdapter->{
             final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
             final Stream<ObjectAction> objectActions = serviceSpec.streamObjectActions(Contributed.EXCLUDED);
             
@@ -63,12 +70,12 @@ public class HomePageProviderServiceDefault implements HomePageProviderService {
             .filter(_NullSafe::isPresent)
             .findAny();
             
-            if(homePage.isPresent()) {
-                return homePage.get();
-            }
-            
-        }
-        return null;
+            return homePage;
+        })
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .findAny()
+        .orElse(null);
     }
 
     protected Object homePageIfUsable(ObjectAdapter serviceAdapter, ObjectAction objectAction) {

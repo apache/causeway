@@ -16,7 +16,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -27,10 +29,10 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
-public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Collection<ObjectAdapter>> {
+public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Stream<ObjectAdapter>> {
 
     private ObjectAdapterLinkTo linkTo;
-    private Collection<ObjectAdapter> objectAdapters;
+    private List<ObjectAdapter> objectAdapters;
     private ObjectSpecification elementType;
     private ObjectSpecification returnType;
     private Rel elementRel;
@@ -46,8 +48,12 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
     }
 
     @Override
-    public ListReprRenderer with(final Collection<ObjectAdapter> objectAdapters) {
-        this.objectAdapters = objectAdapters;
+    public ListReprRenderer with(final Stream<ObjectAdapter> objectAdapters) {
+        this.objectAdapters = objectAdapters!=null 
+                ? objectAdapters
+                .filter(adapter->!adapter.getSpecification().isHidden())
+                .collect(Collectors.toList())
+                    : null;
         return this;
     }
 
@@ -90,11 +96,8 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
 
         final JsonRepresentation values = JsonRepresentation.newArray();
 
-        for (final ObjectAdapter adapter : objectAdapters) {
-            final ObjectSpecification specification = adapter.getSpecification();
-            if (specification.isHidden()) {
-                continue;
-            }
+        objectAdapters
+        .forEach(adapter->{
             final JsonRepresentation linkToObject = linkTo.with(adapter).builder(elementRel).build();
             values.arrayAdd(linkToObject);
 
@@ -104,8 +107,9 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
                         );
                 final JsonRepresentation domainObject = renderer.with(adapter).render();
                 linkToObject.mapPut("value", domainObject);
-            }
-        }
+            }            
+        });
+        
         representation.mapPut("value", values);
     }
 

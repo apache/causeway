@@ -20,8 +20,10 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,7 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -131,21 +134,28 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     // -- SERVICE SUPPORT
     
     @Override
-    public List<ObjectAdapter> getServices() {
-        return serviceAdapters.get();
+    public Stream<ObjectAdapter> streamServices() {
+        return serviceAdapters.get().values().stream();
     }
+    
+    @Override
+    public ObjectAdapter lookupService(final String serviceId) {
+        return serviceAdapters.get().get(serviceId);
+    }
+    
     
     // -- HELPER
     
-    private final _Lazy<List<ObjectAdapter>> serviceAdapters = _Lazy.of(this::initServiceAdapters);
+    private final _Lazy<Map<String, ObjectAdapter>> serviceAdapters = _Lazy.of(this::initServiceAdapters);
     
-    private List<ObjectAdapter> initServiceAdapters() {
+    private Map<String, ObjectAdapter> initServiceAdapters() {
+        
         return servicesInjector.streamRegisteredServiceInstances()
-        .map(this::adapterFor)
+        .map(this::adapterFor) 
         .peek(serviceAdapter->{
             Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
         })
-        .collect(Collectors.toList());
+        .collect(Collectors.toMap(a->ServiceUtil.id(a.getPojo()), v->v, (o,n)->n, LinkedHashMap::new));
     }
     
    

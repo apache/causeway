@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.InputStream;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +38,6 @@ import org.apache.isis.core.commons.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -153,13 +151,9 @@ public abstract class ResourceAbstract {
     }
 
     protected ObjectAdapter getServiceAdapter(final String serviceId) {
-        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-        for (final ObjectAdapter serviceAdapter : serviceAdapters) {
-            final Object servicePojo = serviceAdapter.getPojo();
-            final String id = ServiceUtil.id(servicePojo);
-            if (serviceId.equals(id)) {
-                return serviceAdapter;
-            }
+        final ObjectAdapter serviceAdapter = getPersistenceSession().lookupService(serviceId);
+        if(serviceAdapter!=null) {
+            return serviceAdapter;
         }
         throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, "Could not locate service '%s'", serviceId);
     }

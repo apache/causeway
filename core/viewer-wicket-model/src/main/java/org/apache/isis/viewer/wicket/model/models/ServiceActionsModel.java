@@ -21,9 +21,10 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 /**
@@ -52,7 +53,9 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
 
     @Override
     protected List<ObjectAdapter> load() {
-        return _Lists.filter(getServiceAdapters(), with(menuBar));
+        return streamServiceAdapters()
+                .filter(with(menuBar))
+                .collect(Collectors.toList());
     }
 
     private static Predicate<ObjectAdapter> with(final DomainServiceLayout.MenuBar menuBar) {
@@ -64,8 +67,8 @@ public class ServiceActionsModel extends ModelAbstract<List<ObjectAdapter>> {
         };
     }
 
-    protected List<ObjectAdapter> getServiceAdapters() {
-        return getPersistenceSession().getServices();
+    protected Stream<ObjectAdapter> streamServiceAdapters() {
+        return getPersistenceSession().streamServices();
     }
 
 

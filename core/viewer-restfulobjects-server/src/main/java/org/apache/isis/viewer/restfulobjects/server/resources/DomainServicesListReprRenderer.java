@@ -49,7 +49,7 @@ public class DomainServicesListReprRenderer extends ListReprRenderer {
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
             final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
-            renderer.with(getServiceAdapters());
+            renderer.with(streamServiceAdapters());
             link.mapPut("value", renderer.render());
         }
 

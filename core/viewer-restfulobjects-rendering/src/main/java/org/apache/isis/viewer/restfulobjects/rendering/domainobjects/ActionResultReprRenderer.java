@@ -16,8 +16,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import java.util.Collection;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 
@@ -135,8 +135,8 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
 
         case LIST:
 
-            final Collection<ObjectAdapter> collectionAdapters =
-                CollectionFacet.Utils.toAdapterList(returnedAdapter);
+            final Stream<ObjectAdapter> collectionAdapters =
+                CollectionFacet.Utils.streamAdapters(returnedAdapter);
             
             final ListReprRenderer listReprRenderer =
                     new ListReprRenderer(rendererContext, null, representation).withElementRel(Rel.ELEMENT);

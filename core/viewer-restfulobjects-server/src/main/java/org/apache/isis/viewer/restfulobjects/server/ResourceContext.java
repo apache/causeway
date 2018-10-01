@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,10 +33,9 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
-
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -277,8 +277,8 @@ public class ResourceContext implements RendererContext6 {
         return persistenceSession;
     }
 
-    public List<ObjectAdapter> getServiceAdapters() {
-        return persistenceSession.getServices();
+    public Stream<ObjectAdapter> streamServiceAdapters() {
+        return persistenceSession.streamServices();
     }
 
     @Override

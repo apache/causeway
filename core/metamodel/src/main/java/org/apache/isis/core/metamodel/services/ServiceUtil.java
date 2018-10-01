@@ -58,6 +58,8 @@ public final class ServiceUtil {
             return fqcnOf(serviceClass);
         }
     }
+    
+    // -- HELPER
 
     private static String serviceTypeOf(final Class<?> serviceClass) {
         final String serviceType;

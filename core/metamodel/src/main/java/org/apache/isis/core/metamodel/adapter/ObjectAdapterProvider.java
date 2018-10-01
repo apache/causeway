@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.adapter;
 
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -101,7 +101,8 @@ public interface ObjectAdapterProvider {
     
     // -- SERVICE LOOKUP 
     
-    List<ObjectAdapter> getServices();
+    Stream<ObjectAdapter> streamServices();
+    ObjectAdapter lookupService(String serviceId);
     
     
     // -- FOR THOSE THAT IMPLEMENT THROUGH DELEGATION
@@ -150,11 +151,19 @@ public interface ObjectAdapterProvider {
         }
         
         @Programmatic
-        default List<ObjectAdapter> getServices() {
-            return getObjectAdapterProvider().getServices();
+        default Stream<ObjectAdapter> streamServices() {
+            return getObjectAdapterProvider().streamServices();
+        }
+        
+        @Programmatic
+        default ObjectAdapter lookupService(String serviceId) {
+            return getObjectAdapterProvider().lookupService(serviceId);
         }
         
     }
+
+
+    
     
 
 }

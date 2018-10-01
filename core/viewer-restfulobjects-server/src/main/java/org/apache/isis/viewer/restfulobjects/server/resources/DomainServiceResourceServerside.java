@@ -17,7 +17,8 @@
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.InputStream;
-import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -49,16 +50,10 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjec
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import org.apache.isis.commons.internal.collections._Lists;
-
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
 
-    private final static Predicate<ObjectAdapter> NATURE_OF_MENU = new Predicate<ObjectAdapter>() {
-        @Override
-        public boolean apply(final ObjectAdapter input) {
+    private final static Predicate<ObjectAdapter> NATURE_OF_MENU = (final ObjectAdapter input) -> {
             final ObjectSpecification specification = input.getSpecification();
             final DomainServiceFacet facet = specification.getFacet(DomainServiceFacet.class);
             if (facet == null) {
@@ -69,7 +64,6 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
             return  natureOfService == NatureOfService.VIEW ||
                     natureOfService == NatureOfService.VIEW_MENU_ONLY ||
                     natureOfService == NatureOfService.VIEW_REST_ONLY;
-        }
     };
 
     @Override
@@ -79,10 +73,8 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     public Response services() {
         init(RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final List<ObjectAdapter> serviceAdapters =
-                _Lists.newArrayList(
-                        Iterables.filter(
-                                getResourceContext().getServiceAdapters(), NATURE_OF_MENU));
+        final Stream<ObjectAdapter> serviceAdapters = getResourceContext().streamServiceAdapters()
+                .filter(NATURE_OF_MENU);
 
         final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())
@@ -118,7 +110,6 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    //TODO proprietary @PrettyPrinting
     public Response service(@PathParam("serviceId") final String serviceId) {
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
@@ -159,7 +150,6 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    //TODO proprietary @PrettyPrinting
     public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId) {
         init(RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS, RepresentationService.Intent.ALREADY_PERSISTENT);
 
@@ -195,7 +185,6 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    //TODO proprietary @PrettyPrinting
     public Response invokeActionQueryOnly(
             final @PathParam("serviceId") String serviceId,
             final @PathParam("actionId") String actionId,
@@ -224,7 +213,6 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    //TODO proprietary @PrettyPrinting
     public Response invokeActionIdempotent(
             final @PathParam("serviceId") String serviceId,
             final @PathParam("actionId") String actionId,
@@ -249,7 +237,6 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
         MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
         MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
-    //TODO proprietary @PrettyPrinting
     public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream body) {
         init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE, body);
 

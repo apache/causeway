@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.home;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -90,8 +89,8 @@ public class HomePage extends PageAbstract {
     }
 
     private ObjectAndAction lookupHomePageAction() {
-        final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
-        for (final ObjectAdapter serviceAdapter : serviceAdapters) {
+        final Stream<ObjectAdapter> serviceAdapters = getPersistenceSession().streamServices();
+        return serviceAdapters.map(serviceAdapter->{
             final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
             final Stream<ObjectAction> objectActions = serviceSpec.streamObjectActions(Contributed.EXCLUDED);
             
@@ -99,13 +98,13 @@ public class HomePage extends PageAbstract {
             .map(objectAction->objectAndActionIfHomePageAndUsable(serviceAdapter, objectAction))
             .filter(_NullSafe::isPresent)
             .findAny();
-            
-            if(homePageAction.isPresent()) {
-                return homePageAction.get();
-            }
-
-        }
-        return null;
+            return homePageAction;
+        })
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .findAny()
+        .orElse(null)
+        ;
     }
 
     private ObjectAndAction objectAndActionIfHomePageAndUsable(ObjectAdapter serviceAdapter, ObjectAction objectAction) {

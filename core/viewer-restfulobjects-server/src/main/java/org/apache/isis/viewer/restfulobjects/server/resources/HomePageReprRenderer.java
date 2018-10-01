@@ -19,7 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -57,7 +57,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
 
         addLinkToUser(getRendererContext().getAuthenticationSession());
         addLinkToMenuBars();
-        addLinkToServices(getRendererContext().getPersistenceSession().getServices());
+        addLinkToServices(getRendererContext().getPersistenceSession().streamServices());
         addLinkToVersion();
         addLinkToDomainTypes(((ResourceContext)getRendererContext()).getSpecificationLoader().allSpecifications());
 
@@ -90,7 +90,7 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
         getLinks().arrayAdd(link);
     }
 
-    private void addLinkToServices(List<ObjectAdapter> serviceAdapters) {
+    private void addLinkToServices(Stream<ObjectAdapter> serviceAdapters) {
 
         final JsonRepresentation link = LinkBuilder.newBuilder(getRendererContext(), Rel.SERVICES.getName(), RepresentationType.LIST, "services").build();
 

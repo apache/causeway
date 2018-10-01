@@ -21,7 +21,6 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 
 public interface ReprRenderer<R extends ReprRenderer<R, T>, T> {
 

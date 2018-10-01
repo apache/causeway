@@ -18,6 +18,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.node.NullNode;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -108,14 +109,11 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
 
     private ObjectAdapter contributingServiceAdapter() {
         final ObjectSpecification serviceType = objectMember.getOnType();
-        final List<ObjectAdapter> serviceAdapters = getServiceAdapters();
-        for (final ObjectAdapter serviceAdapter : serviceAdapters) {
-            if (serviceAdapter.getSpecification() == serviceType) {
-                return serviceAdapter;
-            }
-        }
-        // fail fast
-        throw new IllegalStateException("Unable to locate contributing service");
+        final Stream<ObjectAdapter> serviceAdapters = streamServiceAdapters();
+        return serviceAdapters
+                .filter(serviceAdapter->serviceAdapter.getSpecification() == serviceType)
+                .findFirst()
+                .orElseThrow(()->new IllegalStateException("Unable to locate contributing service")); // fail fast
     }
 
     @Override

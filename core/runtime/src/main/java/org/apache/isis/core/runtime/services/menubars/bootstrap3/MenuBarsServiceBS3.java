@@ -57,6 +57,7 @@ import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceF
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
 import org.apache.isis.core.metamodel.services.grid.GridServiceDefault;
 import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -179,31 +180,30 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     private BS3MenuBars deriveMenuBarsFromMetaModelFacets() {
         final BS3MenuBars menuBars = new BS3MenuBars();
 
-        final List<ObjectAdapter> serviceAdapters =
-                isisSessionFactory.getCurrentSession().getPersistenceSession().getServices();
+        final Stream<ObjectAdapter> serviceAdapters =
+                isisSessionFactory.getCurrentSession().getPersistenceSession().streamServices();
 
-        final List<ObjectAdapter> visibleServiceAdapters =
-                _Lists.filter(serviceAdapters,
-                (final ObjectAdapter objectAdapter) -> {
-                        if (objectAdapter == null) {
-                            return false;
-                        }
-                        if (objectAdapter.getSpecification() == null) {
-                            return false;
-                        }
-                        final ObjectSpecification spec = objectAdapter.getSpecification();
-                        if (spec.isHidden()) {
-                            // however, this isn't the same as HiddenObjectFacet, so doesn't filter out
-                            // services that have an imperative hidden() method.
-                            return false;
-                        }
-                        final DomainServiceFacet facet = spec.getFacet(DomainServiceFacet.class);
-                        if (facet == null) {
-                            return true;
-                        }
-                        final NatureOfService natureOfService = facet.getNatureOfService();
-                        return natureOfService == null || natureOfService != NatureOfService.DOMAIN;
-                });
+        final List<ManagedObject> visibleServiceAdapters = serviceAdapters.filter(objectAdapter -> {
+            if (objectAdapter == null) {
+                return false;
+            }
+            if (objectAdapter.getSpecification() == null) {
+                return false;
+            }
+            final ObjectSpecification spec = objectAdapter.getSpecification();
+            if (spec.isHidden()) {
+                // however, this isn't the same as HiddenObjectFacet, so doesn't filter out
+                // services that have an imperative hidden() method.
+                return false;
+            }
+            final DomainServiceFacet facet = spec.getFacet(DomainServiceFacet.class);
+            if (facet == null) {
+                return true;
+            }
+            final NatureOfService natureOfService = facet.getNatureOfService();
+            return natureOfService == null || natureOfService != NatureOfService.DOMAIN;
+        })
+        .collect(Collectors.toList());
 
         append(visibleServiceAdapters, menuBars.getPrimary(), DomainServiceLayout.MenuBar.PRIMARY);
         append(visibleServiceAdapters, menuBars.getSecondary(), DomainServiceLayout.MenuBar.SECONDARY);
@@ -221,14 +221,14 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
 
     private void append(
-            final List<ObjectAdapter> serviceAdapters,
+            final List<ManagedObject> serviceAdapters,
             final BS3MenuBar menuBar,
             final DomainServiceLayout.MenuBar menuBarPos) {
 
         List<ServiceAndAction> serviceActions = _Lists.newArrayList();
 
         // cf ServiceActionsModel & ServiceActionUtil#buildMenu in Wicket viewer
-        for (final ObjectAdapter serviceAdapter : _Lists.filter(serviceAdapters, with(menuBarPos))) {
+        for (final ManagedObject serviceAdapter : _Lists.filter(serviceAdapters, with(menuBarPos))) {
             collateServiceActions(serviceAdapter, ActionType.USER, serviceActions);
             collateServiceActions(serviceAdapter, ActionType.PROTOTYPE, serviceActions);
         }
@@ -282,12 +282,12 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
      * straight copy from Wicket UI
      */
     private static Set<String> serviceNamesInOrder(
-            final List<ObjectAdapter> serviceAdapters,
+            final List<ManagedObject> serviceAdapters,
             final List<ServiceAndAction> serviceActions) {
         final Set<String> serviceNameOrder = _Sets.newLinkedHashSet();
 
         // first, order as defined in isis.properties
-        for (ObjectAdapter serviceAdapter : serviceAdapters) {
+        for (ManagedObject serviceAdapter : serviceAdapters) {
             final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
             String serviceName = serviceSpec.getFacet(NamedFacet.class).value();
             serviceNameOrder.add(serviceName);
@@ -311,12 +311,12 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         final Map<String, List<ServiceAndAction>> serviceActionsByName = _Maps.newTreeMap();
 
         // map available services
-        ObjectAdapter lastServiceAdapter = null;
+        ManagedObject lastServiceAdapter = null;
 
         for (ServiceAndAction serviceAction : serviceActions) {
             List<ServiceAndAction> serviceActionsForName = serviceActionsByName.get(serviceAction.serviceName);
 
-            final ObjectAdapter serviceAdapter = serviceAction.serviceAdapter;
+            final ManagedObject serviceAdapter = serviceAction.serviceAdapter;
 
             if(serviceActionsForName == null) {
                 serviceActionsForName = _Lists.newArrayList();
@@ -334,7 +334,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
 
     private void collateServiceActions(
-            final ObjectAdapter serviceAdapter,
+            final ManagedObject serviceAdapter,
             final ActionType actionType,
             final List<ServiceAndAction> serviceActions) {
         final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
@@ -366,8 +366,8 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
        
     }
 
-    private static Predicate<ObjectAdapter> with(final DomainServiceLayout.MenuBar menuBar) {
-        return (ObjectAdapter input) -> {
+    private static Predicate<ManagedObject> with(final DomainServiceLayout.MenuBar menuBar) {
+        return (ManagedObject input) -> {
                 final DomainServiceLayoutFacet facet =
                         input.getSpecification().getFacet(DomainServiceLayoutFacet.class);
                 return facet != null && facet.getMenuBar() == menuBar;
