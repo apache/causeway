@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -180,19 +181,26 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
     private static void validate(List<Object> serviceList) {
+        
         final ListMultimap<String, Object> servicesById = _Multimaps.newListMultimap();
         for (Object service : serviceList) {
-            String id = ServiceUtil.id(service);
+            String id = ServiceUtil.idOfPojo(service);
             servicesById.putElement(id, service);
         }
 
-        servicesById.forEach((serviceId, services)->{
-            if(services.size() > 1) {
-                throw new IllegalStateException(
-                        String.format("Service ids must be unique; serviceId '%s' is declared by domain services %s",
-                                serviceId, classNamesFor(services)));
-            }
-        });
+        final String errorMsg = servicesById.entrySet().stream()
+        .filter(entry->entry.getValue().size()>1) // filter for duplicates
+        .map(entry->{
+            String serviceId = entry.getKey();
+            List<Object> duplicateServiceEntries = entry.getValue();
+            return String.format("serviceId '%s' is declared by domain services %s",
+                    serviceId, classNamesFor(duplicateServiceEntries));
+        })
+        .collect(Collectors.joining(", "));
+         
+        if(_Strings.isNotEmpty(errorMsg)) {
+            throw new IllegalStateException("Service ids must be unique! "+errorMsg);
+        }
     }
 
     private static String classNamesFor(Collection<Object> services) {

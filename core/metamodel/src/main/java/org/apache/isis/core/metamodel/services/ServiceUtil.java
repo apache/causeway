@@ -19,49 +19,51 @@
 
 package org.apache.isis.core.metamodel.services;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.commons.internal.functions._Functions;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public final class ServiceUtil {
 
     private ServiceUtil() {
     }
 
-    public static String id(final Class<?> serviceClass) {
-        final String serviceType = serviceTypeOf(serviceClass);
+    public static String idOfType(final Class<?> serviceClass) {
+        
+        final String serviceType = serviceTypeUsingAnnotation(serviceClass);
         if (serviceType != null) {
             return serviceType;
         }
 
-        try {
-            Object object = serviceClass.newInstance();
-            return getIdOf(object);
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-            return null;
-        }
+        return serviceTypeUsingIdGetterOrElseGet(serviceClass, ()->serviceClass.newInstance(), ()->null);
     }
 
-    public static String id(final Object object) {
-        final Class<?> serviceClass = object.getClass();
-        final String serviceType = serviceTypeOf(serviceClass);
+    public static String idOfPojo(final Object serviceObject) {
+        final Class<?> serviceClass = serviceObject.getClass();
+        final String serviceType = serviceTypeUsingAnnotation(serviceClass);
         if(serviceType != null) {
             return serviceType;
         }
 
-        try {
-            return getIdOf(object);
-        } catch (final NoSuchMethodException e) {
-            return fqcnOf(serviceClass);
-        }
+        return serviceTypeUsingIdGetterOrElseGet(serviceClass, ()->serviceObject, ()->normalize(serviceClass));
+    }
+    
+    public static String idOfSpec(final ObjectSpecification serviceSpec) {
+        return idOfType(serviceSpec.getCorrespondingClass());
+    }
+    
+    public static String idOfAdapter(final ManagedObject adapter) {
+        return idOfPojo(adapter.getPojo());
     }
     
     // -- HELPER
 
-    private static String serviceTypeOf(final Class<?> serviceClass) {
+    private static String serviceTypeUsingAnnotation(final Class<?> serviceClass) {
         final String serviceType;
         final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
         if(domainService != null) {
@@ -73,17 +75,21 @@ public final class ServiceUtil {
         return null;
     }
 
-    private static String getIdOf(final Object object) throws NoSuchMethodException {
+    private static String serviceTypeUsingIdGetterOrElseGet(
+            final Class<?> serviceClass, 
+            final _Functions.CheckedSupplier<Object> objectSupplier,
+            final Supplier<String> orElse
+            ) {
+        
         try {
-            final Class<?> objectClass = object.getClass();
-            final Method m = objectClass.getMethod("getId");
-            return (String) m.invoke(object);
-        } catch (final SecurityException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-            throw new IsisException(e);
+            final Method m = serviceClass.getMethod("getId");
+            return (String) m.invoke(objectSupplier.get());
+        } catch (Exception e) {
+            return orElse.get();
         }
     }
-
-    private static String fqcnOf(final Class<?> serviceClass) {
+    
+    private static String normalize(Class<?> serviceClass) {
         return serviceClass.getName();
     }
 

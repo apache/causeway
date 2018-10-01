@@ -163,7 +163,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
             // serviceId or instance Id
             if (isService) {
-                representation.mapPut("serviceId", ServiceUtil.id(objectAdapter.getPojo()));
+                representation.mapPut("serviceId", ServiceUtil.idOfAdapter(objectAdapter));
             } else {
                 final String domainType = getDomainType();
                 final String instanceId = getInstanceId();

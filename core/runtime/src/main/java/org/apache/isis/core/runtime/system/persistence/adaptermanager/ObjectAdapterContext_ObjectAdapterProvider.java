@@ -155,7 +155,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         .peek(serviceAdapter->{
             Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
         })
-        .collect(Collectors.toMap(a->ServiceUtil.id(a.getPojo()), v->v, (o,n)->n, LinkedHashMap::new));
+        .collect(Collectors.toMap(ServiceUtil::idOfAdapter, v->v, (o,n)->n, LinkedHashMap::new));
     }
     
    

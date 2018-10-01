@@ -27,7 +27,7 @@ public class DomainServiceLinkTo extends DomainObjectLinkTo {
 
     @Override
     public ObjectAdapterLinkTo with(final ObjectAdapter objectAdapter) {
-        serviceId = ServiceUtil.id(objectAdapter.getPojo());
+        serviceId = ServiceUtil.idOfAdapter(objectAdapter);
         return super.with(objectAdapter);
     }
 

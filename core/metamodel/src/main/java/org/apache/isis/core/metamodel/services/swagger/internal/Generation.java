@@ -35,7 +35,6 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
@@ -783,14 +782,8 @@ class Generation {
                 .required("extensions");
     }
 
-    // TODO: this is horrid, there ought to be a facet we can call instead...
     static String serviceIdFor(final ObjectSpecification serviceSpec) {
-        Object tempServiceInstance = InstanceUtil.createInstance(serviceSpec.getCorrespondingClass());
-        return serviceId(tempServiceInstance);
-    }
-
-    static String serviceId(final Object object) {
-        return ServiceUtil.id(object);
+        return ServiceUtil.idOfSpec(serviceSpec);
     }
 
     static String objectTypeFor(final ObjectSpecification objectSpec) {

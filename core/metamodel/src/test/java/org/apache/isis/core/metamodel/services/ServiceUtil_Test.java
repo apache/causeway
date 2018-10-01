@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.metamodel.services;
 
-import org.junit.Test;
-
-import org.apache.isis.applib.annotation.DomainService;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+
+import org.junit.Test;
+
+import org.apache.isis.applib.annotation.DomainService;
 
 public class ServiceUtil_Test {
 
@@ -59,11 +59,11 @@ public class ServiceUtil_Test {
     public void annotated() throws Exception {
 
         assertThat(
-                ServiceUtil.id(new SomeServiceAnnotated()),
+                ServiceUtil.idOfPojo(new SomeServiceAnnotated()),
                 is(equalTo("foo.SomeServiceAnnotated")));
 
         assertThat(
-                ServiceUtil.id(SomeServiceAnnotated.class),
+                ServiceUtil.idOfType(SomeServiceAnnotated.class),
                 is(equalTo("foo.SomeServiceAnnotated")));
     }
 
@@ -71,11 +71,11 @@ public class ServiceUtil_Test {
     public void id() throws Exception {
 
         assertThat(
-                ServiceUtil.id(new SomeServiceWithId()),
+                ServiceUtil.idOfPojo(new SomeServiceWithId()),
                 is(equalTo("bar.SomeServiceWithId")));
 
         assertThat(
-                ServiceUtil.id(SomeServiceWithId.class),
+                ServiceUtil.idOfType(SomeServiceWithId.class),
                 is(equalTo("bar.SomeServiceWithId")));
     }
 
@@ -83,21 +83,21 @@ public class ServiceUtil_Test {
     public void annotated_precedence_over_id() throws Exception {
 
         assertThat(
-                ServiceUtil.id(new SomeServiceAnnotatedAndWithId()),
+                ServiceUtil.idOfPojo(new SomeServiceAnnotatedAndWithId()),
                 is(equalTo("bop.SomeServiceAnnotated")));
 
         assertThat(
-                ServiceUtil.id(SomeServiceAnnotatedAndWithId.class),
+                ServiceUtil.idOfType(SomeServiceAnnotatedAndWithId.class),
                 is(equalTo("bop.SomeServiceAnnotated")));
     }
 
     @Test
     public void fallback_to_fqcn_for_obj_but_to_null_for_service() throws Exception {
         assertThat(
-                ServiceUtil.id(new SomeServiceWithoutAnnotationOrId()),
+                ServiceUtil.idOfPojo(new SomeServiceWithoutAnnotationOrId()),
                 is(equalTo("org.apache.isis.core.metamodel.services.ServiceUtil_Test$SomeServiceWithoutAnnotationOrId")));
         assertThat(
-                ServiceUtil.id(SomeServiceWithoutAnnotationOrId.class),
+                ServiceUtil.idOfType(SomeServiceWithoutAnnotationOrId.class),
                 is(nullValue()));
     }
 

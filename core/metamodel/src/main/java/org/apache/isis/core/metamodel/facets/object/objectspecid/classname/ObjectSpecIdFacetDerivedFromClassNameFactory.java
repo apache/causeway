@@ -74,7 +74,7 @@ MetaModelValidatorRefiner {
     private static ObjectSpecIdFacet createObjectSpecIdFacet(final FacetHolder facetHolder, final Class<?> substitutedClass) {
         final boolean isService = isService(facetHolder);
         if (isService) {
-            final String id = ServiceUtil.id(substitutedClass);
+            final String id = ServiceUtil.idOfType(substitutedClass);
             if (id != null) {
                 return new ObjectSpecIdFacetDerivedFromDomainServiceAnnotationElseGetId(id, facetHolder);
             }
