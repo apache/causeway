@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
@@ -188,8 +187,24 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
         state = State.CACHING;
 
-        loadSpecificationsForServices();
-        loadSpecificationsForMixins();
+        // need to completely load services and mixins (synchronously)
+        loadSpecificationsFor(
+                allServiceClasses(),
+                NatureOfService.DOMAIN, IntrospectionStrategy.STUB);
+        loadSpecificationsFor(
+                AppManifest.Registry.instance().getMixinTypes(),
+                null, IntrospectionStrategy.STUB);
+
+        loadSpecificationsFor(
+                AppManifest.Registry.instance().getDomainObjectTypes(),
+                null, IntrospectionStrategy.STUB);
+        loadSpecificationsFor(
+                AppManifest.Registry.instance().getViewModelTypes(),
+                null, IntrospectionStrategy.STUB);
+        loadSpecificationsFor(
+                AppManifest.Registry.instance().getXmlElementTypes(),
+                null, IntrospectionStrategy.STUB);
+
         cacheBySpecId();
 
         state = State.INTROSPECTING;
@@ -218,35 +233,22 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     }
 
-    private void loadSpecificationsForServices() {
-        final Properties metadataProperties = new Properties();
-
-        List<Class<?>> classes = allServiceClasses();
-        for (final Class<?> serviceClass : classes) {
-            final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
-            final NatureOfService nature = domainService != null ? domainService.nature() : NatureOfService.DOMAIN;
-            // will 'markAsService'
-            ObjectSpecification objectSpecification = internalLoadSpecification(serviceClass, nature);
-
-            facetProcessorObjectSpecId.process(
-                    serviceClass, metadataProperties,
-                    MethodRemoverConstants.NULL, objectSpecification);
-        }
-    }
-
-    private void loadSpecificationsForMixins() {
-        final Properties metadataProperties = new Properties();
-
-        final Set<Class<?>> mixinTypes = AppManifest.Registry.instance().getMixinTypes();
-        if(mixinTypes == null) {
+    private void loadSpecificationsFor(
+            final Collection<Class<?>> domainTypes,
+            final NatureOfService natureOfServiceFallback,
+            final IntrospectionStrategy introspectionStrategy) {
+        if(domainTypes == null || domainTypes.isEmpty()) {
             return;
         }
-        for (final Class<?> mixinType : mixinTypes) {
-            ObjectSpecification objectSpecification = internalLoadSpecification(mixinType);
-            facetProcessorObjectSpecId.process(
-                    mixinType, metadataProperties,
-                    MethodRemoverConstants.NULL, objectSpecification);
+        final Properties metadataProperties = new Properties();
+        for (final Class<?> domainType : domainTypes) {
 
+            ObjectSpecification objectSpecification =
+                    internalLoadSpecification(domainType, natureOfServiceFallback, introspectionStrategy);
+
+            facetProcessorObjectSpecId.process(
+                    domainType, metadataProperties,
+                    MethodRemoverConstants.NULL, objectSpecification);
         }
     }
 
@@ -388,22 +390,26 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return spec;
     }
 
+    enum IntrospectionStrategy {STUB, COMPLETE}
     private ObjectSpecification internalLoadSpecification(final Class<?> type) {
-        // superclasses tend to be loaded via this method, implicitly.
-        // what can happen is that a subclass domain service, eg a fake one such as FakeLocationLookupService
-        // can be registered first prior to the "real" implementation.  As belt-n-braces, if that superclass is
-        // annotated using @DomainService, then we ensure its own spec is created correctly as a service spec.
-        final DomainService domainServiceIfAny = type.getAnnotation(DomainService.class);
-        final NatureOfService natureOfServiceIfAny = domainServiceIfAny != null ? domainServiceIfAny.nature() : null;
-        return internalLoadSpecification(type, natureOfServiceIfAny);
+        return internalLoadSpecification(type, null, IntrospectionStrategy.COMPLETE);
     }
 
-    private ObjectSpecification internalLoadSpecification(final Class<?> type, final NatureOfService nature) {
+    private ObjectSpecification internalLoadSpecification(
+            final Class<?> type,
+            final NatureOfService natureFallback,
+            final IntrospectionStrategy introspectionStrategy) {
+
         final Class<?> substitutedType = classSubstitutor.getClass(type);
-        return substitutedType != null ? loadSpecificationForSubstitutedClass(substitutedType, nature) : null;
+        return substitutedType != null
+                ? loadSpecificationForSubstitutedClass(substitutedType, natureFallback, introspectionStrategy)
+                : null;
     }
 
-    private ObjectSpecification loadSpecificationForSubstitutedClass(final Class<?> type, final NatureOfService nature) {
+    private ObjectSpecification loadSpecificationForSubstitutedClass(
+            final Class<?> type,
+            final NatureOfService natureFallback,
+            final IntrospectionStrategy introspectionStrategy) {
         Assert.assertNotNull(type);
 
         final String typeName = type.getName();
@@ -412,12 +418,14 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             return spec;
         }
 
-        return loadSpecificationForSubstitutedClassSynchronized(type, nature);
+        return loadSpecificationForSubstitutedClassSynchronized(type, natureFallback, introspectionStrategy);
     }
+
 
     private synchronized ObjectSpecification loadSpecificationForSubstitutedClassSynchronized(
             final Class<?> type,
-            final NatureOfService natureOfService) {
+            final NatureOfService natureOfServiceFallback,
+            final IntrospectionStrategy introspectionStrategy) {
 
         final String typeName = type.getName();
         final ObjectSpecification spec = cache.get(typeName);
@@ -425,13 +433,16 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             // because caller isn't synchronized.
             return spec;
         }
-        final ObjectSpecification specification = createSpecification(type, natureOfService);
+
+        final ObjectSpecification specification = createSpecification(type, natureOfServiceFallback);
 
         // put into the cache prior to introspecting, to prevent
         // infinite loops
         cache.cache(typeName, specification);
 
-        introspectIfRequired(specification);
+        if(introspectionStrategy == IntrospectionStrategy.COMPLETE) {
+            introspectIfRequired(specification);
+        }
 
         return specification;
     }
@@ -466,21 +477,30 @@ public class SpecificationLoader implements ApplicationScopedComponent {
      */
     private ObjectSpecification createSpecification(
             final Class<?> cls,
-            final NatureOfService natureOfServiceIfAny) {
+            final NatureOfService fallback) {
 
         // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {
-            return new ObjectSpecificationOnStandaloneList(servicesInjector,
-                    facetProcessor);
+            return new ObjectSpecificationOnStandaloneList(servicesInjector, facetProcessor);
         } else {
             final ConfigurationServiceInternal configService = servicesInjector.lookupService(
                     ConfigurationServiceInternal.class);
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
                     new FacetedMethodsBuilderContext(
                             this, facetProcessor, layoutMetadataReaders, configService);
+
+            final NatureOfService natureOfServiceIfAny = natureOfServiceFrom(cls, fallback);
+
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext,
                     servicesInjector, facetProcessor, natureOfServiceIfAny);
         }
+    }
+
+    private NatureOfService natureOfServiceFrom(
+            final Class<?> type,
+            final NatureOfService fallback) {
+        final DomainService domainServiceIfAny = type.getAnnotation(DomainService.class);
+        return domainServiceIfAny != null ? domainServiceIfAny.nature() : fallback;
     }
 
     private Class<?> loadBuiltIn(final String className) throws ClassNotFoundException {

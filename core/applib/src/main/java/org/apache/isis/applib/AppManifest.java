@@ -32,7 +32,6 @@ import java.util.Set;
 import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import org.reflections.vfs.SystemDir;
 import org.reflections.vfs.Vfs;
@@ -245,6 +244,32 @@ public interface AppManifest {
             urlTypes.addAll(Arrays.asList(Vfs.DefaultUrlTypes.values()));
 
             return urlTypes;
+
+        }
+
+        private Set<Class<?>> domainObjectTypes;
+        private Set<Class<?>> viewModelTypes;
+        private Set<Class<?>> xmlElementTypes;
+
+        public Set<Class<?>> getDomainObjectTypes() {
+            return domainObjectTypes;
+        }
+        public void setDomainObjectTypes(final Set<Class<?>> domainObjectTypes) {
+            this.domainObjectTypes = domainObjectTypes;
+        }
+
+        public Set<Class<?>> getViewModelTypes() {
+            return viewModelTypes;
+        }
+        public void setViewModelTypes(final Set<Class<?>> viewModelTypes) {
+            this.viewModelTypes = viewModelTypes;
+        }
+
+        public Set<Class<?>> getXmlElementTypes() {
+            return xmlElementTypes;
+        }
+        public void setXmlElementTypes(final Set<Class<?>> xmlElementTypes) {
+            this.xmlElementTypes = xmlElementTypes;
         }
         //endregion
 
