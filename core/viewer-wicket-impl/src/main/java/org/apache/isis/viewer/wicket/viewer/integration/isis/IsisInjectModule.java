@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.runner;
+package org.apache.isis.viewer.wicket.viewer.integration.isis;
 
 import java.util.List;
 import java.util.Map;

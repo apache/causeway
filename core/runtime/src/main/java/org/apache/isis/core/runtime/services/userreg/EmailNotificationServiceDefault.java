@@ -28,12 +28,10 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Singleton;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -47,14 +45,15 @@ import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 /**
  * A service that sends email notifications when specific events occur
  */
-@com.google.inject.Singleton // necessary because is registered in and injected by google guice
+@Singleton // necessary because is registered in and injected by CDI //FIXME[1892]
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
         )
 public class EmailNotificationServiceDefault implements EmailNotificationService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(EmailNotificationServiceDefault.class);
+    
+    private static final long serialVersionUID = 1L;
+    //private static final Logger LOG = LoggerFactory.getLogger(EmailNotificationServiceDefault.class);
 
     // -- constants
 

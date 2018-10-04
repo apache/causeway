@@ -94,6 +94,13 @@
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-guice</artifactId>
+            <exclusions>
+            	<!-- already provided by JEE API -->
+            	<exclusion>
+            		<groupId>javax.inject</groupId>
+            		<artifactId>javax.inject</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.wicketstuff</groupId>

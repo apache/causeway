@@ -25,9 +25,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +33,6 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
-import org.apache.isis.core.runtime.runner.IsisInjectModule;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 
@@ -74,10 +70,11 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
                     
             addConfigurationResourcesForDeploymentType(isisConfigurationBuilder, deploymentType);
 
-            final IsisConfigurationDefault isisConfiguration = isisConfigurationBuilder.getConfiguration();
-            final IsisInjectModule isisModule = new IsisInjectModule(isisConfiguration);
-            final Injector injector = Guice.createInjector(isisModule);
-            injector.injectMembers(this);
+            //FIXME[1892]
+//            final IsisConfigurationDefault isisConfiguration = isisConfigurationBuilder.getConfiguration();
+//            final IsisInjectModule isisModule = new IsisInjectModule(isisConfiguration);
+//            final Injector injector = Guice.createInjector(isisModule);
+//            injector.injectMembers(this);
 
         } catch (final RuntimeException e) {
             LOG.error("startup failed", e);
