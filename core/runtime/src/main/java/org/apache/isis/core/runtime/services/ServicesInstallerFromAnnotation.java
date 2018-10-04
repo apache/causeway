@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.runtime.services;
 
-import static org.apache.isis.commons.internal.functions._Predicates.not;
-
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
@@ -30,9 +28,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.annotation.PreDestroy;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
@@ -51,7 +46,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     // -- constants
 
-    private static final Logger LOG = LoggerFactory.getLogger(ServicesInstallerFromAnnotation.class);
+    //private static final Logger LOG = LoggerFactory.getLogger(ServicesInstallerFromAnnotation.class);
 
     public static final String NAME = "annotation";
     public final static String PACKAGE_PREFIX_KEY = "isis.services.ServicesInstallerFromAnnotation.packagePrefix";
@@ -143,23 +138,12 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     public void shutdown() {
     }
 
-
-
-    // -- helpers
+    // -- HELPERS
 
     private Predicate<Class<?>> instantiatable() {
-        return not(nullClass()).and(not(abstractClass()));
+        return (final Class<?> input) -> 
+            input != null && !Modifier.isAbstract(input.getModifiers());
     }
-
-    private static Predicate<Class<?>> nullClass() {
-        return (final Class<?> input) -> input == null;
-    }
-
-    private static Predicate<Class<?>> abstractClass() {
-        return (final Class<?> input) -> Modifier.isAbstract(input.getModifiers());
-    }
-
-
 
     // -- getServices (API)
 
