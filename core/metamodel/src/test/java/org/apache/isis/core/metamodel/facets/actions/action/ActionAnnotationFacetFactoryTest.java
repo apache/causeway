@@ -108,7 +108,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         facetFactory = new ActionAnnotationFacetFactory();
 
         context.checking(new Expectations() {{
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
             allowing(mockServicesInjector).getConfigurationServiceInternal();

@@ -64,7 +64,7 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
                     final SpecificationLoader specificationLoader) {
         super(type(), holder, eventType, specificationLoader);
 
-        this.translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
+        this.translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);
         // sadness: same as in TranslationFactory
         this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
 

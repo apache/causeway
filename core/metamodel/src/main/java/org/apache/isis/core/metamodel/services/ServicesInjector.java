@@ -22,6 +22,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -116,7 +117,7 @@ public class ServicesInjector implements ApplicationScopedComponent, ServiceRegi
             final InjectorMethodEvaluator injectorMethodEvaluator,
             final IsisConfiguration configuration) {
         
-        this.services = _Lists.unmodifiable(services);
+        this.services = new ArrayList<>(services);//_Lists.unmodifiable(services);
 
         this.injectorMethodEvaluator =
                 injectorMethodEvaluator != null

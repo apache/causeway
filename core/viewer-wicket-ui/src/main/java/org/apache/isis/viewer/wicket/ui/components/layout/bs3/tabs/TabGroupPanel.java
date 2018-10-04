@@ -79,7 +79,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel<ITab>  {
     }
 
     static TranslationService getTranslationService() {
-        return IsisContext.getSessionFactory().getServicesInjector().lookupServiceElseFail(TranslationService.class);
+        return IsisContext.getSessionFactory().getServicesInjector().lookupService(TranslationService.class).orElse(null);
     }
 
     public TabGroupPanel(String id, final EntityModel entityModel, final BS3TabGroup bs3TabGroup) {

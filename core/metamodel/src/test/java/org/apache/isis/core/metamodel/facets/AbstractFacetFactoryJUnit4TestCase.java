@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -126,7 +127,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
             will(returnValue(mockPersistenceSessionServiceInternal));
 
             allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(mockTranslationService));
+            will(returnValue(Optional.of(mockTranslationService)));
 
             allowing(mockServicesInjector).getAuthenticationSessionProvider();
             will(returnValue(mockAuthenticationSessionProvider));

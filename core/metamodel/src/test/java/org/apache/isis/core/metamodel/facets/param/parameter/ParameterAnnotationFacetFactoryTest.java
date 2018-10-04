@@ -134,6 +134,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
         public void withAnnotation() {
 
             class Customer {
+                @SuppressWarnings("unused")
                 public void someAction(
                         @Parameter(
                                 mustSatisfy = {NotTooHot.class, NotTooCold.class}

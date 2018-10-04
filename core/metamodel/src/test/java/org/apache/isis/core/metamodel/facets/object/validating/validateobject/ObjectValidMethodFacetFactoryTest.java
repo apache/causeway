@@ -20,12 +20,14 @@
 package org.apache.isis.core.metamodel.facets.object.validating.validateobject;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 import org.jmock.Expectations;
+
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethod;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethodFactory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -50,7 +52,7 @@ public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest 
 
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(mockTranslationService));
+            will(returnValue(Optional.of(mockTranslationService)));
         }});
 
         facetFactory = new ValidateObjectFacetMethodFactory();

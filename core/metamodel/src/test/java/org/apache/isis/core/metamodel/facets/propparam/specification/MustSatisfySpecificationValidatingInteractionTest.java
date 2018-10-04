@@ -19,6 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.propparam.specification;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
+import java.util.Collections;
+import java.util.Optional;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
@@ -35,13 +43,6 @@ import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.M
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
-import java.util.Collections;
 
 public class MustSatisfySpecificationValidatingInteractionTest {
 
@@ -75,7 +76,7 @@ public class MustSatisfySpecificationValidatingInteractionTest {
         identifiedHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "lastName"));
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(mockTranslationService));
+            will(returnValue(Optional.of(mockTranslationService)));
         }});
 
         specificationAlwaysSatisfied = new SpecificationAlwaysSatisfied();

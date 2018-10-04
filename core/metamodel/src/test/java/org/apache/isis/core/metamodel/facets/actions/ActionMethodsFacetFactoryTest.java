@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.jmock.Expectations;
@@ -107,9 +108,9 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             will(returnValue(mockAuthenticationSession));
 
             allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(mockTranslationService));
+            will(returnValue(Optional.of(mockTranslationService)));
 
-            allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+            allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
             allowing(mockServicesInjector).getAuthenticationSessionProvider();

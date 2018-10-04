@@ -60,7 +60,7 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
                 null);
         if (method != null) {
             processClassContext.removeMethod(method);
-            final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
+            final TranslationService translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
             // sadness: same as in TranslationFactory
             final String translationContext = method.getDeclaringClass().getName() + "#" + method.getName() + "()";
 

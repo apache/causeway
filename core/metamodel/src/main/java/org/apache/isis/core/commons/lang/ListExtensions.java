@@ -92,7 +92,7 @@ public final class ListExtensions {
     public static <T> void adjust(final List<T> list, final int requiredLength) {
         extend(list, requiredLength);
         if(list.size() > requiredLength) {
-            list.subList(requiredLength, list.size()).clear();;
+            list.subList(requiredLength, list.size()).clear();
         }
     }
 

@@ -147,7 +147,7 @@ public class LocalizerForIsis extends Localizer {
 
 
     protected TranslationService getTranslationService() {
-        return getServicesInjector().lookupServiceElseFail(TranslationService.class);
+        return getServicesInjector().lookupService(TranslationService.class).orElse(null);
     }
 
     protected ServicesInjector getServicesInjector() {

@@ -68,7 +68,7 @@ public abstract class SpecificationLoaderTestAbstract {
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
     private MessageService mockMessageService;
-
+    
     ServicesInjector stubServicesInjector;
     IsisConfigurationDefault stubConfiguration;
 

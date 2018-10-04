@@ -176,7 +176,7 @@ implements ApplicationScopedComponent, AppManifestProvider {
             }
 
             // as used by the Wicket UI
-            final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
+            final TranslationService translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
 
             final String context = IsisSessionFactoryBuilder.class.getName();
             final MessageRegistry messageRegistry = new MessageRegistry();

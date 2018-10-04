@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -50,7 +51,7 @@ public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
 
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(mockTranslationService));
+            will(returnValue(Optional.of(mockTranslationService)));
         }});
 
         facetFactory = new TitleFacetViaMethodsFactory();

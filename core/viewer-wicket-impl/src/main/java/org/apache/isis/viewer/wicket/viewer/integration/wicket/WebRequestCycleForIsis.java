@@ -379,7 +379,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
 
     TranslationService getTranslationService() {
-        return getServicesInjector().lookupServiceElseFail(TranslationService.class);
+        return getServicesInjector().lookupService(TranslationService.class).orElse(null);
     }
 
     // -- Dependencies (from wicket)

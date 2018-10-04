@@ -20,14 +20,16 @@
 package org.apache.isis.core.metamodel.facets.object.disabled;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 import org.jmock.Expectations;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.Identifier.Type;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -49,7 +51,7 @@ public class ObjectDisabledMethodFacetFactoryTest extends AbstractFacetFactoryTe
 
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(mockTranslationService));
+            will(returnValue(Optional.of(mockTranslationService)));
         }});
 
         facetFactory = new DisabledObjectFacetViaMethodFactory();

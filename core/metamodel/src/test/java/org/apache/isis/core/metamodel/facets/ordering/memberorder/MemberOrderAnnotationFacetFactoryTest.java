@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.ordering.memberorder;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.Optional;
 
 import org.hamcrest.Description;
 import org.jmock.Expectations;
@@ -59,7 +60,7 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(mockTranslationService));
+            will(returnValue(Optional.of(mockTranslationService)));
         }});
 
         context.checking(new Expectations() {{
@@ -91,7 +92,6 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
     public void testMemberOrderAnnotationPickedUpOnProperty() {
         class Customer {
-            @SuppressWarnings("unused")
             @MemberOrder(sequence = "1")
             public String getFirstName() {
                 return null;
@@ -114,7 +114,6 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         class Order {
         }
         class Customer {
-            @SuppressWarnings("unused")
             @MemberOrder(sequence = "2")
             public Collection<Order> getOrders() {
                 return null;
@@ -139,7 +138,6 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
     public void testMemberOrderAnnotationPickedUpOnAction() {
         class Customer {
-            @SuppressWarnings("unused")
             @MemberOrder(sequence = "3")
             public void someAction() {
             }

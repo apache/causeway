@@ -126,7 +126,8 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
                 mockAuthenticationSessionProvider,
                 mockSpecificationLoader,
                 mockDeploymentCategoryProvider,
-                mockPersistenceSessionServiceInternal
+                mockPersistenceSessionServiceInternal,
+                mockTranslationService
         ), stubConfiguration);
 
         context.checking(new Expectations() {{
