@@ -24,7 +24,6 @@ import java.util.Properties;
 
 import javax.activation.DataSource;
 import javax.annotation.PostConstruct;
-import javax.inject.Singleton;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
@@ -43,7 +42,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 /**
  * A service that sends email notifications when specific events occur
  */
-@Singleton // necessary because is registered in and injected by CDI //FIXME[1892]
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE

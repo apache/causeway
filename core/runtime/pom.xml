@@ -111,13 +111,6 @@
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>
 
-<!--         <dependency> -->
-<!--             required because resteasy-jaxrs declares as a test dependency whereas --> 
-<!--                  httpclient4 needs it as a compile dependency -->
-<!--             <groupId>commons-logging</groupId> -->
-<!--             <artifactId>commons-logging</artifactId> -->
-<!--         </dependency> -->
-
     </dependencies>
 
     <profiles>

@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -44,7 +43,6 @@ import org.apache.isis.commons.internal.resources._Resources;
 /**
  * A service that sends email notifications when specific events occur
  */
-@Singleton // necessary because is registered in and injected by CDI //FIXME[1892]
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE

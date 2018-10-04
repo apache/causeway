@@ -44,7 +44,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
  * small and focused as possible. The builders are available for reuse by other
  * bootstrappers.
  */
-public class IsisWebAppBootstrapper implements ServletContextListener {
+public final class IsisWebAppBootstrapper implements ServletContextListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisWebAppBootstrapper.class);
 
@@ -69,12 +69,6 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             final DeploymentType deploymentType = DeploymentType.get(); 
                     
             addConfigurationResourcesForDeploymentType(isisConfigurationBuilder, deploymentType);
-
-            //FIXME[1892]
-//            final IsisConfigurationDefault isisConfiguration = isisConfigurationBuilder.getConfiguration();
-//            final IsisInjectModule isisModule = new IsisInjectModule(isisConfiguration);
-//            final Injector injector = Guice.createInjector(isisModule);
-//            injector.injectMembers(this);
 
         } catch (final RuntimeException e) {
             LOG.error("startup failed", e);
