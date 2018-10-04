@@ -154,7 +154,7 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
         return null;
     }
 
-    public Class<? extends ActionDomainEvent<?>> getEventType() {
+    public <S> Class<? extends ActionDomainEvent<S>> getEventType() {
         return _Casts.uncheckedCast(value());
     }
 

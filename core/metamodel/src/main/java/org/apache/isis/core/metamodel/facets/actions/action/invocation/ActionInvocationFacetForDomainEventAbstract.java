@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import java.lang.reflect.InvocationTargetException;
@@ -214,7 +215,7 @@ implements ImperativeFacet {
             final Interaction.MemberExecutor<Interaction.ActionInvocation> callable =
                     new Interaction.MemberExecutor<Interaction.ActionInvocation>() {
 
-                @SuppressWarnings("rawtypes")
+                
                 @Override
                 public Object execute(final Interaction.ActionInvocation currentExecution) {
 
@@ -239,11 +240,11 @@ implements ImperativeFacet {
 
 
                         // ... post the executing event
-                        
+                
                         final ActionDomainEvent<?> event =
                                 domainEventHelper.postEventForAction(
                                         AbstractDomainEvent.Phase.EXECUTING,
-                                        eventType, null,
+                                        getEventType(), null,
                                         owningAction, owningAction,
                                         targetAdapter, mixedInAdapter, argumentAdapters,
                                         command,
@@ -257,6 +258,9 @@ implements ImperativeFacet {
                         final ObjectAdapter resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
 
                         // ... post the executed event
+                        
+                        //[ahuber] javac (jdk-8) won't compile this without the cast '(ActionDomainEvent)event', 
+                        // while the eclipse compiler does ... 
                         domainEventHelper.postEventForAction(
                                 AbstractDomainEvent.Phase.EXECUTED,
                                 getEventType(), (ActionDomainEvent)event,
@@ -323,10 +327,6 @@ implements ImperativeFacet {
             // publish (if not a contributed association, query-only mixin)
             final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
             if (publishedActionFacet != null) {
-
-                //TODO not used
-                //                final IdentifiedHolder identifiedHolder = getIdentified();
-                //                final List<ObjectAdapter> parameterAdapters = Arrays.asList(argumentAdapters);
 
                 getPublishingServiceInternal().publishAction(
                         priorExecution
@@ -514,11 +514,8 @@ implements ImperativeFacet {
         }
     }
 
-    /**
-     * For testing only.
-     */
-    public Class<? extends ActionDomainEvent<?>> getEventType() {
-        return eventType;
+    public <S> Class<? extends ActionDomainEvent<S>> getEventType() {
+        return uncheckedCast(eventType);
     }
 
     private static Object unwrap(final ObjectAdapter adapter) {
