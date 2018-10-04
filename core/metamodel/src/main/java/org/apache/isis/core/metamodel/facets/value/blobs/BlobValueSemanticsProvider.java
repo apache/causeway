@@ -19,15 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.value.blobs;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
-
-import org.apache.commons.codec.binary.Base64;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Blob;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
@@ -92,7 +95,8 @@ public class BlobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
     @Override
     protected String doEncode(final Object object) {
         Blob blob = (Blob)object;
-        return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" + Base64.encodeBase64String((blob.getBytes()));
+        return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" + 
+                _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getUrlEncoder(), blob.getBytes()), StandardCharsets.UTF_8);
     }
 
     @Override
@@ -101,7 +105,8 @@ public class BlobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
         final String name  = data.substring(0, colonIdx);
         final int colon2Idx  = data.indexOf(":", colonIdx+1);
         final String mimeTypeBase = data.substring(colonIdx+1, colon2Idx);
-        final byte[] bytes = Base64.decodeBase64(data.substring(colon2Idx+1));
+        final String payload = data.substring(colon2Idx+1);
+        final byte[] bytes = _Bytes.decodeBase64(Base64.getUrlDecoder(), payload.getBytes(StandardCharsets.UTF_8));
         try {
             return new Blob(name, new MimeType(mimeTypeBase), bytes);
         } catch (MimeTypeParseException e) {

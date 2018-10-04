@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.authentication;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,12 +27,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.binary.Base64;
-
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyAbstract;
 
 /**
@@ -79,7 +79,7 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
 
 
     protected String unencoded(final String encodedDigest) {
-        return new String(new Base64().decode(encodedDigest.getBytes()));
+        return _Strings.ofBytes(_Bytes.decodeBase64(Base64.getUrlDecoder(), encodedDigest.getBytes()), StandardCharsets.UTF_8);
     }
 
 
