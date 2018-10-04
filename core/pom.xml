@@ -49,6 +49,9 @@
         <revision>1.0.0-SNAPSHOT</revision>
         <isis.version>${revision}</isis.version>
 
+        <isis.skipTests>false</isis.skipTests>
+        <maven.test.skip>${isis.skipTests}</maven.test.skip>
+
         <jar-plugin.automaticModuleName>org.apache.isis.core</jar-plugin.automaticModuleName>
         <git-plugin.propertiesDir>org/apache/isis/core</git-plugin.propertiesDir>
 

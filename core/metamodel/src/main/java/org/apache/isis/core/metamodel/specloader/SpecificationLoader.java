@@ -279,7 +279,9 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             ObjectSpecification objectSpecification =
                 internalLoadSpecification(domainType, natureOfServiceFallback, introspectionStrategy);
 
-            appendTo.add(objectSpecification);
+            if(objectSpecification != null) {
+                appendTo.add(objectSpecification);
+            }
         }
     }
 

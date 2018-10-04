@@ -162,6 +162,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             updateInterfaces(interfaceSpecList);
         }
 
+        updateAssociationsAndActions();
+    }
+
+    private synchronized void updateAssociationsAndActions() {
+
         // associations and actions
         if(isNotIntrospected()) {
             final List<ObjectAssociation> associations = createAssociations(metadataProperties);
@@ -173,11 +178,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             sortCacheAndUpdateActions(actions);
         }
 
-
-
-
         if(isNotIntrospected()) {
-            updateFromFacetValues();    
+            updateFromFacetValues();
         }
     }
 

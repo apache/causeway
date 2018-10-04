@@ -114,7 +114,20 @@ public class ClassSubstitutor {
             return true;
         }
 
-        return classesToIgnore.contains(cls) || classNamesToIgnore.contains(cls.getCanonicalName());
+        try{
+            return classesToIgnore.contains(cls) || classNamesToIgnore.contains(cls.getCanonicalName());
+        } catch(java.lang.NoClassDefFoundError e) {
+
+            try{
+                if(cls.isAnonymousClass()) {
+                    return shouldIgnore(cls.getSuperclass());
+                } else {
+                    return false;
+                }
+            } catch(java.lang.NoClassDefFoundError ex) {
+                return true;
+            }
+        }
     }
 
     //endregion

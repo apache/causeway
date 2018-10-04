@@ -69,9 +69,11 @@ public class FacetedMethodsBuilder {
 
     private static final class FacetedMethodsMethodRemover implements MethodRemover {
 
+        private final Class<?> introspectedClass;
         private final List<Method> methods;
 
-        private FacetedMethodsMethodRemover(final List<Method> methods) {
+        private FacetedMethodsMethodRemover(final Class<?> introspectedClass, final List<Method> methods) {
+            this.introspectedClass = introspectedClass;
             this.methods = methods;
         }
 
@@ -163,7 +165,7 @@ public class FacetedMethodsBuilder {
         this.introspectedClass = spec.getCorrespondingClass();
         this.methods = Arrays.asList(introspectedClass.getMethods());
 
-        this.methodRemover = new FacetedMethodsMethodRemover(methods);
+        this.methodRemover = new FacetedMethodsMethodRemover(introspectedClass, methods);
 
         this.facetProcessor = facetedMethodsBuilderContext.facetProcessor;
         this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
