@@ -21,15 +21,13 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -42,7 +40,7 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends TitleFacetAbstract {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent.class);
+    //private static final Logger LOG = LoggerFactory.getLogger(TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent.class);
 
     public static Facet create(
             final List<DomainObjectLayout> domainObjectLayouts,
@@ -119,7 +117,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
 
     private TitleUiEvent<Object> newTitleUiEvent(final Object domainObject) {
         try {
-            final TitleUiEvent<Object> titleUiEvent = (TitleUiEvent<Object>) titleUiEventClass.newInstance();
+            final TitleUiEvent<Object> titleUiEvent = _Casts.uncheckedCast(titleUiEventClass.newInstance());
             titleUiEvent.setSource(domainObject);
             return titleUiEvent;
         } catch (InstantiationException | IllegalAccessException ex) {

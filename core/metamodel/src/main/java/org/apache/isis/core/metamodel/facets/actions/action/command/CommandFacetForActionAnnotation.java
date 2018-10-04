@@ -77,6 +77,7 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
                     case ENABLED:
                         return new CommandFacetForActionAnnotation(
                                 persistence, executeIn, Enablement.ENABLED, processor, holder, servicesInjector);
+                    default:
                     }
                     throw new IllegalStateException("command '" + command + "' not recognised");
                 })

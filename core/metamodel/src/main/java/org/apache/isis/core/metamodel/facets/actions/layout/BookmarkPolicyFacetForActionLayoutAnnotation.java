@@ -44,6 +44,7 @@ public class BookmarkPolicyFacetForActionLayoutAnnotation extends BookmarkPolicy
                         return new BookmarkPolicyFacetForActionLayoutAnnotation(bookmarkPolicy, holder);
                     case NEVER:
                         return null;
+                    default:
                     }
                     throw new IllegalStateException("bookmarkPolicy '" + bookmarkPolicy + "' not recognised");
                 }

@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl.standalonelist;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -41,7 +43,7 @@ public class CollectionFacetOnStandaloneList extends CollectionFacetAbstract {
     public <T extends ManagedObject> Stream<T> stream(T wrappedObjectList) {
         final List<ManagedObject> list = collection(wrappedObjectList);
         return list.stream()
-                .map(x->(T)x);
+                .map(x->uncheckedCast(x));
     }
 
     /**

@@ -140,8 +140,6 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
 
     @Override
     public void process(ProcessContributeeMemberContext processMemberContext) {
-        final FacetHolder holder = processMemberContext.getFacetHolder();
-
 
         // cssClass
         CssClassFacet cssClassFacet = null;

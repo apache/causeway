@@ -112,9 +112,7 @@ public class DeweyOrderSet implements Comparable<DeweyOrderSet>, Iterable<Object
         // now populate the OrderSets
         for (final String groupName : groupNames) {
             final DeweyOrderSet deweyOrderSet = orderSetsByGroup.get(groupName);
-            // REVIEW: something fishy happens here with casting, hence warnings
-            // left in
-            final SortedSet sortedMembers = sortedMembersByGroup.get(groupName);
+            final SortedSet<IdentifiedHolder> sortedMembers = sortedMembersByGroup.get(groupName);
             deweyOrderSet.addAll(sortedMembers);
             deweyOrderSet.copyOverChildren();
         }

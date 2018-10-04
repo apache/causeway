@@ -63,6 +63,7 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
                         return new ImmutableFacetForDomainObjectAnnotation(disabledReason, holder);
                     case ENABLED:
                         return null;
+                    default:
                     }
                     throw new IllegalStateException("domainObject.editing() not recognised, is " + domainObject.editing());
                 })

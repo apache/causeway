@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -39,11 +41,17 @@ public final class ParserUtil {
         return !_Strings.isNullOrEmpty(parserName) ? parserName : null;
     }
 
-    @SuppressWarnings("unchecked")
     public static Class<? extends Parser<?>> parserOrNull(final Class<?> candidateClass, final String classCandidateName) {
-        @SuppressWarnings("rawtypes")
-        final Class type = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(), Parser.class, FacetHolder.class) : null;
-        return type != null ? type : (Class)ClassUtil.implementingClassOrNull(classCandidateName, Parser.class, FacetHolder.class);
+        
+        final Class<? extends Parser<?>> type = candidateClass != null 
+                ? uncheckedCast(ClassUtil.implementingClassOrNull(
+                        candidateClass.getName(), Parser.class, FacetHolder.class)) 
+                        : null;
+        
+        return type != null 
+                ? type 
+                        : uncheckedCast(ClassUtil.implementingClassOrNull(
+                                classCandidateName, Parser.class, FacetHolder.class));
     }
 
 }

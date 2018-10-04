@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import org.apache.isis.applib.events.lifecycle.ObjectPersistingEvent;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -39,12 +40,7 @@ public class PersistingLifecycleEventFacetForDomainObjectAnnotation extends Sing
 
     @Override
     public Class<? extends ObjectPersistingEvent<?>> getEventType() {
-        //noinspection unchecked
-        return eventType();
-    }
-
-    Class eventType() {
-        return value();
+        return _Casts.uncheckedCast(value());
     }
 
 

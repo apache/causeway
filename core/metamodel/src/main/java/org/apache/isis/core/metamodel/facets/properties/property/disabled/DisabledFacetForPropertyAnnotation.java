@@ -50,6 +50,7 @@ public class DisabledFacetForPropertyAnnotation extends DisabledFacetAbstractImp
                         return new DisabledFacetForPropertyAnnotation(disabledReason, holder);
                     case ENABLED:
                         return new DisabledFacetForPropertyAnnotationInvertedSemantics(holder);
+                    default:
                     }
                     return null;
                 })

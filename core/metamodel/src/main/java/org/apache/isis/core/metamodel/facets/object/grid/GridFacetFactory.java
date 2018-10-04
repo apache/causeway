@@ -16,9 +16,6 @@
  * under the License. */
 package org.apache.isis.core.metamodel.facets.object.grid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -27,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 public class GridFacetFactory extends FacetFactoryAbstract {
 
-    private static final Logger LOG = LoggerFactory.getLogger(GridFacetFactory.class);
+    //private static final Logger LOG = LoggerFactory.getLogger(GridFacetFactory.class);
 
     public GridFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);

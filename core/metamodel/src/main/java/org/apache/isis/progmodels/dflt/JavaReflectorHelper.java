@@ -52,10 +52,7 @@ public final class JavaReflectorHelper  {
             metaModelRefiner.refineMetaModelValidator(metaModelValidator, configuration);
         }
 
-        // the programming model is itself also a MetaModelValidatorRefiner
-        if(!metaModelRefiners.contains(programmingModel)) {
-            programmingModel.refineMetaModelValidator(metaModelValidator, configuration);
-        }
+        programmingModel.refineMetaModelValidator(metaModelValidator, configuration);
 
         return new SpecificationLoader(configuration, programmingModel, metaModelValidator, servicesInjector);
     }

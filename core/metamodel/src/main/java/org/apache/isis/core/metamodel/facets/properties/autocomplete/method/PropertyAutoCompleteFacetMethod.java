@@ -28,7 +28,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -93,9 +92,6 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
             final ObjectAdapter owningAdapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
-
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
 
         final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, searchArg);
         if (collectionOrArray == null) {

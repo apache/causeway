@@ -66,7 +66,7 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
 
                         promptStyle = PromptStyleConfiguration.parse(configuration);
                         return new PromptStyleFacetAsConfigured(promptStyle, holder);
-
+                    default:
                     }
                     throw new IllegalStateException("promptStyle '" + promptStyle + "' not recognised");
                 })

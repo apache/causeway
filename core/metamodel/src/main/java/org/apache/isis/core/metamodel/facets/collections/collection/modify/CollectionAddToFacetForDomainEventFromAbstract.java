@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.util.Set;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
@@ -88,10 +90,11 @@ implements CollectionAddToFacet {
         // execute the add wrapped between the executing and executed events ...
 
         // ... post the executing event
+        
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.EXECUTING,
-                        eventType(), null,
+                        getEventType(), null,
                         getIdentified(), targetAdapter,
                         CollectionDomainEvent.Of.ADD_TO,
                         referencedObject);
@@ -102,21 +105,15 @@ implements CollectionAddToFacet {
         // ... post the executed event
         domainEventHelper.postEventForCollection(
                 AbstractDomainEvent.Phase.EXECUTED,
-                value(), verify(event),
+                getEventType(), uncheckedCast((CollectionDomainEvent<?, ?>)event),
                 getIdentified(), targetAdapter,
                 CollectionDomainEvent.Of.ADD_TO,
                 referencedObject);
     }
 
-    private Class<? extends CollectionDomainEvent<?, ?>> eventType() {
-        return value();
+    public <S, T> Class<? extends CollectionDomainEvent<S, T>> getEventType() {
+        return uncheckedCast(value());
     }
 
-    /**
-     * Optional hook to allow the facet implementation of now-deleted annotations to discard the event if of a different type; now a no-op, I think.
-     */
-    protected CollectionDomainEvent<?, ?> verify(CollectionDomainEvent<?, ?> event) {
-        return event;
-    }
 
 }

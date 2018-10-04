@@ -214,6 +214,7 @@ implements ImperativeFacet {
             final Interaction.MemberExecutor<Interaction.ActionInvocation> callable =
                     new Interaction.MemberExecutor<Interaction.ActionInvocation>() {
 
+                @SuppressWarnings("rawtypes")
                 @Override
                 public Object execute(final Interaction.ActionInvocation currentExecution) {
 
@@ -238,6 +239,7 @@ implements ImperativeFacet {
 
 
                         // ... post the executing event
+                        
                         final ActionDomainEvent<?> event =
                                 domainEventHelper.postEventForAction(
                                         AbstractDomainEvent.Phase.EXECUTING,
@@ -252,14 +254,12 @@ implements ImperativeFacet {
 
                         // invoke method
                         final Object resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
-
                         final ObjectAdapter resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
-
 
                         // ... post the executed event
                         domainEventHelper.postEventForAction(
                                 AbstractDomainEvent.Phase.EXECUTED,
-                                eventType, verify(event),
+                                getEventType(), (ActionDomainEvent)event,
                                 owningAction, owningAction, targetAdapter, mixedInAdapter, argumentAdapters,
                                 command,
                                 resultAdapterPossiblyCloned);
@@ -512,15 +512,6 @@ implements ImperativeFacet {
             boolean visible = ObjectAdapter.Util.isVisible(resultAdapter, interactionInitiatedBy);
             return visible ? resultAdapter : null;
         }
-    }
-
-
-    /**
-     * Optional hook, previously to allow facet implementations of (now removed) annotations to to discard the event if the domain event
-     * was incompatible.  Now a no-op I think.
-     */
-    protected ActionDomainEvent<?> verify(final ActionDomainEvent<?> event) {
-        return event;
     }
 
     /**

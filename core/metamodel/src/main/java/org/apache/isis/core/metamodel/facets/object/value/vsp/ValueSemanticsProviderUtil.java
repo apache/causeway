@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.value.vsp;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -39,11 +41,17 @@ public final class ValueSemanticsProviderUtil {
         return !_Strings.isNullOrEmpty(semanticsProviderName) ? semanticsProviderName : null;
     }
 
-    @SuppressWarnings("unchecked")
+    
     public static Class<? extends ValueSemanticsProvider<?>> valueSemanticsProviderOrNull(final Class<?> candidateClass, final String classCandidateName) {
-        @SuppressWarnings("rawtypes")
-        final Class clazz = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(), ValueSemanticsProvider.class, FacetHolder.class) : null;
-        return clazz != null ? clazz : (Class)ClassUtil.implementingClassOrNull(classCandidateName, ValueSemanticsProvider.class, FacetHolder.class);
+    
+        final Class<? extends ValueSemanticsProvider<?>> clazz = candidateClass != null 
+                ? uncheckedCast(ClassUtil.implementingClassOrNull(
+                        candidateClass.getName(), ValueSemanticsProvider.class, FacetHolder.class)) 
+                        : null;
+        return clazz != null 
+                ? clazz 
+                        : uncheckedCast(ClassUtil.implementingClassOrNull(
+                                classCandidateName, ValueSemanticsProvider.class, FacetHolder.class));
     }
 
 }

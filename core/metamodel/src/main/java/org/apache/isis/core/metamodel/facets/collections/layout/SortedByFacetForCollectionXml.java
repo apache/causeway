@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.util.Comparator;
 
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -37,12 +39,12 @@ public class SortedByFacetForCollectionXml extends SortedByFacetAbstract {
         if (sortedBy == null) {
             return null;
         }
-        final Class sortedByClass = ClassUtil.forName(sortedBy);
+        final Class<?> sortedByClass = ClassUtil.forName(sortedBy);
         if(sortedByClass == Comparator.class) {
             return null;
         }
 
-        return sortedByClass != null ? new SortedByFacetForCollectionXml(sortedByClass, holder) : null;
+        return sortedByClass != null ? new SortedByFacetForCollectionXml(uncheckedCast(sortedByClass), holder) : null;
     }
 
     private SortedByFacetForCollectionXml(Class<? extends Comparator<?>> sortedBy, FacetHolder holder) {

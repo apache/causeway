@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.util.Comparator;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class SortedByFacetForCollectionLayoutAnnotation extends SortedByFacetAbs
                 .filter(Comparator.class::isAssignableFrom)
                 .findFirst()
                 .map(sortedBy -> {
-                    Class<? extends Comparator<?>> sortedByForceGenerics = sortedBy;
+                    Class<? extends Comparator<?>> sortedByForceGenerics = uncheckedCast(sortedBy);
                     return new SortedByFacetForCollectionLayoutAnnotation(sortedByForceGenerics, holder);
                 })
                 .orElse(null);

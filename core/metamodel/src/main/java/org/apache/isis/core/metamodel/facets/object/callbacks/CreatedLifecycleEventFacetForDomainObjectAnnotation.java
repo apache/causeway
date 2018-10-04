@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -40,11 +41,8 @@ public class CreatedLifecycleEventFacetForDomainObjectAnnotation extends SingleC
 
     @Override
     public Class<? extends AbstractLifecycleEvent<?>> getEventType() {
-        //noinspection unchecked
-        return eventType();
+        return _Casts.uncheckedCast(value());
     }
 
-    Class eventType() {
-        return value();
-    }
+
 }

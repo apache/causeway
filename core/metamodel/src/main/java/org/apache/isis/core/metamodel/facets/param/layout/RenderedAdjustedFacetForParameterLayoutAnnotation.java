@@ -43,6 +43,7 @@ public class RenderedAdjustedFacetForParameterLayoutAnnotation extends RenderedA
                         return null;
                     case AS_DAY_BEFORE:
                         return new RenderedAdjustedFacetForParameterLayoutAnnotation(holder);
+                    default:
                     }
                     throw new IllegalStateException("renderDay '" + renderDay + "' not recognised");
                 })

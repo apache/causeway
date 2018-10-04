@@ -67,8 +67,7 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
         specificationEvaluator = new SpecificationEvaluator(translationService, translationContext);
     }
 
-    private static void inject(
-            final List specifications, final ServicesInjector servicesInjector) {
+    private static void inject(final List<?> specifications, final ServicesInjector servicesInjector) {
         servicesInjector.injectServicesInto(specifications);
     }
 

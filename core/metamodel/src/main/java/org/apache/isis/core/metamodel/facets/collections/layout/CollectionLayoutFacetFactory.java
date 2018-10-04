@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -48,7 +47,6 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
 
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
-        Properties properties = null;
         final List<CollectionLayout> collectionLayouts = Annotations.getAnnotations(processMethodContext.getMethod(), CollectionLayout.class);
 
 
@@ -92,11 +90,6 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
 
     @Override
     public void process(ProcessContributeeMemberContext processMemberContext) {
-
-        final FacetHolder holder = processMemberContext.getFacetHolder();
-
-        Properties properties = null;
-
 
         // cssClass
         CssClassFacet cssClassFacet = null;

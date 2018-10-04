@@ -26,6 +26,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
@@ -70,7 +71,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.HIDE,
-                        eventType(), null,
+                        getEventType(), null,
                         getIdentified(), ic.getTarget(),
                         null, null);
         if (event != null && event.isHidden()) {
@@ -85,7 +86,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.DISABLE,
-                        eventType(), null,
+                        getEventType(), null,
                         getIdentified(), ic.getTarget(),
                         null, null);
         if (event != null && event.isDisabled()) {
@@ -108,7 +109,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.VALIDATE,
-                        eventType(), null,
+                        getEventType(), null,
                         getIdentified(), ic.getTarget(),
                         oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
@@ -128,15 +129,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
         return proposedAdapter != null? proposedAdapter.getPojo(): null;
     }
 
-    private Class<?> eventType() {
-        return value();
-    }
-
-    /**
-     * For testing.
-     */
-    public Class<? extends PropertyDomainEvent<?, ?>> getEventType() {
-        Class eventType = eventType();
-        return eventType;
+    public <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {
+        return _Casts.uncheckedCast(value());
     }
 }

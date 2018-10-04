@@ -47,6 +47,7 @@ public class NotPersistedFacetForCollectionAnnotation extends NotPersistedFacetA
                         return null;
                     case EXCLUDED:
                         return new NotPersistedFacetForCollectionAnnotation(holder);
+                    default:
                     }
                     throw new IllegalStateException("mementoSerialization '" + mementoSerialization + "' not recognized");
                 })

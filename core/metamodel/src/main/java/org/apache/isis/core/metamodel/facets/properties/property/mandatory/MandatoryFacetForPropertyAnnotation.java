@@ -62,6 +62,7 @@ public abstract class MandatoryFacetForPropertyAnnotation extends MandatoryFacet
                         return new MandatoryFacetForPropertyAnnotation.Required(holder);
                     case OPTIONAL:
                         return new MandatoryFacetForPropertyAnnotation.Optional(holder);
+                    default:
                     }
                     throw new IllegalStateException("optionality '" + optionality + "' not recognised");
                 })

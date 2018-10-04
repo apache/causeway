@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
@@ -40,13 +41,7 @@ public class UpdatedLifecycleEventFacetForDomainObjectAnnotation extends SingleC
 
     @Override
     public Class<? extends ObjectUpdatedEvent<?>> getEventType() {
-        //noinspection unchecked
-        return eventType();
+        return _Casts.uncheckedCast(value());
     }
-
-    Class eventType() {
-        return value();
-    }
-
 
 }

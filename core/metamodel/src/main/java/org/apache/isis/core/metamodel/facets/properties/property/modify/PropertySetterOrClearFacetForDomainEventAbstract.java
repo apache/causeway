@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -238,7 +240,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                         final PropertyDomainEvent<?, ?> event =
                                 domainEventHelper.postEventForProperty(
                                         AbstractDomainEvent.Phase.EXECUTING,
-                                        eventType(), null,
+                                        getEventType(), null,
                                         getIdentified(), targetAdapter,
                                         oldValue, newValue);
 
@@ -259,7 +261,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                             // ... post the executed event
                             domainEventHelper.postEventForProperty(
                                     AbstractDomainEvent.Phase.EXECUTED,
-                                    eventType(), verify(event),
+                                    getEventType(), uncheckedCast((PropertyDomainEvent<?, ?>)event),
                                     getIdentified(), targetAdapter,
                                     oldValue, actualNewValue);
                         }
@@ -281,7 +283,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             interaction.execute(executor, execution);
 
             // handle any exceptions
-            final Interaction.Execution priorExecution = interaction.getPriorExecution();
+            final Interaction.Execution<?, ?> priorExecution = interaction.getPriorExecution();
 
             // TODO: should also sync DTO's 'threw' attribute here...?
 
@@ -302,18 +304,9 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         }
     }
 
-    private Class<? extends PropertyDomainEvent<?, ?>> eventType() {
-        return value();
+    public <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {
+        return uncheckedCast(value());
     }
-
-    /**
-     * Optional hook to allow the facet implementation for now-deleted annotations to discard an event if incompatible.
-     * Now in effect redundant.
-     */
-    protected PropertyDomainEvent<?, ?> verify(PropertyDomainEvent<?, ?> event) {
-        return event;
-    }
-
 
     private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
         return servicesInjector.lookupServiceElseFail(InteractionDtoServiceInternal.class);

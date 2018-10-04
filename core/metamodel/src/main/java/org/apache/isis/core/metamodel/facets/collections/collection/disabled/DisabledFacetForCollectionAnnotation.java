@@ -55,6 +55,8 @@ public class DisabledFacetForCollectionAnnotation extends DisabledFacetAbstractI
 
                     case ENABLED:
                         return null;
+                    default:
+                        break;
                     }
                     throw new IllegalStateException("editing '" + editing + "' not recognised");
                 })

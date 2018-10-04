@@ -30,8 +30,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceMenuOrder;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation;
 
-
-
 public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
 
     public DomainServiceLayoutFacetFactory() {
@@ -76,15 +74,6 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
                                 menuBar, menuOrder));
 
                 FacetUtil.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(domainServiceLayouts, facetHolder));
-    }
-
-    private static String coalesce(final String... reasons) {
-        for (final String reason : reasons) {
-            if(reason != null) {
-                return reason;
-            }
-        }
-        return null;
     }
 
 }

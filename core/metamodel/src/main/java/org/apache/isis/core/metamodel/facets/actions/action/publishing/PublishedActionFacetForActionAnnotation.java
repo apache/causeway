@@ -61,6 +61,7 @@ public class PublishedActionFacetForActionAnnotation extends PublishedActionFace
                         return null;
                     case ENABLED:
                         return new PublishedActionFacetForActionAnnotation(holder);
+                    default:
                     }
                     throw new IllegalStateException("publishing '" + publishing + "' not recognised");
                 })

@@ -19,10 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.util.Collection;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -90,7 +93,7 @@ implements CollectionRemoveFromFacet {
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.EXECUTING,
-                        eventType(), null,
+                        getEventType(), null,
                         getIdentified(), targetAdapter,
                         CollectionDomainEvent.Of.REMOVE_FROM,
                         referencedObject);
@@ -101,22 +104,14 @@ implements CollectionRemoveFromFacet {
         // ... and post the executed event
         domainEventHelper.postEventForCollection(
                 AbstractDomainEvent.Phase.EXECUTED,
-                value(), verify(event),
+                getEventType(), uncheckedCast((CollectionDomainEvent<?, ?>)event),
                 getIdentified(), targetAdapter,
                 CollectionDomainEvent.Of.REMOVE_FROM,
                 referencedObject);
     }
 
-    private Class<? extends CollectionDomainEvent<?, ?>> eventType() {
-        return value();
-    }
-
-    /**
-     * Optional hook to allow the facet implementation for now removed annotations
-     * to discard the event if of a different type.  Now a no-op, I think.
-     */
-    protected CollectionDomainEvent<?, ?> verify(CollectionDomainEvent<?, ?> event) {
-        return event;
+    public <S, T> Class<? extends CollectionDomainEvent<S, T>> getEventType() {
+        return _Casts.uncheckedCast(value());
     }
 
 }

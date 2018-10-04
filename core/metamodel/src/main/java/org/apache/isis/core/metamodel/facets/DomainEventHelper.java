@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -51,11 +53,11 @@ public class DomainEventHelper {
     }
 
     // -- postEventForAction, newActionDomainEvent
-    @SuppressWarnings({ "rawtypes" })
-    public ActionDomainEvent<?> postEventForAction(
+    
+    public <S> ActionDomainEvent<S> postEventForAction(
             final AbstractDomainEvent.Phase phase,
-            final Class eventType,
-            final ActionDomainEvent<?> existingEvent,
+            final Class<? extends ActionDomainEvent<S>> eventType,
+            final ActionDomainEvent<S> existingEvent,
             final ObjectAction objectAction,
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
@@ -65,14 +67,14 @@ public class DomainEventHelper {
             final ObjectAdapter resultAdapter) {
 
         try {
-            final ActionDomainEvent<?> event;
+            final ActionDomainEvent<S> event;
 
             if (existingEvent != null && phase.isExecuted()) {
                 // reuse existing event from the executing phase
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final Object source = ObjectAdapter.Util.unwrapPojo(targetAdapter);
+                final S source = uncheckedCast(ObjectAdapter.Util.unwrapPojo(targetAdapter));
                 final Object[] arguments = ObjectAdapter.Util.unwrapPojoArray(argumentAdapters);
                 final Identifier identifier = identified.getIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
@@ -115,11 +117,6 @@ public class DomainEventHelper {
         }
     }
 
-//    private static <T> List<T> immutableList(final Iterable<T> iterable) {
-//        return Collections.unmodifiableList(_Lists.newArrayList(iterable));
-//    }
-
-    @SuppressWarnings("unchecked")
     static <S> ActionDomainEvent<S> newActionDomainEvent(
             final Class<? extends ActionDomainEvent<S>> type,
                     final Identifier identifier,
@@ -133,7 +130,7 @@ public class DomainEventHelper {
             final Class<?>[] parameterTypes = constructor.getParameterTypes();
             if(parameterTypes.length == 0) {
                 final Object event = constructor.newInstance();
-                final ActionDomainEvent<S> ade = (ActionDomainEvent<S>) event;
+                final ActionDomainEvent<S> ade = uncheckedCast(event);
 
                 ade.setSource(source);
                 ade.setIdentifier(identifier);
@@ -158,7 +155,7 @@ public class DomainEventHelper {
                 continue;
             }
             final Object event = constructor.newInstance(source, identifier, arguments);
-            return (ActionDomainEvent<S>) event;
+            return uncheckedCast(event);
         }
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", [Ljava.lang.Object;)");
     }
@@ -172,18 +169,18 @@ public class DomainEventHelper {
 
 
     // -- postEventForProperty, newPropertyInteraction
-    public PropertyDomainEvent<?, ?> postEventForProperty(
+    public <S, T> PropertyDomainEvent<S, T> postEventForProperty(
             final AbstractDomainEvent.Phase phase,
-            final Class eventType,
-            final PropertyDomainEvent<?, ?> existingEvent,
+            final Class<? extends PropertyDomainEvent<S, T>> eventType,
+            final PropertyDomainEvent<S, T> existingEvent,
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
-            final Object oldValue,
-            final Object newValue) {
+            final T oldValue,
+            final T newValue) {
 
         try {
-            final PropertyDomainEvent<?, ?> event;
-            final Object source = ObjectAdapter.Util.unwrapPojo(targetAdapter);
+            final PropertyDomainEvent<S, T> event;
+            final S source = uncheckedCast(ObjectAdapter.Util.unwrapPojo(targetAdapter));
             final Identifier identifier = identified.getIdentifier();
 
             if(existingEvent != null && phase.isExecuted()) {
@@ -206,11 +203,10 @@ public class DomainEventHelper {
         }
     }
 
-    private static <S,T> void setEventNewValue(PropertyDomainEvent<S, T> event, Object newValue) {
-        event.setNewValue((T) newValue);
+    private static <S,T> void setEventNewValue(PropertyDomainEvent<S, T> event, T newValue) {
+        event.setNewValue(newValue);
     }
 
-    @SuppressWarnings("unchecked")
     static <S,T> PropertyDomainEvent<S,T> newPropertyDomainEvent(
             final Class<? extends PropertyDomainEvent<S, T>> type,
                     final Identifier identifier,
@@ -225,7 +221,7 @@ public class DomainEventHelper {
             final Class<?>[] parameterTypes = constructor.getParameterTypes();
             if(parameterTypes.length == 0) {
                 final Object event = constructor.newInstance();
-                final PropertyDomainEvent<S, T> pde = (PropertyDomainEvent<S, T>) event;
+                final PropertyDomainEvent<S, T> pde = uncheckedCast(event);
                 pde.setSource(source);
                 pde.setIdentifier(identifier);
                 pde.setOldValue(oldValue);
@@ -253,7 +249,7 @@ public class DomainEventHelper {
                 continue;
             }
             final Object event = constructor.newInstance(source, identifier, oldValue, newValue);
-            return (PropertyDomainEvent<S, T>) event;
+            return uncheckedCast(event);
         }
 
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object, java.lang.Object)");
@@ -262,22 +258,22 @@ public class DomainEventHelper {
 
     // -- postEventForCollection, newCollectionDomainEvent
 
-    public CollectionDomainEvent<?, ?> postEventForCollection(
+    public <S, T> CollectionDomainEvent<S, T> postEventForCollection(
             AbstractDomainEvent.Phase phase,
-            final Class eventType,
-            final CollectionDomainEvent<?, ?> existingEvent,
+            final Class<? extends CollectionDomainEvent<S, T>> eventType,
+            final CollectionDomainEvent<S, T> existingEvent,
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
             final CollectionDomainEvent.Of of,
-            final Object reference) {
+            final T reference) {
         try {
-            final CollectionDomainEvent<?, ?> event;
+            final CollectionDomainEvent<S, T> event;
             if (existingEvent != null && phase.isExecuted()) {
                 // reuse existing event from the executing phase
                 event = existingEvent;
             } else {
                 // all other phases, create a new event
-                final Object source = ObjectAdapter.Util.unwrapPojo(targetAdapter);
+                final S source = uncheckedCast(ObjectAdapter.Util.unwrapPojo(targetAdapter));
                 final Identifier identifier = identified.getIdentifier();
                 event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
             }
@@ -291,7 +287,6 @@ public class DomainEventHelper {
         }
     }
 
-    @SuppressWarnings("unchecked")
     <S, T> CollectionDomainEvent<S, T> newCollectionDomainEvent(
             final Class<? extends CollectionDomainEvent<S, T>> type,
                     final AbstractDomainEvent.Phase phase,
@@ -309,7 +304,7 @@ public class DomainEventHelper {
             final Class<?>[] parameterTypes = constructor.getParameterTypes();
             if(parameterTypes.length ==0) {
                 final Object event = constructor.newInstance();
-                final CollectionDomainEvent<S, T> cde = (CollectionDomainEvent<S, T>) event;
+                final CollectionDomainEvent<S, T> cde = uncheckedCast(event);
 
                 cde.setSource(source);
                 cde.setIdentifier(identifier);
@@ -338,7 +333,7 @@ public class DomainEventHelper {
                 continue;
             }
             final Object event = constructor.newInstance(source, identifier, of, value);
-            return (CollectionDomainEvent<S, T>) event;
+            return uncheckedCast(event);
         }
 
         if(phase == AbstractDomainEvent.Phase.EXECUTED) {
@@ -360,7 +355,7 @@ public class DomainEventHelper {
                         continue;
                     }
                     final Object event = constructor.newInstance(source, identifier, value);
-                    return (CollectionDomainEvent<S, T>) event;
+                    return uncheckedCast(event);
                 }
             } else if(of == CollectionDomainEvent.Of.REMOVE_FROM) {
                 // support for @PostsCollectionRemovedFrom annotation:
@@ -381,15 +376,12 @@ public class DomainEventHelper {
                     }
                     final Object event = constructor.newInstance(
                             source, identifier, value);
-                    return (CollectionDomainEvent<S, T>) event;
+                    return uncheckedCast(event);
                 }
             }
         }
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object)");
     }
-
-
-
 
     // -- eventBusService
 

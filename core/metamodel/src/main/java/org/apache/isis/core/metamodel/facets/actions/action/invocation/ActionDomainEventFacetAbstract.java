@@ -78,7 +78,7 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.HIDE,
-                        eventType(), null,
+                        getEventType(), null,
                         actionFrom(ic), getIdentified(),
                         ic.getTarget(), ic.getMixedIn(), argumentAdaptersFrom(ic),
                         null,
@@ -95,7 +95,7 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.DISABLE,
-                        eventType(), null,
+                        getEventType(), null,
                         actionFrom(ic), getIdentified(),
                         ic.getTarget(), ic.getMixedIn(), argumentAdaptersFrom(ic),
                         null,
@@ -138,7 +138,7 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
                         AbstractDomainEvent.Phase.VALIDATE,
-                        eventType(), null,
+                        getEventType(), null,
                         actionFrom(ic), getIdentified(),
                         ic.getTarget(), ic.getMixedIn(), aic.getArgs(),
                         null,
@@ -154,13 +154,8 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
         return null;
     }
 
-    protected Class<?> eventType() {
-        return value();
-    }
-
     public Class<? extends ActionDomainEvent<?>> getEventType() {
-        //noinspection unchecked
-        return _Casts.uncheckedCast(eventType());
+        return _Casts.uncheckedCast(value());
     }
 
 }

@@ -46,6 +46,7 @@ public class UnchangingFacetForPropertyLayoutAnnotation extends UnchangingFacetA
                     case NO_REPAINT:
                         unchanging = true;
                         return new UnchangingFacetForPropertyLayoutAnnotation(unchanging, holder);
+                    default:
                     }
                     throw new IllegalStateException("repainting '" + repainting + "' not recognised");
                 })

@@ -43,6 +43,7 @@ public class RenderedAdjustedFacetForPropertyLayoutAnnotation extends RenderedAd
                         return null;
                     case AS_DAY_BEFORE:
                         return new RenderedAdjustedFacetForPropertyLayoutAnnotation(holder);
+                    default:
                     }
                     throw new IllegalStateException("renderDay '" + renderDay + "' not recognised");
                 })

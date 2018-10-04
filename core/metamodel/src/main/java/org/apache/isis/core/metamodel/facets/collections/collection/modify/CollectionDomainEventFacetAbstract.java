@@ -26,6 +26,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
@@ -64,7 +65,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.HIDE,
-                        eventType(), null,
+                        getEventType(), null,
                         getIdentified(), ic.getTarget(),
                         CollectionDomainEvent.Of.ACCESS,
                         null);
@@ -80,7 +81,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.DISABLE,
-                        eventType(), null,
+                        getEventType(), null,
                         getIdentified(), ic.getTarget(),
                         CollectionDomainEvent.Of.ACCESS,
                         null);
@@ -108,7 +109,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.VALIDATE,
-                        eventType(), null,
+                        getEventType(), null,
                         getIdentified(), ic.getTarget(),
                         of,
                         proposed);
@@ -123,16 +124,8 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
         return null;
     }
 
-    private Class<?> eventType() {
-        return value();
-    }
-
-    /**
-     * For testing.
-     */
-    public Class<? extends CollectionDomainEvent<?, ?>> getEventType() {
-        Class eventType = eventType();
-        return eventType;
+    public <S, T> Class<? extends CollectionDomainEvent<S, T>> getEventType() {
+        return _Casts.uncheckedCast(value());
     }
 
 }

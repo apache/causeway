@@ -56,6 +56,7 @@ public abstract class MandatoryFacetForParameterAnnotation extends MandatoryFace
                         return new MandatoryFacetForParameterAnnotation.Required(holder);
                     case OPTIONAL:
                         return new MandatoryFacetForParameterAnnotation.Optional(holder);
+                    default:
                     }
                     throw new IllegalStateException("optionality '" + optionality + "' not recognised");
                 })

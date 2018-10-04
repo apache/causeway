@@ -56,6 +56,7 @@ public class PublishedPropertyFacetForPropertyAnnotation extends PublishedProper
                         return null;
                     case ENABLED:
                         return new PublishedPropertyFacetForPropertyAnnotation(holder);
+                    default:
                     }
                     return null;
 

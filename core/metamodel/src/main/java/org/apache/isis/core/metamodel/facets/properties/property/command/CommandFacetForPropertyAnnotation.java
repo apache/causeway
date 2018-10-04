@@ -70,6 +70,7 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
                                 return null;
                             case ENABLED:
                                 return new CommandFacetForPropertyAnnotation(commandPersistence, commandExecuteIn, Enablement.ENABLED, holder, processor, servicesInjector);
+                            default:
                             }
                             throw new IllegalStateException("command '" + command + "' not recognised");
                 })
