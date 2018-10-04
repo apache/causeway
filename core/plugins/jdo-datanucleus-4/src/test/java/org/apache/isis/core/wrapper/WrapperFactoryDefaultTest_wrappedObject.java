@@ -19,9 +19,14 @@
 
 package org.apache.isis.core.wrapper;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -73,10 +78,6 @@ import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
 import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepository;
 import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepositoryImpl;
 import org.apache.isis.schema.cmd.v1.CommandDto;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 public class WrapperFactoryDefaultTest_wrappedObject {
 
@@ -175,10 +176,10 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 will(returnValue(String.class));
 
                 allowing(mockServicesInjector).lookupService(CommandContext.class);
-                will(returnValue(mockCommandContext));
+                will(returnValue(Optional.of(mockCommandContext)));
 
                 allowing(mockServicesInjector).lookupService(CommandDtoServiceInternal.class);
-                will(returnValue(mockCommandDtoServiceInternal));
+                will(returnValue(Optional.of(mockCommandDtoServiceInternal)));
 
                 allowing(mockCommandDtoServiceInternal).asCommandDto(with(any(List.class)), with(any(OneToOneAssociation.class)), with(any(ObjectAdapter.class)));
                 will(returnValue(new CommandDto()));
@@ -186,10 +187,10 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockCommandContext).getCommand();
                 will(returnValue(mockCommand));
 
-                allowing(mockServicesInjector).lookupService(CommandDtoServiceInternal.class);
+                allowing(mockServicesInjector).lookupServiceElseFail(CommandDtoServiceInternal.class);
                 will(returnValue(new CommandDtoServiceInternalDefault()));
 
-                allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+                allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
                 will(returnValue(mockAuthenticationSessionProvider));
 
                 allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
@@ -257,7 +258,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         context.checking(new Expectations() {
             {
-                allowing(mockServicesInjector).lookupService(WrapperFactory.class);
+                allowing(mockServicesInjector).lookupServiceElseFail(WrapperFactory.class);
                 will(returnValue(wrapperFactory));
 
                 allowing(mockEmployeeSpec).getMember(employeeGetNameMethod);

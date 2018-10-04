@@ -26,7 +26,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -200,7 +199,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
                 allowing(mockPasswordMember).isOneToManyAssociation();
                 will(returnValue(false));
 
-                allowing(mockServicesInjector).lookupService(WrapperFactory.class);
+                allowing(mockServicesInjector).lookupServiceElseFail(WrapperFactory.class);
                 will(returnValue(wrapperFactory));
             }
         });

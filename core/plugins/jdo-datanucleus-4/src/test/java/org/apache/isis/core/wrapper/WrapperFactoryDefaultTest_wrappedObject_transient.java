@@ -199,7 +199,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
                 allowing(mockPasswordMember).isOneToManyAssociation();
                 will(returnValue(false));
 
-                allowing(mockServicesInjector).lookupService(WrapperFactory.class);
+                allowing(mockServicesInjector).lookupServiceElseFail(WrapperFactory.class);
                 will(returnValue(wrapperFactory));
             }
         });
