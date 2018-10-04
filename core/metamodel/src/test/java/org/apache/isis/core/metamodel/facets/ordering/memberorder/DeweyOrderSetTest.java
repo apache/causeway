@@ -20,18 +20,21 @@
 package org.apache.isis.core.metamodel.facets.ordering.memberorder;
 
 import java.util.List;
-import com.google.common.collect.ImmutableList;
+
 import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 import org.junit.Rule;
+
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
@@ -74,9 +77,9 @@ public class DeweyOrderSetTest extends TestCase {
     private final IdentifiedHolder houseNumberMember = FacetedMethod.createForProperty(Customer.class, "House Number");
     private final IdentifiedHolder streetNameMember = FacetedMethod.createForProperty(Customer.class, "Street Name");
     private final IdentifiedHolder postalTownMember = FacetedMethod.createForProperty(Customer.class, "Postal Town");
-    private final List<IdentifiedHolder> lastNameAndFirstName = ImmutableList.of(lastNameMember, firstNameMember);
-    private final List<IdentifiedHolder> nameAndAddressMembers = ImmutableList.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
-    private final List<IdentifiedHolder> lastNameFirstNameAndPostalTown = ImmutableList.of(lastNameMember, firstNameMember, postalTownMember);
+    private final List<IdentifiedHolder> lastNameAndFirstName = _Lists.of(lastNameMember, firstNameMember);
+    private final List<IdentifiedHolder> nameAndAddressMembers = _Lists.of(lastNameMember, firstNameMember, houseNumberMember, streetNameMember, postalTownMember);
+    private final List<IdentifiedHolder> lastNameFirstNameAndPostalTown = _Lists.of(lastNameMember, firstNameMember, postalTownMember);
 
     TranslationService mockTranslationService;
 

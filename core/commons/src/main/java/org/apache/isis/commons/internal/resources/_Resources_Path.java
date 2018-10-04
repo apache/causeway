@@ -32,13 +32,13 @@ import org.apache.isis.commons.internal.base._Strings;
  * attempted construction)
  *
  */
-abstract class _Resource_Path {
+abstract class _Resources_Path {
 
     protected final String path;
 
     protected abstract String resourceName();
 
-    public _Resource_Path(String contextPath) {
+    public _Resources_Path(String contextPath) {
 
         if(_Strings.isEmpty(contextPath))
             throw new IllegalArgumentException(resourceName()+" can not be empty");

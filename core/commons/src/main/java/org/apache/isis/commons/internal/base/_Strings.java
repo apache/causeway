@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -269,7 +270,7 @@ public final class _Strings {
 
     /**
      * Splits the {@code input} into chunks separated by {@code separator},
-     * then puts all chunks on the stream.
+     * then puts all chunks on the returned stream.
      * <p>
      * Corner cases:
      * <ul>
@@ -296,6 +297,20 @@ public final class _Strings {
         return StreamSupport.stream(
                 Spliterators.spliteratorUnknownSize(splitIterator(input, separator), Spliterator.ORDERED),
                 false); // not parallel
+    }
+    
+    /**
+     * Creates a stream from the given input sequence around matches of {@code delimiterPattern}. 
+     * @param input
+     * @param delimiterPattern
+     * @return
+     */
+    public static Stream<String> splitThenStream(@Nullable final CharSequence input, Pattern delimiterPattern) {
+        requires(delimiterPattern, "delimiterPattern");
+        if(isEmpty(input)) {
+            return Stream.of();
+        }
+        return delimiterPattern.splitAsStream(input);
     }
 
     // -- REPLACEMENT OPERATORS
@@ -402,13 +417,6 @@ public final class _Strings {
         requires(fileExtension, "fileExtension");
         return suffix(fileName, prefix(fileExtension, "."));
     }
-
-
-
-
-
-
-
 
 
 }

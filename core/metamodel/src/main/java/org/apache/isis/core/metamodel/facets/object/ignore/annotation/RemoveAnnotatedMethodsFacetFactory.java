@@ -19,16 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.object.ignore.annotation;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import com.google.common.eventbus.Subscribe;
-
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
@@ -37,20 +40,33 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
 
-    private Class<? extends Annotation> eventHandlerClass;
+    private final List<String> eventHandlerClassNames = _Lists.of(
+            "org.axonframework.eventhandling.EventHandler", // axon 3.x
+            "org.axonframework.eventhandling.annotation.EventHandler", // axon 2.x
+            "com.google.common.eventbus.Subscribe" // guava
+            );
+    
+    private final List<Class<? extends Annotation>> eventHandlerClasses;
 
     public RemoveAnnotatedMethodsFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
 
-        try {
-            // doing this reflectively so that don't bring in a dependency on axon.
-            eventHandlerClass = _Casts.uncheckedCast(
-                    ClassUtil.forName("org.axonframework.eventhandling.annotation.EventHandler"));
-
-        } catch(Exception ignore) {
-            // ignore
-            eventHandlerClass = null;
-        }
+        eventHandlerClasses = eventHandlerClassNames.stream()
+        .map(name->{
+            Class<? extends Annotation> eventHandlerClass;
+            try {
+                // doing this reflectively so that don't bring in a dependency on axon.
+                eventHandlerClass = uncheckedCast(
+                        ClassUtil.forName("org.axonframework.eventhandling.annotation.EventHandler"));
+            } catch(Exception ignore) {
+                // ignore
+                eventHandlerClass = null;
+            }
+            return eventHandlerClass;
+        })
+        .filter(_NullSafe::isPresent)
+        .collect(Collectors.toList());
+        
     }
 
     @Override
@@ -68,14 +84,17 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
             removeAnnotatedMethods(methodRemover, method, PreDestroy.class);
             removeAnnotatedMethods(methodRemover, method, PostConstruct.class);
             removeAnnotatedMethods(methodRemover, method, Programmatic.class);
-            removeAnnotatedMethods(methodRemover, method, Subscribe.class);
-            if(eventHandlerClass != null) {
+            eventHandlerClasses.forEach(eventHandlerClass->{
                 removeAnnotatedMethods(methodRemover, method, eventHandlerClass);
-            }
+            });
         }
     }
 
-    private static <T extends Annotation> void removeAnnotatedMethods(final MethodRemover methodRemover, final Method method, Class<T> annotationClass) {
+    private static <T extends Annotation> void removeAnnotatedMethods(
+            final MethodRemover methodRemover, 
+            final Method method, 
+            final Class<T> annotationClass) {
+        
         if (!Annotations.isAnnotationPresent(method, annotationClass)) {
             return;
         }

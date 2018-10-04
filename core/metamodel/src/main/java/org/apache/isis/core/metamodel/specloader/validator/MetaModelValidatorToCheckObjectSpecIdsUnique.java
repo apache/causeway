@@ -18,11 +18,11 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.List;
 import java.util.Map;
-
-import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
+import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -81,10 +81,9 @@ public class MetaModelValidatorToCheckObjectSpecIdsUnique extends MetaModelValid
             }
 
             private String asCsv(final List<ObjectSpecification> specList) {
-                return Joiner.on(",").join(
-                        FluentIterable.from(specList)
-                        .transform(ObjectSpecification.Functions.FULL_IDENTIFIER::apply)
-                        .toList());
+                return stream(specList)
+                        .map(ObjectSpecification.Functions.FULL_IDENTIFIER)
+                        .collect(Collectors.joining(","));
             }
 
         };

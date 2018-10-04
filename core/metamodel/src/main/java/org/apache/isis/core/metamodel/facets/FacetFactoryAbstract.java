@@ -21,8 +21,7 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -37,7 +36,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInje
     private final List<FeatureType> featureTypes;
 
     public FacetFactoryAbstract(final List<FeatureType> featureTypes) {
-        this.featureTypes = ImmutableList.copyOf(featureTypes);
+        this.featureTypes = _Lists.unmodifiable(featureTypes);
     }
 
     @Override

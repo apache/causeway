@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
-import com.google.common.base.Optional;
+import java.util.Optional;
 
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 

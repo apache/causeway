@@ -30,8 +30,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Collections2;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -330,8 +328,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             for (final ActionType type : ActionType.values()) {
                 final List<ObjectAction> objectActionForType = objectActionsByType.get(type);
                 objectActionForType.clear();
-                objectActionForType.addAll(Collections2
-                        .filter(objectActions, ObjectAction.Predicates.ofType(type)::test));
+                objectActions.stream()
+                    .filter(ObjectAction.Predicates.ofType(type))
+                    .forEach(objectActionForType::add);
             }
         }
     }

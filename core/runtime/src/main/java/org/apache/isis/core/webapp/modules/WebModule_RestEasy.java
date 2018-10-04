@@ -24,7 +24,7 @@ import static org.apache.isis.commons.internal.base._Strings.prefix;
 import static org.apache.isis.commons.internal.base._Strings.suffix;
 import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
 import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-import static org.apache.isis.commons.internal.resources._Resource.putRestfulPath;
+import static org.apache.isis.commons.internal.resources._Resources.putRestfulPath;
 
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;

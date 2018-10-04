@@ -18,18 +18,19 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Joiner;
-
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -117,7 +118,8 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
                     List<String> domainObjectClassNames = domainObjectClassNamesByPackage.get(pkg);
                     boolean withinSomeModule = isWithinSomeModule(modulePackageNames, pkg);
                     if(!withinSomeModule) {
-                        String csv = Joiner.on(",").join(domainObjectClassNames);
+                        String csv = stream(domainObjectClassNames)
+                                .collect(Collectors.joining(","));
                         validationFailures.add(
                                 "Domain objects discovered in package '%s' are not in the set of modules obtained from "
                                         + "the AppManifest's top-level module '%s'.  Classes are: %s",

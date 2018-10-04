@@ -25,8 +25,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 
-import com.google.common.io.Resources;
-
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.commons.exceptions.IsisException;
 
 public final class ClassExtensions {
@@ -120,7 +119,7 @@ public final class ClassExtensions {
     }
 
     public static boolean exists(final Class<?> cls, final String resourceName) {
-        final URL url = Resources.getResource(cls, resourceName);
+        final URL url = _Resources.getResourceUrl(cls, resourceName);
         return url != null;
     }
 

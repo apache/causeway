@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.commons.internal.resources._Resource;
+import org.apache.isis.commons.internal.resources._Resources;
 
 
 @DomainService(
@@ -70,7 +70,7 @@ public class SwaggerServiceMenu {
             )
     @MemberOrder(sequence="500.600.2")
     public LocalResourcePath openRestApi() {
-        return new LocalResourcePath("/"+_Resource.getRestfulPathIfAny()+"/");
+        return new LocalResourcePath("/"+_Resources.getRestfulPathIfAny()+"/");
     }
 
     public static class DownloadSwaggerSpecDomainEvent extends ActionDomainEvent { private static final long serialVersionUID = 1L; }

@@ -95,11 +95,11 @@
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <exclusions>
-<!--             	work in progress, ultimately we want to remove guava dependency -->            
-<!--             	<exclusion> -->
-<!--             		<groupId>com.google.guava</groupId> -->
-<!--             		<artifactId>guava</artifactId> -->
-<!--             	</exclusion> -->
+				<!-- metamodel has no more dependency on guava -->            
+            	<exclusion>
+            		<groupId>com.google.guava</groupId>
+            		<artifactId>guava</artifactId>
+            	</exclusion>
             </exclusions>
         </dependency>
 

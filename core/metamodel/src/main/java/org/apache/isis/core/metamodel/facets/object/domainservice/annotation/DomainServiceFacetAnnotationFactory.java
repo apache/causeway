@@ -19,11 +19,8 @@
 package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.google.common.base.Joiner;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -119,11 +116,11 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
 
                     final Stream<ObjectAssociation> associations = thisSpec.streamAssociations(Contributed.EXCLUDED);
                     
-                    final List<String> associationNames = associations
+                    final String associationNames = associations
                         .map(ObjectAssociation::getName)
                         // it's okay to have an "association" called "Id" (corresponding to getId() method)
                         .filter(associationName->!"Id".equalsIgnoreCase(associationName))
-                        .collect(Collectors.toList());
+                        .collect(Collectors.joining(", "));
 
                     if(associationNames.isEmpty()) {
                         return;
@@ -133,7 +130,7 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
                             "%s: services can only have actions ('%s' config property), not properties or collections; annotate with @Programmatic if required.  Found: %s",
                             thisSpec.getFullIdentifier(),
                             ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_KEY,
-                            Joiner.on(", ").join(associationNames));
+                            associationNames);
                 }
             }));
         }

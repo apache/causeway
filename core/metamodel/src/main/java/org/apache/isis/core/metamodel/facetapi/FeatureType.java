@@ -23,9 +23,8 @@ import java.beans.Introspector;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 
@@ -87,34 +86,34 @@ public enum FeatureType {
         }
     };
 
-    public final static List<FeatureType> COLLECTIONS_ONLY = ImmutableList.of(COLLECTION);
-    public final static List<FeatureType> COLLECTIONS_AND_ACTIONS = ImmutableList.of(COLLECTION, ACTION);
-    public final static List<FeatureType> ACTIONS_ONLY = ImmutableList.of(ACTION);
-    public final static List<FeatureType> PARAMETERS_ONLY = ImmutableList.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
-    public final static List<FeatureType> PROPERTIES_ONLY = ImmutableList.of(PROPERTY);
-    public final static List<FeatureType> PROPERTIES_AND_ACTIONS = ImmutableList.of(PROPERTY, ACTION);
-    public final static List<FeatureType> OBJECTS_ONLY = ImmutableList.of(OBJECT);
-    public final static List<FeatureType> MEMBERS = ImmutableList.of(PROPERTY, COLLECTION, ACTION);
-    public final static List<FeatureType> OBJECTS_AND_PROPERTIES = ImmutableList.of(OBJECT, PROPERTY);
-    public final static List<FeatureType> PROPERTIES_AND_COLLECTIONS = ImmutableList.of(PROPERTY, COLLECTION);
-    public final static List<FeatureType> OBJECTS_AND_COLLECTIONS = ImmutableList.of(OBJECT, COLLECTION);
-    public final static List<FeatureType> OBJECTS_AND_ACTIONS = ImmutableList.of(OBJECT, ACTION);
-    public final static List<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = ImmutableList.of(OBJECT, PROPERTY, COLLECTION);
+    public final static List<FeatureType> COLLECTIONS_ONLY = _Lists.of(COLLECTION);
+    public final static List<FeatureType> COLLECTIONS_AND_ACTIONS = _Lists.of(COLLECTION, ACTION);
+    public final static List<FeatureType> ACTIONS_ONLY = _Lists.of(ACTION);
+    public final static List<FeatureType> PARAMETERS_ONLY = _Lists.of(ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
+    public final static List<FeatureType> PROPERTIES_ONLY = _Lists.of(PROPERTY);
+    public final static List<FeatureType> PROPERTIES_AND_ACTIONS = _Lists.of(PROPERTY, ACTION);
+    public final static List<FeatureType> OBJECTS_ONLY = _Lists.of(OBJECT);
+    public final static List<FeatureType> MEMBERS = _Lists.of(PROPERTY, COLLECTION, ACTION);
+    public final static List<FeatureType> OBJECTS_AND_PROPERTIES = _Lists.of(OBJECT, PROPERTY);
+    public final static List<FeatureType> PROPERTIES_AND_COLLECTIONS = _Lists.of(PROPERTY, COLLECTION);
+    public final static List<FeatureType> OBJECTS_AND_COLLECTIONS = _Lists.of(OBJECT, COLLECTION);
+    public final static List<FeatureType> OBJECTS_AND_ACTIONS = _Lists.of(OBJECT, ACTION);
+    public final static List<FeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = _Lists.of(OBJECT, PROPERTY, COLLECTION);
 
     public static final List<FeatureType> ACTIONS_AND_PARAMETERS =
-            ImmutableList.of(ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
+            _Lists.of(ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
 
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.
      */
-    public final static List<FeatureType> EVERYTHING_BUT_PARAMETERS = ImmutableList.of(OBJECT, PROPERTY, COLLECTION, ACTION);
+    public final static List<FeatureType> EVERYTHING_BUT_PARAMETERS = _Lists.of(OBJECT, PROPERTY, COLLECTION, ACTION);
     /**
      * Use of this is discouraged; instead use multiple {@link FacetFactory}s
      * for different features.
      */
     public final static List<FeatureType> EVERYTHING =
-            ImmutableList.of(OBJECT, PROPERTY, COLLECTION, ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
+            _Lists.of(OBJECT, PROPERTY, COLLECTION, ACTION, ACTION_PARAMETER_SCALAR, ACTION_PARAMETER_COLLECTION);
 
     private final String name;
 

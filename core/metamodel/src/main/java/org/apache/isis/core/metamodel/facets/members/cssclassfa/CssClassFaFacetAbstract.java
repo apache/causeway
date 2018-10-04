@@ -19,10 +19,10 @@ package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -53,14 +53,12 @@ public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract impl
      * @return The original CSS classes plus <em>fa</em> and <em>fa-fw</em> if not already provided
      */
     static String sanitize(final String value) {
-        final Iterable<String> classes = Splitter.on(WHITESPACE).split(value.trim());
+        final Stream<String> classes = _Strings.splitThenStream(value.trim(), WHITESPACE);
         final Set<String> cssClassesSet = _Sets.newLinkedHashSet();
         cssClassesSet.add("fa");
         cssClassesSet.add("fa-fw");
-        for (final String cssClass : classes) {
-            cssClassesSet.add(faPrefix(cssClass));
-        }
-        return Joiner.on(' ').join(cssClassesSet).trim();
+        classes.forEach(cssClass->cssClassesSet.add(faPrefix(cssClass)));
+        return cssClassesSet.stream().collect(Collectors.joining(" ")).trim();
     }
 
     private static String faPrefix(final String cssClass) {

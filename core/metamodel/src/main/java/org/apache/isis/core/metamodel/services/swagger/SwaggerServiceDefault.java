@@ -20,8 +20,8 @@ package org.apache.isis.core.metamodel.services.swagger;
 
 import static org.apache.isis.commons.internal.base._Strings.prefix;
 import static org.apache.isis.commons.internal.base._With.ifPresentElse;
-import static org.apache.isis.commons.internal.resources._Resource.getRestfulPathIfAny;
-import static org.apache.isis.commons.internal.resources._Resource.prependContextPathIfPresent;
+import static org.apache.isis.commons.internal.resources._Resources.getRestfulPathIfAny;
+import static org.apache.isis.commons.internal.resources._Resources.prependContextPathIfPresent;
 
 import java.util.Map;
 

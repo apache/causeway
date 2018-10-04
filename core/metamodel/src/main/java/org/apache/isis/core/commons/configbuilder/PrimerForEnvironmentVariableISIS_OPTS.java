@@ -21,11 +21,9 @@ package org.apache.isis.core.commons.configbuilder;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 
 public class PrimerForEnvironmentVariableISIS_OPTS implements IsisConfigurationBuilder.Primer {
@@ -64,18 +62,23 @@ public class PrimerForEnvironmentVariableISIS_OPTS implements IsisConfigurationB
     private static Map<String, String> fromEnv(final String env, final String separator) {
         final LinkedHashMap<String, String> map = _Maps.newLinkedHashMap();
         if (env != null) {
-            final List<String> keyAndValues = Splitter.on(separator).splitToList(env);
-            for (String keyAndValue : keyAndValues) {
-                final List<String> parts = _Lists.newArrayList(Splitter.on("=").splitToList(keyAndValue));
+            
+            _Strings.splitThenStream(env, separator)
+            .forEach(keyAndValue->{
+                
+                final List<String> parts =
+                        _Strings.splitThenStream(env, "=").collect(Collectors.toList());
 
                 if (parts.size() >= 2) {
                     String key = parts.get(0);
-                    parts.remove(0);
-                    final String value = Joiner.on("=").join(parts);
+                    String value = parts.stream()
+                        .skip(1)
+                        .collect(Collectors.joining("="));
 
                     map.put(key, value);
                 }
-            }
+            });
+            
         }
         return map;
     }

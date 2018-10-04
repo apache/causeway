@@ -17,8 +17,7 @@
 package org.apache.isis.core.metamodel.services.grid;
 
 import java.util.List;
-
-import com.google.common.base.Joiner;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -150,7 +149,8 @@ public class GridServiceDefault implements GridService {
                 parts.add(gridSystemService.schemaLocation());
             }
         }
-        return Joiner.on(" ").join(parts);
+        return parts.stream()
+                .collect(Collectors.joining(""));
     }
 
     ////////////////////////////////////////////////////////

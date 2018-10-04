@@ -31,7 +31,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.resources._Resource;
+import org.apache.isis.commons.internal.resources._Resources;
 
 
 /**
@@ -65,7 +65,7 @@ public class JaxbUtil {
             final Charset charset,
             final Class<T> dtoClass) throws IOException {
 
-        final String s = _Resource.loadAsString(contextClass, resourceName, charset);
+        final String s = _Resources.loadAsString(contextClass, resourceName, charset);
         return fromXml(new StringReader(s), dtoClass);
     }
 

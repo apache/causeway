@@ -24,7 +24,7 @@ import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.Locale;
 
-import org.apache.isis.commons.internal.resources._Resource;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class XmlSnapshotServiceAbstractTest {
     
     @Before
     public void setUp() throws Exception {
-        xmlStr = _Resource.loadAsString(
+        xmlStr = _Resources.loadAsString(
         		XmlSnapshotServiceAbstractTest.class, 
         		"XmlSnapshotServiceAbstractTest.xml", 
         		Charset.forName("UTF-8"));

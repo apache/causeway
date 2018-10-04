@@ -21,16 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Collection;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.xml.bind.Marshaller;
-
-import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.DomainService;
@@ -42,6 +37,8 @@ import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.LayoutService2;
 import org.apache.isis.applib.services.menu.MenuBarsService;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -54,13 +51,13 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
         )
 public class LayoutServiceDefault implements LayoutService2 {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LayoutServiceDefault.class);
+    //private static final Logger LOG = LoggerFactory.getLogger(LayoutServiceDefault.class);
 
     @Override
     public String toXml(final Class<?> domainClass, final Style style) {
         final Grid grid = toGrid(domainClass, style);
         return jaxbService.toXml(grid,
-                ImmutableMap.<String,Object>of(
+                _Maps.unmodifiable(
                         Marshaller.JAXB_SCHEMA_LOCATION,
                         grid.getTnsAndSchemaLocation()
                         ));
@@ -97,7 +94,7 @@ public class LayoutServiceDefault implements LayoutService2 {
     @Programmatic
     public byte[] toZip(final Style style) {
         final Collection<ObjectSpecification> allSpecs = specificationLoader.allSpecifications();
-        final Collection<ObjectSpecification> domainObjectSpecs = Collections2
+        final List<ObjectSpecification> domainObjectSpecs = _Lists
                 .filter(allSpecs,(final ObjectSpecification input) ->
                         !input.isAbstract() &&
                                 (input.containsDoOpFacet(JdoPersistenceCapableFacet.class) ||
@@ -114,7 +111,7 @@ public class LayoutServiceDefault implements LayoutService2 {
                 if(grid != null) {
                     zos.putNextEntry(new ZipEntry(zipEntryNameFor(objectSpec)));
                     final String xml = jaxbService.toXml(grid,
-                            ImmutableMap.<String,Object>of(
+                            _Maps.unmodifiable(
                                     Marshaller.JAXB_SCHEMA_LOCATION,
                                     grid.getTnsAndSchemaLocation()
                                     ));
@@ -142,8 +139,7 @@ public class LayoutServiceDefault implements LayoutService2 {
     public String toMenuBarsXml(final MenuBarsService.Type type) {
         final MenuBars menuBars = menuBarsService.menuBars(type);
 
-        return jaxbService.toXml(menuBars,
-                ImmutableMap.<String,Object>of(
+        return jaxbService.toXml(menuBars, _Maps.unmodifiable(
                         Marshaller.JAXB_SCHEMA_LOCATION,
                         menuBars.getTnsAndSchemaLocation()
                         ));

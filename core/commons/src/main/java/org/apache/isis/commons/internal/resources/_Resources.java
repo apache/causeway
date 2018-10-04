@@ -24,6 +24,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.Charset;
 
 import org.apache.isis.commons.internal.base._Bytes;
@@ -41,7 +42,7 @@ import org.apache.isis.commons.internal.context._Context;
  * </p>
  * @since 2.0.0
  */
-public final class _Resource {
+public final class _Resources {
 
     // -- CLASS PATH RESOURCE LOADING
 
@@ -75,6 +76,16 @@ public final class _Resource {
         final InputStream is = load(contextClass, resourceName);
         return _Strings.ofBytes(_Bytes.of(is), charset);
     }
+    
+    /**
+     * @param resourceName
+     * @return The resource location as an URL, or null if the resource could not be found.
+     */
+    public static URL getResourceUrl(Class<?> contextClass, String resourceName) {
+        requires(resourceName, "resourceName");
+        final String absoluteResourceName = resolveName(resourceName, contextClass);
+        return _Context.getDefaultClassLoader().getResource(absoluteResourceName);
+    }
 
     // -- CONTEXT PATH RESOURCE
 
@@ -82,7 +93,7 @@ public final class _Resource {
      * @return context-path resource (if any) as stored previously by {@link #putContextPathIfPresent(String)}
      */
     public final static String getContextPathIfAny() {
-        final _Resource_ContextPath resource = _Context.getIfAny(_Resource_ContextPath.class);
+        final _Resources_ContextPath resource = _Context.getIfAny(_Resources_ContextPath.class);
         return resource!=null ? resource.getContextPath() : null;
     }
 
@@ -95,7 +106,7 @@ public final class _Resource {
      */
     public final static void putContextPathIfPresent(String contextPath) {
         if(!_Strings.isEmpty(contextPath)) {
-            _Context.put(_Resource_ContextPath.class, new _Resource_ContextPath(contextPath), false);
+            _Context.put(_Resources_ContextPath.class, new _Resources_ContextPath(contextPath), false);
         }
     }
 
@@ -124,7 +135,7 @@ public final class _Resource {
      * @return restful-path resource (if any) as stored previously by {@link #putRestfulPath(String)}
      */
     public final static String getRestfulPathIfAny() {
-        final _Resource_RestfulPath resource = _Context.getIfAny(_Resource_RestfulPath.class);
+        final _Resources_RestfulPath resource = _Context.getIfAny(_Resources_RestfulPath.class);
         return resource!=null ? resource.getRestfulPath() : null;
     }
 
@@ -147,7 +158,7 @@ public final class _Resource {
      * @throws IllegalArgumentException if the restfulPath is empty or is the root-path.
      */
     public final static void putRestfulPath(String restfulPath) {
-        _Context.put(_Resource_RestfulPath.class, new _Resource_RestfulPath(restfulPath), false);
+        _Context.put(_Resources_RestfulPath.class, new _Resources_RestfulPath(restfulPath), false);
     }
 
     // -- HELPER
@@ -176,6 +187,8 @@ public final class _Resource {
         }
         return name;
     }
+
+
 
     
 

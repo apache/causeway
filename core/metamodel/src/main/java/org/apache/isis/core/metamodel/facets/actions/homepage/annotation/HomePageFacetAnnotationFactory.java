@@ -19,10 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.actions.homepage.annotation;
 
-import java.util.List;
-import java.util.stream.Stream;
+import static org.apache.isis.commons.internal.functions._Predicates.not;
 
-import com.google.common.base.Joiner;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -94,9 +95,11 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
             public void summarize(ValidationFailures validationFailures) {
                 if(annotated.size()>1) {
                     for (String actionId : annotated) {
-                        final List<String> others = _Lists.newArrayList(annotated);
-                        others.remove(actionId);
-                        final String nonServiceNamesStr = Joiner.on(", ").join(others);
+                        
+                        final String nonServiceNamesStr = annotated.stream()
+                            .filter(not(actionId::equals))
+                            .collect(Collectors.joining(", "));
+                        
                         validationFailures.add(
                                 "%s: other actions also specified as home page: %s ",
                                 actionId, nonServiceNamesStr);

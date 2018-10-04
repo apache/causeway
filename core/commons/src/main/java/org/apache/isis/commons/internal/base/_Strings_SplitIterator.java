@@ -32,10 +32,12 @@ import javax.annotation.Nullable;
 final class _Strings_SplitIterator {
 
     public static Iterator<String> splitIterator(@Nullable final String x, final String delimiter){
-        if(_Strings.isEmpty(delimiter))
+        if(_Strings.isEmpty(delimiter)) {
             throw new IllegalArgumentException("a non empty delimiter is required");
-        if(_Strings.isEmpty(x))
+        }
+        if(_Strings.isEmpty(x)) {
             return Collections.<String>emptyIterator();
+        }
         final int dlen = delimiter.length();
         return new Iterator<String>() {
             private int p=0, q=-1;
@@ -69,5 +71,6 @@ final class _Strings_SplitIterator {
             }
         };
     }
+ 
 
 }

@@ -19,7 +19,7 @@
 package org.apache.isis.core.webapp;
 
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
-import static org.apache.isis.commons.internal.resources._Resource.putContextPathIfPresent;
+import static org.apache.isis.commons.internal.resources._Resources.putContextPathIfPresent;
 
 import java.util.ArrayList;
 import java.util.List;

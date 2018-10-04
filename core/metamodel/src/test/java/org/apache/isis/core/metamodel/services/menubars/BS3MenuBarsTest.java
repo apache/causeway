@@ -18,11 +18,8 @@
  */
 package org.apache.isis.core.metamodel.services.menubars;
 
-import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
-
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 
 import org.junit.After;
 import org.junit.Before;
@@ -30,6 +27,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.commons.internal.resources._Resources;
 
 public class BS3MenuBarsTest {
 
@@ -47,8 +45,8 @@ public class BS3MenuBarsTest {
     @Test
     public void happy_case() throws Exception {
 
-        URL resource = Resources.getResource(getClass(), "menubars.layout.xml");
-        BS3MenuBars menuBars = jaxbService.fromXml(BS3MenuBars.class, Resources.toString(resource, Charsets.UTF_8));
+        BS3MenuBars menuBars = jaxbService.fromXml(BS3MenuBars.class, 
+                _Resources.loadAsString(getClass(), "menubars.layout.xml", StandardCharsets.UTF_8));
 
         Map<String, String> schemas = jaxbService.toXsd(menuBars, JaxbService.IsisSchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {

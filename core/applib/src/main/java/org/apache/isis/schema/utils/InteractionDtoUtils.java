@@ -40,7 +40,7 @@ import org.apache.isis.applib.services.iactn.Interaction;
 import org.apache.isis.applib.util.JaxbUtil;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.resources._Resource;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.schema.cmd.v1.ParamDto;
 import org.apache.isis.schema.cmd.v1.ParamsDto;
 import org.apache.isis.schema.common.v1.InteractionType;
@@ -88,7 +88,7 @@ public final class InteractionDtoUtils {
             final String resourceName,
             final Charset charset) throws IOException {
 
-        final String s = _Resource.loadAsString(contextClass, resourceName, charset);
+        final String s = _Resources.loadAsString(contextClass, resourceName, charset);
         return fromXml(new StringReader(s));
     }
 

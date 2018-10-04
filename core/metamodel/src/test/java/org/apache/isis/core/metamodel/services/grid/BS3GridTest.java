@@ -18,13 +18,14 @@
  */
 package org.apache.isis.core.metamodel.services.grid;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.Arrays;
 import java.util.Map;
 
 import javax.xml.bind.Marshaller;
-
-import com.google.common.collect.ImmutableMap;
-import org.apache.isis.commons.internal.collections._Lists;
 
 import org.junit.After;
 import org.junit.Before;
@@ -42,11 +43,9 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBS3;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 public class BS3GridTest {
 
@@ -140,12 +139,12 @@ public class BS3GridTest {
 
         final String schemaLocations = gridServiceDefault.tnsAndSchemaLocation(bs3Grid);
         String xml = jaxbService.toXml(bs3Grid,
-                ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
+                _Maps.unmodifiable(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         System.out.println(xml);
 
         BS3Grid bs3Pageroundtripped = jaxbService.fromXml(BS3Grid.class, xml);
         String xmlRoundtripped = jaxbService.toXml(bs3Pageroundtripped,
-                ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
+                _Maps.unmodifiable(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         assertThat(xml, is(equalTo(xmlRoundtripped)));
 
 

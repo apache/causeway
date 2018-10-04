@@ -23,10 +23,10 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import com.google.common.base.Splitter;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -137,7 +137,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
         }
 
         private static List<String> componentsFor(final String sequence) {
-            return _Lists.newArrayList(Splitter.on('.').split(sequence));
+            return _Strings.splitThenStream(sequence, ".").collect(Collectors.toList());
         }
     }
 

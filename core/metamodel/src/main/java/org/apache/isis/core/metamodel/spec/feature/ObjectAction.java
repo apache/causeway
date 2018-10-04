@@ -17,6 +17,8 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -24,8 +26,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import com.google.common.collect.FluentIterable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -429,9 +429,8 @@ public interface ObjectAction extends ObjectMember {
 
             @Override
             public boolean test(final ObjectAction objectAction) {
-                return FluentIterable
-                        .from(objectAction.getParameters())
-                        .anyMatch(parameterPredicate::test);
+                return stream(objectAction.getParameters())
+                        .anyMatch(parameterPredicate);
             }
         }
 

@@ -22,8 +22,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
-
-import com.google.common.base.Joiner;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.commons.internal.base._Strings;
@@ -156,7 +155,7 @@ public class DomainMemberDefault implements DomainMember {
                 addIfNotEmpty(interpretFacet(facet), interpretations);
             }
             return !interpretations.isEmpty() ?
-                    Joiner.on(";").join(interpretations) :
+                    interpretations.stream().collect(Collectors.joining(";")) :
                         interpretRowAndFacet(ActionChoicesFacet.class);
         }
     }
@@ -172,7 +171,7 @@ public class DomainMemberDefault implements DomainMember {
                 final ActionParameterAutoCompleteFacet facet = param.getFacet(ActionParameterAutoCompleteFacet.class);
                 addIfNotEmpty(interpretFacet(facet), interpretations);
             }
-            return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : "";
+            return interpretations.stream().collect(Collectors.joining(";"));
         }
     }
     @Override public String getDefault() {
@@ -187,7 +186,9 @@ public class DomainMemberDefault implements DomainMember {
                 final ActionParameterDefaultsFacet facet = param.getFacet(ActionParameterDefaultsFacet.class);
                 addIfNotEmpty(interpretFacet(facet), interpretations);
             }
-            return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : interpretRowAndFacet(ActionDefaultsFacet.class);
+            return !interpretations.isEmpty()
+                    ? interpretations.stream().collect(Collectors.joining(";"))
+                            : interpretRowAndFacet(ActionDefaultsFacet.class);
         }
     }
     @Override public String getValidate() {
@@ -197,7 +198,7 @@ public class DomainMemberDefault implements DomainMember {
             final SortedSet<String> interpretations = _Sets.newTreeSet();
             addIfNotEmpty(interpretRowAndFacet(CollectionValidateAddToFacet.class), interpretations);
             addIfNotEmpty(interpretRowAndFacet(CollectionValidateRemoveFromFacet.class), interpretations);
-            return !interpretations.isEmpty()? Joiner.on(";").join(interpretations) : "";
+            return interpretations.stream().collect(Collectors.joining(";"));
         } else {
             return interpretRowAndFacet(ActionValidationFacet.class);
         }

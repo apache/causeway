@@ -25,11 +25,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
-
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.swagger.SwaggerService;
@@ -170,15 +165,15 @@ class Generation {
         }
     }
 
-    @SuppressWarnings("unused")
-    private void debugAllLoadedClasses(final Collection<ObjectSpecification> allSpecs) {
-        final ImmutableList<String> specs = FluentIterable.from(allSpecs)
-                .transform((final ObjectSpecification objectSpecification)->
-                        objectSpecification.getCorrespondingClass().getName())
-                .toSortedList(Ordering.natural());
-        final String all = Joiner.on(",").join(specs);
-        System.out.println(all);
-    }
+//    @SuppressWarnings("unused")
+//    private void debugAllLoadedClasses(final Collection<ObjectSpecification> allSpecs) {
+//        final ImmutableList<String> specs = FluentIterable.from(allSpecs)
+//                .transform((final ObjectSpecification objectSpecification)->
+//                        objectSpecification.getCorrespondingClass().getName())
+//                .toSortedList(Ordering.natural());
+//        final String all = Joiner.on(",").join(specs);
+//        System.out.println(all);
+//    }
 
     void appendObjectPathsAndDefinitions() {
         // (previously we took a protective copy to avoid a concurrent modification exception,

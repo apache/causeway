@@ -23,17 +23,13 @@ import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsFirst;
 
 import java.io.Serializable;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-import com.google.common.io.BaseEncoding;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Value;
@@ -43,6 +39,7 @@ import org.apache.isis.applib.util.Hashing;
 import org.apache.isis.applib.util.ObjectContracts;
 import org.apache.isis.applib.util.TitleBuffer;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -134,7 +131,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     // -- constructor
 
     private ApplicationFeatureId(final String asString) {
-        final Iterator<String> iterator = Splitter.on(":").split(asString).iterator();
+        final Iterator<String> iterator = _Strings.splitThenStream(asString, ":").iterator();
         final ApplicationFeatureType type = ApplicationFeatureType.valueOf(iterator.next());
         type.init(this, iterator.next());
     }
@@ -282,11 +279,8 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
                 return null; // parent is root
             }
 
-            final Iterable<String> split = Splitter.on(".").split(packageName);
-            final List<String> parts = _Lists.newArrayList(split); // eg [aaa,bbb,ccc]
-            parts.remove(parts.size()-1); // remove last, eg [aaa,bbb]
-
-            final String parentPackageName = Joiner.on(".").join(parts); // eg aaa.bbb
+            final int cutOffPos = packageName.lastIndexOf('.');
+            final String parentPackageName = packageName.substring(0, cutOffPos);
 
             return newPackage(parentPackageName);
         }
@@ -314,7 +308,7 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
 
     @Programmatic
     public String asString() {
-        return Joiner.on(":").join(type, getFullyQualifiedName());
+        return type.name() + ":" + getFullyQualifiedName();
     }
 
     @Programmatic
@@ -323,18 +317,12 @@ public class ApplicationFeatureId implements Comparable<ApplicationFeatureId>, S
     }
 
     private static String base64UrlDecode(final String str) {
-        final byte[] bytes = BaseEncoding.base64Url().decode(str);
-        return new String(bytes, Charset.forName("UTF-8"));
+        return _Strings.convert(str, _Bytes.ofUrlBase64, StandardCharsets.UTF_8);
     }
 
     private static String base64UrlEncode(final String str) {
-        final byte[] bytes = str.getBytes(Charset.forName("UTF-8"));
-        return BaseEncoding.base64Url().encode(bytes);
+        return _Strings.convert(str, _Bytes.asUrlBase64, StandardCharsets.UTF_8);
     }
-
-
-
-
 
     // //////////////////////////////////////
 

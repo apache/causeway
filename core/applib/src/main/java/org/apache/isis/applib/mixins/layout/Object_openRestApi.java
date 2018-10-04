@@ -27,7 +27,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.applib.value.LocalResourcePath;
-import org.apache.isis.commons.internal.resources._Resource;
+import org.apache.isis.commons.internal.resources._Resources;
 
 @Mixin(method="act")
 public class Object_openRestApi {
@@ -59,7 +59,7 @@ public class Object_openRestApi {
 
         return new LocalResourcePath(String.format(
                 "/%s/objects/%s/%s",
-                _Resource.getRestfulPathIfAny(),
+                _Resources.getRestfulPathIfAny(),
                 bookmark.getObjectType(),
                 bookmark.getIdentifier()));
     }

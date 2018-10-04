@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Collections2;
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -108,7 +106,8 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
             return null;
         }
 
-        final Collection<Authenticator> compatibleAuthenticators = Collections2.filter(authenticators, AuthenticatorFuncs.compatibleWith(request)::test);
+        final Collection<Authenticator> compatibleAuthenticators = 
+                _Lists.filter(authenticators, AuthenticatorFuncs.compatibleWith(request));
         if (compatibleAuthenticators.size() == 0) {
             throw new NoAuthenticatorException("No authenticator available for processing " + request.getClass().getName());
         }

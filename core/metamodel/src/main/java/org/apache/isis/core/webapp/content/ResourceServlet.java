@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.resources._Resource;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.commons.lang.InputStreamExtensions;
 import org.apache.isis.core.commons.lang.ResourceUtil;
 import org.apache.isis.core.commons.lang.StringExtensions;
@@ -64,8 +64,8 @@ public class ResourceServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        final String restfulPath = ifPresentElse(_Resource.getRestfulPathIfAny(), "restful");
-        final String restfulBase = _Resource.prependContextPathIfPresent(restfulPath);
+        final String restfulPath = ifPresentElse(_Resources.getRestfulPathIfAny(), "restful");
+        final String restfulBase = _Resources.prependContextPathIfPresent(restfulPath);
         templateVariables = new ResourceServlet_HtmlTemplateVariables(
                 pair("restful-base", prefix(restfulBase, "/"))
                 );

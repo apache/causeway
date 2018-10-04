@@ -18,12 +18,13 @@
  */
 package org.apache.isis.core.metamodel.adapter.oid;
 
+import static org.apache.isis.commons.internal.base._Strings.splitThenStream;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.google.common.base.Splitter;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._Casts;
@@ -168,19 +169,21 @@ final class Oid_Marshaller implements Oid.Marshaller, Oid.Unmarshaller {
 
         final String aggregateOidPart = getGroup(matcher, 6);
         final List<AggregateOidPart> aggregateOidParts = _Lists.newArrayList();
-        final Splitter nestingSplitter = Splitter.on(SEPARATOR_NESTING);
-        final Splitter partsSplitter = Splitter.on(SEPARATOR);
+//        final Splitter nestingSplitter = Splitter.on(SEPARATOR_NESTING);
+//        final Splitter partsSplitter = Splitter.on(SEPARATOR);
         if(aggregateOidPart != null) {
-            final Iterable<String> tildaSplitIter = nestingSplitter.split(aggregateOidPart);
-            for(String str: tildaSplitIter) {
+            final Stream<String> tildaSplitted = splitThenStream(aggregateOidPart, SEPARATOR_NESTING); 
+                    
+            tildaSplitted.forEach(str->{
                 if(_Strings.isNullOrEmpty(str)) {
-                    continue; // leading "~"
+                    return; // leading "~"
                 }
-                final Iterator<String> colonSplitIter = partsSplitter.split(str).iterator();
+                final Iterator<String> colonSplitIter = splitThenStream(str, SEPARATOR).iterator();
                 final String objectType = colonSplitIter.next();
                 final String localId = colonSplitIter.next();
                 aggregateOidParts.add(new AggregateOidPart(objectType, localId));
-            }
+            });
+            
         }
         final String collectionPart = getGroup(matcher, 8);
         final String collectionName = collectionPart != null ? collectionPart.substring(1) : null;

@@ -22,6 +22,8 @@ package org.apache.isis.core.commons.resource;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.isis.commons.internal.resources._Resources;
+
 /**
  * Load from this class' ClassLoader.
  *
@@ -35,7 +37,7 @@ public class ResourceStreamSourceCurrentClassClassPath extends ResourceStreamSou
 
     @Override
     protected InputStream doReadResource(final String resourcePath) throws IOException {
-        return getClass().getClassLoader().getResourceAsStream(resourcePath);
+        return _Resources.load(getClass(), resourcePath);
     }
 
     @Override
