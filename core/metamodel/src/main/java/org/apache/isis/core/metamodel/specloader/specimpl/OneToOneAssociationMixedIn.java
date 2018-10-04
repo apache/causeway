@@ -196,7 +196,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     }
 
     private PublishingServiceInternal getPublishingServiceInternal() {
-        return getServicesInjector().lookupService(PublishingServiceInternal.class);
+        return getServicesInjector().lookupServiceElseFail(PublishingServiceInternal.class);
     }
 
 

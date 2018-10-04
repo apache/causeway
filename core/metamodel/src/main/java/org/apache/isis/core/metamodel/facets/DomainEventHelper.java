@@ -388,7 +388,7 @@ public class DomainEventHelper {
     private EventBusService getEventBusService() {
         // previously this method used to cache, however it prevents integration tests
         // from switching out the EventBusService with a mock.
-        return this.servicesInjector.lookupService(EventBusService.class);
+        return this.servicesInjector.lookupService(EventBusService.class).orElse(null);
     }
 
 

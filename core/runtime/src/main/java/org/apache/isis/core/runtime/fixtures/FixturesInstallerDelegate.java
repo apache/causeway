@@ -108,7 +108,7 @@ public class FixturesInstallerDelegate {
     }
 
     private IsisConfiguration getConfiguration() {
-        return isisSessionFactory.getServicesInjector().lookupService(IsisConfiguration.class);
+        return isisSessionFactory.getServicesInjector().lookupServiceElseFail(IsisConfiguration.class);
     }
 
     private void installFixtures(final List<Object> fixtures) {
@@ -222,7 +222,7 @@ public class FixturesInstallerDelegate {
     }
 
     private EventBusService getEventBusService() {
-        return getServicesInjector().lookupService(EventBusService.class);
+        return getServicesInjector().lookupServiceElseFail(EventBusService.class);
     }
 
     private PersistenceSession getPersistenceSession() {

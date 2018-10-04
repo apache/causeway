@@ -81,7 +81,7 @@ public class IsisMojoXsd extends IsisMojoAbstract {
             final ContextForMojo context, final IsisSessionFactory isisSessionFactory)
                     throws MojoFailureException, IOException {
 
-        final JaxbService jaxbService = isisSessionFactory.getServicesInjector().lookupService(JaxbService.class);
+        final JaxbService jaxbService = isisSessionFactory.getServicesInjector().lookupServiceElseFail(JaxbService.class);
 
         final MavenProject mavenProject = context.getMavenProject();
         final File outputDir = determineOutputDir(mavenProject);

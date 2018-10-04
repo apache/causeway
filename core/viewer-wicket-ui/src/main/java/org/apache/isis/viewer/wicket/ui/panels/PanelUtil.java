@@ -99,7 +99,7 @@ public final class PanelUtil {
         }
 
         final TranslationService translationService =
-                servicesInjector.lookupService(TranslationService.class);
+                servicesInjector.lookupServiceElseFail(TranslationService.class);
 
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 

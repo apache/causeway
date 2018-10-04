@@ -21,6 +21,7 @@ package org.apache.isis.applib.services.exceprecog;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -55,6 +56,10 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
         for (final ExceptionRecognizer er : exceptionRecognizers) {
             add(er);
         }
+    }
+    
+    public ExceptionRecognizerComposite(final Stream<? extends ExceptionRecognizer> exceptionRecognizers) {
+        exceptionRecognizers.forEach(this::add);
     }
 
     /**

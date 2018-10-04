@@ -148,7 +148,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
      * @return The found domain service
      */
     protected <S> S lookupService(final Class<S> serviceClass) {
-        return getPersistenceSession().getServicesInjector().lookupService(serviceClass);
+        return getPersistenceSession().getServicesInjector().lookupService(serviceClass).orElse(null);
     }
 
 

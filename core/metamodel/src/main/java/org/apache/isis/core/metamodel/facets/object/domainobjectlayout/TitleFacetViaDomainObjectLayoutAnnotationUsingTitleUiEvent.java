@@ -57,10 +57,10 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
                         configuration))
                 .findFirst()
                 .map(titleUiEventClass -> {
-                    final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+                    final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
                     final ObjectSpecification facetHolderAsSpec = (ObjectSpecification) facetHolder; // bit naughty...
                     final String translationContext = facetHolderAsSpec.getCorrespondingClass().getCanonicalName();
-                    final EventBusService eventBusService = servicesInjector.lookupService(EventBusService.class);
+                    final EventBusService eventBusService = servicesInjector.lookupServiceElseFail(EventBusService.class);
 
                     return new TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent(
                             titleUiEventClass, translationService, translationContext, eventBusService, facetHolder);

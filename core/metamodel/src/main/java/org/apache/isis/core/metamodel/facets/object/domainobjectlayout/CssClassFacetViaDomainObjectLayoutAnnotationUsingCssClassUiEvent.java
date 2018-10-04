@@ -56,7 +56,7 @@ CssClassFacet {
                         configuration))
                 .findFirst()
                 .map(cssClassUiEventClass -> {
-                    final EventBusService eventBusService = servicesInjector.lookupService(EventBusService.class);
+                    final EventBusService eventBusService = servicesInjector.lookupServiceElseFail(EventBusService.class);
                     return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
                             cssClassUiEventClass, eventBusService, facetHolder);
                 })

@@ -213,7 +213,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
 
     private PublishingServiceInternal getPublishingServiceInternal() {
-        return getServicesInjector().lookupService(PublishingServiceInternal.class);
+        return getServicesInjector().lookupServiceElseFail(PublishingServiceInternal.class);
     }
 
 

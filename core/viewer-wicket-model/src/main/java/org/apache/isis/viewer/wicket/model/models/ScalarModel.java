@@ -861,7 +861,8 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
      */
     @Override
     protected AuthenticationSession getAuthenticationSession() {
-        return getPersistenceSession().getServicesInjector().lookupService(AuthenticationSessionProvider.class).getAuthenticationSession();
+        return getPersistenceSession().getServicesInjector()
+                .lookupServiceElseFail(AuthenticationSessionProvider.class).getAuthenticationSession();
     }
 
     public boolean isRequired() {

@@ -124,7 +124,7 @@ public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String
     }
 
     private TitleService getTitleService() {
-        return servicesInjector.lookupService(TitleService.class);
+        return servicesInjector.lookupServiceElseFail(TitleService.class);
     }
 
 }

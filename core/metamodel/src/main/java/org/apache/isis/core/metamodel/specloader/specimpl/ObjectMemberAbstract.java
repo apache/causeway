@@ -406,7 +406,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     }
 
     protected <T> T lookupService(final Class<T> serviceClass) {
-        return getServicesInjector().lookupService(serviceClass);
+        return getServicesInjector().lookupService(serviceClass).orElse(null);
     }
 
     protected CommandContext getCommandContext() {

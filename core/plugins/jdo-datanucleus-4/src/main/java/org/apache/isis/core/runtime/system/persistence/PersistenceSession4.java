@@ -180,19 +180,22 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     private void postConstructOnRequestScopedServices() {
-        for (final Object service : servicesInjector.getRegisteredServices()) {
+        servicesInjector.streamServices()
+        .forEach(service->{
             if(service instanceof RequestScopedService) {
                 ((RequestScopedService)service).__isis_postConstruct();
             }
-        }
+        });
+        
     }
 
     private void startRequestOnRequestScopedServices() {
-        for (final Object service : servicesInjector.getRegisteredServices()) {
+        servicesInjector.streamServices()
+        .forEach(service->{
             if(service instanceof RequestScopedService) {
                 ((RequestScopedService)service).__isis_startRequest(servicesInjector);
             }
-        }
+        });
     }
 
     private Command createCommand() {
@@ -261,19 +264,21 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     private void endRequestOnRequestScopeServices() {
-        for (final Object service : servicesInjector.getRegisteredServices()) {
+        servicesInjector.streamServices()
+        .forEach(service->{
             if(service instanceof RequestScopedService) {
                 ((RequestScopedService)service).__isis_endRequest();
             }
-        }
+        });
     }
 
     private void preDestroyOnRequestScopedServices() {
-        for (final Object service : servicesInjector.getRegisteredServices()) {
+        servicesInjector.streamServices()
+        .forEach(service->{
             if(service instanceof RequestScopedService) {
                 ((RequestScopedService)service).__isis_preDestroy();
             }
-        }
+        });
     }
 
     private void completeCommandFromInteractionAndClearDomainEvents() {

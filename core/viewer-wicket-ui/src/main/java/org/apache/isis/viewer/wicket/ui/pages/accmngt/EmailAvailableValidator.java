@@ -47,7 +47,7 @@ public class EmailAvailableValidator implements IValidator<String> {
         getIsisSessionFactory().doInSession(new Runnable() {
             @Override
             public void run() {
-                UserRegistrationService userRegistrationService = getServicesInjector().lookupService(UserRegistrationService.class);
+                UserRegistrationService userRegistrationService = getServicesInjector().lookupServiceElseFail(UserRegistrationService.class);
                 String email = validatable.getValue();
                 boolean emailExists1 = userRegistrationService.emailExists(email);
                 if (emailExists1 != emailExists) {

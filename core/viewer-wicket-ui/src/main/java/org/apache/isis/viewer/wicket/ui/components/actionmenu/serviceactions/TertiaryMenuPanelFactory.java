@@ -64,7 +64,7 @@ public class TertiaryMenuPanelFactory extends ComponentFactoryAbstract {
         final ServiceActionsModel serviceActionsModel = (ServiceActionsModel) model;
 
         final MenuBarsService menuBarsService =
-                getIsisSessionFactory().getServicesInjector().lookupService(MenuBarsService.class);
+                getIsisSessionFactory().getServicesInjector().lookupServiceElseFail(MenuBarsService.class);
 
         final MenuBars menuBars = menuBarsService.menuBars();
 

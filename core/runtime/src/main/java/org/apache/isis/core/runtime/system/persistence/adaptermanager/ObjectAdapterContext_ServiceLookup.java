@@ -92,7 +92,7 @@ class ObjectAdapterContext_ServiceLookup {
         
         final ServicesByIdResource lookupResource = new ServicesByIdResource();
         
-        servicesInjector.streamRegisteredServiceInstances()
+        servicesInjector.streamServices()
         .map(objectAdapterContext.getObjectAdapterProvider()::adapterFor)
         .forEach(serviceAdapter->{
             Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());

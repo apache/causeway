@@ -24,6 +24,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
@@ -141,11 +142,11 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
     private void cacheServicesByClassNameIfNecessary() {
         if (servicesByClassName == null) {
             final Map<String,Object> servicesByClassName = _Maps.newHashMap();
-            final List<Object> registeredServices = serviceRegistry.getRegisteredServices();
-            for (Object registeredService : registeredServices) {
+            final Stream<Object> registeredServices = serviceRegistry.streamServices();
+            registeredServices.forEach(registeredService->{
                 final String serviceClassName = registeredService.getClass().getName();
                 servicesByClassName.put(serviceClassName, registeredService);
-            }
+            });
             this.servicesByClassName = servicesByClassName;
         }
     }

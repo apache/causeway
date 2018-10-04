@@ -383,7 +383,7 @@ public class DomainResourceHelper {
     }
 
     private <T> T lookupService(Class<T> serviceType) {
-        return getServicesInjector().lookupService(serviceType);
+        return getServicesInjector().lookupService(serviceType).orElse(null);
     }
 
 }

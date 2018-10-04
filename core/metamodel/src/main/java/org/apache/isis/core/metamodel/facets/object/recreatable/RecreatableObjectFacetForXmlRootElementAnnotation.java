@@ -73,11 +73,11 @@ public class RecreatableObjectFacetForXmlRootElementAnnotation extends Recreatab
 
 
     private JaxbService getJaxbService() {
-        return servicesInjector.lookupService(JaxbService.class);
+        return servicesInjector.lookupServiceElseFail(JaxbService.class);
     }
 
     private UrlEncodingService getUrlEncodingService() {
-        return servicesInjector.lookupService(UrlEncodingService.class);
+        return servicesInjector.lookupServiceElseFail(UrlEncodingService.class);
     }
 
 }

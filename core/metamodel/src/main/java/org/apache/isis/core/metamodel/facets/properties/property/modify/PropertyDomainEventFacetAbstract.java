@@ -58,7 +58,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
         super(PropertyDomainEventFacet.class, holder, eventType, specificationLoader);
         this.getterFacet = getterFacet;
 
-        this.translationService = servicesInjector.lookupService(TranslationService.class);
+        this.translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
         // sadness: same as in TranslationFactory
         this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
 

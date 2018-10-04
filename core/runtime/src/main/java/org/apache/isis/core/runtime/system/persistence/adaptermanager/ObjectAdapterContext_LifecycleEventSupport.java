@@ -55,7 +55,7 @@ class ObjectAdapterContext_LifecycleEventSupport {
         this.persistenceSession = persistenceSession;
         this.servicesInjector = persistenceSession.getServicesInjector();
         this.specificationLoader = servicesInjector.getSpecificationLoader();
-        this.eventBusService = servicesInjector.lookupService(EventBusService.class);
+        this.eventBusService = servicesInjector.lookupServiceElseFail(EventBusService.class);
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })

@@ -19,21 +19,49 @@
 
 package org.apache.isis.applib.services.registry;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 
 public interface ServiceRegistry {
 
     @Programmatic
     <T> T injectServicesInto(final T domainObject);
 
+
+    /**
+     * @return Stream of all currently registered service instances.
+     */
     @Programmatic
-    <T> T lookupService(Class<T> service);
+    Stream<Object> streamServices();
 
     @Programmatic
-    <T> Iterable<T> lookupServices(Class<T> service);
+    <T> Stream<T> streamServices(Class<T> serviceClass);
+    
+    /**
+     * Returns the first registered domain service implementing the requested type.
+     *
+     * <p>
+     * Typically there will only ever be one domain service implementing a given type,
+     * (eg {@link PublishingService}), but for some services there can be more than one
+     * (eg {@link ExceptionRecognizer}).
+     *
+     * @see #lookupServices(Class)
+     */
+    @Programmatic
+    public default <T> Optional<T> lookupService(final Class<T> serviceClass) {
+        return streamServices(serviceClass)
+                .findFirst();
+    }
 
     @Programmatic
-    List<Object> getRegisteredServices();
+    public default <T> T lookupServiceElseFail(final Class<T> serviceClass) {
+        return streamServices(serviceClass)
+                .findFirst()
+                .orElseThrow(()->
+                    new IllegalStateException("Could not locate service of type '" + serviceClass + "'"));
+    }
+    
 }

@@ -22,6 +22,7 @@ import static org.apache.isis.commons.internal.collections._Lists.lastElementIfA
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -264,16 +265,17 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public <T> T lookupService(Class<T> service) {
-    	return serviceRegistry.lookupService(service);
+    	return serviceRegistry.lookupService(service).orElse(null);
     }
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.registry.ServiceRegistry#lookupServices(Class)} instead.
+     * @deprecated - use {@link org.apache.isis.applib.services.registry.ServiceRegistry#streamServices(Class)} instead.
      */
     @Deprecated
     @Programmatic
     public <T> Iterable<T> lookupServices(Class<T> service){
-    	return serviceRegistry.lookupServices(service);	
+    	return serviceRegistry.streamServices(service)
+    	        .collect(Collectors.toList());	
     }
 
     /**

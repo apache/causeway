@@ -173,8 +173,8 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 allowing(mockActThatIsHidden).getSemantics();
                 will(returnValue(SemanticsOf.SAFE));
 
-                allowing(mockServiceRegistry).getRegisteredServices();
-                will(returnValue(_Lists.newArrayList()));
+                allowing(mockServiceRegistry).streamServices();
+                will(returnValue(_Lists.newArrayList().stream()));
             }});
 
             // then
@@ -265,8 +265,8 @@ public class ApplicationFeatureRepositoryDefaultTest {
             super.setUp();
 
             context.checking(new Expectations() {{
-                allowing(mockServiceRegistry).getRegisteredServices();
-                will(returnValue(_Lists.newArrayList()));
+                allowing(mockServiceRegistry).streamServices();
+                will(returnValue(_Lists.newArrayList().stream()));
 
                 allowing(mockSpecificationLoader).allSpecifications();
                 will(returnValue(_Lists.newArrayList()));

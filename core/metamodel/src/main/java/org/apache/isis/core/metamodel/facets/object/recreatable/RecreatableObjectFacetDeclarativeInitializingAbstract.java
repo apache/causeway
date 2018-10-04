@@ -57,8 +57,8 @@ extends RecreatableObjectFacetAbstract {
             final Object viewModelPojo,
             final String mementoStr) {
 
-        final UrlEncodingService codec = servicesInjector.lookupService(UrlEncodingService.class);
-        final SerializingAdapter serializer = servicesInjector.lookupService(SerializingAdapter.class);
+        final UrlEncodingService codec = servicesInjector.lookupServiceElseFail(UrlEncodingService.class);
+        final SerializingAdapter serializer = servicesInjector.lookupServiceElseFail(SerializingAdapter.class);
 
         final _Mementos.Memento memento = _Mementos.parse(codec, serializer, mementoStr);
 
@@ -90,8 +90,8 @@ extends RecreatableObjectFacetAbstract {
     @Override
     public String memento(Object viewModelPojo) {
 
-        final UrlEncodingService codec = servicesInjector.lookupService(UrlEncodingService.class);
-        final SerializingAdapter serializer = servicesInjector.lookupService(SerializingAdapter.class);
+        final UrlEncodingService codec = servicesInjector.lookupServiceElseFail(UrlEncodingService.class);
+        final SerializingAdapter serializer = servicesInjector.lookupServiceElseFail(SerializingAdapter.class);
 
         final _Mementos.Memento memento = _Mementos.create(codec, serializer);
 

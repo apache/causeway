@@ -438,7 +438,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             return new ObjectSpecificationOnStandaloneList(servicesInjector,
                     facetProcessor);
         } else {
-            final ConfigurationServiceInternal configService = servicesInjector.lookupService(
+            final ConfigurationServiceInternal configService = servicesInjector.lookupServiceElseFail(
                     ConfigurationServiceInternal.class);
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
                     new FacetedMethodsBuilderContext(
@@ -535,7 +535,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     @Programmatic
     public Stream<Class<?>> streamServiceClasses() {
-        return servicesInjector.streamRegisteredServiceTypes();
+        return servicesInjector.streamServiceTypes();
     }
 
     @Programmatic

@@ -54,7 +54,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
         }
 
         AppManifest2 appManifest = specificationLoader.getServicesInjector()
-                .lookupService(MetaModelService.class).getAppManifest2();
+                .lookupServiceElseFail(MetaModelService.class).getAppManifest2();
         if(appManifest == null) {
             return;
         }
@@ -101,7 +101,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
             public void summarize(final ValidationFailures validationFailures) {
 
                 AppManifest2 appManifest = specificationLoader.getServicesInjector()
-                        .lookupService(MetaModelService.class).getAppManifest2();
+                        .lookupServiceElseFail(MetaModelService.class).getAppManifest2();
                 if(appManifest == null) {
                     return;
                 }

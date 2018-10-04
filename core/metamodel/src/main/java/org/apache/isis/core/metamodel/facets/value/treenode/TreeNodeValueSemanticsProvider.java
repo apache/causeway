@@ -123,14 +123,14 @@ implements TreeNodeValueFacet {
     // -- HELPER
 
     private _Mementos.Memento newMemento(){
-        final UrlEncodingService codec = getServicesInjector().lookupService(UrlEncodingService.class);
-        final SerializingAdapter serializer = getServicesInjector().lookupService(SerializingAdapter.class);
+        final UrlEncodingService codec = getServicesInjector().lookupServiceElseFail(UrlEncodingService.class);
+        final SerializingAdapter serializer = getServicesInjector().lookupServiceElseFail(SerializingAdapter.class);
         return _Mementos.create(codec, serializer);
     }
 
     private _Mementos.Memento parseMemento(String input){
-        final UrlEncodingService codec = getServicesInjector().lookupService(UrlEncodingService.class);
-        final SerializingAdapter serializer = getServicesInjector().lookupService(SerializingAdapter.class);
+        final UrlEncodingService codec = getServicesInjector().lookupServiceElseFail(UrlEncodingService.class);
+        final SerializingAdapter serializer = getServicesInjector().lookupServiceElseFail(SerializingAdapter.class);
         return _Mementos.parse(codec, serializer, input);
     }
 

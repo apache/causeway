@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import com.google.common.base.Throwables;
-import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.IPageFactory;
@@ -53,6 +53,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
@@ -203,8 +204,8 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
 
             // handle recognised exceptions gracefully also
-            final List<ExceptionRecognizer> exceptionRecognizers =
-                    getServicesInjector().lookupServices(ExceptionRecognizer.class);
+            final Stream<ExceptionRecognizer> exceptionRecognizers =
+                    getServicesInjector().streamServices(ExceptionRecognizer.class);
             String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
             if(recognizedMessageIfAny != null) {
                 return respondGracefully(cycle);
@@ -283,7 +284,8 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         exceptionRecognizers.add(pageExpiredExceptionRecognizer);
 
         if(inIsisSession()) {
-            exceptionRecognizers.addAll(getServicesInjector().lookupServices(ExceptionRecognizer.class));
+            getServicesInjector().streamServices(ExceptionRecognizer.class)
+            .forEach(exceptionRecognizers::add);
         } else {
             final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
             if(mmie != null) {
@@ -377,11 +379,8 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
 
 
     TranslationService getTranslationService() {
-        return getServicesInjector().lookupService(TranslationService.class);
+        return getServicesInjector().lookupServiceElseFail(TranslationService.class);
     }
-
-
-
 
     // -- Dependencies (from wicket)
 

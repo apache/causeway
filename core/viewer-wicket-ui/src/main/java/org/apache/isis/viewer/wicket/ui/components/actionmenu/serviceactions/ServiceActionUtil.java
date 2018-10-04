@@ -270,7 +270,7 @@ public final class ServiceActionUtil {
             final ServicesInjector servicesInjector) {
 
         final TranslationService translationService =
-                servicesInjector.lookupService(TranslationService.class);
+                servicesInjector.lookupServiceElseFail(TranslationService.class);
 
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 

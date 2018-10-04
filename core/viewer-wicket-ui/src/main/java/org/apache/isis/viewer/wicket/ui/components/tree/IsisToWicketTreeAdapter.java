@@ -229,7 +229,7 @@ class IsisToWicketTreeAdapter {
             }
             try {
                 final FactoryService factoryService = IsisContext.getServicesInjector()
-                        .lookupService(FactoryService.class);
+                        .lookupServiceElseFail(FactoryService.class);
                 return wrappedTreeAdapter = factoryService.instantiate(treeAdapterClass);
             } catch (Exception e) {
                 throw new RuntimeException("failed to instantiate tree adapter", e);

@@ -127,7 +127,7 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
                 @Override
                 public void run() {
                     final UserRegistrationService userRegistrationService = getIsisSessionFactory()
-                            .getServicesInjector().lookupService(UserRegistrationService.class);
+                            .getServicesInjector().lookupServiceElseFail(UserRegistrationService.class);
 
                     getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager()
                     .executeWithinTransaction(() -> {

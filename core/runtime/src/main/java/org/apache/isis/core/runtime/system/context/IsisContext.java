@@ -151,6 +151,15 @@ public interface IsisContext {
             System.out.println(k+" -> "+v);
         });
         System.out.println("================================================");
+        System.out.println("=                 Meta Model                   =");
+        System.out.println("================================================");
+        
+        getServicesInjector().streamServices()
+        .forEach(service->{
+            
+        });
+        
+        System.out.println("================================================");
     }
 
 }

@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.system.session;
 
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -32,7 +33,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.title.TitleService;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -117,7 +117,7 @@ implements ApplicationScopedComponent, AppManifestProvider {
     public void constructServices() {
 
         // do postConstruct.  We store the initializer to do preDestroy on shutdown
-        serviceInitializer = new ServiceInitializer(configuration, servicesInjector.getRegisteredServices());
+        serviceInitializer = new ServiceInitializer(configuration, servicesInjector.streamServices().collect(Collectors.toList()));
         serviceInitializer.validate();
 
         openSession(new InitialisationSession());
@@ -155,12 +155,9 @@ implements ApplicationScopedComponent, AppManifestProvider {
             // translateServicesAndEnumConstants
             //
 
-            final List<Object> services = servicesInjector.getRegisteredServices();
-            // take a copy of all services to avoid occasional concurrent modification exceptions
-            // that can sometimes occur in the loop
-            final List<Object> copyOfServices = _Lists.newArrayList(services);
+            final List<Object> services = servicesInjector.streamServices().collect(Collectors.toList());
             final TitleService titleService = servicesInjector.lookupServiceElseFail(TitleService.class);
-            for (Object service : copyOfServices) {
+            for (Object service : services) {
                 @SuppressWarnings("unused")
                 final String unused = titleService.titleOf(service);
             }
@@ -411,7 +408,7 @@ implements ApplicationScopedComponent, AppManifestProvider {
     @Programmatic
     @Deprecated
     public List<Object> getServices() {
-        return servicesInjector.getRegisteredServices();
+        return servicesInjector.streamServices().collect(Collectors.toList());
     }
 
 

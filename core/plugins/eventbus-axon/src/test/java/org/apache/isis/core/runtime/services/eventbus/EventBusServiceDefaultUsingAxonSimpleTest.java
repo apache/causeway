@@ -20,7 +20,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -39,10 +40,10 @@ public class EventBusServiceDefaultUsingAxonSimpleTest {
         eventBusService = new EventBusServiceDefault() {
         	{
         		serviceRegistry = new ServiceRegistry() {
-					@Override public <T> Iterable<T> lookupServices(Class<T> service) { return null; }
-					@Override public <T> T lookupService(Class<T> service) { return null; }
+					@Override public <T> Optional<T> lookupService(Class<T> service) { return null; }
 					@Override public <T> T injectServicesInto(T domainObject) {	return null; }
-					@Override public List<Object> getRegisteredServices() { return null; }
+                    @Override public Stream<Object> streamServices() { return null; }
+                    @Override public <T> Stream<T> streamServices(Class<T> serviceClass) {return null;}
 				}; 
         	}
         };

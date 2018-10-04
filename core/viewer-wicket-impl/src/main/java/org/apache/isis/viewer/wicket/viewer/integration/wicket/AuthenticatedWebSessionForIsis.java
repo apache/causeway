@@ -192,8 +192,9 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     protected @NotNull SessionLoggingService getSessionLoggingService() {
         try {
             final SessionLoggingService service = getIsisSessionFactory().getServicesInjector()
-                    .lookupService(SessionLoggingService.class);
-            return (service!=null) ? service : new SessionLoggingService.Stderr();
+                    .lookupService(SessionLoggingService.class)
+                    .orElseGet(SessionLoggingService.Stderr::new);
+            return service;
         } catch (Exception e) {
             // fallback to System.err
             return new SessionLoggingService.Stderr();

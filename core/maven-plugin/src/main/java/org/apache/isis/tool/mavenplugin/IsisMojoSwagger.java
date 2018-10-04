@@ -78,7 +78,7 @@ public class IsisMojoSwagger extends IsisMojoAbstract {
             final ContextForMojo context, final IsisSessionFactory isisSessionFactory)
                     throws MojoFailureException, IOException {
 
-        final SwaggerService swaggerService = isisSessionFactory.getServicesInjector().lookupService(SwaggerService.class);
+        final SwaggerService swaggerService = isisSessionFactory.getServicesInjector().lookupServiceElseFail(SwaggerService.class);
 
         final MavenProject mavenProject = context.getMavenProject();
         final File outputDir = determineOutputDir(mavenProject, output);

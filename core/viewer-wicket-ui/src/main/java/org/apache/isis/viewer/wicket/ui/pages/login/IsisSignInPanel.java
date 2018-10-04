@@ -43,6 +43,8 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel
  */
 public class IsisSignInPanel extends SignInPanel {
 
+    private static final long serialVersionUID = 1L;
+    
     private final boolean signUpLink;
     private final boolean passwordResetLink;
     private final boolean clearOriginalDestination;
@@ -115,9 +117,9 @@ public class IsisSignInPanel extends SignInPanel {
 
     private void setVisibilityAllowedBasedOnAvailableServices(final Component... components) {
         final UserRegistrationService userRegistrationService =
-                servicesInjector.lookupService(UserRegistrationService.class);
+                servicesInjector.lookupService(UserRegistrationService.class).orElse(null);
         final EmailNotificationService emailNotificationService1 =
-                servicesInjector.lookupService(EmailNotificationService.class);
+                servicesInjector.lookupService(EmailNotificationService.class).orElse(null);
         final boolean visibilityAllowed = userRegistrationService != null && emailNotificationService1.isConfigured();
         for (final Component component: components) {
             if(component.isVisibilityAllowed()) {

@@ -106,11 +106,11 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
     }
 
     private Object getRepository() {
-        return servicesInjector.lookupService(repositoryClass);
+        return servicesInjector.lookupService(repositoryClass).orElse(null);
     }
 
     private PublishingServiceInternal getPublishingServiceInternal() {
-        return servicesInjector.lookupService(PublishingServiceInternal.class);
+        return servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
     }
 
 

@@ -52,7 +52,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
                     final SpecificationLoader specificationLoader) {
         super(CollectionDomainEventFacet.class, holder, eventType, specificationLoader);
 
-        this.translationService = servicesInjector.lookupService(TranslationService.class);
+        this.translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
         // sadness: same as in TranslationFactory
         this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
 

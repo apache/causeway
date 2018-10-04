@@ -50,7 +50,7 @@ public class ErrorPage extends PageAbstract {
         addBookmarkedPages(themeDiv);
 
         final ErrorReportingService errorReportingService = getServicesInjector()
-                .lookupService(ErrorReportingService.class);
+                .lookupService(ErrorReportingService.class).orElse(null);
         if(errorReportingService != null) {
 
             final String mainMessage = exceptionModel.getMainMessage();

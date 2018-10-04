@@ -132,7 +132,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     }
 
     private LocaleProvider getLocaleProvider() {
-        return IsisContext.getSessionFactory().getServicesInjector().lookupService(LocaleProvider.class);
+        return IsisContext.getSessionFactory().getServicesInjector().lookupService(LocaleProvider.class).orElse(null);
     }
 
 

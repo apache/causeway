@@ -24,6 +24,7 @@ import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
@@ -209,7 +210,8 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
 
                         // optional SPI to reorder
                         final List<TableColumnOrderService> tableColumnOrderServices =
-                                getServicesInjector().lookupServices(TableColumnOrderService.class);
+                                getServicesInjector().streamServices(TableColumnOrderService.class)
+                                .collect(Collectors.toList());
 
                         for (final TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
                             final List<String> propertyReorderedIds = reordered(tableColumnOrderService, propertyIds);

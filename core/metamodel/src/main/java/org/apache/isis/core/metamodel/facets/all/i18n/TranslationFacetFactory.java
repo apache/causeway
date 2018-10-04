@@ -130,7 +130,7 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
      */
     TranslationService lookupTranslationService() {
         if(translationService == null) {
-            translationService = servicesInjector.lookupService(TranslationService.class);
+            translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
         }
         return translationService;
     }

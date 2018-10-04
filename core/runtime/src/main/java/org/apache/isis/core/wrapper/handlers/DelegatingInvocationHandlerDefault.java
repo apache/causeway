@@ -52,7 +52,7 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
             throw new IllegalArgumentException("delegate must not be null");
         }
         this.delegate = delegate;
-        this.wrapperFactory = isisSessionFactory.getServicesInjector().lookupService(WrapperFactory.class);
+        this.wrapperFactory = isisSessionFactory.getServicesInjector().lookupServiceElseFail(WrapperFactory.class);
         this.executionMode = executionMode;
 
         try {

@@ -19,9 +19,9 @@ package org.apache.isis.viewer.wicket.ui.panels;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
+import java.util.stream.Stream;
 
 import com.google.common.base.Throwables;
-import org.apache.isis.commons.internal.collections._Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -43,6 +43,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.guice.GuiceBeanProvider;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -70,6 +71,8 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
 implements FormExecutor {
 
+    private static final long serialVersionUID = 1L;
+
     private static final Logger LOG = LoggerFactory.getLogger(FormExecutorDefault.class);
 
     protected final M model;
@@ -83,7 +86,7 @@ implements FormExecutor {
     }
 
     protected WicketViewerSettings getSettings() {
-        final GuiceBeanProvider guiceBeanProvider = getServicesInjector().lookupService(GuiceBeanProvider.class);
+        final GuiceBeanProvider guiceBeanProvider = getServicesInjector().lookupServiceElseFail(GuiceBeanProvider.class);
         return guiceBeanProvider.lookup(WicketViewerSettings.class);
     }
 
@@ -123,7 +126,7 @@ implements FormExecutor {
                 return false;
             }
 
-            final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
+            final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class).orElse(null);
             if (commandContext != null) {
                 command = commandContext.getCommand();
                 command.internal().setExecutor(Command.Executor.USER);
@@ -198,7 +201,7 @@ implements FormExecutor {
 
             forwardOnConcurrencyException(targetAdapter, ex);
 
-            final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
+            final MessageService messageService = getServicesInjector().lookupServiceElseFail(MessageService.class);
             messageService.warnUser(ex.getMessage());
 
             return false;
@@ -431,8 +434,8 @@ implements FormExecutor {
 
         // see if the exception is recognized as being a non-serious error
         // (nb: similar code in WebRequestCycleForIsis, as a fallback)
-        List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector()
-                .lookupServices(ExceptionRecognizer.class);
+        final Stream<ExceptionRecognizer> exceptionRecognizers = getServicesInjector()
+                .streamServices(ExceptionRecognizer.class);
         String recognizedErrorIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
         if (recognizedErrorIfAny != null) {
 
@@ -456,7 +459,7 @@ implements FormExecutor {
             targetIfAny.add(feedbackFormIfAny);
             feedbackFormIfAny.error(error);
         } else {
-            final MessageService messageService = getServicesInjector().lookupService(MessageService.class);
+            final MessageService messageService = getServicesInjector().lookupServiceElseFail(MessageService.class);
             messageService.warnUser(error);
         }
     }

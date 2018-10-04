@@ -18,6 +18,7 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -244,11 +245,11 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     }
 
     private <T> T lookupServiceIfAny(final Class<T> serviceType) {
-        return servicesInjector.lookupService(serviceType);
+        return servicesInjector.lookupService(serviceType).orElse(null);
     }
 
     protected <T> List<T> lookupServices(final Class<T> serviceClass) {
-        return servicesInjector.lookupServices(serviceClass);
+        return servicesInjector.streamServices(serviceClass).collect(Collectors.toList());
     }
 
     @Override

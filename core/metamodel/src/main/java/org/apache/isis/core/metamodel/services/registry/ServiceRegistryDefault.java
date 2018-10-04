@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.services.registry;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -45,20 +45,14 @@ public class ServiceRegistryDefault implements ServiceRegistry, ServicesInjector
 
     @Programmatic
     @Override
-    public <T> T lookupService(final Class<T> service) {
-        return servicesInjector.lookupService(service);
+    public <T> Stream<T> streamServices(Class<T> serviceType) {
+        return servicesInjector.streamServices(serviceType);
     }
 
     @Programmatic
     @Override
-    public <T> Iterable<T> lookupServices(final Class<T> service) {
-        return servicesInjector.lookupServices(service);
-    }
-
-    @Programmatic
-    @Override
-    public List<Object> getRegisteredServices() {
-        return servicesInjector.getRegisteredServices();
+    public Stream<Object> streamServices() {
+        return servicesInjector.streamServices();
     }
 
     private Object unwrapped(Object domainObject) {
@@ -75,5 +69,7 @@ public class ServiceRegistryDefault implements ServiceRegistry, ServicesInjector
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         this.servicesInjector = servicesInjector;
     }
+
+    
 
 }

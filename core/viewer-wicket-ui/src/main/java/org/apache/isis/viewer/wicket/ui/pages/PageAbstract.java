@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Stream;
 
 import com.google.inject.name.Named;
 
@@ -219,7 +220,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             LOG.error("Failed to construct page, going back to sign in page", ex);
 
             // REVIEW: similar code in WebRequestCycleForIsis
-            final  List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+            final Stream<ExceptionRecognizer> exceptionRecognizers = getServicesInjector()
+                    .streamServices(ExceptionRecognizer.class);
             final String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
             final ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
 

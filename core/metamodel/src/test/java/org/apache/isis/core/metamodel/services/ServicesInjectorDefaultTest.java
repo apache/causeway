@@ -102,7 +102,7 @@ public class ServicesInjectorDefaultTest {
     
     @Test
     public void shouldStreamRegisteredServices() {
-        List<Class<?>> registeredServices = injector.streamRegisteredServiceTypes().collect(Collectors.toList());
+        List<Class<?>> registeredServices = injector.streamServiceTypes().collect(Collectors.toList());
         Assert.assertEquals(3, registeredServices.size());
     }
 

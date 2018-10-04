@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
@@ -461,17 +462,18 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
                         InteractionInitiatedBy.USER,
                         WHERE_FOR_ACTION_INVOCATION);
 
-        final List<RoutingService> routingServices = getServicesInjector().lookupServices(RoutingService.class);
+        final Stream<RoutingService> routingServices = getServicesInjector().streamServices(RoutingService.class);
         final Object result = resultAdapter != null ? resultAdapter.getPojo() : null;
-        for (RoutingService routingService : routingServices) {
-            final boolean canRoute = routingService.canRoute(result);
-            if(canRoute) {
+        
+        return routingServices
+            .filter(routingService->routingService.canRoute(result))        
+            .map(routingService->{
                 final Object routeTo = routingService.route(result);
                 return routeTo != null? getPersistenceSession().adapterFor(routeTo): null;
-            }
-        }
-
-        return resultAdapter;
+            })
+            .findFirst()
+            .orElse(resultAdapter);
+        
     }
 
     public String getReasonDisabledIfAny() {

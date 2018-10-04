@@ -56,7 +56,7 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
                 .findFirst()
                 .map(iconUiEvent -> {
 
-                    final EventBusService eventBusService = servicesInjector.lookupService(EventBusService.class);
+                    final EventBusService eventBusService = servicesInjector.lookupServiceElseFail(EventBusService.class);
 
                     return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
                             iconUiEvent, eventBusService, facetHolder);

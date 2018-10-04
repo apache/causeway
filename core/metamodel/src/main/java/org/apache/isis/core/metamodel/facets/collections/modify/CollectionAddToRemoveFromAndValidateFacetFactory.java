@@ -152,7 +152,7 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         processMethodContext.removeMethod(validateAddToMethod);
 
         final IdentifiedHolder facetHolder = processMethodContext.getFacetHolder();
-        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+        final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
         // sadness: same as in TranslationFactory
         final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
 
@@ -185,7 +185,7 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         processMethodContext.removeMethod(validateRemoveFromMethod);
 
         final IdentifiedHolder facetHolder = processMethodContext.getFacetHolder();
-        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+        final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
         // sadness: same as in TranslationFactory
         final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
 

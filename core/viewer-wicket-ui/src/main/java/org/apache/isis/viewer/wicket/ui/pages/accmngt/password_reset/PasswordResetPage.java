@@ -79,7 +79,7 @@ public class PasswordResetPage extends AccountManagementPageAbstract {
                     public Boolean call() throws Exception {
                         UserRegistrationService userRegistrationService = getIsisSessionFactory()
                                 .getCurrentSession().getPersistenceSession().getServicesInjector()
-                                .lookupService(UserRegistrationService.class);
+                                .lookupServiceElseFail(UserRegistrationService.class);
                         return userRegistrationService.emailExists(email);
                     }
                 });

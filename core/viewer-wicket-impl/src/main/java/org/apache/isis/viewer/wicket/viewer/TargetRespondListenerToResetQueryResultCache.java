@@ -41,7 +41,7 @@ class TargetRespondListenerToResetQueryResultCache implements AjaxRequestTarget.
     }
 
     private QueryResultsCache lookupQueryResultsCache() {
-        return getServicesInjector().lookupService(QueryResultsCache.class);
+        return getServicesInjector().lookupService(QueryResultsCache.class).orElse(null);
     }
 
     private ServicesInjector getServicesInjector() {

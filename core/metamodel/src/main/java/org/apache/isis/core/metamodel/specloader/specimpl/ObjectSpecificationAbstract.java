@@ -747,11 +747,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
-    private Iterable<Object> getServicePojos() {
-        return getServicesInjector().getRegisteredServices();
+    private Stream<Object> streamServicePojos() {
+        return getServicesInjector().streamServices();
     }
-
-
 
     // -- contributee associations (properties and collections)
 
@@ -759,11 +757,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (isService() || isValue()) {
             return Collections.emptyList();
         }
-
         final List<ObjectAssociation> contributeeAssociations = _Lists.newArrayList();
-        for (final Object servicePojo : getServicePojos()) {
-            addContributeeAssociationsIfAny(servicePojo, contributeeAssociations);
-        }
+        streamServicePojos()
+            .forEach(servicePojo->addContributeeAssociationsIfAny(servicePojo, contributeeAssociations));
         return contributeeAssociations;
     }
 
@@ -947,10 +943,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return Collections.emptyList();
         }
         final List<ObjectAction> contributeeActions = _Lists.newArrayList();
-
-        for (final Object servicePojo : getServicePojos()) {
-            addContributeeActionsIfAny(servicePojo, contributeeActions);
-        }
+        streamServicePojos()
+            .forEach(servicePojo->addContributeeActionsIfAny(servicePojo, contributeeActions));
         return contributeeActions;
     }
 

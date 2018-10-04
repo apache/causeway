@@ -72,7 +72,7 @@ public class DisabledObjectFacetViaMethodFactory extends MethodPrefixBasedFacetF
             return;
         }
 
-        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+        final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
         // sadness: same logic as in I18nFacetFactory
         final String translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassIdentityString();
         FacetUtil.addFacet(new DisabledObjectFacetViaMethod(method, translationService, translationContext, facetHolder));

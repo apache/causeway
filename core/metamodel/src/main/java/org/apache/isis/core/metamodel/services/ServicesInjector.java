@@ -16,11 +16,13 @@
  */
 package org.apache.isis.core.metamodel.services;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -33,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
@@ -64,7 +67,7 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
  * </p>
  *
  */
-public class ServicesInjector implements ApplicationScopedComponent {
+public class ServicesInjector implements ApplicationScopedComponent, ServiceRegistry {
 
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicesInjector.class);
@@ -74,15 +77,15 @@ public class ServicesInjector implements ApplicationScopedComponent {
 
     // -- CONSTRUCTOR, FIELDS
     /**
-     * This is mutable internally, but only ever exposed (in {@link #getRegisteredServices()}) as immutable.
+     * This is mutable internally, but only ever exposed (in {@link #streamRegisteredServices()}).
      */
-    private final List<Object> services = _Lists.newArrayList();
+    private final List<Object> services;
 
     /**
      * If no key, not yet searched for type; otherwise the corresponding value is a {@link List} of all
      * services that are assignable to the type.  It's possible that this is an empty list.
      */
-    private final Map<Class<?>, List<Object>> servicesAssignableToType = _Maps.newHashMap();
+    private final ListMultimap<Class<?>, Object> servicesAssignableToType = _Multimaps.newListMultimap();
     private final _Lazy<Map<Class<?>, Object>> serviceByConcreteType = _Lazy.of(this::initServiceByConcreteType);
     private final Map<Class<?>, Method[]> methodsByClassCache = _Maps.newHashMap();
     private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newHashMap();
@@ -112,7 +115,8 @@ public class ServicesInjector implements ApplicationScopedComponent {
             final List<Object> services,
             final InjectorMethodEvaluator injectorMethodEvaluator,
             final IsisConfiguration configuration) {
-        this.services.addAll(services);
+        
+        this.services = _Lists.unmodifiable(services);
 
         this.injectorMethodEvaluator =
                 injectorMethodEvaluator != null
@@ -122,32 +126,6 @@ public class ServicesInjector implements ApplicationScopedComponent {
         this.autowireSetters = configuration.getBoolean(KEY_SET_PREFIX, true);
         this.autowireInject = configuration.getBoolean(KEY_INJECT_PREFIX, false);
     }
-
-    // -- REPLACE SERVICES
-//FIXME[ISIS-1976] not used
-//    /**
-//     * Update an individual service.
-//     *
-//     * <p>
-//     * There should already be a service {@link #getRegisteredServices() registered} of the specified type.
-//     *
-//     * @return <tt>true</tt> if a service of the specified type was found and updated, <tt>false</tt> otherwise.
-//     * @param existingService
-//     * @param replacementService
-//     */
-//    public <T> void replaceService(final T existingService, final T replacementService) {
-//
-//        if(!services.remove(existingService)) {
-//            throw new IllegalArgumentException("Service to be replaced was not found (" + existingService + ")");
-//        }
-//
-//        services.add(replacementService);
-//
-//        // invalidate
-//        servicesAssignableToType.clear();
-//        serviceByConcreteType.clear();
-//        autowire();
-//    }
 
     public boolean isRegisteredService(final Class<?> cls) {
         return serviceByConcreteType.get().containsKey(cls);
@@ -177,16 +155,16 @@ public class ServicesInjector implements ApplicationScopedComponent {
      * Validate domain service Ids are unique.
      */
     public void validateServices() {
-        validate(getRegisteredServices());
+        validate(streamServices());
     }
 
-    private static void validate(List<Object> serviceList) {
+    private static void validate(final Stream<Object> serviceInstances) {
         
         final ListMultimap<String, Object> servicesById = _Multimaps.newListMultimap();
-        for (Object service : serviceList) {
-            String id = ServiceUtil.idOfPojo(service);
-            servicesById.putElement(id, service);
-        }
+        serviceInstances.forEach(serviceInstance->{
+            String id = ServiceUtil.idOfPojo(serviceInstance);
+            servicesById.putElement(id, serviceInstance);
+        });
 
         final String errorMsg = servicesById.entrySet().stream()
         .filter(entry->entry.getValue().size()>1) // filter for duplicates
@@ -204,36 +182,27 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
     private static String classNamesFor(Collection<Object> services) {
-        return _NullSafe.stream(services)
+        return stream(services)
                 .map(Object::getClass)
                 .map(Class::getName)
                 .collect(Collectors.joining(", "));
     }
 
     static boolean contains(final List<Object> services, final Class<?> serviceClass) {
-        return _NullSafe.stream(services)
+        return stream(services)
                 .anyMatch(isOfType(serviceClass));
     }
 
-    /**
-     * All registered services, as an immutable {@link List}.
-     */
-    public List<Object> getRegisteredServices() {
-        return Collections.unmodifiableList(services);
-    }
     
     /**
      * @return Stream of all currently registered service types.
      */
-    public Stream<Class<?>> streamRegisteredServiceTypes() {
+    public Stream<Class<?>> streamServiceTypes() {
         return serviceByConcreteType.get().keySet().stream();
     }
     
-    
-    /**
-     * @return Stream of all currently registered service instances.
-     */
-    public Stream<Object> streamRegisteredServiceInstances() {
+    @Override
+    public Stream<Object> streamServices() {
         return services.stream();
     }
     
@@ -245,8 +214,10 @@ public class ServicesInjector implements ApplicationScopedComponent {
      * <p>
      * Called in multiple places from metamodel and facets.
      */
-    public void injectServicesInto(final Object object) {
+    @Override
+    public <T> T injectServicesInto(final T object) {
         injectServices(object, services);
+        return object;
     }
 
     /**
@@ -270,6 +241,28 @@ public class ServicesInjector implements ApplicationScopedComponent {
             final ServicesInjectorAware cast = ServicesInjectorAware.class.cast(candidate);
             cast.setServicesInjector(this);
         }
+    }
+    
+    // -- SERVICE LOOKUP
+    
+    /**
+     * Returns all domain services implementing the requested type, in the order
+     * that they were registered in <tt>isis.properties</tt>.
+     *
+     * <p>
+     * Typically there will only ever be one domain service implementing a given type,
+     * (eg {@link PublishingService}), but for some services there can be more than one
+     * (eg {@link ExceptionRecognizer}).
+     *
+     * @see #lookupService(Class)
+     */
+    @Programmatic
+    @Override
+    public <T> Stream<T> streamServices(final Class<T> serviceClass) {
+        return servicesAssignableToType
+                .computeIfAbsent(serviceClass, this::locateMatchingServices)
+                .stream()
+                .map(x->uncheckedCast(x));
     }
 
     // -- HELPERS
@@ -411,65 +404,12 @@ public class ServicesInjector implements ApplicationScopedComponent {
     }
 
     // -- LOOKUP SERVICE(S)
-
-    /**
-     * Returns the first registered domain service implementing the requested type.
-     *
-     * <p>
-     * Typically there will only ever be one domain service implementing a given type,
-     * (eg {@link PublishingService}), but for some services there can be more than one
-     * (eg {@link ExceptionRecognizer}).
-     *
-     * @see #lookupServices(Class)
-     */
-    @Programmatic
-    public <T> T lookupService(final Class<T> serviceClass) {
-        final List<T> services = lookupServices(serviceClass);
-        return !services.isEmpty() ? services.get(0) : null;
-    }
-
-    @Programmatic
-    public <T> T lookupServiceElseFail(final Class<T> serviceClass) {
-        T service = lookupService(serviceClass);
-        if(service == null) {
-            throw new IllegalStateException("Could not locate service of type '" + serviceClass + "'");
-        }
-        return service;
-    }
-
-    /**
-     * Returns all domain services implementing the requested type, in the order
-     * that they were registered in <tt>isis.properties</tt>.
-     *
-     * <p>
-     * Typically there will only ever be one domain service implementing a given type,
-     * (eg {@link PublishingService}), but for some services there can be more than one
-     * (eg {@link ExceptionRecognizer}).
-     *
-     * @see #lookupService(Class)
-     */
-    @SuppressWarnings("unchecked")
-    @Programmatic
-    public <T> List<T> lookupServices(final Class<T> serviceClass) {
-        locateAndCache(serviceClass);
-        return _Lists.unmodifiable((List<T>) servicesAssignableToType.get(serviceClass));
-    };
-
-    private void locateAndCache(final Class<?> serviceClass) {
-        if(servicesAssignableToType.containsKey(serviceClass)) {
-            return;
-        }
-
-        final List<Object> matchingServices = _Lists.newArrayList();
-        addAssignableTo(serviceClass, services, matchingServices);
-
-        servicesAssignableToType.put(serviceClass, matchingServices);
-    }
-
-    private static void addAssignableTo(final Class<?> type, final List<Object> candidates, final List<Object> filteredServicesAndContainer) {
-        _NullSafe.stream(candidates)
-        .filter(isOfType(type))
-        .forEach(filteredServicesAndContainer::add);
+    
+    private <T> List<Object> locateMatchingServices(final Class<T> serviceClass) {
+        final List<Object> matchingServices = services.stream()
+            .filter(isOfType(serviceClass))
+            .collect(Collectors.toList());
+        return matchingServices;
     }
 
     // -- LAZY INIT

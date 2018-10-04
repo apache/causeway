@@ -147,7 +147,7 @@ public class ComponentHintKey implements Serializable {
 
 
     HintStore getHintStore() {
-        return getIsisSessionFactory().getServicesInjector().lookupService(HintStore.class);
+        return getIsisSessionFactory().getServicesInjector().lookupService(HintStore.class).orElse(null);
     }
 
     IsisSessionFactory getIsisSessionFactory() {

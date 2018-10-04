@@ -54,7 +54,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
         final Response.ResponseBuilder builder;
 
         final MenuBarsService menuBarsService =
-                getResourceContext().getServicesInjector().lookupService(MenuBarsService.class);
+                getResourceContext().getServicesInjector().lookupServiceElseFail(MenuBarsService.class);
 
         final MenuBars menuBars = menuBarsService.menuBars();
         addLinksForServiceActions(menuBars);

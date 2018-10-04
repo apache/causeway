@@ -22,6 +22,7 @@ package org.apache.isis.core.runtime.system.transaction;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,7 +191,8 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
         this.publishingServiceInternal = servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
         this.auditingServiceInternal = servicesInjector.lookupServiceElseFail(AuditingServiceInternal.class);
 
-        withTransactionScopes = servicesInjector.lookupServices(WithTransactionScope.class);
+        withTransactionScopes = servicesInjector.streamServices(WithTransactionScope.class)
+                .collect(Collectors.toList());
 
         this.state = State.IN_PROGRESS;
 

@@ -150,7 +150,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     
     private Map<String, ObjectAdapter> initServiceAdapters() {
         
-        return servicesInjector.streamRegisteredServiceInstances()
+        return servicesInjector.streamServices()
         .map(this::adapterFor) 
         .peek(serviceAdapter->{
             Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());

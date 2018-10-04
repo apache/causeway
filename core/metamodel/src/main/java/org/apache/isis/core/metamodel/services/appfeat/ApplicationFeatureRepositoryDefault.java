@@ -114,10 +114,8 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     }
 
     private Collection<ObjectSpecification> primeMetaModel() {
-        final List<Object> services = serviceRegistry.getRegisteredServices();
-        for (final Object service : services) {
-            specificationLoader.loadSpecification(service.getClass());
-        }
+        serviceRegistry.streamServices()
+            .forEach(service->specificationLoader.loadSpecification(service.getClass()));
         return specificationLoader.allSpecifications();
     }
 
@@ -354,7 +352,8 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
      * </p>
      */
     private boolean isSuperClassOfService(final ObjectSpecification spec) {
-        final List<Object> registeredServices = serviceRegistry.getRegisteredServices();
+        final List<Object> registeredServices = serviceRegistry.streamServices()
+                .collect(Collectors.toList());
 
         final Class<?> specClass = spec.getCorrespondingClass();
 
