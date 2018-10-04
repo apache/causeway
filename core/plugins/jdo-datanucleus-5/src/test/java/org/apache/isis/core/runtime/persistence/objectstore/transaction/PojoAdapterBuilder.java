@@ -21,8 +21,7 @@ package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 
 import java.util.Iterator;
 
-import com.google.common.base.Splitter;
-
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
@@ -126,7 +125,8 @@ public class PojoAdapterBuilder {
     }
 
     public PojoAdapterBuilder withOid(String oidAndTitle) {
-        final Iterator<String> iterator = Splitter.on("|").split(oidAndTitle).iterator();
+        final Iterator<String> iterator = _Strings.splitThenStream(oidAndTitle, "|").iterator(); 
+                
         if(!iterator.hasNext()) { return this; }
         withObjectType(iterator.next());
         if(!iterator.hasNext()) { return this; }

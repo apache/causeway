@@ -35,8 +35,6 @@ import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.datastore.JDOConnection;
 
-import com.google.common.collect.Maps;
-
 import org.datanucleus.api.jdo.JDOPersistenceManager;
 import org.datanucleus.query.typesafe.BooleanExpression;
 import org.datanucleus.query.typesafe.TypesafeQuery;
@@ -46,6 +44,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -123,7 +122,7 @@ public class IsisJdoSupportDN4 implements IsisJdoSupport_v3_1 {
             final ResultSet rs = statement.executeQuery(sql);
             final ResultSetMetaData rsmd = rs.getMetaData();
             while(rs.next()) {
-                final Map<String,Object> row = Maps.newLinkedHashMap();
+                final Map<String,Object> row = _Maps.newLinkedHashMap();
                 final int columnCount = rsmd.getColumnCount();
                 for(int i=0; i<columnCount; i++) {
                     final Object val = rs.getObject(i+1);

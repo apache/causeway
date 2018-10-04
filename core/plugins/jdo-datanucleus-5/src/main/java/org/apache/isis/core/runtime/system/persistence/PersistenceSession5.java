@@ -38,8 +38,6 @@ import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.identity.SingleFieldIdentity;
 import javax.jdo.listener.InstanceLifecycleListener;
 
-import com.google.common.collect.Maps;
-
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.datanucleus.identity.DatastoreIdImpl;
@@ -50,6 +48,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.iactn.Interaction;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -532,7 +531,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     private static Map<RootOid, Object> zip(final List<RootOid> rootOids, final Collection<Object> pojos) {
-        final Map<RootOid,Object> pojoByOid = Maps.newLinkedHashMap();
+        final Map<RootOid,Object> pojoByOid = _Maps.newLinkedHashMap();
         int i = 0;
         for (final Object pojo : pojos) {
             final RootOid rootOid = rootOids.get(i++);

@@ -24,12 +24,11 @@ import java.util.Map;
 
 import javax.jdo.Query;
 
-import org.apache.isis.commons.internal.collections._Lists;
-import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -136,7 +135,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
     }
 
     private static Map<String, Object> unwrap(final Map<String, ObjectAdapter> argumentAdaptersByParameterName) {
-        final Map<String, Object> argumentsByParameterName = Maps.newHashMap();
+        final Map<String, Object> argumentsByParameterName = _Maps.newHashMap();
         for (final String parameterName : argumentAdaptersByParameterName.keySet()) {
             final ObjectAdapter argumentAdapter = argumentAdaptersByParameterName.get(parameterName);
             final Object argument = ObjectAdapter.Util.unwrapPojo(argumentAdapter);

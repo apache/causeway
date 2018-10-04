@@ -24,6 +24,11 @@ import java.util.Map;
 
 import javax.jdo.Query;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -31,11 +36,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession4;
 import org.apache.isis.objectstore.jdo.datanucleus.metamodel.JdoPropertyUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.commons.internal.collections._Lists;
-import com.google.common.collect.Maps;
 
 public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
 
@@ -135,7 +135,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
     }
 
     private static Map<String, Object> unwrap(final Map<String, ObjectAdapter> argumentAdaptersByParameterName) {
-        final Map<String, Object> argumentsByParameterName = Maps.newHashMap();
+        final Map<String, Object> argumentsByParameterName = _Maps.newHashMap();
         for (final String parameterName : argumentAdaptersByParameterName.keySet()) {
             final ObjectAdapter argumentAdapter = argumentAdaptersByParameterName.get(parameterName);
             final Object argument = ObjectAdapter.Util.unwrapPojo(argumentAdapter);

@@ -30,10 +30,9 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 import javax.jdo.listener.LoadLifecycleListener;
 import javax.jdo.listener.StoreLifecycleListener;
 
-import com.google.common.collect.Maps;
-
 import org.datanucleus.enhancement.Persistable;
 
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public class IsisLifecycleListener
@@ -190,7 +189,7 @@ SuspendableListener {
 //        PRE, POST
 //    }
 
-    private static Map<Integer, LifecycleEventType> events = Maps.newHashMap();
+    private static Map<Integer, LifecycleEventType> events = _Maps.newHashMap();
 
     private enum LifecycleEventType {
         CREATE(0), LOAD(1), STORE(2), CLEAR(3), DELETE(4), DIRTY(5), DETACH(6), ATTACH(7);

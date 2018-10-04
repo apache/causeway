@@ -18,15 +18,15 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
-
-import com.google.common.base.Joiner;
-import com.google.common.collect.Maps;
 
 import org.datanucleus.PersistenceNucleusContext;
 import org.datanucleus.PropertyNames;
@@ -36,6 +36,7 @@ import org.datanucleus.metadata.MetaDataManager;
 import org.datanucleus.store.StoreManager;
 import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -191,8 +192,9 @@ public class DataNucleusApplicationComponents4 implements ApplicationScopedCompo
     }
 
     private void configureAutoStart(final Set<String> persistableClassNameSet, final Map<String, String> datanucleusProps) {
-        final String persistableClassNames = Joiner.on(',').join(persistableClassNameSet);
-
+        final String persistableClassNames = 
+            stream(persistableClassNameSet).collect(Collectors.joining(","));
+        
         // ref: http://www.datanucleus.org/products/datanucleus/jdo/autostart.html
         datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MECHANISM, "Classes");
         datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MODE, "Checked");
@@ -255,7 +257,7 @@ public class DataNucleusApplicationComponents4 implements ApplicationScopedCompo
     
     static Map<String, JdoNamedQuery> catalogNamedQueries(
             Set<String> persistableClassNames, final SpecificationLoader specificationLoader) {
-        final Map<String, JdoNamedQuery> namedQueryByName = Maps.newHashMap();
+        final Map<String, JdoNamedQuery> namedQueryByName = _Maps.newHashMap();
         for (final String persistableClassName: persistableClassNames) {
             final ObjectSpecification spec = specificationLoader.loadSpecification(persistableClassName);
             final JdoQueryFacet facet = spec.getFacet(JdoQueryFacet.class);
