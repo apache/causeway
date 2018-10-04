@@ -102,6 +102,8 @@ public final class CommonDtoUtils {
                     .put(Clob.class, ValueType.CLOB)
                     .build();
 
+    public static Collection<Class<?>> VALUE_TYPES = valueTypeByClass.keySet();
+
     public static ValueType asValueType(final Class<?> type) {
         final ValueType valueType = valueTypeByClass.get(type);
         if (valueType != null) {

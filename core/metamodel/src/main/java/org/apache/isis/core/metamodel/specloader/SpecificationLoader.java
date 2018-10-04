@@ -20,11 +20,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -42,7 +44,6 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
@@ -63,7 +64,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-import org.apache.isis.progmodels.dflt.ProgrammingModelForObjectSpecIdFacet;
+import org.apache.isis.schema.utils.CommonDtoUtils;
 
 /**
  * Builds the meta-model.
@@ -97,8 +98,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     private final ProgrammingModel programmingModel;
     private final FacetProcessor facetProcessor;
-
-    FacetProcessor facetProcessorObjectSpecId;
 
     private final IsisConfiguration configuration;
     private final ServicesInjector servicesInjector;
@@ -171,16 +170,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         this.programmingModel.init();
         facetProcessor.init();
 
-        ProgrammingModel programmingModelForObjectSpecId = new ProgrammingModelForObjectSpecIdFacet(configuration);
-        facetProcessorObjectSpecId = new FacetProcessor(programmingModelForObjectSpecId) {
-            @Override
-            public void injectDependenciesInto(final FacetFactory factory) {
-                // no-op... otherwise hit an exception in the other thread, but don't (yet) know why.
-            }
-        };
-        programmingModelForObjectSpecId.init();
-        facetProcessorObjectSpecId.init();
-
         postProcessor.init();
         metaModelValidator.init(this);
 
@@ -188,31 +177,58 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         state = State.CACHING;
 
         // need to completely load services and mixins (synchronously)
-        loadSpecificationsFor(
-                allServiceClasses(),
-                NatureOfService.DOMAIN, IntrospectionStrategy.STUB);
-        loadSpecificationsFor(
-                AppManifest.Registry.instance().getMixinTypes(),
-                null, IntrospectionStrategy.STUB);
+        final List<ObjectSpecification> specificationsFromRegistry = Lists.newArrayList();
 
         loadSpecificationsFor(
-                AppManifest.Registry.instance().getDomainObjectTypes(),
-                null, IntrospectionStrategy.STUB);
+                CommonDtoUtils.VALUE_TYPES, null,
+                IntrospectionStrategy.STUB, specificationsFromRegistry);
         loadSpecificationsFor(
-                AppManifest.Registry.instance().getViewModelTypes(),
-                null, IntrospectionStrategy.STUB);
+                allServiceClasses(), NatureOfService.DOMAIN,
+                IntrospectionStrategy.STUB, specificationsFromRegistry);
         loadSpecificationsFor(
-                AppManifest.Registry.instance().getXmlElementTypes(),
-                null, IntrospectionStrategy.STUB);
-
-        cacheBySpecId();
+                AppManifest.Registry.instance().getMixinTypes(), null,
+                IntrospectionStrategy.STUB, specificationsFromRegistry);
+        loadSpecificationsFor(
+                AppManifest.Registry.instance().getDomainObjectTypes(), null,
+                IntrospectionStrategy.STUB, specificationsFromRegistry);
+        loadSpecificationsFor(
+                AppManifest.Registry.instance().getViewModelTypes(), null,
+                IntrospectionStrategy.STUB, specificationsFromRegistry);
+        loadSpecificationsFor(
+                AppManifest.Registry.instance().getXmlElementTypes(), null,
+                IntrospectionStrategy.STUB, specificationsFromRegistry);
 
         state = State.INTROSPECTING;
+        final Collection<ObjectSpecification> cachedSpecifications = allCachedSpecifications();
 
-        final Collection<ObjectSpecification> objectSpecifications = allSpecifications();
+
+        // for debugging only
+        LOG.info(String.format(
+                "specificationsFromRegistry.size = %d ; cachedSpecifications.size = %d",
+                specificationsFromRegistry.size(), cachedSpecifications.size()));
+
+        ImmutableList<ObjectSpecification> registryNotCached = FluentIterable.from(specificationsFromRegistry)
+                .filter(new Predicate<ObjectSpecification>() {
+                    @Override
+                    public boolean apply(final ObjectSpecification objectSpecification) {
+                        return !cachedSpecifications.contains(objectSpecification);
+                    }
+                }).toList();
+        ImmutableList<ObjectSpecification> cachedNotRegistry = FluentIterable.from(cachedSpecifications)
+                .filter(new Predicate<ObjectSpecification>() {
+                    @Override
+                    public boolean apply(final ObjectSpecification objectSpecification) {
+                        return !specificationsFromRegistry.contains(objectSpecification);
+                    }
+                }).toList();
+
+        LOG.info(String.format(
+                "registryNotCached.size = %d ; cachedNotRegistry.size = %d",
+                registryNotCached.size(), cachedNotRegistry.size()));
+
 
         final List<Callable<Object>> callables = Lists.newArrayList();
-        for (final ObjectSpecification specification : objectSpecifications) {
+        for (final ObjectSpecification specification : specificationsFromRegistry) {
             Callable<Object> callable = new Callable<Object>() {
                 @Override
                 public Object call() {
@@ -231,30 +247,45 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         List<Future<Object>> futures = threadPoolSupport.invokeAll(callables);
         threadPoolSupport.joinGatherFailures(futures);
 
+
+        // for debugging only
+        final Collection<ObjectSpecification> cachedSpecificationsAfter = allCachedSpecifications();
+        ImmutableList<ObjectSpecification> cachedAfterNotBefore = FluentIterable.from(cachedSpecificationsAfter)
+                .filter(new Predicate<ObjectSpecification>() {
+                    @Override
+                    public boolean apply(final ObjectSpecification objectSpecification) {
+                        return !cachedSpecifications.contains(objectSpecification);
+                    }
+                }).toList();
+        LOG.info(String.format("cachedSpecificationsAfter.size = %d ; cachedAfterNotBefore.size = %d",
+                cachedSpecificationsAfter.size(), cachedAfterNotBefore.size()));
+
+
+        // only after full introspection has occured do we cache ObjectSpecifications
+        // by their ObjectSpecId.
+        // the cache (SpecificationCacheDefault will fail-fast as not initialized
+        cacheBySpecId(specificationsFromRegistry);
+
     }
 
     private void loadSpecificationsFor(
             final Collection<Class<?>> domainTypes,
             final NatureOfService natureOfServiceFallback,
-            final IntrospectionStrategy introspectionStrategy) {
-        if(domainTypes == null || domainTypes.isEmpty()) {
-            return;
-        }
-        final Properties metadataProperties = new Properties();
+            final IntrospectionStrategy introspectionStrategy,
+            final List<ObjectSpecification> appendTo) {
+
         for (final Class<?> domainType : domainTypes) {
 
             ObjectSpecification objectSpecification =
-                    internalLoadSpecification(domainType, natureOfServiceFallback, introspectionStrategy);
+                internalLoadSpecification(domainType, natureOfServiceFallback, introspectionStrategy);
 
-            facetProcessorObjectSpecId.process(
-                    domainType, metadataProperties,
-                    MethodRemoverConstants.NULL, objectSpecification);
+            appendTo.add(objectSpecification);
         }
     }
 
-    private void cacheBySpecId() {
+    private void cacheBySpecId(final Collection<ObjectSpecification> objectSpecifications) {
         final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
-        for (final ObjectSpecification objSpec : allCachedSpecifications()) {
+        for (final ObjectSpecification objSpec : objectSpecifications) {
             final ObjectSpecId objectSpecId = objSpec.getSpecId();
             if (objectSpecId == null) {
                 continue;
@@ -262,7 +293,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             specById.put(objectSpecId, objSpec);
         }
 
-        cache.setCacheBySpecId(specById);
+        cache.init(specById);
     }
 
 
@@ -327,7 +358,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         ValidationFailures validationFailures = validate();
         validationFailures.assertNone();
 
-        cacheBySpecId();
+        cacheBySpecId(allCachedSpecifications());
     }
 
     @Programmatic
@@ -390,7 +421,17 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         return spec;
     }
 
-    enum IntrospectionStrategy {STUB, COMPLETE}
+    enum IntrospectionStrategy {
+        /**
+         * Used in a first pass to create ObjectSpecifications that haven't been introspected,
+         * but are cached.
+         */
+        STUB,
+        /**
+         * Second phase (default), to fully introspect.
+         */
+        COMPLETE
+    }
     private ObjectSpecification internalLoadSpecification(final Class<?> type) {
         return internalLoadSpecification(type, null, IntrospectionStrategy.COMPLETE);
     }
@@ -631,6 +672,9 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     //region > lookupBySpecId
     @Programmatic
     public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
+        if(!cache.isInitialized()) {
+            throw new IllegalStateException("Internal cache not yet initialized");
+        }
         final ObjectSpecification objectSpecification = cache.getByObjectType(objectSpecId);
         if(objectSpecification == null) {
             // fallback

@@ -32,7 +32,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.specloader.SpecificationCacheDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -110,7 +109,7 @@ public class SpecificationCacheDefaultTest {
         Map<ObjectSpecId, ObjectSpecification> specByObjectType = Maps.newHashMap();
         specByObjectType.put(ObjectSpecId.of("CUS"), customerSpec);
         
-        specificationCache.setCacheBySpecId(specByObjectType);
+        specificationCache.init(specByObjectType);
         final ObjectSpecification objectSpec = specificationCache.getByObjectType(ObjectSpecId.of("CUS"));
         
         assertSame(objectSpec, customerSpec);

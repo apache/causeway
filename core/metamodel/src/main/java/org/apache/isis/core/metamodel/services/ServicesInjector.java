@@ -30,6 +30,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.ListMultimap;
@@ -455,12 +456,17 @@ public class ServicesInjector implements ApplicationScopedComponent {
         final List<T> services = lookupServices(serviceClass);
         return !services.isEmpty() ? services.get(0) : null;
     }
+    @Programmatic
+    public <T> boolean isService(final Class<T> serviceClass) {
+        locateAndCache(serviceClass);
+        return this.servicesAssignableToType.get(serviceClass) != null;
+    }
 
     @Programmatic
     public <T> T lookupServiceElseFail(final Class<T> serviceClass) {
         T service = lookupService(serviceClass);
         if(service == null) {
-            throw new IllegalStateException("Could not locate service of type '" + serviceClass + "'");
+            throw new IllegalStateException(String.format("Could not locate service of type '%s'", serviceClass));
         }
         return service;
     }
@@ -480,7 +486,16 @@ public class ServicesInjector implements ApplicationScopedComponent {
     @Programmatic
     public <T> List<T> lookupServices(final Class<T> serviceClass) {
         locateAndCache(serviceClass);
-        return Collections.unmodifiableList((List<T>) servicesAssignableToType.get(serviceClass));
+        List<Object> servicesAssignableToType = this.servicesAssignableToType.get(serviceClass);
+        if(servicesAssignableToType == null) {
+            // diagnostic to track suspect call
+            LOG.info(String.format(
+                    "ServicesInjector#lookupServices: called with %s; stack trace:\n%s",
+                    serviceClass, Throwables.getStackTraceAsString(new Exception())));
+            // fallback to an empty list
+            servicesAssignableToType = Lists.newArrayList();
+        }
+        return Collections.unmodifiableList((List<T>) servicesAssignableToType);
     };
 
     private void locateAndCache(final Class<?> serviceClass) {
