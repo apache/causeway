@@ -41,7 +41,6 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Collections;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
@@ -149,6 +148,10 @@ public class ServicesInjector implements ApplicationScopedComponent, ServiceRegi
             // FixtureScriptsDefault so that appears it top of prototyping menu; not
             // more flexible than this currently just because of YAGNI).
             services.add(0, serviceInstance);
+            
+            //[ahuber] currently seems the only entry-point that modifies the services list
+            //hence we also invalidate the lazy lookup
+            serviceByConcreteType.clear();
         }
     }
 
