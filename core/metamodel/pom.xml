@@ -96,6 +96,11 @@
             		<groupId>com.google.guava</groupId>
             		<artifactId>guava</artifactId>
             	</exclusion>
+            	<!-- already provided by JEE API -->
+            	<exclusion>
+            		<groupId>javax.inject</groupId>
+            		<artifactId>javax.inject</artifactId>
+            	</exclusion>
             </exclusions>
         </dependency>
 
@@ -107,6 +112,11 @@
             	<exclusion>
             		<groupId>com.google.guava</groupId>
             		<artifactId>guava</artifactId>
+            	</exclusion>
+            	<!-- already provided by JEE API -->
+            	<exclusion>
+            		<groupId>javax.validation</groupId>
+            		<artifactId>validation-api</artifactId>
             	</exclusion>
             </exclusions>
         </dependency>
