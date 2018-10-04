@@ -20,16 +20,14 @@ package org.apache.isis.viewer.wicket.model.links;
 
 import java.io.Serializable;
 import java.util.List;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import org.apache.isis.commons.internal.collections._Lists;
+import java.util.function.Predicate;
 
 import org.apache.wicket.markup.html.link.AbstractLink;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -41,7 +39,7 @@ public class LinkAndLabel implements Serializable {
     public static List<LinkAndLabel> positioned(
             final List<LinkAndLabel> entityActionLinks,
             final ActionLayout.Position position) {
-        return _Lists.newArrayList(Iterables.filter(entityActionLinks, Predicates.positioned(position)));
+        return _Lists.filter(entityActionLinks, Predicates.positioned(position));
     }
 
     public static LinkAndLabel newLinkAndLabel(
@@ -191,19 +189,8 @@ public class LinkAndLabel implements Serializable {
 
     public static class Predicates {
         public static Predicate<LinkAndLabel> positioned(final ActionLayout.Position position) {
-            return new Predicate<LinkAndLabel>() {
-                @Override
-                public boolean apply(LinkAndLabel input) {
-                    return input.getPosition() == position;
-                }
-            };
+            return (LinkAndLabel input) ->  input.getPosition() == position;
         }
-    }
-
-    public static class Util {
-        private Util(){}
-
-
     }
 
 }

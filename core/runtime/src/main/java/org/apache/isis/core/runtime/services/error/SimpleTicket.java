@@ -25,6 +25,7 @@ import java.util.function.UnaryOperator;
 
 import org.apache.isis.applib.services.error.ErrorReportingService;
 import org.apache.isis.applib.services.error.Ticket;
+import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * Response from the {@link ErrorReportingService}, containing information to show to the end-user.
@@ -128,7 +129,7 @@ public class SimpleTicket implements Ticket {
     }
 
     protected static String htmlEscape(String source) {
-        return com.google.common.html.HtmlEscapers.htmlEscaper().escape(source);
+        return _Strings.htmlEscape(source);
     }
 
 }

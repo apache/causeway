@@ -29,9 +29,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
-
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
@@ -128,12 +125,13 @@ public abstract class IsisComponentProvider {
     }
 
     private void findAndRegisterTypes(final AppManifest appManifest) {
-        final Iterable<String> modulePackages = modulePackageNamesFrom(appManifest);
+        final Stream<String> modulePackages = modulePackageNamesFrom(appManifest);
         final AppManifest.Registry registry = AppManifest.Registry.instance();
 
         final List<String> moduleAndFrameworkPackages = _Lists.newArrayList();
         moduleAndFrameworkPackages.addAll(AppManifest.Registry.FRAMEWORK_PROVIDED_SERVICES);
-        Iterables.addAll(moduleAndFrameworkPackages, modulePackages);
+        
+        modulePackages.forEach(moduleAndFrameworkPackages::add);
 
         final ClassDiscovery discovery = ClassDiscoveryPlugin.get().discover(moduleAndFrameworkPackages);
 
@@ -195,8 +193,8 @@ public abstract class IsisComponentProvider {
     }
 
     private void specifyServicesAndRegisteredEntitiesUsing(final AppManifest appManifest) {
-        final Iterable<String> packageNames = modulePackageNamesFrom(appManifest);
-        final String packageNamesCsv = Joiner.on(',').join(packageNames);
+        final Stream<String> packageNames = modulePackageNamesFrom(appManifest);
+        final String packageNamesCsv = packageNames.collect(Collectors.joining(","));
 
         putConfigurationProperty(ServicesInstallerFromAnnotation.PACKAGE_PREFIX_KEY, packageNamesCsv);
         putConfigurationProperty(RegisterEntities.PACKAGE_PREFIX_KEY, packageNamesCsv);
@@ -221,17 +219,17 @@ public abstract class IsisComponentProvider {
         if (csv2 == null) {
             return csv1;
         }
-        return Joiner.on(",").join(csv1, csv2);
+        return csv1 + "," + csv2;
     }
 
-    private Iterable<String> modulePackageNamesFrom(final AppManifest appManifest) {
+    private Stream<String> modulePackageNamesFrom(final AppManifest appManifest) {
         List<Class<?>> modules = appManifest.getModules();
         if (modules == null || modules.isEmpty()) {
             throw new IllegalArgumentException(
                     "If an appManifest is provided then it must return a non-empty set of modules");
         }
 
-        return _Lists.map(modules, ClassFunctions.packageNameOf());
+        return modules.stream().map(ClassFunctions.packageNameOf());
     }
 
     protected String classNamesFrom(final List<?> objectsOrClasses) {

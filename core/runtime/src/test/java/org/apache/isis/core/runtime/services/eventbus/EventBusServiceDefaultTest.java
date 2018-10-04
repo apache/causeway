@@ -23,11 +23,11 @@ import static org.junit.Assert.assertThat;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableMap;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.collections._Maps;
 
 public class EventBusServiceDefaultTest {
 
@@ -59,67 +59,67 @@ public class EventBusServiceDefaultTest {
 
         @Test
         public void allowLateRegistration_setToFalse() throws Exception {
-            eventBusService.init(ImmutableMap.of(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "false"));
+            eventBusService.init(_Maps.unmodifiable(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "false"));
             assertThat(eventBusService.isAllowLateRegistration(), is(false));
         }
 
         @Test
         public void allowLateRegistration_setToTrue() throws Exception {
-            eventBusService.init(ImmutableMap.of(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "true"));
+            eventBusService.init(_Maps.unmodifiable(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "true"));
             assertThat(eventBusService.isAllowLateRegistration(), is(true));
         }
 
         @Test
         public void allowLateRegistration_setToTrueMixedCase() throws Exception {
-            eventBusService.init(ImmutableMap.of(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "TrUe"));
+            eventBusService.init(_Maps.unmodifiable(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "TrUe"));
             assertThat(eventBusService.isAllowLateRegistration(), is(true));
         }
 
         @Test
         public void allowLateRegistration_setToEmptyString() throws Exception {
-            eventBusService.init(ImmutableMap.of(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, ""));
+            eventBusService.init(_Maps.unmodifiable(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, ""));
             assertThat(eventBusService.isAllowLateRegistration(), is(false));
         }
 
         @Test
         public void allowLateRegistration_setToGarbage() throws Exception {
-            eventBusService.init(ImmutableMap.of(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "SDF$%FDVDFG"));
+            eventBusService.init(_Maps.unmodifiable(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "SDF$%FDVDFG"));
             assertThat(eventBusService.isAllowLateRegistration(), is(false));
         }
 
         @Test
         public void implementation_setToGuava() throws Exception {
-            eventBusService.init(ImmutableMap.of(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, "guava"));
+            eventBusService.init(_Maps.unmodifiable(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, "guava"));
             assertThat(eventBusService.getImplementation(), is("guava"));
         }
 
         @Test
         public void implementation_setToGuavaMixedCaseRequiringTrimming() throws Exception {
-            eventBusService.init(ImmutableMap.of(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, "  GuAvA "));
+            eventBusService.init(_Maps.unmodifiable(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, "  GuAvA "));
             assertThat(eventBusService.getImplementation(), is("guava"));
         }
 
         @Test
         public void implementation_setToAxon() throws Exception {
-            eventBusService.init(ImmutableMap.of(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, "axon"));
+            eventBusService.init(_Maps.unmodifiable(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, "axon"));
             assertThat(eventBusService.getImplementation(), is("axon"));
         }
 
         @Test
         public void implementation_setToAxonMixedCaseRequiringTrimming() throws Exception {
-            eventBusService.init(ImmutableMap.of(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, " AxOn   "));
+            eventBusService.init(_Maps.unmodifiable(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, " AxOn   "));
             assertThat(eventBusService.getImplementation(), is("axon"));
         }
 
         @Test
         public void implementation_setToEmptyString() throws Exception {
-            eventBusService.init(ImmutableMap.of(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, ""));
+            eventBusService.init(_Maps.unmodifiable(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, ""));
             assertThat(eventBusService.getImplementation(), isIn(new String[] {"auto", "plugin"}));
         }
 
         @Test
         public void implementation_setToAnythingElse() throws Exception {
-            eventBusService.init(ImmutableMap.of(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION,
+            eventBusService.init(_Maps.unmodifiable(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION,
                     "com.mycompany.my.event.bus.Implementation"));
             assertThat(eventBusService.getImplementation(), is("com.mycompany.my.event.bus.Implementation"));
         }

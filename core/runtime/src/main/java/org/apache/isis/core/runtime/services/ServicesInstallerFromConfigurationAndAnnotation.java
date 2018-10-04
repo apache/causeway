@@ -23,11 +23,10 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
-import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
@@ -80,7 +79,7 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends ServicesIns
 
         if(serviceList == null) {
 
-            final SortedMap<String,SortedSet<String>> positionedServices = Maps.newTreeMap(new DeweyOrderComparator());
+            final SortedMap<String,SortedSet<String>> positionedServices = _Maps.newTreeMap(new DeweyOrderComparator());
             servicesInstallerFromConfiguration.appendServices(positionedServices);
             servicesInstallerFromAnnotation.appendServices(positionedServices);
 

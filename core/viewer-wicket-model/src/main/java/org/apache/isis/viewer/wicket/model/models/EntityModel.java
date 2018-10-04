@@ -22,8 +22,6 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -31,6 +29,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -169,7 +168,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     public EntityModel(
             final Mode mode,
             final RenderingHint renderingHint) {
-        this(Maps.<PropertyMemento, ScalarModel>newHashMap(), null, mode, renderingHint);
+        this(_Maps.<PropertyMemento, ScalarModel>newHashMap(), null, mode, renderingHint);
     }
 
     public EntityModel(final PageParameters pageParameters) {
@@ -182,7 +181,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     }
 
     public EntityModel(final ObjectAdapterMemento adapterMemento) {
-        this(adapterMemento, Maps.<PropertyMemento, ScalarModel>newHashMap());
+        this(adapterMemento, _Maps.<PropertyMemento, ScalarModel>newHashMap());
     }
 
     public EntityModel(

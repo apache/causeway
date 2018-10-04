@@ -19,16 +19,16 @@ package org.apache.isis.core.specsupport.scenarios;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.isis.applib.services.factory.FactoryService;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.unittestsupport.jmocking.Imposterisers;
 import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.unittestsupport.jmocking.Imposterisers;
 
 /**
  * @deprecated - with no replacement
@@ -38,7 +38,7 @@ class DomainServiceProviderMockery implements DomainServiceProvider {
 
     private RepositoryService mockRepositoryService = null;
     private FactoryService mockFactoryService = null;
-    private final Map<Class<?>, Object> mocks = Maps.newHashMap();
+    private final Map<Class<?>, Object> mocks = _Maps.newHashMap();
 
     private Mockery context;
 

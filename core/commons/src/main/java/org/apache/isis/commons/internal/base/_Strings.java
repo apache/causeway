@@ -183,6 +183,12 @@ public final class _Strings {
         }
         return Character.toUpperCase(input.charAt(0)) + input.substring(1);
     }
+    
+    // -- SPECIAL UNARY OPERATORS
+    
+    public static String htmlEscape(String source) {
+        return _Strings_HtmlEscaper.htmlEscape(source);
+    }
 
     // -- PREFIX/SUFFIX
 

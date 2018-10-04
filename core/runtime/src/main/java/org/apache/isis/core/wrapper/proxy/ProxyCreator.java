@@ -21,7 +21,9 @@ package org.apache.isis.core.wrapper.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+import java.util.Collections;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.commons.internal.base._Casts;
@@ -31,29 +33,23 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.core.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.wrapper.handlers.DelegatingInvocationHandler;
 
-import com.google.common.collect.MapMaker;
-
 public class ProxyCreator {
 
-    /**
-     * Lazily constructed cache.
-     */
     private final Map<Class<?>, ProxyFactory<?>> proxyFactoryByClass;
 
     public ProxyCreator() {
-        this(new MapMaker().weakKeys().concurrencyLevel(10).<Class<?>, ProxyFactory<?>>makeMap());
+        this(Collections.synchronizedMap(new WeakHashMap<>()));
     }
 
     public ProxyCreator(Map<Class<?>, ProxyFactory<?>> proxyFactoryByClass) {
         this.proxyFactoryByClass = proxyFactoryByClass;
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T instantiateProxy(final DelegatingInvocationHandler<T> handler) {
 
         final T toProxy = handler.getDelegate();
 
-        final Class<T> base = (Class<T>) toProxy.getClass();
+        final Class<T> base = _Casts.uncheckedCast(toProxy.getClass());
 
         if (base.isInterface()) {
             return createInstanceForInterface(base, handler, WrappingObject.class);

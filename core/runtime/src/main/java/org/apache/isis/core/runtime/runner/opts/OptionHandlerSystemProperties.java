@@ -22,13 +22,12 @@ package org.apache.isis.core.runtime.runner.opts;
 import java.util.Map;
 import java.util.Properties;
 
-import com.google.common.collect.Maps;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
@@ -40,7 +39,6 @@ public class OptionHandlerSystemProperties extends OptionHandlerAbstract {
     private Map<String,String> additionalProperties;
 
     @Override
-    @SuppressWarnings("static-access")
     public void addOption(final Options options) {
         // no-op
     }
@@ -52,7 +50,7 @@ public class OptionHandlerSystemProperties extends OptionHandlerAbstract {
     }
 
     private static Map<String, String> asMap(Properties properties) {
-        final Map<String,String> map = Maps.newTreeMap();
+        final Map<String,String> map = _Maps.newTreeMap();
         for (String key : properties.stringPropertyNames()) {
             final String value = properties.getProperty(key);
             if (key.startsWith("isis.")) {

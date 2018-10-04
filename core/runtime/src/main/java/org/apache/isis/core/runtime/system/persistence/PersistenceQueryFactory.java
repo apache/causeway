@@ -21,14 +21,13 @@ package org.apache.isis.core.runtime.system.persistence;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -79,7 +78,7 @@ public class PersistenceQueryFactory {
      * same strings.
      */
     private Map<String, ObjectAdapter> wrap(final Map<String, Object> argumentsByParameterName) {
-        final Map<String, ObjectAdapter> argumentsAdaptersByParameterName = Maps.newHashMap();
+        final Map<String, ObjectAdapter> argumentsAdaptersByParameterName = _Maps.newHashMap();
         for (final Map.Entry<String, Object> entry : argumentsByParameterName.entrySet()) {
             final String parameterName = entry.getKey();
             final Object argument = argumentsByParameterName.get(parameterName);

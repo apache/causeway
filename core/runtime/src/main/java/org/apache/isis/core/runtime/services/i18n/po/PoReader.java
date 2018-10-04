@@ -24,8 +24,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +32,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 
 class PoReader extends PoAbstract {
@@ -42,8 +41,8 @@ class PoReader extends PoAbstract {
     public static final String UNDERSCORE = "_";
     public static Logger LOG = LoggerFactory.getLogger(PoReader.class);
 
-    private final Map<Locale, Map<ContextAndMsgId, String>> translationByKeyByLocale = Maps.newHashMap();
-    private final Map<Locale, Boolean> usesFallbackByLocale = Maps.newHashMap();
+    private final Map<Locale, Map<ContextAndMsgId, String>> translationByKeyByLocale = _Maps.newHashMap();
+    private final Map<Locale, Boolean> usesFallbackByLocale = _Maps.newHashMap();
 
     /**
      * The basename of the translations file, hard-coded to <tt>translations</tt>.
@@ -181,7 +180,7 @@ class PoReader extends PoAbstract {
             return translationsByKey;
         }
 
-        translationsByKey = Maps.newHashMap();
+        translationsByKey = _Maps.newHashMap();
         read(locale, translationsByKey);
         translationByKeyByLocale.put(locale, translationsByKey);
 

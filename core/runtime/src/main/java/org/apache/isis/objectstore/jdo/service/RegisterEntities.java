@@ -18,13 +18,14 @@
  */
 package org.apache.isis.objectstore.jdo.service;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.jdo.annotations.PersistenceCapable;
-
-import com.google.common.base.Joiner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +76,8 @@ public class RegisterEntities {
         }
 
         if(!classNamesNotEnhanced.isEmpty()) {
-            final String classNamesNotEnhancedStr = Joiner.on("\n* ").join(classNamesNotEnhanced);
+            final String classNamesNotEnhancedStr = 
+                    stream(classNamesNotEnhanced).collect(Collectors.joining("\n* "));
             throw new IllegalStateException("Non-enhanced @PersistenceCapable classes found, will abort.  The classes in error are:\n\n* " + classNamesNotEnhancedStr + "\n\nDid the DataNucleus enhancer run correctly?\n");
         }
         

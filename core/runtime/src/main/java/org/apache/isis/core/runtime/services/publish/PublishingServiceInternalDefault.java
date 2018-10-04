@@ -20,14 +20,13 @@
 package org.apache.isis.core.runtime.services.publish;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import javax.enterprise.context.RequestScoped;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -42,6 +41,7 @@ import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.user.UserService;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
@@ -69,13 +69,14 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
         // take a copy of enlisted adapters ... the JDO implementation of the PublishingService
         // creates further entities which would be enlisted; taking copy of the map avoids ConcurrentModificationException
 
-        final Map<ObjectAdapter, PublishingChangeKind> changeKindByEnlistedAdapter = Maps.newHashMap();
+        final Map<ObjectAdapter, PublishingChangeKind> changeKindByEnlistedAdapter = _Maps.newHashMap();
         changeKindByEnlistedAdapter.putAll(changedObjectsServiceInternal.getChangeKindByEnlistedAdapter());
 
         final Map<ObjectAdapter, PublishingChangeKind> changeKindByPublishedAdapter =
-                Maps.filterKeys(
+                _Maps.filterKeys(
                         changeKindByEnlistedAdapter,
-                        isPublished());
+                        isPublished(),
+                        HashMap::new);
 
         if(changeKindByPublishedAdapter.isEmpty()) {
             return;
@@ -161,13 +162,10 @@ public class PublishingServiceInternalDefault implements PublishingServiceIntern
 
 
     private static Predicate<ObjectAdapter> isPublished() {
-        return new Predicate<ObjectAdapter>() {
-            @Override
-            public boolean apply(final ObjectAdapter objectAdapter) {
+        return (final ObjectAdapter objectAdapter) -> {
                 final PublishedObjectFacet publishedObjectFacet =
                         objectAdapter.getSpecification().getFacet(PublishedObjectFacet.class);
                 return publishedObjectFacet != null;
-            }
         };
     }
 

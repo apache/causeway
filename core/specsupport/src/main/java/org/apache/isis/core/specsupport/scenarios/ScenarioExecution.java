@@ -23,21 +23,21 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.fixtures.InstallableFixture;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.jmock.Mockery;
 import org.jmock.Sequence;
 import org.jmock.States;
 import org.jmock.internal.ExpectationBuilder;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
+import org.apache.isis.applib.fixtures.InstallableFixture;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 
 /**
  * Represents the currently executing scenario, allowing information to be shared
@@ -245,10 +245,10 @@ public abstract class ScenarioExecution {
         }
     }
 
-    private final Map<VariableId, Object> objectByVariableId = Maps.newLinkedHashMap();
-    private final Map<String, Object> objectsById = Maps.newLinkedHashMap();
+    private final Map<VariableId, Object> objectByVariableId = _Maps.newLinkedHashMap();
+    private final Map<String, Object> objectsById = _Maps.newLinkedHashMap();
 
-    private final Map<String, Object> mostRecent = Maps.newHashMap();
+    private final Map<String, Object> mostRecent = _Maps.newHashMap();
 
     public void putVar(String type, String id, Object value) {
         if(type == null || id == null) {
@@ -492,9 +492,9 @@ public abstract class ScenarioExecution {
 
     private void autowireViaFields(final Object object, final Class<?> cls) {
         final List<Field> fields = Arrays.asList(cls.getDeclaredFields());
-        final Iterable<Field> injectFields = Iterables.filter(fields, new Predicate<Field>() {
+        final List<Field> injectFields = _Lists.filter(fields, new Predicate<Field>() {
             @Override
-            public boolean apply(Field input) {
+            public boolean test(Field input) {
                 final Inject annotation = input.getAnnotation(javax.inject.Inject.class);
                 return annotation != null;
             }

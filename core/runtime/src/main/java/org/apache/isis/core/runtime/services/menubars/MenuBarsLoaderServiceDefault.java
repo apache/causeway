@@ -18,10 +18,7 @@
  */
 package org.apache.isis.core.runtime.services.menubars;
 
-import java.net.URL;
-
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
@@ -29,6 +26,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
@@ -44,8 +42,9 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
     public BS3MenuBars menuBars() {
         final AppManifest appManifest = isisSessionFactory.getAppManifest();
         try {
-            final URL resource = Resources.getResource(appManifest.getClass(), "menubars.layout.xml");
-            String xml = Resources.toString(resource, Charsets.UTF_8);
+            
+            final String xml = 
+                    _Resources.loadAsString(appManifest.getClass(), "menubars.layout.xml", StandardCharsets.UTF_8); 
 
             return jaxbService.fromXml(BS3MenuBars.class, xml);
         } catch (Exception e) {

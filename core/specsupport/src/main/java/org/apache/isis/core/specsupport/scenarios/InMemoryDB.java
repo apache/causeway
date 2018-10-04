@@ -18,16 +18,16 @@ package org.apache.isis.core.specsupport.scenarios;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import org.apache.isis.schema.utils.InteractionDtoUtils.Strategy;
 import org.hamcrest.Description;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import org.apache.isis.commons.internal.collections._Lists;
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.functions._Predicates;
 
 /**
  * Utility class to support the writing of unit-scope specs.
@@ -101,7 +101,7 @@ public class InMemoryDB {
         }
     }
 
-    private Map<InMemoryDB.EntityId, Object> objectsById = Maps.newHashMap();
+    private Map<InMemoryDB.EntityId, Object> objectsById = _Maps.newHashMap();
 
     /**
      * Returns the object if exists, but will NOT instantiate a new one if not present.
@@ -199,7 +199,7 @@ public class InMemoryDB {
     }
 
     public <T> List<T> findAll(Class<T> cls) {
-        return find(cls, Predicates.<T>alwaysTrue());
+        return find(cls, _Predicates.<T>alwaysTrue());
     }
 
     @SuppressWarnings("unchecked")
@@ -208,7 +208,7 @@ public class InMemoryDB {
         for (EntityId entityId : objectsById.keySet()) {
             if(cls.isAssignableFrom(entityId.getType())) {
                 final T object = (T) objectsById.get(entityId);
-                if(predicate.apply(object)) {
+                if(predicate.test(object)) {
                     list.add(object);
                 }
             }

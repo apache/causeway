@@ -22,12 +22,10 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.enterprise.context.RequestScoped;
-
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -59,7 +57,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
      *     the actual differences.
      * </p>
      */
-    private final Map<AdapterAndProperty, PreAndPostValues> enlistedObjectProperties = Maps.newLinkedHashMap();
+    private final Map<AdapterAndProperty, PreAndPostValues> enlistedObjectProperties = _Maps.newLinkedHashMap();
 
     /**
      * Used for auditing; contains the pre- and post- values of every property of every object that actually changed.
@@ -72,7 +70,7 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
 
 
     // used for publishing
-    private final Map<ObjectAdapter,PublishingChangeKind> changeKindByEnlistedAdapter = Maps.newLinkedHashMap();
+    private final Map<ObjectAdapter,PublishingChangeKind> changeKindByEnlistedAdapter = _Maps.newLinkedHashMap();
 
     @Programmatic
     public boolean isEnlisted(ObjectAdapter adapter) {
@@ -236,7 +234,10 @@ public class ChangedObjectsServiceInternal implements WithTransactionScope {
             }
 
             return Collections.unmodifiableSet(
-                    Sets.filter(processedObjectProperties.entrySet(), PreAndPostValues.Predicates.SHOULD_AUDIT));            });
+                    processedObjectProperties.entrySet().stream()
+                    .filter(PreAndPostValues.Predicates.SHOULD_AUDIT)
+                    .collect(Collectors.toSet())    );
+        });
     }
 
     protected boolean shouldIgnore(final ObjectAdapter adapter) {

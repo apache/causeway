@@ -20,20 +20,17 @@ package org.apache.isis.core.runtime.services.changes;
 
 import java.util.Map;
 import java.util.Objects;
-
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
 public class PreAndPostValues {
 
     public static class Predicates {
-        public final static Predicate<Map.Entry<?, PreAndPostValues>> SHOULD_AUDIT = new Predicate<Map.Entry<?, PreAndPostValues>>() {
-            @Override
-            public boolean apply(Map.Entry<?, PreAndPostValues> input) {
+        public final static Predicate<Map.Entry<?, PreAndPostValues>> SHOULD_AUDIT = 
+            (Map.Entry<?, PreAndPostValues> input) -> {
                 final PreAndPostValues papv = input.getValue();
                 return papv.shouldAudit();
-            }
         };
     }
 

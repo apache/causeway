@@ -22,11 +22,11 @@ package org.apache.isis.core.runtime.headless;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import java.util.Set;
-
-import com.google.common.base.Joiner;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.FixtureClock;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -174,7 +174,8 @@ public class IsisSystem {
         final MetaModelInvalidException mmie = IsisContext.getMetaModelInvalidExceptionIfAny();
         if(mmie != null) {
             final Set<String> validationErrors = mmie.getValidationErrors();
-            final String validationMsg = Joiner.on("\n").join(validationErrors);
+            final String validationMsg = _NullSafe.stream(validationErrors)
+                    .collect(Collectors.joining("\n")); 
             throw new AssertionError(validationMsg);
         }
 

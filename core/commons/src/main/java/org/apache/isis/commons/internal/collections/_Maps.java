@@ -29,7 +29,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+
+import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 
 /**
  * <h1>- internal use only -</h1>
@@ -97,6 +103,40 @@ public final class _Maps {
     public static <K, V> Map.Entry<K, V> entry(K k, V v){
         return new AbstractMap.SimpleEntry<K, V>(k, v);
     }
+    
+    // -- TRANSFORMATIONS
+    
+    public static <K, V> Map<K, V> filterKeys(
+            @Nullable Map<K, V> input,
+            Predicate<K> keyFilter, 
+            Supplier<Map<K, V>> factory) {
+        
+        requires(factory, "factory");
+        final Map<K, V> result = factory.get();
+        
+        if(input==null) {
+            return result;
+        }
+        
+        requires(keyFilter, "keyFilter");
+        
+        input.forEach((k, v)->{
+            if(keyFilter.test(k)) {
+                result.put(k, v);
+            }
+        });
+        
+        return result;
+    }
+    
+    public static <K, V> ListMultimap<V, K> invertToListMultimap(Map<K, V> input) {
+        final ListMultimap<V, K> result = _Multimaps.newListMultimap();        
+        if(input==null) {
+            return result;
+        }
+        input.forEach((k, v)->result.putElement(v, k));        
+        return result;
+    }
 
     // -- HASH MAP
 
@@ -125,7 +165,6 @@ public final class _Maps {
     public static <K, V> TreeMap<K, V> newTreeMap(Comparator<? super K> comparator) {
         return new TreeMap<K, V>(comparator);
     }
-    
 
     // --
 

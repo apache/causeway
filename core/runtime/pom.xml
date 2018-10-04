@@ -94,12 +94,6 @@
             <artifactId>isis-core-metamodel</artifactId>
         </dependency>
         
-        <!-- temporary until runtime no longer depends on guava -->
-        <dependency>
-        	<groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-metamodel</artifactId>

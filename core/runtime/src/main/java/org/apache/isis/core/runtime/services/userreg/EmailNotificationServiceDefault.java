@@ -23,15 +23,13 @@ import static java.util.regex.Pattern.quote;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
-
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -41,6 +39,7 @@ import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
 import org.apache.isis.applib.services.userreg.events.EmailRegistrationEvent;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
+import org.apache.isis.commons.internal.resources._Resources;
 
 /**
  * A service that sends email notifications when specific events occur
@@ -88,15 +87,13 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     }
 
     protected String loadResource(final String resourceName) {
-        final URL templateUrl = Resources.getResource(EmailNotificationServiceDefault.class, resourceName);
         try {
-            return Resources.toString(templateUrl, Charsets.UTF_8);
+            return _Resources.loadAsString(EmailNotificationServiceDefault.class, resourceName, StandardCharsets.UTF_8);
         } catch (IOException e) {
+            final URL templateUrl = _Resources.getResourceUrl(EmailNotificationServiceDefault.class, resourceName);
             throw new IllegalStateException(String.format("Unable to read resource URL '%s'", templateUrl));
         }
     }
-
-
 
     // -- isConfigured
 

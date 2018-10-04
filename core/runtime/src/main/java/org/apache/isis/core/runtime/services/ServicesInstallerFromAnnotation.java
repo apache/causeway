@@ -19,22 +19,17 @@
 
 package org.apache.isis.core.runtime.services;
 
-import static com.google.common.base.Predicates.and;
-import static com.google.common.base.Predicates.not;
+import static org.apache.isis.commons.internal.functions._Predicates.not;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.annotation.PreDestroy;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +37,10 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceMenuOrder;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
@@ -71,8 +68,9 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
      *     with the first service found used.
      * </p>
      */
-    public final static String PACKAGE_PREFIX_STANDARD = Joiner.on(",").join(AppManifest.Registry.FRAMEWORK_PROVIDED_SERVICES);
-
+    public final static String PACKAGE_PREFIX_STANDARD =
+            AppManifest.Registry.FRAMEWORK_PROVIDED_SERVICES.stream()
+            .collect(Collectors.joining(","));
 
     // -- constructor, fields
 
@@ -101,7 +99,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
      * </p>
      */
     public void withPackagePrefixes(final String... packagePrefixes) {
-        this.packagePrefixes = Joiner.on(",").join(packagePrefixes);
+        this.packagePrefixes = _NullSafe.stream(packagePrefixes).collect(Collectors.joining(","));
     }
 
 
@@ -150,27 +148,15 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     // -- helpers
 
     private Predicate<Class<?>> instantiatable() {
-        return and(not(nullClass()), not(abstractClass()));
+        return not(nullClass()).and(not(abstractClass()));
     }
 
     private static Predicate<Class<?>> nullClass() {
-        return new Predicate<Class<?>>() {
-
-            @Override
-            public boolean apply(final Class<?> input) {
-                return input == null;
-            }
-        };
+        return (final Class<?> input) -> input == null;
     }
 
     private static Predicate<Class<?>> abstractClass() {
-        return new Predicate<Class<?>>() {
-
-            @Override
-            public boolean apply(final Class<?> input) {
-                return Modifier.isAbstract(input.getModifiers());
-            }
-        };
+        return (final Class<?> input) -> Modifier.isAbstract(input.getModifiers());
     }
 
 
@@ -185,7 +171,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
         if(this.services == null) {
 
-            final SortedMap<String, SortedSet<String>> positionedServices = Maps.newTreeMap(new DeweyOrderComparator());
+            final SortedMap<String, SortedSet<String>> positionedServices = _Maps.newTreeMap(new DeweyOrderComparator());
             appendServices(positionedServices);
 
             this.services = ServicesInstallerUtils.instantiateServicesFrom(positionedServices, serviceInstantiator);
@@ -209,7 +195,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
             domainServiceTypes = discovery.getTypesAnnotatedWith(DomainService.class);
         }
 
-        final List<Class<?>> domainServiceClasses = _Lists.newArrayList(Iterables.filter(domainServiceTypes, instantiatable()));
+        final List<Class<?>> domainServiceClasses = _Lists.filter(domainServiceTypes, instantiatable());
         for (final Class<?> cls : domainServiceClasses) {
 
             final String order = DomainServiceMenuOrder.orderOf(cls);

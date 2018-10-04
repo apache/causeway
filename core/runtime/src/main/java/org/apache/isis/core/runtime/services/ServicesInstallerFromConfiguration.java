@@ -26,11 +26,10 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
@@ -97,7 +96,7 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
 
         if(serviceList == null) {
 
-            final SortedMap<String, SortedSet<String>> positionedServices = Maps.newTreeMap(new DeweyOrderComparator());
+            final SortedMap<String, SortedSet<String>> positionedServices = _Maps.newTreeMap(new DeweyOrderComparator());
             appendServices(positionedServices);
 
             serviceList = ServicesInstallerUtils.instantiateServicesFrom(positionedServices, serviceInstantiator);

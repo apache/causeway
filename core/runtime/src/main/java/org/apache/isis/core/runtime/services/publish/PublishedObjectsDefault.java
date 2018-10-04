@@ -23,17 +23,16 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.UUID;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimaps;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.services.RepresentsInteractionMemberExecution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.schema.chg.v1.ChangesDto;
@@ -145,31 +144,20 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     }
 
     private int numAdaptersOfKind(final PublishingChangeKind kind) {
-        final Collection<ObjectAdapter> objectAdapters = adaptersByChange().get(kind);
+        final Collection<ObjectAdapter> objectAdapters = adaptersByChange.get().get(kind);
         return objectAdapters != null ? objectAdapters.size() : 0;
     }
 
 
     /**
-     * Lazily populated
+     * Lazily calculate the inverse of 'changesByAdapter'
      */
-    private Map<PublishingChangeKind, Collection<ObjectAdapter>> adaptersByChange;
-
-    private Map<PublishingChangeKind, Collection<ObjectAdapter>> adaptersByChange() {
-        return adaptersByChange != null? adaptersByChange : (adaptersByChange = invert(changesByAdapter));
+    private _Lazy<ListMultimap<PublishingChangeKind, ObjectAdapter>> adaptersByChange = 
+            _Lazy.of(this::initAdaptersByChange);
+    
+    private ListMultimap<PublishingChangeKind, ObjectAdapter> initAdaptersByChange(){
+        return _Maps.invertToListMultimap(changesByAdapter);
     }
-
-    private static <T, S> Map<T, Collection<S>> invert(final Map<S, T> valueByKey) {
-        return new TreeMap<>(
-                Multimaps.invertFrom(
-                        Multimaps.forMap(valueByKey),
-                        ArrayListMultimap.<T, S>create()
-                        ).asMap()
-                );
-    }
-
-
-
 
     // -- newDto, newObjectsDto, newChangesDto
 
@@ -195,9 +183,7 @@ public class PublishedObjectsDefault implements PublishedObjects, RepresentsInte
     private OidsDto oidsDtoFor(final PublishingChangeKind kind) {
         final OidsDto oidsDto = new OidsDto();
 
-        final Map<PublishingChangeKind, Collection<ObjectAdapter>> adaptersByChange = adaptersByChange();
-
-        final Collection<ObjectAdapter> adapters = adaptersByChange.get(kind);
+        final Collection<ObjectAdapter> adapters = adaptersByChange.get().get(kind);
         if(adapters != null) {
             final List<OidDto> oidDtos = _Lists.map(adapters, 
                     (final ObjectAdapter objectAdapter) -> {

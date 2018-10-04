@@ -38,8 +38,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.base.Splitter;
-
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -283,7 +281,10 @@ public class IsisSessionFilter implements Filter {
             if (restrictedPathsStr == null) {
                 throw new IllegalStateException(String.format("Require an init-param of '%s' key to be set.", RESTRICTED_KEY));
             }
-            this.restrictedPaths = _Lists.newArrayList(Splitter.on(",").split(restrictedPathsStr));
+            this.restrictedPaths = 
+                    _Strings.splitThenStream(restrictedPathsStr, ",")
+                    .collect(Collectors.toList());
+                    
         }
 
     }
