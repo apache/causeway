@@ -22,10 +22,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.isis.commons.internal.collections._Lists;
-import com.google.common.collect.Maps;
+
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.permission.WildcardPermission;
+
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 
 public class IsisPermission extends WildcardPermission {
 
@@ -34,7 +36,7 @@ public class IsisPermission extends WildcardPermission {
 
     private static ThreadLocal<Map<String,List<IsisPermission>>> VETOING_PERMISSIONS = new ThreadLocal<Map<String,List<IsisPermission>>>() {
         @Override
-        protected java.util.Map<String,List<IsisPermission>> initialValue() { return Maps.newTreeMap(); }
+        protected java.util.Map<String,List<IsisPermission>> initialValue() { return _Maps.newTreeMap(); }
     };
 
     public static void resetVetoedPermissions() {
