@@ -76,4 +76,12 @@ public final class _Predicates {
         return null;
     }
     
+    /**
+     * @param superClass
+     * @return a Predicate that tests for the operand to be an instance of {@code superClass}
+     */
+    public static Predicate<Object> instanceOf(Class<?> superClass) {
+        return obj->superClass.isAssignableFrom(obj.getClass());
+    }
+    
 }

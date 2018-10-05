@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.spec;
 
+import static org.apache.isis.commons.internal.functions._Predicates.instanceOf;
+
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.DomainObject;
@@ -45,11 +48,13 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
 /**
  * Represents an entity or value (cf {@link java.lang.Class}) within the
@@ -63,8 +68,6 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
  */
 public interface ObjectSpecification extends Specification, ObjectActionContainer, 
 ObjectAssociationContainer, Hierarchical,  DefaultProvider {
-
-    ObjectMember getMember(String memberId);
 
     final class Comparators{
         private Comparators(){}
@@ -83,6 +86,21 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
 
         public static final Function<ObjectSpecification, String> FULL_IDENTIFIER = 
                 ObjectSpecification::getFullIdentifier;
+    }
+    
+    ObjectMember getMember(String memberId);
+    
+    /**
+     * @param onType
+     * @return
+     * @since 2.0.0-M2
+     */
+    public default Optional<MixedInMember> getMixedInMember(ObjectSpecification onType) {
+        return streamObjectActions(Contributed.INCLUDED)
+                .filter(instanceOf(MixedInMember.class))
+                .map(member->(MixedInMember) member)
+                .filter(member->member.getMixinType() == onType)
+                .findAny();
     }
 
     /**
@@ -347,9 +365,6 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
 
     boolean isPersistenceCapable();
     boolean isPersistenceCapableOrViewModel();
-
     
-
-
 
 }

@@ -395,7 +395,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             });
         });
     }
-
+    
     // -- toString
     
     @Override

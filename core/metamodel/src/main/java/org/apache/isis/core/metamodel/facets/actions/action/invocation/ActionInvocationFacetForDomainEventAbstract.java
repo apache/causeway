@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -81,9 +80,7 @@ import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
@@ -338,26 +335,9 @@ implements ImperativeFacet {
         return filteredIfRequired(returnedAdapter, interactionInitiatedBy);
     }
 
-    // TODO: could improve this, currently have to go searching for the mixin
     private static String targetNameFor(ObjectAction owningAction, ObjectAdapter mixedInAdapter) {
-        if(mixedInAdapter != null) {
-            final ObjectSpecification onType = owningAction.getOnType();
-            final ObjectSpecification mixedInSpec = mixedInAdapter.getSpecification();
-            final Stream<ObjectAction> objectActions = mixedInSpec.streamObjectActions(Contributed.INCLUDED);
-            
-            final Optional<String> mixinName = objectActions
-            .filter(action->action instanceof MixedInMember)
-            .map(action->(MixedInMember) action)
-            .filter(action->action.getMixinType() == onType)
-            .findAny()
-            .map(MixedInMember::getName);
-            
-            if(mixinName.isPresent()) {
-                return mixinName.get();
-            }
-            
-        }
-        return CommandUtil.targetMemberNameFor(owningAction);
+        return ObjectAction.Util.targetNameFor(owningAction, mixedInAdapter)
+                .orElseGet(()->CommandUtil.targetMemberNameFor(owningAction));
     }
 
     private static String trim(String message, final int maxLen) {

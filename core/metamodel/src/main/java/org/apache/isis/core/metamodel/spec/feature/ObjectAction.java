@@ -23,9 +23,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -53,6 +56,7 @@ import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
 public interface ObjectAction extends ObjectMember {
 
@@ -190,17 +194,6 @@ public interface ObjectAction extends ObjectMember {
             final InteractionInitiatedBy interactionInitiatedBy);
 
 
-
-//    // -- setupBulkActionInvocationContext
-//    /**
-//     * internal API, called by {@link ActionInvocationFacet} if the action is actually executed (ie in the foreground).
-//     */
-//    void setupBulkActionInvocationContext(
-//            final ObjectAdapter targetAdapter);
-//
-
-
-
     // -- Util
     public static final class Util {
 
@@ -306,7 +299,6 @@ public interface ObjectAction extends ObjectMember {
                     ObjectAction.Predicates.memberOrderNotAssociationOf(adapterSpec)
                     .and(ObjectAction.Predicates.dynamicallyVisible(adapter, 
                             InteractionInitiatedBy.USER, Where.ANYWHERE))
-//                    .and(ObjectAction.Predicates.notBulkOnly())
                     .and(ObjectAction.Predicates.excludeWizardActions(adapterSpec));
 
             final Stream<ObjectAction> userActions = 
@@ -348,7 +340,6 @@ public interface ObjectAction extends ObjectMember {
 
             Predicate<ObjectAction> predicate = 
                 ObjectAction.Predicates.memberOrderOf(association)
-//                .and(ObjectAction.Predicates.notBulkOnly())
                 .and(ObjectAction.Predicates.excludeWizardActions(objectSpecification));
 
             final Stream<ObjectAction> userActions = 
@@ -371,8 +362,22 @@ public interface ObjectAction extends ObjectMember {
             }
             return promptStyle;
         }
+        
+        public static Optional<String> targetNameFor(
+                final ObjectAction owningAction,
+                final @Nullable ObjectAdapter mixedInAdapter) {
+            
+            if(mixedInAdapter != null) {
+                final ObjectSpecification onType = owningAction.getOnType();
+                final ObjectSpecification mixedInSpec = mixedInAdapter.getSpecification();
+                final Optional<String> mixinName = mixedInSpec.getMixedInMember(onType)
+                        .map(MixedInMember::getName);
+                
+                return mixinName;
+            }
+            return Optional.empty();
+        }
     }
-
 
 
     // -- Predicates
