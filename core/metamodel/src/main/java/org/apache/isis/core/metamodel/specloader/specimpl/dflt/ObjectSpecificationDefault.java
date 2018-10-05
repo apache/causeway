@@ -161,6 +161,11 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             updateInterfaces(interfaceSpecList);
         }
 
+        updateAssociationsAndActions();
+    }
+
+    private synchronized void updateAssociationsAndActions() {
+
         // associations and actions
         if(isNotIntrospected()) {
             final List<ObjectAssociation> associations = createAssociations();
@@ -171,7 +176,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             final List<ObjectAction> actions = createActions();
             sortCacheAndUpdateActions(actions);
         }
-
 
         if(isNotIntrospected()) {
             updateFromFacetValues();

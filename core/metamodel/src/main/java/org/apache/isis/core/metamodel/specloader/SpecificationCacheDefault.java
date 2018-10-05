@@ -27,9 +27,17 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
+/**
+ * This is populated in two parts.
+ *
+ * Initially the #specByClassName is populated using {@link #cache(String, ObjectSpecification)}.  This allows
+ * {@link #allSpecifications()} to return a list of specs.
+ *
+ * Later on, {@link #init(Map)} is called which populates #classNameBySpecId.
+ *
+ * TODO: the information passed to #init actually comes from the cache itself (the caller calls #allSpecifications() first) so this could be simplified
+ */
 class SpecificationCacheDefault {
 
     private final Map<String, ObjectSpecification> specByClassName = _Maps.newHashMap();
@@ -62,18 +70,20 @@ class SpecificationCacheDefault {
     }
 
     /**
-     * Populated as a result of running {@link MetaModelValidator#validate(ValidationFailures)} validation} after
-     * xxxallxxx most specs have been loaded.
      */
-    void setCacheBySpecId(final Map<ObjectSpecId, ObjectSpecification> specById) {
-        this.classNameBySpecId = _Maps.newHashMap();
+    synchronized void init(final Map<ObjectSpecId, ObjectSpecification> specById) {
+        final Map<ObjectSpecId, String> classNameBySpecId = _Maps.newHashMap();
+        final Map<String, ObjectSpecification> specByClassName = _Maps.newHashMap();
 
         for (ObjectSpecId objectSpecId : specById.keySet()) {
             final ObjectSpecification objectSpec = specById.get(objectSpecId);
             final String className = objectSpec.getCorrespondingClass().getName();
-            this.classNameBySpecId.put(objectSpecId, className);
-            this.specByClassName.put(className, objectSpec);
+            classNameBySpecId.put(objectSpecId, className);
+            specByClassName.put(className, objectSpec);
         }
+        this.classNameBySpecId = classNameBySpecId;
+        this.specByClassName.clear();
+        this.specByClassName.putAll(specByClassName);
     }
 
     public ObjectSpecification remove(String typeName) {

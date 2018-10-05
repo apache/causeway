@@ -45,15 +45,18 @@ public interface ServiceRegistry {
      *
      * <p>
      * Typically there will only ever be one domain service implementing a given type,
-     * (eg {@link PublishingService}), but for some services there can be more than one
-     * (eg {@link ExceptionRecognizer}).
-     *
-     * @see #lookupServices(Class)
+     * (eg {@link org.apache.isis.applib.services.repository.RepositoryService}), but for some services there can be
+     * more than one (eg {@link ExceptionRecognizer}).
      */
     @Programmatic
     public default <T> Optional<T> lookupService(final Class<T> serviceClass) {
         return streamServices(serviceClass)
                 .findFirst();
+    }
+
+    @Programmatic
+    public default boolean isService(final Class<?> serviceClass) {
+        return lookupService(serviceClass).isPresent();
     }
 
     @Programmatic

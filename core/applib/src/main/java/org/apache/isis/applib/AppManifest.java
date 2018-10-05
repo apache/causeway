@@ -229,6 +229,32 @@ public interface AppManifest {
         }
 
 
+        private Set<Class<?>> domainObjectTypes;
+        private Set<Class<?>> viewModelTypes;
+        private Set<Class<?>> xmlElementTypes;
+
+        public Set<Class<?>> getDomainObjectTypes() {
+            return domainObjectTypes;
+        }
+        public void setDomainObjectTypes(final Set<Class<?>> domainObjectTypes) {
+            this.domainObjectTypes = domainObjectTypes;
+        }
+
+        public Set<Class<?>> getViewModelTypes() {
+            return viewModelTypes;
+        }
+        public void setViewModelTypes(final Set<Class<?>> viewModelTypes) {
+            this.viewModelTypes = viewModelTypes;
+        }
+
+        public Set<Class<?>> getXmlElementTypes() {
+            return xmlElementTypes;
+        }
+        public void setXmlElementTypes(final Set<Class<?>> xmlElementTypes) {
+            this.xmlElementTypes = xmlElementTypes;
+        }
+        //endregion
+
     }
 
     public static class Util {

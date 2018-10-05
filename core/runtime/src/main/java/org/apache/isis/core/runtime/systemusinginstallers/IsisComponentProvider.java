@@ -28,12 +28,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlElement;
+
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -150,6 +153,9 @@ public abstract class IsisComponentProvider {
         })
         .forEach(mixinTypes::add);
 
+        final Set<Class<?>> viewModelTypes = discovery.getTypesAnnotatedWith(ViewModel.class);
+        final Set<Class<?>> xmlElementTypes = discovery.getTypesAnnotatedWith(XmlElement.class);
+
         // add in any explicitly registered services...
         domainServiceTypes.addAll(appManifest.getAdditionalServices());
 
@@ -168,7 +174,9 @@ public abstract class IsisComponentProvider {
         registry.setPersistenceCapableTypes(within(packagesWithDotSuffix, persistenceCapableTypes));
         registry.setFixtureScriptTypes(within(packagesWithDotSuffix, fixtureScriptTypes));
         registry.setMixinTypes(within(packagesWithDotSuffix, mixinTypes));
-
+        registry.setDomainObjectTypes(within(packagesWithDotSuffix, domainObjectTypes));
+        registry.setViewModelTypes(within(packagesWithDotSuffix, viewModelTypes));
+        registry.setXmlElementTypes(within(packagesWithDotSuffix, xmlElementTypes));
     }
 
     static <T> Set<Class<? extends T>> within(

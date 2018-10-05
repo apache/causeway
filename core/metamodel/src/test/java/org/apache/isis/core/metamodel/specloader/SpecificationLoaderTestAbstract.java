@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
@@ -30,8 +28,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -112,6 +113,14 @@ public abstract class SpecificationLoaderTestAbstract {
                 new MetaModelValidatorDefault(), stubServicesInjector);
 
         stubServicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);
+
+        AppManifest.Registry.instance().setDomainServiceTypes(_Sets.newHashSet());
+        AppManifest.Registry.instance().setFixtureScriptTypes(_Sets.newHashSet());
+        AppManifest.Registry.instance().setDomainObjectTypes(_Sets.newHashSet());
+        AppManifest.Registry.instance().setMixinTypes(_Sets.newHashSet());
+        AppManifest.Registry.instance().setViewModelTypes(_Sets.newHashSet());
+        AppManifest.Registry.instance().setPersistenceCapableTypes(_Sets.newHashSet());
+        AppManifest.Registry.instance().setXmlElementTypes(_Sets.newHashSet());
 
         specificationLoader.init();
         

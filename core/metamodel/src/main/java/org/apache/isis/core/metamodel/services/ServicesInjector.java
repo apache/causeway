@@ -502,7 +502,4 @@ public class ServicesInjector implements ApplicationScopedComponent, ServiceRegi
                         : (deploymentCategoryProvider = lookupServiceElseFail(DeploymentCategoryProvider.class));
     }
 
-
-
-
 }
