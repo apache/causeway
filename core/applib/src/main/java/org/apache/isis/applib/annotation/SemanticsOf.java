@@ -20,53 +20,82 @@ package org.apache.isis.applib.annotation;
 
 import org.apache.isis.applib.util.Enums;
 
+/**
+ * @see <a href="https://isis.apache.org/guides/rgant/rgant.html#_rgant-Action_semantics">Reference Guide</a>
+ */
 public enum SemanticsOf {
 
     /**
      * Safe, with no side effects, and caching the returned value when invoked multiple times in the same request.
+     * <ul>
+     * <li>Changes state: <b>No</b></li>
+     * <li>HTTP verb: <b>GET</b></li>
+     * <li>Effect of multiple calls: Will <b>always return the same result</b> each time invoked 
+     * (within a given request scope).</li>
+     * </ul>
      */
     SAFE_AND_REQUEST_CACHEABLE,
+    
     /**
-     * Safe, with no side-effects.
-     *
-     * <p>
-     * In other words, a query-only action.  By definition, is also idempotent.
+     * Safe, with no side-effects. In other words, a query-only action.
+     * <ul>
+     * <li>Changes state: <b>No</b></li>
+     * <li>HTTP verb: <b>GET</b></li>
+     * <li>Effect of multiple calls: Might result in <b>different results each invocation</b> 
+     * (within a given request scope).</li>
+     * </ul>
      */
     SAFE,
+    
     /**
      * Post-conditions are always the same, irrespective as to how many times called.
-     *
-     * <p>
-     * An example might be <tt>placeOrder()</tt>, that is a no-op if the order has already been placed.
+     * <ul>
+     * <li>Changes state: <b>Yes</b></li>
+     * <li>HTTP verb: <b>PUT</b></li>
+     * <li>Effect of multiple calls: Will make <b>no further changes</b> if called multiple times 
+     * (eg sets a property or adds of same item to a Set).</li>
+     * </ul>
      */
     IDEMPOTENT,
+    
     /**
      * Neither safe nor idempotent; every invocation is likely to change the state of the object.
-     *
-     * <p>
-     * An example is increasing the quantity of a line item in an Order by 1.
+     * <ul>
+     * <li>Changes state: <b>Yes</b></li>
+     * <li>HTTP verb: <b>POST</b></li>
+     * <li>Effect of multiple calls: Might <b>change the state</b> of the system each time called 
+     * (eg increments a counter or adds to a List).</li>
+     * <li>Example: Increasing the quantity of a line item in an Order by 1.</li>
+     * </ul>
      */
     NON_IDEMPOTENT,
+    
     /**
      * Post-conditions are always the same, irrespective as to how many times called.
-     *
      * <p>
      * If supported the UI viewer will show a confirmation dialog before executing the action.
-     *
-     * <p>
-     * An example might be <tt>placeOrder()</tt>, that is a no-op if the order has already been placed.
+     * <ul>
+     * <li>Changes state: <b>Yes</b></li>
+     * <li>HTTP verb: <b>PUT</b></li>
+     * <li>Effect of multiple calls: Will make <b>no further changes</b> if called multiple times 
+     * (eg sets a property or adds of same item to a Set).</li>
+     * </ul>
      */
     IDEMPOTENT_ARE_YOU_SURE,
+    
     /**
      * Neither safe nor idempotent; every invocation is likely to change the state of the object.
-     *
      * <p>
      * If supported the UI viewer will show a confirmation dialog before executing the action.
-     *
-     * <p>
-     * An example is increasing the quantity of a line item in an Order by 1.
+     * <ul>
+     * <li>Changes state: <b>Yes</b></li>
+     * <li>HTTP verb: <b>POST</b></li>
+     * <li>Effect of multiple calls: Might <b>change the state</b> of the system each time called 
+     * (eg increments a counter or adds to a List).</li>
+     * <li>Example: Increasing the quantity of a line item in an Order by 1.</li>
      */
     NON_IDEMPOTENT_ARE_YOU_SURE,
+    
     /**
      * Ignore the value provided by this annotation (meaning that the framework will keep searching, in meta
      * annotations or superclasses/interfaces).
