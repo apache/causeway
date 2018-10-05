@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
-import java.util.List;
-
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -60,7 +58,7 @@ public interface MetaModelService {
      * </p>
      */
     @Programmatic
-    List<DomainMember> export();
+    DomainModel getDomainModel();
 
     @Programmatic
     Sort sortOf(Class<?> domainType, Mode mode);

@@ -24,10 +24,15 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
@@ -55,6 +60,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
 
+@XmlRootElement(name = "domain-member")
+@XmlAccessorType(XmlAccessType.PROPERTY)
 public class DomainMemberDefault implements DomainMember {
 
     private final ObjectSpecification spec;
@@ -62,6 +69,11 @@ public class DomainMemberDefault implements DomainMember {
     private final ObjectMember member;
     private ObjectAction action;
 
+    // to support JAX-B marshaling 
+    DomainMemberDefault(){
+        throw _Exceptions.unexpectedCodeReach();
+    }
+    
     DomainMemberDefault(ObjectSpecification spec, OneToOneAssociation property) {
         this.spec = spec;
         this.member = property;
@@ -80,40 +92,53 @@ public class DomainMemberDefault implements DomainMember {
         this.memberType = MemberType.ACTION;
     }
 
-    @Override public String getClassType() {
+    @XmlElement @Override
+    public String getClassType() {
         boolean service = false;
         for(ObjectSpecification subspecs: spec.subclasses(Hierarchical.Depth.DIRECT)) {
             service = service || subspecs.isService();
         }
         return service || spec.isService() ?"2 Service":spec.isValue()?"3 Value":spec.isParentedOrFreeCollection()?"4 Collection":"1 Object";
     }
-    @Override public String getClassName() {
+    
+    @XmlElement @Override
+    public String getClassName() {
         final String fullIdentifier = spec.getFullIdentifier();
         final int lastDot = fullIdentifier.lastIndexOf(".");
         return lastDot>0 && lastDot < fullIdentifier.length()-1
                 ?fullIdentifier.substring(lastDot+1,fullIdentifier.length())
                         :fullIdentifier;
     }
-    @Override public String getPackageName() {
+    
+    @XmlElement @Override
+    public String getPackageName() {
         final String fullIdentifier = spec.getFullIdentifier();
         final int lastDot = fullIdentifier.lastIndexOf(".");
         return lastDot>0?fullIdentifier.substring(0,lastDot):fullIdentifier;
     }
-    @Override public String getType() {
+    
+    @XmlElement @Override
+    public String getType() {
         return memberType.name().toLowerCase();
     }
-    @Override public String getMemberName() {
+    
+    @XmlElement @Override
+    public String getMemberName() {
         return member.getId();
     }
-    @Override public String getNumParams() {
+    
+    @XmlElement @Override
+    public String getNumParams() {
         return action!=null?""+action.getParameterCount():"";
     }
 
-    @Override public boolean isContributed() {
+    @XmlElement @Override
+    public boolean isContributed() {
         return member instanceof ContributeeMember;
     }
 
-    @Override public String getContributedBy() {
+    @XmlElement @Override
+    public String getContributedBy() {
         if(member instanceof ContributeeMember) {
             final ObjectSpecification serviceContributedBy = ((ContributeeMember) member).getServiceContributedBy();
             return serviceContributedBy.getCorrespondingClass().getSimpleName();
@@ -121,11 +146,13 @@ public class DomainMemberDefault implements DomainMember {
         return "";
     }
 
-    @Override public boolean isMixedIn() {
+    @XmlElement @Override
+    public boolean isMixedIn() {
         return member instanceof MixedInMember;
     }
 
-    @Override public String getMixin() {
+    @XmlElement @Override
+    public String getMixin() {
         if(member instanceof MixedInMember) {
             final MixedInMember mixedInMember = (MixedInMember) this.member;
 
@@ -135,13 +162,18 @@ public class DomainMemberDefault implements DomainMember {
         return "";
     }
 
-    @Override public String getHidden() {
+    @XmlElement @Override
+    public String getHidden() {
         return interpret(HiddenFacet.class);
     }
-    @Override public String getDisabled() {
+    
+    @XmlElement @Override
+    public String getDisabled() {
         return interpret(DisabledFacet.class);
     }
-    @Override public String getChoices() {
+    
+    @XmlElement @Override
+    public String getChoices() {
         switch (memberType) {
         case PROPERTY:
             return interpretRowAndFacet(PropertyChoicesFacet.class);
@@ -159,7 +191,9 @@ public class DomainMemberDefault implements DomainMember {
                         interpretRowAndFacet(ActionChoicesFacet.class);
         }
     }
-    @Override public String getAutoComplete() {
+    
+    @XmlElement @Override
+    public String getAutoComplete() {
         if(memberType == MemberType.PROPERTY) {
             return interpretRowAndFacet(PropertyAutoCompleteFacet.class);
         } else if(memberType == MemberType.COLLECTION) {
@@ -174,7 +208,9 @@ public class DomainMemberDefault implements DomainMember {
             return interpretations.stream().collect(Collectors.joining(";"));
         }
     }
-    @Override public String getDefault() {
+    
+    @XmlElement @Override
+    public String getDefault() {
         if(memberType == MemberType.PROPERTY) {
             return interpretRowAndFacet(PropertyDefaultFacet.class);
         } else if(memberType == MemberType.COLLECTION) {
@@ -191,7 +227,9 @@ public class DomainMemberDefault implements DomainMember {
                             : interpretRowAndFacet(ActionDefaultsFacet.class);
         }
     }
-    @Override public String getValidate() {
+    
+    @XmlElement @Override
+    public String getValidate() {
         if(memberType == MemberType.PROPERTY) {
             return interpretRowAndFacet(PropertyValidateFacet.class);
         } else if(memberType == MemberType.COLLECTION) {
@@ -204,6 +242,14 @@ public class DomainMemberDefault implements DomainMember {
         }
     }
 
+    // -- COMPARATOR
+    
+    @Override
+    public int compareTo(DomainMember o) {
+        return comparator.compare(this, o);
+    }
+    
+    // -- HELPER
 
     private String interpretRowAndFacet(Class<? extends Facet> facetClass) {
         final Facet facet = member.getFacet(facetClass);
@@ -232,21 +278,23 @@ public class DomainMemberDefault implements DomainMember {
         if (ignore(name)) {
             return "";
         }
-        final String abbr = StringExtensions.toAbbreviation(name);
-        return abbr.length()>0 ? abbr : name;
+//[ahuber] not sure why abbreviated, so I disabled abbreviation        
+//        final String abbr = StringExtensions.toAbbreviation(name);
+//        return abbr.length()>0 ? abbr : name;
+        
+        return name;
     }
 
     protected static boolean ignore(final String name) {
-        return Arrays.asList("PropertyValidateFacetDefault","PropertyDefaultFacetDerivedFromDefaultedFacet").contains(name);
+        return Arrays.asList("PropertyValidateFacetDefault","PropertyDefaultFacetDerivedFromDefaultedFacet")
+                .contains(name);
     }
+    
+    private final static Comparator<DomainMember> comparator = 
+            Comparator.comparing(DomainMember::getClassType)
+            .thenComparing(DomainMember::getClassName)
+            .thenComparing(DomainMember::getType, Comparator.reverseOrder()) // desc
+            .thenComparing(DomainMember::getMemberName);
 
-    @Override
-    public int compareTo(DomainMember o) {
-        // legacy of ObjectContracts.compare(this, o, "classType,className,type desc,memberName");
-        return Comparator.comparing(DomainMember::getClassType)
-                .thenComparing(DomainMember::getClassName)
-                .thenComparing(DomainMember::getType, Comparator.reverseOrder()) // desc
-                .thenComparing(DomainMember::getMemberName)
-                .compare(this, o);
-    }
+    
 }

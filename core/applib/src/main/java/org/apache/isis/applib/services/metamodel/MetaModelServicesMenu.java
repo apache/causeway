@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
@@ -35,7 +36,9 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 
 @DomainService(
@@ -72,15 +75,40 @@ public class MetaModelServicesMenu {
             )
     @ActionLayout(
             cssClassFa = "fa-download",
-            named = "Download Meta Model (CSV)"
+            named = "Download Meta Model (XML)"
             )
     @MemberOrder(sequence="500.500.1")
-    public Clob downloadMetaModel(
+    public Clob downloadMetaModelXml(
+            @ParameterLayout(named = ".xml file name")
+            final String fileName) {
+
+        final DomainModel domainMembers =  metaModelService.getDomainModel();
+        final String xml = toXml(domainMembers);
+        return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
+    }
+
+    public String default0DownloadMetaModelXml() {
+        return "metamodel.xml";
+    }
+    
+    // //////////////////////////////////////
+    
+    @Action(
+            domainEvent = DownloadMetaModelEvent.class,
+            semantics = SemanticsOf.SAFE,
+            restrictTo = RestrictTo.PROTOTYPING
+            )
+    @ActionLayout(
+            cssClassFa = "fa-download",
+            named = "Download Meta Model (CSV)"
+            )
+    @MemberOrder(sequence="500.500.2")
+    public Clob downloadMetaModelCsv(
             @ParameterLayout(named = ".csv file name")
             final String csvFileName) {
 
-        final List<DomainMember> rows =  metaModelService.export();
-        final List<String> list = asList(rows);
+        final DomainModel domainMembers =  metaModelService.getDomainModel();
+        final List<String> list = asList(domainMembers);
         final StringBuilder buf = asBuf(list);
 
         return new Clob(
@@ -88,11 +116,19 @@ public class MetaModelServicesMenu {
                 mimeTypeTextCsv, buf.toString().toCharArray());
     }
 
-    public String default0DownloadMetaModel() {
+    public String default0DownloadMetaModelCsv() {
         return "metamodel.csv";
     }
 
-    // //////////////////////////////////////
+    // -- XML HELPER
+    
+    @Inject JaxbService jaxbService;
+    
+    private String toXml(DomainModel model) {
+        return jaxbService.toXml(model);    
+    }
+    
+    // -- CSV HELPER
 
     private static StringBuilder asBuf(final List<String> list) {
         final StringBuilder buf = new StringBuilder();
@@ -102,16 +138,14 @@ public class MetaModelServicesMenu {
         return buf;
     }
 
-    private static List<String> asList(final List<DomainMember> rows) {
+    private static List<String> asList(final DomainModel model) {
         final List<String> list = _Lists.newArrayList();
         list.add(header());
-        for (final DomainMember row : rows) {
+        for (final DomainMember row : model.getDomainMembers()) {
             list.add(asTextCsv(row));
         }
         return list;
     }
-
-
 
     private static String header() {
         return "classType,packageName,className,memberType,memberName,numParams,contributed?,contributedBy,mixedIn?,mixin,hidden,disabled,choices,autoComplete,default,validate";

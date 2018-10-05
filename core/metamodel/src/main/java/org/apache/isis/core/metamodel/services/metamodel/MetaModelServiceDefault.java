@@ -36,6 +36,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
+import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
@@ -107,7 +108,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @Override
     @Programmatic
-    public List<DomainMember> export() {
+    public DomainModel getDomainModel() {
 
         final Collection<ObjectSpecification> specifications = specificationLookup.allSpecifications();
 
@@ -151,7 +152,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
         Collections.sort(rows);
 
-        return rows;
+        return new DomainModelDefault(rows);
     }
 
 
@@ -284,5 +285,8 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @javax.inject.Inject
     AppManifestProvider appManifestProvider;
+
+
+
 
 }
