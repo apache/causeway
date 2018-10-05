@@ -244,10 +244,9 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
                     final IRequestHandler handler = ActionModel.downloadHandler(value);
 
                     //ISIS-1619, prevent clients from caching the response content
-                    return isNonIdempotent(actionModel)
-                            ? enforceNoCacheOnClientSide(handler)
-                                    : handler
-                                    ;
+                    return isIdempotentOrCachable(actionModel)
+                            ? handler
+                                    : enforceNoCacheOnClientSide(handler);
                 }
             };
         }
@@ -272,10 +271,10 @@ public abstract class ActionLink extends AjaxLink<ObjectAdapter> implements IAja
                 action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
     }
 
-    private static boolean isNonIdempotent(ActionModel actionModel) {
+    private static boolean isIdempotentOrCachable(ActionModel actionModel) {
         final ObjectAction objectAction = actionModel.getActionMemento()
                 .getAction(actionModel.getSpecificationLoader());
-        return ObjectAction.Util.isNonIdempotent(objectAction);
+        return ObjectAction.Util.isIdempotentOrCachable(objectAction);
     }
 
     // -- CLIENT SIDE CACHING ASPECTS ...

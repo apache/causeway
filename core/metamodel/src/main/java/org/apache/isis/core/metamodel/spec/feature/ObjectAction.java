@@ -229,10 +229,11 @@ public interface ObjectAction extends ObjectMember {
             return semanticsOf(objectAction).isAreYouSure();
         }
 
-        public static boolean isNonIdempotent(ObjectAction objectAction) {
-            return !semanticsOf(objectAction).isIdempotentInNature();
+        public static boolean isIdempotentOrCachable(ObjectAction objectAction) {
+            final SemanticsOf semantics = semanticsOf(objectAction);
+            return semantics.isIdempotentInNature() || semantics.isSafeAndRequestCacheable();
         }
-
+        
         public static boolean isNoParameters(ObjectAction objectAction) {
             return objectAction.getParameterCount()==0;
         }
