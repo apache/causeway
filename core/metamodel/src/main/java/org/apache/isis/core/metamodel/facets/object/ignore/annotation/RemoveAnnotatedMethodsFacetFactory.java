@@ -53,16 +53,15 @@ public class RemoveAnnotatedMethodsFacetFactory extends FacetFactoryAbstract {
 
         eventHandlerClasses = eventHandlerClassNames.stream()
         .map(name->{
-            Class<? extends Annotation> eventHandlerClass;
+            Class<? extends Annotation> eventHandlerAnnotationClass;
             try {
                 // doing this reflectively so that don't bring in a dependency on axon.
-                eventHandlerClass = uncheckedCast(
-                        ClassUtil.forName("org.axonframework.eventhandling.annotation.EventHandler"));
+                eventHandlerAnnotationClass = uncheckedCast(ClassUtil.forName(name));
             } catch(Exception ignore) {
                 // ignore
-                eventHandlerClass = null;
+                eventHandlerAnnotationClass = null;
             }
-            return eventHandlerClass;
+            return eventHandlerAnnotationClass;
         })
         .filter(_NullSafe::isPresent)
         .collect(Collectors.toList());
