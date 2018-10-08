@@ -34,6 +34,7 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.PublishedAction;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
@@ -41,6 +42,7 @@ import org.apache.isis.applib.services.metamodel.MetaModelService6;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -91,8 +93,10 @@ class MetaModelExporter {
         // these are added into a map for lookups in phase 2
         Map<ObjectSpecification, DomainClass> domainClassByObjectSpec = Maps.newHashMap();
         for (final ObjectSpecification specification : specificationLookup.allSpecifications()) {
-            if(config.getPackagePrefix() != null &&
-               !specification.getCorrespondingClass().getCanonicalName().startsWith(config.getPackagePrefix())) {
+            if(notInPackagePrefixes(specification, config)) {
+                continue;
+            }
+            if(config.isIgnoreMixins() && specification.isMixin()) {
                 continue;
             }
             if(config.isIgnoreInterfaces() && specification.getCorrespondingClass().isInterface()) {
@@ -112,7 +116,7 @@ class MetaModelExporter {
         // phase 2: now flesh out the domain class types, passing the map for lookups of the domainClassTypes that
         // correspond to each object members types.
         for (final ObjectSpecification specification : Lists.newArrayList(domainClassByObjectSpec.keySet())) {
-            addMembersTo(specification, domainClassByObjectSpec, config);
+            addFacetsAndMembersTo(specification, domainClassByObjectSpec, config);
         }
 
         // phase 3: now copy all domain classes into the metamodel
@@ -125,6 +129,23 @@ class MetaModelExporter {
         return metamodelDto;
     }
 
+    private boolean notInPackagePrefixes(
+            final ObjectSpecification specification, final MetaModelService6.Config config) {
+        return !inPackagePrefixes(specification, config);
+    }
+
+    private boolean inPackagePrefixes(
+            final ObjectSpecification specification,
+            final MetaModelService6.Config config) {
+        final String canonicalName = specification.getCorrespondingClass().getCanonicalName();
+        for (final String s : config.getPackagePrefixes()) {
+            if(canonicalName.startsWith(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private DomainClass asXsdType(
             final ObjectSpecification specification,
             final MetaModelService6.Config config) {
@@ -132,61 +153,47 @@ class MetaModelExporter {
         final DomainClass domainClass = new DomainClass();
 
         domainClass.setId(specification.getFullIdentifier());
-        domainClass.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
 
-        if (!isValueType(specification)) {
-            if(!isEnum(specification)) {
-                domainClass.setActions(new DomainClass.Actions());
-            }
-            if(specification.isService()) {
-                domainClass.setService(true);
-            } else {
-                domainClass.setProperties(new DomainClass.Properties());
-                domainClass.setCollections(new DomainClass.Collections());
-            }
+        if(specification.isService()) {
+            domainClass.setService(true);
         }
 
         return domainClass;
     }
 
-    private void addMembersTo(
+    private void addFacetsAndMembersTo(
             final ObjectSpecification specification,
             final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
             final MetaModelService6.Config config) {
 
         final DomainClass domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
+        if(domainClass.getFacets() == null) {
+            domainClass.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
+        }
         addFacets(specification, domainClass.getFacets(), config);
 
-        if(!isValueType(specification)) {
-            if(!isEnum(specification)) {
-                addActions(specification, domainClassByObjectSpec, config);
-            }
-            if(! specification.isService()) {
-                addProperties(specification, domainClassByObjectSpec, config);
-                addCollections(specification, domainClassByObjectSpec, config);
-            }
+        if(specification.isValueOrIsParented() || isEnum(specification)) {
+            return;
         }
 
+        if (specification.isService()) {
+            if(!hasNatureOfServiceOfDomain(specification)) {
+                addActions(specification, domainClassByObjectSpec, config);
+            }
+        } else {
+            addProperties(specification, domainClassByObjectSpec, config);
+            addCollections(specification, domainClassByObjectSpec, config);
+            addActions(specification, domainClassByObjectSpec, config);
+        }
     }
 
     private boolean isEnum(final ObjectSpecification specification) {
         return specification.getCorrespondingClass().isEnum();
     }
 
-    private void addMembers(
-            final ObjectSpecification specification,
-            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
-            final MetaModelService6.Config config) {
-
-        if(specification.isValueOrIsParented()) {
-            return;
-        }
-
-        if(! specification.isService()) {
-            addProperties(specification, domainClassByObjectSpec, config);
-            addCollections(specification, domainClassByObjectSpec, config);
-        }
-        addActions(specification, domainClassByObjectSpec, config);
+    private boolean hasNatureOfServiceOfDomain(final ObjectSpecification specification) {
+        final DomainServiceFacet domainServiceFacet = specification.getFacet(DomainServiceFacet.class);
+        return domainServiceFacet != null && domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN;
     }
 
     private void addProperties(
@@ -197,6 +204,9 @@ class MetaModelExporter {
 
         final List<ObjectAssociation> oneToOneAssociations =
                 specification.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.PROPERTIES);
+        if(domainClass.getProperties() == null) {
+            domainClass.setProperties(new DomainClass.Properties());
+        }
         final List<Property> properties = domainClass.getProperties().getProp();
         for (final ObjectAssociation association : oneToOneAssociations) {
             final OneToOneAssociation otoa = (OneToOneAssociation) association;
@@ -212,6 +222,9 @@ class MetaModelExporter {
         final DomainClass domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
         final List<ObjectAssociation> oneToManyAssociations =
                 specification.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.COLLECTIONS);
+        if(domainClass.getCollections() == null) {
+            domainClass.setCollections(new DomainClass.Collections());
+        }
         final List<Collection> collections = domainClass.getCollections().getColl();
         for (final ObjectAssociation association : oneToManyAssociations) {
             final OneToManyAssociation otma = (OneToManyAssociation) association;
@@ -227,6 +240,9 @@ class MetaModelExporter {
         final DomainClass domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
         final List<ObjectAction> objectActions =
                 specification.getObjectActions(Contributed.INCLUDED);
+        if(domainClass.getActions() == null) {
+            domainClass.setActions(new DomainClass.Actions());
+        }
         final List<Action> actions = domainClass.getActions().getAct();
         for (final ObjectAction action : objectActions) {
             actions.add(asXsdType(action, domainClassByObjectSpec, config));
@@ -296,8 +312,6 @@ class MetaModelExporter {
         if(value == null) {
             final DomainClass domainClass = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClass);
-            addFacets(specification, domainClass.getFacets(), config);
-            addMembers(specification, domainClassByObjectSpec, config);
             value = domainClass;
         }
         return value;
