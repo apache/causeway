@@ -41,12 +41,12 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="objectSpecification" type="objectSpecificationDto" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="objectSpecification" type="objectSpecDto" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="objectSpecificationDto">
+    <xs:complexType name="objectSpecDto">
         <xs:annotation>
             <xs:documentation>Represents a type
             </xs:documentation>
@@ -87,7 +87,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="attribute" type="facetAttributeDto" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="attr" type="facetAttributeDto" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:string"/>
         <xs:attribute name="fqcn" type="xs:string"/>

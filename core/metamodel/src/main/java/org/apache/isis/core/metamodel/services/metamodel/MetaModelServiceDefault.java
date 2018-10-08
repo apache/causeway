@@ -66,7 +66,7 @@ import org.apache.isis.schema.metamodel.v1.FacetAttributeDto;
 import org.apache.isis.schema.metamodel.v1.FacetDto;
 import org.apache.isis.schema.metamodel.v1.FacetHolderDto;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
-import org.apache.isis.schema.metamodel.v1.ObjectSpecificationDto;
+import org.apache.isis.schema.metamodel.v1.ObjectSpecDto;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -300,7 +300,7 @@ public class MetaModelServiceDefault implements MetaModelService6 {
         MetamodelDto metamodelDto = new MetamodelDto();
 
         for (final ObjectSpecification specification : specificationLookup.allSpecifications()) {
-            ObjectSpecificationDto specDto = asDto(specification, flags);
+            ObjectSpecDto specDto = asDto(specification, flags);
             metamodelDto.getObjectSpecification().add(specDto);
         }
 
@@ -309,11 +309,11 @@ public class MetaModelServiceDefault implements MetaModelService6 {
         return metamodelDto;
     }
 
-    private ObjectSpecificationDto asDto(
+    private ObjectSpecDto asDto(
             final ObjectSpecification specification,
             final Flags flags) {
 
-        final ObjectSpecificationDto specDto = new ObjectSpecificationDto();
+        final ObjectSpecDto specDto = new ObjectSpecDto();
         specDto.setId(specification.getFullIdentifier());
         specDto.setFacets(new FacetHolderDto.Facets());
 
@@ -364,7 +364,7 @@ public class MetaModelServiceDefault implements MetaModelService6 {
             addAttribute(facetDto,key, str);
         }
 
-        sortFacetAttributes(facetDto.getAttribute());
+        sortFacetAttributes(facetDto.getAttr());
     }
 
     private String asStr(final Object attributeObj) {
@@ -440,6 +440,9 @@ public class MetaModelServiceDefault implements MetaModelService6 {
     }
 
     private String asStr(final Object[] list) {
+        if(list.length == 0) {
+            return null; // skip
+        }
         List<String> strings = Lists.newArrayList();
         for (final Object o : list) {
             String s = asStr(o);
@@ -449,6 +452,9 @@ public class MetaModelServiceDefault implements MetaModelService6 {
     }
 
     private String asStr(final List<?> list) {
+        if(list.isEmpty()) {
+            return null; // skip
+        }
         List<String> strings = Lists.newArrayList();
         for (final Object o : list) {
             String s = asStr(o);
@@ -459,10 +465,13 @@ public class MetaModelServiceDefault implements MetaModelService6 {
 
     private void addAttribute(
             final FacetDto facetDto, final String key, final String str) {
+        if(str == null) {
+            return;
+        }
         FacetAttributeDto attributeDto = new FacetAttributeDto();
         attributeDto.setName(key);
         attributeDto.setValue(str);
-        facetDto.getAttribute().add(attributeDto);
+        facetDto.getAttr().add(attributeDto);
     }
 
     private void sortFacetAttributes(final List<FacetAttributeDto> attributes) {
@@ -474,10 +483,10 @@ public class MetaModelServiceDefault implements MetaModelService6 {
         });
     }
 
-    private static void sortSpecs(final List<ObjectSpecificationDto> specifications) {
-        Collections.sort(specifications, new Comparator<ObjectSpecificationDto>() {
+    private static void sortSpecs(final List<ObjectSpecDto> specifications) {
+        Collections.sort(specifications, new Comparator<ObjectSpecDto>() {
             @Override
-            public int compare(final ObjectSpecificationDto o1, final ObjectSpecificationDto o2) {
+            public int compare(final ObjectSpecDto o1, final ObjectSpecDto o2) {
                 return o1.getId().compareTo(o2.getId());
             }
         });

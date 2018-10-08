@@ -199,7 +199,7 @@ public abstract class FacetAbstract implements Facet {
     @Override
     public void appendAttributesTo(final Map<String, Object> attributeMap) {
         attributeMap.put("derived", derived);
-        attributeMap.put("hasUnderlyingFacet", ""+(underlyingFacet != null));
+        attributeMap.put("underlyingFacet", underlyingFacet);
         if(isNoop()) {
             attributeMap.put("noop", isNoop());
         }

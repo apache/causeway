@@ -356,8 +356,8 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        appendAttributesTo("getterFacet", getterFacet);
-        appendAttributesTo("setterFacet", setterFacet);
-        appendAttributesTo("clearFacet", clearFacet);
+        attributeMap.put("getterFacet", getterFacet);
+        attributeMap.put("setterFacet", setterFacet);
+        attributeMap.put("clearFacet", clearFacet);
     }
 }
