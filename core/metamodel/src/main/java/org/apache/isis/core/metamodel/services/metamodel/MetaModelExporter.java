@@ -364,7 +364,7 @@ class MetaModelExporter {
         } else if(attributeObj instanceof Pattern) {
             str = asStr((Pattern) attributeObj);
         } else if(attributeObj instanceof PublishedObject.PayloadFactory) {
-            str = asStr((PublishedAction.PayloadFactory) attributeObj);
+            str = asStr((PublishedObject.PayloadFactory) attributeObj);
         } else if(attributeObj instanceof PublishedAction.PayloadFactory) {
             str = asStr((PublishedAction.PayloadFactory) attributeObj);
         } else if(attributeObj instanceof CommandDtoProcessor) {
