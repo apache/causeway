@@ -18,6 +18,11 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
+import java.util.Collections;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
@@ -29,16 +34,17 @@ public interface MetaModelService6 extends MetaModelService5 {
         private static final int IGNORE_INTERFACES = 2;
         private static final int IGNORE_ABSTRACT_CLASSES = 4;
         private static final int IGNORE_BUILT_IN_VALUE_TYPES = 8;
+        private static final int IGNORE_MIXINS = 16;
 
         private final int mask;
-        private final String packagePrefix;
+        private final List<String> packagePrefixes;
 
         public Config() {
-            this(0, null);
+            this(0, Collections.<String>emptyList());
         }
-        private Config(final int mask, final String packagePrefix) {
+        private Config(final int mask, final List<String> packagePrefixes) {
             this.mask = mask;
-            this.packagePrefix = packagePrefix;
+            this.packagePrefixes = Collections.unmodifiableList(packagePrefixes);
         }
         private Config(final int mask) {
             this(mask, null);
@@ -58,13 +64,18 @@ public interface MetaModelService6 extends MetaModelService5 {
         public Config withIgnoreBuiltInValueTypes() {
             return newConfigWith(IGNORE_BUILT_IN_VALUE_TYPES);
         }
+        public Config withIgnoreMixins() {
+            return newConfigWith(IGNORE_MIXINS);
+        }
 
         private Config newConfigWith(final int x) {
-            return new Config(mask | x, packagePrefix);
+            return new Config(mask | x, packagePrefixes);
         }
 
         public Config withPackagePrefix(final String packagePrefix) {
-            return new Config(mask, packagePrefix);
+            final List<String> prefixes = Lists.newArrayList(packagePrefix);
+            prefixes.add(packagePrefix);
+            return new Config(mask, prefixes);
         }
 
         public boolean isIgnoreNoop() {
@@ -81,9 +92,12 @@ public interface MetaModelService6 extends MetaModelService5 {
         public boolean isIgnoreBuiltInValueTypes() {
             return hasFlag(IGNORE_BUILT_IN_VALUE_TYPES);
         }
+        public boolean isIgnoreMixins() {
+            return hasFlag(IGNORE_MIXINS);
+        }
 
-        public String getPackagePrefix() {
-            return packagePrefix;
+        public List<String> getPackagePrefixes() {
+            return packagePrefixes;
         }
 
         private boolean hasFlag(final int x) {
