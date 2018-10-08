@@ -29,7 +29,6 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.metamodel.MetaModelService6;
-import org.apache.isis.applib.services.metamodel.MetaModelService6.Flags;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 import domainapp.application.integtests.DomainAppIntegTestAbstract;
@@ -54,7 +53,15 @@ public class MetaModelService_IntegTest extends DomainAppIntegTestAbstract {
     public void exports() throws Exception {
 
         // when
-        MetamodelDto metamodelDto = metaModelService6.exportMetaModel(new Flags().ignoreNoop());
+        MetamodelDto metamodelDto =
+                metaModelService6.exportMetaModel(
+                        new MetaModelService6.Config()
+                                .withIgnoreNoop()
+                                .withIgnoreAbstractClasses()
+                                .withIgnoreBuiltInValueTypes()
+                                .withIgnoreInterfaces()
+                                .withPackagePrefix("domainapp")
+                );
 
         // then
         String asXml = jaxbService.toXml(metamodelDto);

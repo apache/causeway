@@ -292,8 +292,8 @@ public class MetaModelServiceDefault implements MetaModelService6 {
     AppManifestProvider appManifestProvider;
 
     @Override
-    public MetamodelDto exportMetaModel(final Flags flags) {
-        return metaModelExporter.exportMetaModel(flags);
+    public MetamodelDto exportMetaModel(final Config config) {
+        return metaModelExporter.exportMetaModel(config);
     }
 
 }

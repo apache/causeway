@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.services.metamodel;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -61,6 +62,7 @@ import org.apache.isis.schema.metamodel.v1.Param;
 import org.apache.isis.schema.metamodel.v1.Property;
 import org.apache.isis.schema.metamodel.v1.ScalarParam;
 import org.apache.isis.schema.metamodel.v1.VectorParam;
+import org.apache.isis.schema.utils.CommonDtoUtils;
 
 class MetaModelExporter {
 
@@ -82,22 +84,40 @@ class MetaModelExporter {
      *     to exist first.
      * </p>
      */
-    MetamodelDto exportMetaModel(final MetaModelService6.Flags flags) {
+    MetamodelDto exportMetaModel(final MetaModelService6.Config config) {
         MetamodelDto metamodelDto = new MetamodelDto();
 
         // phase 1: create a domainClassType for each ObjectSpecification
-        // these are also added into a map for lookups in phase 2
+        // these are added into a map for lookups in phase 2
         Map<ObjectSpecification, DomainClass> domainClassByObjectSpec = Maps.newHashMap();
         for (final ObjectSpecification specification : specificationLookup.allSpecifications()) {
-            DomainClass domainClassType = asXsdType(specification, flags);
-            metamodelDto.getDomainClass().add(domainClassType);
+            if(config.getPackagePrefix() != null &&
+               !specification.getCorrespondingClass().getCanonicalName().startsWith(config.getPackagePrefix())) {
+                continue;
+            }
+            if(config.isIgnoreInterfaces() && specification.getCorrespondingClass().isInterface()) {
+                continue;
+            }
+            if(config.isIgnoreAbstractClasses() && Modifier.isAbstract(specification.getCorrespondingClass().getModifiers())) {
+                continue;
+            }
+            if(config.isIgnoreBuiltInValueTypes() && isValueType(specification)) {
+                continue;
+            }
+
+            DomainClass domainClassType = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClassType);
         }
 
         // phase 2: now flesh out the domain class types, passing the map for lookups of the domainClassTypes that
         // correspond to each object members types.
-        for (final ObjectSpecification specification : specificationLookup.allSpecifications()) {
-            addMembersTo(specification, domainClassByObjectSpec, flags);
+        for (final ObjectSpecification specification : Lists.newArrayList(domainClassByObjectSpec.keySet())) {
+            addMembersTo(specification, domainClassByObjectSpec, config);
+        }
+
+        // phase 3: now copy all domain classes into the metamodel
+        for (final DomainClass domainClass : Lists.newArrayList(domainClassByObjectSpec.values())) {
+            metamodelDto.getDomainClass().add(domainClass);
         }
 
         sortDomainClasses(metamodelDto.getDomainClass());
@@ -107,61 +127,109 @@ class MetaModelExporter {
 
     private DomainClass asXsdType(
             final ObjectSpecification specification,
-            final MetaModelService6.Flags flags) {
+            final MetaModelService6.Config config) {
 
         final DomainClass domainClass = new DomainClass();
+
         domainClass.setId(specification.getFullIdentifier());
         domainClass.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
-        domainClass.setProperties(new DomainClass.Properties());
-        domainClass.setCollections(new DomainClass.Collections());
-        domainClass.setActions(new DomainClass.Actions());
+
+        if (!isValueType(specification)) {
+            if(!isEnum(specification)) {
+                domainClass.setActions(new DomainClass.Actions());
+            }
+            if(specification.isService()) {
+                domainClass.setService(true);
+            } else {
+                domainClass.setProperties(new DomainClass.Properties());
+                domainClass.setCollections(new DomainClass.Collections());
+            }
+        }
 
         return domainClass;
     }
 
-
     private void addMembersTo(
             final ObjectSpecification specification,
             final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
-            final MetaModelService6.Flags flags) {
+            final MetaModelService6.Config config) {
 
-        DomainClass domainClass = domainClassByObjectSpec.get(specification);
+        final DomainClass domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
+        addFacets(specification, domainClass.getFacets(), config);
 
-        addFacets(specification, domainClass.getFacets(), flags);
-        addMembers(specification, domainClassByObjectSpec, flags);
+        if(!isValueType(specification)) {
+            if(!isEnum(specification)) {
+                addActions(specification, domainClassByObjectSpec, config);
+            }
+            if(! specification.isService()) {
+                addProperties(specification, domainClassByObjectSpec, config);
+                addCollections(specification, domainClassByObjectSpec, config);
+            }
+        }
+
     }
 
+    private boolean isEnum(final ObjectSpecification specification) {
+        return specification.getCorrespondingClass().isEnum();
+    }
 
     private void addMembers(
             final ObjectSpecification specification,
             final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
-            final MetaModelService6.Flags flags) {
+            final MetaModelService6.Config config) {
 
-        final DomainClass domainClass = domainClassByObjectSpec.get(specification);
+        if(specification.isValueOrIsParented()) {
+            return;
+        }
+
+        if(! specification.isService()) {
+            addProperties(specification, domainClassByObjectSpec, config);
+            addCollections(specification, domainClassByObjectSpec, config);
+        }
+        addActions(specification, domainClassByObjectSpec, config);
+    }
+
+    private void addProperties(
+            final ObjectSpecification specification,
+            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final MetaModelService6.Config config) {
+        final DomainClass domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
 
         final List<ObjectAssociation> oneToOneAssociations =
                 specification.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.PROPERTIES);
         final List<Property> properties = domainClass.getProperties().getProp();
         for (final ObjectAssociation association : oneToOneAssociations) {
-            OneToOneAssociation otoa = (OneToOneAssociation) association;
-            properties.add(asXsdType(otoa, domainClassByObjectSpec, flags));
+            final OneToOneAssociation otoa = (OneToOneAssociation) association;
+            properties.add(asXsdType(otoa, domainClassByObjectSpec, config));
         }
         sortMembers(properties);
+    }
 
+    private void addCollections(
+            final ObjectSpecification specification,
+            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final MetaModelService6.Config config) {
+        final DomainClass domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
         final List<ObjectAssociation> oneToManyAssociations =
                 specification.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.COLLECTIONS);
         final List<Collection> collections = domainClass.getCollections().getColl();
         for (final ObjectAssociation association : oneToManyAssociations) {
-            OneToManyAssociation otma = (OneToManyAssociation) association;
-            collections.add(asXsdType(otma, domainClassByObjectSpec, flags));
+            final OneToManyAssociation otma = (OneToManyAssociation) association;
+            collections.add(asXsdType(otma, domainClassByObjectSpec, config));
         }
         sortMembers(collections);
+    }
 
+    private void addActions(
+            final ObjectSpecification specification,
+            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final MetaModelService6.Config config) {
+        final DomainClass domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
         final List<ObjectAction> objectActions =
                 specification.getObjectActions(Contributed.INCLUDED);
         final List<Action> actions = domainClass.getActions().getAct();
         for (final ObjectAction action : objectActions) {
-            actions.add(asXsdType(action, domainClassByObjectSpec, flags));
+            actions.add(asXsdType(action, domainClassByObjectSpec, config));
         }
         sortMembers(actions);
     }
@@ -169,70 +237,76 @@ class MetaModelExporter {
     private Property asXsdType(
             final OneToOneAssociation otoa,
             final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
-            final MetaModelService6.Flags flags) {
+            final MetaModelService6.Config config) {
 
         Property propertyType = new Property();
         propertyType.setId(otoa.getId());
         propertyType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
         final ObjectSpecification specification = otoa.getSpecification();
-        final DomainClass value = domainClassByObjectSpec.get(specification);
-        if(value == null) {
-            throw new IllegalStateException("Could not locate domainClass for: " + specification);
-        }
+        final DomainClass value = lookupDomainClass(specification, domainClassByObjectSpec, config);
         propertyType.setType(value);
 
-        addFacets(otoa, propertyType.getFacets(), flags);
+        addFacets(otoa, propertyType.getFacets(), config);
         return propertyType;
     }
 
     private Collection asXsdType(
             final OneToManyAssociation otoa,
             final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
-            final MetaModelService6.Flags flags) {
+            final MetaModelService6.Config config) {
         Collection collectionType = new Collection();
         collectionType.setId(otoa.getId());
         collectionType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
         final ObjectSpecification specification = otoa.getSpecification();
-        final DomainClass value = domainClassByObjectSpec.get(specification);
-        if(value == null) {
-            throw new IllegalStateException("Could not locate domainClass for: " + specification);
-        }
+        final DomainClass value = lookupDomainClass(specification, domainClassByObjectSpec, config);
         collectionType.setType(value);
 
-        addFacets(otoa, collectionType.getFacets(), flags);
+        addFacets(otoa, collectionType.getFacets(), config);
         return collectionType;
     }
 
     private Action asXsdType(
             final ObjectAction oa,
             final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
-            final MetaModelService6.Flags flags) {
+            final MetaModelService6.Config config) {
         Action actionType = new Action();
         actionType.setId(oa.getId());
         actionType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
         actionType.setParams(new Action.Params());
 
         final ObjectSpecification specification = oa.getReturnType();
-        final DomainClass value = domainClassByObjectSpec.get(specification);
-        if(value == null) {
-            throw new IllegalStateException("Could not locate domainClass for: " + specification);
-        }
+        final DomainClass value = lookupDomainClass(specification, domainClassByObjectSpec, config);
         actionType.setReturnType(value);
 
-        addFacets(oa, actionType.getFacets(), flags);
+        addFacets(oa, actionType.getFacets(), config);
 
         final List<ObjectActionParameter> parameters = oa.getParameters();
         final List<Param> params = actionType.getParams().getParam();
         for (final ObjectActionParameter parameter : parameters) {
-            params.add(asXsdType(parameter, domainClassByObjectSpec, flags));
+            params.add(asXsdType(parameter, domainClassByObjectSpec, config));
         }
         return actionType;
+    }
+
+    private DomainClass lookupDomainClass(
+            final ObjectSpecification specification,
+            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final MetaModelService6.Config config) {
+        DomainClass value = domainClassByObjectSpec.get(specification);
+        if(value == null) {
+            final DomainClass domainClass = asXsdType(specification, config);
+            domainClassByObjectSpec.put(specification, domainClass);
+            addFacets(specification, domainClass.getFacets(), config);
+            addMembers(specification, domainClassByObjectSpec, config);
+            value = domainClass;
+        }
+        return value;
     }
 
     private Param asXsdType(
             final ObjectActionParameter parameter,
             final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
-            final MetaModelService6.Flags flags) {
+            final MetaModelService6.Config config) {
 
         Param parameterType = parameter instanceof OneToOneActionParameter
                                     ? new ScalarParam()
@@ -241,26 +315,23 @@ class MetaModelExporter {
         parameterType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
 
         final ObjectSpecification specification = parameter.getSpecification();
-        final DomainClass value = domainClassByObjectSpec.get(specification);
-        if(value == null) {
-            throw new IllegalStateException("Could not locate domainClass for: " + specification);
-        }
+        final DomainClass value = lookupDomainClass(specification, domainClassByObjectSpec, config);
         parameterType.setType(value);
 
-        addFacets(parameter, parameterType.getFacets(), flags);
+        addFacets(parameter, parameterType.getFacets(), config);
         return parameterType;
     }
 
     private void addFacets(
             final FacetHolder facetHolder,
             final org.apache.isis.schema.metamodel.v1.FacetHolder.Facets facets,
-            final MetaModelService6.Flags flags) {
+            final MetaModelService6.Config config) {
 
         final Class<? extends Facet>[] facetTypes = facetHolder.getFacetTypes();
         for (final Class<? extends Facet> facetType : facetTypes) {
             final Facet facet = facetHolder.getFacet(facetType);
-            if(!facet.isNoop() || !flags.isIgnoreNoop()) {
-                facets.getFacet().add(asXsdType(facet, flags));
+            if(!facet.isNoop() || !config.isIgnoreNoop()) {
+                facets.getFacet().add(asXsdType(facet, config));
             }
         }
         sortFacets(facets.getFacet());
@@ -268,12 +339,12 @@ class MetaModelExporter {
 
     private org.apache.isis.schema.metamodel.v1.Facet asXsdType(
             final Facet facet,
-            final MetaModelService6.Flags flags) {
+            final MetaModelService6.Config config) {
         final org.apache.isis.schema.metamodel.v1.Facet facetType = new org.apache.isis.schema.metamodel.v1.Facet();
         facetType.setId(facet.facetType().getCanonicalName());
         facetType.setFqcn(facet.getClass().getCanonicalName());
 
-        addFacetAttributes(facet, facetType, flags);
+        addFacetAttributes(facet, facetType, config);
 
         return facetType;
     }
@@ -281,7 +352,7 @@ class MetaModelExporter {
     private void addFacetAttributes(
             final Facet facet,
             final org.apache.isis.schema.metamodel.v1.Facet facetType,
-            final MetaModelService6.Flags flags) {
+            final MetaModelService6.Config config) {
 
         Map<String, Object> attributeMap = Maps.newTreeMap();
         facet.appendAttributesTo(attributeMap);
@@ -344,6 +415,11 @@ class MetaModelExporter {
             }
         });
     }
+
+    private boolean isValueType(final ObjectSpecification specification) {
+        return CommonDtoUtils.VALUE_TYPES.contains(specification.getCorrespondingClass());
+    }
+
 
     private String asStr(final Object attributeObj) {
         String str;
@@ -444,7 +520,7 @@ class MetaModelExporter {
             String s = asStr(o);
             strings.add(s);
         }
-        return Joiner.on(",").join(strings);
+        return Joiner.on(";").join(strings);
     }
 
     private String asStr(final List<?> list) {
@@ -456,7 +532,7 @@ class MetaModelExporter {
             String s = asStr(o);
             strings.add(s);
         }
-        return Joiner.on(",").join(strings);
+        return Joiner.on(";").join(strings);
     }
 
 

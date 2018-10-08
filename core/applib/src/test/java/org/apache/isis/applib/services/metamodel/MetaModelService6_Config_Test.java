@@ -7,22 +7,22 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertThat;
 
-public class MetaModelService6_Flags_Test {
+public class MetaModelService6_Config_Test {
 
     @Test
     public void ignore_noop() throws Exception {
 
         // when
-        MetaModelService6.Flags flags = new MetaModelService6.Flags();
+        MetaModelService6.Config config = new MetaModelService6.Config();
         // then
-        assertThat(flags.isIgnoreNoop(), is(equalTo(false)));
+        assertThat(config.isIgnoreNoop(), is(equalTo(false)));
 
         // and when
-        MetaModelService6.Flags flags2 = flags.ignoreNoop();
+        MetaModelService6.Config flags2 = config.withIgnoreNoop();
 
         // then
-        assertNotSame(flags, flags2);
-        assertThat(flags.isIgnoreNoop(), is(equalTo(false)));
+        assertNotSame(config, flags2);
+        assertThat(config.isIgnoreNoop(), is(equalTo(false)));
         assertThat(flags2.isIgnoreNoop(), is(equalTo(true)));
     }
 }
