@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.all.named;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
@@ -47,5 +49,11 @@ public abstract class NamedFacetAbstract extends MultipleValueFacetAbstract impl
     @Override
     public boolean escaped() {
         return escaped;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("value", value);
+        attributeMap.put("escaped", escaped);
     }
 }

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
+import java.util.Map;
 import java.util.Set;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
@@ -119,4 +120,9 @@ public abstract class CollectionAddToFacetForDomainEventFromAbstract
         return event;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("getterFacet", getterFacet);
+        attributeMap.put("collectionAddToFacet", collectionAddToFacet);
+    }
 }

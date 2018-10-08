@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Strings;
@@ -613,4 +614,14 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     public TransactionState getTransactionState() {
         return persistenceSessionServiceInternal.getTransactionState();
     }
+
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+        attributeMap.put("onType", onType);
+        attributeMap.put("returnType", returnType);
+        attributeMap.put("eventType", eventType);
+    }
+
 }

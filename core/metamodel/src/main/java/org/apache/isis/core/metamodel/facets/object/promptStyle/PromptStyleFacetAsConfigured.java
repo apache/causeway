@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.promptStyle;
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -34,4 +36,10 @@ public class PromptStyleFacetAsConfigured extends PromptStyleFacetAbstract {
     @Override public PromptStyle value() {
         return promptStyle;
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("promptStyle", promptStyle);
+    }
+
 }

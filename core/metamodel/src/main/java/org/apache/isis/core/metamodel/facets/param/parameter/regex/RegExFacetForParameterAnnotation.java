@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.param.parameter.regex;
 
+import java.util.Map;
 import java.util.regex.Pattern;
+
 import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -75,5 +78,9 @@ public class RegExFacetForParameterAnnotation extends RegExFacetAbstract {
         return !pattern.matcher(text).matches();
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("pattern", pattern);
+    }
 
 }

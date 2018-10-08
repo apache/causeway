@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.members.hidden.method;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -67,5 +68,9 @@ public class HideForContextFacetViaMethod extends HideForContextFacetAbstract im
         return "method=" + method;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+    }
 
 }

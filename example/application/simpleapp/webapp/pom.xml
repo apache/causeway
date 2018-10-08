@@ -90,6 +90,14 @@
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>sourceandjavadoc</artifactId>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>staticanalysis</artifactId>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>jettywar</artifactId>
                         </mixin>
                         <mixin>

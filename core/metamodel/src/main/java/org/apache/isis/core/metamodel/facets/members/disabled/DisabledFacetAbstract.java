@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.UsabilityEvent;
@@ -91,6 +93,13 @@ public abstract class DisabledFacetAbstract extends WhenAndWhereValueFacetAbstra
     @Override
     public boolean isInvertedSemantics() {
         return semantics == Semantics.ENABLED;
+    }
+
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("semantics", semantics);
+        attributeMap.put("inverted", isInvertedSemantics());
     }
 
 }

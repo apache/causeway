@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
+import java.util.Map;
+
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
@@ -139,4 +141,10 @@ public abstract class PropertyDomainEventFacetAbstract
         Class eventType = eventType();
         return eventType;
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("getterFacet", getterFacet);
+    }
+
 }

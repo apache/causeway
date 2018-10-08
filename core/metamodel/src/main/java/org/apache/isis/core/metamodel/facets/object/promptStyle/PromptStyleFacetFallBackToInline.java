@@ -32,4 +32,6 @@ public class PromptStyleFacetFallBackToInline extends PromptStyleFacetAbstract {
     public PromptStyle value() {
         return PromptStyle.INLINE;
     }
+
+
 }

@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.param.autocomplete.method;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -110,5 +111,12 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
         return "method=" + method + ",type=" + choicesType;
     }
 
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+        attributeMap.put("choicesType", choicesType);
+        attributeMap.put("minLength", minLength);
+    }
 
 }

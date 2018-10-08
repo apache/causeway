@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.value;
 
+import java.util.Map;
+
 import org.apache.isis.applib.adapters.Parser2;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
@@ -63,4 +65,8 @@ public class MaxLengthFacetUsingParser2 extends MaxLengthFacetAbstract{
         return dependencyInjector;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("parser", parser);
+    }
 }

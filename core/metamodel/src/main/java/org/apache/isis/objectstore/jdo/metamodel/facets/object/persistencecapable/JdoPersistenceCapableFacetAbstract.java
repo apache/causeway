@@ -18,6 +18,8 @@
  */
 package org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable;
 
+import java.util.Map;
+
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -56,5 +58,12 @@ public abstract class JdoPersistenceCapableFacetAbstract extends FacetAbstract i
     }
     public String getTable() {
         return table;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("schema", schema);
+        attributeMap.put("table", table);
+        attributeMap.put("identityType", identityType);
     }
 }

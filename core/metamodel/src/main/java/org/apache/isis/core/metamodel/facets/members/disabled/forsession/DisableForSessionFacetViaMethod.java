@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.members.disabled.forsession;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -74,6 +75,11 @@ public class DisableForSessionFacetViaMethod extends DisableForSessionFacetAbstr
     @Override
     protected String toStringValues() {
         return "method=" + method;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }
 
 }

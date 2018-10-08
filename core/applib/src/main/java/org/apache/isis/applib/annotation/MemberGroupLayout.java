@@ -149,6 +149,10 @@ public @interface MemberGroupLayout {
         public boolean exceedsRow() {
             return getLeft() + getMiddle() + getRight() + getCollections() > 12;
         }
+
+        public String toString() {
+            return name();
+        }
     }
 
     /**

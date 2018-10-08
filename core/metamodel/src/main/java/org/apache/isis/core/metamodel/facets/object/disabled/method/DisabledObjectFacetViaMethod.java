@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.disabled.method;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.Identifier.Type;
@@ -83,5 +84,10 @@ public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract im
     public void copyOnto(final FacetHolder holder) {
         final DisabledObjectFacetViaMethod clonedFacet = new DisabledObjectFacetViaMethod(this.method, translationService, translationContext, holder);
         FacetUtil.addFacet(clonedFacet);
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("method", method);
     }
 }

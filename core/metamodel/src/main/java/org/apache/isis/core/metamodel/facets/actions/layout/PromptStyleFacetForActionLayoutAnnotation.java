@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -88,4 +90,10 @@ public class PromptStyleFacetForActionLayoutAnnotation extends PromptStyleFacetA
     public PromptStyle value() {
         return promptStyle;
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("promptStyle", promptStyle);
+    }
+
 }

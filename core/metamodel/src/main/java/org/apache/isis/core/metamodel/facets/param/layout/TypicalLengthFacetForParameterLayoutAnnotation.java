@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.layout;
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
@@ -34,15 +36,21 @@ public class TypicalLengthFacetForParameterLayoutAnnotation extends TypicalLengt
         return typicalLength != -1 ? new TypicalLengthFacetForParameterLayoutAnnotation(typicalLength, holder) : null;
     }
 
-    private final int typicalLength;
+    private final int value;
 
     public TypicalLengthFacetForParameterLayoutAnnotation(int typicalLength, FacetHolder holder) {
         super(holder, Derivation.NOT_DERIVED);
-        this.typicalLength = typicalLength;
+        this.value = typicalLength;
     }
 
     @Override
     public int value() {
-        return typicalLength;
+        return value;
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("value", value);
+    }
+
 }

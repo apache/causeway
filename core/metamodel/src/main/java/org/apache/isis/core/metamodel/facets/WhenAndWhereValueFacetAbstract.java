@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -41,4 +43,11 @@ public abstract class WhenAndWhereValueFacetAbstract extends WhenValueFacetAbstr
     protected String toStringValues() {
         return super.toStringValues() + "; where =" + where.getFriendlyName();
     }
+
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("where", where);
+    }
+
 }

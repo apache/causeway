@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.postprocessors.param;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -71,4 +72,8 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
         return mixedInTarget != null ? mixedInTarget : target;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("oneToManyAssociation", otma);
+    }
 }

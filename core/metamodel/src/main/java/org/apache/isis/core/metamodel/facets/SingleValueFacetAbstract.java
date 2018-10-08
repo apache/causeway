@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -35,6 +37,9 @@ public abstract class SingleValueFacetAbstract<T> extends FacetAbstract implemen
     public T value() {
         return value;
     }
-    
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("value", value);
+    }
 }

@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.collections.accessor;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.Lists;
 
@@ -105,5 +106,10 @@ public class CollectionAccessorFacetViaAccessor
         return "method=" + method;
     }
 
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+    }
 
 }

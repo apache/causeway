@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -47,4 +49,8 @@ public abstract class RenderedAdjustedFacetAbstract extends FacetAbstract implem
         return val == -1 ? "default" : String.valueOf(val);
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("adjustBy", adjustBy);
+    }
 }

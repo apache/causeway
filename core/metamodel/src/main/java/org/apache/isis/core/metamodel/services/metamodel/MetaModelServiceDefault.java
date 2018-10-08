@@ -21,6 +21,9 @@ package org.apache.isis.core.metamodel.services.metamodel;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
 
 import com.google.common.collect.Lists;
 
@@ -37,7 +40,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
-import org.apache.isis.applib.services.metamodel.MetaModelService5;
+import org.apache.isis.applib.services.metamodel.MetaModelService6;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
@@ -52,16 +55,24 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class MetaModelServiceDefault implements MetaModelService5 {
+public class MetaModelServiceDefault implements MetaModelService6 {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(MetaModelServiceDefault.class);
 
+    private MetaModelExporter metaModelExporter;
+
+    @PostConstruct
+    @Programmatic
+    public void init(Map<String,String> properties) {
+        metaModelExporter = new MetaModelExporter(specificationLookup);
+    }
 
     @Programmatic
     public Class<?> fromObjectType(final String objectType) {
@@ -279,5 +290,10 @@ public class MetaModelServiceDefault implements MetaModelService5 {
 
     @javax.inject.Inject
     AppManifestProvider appManifestProvider;
+
+    @Override
+    public MetamodelDto exportMetaModel(final Flags flags) {
+        return metaModelExporter.exportMetaModel(flags);
+    }
 
 }

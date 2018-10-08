@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.paged;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -41,4 +43,8 @@ public abstract class PagedFacetAbstract extends FacetAbstract implements PagedF
         return value;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("value", value);
+    }
 }

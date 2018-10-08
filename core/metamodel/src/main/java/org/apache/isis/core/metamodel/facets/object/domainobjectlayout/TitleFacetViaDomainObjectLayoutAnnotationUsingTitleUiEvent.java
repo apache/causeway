@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,5 +126,10 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
         } catch (InstantiationException | IllegalAccessException ex) {
             throw new NonRecoverableException(ex);
         }
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("titleUiEventClass", titleUiEventClass);
     }
 }

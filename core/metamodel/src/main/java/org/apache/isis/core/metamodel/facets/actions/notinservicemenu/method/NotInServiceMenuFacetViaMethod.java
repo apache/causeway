@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -33,11 +34,11 @@ import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServi
 @Deprecated
 public class NotInServiceMenuFacetViaMethod extends NotInServiceMenuFacetAbstract {
 
-    private final Method notInServiceMenuMethod;
+    private final Method method;
 
-    public NotInServiceMenuFacetViaMethod(final Method notInServiceMenuMethod, final FacetHolder holder) {
+    public NotInServiceMenuFacetViaMethod(final Method method, final FacetHolder holder) {
         super(holder);
-        this.notInServiceMenuMethod = notInServiceMenuMethod;
+        this.method = method;
     }
 
     @Override
@@ -46,8 +47,12 @@ public class NotInServiceMenuFacetViaMethod extends NotInServiceMenuFacetAbstrac
         if (owningAdapter == null) {
             return null;
         }
-        final Boolean currentlyHidden = (Boolean) ObjectAdapter.InvokeUtils.invoke(notInServiceMenuMethod, owningAdapter);
+        final Boolean currentlyHidden = (Boolean) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         return currentlyHidden.booleanValue() ? "notInServiceMenuXxx() method returning true" : null;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("method", method);
+    }
 }

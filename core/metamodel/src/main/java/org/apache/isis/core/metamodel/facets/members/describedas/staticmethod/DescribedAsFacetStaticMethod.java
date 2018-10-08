@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.members.describedas.staticmethod;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -48,6 +49,11 @@ public class DescribedAsFacetStaticMethod extends DescribedAsFacetAbstract imple
     @Override
     public Intent getIntent(final Method method) {
         return Intent.UI_HINT;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }
 
 }

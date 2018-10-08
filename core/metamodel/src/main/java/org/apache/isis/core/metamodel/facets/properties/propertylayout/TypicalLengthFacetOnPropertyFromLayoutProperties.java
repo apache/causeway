@@ -19,24 +19,27 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.Map;
 import java.util.Properties;
+
 import com.google.common.base.Strings;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
 public class TypicalLengthFacetOnPropertyFromLayoutProperties extends TypicalLengthFacetAbstract {
 
-    private final int typicalLength;
+    private final int value;
 
     public static TypicalLengthFacet create(Properties properties, FacetHolder holder) {
         final int typicalLength = typicalLength(properties);
         return typicalLength != -1? new TypicalLengthFacetOnPropertyFromLayoutProperties(typicalLength, holder): null;
     }
 
-    private TypicalLengthFacetOnPropertyFromLayoutProperties(int typicalLength, FacetHolder holder) {
+    private TypicalLengthFacetOnPropertyFromLayoutProperties(int value, FacetHolder holder) {
         super(holder, Derivation.NOT_DERIVED);
-        this.typicalLength = typicalLength;
+        this.value = value;
     }
 
     private static int typicalLength(Properties properties) {
@@ -52,6 +55,12 @@ public class TypicalLengthFacetOnPropertyFromLayoutProperties extends TypicalLen
 
     @Override
     public int value() {
-        return typicalLength;
+        return value;
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("value", value);
+    }
+
 }

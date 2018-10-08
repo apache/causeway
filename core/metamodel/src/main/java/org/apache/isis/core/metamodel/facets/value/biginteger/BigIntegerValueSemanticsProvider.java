@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.value.biginteger;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Map;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -102,4 +103,8 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
         return "BigIntegerValueSemanticsProvider: " + format;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("format", format);
+    }
 }
