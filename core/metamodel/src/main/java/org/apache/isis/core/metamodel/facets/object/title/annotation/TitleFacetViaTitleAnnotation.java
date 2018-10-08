@@ -89,19 +89,17 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
         @Override
         public String toString() {
             final List<String> parts = Lists.newArrayList();
-            if(prepend != null) {
+            if(prepend != null && !Strings.isNullOrEmpty(prepend.trim())) {
                 parts.add("prepend=" + prepend);
             }
-            if(append != null) {
+            if(append != null && !Strings.isNullOrEmpty(append.trim())) {
                 parts.add("append=" + append);
             }
-            parts.add("abbreviateTo=" + abbreviateTo);
-            if(titleEvaluator != null) {
-                parts.add("titleEvaluator=" + titleEvaluator.toString());
+            if(abbreviateTo != Integer.MAX_VALUE) {
+                parts.add("abbreviateTo=" + abbreviateTo);
             }
             return Joiner.on(";").join(parts);
         }
-
     }
 
     public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, final AdapterManager adapterManager) {
@@ -168,6 +166,8 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        attributeMap.put("components", components);
+        if(components != null && !Strings.isNullOrEmpty(components.toString())) {
+            attributeMap.put("components", components);
+        }
     }
 }

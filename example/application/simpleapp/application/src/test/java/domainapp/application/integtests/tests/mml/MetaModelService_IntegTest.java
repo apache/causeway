@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import org.approvaltests.Approvals;
 import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.UseReporter;
+import org.approvaltests.writers.ApprovalTextWriter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -57,7 +58,7 @@ public class MetaModelService_IntegTest extends DomainAppIntegTestAbstract {
 
         // then
         String asXml = jaxbService.toXml(metamodelDto);
-        Approvals.verify(asXml);
+        Approvals.verify(new ApprovalTextWriter(asXml, "xml"));
     }
 
 }

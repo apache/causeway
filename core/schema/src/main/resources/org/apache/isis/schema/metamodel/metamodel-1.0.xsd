@@ -41,23 +41,48 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="objectSpecification" type="objectSpecDto" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="domainClass" type="domainClass" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="objectSpecDto">
+    <xs:complexType name="domainClass">
         <xs:annotation>
-            <xs:documentation>Represents a type
+            <xs:documentation>Represents a domain class.
+                Corresponds to ObjectSpecification in the internal metamodel.
             </xs:documentation>
         </xs:annotation>
         <xs:complexContent>
-            <xs:extension base="facetHolderDto">
+            <xs:extension base="facetHolder">
                 <xs:sequence>
+                    <xs:element name="properties">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="prop" type="property" minOccurs="0" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="collections">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="coll" type="collection" minOccurs="0" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element name="actions">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="act" type="action" minOccurs="0" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
                 </xs:sequence>
-                <xs:attribute name="id" type="xs:string">
+                <xs:attribute name="id" type="xs:ID">
                     <xs:annotation>
                         <xs:documentation>The fully qualified class name of the underlying Java class.
+                            This is declared as 'xs:ID' so can be referenced elsewhere (using 'xs:IDREF')
+
+                            In the internal metamodel, corresponds to ObjectSpecification#getFullIdentifier()
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
@@ -65,35 +90,181 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="facetHolderDto">
+    <xs:complexType name="member">
         <xs:annotation>
-            <xs:documentation>Captures the information required to be able to invoke an action on the target(s).
+            <xs:documentation>Represents a member of a class (property, collection or action).
+                Corresponds to ObjectMember in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="facetHolder">
+                <xs:attribute name="id" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>The id of the member, which should be unique within the domain class.
+                            NB: this assumes no overloading of method names.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="property">
+        <xs:annotation>
+            <xs:documentation>Represents a property of a domain class.
+                Corresponds to OneToOneAssociation in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="member">
+                <xs:sequence>
+                    <xs:element name="type" type="xs:IDREF">
+                        <xs:annotation>
+                            <xs:documentation>A (reference to ) the type of this property, eg a String or a Customer.
+                                Corresponds to OneToOneAssociation#getSpecification() in the internal metamodel.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="collection">
+        <xs:annotation>
+            <xs:documentation>Represents a collection of a domain class.
+                Corresponds to OneToManyAssociation in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="member">
+                <xs:sequence>
+                    <xs:element name="type" type="xs:IDREF">
+                        <xs:annotation>
+                            <xs:documentation>A (reference to ) the _element_ type of this collection, eg a String or a Customer.
+                                Corresponds to OneToOneAssociation#getSpecification() in the internal metamodel.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="action">
+        <xs:annotation>
+            <xs:documentation>Represents an action of a domain class.
+                Corresponds to ObjectAction in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="member">
+                <xs:sequence>
+                    <xs:element name="returnType" type="xs:IDREF">
+                        <xs:annotation>
+                            <xs:documentation>(A reference to) the return type of this collection, eg a String or a Customer.
+                                Corresponds to ObjectAction#getReturnType() in the internal metamodel.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="params">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="param" type="param" minOccurs="0" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="param">
+        <xs:annotation>
+            <xs:documentation>Represents the parameter of an action
+                Corresponds to ObjectActionParameter in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="facetHolder">
+                <xs:sequence>
+                    <xs:element name="type" type="xs:IDREF">
+                        <xs:annotation>
+                            <xs:documentation>(A reference to) the type of this action parameter, eg a String or a Customer.
+                                For vector parameters, this is the element types of the collection parameter.
+                                Corresponds to ObjectActionParameter#getSpecification() in the internal metamodel.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:attribute name="id" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>The id of the parameter, which should be unique within the action.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="scalarParam">
+        <xs:annotation>
+            <xs:documentation>Represents a parameter of an action
+                Corresponds to OneToOneActionParameter in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="param">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="vectorParam">
+        <xs:annotation>
+            <xs:documentation>Represents a multi-valued parameter of an action
+                Corresponds to OneToManyActionParameter in the internal metamodel.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="param">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="facetHolder">
+        <xs:annotation>
+            <xs:documentation>Corresponds to FacetHolder interface in the internal metamodel.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="facets">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element name="facet" type="facetDto" minOccurs="0" maxOccurs="unbounded"/>
+                        <xs:element name="facet" type="facet" minOccurs="0" maxOccurs="unbounded"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="facetDto">
+    <xs:complexType name="facet">
         <xs:annotation>
-            <xs:documentation>Describes a facet of the metamodel, for example whether an action can be disabled, or the name of a class
+            <xs:documentation>Describes a facet of the metamodel, for example whether an action can be disabled, or the name of a class.
+                Corresponds to Facet interface in the internal metamodel.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="attr" type="facetAttributeDto" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="attr" type="facetAttr" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:string"/>
         <xs:attribute name="fqcn" type="xs:string"/>
     </xs:complexType>
 
-    <xs:complexType name="facetAttributeDto">
+    <xs:complexType name="facetAttr">
         <xs:annotation>
             <xs:documentation>Describes an attribute of a facet of the metamodel, as a simple key/value pair of strings (the key is modelled as an attribute of the value).
             </xs:documentation>
