@@ -104,20 +104,20 @@
             <xs:documentation>Describes an attribute of a facet of the metamodel, as a simple key/value pair of strings (the key is modelled as an attribute of the value).
             </xs:documentation>
         </xs:annotation>
-        <xs:sequence>
-            <xs:element name="value" minOccurs="1" maxOccurs="1">
+        <xs:complexContent>
+            <xs:extension base="xs:string">
                 <xs:annotation>
                     <xs:documentation>The value of the attribute, unique across all facet attributes of a facet.
                     </xs:documentation>
                 </xs:annotation>
-            </xs:element>
-        </xs:sequence>
-        <xs:attribute name="name" type="xs:string">
-            <xs:annotation>
-                <xs:documentation>The name of the attribute value, unique across all facet attributes of a facet.
-                </xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
+                <xs:attribute name="name" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation>The name of the attribute value, unique across all facet attributes of a facet.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 
 
