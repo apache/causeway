@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.notcontributed.derived;
 
+import java.util.Map;
 
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.NotContributed;
@@ -37,4 +38,10 @@ public class NotContributedFacetDerivedFromDomainServiceFacet extends NotContrib
     NatureOfService getNatureOfService() {
         return natureOfService;
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("natureOfService", natureOfService);
+    }
+
 }

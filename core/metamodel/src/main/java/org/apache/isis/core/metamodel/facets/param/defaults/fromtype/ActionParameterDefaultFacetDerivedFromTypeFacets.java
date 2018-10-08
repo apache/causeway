@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.defaults.fromtype;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
@@ -51,4 +53,8 @@ public class ActionParameterDefaultFacetDerivedFromTypeFacets extends ActionDefa
         return defaults;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("defaultFacets", defaultedFacets);
+    }
 }

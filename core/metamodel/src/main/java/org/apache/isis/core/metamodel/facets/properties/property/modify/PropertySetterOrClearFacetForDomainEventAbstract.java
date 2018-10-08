@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
 import java.sql.Timestamp;
+import java.util.Map;
 
 import com.google.common.base.Objects;
 
@@ -353,5 +354,10 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
         return persistenceSessionServiceInternal;
     }
 
-
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        appendAttributesTo("getterFacet", getterFacet);
+        appendAttributesTo("setterFacet", setterFacet);
+        appendAttributesTo("clearFacet", clearFacet);
+    }
 }

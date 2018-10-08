@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.value.floats;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -106,4 +107,8 @@ public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderA
         return "FloatValueSemanticsProvider: " + format;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("format", format);
+    }
 }

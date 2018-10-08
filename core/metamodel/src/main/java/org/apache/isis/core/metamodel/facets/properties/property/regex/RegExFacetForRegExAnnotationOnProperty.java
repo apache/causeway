@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.regex;
 
+import java.util.Map;
 import java.util.regex.Pattern;
+
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -78,6 +80,11 @@ public class RegExFacetForRegExAnnotationOnProperty extends RegExFacetAbstract {
 
     private int patternFlags() {
         return !caseSensitive() ? Pattern.CASE_INSENSITIVE : 0;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("pattern", pattern);
     }
 
 }

@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.all.i18n;
 
+import java.util.Map;
+
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -58,5 +60,11 @@ public class NamedFacetTranslated extends FacetAbstract implements NamedFacet {
     public boolean escaped() {
         final NamedFacet underlyingFacet = (NamedFacet) getUnderlyingFacet();
         return underlyingFacet != null && underlyingFacet.escaped();
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("context", context);
+        attributeMap.put("originalText", originalText);
     }
 }

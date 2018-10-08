@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.collections.modify;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -62,6 +63,11 @@ public class CollectionRemoveFromFacetViaMethod extends CollectionRemoveFromFace
     @Override
     protected String toStringValues() {
         return "method=" + method;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("method", method);
     }
 
 }

@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -31,7 +32,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigDecimal> implements BigDecimalValueFacet {
@@ -141,5 +141,9 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndF
         return "BigDecimalValueSemanticsProvider: " + format;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("format", format);
+    }
 
 }

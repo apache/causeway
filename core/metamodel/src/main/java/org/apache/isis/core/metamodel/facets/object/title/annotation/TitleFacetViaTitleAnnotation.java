@@ -20,10 +20,13 @@
 package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.base.Objects;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,6 +84,22 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
             final String append = annotation != null ? annotation.append() : "";
             final int abbreviateTo = annotation != null ? annotation.abbreviatedTo() : Integer.MAX_VALUE;
             return new TitleComponent(prepend, append, titleEvaluator, abbreviateTo);
+        }
+
+        @Override
+        public String toString() {
+            final List<String> parts = Lists.newArrayList();
+            if(prepend != null) {
+                parts.add("prepend=" + prepend);
+            }
+            if(append != null) {
+                parts.add("append=" + append);
+            }
+            parts.add("abbreviateTo=" + abbreviateTo);
+            if(titleEvaluator != null) {
+                parts.add("titleEvaluator=" + titleEvaluator.toString());
+            }
+            return Joiner.on(";").join(parts);
         }
 
     }
@@ -145,5 +164,10 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
             LOG.warn("Title failure", ex);
             return "Failed Title";
         }
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("components", components);
     }
 }

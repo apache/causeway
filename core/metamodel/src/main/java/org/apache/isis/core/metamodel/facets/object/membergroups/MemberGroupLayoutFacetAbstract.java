@@ -21,12 +21,12 @@ package org.apache.isis.core.metamodel.facets.object.membergroups;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 
 public abstract class MemberGroupLayoutFacetAbstract extends FacetAbstract implements MemberGroupLayoutFacet {
 
@@ -78,5 +78,13 @@ public abstract class MemberGroupLayoutFacetAbstract extends FacetAbstract imple
     @Override
     public List<String> getRight() {
         return right;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("columns", "" + columns);
+        attributeMap.put("left", left);
+        attributeMap.put("middle", middle);
+        attributeMap.put("right", right);
     }
 }

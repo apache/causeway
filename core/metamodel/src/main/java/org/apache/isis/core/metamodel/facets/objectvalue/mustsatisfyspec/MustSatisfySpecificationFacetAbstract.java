@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.Lists;
 
@@ -120,4 +121,8 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
         }
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("specifications", specifications);
+    }
 }

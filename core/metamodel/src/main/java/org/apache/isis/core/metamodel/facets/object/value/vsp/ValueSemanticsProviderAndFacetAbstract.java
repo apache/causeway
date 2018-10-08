@@ -23,6 +23,7 @@ import java.text.DecimalFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -357,6 +358,16 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
 
     protected static Clock getClock() {
         return Clock.getInstance();
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("adaptedClass", adaptedClass);
+        attributeMap.put("typicalLength", this.typicalLength);
+        attributeMap.put("maxLength", this.maxLength);
+        attributeMap.put("immutable", this.immutable);
+        attributeMap.put("equalByContent", this.equalByContent);
+        attributeMap.put("defaultValue", this.defaultValue);
     }
 
 }

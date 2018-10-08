@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.facets.actions.defaults.method;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,14 +34,14 @@ import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInv
 
 public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract implements ImperativeFacet {
 
-    private final Method defaultMethod;
+    private final Method method;
 
     @SuppressWarnings("unused")
     private final Method actionMethod;
 
-    public ActionDefaultsFacetViaMethod(final Method defaultMethod, final FacetHolder holder) {
+    public ActionDefaultsFacetViaMethod(final Method method, final FacetHolder holder) {
         super(holder, Derivation.NOT_DERIVED);
-        this.defaultMethod = defaultMethod;
+        this.method = method;
         this.actionMethod = determineActionMethod(holder);
     }
 
@@ -61,7 +63,7 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
      */
     @Override
     public List<Method> getMethods() {
-        return Collections.singletonList(defaultMethod);
+        return Collections.singletonList(method);
     }
 
     @Override
@@ -71,12 +73,16 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
 
     @Override
     public Object[] getDefaults(final ObjectAdapter owningAdapter) {
-        return (Object[]) ObjectAdapter.InvokeUtils.invoke(defaultMethod, owningAdapter);
+        return (Object[]) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
     }
 
     @Override
     protected String toStringValues() {
-        return "method=" + defaultMethod;
+        return "method=" + method;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+    }
 }

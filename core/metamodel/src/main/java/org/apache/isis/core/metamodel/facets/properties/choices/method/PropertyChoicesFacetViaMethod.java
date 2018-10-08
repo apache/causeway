@@ -22,17 +22,18 @@ package org.apache.isis.core.metamodel.facets.properties.choices.method;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.facets.CollectionUtils;
-import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 
 public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract implements ImperativeFacet {
 
@@ -89,6 +90,12 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
 
     protected AdapterManager getAdapterManager() {
         return adapterManager;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+        attributeMap.put("choicesType", choicesClass);
     }
 
 }

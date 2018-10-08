@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -76,4 +77,8 @@ public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet extend
                 .getReason();
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("specifications", specifications);
+    }
 }

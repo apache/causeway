@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.regex;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 
@@ -36,4 +38,8 @@ public class TitleFacetFormattedByRegex extends TitleFacetAbstract {
         return regexFacet.format(object.titleString());
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("regexFacet", regexFacet);
+    }
 }

@@ -17,21 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.promptStyle;
+package org.apache.isis.core.metamodel.facetapi;
 
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import java.util.Map;
 
-public class PromptStyleFacetFallBackToInline extends PromptStyleFacetAbstract {
+import org.apache.isis.applib.services.metamodel.MetaModelService6;
 
-    public PromptStyleFacetFallBackToInline(final FacetHolder holder) {
-        super(holder, Derivation.DERIVED);
-    }
+/**
+ * For serialization of metamodel into XML, see {@link org.apache.isis.applib.services.metamodel.MetaModelService6#exportMetaModel(MetaModelService6.Flags)}.
+ */
+public interface FacetWithAttributes {
 
-    @Override
-    public PromptStyle value() {
-        return PromptStyle.INLINE;
-    }
-
-
+    void appendAttributesTo(Map<String,Object> attributeMap);
 }

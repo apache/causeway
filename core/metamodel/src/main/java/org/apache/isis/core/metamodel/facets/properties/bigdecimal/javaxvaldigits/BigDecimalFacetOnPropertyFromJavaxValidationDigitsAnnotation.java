@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
@@ -48,4 +50,11 @@ public class BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotation extend
     public Integer getScale() {
         return scale;
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("precision", precision);
+        attributeMap.put("scale", scale);
+    }
+
 }

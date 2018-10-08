@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.typicallen.annotation;
 
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -36,6 +37,11 @@ public class TypicalLengthFacetOnPropertyFromProperties extends TypicalLengthFac
     @Override
     public int value() {
         return value;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("value", value);
     }
 
 }

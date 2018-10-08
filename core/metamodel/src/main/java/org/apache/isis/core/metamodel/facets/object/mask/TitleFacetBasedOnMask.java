@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.mask;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
@@ -46,4 +48,9 @@ public class TitleFacetBasedOnMask extends TitleFacetAbstract {
         }
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("maskFacet", maskFacet);
+        attributeMap.put("underlyingTitleFacet", underlyingTitleFacet);
+    }
 }

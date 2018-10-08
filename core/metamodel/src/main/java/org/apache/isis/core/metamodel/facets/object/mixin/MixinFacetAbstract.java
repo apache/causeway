@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.mixin;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -127,4 +128,9 @@ public abstract class MixinFacetAbstract extends SingleValueFacetAbstract<String
         return servicesInjector.lookupService(TitleService.class);
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("mixinType", mixinType);
+        attributeMap.put("constructorType", constructorType);
+    }
 }

@@ -23,6 +23,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Currency;
+import java.util.Map;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -32,8 +33,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
-import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
+import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Money> implements MoneyValueFacet {
@@ -221,6 +222,11 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     @Override
     public String toString() {
         return "MoneyValueSemanticsProvider: " + getDefaultCurrencyCode();
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("defaultCurrencyCode", defaultCurrencyCode);
     }
 
 }

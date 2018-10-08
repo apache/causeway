@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.Map;
 import java.util.Properties;
 
 import com.google.common.base.Strings;
@@ -57,4 +58,10 @@ public class PromptStyleFacetOnPropertyFromLayoutProperties extends PromptStyleF
     public PromptStyle value() {
         return promptStyle;
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("promptStyle", promptStyle);
+    }
+
 }

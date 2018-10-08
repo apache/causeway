@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.update.modify;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -71,6 +72,10 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
     }
 
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+    }
 
 
 }

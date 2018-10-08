@@ -18,12 +18,17 @@
  */
 package org.apache.isis.core.metamodel.services.metamodel;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
@@ -39,9 +44,9 @@ import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.MetaModelService6;
+import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
@@ -56,6 +61,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.schema.metamodel.v1.FacetAttributeDto;
 import org.apache.isis.schema.metamodel.v1.FacetDto;
 import org.apache.isis.schema.metamodel.v1.FacetHolderDto;
@@ -290,11 +296,11 @@ public class MetaModelServiceDefault implements MetaModelService6 {
     AppManifestProvider appManifestProvider;
 
     @Override
-    public MetamodelDto exportMetaModel() {
+    public MetamodelDto exportMetaModel(final Flags flags) {
         MetamodelDto metamodelDto = new MetamodelDto();
 
         for (final ObjectSpecification specification : specificationLookup.allSpecifications()) {
-            ObjectSpecificationDto specDto = asDto(specification);
+            ObjectSpecificationDto specDto = asDto(specification, flags);
             metamodelDto.getObjectSpecification().add(specDto);
         }
 
@@ -303,47 +309,160 @@ public class MetaModelServiceDefault implements MetaModelService6 {
         return metamodelDto;
     }
 
-    private ObjectSpecificationDto asDto(final ObjectSpecification specification) {
+    private ObjectSpecificationDto asDto(
+            final ObjectSpecification specification,
+            final Flags flags) {
 
         final ObjectSpecificationDto specDto = new ObjectSpecificationDto();
         specDto.setId(specification.getFullIdentifier());
         specDto.setFacets(new FacetHolderDto.Facets());
 
-        addFacets(specification, specDto.getFacets());
+        addFacets(specification, specDto.getFacets(), flags);
 
         return specDto;
     }
 
-    private void addFacets(final FacetHolder facetHolder, final FacetHolderDto.Facets facets) {
+    private void addFacets(
+            final FacetHolder facetHolder,
+            final FacetHolderDto.Facets facets,
+            final Flags flags) {
         final Class<? extends Facet>[] facetTypes = facetHolder.getFacetTypes();
         for (final Class<? extends Facet> facetType : facetTypes) {
             final Facet facet = facetHolder.getFacet(facetType);
-            final FacetDto facetDto = asDto(facet);
-            facets.getFacet().add(facetDto);
+            if(!facet.isNoop() || !flags.isIgnoreNoop()) {
+                facets.getFacet().add(asDto(facet));
+            }
         }
         sortFacets(facets.getFacet());
     }
 
-    private FacetDto asDto(final Facet facet) {
+    private FacetDto asDto(
+            final Facet facet) {
         final FacetDto facetDto = new FacetDto();
         facetDto.setId(facet.facetType().getCanonicalName());
         facetDto.setFqcn(facet.getClass().getCanonicalName());
-        facetDto.setAttributes(new FacetDto.Attributes());
 
         addFacetAttributes(facet, facetDto);
 
         return facetDto;
     }
 
-    private void addFacetAttributes(final Facet facet, final FacetDto facetDto) {
-        if(facet instanceof SingleStringValueFacet) {
-            SingleStringValueFacet ssvf = (SingleStringValueFacet) facet;
-            FacetAttributeDto attributeDto = new FacetAttributeDto();
-            attributeDto.setName(ssvf.getClass().getName());
-            attributeDto.setValue(ssvf.value());
-            facetDto.getAttributes().getAttribute().add(attributeDto);
+    private void addFacetAttributes(
+            final Facet facet,
+            final FacetDto facetDto) {
+
+        Map<String, Object> attributeMap = Maps.newTreeMap();
+        facet.appendAttributesTo(attributeMap);
+
+        for (final String key : attributeMap.keySet()) {
+            Object attributeObj = attributeMap.get(key);
+            if(attributeObj == null) {
+                continue;
+            }
+
+            String str = asStr(attributeObj);
+            addAttribute(facetDto,key, str);
         }
-        sortFacetAttributes(facetDto.getAttributes().getAttribute());
+
+        sortFacetAttributes(facetDto.getAttribute());
+    }
+
+    private String asStr(final Object attributeObj) {
+        String str;
+        if(attributeObj instanceof Method) {
+            str = asStr((Method) attributeObj);
+        } else if(attributeObj instanceof Enum) {
+            str = asStr((Enum) attributeObj);
+        } else if(attributeObj instanceof Class) {
+            str = asStr((Class) attributeObj);
+        } else if(attributeObj instanceof Specification) {
+            str = asStr((Specification) attributeObj);
+        } else if(attributeObj instanceof Facet) {
+            str = asStr((Facet) attributeObj);
+        } else if(attributeObj instanceof JdoNamedQuery) {
+            str = asStr((JdoNamedQuery) attributeObj);
+        } else if(attributeObj instanceof Pattern) {
+            str = asStr((Pattern) attributeObj);
+        } else if(attributeObj instanceof CommandDtoProcessor) {
+            str = asStr((CommandDtoProcessor) attributeObj);
+        } else if(attributeObj instanceof ObjectSpecification) {
+            str = asStr((ObjectSpecification) attributeObj);
+        } else if(attributeObj instanceof ObjectMember) {
+            str = asStr((ObjectMember) attributeObj);
+        } else if(attributeObj instanceof List) {
+            str = asStr((List<?>) attributeObj);
+        } else if(attributeObj instanceof Object[]) {
+            str = asStr((Object[]) attributeObj);
+        } else  {
+            str = "" + attributeObj;
+        }
+        return str;
+    }
+
+    private String asStr(final Specification attributeObj) {
+        return attributeObj.getClass().getName();
+    }
+
+    private String asStr(final ObjectSpecification attributeObj) {
+        return attributeObj.getFullIdentifier();
+    }
+
+    private String asStr(final JdoNamedQuery attributeObj) {
+        return attributeObj.getName();
+    }
+
+    private String asStr(final CommandDtoProcessor attributeObj) {
+        return attributeObj.getClass().getName();
+    }
+
+    private String asStr(final Pattern attributeObj) {
+        return attributeObj.pattern();
+    }
+
+    private String asStr(final Facet attributeObj) {
+        return attributeObj.getClass().getName();
+    }
+
+    private String asStr(final ObjectMember attributeObj) {
+        return attributeObj.getId();
+    }
+
+    private String asStr(final Class attributeObj) {
+        return attributeObj.getCanonicalName();
+    }
+
+    private String asStr(final Enum attributeObj) {
+        return attributeObj.name();
+    }
+
+    private String asStr(final Method attributeObj) {
+        return attributeObj.toGenericString();
+    }
+
+    private String asStr(final Object[] list) {
+        List<String> strings = Lists.newArrayList();
+        for (final Object o : list) {
+            String s = asStr(o);
+            strings.add(s);
+        }
+        return Joiner.on(",").join(strings);
+    }
+
+    private String asStr(final List<?> list) {
+        List<String> strings = Lists.newArrayList();
+        for (final Object o : list) {
+            String s = asStr(o);
+            strings.add(s);
+        }
+        return Joiner.on(",").join(strings);
+    }
+
+    private void addAttribute(
+            final FacetDto facetDto, final String key, final String str) {
+        FacetAttributeDto attributeDto = new FacetAttributeDto();
+        attributeDto.setName(key);
+        attributeDto.setValue(str);
+        facetDto.getAttribute().add(attributeDto);
     }
 
     private void sortFacetAttributes(final List<FacetAttributeDto> attributes) {

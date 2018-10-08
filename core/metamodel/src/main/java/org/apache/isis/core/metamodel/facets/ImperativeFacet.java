@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.Lists;
 
@@ -71,6 +72,7 @@ public interface ImperativeFacet extends Facet {
      * </pre>
      */
     public List<Method> getMethods();
+
 
     public static enum Intent {
         CHECK_IF_HIDDEN,
@@ -171,6 +173,16 @@ public interface ImperativeFacet extends Facet {
             }
             throw new IllegalArgumentException(member.getIdentifier().toClassAndNameIdentityString() +  ": unable to determine intent of " + method.getName());
         }
+
+        public static void appendAttributesTo(ImperativeFacet facet, final Map<String, Object> attributeMap) {
+            List<Method> methods = facet.getMethods();
+            attributeMap.put("methods", methods);
+            for (Method method : methods) {
+                Intent intent = facet.getIntent(method);
+                attributeMap.put("intent." + method.getName(), intent);
+            }
+        }
+
     }
 
 }

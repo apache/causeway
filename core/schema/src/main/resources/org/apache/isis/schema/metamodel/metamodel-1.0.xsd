@@ -87,13 +87,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="attributes">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="attribute" type="facetAttributeDto" minOccurs="0" maxOccurs="unbounded"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
+            <xs:element name="attribute" type="facetAttributeDto" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="id" type="xs:string"/>
         <xs:attribute name="fqcn" type="xs:string"/>
@@ -104,7 +98,7 @@
             <xs:documentation>Describes an attribute of a facet of the metamodel, as a simple key/value pair of strings (the key is modelled as an attribute of the value).
             </xs:documentation>
         </xs:annotation>
-        <xs:complexContent>
+        <xs:simpleContent>
             <xs:extension base="xs:string">
                 <xs:annotation>
                     <xs:documentation>The value of the attribute, unique across all facet attributes of a facet.
@@ -117,7 +111,7 @@
                     </xs:annotation>
                 </xs:attribute>
             </xs:extension>
-        </xs:complexContent>
+        </xs:simpleContent>
     </xs:complexType>
 
 

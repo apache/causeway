@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
+import java.util.Map;
+
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.When;
@@ -80,5 +82,8 @@ public abstract class DisabledFacetAbstractImpl extends DisabledFacetAbstract {
         return reason;
     }
 
-
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("reason", reason);
+    }
 }

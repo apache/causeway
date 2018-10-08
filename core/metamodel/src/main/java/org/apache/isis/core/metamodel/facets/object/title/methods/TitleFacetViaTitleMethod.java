@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.title.methods;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,4 +80,10 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
             return "Failed Title";
         }
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+    }
+
 }

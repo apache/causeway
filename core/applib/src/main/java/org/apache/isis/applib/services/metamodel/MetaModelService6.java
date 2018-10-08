@@ -23,7 +23,29 @@ import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 public interface MetaModelService6 extends MetaModelService5 {
 
+    public static class Flags {
+
+        private static final int IGNORE_NOOP = 1;
+
+        private final int mask;
+
+        public Flags() {
+            this(0);
+        }
+        private Flags(final int mask) {
+            this.mask = mask;
+        }
+
+        public Flags ignoreNoop() {
+            return new Flags(mask | IGNORE_NOOP);
+        }
+
+        public boolean isIgnoreNoop() {
+            return (mask & IGNORE_NOOP) == IGNORE_NOOP;
+        }
+    }
+
     @Programmatic
-    MetamodelDto exportMetaModel();
+    MetamodelDto exportMetaModel(final Flags flags);
 
 }

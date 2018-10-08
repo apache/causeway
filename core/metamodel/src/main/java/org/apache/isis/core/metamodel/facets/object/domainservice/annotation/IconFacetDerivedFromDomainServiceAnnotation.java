@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
+import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -37,4 +38,10 @@ public class IconFacetDerivedFromDomainServiceAnnotation extends IconFacetAbstra
     public String iconName(ObjectAdapter object) {
         return repositoryFor.getName();
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("repositoryFor", repositoryFor);
+    }
+
 }

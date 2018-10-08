@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -75,6 +76,11 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
 
     protected AdapterManager getAdapterManager() {
         return adapterManager;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }
 
 }
