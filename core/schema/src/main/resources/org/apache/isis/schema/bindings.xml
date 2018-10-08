@@ -76,4 +76,17 @@
             <namespace:prefix name="cmd" />
         </jaxb:bindings>
     </jaxb:bindings>
+
+    <jaxb:bindings schemaLocation="metamodel/metamodel-1.0.xsd">
+        <jaxb:schemaBindings>
+            <!--
+            we don't include the minor version, because the
+            generated Java class will be backwards compatible
+            -->
+            <jaxb:package name="org.apache.isis.schema.metamodel.v1"/>
+        </jaxb:schemaBindings>
+        <jaxb:bindings>
+            <namespace:prefix name="mml" />
+        </jaxb:bindings>
+    </jaxb:bindings>
 </jaxb:bindings>

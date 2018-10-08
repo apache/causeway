@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.services.metamodel;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -37,7 +38,10 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
-import org.apache.isis.applib.services.metamodel.MetaModelService5;
+import org.apache.isis.applib.services.metamodel.MetaModelService6;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
@@ -52,12 +56,17 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.schema.metamodel.v1.FacetAttributeDto;
+import org.apache.isis.schema.metamodel.v1.FacetDto;
+import org.apache.isis.schema.metamodel.v1.FacetHolderDto;
+import org.apache.isis.schema.metamodel.v1.MetamodelDto;
+import org.apache.isis.schema.metamodel.v1.ObjectSpecificationDto;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class MetaModelServiceDefault implements MetaModelService5 {
+public class MetaModelServiceDefault implements MetaModelService6 {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(MetaModelServiceDefault.class);
@@ -279,5 +288,89 @@ public class MetaModelServiceDefault implements MetaModelService5 {
 
     @javax.inject.Inject
     AppManifestProvider appManifestProvider;
+
+    @Override
+    public MetamodelDto exportMetaModel() {
+        MetamodelDto metamodelDto = new MetamodelDto();
+
+        for (final ObjectSpecification specification : specificationLookup.allSpecifications()) {
+            ObjectSpecificationDto specDto = asDto(specification);
+            metamodelDto.getObjectSpecification().add(specDto);
+        }
+
+        sortSpecs(metamodelDto.getObjectSpecification());
+
+        return metamodelDto;
+    }
+
+    private ObjectSpecificationDto asDto(final ObjectSpecification specification) {
+
+        final ObjectSpecificationDto specDto = new ObjectSpecificationDto();
+        specDto.setId(specification.getFullIdentifier());
+        specDto.setFacets(new FacetHolderDto.Facets());
+
+        addFacets(specification, specDto.getFacets());
+
+        return specDto;
+    }
+
+    private void addFacets(final FacetHolder facetHolder, final FacetHolderDto.Facets facets) {
+        final Class<? extends Facet>[] facetTypes = facetHolder.getFacetTypes();
+        for (final Class<? extends Facet> facetType : facetTypes) {
+            final Facet facet = facetHolder.getFacet(facetType);
+            final FacetDto facetDto = asDto(facet);
+            facets.getFacet().add(facetDto);
+        }
+        sortFacets(facets.getFacet());
+    }
+
+    private FacetDto asDto(final Facet facet) {
+        final FacetDto facetDto = new FacetDto();
+        facetDto.setId(facet.facetType().getCanonicalName());
+        facetDto.setFqcn(facet.getClass().getCanonicalName());
+        facetDto.setAttributes(new FacetDto.Attributes());
+
+        addFacetAttributes(facet, facetDto);
+
+        return facetDto;
+    }
+
+    private void addFacetAttributes(final Facet facet, final FacetDto facetDto) {
+        if(facet instanceof SingleStringValueFacet) {
+            SingleStringValueFacet ssvf = (SingleStringValueFacet) facet;
+            FacetAttributeDto attributeDto = new FacetAttributeDto();
+            attributeDto.setName(ssvf.getClass().getName());
+            attributeDto.setValue(ssvf.value());
+            facetDto.getAttributes().getAttribute().add(attributeDto);
+        }
+        sortFacetAttributes(facetDto.getAttributes().getAttribute());
+    }
+
+    private void sortFacetAttributes(final List<FacetAttributeDto> attributes) {
+        Collections.sort(attributes, new Comparator<FacetAttributeDto>() {
+            @Override
+            public int compare(final FacetAttributeDto o1, final FacetAttributeDto o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+    }
+
+    private static void sortSpecs(final List<ObjectSpecificationDto> specifications) {
+        Collections.sort(specifications, new Comparator<ObjectSpecificationDto>() {
+            @Override
+            public int compare(final ObjectSpecificationDto o1, final ObjectSpecificationDto o2) {
+                return o1.getId().compareTo(o2.getId());
+            }
+        });
+    }
+
+    private void sortFacets(final List<FacetDto> facets) {
+        Collections.sort(facets, new Comparator<FacetDto>() {
+            @Override public int compare(final FacetDto o1, final FacetDto o2) {
+                return o1.getId().compareTo(o2.getId());
+            }
+        });
+    }
+
 
 }

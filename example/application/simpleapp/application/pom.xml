@@ -108,7 +108,7 @@
             <artifactId>isis-core-wrapper</artifactId>
         </dependency>
 
-        <!-- test -->
+        <!-- TESTS -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>simpleapp-module-simple</artifactId>
@@ -122,6 +122,26 @@
             <type>pom</type>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.approvaltests</groupId>
+            <artifactId>approvaltests</artifactId>
+            <version>2.0.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 
