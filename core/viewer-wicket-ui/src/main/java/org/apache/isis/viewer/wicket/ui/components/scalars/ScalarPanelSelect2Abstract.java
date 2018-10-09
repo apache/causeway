@@ -65,23 +65,20 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
         return select2;
     }
 
-//    private Label createScalarName(final String id) {
-//        final String labelCaption = getRendering().getLabelCaption(select2.component());
-//        return createScalarName(id, labelCaption);
-//    }
-
     protected FormGroup createFormGroupAndName(
             final FormComponent<?> component,
             final String formGroupId, final String nameId) {
         final FormGroup formGroup = new FormGroup(formGroupId, component);
         final String describedAs = getModel().getDescribedAs();
-        if(describedAs != null) {
-            Tooltips.addTooltip(formGroup, describedAs);
-        }
         formGroup.add(component);
 
         final String labelCaption = getRendering().getLabelCaption(select2.component());
         final Label scalarName = createScalarName(nameId, labelCaption);
+        
+        if(describedAs != null) {
+            Tooltips.addTooltip(scalarName, describedAs);
+        }
+        
         formGroup.addOrReplace(scalarName);
         return formGroup;
     }

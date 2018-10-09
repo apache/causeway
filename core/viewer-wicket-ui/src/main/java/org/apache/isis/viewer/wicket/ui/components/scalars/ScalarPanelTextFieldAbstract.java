@@ -125,19 +125,11 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         addStandardSemantics();
 
-
-
         //
         // read-only/dialog edit
         //
 
         final MarkupContainer scalarIfRegularFormGroup = createScalarIfRegularFormGroup();
-
-        final String describedAs = getModel().getDescribedAs();
-        if(describedAs != null) {
-            Tooltips.addTooltip(scalarIfRegularFormGroup, describedAs);
-        }
-
         return scalarIfRegularFormGroup;
     }
 
@@ -170,7 +162,12 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
         final String labelCaption = getRendering().getLabelCaption(textField);
         final Label scalarName = createScalarName(ID_SCALAR_NAME, labelCaption);
+        final String describedAs = getModel().getDescribedAs();
 
+        if(describedAs != null) {
+            Tooltips.addTooltip(scalarName, describedAs);
+        }
+        
         formGroup.add(scalarName);
 
         return formGroup;
