@@ -56,7 +56,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.schema.metamodel.v1.Action;
 import org.apache.isis.schema.metamodel.v1.Collection;
-import org.apache.isis.schema.metamodel.v1.DomainClass;
+import org.apache.isis.schema.metamodel.v1.DomainClassDto;
 import org.apache.isis.schema.metamodel.v1.FacetAttr;
 import org.apache.isis.schema.metamodel.v1.Member;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
@@ -78,11 +78,11 @@ class MetaModelExporter {
     }
 
     /**
-     * The metamodel is populated in two phases, first to create a {@link DomainClass} for each ObjectSpecification,
+     * The metamodel is populated in two phases, first to create a {@link DomainClassDto} for each ObjectSpecification,
      * and then to populate the members of those domain class types.
      *
      * <p>
-     *     This is because the members (and action parameters) all reference the {@link DomainClass}s, so these need
+     *     This is because the members (and action parameters) all reference the {@link DomainClassDto}s, so these need
      *     to exist first.
      * </p>
      */
@@ -91,7 +91,7 @@ class MetaModelExporter {
 
         // phase 1: create a domainClassType for each ObjectSpecification
         // these are added into a map for lookups in phase 2
-        Map<ObjectSpecification, DomainClass> domainClassByObjectSpec = Maps.newHashMap();
+        Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = Maps.newHashMap();
         for (final ObjectSpecification specification : specificationLookup.allSpecifications()) {
             if(notInPackagePrefixes(specification, config)) {
                 continue;
@@ -109,7 +109,7 @@ class MetaModelExporter {
                 continue;
             }
 
-            DomainClass domainClassType = asXsdType(specification, config);
+            DomainClassDto domainClassType = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClassType);
         }
 
@@ -120,11 +120,11 @@ class MetaModelExporter {
         }
 
         // phase 3: now copy all domain classes into the metamodel
-        for (final DomainClass domainClass : Lists.newArrayList(domainClassByObjectSpec.values())) {
-            metamodelDto.getDomainClass().add(domainClass);
+        for (final DomainClassDto domainClass : Lists.newArrayList(domainClassByObjectSpec.values())) {
+            metamodelDto.getDomainClassDto().add(domainClass);
         }
 
-        sortDomainClasses(metamodelDto.getDomainClass());
+        sortDomainClasses(metamodelDto.getDomainClassDto());
 
         return metamodelDto;
     }
@@ -146,11 +146,11 @@ class MetaModelExporter {
         return false;
     }
 
-    private DomainClass asXsdType(
+    private DomainClassDto asXsdType(
             final ObjectSpecification specification,
             final MetaModelService6.Config config) {
 
-        final DomainClass domainClass = new DomainClass();
+        final DomainClassDto domainClass = new DomainClassDto();
 
         domainClass.setId(specification.getFullIdentifier());
 
@@ -163,10 +163,10 @@ class MetaModelExporter {
 
     private void addFacetsAndMembersTo(
             final ObjectSpecification specification,
-            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final MetaModelService6.Config config) {
 
-        final DomainClass domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
+        final DomainClassDto domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
         if(domainClass.getFacets() == null) {
             domainClass.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
         }
@@ -198,14 +198,14 @@ class MetaModelExporter {
 
     private void addProperties(
             final ObjectSpecification specification,
-            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final MetaModelService6.Config config) {
-        final DomainClass domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
+        final DomainClassDto domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
 
         final List<ObjectAssociation> oneToOneAssociations =
                 specification.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.PROPERTIES);
         if(domainClass.getProperties() == null) {
-            domainClass.setProperties(new DomainClass.Properties());
+            domainClass.setProperties(new DomainClassDto.Properties());
         }
         final List<Property> properties = domainClass.getProperties().getProp();
         for (final ObjectAssociation association : oneToOneAssociations) {
@@ -217,13 +217,13 @@ class MetaModelExporter {
 
     private void addCollections(
             final ObjectSpecification specification,
-            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final MetaModelService6.Config config) {
-        final DomainClass domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
+        final DomainClassDto domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
         final List<ObjectAssociation> oneToManyAssociations =
                 specification.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.COLLECTIONS);
         if(domainClass.getCollections() == null) {
-            domainClass.setCollections(new DomainClass.Collections());
+            domainClass.setCollections(new DomainClassDto.Collections());
         }
         final List<Collection> collections = domainClass.getCollections().getColl();
         for (final ObjectAssociation association : oneToManyAssociations) {
@@ -235,13 +235,13 @@ class MetaModelExporter {
 
     private void addActions(
             final ObjectSpecification specification,
-            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final MetaModelService6.Config config) {
-        final DomainClass domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
+        final DomainClassDto domainClass = lookupDomainClass(specification, domainClassByObjectSpec, config);
         final List<ObjectAction> objectActions =
                 specification.getObjectActions(Contributed.INCLUDED);
         if(domainClass.getActions() == null) {
-            domainClass.setActions(new DomainClass.Actions());
+            domainClass.setActions(new DomainClassDto.Actions());
         }
         final List<Action> actions = domainClass.getActions().getAct();
         for (final ObjectAction action : objectActions) {
@@ -252,14 +252,14 @@ class MetaModelExporter {
 
     private Property asXsdType(
             final OneToOneAssociation otoa,
-            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final MetaModelService6.Config config) {
 
         Property propertyType = new Property();
         propertyType.setId(otoa.getId());
         propertyType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
         final ObjectSpecification specification = otoa.getSpecification();
-        final DomainClass value = lookupDomainClass(specification, domainClassByObjectSpec, config);
+        final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
         propertyType.setType(value);
 
         addFacets(otoa, propertyType.getFacets(), config);
@@ -268,13 +268,13 @@ class MetaModelExporter {
 
     private Collection asXsdType(
             final OneToManyAssociation otoa,
-            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final MetaModelService6.Config config) {
         Collection collectionType = new Collection();
         collectionType.setId(otoa.getId());
         collectionType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
         final ObjectSpecification specification = otoa.getSpecification();
-        final DomainClass value = lookupDomainClass(specification, domainClassByObjectSpec, config);
+        final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
         collectionType.setType(value);
 
         addFacets(otoa, collectionType.getFacets(), config);
@@ -283,7 +283,7 @@ class MetaModelExporter {
 
     private Action asXsdType(
             final ObjectAction oa,
-            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final MetaModelService6.Config config) {
         Action actionType = new Action();
         actionType.setId(oa.getId());
@@ -291,7 +291,7 @@ class MetaModelExporter {
         actionType.setParams(new Action.Params());
 
         final ObjectSpecification specification = oa.getReturnType();
-        final DomainClass value = lookupDomainClass(specification, domainClassByObjectSpec, config);
+        final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
         actionType.setReturnType(value);
 
         addFacets(oa, actionType.getFacets(), config);
@@ -304,13 +304,13 @@ class MetaModelExporter {
         return actionType;
     }
 
-    private DomainClass lookupDomainClass(
+    private DomainClassDto lookupDomainClass(
             final ObjectSpecification specification,
-            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final MetaModelService6.Config config) {
-        DomainClass value = domainClassByObjectSpec.get(specification);
+        DomainClassDto value = domainClassByObjectSpec.get(specification);
         if(value == null) {
-            final DomainClass domainClass = asXsdType(specification, config);
+            final DomainClassDto domainClass = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClass);
             value = domainClass;
         }
@@ -319,7 +319,7 @@ class MetaModelExporter {
 
     private Param asXsdType(
             final ObjectActionParameter parameter,
-            final Map<ObjectSpecification, DomainClass> domainClassByObjectSpec,
+            final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec,
             final MetaModelService6.Config config) {
 
         Param parameterType = parameter instanceof OneToOneActionParameter
@@ -329,7 +329,7 @@ class MetaModelExporter {
         parameterType.setFacets(new org.apache.isis.schema.metamodel.v1.FacetHolder.Facets());
 
         final ObjectSpecification specification = parameter.getSpecification();
-        final DomainClass value = lookupDomainClass(specification, domainClassByObjectSpec, config);
+        final DomainClassDto value = lookupDomainClass(specification, domainClassByObjectSpec, config);
         parameterType.setType(value);
 
         addFacets(parameter, parameterType.getFacets(), config);
@@ -405,10 +405,10 @@ class MetaModelExporter {
         });
     }
 
-    private static void sortDomainClasses(final List<DomainClass> specifications) {
-        Collections.sort(specifications, new Comparator<DomainClass>() {
+    private static void sortDomainClasses(final List<DomainClassDto> specifications) {
+        Collections.sort(specifications, new Comparator<DomainClassDto>() {
             @Override
-            public int compare(final DomainClass o1, final DomainClass o2) {
+            public int compare(final DomainClassDto o1, final DomainClassDto o2) {
                 return o1.getId().compareTo(o2.getId());
             }
         });

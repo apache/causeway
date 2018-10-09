@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.integtests.tests.smoke;
+package domainapp.application.integtests.smoke;
 
 import java.util.List;
 
