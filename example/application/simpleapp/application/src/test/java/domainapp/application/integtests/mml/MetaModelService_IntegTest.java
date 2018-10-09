@@ -18,6 +18,7 @@
  */
 package domainapp.application.integtests.mml;
 
+import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -94,7 +95,7 @@ public class MetaModelService_IntegTest extends DomainAppIntegTestAbstract {
     @Test
     public void _2_verify() throws Exception {
 
-        assumeThat(System.getProperty("lockdown.verify"), is(notNullValue()));
+        //assumeThat(System.getProperty("lockdown.verify"), is(notNullValue()));
 
         // when
         MetamodelDto metamodelDto =
@@ -116,9 +117,31 @@ public class MetaModelService_IntegTest extends DomainAppIntegTestAbstract {
 
     private void verifyClass(final DomainClassDto domainClass) {
         String asXml = jaxbService.toXml(domainClass);
-        verify(new ApprovalTextWriter(asXml, "xml"), new StackTraceNamer() {
+        verify(new ApprovalTextWriter(asXml, "xml"){
+            @Override public String writeReceivedFile(final String received) throws Exception {
+                return super.writeReceivedFile(received);
+            }
+
+            @Override public String getReceivedFilename(final String base) {
+                return toFilename("received", base);
+            }
+
+            @Override public String getApprovalFilename(final String base) {
+                return toFilename("approved", base);
+            }
+
+            private String toFilename(final String prefix, final String base) {
+                final File file = new File(base);
+                final File parentFile = file.getParentFile();
+                final String localName = file.getName();
+                final File newDir = new File(parentFile, prefix);
+                final File newFile = new File(newDir, localName + ".xml");
+                return newFile.toString();
+            }
+
+        }, new StackTraceNamer() {
             @Override public String getApprovalName() {
-                return "_" + domainClass.getId();
+                return domainClass.getId();
             }
         }, getReporter());
     }
