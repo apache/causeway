@@ -253,7 +253,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="facets">
+            <xs:element name="facets" minOccurs="0">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="facet" type="facet" minOccurs="0" maxOccurs="unbounded"/>
