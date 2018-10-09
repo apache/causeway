@@ -23,85 +23,84 @@
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <xs:element name="metamodelDto">
-        <xs:annotation>
-            <xs:documentation>Represents v1.0 of this schema (as per majorVersion.minorVersion @default attribute, below)
-            </xs:documentation>
-        </xs:annotation>
         <xs:complexType>
-            <xs:sequence>
-                <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
-                    <xs:annotation>
-                        <xs:documentation>The major version of the schema that an XML instance was created using.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="0">
-                    <xs:annotation>
-                        <xs:documentation>The minor version of the schema that an XML instance was created using.
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="domainClass" type="domainClass" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+                <xs:element ref="domainClassDto"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="domainClass">
-        <xs:annotation>
-            <xs:documentation>Represents a domain class.
-                Corresponds to ObjectSpecification in the internal metamodel.
-            </xs:documentation>
-        </xs:annotation>
-        <xs:complexContent>
-            <xs:extension base="facetHolder">
-                <xs:sequence>
-                    <xs:element name="properties" minOccurs="0">
+    <xs:element name="domainClassDto">
+        <xs:complexType>
+            <xs:annotation>
+                <xs:documentation>Represents a domain class.
+                    Corresponds to ObjectSpecification in the internal metamodel.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:complexContent>
+                <xs:extension base="facetHolder">
+                    <xs:sequence>
+                        <xs:element name="majorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="1">
+                            <xs:annotation>
+                                <xs:documentation>The major version of the schema that an XML instance was created using.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="minorVersion" type="xs:string" minOccurs="0" maxOccurs="1" default="0">
+                            <xs:annotation>
+                                <xs:documentation>The minor version of the schema that an XML instance was created using.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="properties" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Optional because domain services have properties.
+                                </xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="prop" type="property" minOccurs="0" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="collections" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>Optional because domain services have collections.
+                                </xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="coll" type="collection" minOccurs="0" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="actions" minOccurs="0">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="act" type="action" minOccurs="0" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="id" type="xs:ID">
                         <xs:annotation>
-                            <xs:documentation>Optional because domain services have properties.
-                            </xs:documentation>
-                        </xs:annotation>
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name="prop" type="property" minOccurs="0" maxOccurs="unbounded"/>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
-                    <xs:element name="collections" minOccurs="0">
-                        <xs:annotation>
-                            <xs:documentation>Optional because domain services have collections.
-                            </xs:documentation>
-                        </xs:annotation>
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name="coll" type="collection" minOccurs="0" maxOccurs="unbounded"/>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
-                    <xs:element name="actions" minOccurs="0">
-                        <xs:complexType>
-                            <xs:sequence>
-                                <xs:element name="act" type="action" minOccurs="0" maxOccurs="unbounded"/>
-                            </xs:sequence>
-                        </xs:complexType>
-                    </xs:element>
-                </xs:sequence>
-                <xs:attribute name="id" type="xs:ID">
-                    <xs:annotation>
-                        <xs:documentation>The fully qualified class name of the underlying Java class.
-                            This is declared as 'xs:ID' so can be referenced elsewhere (using 'xs:IDREF')
+                            <xs:documentation>The fully qualified class name of the underlying Java class.
+                                This is declared as 'xs:ID' so can be referenced elsewhere (using 'xs:IDREF')
 
-                            In the internal metamodel, corresponds to ObjectSpecification#getFullIdentifier()
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-                <xs:attribute name="service" type="xs:boolean">
-                    <xs:annotation>
-                        <xs:documentation>Whether this is a domain service</xs:documentation>
-                    </xs:annotation>
-                </xs:attribute>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+                                In the internal metamodel, corresponds to ObjectSpecification#getFullIdentifier()
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute name="service" type="xs:boolean">
+                        <xs:annotation>
+                            <xs:documentation>Whether this is a domain service</xs:documentation>
+                        </xs:annotation>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
 
     <xs:complexType name="member">
         <xs:annotation>
