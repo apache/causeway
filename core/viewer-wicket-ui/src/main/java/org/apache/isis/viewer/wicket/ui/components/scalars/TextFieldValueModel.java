@@ -43,9 +43,6 @@ public class TextFieldValueModel<T extends Serializable> extends Model<T> {
     private final ScalarModelProvider scalarModelProvider;
 
     public TextFieldValueModel(ScalarModelProvider scalarModelProvider) {
-        
-        System.out.println("!!! TextFieldValueModel: "+scalarModelProvider.getModel().getObjectAsString());
-        
         this.scalarModelProvider = scalarModelProvider;
     }
 

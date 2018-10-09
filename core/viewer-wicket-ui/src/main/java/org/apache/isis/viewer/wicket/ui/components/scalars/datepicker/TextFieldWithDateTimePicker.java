@@ -69,8 +69,6 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
     public TextFieldWithDateTimePicker(String id, IModel<T> model, Class<T> type, DateConverter<T> converter) {
         super(id, model, type);
         
-        System.out.println("!!! model("+id+"): "+model.getObject());
-
         DateTimeConfig config = new DateTimeConfig();
 
         setOutputMarkupId(true);
@@ -112,17 +110,11 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
     @Override
     public T convertToObject(String value, Locale locale) {
-        
-        System.out.println("!!! picker toObject: "+value);
-        
         return converter.convertToObject(value, locale);
     }
 
     @Override
     public String convertToString(T value, Locale locale) {
-        
-        System.out.println("!!! picker toString: "+value);
-        
         return converter.convertToString(value, locale);
     }
 

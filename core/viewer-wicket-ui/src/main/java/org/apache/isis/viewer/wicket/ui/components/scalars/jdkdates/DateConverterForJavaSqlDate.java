@@ -39,9 +39,6 @@ public class DateConverterForJavaSqlDate extends DateConverterForJavaAbstract<ja
 
     @Override
     protected java.sql.Date doConvertToObject(String value, Locale locale) throws ConversionException {
-        
-        System.out.println("!!! toObject: "+value+" -> "+parseDateOnly(value)+" -> "+adjustDaysBackward(parseDateOnly(value)));
-        
         final java.sql.Date date = parseDateOnly(value);
         final java.sql.Date adjustedDate = adjustDaysBackward(date);
         return adjustedDate;
@@ -49,10 +46,7 @@ public class DateConverterForJavaSqlDate extends DateConverterForJavaAbstract<ja
 
     @Override
     protected String doConvertToString(java.sql.Date value, Locale locale) {
-        
         final java.sql.Date adjustedDate = adjustDaysForward(value);
-        System.out.println("!!! toString: "+value+" -> "+adjustedDate+" -> "+getDateOnlyFormat().format(adjustedDate));
-        
         return getDateOnlyFormat().format(adjustedDate);
     }
 
