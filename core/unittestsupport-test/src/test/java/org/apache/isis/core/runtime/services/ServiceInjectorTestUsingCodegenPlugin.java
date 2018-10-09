@@ -67,21 +67,21 @@ public class ServiceInjectorTestUsingCodegenPlugin {
 
     @Test
     public void singleton() {
-        SingletonCalculator calculator = serviceInjector.lookupService(SingletonCalculator.class);
+        SingletonCalculator calculator = serviceInjector.lookupServiceElseFail(SingletonCalculator.class);
         assertThat(calculator.add(3), is(3));
-        calculator = serviceInjector.lookupService(SingletonCalculator.class);
+        calculator = serviceInjector.lookupServiceElseFail(SingletonCalculator.class);
         assertThat(calculator.add(4), is(7));
     }
 
     @Test
     public void requestScoped_instantiate() {
-        final AccumulatingCalculator calculator = serviceInjector.lookupService(AccumulatingCalculator.class);
+        final AccumulatingCalculator calculator = serviceInjector.lookupServiceElseFail(AccumulatingCalculator.class);
         assertThat(calculator instanceof RequestScopedService, is(true));
     }
 
     @Test
     public void requestScoped_justOneThread() {
-        final AccumulatingCalculator calculator = serviceInjector.lookupService(AccumulatingCalculator.class);
+        final AccumulatingCalculator calculator = serviceInjector.lookupServiceElseFail(AccumulatingCalculator.class);
         
         try {
             ((RequestScopedService)calculator).__isis_startRequest(serviceInjector);
@@ -96,7 +96,7 @@ public class ServiceInjectorTestUsingCodegenPlugin {
     @Test
     public void requestScoped_multipleThreads() throws InterruptedException, ExecutionException {
         
-        final AccumulatingCalculator calculator = serviceInjector.lookupService(AccumulatingCalculator.class);
+        final AccumulatingCalculator calculator = serviceInjector.lookupServiceElseFail(AccumulatingCalculator.class);
         final ExecutorService executor = Executors.newFixedThreadPool(10);
         
         // setup 32 tasks

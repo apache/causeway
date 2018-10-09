@@ -49,7 +49,7 @@
         
         <dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-wrapper</artifactId>
+			<artifactId>isis-core-runtime</artifactId>
 			<scope>test</scope>
 		</dependency>
         
