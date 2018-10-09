@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time;
 
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverterAbstract;
+import org.apache.isis.viewer.wicket.ui.components.scalars.DateFormatSettings;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -28,29 +29,29 @@ abstract class DateConverterForJdk8Abstract<T> extends DateConverterAbstract<T> 
 
     private static final long serialVersionUID = 1L;
 
-    DateConverterForJdk8Abstract(Class<T> cls, String datePattern, String dateTimePattern, int adjustBy) {
-        super(cls, datePattern, dateTimePattern, adjustBy);
+    DateConverterForJdk8Abstract(Class<T> cls, DateFormatSettings dateFormatSettings) {
+        super(cls, dateFormatSettings);
     }
-
+    
     @Override
     protected final T doConvertToObject(String value, Locale locale) {
         T dateTime = convert(value);
-        return minusDays(dateTime, adjustBy);
+        return minusDays(dateTime, dateFormatSettings.getAdjustBy());
     }
 
     @Override
     protected String doConvertToString(T value, Locale locale) {
         // for JodaLocalDate, the date time pattern is same as date pattern, so can use either to convert to string.
-        T t = plusDays(value, adjustBy);
-        return toString(t, DateTimeFormatter.ofPattern(dateTimePattern));
+        T t = plusDays(value, dateFormatSettings.getAdjustBy());
+        return toString(t, DateTimeFormatter.ofPattern(dateFormatSettings.getDateTimePattern()));
     }
 
     protected DateTimeFormatter getFormatterForDatePattern8() {
-        return DateTimeFormatter.ofPattern(datePattern);
+        return DateTimeFormatter.ofPattern(dateFormatSettings.getDatePattern());
     }
 
     protected DateTimeFormatter getFormatterForDateTimePattern8() {
-        return DateTimeFormatter.ofPattern(dateTimePattern);
+        return DateTimeFormatter.ofPattern(dateFormatSettings.getDateTimePattern());
     }
 
     protected abstract T minusDays(T value, int adjustBy);

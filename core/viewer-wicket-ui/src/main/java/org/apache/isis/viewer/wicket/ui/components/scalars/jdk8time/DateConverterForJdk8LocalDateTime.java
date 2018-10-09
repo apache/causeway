@@ -24,6 +24,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.ui.components.scalars.DateFormatSettings;
+
 import org.apache.wicket.util.convert.ConversionException;
 
 public class DateConverterForJdk8LocalDateTime extends DateConverterForJdk8Abstract<LocalDateTime> {
@@ -31,9 +33,8 @@ public class DateConverterForJdk8LocalDateTime extends DateConverterForJdk8Abstr
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJdk8LocalDateTime(WicketViewerSettings settings, int adjustBy) {
-        super(LocalDateTime.class, settings.getDatePattern(), settings.getDateTimePattern(), adjustBy);
+        super(LocalDateTime.class, DateFormatSettings.ofDateAndTime(settings, adjustBy));
     }
-
 
     @Override
     protected LocalDateTime minusDays(LocalDateTime value, int adjustBy) {
@@ -63,7 +64,7 @@ public class DateConverterForJdk8LocalDateTime extends DateConverterForJdk8Abstr
                 throw new ConversionException(
                         String.format(
                                 "Cannot convert '%s' into a date/time using pattern '%s' or '%s'",
-                                value, dateTimePattern, datePattern),
+                                value, dateFormatSettings.getDateTimePattern(), dateFormatSettings.getDatePattern()),
                         ex2	);
             }
         }

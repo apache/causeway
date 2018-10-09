@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
 import java.sql.Date;
 
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldDatePickerAbstract;
 
@@ -33,6 +34,11 @@ public class JavaSqlDatePanel extends ScalarPanelTextFieldDatePickerAbstract<jav
 
     public JavaSqlDatePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel, java.sql.Date.class);
+        
+        System.out.println("!!! JavaSqlDatePanel ("+scalarModel.getClass()+"): "+scalarModel.getObjectAsString());
+        
+        _Exceptions.dumpStackTrace(System.out, 0, 10);
+        
         init(new DateConverterForJavaSqlDate(getSettings(), getAdjustBy()));
     }
 

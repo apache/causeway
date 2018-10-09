@@ -18,54 +18,47 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates;
 
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import org.apache.wicket.util.convert.ConversionException;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.ui.components.scalars.DateFormatSettings;
 
 
 public class DateConverterForJavaSqlDate extends DateConverterForJavaAbstract<java.sql.Date> {
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJavaSqlDate(WicketViewerSettings settings, int adjustBy) {
-        this(settings.getDatePattern(), settings.getDatePattern(), adjustBy);
+        this(DateFormatSettings.ofDateOnly(settings, adjustBy));
     }
 
-    private DateConverterForJavaSqlDate(String datePattern, String datePickerPattern, int adjustBy) {
-        super(java.sql.Date.class, datePattern, datePattern, datePickerPattern, adjustBy);
+    private DateConverterForJavaSqlDate(DateFormatSettings dateFormatSettings) {
+        super(java.sql.Date.class, dateFormatSettings);
     }
 
     @Override
     protected java.sql.Date doConvertToObject(String value, Locale locale) throws ConversionException {
-        final Date date = convert(value);
-        final java.util.Date adjustedDate = addDays(date, 0-adjustBy);
-        return new java.sql.Date(adjustedDate.getTime());
-    }
-
-    private java.util.Date convert(String value) {
-        try {
-            return newSimpleDateFormatUsingDatePattern().parse(value);
-        } catch (ParseException e) {
-            throw new ConversionException("Cannot convert into a date", e);
-        }
+        
+        System.out.println("!!! toObject: "+value+" -> "+parseDateOnly(value)+" -> "+adjustDaysBackward(parseDateOnly(value)));
+        
+        final java.sql.Date date = parseDateOnly(value);
+        final java.sql.Date adjustedDate = adjustDaysBackward(date);
+        return adjustedDate;
     }
 
     @Override
     protected String doConvertToString(java.sql.Date value, Locale locale) {
-        return newSimpleDateFormatUsingDatePattern().format(addDays(value, adjustBy));
+        
+        final java.sql.Date adjustedDate = adjustDaysForward(value);
+        System.out.println("!!! toString: "+value+" -> "+adjustedDate+" -> "+getDateOnlyFormat().format(adjustedDate));
+        
+        return getDateOnlyFormat().format(adjustedDate);
     }
 
-    private static Date addDays(java.util.Date value, final int days) {
-        final Calendar cal = Calendar.getInstance();
-        cal.setTime(value);
-        cal.add(Calendar.DATE, days);
-        final Date adjusted = cal.getTime();
-        return adjusted;
+    @Override
+    protected java.sql.Date temporalValueOf(java.util.Date date) {
+        return new java.sql.Date(date.getTime());
     }
-
 
 }

@@ -38,6 +38,8 @@ import org.joda.time.format.DateTimeFormatter;
  * JavaScript widget
  */
 public class DateTimeConfig extends AbstractConfig {
+    private static final long serialVersionUID = 1L;
+
     /**
      * The earliest date that may be selected; all earlier dates will be disabled.
      */

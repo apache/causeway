@@ -18,21 +18,19 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 
-import java.util.Locale;
-
 import org.apache.wicket.util.convert.ConversionException;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.joda.time.LocalDate;
-import org.joda.time.format.DateTimeFormatter;
+import org.apache.isis.viewer.wicket.ui.components.scalars.DateFormatSettings;
 
 public class DateConverterForJodaDateTime extends DateConverterForJodaAbstract<DateTime> {
 
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJodaDateTime(WicketViewerSettings settings, int adjustBy) {
-        super(DateTime.class, settings.getDatePattern(), settings.getDateTimePattern(), adjustBy);
+        super(DateTime.class, DateFormatSettings.ofDateAndTime(settings, adjustBy));
     }
 
     @Override

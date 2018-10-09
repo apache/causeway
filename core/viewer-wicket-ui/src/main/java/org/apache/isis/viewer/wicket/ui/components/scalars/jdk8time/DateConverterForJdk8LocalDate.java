@@ -21,8 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.jdk8time;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.wicket.util.convert.ConversionException;
+
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.ui.components.scalars.DateFormatSettings;
 
 /**
  * Uses the same pattern for both date and date/time.  The only real consequence of this is that when converting a
@@ -33,7 +35,7 @@ public class DateConverterForJdk8LocalDate extends DateConverterForJdk8Abstract<
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJdk8LocalDate(WicketViewerSettings settings, int adjustBy) {
-        super(LocalDate.class, settings.getDatePattern(), settings.getDatePattern(), adjustBy);
+        super(LocalDate.class, DateFormatSettings.ofDateOnly(settings, adjustBy));
     }
 
     @Override

@@ -30,17 +30,11 @@ public abstract class DateConverterAbstract<T> implements DateConverter<T> {
     private static final long serialVersionUID = 1L;
 
     private final Class<T> cls;
-    protected final String datePattern;
-    protected final String dateTimePattern;
+    protected final DateFormatSettings dateFormatSettings;
 
-    protected final int adjustBy;
-
-
-    protected DateConverterAbstract(Class<T> cls, String datePattern, String dateTimePattern, int adjustBy) {
+    protected DateConverterAbstract(Class<T> cls, DateFormatSettings dateFormatSettings) {
         this.cls = cls;
-        this.datePattern = datePattern;
-        this.dateTimePattern = dateTimePattern;
-        this.adjustBy = adjustBy;
+        this.dateFormatSettings = dateFormatSettings;
     }
 
     @Override
@@ -50,20 +44,20 @@ public abstract class DateConverterAbstract<T> implements DateConverter<T> {
 
     @Override
     public String getDatePattern(Locale locale) {
-        return datePattern;
+        return dateFormatSettings.getDatePattern();
     }
 
     @Override
     public String getDateTimePattern(Locale locale) {
-        return dateTimePattern;
+        return dateFormatSettings.getDateTimePattern();
     }
 
     protected DateTimeFormatter getFormatterForDatePattern() {
-        return DateTimeFormat.forPattern(datePattern);
+        return DateTimeFormat.forPattern(dateFormatSettings.getDatePattern());
     }
 
     protected DateTimeFormatter getFormatterForDateTimePattern() {
-        return DateTimeFormat.forPattern(dateTimePattern);
+        return DateTimeFormat.forPattern(dateFormatSettings.getDateTimePattern());
     }
 
     @Override

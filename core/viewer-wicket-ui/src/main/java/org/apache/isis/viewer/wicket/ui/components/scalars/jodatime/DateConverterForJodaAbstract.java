@@ -18,35 +18,32 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 
+import java.util.Locale;
+
 import org.apache.wicket.util.convert.ConversionException;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverterAbstract;
-
-import java.util.Locale;
+import org.apache.isis.viewer.wicket.ui.components.scalars.DateFormatSettings;
 
 abstract class DateConverterForJodaAbstract<T> extends DateConverterAbstract<T> {
 
     private static final long serialVersionUID = 1L;
 
-    DateConverterForJodaAbstract(Class<T> cls, String datePattern, String dateTimePattern, int adjustBy) {
-        super(cls, datePattern, dateTimePattern, adjustBy);
+    DateConverterForJodaAbstract(Class<T> cls, DateFormatSettings dateFormatSettings) {
+        super(cls, dateFormatSettings);
     }
 
     @Override
     protected final T doConvertToObject(String value, Locale locale) {
         T dateTime = convert(value);
-        return minusDays(dateTime, adjustBy);
+        return minusDays(dateTime, dateFormatSettings.getAdjustBy());
     }
 
     @Override
     protected String doConvertToString(T value, Locale locale) {
         // for JodaLocalDate, the date time pattern is same as date pattern, so can use either to convert to string.
-        T t = plusDays(value, adjustBy);
+        T t = plusDays(value, dateFormatSettings.getAdjustBy());
         return toString(t, getFormatterForDateTimePattern());
     }
 

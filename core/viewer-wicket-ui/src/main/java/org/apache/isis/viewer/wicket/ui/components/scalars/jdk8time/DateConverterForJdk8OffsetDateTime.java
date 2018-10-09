@@ -26,6 +26,8 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.ui.components.scalars.DateFormatSettings;
+
 import org.apache.wicket.util.convert.ConversionException;
 
 public class DateConverterForJdk8OffsetDateTime extends DateConverterForJdk8Abstract<OffsetDateTime> {
@@ -33,7 +35,7 @@ public class DateConverterForJdk8OffsetDateTime extends DateConverterForJdk8Abst
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJdk8OffsetDateTime(WicketViewerSettings settings, int adjustBy) {
-        super(OffsetDateTime.class, settings.getDatePattern(), settings.getDateTimePattern(), adjustBy);
+        super(OffsetDateTime.class, DateFormatSettings.ofDateAndTime(settings, adjustBy));
     }
 
     @Override
@@ -79,7 +81,7 @@ public class DateConverterForJdk8OffsetDateTime extends DateConverterForJdk8Abst
                 throw new ConversionException(
                         String.format(
                                 "Cannot convert '%s' into a date/time using pattern '%s' or '%s'",
-                                value, dateTimePattern, datePattern),
+                                value, dateFormatSettings.getDateTimePattern(), dateFormatSettings.getDatePattern()),
                         ex2	);
             }
         }

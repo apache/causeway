@@ -68,7 +68,6 @@ public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProvide
         cal.add(Calendar.YEAR, years);
         cal.add(Calendar.MONTH, months);
         cal.add(Calendar.DAY_OF_MONTH, days);
-
         return setDate(cal.getTime());
     }
 
@@ -85,6 +84,16 @@ public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProvide
     @Override
     protected Date now() {
         return new Date(Clock.getTime());
+    }
+    
+    @Override //[ISIS-2005] java.sql.Date requires special treatment, so overriding the default
+    protected String doEncode(final Object pojo) {
+        return ((Date)pojo).toString();
+    }
+
+    @Override //[ISIS-2005] java.sql.Date requires special treatment, so overriding the default
+    protected Date doRestore(final String enString) {
+        return Date.valueOf(enString);
     }
 
 }

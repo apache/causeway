@@ -18,13 +18,12 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars.jodatime;
 
-import java.util.Locale;
-
 import org.apache.wicket.util.convert.ConversionException;
 import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormatter;
 
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.joda.time.format.DateTimeFormatter;
+import org.apache.isis.viewer.wicket.ui.components.scalars.DateFormatSettings;
 
 /**
  * Uses the same pattern for both date and date/time.  The only real consequence of this is that when converting a
@@ -35,7 +34,7 @@ public class DateConverterForJodaLocalDate extends DateConverterForJodaAbstract<
     private static final long serialVersionUID = 1L;
 
     public DateConverterForJodaLocalDate(WicketViewerSettings settings, int adjustBy) {
-        super(LocalDate.class, settings.getDatePattern(), settings.getDatePattern(), adjustBy);
+        super(LocalDate.class, DateFormatSettings.ofDateOnly(settings, adjustBy));
     }
 
     @Override
