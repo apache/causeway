@@ -29,6 +29,8 @@ import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
@@ -142,6 +144,20 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         }
         return false;
     }
+    
+    protected List<String> mediaTypeParameterList(
+            final List<MediaType> acceptableMediaTypes,
+            final String parameter) {
+        final List<String> paramList = _Lists.newArrayList();
+        for (MediaType mediaType : acceptableMediaTypes) {
+            final String paramValue = sanitize(mediaType.getParameters().get(parameter));
+            _Strings.splitThenStream(paramValue, ",")
+            .map(String::trim)
+            .forEach(paramList::add);
+        }
+        return paramList;
+    }
+    
 
     /**
      * Remove any single quotes.

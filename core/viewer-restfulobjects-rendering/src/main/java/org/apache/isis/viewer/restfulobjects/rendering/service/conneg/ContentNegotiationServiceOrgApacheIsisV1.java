@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -28,6 +29,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -51,6 +53,52 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
         menuOrder = "" + (Integer.MAX_VALUE - 10)
         )
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
+    
+    public static enum SuppressionType {
+        
+        /** suppress '$$RO', RO Spec representation*/
+        RO,
+        
+        /** suppress '$$href', hyperlink to the representation*/
+        HREF,
+        
+        /** suppress '$$instanceId', instance id of the domain object*/
+        ID,
+        
+        /** suppress '$$title', title of the domain object*/
+        TITLE,
+        
+        /** suppress all '$$...' entries*/
+        ALL
+        ;
+
+        public static EnumSet<SuppressionType> parse(List<String> parameterList) {
+            final EnumSet<SuppressionType> set = EnumSet.noneOf(SuppressionType.class);
+            parameterList.stream()
+            .map(SuppressionType::parseOrElseNull)
+            .filter(_NullSafe::isPresent)
+            .forEach(set::add);
+            if(set.contains(ALL)) {
+                return EnumSet.allOf(SuppressionType.class);
+            }
+            return set;
+        }
+        
+        private static SuppressionType parseOrElseNull(String literal) {
+            
+            // honor pre v2 behavior
+            if("true".equalsIgnoreCase(literal)) {
+                return SuppressionType.RO; 
+            }
+            
+            try {
+                return SuppressionType.valueOf(literal.toUpperCase());
+            } catch (IllegalArgumentException  e) {
+                return null;
+            }
+        }
+        
+    }
 
     /**
      * Unlike RO v1.0, use a single content-type of <code>application/json;profile="urn:org.apache.isis/v1"</code>.
@@ -61,11 +109,6 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
      * </p>
      */
     public static final String ACCEPT_PROFILE = "urn:org.apache.isis/v1";
-
-    /**
-     * Whether to suppress the RO v1.0 '$$ro' node; suppress='false' or suppress='true'
-     */
-    public static final String ACCEPT_RO = "suppress";
 
     /**
      * The media type (as a string) used as the content-Type header when a domain object is rendered.
@@ -110,11 +153,13 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         if(!canAccept) {
             return null;
         }
-        boolean suppressRO = suppress(rendererContext);
+        
+        final EnumSet<SuppressionType> suppression = suppress(rendererContext);
+        final boolean suppressRO = suppression.contains(SuppressionType.RO);
 
         final JsonRepresentation rootRepresentation = JsonRepresentation.newMap();
 
-        appendObjectTo(rendererContext, objectAdapter, rootRepresentation);
+        appendObjectTo(rendererContext, objectAdapter, rootRepresentation, suppression);
 
         final JsonRepresentation $$roRepresentation;
         if(!suppressRO) {
@@ -157,14 +202,15 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         if(!canAccept(rendererContext)) {
             return null;
         }
-        boolean suppressRO = suppress(rendererContext);
+        final EnumSet<SuppressionType> suppression = suppress(rendererContext);
+        final boolean suppressRO = suppression.contains(SuppressionType.RO);
 
         final JsonRepresentation rootRepresentation = JsonRepresentation.newArray();
 
         ObjectAdapter objectAdapter = objectAndCollection.getObjectAdapter();
         OneToManyAssociation collection = objectAndCollection.getMember();
 
-        appendCollectionTo(rendererContext, objectAdapter, collection, rootRepresentation);
+        appendCollectionTo(rendererContext, objectAdapter, collection, rootRepresentation, suppression);
 
         final JsonRepresentation $$roRepresentation;
         if(!suppressRO) {
@@ -216,7 +262,8 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         if(!canAccept(rendererContext)) {
             return null;
         }
-        boolean suppressRO = suppress(rendererContext);
+        final EnumSet<SuppressionType> suppression = suppress(rendererContext);
+        final boolean suppressRO = suppression.contains(SuppressionType.RO);
 
         JsonRepresentation rootRepresentation = null;
         final JsonRepresentation $$roRepresentation;
@@ -238,7 +285,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         case DOMAIN_OBJECT:
 
             rootRepresentation = JsonRepresentation.newMap();
-            appendObjectTo(rendererContext, returnedAdapter, rootRepresentation);
+            appendObjectTo(rendererContext, returnedAdapter, rootRepresentation, suppression);
 
             break;
 
@@ -250,7 +297,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             
             final Stream<ObjectAdapter> collectionAdapters = CollectionFacet.Utils.streamAdapters(returnedAdapter);
             
-            appendStreamTo(rendererContext, collectionAdapters, rootRepresentation);
+            appendStreamTo(rendererContext, collectionAdapters, rootRepresentation, suppression);
 
             // $$ro representation will be an object in the list with a single property named "$$ro"
             if(!suppressRO) {
@@ -294,18 +341,19 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         return mediaTypeParameterMatches(acceptableMediaTypes, "profile", ACCEPT_PROFILE);
     }
 
-    protected boolean suppress(
+    protected EnumSet<SuppressionType> suppress(
             final RepresentationService.Context2 rendererContext) {
         final List<MediaType> acceptableMediaTypes = rendererContext.getAcceptableMediaTypes();
-        return mediaTypeParameterMatches(acceptableMediaTypes, "suppress", "true");
+        return SuppressionType.parse(mediaTypeParameterList(acceptableMediaTypes, "suppress"));
     }
-
+    
     private void appendObjectTo(
             final RepresentationService.Context2 rendererContext,
             final ObjectAdapter objectAdapter,
-            final JsonRepresentation rootRepresentation) {
+            final JsonRepresentation rootRepresentation,
+            final EnumSet<SuppressionType> suppression) {
 
-        appendPropertiesTo(rendererContext, objectAdapter, rootRepresentation);
+        appendPropertiesTo(rendererContext, objectAdapter, rootRepresentation, suppression);
 
         final Where where = rendererContext.getWhere();
         final Stream<OneToManyAssociation> collections = objectAdapter.getSpecification()
@@ -322,7 +370,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
                 return;
             }
 
-            appendCollectionTo(rendererContext, objectAdapter, collection, collectionRepresentation);
+            appendCollectionTo(rendererContext, objectAdapter, collection, collectionRepresentation, suppression);
         });
         
     }
@@ -330,7 +378,8 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     private void appendPropertiesTo(
             final RepresentationService.Context2 rendererContext,
             final ObjectAdapter objectAdapter,
-            final JsonRepresentation rootRepresentation) {
+            final JsonRepresentation rootRepresentation,
+            final EnumSet<SuppressionType> suppression) {
         final InteractionInitiatedBy interactionInitiatedBy = determineInteractionInitiatedByFrom(rendererContext);
         final Where where = rendererContext.getWhere();
         final Stream<OneToOneAssociation> properties = objectAdapter.getSpecification()
@@ -350,12 +399,19 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
             final JsonRepresentation propertyValueRepresentation = renderer.render();
 
-            final String upHref = propertyValueRepresentation.getString("links[rel=up].href");
-            rootRepresentation.mapPut("$$href", upHref);
-            final String upTitle = propertyValueRepresentation.getString("links[rel=up].title");
-            rootRepresentation.mapPut("$$title", upTitle);
-            final String upInstanceId = upHref.substring(upHref.lastIndexOf("/")+1);
-            rootRepresentation.mapPut("$$instanceId", upInstanceId);
+            if(!suppression.contains(SuppressionType.HREF)) {
+                final String upHref = propertyValueRepresentation.getString("links[rel=up].href");
+                rootRepresentation.mapPut("$$href", upHref);
+            }
+            if(!suppression.contains(SuppressionType.TITLE)) {
+                final String upTitle = propertyValueRepresentation.getString("links[rel=up].title");
+                rootRepresentation.mapPut("$$title", upTitle);
+            }
+            if(!suppression.contains(SuppressionType.ID)) {
+                final String upHref = propertyValueRepresentation.getString("links[rel=up].href");
+                final String upInstanceId = upHref.substring(upHref.lastIndexOf("/")+1);
+                rootRepresentation.mapPut("$$instanceId", upInstanceId);
+            }
 
             final JsonRepresentation value = propertyValueRepresentation.getRepresentation("value");
             rootRepresentation.mapPut(property.getId(), value);
@@ -367,7 +423,8 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
             final RepresentationService.Context2 rendererContext,
             final ObjectAdapter objectAdapter,
             final OneToManyAssociation collection,
-            final JsonRepresentation representation) {
+            final JsonRepresentation representation, 
+            final EnumSet<SuppressionType> suppression) {
 
         final InteractionInitiatedBy interactionInitiatedBy = determineInteractionInitiatedByFrom(rendererContext);
         final ObjectAdapter valueAdapter = collection.get(objectAdapter, interactionInitiatedBy);
@@ -376,17 +433,18 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         }
 
         final Stream<ObjectAdapter> adapters = CollectionFacet.Utils.streamAdapters(valueAdapter);
-        appendStreamTo(rendererContext, adapters, representation);
+        appendStreamTo(rendererContext, adapters, representation, suppression);
     }
 
     private void appendStreamTo(
             final RepresentationService.Context2 rendererContext,
             final Stream<ObjectAdapter> adapters,
-            final JsonRepresentation collectionRepresentation) {
+            final JsonRepresentation collectionRepresentation, 
+            final EnumSet<SuppressionType> suppression) {
         
         adapters.forEach(elementAdapter->{
             JsonRepresentation elementRepresentation = JsonRepresentation.newMap();
-            appendPropertiesTo(rendererContext, elementAdapter, elementRepresentation);
+            appendPropertiesTo(rendererContext, elementAdapter, elementRepresentation, suppression);
 
             collectionRepresentation.arrayAdd(elementRepresentation);
         });

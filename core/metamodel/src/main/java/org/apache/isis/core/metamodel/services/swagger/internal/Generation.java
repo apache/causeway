@@ -382,6 +382,7 @@ class Generation {
                 .type("string"))
         .produces("application/json;profile=urn:org.apache.isis/v1")
         .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
+        .produces("application/json;profile=urn:org.apache.isis/v1;suppress=all")
         .produces("application/json;profile=urn:org.restfulobjects:repr-types/object");
 
 
@@ -456,6 +457,7 @@ class Generation {
                 .description(Util.roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + actionId)
                 .produces("application/json;profile=urn:org.apache.isis/v1")
                 .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
+                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=all")
                 .produces("application/json;profile=urn:org.restfulobjects:repr-types/object")
                 .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result")
                 ;
@@ -544,6 +546,7 @@ class Generation {
                         .type("string"))
                 .produces("application/json;profile=urn:org.apache.isis/v1")
                 .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
+                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=all")
                 .produces("application/json;profile=urn:org.restfulobjects:repr-types/object-collection");
 
         path.get(collectionOperation);
@@ -577,6 +580,7 @@ class Generation {
                         .type("string"))
                 .produces("application/json;profile=urn:org.apache.isis/v1")
                 .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
+                .produces("application/json;profile=urn:org.apache.isis/v1;suppress=all")
                 .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result");
 
         final SemanticsOf semantics = objectAction.getSemantics();
