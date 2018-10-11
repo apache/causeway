@@ -117,6 +117,9 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     //region > Facets
 
+    /**
+     * Not API.
+     */
     public FacetedMethod getFacetedMethod() {
         return facetedMethod;
     }

@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
@@ -52,10 +51,9 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
         if(facet == null) {
             facet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext), processMethodContext);
         }
-        if (facet == null) {
-            facet = createFromAnnotationOnReturnTypeIfPossible(processMethodContext);
-        }
-        
+
+        // facet derived from type moved to post-processor
+
         // no-op if null
         FacetUtil.addFacet(facet);
     }
@@ -80,17 +78,6 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
         // look for annotation on the property
         final DescribedAs annotation = Annotations.getAnnotation(processMethodContext.getMethod(), DescribedAs.class);
         return annotation == null ? null : new DescribedAsFacetOnMemberAnnotation(annotation.value(), processMethodContext.getFacetHolder());
-    }
-
-    private DescribedAsFacet createFromAnnotationOnReturnTypeIfPossible(final ProcessMethodContext processMethodContext) {
-        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
-        final DescribedAsFacet returnTypeDescribedAsFacet = getDescribedAsFacet(returnType);
-        return returnTypeDescribedAsFacet != null ? new DescribedAsFacetOnMemberDerivedFromType(returnTypeDescribedAsFacet, processMethodContext.getFacetHolder()) : null;
-    }
-    
-    private DescribedAsFacet getDescribedAsFacet(final Class<?> type) {
-        final ObjectSpecification paramTypeSpec = getSpecificationLoader().loadSpecification(type);
-        return paramTypeSpec.getFacet(DescribedAsFacet.class);
     }
 
 

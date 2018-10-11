@@ -38,7 +38,7 @@ public class TypicalLengthFacetOnPropertyDerivedFromType extends TypicalLengthFa
     @Override
     public int value() {
         final MultiLineFacet facet = getFacetHolder().getFacet(MultiLineFacet.class);
-        return facet.numberOfLines() * typicalLengthFacet.value();
+        return (facet != null ? facet.numberOfLines() : 1) * typicalLengthFacet.value();
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

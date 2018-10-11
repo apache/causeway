@@ -19,7 +19,6 @@ package org.apache.isis.core.metamodel.specloader;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
@@ -28,7 +27,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -145,7 +143,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     //endregion
 
 
-    //region > init
+    //region > internalInit
 
     private State state;
 
@@ -249,7 +247,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
 
         // for debugging only
-        final Collection<ObjectSpecification> cachedSpecificationsAfter = allCachedSpecifications();
+        final Collection<ObjectSpecification> cachedSpecificationsAfter = cache.allSpecifications();
         ImmutableList<ObjectSpecification> cachedAfterNotBefore = FluentIterable.from(cachedSpecificationsAfter)
                 .filter(new Predicate<ObjectSpecification>() {
                     @Override
@@ -261,10 +259,10 @@ public class SpecificationLoader implements ApplicationScopedComponent {
                 cachedSpecificationsAfter.size(), cachedAfterNotBefore.size()));
 
 
-        // only after full introspection has occured do we cache ObjectSpecifications
+        // only after full introspection has occurred do we cache ObjectSpecifications
         // by their ObjectSpecId.
         // the cache (SpecificationCacheDefault will fail-fast as not initialized
-        cacheBySpecId(specificationsFromRegistry);
+        cache.init();
 
     }
 
@@ -285,18 +283,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         }
     }
 
-    private void cacheBySpecId(final Collection<ObjectSpecification> objectSpecifications) {
-        final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
-        for (final ObjectSpecification objSpec : objectSpecifications) {
-            final ObjectSpecId objectSpecId = objSpec.getSpecId();
-            if (objectSpecId == null) {
-                continue;
-            }
-            specById.put(objectSpecId, objSpec);
-        }
-
-        cache.init(specById);
-    }
 
 
 
@@ -360,7 +346,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         ValidationFailures validationFailures = validate();
         validationFailures.assertNone();
 
-        cacheBySpecId(allCachedSpecifications());
+        cache.init();
     }
 
     @Programmatic

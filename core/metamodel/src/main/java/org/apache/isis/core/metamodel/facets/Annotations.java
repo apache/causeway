@@ -34,6 +34,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
@@ -281,6 +282,7 @@ public final class Annotations  {
                     PropertyLayout.class,
                     Collection.class,
                     CollectionLayout.class,
+                    Programmatic.class,
                     MemberOrder.class,
                     javax.annotation.Nullable.class,
                     Title.class,

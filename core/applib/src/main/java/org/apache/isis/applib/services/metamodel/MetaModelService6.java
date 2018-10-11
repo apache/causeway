@@ -73,7 +73,7 @@ public interface MetaModelService6 extends MetaModelService5 {
         }
 
         public Config withPackagePrefix(final String packagePrefix) {
-            final List<String> prefixes = Lists.newArrayList(packagePrefix);
+            final List<String> prefixes = Lists.newArrayList(this.packagePrefixes);
             prefixes.add(packagePrefix);
             return new Config(mask, prefixes);
         }

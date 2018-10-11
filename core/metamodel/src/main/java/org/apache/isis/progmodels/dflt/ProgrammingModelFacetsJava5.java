@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.facets.all.i18n.TranslationFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
-import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.DisabledFacetOnCollectionDerivedFromImmutableFactory;
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.layout.CollectionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToRemoveFromAndValidateFacetFactory;
@@ -103,7 +102,6 @@ import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilt
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.CopyImmutableFacetOntoMembersFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutablemarkerifc.ImmutableFacetMarkerInterfaceFactory;
 import org.apache.isis.core.metamodel.facets.object.mask.annotation.MaskFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.maxlen.annotation.MaxLengthFacetOnTypeAnnotationFactory;
@@ -132,13 +130,9 @@ import org.apache.isis.core.metamodel.facets.object.validating.validateobject.me
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.method.ActionParameterAutoCompleteFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits.BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetDerivedFromChoicesFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.choices.method.ActionChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.postprocessors.param.ActionCollectionParameterDefaultsAndChoicesPostProcessor;
-import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.mandatory.dflt.MandatoryFacetOnParametersDefaultFactory;
 import org.apache.isis.core.metamodel.facets.param.multiline.annotation.MultiLineFacetOnParameterAnnotationFactory;
@@ -146,16 +140,12 @@ import org.apache.isis.core.metamodel.facets.param.named.annotation.NamedFacetOn
 import org.apache.isis.core.metamodel.facets.param.parameter.ParameterAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.renderedasdaybefore.annotation.RenderedAsDayBeforeFacetOnParameterAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.typicallen.annotation.TypicalLengthFacetOnParameterAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.validating.maskannot.MaskFacetOnParameterAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.method.PropertyAutoCompleteFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits.BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.choices.method.PropertyChoicesFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.properties.defaults.method.PropertyDefaultFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutableFactory;
 import org.apache.isis.core.metamodel.facets.properties.disabled.inferred.DisabledFacetOnPropertyInferredFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.dflt.MandatoryFacetOnProperyDefaultFactory;
 import org.apache.isis.core.metamodel.facets.properties.mandatory.staticmethod.MandatoryFacetOnPropertyStaticMethodFactory;
@@ -164,7 +154,6 @@ import org.apache.isis.core.metamodel.facets.properties.property.PropertyAnnotat
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.renderedasdaybefore.annotation.RenderedAsDayBeforeAnnotationOnPropertyFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.annotation.TypicalLengthOnPropertyFacetFactory;
-import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.update.PropertyModifyFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.update.PropertySetAndClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.validating.dflt.PropertyValidateFacetDefaultFactory;
@@ -210,6 +199,7 @@ import org.apache.isis.core.metamodel.facets.value.timestamp.TimeStampValueFacet
 import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.postprocessors.param.ActionCollectionParameterDefaultsAndChoicesPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 
@@ -254,8 +244,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         // enum support
         addFactory(new EnumFacetUsingValueFacetUsingSemanticsProviderFactory());
-        addFactory(new ActionParameterChoicesFacetDerivedFromChoicesFacetFactory());
-        addFactory(new PropertyChoicesFacetDerivedFromChoicesFacetFactory());
+        // addFactory(new ActionParameterChoicesFacetDerivedFromChoicesFacetFactory()); ... moved into post-processor, see below
+        // addFactory(new PropertyChoicesFacetDerivedFromChoicesFacetFactory()); ... moved into post-processor, see below
 
         // properties
         addFactory(new PropertyAccessorFacetViaAccessorFactory());
@@ -329,13 +319,13 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new ChoicesFacetFromBoundedMarkerInterfaceFactory());
 
         addFactory(new DefaultedFacetAnnotationElseConfigurationFactory());
-        addFactory(new PropertyDefaultFacetDerivedFromTypeFactory());
-        addFactory(new ActionParameterDefaultFacetDerivedFromTypeFactory());
+        //addFactory(new PropertyDefaultFacetDerivedFromTypeFactory()); ... logic moved to post-processor
+        //addFactory(new ActionParameterDefaultFacetDerivedFromTypeFactory()); ... logic moved to post-processor
 
         
         addFactory(new DescribedAsFacetOnTypeAnnotationFactory());
         addFactory(new DescribedAsFacetOnMemberFactory());
-        addFactory(new DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory());
+        //addFactory(new DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory()); ... logic moved to post-processor
 
         addFactory(new BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory());
         addFactory(new BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory());
@@ -372,7 +362,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new HiddenObjectFacetViaMethodFactory());
         addFactory(new DisabledObjectFacetViaMethodFactory());
 
-        addFactory(new CopyImmutableFacetOntoMembersFactory());
+        // addFactory(new CopyImmutableFacetOntoMembersFactory()); ... logic moved to post-processor
         addFactory(new ImmutableFacetMarkerInterfaceFactory());
 
         addFactory(new RecreatableObjectFacetFactory());
@@ -460,8 +450,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         
         addFactory(new RegExFacetOnTypeAnnotationFactory());
 
-        addFactory(new TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory());
-        addFactory(new TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory());
+        // addFactory(new TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory()); ... logic moved to post-processor
+        // addFactory(new TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory()); ... logic moved to post-processor
 
         
         addFactory(new TypicalLengthFacetOnTypeAnnotationFactory());
@@ -528,8 +518,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // so we can dogfood the applib "value" types
         addFactory(new ValueFacetAnnotationOrConfigurationFactory());
 
-        addFactory(new DisabledFacetOnPropertyDerivedFromImmutableFactory());
-        addFactory(new DisabledFacetOnCollectionDerivedFromImmutableFactory());
+        // addFactory(new DisabledFacetOnPropertyDerivedFromImmutableFactory()); ... logic moved to post-processor
+        // addFactory(new DisabledFacetOnCollectionDerivedFromImmutableFactory()); ... logic moved to post-processor
 
         // should come near the end, after any facets that install PropertySetterFacet have run.
         addFactory(new DisabledFacetOnPropertyInferredFactory());

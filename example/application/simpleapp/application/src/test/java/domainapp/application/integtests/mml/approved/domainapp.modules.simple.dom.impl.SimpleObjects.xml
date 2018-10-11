@@ -88,6 +88,7 @@
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
                     <mml:attr name="value">NON_IDEMPOTENT</mml:attr>
                 </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated">
                     <mml:attr name="context">domainapp.modules.simple.dom.impl.SimpleObjects#create()</mml:attr>
                     <mml:attr name="originalText">Create</mml:attr>
@@ -141,7 +142,6 @@
                         <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromType">
                             <mml:attr name="derived">true</mml:attr>
                             <mml:attr name="typicalLengthFacet">org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
-                            <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromType</mml:attr>
                         </mml:facet>
                     </mml:facets>
                     <mml:type>java.lang.String</mml:type>
@@ -245,7 +245,6 @@
                         <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromType">
                             <mml:attr name="derived">true</mml:attr>
                             <mml:attr name="typicalLengthFacet">org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
-                            <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromType</mml:attr>
                         </mml:facet>
                     </mml:facets>
                     <mml:type>java.lang.String</mml:type>

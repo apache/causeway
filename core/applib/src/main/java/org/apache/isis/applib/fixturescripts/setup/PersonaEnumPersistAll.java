@@ -22,12 +22,14 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
 
+@Programmatic
 public class PersonaEnumPersistAll<E extends Enum<E> & PersonaWithBuilderScript<T,F>, T, F extends BuilderScriptAbstract<T,F>>
         extends FixtureScript
         implements FixtureScriptWithExecutionStrategy {

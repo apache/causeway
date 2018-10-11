@@ -21,17 +21,11 @@ package org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable
 
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-/**
- * REVIEW: I'm not sure this {@link FacetFactory} actually makes sense. Just
- * because a type is immutable, doesn't imply that the property can't change the
- * instance that it refers to?
- */
 public class DisabledFacetOnCollectionDerivedFromImmutableFactory extends FacetFactoryAbstract {
 
     public DisabledFacetOnCollectionDerivedFromImmutableFactory() {
@@ -40,7 +34,8 @@ public class DisabledFacetOnCollectionDerivedFromImmutableFactory extends FacetF
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(processMethodContext.getMethod().getDeclaringClass());
+        final Class<?> declaringClass = processMethodContext.getMethod().getDeclaringClass();
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
         if (spec.containsDoOpFacet(ImmutableFacet.class)) {
             final ImmutableFacet immutableFacet = spec.getFacet(ImmutableFacet.class);
             final FacetedMethod facetHolder = processMethodContext.getFacetHolder();

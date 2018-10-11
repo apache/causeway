@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -125,19 +124,15 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
                 continue;
             }
 
-            final TypedHolder paramPeer = paramPeers.get(serviceParamNum);
-            final ObjectSpecification specification = ObjectMemberAbstract
-                    .getSpecification(getSpecificationLoader(), paramPeer.getType());
-
             final ObjectActionParameterAbstract serviceParameter =
                     (ObjectActionParameterAbstract) serviceParameters.get(serviceParamNum);
 
             final ObjectActionParameterContributee contributedParam =
                     serviceParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR
                             ? new OneToOneActionParameterContributee(
-                                    getServiceAdapter(), serviceParameter, contributeeParamNum, this)
+                                    servicePojo, serviceParameter, contributeeParamNum, this)
                             : new OneToManyActionParameterContributee(
-                                    getServiceAdapter(), serviceParameter, contributeeParamNum, this);
+                                    servicePojo, serviceParameter, contributeeParamNum, this);
 
             contributeeParameters.add(contributedParam);
 

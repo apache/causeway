@@ -40,7 +40,7 @@ public class IsisComponentProvider_within_Test {
         final String budgetAssignmentPackageWithDot =
                 SomeServiceNotToInclude.class.getPackage().getName()  + ".";
 
-        final Set<Class<?>> within = IsisComponentProvider.within(Arrays.asList(budgetPackageWithDot),
+        final Set<Class<?>> within = IsisComponentProvider.withinPackageAndNotAnonymous(Arrays.asList(budgetPackageWithDot),
                 Sets.newHashSet(SomeServiceToInclude.class, SomeServiceNotToInclude.class));
 
         Assert.assertThat(within.size(), is(equalTo(1)));

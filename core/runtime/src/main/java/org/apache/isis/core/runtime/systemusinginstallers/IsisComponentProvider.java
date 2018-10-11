@@ -41,10 +41,15 @@ import org.reflections.vfs.Vfs;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.annotation.ViewModelLayout;
+import org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -52,6 +57,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -144,27 +150,53 @@ public abstract class IsisComponentProvider {
 
         final Reflections reflections = new Reflections(moduleAndFrameworkPackages);
 
-        final Set<Class<?>> domainServiceTypes = reflections.getTypesAnnotatedWith(DomainService.class);
-        final Set<Class<?>> persistenceCapableTypes = reflections.getTypesAnnotatedWith(PersistenceCapable.class);
-        final Set<Class<? extends FixtureScript>> fixtureScriptTypes = reflections.getSubTypesOf(FixtureScript.class);
+        final Set<Class<?>> domainServiceTypes = Sets.newLinkedHashSet();
+        domainServiceTypes.addAll(reflections.getTypesAnnotatedWith(DomainService.class));
+        domainServiceTypes.addAll(reflections.getTypesAnnotatedWith(DomainServiceLayout.class));
+
+        final Set<Class<?>> persistenceCapableTypes = Sets.newLinkedHashSet();
+        persistenceCapableTypes.addAll(reflections.getTypesAnnotatedWith(PersistenceCapable.class));
+
+        // the fixtureScript types are introspected just to provide a drop-down when running fixture scripts
+        // in prototyping mode (though they may be introspected lazily if actually run).
+        // we therefore try to limit the set of fixture types eagerly introspected at startup
+        final Set<Class<? extends FixtureScript>> fixtureScriptTypes = Sets.newLinkedHashSet();
+        fixtureScriptTypes.addAll(
+            FluentIterable.from(reflections.getSubTypesOf(FixtureScript.class)).
+                filter(new Predicate<Class<?>>(){
+                    @Override
+                    public boolean apply(@Nullable final Class<?> aClass) {
+                        // ignore as a fixture script if annotated with @Programmatic
+                        // (though directly implementing DiscoverableFixtureScript takes precedence and will NOT ignore)
+                        return DiscoverableFixtureScript.class.isAssignableFrom(aClass) ||
+                        Annotations.getAnnotation(aClass, Programmatic.class) == null;
+                    }
+                })
+                .toList());
+
+        final Set<Class<?>> domainObjectTypes = Sets.newLinkedHashSet();
+        domainObjectTypes.addAll(reflections.getTypesAnnotatedWith(DomainObject.class));
+        domainObjectTypes.addAll(reflections.getTypesAnnotatedWith(DomainObjectLayout.class));
 
         final Set<Class<?>> mixinTypes = Sets.newHashSet();
         mixinTypes.addAll(reflections.getTypesAnnotatedWith(Mixin.class));
-
-        final Set<Class<?>> domainObjectTypes = reflections.getTypesAnnotatedWith(DomainObject.class);
         mixinTypes.addAll(
                 Lists.newArrayList(Iterables.filter(domainObjectTypes, new Predicate<Class<?>>() {
                     @Override
                     public boolean apply(@Nullable final Class<?> input) {
                         if(input == null) { return false; }
                         final DomainObject annotation = input.getAnnotation(DomainObject.class);
-                        return annotation.nature() == Nature.MIXIN;
+                        return annotation != null && annotation.nature() == Nature.MIXIN;
                     }
                 }))
         );
 
-        final Set<Class<?>> viewModelTypes = reflections.getTypesAnnotatedWith(ViewModel.class);
-        final Set<Class<?>> xmlElementTypes = reflections.getTypesAnnotatedWith(XmlElement.class);
+        final Set<Class<?>> viewModelTypes = Sets.newLinkedHashSet();
+        viewModelTypes.addAll(reflections.getTypesAnnotatedWith(ViewModel.class));
+        viewModelTypes.addAll(reflections.getTypesAnnotatedWith(ViewModelLayout.class));
+
+        final Set<Class<?>> xmlElementTypes = Sets.newLinkedHashSet();
+        xmlElementTypes.addAll(reflections.getTypesAnnotatedWith(XmlElement.class));
 
         // add in any explicitly registered services...
         domainServiceTypes.addAll(appManifest.getAdditionalServices());
@@ -183,27 +215,28 @@ public abstract class IsisComponentProvider {
                 }
             }).toList();
 
-        registry.setDomainServiceTypes(within(packagesWithDotSuffix, domainServiceTypes));
-        registry.setPersistenceCapableTypes(within(packagesWithDotSuffix, persistenceCapableTypes));
-        registry.setFixtureScriptTypes(within(packagesWithDotSuffix, fixtureScriptTypes));
-        registry.setMixinTypes(within(packagesWithDotSuffix, mixinTypes));
-        registry.setDomainObjectTypes(within(packagesWithDotSuffix, domainObjectTypes));
-        registry.setViewModelTypes(within(packagesWithDotSuffix, viewModelTypes));
-        registry.setXmlElementTypes(within(packagesWithDotSuffix, xmlElementTypes));
+        registry.setDomainServiceTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, domainServiceTypes));
+        registry.setPersistenceCapableTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, persistenceCapableTypes));
+        registry.setFixtureScriptTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, fixtureScriptTypes));
+        registry.setMixinTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, mixinTypes));
+        registry.setDomainObjectTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, domainObjectTypes));
+        registry.setViewModelTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, viewModelTypes));
+        registry.setXmlElementTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, xmlElementTypes));
     }
 
-    static <T> Set<Class<? extends T>> within(
+    static <T> Set<Class<? extends T>> withinPackageAndNotAnonymous(
             final List<String> packagesWithDotSuffix,
             final Set<Class<? extends T>> classes) {
         Set<Class<? extends T>> classesWithin = Sets.newLinkedHashSet();
         for (Class<? extends T> clz : classes) {
             final String className = clz.getName();
-            if(containedWithin(packagesWithDotSuffix, className)) {
+            if(containedWithin(packagesWithDotSuffix, className) && notAnonymous(clz)) {
                 classesWithin.add(clz);
             }
         }
         return classesWithin;
     }
+
     static private boolean containedWithin(final List<String> packagesWithDotSuffix, final String className) {
         for (String packageWithDotSuffix : packagesWithDotSuffix) {
             if(className.startsWith(packageWithDotSuffix)) {
@@ -211,6 +244,14 @@ public abstract class IsisComponentProvider {
             }
         }
         return false;
+    }
+
+    private static <T> boolean notAnonymous(final Class<? extends T> clz) {
+        try {
+            return !clz.isAnonymousClass();
+        } catch(NoClassDefFoundError error) {
+            return false; // ignore, assume anonymous
+        }
     }
 
     private void specifyServicesAndRegisteredEntitiesUsing(final AppManifest appManifest) {

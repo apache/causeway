@@ -24,6 +24,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
+@Programmatic
 public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,F>>
         extends FixtureScript implements WithPrereqs<T,F>, FixtureScriptWithExecutionStrategy {
 

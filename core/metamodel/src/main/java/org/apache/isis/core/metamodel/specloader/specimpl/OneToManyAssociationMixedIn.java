@@ -207,9 +207,13 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     }
 
     @Override
+    public ObjectSpecification getOnType() {
+        return mixedInType;
+    }
+
+    @Override
     public ObjectSpecification getMixinType() {
         return getSpecificationLoader().loadSpecification(mixinType);
-
     }
 
     //endregion

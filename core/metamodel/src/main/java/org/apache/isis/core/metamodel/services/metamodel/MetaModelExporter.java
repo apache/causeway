@@ -91,7 +91,7 @@ class MetaModelExporter {
 
         // phase 1: create a domainClassType for each ObjectSpecification
         // these are added into a map for lookups in phase 2
-        Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = Maps.newHashMap();
+        final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = Maps.newHashMap();
         for (final ObjectSpecification specification : specificationLookup.allSpecifications()) {
             if(notInPackagePrefixes(specification, config)) {
                 continue;
@@ -117,6 +117,26 @@ class MetaModelExporter {
         // correspond to each object members types.
         for (final ObjectSpecification specification : Lists.newArrayList(domainClassByObjectSpec.keySet())) {
             addFacetsAndMembersTo(specification, domainClassByObjectSpec, config);
+        }
+
+        // phase 2.5: check no duplicates
+        final Map<String, ObjectSpecification> objectSpecificationByDomainClassId = Maps.newHashMap();
+        final List<String> buf = Lists.newArrayList();
+        for (final Map.Entry<ObjectSpecification, DomainClassDto> entry : domainClassByObjectSpec.entrySet()) {
+            final ObjectSpecification objectSpecification = entry.getKey();
+            final DomainClassDto domainClassDto = entry.getValue();
+            final String id = domainClassDto.getId();
+            final ObjectSpecification existing = objectSpecificationByDomainClassId.get(id);
+            if(existing != null) {
+                if(!existing.getCorrespondingClass().isEnum()) {
+                    buf.add(String.format("%s mapped to %s and %s", id, existing, objectSpecification));
+                }
+            } else {
+                objectSpecificationByDomainClassId.put(id, objectSpecification);
+            }
+        }
+        if(buf.size() > 0) {
+            throw new IllegalStateException(Joiner.on("\n").join(buf));
         }
 
         // phase 3: now copy all domain classes into the metamodel
