@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.value.bytes;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -103,6 +104,11 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
     @Override
     public String toString() {
         return "ByteValueSemanticsProvider: " + format;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("format", format);
     }
 
 }

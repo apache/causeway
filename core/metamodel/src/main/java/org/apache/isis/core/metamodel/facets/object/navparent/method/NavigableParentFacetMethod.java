@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.navparent.method;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import org.apache.isis.core.commons.reflection.Reflect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -49,5 +50,11 @@ public class NavigableParentFacetMethod extends NavigableParentFacetAbstract {
         }
     }
 
+
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("methodHandle", methodHandle);
+    }
 
 }

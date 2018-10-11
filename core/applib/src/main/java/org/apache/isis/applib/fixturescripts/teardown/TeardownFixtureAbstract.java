@@ -21,10 +21,12 @@ package org.apache.isis.applib.fixturescripts.teardown;
 import javax.inject.Inject;
 import javax.jdo.metadata.TypeMetadata;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.commons.internal.base._Strings;
 
+@Programmatic
 public abstract class TeardownFixtureAbstract extends FixtureScript {
 
     protected void deleteFrom(final Class<?> cls) {

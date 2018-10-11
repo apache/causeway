@@ -20,6 +20,10 @@
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -112,4 +116,8 @@ CssClassFacet {
         }
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("cssClassUiEventClass", cssClassUiEventClass);
+    }
 }

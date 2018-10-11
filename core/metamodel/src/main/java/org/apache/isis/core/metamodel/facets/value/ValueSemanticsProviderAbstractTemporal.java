@@ -364,4 +364,9 @@ public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSem
         return false;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("configuredFormat", configuredFormat);
+        attributeMap.put("propertyType", propertyType);
+    }
 }

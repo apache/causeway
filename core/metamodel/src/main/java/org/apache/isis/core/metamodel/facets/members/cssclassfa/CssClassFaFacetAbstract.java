@@ -17,6 +17,7 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -71,4 +72,8 @@ public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract impl
         return CssClassFaFacet.class;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("position", position);
+    }
 }

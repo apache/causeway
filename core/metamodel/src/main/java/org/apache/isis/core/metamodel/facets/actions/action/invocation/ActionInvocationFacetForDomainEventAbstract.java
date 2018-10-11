@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.Map;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -567,4 +569,14 @@ implements ImperativeFacet {
     public TransactionState getTransactionState() {
         return persistenceSessionServiceInternal.getTransactionState();
     }
+
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+        attributeMap.put("onType", onType);
+        attributeMap.put("returnType", returnType);
+        attributeMap.put("eventType", eventType);
+    }
+
 }

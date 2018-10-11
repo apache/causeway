@@ -76,4 +76,5 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
     protected AuthenticationSession getAuthenticationSession() {
         return authenticationSessionProvider.getAuthenticationSession();
     }
+
 }

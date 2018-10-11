@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,4 +42,8 @@ public class ChoicesFacetEnum extends ChoicesFacetAbstract {
         return choices;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("choices", choices);
+    }
 }

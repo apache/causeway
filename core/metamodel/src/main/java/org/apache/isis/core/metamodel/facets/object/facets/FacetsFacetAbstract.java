@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.facets;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -86,4 +87,8 @@ public abstract class FacetsFacetAbstract extends FacetAbstract implements Facet
         return (Class<? extends FacetFactory>) (FacetFactory.class.isAssignableFrom(classCandidate) ? classCandidate : null);
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("facetFactories", facetFactories);
+    }
 }

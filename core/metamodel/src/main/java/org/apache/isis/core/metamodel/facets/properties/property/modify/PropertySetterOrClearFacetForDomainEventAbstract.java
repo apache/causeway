@@ -20,8 +20,9 @@
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.sql.Timestamp;
+import java.util.Map;
+
 import java.util.Objects;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
@@ -336,5 +337,10 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
         return persistenceSessionServiceInternal;
     }
 
-
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("getterFacet", getterFacet);
+        attributeMap.put("setterFacet", setterFacet);
+        attributeMap.put("clearFacet", clearFacet);
+    }
 }

@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
 import java.util.List;
+import java.util.Map;
+
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
@@ -89,6 +91,12 @@ public class ImmutableFacetForDomainObjectAnnotation extends ImmutableFacetAbstr
     public void copyOnto(final FacetHolder holder) {
         final Facet facet = new ImmutableFacetForDomainObjectAnnotation(reason, holder);
         FacetUtil.addFacet(facet);
+    }
+
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("reason", reason);
     }
 
 }

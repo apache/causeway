@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -148,4 +149,8 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
         return titleString(value);
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("titleMethod", titleMethod);
+    }
 }

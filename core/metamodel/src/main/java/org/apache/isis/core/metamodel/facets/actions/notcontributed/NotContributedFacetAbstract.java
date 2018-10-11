@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.notcontributed;
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -61,6 +63,11 @@ public abstract class NotContributedFacetAbstract extends FacetAbstract implemen
     public boolean toAssociations() {
         // not contributed to associations if...
         return contributed() == Contributed.AS_NEITHER || contributed() == Contributed.AS_ACTION;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("contributed", contributed);
     }
 
 }

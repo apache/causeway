@@ -19,6 +19,8 @@
 package org.apache.isis.core.metamodel.facets.object.domainservice;
 
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -53,5 +55,11 @@ implements DomainServiceFacet {
     @Override
     public NatureOfService getNatureOfService() {
         return natureOfService;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("repositoryFor", repositoryFor);
+        attributeMap.put("natureOfService", natureOfService);
     }
 }

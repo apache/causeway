@@ -37,6 +37,7 @@ public class DescribedAsFacetOnMemberFactory extends FacetFactoryAbstract implem
     public void process(final ProcessMethodContext processMethodContext) {
 
         DescribedAsFacet facet = createFromAnnotationOnReturnTypeIfPossible(processMethodContext);
+        // facet derived from type moved to post-processor
 
         // no-op if null
         FacetUtil.addFacet(facet);

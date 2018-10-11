@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.propcoll.accessor;
 
+import java.util.Map;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -93,4 +95,8 @@ implements PropertyOrCollectionAccessorFacet {
         return authenticationSessionProvider.getAuthenticationSession();
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("onType", onType);
+    }
 }

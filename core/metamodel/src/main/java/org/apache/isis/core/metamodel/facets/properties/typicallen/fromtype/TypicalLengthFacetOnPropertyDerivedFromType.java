@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
@@ -36,7 +38,12 @@ public class TypicalLengthFacetOnPropertyDerivedFromType extends TypicalLengthFa
     @Override
     public int value() {
         final MultiLineFacet facet = getFacetHolder().getFacet(MultiLineFacet.class);
-        return facet.numberOfLines() * typicalLengthFacet.value();
+        return (facet != null ? facet.numberOfLines() : 1) * typicalLengthFacet.value();
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("typicalLengthFacet", typicalLengthFacet);
     }
 
 }

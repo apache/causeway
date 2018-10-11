@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -46,4 +48,10 @@ public class PromptStyleFacetForActionXml extends PromptStyleFacetAbstract {
     public PromptStyle value() {
         return promptStyle;
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("promptStyle", promptStyle);
+    }
+
 }

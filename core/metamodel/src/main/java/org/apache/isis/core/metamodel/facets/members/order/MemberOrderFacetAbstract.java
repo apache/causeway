@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.members.order;
 
+import java.util.Map;
+
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -96,4 +98,10 @@ public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstrac
         return sequence;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("name", name);
+        attributeMap.put("originalName", originalName);
+        attributeMap.put("sequence", sequence);
+    }
 }

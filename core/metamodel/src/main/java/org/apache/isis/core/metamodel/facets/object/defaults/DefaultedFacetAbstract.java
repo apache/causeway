@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.object.defaults;
 
+import java.util.Map;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -82,4 +84,8 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
         return dependencyInjector;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("defaultsProviderClass", defaultsProviderClass);
+    }
 }

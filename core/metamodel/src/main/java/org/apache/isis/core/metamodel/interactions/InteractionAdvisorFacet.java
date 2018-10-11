@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionAdvisor;
@@ -46,6 +48,10 @@ public interface InteractionAdvisorFacet extends InteractionAdvisor, Facet {
      * For testing purposes only.
      */
     public static InteractionAdvisorFacet NOOP = new InteractionAdvisorFacet() {
+        @Override
+        public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        }
+
         @Override
         public boolean alwaysReplace() {
             return false;

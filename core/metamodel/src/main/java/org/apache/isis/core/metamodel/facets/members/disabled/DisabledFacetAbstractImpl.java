@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.members.disabled;
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -74,5 +76,8 @@ public abstract class DisabledFacetAbstractImpl extends DisabledFacetAbstract {
         return reason;
     }
 
-
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("reason", reason);
+    }
 }

@@ -28,17 +28,18 @@ public abstract class ObjectActionParameterContributeeAbstract
 extends ObjectActionParameterAbstract
 implements ObjectActionParameterContributee {
 
-    private final ObjectAdapter serviceAdapter;
+    private final Object servicePojo;
     private final ObjectActionParameter serviceActionParameter;
     private final ObjectActionContributee contributeeAction;
 
     public ObjectActionParameterContributeeAbstract(
-            final FeatureType featureType, final ObjectAdapter serviceAdapter,
+            final FeatureType featureType,
+            final Object servicePojo,
             final ObjectActionParameterAbstract serviceActionParameter,
             final int contributeeParamNumber,
             final ObjectActionContributee contributeeAction) {
         super(featureType, contributeeParamNumber, contributeeAction, serviceActionParameter.getPeer());
-        this.serviceAdapter = serviceAdapter;
+        this.servicePojo = servicePojo;
         this.serviceActionParameter = serviceActionParameter;
         this.contributeeAction = contributeeAction;
     }
@@ -48,13 +49,17 @@ implements ObjectActionParameterContributee {
             final ObjectAdapter adapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return serviceActionParameter.getAutoComplete(serviceAdapter, searchArg,
+        return serviceActionParameter.getAutoComplete(getServiceAdapter(), searchArg,
                 interactionInitiatedBy);
+    }
+
+    protected ObjectAdapter getServiceAdapter() {
+        return getObjectPersistor().adapterFor(servicePojo);
     }
 
     @Override
     protected ObjectAdapter targetForDefaultOrChoices(final ObjectAdapter adapter) {
-        return serviceAdapter;
+        return getServiceAdapter();
     }
 
     @Override

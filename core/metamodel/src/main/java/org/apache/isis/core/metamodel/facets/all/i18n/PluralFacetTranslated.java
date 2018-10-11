@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.all.i18n;
 
+import java.util.Map;
+
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -45,4 +47,9 @@ public class PluralFacetTranslated extends FacetAbstract implements PluralFacet 
         return StringExtensions.asPluralName(singularName);
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("context", context);
+        attributeMap.put("originalText", originalText);
+    }
 }

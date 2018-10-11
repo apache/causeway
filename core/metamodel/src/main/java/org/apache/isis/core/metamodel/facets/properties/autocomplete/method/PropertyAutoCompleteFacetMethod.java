@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.autocomplete.method;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -145,4 +146,12 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
     protected AuthenticationSession getAuthenticationSession() {
         return authenticationSessionProvider.getAuthenticationSession();
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+        attributeMap.put("choicesType", choicesClass);
+        attributeMap.put("minLength", minLength);
+    }
+
 }

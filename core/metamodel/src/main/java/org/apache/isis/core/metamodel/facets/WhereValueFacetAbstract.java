@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -44,4 +46,11 @@ public abstract class WhereValueFacetAbstract extends FacetAbstract implements W
     protected String toStringValues() {
         return super.toStringValues() + "; where =" + where.getFriendlyName();
     }
+
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("where", where);
+    }
+
 }

@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.multiline;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
@@ -53,4 +55,9 @@ public abstract class MultiLineFacetAbstract extends MultipleValueFacetAbstract 
         return "lines=" + numberOfLines + "," + (preventWrapping ? "prevent-wrapping" : "allow-wrapping");
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("numberOfLines", numberOfLines);
+        attributeMap.put("preventWrapping", preventWrapping);
+    }
 }

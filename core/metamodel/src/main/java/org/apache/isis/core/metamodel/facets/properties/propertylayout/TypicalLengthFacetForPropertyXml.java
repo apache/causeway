@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.util.Map;
+
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
@@ -34,16 +36,21 @@ public class TypicalLengthFacetForPropertyXml extends TypicalLengthFacetAbstract
         return typicalLength != null && typicalLength != -1 ? new TypicalLengthFacetForPropertyXml(typicalLength, holder) : null;
     }
 
-    private final int typicalLength;
+    private final int value;
 
-    private TypicalLengthFacetForPropertyXml(int typicalLength, FacetHolder holder) {
+    private TypicalLengthFacetForPropertyXml(int value, FacetHolder holder) {
         super(holder, Derivation.NOT_DERIVED);
-        this.typicalLength = typicalLength;
+        this.value = value;
     }
 
     @Override
     public int value() {
-        return typicalLength;
+        return value;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("value", value);
     }
 
 }

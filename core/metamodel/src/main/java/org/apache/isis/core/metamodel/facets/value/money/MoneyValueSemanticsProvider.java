@@ -23,6 +23,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Currency;
+import java.util.Map;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -221,6 +222,11 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
     @Override
     public String toString() {
         return "MoneyValueSemanticsProvider: " + getDefaultCurrencyCode();
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("defaultCurrencyCode", defaultCurrencyCode);
     }
 
 }

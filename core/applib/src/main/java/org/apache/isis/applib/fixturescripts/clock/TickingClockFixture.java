@@ -23,6 +23,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.TickingFixtureClock;
@@ -31,6 +32,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 
+@Programmatic
 public class TickingClockFixture
 extends FixtureScript
 implements FixtureScriptWithExecutionStrategy {

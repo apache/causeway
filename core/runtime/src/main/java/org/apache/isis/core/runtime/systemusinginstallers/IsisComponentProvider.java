@@ -28,15 +28,20 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+import javax.jdo.annotations.PersistenceCapable;
 import javax.xml.bind.annotation.XmlElement;
-
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.annotation.ViewModelLayout;
+import org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -46,6 +51,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassFunctions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
@@ -138,23 +144,45 @@ public abstract class IsisComponentProvider {
 
         final ClassDiscovery discovery = ClassDiscoveryPlugin.get().discover(moduleAndFrameworkPackages);
 
-        final Set<Class<?>> domainServiceTypes = discovery.getTypesAnnotatedWith(DomainService.class);
+        final Set<Class<?>> domainServiceTypes = _Sets.newLinkedHashSet();
+        domainServiceTypes.addAll(discovery.getTypesAnnotatedWith(DomainService.class));
+        domainServiceTypes.addAll(discovery.getTypesAnnotatedWith(DomainServiceLayout.class));
+
         final Set<Class<?>> persistenceCapableTypes = PersistenceCapableTypeFinder.find(discovery);
-        final Set<Class<? extends FixtureScript>> fixtureScriptTypes = discovery.getSubTypesOf(FixtureScript.class);
+
+        final Set<Class<? extends FixtureScript>> fixtureScriptTypes = discovery.getSubTypesOf(FixtureScript.class)
+                .stream()
+                .filter(aClass -> {
+                    // the fixtureScript types are introspected just to provide a drop-down when running fixture scripts
+                    // in prototyping mode (though they may be introspected lazily if actually run).
+                    // we therefore try to limit the set of fixture types eagerly introspected at startup
+                    //
+                    // specifically, we ignore as a fixture script if annotated with @Programmatic
+                    // (though directly implementing DiscoverableFixtureScript takes precedence and will NOT ignore)
+                    return DiscoverableFixtureScript.class.isAssignableFrom(aClass) ||
+                            Annotations.getAnnotation(aClass, Programmatic.class) == null;
+                })
+                .collect(Collectors.toSet());
+
+        final Set<Class<?>> domainObjectTypes = _Sets.newLinkedHashSet();
+        domainObjectTypes.addAll(discovery.getTypesAnnotatedWith(DomainObject.class));
+        domainObjectTypes.addAll(discovery.getTypesAnnotatedWith(DomainObjectLayout.class));
 
         final Set<Class<?>> mixinTypes = _Sets.newHashSet();
         mixinTypes.addAll(discovery.getTypesAnnotatedWith(Mixin.class));
-
-        final Set<Class<?>> domainObjectTypes = discovery.getTypesAnnotatedWith(DomainObject.class);
         domainObjectTypes.stream()
         .filter(input -> {
             final DomainObject annotation = input.getAnnotation(DomainObject.class);
-            return annotation.nature() == Nature.MIXIN;
+            return annotation != null && annotation.nature() == Nature.MIXIN;
         })
         .forEach(mixinTypes::add);
 
-        final Set<Class<?>> viewModelTypes = discovery.getTypesAnnotatedWith(ViewModel.class);
-        final Set<Class<?>> xmlElementTypes = discovery.getTypesAnnotatedWith(XmlElement.class);
+        final Set<Class<?>> viewModelTypes = _Sets.newLinkedHashSet();
+        viewModelTypes.addAll(discovery.getTypesAnnotatedWith(ViewModel.class));
+        viewModelTypes.addAll(discovery.getTypesAnnotatedWith(ViewModelLayout.class));
+
+        final Set<Class<?>> xmlElementTypes = _Sets.newLinkedHashSet();
+        xmlElementTypes.addAll(discovery.getTypesAnnotatedWith(XmlElement.class));
 
         // add in any explicitly registered services...
         domainServiceTypes.addAll(appManifest.getAdditionalServices());
@@ -170,27 +198,28 @@ public abstract class IsisComponentProvider {
                         return s != null ? s + "." : null;
                 });
 
-        registry.setDomainServiceTypes(within(packagesWithDotSuffix, domainServiceTypes));
-        registry.setPersistenceCapableTypes(within(packagesWithDotSuffix, persistenceCapableTypes));
-        registry.setFixtureScriptTypes(within(packagesWithDotSuffix, fixtureScriptTypes));
-        registry.setMixinTypes(within(packagesWithDotSuffix, mixinTypes));
-        registry.setDomainObjectTypes(within(packagesWithDotSuffix, domainObjectTypes));
-        registry.setViewModelTypes(within(packagesWithDotSuffix, viewModelTypes));
-        registry.setXmlElementTypes(within(packagesWithDotSuffix, xmlElementTypes));
+        registry.setDomainServiceTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, domainServiceTypes));
+        registry.setPersistenceCapableTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, persistenceCapableTypes));
+        registry.setFixtureScriptTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, fixtureScriptTypes));
+        registry.setMixinTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, mixinTypes));
+        registry.setDomainObjectTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, domainObjectTypes));
+        registry.setViewModelTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, viewModelTypes));
+        registry.setXmlElementTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, xmlElementTypes));
     }
 
-    static <T> Set<Class<? extends T>> within(
+    static <T> Set<Class<? extends T>> withinPackageAndNotAnonymous(
             final List<String> packagesWithDotSuffix,
             final Set<Class<? extends T>> classes) {
         Set<Class<? extends T>> classesWithin = _Sets.newLinkedHashSet();
         for (Class<? extends T> clz : classes) {
             final String className = clz.getName();
-            if(containedWithin(packagesWithDotSuffix, className)) {
+            if(containedWithin(packagesWithDotSuffix, className) && notAnonymous(clz)) {
                 classesWithin.add(clz);
             }
         }
         return classesWithin;
     }
+
     static private boolean containedWithin(final List<String> packagesWithDotSuffix, final String className) {
         for (String packageWithDotSuffix : packagesWithDotSuffix) {
             if (className.startsWith(packageWithDotSuffix)) {
@@ -198,6 +227,14 @@ public abstract class IsisComponentProvider {
             }
         }
         return false;
+    }
+
+    private static <T> boolean notAnonymous(final Class<? extends T> clz) {
+        try {
+            return !clz.isAnonymousClass();
+        } catch(NoClassDefFoundError error) {
+            return false; // ignore, assume anonymous
+        }
     }
 
     private void specifyServicesAndRegisteredEntitiesUsing(final AppManifest appManifest) {

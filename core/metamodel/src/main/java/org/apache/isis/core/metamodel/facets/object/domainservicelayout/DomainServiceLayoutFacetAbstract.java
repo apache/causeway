@@ -19,6 +19,8 @@
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -50,5 +52,11 @@ implements DomainServiceLayoutFacet {
     @Override
     public String getMenuOrder() {
         return menuOrder;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("menuBar", menuBar);
+        attributeMap.put("menuOrder", menuOrder);
     }
 }

@@ -103,7 +103,7 @@
             <artifactId>simpleapp-module-simple</artifactId>
         </dependency>
 
-        <!-- test -->
+        <!-- TESTS -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>simpleapp-module-simple</artifactId>
@@ -117,6 +117,19 @@
             <type>pom</type>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.approvaltests</groupId>
+            <artifactId>approvaltests</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 

@@ -31,12 +31,13 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 /**
  * This is populated in two parts.
  *
- * Initially the #specByClassName is populated using {@link #cache(String, ObjectSpecification)}.  This allows
- * {@link #allSpecifications()} to return a list of specs.
+ * Initially the <tt>specByClassName</tt> map is populated using {@link #cache(String, ObjectSpecification)}.
+ * This allows {@link #allSpecifications()} to return a list of specs.
+ * Later on, {@link #init()} called which populates #classNameBySpecId.
  *
- * Later on, {@link #init(Map)} is called which populates #classNameBySpecId.
+ * Attempting to call {@link #getByObjectType(ObjectSpecId)} before {@link #init() initialisation} will result in an
+ * {@link IllegalStateException}.
  *
- * TODO: the information passed to #init actually comes from the cache itself (the caller calls #allSpecifications() first) so this could be simplified
  */
 class SpecificationCacheDefault {
 
@@ -69,9 +70,21 @@ class SpecificationCacheDefault {
         return className != null ? specByClassName.get(className) : null;
     }
 
-    /**
-     */
-    synchronized void init(final Map<ObjectSpecId, ObjectSpecification> specById) {
+    synchronized void init() {
+        final Collection<ObjectSpecification> objectSpecifications = allSpecifications();
+        final Map<ObjectSpecId, ObjectSpecification> specById = _Maps.newHashMap();
+        for (final ObjectSpecification objSpec : objectSpecifications) {
+            final ObjectSpecId objectSpecId = objSpec.getSpecId();
+            if (objectSpecId == null) {
+                continue;
+            }
+            specById.put(objectSpecId, objSpec);
+        }
+
+        internalInit(specById);
+    }
+
+    void internalInit(final Map<ObjectSpecId, ObjectSpecification> specById) {
         final Map<ObjectSpecId, String> classNameBySpecId = _Maps.newHashMap();
         final Map<String, ObjectSpecification> specByClassName = _Maps.newHashMap();
 

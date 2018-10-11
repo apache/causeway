@@ -19,12 +19,14 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.ensure.Ensure;
+
+import static org.apache.isis.commons.internal.base._With.requires;
+
 
 public abstract class FacetAbstract implements Facet {
 
@@ -154,13 +156,13 @@ public abstract class FacetAbstract implements Facet {
     @Override
     public String toString() {
         String details = "";
-        if (Validating.class.isAssignableFrom(getClass())) {
+        if (isValidating()) {
             details += "Validating";
         }
-        if (Disabling.class.isAssignableFrom(getClass())) {
+        if (isDisabling()) {
             details += (details.length() > 0 ? ";" : "") + "Disabling";
         }
-        if (Hiding.class.isAssignableFrom(getClass())) {
+        if (isHiding()) {
             details += (details.length() > 0 ? ";" : "") + "Hiding";
         }
         if (!"".equals(details)) {
@@ -177,6 +179,38 @@ public abstract class FacetAbstract implements Facet {
             details += ",";
         }
         return className.substring(className.lastIndexOf('.') + 1) + "[" + details + stringValues + "]";
+    }
+
+    private boolean isHiding() {
+        return Hiding.class.isAssignableFrom(getClass());
+    }
+
+    private boolean isDisabling() {
+        return Disabling.class.isAssignableFrom(getClass());
+    }
+
+    private boolean isValidating() {
+        return Validating.class.isAssignableFrom(getClass());
+    }
+
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        if(derived) {
+            attributeMap.put("derived", derived);
+        }
+        attributeMap.put("underlyingFacet", underlyingFacet);
+        if(isNoop()) {
+            attributeMap.put("noop", isNoop());
+        }
+        if(isHiding()) {
+            attributeMap.put("hiding", isHiding());
+        }
+        if(isDisabling()) {
+            attributeMap.put("disabling", isDisabling());
+        }
+        if(isValidating()) {
+            attributeMap.put("validating", isValidating());
+        }
     }
 
     /**

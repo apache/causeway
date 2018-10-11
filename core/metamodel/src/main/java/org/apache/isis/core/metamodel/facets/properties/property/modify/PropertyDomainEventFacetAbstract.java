@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
+import java.util.Map;
+
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
@@ -132,4 +134,10 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
     public <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {
         return _Casts.uncheckedCast(value());
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("getterFacet", getterFacet);
+    }
+
 }

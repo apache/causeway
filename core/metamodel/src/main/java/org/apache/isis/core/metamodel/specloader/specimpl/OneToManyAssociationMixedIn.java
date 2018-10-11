@@ -55,10 +55,10 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
      */
     private final ObjectActionDefault mixinAction;
 
-//    /**
-//     * The domain object type being mixed in to (being supplemented).
-//     */
-//    private final ObjectSpecification mixedInType;
+    /**
+     * The domain object type being mixed in to (being supplemented).
+     */
+    private final ObjectSpecification mixedInType;
 
 
     /**
@@ -93,7 +93,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
-//        this.mixedInType = mixedInType;
+        this.mixedInType = mixedInType;
 
         //
         // ensure the mixedIn collection cannot be modified, and derive its TypeOfFaccet
@@ -205,9 +205,13 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     }
 
     @Override
+    public ObjectSpecification getOnType() {
+        return mixedInType;
+    }
+
+    @Override
     public ObjectSpecification getMixinType() {
         return getSpecificationLoader().loadSpecification(mixinType);
-
     }
 
 

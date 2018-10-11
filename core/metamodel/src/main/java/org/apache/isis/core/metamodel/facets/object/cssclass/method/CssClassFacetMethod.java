@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.cssclass.method;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -54,4 +55,8 @@ public class CssClassFacetMethod extends FacetAbstract implements CssClassFacet 
         }
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("method", method);
+    }
 }

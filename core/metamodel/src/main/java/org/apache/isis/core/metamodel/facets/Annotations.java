@@ -39,6 +39,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
@@ -583,6 +584,7 @@ public final class Annotations  {
                     PropertyLayout.class,
                     Collection.class,
                     CollectionLayout.class,
+                    Programmatic.class,
                     MemberOrder.class,
                     Pattern.class,
                     javax.annotation.Nullable.class,

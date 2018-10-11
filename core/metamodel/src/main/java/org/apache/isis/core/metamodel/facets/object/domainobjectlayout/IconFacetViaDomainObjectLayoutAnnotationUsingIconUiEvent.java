@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 import java.util.List;
+import java.util.Map;
+
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -110,6 +112,11 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
         } catch (InstantiationException | IllegalAccessException ex) {
             throw new NonRecoverableException(ex);
         }
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("iconUiEventClass", iconUiEventClass);
     }
 
 }

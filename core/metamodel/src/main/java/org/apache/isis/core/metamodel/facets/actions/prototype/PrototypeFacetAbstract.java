@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.actions.prototype;
 
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -49,5 +51,10 @@ public abstract class PrototypeFacetAbstract extends MarkerFacetAbstract impleme
 
     protected DeploymentCategory getDeploymentCategory() {
         return deploymentCategory;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("deploymentCategory", deploymentCategory);
     }
 }

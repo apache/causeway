@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.collections.accessor;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -108,5 +109,10 @@ implements ImperativeFacet {
         return "method=" + method;
     }
 
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+    }
 
 }

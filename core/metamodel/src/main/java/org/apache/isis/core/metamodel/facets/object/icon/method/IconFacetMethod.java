@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.icon.method;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -42,6 +43,11 @@ public class IconFacetMethod extends IconFacetAbstract {
         } catch (final RuntimeException ex) {
             return null;
         }
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("method", method);
     }
 
 }

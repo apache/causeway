@@ -123,7 +123,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
      * NOT API, but exposed for the benefit of {@link ObjectActionParameterContributee}
      * and {@link ObjectActionParameterMixedIn}.
      */
-    TypedHolder getPeer() {
+    public TypedHolder getPeer() {
         return peer;
     }
 

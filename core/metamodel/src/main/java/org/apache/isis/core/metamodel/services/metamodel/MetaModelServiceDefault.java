@@ -21,8 +21,12 @@ package org.apache.isis.core.metamodel.services.metamodel;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,16 +58,24 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-        )
+    )
 public class MetaModelServiceDefault implements MetaModelService {
 
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(MetaModelServiceDefault.class);
 
+    private MetaModelExporter metaModelExporter;
+
+    @PostConstruct
+    @Programmatic
+    public void init(Map<String,String> properties) {
+        metaModelExporter = new MetaModelExporter(specificationLookup);
+    }
 
     @Override
     @Programmatic
@@ -286,7 +298,10 @@ public class MetaModelServiceDefault implements MetaModelService {
     @javax.inject.Inject
     AppManifestProvider appManifestProvider;
 
-
+    @Override
+    public MetamodelDto exportMetaModel(final Config config) {
+        return metaModelExporter.exportMetaModel(config);
+    }
 
 
 }

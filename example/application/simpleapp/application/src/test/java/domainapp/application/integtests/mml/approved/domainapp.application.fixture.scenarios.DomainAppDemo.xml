@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mml:domainClassDto id="domainapp.application.fixture.scenarios.DomainAppDemo" xmlns:mml="http://isis.apache.org/schema/metamodel">
+    <mml:facets>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated">
+            <mml:attr name="context">domainapp.application.fixture.scenarios.DomainAppDemo</mml:attr>
+            <mml:attr name="originalText">Script</mml:attr>
+            <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.object.domainobjectlayout.NamedFacetForViewModelLayoutAnnotation</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
+            <mml:attr name="bookmarkPolicy">NEVER</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.isis.core.metamodel.facets.object.grid.GridFacetDefault"/>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet" fqcn="org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFallback">
+            <mml:attr name="columns">[4,0,0,8]</mml:attr>
+            <mml:attr name="left">General</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.NotPersistableFacetNull">
+            <mml:attr name="disabling">true</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet" fqcn="org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName">
+            <mml:attr name="derived">true</mml:attr>
+            <mml:attr name="value">domainapp.application.fixture.scenarios.DomainAppDemo</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
+            <mml:attr name="validating">true</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
+            <mml:attr name="derived">true</mml:attr>
+            <mml:attr name="value">25</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.plural.PluralFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.PluralFacetTranslated">
+            <mml:attr name="context">domainapp.application.fixture.scenarios.DomainAppDemo</mml:attr>
+            <mml:attr name="derived">true</mml:attr>
+            <mml:attr name="originalText">Script</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.title.TitleFacet" fqcn="org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation">
+            <mml:attr name="components"></mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet" fqcn="org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetForRecreatableObjectInterface">
+            <mml:attr name="recreationMechanism">INITIALIZES</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.runtime.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.core.runtime.authorization.standard.AuthorizationFacetImpl">
+            <mml:attr name="disabling">true</mml:attr>
+            <mml:attr name="hiding">true</mml:attr>
+        </mml:facet>
+    </mml:facets>
+    <mml:properties/>
+    <mml:collections/>
+    <mml:actions>
+        <mml:act id="downloadLayoutXml">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation" fqcn="org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation">
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="when">ALWAYS</mml:attr>
+                    <mml:attr name="where">NOWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.services.layout.Object_downloadLayoutXml.ActionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
+                    <mml:attr name="eventType">org.apache.isis.applib.services.layout.Object_downloadLayoutXml.ActionDomainEvent</mml:attr>
+                    <mml:attr name="intent.act">EXECUTE</mml:attr>
+                    <mml:attr name="methods">public java.lang.Object org.apache.isis.applib.services.layout.Object_downloadLayoutXml.act(java.lang.String,org.apache.isis.applib.services.layout.LayoutService$Style)</mml:attr>
+                    <mml:attr name="onType">org.apache.isis.applib.services.layout.Object_downloadLayoutXml</mml:attr>
+                    <mml:attr name="returnType">java.lang.Object</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation">
+                    <mml:attr name="value">REGULAR_ONLY</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.layout.NotContributedFacetForActionLayoutAnnotation">
+                    <mml:attr name="as">ASSOCIATION</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacet</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutAnnotation">
+                    <mml:attr name="position">PANEL_DROPDOWN</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
+                    <mml:attr name="deploymentCategory">PRODUCTION</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
+                    <mml:attr name="value">SAFE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.application.fixture.scenarios.DomainAppDemo#downloadLayoutXml()</mml:attr>
+                    <mml:attr name="originalText">Download Layout Xml</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionLayoutAnnotation">
+                    <mml:attr name="value">hidden</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForActionLayoutAnnotation">
+                    <mml:attr name="position">LEFT</mml:attr>
+                    <mml:attr name="value">fa fa-fw fa-download</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet" fqcn="org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation">
+                    <mml:attr name="name">datanucleusIdLong</mml:attr>
+                    <mml:attr name="originalName">datanucleusIdLong</mml:attr>
+                    <mml:attr name="sequence">700.1</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
+                    <mml:attr name="bookmarkPolicy">NEVER</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetFallBackToInline">
+                    <mml:attr name="derived">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.propertylayout.UnchangingFacetOnPropertyFromLayoutProperties">
+                    <mml:attr name="value">false</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.runtime.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.core.runtime.authorization.standard.AuthorizationFacetImpl">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:returnType>java.lang.Object</mml:returnType>
+            <mml:params>
+                <mml:param xsi:type="mml:scalarParam" id="fileName" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <mml:facets>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated">
+                            <mml:attr name="context">org.apache.isis.applib.services.layout.Object_downloadLayoutXml#act(java.lang.String,org.apache.isis.applib.services.layout.LayoutService$Style)</mml:attr>
+                            <mml:attr name="originalText">File name</mml:attr>
+                            <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.param.layout.NamedFacetForParameterLayoutAnnotation</mml:attr>
+                        </mml:facet>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet" fqcn="org.apache.isis.core.metamodel.facets.param.layout.LabelAtFacetForParameterLayoutAnnotation">
+                            <mml:attr name="label">DEFAULT</mml:attr>
+                            <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.param.layout.LabelAtFacetForParameterLayoutAnnotation</mml:attr>
+                        </mml:facet>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                            <mml:attr name="inverted">false</mml:attr>
+                            <mml:attr name="semantics">REQUIRED</mml:attr>
+                            <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault</mml:attr>
+                            <mml:attr name="validating">true</mml:attr>
+                        </mml:facet>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod">
+                            <mml:attr name="intent.default0Act">DEFAULTS</mml:attr>
+                            <mml:attr name="methods">public java.lang.String org.apache.isis.applib.services.layout.Object_downloadLayoutXml.default0Act()</mml:attr>
+                        </mml:facet>
+                    </mml:facets>
+                    <mml:type>java.lang.String</mml:type>
+                </mml:param>
+                <mml:param xsi:type="mml:scalarParam" id="style" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                    <mml:facets>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
+                            <mml:attr name="inverted">false</mml:attr>
+                            <mml:attr name="semantics">REQUIRED</mml:attr>
+                            <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault</mml:attr>
+                            <mml:attr name="validating">true</mml:attr>
+                        </mml:facet>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod">
+                            <mml:attr name="intent.default1Act">DEFAULTS</mml:attr>
+                            <mml:attr name="methods">public org.apache.isis.applib.services.layout.LayoutService$Style org.apache.isis.applib.services.layout.Object_downloadLayoutXml.default1Act()</mml:attr>
+                        </mml:facet>
+                    </mml:facets>
+                    <mml:type>org.apache.isis.applib.services.layout.LayoutService$Style</mml:type>
+                </mml:param>
+            </mml:params>
+        </mml:act>
+        <mml:act id="openRestApi">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation" fqcn="org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation">
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="when">ALWAYS</mml:attr>
+                    <mml:attr name="where">NOWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.services.layout.Object_openRestApi.ActionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
+                    <mml:attr name="eventType">org.apache.isis.applib.services.layout.Object_openRestApi.ActionDomainEvent</mml:attr>
+                    <mml:attr name="intent.act">EXECUTE</mml:attr>
+                    <mml:attr name="methods">public java.net.URL org.apache.isis.applib.services.layout.Object_openRestApi.act() throws java.net.MalformedURLException</mml:attr>
+                    <mml:attr name="onType">org.apache.isis.applib.services.layout.Object_openRestApi</mml:attr>
+                    <mml:attr name="returnType">java.net.URL</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation">
+                    <mml:attr name="value">REGULAR_ONLY</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.layout.NotContributedFacetForActionLayoutAnnotation">
+                    <mml:attr name="as">ASSOCIATION</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacet</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutAnnotation">
+                    <mml:attr name="position">PANEL_DROPDOWN</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
+                    <mml:attr name="deploymentCategory">PRODUCTION</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
+                    <mml:attr name="value">SAFE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.application.fixture.scenarios.DomainAppDemo#openRestApi()</mml:attr>
+                    <mml:attr name="originalText">Open Rest Api</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionLayoutAnnotation">
+                    <mml:attr name="value">hidden</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForActionLayoutAnnotation">
+                    <mml:attr name="position">LEFT</mml:attr>
+                    <mml:attr name="value">fa fa-fw fa-external-link</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet" fqcn="org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation">
+                    <mml:attr name="name">datanucleusIdLong</mml:attr>
+                    <mml:attr name="originalName">datanucleusIdLong</mml:attr>
+                    <mml:attr name="sequence">750.1</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
+                    <mml:attr name="bookmarkPolicy">NEVER</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetFallBackToInline">
+                    <mml:attr name="derived">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.propertylayout.UnchangingFacetOnPropertyFromLayoutProperties">
+                    <mml:attr name="value">false</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.runtime.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.core.runtime.authorization.standard.AuthorizationFacetImpl">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:returnType>java.net.URL</mml:returnType>
+            <mml:params/>
+        </mml:act>
+        <mml:act id="rebuildMetamodel">
+            <mml:facets>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation" fqcn="org.apache.isis.core.metamodel.facets.actions.action.hidden.HiddenFacetForActionAnnotation">
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="when">ALWAYS</mml:attr>
+                    <mml:attr name="where">NOWHERE</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetForActionAnnotation">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                    <mml:attr name="validating">true</mml:attr>
+                    <mml:attr name="value">org.apache.isis.applib.services.layout.Object_rebuildMetamodel.ActionDomainEvent</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventFromActionAnnotation">
+                    <mml:attr name="eventType">org.apache.isis.applib.services.layout.Object_rebuildMetamodel.ActionDomainEvent</mml:attr>
+                    <mml:attr name="intent.act">EXECUTE</mml:attr>
+                    <mml:attr name="methods">public void org.apache.isis.applib.services.layout.Object_rebuildMetamodel.act()</mml:attr>
+                    <mml:attr name="onType">org.apache.isis.applib.services.layout.Object_rebuildMetamodel</mml:attr>
+                    <mml:attr name="returnType">void</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.bulk.BulkFacetForActionAnnotation">
+                    <mml:attr name="value">REGULAR_ONLY</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.layout.NotContributedFacetForActionLayoutAnnotation">
+                    <mml:attr name="as">ASSOCIATION</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacet</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutAnnotation">
+                    <mml:attr name="position">PANEL_DROPDOWN</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
+                    <mml:attr name="deploymentCategory">PRODUCTION</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
+                    <mml:attr name="value">IDEMPOTENT</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated">
+                    <mml:attr name="context">domainapp.application.fixture.scenarios.DomainAppDemo#rebuildMetamodel()</mml:attr>
+                    <mml:attr name="originalText">Rebuild Metamodel</mml:attr>
+                    <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet" fqcn="org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionLayoutAnnotation">
+                    <mml:attr name="value">hidden</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForActionLayoutAnnotation">
+                    <mml:attr name="position">LEFT</mml:attr>
+                    <mml:attr name="value">fa fa-fw fa-refresh</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet" fqcn="org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation">
+                    <mml:attr name="name">datanucleusIdLong</mml:attr>
+                    <mml:attr name="originalName">datanucleusIdLong</mml:attr>
+                    <mml:attr name="sequence">800.1</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
+                    <mml:attr name="bookmarkPolicy">NEVER</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet" fqcn="org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacetFallBackToInline">
+                    <mml:attr name="derived">true</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet" fqcn="org.apache.isis.core.metamodel.facets.properties.propertylayout.UnchangingFacetOnPropertyFromLayoutProperties">
+                    <mml:attr name="value">false</mml:attr>
+                </mml:facet>
+                <mml:facet id="org.apache.isis.core.runtime.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.core.runtime.authorization.standard.AuthorizationFacetImpl">
+                    <mml:attr name="disabling">true</mml:attr>
+                    <mml:attr name="hiding">true</mml:attr>
+                </mml:facet>
+            </mml:facets>
+            <mml:returnType>void</mml:returnType>
+            <mml:params/>
+        </mml:act>
+    </mml:actions>
+</mml:domainClassDto>

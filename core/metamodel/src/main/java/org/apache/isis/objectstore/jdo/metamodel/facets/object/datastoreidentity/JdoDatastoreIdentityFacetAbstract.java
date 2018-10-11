@@ -18,6 +18,8 @@
  */
 package org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity;
 
+import java.util.Map;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -43,5 +45,10 @@ JdoDatastoreIdentityFacet {
     @Override
     public IdGeneratorStrategy getStrategy() {
         return strategy;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("strategy", strategy);
     }
 }

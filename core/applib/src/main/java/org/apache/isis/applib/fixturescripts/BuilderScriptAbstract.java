@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
 
+@Programmatic
 public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,F>>
 extends FixtureScript implements WithPrereqs<T,F>, FixtureScriptWithExecutionStrategy {
 

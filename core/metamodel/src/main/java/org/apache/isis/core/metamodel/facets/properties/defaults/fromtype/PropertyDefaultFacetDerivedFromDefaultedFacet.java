@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.defaults.fromtype;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -59,4 +61,8 @@ public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract
         return adapterProvider;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("typeFacet", typeFacet);
+    }
 }

@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.position;
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -45,6 +47,11 @@ public abstract class ActionPositionFacetAbstract extends FacetAbstract implemen
     @Override
     protected String toStringValues() {
         return "position=" + position;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("position", position);
     }
 
 }

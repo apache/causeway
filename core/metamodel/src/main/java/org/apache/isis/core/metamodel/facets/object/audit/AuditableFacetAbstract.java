@@ -19,6 +19,8 @@
 package org.apache.isis.core.metamodel.facets.object.audit;
 
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -52,4 +54,8 @@ AuditableFacet {
         return this.enablement == Enablement.DISABLED;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("enablement", enablement);
+    }
 }

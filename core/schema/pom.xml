@@ -91,6 +91,7 @@
                                         <schemaInclude>cmd/cmd-1.4.xsd</schemaInclude>
                                         <schemaInclude>ixn/ixn-1.3.xsd</schemaInclude>
                                         <schemaInclude>chg/chg-1.1.xsd</schemaInclude>
+                                        <schemaInclude>metamodel/metamodel-1.0.xsd</schemaInclude>
                                     </schemaIncludes>
                                     <bindingDirectory>src/main/resources/org/apache/isis/schema</bindingDirectory>
                                     <bindingIncludes>

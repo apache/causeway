@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -119,7 +120,10 @@ MetaModelValidatorRefiner {
                             return;
                         }
                         ObjectSpecIdFacet objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
-                        if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName) {
+                        if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName &&
+                           // as a special case, don't enforce this for fixture scripts... we never invoke actions on fixture scripts anyway
+                           !FixtureScript.class.isAssignableFrom(objectSpec.getCorrespondingClass()) ) {
+
                             validationFailures.add(
                                     "%s: the object type must be specified explicitly ('%s' config property).  Defaulting the object type from the package/class/package name can lead to data migration issues for apps deployed to production (if the class is subsequently refactored).  Use @Discriminator, @DomainObject(objectType=...) or @PersistenceCapable(schema=...) to specify explicitly.",
                                     objectSpec.getFullIdentifier(), ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY);

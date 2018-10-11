@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.param.choices.methodnum;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -99,6 +100,12 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
     @Override
     protected String toStringValues() {
         return "method=" + method + ",type=" + choicesType;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+        attributeMap.put("choicesType", choicesType);
     }
 
 }

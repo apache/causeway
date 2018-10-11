@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
+import java.util.Map;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -128,5 +129,12 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
 
     protected AuthenticationSession getAuthenticationSession() {
         return authenticationSessionProvider.getAuthenticationSession();
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("repositoryClass", repositoryClass);
+        attributeMap.put("repositoryMethod", repositoryMethod);
+        attributeMap.put("minLength", getMinLength());
     }
 }

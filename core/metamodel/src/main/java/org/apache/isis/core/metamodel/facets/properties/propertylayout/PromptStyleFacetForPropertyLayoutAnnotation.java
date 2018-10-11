@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -86,4 +87,10 @@ public class PromptStyleFacetForPropertyLayoutAnnotation extends PromptStyleFace
     public PromptStyle value() {
         return promptStyle;
     }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("promptStyle", promptStyle);
+    }
+
 }

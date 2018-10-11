@@ -26,6 +26,8 @@ import java.util.Collection;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.commons.internal.base._Casts;
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -47,6 +49,7 @@ implements CollectionRemoveFromFacet {
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
     private final CollectionRemoveFromFacet collectionRemoveFromFacet;
+    // TODO: seems to be unused, remove?
     private final CollectionDomainEventFacetAbstract collectionDomainEventFacet;
 
     private final DomainEventHelper domainEventHelper;
@@ -114,4 +117,9 @@ implements CollectionRemoveFromFacet {
         return _Casts.uncheckedCast(value());
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("getterFacet", getterFacet);
+        attributeMap.put("collectionRemoveFromFacet", collectionRemoveFromFacet);
+    }
 }

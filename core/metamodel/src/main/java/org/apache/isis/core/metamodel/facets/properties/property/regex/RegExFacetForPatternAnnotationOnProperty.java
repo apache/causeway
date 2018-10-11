@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.apache.isis.commons.internal.base._Strings;
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
@@ -65,6 +67,11 @@ public class RegExFacetForPatternAnnotationOnProperty extends RegExFacetAbstract
             return true;
         }
         return !pattern.matcher(text).matches();
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("pattern", pattern);
     }
 
 }

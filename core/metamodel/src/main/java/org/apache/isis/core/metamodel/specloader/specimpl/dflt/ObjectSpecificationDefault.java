@@ -35,6 +35,9 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.applib.annotation.HomePage;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -46,6 +49,7 @@ import org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred;
@@ -202,20 +206,22 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
 
-
     // -- create associations and actions
     private List<ObjectAssociation> createAssociations() {
-        final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods();
         final List<ObjectAssociation> associations = _Lists.newArrayList();
-        for (FacetedMethod facetedMethod : associationFacetedMethods) {
-            final ObjectAssociation association = createAssociation(facetedMethod);
-            if(association != null) {
-                associations.add(association);
+        if(skipAssociationsAndActions()) {
+            // add no associations
+        } else {
+            final List<FacetedMethod> associationFacetedMethods = facetedMethodsBuilder.getAssociationFacetedMethods();
+            for (FacetedMethod facetedMethod : associationFacetedMethods) {
+                final ObjectAssociation association = createAssociation(facetedMethod);
+                if(association != null) {
+                    associations.add(association);
+                }
             }
         }
         return associations;
     }
-
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
         if (facetMethod.getFeatureType().isCollection()) {
@@ -228,12 +234,16 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private List<ObjectAction> createActions() {
-        final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
         final List<ObjectAction> actions = _Lists.newArrayList();
-        for (FacetedMethod facetedMethod : actionFacetedMethods) {
-            final ObjectAction action = createAction(facetedMethod);
-            if(action != null) {
-                actions.add(action);
+        if(skipAssociationsAndActions()) {
+            // create no actions
+        } else {
+            final List<FacetedMethod> actionFacetedMethods = facetedMethodsBuilder.getActionFacetedMethods();
+            for (FacetedMethod facetedMethod : actionFacetedMethods) {
+                final ObjectAction action = createAction(facetedMethod);
+                if(action != null) {
+                    actions.add(action);
+                }
             }
         }
         return actions;
@@ -248,6 +258,32 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
     }
 
+    private boolean skipAssociationsAndActions() {
+        return isFixtureScript() || isDomainServiceWithDomainNatureOfServiceNotHomePage();
+    }
+
+    // TODO: this is a bit horrible; maybe instead introduce a new NatureOfService for home page services (also for seed services?)
+    private boolean isDomainServiceWithDomainNatureOfServiceNotHomePage() {
+        final DomainServiceFacet domainServiceFacet = this.getFacet(DomainServiceFacet.class);
+        if (domainServiceFacet == null) {
+            return false;
+        }
+        if (domainServiceFacet.getNatureOfService() != NatureOfService.DOMAIN) {
+            return false;
+        }
+        // domain services that have a single method annotated with @HomePage ARE introspected.
+        final Method[] methods = getCorrespondingClass().getDeclaredMethods();
+        if (methods.length != 1) {
+            return true;
+        }
+        return methods[0].getAnnotation(HomePage.class) == null;
+    }
+
+    private boolean isFixtureScript() {
+        return FixtureScript.class.isAssignableFrom(getCorrespondingClass());
+    }
+
+    //endregion
 
 
     // -- isXxx

@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.objectvalue.mandatory;
 
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -81,6 +83,7 @@ public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract impleme
         if (!(context instanceof PropertyModifyContext) && !(context instanceof ActionArgValidityContext)) {
             return null;
         }
+        // TODO: IntelliJ says the following is always false, so looks like it can be removed...
         if (!(context instanceof ProposedHolder)) {
             // shouldn't happen, since both the above should hold a proposed
             // value/argument
@@ -94,5 +97,11 @@ public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract impleme
         final NamedFacet namedFacet = getFacetHolder().getFacet(NamedFacet.class);
         final String name = namedFacet != null? namedFacet.value(): null;
         return name != null? "'" + name + "' is mandatory":"Mandatory";
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("semantics", semantics);
+        attributeMap.put("inverted", isInvertedSemantics());
     }
 }

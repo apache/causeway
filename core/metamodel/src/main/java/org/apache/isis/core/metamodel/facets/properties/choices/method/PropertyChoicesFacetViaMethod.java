@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.choices.method;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -95,6 +96,12 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
 
     protected ObjectAdapterProvider getObjectAdapterProvider() {
         return adapterProvider;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+        attributeMap.put("choicesType", choicesClass);
     }
 
 }

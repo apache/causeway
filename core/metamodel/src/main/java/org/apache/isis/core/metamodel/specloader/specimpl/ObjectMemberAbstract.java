@@ -120,6 +120,9 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     // -- Facets
 
+    /**
+     * Not API.
+     */
     public FacetedMethod getFacetedMethod() {
         return facetedMethod;
     }

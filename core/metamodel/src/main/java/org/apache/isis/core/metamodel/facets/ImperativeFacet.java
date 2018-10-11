@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import java.util.Map;
 
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -165,6 +166,16 @@ public interface ImperativeFacet extends Facet {
             }
             throw new IllegalArgumentException(member.getIdentifier().toClassAndNameIdentityString() +  ": unable to determine intent of " + method.getName());
         }
+
+        public static void appendAttributesTo(ImperativeFacet facet, final Map<String, Object> attributeMap) {
+            List<Method> methods = facet.getMethods();
+            attributeMap.put("methods", methods);
+            for (Method method : methods) {
+                Intent intent = facet.getIntent(method);
+                attributeMap.put("intent." + method.getName(), intent);
+            }
+        }
+
     }
 
 }

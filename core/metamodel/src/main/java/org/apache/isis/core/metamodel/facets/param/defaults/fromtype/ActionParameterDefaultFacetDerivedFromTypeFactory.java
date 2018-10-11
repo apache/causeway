@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFace
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class ActionParameterDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbstract {
+public class ActionParameterDefaultFacetDerivedFromTypeFactory extends FacetFactoryAbstract  {
 
     public ActionParameterDefaultFacetDerivedFromTypeFactory() {
         super(FeatureType.PARAMETERS_ONLY);

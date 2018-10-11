@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.param.defaults.methodnum;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -71,6 +72,11 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
 
     protected ObjectAdapterProvider getObjectAdapterProvider() {
         return adapterProvider;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }
 
 }

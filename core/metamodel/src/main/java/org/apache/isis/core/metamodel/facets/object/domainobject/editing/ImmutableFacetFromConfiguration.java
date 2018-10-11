@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
 import org.apache.isis.commons.internal.base._Strings;
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -48,4 +50,9 @@ public class ImmutableFacetFromConfiguration extends ImmutableFacetAbstract {
         FacetUtil.addFacet(facet);
     }
 
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("reason", reason);
+    }
 }

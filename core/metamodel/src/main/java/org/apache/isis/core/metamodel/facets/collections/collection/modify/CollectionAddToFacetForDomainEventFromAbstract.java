@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
@@ -48,6 +49,7 @@ implements CollectionAddToFacet {
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
     private final CollectionAddToFacet collectionAddToFacet;
+    // TODO: seems to be unused, remove?
     private final CollectionDomainEventFacetAbstract collectionDomainEventFacet;
 
     public CollectionAddToFacetForDomainEventFromAbstract(
@@ -116,4 +118,9 @@ implements CollectionAddToFacet {
     }
 
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("getterFacet", getterFacet);
+        attributeMap.put("collectionAddToFacet", collectionAddToFacet);
+    }
 }

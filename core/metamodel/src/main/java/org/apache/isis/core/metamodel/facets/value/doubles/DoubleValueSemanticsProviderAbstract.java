@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.value.doubles;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -107,6 +108,11 @@ public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemantic
     @Override
     public String toString() {
         return "DoubleValueSemanticsProvider: " + format;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("format", format);
     }
 
 }

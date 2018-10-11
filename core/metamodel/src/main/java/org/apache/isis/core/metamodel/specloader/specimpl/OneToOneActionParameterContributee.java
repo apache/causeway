@@ -16,7 +16,6 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
@@ -25,11 +24,11 @@ extends ObjectActionParameterContributeeAbstract
 implements OneToOneActionParameter {
 
     public OneToOneActionParameterContributee(
-            final ObjectAdapter serviceAdapter,
+            final Object servicePojo,
             final ObjectActionParameterAbstract serviceActionParameter,
             final int contributeeParamNumber,
             final ObjectActionContributee contributeeAction) {
-        super(FeatureType.ACTION_PARAMETER_SCALAR, serviceAdapter, serviceActionParameter, contributeeParamNumber, contributeeAction);
+        super(FeatureType.ACTION_PARAMETER_SCALAR, servicePojo, serviceActionParameter, contributeeParamNumber, contributeeAction);
     }
 
 

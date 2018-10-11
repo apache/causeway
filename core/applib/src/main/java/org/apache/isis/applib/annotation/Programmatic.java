@@ -44,7 +44,7 @@ import java.lang.annotation.Target;
  * being discouraged because of the name clash with <tt>org.junit.Ignore</tt>).
  */
 @Inherited
-@Target({ ElementType.METHOD, ElementType.TYPE })
+@Target({ ElementType.METHOD, ElementType.TYPE, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Programmatic {
 

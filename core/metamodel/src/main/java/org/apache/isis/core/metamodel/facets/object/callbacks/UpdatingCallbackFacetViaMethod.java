@@ -19,10 +19,11 @@
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.Wormhole;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -31,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class UpdatingCallbackFacetViaMethod extends UpdatingCallbackFacetAbstract implements ImperativeFacet {
 
-    private final List<Method> methods = new ArrayList<Method>();
+    private final List<Method> methods = _Lists.newArrayList();
 
     public UpdatingCallbackFacetViaMethod(final Method method, final FacetHolder holder) {
         super(holder);
@@ -61,6 +62,11 @@ public class UpdatingCallbackFacetViaMethod extends UpdatingCallbackFacetAbstrac
     @Override
     protected String toStringValues() {
         return "methods=" + methods;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }
 
 }

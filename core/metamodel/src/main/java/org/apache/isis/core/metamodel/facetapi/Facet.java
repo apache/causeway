@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 
-public interface Facet {
+public interface Facet extends FacetWithAttributes {
 
     /**
      * The {@link FacetHolder holder} of this facet.

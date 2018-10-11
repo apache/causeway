@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.validating.method;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -76,4 +77,8 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
         return "method=" + method;
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+    }
 }

@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -78,6 +80,20 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
             return new TitleComponent(prepend, append, titleEvaluator, abbreviateTo);
         }
 
+        @Override
+        public String toString() {
+            final List<String> parts = _Lists.newArrayList();
+            if(prepend != null && !_Strings.isNullOrEmpty(prepend.trim())) {
+                parts.add("prepend=" + prepend);
+            }
+            if(append != null && !_Strings.isNullOrEmpty(append.trim())) {
+                parts.add("append=" + append);
+            }
+            if(abbreviateTo != Integer.MAX_VALUE) {
+                parts.add("abbreviateTo=" + abbreviateTo);
+            }
+            return String.join(";", parts);
+        }
     }
 
     public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, final ObjectAdapterProvider adapterProvider) {
@@ -139,6 +155,13 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
         } catch (final RuntimeException ex) {
             LOG.warn("Title failure", ex);
             return "Failed Title";
+        }
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        if(components != null && !_Strings.isNullOrEmpty(components.toString())) {
+            attributeMap.put("components", components);
         }
     }
 }

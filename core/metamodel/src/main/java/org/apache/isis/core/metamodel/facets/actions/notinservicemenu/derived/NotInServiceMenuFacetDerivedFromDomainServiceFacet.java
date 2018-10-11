@@ -19,6 +19,8 @@
 package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived;
 
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -43,5 +45,10 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacet extends NotInSer
 
     NatureOfService getNatureOfService() {
         return natureOfService;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("natureOfService", natureOfService);
     }
 }

@@ -23,8 +23,6 @@ import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Maps;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
@@ -32,6 +30,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -109,7 +109,7 @@ public class SpecificationCacheDefaultTest {
         Map<ObjectSpecId, ObjectSpecification> specByObjectType = _Maps.newHashMap();
         specByObjectType.put(ObjectSpecId.of("CUS"), customerSpec);
         
-        specificationCache.init(specByObjectType);
+        specificationCache.internalInit(specByObjectType);
         final ObjectSpecification objectSpec = specificationCache.getByObjectType(ObjectSpecId.of("CUS"));
         
         assertSame(objectSpec, customerSpec);

@@ -21,6 +21,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.query;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.jdo.annotations.Query;
 
@@ -53,6 +54,11 @@ JdoQueryFacet {
     @Override
     public List<JdoNamedQuery> getNamedQueries() {
         return Collections.unmodifiableList(namedQueries);
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("namedQueries", namedQueries);
     }
 
 }

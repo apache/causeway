@@ -18,6 +18,8 @@
  */
 package org.apache.isis.objectstore.jdo.metamodel.facets.prop.column;
 
+import java.util.Map;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
@@ -26,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFac
 
 public class BigDecimalFacetDerivedFromJdoColumn extends BigDecimalValueFacetAbstract {
 
-    private final Integer length;
+    private final Integer precision;
     private final Integer scale;
 
     public static Class<? extends Facet> type() {
@@ -35,17 +37,23 @@ public class BigDecimalFacetDerivedFromJdoColumn extends BigDecimalValueFacetAbs
 
     public BigDecimalFacetDerivedFromJdoColumn(final FacetHolder holder, final Integer precision, final Integer scale) {
         super(BigDecimalFacetDerivedFromJdoColumn.type(), holder, Derivation.NOT_DERIVED);
-        this.length = precision;
+        this.precision = precision;
         this.scale = scale;
     }
 
     @Override
     public Integer getPrecision() {
-        return length;
+        return precision;
     }
 
     @Override
     public Integer getScale() {
         return scale;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("precision", precision);
+        attributeMap.put("scale", scale);
     }
 }

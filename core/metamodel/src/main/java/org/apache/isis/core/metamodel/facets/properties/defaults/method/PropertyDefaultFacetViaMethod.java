@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.defaults.method;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -96,6 +97,11 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
 
     protected ObjectAdapterProvider getObjectAdapterProvider() {
         return adapterProvider;
+    }
+
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
     }
 
 }

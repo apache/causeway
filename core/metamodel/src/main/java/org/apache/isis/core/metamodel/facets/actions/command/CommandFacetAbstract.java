@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.command;
 
+import java.util.Map;
+
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
@@ -111,4 +113,11 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
         }
     }
 
+    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+        super.appendAttributesTo(attributeMap);
+        attributeMap.put("executeIn", executeIn);
+        attributeMap.put("persistence", persistence);
+        attributeMap.put("disabled", isDisabled());
+        attributeMap.put("dtoProcessor", processor);
+    }
 }

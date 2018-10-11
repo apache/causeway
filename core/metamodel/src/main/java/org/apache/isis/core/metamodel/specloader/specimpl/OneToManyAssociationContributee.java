@@ -123,6 +123,11 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
     }
 
     @Override
+    public ObjectSpecification getOnType() {
+        return serviceAction.getOnType();
+    }
+
+    @Override
     public Identifier getIdentifier() {
         return identifier;
     }

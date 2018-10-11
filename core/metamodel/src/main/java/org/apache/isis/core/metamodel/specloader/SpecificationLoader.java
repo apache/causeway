@@ -18,7 +18,6 @@ package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -32,7 +31,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -216,23 +214,24 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             callables.add(callable);
         }
         ThreadPoolSupport threadPoolSupport = ThreadPoolSupport.getInstance();
-        List<Future<Object>> futures = threadPoolSupport.invokeAll(callables);
+        List<Future<Object>> futures = threadPoolSupport.invokeAllSequential(callables);
         threadPoolSupport.joinGatherFailures(futures);
 
 
         // for debugging only
-        final Collection<ObjectSpecification> cachedSpecificationsAfter = allCachedSpecifications();
+        final Collection<ObjectSpecification> cachedSpecificationsAfter = cache.allSpecifications();
         List<ObjectSpecification> cachedAfterNotBefore = cachedSpecificationsAfter.stream()
                 .filter(spec -> !cachedSpecifications.contains(spec))
                 .collect(Collectors.toList());
+
         LOG.info(String.format("cachedSpecificationsAfter.size = %d ; cachedAfterNotBefore.size = %d",
                 cachedSpecificationsAfter.size(), cachedAfterNotBefore.size()));
 
 
-        // only after full introspection has occured do we cache ObjectSpecifications
+        // only after full introspection has occurred do we cache ObjectSpecifications
         // by their ObjectSpecId.
         // the cache (SpecificationCacheDefault will fail-fast as not initialized
-        cacheBySpecId(specificationsFromRegistry);
+        cache.init();
 
     }
 
@@ -253,19 +252,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         }
     }
 
-
-    private void cacheBySpecId(final Collection<ObjectSpecification> objectSpecifications) {
-        final Map<ObjectSpecId, ObjectSpecification> specById = _Maps.newHashMap();
-        for (final ObjectSpecification objSpec : objectSpecifications) {
-            final ObjectSpecId objectSpecId = objSpec.getSpecId();
-            if (objectSpecId == null) {
-                continue;
-            }
-            specById.put(objectSpecId, objSpec);
-        }
-
-        cache.init(specById);
-    }
 
 
     // -- shutdown
@@ -322,7 +308,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         ValidationFailures validationFailures = validate();
         validationFailures.assertNone();
 
-        cacheBySpecId(allCachedSpecifications());
+        cache.init();
     }
 
     @Programmatic
