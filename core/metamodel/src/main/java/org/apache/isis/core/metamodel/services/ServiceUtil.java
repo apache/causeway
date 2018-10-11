@@ -16,11 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.metamodel.services;
 
 import java.lang.reflect.Method;
-import java.util.function.Supplier;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.commons.internal.base._Strings;
@@ -33,36 +32,39 @@ public final class ServiceUtil {
     private ServiceUtil() {
     }
 
-    public static String idOfType(final Class<?> serviceClass) {
-        
-        final String serviceType = serviceTypeUsingAnnotation(serviceClass);
-        if (serviceType != null) {
-            return serviceType;
-        }
-
-        return serviceTypeUsingIdGetterOrElseGet(serviceClass, ()->serviceClass.newInstance(), ()->null);
-    }
-
     public static String idOfPojo(final Object serviceObject) {
         final Class<?> serviceClass = serviceObject.getClass();
-        final String serviceType = serviceTypeUsingAnnotation(serviceClass);
-        if(serviceType != null) {
-            return serviceType;
-        }
-
-        return serviceTypeUsingIdGetterOrElseGet(serviceClass, ()->serviceObject, ()->normalize(serviceClass));
+        return explicitelySpecifiedIdOfType(serviceClass, ()->serviceObject)
+                .orElseGet(()->normalize(serviceClass));
     }
     
     public static String idOfSpec(final ObjectSpecification serviceSpec) {
-        return idOfType(serviceSpec.getCorrespondingClass());
+        final Class<?> serviceClass = serviceSpec.getCorrespondingClass();
+        return explicitelySpecifiedIdOfType(serviceClass, serviceClass::newInstance)
+                .orElseGet(()->normalize(serviceClass));
     }
     
-    public static String idOfAdapter(final ManagedObject adapter) {
-        return idOfPojo(adapter.getPojo());
+    public static String idOfAdapter(final ManagedObject serviceAdapter) {
+        return idOfPojo(serviceAdapter.getPojo());
+    }
+    
+    public static Optional<String> getExplicitelySpecifiedIdOfType(final Class<?> serviceClass) {
+        return explicitelySpecifiedIdOfType(serviceClass, serviceClass::newInstance);
     }
     
     // -- HELPER
 
+    private static Optional<String> explicitelySpecifiedIdOfType(
+            final Class<?> serviceClass, 
+            final _Functions.CheckedSupplier<Object> serviceInstanceSupplier) {
+        
+        final String serviceType = serviceTypeUsingAnnotation(serviceClass);
+        if (serviceType != null) {
+            return Optional.of(serviceType);
+        }
+        return serviceTypeUsingIdGetter(serviceClass, serviceInstanceSupplier);
+    }
+    
     private static String serviceTypeUsingAnnotation(final Class<?> serviceClass) {
         final String serviceType;
         final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
@@ -75,17 +77,16 @@ public final class ServiceUtil {
         return null;
     }
 
-    private static String serviceTypeUsingIdGetterOrElseGet(
+    private static Optional<String> serviceTypeUsingIdGetter(
             final Class<?> serviceClass, 
-            final _Functions.CheckedSupplier<Object> objectSupplier,
-            final Supplier<String> orElse
+            final _Functions.CheckedSupplier<Object> serviceInstanceSupplier
             ) {
         
         try {
             final Method m = serviceClass.getMethod("getId");
-            return (String) m.invoke(objectSupplier.get());
+            return Optional.ofNullable((String) m.invoke(serviceInstanceSupplier.get()));
         } catch (Exception e) {
-            return orElse.get();
+            return Optional.empty();
         }
     }
     
