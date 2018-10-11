@@ -63,7 +63,7 @@ public class ServiceUtil_Test {
                 is(equalTo("foo.SomeServiceAnnotated")));
 
         assertThat(
-                ServiceUtil.getExplicitelySpecifiedIdOfType(SomeServiceAnnotated.class).orElse(null),
+                ServiceUtil.getExplicitIdOfType(SomeServiceAnnotated.class).orElse(null),
                 is(equalTo("foo.SomeServiceAnnotated")));
     }
 
@@ -75,7 +75,7 @@ public class ServiceUtil_Test {
                 is(equalTo("bar.SomeServiceWithId")));
 
         assertThat(
-                ServiceUtil.getExplicitelySpecifiedIdOfType(SomeServiceWithId.class).orElse(null),
+                ServiceUtil.getExplicitIdOfType(SomeServiceWithId.class).orElse(null),
                 is(equalTo("bar.SomeServiceWithId")));
     }
 
@@ -87,7 +87,7 @@ public class ServiceUtil_Test {
                 is(equalTo("bop.SomeServiceAnnotated")));
 
         assertThat(
-                ServiceUtil.getExplicitelySpecifiedIdOfType(SomeServiceAnnotatedAndWithId.class).orElse(null),
+                ServiceUtil.getExplicitIdOfType(SomeServiceAnnotatedAndWithId.class).orElse(null),
                 is(equalTo("bop.SomeServiceAnnotated")));
     }
 
@@ -97,7 +97,7 @@ public class ServiceUtil_Test {
                 ServiceUtil.idOfPojo(new SomeServiceWithoutAnnotationOrId()),
                 is(equalTo("org.apache.isis.core.metamodel.services.ServiceUtil_Test$SomeServiceWithoutAnnotationOrId")));
         assertThat(
-                ServiceUtil.getExplicitelySpecifiedIdOfType(SomeServiceWithoutAnnotationOrId.class).orElse(null),
+                ServiceUtil.getExplicitIdOfType(SomeServiceWithoutAnnotationOrId.class).orElse(null),
                 is(nullValue()));
     }
 

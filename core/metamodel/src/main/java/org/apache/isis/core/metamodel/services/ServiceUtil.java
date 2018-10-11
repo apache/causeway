@@ -34,13 +34,13 @@ public final class ServiceUtil {
 
     public static String idOfPojo(final Object serviceObject) {
         final Class<?> serviceClass = serviceObject.getClass();
-        return explicitelySpecifiedIdOfType(serviceClass, ()->serviceObject)
+        return explicitIdOfType(serviceClass, ()->serviceObject)
                 .orElseGet(()->normalize(serviceClass));
     }
     
     public static String idOfSpec(final ObjectSpecification serviceSpec) {
         final Class<?> serviceClass = serviceSpec.getCorrespondingClass();
-        return explicitelySpecifiedIdOfType(serviceClass, serviceClass::newInstance)
+        return explicitIdOfType(serviceClass, serviceClass::newInstance)
                 .orElseGet(()->normalize(serviceClass));
     }
     
@@ -48,13 +48,13 @@ public final class ServiceUtil {
         return idOfPojo(serviceAdapter.getPojo());
     }
     
-    public static Optional<String> getExplicitelySpecifiedIdOfType(final Class<?> serviceClass) {
-        return explicitelySpecifiedIdOfType(serviceClass, serviceClass::newInstance);
+    public static Optional<String> getExplicitIdOfType(final Class<?> serviceClass) {
+        return explicitIdOfType(serviceClass, serviceClass::newInstance);
     }
     
     // -- HELPER
 
-    private static Optional<String> explicitelySpecifiedIdOfType(
+    private static Optional<String> explicitIdOfType(
             final Class<?> serviceClass, 
             final _Functions.CheckedSupplier<Object> serviceInstanceSupplier) {
         
