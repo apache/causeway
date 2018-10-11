@@ -43,8 +43,7 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
         final DomainService domainService = Annotations.getAnnotation(cls, DomainService.class);
         final DomainServiceLayout domainServiceLayout = Annotations.getAnnotation(cls, DomainServiceLayout.class);
 
-        final boolean bothAnnotationsArePresent = domainService != null && domainServiceLayout != null; 
-        if (!bothAnnotationsArePresent) {
+        if (domainService == null && domainServiceLayout == null) {
             return;
         }
 
