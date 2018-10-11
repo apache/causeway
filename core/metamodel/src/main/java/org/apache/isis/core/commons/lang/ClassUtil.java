@@ -108,8 +108,6 @@ public final class ClassUtil {
 
     // //////////////////////////////////////
 
-
-
     private ClassUtil() {
     }
 
@@ -128,7 +126,7 @@ public final class ClassUtil {
         }
         Class<?> classCandidate = null;
         try {
-            classCandidate = Class.forName(classCandidateName);
+            classCandidate = _Context.loadClass(classCandidateName);
             return ClassExtensions.implementingClassOrNull(classCandidate, requiredClass, constructorParamType);
         } catch (final ClassNotFoundException e) {
             return null;

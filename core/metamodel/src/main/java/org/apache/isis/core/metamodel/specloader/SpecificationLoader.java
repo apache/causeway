@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -511,7 +510,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         if (builtIn != null) {
             return builtIn;
         }
-        return Class.forName(className);
+        return ClassUtil.forName(className);
     }
 
     /**
