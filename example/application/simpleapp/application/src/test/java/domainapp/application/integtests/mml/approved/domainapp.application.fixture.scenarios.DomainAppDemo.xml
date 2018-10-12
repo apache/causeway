@@ -13,9 +13,6 @@
             <mml:attr name="bookmarkPolicy">NOT_SPECIFIED</mml:attr>
             <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback</mml:attr>
         </mml:facet>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet" fqcn="org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation">
-            <mml:attr name="menuBar">PRIMARY</mml:attr>
-        </mml:facet>
         <mml:facet id="org.apache.isis.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.isis.core.metamodel.facets.object.grid.GridFacetDefault"/>
         <mml:facet id="org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet" fqcn="org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName">
             <mml:attr name="derived">true</mml:attr>

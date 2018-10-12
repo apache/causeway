@@ -32,9 +32,6 @@
         <mml:facet id="org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet" fqcn="org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacetForDomainObjectAnnotation">
             <mml:attr name="value">org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent.Default</mml:attr>
         </mml:facet>
-        <mml:facet id="org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet" fqcn="org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation">
-            <mml:attr name="menuBar">PRIMARY</mml:attr>
-        </mml:facet>
         <mml:facet id="org.apache.isis.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.isis.core.metamodel.facets.object.grid.GridFacetDefault"/>
         <mml:facet id="org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet" fqcn="org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation">
             <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName</mml:attr>

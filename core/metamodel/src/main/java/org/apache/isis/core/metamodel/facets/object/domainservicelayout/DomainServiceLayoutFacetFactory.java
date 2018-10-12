@@ -18,8 +18,12 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainservicelayout;
 
+import java.util.List;
+import java.util.Objects;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -41,21 +45,45 @@ public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final DomainService domainService = Annotations.getAnnotation(cls, DomainService.class);
-        final DomainServiceLayout domainServiceLayout = Annotations.getAnnotation(cls, DomainServiceLayout.class);
+        final List<DomainServiceLayout> domainServiceLayouts = Annotations.getAnnotations(cls, DomainServiceLayout.class);
 
-        if (domainService == null && domainServiceLayout == null) {
+        // either one is enough to treat this as a domain service
+        if(domainService == null && domainServiceLayouts.isEmpty()) {
             return;
         }
 
-        final String menuOrder = DomainServiceMenuOrder.orderOf(cls);
+        final String domainServiceMenuOrder =
+                domainService != null && !domainService.menuOrder().equals("" + (Integer.MAX_VALUE - 100))
+                ? domainService.menuOrder()
+                        : null;
+        final String domainServiceLayoutMenuOrder =domainServiceLayouts.stream()
+                .map(DomainServiceLayout::menuOrder)
+                .filter(menuOrder -> !menuOrder.equals("" + (Integer.MAX_VALUE - 100)))
+                .findFirst()
+                .orElse(null);
 
-        DomainServiceLayout.MenuBar menuBar =
-                domainServiceLayout != null
-                ? domainServiceLayout.menuBar()
-                        : DomainServiceLayout.MenuBar.PRIMARY;
+        final String menuOrder = DomainServiceMenuOrder.minimumOf(domainServiceLayoutMenuOrder, domainServiceMenuOrder);
 
-        FacetUtil.addFacet(new DomainServiceLayoutFacetAnnotation(facetHolder, menuBar, menuOrder));
-        FacetUtil.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(domainServiceLayout, facetHolder));
+        final DomainServiceLayout.MenuBar menuBar =
+                domainServiceLayouts.stream()
+                .map(DomainServiceLayout::menuBar)
+                .filter(mb -> mb != DomainServiceLayout.MenuBar.NOT_SPECIFIED)
+                .findFirst()
+                .orElse(DomainServiceLayout.MenuBar.PRIMARY);
+
+        FacetUtil.addFacet(
+                new DomainServiceLayoutFacetAnnotation(
+                        facetHolder,
+                        menuBar, menuOrder));
+
+        final String named =
+                domainServiceLayouts.stream()
+                        .map(DomainServiceLayout::named)
+                        .map(_Strings::emptyToNull)
+                        .filter(Objects::nonNull)
+                        .findFirst()
+                        .orElse(null);
+        FacetUtil.addFacet(NamedFacetForDomainServiceLayoutAnnotation.create(named, facetHolder));
     }
 
 }

@@ -48,6 +48,7 @@ public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
     public void testAnnotationPickedUpOnClass() {
+        @DomainService
         @DomainServiceLayout(menuOrder = "123" ,menuBar = DomainServiceLayout.MenuBar.SECONDARY)
         class Customers {
         }
