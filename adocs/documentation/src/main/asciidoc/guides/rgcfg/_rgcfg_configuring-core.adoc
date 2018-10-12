@@ -291,6 +291,31 @@ If the setting is changed to disabled then this may reduce application start-up 
 
 
 
+[[__rgcfg_configuring-core_metamodel-introspection]]
+== MetaModel Introspection
+
+
+.Metamodel Introspection
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.reflector.introspect.` +
+`parallelize`
+|`true`,`false` +
+(`true`)
+|Whether to build the metamodel in parallel (with multiple threads) or in serial (using a single thread).
+
+In general, parallelisation should result in faster bootstrap times.
+
+
+|===
+
+
+
 [[__rgcfg_configuring-core_metamodel-validation]]
 == MetaModel Validation
 

@@ -21,18 +21,29 @@ This table summarises all releases of Apache Isis to date.
 | Bugs
 | JIRA relnotes
 
+
+| xref:release-notes.adoc#_release-notes_1.17.0[1.17.0]
+| dd-mm-yyyy
+| TODO
+|
+|
+|
+| TODO
+
 | link:https://isis.apache.org/versions/2.0.0-M1/release-notes/release-notes.html#_release-notes_2.0.0-M1[2.0.0-M1]
 | 31-07-2018
 | First milestone release for Apache Isis 2.0.0: Java 8 support, DataNucleus 5.1, Wicket 8, meta-annotations, breadcrumbs
 | 6
 | 55
-
 + 4 tasks
 + 13 sub-tasks
 | 22
 | https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342392[Release notes for 2.0.0-M1]
 
 | link:https://isis.apache.org/versions/1.16.2/release-notes/release-notes.html#_release-notes_1.16.2[1.16.2]
+
+
+| xref:release-notes.adoc#_release-notes_1.16.2[1.16.2]
 | 05-03-2018
 | RO viewer support, performance improvement, fix of severe bug for parented checkboxes
 | 1
@@ -332,6 +343,7 @@ This table summarises all releases of Apache Isis to date.
 
 
 
+include::_release-notes_1.17.0.adoc[leveloffset=+1]
 include::_release-notes_2.0.0-M1.adoc[leveloffset=+1]
 include::_release-notes_1.16.2.adoc[leveloffset=+1]
 include::_release-notes_1.16.1.adoc[leveloffset=+1]

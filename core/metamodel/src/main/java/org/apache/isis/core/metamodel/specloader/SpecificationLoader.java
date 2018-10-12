@@ -87,6 +87,9 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private final static Logger LOG = LoggerFactory.getLogger(SpecificationLoader.class);
 
     // -- constructor, fields
+    public static final String INTROSPECTOR_PARALLELIZE_KEY = "isis.reflector.introspector.parallelize";
+    public static final boolean INTROSPECTOR_PARALLELIZE_DEFAULT = true;
+
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
     private final ProgrammingModel programmingModel;
@@ -214,7 +217,14 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             callables.add(callable);
         }
         ThreadPoolSupport threadPoolSupport = ThreadPoolSupport.getInstance();
-        List<Future<Object>> futures = threadPoolSupport.invokeAllSequential(callables);
+        final boolean parallelize =
+                configuration.getBoolean(INTROSPECTOR_PARALLELIZE_KEY, INTROSPECTOR_PARALLELIZE_DEFAULT);
+        List<Future<Object>> futures;
+        if(parallelize) {
+            futures = threadPoolSupport.invokeAll(callables);
+        } else {
+            futures = threadPoolSupport.invokeAllSequential(callables);
+        }
         threadPoolSupport.joinGatherFailures(futures);
 
 
