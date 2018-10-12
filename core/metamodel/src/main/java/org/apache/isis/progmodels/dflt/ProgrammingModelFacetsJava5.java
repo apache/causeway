@@ -149,7 +149,7 @@ import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueFacet
 import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.uuid.UUIDValueFacetUsingSemanticsProviderFactory;
-import org.apache.isis.core.metamodel.postprocessors.param.ActionCollectionParameterDefaultsAndChoicesPostProcessor;
+import org.apache.isis.core.metamodel.postprocessors.param.DeriveFacetsPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelPlugin;
@@ -407,7 +407,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
     @Override
     public List<ObjectSpecificationPostProcessor> getPostProcessors() {
         return _Lists.singleton(
-                new ActionCollectionParameterDefaultsAndChoicesPostProcessor() );
+            new DeriveFacetsPostProcessor()
+        );
     }
 
     // -- HELPER

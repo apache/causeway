@@ -87,11 +87,9 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
- *
- * TODO: rename this class because it does much more than its name suggests.
  */
-public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements ObjectSpecificationPostProcessor,
-ServicesInjectorAware {
+public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcessor,
+        ServicesInjectorAware {
 
     private DeploymentCategoryProvider deploymentCategoryProvider;
     private SpecificationLoader specificationLoader;
