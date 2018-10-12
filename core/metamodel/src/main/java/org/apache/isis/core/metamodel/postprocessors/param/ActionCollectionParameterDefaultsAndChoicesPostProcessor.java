@@ -40,9 +40,14 @@ import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.CopyImmutableFacetOntoMembersFactory;
+import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromRecreatableObject;
+import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromViewModelFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObject;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
@@ -136,6 +141,7 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
             derivePropertyDefaultsFromType(property);
             derivePropertyTypicalLengthFromType(property);
             derivePropertyOrCollectionDescribedAsFromType(property);
+            derivePropertyDisabledFromViewModel(property);
             derivePropertyOrCollectionImmutableFromSpec(property);
             derivePropertyDisabledFromImmutable(property);
         }
@@ -145,6 +151,7 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
         for (final OneToManyAssociation collection : collections) {
 
             derivePropertyOrCollectionDescribedAsFromType(collection);
+            deriveCollectionDisabledFromViewModel(collection);
             derivePropertyOrCollectionImmutableFromSpec(collection);
             deriveCollectionDisabledFromImmutable(collection);
 
@@ -194,6 +201,12 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
                 }
             }
         }
+    }
+
+    static DisabledFacetAbstract.Semantics inferSemanticsFrom(final ViewModelFacet facet) {
+        return facet.isImplicitlyImmutable() ?
+                DisabledFacetAbstract.Semantics.DISABLED :
+                DisabledFacetAbstract.Semantics.ENABLED;
     }
 
     private FacetedMethod facetedMethodFor(final ObjectMember objectMember) {
@@ -361,6 +374,24 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
     }
 
     /**
+     * Replaces {@link org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory}
+     * @param property
+     */
+    private void derivePropertyDisabledFromViewModel(final OneToOneAssociation property) {
+        if(property.containsDoOpFacet(DisabledFacet.class)){
+            return;
+        }
+
+        final ObjectSpecification propertySpec = property.getOnType();
+        final ViewModelFacet specFacet = propertySpec.getFacet(ViewModelFacet.class);
+        if(existsAndIsDoOp(specFacet)) {
+            final DisabledFacetAbstract.Semantics semantics = inferSemanticsFrom(specFacet);
+            FacetUtil.addFacet(new DisabledFacetOnPropertyDerivedFromRecreatableObject(facetedMethodFor(property), semantics));
+        }
+    }
+
+
+    /**
      * Replaces {@link DisabledFacetOnPropertyDerivedFromImmutableFactory}
      */
     private void derivePropertyDisabledFromImmutable(final OneToOneAssociation property) {
@@ -391,6 +422,24 @@ public class ActionCollectionParameterDefaultsAndChoicesPostProcessor implements
         }
     }
 
+
+    /**
+     * Replaces {@link DisabledFacetOnCollectionDerivedFromViewModelFacetFactory}
+     * @param collection
+     */
+    private void deriveCollectionDisabledFromViewModel(final OneToManyAssociation collection) {
+        if(collection.containsDoOpFacet(DisabledFacet.class)){
+            return;
+        }
+
+        final ObjectSpecification collectionSpec = collection.getOnType();
+        final ViewModelFacet specFacet = collectionSpec.getFacet(ViewModelFacet.class);
+        if(existsAndIsDoOp(specFacet)) {
+            final DisabledFacetAbstract.Semantics semantics = inferSemanticsFrom(specFacet);
+            FacetUtil.addFacet(new DisabledFacetOnCollectionDerivedFromRecreatableObject(facetedMethodFor(collection), semantics));
+        }
+
+    }
 
     /**
      * Replaces {@link DisabledFacetOnCollectionDerivedFromImmutableFactory}

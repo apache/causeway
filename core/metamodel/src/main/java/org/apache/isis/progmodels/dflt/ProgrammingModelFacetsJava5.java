@@ -118,8 +118,6 @@ import org.apache.isis.core.metamodel.facets.object.parented.aggregated.Aggregat
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.plural.annotation.PluralAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.plural.staticmethod.PluralFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromViewModelFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.regex.annotation.RegExFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
@@ -396,8 +394,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new ParameterAnnotationFacetFactory());
 
         // must come after DomainObjectAnnotationFacetFactory
-        addFactory(new DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory());
-        addFactory(new DisabledFacetOnCollectionDerivedFromViewModelFacetFactory());
+        //addFactory(new DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory()); ... moved to post-processor
+        //addFactory(new DisabledFacetOnCollectionDerivedFromViewModelFacetFactory()); ... moved to post-processor
+
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
         addFactory(new NotContributedFacetDerivedFromMixinFacetFactory());
 
