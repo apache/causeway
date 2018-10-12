@@ -109,7 +109,7 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
             public boolean visit(final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
                 final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
                 final Facet underlyingFacet = facet != null ? facet.getUnderlyingFacet() : null;
-                if(underlyingFacet != null) {
+                if(underlyingFacet != null && underlyingFacet.getClass() != facet.getClass()) {
                     validationFailures.add(
                             "%s: has multiple incompatible annotations/interfaces indicating that " +
                                     "it is a recreatable object of some sort (%s and %s)",
