@@ -21,6 +21,14 @@ This table summarises all releases of Apache Isis to date.
 | Bugs
 | JIRA relnotes
 
+| xref:release-notes.adoc#_release-notes_1.17.0[1.17.0]
+| dd-mm-yyyy
+| TODO
+|
+|
+|
+| TODO
+
 | xref:release-notes.adoc#_release-notes_1.16.2[1.16.2]
 | 05-03-2018
 | RO viewer support, performance improvement, fix of severe bug for parented checkboxes
@@ -321,6 +329,7 @@ This table summarises all releases of Apache Isis to date.
 
 
 
+include::_release-notes_1.17.0.adoc[leveloffset=+1]
 include::_release-notes_1.16.2.adoc[leveloffset=+1]
 include::_release-notes_1.16.1.adoc[leveloffset=+1]
 include::_release-notes_1.16.0.adoc[leveloffset=+1]
