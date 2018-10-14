@@ -127,8 +127,8 @@ The subscriber can then populate this event:
 @DomainService(nature=NatureOfService.DOMAIN)
 public class AuthorSubscriptions extends AbstractSubscriber {
 
-    @org.axonframework.eventhandling.annotation.EventHandler
-    @com.google.common.eventbus.Subscribe
+    @org.axonframework.eventhandling.EventHandler   // if using axon
+    @com.google.common.eventbus.Subscribe           // if using guava
     public void on(Author.TitleUiEvent ev) {
         Author author = ev.getSource();
         ev.setTitle(titleOf(author);
@@ -226,8 +226,8 @@ The subscriber can then populate this event:
 @DomainService(nature=NatureOfService.DOMAIN)
 public class OrderSubscriptions extends AbstractSubscriber {
 
-    @org.axonframework.eventhandling.annotation.EventHandler
-    @com.google.common.eventbus.Subscribe
+    @org.axonframework.eventhandling.EventHandler   // if using axon
+    @com.google.common.eventbus.Subscribe           // if using guava
     public void on(Order.IconUiEvent ev) {
         Order order = ev.getSource();
         ev.setIconName(iconNameOf(order);
@@ -310,8 +310,8 @@ The subscriber can then populate this event:
 @DomainService(nature=NatureOfService.DOMAIN)
 public class OrderSubscriptions extends AbstractSubscriber {
 
-    @org.axonframework.eventhandling.annotation.EventHandler
-    @com.google.common.eventbus.Subscribe
+    @org.axonframework.eventhandling.EventHandler   // if using axon
+    @com.google.common.eventbus.Subscribe           // if using guava
     public void on(Order.CssClassUiEvent ev) {
         Order order = ev.getSource();
         ev.setIconName(iconNameOf(order);

@@ -111,31 +111,20 @@ public class Customer {
 }
 ----
 
-will propagate an instance of the default `o.a.i.applib.services.eventbus.ActionDomainEvent.Default` class.   If using the Guava event bus this can be subscribed to using:
+will propagate an instance of the default `o.a.i.applib.services.eventbus.ActionDomainEvent.Default` class, which can then be subscribed to:
 
 [source,java]
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class MySubscribingDomainService
     @Programmatic
-    @com.google.common.eventbus.Subscribe
+    @org.axonframework.eventhandling.EventHandler   // if using axon
+    @com.google.common.eventbus.Subscribe           // if using guava
     public void on(ActionDomainEvent ev) { ... }
     ...
 }
 ----
 
-or if using Axonframework, the subscriber uses a different annotation:
-
-[source,java]
-----
-@DomainService(nature=NatureOfService.DOMAIN)
-public class MySubscribingDomainService
-    @Programmatic
-    @org.axonframework.eventhandling.annotation.EventHandler
-    public void on(ActionDomainEvent ev) { ... }
-    ...
-}
-----
 
 More commonly though you will probably want to emit domain events of a specific subtype.  As a slightly more interesting example, suppose in a library domain that a `LibraryMember` wants to leave the library. A letter should be sent out detailing any books that they still have out on loan:
 

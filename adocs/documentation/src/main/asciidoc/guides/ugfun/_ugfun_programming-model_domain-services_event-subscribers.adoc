@@ -16,18 +16,18 @@ We suggest naming such classes `XxxSubscriptions`, for example:
 [source,java]
 ----
 @DomainService(
-    nature=NatureOfService.DOMAIN                               // <1>
+    nature=NatureOfService.DOMAIN                      // <1>
 )
 @DomainServiceLayout(
     menuOrder="10",
     name="...",
 }
 public class CustomerOrderSubscriptions
-                    extends AbstractSubscriber {                // <2>
+                    extends AbstractSubscriber {       // <2>
 
-    @org.axonframework.eventhandling.annotation.EventHandler    // <3>
-    @com.google.common.eventbus.Subscribe                       // <3>
-    public void on(final Customer.DeletedEvent ev) {            // <4>
+    @org.axonframework.eventhandling.EventHandler      // <3>
+    @com.google.common.eventbus.Subscribe              // <3>
+    public void on(final Customer.DeletedEvent ev) {   // <4>
         Customer customer = ev.getSource();
         orderRepository.delete(customer);
     }

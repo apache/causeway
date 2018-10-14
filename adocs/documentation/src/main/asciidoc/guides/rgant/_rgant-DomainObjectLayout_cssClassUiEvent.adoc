@@ -64,8 +64,8 @@ Subscribers can be either coarse-grained (if they subscribe to the top-level eve
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @org.axonframework.eventhandling.annotation.EventHandler // if using axon
-    @com.google.common.eventbus.Subscribe                    // if using guava
+    @org.axonframework.eventhandling.EventHandler       // if using axon
+    @com.google.common.eventbus.Subscribe               // if using guava
     public void on(CssClassUiEvent ev) {
         if(ev.getSource() instanceof ToDoItemDto) { ... }
     }
@@ -78,8 +78,8 @@ or can be fine-grained (by subscribing to specific event subtypes):
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @org.axonframework.eventhandling.annotation.EventHandler // if using axon
-    @com.google.common.eventbus.Subscribe                    // if using guava
+    @org.axonframework.eventhandling.EventHandler       // if using axon
+    @com.google.common.eventbus.Subscribe               // if using guava
     public void on(ToDoItemDto.CssClassUiEvent ev) {
         ...
     }

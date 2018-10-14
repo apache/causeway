@@ -81,17 +81,14 @@ or can be fine-grained (by subscribing to specific event subtypes):
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @com.google.common.eventbus.Subscribe
+    @org.axonframework.eventhandling.EventHandler       // if using axon
+    @com.google.common.eventbus.Subscribe               // if using guava
     public void on(ToDoItem.CompletedEvent ev) {
         ...
     }
 }
 ----
 
-[TIP]
-====
-If the AxonFramework is being used, replace `@com.google.common.eventbus.Subscribe` with `@org.axonframework.eventhandling.annotation.EventHandler`.
-====
 
 
 The subscriber's method is called (up to) 5 times:

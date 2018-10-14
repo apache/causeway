@@ -55,12 +55,13 @@ public interface BookmarkService {
          * If the object is unresolved then the object's missing data should be retrieved from the persistence
          * mechanism and be used to set up the value objects and associations.
          *
-         * If the object is a view model, then is ignored; the behaviour is as for {@link #DONT_RESET}
-         * @deprecated - retained for previous behaviour, but in most/all cases,
+         * If the object is a view model, then is ignored; the behaviour is as for {@link #DONT_REFRESH}
+         *
+         * @deprecated - retained for backwards compatibility with previous behaviour, but in most/all cases {@link #DONT_REFRESH} makes more sense/is less surprising.
          */
         @Deprecated
         RESET,
-        /**
+        /*p*
          * Required in order to recreate view models.
          */
         DONT_REFRESH
