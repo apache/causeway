@@ -1174,7 +1174,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-commons</artifactId>
-                <version>${revision}</version>
+                <version>${isis.version}</version>
             </dependency>
         
             <!-- unittestsupport -->
@@ -1347,61 +1347,61 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-plugins-security-shiro</artifactId>
-                <version>${revision}</version>
+                <version>${isis.version}</version>
             </dependency>
             
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
-                <version>${revision}</version>
+                <version>${isis.version}</version>
             </dependency>
             
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-plugins-codegen-javassist</artifactId>
-                <version>${revision}</version>
+                <version>${isis.version}</version>
             </dependency>
             
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-plugins-discovery-reflections</artifactId>
-                <version>${revision}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-plugins-jdo-datanucleus-4</artifactId>
-                <version>${revision}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
-                <version>${revision}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-plugins-eventbus-guava</artifactId>
-                <version>${revision}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-plugins-eventbus-axon</artifactId>
-                <version>${revision}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-plugins-jaxrs-resteasy-3</artifactId>
-                <version>${revision}</version>
+                <version>${isis.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-plugins-jaxrs-resteasy-4</artifactId>
-                <version>${revision}</version>
+                <version>${isis.version}</version>
             </dependency>
 
 
