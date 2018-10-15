@@ -80,12 +80,12 @@ Entity<String> args = client.arguments()
         .addActionParameter("id", "12345")
         .build();
 
-Response response = request
+Future<Response> asyncResponse = request
         .async()
         .post(args);
 
 CompletableFuture<ResponseDigest<MyObject>> digestFuture = 
-                client.digest(response, MyObject.class);
+                client.digest(asyncResponse, MyObject.class);
         
 ResponseDigest<MyObject> digest = digestFuture.get(); // blocking
 
