@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.adapters;
+package org.apache.isis.applib.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * Provides JAXB XmlAdapters for Java built-in temporal types. 
+ * Others types might be added, if convenient. 
  * 
  * @since 2.0.0-M2
  */
