@@ -29,7 +29,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.applib.client.SuppressionType;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -54,52 +54,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
         )
 public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
     
-    public static enum SuppressionType {
-        
-        /** suppress '$$RO', RO Spec representation*/
-        RO,
-        
-        /** suppress '$$href', hyperlink to the representation*/
-        HREF,
-        
-        /** suppress '$$instanceId', instance id of the domain object*/
-        ID,
-        
-        /** suppress '$$title', title of the domain object*/
-        TITLE,
-        
-        /** suppress all '$$...' entries*/
-        ALL
-        ;
-
-        public static EnumSet<SuppressionType> parse(List<String> parameterList) {
-            final EnumSet<SuppressionType> set = EnumSet.noneOf(SuppressionType.class);
-            parameterList.stream()
-            .map(SuppressionType::parseOrElseNull)
-            .filter(_NullSafe::isPresent)
-            .forEach(set::add);
-            if(set.contains(ALL)) {
-                return EnumSet.allOf(SuppressionType.class);
-            }
-            return set;
-        }
-        
-        private static SuppressionType parseOrElseNull(String literal) {
-            
-            // honor pre v2 behavior
-            if("true".equalsIgnoreCase(literal)) {
-                return SuppressionType.RO; 
-            }
-            
-            try {
-                return SuppressionType.valueOf(literal.toUpperCase());
-            } catch (IllegalArgumentException  e) {
-                return null;
-            }
-        }
-        
-    }
-
     /**
      * Unlike RO v1.0, use a single content-type of <code>application/json;profile="urn:org.apache.isis/v1"</code>.
      *
@@ -344,7 +298,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     protected EnumSet<SuppressionType> suppress(
             final RepresentationService.Context2 rendererContext) {
         final List<MediaType> acceptableMediaTypes = rendererContext.getAcceptableMediaTypes();
-        return SuppressionType.parse(mediaTypeParameterList(acceptableMediaTypes, "suppress"));
+        return SuppressionType.ParseUtil.parse(mediaTypeParameterList(acceptableMediaTypes, "suppress"));
     }
     
     private void appendObjectTo(

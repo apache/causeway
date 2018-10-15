@@ -24,9 +24,11 @@ import static org.apache.isis.commons.internal.base._Strings_SplitIterator.split
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.UnaryOperator;
@@ -332,6 +334,20 @@ public final class _Strings {
         requires(replacement, "replacement");
         return mapIfPresentElse(input, __->input.replaceAll("\\s+", replacement), null);
     }
+    
+    // -- READ FROM INPUT STREAM
+    
+    public static String read(@Nullable final InputStream input, Charset charset) {
+        requires(charset, "charset");
+        if(input==null) {
+            return "";
+        }
+        // see https://stackoverflow.com/questions/309424/how-to-read-convert-an-inputstream-into-a-string-in-java
+        try(Scanner scanner = new Scanner(input, charset.name())){
+            scanner.useDelimiter("\\A");
+            return scanner.hasNext() ? scanner.next() : "";
+        }
+    }
 
     // -- BYTE ARRAY CONVERSION
 
@@ -423,6 +439,8 @@ public final class _Strings {
         requires(fileExtension, "fileExtension");
         return suffix(fileName, prefix(fileExtension, "."));
     }
+
+    
 
 
 }
