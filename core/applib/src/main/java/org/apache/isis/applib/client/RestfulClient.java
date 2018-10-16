@@ -212,7 +212,8 @@ public class RestfulClient {
             Class<?> MOXyJsonProvider = _Context.loadClass("org.eclipse.persistence.jaxb.rs.MOXyJsonProvider");
             client.register(MOXyJsonProvider);
         } catch (Exception e) {
-            LOG.warning("This implementaion of RestfulClient does require the class 'MOXyJsonProvider' on the class-path."
+            LOG.warning("This implementation of RestfulClient does require the class 'MOXyJsonProvider'"
+                    + " on the class-path."
                     + " Are you missing a maven dependency?");
         }
     }
