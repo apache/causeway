@@ -31,6 +31,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
 
 /**
@@ -65,9 +66,7 @@ final class WebModule_Wicket implements WebModule  {
                 configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.basePath", "/wicket");
         
         {
-            //TODO[ahuber] once this class is moved to viewer-wicket-impl, we can utilize
-            // IsisWicketApplication's method of determining the deployment code.
-            deploymentMode = "true".equalsIgnoreCase(System.getenv("PROTOTYPING"))
+            deploymentMode = IsisContext.getEnvironment().getDeploymentCategory().isPrototyping()
                     ? "development" : "deployment";
         }
         

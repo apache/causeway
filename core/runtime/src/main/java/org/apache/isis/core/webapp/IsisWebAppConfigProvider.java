@@ -44,12 +44,13 @@ public class IsisWebAppConfigProvider {
     
     private static final Logger LOG = LoggerFactory.getLogger(IsisWebAppConfigProvider.class);
     
+    private IsisConfigurationBuilder cfgBuilder;
+    
     /**
-     * Removes any cashed IsisConfigurationBuilder instance from the ServletContext.
-     * @param servletContext
+     * Removes any cached IsisConfigurationBuilder instance from this provider.
      */
-    public void invalidate(final ServletContext servletContext) {
-        servletContext.setAttribute(WebAppConstants.CONFIGURATION_BUILDER_KEY, null);
+    public void invalidate() {
+        cfgBuilder = null;
     }
     
     /**
@@ -60,13 +61,10 @@ public class IsisWebAppConfigProvider {
      * @return
      */
     public synchronized IsisConfigurationBuilder getConfigurationBuilder(final ServletContext servletContext) {
-        IsisConfigurationBuilder isisConfigurationBuilder =
-                (IsisConfigurationBuilder) servletContext.getAttribute(WebAppConstants.CONFIGURATION_BUILDER_KEY);
-        if(isisConfigurationBuilder == null) {
-            isisConfigurationBuilder = newIsisConfigurationBuilder(servletContext);
-            servletContext.setAttribute(WebAppConstants.CONFIGURATION_BUILDER_KEY, isisConfigurationBuilder);
+        if(cfgBuilder == null) {
+            cfgBuilder = newIsisConfigurationBuilder(servletContext);
         }
-        return isisConfigurationBuilder;
+        return cfgBuilder;
     }
 
     /**

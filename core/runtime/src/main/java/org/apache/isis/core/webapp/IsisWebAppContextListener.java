@@ -83,7 +83,7 @@ public class IsisWebAppContextListener implements ServletContextListener {
         // put the list of viewer names "isis.viewers" into a context parameter
         WebModule.ContextUtil.commitViewers(servletContext);
         // invalidate config such that next IsisConfigurationBuilder that gets obtained is reinitialized
-        configProvider.invalidate(servletContext);  
+        configProvider.invalidate();  
         
         LOG.info("=== PHASE 2 === Initializing the ServletContext");
         

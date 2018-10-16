@@ -25,13 +25,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 public final class WebAppConstants {
 
     /**
-     * Key under which the {@link org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder} is
-     * bound as a servlet context attribute (<tt>ServletContext#getAttribute(String)</tt>); used to pass
-     * from the <tt>webserver</tt> module to this.
-     */
-    public static final String CONFIGURATION_BUILDER_KEY = "isis.configurationBuilder";
-
-    /**
      * Key under which the {@link AuthenticationSession} is bound as a session
      * attribute ( <tt>HttpSession#getAttribute(String)</tt>).
      */
