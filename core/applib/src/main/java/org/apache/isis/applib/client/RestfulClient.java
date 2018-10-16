@@ -37,7 +37,7 @@ import org.apache.isis.commons.internal.context._Context;
 
 /**
  * Setup the Restful Client with Basic-Auth:
- * <pre>
+ * <blockquote><pre>
 RestfulClientConfig clientConfig = new RestfulClientConfig();
 clientConfig.setRestfulBase("http://localhost:8080/helloworld/restful/");
 // setup basic-auth
@@ -46,14 +46,14 @@ clientConfig.setRestfulAuthUser("sven");
 clientConfig.setRestfulAuthPassword("pass");
 
 RestfulClient client = RestfulClient.ofConfig(clientConfig);
- * </pre>
+ * </pre></blockquote>
  * 
  * Synchronous example:
- * <pre>
+ * <blockquote><pre>{@code
 
 Builder request = client.request(
                 "services/myService/actions/lookupMyObjectById/invoke", 
-                SuppressionType.setOf(SuppressionType.RO));
+                SuppressionType.RO);
 
 Entity<String> args = client.arguments()
         .addActionParameter("id", "12345")
@@ -62,19 +62,19 @@ Entity<String> args = client.arguments()
 Response response = request.post(args);
 
 ResponseDigest<MyObject> digest = client.digest(response, MyObject.class);
+}
 
 if(digest.isSuccess()) {
     System.out.println("result: "+ digest.get().get$$instanceId());
 } else {
     digest.getFailureCause().printStackTrace();
 }
- * </pre>
+ * </pre></blockquote>
  * Asynchronous example:
- * <pre>
- 
+ * <blockquote><pre>{@code 
 Builder request = client.request(
                 "services/myService/actions/lookupMyObjectById/invoke", 
-                SuppressionType.setOf(SuppressionType.RO));
+                SuppressionType.RO);
 
 Entity<String> args = client.arguments()
         .addActionParameter("id", "12345")
@@ -88,16 +88,17 @@ CompletableFuture<ResponseDigest<MyObject>> digestFuture =
                 client.digest(asyncResponse, MyObject.class);
         
 ResponseDigest<MyObject> digest = digestFuture.get(); // blocking
+}
 
 if(digest.isSuccess()) {
     System.out.println("result: "+ digest.get().get$$instanceId());
 } else {
     digest.getFailureCause().printStackTrace();
 }
- * </pre>
+ * </pre></blockquote>
  * 
  * Maven Setup:
- * <pre>{@code
+ * <blockquote><pre>{@code
 <dependency>
     <groupId>org.apache.isis.core</groupId>
     <artifactId>isis-core-applib</artifactId>
@@ -117,8 +118,8 @@ if(digest.isSuccess()) {
     <groupId>org.eclipse.persistence</groupId>
     <artifactId>org.eclipse.persistence.moxy</artifactId>
     <version>2.6.0</version>
-</dependency>} 
- * </pre>
+</dependency>
+ * }</pre></blockquote>
  * 
  * @since 2.0.0-M2
  */
