@@ -32,23 +32,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class RestfulClientConfig {
 
     // --
-    
+
     @XmlElement(name="restfulBase") 
     private String restfulBase;
-    
+
     public String getRestfulBase() {
         return restfulBase;
     }
-    
+
     public void setRestfulBase(String restfulBase) {
         this.restfulBase = restfulBase;
     }
-    
+
     // --
-    
+
     @XmlElement(name="useBasicAuth") 
     private boolean useBasicAuth;
-    
+
     public boolean isUseBasicAuth() {
         return useBasicAuth;
     }
@@ -56,32 +56,46 @@ public class RestfulClientConfig {
     public void setUseBasicAuth(boolean useBasicAuth) {
         this.useBasicAuth = useBasicAuth;
     }
-    
+
     // --
 
     @XmlElement(name="restfulAuthUser")
     private String restfulAuthUser;
-    
+
     public String getRestfulAuthUser() {
         return restfulAuthUser;
     }
-    
+
     public void setRestfulAuthUser(String restfulAuthUser) {
         this.restfulAuthUser = restfulAuthUser;
     }
-    
+
     // --
 
     @XmlElement(name="restfulAuthPassword")
     private String restfulAuthPassword;
-    
+
     public String getRestfulAuthPassword() {
         return restfulAuthPassword;
     }
-    
+
     public void setRestfulAuthPassword(String restfulAuthPassword) {
         this.restfulAuthPassword = restfulAuthPassword;
     }
-    
-    
+
+    // --
+
+    @XmlElement(name="useRequestDebugLogging") 
+    private boolean useRequestDebugLogging;
+
+    public boolean isUseRequestDebugLogging() {
+        return useRequestDebugLogging;
+    }
+
+    public void setUseRequestDebugLogging(boolean useRequestDebugLogging) {
+        this.useRequestDebugLogging = useRequestDebugLogging;
+    }
+
+    // --
+
 }

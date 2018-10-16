@@ -23,6 +23,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import java.util.EnumSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.client.Client;
@@ -32,6 +33,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.client.auth.BasicAuthFilter;
 import org.apache.isis.applib.client.auth.BasicAuthFilter.Credentials;
+import org.apache.isis.applib.client.log.RestfulLoggingFilter;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 
@@ -41,9 +43,11 @@ import org.apache.isis.commons.internal.context._Context;
 RestfulClientConfig clientConfig = new RestfulClientConfig();
 clientConfig.setRestfulBase("http://localhost:8080/helloworld/restful/");
 // setup basic-auth
-clientConfig.setUseBasicAuth(true);
+clientConfig.setUseBasicAuth(true); // default = false
 clientConfig.setRestfulAuthUser("sven");
 clientConfig.setRestfulAuthPassword("pass");
+// setup request/response debug logging
+clientConfig.setUseRequestDebugLogging(true); // default = false
 
 RestfulClient client = RestfulClient.ofConfig(clientConfig);
  * </pre></blockquote>
@@ -125,7 +129,9 @@ if(digest.isSuccess()) {
  */
 public class RestfulClient {
     
-    public static String DEFAULT_RESPONSE_CONTENT_TYPE = "application/json;profile=urn:org.apache.isis/v1";
+    private static final Logger LOG = Logger.getLogger(RestfulClient.class.getName());
+    
+    public static String DEFAULT_RESPONSE_CONTENT_TYPE = "application/json;profile=\"urn:org.apache.isis/v1\"";
 
     private RestfulClientConfig clientConfig;
     private Client client;
@@ -140,22 +146,11 @@ public class RestfulClient {
         this.clientConfig = clientConfig;
         client = ClientBuilder.newClient();
         
-        if(clientConfig.isUseBasicAuth()){
-            final Credentials credentials = Credentials.of(
-                    clientConfig.getRestfulAuthUser(), 
-                    clientConfig.getRestfulAuthPassword());
-            client.register(BasicAuthFilter.of(credentials));
-        }
-        
-        try {
-            Class<?> MOXyJsonProvider = _Context.loadClass("org.eclipse.persistence.jaxb.rs.MOXyJsonProvider");
-            client.register(MOXyJsonProvider);
-        } catch (Exception e) {
-            // this is just provided for convenience
-        }
-        
+        registerDefaultJsonProvider();
+        registerBasicAuthFilter();
+        registerRequestDebugLoggingFilter();
     }
-    
+
     public RestfulClientConfig getConfig() {
         return clientConfig;
     }
@@ -208,6 +203,33 @@ public class RestfulClient {
         });
         
         return completableFuture;
+    }
+    
+    // -- FILTER
+    
+    private void registerDefaultJsonProvider() {
+        try {
+            Class<?> MOXyJsonProvider = _Context.loadClass("org.eclipse.persistence.jaxb.rs.MOXyJsonProvider");
+            client.register(MOXyJsonProvider);
+        } catch (Exception e) {
+            LOG.warning("This implementaion of RestfulClient does require the class 'MOXyJsonProvider' on the class-path."
+                    + " Are you missing a maven dependency?");
+        }
+    }
+    
+    private void registerBasicAuthFilter() {
+        if(clientConfig.isUseBasicAuth()){
+            final Credentials credentials = Credentials.of(
+                    clientConfig.getRestfulAuthUser(), 
+                    clientConfig.getRestfulAuthPassword());
+            client.register(BasicAuthFilter.of(credentials));
+        }
+    }
+    
+    private void registerRequestDebugLoggingFilter() {
+        if(clientConfig.isUseRequestDebugLogging()){
+            client.register(new RestfulLoggingFilter());
+        }
     }
     
     // -- HELPER

@@ -23,6 +23,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import javax.annotation.Priority;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.xml.bind.DatatypeConverter;
@@ -33,6 +34,7 @@ import org.apache.isis.commons.internal.base._Strings;
  * 
  * @since 2.0.0-M2
  */
+@Priority(100)
 public class BasicAuthFilter implements ClientRequestFilter {
 
     /**

@@ -21,6 +21,8 @@ package org.apache.isis.commons.internal.base;
 
 import static org.apache.isis.commons.internal.exceptions._Exceptions.notImplemented;
 
+import java.util.Optional;
+
 import org.apache.isis.commons.internal.base._Strings.KeyValuePair;
 
 /**
@@ -55,6 +57,30 @@ final class _Strings_KeyValuePair implements _Strings.KeyValuePair {
     @Override
     public String setValue(String value) {
         throw notImplemented();
+    }
+    
+    /**
+     * Parses a string assumed to be of the form <kbd>key=value</kbd> into its parts.
+     *
+     * @return a non-empty Optional, if (and only if) the {@code keyValueLiteral} does contain at least one '='
+     */
+    public static Optional<KeyValuePair> parse(String keyValueLiteral) {
+        
+        if(_Strings.isNullOrEmpty(keyValueLiteral)) {
+            return Optional.empty();
+        }
+        
+        final int equalsIndex = keyValueLiteral.indexOf('=');
+        if (equalsIndex == -1) {
+            return Optional.empty();
+        }
+
+        String aKey = keyValueLiteral.substring(0, equalsIndex);
+        String aValue = equalsIndex == keyValueLiteral.length() - 1 
+                ? "" 
+                        : keyValueLiteral.substring(equalsIndex + 1);
+
+        return Optional.of(of(aKey, aValue));
     }
 
 }

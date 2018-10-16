@@ -28,6 +28,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -74,6 +75,15 @@ public final class _Strings {
     
     public static KeyValuePair pair(final String key, final String value){
         return _Strings_KeyValuePair.of(key, value);
+    }
+    
+    /**
+     * Parses a string assumed to be of the form <kbd>key=value</kbd> into its parts.
+     *
+     * @return a non-empty Optional, if (and only if) the {@code keyValueLiteral} does contain at least one '='
+     */
+    public static Optional<KeyValuePair> parseKeyValuePair(@Nullable String keyValueLiteral) {
+        return _Strings_KeyValuePair.parse(keyValueLiteral);
     }
     
     // -- FILLING
