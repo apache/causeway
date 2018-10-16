@@ -20,14 +20,17 @@ package org.apache.isis.core.webapp;
 
 import static org.apache.isis.commons.internal.base._With.ifPresentElse;
 import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.context._Context.computeIfAbsent;
 import static org.apache.isis.commons.internal.context._Context.getOrThrow;
-import static org.apache.isis.commons.internal.context._Context.putSingleton;
+
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
@@ -45,6 +48,11 @@ public class IsisWebAppConfigProvider {
     private static final Logger LOG = LoggerFactory.getLogger(IsisWebAppConfigProvider.class);
     
     private IsisConfigurationBuilder cfgBuilder;
+    private final Map<String, String> additionalConfig = _Maps.newHashMap();
+    
+    private IsisWebAppConfigProvider() {
+        // private constructor
+    }
     
     /**
      * Removes any cached IsisConfigurationBuilder instance from this provider.
@@ -75,9 +83,16 @@ public class IsisWebAppConfigProvider {
     protected IsisConfigurationBuilder newIsisConfigurationBuilder(final ServletContext servletContext) {
         IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilder();
         isisConfigurationBuilder.primeWith(new OptionHandlerInitParameters(servletContext));
+        additionalConfig.forEach((k, v)->isisConfigurationBuilder.put(k, v));
         addServletContextConstants(servletContext, isisConfigurationBuilder);
         addResourceStreamSources(servletContext, isisConfigurationBuilder);
         return isisConfigurationBuilder;
+    }
+    
+    // -- CONFIG OVERRIDING
+    
+    public void addConfig(Map<String, String> map) {
+        this.additionalConfig.putAll(map);
     }
     
     // -- PEEKING
@@ -101,20 +116,18 @@ public class IsisWebAppConfigProvider {
     // -- LOOKUP
     
     /**
-     * Register an instance of IsisWebAppConfigProvider as an application-scoped singleton.
-     * @param configProvider
-     */
-    public static void register(IsisWebAppConfigProvider configProvider) {
-        putSingleton(IsisWebAppConfigProvider.class, configProvider);
-    }
-    
-    /**
      * @return the application-scoped singleton instance of IsisWebAppConfigProvider
      * @throws IllegalStateException if no such singleton was registered
      */
     public static IsisWebAppConfigProvider getInstance() {
         return getOrThrow(IsisWebAppConfigProvider.class, 
                 ()->new IllegalStateException("No config provider registered on this context."));
+    }
+    
+    public static IsisWebAppConfigProvider registerInstanceIfAbsent() {
+        final IsisWebAppConfigProvider configProvider =  
+                computeIfAbsent(IsisWebAppConfigProvider.class, __->new IsisWebAppConfigProvider());
+        return configProvider;
     }
     
     // -- HELPER
@@ -144,5 +157,6 @@ public class IsisWebAppConfigProvider {
             isisConfigurationBuilder.addResourceStreamSource(new ResourceStreamSourceForWebInf(servletContext));
         }
     }
+
     
 }

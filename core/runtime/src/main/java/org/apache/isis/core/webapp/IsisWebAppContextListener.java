@@ -72,8 +72,7 @@ public class IsisWebAppContextListener implements ServletContextListener {
         
         putContextPathIfPresent(servletContext.getContextPath());
         
-        final IsisWebAppConfigProvider configProvider = new IsisWebAppConfigProvider();
-        IsisWebAppConfigProvider.register(configProvider);
+        final IsisWebAppConfigProvider configProvider = IsisWebAppConfigProvider.registerInstanceIfAbsent();
 
         final List<WebModule> webModules =
                  WebModule.discoverWebModules()
