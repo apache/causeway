@@ -51,8 +51,17 @@ public final class Blob implements NamedWithMimeType, Serializable {
     }
 
     public Blob(String name, MimeType mimeType, byte[] bytes) {
+        if(name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
+        }
+        if(mimeType == null) {
+            throw new IllegalArgumentException("MimeType cannot be null");
+        }
         if(name.contains(":")) {
             throw new IllegalArgumentException("Name cannot contain ':'");
+        }
+        if(bytes == null) {
+            throw new IllegalArgumentException("Bytes cannot be null");
         }
         this.name = name;
         this.mimeType = mimeType;

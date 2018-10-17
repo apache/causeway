@@ -55,8 +55,17 @@ public final class Clob implements NamedWithMimeType, Serializable {
     }
 
     public Clob(String name, MimeType mimeType, CharSequence chars) {
+        if(name == null) {
+            throw new IllegalArgumentException("Name cannot be null");
+        }
+        if(mimeType == null) {
+            throw new IllegalArgumentException("MimeType cannot be null");
+        }
         if(name.contains(":")) {
             throw new IllegalArgumentException("Name cannot contain ':'");
+        }
+        if(chars == null) {
+            throw new IllegalArgumentException("Chars cannot be null");
         }
         this.name = name;
         this.mimeType = mimeType;
