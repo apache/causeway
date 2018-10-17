@@ -42,9 +42,24 @@
                     <ul class="nav navbar-nav">
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <p class="navbar-text powered-by">Powered by:</p>
+                        <p class="navbar-text powered-by"><span  wicket:id="creditsLabel">Credits:</span></p>
                         <li>
-                            <a href="http://isis.apache.org" tabindex="-1" target="_blank">Apache Isis &#8482;</a>
+                            <a tabindex="-1" wicket:id="credit1" >
+                                <img wicket:id="credit1Image" class="footer-image"/>
+                                <span wicket:id="credit1Name"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a tabindex="-1" wicket:id="credit2" >
+                                <img wicket:id="credit2Image" class="footer-image"/>
+                                <span wicket:id="credit2Name"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a tabindex="-1" wicket:id="credit3" >
+                                <img wicket:id="credit3Image"  class="footer-image"/>
+                                <span wicket:id="credit3Name"></span>
+                            </a>
                         </li>
                         <li>
                             <a wicket:id="aboutLink" tabindex="-1" id="aboutLink" class="navbar-right">

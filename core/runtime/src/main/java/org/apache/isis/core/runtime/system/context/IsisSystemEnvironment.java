@@ -35,36 +35,22 @@ public interface IsisSystemEnvironment {
     // -- DEFAULT IMPLEMENTATIONS 
     
     public static IsisSystemEnvironment getDefault() {
-        return new IsisSystemEnvironment() {
-            @Override
-            public DeploymentCategory getDeploymentCategory() {
-                
-                final DeploymentCategory deploymentCategory = 
-                        "true".equalsIgnoreCase(System.getenv("PROTOTYPING"))
-                            ? DeploymentCategory.PROTOTYPING 
-                                    : DeploymentCategory.PRODUCTION;
-                
-                return deploymentCategory;
-            }
+        return () -> {
+            final DeploymentCategory deploymentCategory =
+                    "true".equalsIgnoreCase(System.getenv("PROTOTYPING"))
+                        ? DeploymentCategory.PROTOTYPING
+                                : DeploymentCategory.PRODUCTION;
+
+            return deploymentCategory;
         };
     }
     
     public static IsisSystemEnvironment getPrototyping() {
-        return new IsisSystemEnvironment() {
-            @Override
-            public DeploymentCategory getDeploymentCategory() {
-                return DeploymentCategory.PROTOTYPING;
-            }
-        };
+        return () -> DeploymentCategory.PROTOTYPING;
     }
     
     public static IsisSystemEnvironment getProduction() {
-        return new IsisSystemEnvironment() {
-            @Override
-            public DeploymentCategory getDeploymentCategory() {
-                return DeploymentCategory.PRODUCTION;
-            }
-        };
+        return () -> DeploymentCategory.PRODUCTION;
     }
 
     

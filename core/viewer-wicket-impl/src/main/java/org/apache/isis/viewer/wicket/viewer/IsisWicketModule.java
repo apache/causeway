@@ -87,7 +87,7 @@ public class IsisWicketModule extends AbstractModule {
         bind(EmailService.class).to(EmailServiceWicket.class);
         bind(EmailNotificationService.class).to(EmailNotificationServiceWicket.class);
 
-        bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Apache Isis Wicket Viewer");
+        bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Apache Isis ™");
         bind(String.class).annotatedWith(Names.named("applicationCss")).toProvider(Providers.of((String) null));
         bind(String.class).annotatedWith(Names.named("applicationJs")).toProvider(Providers.of((String)null));
         bind(String.class).annotatedWith(Names.named("welcomeMessage")).toProvider(Providers.of((String)null));
