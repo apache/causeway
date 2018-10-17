@@ -746,7 +746,7 @@ div.referencePanel.scalarNameAndValueComponentType {
 }
 
 .navbar-header a.navbar-brand {
-    margin-top: -2px;
+    margin-top: 0px;
 }
 
 .valueChoicesSelect2Panel .scalarValueWrapper .choicesPlaceholder {
@@ -770,6 +770,11 @@ tbody td.togglebox-column form {
     margin-left: 6px;
 }
 */
+
+
+footer .footer-image {
+    height: 24px;
+}
 
 #aboutLink {
     padding-right: 30px;

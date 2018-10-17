@@ -24,7 +24,12 @@ To tell Apache Isis that the Wicket viewer is in use (and should therefore searc
 If you prefer you can place all configuration properties into `WEB-INF/isis.properties` (the configuration properties from all config files are merged together).
 
 
-.Wicket Viewer Configuration Properties
+[[_ugvw_configuration-properties_sign-in]]
+== Sign-in, Sign-up and Remember Me
+
+Configuration properties that influence the behaviour and appearance of the sign-in page.
+
+.Remember Me
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -32,11 +37,387 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 (_default value_)
 |Description
 
+|
+|
+|
+
 |`isis.viewer.wicket.` +
-`ajaxDebugMode`
+`rememberMe.cookieKey`
+| ascii chars +
+(`_isisWicketRememberMe_`)
+|Cookie key holding the (encrypted) 'rememberMe' user/password.  There is generally no need to
+change this.  +
+
+Valid values as per link:http://stackoverflow.com/a/1969339/56880[this StackOverflow answer].
+
+|`isis.viewer.wicket.` +
+`rememberMe.encryptionKey`
+| any string +
+(in prod, a random UUID each time)
+|Encryption key is used to encrypt the rememberMe user/password.  +
+
+Apache Isis leverages link:http://wicket.apache.org[Apache Wicket]'s rememberMe support which holds remembered
+user/passwords in an encrypted cookie.
+
+If a hard-coded and publicly known value were to be used (as was the case prior to `1.13.0`), then it would be possible for rememberMe user/password to be intercepted and decrypted, possibly compromising access.
+This configuration property therefore allows a private key to be specified, baked into the application.
+
+If no value is set then, in production, a random UUID will be used as the encryption key.
+The net effect of this fallback behaviour is that 'rememberMe' will work, but only until the webapp is restarted (after which the end-user will have to log in again.
+In prototype mode, though, a fixed key will still be used; this saves the developer having to login each time.
+
+|`isis.viewer.wicket.` +
+`rememberMe.suppress`
 | `true`,`false` +
 (`_false_`)
-| whether the Wicket debug mode should be enabled.
+|Whether to suppress "remember me" checkbox on the login page.
+
+Further discussion xref:ugvw.adoc#_ugvw_configuration-properties_sign-in_remember-me[below].
+
+|`isis.viewer.wicket.` +
+`suppressPasswordReset`
+| `true`,`false` +
+(`_false_`)
+|If user registration is enabled, whether to suppress the "password reset" link on the login page.
+
+Further discussion xref:ugvw.adoc#_ugvw_configuration-properties_sign-in_password-reset[below].
+
+|`isis.viewer.wicket.` +
+`suppressRememberMe`
+| `true`,`false` +
+(`_false_`)
+|Whether to suppress "remember me" checkbox on the login page.
+
+Further discussion xref:ugvw.adoc#_ugvw_configuration-properties_sign-in_remember-me[below].
+
+[NOTE]
+====
+(Deprecated in `1.13.0`, replaced by `rememberMe.suppress`).
+====
+
+
+|`isis.viewer.wicket.` +
+`suppressSignUp`
+| `true`,`false` +
+(`_false_`)
+|Whether to suppress "sign-up" link.
+
+Note though that user registration services must also be configured.
+
+Further discussion xref:ugvw.adoc#_ugvw_configuration-properties_sign-in_sign-up[below].
+
+
+|===
+
+
+
+[[_ugvw_configuration-properties_sign-in_remember-me]]
+=== Remember Me
+
+The 'remember me' checkbox on the login page can be suppressed, if required, by setting a configuration flag:
+
+[source,ini]
+----
+isis.viewer.wicket.rememberMe.suppress=true
+----
+
+
+With 'remember me' not suppressed (the default):
+
+image::{_imagesdir}suppress-remember-me/login-page-default.png[width="300px",link="{_imagesdir}suppress-remember-me/login-page-default.png"]
+
+and with the checkbox suppressed:
+
+image::{_imagesdir}suppress-remember-me/login-page-suppress-remember-me.png[width="300px",link="{_imagesdir}suppress-remember-me/login-page-suppress-remember-me.png"]
+
+
+
+
+
+
+[[_ugvw_configuration-properties_sign-in_sign-up]]
+=== Sign-up
+
+If user registration has been configured, then the Wicket viewer allows the user to sign-up a new account and to reset their password from the login page.
+
+The 'sign up' link can be suppressed, if required, by setting a configuration flag.
+
+[source,ini]
+----
+isis.viewer.wicket.suppressSignUp=true
+----
+
+
+With 'sign up' not suppressed (the default):
+
+image::{_imagesdir}suppress-sign-up/login-page-default.png[width="300px",link="{_imagesdir}suppress-sign-up/login-page-default.png"]
+
+and with the link suppressed:
+
+image::{_imagesdir}suppress-sign-up/login-page-suppress-sign-up.png[width="300px",link="{_imagesdir}suppress-sign-up/login-page-suppress-sign-up.png"]
+
+
+
+[[_ugvw_configuration-properties_sign-in_password-reset]]
+=== Password Reset
+
+If user registration has been configured, then the Wicket viewer allows the user to sign-up a new account and to reset their password from the login page.
+
+The 'password reset' link can be suppressed, if required, by setting a configuration flag:
+
+[source,ini]
+----
+isis.viewer.wicket.suppressPasswordReset=true
+----
+
+
+With 'password reset' not suppressed (the default):
+
+image::{_imagesdir}suppress-password-reset/login-page-default.png[width="300px",link="{_imagesdir}suppress-password-reset/login-page-default.png"]
+
+and with the link suppressed:
+
+image::{_imagesdir}suppress-password-reset/login-page-suppress-password-reset.png[width="300px",link="{_imagesdir}suppress-password-reset/login-page-suppress-password-reset.png"]
+
+
+
+
+
+
+[[_ugvw_configuration-properties_header-and-footer]]
+== Header and Footer
+
+Configuration properties that influence the appearance of the header and footer panels.
+
+See also the xref:ugvw.adoc#_ugvw_configuration-properties_bookmarks-and-breadcrumbs[bookmarks and breadcrumbs] and xref:ugvw.adoc#_ugvw_configuration-properties_themes
+[themes] configuration properties, because these also control UI elements that appear on the header/footer panels.
+
+.Header and Footer
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+
+|`isis.viewer.wicket.+`
+`credit.1.image`
+|File path
+|File path to a logo image for the first credited organisation, relative to `src/main/webapp` directory.
+
+For example: +
+`/images/apache-isis/logo-48x48.png`.
+
+Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
+
+|`isis.viewer.wicket.+`
+`credit.1.name`
+|String
+|Name of the first credited organisation.
+
+For example: "Apache Isis"
+
+Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
+
+|`isis.viewer.wicket.+`
+`credit.1.url`
+|URL
+|URL to the website of the first credited organisation.
+
+For example: +
+`http://isis.apache.org`.
+
+Optional.
+
+|`isis.viewer.wicket.+`
+`credit.2.image`
+|File path
+|File path to a logo image for the second credited organisation, relative to `src/main/webapp` directory.
+
+Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
+
+|`isis.viewer.wicket.+`
+`credit.2.name`
+|String
+|Name of the second credited organisation.
+
+Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
+
+|`isis.viewer.wicket.+`
+`credit.2.url`
+|URL
+|URL to the website of the second credited organisation.
+
+Optional.
+
+|`isis.viewer.wicket.+`
+`credit.3.image`
+|File path
+|File path to a logo image for the third credited organisation, relative to `src/main/webapp` directory.
+
+Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
+
+|`isis.viewer.wicket.+`
+`credit.3.name`
+|String
+|Name of the third credited organisation.
+
+Either/both of `name` and `image` must be defined for the credit to be rendered in the footer.
+
+|`isis.viewer.wicket.+`
+`credit.3.url`
+|URL
+|URL to the website of the third credited organisation.
+
+Optional.
+
+|
+|
+
+|===
+
+
+
+[[_ugvw_configuration-properties_presentation]]
+== Presentation
+
+These configuration properties that effect the overall presentation and appearance of the viewer.
+
+[NOTE]
+====
+Some of the properties below use the prefix `isis.viewers.` (rather than the usual `isis.viewer.wicket.`).
+====
+
+.Presentation
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+
+|`isis.viewers.` +
+`collectionLayout.` +
+`defaultView`
+|`hidden`, `table` +
+(`hidden`)
+|Default for the default view for all (parented) collections if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+
+By default the framework renders (parented) collections as "hidden", ie collapsed.
+These can be overridden on a case-by-case basis using the xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`] or the corresponding `<collectionLayout defaultView="...">` element in the `Xxx.layout.xml` layout file.
+
+If the majority of collections should be displayed as "table" form, then it is more convenient to specify the default view globally.
+
+
+|`isis.viewers.` +
+`paged.parented`
+|positive integer (12)
+|Default page size for parented collections (as owned by an object, eg `Customer#getOrders()`)
+
+
+|`isis.viewers.` +
+`paged.standalone`
+|positive integer (25)
+|Default page size for standalone collections (as returned from an action invocation)
+
+
+|`isis.viewers.` +
+`propertyLayout.` +
+`labelPosition`
+|`TOP`, `LEFT` +
+(`LEFT`)
+|Default for label position for all properties if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_labelPosition[`@PropertyLayout#labelPosition()`]
+
+
+If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
+
+If these are not present then Apache Isis will render according to internal defaults.
+At the time of writing, this means labels are to the left for all datatypes except multiline strings.
+
+
+|`isis.viewer.wicket.` +
+`maxTitleLength` +
+`InParentedTables`
+| +ve integer +
+(`_12_`)
+| See further discussion (immediately below).
+
+|`isis.viewer.wicket.` +
+`maxTitleLength` +
+`InStandaloneTables`
+| +ve integer, +
+(`_12_`)
+| See further discussion (immediately below).
+
+|`isis.viewer.wicket.` +
+`maxTitleLengthInTables`
+| +ve integer, +
+(`_12_`)
+| See further discussion (immediately below).
+
+|`isis.viewer.wicket.` +
+`promptStyle`
+|`dialog`,`inline`, +
+`inline_as_if_edit` +
+(`inline`)
+| whether the prompt for editing a domain object property or invoking an action (associated with a property) is shown inline within the property's form, or instead shown in a modal dialog box.
+For actions, `inline_as_if_edit` will suppress the action's button, and instead let the action be invoked as if editing the property.
+The net effect is that being able to "edit" complex properties with multiple parts (eg a date) using a multi-argument editor (this editor, in fact, being the action's argument panel).
+
+The property can be overridden on a property-by-property basis using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_promptStyle[`@Property#promptStyle()`]) or  xref:../rgant/rgant.adoc#_rgant-ActionLayout_promptStyle[`@Action#promptStyle()`]).
+
+Note that `inline_as_if_edit` does not make sense for a configuration property default, and will instead be interpreted as `inline`.
+
+
+
+
+
+|===
+
+
+Objects whose title is overly long can be cumbersome in titles.
+The Wicket viewer has a xref:../ugvw/ugvw.adoc#_ugvw_features_titles-in-tables[mechanism to automatically shorten] the titles of objects specified using `@Title`.
+As an alternative/in addition, the viewer can also be configured to simply truncate titles longer than a certain length.
+
+The properties themselves are:
+
+[source,ini]
+----
+isis.viewer.wicket.maxTitleLengthInStandaloneTables=20
+isis.viewer.wicket.maxTitleLengthInParentedTables=8
+----
+
+If you wish to use the same value in both cases, you can also specify just:
+
+[source,ini]
+----
+isis.viewer.wicket.maxTitleLengthInTables=15
+----
+
+This is used as a fallback if the more specific properties are not provided.
+
+If no properties are provided, then the Wicket viewer defaults to abbreviating titles to a length of `12`.
+
+
+
+
+
+
+
+[[_ugvw_configuration-properties_bookmarks-and-breadcrumbs]]
+== Bookmarks and Breadcrumbs
+
+These configuration properties enable or disable the mechanisms for locating previously accessed objects.
+
+.Bookmarks and Breadcrumbs
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
 
 |`isis.viewer.wicket.` +
 `bookmarkedPages.maxSize`
@@ -54,7 +435,97 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 `breadcrumbs.showChooser`
 | `true`,`false` +
 (`_true_`)
-| Whether to show chooser for Breadcrumbs (bottom-left in the Wicket viewer)
+| Whether to show chooser for Breadcrumbs (bottom-left footer in the Wicket viewer)
+
+
+
+|===
+
+
+
+
+[[_ugvw_configuration-properties_themes]]
+== Themes
+
+These configuration properties control the switching of themes.
+
+.Themes
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.viewer.wicket.` +
+`themes.enabled`
+| comma separated list ...
+| ... of bootswatch themes.  Only applies if `themes.showChooser`==`true`.
+
+See further discussion below.
+
+|`isis.viewer.wicket.` +
+`themes.showChooser`
+| `true`,`false` +
+(`_false_`)
+| Whether to show chooser for Bootstrap themes.
+
+See further discussion below.
+
+|===
+
+
+
+The Wicket viewer uses link:http://getbootstrap.com/[Bootstrap] styles and components (courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration).
+
+Unless a xref:../ugvw/ugvw.adoc#_ugvw_customisation_default-theme[default theme has been specified], the viewer uses the default bootstrap theme.
+However, the viewer can also be configured to allow the end-user to switch theme to another theme, in particular one of those provided by http://bootswatch.com[bootswatch.com].
+
+This is done using the following configuration property (in `WEB-INF/viewer_wicket.properties`):
+
+[source,ini]
+----
+isis.viewer.wicket.themes.showChooser=true
+----
+
+.Example 1
+image::{_imagesdir}theme-chooser/example-1.png[width="720px",link="{_imagesdir}theme-chooser/example-1.png"]
+
+
+.Example 2:
+image::{_imagesdir}theme-chooser/example-2.png[width="720px",link="{_imagesdir}theme-chooser/example-2.png"]
+
+It is also possible to restrict the themes shown to some subset of those in bootswatch. This is done using a further
+property:
+
+[source,ini]
+----
+isis.viewer.wicket.themes.enabled=bootstrap-theme,Cosmo,Flatly,Darkly,Sandstone,United
+----
+
+where the value is the list of themes (from http://bootswatch.com[bootswatch.com]) to be made available.
+
+[TIP]
+====
+You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the xref:../ugvw/ugvw.adoc#_ugvw_extending_custom-bootstrap-theme[Extending] chapter for further details.
+====
+
+
+
+
+[[_ugvw_configuration-properties_date-formatting]]
+== Date Formatting & Date Picker
+
+These configuration properties influence the way in which date/times are rendered and can be selected using the date/time pickers.
+
+.Date Formatting & Date Picker
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
 
 |`isis.viewer.wicket.` +
 `datePattern`
@@ -89,12 +560,37 @@ See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#mindate[dat
 further details.  The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
 for further details).
 
+
 |`isis.viewer.wicket.` +
-`disableDependent` +
-`ChoiceAutoSelection`
+`timestampPattern`
+| date/time format +
+(`yyyy-MM-dd HH:mm:ss.SSS`)
+|The `SimpleDateFormat` used to render timestamps.
+
+
+
+
+|===
+
+
+[[_ugvw_configuration-properties_debugging]]
+== Debugging
+
+These configuration properties can assist with debugging the behaviour of the Wicket viewer itself.
+
+.Debugging
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+|`isis.viewer.wicket.` +
+`ajaxDebugMode`
 | `true`,`false` +
 (`_false_`)
-| For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
+| whether the Wicket debug mode should be enabled.
 
 |`isis.viewer.wicket.` +
 `developmentUtilities.enable`
@@ -107,38 +603,71 @@ If running in prototyping mode, the development utilities (debug bar) is always 
 This feature is primarily just to help track any memory leakage issues that might be suspected when running in production.
 
 |`isis.viewer.wicket.` +
-`disableModalDialogs`
-| `true`,`false` +
-(`_false_`)
-|No longer supported.
-
-|`isis.viewer.wicket.` +
 `liveReloadUrl`
 | URL
 |Specifies the URL if xref:../dg/dg.adoc#__dg_ide_intellij_advanced_gradle-liveReload[live reload] is set up, eg: +
 
 `http://localhost:35729/livereload.js?snipver=1`
 
+|`isis.viewer.wicket.` +
+`stripWicketTags`
+| `true`,`false` +
+(`_true_`)
+| Whether to force Wicket tags to be stripped in prototype/development mode.
+
+[NOTE]
+====
+In 1.7.0 and earlier, the behaviour is different; the Apache Isis Wicket viewer will preserve wicket tags when running in Apache Isis' prototype/development mode, but will still strip wicket tags in Apache Isis' server/deployment mode.
+
+We changed the behaviour in 1.8.0 because we found that Internet Explorer can be sensitive to the presence of Wicket tags.
+====
 
 |`isis.viewer.wicket.` +
-`maxTitleLength` +
-`InParentedTables`
-| +ve integer +
-(`_12_`)
-| See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
+`wicketSourcePlugin`
+| `true`,`false` +
+(`_false_`)
+| Whether the WicketSource plugin should be enabled; by default it is not enabled.
+
+[WARNING]
+====
+Enabling this setting can significantly slow down rendering performance of the Wicket viewer.
+====
+
+|===
+
+
+
+
+
+
+
+
+
+[[_ugvw_configuration-properties_presentation]]
+== Feature Toggles
+
+These configuration properties are used to enable/disable features that are either on the way to becoming the default behaviour (but can temporarily be disabled) or conversely for features that are to be removed (but can temporarily be left as enabled).
+
+.Feature Toggles
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
 
 |`isis.viewer.wicket.` +
-`maxTitleLength` +
-`InStandaloneTables`
-| +ve integer, +
-(`_12_`)
-| See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
+`disableDependent` +
+`ChoiceAutoSelection`
+| `true`,`false` +
+(`_false_`)
+| For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
 
 |`isis.viewer.wicket.` +
-`maxTitleLengthInTables`
-| +ve integer, +
-(`_12_`)
-| See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_abbreviating-titles[below].
+`disableModalDialogs`
+| `true`,`false` +
+(`_false_`)
+|No longer supported.
 
 |`isis.viewer.wicket.` +
 `preventDoubleClick` +
@@ -154,18 +683,6 @@ This feature is primarily just to help track any memory leakage issues that migh
 (`_true_`)
 | Whether to disable a no-arg action button after it has been clicked, to prevent users causing an error if they do a double click.
 
-|`isis.viewer.wicket.` +
-`promptStyle`
-|`dialog`,`inline`, +
-`inline_as_if_edit` +
-(`inline`)
-| whether the prompt for editing a domain object property or invoking an action (associated with a property) is shown inline within the property's form, or instead shown in a modal dialog box.
-For actions, `inline_as_if_edit` will suppress the action's button, and instead let the action be invoked as if editing the property.
-The net effect is that being able to "edit" complex properties with multiple parts (eg a date) using a multi-argument editor (this editor, in fact, being the action's argument panel).
-
-The property can be overridden on a property-by-property basis using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_promptStyle[`@Property#promptStyle()`]) or  xref:../rgant/rgant.adoc#_rgant-ActionLayout_promptStyle[`@Action#promptStyle()`]).
-
-Note that `inline_as_if_edit` does not make sense for a configuration property default, and will instead be interpreted as `inline`.
 
 |`isis.viewer.wicket.` +
 `redirectEvenIfSameObject`
@@ -182,7 +699,6 @@ Note that the default behaviour is new in `1.15.0`, providing a better end-user 
 Setting this option retains the behaviour of the viewer pre-`1.15.0`.
 ====
 
-
 |`isis.viewer.wicket.` +
 `regularCase`
 | `true`,`false` +
@@ -197,80 +713,6 @@ Setting this option retains the behaviour of the viewer pre-`1.15.0`.
 | Whether to replace 'disabled' tag with 'readonly' (for link:https://www.w3.org/TR/2014/REC-html5-20141028/forms.html#the-readonly-attribute[w3 spec]-compliant browsers such as for Firefox and Chrome 54+) which prevent copy from 'disabled' fields.
 
 |`isis.viewer.wicket.` +
-`rememberMe.cookieKey`
-| ascii chars +
-(`_isisWicketRememberMe_`)
-|Cookie key holding the (encrypted) 'rememberMe' user/password.  There is generally no need to
-change this.  +
-
-Valid values as per link:http://stackoverflow.com/a/1969339/56880[this StackOverflow answer].
-
-|`isis.viewer.wicket.` +
-`rememberMe.encryptionKey`
-| any string +
-(in prod, a random UUID each time)
-|Encryption key is used to encrypt the rememberMe user/password.  +
-
-Apache Isis leverages link:http://wicket.apache.org[Apache Wicket]'s rememberMe support which holds remembered
-user/passwords in an encrypted cookie.
-
-If a hard-coded and publicly known value were to be used (as was the case prior to `1.13.0`), then it would be possible for rememberMe user/password to be intercepted and decrypted, possibly compromising access.
-This configuration property therefore allows a private key to be specified, baked into the application.
-
-If no value is set then, in production, a random UUID will be used as the encryption key.
-The net effect of this fallback behaviour is that 'rememberMe' will work, but only until the webapp is restarted (after which the end-user will have to log in again.
-In prototype mode, though, a fixed key will still be used; this saves the developer having to login each time.
-
-|`isis.viewer.wicket.` +
-`rememberMe.suppress`
-| `true`,`false` +
-(`_false_`)
-|Whether to suppress "remember me" checkbox on the login page.
-
-
-|`isis.viewer.wicket.` +
-`stripWicketTags`
-| `true`,`false` +
-(`_true_`)
-| Whether to force Wicket tags to be stripped in prototype/development mode.  See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_stripped-wicket-tags[below].
-
-|`isis.viewer.wicket.` +
-`suppressPasswordReset`
-| `true`,`false` +
-(`_false_`)
-|If user registration is enabled, whether to suppress the "password reset" link on the login page.  See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_suppressing-password-reset[below].
-
-|`isis.viewer.wicket.` +
-`suppressRememberMe`
-| `true`,`false` +
-(`_false_`)
-|(Deprecated in `1.13.0`, replaced by `rememberMe.suppress`).  Whether to suppress "remember me" checkbox on the login page.
-
-|`isis.viewer.wicket.` +
-`suppressSignUp`
-| `true`,`false` +
-(`_false_`)
-|If user registration is enabled, whether to suppress the "sign up" link on the login page.  See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_suppressing-sign-up[below].
-
-|`isis.viewer.wicket.` +
-`timestampPattern`
-| date/time format +
-(`yyyy-MM-dd HH:mm:ss.SSS`)
-|The `SimpleDateFormat` used to render timestamps.
-
-
-|`isis.viewer.wicket.` +
-`themes.enabled`
-| comma separated list ...
-| ... of bootswatch themes.  Only applies if `themes.showChooser`==`true`.  See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_showing-theme-chooser[below].
-
-|`isis.viewer.wicket.` +
-`themes.showChooser`
-| `true`,`false` +
-(`_false_`)
-| Whether to show chooser for Bootstrap themes.  See discussion xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties_showing-theme-chooser[below]
-
-|`isis.viewer.wicket.` +
 `useIndicatorForFormSubmit`
 | `true`,`false` +
 (`_true_`)
@@ -282,75 +724,8 @@ In prototype mode, though, a fixed key will still be used; this saves the develo
 (`_true_`)
 | Whether to show an indicator for a no-arg action button that it has been clicked.
 
-|`isis.viewer.wicket.` +
-`wicketSourcePlugin`
-| `true`,`false` +
-(`_false_`)
-| Whether the WicketSource plugin should be enabled; by default it is not enabled.
 
-[WARNING]
-====
-Enabling this setting can significantly slow down rendering performance of the Wicket viewer.
-====
 
 |===
 
-
-Also:
-
-[cols="2a,1,3a", options="header"]
-|===
-|Property
-|Value +
-(default value)
-|Description
-
-|`isis.viewers.` +
-`paged.parented`
-|positive integer (12)
-|Default page size for parented collections (as owned by an object, eg `Customer#getOrders()`)
-
-
-|`isis.viewers.` +
-`paged.standalone`
-|positive integer (25)
-|Default page size for standalone collections (as returned from an action invocation)
-
-
-|`isis.viewers.` +
-`propertyLayout.` +
-`labelPosition`
-|`TOP`, `LEFT` +
-(`LEFT`)
-|Default for label position for all properties if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_labelPosition[`@PropertyLayout#labelPosition()`]
-
-
-If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
-
-If these are not present then Apache Isis will render according to internal defaults.
-At the time of writing, this means labels are to the left for all datatypes except multiline strings.
-
-
-|`isis.viewers.` +
-`collectionLayout.` +
-`defaultView`
-|`hidden`, `table` +
-(`hidden`)
-|Default for the default view for all (parented) collections if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
-
-By default the framework renders (parented) collections as "hidden", ie collapsed.
-These can be overridden on a case-by-case basis using the xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`] or the corresponding `<collectionLayout defaultView="...">` element in the `Xxx.layout.xml` layout file.
-
-If the majority of collections should be displayed as "table" form, then it is more convenient to specify the default view globally.
-
-|===
-
-
-
-include::_ugvw_configuration-properties_abbreviating-titles.adoc[leveloffset=+1]
-include::_ugvw_configuration-properties_suppressing-remember-me.adoc[leveloffset=+1]
-include::_ugvw_configuration-properties_suppressing-sign-up.adoc[leveloffset=+1]
-include::_ugvw_configuration-properties_suppressing-password-reset.adoc[leveloffset=+1]
-include::_ugvw_configuration-properties_stripped-wicket-tags.adoc[leveloffset=+1]
-include::_ugvw_configuration-properties_showing-theme-chooser.adoc[leveloffset=+1]
 

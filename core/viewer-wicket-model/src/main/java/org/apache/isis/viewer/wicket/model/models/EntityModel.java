@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
@@ -400,10 +401,11 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     public void resetPropertyModels() {
         adapterMemento.resetVersion(getPersistenceSession(), getSpecificationLoader());
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
+            OneToOneAssociation otoa = pm.getProperty(getSpecificationLoader());
             final ScalarModel scalarModel = propertyScalarModels.get(pm);
             final ObjectAdapter adapter = getObject();
             final ObjectAdapter associatedAdapter =
-                    pm.getProperty(getSpecificationLoader()).get(adapter, InteractionInitiatedBy.USER);
+                    otoa.get(adapter, InteractionInitiatedBy.USER);
             scalarModel.setObject(associatedAdapter);
         }
     }
