@@ -188,7 +188,8 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
             final ServicesInjector servicesInjector,
             final AuthenticationSession authenticationSession) {
 
-        Objects.requireNonNull(applicationComponents.get(), "PersistenceSession5 requires initialization. "+this.hashCode());
+        Objects.requireNonNull(applicationComponents.get(),
+                () -> "PersistenceSession5 requires initialization. "+this.hashCode());
         
         final FixturesInstalledFlag fixturesInstalledFlag = this;
         

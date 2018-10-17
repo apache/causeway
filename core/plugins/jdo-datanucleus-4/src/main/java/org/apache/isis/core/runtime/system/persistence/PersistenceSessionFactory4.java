@@ -188,7 +188,8 @@ PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledFlag {
             final ServicesInjector servicesInjector,
             final AuthenticationSession authenticationSession) {
 
-        Objects.requireNonNull(applicationComponents, "PersistenceSession5 requires initialization. "+this.hashCode());
+        Objects.requireNonNull(applicationComponents,
+                () -> "PersistenceSession5 requires initialization. " + this.hashCode());
         
         final FixturesInstalledFlag fixturesInstalledFlag = this;
         

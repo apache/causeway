@@ -46,24 +46,19 @@ class OidFactory_Builder implements OidFactoryBuilder {
 
     @Override
     public OidFactory build() {
-        return new OidFactory() {
-            
-            @Override
-            public RootOid oidFor(Object pojo) {
-                
-                final ObjectSpecification spec = specProvider.apply(pojo);
-                
-                final RootOid rootOid = handler.stream()
-                .filter(h->h.isHandling(pojo, spec))
-                .findFirst()
-                .map(h->h.oidFor(pojo, spec))
-                .orElse(null);
-                
-                Objects.requireNonNull(rootOid, "Could not create an Oid for pojo: "+pojo);
-                
-                return rootOid;
-            }
-            
+        return pojo -> {
+
+            final ObjectSpecification spec = specProvider.apply(pojo);
+
+            final RootOid rootOid = handler.stream()
+            .filter(h->h.isHandling(pojo, spec))
+            .findFirst()
+            .map(h->h.oidFor(pojo, spec))
+            .orElse(null);
+
+            Objects.requireNonNull(rootOid, () -> "Could not create an Oid for pojo: "+pojo);
+
+            return rootOid;
         };
     }
     
