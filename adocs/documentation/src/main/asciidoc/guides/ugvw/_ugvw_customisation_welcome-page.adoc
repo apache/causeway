@@ -17,6 +17,12 @@ isis.viewer.wicket.application.about=My Wonderful App v1.0
 ----
 <1> the `welcome.html` file is resolved relative to `src/main/webapp`.
 
+[TIP]
+====
+Do not confuse the welcome page file with the xref:ugvw.adoc#_ugvw_customisation_top-level-index-page[top-level index page]; they are different things!
+====
+
+
 The `application.name` is used both on the sign-in page and also top-left on the header.
 It's also possible to replace this text with images:
 
@@ -28,3 +34,4 @@ isis.viewer.wicket.application.brandLogoHeader=/images/logo-80x32.png
 ----
 
 These images are resolved relative to `src/main/webapp`.
+

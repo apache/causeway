@@ -6,6 +6,7 @@
 
 
 
+include::_ugvw_customisation_top-level-index-page.adoc[leveloffset=+1]
 include::_ugvw_customisation_brand-logo.adoc[leveloffset=+1]
 include::_ugvw_customisation_default-theme.adoc[leveloffset=+1]
 include::_ugvw_customisation_welcome-page.adoc[leveloffset=+1]

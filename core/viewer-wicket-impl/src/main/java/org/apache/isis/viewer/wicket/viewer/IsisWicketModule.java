@@ -62,19 +62,7 @@ import static org.apache.isis.viewer.wicket.viewer.IsisWicketApplication.readLin
  *     protected void configure() {
  *         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarForMyApp.class);
  *         bind(PageClassList.class).to(PageClassListForMyApp.class);
-<<<<<<< HEAD
- *         ...  
- *         bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("My App");
- *         bind(String.class).annotatedWith(Names.named("brandLogoHeader")).toInstance("/images/myapp-logo-header.png");
- *         bind(String.class).annotatedWith(Names.named("brandLogoSignin")).toInstance("/images/myapp-logo-signin.png");
- *         bind(String.class).annotatedWith(Names.named("applicationCss")).toInstance("css/application.css");
- *         bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("scripts/application.js");
- *         bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance("Hello, welcome to my app");
- *         bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("MyApp v1.0.0");
- *         bind(AppManifest.class).toInstance(new MyAppManifest());
-=======
  *         ...
->>>>>>> 5742167210... ISIS-2003: adds new config props to mostly avoid need to subclass IsisWicketApplication.
  *      }
  *  };
  * final Module overridden = Modules.override(isisDefaults).with(myAppOverrides);
@@ -105,6 +93,7 @@ public class IsisWicketModule extends AbstractModule {
 
         // these services need to be bound because they injected directly into
         // Wicket panels outside of the Isis runtime.
+
         bind(EmailService.class)
                 .to(EmailServiceDefault.class);
         bind(EmailNotificationService.class)
@@ -158,10 +147,18 @@ public class IsisWicketModule extends AbstractModule {
                             });
             final String welcomeFile = isisConfigIfAny.getString("isis.viewer.wicket.welcome.file", "welcome.html");
             bind(String.class).annotatedWith(Names.named("welcomeMessage"))
-                    .toProvider(new Provider<String>() {
+                    .toProvider(
+                            new Provider<String>() {
                         @Override public String get() {
                             return readLines(getClass(), welcomeFile,
                                     isisConfigIfAny.getString("isis.viewer.wicket.welcome.text"));
+                        }
+                    });
+            bind(String.class).annotatedWith(Names.named("applicationVersion"))
+                    .toProvider(
+                            new Provider<String>() {
+                        @Override public String get() {
+                            return isisConfigIfAny.getString("isis.viewer.wicket.application.version");
                         }
                     });
         }

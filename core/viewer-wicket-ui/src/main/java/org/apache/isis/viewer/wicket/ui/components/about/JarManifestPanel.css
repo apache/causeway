@@ -17,23 +17,11 @@
  *  under the License.
  */
 
- .jarManifestPanel .aboutInfo {
+.jarManifestPanel .aboutInfo {
     margin-left: 50px;
     margin-right: 50px;
-    padding-top: 50px;
 }
 
-
-.jarManifestPanel .aboutMessage {
-    background:#FFFFFF;
-    border-radius:4px;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
-    padding: 15px;
-    display: block;
-    text-align:center;
-    font-size:1.2em;
-}
 
  .jarManifestPanel .manifestAttributes {
     margin-top: 30px; 

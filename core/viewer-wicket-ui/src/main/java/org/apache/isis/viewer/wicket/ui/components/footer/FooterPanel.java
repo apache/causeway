@@ -18,6 +18,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.footer;
 
+import com.google.inject.name.Named;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.ComponentTag;
@@ -49,6 +51,10 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
     private static final String ID_ABOUT_LINK = "aboutLink";
     private static final String ID_ABOUT_MESSAGE = "aboutMessage";
     private static final String ID_THEME_PICKER = "themePicker";
+
+    @com.google.inject.Inject
+    @Named("applicationVersion")
+    private String applicationVersion;
 
 
     /**
@@ -197,7 +203,11 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
         final BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>(ID_ABOUT_LINK, AboutPage.class);
         add(aboutLink);
 
-        final Label aboutLabel = new Label(ID_ABOUT_MESSAGE, new ResourceModel("aboutLabel"));
+        final Label aboutLabel =
+                 applicationVersion != null && !applicationVersion.isEmpty()?
+                    new Label(ID_ABOUT_MESSAGE,  applicationVersion) :
+                    new Label(ID_ABOUT_MESSAGE,  new ResourceModel("aboutLabel"))
+                    ;
         aboutLink.add(aboutLabel);
         addDevModeWarning(aboutLink);
     }

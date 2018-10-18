@@ -23,6 +23,8 @@ import java.io.InputStream;
 
 import com.google.inject.name.Named;
 
+import org.apache.wicket.markup.html.basic.Label;
+
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -38,9 +40,37 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
     private static final String ID_MANIFEST_ATTRIBUTES = "manifestAttributes";
 
     @com.google.inject.Inject
+    @Named("applicationName")
+    private String applicationName;
+
+    @com.google.inject.Inject
+    @Named("applicationVersion")
+    private String applicationVersion;
+
+    @com.google.inject.Inject
     @Named("aboutMessage")
     private String aboutMessage;
-    
+
+    private static final String ID_APPLICATION_NAME = "applicationName";
+    private static final String ID_APPLICATION_VERSION = "applicationVersion";
+    private static final String ID_ABOUT_MESSAGE = "aboutMessage";
+
+
+    public static class LabelVisibleOnlyIfNonEmpty extends Label {
+
+        private final String label;
+
+        public LabelVisibleOnlyIfNonEmpty(final String id, final String label) {
+            super(id, label);
+            this.label = label;
+        }
+
+        @Override protected void onConfigure() {
+            super.onConfigure();
+            setVisibilityAllowed(label != null && !label.isEmpty());
+        }
+    }
+
     /**
      * We take care to read this only once.
      *
@@ -56,9 +86,13 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
     
     public AboutPanel(final String id) {
         super(id);
-        
+
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, applicationName));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, applicationVersion));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, aboutMessage));
+
         if(jarManifestModel == null) {
-            jarManifestModel = new JarManifestModel(aboutMessage, metaInfManifestIs);
+            jarManifestModel = new JarManifestModel(metaInfManifestIs);
         }
         
         add(new JarManifestPanel(ID_MANIFEST_ATTRIBUTES, jarManifestModel));
