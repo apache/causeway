@@ -19,14 +19,19 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import java.io.InputStream;
+
+import javax.servlet.ServletContext;
+
 import com.google.inject.AbstractModule;
+import com.google.inject.Provider;
 import com.google.inject.name.Names;
-import com.google.inject.util.Providers;
 
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.core.runtime.services.email.EmailServiceDefault;
 import org.apache.isis.core.runtime.services.userreg.EmailNotificationServiceDefault;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -44,6 +49,8 @@ import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDe
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageNavigationServiceDefault;
 import org.apache.isis.viewer.wicket.viewer.settings.WicketViewerSettingsDefault;
 
+import static org.apache.isis.viewer.wicket.viewer.IsisWicketApplication.readLines;
+
 /**
  * To override
  * 
@@ -55,6 +62,7 @@ import org.apache.isis.viewer.wicket.viewer.settings.WicketViewerSettingsDefault
  *     protected void configure() {
  *         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarForMyApp.class);
  *         bind(PageClassList.class).to(PageClassListForMyApp.class);
+<<<<<<< HEAD
  *         ...  
  *         bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("My App");
  *         bind(String.class).annotatedWith(Names.named("brandLogoHeader")).toInstance("/images/myapp-logo-header.png");
@@ -64,12 +72,25 @@ import org.apache.isis.viewer.wicket.viewer.settings.WicketViewerSettingsDefault
  *         bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance("Hello, welcome to my app");
  *         bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("MyApp v1.0.0");
  *         bind(AppManifest.class).toInstance(new MyAppManifest());
+=======
+ *         ...
+>>>>>>> 5742167210... ISIS-2003: adds new config props to mostly avoid need to subclass IsisWicketApplication.
  *      }
  *  };
  * final Module overridden = Modules.override(isisDefaults).with(myAppOverrides);
  * </pre>
  */
 public class IsisWicketModule extends AbstractModule {
+
+    private ServletContext servletContext;
+    private IsisConfiguration isisConfigIfAny;
+
+    public IsisWicketModule(
+            final ServletContext servletContext,
+            final IsisConfiguration isisConfigurationIfAny) {
+        this.servletContext = servletContext;
+        this.isisConfigIfAny = isisConfigurationIfAny;
+    }
 
     @Override
     protected void configure() {
@@ -89,10 +110,66 @@ public class IsisWicketModule extends AbstractModule {
         bind(EmailNotificationService.class)
                 .to(EmailNotificationServiceDefault.class);
 
-        bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Apache Isis ™");
-        bind(String.class).annotatedWith(Names.named("applicationCss")).toProvider(Providers.of((String) null));
-        bind(String.class).annotatedWith(Names.named("applicationJs")).toProvider(Providers.of((String)null));
-        bind(String.class).annotatedWith(Names.named("welcomeMessage")).toProvider(Providers.of((String)null));
-        bind(String.class).annotatedWith(Names.named("aboutMessage")).toProvider(Providers.of((String)null));
+        if(isisConfigIfAny != null) {
+            bind(String.class).annotatedWith(Names.named("applicationName"))
+                    .toProvider(
+                            new Provider<String>() {
+                                @Override public String get() {
+                                    return isisConfigIfAny.getString("isis.viewer.wicket.application.name", "Apache Isis ™");
+                                }
+                            });
+            bind(String.class).annotatedWith(Names.named("brandLogoHeader"))
+                    .toProvider(
+                            new Provider<String>() {
+                                @Override public String get() {
+                                    return isisConfigIfAny.getString("isis.viewer.wicket.application.brandLogoHeader");
+                                }
+                            });
+
+            bind(String.class).annotatedWith(Names.named("brandLogoSignin"))
+                    .toProvider(
+                            new Provider<String>() {
+                                @Override public String get() {
+                                    return isisConfigIfAny.getString("isis.viewer.wicket.application.brandLogoSignin");
+                                }
+                            });
+
+            bind(String.class).annotatedWith(Names.named("applicationCss"))
+                    .toProvider(
+                            new Provider<String>() {
+                                @Override public String get() {
+                                    return isisConfigIfAny.getString("isis.viewer.wicket.application.css", "css/application.css");
+                                }
+                            });
+            bind(String.class).annotatedWith(Names.named("applicationJs"))
+                    .toProvider(
+                            new Provider<String>() {
+                                @Override public String get() {
+                                    return isisConfigIfAny.getString("isis.viewer.wicket.application.js", "css/application.js");
+                                }
+                            });
+            bind(String.class).annotatedWith(Names.named("aboutMessage"))
+                    .toProvider(
+                            new Provider<String>() {
+                                @Override public String get() {
+                                    return isisConfigIfAny.getString("isis.viewer.wicket.application.about",
+                                            isisConfigIfAny.getString("isis.viewer.wicket.application.name"));
+                                }
+                            });
+            final String welcomeFile = isisConfigIfAny.getString("isis.viewer.wicket.welcome.file", "welcome.html");
+            bind(String.class).annotatedWith(Names.named("welcomeMessage"))
+                    .toProvider(new Provider<String>() {
+                        @Override public String get() {
+                            return readLines(getClass(), welcomeFile,
+                                    isisConfigIfAny.getString("isis.viewer.wicket.welcome.text"));
+                        }
+                    });
+        }
+        bind(InputStream.class).annotatedWith(Names.named("metaInfManifest"))
+                .toProvider(new Provider<InputStream>() {
+                    @Override public InputStream get() {
+                        return servletContext.getResourceAsStream("/META-INF/MANIFEST.MF");
+                    }
+                });
     }
 }

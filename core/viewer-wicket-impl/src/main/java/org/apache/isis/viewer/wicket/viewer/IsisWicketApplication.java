@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.viewer;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -30,8 +29,8 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Function;
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.io.Resources;
@@ -126,6 +125,7 @@ import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
 import net.ftlines.wicketsource.WicketSource;
 
+
 /**
  * Main application, subclassing the Wicket {@link Application} and
  * bootstrapping Isis.
@@ -146,7 +146,7 @@ import net.ftlines.wicketsource.WicketSource;
  * make the {@link ComponentFactory} defined within it available.
  *
  * <p>
- * Alternatively, {@link ComponentFactory}s can be specified by overridding {@link #newIsisWicketModule()}.
+ * Alternatively, {@link ComponentFactory}s can be specified by overridding {@link #newIsisWicketModule()} or {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule(IsisConfiguration)}.
  * This mechanism allows a number of other aspects to be customized.
  */
 public class IsisWicketApplication
@@ -359,7 +359,8 @@ public class IsisWicketApplication
             //
             final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();
             final IsisInjectModule isisModule = newIsisModule(deploymentCategory, configuration);
-            final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
+            final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule(configuration));
+
             initWicketComponentInjection(injector);
 
             injector.injectMembers(this); // populates this.isisSessionFactory
@@ -536,11 +537,13 @@ public class IsisWicketApplication
      * For convenience of subclasses.
      */
     protected static String readLines(final Class<?> contextClass, final String resourceName, final String fallback) {
+        if(resourceName == null) {
+            return fallback;
+        }
         try {
-            List<String> readLines = Resources.readLines(Resources.getResource(contextClass, resourceName), Charset.defaultCharset());
-            final String aboutText = Joiner.on("\n").join(readLines);
-            return aboutText;
-        } catch (IOException e) {
+            List<String> readLines = Resources.readLines(Resources.getResource(contextClass, resourceName), Charsets.UTF_8);
+            return String.join("\n", readLines);
+        } catch (IOException | IllegalArgumentException e) {
             return fallback;
         }
     }
@@ -656,9 +659,13 @@ public class IsisWicketApplication
 
     /**
      * Override if required
+     * @param isisConfiguration
      */
+    protected Module newIsisWicketModule(final IsisConfiguration isisConfiguration) {
+        return new IsisWicketModule(getServletContext(), isisConfiguration);
+    }
     protected Module newIsisWicketModule() {
-        return new IsisWicketModule();
+        return newIsisWicketModule(null);
     }
 
     // //////////////////////////////////////

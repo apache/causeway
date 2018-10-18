@@ -5,10 +5,12 @@
 :_imagesdir: images/
 
 
-Wicket configuration properties alter the way in which Apache Isis' Wicket viewer renders domain objects.  They are typically stored in `WEB-INF/viewer_wicket.properties`.
+Wicket configuration properties alter the way in which Apache Isis' Wicket viewer renders domain objects.
 
-[NOTE]
-====
+== Loading Configuration Properties
+
+Configuration properties are typically stored in `WEB-INF/isis.properties` or in `WEB-INF/viewer_wicket.properties`.
+
 To tell Apache Isis that the Wicket viewer is in use (and should therefore search for the `viewer_wicket.properties` file), add the following to `WEB-INF/web.xml`:
 
 [source, xml]
@@ -19,17 +21,35 @@ To tell Apache Isis that the Wicket viewer is in use (and should therefore searc
 </context-param>
 ----
 
-====
+Alternatively, because most of these configuration properties tend not to change between environment (development and production), another practice is to load them programmatically from the `AppManifest`:
 
-If you prefer you can place all configuration properties into `WEB-INF/isis.properties` (the configuration properties from all config files are merged together).
+[source,java]
+----
+public class MyAppAppManifest extends AppManifestAbstract2 {
+
+    public static final Builder BUILDER = Builder
+            .forModule(new MyApplicationModule())
+            ...
+            .withConfigurationPropertiesFile(
+            MyAppManifest.class, "isis-non-changing.properties") ;
+
+    ...
+}
+----
+
+where `isis-non-changing.properties` is on the classpath in the same package as `MyAppAppManifest`.
+
+Whichever approach is used, the configuration properties from all config files are merged together.
 
 
-[[_ugvw_configuration-properties_sign-in]]
-== Sign-in, Sign-up and Remember Me
+[[_ugvw_configuration-properties_application]]
+== Application Identity
 
-Configuration properties that influence the behaviour and appearance of the sign-in page.
+Configuration properties that identify the application, in the sign-in page, welcome and about pages.
 
-.Remember Me
+These also include top-level overrides for CSS and Javascript.
+
+.Application Identity
 [cols="2a,1,3a", options="header"]
 |===
 |Property
@@ -37,9 +57,108 @@ Configuration properties that influence the behaviour and appearance of the sign
 (_default value_)
 |Description
 
+|`isis.viewer.wicket.` +
+`application.name`
+|Apache Isis ™
+|Identifies the application on the sign-in page (unless a `brandLogoSignin` image is configured) and on top-left in the header (unless a `brandLogoHeader` image is configured).
+
+|`isis.viewer.wicket.` +
+`application.css`
+|`scripts/application.css`
+|File to read any custom CSS, relative to `src/main/webapp` directory.
+
+|`isis.viewer.wicket.` +
+`application.js`
+|`scripts/application.js`
+|File to read any custom Javascript, relative to `src/main/webapp` directory.
+
+|`isis.viewer.wicket.` +
+`application.about`
+|Apache Isis ™
+|Label used on the about page.
+
+If not specified, then `application.name` is used instead.
+
+|`isis.viewer.wicket.` +
+`welcome.file`
+|`welcome.html`
+|Location of the HTML file (relative to `src/main/webapp`) whose contents should be displayed on the application's home page.
+
+Note though that if a xref:../../guides/rgant/rgant.adoc#_rgant-HomePage[@HomePage] action exists, then that will take precedence.
+
+If no welcome file exists, then the value of `welcome.text` is shown as a fallback.
+
+|`isis.viewer.wicket.` +
+`welcome.text`
 |
-|
-|
+|Text to be displayed on the application's home page, used as a fallback if `welcome.file` is not specified.
+
+Note though that if a xref:../../guides/rgant/rgant.adoc#_rgant-HomePage[@HomePage] action exists, then that will take precedence.
+
+
+|`isis.viewer.wicket.` +
+`application.` +
+`brandLogoHeader`
+|Image URL
+|Either the location of the image file (relative to `src/main/webapp`), or an absolute URL.
+This is rendered on the header panel.
+
+An image with a size of 160x40 works well.
+
+If not specified, the `application.name` is used instead.
+
+
+|`isis.viewer.wicket.` +
+`application.` +
+`brandLogoSignin`
+|Image URL
+|Either the location of the image file (relative to `src/main/webapp`), or an absolute URL.
+This is rendered on the sign-in page.
+
+An image with a size of 400x40 works well.
+
+If not specified, the `application.name` is used instead.
+
+
+|===
+
+
+As well as the `welcome.html` file, applications can also define an about file, residing in `about/index.html` (relative to `/src/main/webapp`).
+
+This page is shown as the root; the archetypes provide a version of this file that hyperlink to the wicket and swagger UIs.
+
+
+[TIP]
+====
+To redirect straight to the Wicket sign-in page, replace this file with:
+
+.about/index.html
+[source,html]
+----
+<html>
+<head>
+    <META HTTP-EQUIV="Refresh" CONTENT="0; URL=wicket/"/>
+</head>
+</html>
+----
+====
+
+
+
+
+
+[[_ugvw_configuration-properties_sign-in]]
+== Sign-in, Sign-up and Remember Me
+
+Configuration properties that influence the behaviour and appearance of the sign-in page.
+
+.Sign-in, Sign-up and Remember Me
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
 
 |`isis.viewer.wicket.` +
 `rememberMe.cookieKey`

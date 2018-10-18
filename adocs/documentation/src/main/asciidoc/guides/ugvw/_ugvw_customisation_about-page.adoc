@@ -88,35 +88,7 @@ Add the following to the webapp's `pom.xml` (under `<build>/<plugins>`):
 ----
 
 If you then build the webapp from the Maven command line (`mvn clean package`), then the WAR should contain a `META-INF/MANIFEST.MF` with those various attribute entries.
-
-=== Exporting the attributes into the app
-
-The manifest attributes are provided to the rest of the application by way of the Wicket viewer's integration with Google Guice.
-
-In your subclass of `IsisWicketApplication`, there is a method `newIsisWicketModule()`.
-In this method you need to bind an `InputStream` that will read the manifest attributes.
-This is all boilerplate so you can just copy-n-paste:
-
-[source,java]
-----
-@Override
-protected Module newIsisWicketModule() {
-    ...
-    final Module simpleappOverrides = new AbstractModule() {
-        @Override
-        protected void configure() {
-            ...
-            bind(InputStream.class)
-                .annotatedWith(Names.named("metaInfManifest"))
-                .toProvider(Providers.of(
-                    getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")));
-        }
-    };
-    ...
-}
-----
-
-With that you should be good to go!
+This will be picked up automatically and used in the about page.
 
 
 
