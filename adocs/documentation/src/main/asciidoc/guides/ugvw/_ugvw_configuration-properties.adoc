@@ -123,26 +123,6 @@ If not specified, the `application.name` is used instead.
 |===
 
 
-As well as the `welcome.html` file, applications can also define an about file, residing in `about/index.html` (relative to `/src/main/webapp`).
-
-This page is shown as the root; the archetypes provide a version of this file that hyperlink to the wicket and swagger UIs.
-
-
-[TIP]
-====
-To redirect straight to the Wicket sign-in page, replace this file with:
-
-.about/index.html
-[source,html]
-----
-<html>
-<head>
-    <META HTTP-EQUIV="Refresh" CONTENT="0; URL=wicket/"/>
-</head>
-</html>
-----
-====
-
 
 
 

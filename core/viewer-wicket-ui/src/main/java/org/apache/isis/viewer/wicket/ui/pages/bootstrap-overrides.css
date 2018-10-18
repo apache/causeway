@@ -446,11 +446,21 @@ span.containedButtonPanel {
 }
 
 
+
 .navbar .powered-by {
-    margin-right: 0px;
+    margin-right: 10px;
+    font-size: small;
+    font-style: italic;
+    vertical-align: middle;
 }
 
+.navbar .creditName {
+    vertical-align: middle;
+}
 
+.navbar .aboutMessage {
+    vertical-align: middle;
+}
 
 
 
@@ -998,3 +1008,27 @@ such as https://chrome.google.com/webstore/detail/focus-indicator/heeoeadndnhebm
 .popover .open > .dropdown-menu {
   overflow: visible;
 }
+
+.aboutPanel .aboutMessage {
+    font-size:1.2em;
+    margin-left:50px;
+    margin-right:50px;
+    padding: 10px;
+}
+
+.aboutPanel .applicationName,
+.aboutPanel .applicationVersion {
+    text-align:center;
+}
+
+.aboutPanel .applicationName,
+.aboutPanel .applicationVersion,
+.aboutPanel .aboutMessage {
+    background:#FFFFFF;
+    border-radius:4px;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    padding: 5px;
+    display: block;
+}
+

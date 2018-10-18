@@ -21,43 +21,26 @@ package org.apache.isis.viewer.wicket.ui.components.about;
 
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
+
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
 
 public class JarManifestPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_ABOUT_MESSAGE = "aboutMessage";
-
     private static final String ID_MANIFEST_ATTRIBUTES = "manifestAttributes";
 
     private static final String ID_MANIFEST_ATTRIBUTE = "manifestAttribute";
     private static final String ID_LINE = "manifestAttributeLine";
 
-    private static final JavaScriptResourceReference DIV_TOGGLE_JS = new JavaScriptResourceReference(JarManifestPanel.class, "div-toggle.js");
-
     public JarManifestPanel(String id, JarManifestModel manifestModel) {
         super(id, manifestModel);
 
-        final String aboutMessage = manifestModel.getAboutMessage();
-        final Label label = new Label(ID_ABOUT_MESSAGE, aboutMessage);
-        // safe to not escape, about message is read from file (part of deployed WAR)
-        label.setEscapeModelStrings(false);
-        add(label);
-
-        MarkupContainer container = new WebMarkupContainer(ID_MANIFEST_ATTRIBUTES) {
-            private static final long serialVersionUID = 1L;
-            @Override
-            public void renderHead(IHeaderResponse response) {
-                response.render(JavaScriptReferenceHeaderItem.forReference(DIV_TOGGLE_JS));
-            }
-        };
-        container.add(new JarManifestListView(ID_MANIFEST_ATTRIBUTE, JarManifestPanel.ID_LINE, manifestModel.getDetail()));
+        final MarkupContainer container = new WebMarkupContainer(ID_MANIFEST_ATTRIBUTES);
+        container.add(
+                new JarManifestListView(ID_MANIFEST_ATTRIBUTE, JarManifestPanel.ID_LINE, manifestModel.getDetail()));
         add(container);
     }
 

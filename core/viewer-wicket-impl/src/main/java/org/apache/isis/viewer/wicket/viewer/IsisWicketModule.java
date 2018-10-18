@@ -119,6 +119,9 @@ public class IsisWicketModule extends AbstractModule {
                 .toProvider(() -> readLines(getClass(), welcomeFile,
                                             isisConfig.getString("isis.viewer.wicket.welcome.text")));
 
+        bind(String.class).annotatedWith(Names.named("applicationVersion"))
+                .toProvider(() -> isisConfig.getString("isis.viewer.wicket.application.version"));
+
         bind(InputStream.class).annotatedWith(Names.named("metaInfManifest"))
                 .toProvider(() -> servletContext.getResourceAsStream("/META-INF/MANIFEST.MF"));
 
