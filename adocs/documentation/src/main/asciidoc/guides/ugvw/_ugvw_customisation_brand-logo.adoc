@@ -6,8 +6,8 @@
 
 
 
-By default the Wicket viewer will display the application name top-left in the header menu. This can be changed to
-display a png logo instead.
+By default the Wicket viewer will display the application name top-left in the header menu.
+This can be changed to display a png logo instead.
 
 == Screenshots
 
@@ -21,42 +21,22 @@ image::{_imagesdir}brand-logo/brand-logo-signin.png[width="750px",link="{_images
 
 
 
+To configure, simply specify the appropriate configuration properties:
 
-== Configuration
-
-In the application-specific subclass of `IsisWicketApplication`, bind:
-
-* a string with name "brandLogoHeader" to the URL of a header image. A size of 160x40 works well.
-* a string with name "brandLogoSignin" to the URL of a image for the sign-in page. A size of 400x100 works well.
-
-For example:
-
-[source,java]
+[source,properties]
 ----
-@Override
-protected Module newIsisWicketModule() {
-    final Module isisDefaults = super.newIsisWicketModule();
-
-    final Module overrides = new AbstractModule() {
-        @Override
-        protected void configure() {
-            ...
-            bind(String.class).annotatedWith(Names.named("brandLogoHeader"))
-                              .toInstance("/images/todoapp-logo-header.png");
-            bind(String.class).annotatedWith(Names.named("brandLogoSignin"))
-                              .toInstance("/images/todoapp-logo-signin.png");
-            ...
-        }
-    };
-
-    return Modules.override(isisDefaults).with(overrides);
-}
+isis.wicket.viewer.application.brandLogoSignin=/images/todoapp-logo-signin.png
+isis.wicket.viewer.application.brandLogoHeader=/images/todoapp-logo-header.png
 ----
 
-If the logo is hosted locally, add to the relevant directory (eg `src/main/webapp/images`). It is also valid for the
-URL to be absolute.
+These are resolved relative to `src/main/webapp`, or an absolute URL can be specified.
 
-You may also wish to tweak the xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]. For example, a logo with height 40px works well with the following:
+* for the signin image, a size of 400x100 works well.
+* for the header image, a size of 160x40 works well.
+
+
+You may also wish to tweak the xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`].
+For example, a logo with height 40px works well with the following:
 
 [source,css]
 ----

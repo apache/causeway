@@ -6,34 +6,25 @@
 
 
 
-The Wicket viewer ships with embedded JQuery, so this can be leveraged to perform arbitrary transformations of the rendered page (eg to run some arbitrary JQuery on page load).
+The Wicket viewer ships with embedded JQuery, so this can be leveraged, for example to perform arbitrary transformations of the rendered page on page load.
 
 [WARNING]
 ====
-Just because something is possible, it doesn't necessarily mean we encourage it.  Please be aware that there is no formal API for any custom javascript that you might implement to target; future versions of Apache Isis might break your code.
+Just because something is possible, it doesn't necessarily mean we encourage it.
+Please be aware that there is no formal API for any custom javascript that you might implement to target; future versions of Apache Isis might break your code.
 
 If possible, consider using the `ComponentFactory` API described in the xref:../ugvw/ugvw.adoc#_ugvw_extending[Extending] chapter.
 ====
 
-To register your Javascript code, adjusting the Guice bindings (part of Apache Isis' bootstrapping) in your custom subclass of `IsisWicketApplication`:
+To register your Javascript code, then just specify the appropriate configuration property:
 
-    public class MyAppApplication extends IsisWicketApplication {
-        @Override
-        protected Module newIsisWicketModule() {
-            final Module isisDefaults = super.newIsisWicketModule();
-            final Module myAppOverrides = new AbstractModule() {
-                @Override
-                protected void configure() {
-                    ...
-                    bind(String.class)
-                        .annotatedWith(Names.named("applicationJs"))
-                        .toInstance("scripts/application.js");
-                    ...
-                }
-            };
-            return Modules.override(isisDefaults).with(myAppOverrides);
-        }
-    }
+
+[source,java]
+----
+isis.viewer.wicket.application.js=stylesheets/myapp.js
+----
+
+This file is resolved relative to `src/main/webapp`.
 
 Currently only one such `.js` file can be registered.
 

@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import static java.util.Objects.requireNonNull;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Collections;
@@ -32,6 +30,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.io.Resources;
 import com.google.inject.Guice;
@@ -118,6 +117,7 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
+import static java.util.Objects.requireNonNull;
 import net.ftlines.wicketsource.WicketSource;
 
 /**
@@ -140,7 +140,7 @@ import net.ftlines.wicketsource.WicketSource;
  * make the {@link ComponentFactory} defined within it available.
  *
  * <p>
- * Alternatively, {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule()}.
+ * Alternatively, {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule(IsisConfigurationDefault)}.
  * This mechanism allows a number of other aspects to be customized.
  */
 public class IsisWicketApplication
@@ -320,7 +320,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             // create IsisSessionFactory
             //
             final IsisInjectModule isisModule = newIsisModule(configuration);
-            final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
+            final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule(isisConfiguration));
             initWicketComponentInjection(injector);
 
             injector.injectMembers(this); // populates this.isisSessionFactory
@@ -469,11 +469,13 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
      * For convenience of subclasses.
      */
     protected static String readLines(final Class<?> contextClass, final String resourceName, final String fallback) {
+        if(resourceName == null) {
+            return fallback;
+        }
         try {
-            List<String> readLines = Resources.readLines(Resources.getResource(contextClass, resourceName), Charset.defaultCharset());
-            final String aboutText = Joiner.on("\n").join(readLines);
-            return aboutText;
-        } catch (IOException e) {
+            List<String> readLines = Resources.readLines(Resources.getResource(contextClass, resourceName), Charsets.UTF_8);
+            return String.join("\n", readLines);
+        } catch (IOException | IllegalArgumentException e) {
             return fallback;
         }
     }
@@ -539,9 +541,10 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     /**
      * Override if required
+     * @param isisConfiguration
      */
-    protected Module newIsisWicketModule() {
-        return new IsisWicketModule();
+    protected Module newIsisWicketModule(final IsisConfiguration isisConfiguration) {
+        return new IsisWicketModule(getServletContext(), isisConfiguration);
     }
 
     // //////////////////////////////////////

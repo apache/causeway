@@ -75,7 +75,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
             this.url = url;
             this.name = name;
             this.image = image;
-            this.defined = name != null || image != null;
+            this.defined = (name != null || image != null) && url != null;
         }
 
         int getNum() {
