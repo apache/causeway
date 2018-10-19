@@ -27,6 +27,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PropertyLayout;
@@ -47,8 +50,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 
 @ViewModelLayout(named="Script")
 public abstract class FixtureScript
@@ -931,6 +932,13 @@ implements InstallableFixture {
     /**
      * Wraps domain object
      */
+    protected <T> T w(final T domainObject) {
+        return wrapperFactory.w(domainObject);
+    }
+
+    /**
+     * Wraps domain object
+     */
     protected <T> T wrap(final T domainObject) {
         return wrapperFactory.wrap(domainObject);
     }
@@ -944,6 +952,13 @@ implements InstallableFixture {
      */
     protected <T> T unwrap(final T possibleWrappedDomainObject) {
         return wrapperFactory.unwrap(possibleWrappedDomainObject);
+    }
+
+    /**
+     * Convenience method
+     */
+    protected <T> T m(final Class<T> mixinClass, final Object mixedIn) {
+        return factoryService.m(mixinClass, mixedIn);
     }
 
     /**

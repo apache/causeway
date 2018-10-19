@@ -78,6 +78,13 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     @Programmatic
     @Override
+    public boolean isDeleted(final Object domainObject) {
+        final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
+        return adapter.isDestroyed();
+    }
+
+    @Programmatic
+    @Override
     public <T> T persist(final T object) {
         if (isPersistent(object)) {
             return object;

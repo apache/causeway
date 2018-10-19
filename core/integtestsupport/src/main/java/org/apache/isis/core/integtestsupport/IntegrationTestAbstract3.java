@@ -115,4 +115,56 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
         super.tearDownAllModules();
     }
 
+
+    public interface Step {
+        void step();
+    }
+    public interface StepT<T> {
+        T step();
+    }
+
+    protected void given(Step step) throws Exception {
+        step.step();
+        transactionService.flushTransaction();
+    }
+
+    protected void givenS(Step step) throws Exception {
+        step.step();
+        sessionManagementService.nextSession();
+    }
+
+    protected <T> T givenT(StepT<T> step) throws Exception {
+        final T stepReturn = step.step();
+        transactionService.flushTransaction();
+        return stepReturn;
+    }
+
+    protected void when(Step step) throws Exception {
+        step.step();
+        transactionService.flushTransaction();
+    }
+
+    protected <T> T whenT(StepT<T> step) throws Exception {
+        final T stepReturn = step.step();
+        transactionService.flushTransaction();
+        return stepReturn;
+    }
+
+    protected void whenS(Step step) throws Exception {
+        step.step();
+        transactionService.flushTransaction();
+        sessionManagementService.nextSession();
+    }
+
+    protected void then(Step step) throws Exception {
+        step.step();
+    }
+
+    protected <T> T thenT(StepT<T> step) throws Exception {
+        final T stepReturn = step.step();
+        transactionService.flushTransaction();
+        return stepReturn;
+    }
+
+
 }

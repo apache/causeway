@@ -65,8 +65,24 @@ public abstract class HeadlessAbstract {
     /**
      * For convenience of subclasses, remove some boilerplate
      */
+    protected <T> T w(final T obj) {
+        return wrapperFactory.w(obj);
+    }
     protected <T> T wrap(final T obj) {
         return wrapperFactory.wrap(obj);
+    }
+    protected <T> T wm(final T obj) {
+        return wrapperFactory.w(obj);
+    }
+    protected <T> T wm(final Class<T> mixinClass, final Object mixedIn) {
+        return wrapperFactory.wm(mixinClass, mixedIn);
+    }
+
+    /**
+     * For convenience of subclasses, remove some boilerplate
+     */
+    protected <T> T m(final Class<T> mixinClass, final Object mixedIn) {
+        return factoryService.m(mixinClass, mixedIn);
     }
 
     /**

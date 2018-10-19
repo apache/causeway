@@ -25,9 +25,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.events.ActionArgumentEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionInvocationEvent;
 import org.apache.isis.applib.services.wrapper.events.ActionUsabilityEvent;
@@ -220,6 +223,17 @@ public class WrapperFactoryDefault implements WrapperFactory {
     // /////////////////////////////////////////////////////////////
     // wrap and unwrap
     // /////////////////////////////////////////////////////////////
+
+    @Inject
+    FactoryService factoryService;
+    public <T> T wm(final Class<T> mixinClass, final Object mixedIn) {
+        return w(factoryService.m(mixinClass, mixedIn));
+    }
+
+    @Override
+    public <T> T w(final T domainObject) {
+        return wrap(domainObject, ExecutionMode.EXECUTE);
+    }
 
     @Override
     public <T> T wrap(final T domainObject) {

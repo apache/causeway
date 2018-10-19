@@ -18,9 +18,6 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
-import static java.util.Objects.requireNonNull;
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -95,6 +92,9 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.Persisten
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
+
+import static java.util.Objects.requireNonNull;
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 /**
  * A wrapper around the JDO {@link PersistenceManager}, which also manages concurrency
@@ -885,26 +885,25 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return false;
     }
 
+    /**
+     * May also deleted (that is, {@link #isDestroyed(Object)} could return true).
+     * @param pojo
+     * @return
+     */
     @Override
     public boolean isRepresentingPersistent(@Nullable Object pojo) {
-        if (pojo!=null && pojo instanceof Persistable) {
+        if (pojo instanceof Persistable) {
             final Persistable p = (Persistable) pojo;
-            final boolean isPersistent = p.dnIsPersistent();
-            if (isPersistent) {
-                return true;
-            }
+            return p.dnIsPersistent();
         }
         return false;
     }
 
     @Override
     public boolean isDestroyed(@Nullable Object pojo) {
-        if (pojo!=null && pojo instanceof Persistable) {
+        if (pojo instanceof Persistable) {
             final Persistable p = (Persistable) pojo;
-            final boolean isDeleted = p.dnIsDeleted();
-            if (isDeleted) {
-                return true;
-            }
+            return p.dnIsDeleted();
         }
         return false;
     }

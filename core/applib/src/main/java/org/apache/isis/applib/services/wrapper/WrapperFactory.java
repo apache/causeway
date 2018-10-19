@@ -22,7 +22,10 @@ package org.apache.isis.applib.services.wrapper;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 
@@ -109,6 +112,18 @@ public interface WrapperFactory {
             return domainObject;
         }
 
+        @Override public <T> T w(final T domainObject) {
+            return wrap(domainObject);
+        }
+
+        @Inject
+        FactoryService factoryService;
+
+        @Override
+        public <T> T wm(final Class<T> mixinClass, final Object mixedIn) {
+            return wrap(factoryService.m(mixinClass, mixedIn));
+        }
+
         @Override
         public <T> T wrapNoExecute(T domainObject) {
             return domainObject;
@@ -163,6 +178,11 @@ public interface WrapperFactory {
      */
     @Programmatic
     <T> T wrap(T domainObject);
+
+    @Programmatic
+    <T> T w(T domainObject);
+
+    <T> T wm(Class<T> mixinClass, Object mixedIn);
 
     /**
      * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#NO_EXECUTE},

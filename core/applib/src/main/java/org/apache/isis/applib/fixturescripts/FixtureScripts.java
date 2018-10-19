@@ -357,6 +357,11 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     @Programmatic
+    public <P extends PersonaWithBuilderScript<T,F>, T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final P persona) {
+        return runBuilderScript(persona.builder());
+    }
+
+    @Programmatic
     public <T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final F fixtureScript) {
 
         serviceRegistry.injectServicesInto(fixtureScript);

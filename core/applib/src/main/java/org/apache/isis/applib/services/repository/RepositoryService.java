@@ -55,9 +55,20 @@ public interface RepositoryService {
     /**
      * Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine
      * in the object store).
+     *
+     * <p>
+     *     This method can also return <code>true</code> if the object has been {@link #isDeleted(Object) deleted}
+     *     from the object store.
+     * </p>
      */
     @Programmatic
     boolean isPersistent(Object domainObject);
+
+    /**
+     * Determines if the specified object has been deleted from the object store.
+     */
+    @Programmatic
+    boolean isDeleted(Object domainObject);
 
     /**
      * Persist the specified object (or do nothing if already persistent).

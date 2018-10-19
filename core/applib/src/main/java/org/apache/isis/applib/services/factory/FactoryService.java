@@ -59,4 +59,7 @@ public interface FactoryService {
     @Programmatic
     <T> T mixin(Class<T> mixinClass, Object mixedIn);
 
+    @Programmatic
+    <T> T m(Class<T> mixinClass, Object mixedIn);
+
 }
