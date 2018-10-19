@@ -48,7 +48,6 @@ public class AuditerServiceLogging implements AuditerService {
         return LOG.isDebugEnabled();
     }
 
-    @Programmatic
     @Override
     public void audit(
             final UUID interactionId, int sequence,

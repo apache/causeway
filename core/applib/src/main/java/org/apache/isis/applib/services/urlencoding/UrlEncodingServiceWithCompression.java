@@ -26,7 +26,7 @@ import org.apache.isis.commons.internal.base._Strings;
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
-        )
+)
 public class UrlEncodingServiceWithCompression implements UrlEncodingService {
 
     @Override

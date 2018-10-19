@@ -46,7 +46,6 @@ import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCal
 public class ContentMappingServiceForCommandDto implements ContentMappingService {
 
     @Override
-    @Programmatic
     public Object map(Object object, final List<MediaType> acceptableMediaTypes) {
         final boolean supported = Util.isSupported(CommandDto.class, acceptableMediaTypes);
         if(!supported) {
@@ -59,7 +58,6 @@ public class ContentMappingServiceForCommandDto implements ContentMappingService
     /**
      * Not part of the {@link ContentMappingService} API.
      */
-    @Programmatic
     public CommandDto map(final CommandWithDto commandWithDto) {
         return asProcessedDto(commandWithDto);
     }

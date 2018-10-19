@@ -32,7 +32,10 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 
-@DomainService(nature=NatureOfService.DOMAIN)
+@DomainService(
+        nature=NatureOfService.DOMAIN,
+        menuOrder = "" + Integer.MAX_VALUE
+)
 public class HeadlessTransactionSupportDefault implements HeadlessTransactionSupport {
 
     @Override

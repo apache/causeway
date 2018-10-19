@@ -53,7 +53,6 @@ public class QueryResultsCacheControlInternal extends AbstractSubscriber impleme
 
     private boolean fixturesInstalling;
 
-    @Programmatic
     @Override
     public boolean isFixturesInstalling() {
         return fixturesInstalling;

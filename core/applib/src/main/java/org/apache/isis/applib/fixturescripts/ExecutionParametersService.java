@@ -40,7 +40,6 @@ import org.apache.isis.applib.annotation.Programmatic;
         )
 public class ExecutionParametersService {
 
-    @Programmatic
     public ExecutionParameters newExecutionParameters(final String parameters) {
         return new ExecutionParameters(parameters);
     }

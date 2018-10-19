@@ -45,27 +45,41 @@ public enum NatureOfService {
      */
     VIEW_REST_ONLY,
     /**
-     * The service's actions do not appear on menus and are not contributed.
+     * The service's actions do not appear on menus and are not contributed, but can be {@link org.apache.isis.applib.services.wrapper.WrapperFactory#wrap(Object) wrapped}.
+     */
+    DOMAIN_API,
+    /**
+     * The domain service methods are NOT part of the metamodel and instead are intended only to be invoked programmatically.
      */
     DOMAIN;
 
-    boolean isViewRestOnly() {
+    public boolean isViewRestOnly() {
         return this == VIEW_REST_ONLY;
     }
-    boolean isView() {
+    public boolean isView() {
         return this == VIEW;
     }
-    boolean isViewMenuOnly() {
+    public boolean isViewMenuOnly() {
         return this == VIEW_MENU_ONLY;
     }
-    boolean isViewContributionsOnly() {
+    public boolean isViewContributionsOnly() {
         return this == VIEW_CONTRIBUTIONS_ONLY;
     }
-    boolean isDomain() {
+
+    /**
+     * Is either {@link #DOMAIN domain (implementation)} or {@link #DOMAIN_API domain (api)}.
+     */
+    public boolean isDomain() {
+        return this == DOMAIN || this == DOMAIN_API;
+    }
+    public boolean isDomainImpl() {
         return this == DOMAIN;
     }
+    public boolean isDomainApi() {
+        return this == DOMAIN_API;
+    }
 
-    boolean isViewOrViewMenuOnly() {
+    public boolean isViewOrViewMenuOnly() {
         return isView() || isViewMenuOnly();
     }
 

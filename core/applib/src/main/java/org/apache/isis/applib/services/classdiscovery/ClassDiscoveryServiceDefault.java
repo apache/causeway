@@ -48,7 +48,6 @@ public class ClassDiscoveryServiceDefault
 extends AbstractService
 implements ClassDiscoveryService {
 
-    @Programmatic
     @Override
     public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type, String packageNamePrefix) {
 

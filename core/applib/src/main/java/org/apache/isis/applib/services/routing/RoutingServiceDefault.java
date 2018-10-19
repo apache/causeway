@@ -35,13 +35,11 @@ public class RoutingServiceDefault implements RoutingService {
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(RoutingServiceDefault.class);
 
-    @Programmatic
     @Override
     public boolean canRoute(final Object original) {
         return true;
     }
 
-    @Programmatic
     @Override
     public Object route(final Object original) {
         return original != null? original: homePageProviderService.homePage();

@@ -131,10 +131,6 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
         return b;
     }
 
-    // UNUSED
-    protected boolean skipContributing(final DomainServiceFacet domainServiceFacet) {
-        return domainServiceFacet == null || domainServiceFacet.isNoop() || domainServiceFacet.getNatureOfService() == NatureOfService.VIEW_MENU_ONLY || domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN;
-    }
 
     @Override
     public void process(ProcessContributeeMemberContext processMemberContext) {

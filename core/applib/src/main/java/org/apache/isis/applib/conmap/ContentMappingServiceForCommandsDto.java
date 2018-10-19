@@ -37,7 +37,6 @@ import org.apache.isis.schema.cmd.v1.CommandsDto;
 public class ContentMappingServiceForCommandsDto implements ContentMappingService {
 
     @Override
-    @Programmatic
     public Object map(Object object, final List<MediaType> acceptableMediaTypes) {
         final boolean supported = Util.isSupported(CommandsDto.class, acceptableMediaTypes);
         if(!supported) {
@@ -50,7 +49,6 @@ public class ContentMappingServiceForCommandsDto implements ContentMappingServic
     /**
      * Not part of the {@link ContentMappingService} API.
      */
-    @Programmatic
     public CommandsDto map(final Object object) {
         if(object instanceof CommandsDto) {
             return ((CommandsDto) object);

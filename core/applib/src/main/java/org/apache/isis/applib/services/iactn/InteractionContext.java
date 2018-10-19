@@ -46,9 +46,7 @@ public class InteractionContext {
 
     /**
      * Returns the currently active {@link Interaction} for this thread.
-     * @return
      */
-    @Programmatic
     public Interaction getInteraction() {
         return interaction;
     }
@@ -56,7 +54,6 @@ public class InteractionContext {
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
      */
-    @Programmatic
     public void setInteraction(final Interaction interaction) {
         this.interaction = interaction;
     }

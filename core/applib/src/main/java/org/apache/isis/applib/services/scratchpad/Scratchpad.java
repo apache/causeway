@@ -53,14 +53,12 @@ public class Scratchpad {
     /**
      * Obtain user-data, as set by a previous object being acted upon.
      */
-    @Programmatic
     public Object get(Object key) {
         return userData.get(key);
     }
     /**
      * Set user-data, for the use of a subsequent object being acted upon.
      */
-    @Programmatic
     public void put(Object key, Object value) {
         userData.put(key, value);
     }
@@ -68,7 +66,6 @@ public class Scratchpad {
     /**
      * Clear any user data.
      */
-    @Programmatic
     public void clear() {
         userData.clear();
     }

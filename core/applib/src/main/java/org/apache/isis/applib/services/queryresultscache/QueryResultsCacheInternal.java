@@ -52,7 +52,6 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
 
     private final Map<Key, Value<?>> cache = _Maps.newHashMap();
 
-    @Programmatic
     @Override
     public <T> T execute(
             final Callable<T> callable,
@@ -70,7 +69,6 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
         return executeWithCaching(callable, cacheKey);
     }
 
-    @Programmatic
     private <T> T execute(final Callable<T> callable, final Key cacheKey) {
         if(control.isFixturesInstalling()) {
             try {
@@ -107,12 +105,10 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
         }
     }
 
-    @Programmatic
     private <T> Value<T> get(final Class<?> callingClass, final String methodName, final Object... keys) {
         return get(new Key(callingClass, methodName, keys));
     }
 
-    @Programmatic
     @SuppressWarnings("unchecked")
     private <T> Value<T> get(final Key cacheKey) {
         Value<T> value = (Value<T>) cache.get(cacheKey);
@@ -120,7 +116,6 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
         return value;
     }
 
-    @Programmatic
     private <T> void put(final Key cacheKey, final T result) {
         LOG.debug("PUT: {}", cacheKey);
         cache.put(cacheKey, new Value<T>(result));
@@ -141,7 +136,6 @@ public class QueryResultsCacheInternal implements QueryResultsCache, WithTransac
      * a transaction-scoped service; since that isn't yet supported by the framework, we have to manually reset).
      * </p>
      */
-    @Programmatic
     @Override
     public void resetForNextTransaction() {
         cache.clear();

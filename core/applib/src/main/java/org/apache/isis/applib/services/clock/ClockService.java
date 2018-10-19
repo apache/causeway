@@ -40,27 +40,22 @@ import org.apache.isis.applib.clock.Clock;
         )
 public class ClockService {
 
-    @Programmatic
     public LocalDate now() {
         return Clock.getTimeAsLocalDate();
     }
 
-    @Programmatic
     public LocalDateTime nowAsLocalDateTime() {
         return Clock.getTimeAsLocalDateTime();
     }
 
-    @Programmatic
     public DateTime nowAsDateTime() {
         return Clock.getTimeAsDateTime();
     }
 
-    @Programmatic
     public Timestamp nowAsJavaSqlTimestamp() {
         return Clock.getTimeAsJavaSqlTimestamp();
     }
 
-    @Programmatic
     public long nowAsMillis() {
         return Clock.getTime();
     }

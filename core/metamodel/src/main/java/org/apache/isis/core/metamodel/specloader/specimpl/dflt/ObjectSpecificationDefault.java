@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl.dflt;
 
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
@@ -31,13 +29,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -74,6 +71,8 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
+
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements FacetHolder {
 
@@ -259,11 +258,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private boolean skipAssociationsAndActions() {
-        return isFixtureScript() || isDomainServiceWithDomainNatureOfServiceNotHomePage();
+        return isFixtureScript() || isDomainServiceWithDomainImpl();
     }
 
-    // TODO: this is a bit horrible; maybe instead introduce a new NatureOfService for home page services (also for seed services?)
-    private boolean isDomainServiceWithDomainNatureOfServiceNotHomePage() {
+    private boolean isDomainServiceWithDomainImpl() {
         final DomainServiceFacet domainServiceFacet = this.getFacet(DomainServiceFacet.class);
         if (domainServiceFacet == null) {
             return false;
