@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.runtime.headless;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,10 +34,13 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidExcep
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.headless.auth.AuthenticationRequestNameOnly;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 
 /**
@@ -186,7 +187,8 @@ public class IsisSystem {
                     configurationOverride
                     );
 
-            final IsisSessionFactoryBuilder isisSessionFactoryBuilder = new IsisSessionFactoryBuilder(componentProvider, DeploymentCategory.PRODUCTION, appManifestIfAny);
+            final IsisSessionFactoryBuilder isisSessionFactoryBuilder = new IsisSessionFactoryBuilder(componentProvider,
+                    deploymentTypeFrom(configurationOverride), appManifestIfAny);
 
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();
@@ -217,6 +219,12 @@ public class IsisSystem {
         authenticationSession = authenticationManager.authenticate(authenticationRequestIfAny);
 
         openSession();
+    }
+
+    private DeploymentCategory deploymentTypeFrom(final IsisConfiguration configurationOverride) {
+        final DeploymentType deploymentType = DeploymentType.lookup(
+                        configurationOverride.getString("isis.deploymentType", "SERVER"));
+        return deploymentType.getDeploymentCategory();
     }
 
     // -- isisSystem (populated during setup)
