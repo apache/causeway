@@ -368,32 +368,9 @@ Under `src/main/java` there is:
 ----
 > domainapp/
 >> webapp/
->>> DomainApplication.java
 >>> welcome.html
 ----
 
-The `DomainApplication` is required to bootstrap the Wicket viewer (it is configured in `WEB-INF/web.xml`, discussed below).
-Within `DomainApplication` is the bootstrapping of the Wicket viewer.
-Internally it uses Google Guice to configure various static resources served up by Wicket:
-
-[source,java]
-----
-public class DomainApplication extends IsisWicketApplication {
-
-    protected Module newIsisWicketModule() {
-        final Module isisDefaults = super.newIsisWicketModule();
-        final Module overrides = new AbstractModule() {
-            @Override
-            protected void configure() {
-                ...
-            }
-        };
-        return Modules.override(isisDefaults).with(overrides);
-    }
-}
-----
-
-The `configure()` method is the place to change the name of the application for example, or to change the initial about and welcome messages.
 The text of the welcome page shown by the Wicket viewer can be found in `welcome.html`, loaded from the classpath and in the same package as `DomainApplication`.
 
 Under `src/main/webapp` we have various resources that are used to configure the webapp, or that are served up by the running webapp:
@@ -415,28 +392,18 @@ Under `src/main/webapp` we have various resources that are used to configure the
 >> web.xml
 ----
 
-Most important of these is `WEB-INF/web.xml`, which bootstraps both the Wicket viewer and the Restful Objects viewer (the REST API derived from the domain object model):
+Most important of these is `WEB-INF/web.xml`, which bootstraps both the Wicket viewer and the Restful Objects viewer, along with Shiro security.
+This is done using a webapp context listener:
 
 [source,xml]
 .web.xml
 ----
 <web-app ...>
   ...
-  <filter>
-    <filter-name>WicketFilter</filter-name>
-    <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
-    <init-param>
-      <param-name>applicationClassName</param-name>
-      <param-value>domainapp.webapp.DomainApplication</param-value>
-    </init-param>
-  </filter>
-  ...
-  <context-param>
-    <param-name>javax.ws.rs.Application</param-name>
-    <param-value>
-      org.apache.isis.viewer.restfulobjects.server.RestfulObjectsApplication
-    </param-value>
-  </context-param>
+  <listener>
+      <listener-class>org.apache.isis.core.webapp.IsisWebAppContextListener</listener-class>
+  </listener>
+
   ...
 </web-app>
 ----

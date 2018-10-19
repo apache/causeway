@@ -64,24 +64,28 @@ These also include top-level overrides for CSS and Javascript.
 
 |`isis.viewer.wicket.` +
 `application.css`
-|`scripts/application.css`
+|File name +
+(_`scripts/application.css`_)
 |File to read any custom CSS, relative to `src/main/webapp` directory.
 
 |`isis.viewer.wicket.` +
 `application.js`
-|`scripts/application.js`
+|File name +
+(_`scripts/application.js`_)
 |File to read any custom Javascript, relative to `src/main/webapp` directory.
 
 |`isis.viewer.wicket.` +
 `application.about`
-|Apache Isis ™
+|Text +
+(_Apache Isis ™_)
 |Label used on the about page.
 
 If not specified, then `application.name` is used instead.
 
 |`isis.viewer.wicket.` +
 `welcome.file`
-|`welcome.html`
+|File name +
+(_`welcome.html`_)
 |Location of the HTML file (relative to `src/main/webapp`) whose contents should be displayed on the application's home page.
 
 Note though that if a xref:../../guides/rgant/rgant.adoc#_rgant-HomePage[@HomePage] action exists, then that will take precedence.
@@ -90,8 +94,8 @@ If no welcome file exists, then the value of `welcome.text` is shown as a fallba
 
 |`isis.viewer.wicket.` +
 `welcome.text`
-|
-|Text to be displayed on the application's home page, used as a fallback if `welcome.file` is not specified.
+|Text
+|To be displayed on the application's home page, used as a fallback if `welcome.file` is not specified.
 
 Note though that if a xref:../../guides/rgant/rgant.adoc#_rgant-HomePage[@HomePage] action exists, then that will take precedence.
 
@@ -570,6 +574,13 @@ See further discussion below.
 | Whether to show chooser for Bootstrap themes.
 
 See further discussion below.
+
+|`isis.viewer.wicket.` +
+`themes.default`
+| bootswatch theme name +
+(`_Flatly_`)
+| Which Bootstrap theme to use by default.
+
 
 |===
 

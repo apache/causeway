@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.viewer;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -31,7 +30,6 @@ import java.util.concurrent.Future;
 import java.util.function.Function;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
 import com.google.common.io.Resources;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -114,6 +112,8 @@ import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
@@ -140,7 +140,7 @@ import net.ftlines.wicketsource.WicketSource;
  * make the {@link ComponentFactory} defined within it available.
  *
  * <p>
- * Alternatively, {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule(IsisConfigurationDefault)}.
+ * Alternatively, {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule(IsisConfiguration)}.
  * This mechanism allows a number of other aspects to be customized.
  */
 public class IsisWicketApplication
@@ -171,8 +171,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
      */
     public static final String ENABLE_DEVELOPMENT_UTILITIES_KEY = "isis.viewer.wicket.developmentUtilities.enable";
     public static final boolean ENABLE_DEVELOPMENT_UTILITIES_DEFAULT = false;
-
-
+    public static final BootswatchTheme BOOTSWATCH_THEME_DEFAULT = BootswatchTheme.Flatly;
 
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
@@ -393,6 +392,20 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         } finally {
             ThreadPoolSupport.getInstance().join(futures);
         }
+
+        final String themeName = isisConfiguration.getString(
+                "isis.viewer.wicket.themes.initial", BOOTSWATCH_THEME_DEFAULT.name());
+        BootswatchTheme bootswatchTheme;
+        try {
+            bootswatchTheme = BootswatchTheme.valueOf(themeName);
+        } catch(Exception ex) {
+            bootswatchTheme = BOOTSWATCH_THEME_DEFAULT;
+            LOG.warn("Did not recognise configured bootswatch theme '{}', defaulting to '{}'", bootswatchTheme);
+
+        }
+        IBootstrapSettings settings = Bootstrap.getSettings();
+        settings.setThemeProvider(new BootswatchThemeProvider(bootswatchTheme));
+
     }
     
     protected List<Future<Object>> startBackgroundInitializationThreads() {
