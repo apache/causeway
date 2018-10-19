@@ -100,6 +100,9 @@ public class FixtureScriptsDefault extends FixtureScripts {
     @Action(
             restrictTo = RestrictTo.PROTOTYPING
             )
+    @ActionLayout(
+            cssClassFa="fa fa-chevron-right"
+    )
     @MemberOrder(sequence="10")
     @Override
     public List<FixtureResult> runFixtureScript(
