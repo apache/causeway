@@ -71,7 +71,7 @@ final class WebModule_Wicket implements WebModule  {
         }
         
         appConfigValue = 
-                configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.app", 
+                configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.app",
                         "org.apache.isis.viewer.wicket.viewer.IsisWicketApplication");
         
         ContextUtil.registerBootstrapper(ctx, this);

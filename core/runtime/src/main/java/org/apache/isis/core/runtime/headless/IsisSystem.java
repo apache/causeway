@@ -221,7 +221,7 @@ public class IsisSystem {
         openSession();
     }
 
-    private DeploymentCategory deploymentTypeFrom(final IsisConfiguration configurationOverride) {
+    public static DeploymentCategory deploymentTypeFrom(final IsisConfiguration configurationOverride) {
         final DeploymentType deploymentType = DeploymentType.lookup(
                         configurationOverride.getString("isis.deploymentType", "SERVER"));
         return deploymentType.getDeploymentCategory();
