@@ -588,10 +588,15 @@ See further discussion below.
 
 The Wicket viewer uses link:http://getbootstrap.com/[Bootstrap] styles and components (courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration).
 
-Unless a xref:../ugvw/ugvw.adoc#_ugvw_customisation_default-theme[default theme has been specified], the viewer uses the default bootstrap theme.
-However, the viewer can also be configured to allow the end-user to switch theme to another theme, in particular one of those provided by http://bootswatch.com[bootswatch.com].
+By default the viewer uses the "Flatly" theme from http://bootswatch.com[bootswatch.com].
+This can be overridden using the following configuration property:
 
-This is done using the following configuration property (in `WEB-INF/viewer_wicket.properties`):
+[source,ini]
+----
+isis.viewer.wicket.themes.initial=Darky
+----
+
+The end-user can also be given the choice of changing the theme:
 
 [source,ini]
 ----
@@ -605,7 +610,9 @@ image::{_imagesdir}theme-chooser/example-1.png[width="720px",link="{_imagesdir}t
 .Example 2:
 image::{_imagesdir}theme-chooser/example-2.png[width="720px",link="{_imagesdir}theme-chooser/example-2.png"]
 
-It is also possible to restrict the themes shown to some subset of those in bootswatch. This is done using a further
+
+It is also possible to restrict the themes shown to some subset of those in bootswatch.
+This is done using a further
 property:
 
 [source,ini]
@@ -619,7 +626,6 @@ where the value is the list of themes (from http://bootswatch.com[bootswatch.com
 ====
 You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the xref:../ugvw/ugvw.adoc#_ugvw_extending_custom-bootstrap-theme[Extending] chapter for further details.
 ====
-
 
 
 
