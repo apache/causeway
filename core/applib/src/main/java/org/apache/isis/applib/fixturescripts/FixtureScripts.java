@@ -20,9 +20,9 @@ package org.apache.isis.applib.fixturescripts;
 
 import java.io.PrintStream;
 import java.lang.reflect.Constructor;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -51,7 +51,6 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 
@@ -223,30 +222,19 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     private List<FixtureScript> findAndInstantiateFixtureScripts() {
-        final List<FixtureScript> fixtureScripts = _Lists.newArrayList();
-        final Set<Class<? extends FixtureScript>> fixtureScriptSubtypes =
-                findFixtureScriptSubTypesInPackage();
-        for (final Class<? extends FixtureScript> fixtureScriptCls : fixtureScriptSubtypes) {
-            final String packageName = fixtureScriptCls.getPackage().getName();
-            if(!packageName.startsWith(getPackagePrefix())) {
-                // redundant check if ClassDiscoveryService2 in use because already filtered out
-                continue;
-            }
-            final FixtureScript fs = newFixtureScript(fixtureScriptCls);
-            if(fs != null) {
-                fixtureScripts.add(fs);
-            }
-        }
-        Collections.sort(fixtureScripts, new Comparator<FixtureScript>() {
-            @Override
-            public int compare(final FixtureScript o1, final FixtureScript o2) {
-                return Comparator
+        return findFixtureScriptSubTypesInPackage().stream()
+                .filter(fixtureScriptCls -> {
+                    final String packageName = fixtureScriptCls.getPackage().getName();
+                    // redundant check if ClassDiscoveryService2 in use because already filtered out
+                    return packageName.startsWith(getPackagePrefix());
+                })
+                .map(this::newFixtureScript)
+                .filter(Objects::nonNull).
+                sorted((o1, o2) -> Comparator
                         .comparing(FixtureScript::getFriendlyName)
                         .thenComparing(FixtureScript::getQualifiedName)
-                        .compare(o1, o2);
-            }
-        });
-        return fixtureScripts;
+                        .compare(o1, o2))
+                .collect(Collectors.toList());
     }
 
     private Set<Class<? extends FixtureScript>> findFixtureScriptSubTypesInPackage() {
@@ -269,9 +257,6 @@ public abstract class FixtureScripts extends AbstractService {
             instance.setParentPath(template.getParentPath());
 
             return instance;
-
-            //Legacy of ...
-            //return container.newViewModelInstance(fixtureScriptCls, mementoFor(template));
 
         } catch(final Exception ex) {
             // ignore if does not have a no-arg constructor or cannot be instantiated

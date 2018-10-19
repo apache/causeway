@@ -18,9 +18,15 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 
-@DomainObjectLayout(named="Simple Script")
+@DomainObject(
+        objectType = "org.apache.isis.applib.fixturescripts.SimpleFixtureScript"
+)
+@DomainObjectLayout(
+        named="Simple Script"
+)
 public abstract class SimpleFixtureScript extends FixtureScript {
 
     private static Discoverability defaultDiscoverability() {
