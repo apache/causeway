@@ -76,16 +76,27 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
     }
 
     protected IntegrationTestAbstract3(final Module module) {
-        this(new LogConfig(Level.INFO), module);
+        this(new LogConfig(Level.INFO), module, AppManifest.Util.MemDb.HSQLDB);
+    }
+
+    protected IntegrationTestAbstract3(final Module module, final AppManifest.Util.MemDb memDb) {
+        this(new LogConfig(Level.INFO), module, memDb);
     }
 
     protected IntegrationTestAbstract3(
             final LogConfig logConfig,
             final Module module) {
+        this(logConfig, module, AppManifest.Util.MemDb.HSQLDB);
+    }
+
+    protected IntegrationTestAbstract3(
+            final LogConfig logConfig,
+            final Module module,
+            final AppManifest.Util.MemDb memDb) {
         super(logConfig,
                 ModuleBuilder.create(module)
                 .withHeadlessTransactionSupport()
-                .withIntegrationTestConfigFallback()
+                .withIntegrationTestConfigFallback(memDb)
                 .build() );
     }
 

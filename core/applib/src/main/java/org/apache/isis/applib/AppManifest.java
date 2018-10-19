@@ -263,14 +263,26 @@ public interface AppManifest {
         public static final String ISIS_PERSISTOR_DATANUCLEUS       = ISIS_PERSISTOR + "datanucleus.";
         public static final String ISIS_PERSISTOR_DATANUCLEUS_IMPL  = ISIS_PERSISTOR_DATANUCLEUS + "impl.";
 
-        public static Map<String,String> withJavaxJdoRunInMemoryProperties(final Map<String, String> map) {
+        public static Map<String,String> withH2InMemoryProperties(final Map<String, String> map) {
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:h2:mem:test-" + UUID.randomUUID().toString());
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionDriverName", "org.h2.Driver");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionUserName", "sa");
+            map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionPassword", "");
 
+            return map;
+        }
+
+        public static Map<String,String> withHsqlDbInMemoryProperties(final Map<String, String> map) {
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test-" + UUID.randomUUID().toString());
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionUserName", "sa");
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionPassword", "");
 
             return map;
+        }
+        @Deprecated
+        public static Map<String,String> withJavaxJdoRunInMemoryProperties(final Map<String, String> map) {
+            return withHsqlDbInMemoryProperties(map);
         }
 
         public static Map<String,String> withDataNucleusProperties(final Map<String, String> map) {
@@ -299,6 +311,20 @@ public interface AppManifest {
             return map;
         }
 
+        public enum MemDb {
+            HSQLDB{
+                @Override public void withProperties(final Map<String, String> map) {
+                    withHsqlDbInMemoryProperties(map);
+                }
+            },
+            H2{
+                @Override public void withProperties(final Map<String, String> map) {
+                    withH2InMemoryProperties(map);
+                }
+            };
+
+            public abstract void withProperties(final Map<String, String> map);
+        }
     }
 
 }

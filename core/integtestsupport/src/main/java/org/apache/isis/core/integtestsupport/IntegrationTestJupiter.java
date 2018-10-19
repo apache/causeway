@@ -71,16 +71,27 @@ public abstract class IntegrationTestJupiter extends HeadlessWithBootstrappingAb
     }
 
     protected IntegrationTestJupiter(final Module module) {
-        this(new LogConfig(Level.INFO), module);
+        this(new LogConfig(Level.INFO), module, AppManifest.Util.MemDb.HSQLDB);
+    }
+
+    protected IntegrationTestJupiter(final Module module, final AppManifest.Util.MemDb memDb) {
+        this(new LogConfig(Level.INFO), module, memDb);
     }
 
     protected IntegrationTestJupiter(
             final LogConfig logConfig,
             final Module module) {
+        this(logConfig, module, AppManifest.Util.MemDb.HSQLDB);
+    }
+
+    protected IntegrationTestJupiter(
+            final LogConfig logConfig,
+            final Module module,
+            final AppManifest.Util.MemDb memDb) {
         super(logConfig,
                 ModuleBuilder.create(module)
                 .withHeadlessTransactionSupport()
-                .withIntegrationTestConfigFallback()
+                .withIntegrationTestConfigFallback(memDb)
                 .build() );
     }
 

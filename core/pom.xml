@@ -149,6 +149,7 @@
         <swagger-core.version>1.5.21</swagger-core.version>
 
         <hsqldb.version>2.4.1</hsqldb.version>
+        <h2.version>1.4.197</h2.version>
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
 
         <jetty.version>9.4.3.v20170317</jetty.version>
@@ -1599,6 +1600,13 @@ ${license.additional-notes}
               <artifactId>hsqldb</artifactId>
               <version>${hsqldb.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${h2.version}</version>
+            </dependency>
+
 
             <dependency>
               <groupId>org.lazyluke</groupId>

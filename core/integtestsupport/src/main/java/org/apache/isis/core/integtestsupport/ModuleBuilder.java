@@ -51,17 +51,21 @@ public class ModuleBuilder {
         module.getAdditionalServices().add(HeadlessTransactionSupportDefault.class);
         return this;
     }
+
     /**
      * Adds default fallback configuration values for integration tests,
      * without overriding any existing key value pairs.
      */
     public ModuleBuilder withIntegrationTestConfigFallback() {
-        final Map<String, String> integrationTestDefaultConfig = new HashMap<>();
-        AppManifest.Util.withJavaxJdoRunInMemoryProperties(integrationTestDefaultConfig);
-        AppManifest.Util.withDataNucleusProperties(integrationTestDefaultConfig);
-        AppManifest.Util.withIsisIntegTestProperties(integrationTestDefaultConfig);
+        return withIntegrationTestConfigFallback(AppManifest.Util.MemDb.HSQLDB);
+    }
+    public ModuleBuilder withIntegrationTestConfigFallback(AppManifest.Util.MemDb memDb) {
+        final Map<String, String> map = new HashMap<>();
+        memDb.withProperties(map);
+        AppManifest.Util.withDataNucleusProperties(map);
+        AppManifest.Util.withIsisIntegTestProperties(map);
 
-        integrationTestDefaultConfig.forEach((k, v)-> module.getFallbackConfigProps().putIfAbsent(k, v));
+        map.forEach((k, v)-> module.getFallbackConfigProps().putIfAbsent(k, v));
         return this;
     }
 }
