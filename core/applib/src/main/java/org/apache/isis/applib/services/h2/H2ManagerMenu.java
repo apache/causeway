@@ -65,9 +65,10 @@ public class H2ManagerMenu {
             cssClassFa = "database"
             )
     public LocalResourcePath openH2Console() {
+        // TODO: this is a bit of a hack, needs to be improved, eg by searching on the classpath, also make the URL configurable
         return new LocalResourcePath("/db/");
     }
-    public boolean hideHsqlDbManager() {
+    public boolean hideOpenH2Console() {
         return _Strings.isNullOrEmpty(url) || !url.contains("h2:mem");
     }
 
