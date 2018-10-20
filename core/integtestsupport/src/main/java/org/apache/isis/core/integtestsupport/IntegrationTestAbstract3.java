@@ -29,6 +29,7 @@ import org.slf4j.event.Level;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Module;
+import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
 import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
 import org.apache.isis.core.runtime.headless.IsisSystem;
@@ -116,54 +117,57 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
     }
 
 
-    public interface Step {
-        void step();
-    }
     public interface StepT<T> {
-        T step();
+        T execute() throws Exception;
     }
 
-    protected void given(Step step) throws Exception {
-        step.step();
-        transactionService.flushTransaction();
+    public interface StepV {
+        void execute() throws Exception;
     }
 
-    protected void givenS(Step step) throws Exception {
-        step.step();
-        sessionManagementService.nextSession();
-    }
-
-    protected <T> T givenT(StepT<T> step) throws Exception {
-        final T stepReturn = step.step();
+    protected <T> T given(StepT<T> step) throws Exception {
+        final T stepReturn = step.execute();
         transactionService.flushTransaction();
         return stepReturn;
     }
 
-    protected void when(Step step) throws Exception {
-        step.step();
+    /**
+     * As {@link #given(StepT)}, but for an operation that returns <code>void</code>.
+     */
+    protected void givenV(StepV step) throws Exception {
+        step.execute();
         transactionService.flushTransaction();
     }
 
-    protected <T> T whenT(StepT<T> step) throws Exception {
-        final T stepReturn = step.step();
+    /**
+     * {@link StepT#execute() Execute}s the step, then {@link TransactionService#flushTransaction() flush}es the transaction.
+     */
+    protected <T> T when(StepT<T> step) throws Exception {
+        final T stepReturn = step.execute();
+        transactionService.flushTransaction();
+        return stepReturn;
+    }
+
+    /**
+     * As {@link #when(StepT)}, but for an operation that returns <code>void</code>.
+     */
+    protected void whenV(StepV step) throws Exception {
+        step.execute();
+        transactionService.flushTransaction();
+    }
+
+    protected <T> T then(StepT<T> step) throws Exception {
+        final T stepReturn = step.execute();
         transactionService.flushTransaction();
         return stepReturn;
     }
 
-    protected void whenS(Step step) throws Exception {
-        step.step();
+    /**
+     * As {@link #then(StepT)}, but for an operation that returns <code>void</code>.
+     */
+    protected void thenV(StepV step) throws Exception {
+        step.execute();
         transactionService.flushTransaction();
-        sessionManagementService.nextSession();
-    }
-
-    protected void then(Step step) throws Exception {
-        step.step();
-    }
-
-    protected <T> T thenT(StepT<T> step) throws Exception {
-        final T stepReturn = step.step();
-        transactionService.flushTransaction();
-        return stepReturn;
     }
 
 

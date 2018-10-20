@@ -515,6 +515,14 @@ implements InstallableFixture {
             executeChildren(callingFixtureScript, personaWithBuilderScript);
         }
 
+        @Programmatic
+        public <T, F extends BuilderScriptAbstract<T, F>> T executeChildT(
+                final FixtureScript callingFixtureScript,
+                final PersonaWithBuilderScript<T, F> personaWithBuilderScript) {
+            final F f = executeChildT(callingFixtureScript, personaWithBuilderScript.builder());
+            return f.getObject();
+        }
+
         /**
          * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
          * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
@@ -930,46 +938,63 @@ implements InstallableFixture {
     }
 
     /**
-     * Wraps domain object
-     */
-    protected <T> T w(final T domainObject) {
-        return wrapperFactory.w(domainObject);
-    }
-
-    /**
-     * Wraps domain object
+     * Convenience method, simply delegates to {@link WrapperFactory#wrap(Object)}.
      */
     protected <T> T wrap(final T domainObject) {
         return wrapperFactory.wrap(domainObject);
     }
 
+    /**
+     * Convenience method, synonym for {@link #wrap(Object)}.
+     */
+    protected <T> T w(final T domainObject) {
+        return wrap(domainObject);
+    }
+
+    /**
+     * Convenience method, simply delegates to {@link WrapperFactory#wrap(Object, WrapperFactory.ExecutionMode)}.
+     */
     protected <T> T wrap(final T domainObject, final WrapperFactory.ExecutionMode executionMode) {
         return wrapperFactory.wrap(domainObject, executionMode);
     }
 
     /**
-     * Unwraps domain object (no-arg if already wrapped).
+     * Convenience method, simply delegates to {@link WrapperFactory#unwrap(Object)}.
      */
     protected <T> T unwrap(final T possibleWrappedDomainObject) {
         return wrapperFactory.unwrap(possibleWrappedDomainObject);
     }
 
     /**
-     * Convenience method
-     */
-    protected <T> T m(final Class<T> mixinClass, final Object mixedIn) {
-        return factoryService.m(mixinClass, mixedIn);
-    }
-
-    /**
-     * Convenience method
+     * Convenience method, simply delegates to {@link FactoryService#mixin(Class, Object)}.
      */
     protected <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
         return factoryService.mixin(mixinClass, mixedIn);
     }
 
     /**
-     * Convenience method
+     * Convenience method, synonym for {@link #mixin(Class, Object)}.
+     */
+    protected <T> T m(final Class<T> mixinClass, final Object mixedIn) {
+        return factoryService.m(mixinClass, mixedIn);
+    }
+
+    /**
+     * Convenience method, {@link #wrap(Object) wraps} a {@link #mixin(Class, Object) mixin}.
+     */
+    protected <T> T wrapMixin(final Class<T> mixinClass, final Object mixedIn) {
+        return wrap(mixin(mixinClass, mixedIn));
+    }
+
+    /**
+     * Convenience method, synonym for {@link #wrapMixin(Class, Object)}.
+     */
+    protected <T> T wm(final Class<T> mixinClass, final Object mixedIn) {
+        return wrapMixin(mixinClass, mixedIn);
+    }
+
+    /**
+     * Convenience method, simply delegates to {@link TransactionService#nextTransaction()}.
      */
     protected void nextTransaction() {
         transactionService.nextTransaction();

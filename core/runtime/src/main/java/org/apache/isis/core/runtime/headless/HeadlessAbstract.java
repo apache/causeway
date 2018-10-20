@@ -63,33 +63,45 @@ public abstract class HeadlessAbstract {
 
 
     /**
-     * For convenience of subclasses, remove some boilerplate
+     * Convenience method, simply delegates to {@link WrapperFactory#wrap(Object)}
      */
-    protected <T> T w(final T obj) {
-        return wrapperFactory.w(obj);
-    }
     protected <T> T wrap(final T obj) {
         return wrapperFactory.wrap(obj);
     }
-    protected <T> T wm(final T obj) {
-        return wrapperFactory.w(obj);
-    }
-    protected <T> T wm(final Class<T> mixinClass, final Object mixedIn) {
-        return wrapperFactory.wm(mixinClass, mixedIn);
-    }
 
     /**
-     * For convenience of subclasses, remove some boilerplate
+     * Convenience method, synonym of {@link #wrap(Object)}
      */
-    protected <T> T m(final Class<T> mixinClass, final Object mixedIn) {
-        return factoryService.m(mixinClass, mixedIn);
+    protected <T> T w(final T obj) {
+        return wrap(obj);
     }
 
     /**
-     * For convenience of subclasses, remove some boilerplate
+     * Convenience method, simply delegates to {@link WrapperFactory#wrapMixin(Class, Object)}.
+     */
+    protected <T> T wrapMixin(final Class<T> mixinClass, final Object mixedIn) {
+        return wrapperFactory.wrapMixin(mixinClass, mixedIn);
+    }
+
+    /**
+     * Convenience method, synonym for {@link #wrapMixin(Class, Object)}.
+     */
+    protected <T> T wm(final Class<T> mixinClass, final Object mixedIn) {
+        return wrapMixin(mixinClass, mixedIn);
+    }
+
+    /**
+     * Convenience method, simply delegates to {@link FactoryService#mixin(Class, Object)}.
      */
     protected <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
         return factoryService.mixin(mixinClass, mixedIn);
+    }
+
+    /**
+     * Convenience method, synonym for {@link #mixin(Class, Object)}.
+     */
+    protected <T> T m(final Class<T> mixinClass, final Object mixedIn) {
+        return factoryService.m(mixinClass, mixedIn);
     }
 
 

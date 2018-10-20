@@ -121,6 +121,11 @@ public interface WrapperFactory {
 
         @Override
         public <T> T wm(final Class<T> mixinClass, final Object mixedIn) {
+            return wrapMixin(mixinClass, mixedIn);
+        }
+
+        @Override
+        public <T> T wrapMixin(final Class<T> mixinClass, final Object mixedIn) {
             return wrap(factoryService.m(mixinClass, mixedIn));
         }
 
@@ -179,10 +184,23 @@ public interface WrapperFactory {
     @Programmatic
     <T> T wrap(T domainObject);
 
+    /**
+     * Alias for {@link #wrap(Object)}.
+     */
     @Programmatic
     <T> T w(T domainObject);
 
+    /**
+     * Alias for {@link #wrapMixin(Class, Object)}
+     */
+    @Programmatic
     <T> T wm(Class<T> mixinClass, Object mixedIn);
+
+    /**
+     * {@link #wrap(Object) wraps} a {@link FactoryService#mixin(Class, Object) mixin}.
+     */
+    @Programmatic
+    <T> T wrapMixin(Class<T> mixinClass, Object mixedIn);
 
     /**
      * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#NO_EXECUTE},

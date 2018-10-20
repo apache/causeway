@@ -224,9 +224,11 @@ public class WrapperFactoryDefault implements WrapperFactory {
     // wrap and unwrap
     // /////////////////////////////////////////////////////////////
 
-    @Inject
-    FactoryService factoryService;
     public <T> T wm(final Class<T> mixinClass, final Object mixedIn) {
+        return w(factoryService.m(mixinClass, mixedIn));
+    }
+
+    public <T> T wrapMixin(final Class<T> mixinClass, final Object mixedIn) {
         return w(factoryService.m(mixinClass, mixedIn));
     }
 
@@ -316,16 +318,16 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
 
-    @javax.inject.Inject
+    @Inject
     AuthenticationSessionProvider authenticationSessionProvider;
 
-    //    @javax.inject.Inject
-    //    SpecificationLoader specificationLoader;
-
-    @javax.inject.Inject
+    @Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
-    @javax.inject.Inject
+    @Inject
     IsisSessionFactory isisSessionFactory;
+
+    @Inject
+    FactoryService factoryService;
 
 }
