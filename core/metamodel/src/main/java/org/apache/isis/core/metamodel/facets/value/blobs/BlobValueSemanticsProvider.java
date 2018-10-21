@@ -96,7 +96,7 @@ public class BlobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
     protected String doEncode(final Object object) {
         Blob blob = (Blob)object;
         return blob.getName() + ":" + blob.getMimeType().getBaseType() + ":" + 
-                _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getUrlEncoder(), blob.getBytes()), StandardCharsets.UTF_8);
+                _Strings.ofBytes(_Bytes.encodeToBase64(Base64.getEncoder(), blob.getBytes()), StandardCharsets.UTF_8);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class BlobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
         final int colon2Idx  = data.indexOf(":", colonIdx+1);
         final String mimeTypeBase = data.substring(colonIdx+1, colon2Idx);
         final String payload = data.substring(colon2Idx+1);
-        final byte[] bytes = _Bytes.decodeBase64(Base64.getUrlDecoder(), payload.getBytes(StandardCharsets.UTF_8));
+        final byte[] bytes = _Bytes.decodeBase64(Base64.getDecoder(), payload.getBytes(StandardCharsets.UTF_8));
         try {
             return new Blob(name, new MimeType(mimeTypeBase), bytes);
         } catch (MimeTypeParseException e) {
