@@ -576,7 +576,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
      * </p>
      */
     @Programmatic
-    public Collection<ObjectSpecification> allSpecifications() {
+    public List<ObjectSpecification> allSpecifications() {
         return _Lists.newArrayList(allCachedSpecifications());
     }
 

@@ -38,6 +38,8 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
@@ -314,7 +316,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     private ObjectSpecification elementSpecFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
         final TypeOfFacet typeOfFacet = objectAndActionInvocation.getAction().getFacet(TypeOfFacet.class);
-        return typeOfFacet.valueSpec();
+        return typeOfFacet != null ? typeOfFacet.valueSpec() :  getSpecificationLoader().loadSpecification(Object.class) ;
     }
 
     private Collection<ObjectAdapter> objectAdaptersFrom(final ObjectAndActionInvocation objectAndActionInvocation) {
@@ -411,6 +413,9 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         return true;
     }
 
+    private SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
 
 
 }

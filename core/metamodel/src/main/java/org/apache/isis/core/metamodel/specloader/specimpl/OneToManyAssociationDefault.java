@@ -68,7 +68,8 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
 
     @Override
     public CollectionSemantics getCollectionSemantics() {
-        return getFacet(CollectionSemanticsFacet.class).value();
+        final CollectionSemanticsFacet facet = getFacet(CollectionSemanticsFacet.class);
+        return facet != null ? facet.value() : CollectionSemantics.OTHER_IMPLEMENTATION;
     }
 
 
