@@ -18,12 +18,12 @@
  */
 package org.apache.isis.applib.client;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.EnumSet;
 import java.util.List;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 /**
  * 
@@ -39,6 +39,9 @@ public enum SuppressionType {
 
     /** suppress '$$instanceId', instance id of the domain object*/
     ID,
+
+    /** suppress '$$domainType', object spec of the domain object */
+    DOMAIN_TYPE,
 
     /** suppress '$$title', title of the domain object*/
     TITLE,

@@ -361,10 +361,21 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
                 final String upTitle = propertyValueRepresentation.getString("links[rel=up].title");
                 rootRepresentation.mapPut("$$title", upTitle);
             }
+            if(!suppression.contains(SuppressionType.DOMAIN_TYPE)) {
+                final String upHref = propertyValueRepresentation.getString("links[rel=up].href");
+                final String[] parts = upHref.split("[/]");
+                if(parts.length > 2) {
+                    final String upObjectType = parts[parts.length - 2];
+                    rootRepresentation.mapPut("$$domainType", upObjectType);
+                }
+            }
             if(!suppression.contains(SuppressionType.ID)) {
                 final String upHref = propertyValueRepresentation.getString("links[rel=up].href");
-                final String upInstanceId = upHref.substring(upHref.lastIndexOf("/")+1);
-                rootRepresentation.mapPut("$$instanceId", upInstanceId);
+                final String[] parts = upHref.split("[/]");
+                if(parts.length > 1) {
+                    final String upInstanceId = parts[parts.length-1];
+                    rootRepresentation.mapPut("$$instanceId", upInstanceId);
+                }
             }
 
             final JsonRepresentation value = propertyValueRepresentation.getRepresentation("value");
