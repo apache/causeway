@@ -28,22 +28,8 @@
         <welcome-file>about/index.html</welcome-file>
     </welcome-file-list>
 
-    <!-- can be removed with axon >= 3.5 -->
-    <persistence-context-ref>
-        <persistence-context-ref-name>org.axonframework.common.jpa.ContainerManagedEntityManagerProvider/entityManager</persistence-context-ref-name>
-        <persistence-unit-name>noop</persistence-unit-name>
-    </persistence-context-ref>
-
     <listener>
         <listener-class>org.apache.isis.core.webapp.IsisWebAppContextListener</listener-class>
     </listener>
-
-    <!--
-    this config value wins over that provided via environment variable PROTOTYPING=true/false
-    -->
- 	<context-param>
- 		<param-name>isis.viewer.wicket.mode</param-name>
- 		<param-value>development</param-value>
- 	</context-param>
 
 </web-app>

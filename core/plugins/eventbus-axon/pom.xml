@@ -30,7 +30,7 @@
 	<properties>
 		<jar-plugin.automaticModuleName>org.apache.isis.plugins.eventbus-axon</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/plugins/eventbus-axon</git-plugin.propertiesDir>
-		<axon-core.version>3.3.5</axon-core.version>
+		<axon-core.version>3.4</axon-core.version>
 	</properties>
 
 	<build>
@@ -59,10 +59,7 @@
 			<groupId>org.axonframework</groupId>
 			<artifactId>axon-core</artifactId>
 			<version>${axon-core.version}</version>
-			<!-- <classifier>ee-compat</classifier> 
-			seems not available yet
-			see https://github.com/AxonFramework/AxonFramework/issues/534
-			-->
+			<classifier>ee-compat</classifier> 
 		</dependency>
 
 		<dependency>

@@ -34,12 +34,11 @@ import javax.persistence.spi.ProviderUtil;
 import javax.resource.NotSupportedException;
 
 /**
- * [ahuber] still work in progress, some information given here might be wrong ... <br/><br/>
- *
- * Implements a PersistenceProvider that does nothing.
+ * Implements a PersistenceProvider that does nothing. (no longer required)
  * <p>
- * Note: the axon framework on JEE requires at least a dummy persistence unit.
- * This requires that the {@code web.xml} includes a {@code persistence-context-ref} entry as follows:
+ * Note: the axon framework on JEE required at least a dummy persistence unit. 
+ * That was before release of axon-framework 3.4.
+ * This required that the {@code web.xml} includes a {@code persistence-context-ref} entry as follows:
  *
  * <pre>{@code
  * <persistence-context-ref>
@@ -54,7 +53,7 @@ import javax.resource.NotSupportedException;
  * is bundled with this module.
  * </p>
  *
- * @since 2.0.0
+ * @since 2.0.0-M1
  *
  */
 @SuppressWarnings("rawtypes")
