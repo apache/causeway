@@ -76,6 +76,14 @@ public interface IsisContext {
         return _Context.getOrElse(IsisSystemEnvironment.class, IsisSystemEnvironment::getDefault);
     }
     
+    /**
+     * For integration testing allows to prime the environment via provided configuration. Will not override
+     * any IsisSystemEnvironment instance, that is already registered with the current context, because the 
+     * IsisSystemEnvironment is expected to be an immutable singleton within an application's life-cycle.
+     */
+    public static void primeEnvironment(IsisConfiguration conf) {
+        _Context.computeIfAbsent(IsisSystemEnvironment.class, __->IsisSystemEnvironment.of(conf));
+    }
     
     // -- LIFE-CYCLING
 
@@ -152,5 +160,7 @@ public interface IsisContext {
         });
         System.out.println("================================================");
     }
+
+
 
 }

@@ -187,8 +187,13 @@ public class IsisSystem {
                     configurationOverride
                     );
 
-            final IsisSessionFactoryBuilder isisSessionFactoryBuilder = new IsisSessionFactoryBuilder(componentProvider,
-                    deploymentTypeFrom(configurationOverride), appManifestIfAny);
+            IsisContext.primeEnvironment(configurationOverride);
+            
+            final IsisSessionFactoryBuilder isisSessionFactoryBuilder = 
+                    new IsisSessionFactoryBuilder(
+                            componentProvider,
+                            IsisContext.getEnvironment().getDeploymentCategory(),
+                            appManifestIfAny);
 
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();
@@ -219,12 +224,6 @@ public class IsisSystem {
         authenticationSession = authenticationManager.authenticate(authenticationRequestIfAny);
 
         openSession();
-    }
-
-    public static DeploymentCategory deploymentTypeFrom(final IsisConfiguration configurationOverride) {
-        final DeploymentType deploymentType = DeploymentType.lookup(
-                        configurationOverride.getString("isis.deploymentType", "SERVER"));
-        return deploymentType.getDeploymentCategory();
     }
 
     // -- isisSystem (populated during setup)
