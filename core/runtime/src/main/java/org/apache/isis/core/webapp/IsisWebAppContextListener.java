@@ -18,9 +18,6 @@
  */
 package org.apache.isis.core.webapp;
 
-import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
-import static org.apache.isis.commons.internal.resources._Resources.putContextPathIfPresent;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +31,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.config.NotFoundPolicy;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.webapp.modules.WebModule;
+
+import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
+import static org.apache.isis.commons.internal.resources._Resources.putContextPathIfPresent;
 
 /**
  * 
@@ -74,6 +79,12 @@ public class IsisWebAppContextListener implements ServletContextListener {
         
         final IsisWebAppConfigProvider configProvider = IsisWebAppConfigProvider.registerInstanceIfAbsent();
 
+        final IsisConfigurationBuilder isisConfigurationBuilder =
+                IsisWebAppConfigProvider.getInstance().getConfigurationBuilder(servletContext);
+        isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
+
+        IsisContext.primeEnvironment(isisConfigurationBuilder.getConfiguration());
+
         final List<WebModule> webModules =
                  WebModule.discoverWebModules()
                  .peek(module->module.prepare(servletContext)) // prepare context
@@ -93,6 +104,13 @@ public class IsisWebAppContextListener implements ServletContextListener {
         activeListeners.forEach(listener->listener.contextInitialized(event));
         
         LOG.info("=== DONE === ServletContext initialized.");
+    }
+
+    void addConfigurationResourcesForDeploymentType(
+            final IsisConfigurationBuilder isisConfigurationBuilder,
+            final DeploymentType deploymentType) {
+        final String resourceName = deploymentType.name().toLowerCase() + ".properties";
+        isisConfigurationBuilder.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE, IsisConfigurationDefault.ContainsPolicy.IGNORE);
     }
 
     @Override

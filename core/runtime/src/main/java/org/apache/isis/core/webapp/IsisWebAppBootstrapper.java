@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.webapp;
 
-import static org.apache.isis.commons.internal._Constants.emptyStringArray;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -36,6 +34,8 @@ import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 
+import static org.apache.isis.commons.internal._Constants.emptyStringArray;
+
 /**
  * Initialize the {@link IsisSessionFactoryBuilder} when the web application starts, and
  * destroys it when it ends.
@@ -43,6 +43,8 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
  * Implementation note: we use a number of helper builders to keep this class as
  * small and focused as possible. The builders are available for reuse by other
  * bootstrappers.
+ *
+ * TODO: this is now defunct, I think ... replaced by IsisWebAppContextListener, which is always used.  Note that _ugbtb_web-xml.adoc also needs to be updated.
  */
 public final class IsisWebAppBootstrapper implements ServletContextListener {
 
