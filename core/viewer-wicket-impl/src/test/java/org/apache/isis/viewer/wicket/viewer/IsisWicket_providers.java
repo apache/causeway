@@ -19,10 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -34,6 +30,10 @@ import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 public class IsisWicket_providers {
 
     private IsisWicketModule isisWicketModule;
@@ -41,7 +41,7 @@ public class IsisWicket_providers {
 
     @Before
     public void setUp() throws Exception {
-        isisWicketModule = new IsisWicketModule();
+        isisWicketModule = new IsisWicketModule(null, null);
         injector = Guice.createInjector(isisWicketModule);
     }
 
