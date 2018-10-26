@@ -496,7 +496,7 @@
                     <mml:attr name="position">PANEL_DROPDOWN</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
-                    <mml:attr name="deploymentCategory">PRODUCTION</mml:attr>
+                    <mml:attr name="deploymentCategory">PROTOTYPING</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
@@ -535,6 +535,11 @@
             <mml:params>
                 <mml:param xsi:type="mml:scalarParam" id="fileName" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <mml:facets>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFacets">
+                            <mml:attr name="defaultFacets">org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
+                            <mml:attr name="derived">true</mml:attr>
+                        </mml:facet>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterDerivedFromType"/>
                         <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated">
                             <mml:attr name="context">org.apache.isis.core.metamodel.services.jdosupport.Persistable_downloadJdoMetadata#act(java.lang.String)</mml:attr>
                             <mml:attr name="originalText">File name</mml:attr>
@@ -545,6 +550,10 @@
                             <mml:attr name="semantics">REQUIRED</mml:attr>
                             <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault</mml:attr>
                             <mml:attr name="validating">true</mml:attr>
+                        </mml:facet>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromType">
+                            <mml:attr name="derived">true</mml:attr>
+                            <mml:attr name="typicalLengthFacet">org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
                         </mml:facet>
                         <mml:facet id="org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod">
                             <mml:attr name="intent.default0Act">DEFAULTS</mml:attr>
@@ -578,7 +587,7 @@
                     <mml:attr name="position">PANEL_DROPDOWN</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
-                    <mml:attr name="deploymentCategory">PRODUCTION</mml:attr>
+                    <mml:attr name="deploymentCategory">PROTOTYPING</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
@@ -617,6 +626,11 @@
             <mml:params>
                 <mml:param xsi:type="mml:scalarParam" id="fileName" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <mml:facets>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFacets">
+                            <mml:attr name="defaultFacets">org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
+                            <mml:attr name="derived">true</mml:attr>
+                        </mml:facet>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterDerivedFromType"/>
                         <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated">
                             <mml:attr name="context">org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml#act(java.lang.String,org.apache.isis.applib.services.layout.LayoutService$Style)</mml:attr>
                             <mml:attr name="originalText">File name</mml:attr>
@@ -628,6 +642,10 @@
                             <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault</mml:attr>
                             <mml:attr name="validating">true</mml:attr>
                         </mml:facet>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromType">
+                            <mml:attr name="derived">true</mml:attr>
+                            <mml:attr name="typicalLengthFacet">org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
+                        </mml:facet>
                         <mml:facet id="org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod">
                             <mml:attr name="intent.default0Act">DEFAULTS</mml:attr>
                             <mml:attr name="methods">public java.lang.String org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml.default0Act()</mml:attr>
@@ -637,12 +655,22 @@
                 </mml:param>
                 <mml:param xsi:type="mml:scalarParam" id="style" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <mml:facets>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.defaults.fromtype.ActionParameterDefaultFacetDerivedFromTypeFacets">
+                            <mml:attr name="defaultFacets">org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
+                            <mml:attr name="derived">true</mml:attr>
+                        </mml:facet>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterDerivedFromType"/>
                         <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet" fqcn="org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault">
                             <mml:attr name="inverted">false</mml:attr>
                             <mml:attr name="semantics">REQUIRED</mml:attr>
                             <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault</mml:attr>
                             <mml:attr name="validating">true</mml:attr>
                         </mml:facet>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromType">
+                            <mml:attr name="derived">true</mml:attr>
+                            <mml:attr name="typicalLengthFacet">org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetUsingParser</mml:attr>
+                        </mml:facet>
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet" fqcn="org.apache.isis.core.metamodel.facets.param.choices.enums.ActionParameterChoicesFacetDerivedFromChoicesFacet"/>
                         <mml:facet id="org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod">
                             <mml:attr name="intent.default1Act">DEFAULTS</mml:attr>
                             <mml:attr name="methods">public org.apache.isis.applib.services.layout.LayoutService$Style org.apache.isis.applib.mixins.layout.Object_downloadLayoutXml.default1Act()</mml:attr>
@@ -675,7 +703,7 @@
                     <mml:attr name="position">PANEL_DROPDOWN</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
-                    <mml:attr name="deploymentCategory">PRODUCTION</mml:attr>
+                    <mml:attr name="deploymentCategory">PROTOTYPING</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
@@ -736,7 +764,7 @@
                     <mml:attr name="position">PANEL_DROPDOWN</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
-                    <mml:attr name="deploymentCategory">PRODUCTION</mml:attr>
+                    <mml:attr name="deploymentCategory">PROTOTYPING</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
