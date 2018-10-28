@@ -184,7 +184,7 @@ public class TranslationServicePo implements TranslationService {
     private TranslationsResolver translationsResolver;
 
     @Programmatic
-    TranslationsResolver getTranslationsResolver() {
+    public TranslationsResolver getTranslationsResolver() {
         return translationsResolver;
     }
 
@@ -192,7 +192,7 @@ public class TranslationServicePo implements TranslationService {
     private LocaleProvider localeProvider;
 
     @Programmatic
-    LocaleProvider getLocaleProvider() {
+    public LocaleProvider getLocaleProvider() {
         return localeProvider;
     }
 

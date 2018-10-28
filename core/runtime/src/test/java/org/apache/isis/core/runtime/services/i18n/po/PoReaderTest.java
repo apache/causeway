@@ -20,14 +20,17 @@ package org.apache.isis.core.runtime.services.i18n.po;
 
 import java.util.List;
 import java.util.Locale;
-import org.apache.isis.commons.internal.collections._Lists;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -36,20 +39,18 @@ import static org.junit.Assert.assertThat;
 
 public class PoReaderTest {
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    @Rule public JUnitRuleMockery2 context = JUnitRuleMockery2
+            .createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    TranslationServicePo mockTranslationServicePo;
-    @Mock
-    TranslationsResolver mockTranslationsResolver;
-    @Mock
-    LocaleProvider mockLocaleProvider;
+    @Mock TranslationServicePo mockTranslationServicePo;
+    @Mock TranslationsResolver mockTranslationsResolver;
+    @Mock LocaleProvider mockLocaleProvider;
 
     PoReader poReader;
 
     @Before
     public void setUp() throws Exception {
+        
         context.checking(new Expectations() {{
             allowing(mockTranslationServicePo).getLocaleProvider();
             will(returnValue(mockLocaleProvider));
@@ -60,6 +61,14 @@ public class PoReaderTest {
             allowing(mockLocaleProvider).getLocale();
             will(returnValue(Locale.UK));
         }});
+        
+        //[ahuber] with update of byte-buddy 1.8.0 -> 1.9.2, Apache Isis runs on JDK 11+, but
+        // it seems to no longer support mockery of non public methods, so we 
+        // explicitly test proper mockery here ...  
+        Assert.assertNotNull(mockTranslationServicePo.getLocaleProvider());
+        Assert.assertNotNull(mockTranslationServicePo.getTranslationsResolver());
+        Assert.assertNotNull(mockLocaleProvider.getLocale());
+        
     }
 
     public static class Translate extends PoReaderTest {

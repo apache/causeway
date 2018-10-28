@@ -18,12 +18,6 @@
  */
 package org.apache.isis.core.unittestsupport.jmocking;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,16 +26,27 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Date;
 
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.plugins.codegen.ProxyFactoryPlugin;
+import org.jmock.Expectations;
 import org.jmock.api.Imposteriser;
 import org.jmock.api.Invocation;
 import org.jmock.api.Invokable;
+import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.action.VoidAction;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.applib.services.i18n.TranslationsResolver;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.plugins.codegen.ProxyFactoryPlugin;
+import org.apache.isis.core.runtime.services.i18n.po.TranslationServicePo;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class ImposteriserTestUsingCodegenPlugin {
 
@@ -93,7 +98,28 @@ public class ImposteriserTestUsingCodegenPlugin {
         assertNotNull(imposter);
         imposter.toString();
     }
-
+    
+    @Test
+    public void imposteriserShouldBeUsableForMockery() {
+        
+        final JUnit4Mockery context = new JUnit4Mockery() {
+            {
+                setImposteriser(imposteriser);
+            }
+        };
+        
+        // using TranslationService here is just arbitrary, can be replaced any time ...
+        final TranslationServicePo mockTranslationServicePo = context.mock(TranslationServicePo.class);
+        final TranslationsResolver mockTranslationsResolver = context.mock(TranslationsResolver.class);
+        
+        context.checking(new Expectations() {{
+            allowing(mockTranslationServicePo).getTranslationsResolver();
+            will(returnValue(mockTranslationsResolver));
+        }});
+        
+        Assert.assertNotNull(mockTranslationServicePo);
+        Assert.assertNotNull(mockTranslationServicePo.getTranslationsResolver());
+    }
 
     // //////////////////////////////////////
 
