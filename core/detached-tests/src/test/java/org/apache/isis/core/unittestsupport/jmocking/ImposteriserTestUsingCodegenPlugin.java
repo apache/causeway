@@ -97,7 +97,7 @@ public class ImposteriserTestUsingCodegenPlugin {
         imposter.toString();
     }
     
-    // class we want to mock, while making sure, that we have access to non public fields 
+    // class we want to mock, while making sure, that we have access to non public methods 
     static class NonPublicMethodStub {
         Integer getInteger() {
             return 1;
