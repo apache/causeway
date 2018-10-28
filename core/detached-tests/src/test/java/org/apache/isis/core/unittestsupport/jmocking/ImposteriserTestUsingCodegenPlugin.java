@@ -37,10 +37,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.plugins.codegen.ProxyFactoryPlugin;
-import org.apache.isis.core.runtime.services.i18n.po.TranslationServicePo;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -99,6 +97,13 @@ public class ImposteriserTestUsingCodegenPlugin {
         imposter.toString();
     }
     
+    // class we want to mock, while making sure, that we have access to non public fields 
+    static class NonPublicMethodStub {
+        Integer getInteger() {
+            return 1;
+        }
+    }
+    
     @Test
     public void imposteriserShouldBeUsableForMockery() {
         
@@ -108,17 +113,16 @@ public class ImposteriserTestUsingCodegenPlugin {
             }
         };
         
-        // using TranslationService here is just arbitrary, can be replaced any time ...
-        final TranslationServicePo mockTranslationServicePo = context.mock(TranslationServicePo.class);
-        final TranslationsResolver mockTranslationsResolver = context.mock(TranslationsResolver.class);
-        
+        final NonPublicMethodStub mocked = context.mock(NonPublicMethodStub.class);
+                
         context.checking(new Expectations() {{
-            allowing(mockTranslationServicePo).getTranslationsResolver();
-            will(returnValue(mockTranslationsResolver));
+            allowing(mocked).getInteger();
+            will(returnValue(Integer.valueOf(2)));
         }});
         
-        Assert.assertNotNull(mockTranslationServicePo);
-        Assert.assertNotNull(mockTranslationServicePo.getTranslationsResolver());
+        Assert.assertNotNull(mocked);
+        Assert.assertNotNull(mocked.getInteger());
+        Assert.assertEquals(2, mocked.getInteger().intValue());
     }
 
     // //////////////////////////////////////

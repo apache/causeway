@@ -37,17 +37,9 @@ import net.bytebuddy.implementation.InvocationHandlerAdapter;
 import net.bytebuddy.matcher.ElementMatchers;
 
 public class ProxyFactoryPluginUsingByteBuddy implements ProxyFactoryPlugin {
-
-    private static <T> ImplementationDefinition<T> nextProxyDef(
-            Class<T> base,
-            Class<?>[] interfaces) {
-        return new ByteBuddy()
-                .with(new NamingStrategy.SuffixingRandom("bb"))
-                .subclass(base)
-                .implement(interfaces)
-                .method(ElementMatchers.any());
-    }
-
+    
+    private final ClassLoadingStrategyAdvisor strategyAdvisor = new ClassLoadingStrategyAdvisor(); 
+    
     @Override
     public <T> ProxyFactory<T> factory(
             Class<T> base,
@@ -60,7 +52,7 @@ public class ProxyFactoryPluginUsingByteBuddy implements ProxyFactoryPlugin {
         nextProxyDef(base, interfaces)
         .intercept(InvocationHandlerAdapter.of(handler))
         .make()
-        .load(_Context.getDefaultClassLoader())
+        .load(_Context.getDefaultClassLoader(), strategyAdvisor.getSuitableStrategy(base))
         .getLoaded();
 
         return new ProxyFactory<T>() {
@@ -121,6 +113,16 @@ public class ProxyFactoryPluginUsingByteBuddy implements ProxyFactoryPlugin {
     }
 
     // -- HELPER
+    
+    private static <T> ImplementationDefinition<T> nextProxyDef(
+            Class<T> base,
+            Class<?>[] interfaces) {
+        return new ByteBuddy()
+                .with(new NamingStrategy.SuffixingRandom("bb"))
+                .subclass(base)
+                .implement(interfaces)
+                .method(ElementMatchers.any());
+    }
 
     private static void ensureSameSize(Class<?>[] a, Object[] b) {
         if(_NullSafe.size(a) != _NullSafe.size(b)) {

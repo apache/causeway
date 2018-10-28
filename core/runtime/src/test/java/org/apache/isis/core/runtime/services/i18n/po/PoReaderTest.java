@@ -62,9 +62,8 @@ public class PoReaderTest {
             will(returnValue(Locale.UK));
         }});
         
-        //[ahuber] with update of byte-buddy 1.8.0 -> 1.9.2, Apache Isis runs on JDK 11+, but
-        // it seems to no longer support mockery of non public methods, so we 
-        // explicitly test proper mockery here ...  
+        //[ahuber] with update of byte-buddy 1.8.0 -> 1.9.2, Apache Isis runs on JDK 11+, 
+        // we explicitly test proper mockery of non-public methods here ...  
         Assert.assertNotNull(mockTranslationServicePo.getLocaleProvider());
         Assert.assertNotNull(mockTranslationServicePo.getTranslationsResolver());
         Assert.assertNotNull(mockLocaleProvider.getLocale());
