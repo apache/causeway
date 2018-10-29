@@ -35,7 +35,6 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 
 /**
  * Provides static access to current context's singletons
@@ -75,20 +74,16 @@ public interface IsisContext {
     /**
      * Non-blocking call.
      * <p>
-     * Utilizes the framework's thread pool by submitting the specified {@code computation} to run
-     * in background. The {@code computation} is running in the context of a new {@link IsisSession}.
+     * Returns a new CompletableFuture that is asynchronously completed by a task running in the 
+     * ForkJoinPool.commonPool() with the value obtained by calling the given Supplier {@code computation}.
      * <p>
-     * If the computation requires no IsisSession use 
-     * {@link ThreadPoolSupport#newCompletableFuture(Supplier)} instead.
+     * If the calling thread is within an open {@link IsisSession} then the ForkJoinPool does make this
+     * session also available for any forked threads, via means of {@link InheritableThreadLocal}.
      * 
      * @param computation
-     * @return
      */
-    public static <T> CompletableFuture<T> newCompletableFuture(Supplier<T> computation){
-        final Supplier<T> computationWithSession = ()->
-            IsisContext.getSessionFactory().doInSession(computation::get);
-        
-        return ThreadPoolSupport.getInstance().newCompletableFuture(computationWithSession);
+    public static <T> CompletableFuture<T> compute(Supplier<T> computation){
+        return CompletableFuture.supplyAsync(computation);
     }
 
     /**

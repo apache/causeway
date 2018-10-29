@@ -48,6 +48,7 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.MessageRegistry;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
@@ -251,7 +252,12 @@ implements ApplicationScopedComponent, AppManifestProvider {
     }
 
     // -- openSession, closeSession, currentSession, inSession
-    private final ThreadLocal<IsisSession> currentSession = new ThreadLocal<>();
+    
+    /**
+     * Inheritable... allows to have concurrent computations utilizing the ForkJoinPool.
+     * see {@link IsisContext#compute(java.util.function.Supplier)}
+     */ 
+    private final InheritableThreadLocal<IsisSession> currentSession = new InheritableThreadLocal<>();
 
     /**
      * Creates and {@link IsisSession#open() open}s the {@link IsisSession}.

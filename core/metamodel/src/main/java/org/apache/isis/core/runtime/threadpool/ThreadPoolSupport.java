@@ -116,7 +116,8 @@ public final class ThreadPoolSupport implements AutoCloseable {
     /**
      * Non-blocking call. 
      * <p>
-     * If the computation requires an IsisSession use {@code IsisContext.newCompletableFuture(Supplier)} instead.
+     * If the computation requires an open IsisSession use {@code IsisContext.compute(Supplier)} instead,
+     * which utilizes a ForkJoinPool instead.
      * 
      * @param computation - async task 
      * @return new CompletableFuture utilizing this thread-pool's underlying concurrent executor
