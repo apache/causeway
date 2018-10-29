@@ -19,18 +19,15 @@
 
 package org.apache.isis.core.runtime.threadpool;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
@@ -48,6 +45,12 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * ThreadPoolSupport is application-scoped, meaning ThreadPoolSupport is closed on
@@ -102,6 +105,27 @@ public final class ThreadPoolSupport implements AutoCloseable {
     public void close() throws Exception {
         concurrentExecutor.shutdown();
     }
+    
+    /**
+     * @return this thread-pool's underlying concurrent executor
+     */
+    public Executor getExecutor() {
+        return concurrentExecutor;
+    }
+    
+    /**
+     * Non-blocking call. 
+     * <p>
+     * If the computation requires an IsisSession use {@code IsisContext.newCompletableFuture(Supplier)} instead.
+     * 
+     * @param computation - async task 
+     * @return new CompletableFuture utilizing this thread-pool's underlying concurrent executor
+     */
+    public <T> CompletableFuture<T> newCompletableFuture(Supplier<T> computation) {
+        requires(computation, "computation");
+        return CompletableFuture.supplyAsync(computation, getExecutor());
+    }
+    
 
     /**
      * Executes specified {@code callables} on the default executor.  
@@ -155,7 +179,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
 
 
     /**
-     * Waits if necessary for the computation to complete. (Suppresses checked exceptions.)
+     * Waits if necessary for the computation to complete. Suppresses checked exceptions.
      * @param futures
      * @return list of computation results.
      */
@@ -177,12 +201,17 @@ public final class ThreadPoolSupport implements AutoCloseable {
         }
     }
 
+    /**
+     * Waits if necessary for the computation to complete. Re-throws any checked exception as RuntimeException.
+     * @param futures
+     * @return list of computation results.
+     */
     public List<Object> joinGatherFailures(final List<Future<Object>> futures) {
         if (futures == null) {
             return null;
         }
 
-        final long t0 = System.currentTimeMillis();
+        final long t0 = System.nanoTime();
         try{
             final List<Object> returnValues = _Lists.newArrayList();
             for (Future<Object> future : futures) {
@@ -196,8 +225,8 @@ public final class ThreadPoolSupport implements AutoCloseable {
             }
             return returnValues;
         } finally {
-            final long t1 = System.currentTimeMillis();
-            LOG.info("join'ing {} tasks: waited {} milliseconds ", futures.size(), (t1-t0));
+            final long t1 = System.nanoTime();
+            LOG.info("join'ing {} tasks: waited {} milliseconds ", futures.size(), 0.000_001 * (t1-t0));
         }
     }
 

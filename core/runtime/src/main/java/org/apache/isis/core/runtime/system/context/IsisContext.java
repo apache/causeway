@@ -22,6 +22,8 @@ package org.apache.isis.core.runtime.system.context;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
@@ -33,6 +35,7 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 
 /**
  * Provides static access to current context's singletons
@@ -68,6 +71,25 @@ public interface IsisContext {
     public static ClassLoader getClassLoader() {
         return _Context.getDefaultClassLoader();
     }
+    
+    /**
+     * Non-blocking call.
+     * <p>
+     * Utilizes the framework's thread pool by submitting the specified {@code computation} to run
+     * in background. The {@code computation} is running in the context of a new {@link IsisSession}.
+     * <p>
+     * If the computation requires no IsisSession use 
+     * {@link ThreadPoolSupport#newCompletableFuture(Supplier)} instead.
+     * 
+     * @param computation
+     * @return
+     */
+    public static <T> CompletableFuture<T> newCompletableFuture(Supplier<T> computation){
+        final Supplier<T> computationWithSession = ()->
+            IsisContext.getSessionFactory().doInSession(computation::get);
+        
+        return ThreadPoolSupport.getInstance().newCompletableFuture(computationWithSession);
+    }
 
     /**
      * @return pre-bootstrapping configuration
@@ -80,6 +102,7 @@ public interface IsisContext {
      * For integration testing allows to prime the environment via provided configuration. Will not override
      * any IsisSystemEnvironment instance, that is already registered with the current context, because the 
      * IsisSystemEnvironment is expected to be an immutable singleton within an application's life-cycle.
+     * @deprecated currently under investigation on user mailing list
      */
     public static void primeEnvironment(IsisConfiguration conf) {
         _Context.computeIfAbsent(IsisSystemEnvironment.class, __->IsisSystemEnvironment.of(conf));
@@ -134,14 +157,16 @@ public interface IsisContext {
         return "2.0.0-M2";
     }
     
-    public static void dumpConfig() {
+    public static StringBuilder dumpConfig() {
+        
+        final StringBuilder sb = new StringBuilder();
 
         final IsisConfiguration configuration;
         try {
             configuration = getConfiguration();
         } catch (Exception e) {
             // ignore
-            return;
+            return sb;
         }
 
         final Map<String, String> map = new TreeMap<>(configuration.asMap());
@@ -152,13 +177,15 @@ public interface IsisContext {
         final int fillRight = fillCount-fillLeft;
         head = _Strings.padStart("", fillLeft, ' ') + head + _Strings.padEnd("", fillRight, ' ');
         
-        System.out.println("================================================");
-        System.out.println("="+head+"=");
-        System.out.println("================================================");
+        sb.append("================================================\n");
+        sb.append("="+head+"=\n");
+        sb.append("================================================\n");
         map.forEach((k,v)->{
-            System.out.println(k+" -> "+v);
+            sb.append(k+" -> "+v).append("\n");
         });
-        System.out.println("================================================");
+        sb.append("================================================\n");
+        
+        return sb;
     }
 
 
