@@ -49,6 +49,13 @@ It also lists their corresponding implementation, either a default implementatio
 `CommandService-` ++
 `JdoRepository`
 
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_HealthCheckService[`o.a.i.applib.` +
+`services.health` +
+`HealthCheckService`]
+|Performs a health check so that the runtime infrastructure can determine if the application is still healthy (and perform remedial action, such as restarting the app, if not).
+|No default implementation.
+|Exposed via REST API, typically on `/restful/health`.
+
 
 |xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_HomePageProviderService[`o.a.i.applib.` +
 `services.homepage` +
@@ -78,3 +85,4 @@ Key:
 include::_rgsvc_application-layer-spi_BackgroundCommandService.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-spi_CommandService.adoc[leveloffset=+1]
 include::_rgsvc_application-layer-spi_HomePageProviderService.adoc[leveloffset=+1]
+include::_rgsvc_application-layer-spi_HealthCheckService.adoc[leveloffset=+1]

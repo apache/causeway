@@ -243,6 +243,11 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
     @Override
+    public <T> T wrapTry(final T domainObject) {
+        return wrap(domainObject, ExecutionMode.TRY);
+    }
+
+    @Override
     public <T> T wrapNoExecute(final T domainObject) {
         return wrap(domainObject, ExecutionMode.NO_EXECUTE);
     }

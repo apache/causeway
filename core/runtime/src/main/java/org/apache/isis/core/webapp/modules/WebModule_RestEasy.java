@@ -18,14 +18,6 @@
  */
 package org.apache.isis.core.webapp.modules;
 
-import static java.util.Objects.requireNonNull;
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.base._Strings.prefix;
-import static org.apache.isis.commons.internal.base._Strings.suffix;
-import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
-import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-import static org.apache.isis.commons.internal.resources._Resources.putRestfulPath;
-
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
@@ -33,6 +25,14 @@ import javax.servlet.ServletException;
 
 import org.apache.isis.core.webapp.IsisSessionFilter;
 import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
+
+import static java.util.Objects.requireNonNull;
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.base._Strings.prefix;
+import static org.apache.isis.commons.internal.base._Strings.suffix;
+import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
+import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
+import static org.apache.isis.commons.internal.resources._Resources.putRestfulPath;
 
 /**
  * Package private mixin for WebModule implementing WebModule.
@@ -99,7 +99,7 @@ final class WebModule_RestEasy implements WebModule  {
                     "auto"); // ... 401 and a basic authentication challenge if request originates from web browser
             filter.setInitParameter(
                     "passThru", 
-                    getRestfulPath()+"swagger"); 
+                    String.join(",", getRestfulPath()+"swagger", getRestfulPath()+"health"));
             
         }
         

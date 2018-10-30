@@ -79,22 +79,28 @@ public interface WrapperFactory {
         /**
          * Validate all business rules and then execute.
          */
-        EXECUTE(true,true),
+        EXECUTE(true,true,true),
+        /**
+         * Validate all business rules and then execute, but don't throw exception if fails.
+         */
+        TRY(true,true,false),
         /**
          * Skip all business rules and then execute.
          */
-        SKIP_RULES(false, true),
+        SKIP_RULES(false, true, false),
         /**
          * Validate all business rules but do not execute.
          */
-        NO_EXECUTE(true, false);
-
+        NO_EXECUTE(true, false, true);
+        
         private final boolean enforceRules;
         private final boolean execute;
+        private final boolean failFast;
 
-        private ExecutionMode(final boolean enforceRules, final boolean execute) {
+        private ExecutionMode(final boolean enforceRules, final boolean execute, final boolean failFast) {
             this.enforceRules = enforceRules;
             this.execute = execute;
+            this.failFast = failFast;
         }
 
         public boolean shouldEnforceRules() {
@@ -102,6 +108,9 @@ public interface WrapperFactory {
         }
         public boolean shouldExecute() {
             return execute;
+        }
+        public boolean shouldFailFast() {
+            return failFast;
         }
     }
 
@@ -127,6 +136,11 @@ public interface WrapperFactory {
         @Override
         public <T> T wrapMixin(final Class<T> mixinClass, final Object mixedIn) {
             return wrap(factoryService.m(mixinClass, mixedIn));
+        }
+
+        @Override
+        public <T> T wrapTry(T domainObject) {
+            return domainObject;
         }
 
         @Override
@@ -202,6 +216,13 @@ public interface WrapperFactory {
     @Programmatic
     <T> T wrapMixin(Class<T> mixinClass, Object mixedIn);
 
+    /**
+     * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#TRY},
+     * to make this feature more discoverable.
+     */
+    @Programmatic
+    <T> T wrapTry(T domainObject);
+    
     /**
      * Convenience method for {@link #wrap(Object, ExecutionMode)} with {@link ExecutionMode#NO_EXECUTE},
      * to make this feature more discoverable.

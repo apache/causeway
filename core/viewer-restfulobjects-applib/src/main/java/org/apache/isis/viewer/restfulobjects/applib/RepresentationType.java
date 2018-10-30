@@ -18,7 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -41,6 +40,7 @@ import org.apache.isis.viewer.restfulobjects.applib.domaintypes.PropertyDescript
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.TypeActionResultRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.domaintypes.TypeListRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.errors.ErrorRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.health.HealthRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.homepage.HomePageRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.MediaTypes;
@@ -61,6 +61,10 @@ public enum RepresentationType {
             RestfulMediaType.APPLICATION_JSON_VERSION,
             null,
             VersionRepresentation.class),
+    HEALTH(
+            RestfulMediaType.APPLICATION_JSON_HEALTH,
+            null,
+            HealthRepresentation.class),
     LIST(
             RestfulMediaType.APPLICATION_JSON_LIST,
             null,

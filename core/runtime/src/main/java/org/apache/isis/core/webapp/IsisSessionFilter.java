@@ -20,6 +20,7 @@
 package org.apache.isis.core.webapp;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -150,7 +151,7 @@ public class IsisSessionFilter implements Filter {
      */
     public static final String QUERY_STRING_FORCE_LOGOUT = "__isis_force_logout";
 
-    private String passThru;
+    private List<String> passThruList = Collections.emptyList();
 
     static void redirect(final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final String redirectTo) throws IOException {
         httpResponse.sendRedirect(StringExtensions.combinePath(httpRequest.getContextPath(), redirectTo));
@@ -289,10 +290,15 @@ public class IsisSessionFilter implements Filter {
 
     }
 
-    private void lookupPassThru(final FilterConfig config) {
+    void lookupPassThru(final FilterConfig config) {
+        this.passThruList = lookupAndParsePassThru(config);
+    }
 
-        this.passThru = config.getInitParameter(PASS_THRU_KEY);
-
+    List<String> lookupAndParsePassThru(final FilterConfig config) {
+        final String passThru = config.getInitParameter(PASS_THRU_KEY);
+        return passThru != null && !passThru.equals("")
+                ? Arrays.asList(passThru.split(","))
+                : Collections.<String>emptyList();
     }
 
     private void lookupRedirectToOnException(final FilterConfig config) {
@@ -394,7 +400,13 @@ public class IsisSessionFilter implements Filter {
 
 
     protected boolean requestIsPassThru(final HttpServletRequest httpServletRequest) {
-        return passThru != null && httpServletRequest.getRequestURI().startsWith(passThru);
+        final String requestURI = httpServletRequest.getRequestURI();
+        for (final String passThru : passThruList) {
+            if(requestURI.startsWith(passThru)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean requestIsIgnoreExtension(final IsisSessionFilter filter, final HttpServletRequest httpRequest) {
