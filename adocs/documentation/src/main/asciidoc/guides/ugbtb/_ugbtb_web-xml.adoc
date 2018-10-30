@@ -6,9 +6,12 @@
 
 
 
-Apache Isis provides two different viewers, the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].  You can deploy both of these concurrently, or deploy just the Wicket viewer, or deploy just the Restful Objects viewer.  The configuration in `web.xml` varies accordingly, both in terms of the servlet context listeners, filters and servlets.
+Apache Isis provides two different viewers, the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
+You can deploy both of these concurrently, or deploy just the Wicket viewer, or deploy just the Restful Objects viewer.
+The configuration in `web.xml` varies accordingly, both in terms of the servlet context listeners, filters and servlets.
 
-If you are using Apache Isis' integration with Apache Shiro (for security) then this also needs configuring in `web.xml`.  See the xref:../ugsec/ugsec.adoc#_ugsec_configuring-isis-to-use-shiro[security chapter] for full details on this topic.
+If you are using Apache Isis' integration with Apache Shiro (for security) then this also needs configuring in `web.xml`.
+See the xref:../ugsec/ugsec.adoc#_ugsec_configuring-isis-to-use-shiro[security chapter] for full details on this topic.
 
 The servlets and filters are mapped to three main pipelines:
 
@@ -24,15 +27,19 @@ the diagram below shows the components to be configured if deploying both the Wi
 
 image::{_imagesdir}runtime/web-xml/wicket-and-ro.png[width="800px",link="{_imagesdir}runtime/web-xml/wicket-and-ro.png"]
 
-Here the Wicket viewer is responsible for the main bootstrapping of Apache Isis itself, in other words the shared (global) metadata; this is done by the `IsisWicketApplication` class (extending the `WicketApplication` Wicket API).  This class is also responsible for Apache Isis' own session and transaction management.
+Here the Wicket viewer is responsible for the main bootstrapping of Apache Isis itself, in other words the shared (global) metadata; this is done by the `IsisWicketApplication` class (extending the `WicketApplication` Wicket API).
+This class is also responsible for Apache Isis' own session and transaction management.
 
-The Restful Objects viewer - being a JAX-RS application implemented using the RestEasy framework - requires the `RestEasyBootstrapper` servlet context listener.  It is this context listener that also sets up the `RestfulObjectsApplication`, which is then delegated to by the RestEasy `HttpServletDispatcher`.  This pipeline uses the `IsisSessionFilter` and `IsisTransactionFilterForRestfulObjects` to perform the session and transaction management before it hits the RestEasy servlet.
+The Restful Objects viewer - being a JAX-RS application implemented using the RestEasy framework - requires the `RestEasyBootstrapper` servlet context listener.
+It is this context listener that also sets up the `RestfulObjectsApplication`, which is then delegated to by the RestEasy `HttpServletDispatcher`.
+This pipeline uses the `IsisSessionFilter` and `IsisTransactionFilterForRestfulObjects` to perform the session and transaction management before it hits the RestEasy servlet.
 
 If only the Wicket viewer is deployed, then the diagram is more or less the same: the RestEasy servlet, context listener and supporting filters are simply removed:
 
 image::{_imagesdir}runtime/web-xml/wicket-only.png[width="800px",link="{_imagesdir}runtime/web-xml/wicket-only.png"]
 
-Finally, if only the Restful Objects viewer is deployed, then things change a little more subtly.  Here, the Wicket filter is no longer needed.  In its place, though the `IsisWebAppBootstrapper` context listener is required: this is responsible for seting up the shared (global) metadata.
+Finally, if only the Restful Objects viewer is deployed, then things change a little more subtly.  Here, the Wicket filter is no longer needed.
+In its place, though the `IsisWebAppBootstrapper` context listener is required: this is responsible for seting up the shared (global) metadata.
 
 image::{_imagesdir}runtime/web-xml/ro-only.png[width="800px",link="{_imagesdir}runtime/web-xml/ro-only.png"]
 
@@ -43,7 +50,9 @@ The following sections detail these various listeners, filters and servlets in m
 [[__ugbtb_web-xml_servlet-context-listeners]]
 == Servlet Context Listeners
 
-Servlet context listeners are used to perform initialization on application startup.  Both Shiro (if configured as the security mechanism) and RestEasy (for the Restful Objects viewer) require their own context listener.  In addition, if the Wicket viewer is _not_ being used, then additional Apache Isis-specific listener is required for bootstrapping of the Apache Isis framework itself.
+Servlet context listeners are used to perform initialization on application startup.
+Both Shiro (if configured as the security mechanism) and RestEasy (for the Restful Objects viewer) require their own context listener.
+In addition, if the Wicket viewer is _not_ being used, then additional Apache Isis-specific listener is required for bootstrapping of the Apache Isis framework itself.
 
 
 === `EnvironmentLoaderListener` (Shiro)
@@ -63,7 +72,8 @@ Its definition is:
 
 === `IsisWebAppBootstrapper`
 
-The `IsisWebAppBootstrapper` servlet context listener bootstraps the shared (global) metadata for the Apache Isis framework.  This listener is not required (indeed must not be configured) if the Wicket viewer is in use.
+The `IsisWebAppBootstrapper` servlet context listener bootstraps the shared (global) metadata for the Apache Isis framework.
+This listener is not required (indeed must not be configured) if the Wicket viewer is in use.
 
 Its definition is:
 
@@ -91,7 +101,8 @@ Its context parameters are:
 
 === `ResteasyBootstrap` (RestEasy)
 
-The `ResteasyBootstrap` servlet context listener initializes the RestEasy runtime, specifying that classes (namely, those specified in Isis' `RestfulObjectsApplication`) to be exposed as REST resources.  It is required if the Restful Objects viewer is to be deployed.
+The `ResteasyBootstrap` servlet context listener initializes the RestEasy runtime, specifying that classes (namely, those specified in Isis' `RestfulObjectsApplication`) to be exposed as REST resources.
+It is required if the Restful Objects viewer is to be deployed.
 
 Its definition is:
 
@@ -216,14 +227,13 @@ Its mapping is:
 [[__ugbtb_web-xml_filters]]
 == Filters
 
-The order in which filters appear in `web.xml` matters: first to last they define a pipeline.  This is shown in the
-above diagrams, and the subsections also list the in the same order that they should appear in your `web.xml`.
+The order in which filters appear in `web.xml` matters: first to last they define a pipeline.
+This is shown in the above diagrams, and the subsections also list the in the same order that they should appear in your `web.xml`.
 
 
 === `ShiroFilter` (Shiro)
 
-Shiro filter that sets up a Shiro security manager for the request, obtained from the Shiro `WebEnvironment` set up
-by the Shiro `EnvironmentLoaderListener` (discussed above).
+Shiro filter that sets up a Shiro security manager for the request, obtained from the Shiro `WebEnvironment` set up by the Shiro `EnvironmentLoaderListener` (discussed above).
 
 Its definition is:
 
@@ -248,9 +258,8 @@ Its mapping is:
 
 === `IsisLogOnExceptionFilter`
 
-The `IsisLogOnExceptionFilter` filter simply logs the URL of any request that causes an exception to be thrown, then
-re-propagates the exception. The use case is simply to ensure that all exceptions are logged (against the
-`IsisLogOnExceptionFilter` slf4j appender).
+The `IsisLogOnExceptionFilter` filter simply logs the URL of any request that causes an exception to be thrown, then re-propagates the exception.
+The use case is simply to ensure that all exceptions are logged (against the `IsisLogOnExceptionFilter` slf4j appender).
 
 Its definition is:
 
@@ -353,7 +362,7 @@ Its definition is:
     <filter-name>WicketFilter</filter-name>
     <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
     <init-param>
-        <param-name>applicationClassName</param-name>   <!--1-->
+        <param-name>applicationClassName</param-name>                   <!--1-->
         <param-value>domainapp.webapp.SimpleApplication</param-value>
     </init-param>
 </filter>
@@ -383,7 +392,8 @@ This filter reads one context parameter:
 
 === `IsisSessionFilter`
 
-The `IsisSessionFilter` is responsible for the (persistence) session management; in effect a wrapper around DataNucleus' `PersistenceManager` object.  It is only required for the Restful Objects viewer.
+The `IsisSessionFilter` is responsible for the (persistence) session management; in effect a wrapper around DataNucleus' `PersistenceManager` object.
+It is only required for the Restful Objects viewer.
 
 [source,xml]
 ----
@@ -402,7 +412,7 @@ The `IsisSessionFilter` is responsible for the (persistence) session management;
     </init-param>
     <init-param>
         <param-name>passThru</param-name>                       <!--3-->
-        <param-value>/restful/swagger</param-value>
+        <param-value>/restful/swagger,/restful/health</param-value>
     </init-param>
     <!--
     <init-param>
@@ -417,21 +427,30 @@ The `IsisSessionFilter` is responsible for the (persistence) session management;
 </filter>
 ----
 <1> pluggable strategy for determining what the authentication session (credentials) are of the request
-<2> what the servlet should do if no existing session was found.  Usual values are either `unauthorized`, `basicAuthChallenge` or `auto`.  Discussed in more detail below.
-<3> specify which URIs to ignore and simply passthru.  Originally introduced to allow the `SwaggerSpec` resource (which does not require a session) to be invoked.
-<4> List of paths that are allowed through even if not authenticated.  The servlets mapped to these paths are expected to be able to deal with there being no session. Typically they will be logon pages.  See below for further details.
+<2> what the servlet should do if no existing session was found.
+Usual values are either `unauthorized`, `basicAuthChallenge` or `auto`.
+Discussed in more detail below.
+<3> specify which URIs to ignore and simply pass through.
+Originally introduced to allow the `SwaggerSpec` resource (which does not require a session) to be invoked.
+<4> A comma separated list of paths that are allowed through even if not authenticated.
+The servlets mapped to these paths are expected to be able to deal with there being no session.
+Typically they will be logon pages, or for health checks (as per xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_HealthCheckService[`HealthCheckService`] SPI.
+See below for further details.
 <5> where to redirect to if an exception occurs.
 
 
-The `whenNoSession` parameter determines what the behaviour should be if no existing session can be found.  There are a number of predetermined values available:
+The `whenNoSession` parameter determines what the behaviour should be if no existing session can be found.
+There are a number of predetermined values available:
 
 * `unauthorized` will generates a 401 response
 * `basicAuthChallenge` will also generate a 401 response, and also issues a Basic Auth challenge using `WWW-Authenticate` response header
-* `auto` combines the `unauthorized` and `basicAuthChallenge` strategies: it will generate a 401 response, but only issues a Basic Auth challenge if it detects that the request originates from a web browser (ie that the HTTP `Accept` header is set to `text/html`).  This means that custom Javascript apps can perform their authentication correctly, while the REST API can still be explored using the web browser (relying upon the web browser's in-built support for HTTP Basic Auth).
+* `auto` combines the `unauthorized` and `basicAuthChallenge` strategies: it will generate a 401 response, but only issues a Basic Auth challenge if it detects that the request originates from a web browser (ie that the HTTP `Accept` header is set to `text/html`).
+This means that custom Javascript apps can perform their authentication correctly, while the REST API can still be explored using the web browser (relying upon the web browser's in-built support for HTTP Basic Auth).
 * `continue`, in which case the request is allowed to continue but the destination expected to know that there will be no open session
 * `restricted`, which allows access to a restricted list of URLs, otherwise will redirect to the first of that list of URLs
 
-If accessing the REST API through a web browser, then normally `basicAuthChallenge` is appropriate; the browser will automatically display a simple prompt.  If accessing the REST API through a custom Javascript app, then `unauthorized` is usually the one to use.
+If accessing the REST API through a web browser, then normally `basicAuthChallenge` is appropriate; the browser will automatically display a simple prompt.
+If accessing the REST API through a custom Javascript app, then `unauthorized` is usually the one to use.
 
 This filter should be mapped to the `servlet-name` for the RestEasy `HttpServletDispatcher`; for example:
 
@@ -448,8 +467,7 @@ This filter should be mapped to the `servlet-name` for the RestEasy `HttpServlet
 
 === `IsisTransactionFilterForRestfulObjects`
 
-The `IsisTransactionFilterForRestfulObjects` filter simply ensures that a transaction is in progress for all
-calls routed to the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
+The `IsisTransactionFilterForRestfulObjects` filter simply ensures that a transaction is in progress for all calls routed to the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
 
 Its definition is:
 
@@ -476,10 +494,10 @@ This filter should be mapped to the `servlet-name` for the RestEasy `HttpServlet
 [[__ugbtb_web-xml_context-parameters]]
 == Configuration Files
 
-However Apache Isis is bootstrapped (using the `IsisWicketApplication` or using `IsisWebAppBootstrapper`), it will
-read a number of configuration files, such as `isis.properties`.
+However Apache Isis is bootstrapped (using the `IsisWicketApplication` or using `IsisWebAppBootstrapper`), it will read a number of configuration files, such as `isis.properties`.
 
-By default these are read from `WEB-INF` directory.  This can be overriden using the `isis.config.dir` context parameter:
+By default these are read from `WEB-INF` directory.
+This can be overridden using the `isis.config.dir` context parameter:
 
 [source,xml]
 ----
@@ -489,8 +507,7 @@ By default these are read from `WEB-INF` directory.  This can be overriden using
 </context-param>
 ----
 
-Another context parameter, `isis.viewres` specifies which additional configuration files to search for (over and above
-the default ones of `isis.properties` et al):
+Another context parameter, `isis.viewres` specifies which additional configuration files to search for (over and above the default ones of `isis.properties` et al):
 
 [source,xml]
 ----
