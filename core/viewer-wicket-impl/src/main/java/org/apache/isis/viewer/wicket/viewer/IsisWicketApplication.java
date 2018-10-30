@@ -31,6 +31,7 @@ import java.util.concurrent.Future;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.common.io.Resources;
@@ -120,6 +121,8 @@ import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
@@ -177,6 +180,8 @@ public class IsisWicketApplication
      */
     public static final String ENABLE_DEVELOPMENT_UTILITIES_KEY = "isis.viewer.wicket.developmentUtilities.enable";
     public static final boolean ENABLE_DEVELOPMENT_UTILITIES_DEFAULT = false;
+
+    public static final BootswatchTheme BOOTSWATCH_THEME_DEFAULT = BootswatchTheme.Flatly;
 
 
 
@@ -436,6 +441,20 @@ public class IsisWicketApplication
         } finally {
             ThreadPoolSupport.getInstance().join(futures);
         }
+
+        final String themeName = configuration.getString(
+                "isis.viewer.wicket.themes.initial", BOOTSWATCH_THEME_DEFAULT.name());
+        BootswatchTheme bootswatchTheme;
+        try {
+            bootswatchTheme = BootswatchTheme.valueOf(themeName);
+        } catch(Exception ex) {
+            bootswatchTheme = BOOTSWATCH_THEME_DEFAULT;
+            LOG.warn("Did not recognise configured bootswatch theme '{}', defaulting to '{}'", bootswatchTheme);
+
+        }
+        IBootstrapSettings settings = Bootstrap.getSettings();
+        settings.setThemeProvider(new BootswatchThemeProvider(bootswatchTheme));
+
     }
 
     protected List<Future<Object>> startBackgroundInitializationThreads() {
@@ -542,7 +561,7 @@ public class IsisWicketApplication
         }
         try {
             List<String> readLines = Resources.readLines(Resources.getResource(contextClass, resourceName), Charsets.UTF_8);
-            return String.join("\n", readLines);
+            return Joiner.on("\n").join(readLines);
         } catch (IOException | IllegalArgumentException e) {
             return fallback;
         }
