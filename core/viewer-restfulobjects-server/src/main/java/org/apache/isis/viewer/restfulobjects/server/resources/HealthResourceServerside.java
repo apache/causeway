@@ -39,6 +39,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.Caching;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+import org.apache.isis.viewer.restfulobjects.rendering.util.JsonWriterUtil;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation
@@ -85,14 +86,23 @@ public class HealthResourceServerside extends ResourceAbstract implements Health
             init(RepresentationType.VERSION, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
             final HealthReprRenderer renderer = new HealthReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+            final Health health;
             if(healthService != null) {
-                final Health health = healthService.check();
+                health = healthService.check();
                 renderer.with(health);
+            } else {
+                health = Health.ok();
             }
             renderer.includesSelf();
 
+            final Response.ResponseBuilder responseBuilder = health.getResult()
+                    ? Responses.ofOk(renderer, Caching.NONE)
+                    : Response.serverError()
+                            .entity(JsonWriterUtil.jsonFor(renderer.render()))
+                            .cacheControl(Caching.NONE.getCacheControl());
+
             final Response[] responseHolder = (Response[]) context;
-            responseHolder[0] = Responses.ofOk(renderer, Caching.ONE_DAY).build();
+            responseHolder[0] = responseBuilder.build();
         }
 
         @Inject
