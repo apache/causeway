@@ -390,9 +390,20 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final ObjectAdapter targetAdapter, final ObjectSpecification targetNoSpec) {
 
         if(getExecutionMode().shouldEnforceRules()) {
-            final InteractionResult interactionResult =
-                    targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy());
-            notifyListenersAndVetoIfRequired(interactionResult);
+            if(getExecutionMode().shouldFailFast()) {
+                final InteractionResult interactionResult =
+                        targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy());
+                notifyListenersAndVetoIfRequired(interactionResult);
+            } else {
+                try {
+                    final InteractionResult interactionResult =
+                            targetNoSpec.isValidResult(targetAdapter, getInteractionInitiatedBy());
+                    notifyListenersAndVetoIfRequired(interactionResult);
+                } catch(Exception ex) {
+                    return null;
+                }
+            }
+
         }
 
         if (getExecutionMode().shouldExecute()) {
@@ -425,7 +436,17 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
 
         if(getExecutionMode().shouldEnforceRules()) {
-            checkVisibility(targetAdapter, property);
+            if(getExecutionMode().shouldFailFast()) {
+                checkVisibility(targetAdapter, property);
+            } else {
+                try {
+                    checkVisibility(targetAdapter, property);
+                } catch(Exception ex) {
+                    return null;
+
+                }
+            }
+
         }
 
         resolveIfRequired(targetAdapter);
@@ -455,8 +476,18 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         final Object argumentObj = underlying(args[0]);
 
         if(getExecutionMode().shouldEnforceRules()) {
-            checkVisibility(targetAdapter, property);
-            checkUsability(targetAdapter, property);
+            if(getExecutionMode().shouldFailFast()) {
+                checkVisibility(targetAdapter, property);
+                checkUsability(targetAdapter, property);
+            } else {
+                try {
+                    checkVisibility(targetAdapter, property);
+                    checkUsability(targetAdapter, property);
+                } catch(Exception ex) {
+                    return null;
+                }
+            }
+
         }
 
         final ObjectAdapter argumentAdapter = argumentObj != null ? adapterFor(argumentObj) : null;
@@ -502,7 +533,16 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
 
         if(getExecutionMode().shouldEnforceRules()) {
-            checkVisibility(targetAdapter, collection);
+            if(getExecutionMode().shouldFailFast()) {
+                checkVisibility(targetAdapter, collection);
+            } else {
+                try {
+                    checkVisibility(targetAdapter, collection);
+                } catch(Exception ex) {
+                    return null;
+                }
+            }
+
         }
 
         resolveIfRequired(targetAdapter);
@@ -561,8 +601,17 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
 
         if(getExecutionMode().shouldEnforceRules()) {
-            checkVisibility(targetAdapter, otma);
-            checkUsability(targetAdapter, otma);
+            if(getExecutionMode().shouldFailFast()) {
+                checkVisibility(targetAdapter, otma);
+                checkUsability(targetAdapter, otma);
+            } else {
+                try {
+                    checkVisibility(targetAdapter, otma);
+                    checkUsability(targetAdapter, otma);
+                } catch(Exception ex) {
+                    return null;
+                }
+            }
         }
 
         resolveIfRequired(targetAdapter);
@@ -608,8 +657,18 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
 
         if(getExecutionMode().shouldEnforceRules()) {
-            checkVisibility(targetAdapter, collection);
-            checkUsability(targetAdapter, collection);
+            if(getExecutionMode().shouldFailFast()) {
+                checkVisibility(targetAdapter, collection);
+                checkUsability(targetAdapter, collection);
+            } else {
+                try {
+                    checkVisibility(targetAdapter, collection);
+                    checkUsability(targetAdapter, collection);
+                } catch(Exception ex) {
+                    return null;
+                }
+            }
+
         }
 
 
@@ -667,13 +726,28 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
 
         if(getExecutionMode().shouldEnforceRules()) {
-            if(contributeeMember != null) {
-                checkVisibility(contributeeAdapter, contributeeMember);
-                checkUsability(contributeeAdapter, contributeeMember);
+            if(getExecutionMode().shouldFailFast()) {
+                if(contributeeMember != null) {
+                    checkVisibility(contributeeAdapter, contributeeMember);
+                    checkUsability(contributeeAdapter, contributeeMember);
+                } else {
+                    checkVisibility(targetAdapter, objectAction);
+                    checkUsability(targetAdapter, objectAction);
+                }
             } else {
-                checkVisibility(targetAdapter, objectAction);
-                checkUsability(targetAdapter, objectAction);
+                try {
+                    if(contributeeMember != null) {
+                        checkVisibility(contributeeAdapter, contributeeMember);
+                        checkUsability(contributeeAdapter, contributeeMember);
+                    } else {
+                        checkVisibility(targetAdapter, objectAction);
+                        checkUsability(targetAdapter, objectAction);
+                    }
+                } catch(Exception ex) {
+                    return null;
+                }
             }
+
         }
 
         final ObjectAdapter[] argAdapters = asObjectAdaptersUnderlying(args);
