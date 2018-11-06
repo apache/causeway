@@ -152,7 +152,7 @@
         <h2.version>1.4.197</h2.version>
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
 
-        <jetty.version>9.4.3.v20170317</jetty.version>
+        <jetty.version>9.4.12.v20180830</jetty.version>
 
         <wicket.version>8.1.0</wicket.version>
         <wicketstuff.version>8.1.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
