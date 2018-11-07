@@ -51,10 +51,9 @@
         <jetty-maven-plugin.version>9.4.12.v20180830</jetty-maven-plugin.version>
 
         <!-- override incode-build (see dn5-xxx.version in isis-core-plugins-jdo-datanucleus-5) -->
-        <datanucleus-api-jdo.version>5.1.9</datanucleus-api-jdo.version>
-        <datanucleus-core.version>5.1.11</datanucleus-core.version>
-        <datanucleus-api-jdo.version>5.1.9</datanucleus-api-jdo.version>
-        <datanucleus-jodatime.version>5.1.0-release</datanucleus-jodatime.version>
+        <datanucleus-api-jdo.version>5.2.0-m2</datanucleus-api-jdo.version>
+        <datanucleus-core.version>5.2.0-m2</datanucleus-core.version>
+        <datanucleus-jodatime.version>5.2.0-m1</datanucleus-jodatime.version>
         <hsqldb.version>2.4.1</hsqldb.version>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>

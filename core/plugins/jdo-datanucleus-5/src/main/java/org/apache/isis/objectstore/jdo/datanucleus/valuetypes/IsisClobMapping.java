@@ -64,7 +64,7 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
     }
 
     @Override
-    public Object getValueForDatastoreMapping(NucleusContext nucleusCtx, int index, Object value)
+    public Object getValueForColumnMapping(NucleusContext nucleusCtx, int index, Object value)
     {
         Clob clob = ((Clob)value);
         switch (index) {
@@ -80,13 +80,13 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
     {
         Clob clob = ((Clob)value);
         if (clob == null) {
-            getDatastoreMapping(0).setObject(preparedStmt, exprIndex[0], null);
-            getDatastoreMapping(1).setObject(preparedStmt, exprIndex[1], null);
-            getDatastoreMapping(2).setObject(preparedStmt, exprIndex[2], null);
+            getColumnMapping(0).setObject(preparedStmt, exprIndex[0], null);
+            getColumnMapping(1).setObject(preparedStmt, exprIndex[1], null);
+            getColumnMapping(2).setObject(preparedStmt, exprIndex[2], null);
         } else {
-            getDatastoreMapping(0).setString(preparedStmt, exprIndex[0], clob.getName());
-            getDatastoreMapping(1).setString(preparedStmt, exprIndex[1], clob.getMimeType().getBaseType());
-            getDatastoreMapping(2).setObject(preparedStmt, exprIndex[2], clob.getChars().toString());
+            getColumnMapping(0).setString(preparedStmt, exprIndex[0], clob.getName());
+            getColumnMapping(1).setString(preparedStmt, exprIndex[1], clob.getMimeType().getBaseType());
+            getColumnMapping(2).setObject(preparedStmt, exprIndex[2], clob.getChars().toString());
         }
     }
 
@@ -96,7 +96,7 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
         try
         {
             // Check for null entries
-            if (getDatastoreMapping(0).getObject(resultSet, exprIndex[0]) == null)
+            if (getColumnMapping(0).getObject(resultSet, exprIndex[0]) == null)
             {
                 return null;
             }
@@ -106,9 +106,9 @@ public class IsisClobMapping extends SingleFieldMultiMapping {
             // Do nothing
         }
 
-        final String name = getDatastoreMapping(0).getString(resultSet, exprIndex[0]);
-        final String mimeTypeBase = getDatastoreMapping(1).getString(resultSet, exprIndex[1]);
-        final String str = getDatastoreMapping(2).getString(resultSet, exprIndex[2]);
+        final String name = getColumnMapping(0).getString(resultSet, exprIndex[0]);
+        final String mimeTypeBase = getColumnMapping(1).getString(resultSet, exprIndex[1]);
+        final String str = getColumnMapping(2).getString(resultSet, exprIndex[2]);
         if(name == null || mimeTypeBase == null || str == null) {
             return null;
         }

@@ -73,15 +73,15 @@ public class IsisMoneyMapping extends SingleFieldMultiMapping {
         final MappingManager mgr = getStoreManager().getMappingManager();
         Column column = null;
         if (table != null) {
-            column = mgr.createColumn(this, typeName, getNumberOfDatastoreMappings());
+            column = mgr.createColumn(this, typeName, getNumberOfColumnMappings());
             /* TODO metaData.setJdbcType("NCHAR") */
             column.setColumnMetaData(column.getColumnMetaData().setLength(columnLength));
         }
-        mgr.createDatastoreMapping(this, column, typeName);
+        mgr.createColumnMapping(this, column, typeName);
     }
 
     @Override
-    public Object getValueForDatastoreMapping(final NucleusContext nucleusCtx, final int index, final Object value) {
+    public Object getValueForColumnMapping(final NucleusContext nucleusCtx, final int index, final Object value) {
 
         final Money m = ((Money) value);
         switch (index) {
@@ -99,11 +99,11 @@ public class IsisMoneyMapping extends SingleFieldMultiMapping {
 
         if (value instanceof Money) {
             final Money m = ((Money) value);
-            getDatastoreMapping(0).setLong(preparedStmt, exprIndex[0], m.longValue());
-            getDatastoreMapping(1).setString(preparedStmt, exprIndex[1], m.getCurrency());
+            getColumnMapping(0).setLong(preparedStmt, exprIndex[0], m.longValue());
+            getColumnMapping(1).setString(preparedStmt, exprIndex[1], m.getCurrency());
         } else {
-            getDatastoreMapping(0).setLong(preparedStmt, exprIndex[0], 0l);
-            getDatastoreMapping(1).setString(preparedStmt, exprIndex[1], null);
+            getColumnMapping(0).setLong(preparedStmt, exprIndex[0], 0l);
+            getColumnMapping(1).setString(preparedStmt, exprIndex[1], null);
         }
     }
 
@@ -112,16 +112,16 @@ public class IsisMoneyMapping extends SingleFieldMultiMapping {
 
         try {
             // Check for null entries
-            if (getDatastoreMapping(0).getObject(resultSet, exprIndex[0]) == null
-                    || getDatastoreMapping(1).getObject(resultSet, exprIndex[1]) == null) {
+            if (getColumnMapping(0).getObject(resultSet, exprIndex[0]) == null
+                    || getColumnMapping(1).getObject(resultSet, exprIndex[1]) == null) {
                 return null;
             }
         } catch (final Exception e) {
             // Do nothing
         }
 
-        final long amount = getDatastoreMapping(0).getLong(resultSet, exprIndex[0]);
-        final String currency = getDatastoreMapping(1).getString(resultSet, exprIndex[1]);
+        final long amount = getColumnMapping(0).getLong(resultSet, exprIndex[0]);
+        final String currency = getColumnMapping(1).getString(resultSet, exprIndex[1]);
         if (currency == null) {
             return null;
         }

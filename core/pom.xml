@@ -94,12 +94,12 @@
         <jdo-api.version>3.1</jdo-api.version>
 
         <!-- Isis Datanucleus JDO Plugin dn5 -->
-	    <dn5-jdo-api.version>3.2.0-m8</dn5-jdo-api.version>
-        <dn5-core.version>5.1.11</dn5-core.version>
-        <dn5-api-jdo.version>5.1.9</dn5-api-jdo.version>
-        <dn5-jdo-query.version>5.0.5</dn5-jdo-query.version>
-        <dn5-rdbms.version>5.1.11</dn5-rdbms.version>
-        <dn5-jodatime.version>5.1.0-release</dn5-jodatime.version>
+	    <dn5-jdo-api.version>3.2.0-m10</dn5-jdo-api.version>
+        <dn5-core.version>5.2.0-m2</dn5-core.version>
+        <dn5-api-jdo.version>5.2.0-m2</dn5-api-jdo.version>
+        <dn5-jdo-query.version>5.0.8</dn5-jdo-query.version>
+        <dn5-rdbms.version>5.2.0-m2</dn5-rdbms.version>
+        <dn5-jodatime.version>5.2.0-m1</dn5-jodatime.version>
         <dn5-maven-plugin.version>5.0.2</dn5-maven-plugin.version>
 
         <!-- Isis Datanucleus JDO Plugin dn4 -->
