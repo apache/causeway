@@ -171,15 +171,21 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     @Programmatic
     @Override
-    public <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression expression) {
-        final JDOQLTypedQuery<T> query = newTypesafeQuery(cls).filter(expression);
+    public <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression filter) {
+        JDOQLTypedQuery<T> query = newTypesafeQuery(cls);
+        if(filter!=null) {
+            query = query.filter(filter);
+        }
         return executeListAndClose(query);
     }
 
     @Programmatic
     @Override
-    public <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression expression) {
-        final JDOQLTypedQuery<T> query = newTypesafeQuery(cls).filter(expression);
+    public <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression filter) {
+        JDOQLTypedQuery<T> query = newTypesafeQuery(cls);
+        if(filter!=null) {
+            query = query.filter(filter);
+        }
         return executeUniqueAndClose(query);
     }
 
@@ -190,16 +196,22 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     }
 
     private static <T> List<T> executeListAndClose(final JDOQLTypedQuery<T> query) {
-        final List<T> elements = query.executeList();
-        final List<T> list = _Lists.newArrayList(elements);
-        query.closeAll();
-        return list;
+        try {
+            final List<T> elements = query.executeList();
+            final List<T> list = _Lists.newArrayList(elements); 
+            return list;    
+        } finally {
+            query.closeAll();
+        }
     }
 
     private static <T> T executeUniqueAndClose(final JDOQLTypedQuery<T> query) {
-        final T result = query.executeUnique();
-        query.closeAll();
-        return result;
+        try {
+            final T result = query.executeUnique();
+            return result;
+        } finally {
+            query.closeAll();
+        }
     }
 
     // //////////////////////////////////////

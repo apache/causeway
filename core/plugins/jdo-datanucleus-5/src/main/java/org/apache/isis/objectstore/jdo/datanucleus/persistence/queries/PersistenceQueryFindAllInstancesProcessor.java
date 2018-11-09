@@ -20,14 +20,16 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.queries;
 
 import java.util.List;
 
-import javax.jdo.Query;
+import javax.jdo.JDOQLTypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
 
 public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
@@ -41,23 +43,23 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
     @Override
     public List<ObjectAdapter> process(final PersistenceQueryFindAllInstances persistenceQuery) {
 
+        final IsisJdoSupport_v3_2 isisJdoSupport = 
+                IsisContext.getServicesInjector().lookupServiceElseFail(IsisJdoSupport_v3_2.class);
+        
         final ObjectSpecification specification = persistenceQuery.getSpecification();
+        final Class<?> cls = specification.getCorrespondingClass();
 
-        Class<?> cls = specification.getCorrespondingClass();
-        final Query<?> jdoQuery = persistenceSession.newJdoQuery(cls);
-
-        // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
-        jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
+        JDOQLTypedQuery<?> typesafeQuery = isisJdoSupport.newTypesafeQuery(cls);
+        isisJdoSupport.disableMultivaluedFetch(typesafeQuery); // fetch optimization
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("allInstances(): class={}", specification.getFullIdentifier());
         }
+        
+        final List<?> pojos = isisJdoSupport.executeQuery(cls);
+        return loadAdapters(pojos);
 
-        try {
-            final List<?> pojos = (List<?>) jdoQuery.execute();
-            return loadAdapters(pojos);
-        } finally {
-            jdoQuery.closeAll();
-        }
     }
+    
+    
 }

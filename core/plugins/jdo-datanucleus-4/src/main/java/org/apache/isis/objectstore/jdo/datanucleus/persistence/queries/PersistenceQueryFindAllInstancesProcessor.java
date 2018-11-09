@@ -22,12 +22,13 @@ import java.util.List;
 
 import javax.jdo.Query;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession4;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
 
@@ -44,7 +45,7 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
 
         Class<?> cls = specification.getCorrespondingClass();
         final Query jdoQuery = persistenceSession.newJdoQuery(cls);
-
+        
         // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
         jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
 

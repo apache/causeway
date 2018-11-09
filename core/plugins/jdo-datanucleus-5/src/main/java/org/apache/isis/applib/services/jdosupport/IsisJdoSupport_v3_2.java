@@ -21,8 +21,11 @@ package org.apache.isis.applib.services.jdosupport;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.jdo.JDOQLTypedQuery;
 import javax.jdo.query.BooleanExpression;
+
+import org.datanucleus.store.rdbms.RDBMSPropertyNames;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
@@ -49,7 +52,12 @@ public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdo
      * </p>
      */
     @Programmatic
-    <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression booleanExpression);
+    <T> List<T> executeQuery(final Class<T> cls, @Nullable final BooleanExpression filter);
+    
+    @Programmatic
+    default <T> List<T> executeQuery(final Class<T> cls) {
+        return executeQuery(cls, null);
+    }
 
     /**
      * To perform a common use-case of executing a (type-safe) query against the specified class,
@@ -68,7 +76,12 @@ public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdo
      * </p>
      */
     @Programmatic
-    <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression booleanExpression);
+    <T> T executeQueryUnique(final Class<T> cls, @Nullable final BooleanExpression filter);
+    
+    @Programmatic
+    default <T> T executeQueryUnique(final Class<T> cls) {
+        return executeQueryUnique(cls, null);
+    }
 
     /**
      * To support the execution of type-safe queries using DataNucleus' lower-level APIs
@@ -81,4 +94,23 @@ public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdo
      */
     @Programmatic
     <T> JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls);
+    
+    // -- UTILITY
+    
+    /**
+     * from <a href="http://www.datanucleus.org/products/accessplatform/jdo/query.html">DN-5.2</a>
+     * <p>
+     * For RDBMS any single-valued member will be fetched in the original SQL query, but with 
+     * multiple-valued members this is not supported. However what will happen is that any 
+     * collection/array field will be retrieved in a single SQL query for all candidate objects 
+     * (by default using an EXISTS subquery); this avoids the "N+1" problem, resulting in 1 original 
+     * SQL query plus 1 SQL query per collection member. Note that you can disable this by either 
+     * not putting multi-valued fields in the FetchPlan, or by setting the query extension 
+     * datanucleus.rdbms.query.multivaluedFetch to none (default is "exists" using the single SQL per field).
+     */
+    default void disableMultivaluedFetch(JDOQLTypedQuery<?> query) {
+        String key = RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH;
+        query.extension(key, "none");
+    }
+
 }
