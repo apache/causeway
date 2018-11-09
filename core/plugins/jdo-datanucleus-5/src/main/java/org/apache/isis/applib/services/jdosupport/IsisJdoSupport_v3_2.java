@@ -108,6 +108,7 @@ public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdo
      * not putting multi-valued fields in the FetchPlan, or by setting the query extension 
      * datanucleus.rdbms.query.multivaluedFetch to none (default is "exists" using the single SQL per field).
      */
+    @Programmatic
     default void disableMultivaluedFetch(JDOQLTypedQuery<?> query) {
         String key = RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH;
         query.extension(key, "none");
