@@ -254,7 +254,7 @@ UiHintContainer {
 
         final ObjectSpecification elementSpec = lowestCommonSuperclassFinder.getLowestCommonSuperclass()
                 .map(sessionFactory.getSpecificationLoader()::loadSpecification)
-                .orElse(collectionAsAdapter.getElementSpecification());
+                .orElse(collectionAsAdapter.getSpecification().getElementSpecification());
 
         final Class<?> elementType;
         int pageSize = PAGE_SIZE_DEFAULT_FOR_STANDALONE;

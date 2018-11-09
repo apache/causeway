@@ -81,9 +81,11 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
         addTopToolbar(headersToolbar);
 
         navigationToolbar = new IsisAjaxNavigationToolbar(this, this.toggleboxColumn);
-        addBottomToolbar(navigationToolbar);
-
+        
+        // implementation note: toolbars do decide for themselves, whether they are visible
+        addBottomToolbar(navigationToolbar); 
         addBottomToolbar(new NoRecordsToolbar(this));
+        addBottomToolbar(new IsisTotalRecordsToolbar(this));
     }
 
     @Override
@@ -171,7 +173,7 @@ public class IsisAjaxFallbackDataTable<T, S> extends DataTable<T, S> {
 
     public void honourHints() {
         headersToolbar.honourSortOrderHints();
-        navigationToolbar.honourSortOrderHints();
+        navigationToolbar.honourHints();
         honourPageNumberHint();
     }
 

@@ -76,7 +76,7 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
         return new IsisAjaxPagingNavigator(navigatorId, table);
     }
 
-    void honourSortOrderHints() {
+    void honourHints() {
         UiHintContainer uiHintContainer = getUiHintContainer();
         if(uiHintContainer == null) {
             return;
@@ -89,7 +89,7 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
         }
     }
 
-    private void showAllItemsOn(final DataTable<?, ?> table) {
+    static void showAllItemsOn(final DataTable<?, ?> table) {
         table.setItemsPerPage(Long.MAX_VALUE);
     }
 

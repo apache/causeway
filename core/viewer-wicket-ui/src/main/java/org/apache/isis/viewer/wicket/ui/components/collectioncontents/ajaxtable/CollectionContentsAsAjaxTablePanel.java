@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable;
 
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +61,8 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ObjectAdapterToggleboxColumn;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
 /**
  * {@link PanelAbstract Panel} that represents a {@link EntityCollectionModel
  * collection of entity}s rendered using {@link AjaxFallbackDefaultDataTable}.
@@ -86,12 +86,12 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
         super.onInitialize();
         buildGui();
     }
-
+    
     private void buildGui() {
 
         final List<IColumn<ObjectAdapter,String>> columns = _Lists.newArrayList();
 
-        // bulkactions
+        // bulk actions
         final BulkActionsProvider bulkActionsProvider = getBulkActionsProvider();
 
         ObjectAdapterToggleboxColumn toggleboxColumn = null;
@@ -105,14 +105,19 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
         }
 
         final EntityCollectionModel model = getModel();
-        addTitleColumn(columns, model.getParentObjectAdapterMemento(), getSettings().getMaxTitleLengthInStandaloneTables(), getSettings().getMaxTitleLengthInStandaloneTables());
+        addTitleColumn(
+                columns, 
+                model.getParentObjectAdapterMemento(), 
+                getSettings().getMaxTitleLengthInParentedTables(), 
+                getSettings().getMaxTitleLengthInStandaloneTables());
+        
         addPropertyColumnsIfRequired(columns);
 
         final CollectionContentsSortableDataProvider dataProvider = new CollectionContentsSortableDataProvider(model);
         dataTable = new IsisAjaxFallbackDataTable<>(ID_TABLE, columns, dataProvider, model.getPageSize(), toggleboxColumn);
         addOrReplace(dataTable);
         dataTable.honourHints();
-
+        
         if(toggleboxColumn != null) {
             final OnConcurrencyExceptionHandler handler2 = new OnConcurrencyExceptionHandler() {
 
