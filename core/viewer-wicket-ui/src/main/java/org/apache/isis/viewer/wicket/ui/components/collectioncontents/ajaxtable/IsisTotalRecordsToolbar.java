@@ -27,8 +27,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.runtime.system.context.IsisContext;
-
 /**
  * Responsibility: Display 'Showing all of 123' at the bottom of data tables.
  * <p>
@@ -48,16 +46,6 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
 
             @Override
             public String getObject() {
-                
-                final boolean isPrototyping = IsisContext.getEnvironment()
-                        .getDeploymentCategory().isPrototyping();
-                
-                if(!isPrototyping) {
-                    return String.format("Showing all of %d", table.getRowCount());
-                }
-
-                // when prototyping append a 'took seconds message' ...
-                
                 return String.format("Showing all of %d %s", 
                         table.getRowCount(), 
                         PrototypingMessageProvider.getTookTimingMessage());

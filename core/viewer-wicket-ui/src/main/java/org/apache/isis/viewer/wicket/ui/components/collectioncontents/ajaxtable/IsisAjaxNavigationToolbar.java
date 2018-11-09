@@ -24,7 +24,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -81,13 +80,7 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
             }
         });
         
-        final boolean isPrototyping = IsisContext.getEnvironment()
-                .getDeploymentCategory().isPrototyping();
-        
-        span.add(new Label("prototyping", isPrototyping 
-                ? PrototypingMessageProvider.getTookTimingMessage() 
-                        : ""));
-        
+        span.add(new Label("prototyping", PrototypingMessageProvider.getTookTimingMessageModel())); 
         
     }
     
