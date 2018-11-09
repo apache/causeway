@@ -27,7 +27,14 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 /**
  * Provides JAXB XmlAdapters for Java built-in temporal types. 
  * Others types might be added, if convenient. 
+ * <p>
  * 
+ * Example:<pre>
+ * &#64;XmlElement &#64;XmlJavaTypeAdapter(JaxbAdapters.LocalDateAdapter.class)
+ * &#64;Getter &#64;Setter private LocalDate javaLocalDate;
+ * </pre>
+ * 
+ *  
  * @since 2.0.0-M2
  */
 public final class JaxbAdapters {
