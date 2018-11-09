@@ -25,7 +25,11 @@ import org.apache.isis.commons.internal.base._Timing.StopWatch;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
- * Responsibility: produce additional info when in prototyping mode eg. render/response timing 
+ * Responsibility: produce additional info when in prototyping mode 
+ * eg. render/response timing
+ * <p>
+ * currently used by the framework's NavigationToolbars to add a 
+ * 'took seconds' label to bottom of data tables 
  * 
  * @since 2.0.0-M2
  */

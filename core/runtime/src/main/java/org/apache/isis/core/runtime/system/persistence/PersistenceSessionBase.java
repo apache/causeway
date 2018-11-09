@@ -74,7 +74,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     protected final UserService userService;
     
     /**
-     * Set to System.currentTimeMillis() when session opens.
+     * Set to System.nanoTime() when session opens.
      */
     protected long openedAtSystemNanos = -1L;
     
