@@ -43,6 +43,16 @@ public final class _Timing {
     }
 
     /**
+     * 
+     * @param startedAtNanos
+     * @return a new {@code startedAtSystemNanos} instance of {@link StopWatch}
+     */
+    public static StopWatch atSystemNanos(long startedAtSystemNanos) {
+        return new StopWatch(startedAtSystemNanos);
+    }
+    
+    
+    /**
      * Non thread safe start/stop watch utilizing the currently running
      * JVM's high-resolution time source.
      */
@@ -51,6 +61,10 @@ public final class _Timing {
         private long t0 = 0;
         private long t1 = 0;
         private boolean stopped;
+        
+        private StopWatch(long startedAtSystemNanos) {
+            t0 = startedAtSystemNanos;
+        }
         
         private StopWatch() {
             start();
@@ -66,6 +80,10 @@ public final class _Timing {
             t1 = System.nanoTime();
             stopped  = true;
             return this;
+        }
+        
+        public double getSeconds() {
+            return 0.000_000_001 * getNanos();
         }
         
         public double getMillis() {

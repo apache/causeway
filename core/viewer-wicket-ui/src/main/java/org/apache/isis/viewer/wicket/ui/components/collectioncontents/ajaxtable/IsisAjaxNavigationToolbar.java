@@ -21,8 +21,10 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.table.AjaxNavigationToolbar;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -41,11 +43,20 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
         this.toggleboxColumn = toggleboxColumn;
         addShowAllButton(table);
     }
+    
+    @Override
+    protected PagingNavigator newPagingNavigator(String navigatorId, DataTable<?, ?> table) {
+        return new IsisAjaxPagingNavigator(navigatorId, table);
+    }
+    
+    // -- HELPER
 
     private void addShowAllButton(final DataTable<?, ?> table) {
         table.setOutputMarkupId(true);
 
-        ((MarkupContainer)get("span")).add(new AjaxLink<Void>(ID_SHOW_ALL) {
+        final MarkupContainer span = spanThatContainsNavigatorLabel();
+        
+        span.add(new AjaxLink<Void>(ID_SHOW_ALL) {
 
             private static final long serialVersionUID = 1L;
 
@@ -69,11 +80,19 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
                 target.add(table);
             }
         });
+        
+        final boolean isPrototyping = IsisContext.getEnvironment()
+                .getDeploymentCategory().isPrototyping();
+        
+        span.add(new Label("prototyping", isPrototyping 
+                ? PrototypingMessageProvider.getTookTimingMessage() 
+                        : ""));
+        
+        
     }
-
-    @Override
-    protected PagingNavigator newPagingNavigator(String navigatorId, DataTable<?, ?> table) {
-        return new IsisAjaxPagingNavigator(navigatorId, table);
+    
+    private MarkupContainer spanThatContainsNavigatorLabel() {
+        return ((MarkupContainer)get("span"));
     }
 
     void honourHints() {

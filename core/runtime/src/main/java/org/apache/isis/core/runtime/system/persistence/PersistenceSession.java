@@ -180,5 +180,7 @@ extends
     
     void execute(List<PersistenceCommand> persistenceCommandList);
     
+    long getLifecycleStartedAtSystemNanos();
+    
 
 }
