@@ -33,13 +33,17 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Optionality;
+import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.metamodel.MetaModelService.Config;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
@@ -79,16 +83,48 @@ public class MetaModelServicesMenu {
             )
     @MemberOrder(sequence="500.500.1")
     public Clob downloadMetaModelXml(
+            
             @ParameterLayout(named = ".xml file name")
-            final String fileName) {
+            @Parameter(optionality=Optionality.MANDATORY)
+            final String fileName,
+            
+            @ParameterLayout(
+                named = "Package Prefix", 
+                describedAs="Subset of the complete meta model, only including packages starting with given prefix.")
+            @Parameter(optionality=Optionality.MANDATORY)
+            final String packagePrefix,
+            
+            @ParameterLayout(named = "Ignore Interfaces")
+            @Parameter(optionality=Optionality.MANDATORY)
+            final boolean ignoreInterfaces
+            
+            ) {
 
-        final DomainModel domainMembers =  metaModelService.getDomainModel();
-        final String xml = toXml(domainMembers);
+        Config modelConfig = new MetaModelService.Config()
+                .withIgnoreNoop()
+                .withIgnoreAbstractClasses()
+                .withIgnoreBuiltInValueTypes()
+                .withPackagePrefix(packagePrefix);
+        
+        if(ignoreInterfaces) {
+            modelConfig = modelConfig.withIgnoreInterfaces();
+        }
+        
+        final MetamodelDto metamodelDto = metaModelService.exportMetaModel(modelConfig);
+        final String xml = toXml(metamodelDto); 
         return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
     }
 
     public String default0DownloadMetaModelXml() {
         return "metamodel.xml";
+    }
+    
+    public String default1DownloadMetaModelXml() {
+        return "domainapp";
+    }
+    
+    public boolean default2DownloadMetaModelXml() {
+        return true;
     }
     
     // //////////////////////////////////////
@@ -124,7 +160,7 @@ public class MetaModelServicesMenu {
     
     @Inject JaxbService jaxbService;
     
-    private String toXml(DomainModel model) {
+    private String toXml(MetamodelDto model) {
         return jaxbService.toXml(model);    
     }
     
