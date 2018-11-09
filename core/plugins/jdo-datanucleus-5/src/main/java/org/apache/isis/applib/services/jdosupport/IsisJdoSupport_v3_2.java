@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.jdo.JDOQLTypedQuery;
+import javax.jdo.Query;
 import javax.jdo.query.BooleanExpression;
 
 import org.datanucleus.store.rdbms.RDBMSPropertyNames;
@@ -98,7 +99,9 @@ public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdo
     // -- UTILITY
     
     /**
-     * from <a href="http://www.datanucleus.org/products/accessplatform/jdo/query.html">DN-5.2</a>
+     * Fetch Optimization
+     * <p>
+     * From <a href="http://www.datanucleus.org/products/accessplatform/jdo/query.html">DN-5.2</a> ...
      * <p>
      * For RDBMS any single-valued member will be fetched in the original SQL query, but with 
      * multiple-valued members this is not supported. However what will happen is that any 
@@ -110,8 +113,17 @@ public interface IsisJdoSupport_v3_2 extends org.apache.isis.applib.services.jdo
      */
     @Programmatic
     default void disableMultivaluedFetch(JDOQLTypedQuery<?> query) {
-        String key = RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH;
-        query.extension(key, "none");
+        query.extension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
+    }
+
+    /**
+     * Fetch Optimization
+     * @see {@link IsisJdoSupport_v3_2#disableMultivaluedFetch(JDOQLTypedQuery)}
+     * @param query
+     */
+    @Programmatic
+    default void disableMultivaluedFetch(Query<?> query) {
+        query.addExtension(RDBMSPropertyNames.PROPERTY_RDBMS_QUERY_MULTIVALUED_FETCH, "none");
     }
 
 }

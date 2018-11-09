@@ -22,14 +22,16 @@ import java.util.List;
 
 import javax.jdo.listener.InstanceLifecycleEvent;
 
+import org.datanucleus.enhancement.Persistable;
+
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.IsisLifecycleListener;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
-import org.datanucleus.enhancement.Persistable;
-
-import org.apache.isis.commons.internal.collections._Lists;
 
 public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQuery>
 implements PersistenceQueryProcessor<T> {
@@ -65,6 +67,12 @@ implements PersistenceQueryProcessor<T> {
             adapters.add(adapter);
         }
         return adapters;
+    }
+    
+    // -- HELPER
+    
+    protected static IsisJdoSupport_v3_2 isisJdoSupport() { 
+        return IsisContext.getServicesInjector().lookupServiceElseFail(IsisJdoSupport_v3_2.class);
     }
 
 

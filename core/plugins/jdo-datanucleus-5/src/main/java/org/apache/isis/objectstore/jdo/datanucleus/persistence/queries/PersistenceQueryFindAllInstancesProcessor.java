@@ -29,7 +29,6 @@ import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
 
 public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
@@ -43,8 +42,7 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
     @Override
     public List<ObjectAdapter> process(final PersistenceQueryFindAllInstances persistenceQuery) {
 
-        final IsisJdoSupport_v3_2 isisJdoSupport = 
-                IsisContext.getServicesInjector().lookupServiceElseFail(IsisJdoSupport_v3_2.class);
+        final IsisJdoSupport_v3_2 isisJdoSupport = isisJdoSupport();
         
         final ObjectSpecification specification = persistenceQuery.getSpecification();
         final Class<?> cls = specification.getCorrespondingClass();
@@ -60,6 +58,5 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
         return loadAdapters(pojos);
 
     }
-    
     
 }

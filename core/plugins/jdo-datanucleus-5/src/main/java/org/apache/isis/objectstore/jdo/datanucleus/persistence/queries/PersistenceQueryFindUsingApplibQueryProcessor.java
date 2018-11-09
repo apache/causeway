@@ -27,6 +27,7 @@ import javax.jdo.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -60,9 +61,13 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         return loadAdapters(results);
     }
 
+    // -- HELPER
+    
     // special case handling
     private List<?> getResultsPk(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
 
+        final IsisJdoSupport_v3_2 isisJdoSupport = isisJdoSupport();
+        
         final String queryName = persistenceQuery.getQueryName();
         final Map<String, Object> map = unwrap(persistenceQuery.getArgumentsAdaptersByParameterName());
         final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
@@ -74,11 +79,13 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final OneToOneAssociation pkOtoa = JdoPropertyUtils.getPrimaryKeyPropertyFor(objectSpec);
         final String pkOtoaId = pkOtoa.getId();
         final String filter = pkOtoaId + "==" + map.get(pkOtoaId);
+        
+        /* FIXME[ISIS-2020] as of Oct. 2018: likely not working on FederatedDataStore
+         * see PersistenceQueryFindAllInstancesProcessor for workaround using type-safe query instead
+         */
         final Query<?> jdoQuery = persistenceSession.newJdoQuery(cls, filter);
-
-        // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
-        jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
-
+        isisJdoSupport.disableMultivaluedFetch(jdoQuery); // fetch optimization
+        
         if (LOG.isDebugEnabled()) {
             LOG.debug("{} # {} ( {} )", cls.getName(), queryName, filter);
         }
@@ -93,6 +100,8 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
 
     private List<?> getResults(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
 
+        final IsisJdoSupport_v3_2 isisJdoSupport = isisJdoSupport();
+        
         final String queryName = persistenceQuery.getQueryName();
         final Map<String, Object> argumentsByParameterName = unwrap(
                 persistenceQuery.getArgumentsAdaptersByParameterName());
@@ -100,11 +109,13 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
 
         final Class<?> cls = objectSpec.getCorrespondingClass();
-        final Query<?> jdoQuery = persistenceSession.newJdoNamedQuery(cls, queryName);
-
-        // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
-        jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
-
+        
+        /* FIXME[ISIS-2020] as of Oct. 2018: likely not working on FederatedDataStore
+         * see PersistenceQueryFindAllInstancesProcessor for workaround using type-safe query instead 
+         */
+        final Query<?> jdoQuery = persistenceSession.newJdoNamedQuery(cls, queryName); 
+        isisJdoSupport.disableMultivaluedFetch(jdoQuery);
+        
         if(persistenceQuery.hasRange()) {
             jdoQuery.setRange(persistenceQuery.getStart(), persistenceQuery.getEnd());
         }
@@ -146,4 +157,3 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
 
 }
 
-// Copyright (c) Naked Objects Group Ltd.
