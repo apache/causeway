@@ -16,11 +16,12 @@
    limitations under the License.
 -->
 <wicket:panel xmlns:wicket="http://wicket.apache.org">
-	<tr class="totalrecords-tr">
-		<td wicket:id="td" class="totalrecords-td">
-			<div class="navigatorLabel">
-				<span wicket:id="msg">[total records message]</span>
+	<tr class="navigation">
+        <td wicket:id="navigatorContainer">
+            <div class="navigatorLabel">
+                <span wicket:id="navigatorLabel">[navigator-label]</span>
+                <span wicket:id="prototypingLabel" class="navigator-prototyping-label">[prototyping-label]</span>
             </div>
-		</td>
-	</tr>
+        </td>
+    </tr>
 </wicket:panel>

@@ -37,6 +37,7 @@ import org.apache.wicket.model.Model;
 public class IsisTotalRecordsToolbar extends AbstractToolbar {
 
     private static final long serialVersionUID = 1L;
+    private static final String navigatorContainerId = "navigatorContainer";
 
     public IsisTotalRecordsToolbar(final DataTable<?, ?> table) {
         
@@ -46,9 +47,8 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
 
             @Override
             public String getObject() {
-                return String.format("Showing all of %d %s", 
-                        table.getRowCount(), 
-                        PrototypingMessageProvider.getTookTimingMessage());
+                return String.format("Showing all of %d", 
+                        table.getRowCount());
             }
             
         });
@@ -64,10 +64,10 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
     protected IsisTotalRecordsToolbar(final DataTable<?, ?> table, final IModel<String> messageModel) {
         super(table);
 
-        WebMarkupContainer td = new WebMarkupContainer("td");
-        add(td);
+        WebMarkupContainer container = new WebMarkupContainer(navigatorContainerId);
+        add(container);
 
-        td.add(AttributeModifier.replace("colspan", new IModel<String>()
+        container.add(AttributeModifier.replace("colspan", new IModel<String>()
         {
             private static final long serialVersionUID = 1L;
 
@@ -77,17 +77,20 @@ public class IsisTotalRecordsToolbar extends AbstractToolbar {
                 return String.valueOf(table.getColumns().size()).intern();
             }
         }));
-        td.add(new Label("msg", messageModel));
+        container.add(new Label("navigatorLabel", messageModel));
+        container.add(new Label("prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel()));
     }
 
     /**
-     * Only shows this toolbar when there is only one pages (when there is no page navigation)
+     * only shows this toolbar when there is only one page (when page navigation not available),
+     * and when there are at least 6 elements in the list
+     * 
      */
     @Override
     protected void onConfigure() {
         super.onConfigure();
 
-        if(getTable().getRowCount() == 0) {
+        if(getTable().getRowCount() <= 5) {
             setVisible(false);
             return;
         }

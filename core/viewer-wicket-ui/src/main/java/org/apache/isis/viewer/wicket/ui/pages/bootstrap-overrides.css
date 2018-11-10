@@ -772,6 +772,10 @@ div.referencePanel.scalarNameAndValueComponentType {
     text-decoration: underline;
 }
 
+.navigatorLabel .navigator-prototyping-label {
+    color: silver;
+}
+
 tr.headers th form input {
     margin-left: -8px;
 }

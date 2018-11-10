@@ -38,7 +38,22 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
  */
 class PrototypingMessageProvider {
 
-    public static String getTookTimingMessage() {
+    public static IModel<String> getTookTimingMessageModel() {
+        return new Model<String>() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public String getObject() {
+                return getTookTimingMessage();
+            }
+            
+        };
+    }
+    
+    // -- HELPER
+    
+    private static String getTookTimingMessage() {
         
         final boolean isPrototyping = IsisContext.getEnvironment()
                 .getDeploymentCategory().isPrototyping();
@@ -55,19 +70,6 @@ class PrototypingMessageProvider {
         });
 
         return tookTimingMessage.toString();
-    }
-
-    public static IModel<String> getTookTimingMessageModel() {
-        return new Model<String>() {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public String getObject() {
-                return getTookTimingMessage();
-            }
-            
-        };
     }
 
 }

@@ -33,6 +33,7 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
 
     private static final long serialVersionUID = 1L;
 
+    private static final String navigatorContainerId = "span";
     private static final String ID_SHOW_ALL = "showAll";
     private static final String HINT_KEY_SHOW_ALL = "showAll";
     private final ObjectAdapterToggleboxColumn toggleboxColumn;
@@ -53,9 +54,9 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
     private void addShowAllButton(final DataTable<?, ?> table) {
         table.setOutputMarkupId(true);
 
-        final MarkupContainer span = spanThatContainsNavigatorLabel();
+        final MarkupContainer container = navigatorContainer();
         
-        span.add(new AjaxLink<Void>(ID_SHOW_ALL) {
+        container.add(new AjaxLink<Void>(ID_SHOW_ALL) {
 
             private static final long serialVersionUID = 1L;
 
@@ -80,12 +81,12 @@ public class IsisAjaxNavigationToolbar extends AjaxNavigationToolbar {
             }
         });
         
-        span.add(new Label("prototyping", PrototypingMessageProvider.getTookTimingMessageModel())); 
+        container.add(new Label("prototypingLabel", PrototypingMessageProvider.getTookTimingMessageModel())); 
         
     }
     
-    private MarkupContainer spanThatContainsNavigatorLabel() {
-        return ((MarkupContainer)get("span"));
+    private MarkupContainer navigatorContainer() {
+        return ((MarkupContainer)get(navigatorContainerId));
     }
 
     void honourHints() {
