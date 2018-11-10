@@ -39,22 +39,22 @@
 
 
     <!--
-    http://www.datanucleus.org/documentation/extensions/rdbms_datastore_types.html
+    https://github.com/datanucleus/docs-accessplatform/blob/master/src/main/asciidoc/extensions/_extensions_rdbms_column_mapping.adoc
     -->
-    <extension point="org.datanucleus.store.rdbms.datastore_mapping">
+    <extension point="org.datanucleus.store.rdbms.column_mapping">
         <mapping
                 java-type="[B"
                 jdbc-type="BLOB"
                 sql-type="BLOB"
                 default="true"
-                rdbms-mapping-class="org.apache.isis.objectstore.jdo.datanucleus.valuemappings.ByteArrayBlobRdbmsMapping">
+                column-mapping-class="org.apache.isis.objectstore.jdo.datanucleus.valuemappings.ByteArrayBlobRdbmsMapping">
         </mapping>
         <mapping
                 java-type="[Ljava.lang.Byte;"
                 jdbc-type="BLOB"
                 sql-type="BLOB"
                 default="true"
-                rdbms-mapping-class="org.apache.isis.objectstore.jdo.datanucleus.valuemappings.ByteArrayBlobRdbmsMapping">
+                column-mapping-class="org.apache.isis.objectstore.jdo.datanucleus.valuemappings.ByteArrayBlobRdbmsMapping">
         </mapping>
     </extension>
 
