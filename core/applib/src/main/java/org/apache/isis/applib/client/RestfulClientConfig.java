@@ -18,10 +18,19 @@
  */
 package org.apache.isis.applib.client;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.transform.stream.StreamSource;
+
+import org.apache.isis.applib.anyio.AnyIn;
+import org.apache.isis.applib.anyio.AnyOut;
+import org.apache.isis.applib.anyio.Try;
 
 /**
  * 
@@ -96,6 +105,79 @@ public class RestfulClientConfig {
         this.useRequestDebugLogging = useRequestDebugLogging;
     }
 
-    // --
+    // -- MARSHALLING
+    
+    public static Marshaller createMarshaller() throws JAXBException {
+        Marshaller marshaller = JAXBContext.newInstance(RestfulClientConfig.class).createMarshaller();
+        return marshaller;
+    }
+    
+    public static Unmarshaller createUnmarshaller() throws JAXBException {
+        Unmarshaller unmarshaller = JAXBContext.newInstance(RestfulClientConfig.class).createUnmarshaller();
+        return unmarshaller;
+    }
+
+    // -- READ
+    
+    /**
+     * Tries to read the RestfulClientConfig from universal source {@code in}.
+     * @param in - universal source {@link AnyIn}
+     * @return
+     */
+    public static Try<RestfulClientConfig> tryRead(AnyIn in) {
+        
+        return in.tryApplyInputStream(is->{
+            
+            try {
+                StreamSource source = new StreamSource(is);
+                RestfulClientConfig clientConfig = createUnmarshaller()
+                                    .unmarshal(source, RestfulClientConfig.class).getValue();
+                
+                return Try.success(clientConfig);
+                
+            } catch (JAXBException e) {
+                
+                return Try.failure(e);
+            }
+            
+        });
+        
+    }
+    
+    // -- WRITE
+    
+    /**
+     * Tries to write this RestfulClientConfig to universal sink {@code output}.
+     * @param output - universal sink {@link AnyOut}
+     * @return
+     */
+    public Try<Void> tryWrite(AnyOut output) {
+        return output.tryApplyOutputStream(os->{
+    
+            try {
+
+                createMarshaller().marshal(this, os);
+                return Try.success(null);
+                
+            } catch (JAXBException e) {
+                
+                return Try.failure(e);
+            }
+            
+        });
+    }
+    
+    /**
+     * Writes this RestfulClientConfig to universal sink {@code output}.
+     * @param output - universal sink {@link AnyOut}
+     * @throws Exception
+     */
+    public void write(AnyOut output) throws Exception {
+        
+        Try<Void> _try = tryWrite(output);
+        _try.throwIfFailure();
+        
+    }
+    
 
 }
