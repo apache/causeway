@@ -45,6 +45,7 @@ public class AnyOutBuffer implements AnyOut {
             throw new IllegalStateException("Buffer was already written to.");
         }
         Try<T> _try = outputConsumer.apply(buffer);
+        lastTry = _try;
         return _try;
     }
 
