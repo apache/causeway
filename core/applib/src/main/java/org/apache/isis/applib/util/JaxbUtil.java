@@ -28,11 +28,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
 
-import org.apache.isis.applib.anyio.AnyIn;
-import org.apache.isis.applib.anyio.AnyOut;
-import org.apache.isis.applib.anyio.Try;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.resources._Resources;
@@ -50,75 +46,6 @@ import org.apache.isis.commons.internal.resources._Resources;
 public class JaxbUtil {
 
     private JaxbUtil(){}
-    
-    // -- READ - implemented for AnyIn
-    
-    /**
-     * Tries to read the object from universal source {@code in}.
-     * @param in - universal source {@link AnyIn}
-     * @param dtoClass - object type to be read
-     * @return
-     */
-    public static <T> Try<T> tryReadXml(AnyIn in, final Class<T> dtoClass) {
-        
-        return in.tryApplyInputStream(is->{
-            
-            try {
-                
-                Unmarshaller unmarshaller = jaxbContextFor(dtoClass).createUnmarshaller();
-                
-                StreamSource source = new StreamSource(is);
-                T dto = unmarshaller.unmarshal(source, dtoClass).getValue();
-                
-                return Try.success(dto);
-                
-            } catch (JAXBException e) {
-                
-                return Try.failure(e);
-            }
-            
-        });
-        
-    }
-    
-    // -- WRITE - implemented for AnyOut
-    
-    /**
-     * Tries to write the object to universal sink {@code output}.
-     * @param dto - object to be written
-     * @param output - universal sink {@link AnyOut}
-     * @return
-     */
-    public static <T> Try<Void> tryWriteXml(final T dto, AnyOut output) {
-        return output.tryApplyOutputStream(os->{
-    
-            try {
-
-                final Marshaller marshaller = jaxbContextFor(dto.getClass()).createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-                marshaller.marshal(dto, os);
-                return Try.success(null);
-                
-            } catch (JAXBException e) {
-                
-                return Try.failure(e);
-            }
-            
-        });
-    }
-    
-    /**
-     * Writes the object to universal sink {@code output}.
-     * @param dto - object to be written
-     * @param output - universal sink {@link AnyOut}
-     * @throws Exception
-     */
-    public static <T> void writeXml(final T dto, AnyOut output) throws Exception {
-        
-        Try<Void> _try = tryWriteXml(dto, output);
-        _try.throwIfFailure();
-        
-    }
     
     // -- READ
 
