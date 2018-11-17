@@ -184,6 +184,8 @@ public class IsisSystem {
                     appManifestIfAny,
                     configurationOverride
                     );
+            
+            IsisContext.EnvironmentPrimer.primeEnvironment(configurationOverride);
 
             final IsisSessionFactoryBuilder isisSessionFactoryBuilder = 
                     new IsisSessionFactoryBuilder(componentProvider, appManifestIfAny);

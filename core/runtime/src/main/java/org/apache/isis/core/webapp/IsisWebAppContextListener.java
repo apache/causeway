@@ -81,6 +81,8 @@ public class IsisWebAppContextListener implements ServletContextListener {
         final IsisConfigurationBuilder isisConfigurationBuilder =
                 IsisWebAppConfigProvider.getInstance().getConfigurationBuilder(servletContext);
         isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
+        
+        IsisContext.EnvironmentPrimer.primeEnvironment(isisConfigurationBuilder.getConfiguration());
 
         final List<WebModule> webModules =
                  WebModule.discoverWebModules()
