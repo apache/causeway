@@ -131,7 +131,7 @@ public interface IsisContext {
         private static DeploymentType parseDeploymentType(String deploymentTypeLiteral) {
             
             switch(deploymentTypeLiteral) {
-            case "server_prototyping":
+            case "server_prototype":
             case "prototyping":
                 return DeploymentType.PROTOTYPING;
             case "server":
