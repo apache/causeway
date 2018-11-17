@@ -51,7 +51,7 @@ public interface IsisSystemEnvironment {
                     "true".equalsIgnoreCase(System.getenv("PROTOTYPING"));
             
             anyVoteForPrototyping|=
-                    "server-prototype".equalsIgnoreCase(System.getProperty("isis.deploymentType"));
+                    "server_prototype".equalsIgnoreCase(System.getProperty("isis.deploymentType"));
             
             anyVoteForPrototyping|=
                     "PROTOTYPING".equalsIgnoreCase(System.getProperty("isis.deploymentType"));
