@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.param.autocomplete;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -35,19 +34,16 @@ public abstract class ActionParameterAutoCompleteFacetAbstract extends FacetAbst
         return ActionParameterAutoCompleteFacet.class;
     }
 
-    private final DeploymentCategory deploymentCategory;
     private final SpecificationLoader specificationLoader;
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ObjectAdapterProvider adapterProvider;
 
     public ActionParameterAutoCompleteFacetAbstract(
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final ObjectAdapterProvider adapterProvider) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.deploymentCategory = deploymentCategory;
         this.specificationLoader = specificationLoader;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.adapterProvider = adapterProvider;
@@ -70,10 +66,6 @@ public abstract class ActionParameterAutoCompleteFacetAbstract extends FacetAbst
 
     protected ObjectAdapterProvider getObjectAdapterProvider() {
         return adapterProvider;
-    }
-
-    protected DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
     }
 
     protected AuthenticationSession getAuthenticationSession() {

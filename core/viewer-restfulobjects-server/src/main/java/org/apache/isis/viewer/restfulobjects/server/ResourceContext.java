@@ -41,7 +41,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -52,12 +51,12 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext6;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
-public class ResourceContext implements RendererContext6 {
+public class ResourceContext implements RendererContext {
 
     private final HttpHeaders httpHeaders;
     private final UriInfo uriInfo;
@@ -67,7 +66,6 @@ public class ResourceContext implements RendererContext6 {
     private final HttpServletResponse httpServletResponse;
     private final SecurityContext securityContext;
 
-    private final DeploymentCategory deploymentCategory;
     private final IsisConfiguration configuration;
     private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
@@ -118,7 +116,6 @@ public class ResourceContext implements RendererContext6 {
 
         this.authenticationSession = isisSessionFactory.getCurrentSession().getAuthenticationSession();
         this.specificationLoader = isisSessionFactory.getSpecificationLoader();
-        this.deploymentCategory = isisSessionFactory.getDeploymentCategory();
         this.persistenceSession = isisSessionFactory.getCurrentSession().getPersistenceSession();
 
         this.interactionInitiatedBy = interactionInitiatedBy;
@@ -245,11 +242,6 @@ public class ResourceContext implements RendererContext6 {
 
     public SecurityContext getSecurityContext() {
         return securityContext;
-    }
-
-    @Override
-    public DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
     }
 
     @Override

@@ -37,8 +37,6 @@ import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
@@ -46,7 +44,6 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.core.runtime.services.deplcat.DeploymentCategoryProviderDefault;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
@@ -70,38 +67,29 @@ public class IsisSessionFactoryBuilder {
     // -- constructors, accessors
 
     private final IsisComponentProvider componentProvider;
-    private final DeploymentCategory deploymentCategory;
     private final AppManifest appManifest;
 
     private final IsisLocaleInitializer localeInitializer;
     private final IsisTimeZoneInitializer timeZoneInitializer;
 
     public IsisSessionFactoryBuilder(final AppManifest appManifest) {
-        this(new IsisComponentProviderDefault2(appManifest, null), DeploymentCategory.PRODUCTION, appManifest);
+        this(new IsisComponentProviderDefault2(appManifest, null), appManifest);
     }
 
     public IsisSessionFactoryBuilder(
             final IsisComponentProvider componentProvider,
-            final DeploymentCategory deploymentCategory,
             final AppManifest appManifest) {
 
         this.componentProvider = componentProvider;
-        this.deploymentCategory = deploymentCategory;
         this.appManifest = appManifest;
 
         this.localeInitializer = new IsisLocaleInitializer();
         this.timeZoneInitializer = new IsisTimeZoneInitializer();
     }
 
-    public DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
-    }
-
     public AppManifest getAppManifest() {
         return appManifest;
     }
-
-
 
     // -- buildSessionFactory
 
@@ -126,7 +114,7 @@ public class IsisSessionFactoryBuilder {
         // ValueSemanticsProvider for a date value type) needs to use the Clock singleton
         // we do this after loading the services to allow a service to prime a different clock
         // implementation (eg to use an NTP time service).
-        if (!getDeploymentCategory().isProduction() && !Clock.isInitialized()) {
+        if (!IsisContext.getEnvironment().getDeploymentType().isProduction() && !Clock.isInitialized()) {
             FixtureClock.initialize();
         }
 
@@ -137,12 +125,7 @@ public class IsisSessionFactoryBuilder {
             // the IsisSessionFactory will look up each of these components from the ServicesInjector
 
             final ServicesInjector servicesInjector = componentProvider.provideServiceInjector(configuration);
-
-            // deploymentCategory, configuration
-            servicesInjector.addFallbackIfRequired(
-                    DeploymentCategoryProvider.class, new DeploymentCategoryProviderDefault(deploymentCategory));
             servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, configuration);
-
 
             // fixtureScripts
             servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
@@ -170,7 +153,7 @@ public class IsisSessionFactoryBuilder {
             servicesInjector.validateServices();
 
             // instantiate the IsisSessionFactory
-            isisSessionFactory = new IsisSessionFactory(deploymentCategory, servicesInjector, appManifest);
+            isisSessionFactory = new IsisSessionFactory(servicesInjector, appManifest);
 
             // now, add the IsisSessionFactory itself into ServicesInjector, so it can be @javax.inject.Inject'd
             // into any internal domain services
@@ -212,8 +195,8 @@ public class IsisSessionFactoryBuilder {
                             // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
                             // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
 
-                            authenticationManager.init(deploymentCategory);
-                            authorizationManager.init(deploymentCategory);
+                            authenticationManager.init();
+                            authorizationManager.init();
 
                             return null;
                         }

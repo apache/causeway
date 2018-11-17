@@ -33,8 +33,6 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -81,7 +79,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     private final ObjectSpecification customerSpec = new ObjectSpecificationStub("Customer");
 
     private ServicesInjector mockServicesInjector;
-    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     private ConfigurationServiceInternal stubConfigurationServiceInternal;
     private TranslationService mockTranslationService;
@@ -89,20 +86,20 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
 
     public void setUp() throws Exception {
+        
+        // PRODUCTION
+        
         super.setUp();
         mockServicesInjector = context.mock(ServicesInjector.class);
         mockTranslationService = context.mock(TranslationService.class);
         mockPersistenceSessionServiceInternal = context.mock(PersistenceSessionServiceInternal.class);
 
-        mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
         stubConfigurationServiceInternal = new IsisConfigurationDefault(null);
 
         final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
 
         context.checking(new Expectations() {{
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
 
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));
@@ -119,17 +116,8 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
             allowing(mockServicesInjector).getConfigurationServiceInternal();
             will(returnValue(stubConfigurationServiceInternal));
 
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockServicesInjector).getDeploymentCategoryProvider();
-            will(returnValue(mockDeploymentCategoryProvider));
-
             allowing(mockServicesInjector).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));
-
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
 
             allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
             will(returnValue(mockPersistenceSessionServiceInternal));

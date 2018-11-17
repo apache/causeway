@@ -28,7 +28,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -79,22 +78,22 @@ public class ExplorationAuthenticatorTest {
         assertThat(authenticator.canAuthenticate(someOtherRequest.getClass()), is(false));
     }
 
-    @Test
-    public void isValidExplorationRequestWhenRunningInExplorationMode() throws Exception {
-        authenticator.init(DeploymentCategory.EXPLORING);
-        assertThat(authenticator.isValid(explorationRequest), is(true));
-    }
-
-    @Test
-    public void isNotValidExplorationRequestWhenRunningInSomethingOtherThanExplorationMode() throws Exception {
-        authenticator.init(DeploymentCategory.PROTOTYPING);
-        assertThat(authenticator.isValid(explorationRequest), is(false));
-    }
-
-    @Test
-    public void isValidSomeOtherTypeOfRequest() throws Exception {
-        authenticator.init(DeploymentCategory.PROTOTYPING);
-        assertThat(authenticator.canAuthenticate(someOtherRequest.getClass()), is(false));
-    }
+//    @Test
+//    public void isValidExplorationRequestWhenRunningInExplorationMode() throws Exception {
+//        authenticator.init(DeploymentCategory.EXPLORING);
+//        assertThat(authenticator.isValid(explorationRequest), is(true));
+//    }
+//
+//    @Test
+//    public void isNotValidExplorationRequestWhenRunningInSomethingOtherThanExplorationMode() throws Exception {
+//        authenticator.init(DeploymentCategory.PROTOTYPING);
+//        assertThat(authenticator.isValid(explorationRequest), is(false));
+//    }
+//
+//    @Test
+//    public void isValidSomeOtherTypeOfRequest() throws Exception {
+//        authenticator.init(DeploymentCategory.PROTOTYPING);
+//        assertThat(authenticator.canAuthenticate(someOtherRequest.getClass()), is(false));
+//    }
 
 }

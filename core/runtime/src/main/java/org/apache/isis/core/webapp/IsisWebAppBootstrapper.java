@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 
 import static org.apache.isis.commons.internal._Constants.emptyStringArray;
@@ -68,9 +68,7 @@ public final class IsisWebAppBootstrapper implements ServletContextListener {
                     IsisWebAppConfigProvider.getInstance().getConfigurationBuilder(servletContext);
             isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
 
-            final DeploymentType deploymentType = DeploymentType.get(); 
-                    
-            addConfigurationResourcesForDeploymentType(isisConfigurationBuilder, deploymentType);
+            addConfigurationResourcesForDeploymentType(isisConfigurationBuilder);
 
         } catch (final RuntimeException e) {
             LOG.error("startup failed", e);
@@ -80,9 +78,9 @@ public final class IsisWebAppBootstrapper implements ServletContextListener {
     }
 
     protected void addConfigurationResourcesForDeploymentType(
-            final IsisConfigurationBuilder isisConfigurationBuilder,
-            final DeploymentType deploymentType) {
-        final String resourceName = deploymentType.name().toLowerCase() + ".properties";
+            final IsisConfigurationBuilder isisConfigurationBuilder) {
+        final String resourceName =
+                IsisContext.getEnvironment().getDeploymentType().name().toLowerCase() + ".properties";
         isisConfigurationBuilder.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE, IsisConfigurationDefault.ContainsPolicy.IGNORE);
     }
 

@@ -18,9 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.server;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +38,6 @@ import org.junit.Test;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -51,6 +47,9 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest {
 
@@ -68,10 +67,10 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
     @Mock PersistenceSession mockPersistenceSession;
     @Mock SpecificationLoader mockSpecificationLoader;
 
-    DeploymentCategory deploymentCategory;
     @Before
     public void setUp() throws Exception {
-        deploymentCategory = DeploymentCategory.PRODUCTION;
+            
+        // PRODUCTION
         
         _Context.put(IsisSessionFactory.class, mockIsisSessionFactory, false);
 
@@ -94,8 +93,6 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
                 will(returnValue(mockAuthenticationSession));
                 allowing(mockIsisSessionFactory).getSpecificationLoader();
                 will(returnValue(mockSpecificationLoader));
-                allowing(mockIsisSessionFactory).getDeploymentCategory();
-                will(returnValue(deploymentCategory));
                 allowing(mockIsisSession).getPersistenceSession();
                 will(returnValue(mockPersistenceSession));
             }

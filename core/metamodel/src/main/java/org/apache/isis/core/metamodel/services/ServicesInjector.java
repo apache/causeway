@@ -16,9 +16,6 @@
  */
 package org.apache.isis.core.metamodel.services;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -49,7 +46,6 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.util.ToString;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -58,6 +54,9 @@ import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 /**
  * The repository of services, also able to inject into any object.
@@ -492,14 +491,6 @@ public class ServicesInjector implements ApplicationScopedComponent, ServiceRegi
         return configurationServiceInternal != null
                 ? configurationServiceInternal
                         : (configurationServiceInternal = lookupServiceElseFail(ConfigurationServiceInternal.class));
-    }
-
-    private DeploymentCategoryProvider deploymentCategoryProvider;
-    @Programmatic
-    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
-        return deploymentCategoryProvider != null
-                ? deploymentCategoryProvider
-                        : (deploymentCategoryProvider = lookupServiceElseFail(DeploymentCategoryProvider.class));
     }
 
 }

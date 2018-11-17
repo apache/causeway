@@ -38,7 +38,14 @@ public final class InteractionUtils {
         final Stream<Facet> facets = facetHolder.streamFacets().filter(isA(HidingInteractionAdvisor.class));
         facets.forEach(facet->{
             final HidingInteractionAdvisor advisor = (HidingInteractionAdvisor) facet;
-            result.advise(advisor.hides(context), advisor);
+            
+            String hides = advisor.hides(context);
+            
+            if(hides!=null) {
+                System.out.println("!!! advisor: " + advisor + " hides " + context.getIdentifier()+ " -> "+hides);    
+            }
+            
+            result.advise(hides, advisor);
         });
         return result;
     }

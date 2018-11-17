@@ -36,7 +36,6 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.url.UrlDecoderUtil;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -70,11 +69,11 @@ public class ResourceContextTest_getArg {
 
     private ResourceContext resourceContext;
 
-    DeploymentCategory deploymentCategory;
 
     @Before
     public void setUp() throws Exception {
-        deploymentCategory = DeploymentCategory.PRODUCTION;
+
+        // PRODUCTION;
 
         _Context.put(IsisSessionFactory.class, mockIsisSessionFactory, false);
         
@@ -97,8 +96,6 @@ public class ResourceContextTest_getArg {
                 will(returnValue(mockAuthenticationSession));
                 allowing(mockIsisSessionFactory).getSpecificationLoader();
                 will(returnValue(mockSpecificationLoader));
-                allowing(mockIsisSessionFactory).getDeploymentCategory();
-                will(returnValue(deploymentCategory));
                 allowing(mockIsisSession).getPersistenceSession();
                 will(returnValue(mockPersistenceSession));
             }

@@ -27,7 +27,7 @@ import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(nature = NatureOfService.DOMAIN)
@@ -35,7 +35,7 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
 
     @Override
     public boolean supportsReloading() {
-        return !deploymentCategoryProvider.getDeploymentCategory().isProduction();
+        return !IsisContext.getEnvironment().getDeploymentType().isProduction();
     }
 
     @Override
@@ -51,9 +51,6 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
             return null;
         }
     }
-
-    @javax.inject.Inject
-    DeploymentCategoryProvider deploymentCategoryProvider;
 
     @javax.inject.Inject
     JaxbService jaxbService;

@@ -17,8 +17,6 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -40,10 +38,10 @@ import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.actions.action.associateWith.AssociatedWithFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -57,6 +55,8 @@ import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetCo
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public interface ObjectAction extends ObjectMember {
 
@@ -277,12 +277,11 @@ public interface ObjectAction extends ObjectMember {
 
 
         public static List<ObjectAction> findTopLevel(
-                final ObjectAdapter adapter,
-                final DeploymentCategory deploymentCategory) {
+                final ObjectAdapter adapter) {
             final List<ObjectAction> topLevelActions = _Lists.newArrayList();
 
             addTopLevelActions(adapter, ActionType.USER, topLevelActions);
-            if(deploymentCategory.isPrototyping()) {
+            if(_Context.getEnvironment().getDeploymentType().isPrototyping()) {
                 addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
             }
             return topLevelActions;
@@ -312,11 +311,12 @@ public interface ObjectAction extends ObjectMember {
 
         public static List<ObjectAction> findForAssociation(
                 final ObjectAdapter adapter,
-                final ObjectAssociation association, final DeploymentCategory deploymentCategory) {
+                final ObjectAssociation association) {
+            
             final List<ObjectAction> associatedActions = _Lists.newArrayList();
 
             addActions(adapter, ActionType.USER, association, associatedActions);
-            if(deploymentCategory.isPrototyping()) {
+            if(_Context.getEnvironment().getDeploymentType().isPrototyping()) {
                 addActions(adapter, ActionType.PROTOTYPE, association, associatedActions);
             }
 

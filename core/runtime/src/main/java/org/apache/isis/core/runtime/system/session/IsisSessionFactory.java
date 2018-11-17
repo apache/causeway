@@ -36,17 +36,16 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.appmanifest.AppManifestProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.plugins.environment.DeploymentType;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.MessageRegistry;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
@@ -77,7 +76,6 @@ implements ApplicationScopedComponent, AppManifestProvider {
 
     // -- constructor, fields, accessors
 
-    private final DeploymentCategory deploymentCategory;
     private final IsisConfiguration configuration;
     private final SpecificationLoader specificationLoader;
     private final ServicesInjector servicesInjector;
@@ -87,12 +85,10 @@ implements ApplicationScopedComponent, AppManifestProvider {
     private final AppManifest appManifest;
 
     public IsisSessionFactory(
-            final DeploymentCategory deploymentCategory,
             final ServicesInjector servicesInjector,
             final AppManifest appManifest) {
 
         this.servicesInjector = servicesInjector;
-        this.deploymentCategory = deploymentCategory;
 
         this.configuration = servicesInjector.getConfigurationServiceInternal();
         this.specificationLoader = servicesInjector.getSpecificationLoader();
@@ -148,7 +144,7 @@ implements ApplicationScopedComponent, AppManifestProvider {
             fixtureInstaller.installFixtures();
 
             // only allow logon fixtures if not in production mode.
-            if (!deploymentCategory.isProduction()) {
+            if (!IsisContext.getEnvironment().getDeploymentType().isProduction()) {
                 logonFixture = fixtureInstaller.getLogonFixture();
             }
 
@@ -380,14 +376,6 @@ implements ApplicationScopedComponent, AppManifestProvider {
 
 
     // -- component accessors
-    /**
-     * The {@link ApplicationScopedComponent application-scoped}
-     * {@link DeploymentCategory}.
-     */
-    @Programmatic
-    public DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
-    }
 
     /**
      * The {@link ApplicationScopedComponent application-scoped}

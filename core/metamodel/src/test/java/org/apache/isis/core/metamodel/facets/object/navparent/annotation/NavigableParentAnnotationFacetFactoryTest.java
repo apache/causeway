@@ -20,24 +20,23 @@ package org.apache.isis.core.metamodel.facets.object.navparent.annotation;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.reflection.Reflect;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
-import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
-import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.reflection.Reflect;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
+import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
+import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
 
 public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -51,6 +50,8 @@ public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFact
     @Before
     public void setUp() throws Exception {
 
+        // PRODUCTION
+        
         context.allowing(mockSpecificationLoader);
 
         facetFactory = new NavigableParentAnnotationFacetFactory();
@@ -60,12 +61,6 @@ public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFact
             {
                 allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
                 will(returnValue(mockAuthenticationSessionProvider));
-
-                allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-                will(returnValue(mockDeploymentCategoryProvider));
-
-                allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-                will(returnValue(DeploymentCategory.PRODUCTION));
 
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(mockAuthenticationSession));

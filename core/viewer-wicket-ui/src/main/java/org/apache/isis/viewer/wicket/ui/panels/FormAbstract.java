@@ -25,7 +25,6 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -107,10 +106,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
 
     protected  AuthenticationSession getAuthenticationSession() {
         return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
-    }
-
-    protected DeploymentCategory getDeploymentCategory() {
-        return getIsisSessionFactory().getDeploymentCategory();
     }
 
     public SpecificationLoader getSpecificationLoader() {

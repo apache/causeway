@@ -19,10 +19,6 @@
 
 package org.apache.isis.commons.internal.context;
 
-import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
-import static org.apache.isis.commons.internal.base._With.ifPresentElseThrow;
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +28,12 @@ import java.util.function.Supplier;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
+import org.apache.isis.core.plugins.environment.IsisSystemEnvironmentPlugin;
+
+import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
+import static org.apache.isis.commons.internal.base._With.ifPresentElseThrow;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>
@@ -237,12 +239,20 @@ public final class _Context {
         return Class.forName(className, true, getDefaultClassLoader());
     }
 
+    // -- ENVIRONMENT
+    
+    public static IsisSystemEnvironment getEnvironment() {
+        return getOrElse(IsisSystemEnvironment.class, 
+                IsisSystemEnvironmentPlugin.get()::getIsisSystemEnvironment);
+    }
 
     // -- HELPER
 
     private static String toKey(Class<?> type) {
         return type.getName();
     }
+
+
 
 
 }

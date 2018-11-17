@@ -79,7 +79,7 @@ BulkActionsProvider {
         final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
 
         final List<ObjectAction> associatedActions =
-                ObjectAction.Util.findForAssociation(adapter, otma, getDeploymentCategory());
+                ObjectAction.Util.findForAssociation(adapter, otma);
 
         associatedWithActionsHelper = new AssociatedWithActionsHelper(collectionModel);
 

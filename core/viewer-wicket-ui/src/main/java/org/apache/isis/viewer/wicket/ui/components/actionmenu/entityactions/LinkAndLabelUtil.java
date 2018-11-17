@@ -25,7 +25,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -39,8 +38,7 @@ public final class LinkAndLabelUtil {
     private LinkAndLabelUtil(){}
 
     public static List<LinkAndLabel> asActionLinksForAssociation(
-            final ScalarModel scalarModelForAssociation,
-            final DeploymentCategory deploymentCategory) {
+            final ScalarModel scalarModelForAssociation) {
 
         if (scalarModelForAssociation.getKind() != ScalarModel.Kind.PROPERTY) {
             return Collections.emptyList();
@@ -54,7 +52,7 @@ public final class LinkAndLabelUtil {
                 scalarModelForAssociation.getPropertyMemento().getProperty(scalarModelForAssociation.getSpecificationLoader());
 
         final List<ObjectAction> associatedActions =
-                ObjectAction.Util.findForAssociation(parentAdapter, oneToOneAssociation, deploymentCategory);
+                ObjectAction.Util.findForAssociation(parentAdapter, oneToOneAssociation);
 
         return asActionLinksForAdditionalLinksPanel(parentEntityModel, associatedActions,
                 scalarModelForAssociation);

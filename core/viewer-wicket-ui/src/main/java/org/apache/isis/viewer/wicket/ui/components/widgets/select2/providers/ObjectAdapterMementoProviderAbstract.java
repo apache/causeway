@@ -20,16 +20,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.isis.commons.internal.collections._Lists;
-import org.wicketstuff.select2.ChoiceProvider;
 import org.apache.wicket.Session;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
+import org.wicketstuff.select2.ChoiceProvider;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -146,10 +145,6 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
 
     public AuthenticationSession getAuthenticationSession() {
         return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
-    }
-
-    public DeploymentCategory getDeploymentCategory() {
-        return getIsisSessionFactory().getDeploymentCategory();
     }
 
 

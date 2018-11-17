@@ -28,7 +28,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -37,7 +36,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext6;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
@@ -52,14 +51,14 @@ import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 
 public class DomainResourceHelper {
 
-    static class RepresentationServiceContextAdapter implements RepresentationService.Context6 {
+    static class RepresentationServiceContextAdapter implements RepresentationService.Context {
 
-        private final RendererContext6 rendererContext;
+        private final RendererContext rendererContext;
         private final ObjectAdapterLinkTo adapterLinkTo;
         private RepresentationService.Intent intent;
 
         RepresentationServiceContextAdapter(
-                final RendererContext6 rendererContext,
+                final RendererContext rendererContext,
                 final ObjectAdapterLinkTo adapterLinkTo) {
             this.rendererContext = rendererContext;
             this.adapterLinkTo = adapterLinkTo;
@@ -94,11 +93,6 @@ public class DomainResourceHelper {
         @Override
         public Where getWhere() {
             return rendererContext.getWhere();
-        }
-
-        @Override
-        public DeploymentCategory getDeploymentCategory() {
-            return rendererContext.getDeploymentCategory();
         }
 
         @Override

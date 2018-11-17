@@ -100,7 +100,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
      */
     @Override
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAdapter objectAdapter) {
 
         boolean canAccept = canAccept(rendererContext);
@@ -137,7 +137,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAndProperty objectAndProperty)  {
 
         return null;
@@ -150,7 +150,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAndCollection objectAndCollection) {
 
         if(!canAccept(rendererContext)) {
@@ -193,7 +193,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAndAction objectAndAction)  {
         return null;
     }
@@ -210,7 +210,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
         if(!canAccept(rendererContext)) {
@@ -290,19 +290,19 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
         return responseBuilder;
     }
 
-    boolean canAccept(final RepresentationService.Context2 rendererContext) {
+    boolean canAccept(final RepresentationService.Context rendererContext) {
         final List<MediaType> acceptableMediaTypes = rendererContext.getAcceptableMediaTypes();
         return mediaTypeParameterMatches(acceptableMediaTypes, "profile", ACCEPT_PROFILE);
     }
 
     protected EnumSet<SuppressionType> suppress(
-            final RepresentationService.Context2 rendererContext) {
+            final RepresentationService.Context rendererContext) {
         final List<MediaType> acceptableMediaTypes = rendererContext.getAcceptableMediaTypes();
         return SuppressionType.ParseUtil.parse(mediaTypeParameterList(acceptableMediaTypes, "suppress"));
     }
     
     private void appendObjectTo(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAdapter objectAdapter,
             final JsonRepresentation rootRepresentation,
             final EnumSet<SuppressionType> suppression) {
@@ -330,7 +330,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     }
 
     private void appendPropertiesTo(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAdapter objectAdapter,
             final JsonRepresentation rootRepresentation,
             final EnumSet<SuppressionType> suppression) {
@@ -385,7 +385,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     }
 
     private void appendCollectionTo(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAdapter objectAdapter,
             final OneToManyAssociation collection,
             final JsonRepresentation representation, 
@@ -402,7 +402,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
     }
 
     private void appendStreamTo(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final Stream<ObjectAdapter> adapters,
             final JsonRepresentation collectionRepresentation, 
             final EnumSet<SuppressionType> suppression) {
@@ -417,12 +417,7 @@ public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiation
 
     private static InteractionInitiatedBy determineInteractionInitiatedByFrom(
             final RendererContext rendererContext) {
-        if (rendererContext instanceof RepresentationService.Context4) {
-            return ((RepresentationService.Context4) rendererContext).getInteractionInitiatedBy();
-        } else {
-            // fallback
-            return InteractionInitiatedBy.USER;
-        }
+        return rendererContext.getInteractionInitiatedBy();
     }
 
 }

@@ -23,30 +23,30 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.RestrictTo;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
+import org.apache.isis.core.plugins.environment.DeploymentType;
 
 public class PrototypeFacetForActionAnnotation extends PrototypeFacetAbstract {
 
     public static PrototypeFacet create(
             final List<Action> actions,
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory) {
-
+            final DeploymentType deploymentType) {
+        
         return actions.stream()
                 .map(Action::restrictTo)
                 .filter(restrictTo -> restrictTo != RestrictTo.NOT_SPECIFIED)
                 .filter(restrictTo -> restrictTo == RestrictTo.PROTOTYPING)
                 .findFirst()
-                .map(restrictTo -> new PrototypeFacetForActionAnnotation(holder, deploymentCategory))
+                .map(restrictTo -> new PrototypeFacetForActionAnnotation(holder, deploymentType))
                 .orElse(null);
 
     }
 
-    private PrototypeFacetForActionAnnotation(FacetHolder holder, final DeploymentCategory deploymentCategory) {
-        super(holder, deploymentCategory);
+    private PrototypeFacetForActionAnnotation(FacetHolder holder, final DeploymentType deploymentType) {
+        super(holder, deploymentType);
     }
 
 }

@@ -22,9 +22,9 @@ import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.plugins.environment.DeploymentType;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.junit.Assert.assertEquals;
@@ -41,14 +41,13 @@ public class PrototypeFacetAbstractTest {
 
     @Test
     public void allCombinations() throws Exception {
-        givenWhenThen(DeploymentCategory.EXPLORING, null);
-        givenWhenThen(DeploymentCategory.PROTOTYPING, null);
-        givenWhenThen(DeploymentCategory.PRODUCTION, "Prototyping action not visible in production mode");
+        givenWhenThen(DeploymentType.PROTOTYPING, null);
+        givenWhenThen(DeploymentType.PRODUCTION, "Prototyping action not visible in production mode");
     }
 
-    protected void givenWhenThen(final DeploymentCategory deploymentCategory, final String expected) {
+    protected void givenWhenThen(final DeploymentType deploymentType, final String expected) {
         // given
-        final PrototypeFacetAbstract facet = new PrototypeFacetAbstract(mockFacetHolder, deploymentCategory){};
+        final PrototypeFacetAbstract facet = new PrototypeFacetAbstract(mockFacetHolder, deploymentType){};
 
         // when
         final String reason = facet.hides(mockVisibilityContext);

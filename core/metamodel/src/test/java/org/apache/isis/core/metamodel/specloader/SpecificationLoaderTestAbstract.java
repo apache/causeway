@@ -35,8 +35,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -60,8 +58,6 @@ public abstract class SpecificationLoaderTestAbstract {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Mock
-    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
-    @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
     private GridService mockGridService;
@@ -81,11 +77,10 @@ public abstract class SpecificationLoaderTestAbstract {
 
     @Before
     public void setUp() throws Exception {
+        
+        // PRODUCTION
 
         context.checking(new Expectations() {{
-
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
 
             ignoring(mockGridService).existsFor(with(any(Class.class)));
 
@@ -101,11 +96,9 @@ public abstract class SpecificationLoaderTestAbstract {
                     _Lists.of(
                         mockAuthenticationSessionProvider,
                         stubConfiguration,
-                        mockDeploymentCategoryProvider,
                         mockPersistenceSessionServiceInternal,
                             mockMessageService,
-                        mockGridService,
-                        mockDeploymentCategoryProvider),
+                        mockGridService),
                     stubConfiguration);
 
         specificationLoader = new SpecificationLoader(

@@ -86,7 +86,7 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
             FacetUtil.addFacet(
                     new ActionParameterAutoCompleteFacetViaMethod(
                             autoCompleteMethod, paramType, paramAsHolder,
-                            getDeploymentCategory(), getSpecificationLoader(),
+                            getSpecificationLoader(),
                             getAuthenticationSessionProvider(), adapterProvider));
         }
     }

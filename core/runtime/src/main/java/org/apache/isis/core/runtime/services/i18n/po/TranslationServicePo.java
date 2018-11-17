@@ -32,8 +32,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -91,7 +90,7 @@ public class TranslationServicePo implements TranslationService {
     }
 
     protected boolean isPrototypeOrTest() {
-        return !getDeploymentCategory().isProduction();
+        return !IsisContext.getEnvironment().getDeploymentType().isProduction();
     }
 
     @Programmatic
@@ -172,13 +171,6 @@ public class TranslationServicePo implements TranslationService {
     }
 
     // //////////////////////////////////////
-
-    DeploymentCategory getDeploymentCategory() {
-        return deploymentCategoryProvider.getDeploymentCategory();
-    }
-
-    @javax.inject.Inject
-    DeploymentCategoryProvider deploymentCategoryProvider;
 
     @javax.inject.Inject
     private TranslationsResolver translationsResolver;

@@ -31,7 +31,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -65,17 +64,14 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
         return ChoicesFacet.class;
     }
 
-    private final DeploymentCategory deploymentCategory;
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 
     public ChoicesFacetFromBoundedAbstract(
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.deploymentCategory = deploymentCategory;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.persistenceSessionServiceInternal = persistenceSessionServiceInternal;
     }
@@ -135,10 +131,6 @@ implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvis
         return _NullSafe.stream(adapters)
                 .map(ObjectAdapter.Util::unwrapPojo)
                 .collect(_Arrays.toArray(Object.class, _NullSafe.size(adapters)));
-    }
-
-    protected DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
     }
 
     protected AuthenticationSession getAuthenticationSession() {

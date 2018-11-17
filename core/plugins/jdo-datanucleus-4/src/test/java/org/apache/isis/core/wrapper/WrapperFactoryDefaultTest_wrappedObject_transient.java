@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.wrapper;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
@@ -50,8 +47,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.Veto;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
@@ -68,6 +63,9 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 /**
  * Contract test.
  */
@@ -80,8 +78,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     private ObjectAdapterProvider mockAdapterManager;
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    @Mock
-    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
+    
     @Mock
     private IsisConfiguration mockConfiguration;
     @Mock
@@ -122,6 +119,8 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
     @Before
     public void setUp() throws Exception {
+        
+        // PRODUCTION
 
         employeeDO = new Employee();
         employeeDO.setName("Smith");
@@ -153,9 +152,6 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
                 allowing(mockServicesInjector).getSpecificationLoader();
                 will(returnValue(mockSpecificationLoader));
-
-                allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-                will(returnValue(DeploymentCategory.PRODUCTION));
 
 //                allowing(mockAdapterManager).lookupAdapterFor(employeeDO);
 //                will(returnValue(mockEmployeeAdapter));
@@ -287,7 +283,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         // and given
         facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(mockOnType, getPasswordMethod, mockPasswordMember,
-                mockDeploymentCategoryProvider.getDeploymentCategory(), mockConfiguration, mockSpecificationLoader,
+                mockConfiguration, mockSpecificationLoader,
                 mockAuthenticationSessionProvider, mockAdapterManager
         ));
         context.checking(new Expectations() {

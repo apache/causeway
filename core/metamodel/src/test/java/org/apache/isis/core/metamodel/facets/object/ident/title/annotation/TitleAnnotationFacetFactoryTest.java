@@ -34,8 +34,6 @@ import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -59,6 +57,8 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
     @Before
     public void setUp() throws Exception {
+        
+        // PRODUCTION
 
         context.allowing(mockSpecificationLoader);
 
@@ -69,12 +69,6 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
             {
                 allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
                 will(returnValue(mockAuthenticationSessionProvider));
-
-                allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-                will(returnValue(mockDeploymentCategoryProvider));
-
-                allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-                will(returnValue(DeploymentCategory.PRODUCTION));
 
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(mockAuthenticationSession));

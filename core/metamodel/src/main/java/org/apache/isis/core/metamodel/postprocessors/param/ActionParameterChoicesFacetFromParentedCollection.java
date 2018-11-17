@@ -26,7 +26,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
@@ -41,11 +40,10 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
     public ActionParameterChoicesFacetFromParentedCollection(
             final FacetHolder holder,
             final OneToManyAssociation otma,
-            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final ObjectAdapterProvider adapterProvider) {
-        super(holder, deploymentCategory, specificationLoader, authenticationSessionProvider, adapterProvider);
+        super(holder, specificationLoader, authenticationSessionProvider, adapterProvider);
         this.otma = otma;
     }
 

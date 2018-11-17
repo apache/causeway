@@ -350,7 +350,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelW
     private List<ObjectAdapterMemento> obtainChoiceMementos(final ObjectAdapter[] argsIfAvailable) {
         final List<ObjectAdapter> choices = _Lists.newArrayList();
         if(getModel().hasChoices()) {
-            choices.addAll(getModel().getChoices(argsIfAvailable, getAuthenticationSession(), getDeploymentCategory()));
+            choices.addAll(getModel().getChoices(argsIfAvailable, getAuthenticationSession()));
         }
         return _Lists.map(choices, ObjectAdapterMemento.Functions.fromAdapter());
     }

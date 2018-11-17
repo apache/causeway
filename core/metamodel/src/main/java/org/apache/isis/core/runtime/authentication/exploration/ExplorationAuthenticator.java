@@ -42,7 +42,9 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
  * <pre>
  * &lt;:userName&gt; [:&lt;role&gt;[|&lt;role&gt;]...], &lt;userName&gt;...
  * </pre>
+ * @deprecated no longer supported
  */
+@Deprecated
 public class ExplorationAuthenticator extends AuthenticatorAbstract {
 
     // -- Constructor, fields
@@ -103,7 +105,7 @@ public class ExplorationAuthenticator extends AuthenticatorAbstract {
 
     @Override
     protected final boolean isValid(final AuthenticationRequest request) {
-        return getDeploymentCategory().isExploring();
+        return false; //was true only for deprecated exploring mode
     }
 
     @Override

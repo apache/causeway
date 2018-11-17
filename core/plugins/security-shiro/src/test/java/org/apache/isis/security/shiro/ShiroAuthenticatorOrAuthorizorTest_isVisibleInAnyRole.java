@@ -33,7 +33,6 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -55,13 +54,15 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
     @Before
     public void setUp() throws Exception {
     	
+        // PRODUCTION
+        
     	context.checking(new Expectations() {{
             allowing(mockConfiguration).getBoolean("isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated", false);
             will(returnValue(false));
         }});
     	
         authOrAuth = new ShiroAuthenticatorOrAuthorizor(mockConfiguration);
-        authOrAuth.init(DeploymentCategory.PRODUCTION);
+        authOrAuth.init();
     }
 
     @After

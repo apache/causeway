@@ -30,7 +30,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -49,12 +48,11 @@ implements ImperativeFacet {
             final ObjectSpecification typeSpec,
             final Method method,
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
             final IsisConfiguration isisConfiguration,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final ObjectAdapterProvider adapterManager) {
-        super(typeSpec, holder, deploymentCategory, isisConfiguration, specificationLoader, authenticationSessionProvider, adapterManager);
+        super(typeSpec, holder, isisConfiguration, specificationLoader, authenticationSessionProvider, adapterManager);
         this.method = method;
     }
 

@@ -56,7 +56,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext2,
             final ObjectAdapter objectAdapter) {
         return null;
     }
@@ -64,7 +64,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext2,
             final ObjectAndProperty objectAndProperty)  {
         return null;
     }
@@ -72,7 +72,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext2,
             final ObjectAndCollection objectAndCollection) {
         return null;
     }
@@ -80,7 +80,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext2,
             final ObjectAndAction objectAndAction)  {
         return null;
     }
@@ -88,7 +88,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     @Override
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext2,
             final ObjectAndActionInvocation objectAndActionInvocation) {
         return null;
     }

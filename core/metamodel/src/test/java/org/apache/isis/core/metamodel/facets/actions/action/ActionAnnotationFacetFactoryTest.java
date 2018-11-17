@@ -19,13 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.UUID;
@@ -46,8 +39,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -75,6 +66,13 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings({"hiding", "serial"})
 public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
@@ -105,6 +103,9 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
     @Before
     public void setUp() throws Exception {
+        
+        // PRODUCTION
+        
         facetFactory = new ActionAnnotationFacetFactory();
 
         context.checking(new Expectations() {{
@@ -113,12 +114,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             allowing(mockServicesInjector).getConfigurationServiceInternal();
             will(returnValue(mockConfiguration));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
 
         }});
 

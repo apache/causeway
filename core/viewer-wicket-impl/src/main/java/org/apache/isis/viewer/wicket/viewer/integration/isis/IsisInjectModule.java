@@ -31,8 +31,8 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.plugins.environment.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -75,13 +75,13 @@ public class IsisInjectModule extends AbstractModule {
         }
     };
 
-    private final DeploymentCategory deploymentCategory;
+    //private final DeploymentCategory deploymentCategory;
     private final IsisConfigurationDefault isisConfiguration;
 
     public IsisInjectModule(
             final IsisConfigurationDefault isisConfiguration) {
         this.isisConfiguration = isisConfiguration;
-        this.deploymentCategory = IsisContext.getEnvironment().getDeploymentCategory();
+        //this.deploymentCategory = IsisContext.getEnvironment().getDeploymentCategory();
     }
 
     /**
@@ -106,13 +106,10 @@ public class IsisInjectModule extends AbstractModule {
         return isisConfiguration;
     }
 
-    /**
-     * Simply as provided in the constructor.
-     */
     @Provides
     @Singleton
-    protected DeploymentCategory provideDeploymentCategory() {
-        return deploymentCategory;
+    protected DeploymentType provideDeploymentType() {
+        return IsisContext.getEnvironment().getDeploymentType();
     }
 
     @Provides
@@ -127,7 +124,7 @@ public class IsisInjectModule extends AbstractModule {
                 new IsisComponentProviderUsingInstallers(appManifestToUse, isisConfiguration);
 
         final IsisSessionFactoryBuilder builder =
-                new IsisSessionFactoryBuilder(componentProvider, deploymentCategory, componentProvider.getAppManifest());
+                new IsisSessionFactoryBuilder(componentProvider, componentProvider.getAppManifest());
 
         // as a side-effect, if the metamodel turns out to be invalid, then
         // this will push the MetaModelInvalidException into IsisContext.

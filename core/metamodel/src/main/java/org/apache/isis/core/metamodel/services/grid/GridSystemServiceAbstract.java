@@ -53,7 +53,7 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -173,7 +173,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
             }
         } else {
 
-            if(!deploymentCategoryProvider.getDeploymentCategory().isProduction()) {
+            if(_Context.getEnvironment().getDeploymentType().isPrototyping()) {
                 messageService.warnUser("Grid metadata errors for " + grid.getDomainClass().getName() + "; check the error log");
             }
             LOG.error("Grid metadata errors:\n\n{}\n\n", jaxbService.toXml(grid));
@@ -702,9 +702,5 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
 
     @javax.inject.Inject
     protected MessageService messageService;
-
-    @javax.inject.Inject
-    DeploymentCategoryProvider deploymentCategoryProvider;
-
 
 }

@@ -21,6 +21,10 @@ package org.apache.isis.core.runtime.authentication.exploration;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 
+/**
+* @deprecated no longer supported
+*/
+@Deprecated
 public final class ExplorationAuthenticatorConstants {
 
     public static final String USERS = ConfigurationConstants.ROOT + "exploration.users";

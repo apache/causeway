@@ -82,7 +82,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAdapter objectAdapter) {
 
         final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
@@ -98,7 +98,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
      * Not API
      */
     ResponseBuilder buildResponseTo(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAdapter objectAdapter,
             final JsonRepresentation representationIfAnyRequired,
             final JsonRepresentation rootRepresentation) {
@@ -109,9 +109,8 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
 
-        if(rendererContext instanceof RepresentationService.Context6) {
-            final RepresentationService.Context6 context6 = (RepresentationService.Context6) rendererContext;
-            final RepresentationService.Intent intent = context6.getIntent();
+        if(true) {
+            final RepresentationService.Intent intent = rendererContext.getIntent();
             if(intent == RepresentationService.Intent.JUST_CREATED) {
                 responseBuilder.status(Response.Status.CREATED);
             }
@@ -130,7 +129,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAndProperty objectAndProperty) {
 
         final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
@@ -153,7 +152,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAndCollection objectAndCollection) {
 
         final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
@@ -169,7 +168,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
      * Not API
      */
     ResponseBuilder buildResponseTo(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAndCollection objectAndCollection,
             final JsonRepresentation representation,
             final JsonRepresentation rootRepresentation) {
@@ -189,7 +188,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAndAction objectAndAction) {
 
         final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
@@ -207,7 +206,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
         final ResponseBuilder responseBuilder;
@@ -333,7 +332,7 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
      * Not API
      */
     ResponseBuilder buildResponseTo(
-            final RepresentationService.Context2 rendererContext,
+            final RepresentationService.Context rendererContext,
             final ObjectAndActionInvocation objectAndActionInvocation,
             final JsonRepresentation representation,
             final JsonRepresentation rootRepresentation) {

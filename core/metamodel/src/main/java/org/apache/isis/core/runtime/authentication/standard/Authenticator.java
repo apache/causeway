@@ -21,15 +21,12 @@ package org.apache.isis.core.runtime.authentication.standard;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
 public interface Authenticator extends ApplicationScopedComponent {
 
-    void init(final DeploymentCategory deploymentCategory);
+    void init();
     void shutdown();
-
-    DeploymentCategory getDeploymentCategory();
 
     /**
      * Whether the provided {@link AuthenticationRequest} is recognized by this

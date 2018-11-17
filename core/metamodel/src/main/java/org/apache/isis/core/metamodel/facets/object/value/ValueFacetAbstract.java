@@ -27,7 +27,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -172,10 +171,6 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
     // /////////////////////////////////////////
     // Dependencies (from constructor)
     // /////////////////////////////////////////
-
-    protected DeploymentCategory getDeploymentCategory(final ServicesInjector servicesInjector) {
-        return servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
-    }
 
     private ObjectAdapterProvider getObjectAdapterProvider() {
         return servicesInjector.getPersistenceSessionServiceInternal();

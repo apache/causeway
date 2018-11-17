@@ -76,10 +76,8 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
@@ -108,6 +106,8 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjec
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
 
+import static java.util.Objects.requireNonNull;
+
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
@@ -117,7 +117,6 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvid
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
-import static java.util.Objects.requireNonNull;
 import net.ftlines.wicketsource.WicketSource;
 
 /**
@@ -213,12 +212,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
      */
     @com.google.inject.Inject
     private IsisSessionFactory isisSessionFactory;
-
-    /**
-     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
-     */
-    @com.google.inject.Inject
-    private DeploymentCategory deploymentCategory;
 
     @com.google.inject.Inject
     private WicketViewerSettings settings;
@@ -356,7 +349,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                 log(mmie.getValidationErrors());
             }
 
-            if(getDeploymentCategory().isPrototyping()) {
+            if(IsisContext.getEnvironment().getDeploymentType().isPrototyping()) {
                 DebugDiskDataStore.register(this);
                 LOG.info("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
                 LOG.info("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
@@ -439,9 +432,9 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
      * app is restarted.
      */
     protected String defaultEncryptionKeyIfNotConfigured() {
-        return getDeploymentCategory().isProduction()
-                ? UUID.randomUUID().toString()
-                        : "PrototypingEncryptionKey";
+        return IsisContext.getEnvironment().getDeploymentType().isPrototyping()
+                ? "PrototypingEncryptionKey"
+                        : UUID.randomUUID().toString();
     }
 
     private void log(final Set<String> validationErrors) {
@@ -473,7 +466,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     }
 
     protected void configureWicketSourcePlugin() {
-        if(!deploymentCategory.isProduction()) {
+        if(IsisContext.getEnvironment().getDeploymentType().isPrototyping()) {
             WicketSource.configure(this);
         }
     }
@@ -739,7 +732,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     @Override //[ahuber] final on purpose! to switch DeploymentType, do this consistent with IsisContext.
     public final RuntimeConfigurationType getConfigurationType() {
-        return DeploymentType.get().isPrototyping()
+        return IsisContext.getEnvironment().getDeploymentType().isPrototyping()
                 ? RuntimeConfigurationType.DEVELOPMENT
                         : RuntimeConfigurationType.DEPLOYMENT;
     }
@@ -853,10 +846,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     public AuthenticationSession getAuthenticationSession() {
         return isisSessionFactory.getCurrentSession().getAuthenticationSession();
-    }
-
-    public DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
     }
 
     @Override

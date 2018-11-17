@@ -237,7 +237,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(bounded=...)
-        Facet facet = ChoicesFacetForDomainObjectAnnotation.create(domainObjects, facetHolder, getDeploymentCategory(), getAuthenticationSessionProvider(), persistenceSessionServiceInternal);
+        Facet facet = ChoicesFacetForDomainObjectAnnotation.create(domainObjects, facetHolder, getAuthenticationSessionProvider(), persistenceSessionServiceInternal);
 
         // then add
         FacetUtil.addFacet(facet);

@@ -19,42 +19,42 @@
 
 package org.apache.isis.core.metamodel.facets.actions.prototype;
 
-import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.plugins.environment.DeploymentType;
 
 public abstract class PrototypeFacetAbstract extends MarkerFacetAbstract implements PrototypeFacet {
 
-    private final DeploymentCategory deploymentCategory;
+    private final DeploymentType deploymentType;
 
     public static Class<? extends Facet> type() {
         return PrototypeFacet.class;
     }
 
-    public PrototypeFacetAbstract(final FacetHolder holder, final DeploymentCategory deploymentCategory) {
+    public PrototypeFacetAbstract(final FacetHolder holder, final DeploymentType deploymentType) {
         super(type(), holder);
-        this.deploymentCategory = deploymentCategory;
+        this.deploymentType = deploymentType;
     }
 
     @Override
     public String hides(
             final VisibilityContext<? extends VisibilityEvent> ic) {
-        return getDeploymentCategory().isProduction()
+        return getDeploymentType().isProduction()
                 ? "Prototyping action not visible in production mode"
                         : null;
     }
 
-    protected DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
+    protected DeploymentType getDeploymentType() {
+        return deploymentType;
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        attributeMap.put("deploymentCategory", deploymentCategory);
+        attributeMap.put("deploymentType", deploymentType.name());
     }
 }

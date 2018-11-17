@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -34,10 +32,11 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.RegistrationDetails;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public class AuthenticationManagerStandard implements AuthenticationManager {
 
@@ -64,14 +63,14 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
      */
     @Override
     @Programmatic
-    public final void init(final DeploymentCategory deploymentCategory) {
+    public final void init() {
         defaultRandomCodeGeneratorIfNecessary();
         addDefaultAuthenticators();
         if (authenticators.size() == 0) {
             throw new IsisException("No authenticators specified");
         }
         for (final Authenticator authenticator : authenticators) {
-            authenticator.init(deploymentCategory);
+            authenticator.init();
         }
     }
 

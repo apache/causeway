@@ -26,6 +26,10 @@ import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 
+/**
+ * @deprecated no longer supported
+ */
+@Deprecated
 public final class ExplorationSession extends AuthenticationSessionAbstract implements Encodable {
 
     private static final long serialVersionUID = 1L;

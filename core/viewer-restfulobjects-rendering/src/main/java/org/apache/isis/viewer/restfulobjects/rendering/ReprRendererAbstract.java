@@ -29,14 +29,12 @@ import com.google.common.collect.Maps;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> implements ReprRenderer<R, T> {
 
@@ -46,7 +44,6 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     protected final JsonRepresentation representation;
     private final Map<String,String> mediaTypeParams = Maps.newLinkedHashMap();
 
-    private final DeploymentCategory deploymentCategory;
     private final InteractionInitiatedBy interactionInitiatedBy;
 
     protected boolean includesSelf;
@@ -61,30 +58,12 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
         this.representationType = representationType;
         this.representation = representation;
 
-        this.deploymentCategory = determineDeploymentCategoryFrom(this.rendererContext);
         this.interactionInitiatedBy = determineInteractionInitiatedByFrom(this.rendererContext);
-    }
-
-    private static DeploymentCategory determineDeploymentCategoryFrom(final RendererContext rendererContext) {
-        if(rendererContext instanceof RendererContext3) {
-            return ((RendererContext3) rendererContext).getDeploymentCategory();
-        } else {
-            return DeploymentCategory.PRODUCTION; // fallback
-        }
     }
 
     private static InteractionInitiatedBy determineInteractionInitiatedByFrom(
             final RendererContext rendererContext) {
-        if (rendererContext instanceof RepresentationService.Context4) {
-            return ((RepresentationService.Context4) rendererContext).getInteractionInitiatedBy();
-        } else {
-            // fallback
-            return InteractionInitiatedBy.USER;
-        }
-    }
-
-    protected DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
+        return rendererContext.getInteractionInitiatedBy();
     }
 
     protected InteractionInitiatedBy getInteractionInitiatedBy() {

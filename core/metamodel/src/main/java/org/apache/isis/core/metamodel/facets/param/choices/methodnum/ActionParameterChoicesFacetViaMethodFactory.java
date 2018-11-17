@@ -95,7 +95,7 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
             FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder,
-                    getDeploymentCategory(), getSpecificationLoader(), getAuthenticationSessionProvider(), adapterProvider
+                    getSpecificationLoader(), getAuthenticationSessionProvider(), adapterProvider
                     ));
         }
     }

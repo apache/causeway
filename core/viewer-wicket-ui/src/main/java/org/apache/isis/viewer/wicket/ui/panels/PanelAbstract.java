@@ -26,7 +26,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -158,11 +157,6 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
 
         PanelUtil.addConfirmationDialogIfAreYouSureSemantics(component, semanticsOf, servicesInjector);
     }
-
-    public DeploymentCategory getDeploymentCategory() {
-        return getIsisSessionFactory().getDeploymentCategory();
-    }
-
 
     // ///////////////////////////////////////////////////////////////////
     // Dependencies (from IsisContext)

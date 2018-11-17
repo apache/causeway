@@ -16,15 +16,24 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.rendering;
-
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+package org.apache.isis.core.plugins.environment;
 
 /**
- * TODO: roll-up in the future (introduced only so that API does not break)
+ * 
+ * @since 2.0.0-M2
+ *
  */
-public interface RendererContext4 extends RendererContext3 {
+public enum DeploymentType {
+    PRODUCTION,
+    PROTOTYPING
+    ;
 
-    InteractionInitiatedBy getInteractionInitiatedBy();
-
+    public boolean isPrototyping() {
+        return this == PROTOTYPING;
+    }
+    
+    public boolean isProduction() {
+        return this == PRODUCTION;
+    }
+    
 }

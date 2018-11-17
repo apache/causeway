@@ -21,14 +21,13 @@ package org.apache.isis.core.integtestsupport.components;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 
 public class AuthorizationManagerAllowAll implements AuthorizationManager {
 
     @Override
-    public void init(final DeploymentCategory deploymentCategory) {
+    public void init() {
     }
 
     @Override

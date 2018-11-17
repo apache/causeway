@@ -26,11 +26,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -38,7 +37,6 @@ import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -194,8 +192,8 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
             public List<ObjectAdapter> getChoices(
                     final ScalarModel scalarModel,
                     final ObjectAdapter[] argumentsIfAvailable,
-                    final AuthenticationSession authenticationSession,
-                    final DeploymentCategory deploymentCategory) {
+                    final AuthenticationSession authenticationSession) {
+                
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
@@ -217,8 +215,8 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
             public List<ObjectAdapter> getAutoComplete(
                     final ScalarModel scalarModel,
                     final String searchArg,
-                    final AuthenticationSession authenticationSession,
-                    final DeploymentCategory deploymentCategory) {
+                    final AuthenticationSession authenticationSession) {
+                
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
@@ -415,8 +413,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
             public List<ObjectAdapter> getChoices(
                     final ScalarModel scalarModel,
                     final ObjectAdapter[] argumentsIfAvailable,
-                    final AuthenticationSession authenticationSession,
-                    final DeploymentCategory deploymentCategory) {
+                    final AuthenticationSession authenticationSession) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
 
@@ -439,8 +436,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
             public List<ObjectAdapter> getAutoComplete(
                     final ScalarModel scalarModel,
                     final String searchArg,
-                    final AuthenticationSession authenticationSession,
-                    final DeploymentCategory deploymentCategory) {
+                    final AuthenticationSession authenticationSession) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
 
@@ -604,14 +600,13 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
         public abstract List<ObjectAdapter> getChoices(
                 final ScalarModel scalarModel,
                 final ObjectAdapter[] argumentsIfAvailable,
-                final AuthenticationSession authenticationSession,
-                final DeploymentCategory deploymentCategory);
+                final AuthenticationSession authenticationSession);
 
         public abstract boolean hasAutoComplete(ScalarModel scalarModel);
         public abstract List<ObjectAdapter> getAutoComplete(
                 ScalarModel scalarModel,
                 String searchArg,
-                final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory);
+                final AuthenticationSession authenticationSession);
 
         public abstract int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel);
 
@@ -891,9 +886,8 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
     public List<ObjectAdapter> getChoices(
             final ObjectAdapter[] argumentsIfAvailable,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
-        return kind.getChoices(this, argumentsIfAvailable, authenticationSession, deploymentCategory);
+            final AuthenticationSession authenticationSession) {
+        return kind.getChoices(this, argumentsIfAvailable, authenticationSession);
     }
 
     public boolean hasAutoComplete() {
@@ -902,9 +896,8 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
     public List<ObjectAdapter> getAutoComplete(
             final String searchTerm,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
-        return kind.getAutoComplete(this, searchTerm, authenticationSession, deploymentCategory);
+            final AuthenticationSession authenticationSession) {
+        return kind.getAutoComplete(this, searchTerm, authenticationSession);
     }
 
     /**

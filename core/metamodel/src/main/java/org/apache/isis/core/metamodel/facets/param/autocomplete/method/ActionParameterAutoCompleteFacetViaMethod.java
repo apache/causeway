@@ -30,7 +30,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
@@ -50,11 +49,10 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
             final Method method,
             final Class<?> choicesType,
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLookup,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final ObjectAdapterProvider adapterManager) {
-        super(holder, deploymentCategory, specificationLookup, authenticationSessionProvider, adapterManager);
+        super(holder, specificationLookup, authenticationSessionProvider, adapterManager);
         this.method = method;
         this.choicesType = choicesType;
         this.minLength = MinLengthUtil.determineMinLength(method);

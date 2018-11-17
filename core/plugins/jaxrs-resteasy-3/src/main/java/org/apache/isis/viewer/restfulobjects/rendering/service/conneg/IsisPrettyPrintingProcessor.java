@@ -25,7 +25,6 @@ import org.jboss.resteasy.annotations.DecorateTypes;
 import org.jboss.resteasy.spi.DecoratorProcessor;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
@@ -43,8 +42,8 @@ public class IsisPrettyPrintingProcessor implements DecoratorProcessor<Marshalle
 
     protected boolean shouldPrettyPrint() {
         try {
-            final DeploymentCategory deploymentCategory = getDeploymentCategory();
-            return getConfiguration().getBoolean(KEY_PRETTY_PRINT, !deploymentCategory.isProduction());
+            return getConfiguration().getBoolean(KEY_PRETTY_PRINT, 
+                    IsisContext.getEnvironment().getDeploymentType().isPrototyping());
         } catch (Exception e) {
             return true;
         }
@@ -57,12 +56,6 @@ public class IsisPrettyPrintingProcessor implements DecoratorProcessor<Marshalle
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-    }
-
-
-
-    protected DeploymentCategory getDeploymentCategory() {
-        return getIsisSessionFactory().getDeploymentCategory();
     }
 
     protected IsisConfiguration getConfiguration() {

@@ -80,7 +80,7 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
         final LogonFixture logonFixture = sessionFactory.getLogonFixture();
 
         // see if exploration is supported
-        if (sessionFactory.getDeploymentCategory().isExploring()) {
+        if (false) {
             authSession = authenticationManager.authenticate(new AuthenticationRequestExploration(logonFixture));
             if (authSession != null) {
                 return authSession;

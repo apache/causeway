@@ -30,7 +30,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -43,7 +42,6 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
 
     private final Method method;
     private final Class<?> choicesType;
-    private final DeploymentCategory deploymentCategory;
     private final SpecificationLoader specificationLoader;
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ObjectAdapterProvider adapterProvider;
@@ -52,14 +50,12 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             final Method method,
             final Class<?> choicesType,
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final ObjectAdapterProvider adapterProvider) {
         super(holder);
         this.method = method;
         this.choicesType = choicesType;
-        this.deploymentCategory = deploymentCategory;
         this.specificationLoader = specificationLoader;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.adapterProvider = adapterProvider;
@@ -143,10 +139,6 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
 
     protected ObjectAdapterProvider getObjectAdapterProvider() {
         return adapterProvider;
-    }
-
-    protected DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
     }
 
     protected AuthenticationSession getAuthenticationSession() {

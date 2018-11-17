@@ -20,22 +20,32 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.List;
 
+import javax.ws.rs.core.MediaType;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 public interface RendererContext {
 
     String urlFor(final String url);
 
     AuthenticationSession getAuthenticationSession();
-
     IsisConfiguration getConfiguration();
-
     PersistenceSession getPersistenceSession();
+    List<MediaType> getAcceptableMediaTypes();
+    
+    SpecificationLoader getSpecificationLoader();
+    ServicesInjector getServicesInjector();
+    
+    InteractionInitiatedBy getInteractionInitiatedBy();
 
     Where getWhere();
 
@@ -61,5 +71,10 @@ public interface RendererContext {
      * @return whether this adapter has already been rendered (implying the caller should not render the value).
      */
     boolean canEagerlyRender(ObjectAdapter objectAdapter);
+    
+    /**
+     * Applies only when rendering a domain object.
+     */
+    RepresentationService.Intent getIntent();
 
 }

@@ -19,10 +19,6 @@
 
 package org.apache.isis.core.wrapper;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
@@ -47,8 +43,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
@@ -79,6 +73,10 @@ import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepository;
 import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepositoryImpl;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 public class WrapperFactoryDefaultTest_wrappedObject {
 
     @Rule
@@ -107,8 +105,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private ObjectSpecification mockOnType;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
-    @Mock
-    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
+    
     @Mock
     private IsisConfiguration mockConfiguration;
 
@@ -143,6 +140,8 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Before
     public void setUp() {
 
+        // PRODUCTION
+        
         employeeRepository = new EmployeeRepositoryImpl();
 
         employeeDO = new Employee();
@@ -193,9 +192,6 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
                 will(returnValue(mockAuthenticationSessionProvider));
 
-                allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-                will(returnValue(DeploymentCategory.PRODUCTION));
-
                 allowing(mockServicesInjector).getSpecificationLoader();
                 will(returnValue(mockSpecificationLoader));
 
@@ -204,9 +200,6 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
                 allowing(mockStringSpec).getShortIdentifier();
                 will(returnValue(String.class.getName()));
-
-                allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-                will(returnValue(DeploymentCategory.PRODUCTION));
 
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(session));
@@ -428,7 +421,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private FacetedMethod facetedMethodForProperty(
             Method init, Method accessor, Method modify, Method clear, Method hide, Method disable, Method validate) {
         FacetedMethod facetedMethod = FacetedMethod.createForProperty(accessor.getDeclaringClass(), accessor);
-        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(mockOnType, accessor, facetedMethod, mockDeploymentCategoryProvider.getDeploymentCategory(),
+        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(mockOnType, accessor, facetedMethod,
                 mockConfiguration, mockSpecificationLoader,
                 mockAuthenticationSessionProvider, mockAdapterManager
         ));

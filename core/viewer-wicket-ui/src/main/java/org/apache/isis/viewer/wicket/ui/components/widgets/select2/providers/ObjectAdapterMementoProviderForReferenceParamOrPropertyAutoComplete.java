@@ -38,6 +38,8 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -46,12 +48,6 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import com.google.common.collect.Collections2;
-import org.apache.isis.commons.internal.collections._Lists;
 
 public class ObjectAdapterMementoProviderForReferenceParamOrPropertyAutoComplete
 extends ObjectAdapterMementoProviderAbstract {
@@ -68,7 +64,7 @@ extends ObjectAdapterMementoProviderAbstract {
         final List<ObjectAdapter> autoCompleteChoices = _Lists.newArrayList();
         if (getScalarModel().hasAutoComplete()) {
             final List<ObjectAdapter> autoCompleteAdapters =
-                    getScalarModel().getAutoComplete(term, getAuthenticationSession(), getDeploymentCategory());
+                    getScalarModel().getAutoComplete(term, getAuthenticationSession());
             autoCompleteChoices.addAll(autoCompleteAdapters);
         }
         return _Lists.map(autoCompleteChoices, ObjectAdapterMemento.Functions.fromAdapter());

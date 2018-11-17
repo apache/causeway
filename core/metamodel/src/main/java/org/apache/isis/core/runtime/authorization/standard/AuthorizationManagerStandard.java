@@ -25,7 +25,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -45,7 +44,7 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
         authorizor = new Authorizor() {
 
             @Override
-            public void init(final DeploymentCategory deploymentCategory) {
+            public void init() {
             }
 
             @Override
@@ -79,8 +78,8 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
     // /////////////////////////////////////////////////////////
 
     @Override
-    public void init(final DeploymentCategory deploymentCategory) {
-        authorizor.init(deploymentCategory);
+    public void init() {
+        authorizor.init();
     }
 
     @Override

@@ -61,24 +61,24 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
      */
     @Override
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext,
             final ObjectAdapter objectAdapter) {
 
         final Object domainObject = objectOf(objectAdapter);
         final RepresentationType representationType = RepresentationType.DOMAIN_OBJECT;
 
-        final MediaType mediaType = mediaTypeFrom(renderContext2, representationType);
+        final MediaType mediaType = mediaTypeFrom(renderContext, representationType);
         if (mediaType == null) {
             return null;
         }
 
-        return buildResponse(renderContext2, domainObject, representationType);
+        return buildResponse(renderContext, domainObject, representationType);
     }
 
     protected MediaType mediaTypeFrom(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext,
             final RepresentationType representationType) {
-        final List<MediaType> acceptableMediaTypes = renderContext2.getAcceptableMediaTypes();
+        final List<MediaType> acceptableMediaTypes = renderContext.getAcceptableMediaTypes();
         MediaType mediaType =
                 representationType.matchesXmlProfileWithParameter(acceptableMediaTypes, X_RO_DOMAIN_TYPE);
 
@@ -94,12 +94,12 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
      */
     @Override
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
         final RepresentationType representationType = RepresentationType.ACTION_RESULT;
 
-        final MediaType mediaType = mediaTypeFrom(renderContext2, representationType);
+        final MediaType mediaType = mediaTypeFrom(renderContext, representationType);
         if (mediaType == null) {
             return null;
         }
@@ -108,17 +108,17 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
         if(domainObject == null) {
             throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_FOUND);
         }
-        return buildResponse(renderContext2, domainObject, representationType);
+        return buildResponse(renderContext, domainObject, representationType);
     }
 
     protected Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext,
             final Object domainObject,
             final RepresentationType representationType) {
 
-        final List<MediaType> acceptableMediaTypes = renderContext2.getAcceptableMediaTypes();
+        final List<MediaType> acceptableMediaTypes = renderContext.getAcceptableMediaTypes();
 
-        final MediaType mediaType = mediaTypeFrom(renderContext2, representationType);
+        final MediaType mediaType = mediaTypeFrom(renderContext, representationType);
         if (mediaType == null) {
             return null;
         }

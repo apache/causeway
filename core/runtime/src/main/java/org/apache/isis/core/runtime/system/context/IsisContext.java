@@ -31,7 +31,8 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.plugins.environment.DeploymentType;
+import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -90,17 +91,17 @@ public interface IsisContext {
      * @return pre-bootstrapping configuration
      */
     public static IsisSystemEnvironment getEnvironment() {
-        return _Context.getOrElse(IsisSystemEnvironment.class, IsisSystemEnvironment::getDefault);
+        return _Context.getEnvironment();
     }
     
     /**
-     * For integration testing allows to prime the environment via provided configuration. Will not override
+     * For integration testing allows to prime the environment via provided parameters. Will not override
      * any IsisSystemEnvironment instance, that is already registered with the current context, because the 
      * IsisSystemEnvironment is expected to be an immutable singleton within an application's life-cycle.
      * @deprecated currently under investigation on user mailing list
      */
-    public static void primeEnvironment(IsisConfiguration conf) {
-        _Context.computeIfAbsent(IsisSystemEnvironment.class, __->IsisSystemEnvironment.of(conf));
+    public static void primeEnvironment(DeploymentType deploymentType) {
+        _Context.computeIfAbsent(IsisSystemEnvironment.class, __->IsisSystemEnvironment.of(deploymentType));
     }
     
     // -- LIFE-CYCLING
@@ -166,7 +167,7 @@ public interface IsisContext {
 
         final Map<String, String> map = new TreeMap<>(configuration.asMap());
 
-        String head = String.format("ISIS %s (%s) ", getVersion(), DeploymentType.get().name());
+        String head = String.format("ISIS %s (%s) ", getVersion(), IsisContext.getEnvironment().getDeploymentType().name());
         final int fillCount = 46-head.length();
         final int fillLeft = fillCount/2;
         final int fillRight = fillCount-fillLeft;
@@ -182,6 +183,8 @@ public interface IsisContext {
         
         return sb;
     }
+
+
 
 
 

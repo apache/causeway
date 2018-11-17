@@ -24,10 +24,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -91,7 +90,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcessor,
         ServicesInjectorAware {
 
-    private DeploymentCategoryProvider deploymentCategoryProvider;
     private SpecificationLoader specificationLoader;
     private AuthenticationSessionProvider authenticationSessionProvider;
     private ObjectAdapterProvider adapterProvider;
@@ -272,7 +270,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
             FacetUtil.addFacet(
                 new ActionParameterChoicesFacetDerivedFromChoicesFacet(
                     peerFor(parameter),
-                    getDeploymentCategory(), specificationLoader, authenticationSessionProvider, adapterProvider));
+                    specificationLoader, authenticationSessionProvider, adapterProvider));
         }
     }
 
@@ -473,7 +471,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         FacetUtil.addFacet(
                 new ActionParameterChoicesFacetFromParentedCollection(
                         scalarOrCollectionParam, otma,
-                        getDeploymentCategory(), specificationLoader,
+                        specificationLoader,
                         authenticationSessionProvider, adapterProvider));
     }
 
@@ -484,20 +482,15 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
     private List<ActionType> inferActionTypes() {
         final List<ActionType> actionTypes = _Lists.newArrayList();
         actionTypes.add(ActionType.USER);
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
-        if ( !deploymentCategory.isProduction()) {
+        if (_Context.getEnvironment().getDeploymentType().isPrototyping()) {
             actionTypes.add(ActionType.PROTOTYPE);
         }
         return actionTypes;
     }
 
-    private DeploymentCategory getDeploymentCategory() {
-        return deploymentCategoryProvider.getDeploymentCategory();
-    }
 
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
-        deploymentCategoryProvider = servicesInjector.getDeploymentCategoryProvider();
         specificationLoader = servicesInjector.getSpecificationLoader();
         authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
         adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();

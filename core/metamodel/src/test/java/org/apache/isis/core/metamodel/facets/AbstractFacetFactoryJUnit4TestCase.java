@@ -33,8 +33,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -72,8 +70,6 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     protected IsisConfigurationDefault mockConfiguration;
 
     @Mock
-    protected DeploymentCategoryProvider mockDeploymentCategoryProvider;
-    @Mock
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
 
     protected IdentifiedHolder facetHolder;
@@ -108,17 +104,9 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     @Before
     public void setUpFacetedMethodAndParameter() throws Exception {
 
+        // PRODUCTION
 
         context.checking(new Expectations() {{
-
-            allowing(mockServicesInjector).getDeploymentCategoryProvider();
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockServicesInjector).lookupService(DeploymentCategoryProvider.class);
-            will(returnValue(mockDeploymentCategoryProvider));
-
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
 
             allowing(mockServicesInjector).getConfigurationServiceInternal();
             will(returnValue(mockConfiguration));

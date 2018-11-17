@@ -35,7 +35,6 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -206,14 +205,9 @@ public class EntityPage extends PageAbstract {
 
     }
 
-    protected DeploymentCategory getDeploymentCategory() {
-        return getIsisSessionFactory().getDeploymentCategory();
-    }
-
     protected void addWhereAmIIfShown(
             WebMarkupContainer entityPageContainer,
-            WhereAmIModel whereAmIModel)
-    {
+            WhereAmIModel whereAmIModel) {
 
         final WebMarkupContainer whereAmIContainer =
                 new WebMarkupContainer("whereAmI-container");

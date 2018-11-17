@@ -215,7 +215,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
 
         final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
         final List<ObjectAction> associatedActions =
-                ObjectAction.Util.findForAssociation(adapter, otoa, getDeploymentCategory());
+                ObjectAction.Util.findForAssociation(adapter, otoa);
 
         entityActions.addAll(
                 LinkAndLabelUtil.asActionLinksForAdditionalLinksPanel(entityModel, associatedActions, null));

@@ -27,12 +27,12 @@ import java.util.stream.Stream;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -59,7 +59,7 @@ public class AssociatedWithActionsHelper implements Serializable {
 
         final ObjectSpecification objectSpec = getObjectSpecification(isisSessionFactory);
 
-        final List<ActionType> actionTypes = inferActionTypes(isisSessionFactory);
+        final List<ActionType> actionTypes = inferActionTypes();
         final Stream<ObjectAction> objectActions = objectSpec.streamObjectActions(actionTypes, Contributed.INCLUDED);
 
         return objectActions
@@ -76,11 +76,10 @@ public class AssociatedWithActionsHelper implements Serializable {
         return parentAdapter.getSpecification();
     }
 
-    private static List<ActionType> inferActionTypes(final IsisSessionFactory isisSessionFactory) {
+    private static List<ActionType> inferActionTypes() {
         final List<ActionType> actionTypes = _Lists.newArrayList();
         actionTypes.add(ActionType.USER);
-        final DeploymentCategory deploymentCategory = isisSessionFactory.getDeploymentCategory();
-        if ( !deploymentCategory.isProduction()) {
+        if ( !IsisContext.getEnvironment().getDeploymentType().isProduction()) {
             actionTypes.add(ActionType.PROTOTYPE);
         }
         return actionTypes;

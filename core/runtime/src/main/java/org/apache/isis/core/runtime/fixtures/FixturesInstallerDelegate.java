@@ -36,7 +36,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.plugins.environment.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;

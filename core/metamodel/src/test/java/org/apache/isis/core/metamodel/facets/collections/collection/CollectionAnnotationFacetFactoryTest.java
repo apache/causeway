@@ -16,10 +16,6 @@
  * under the License. */
 package org.apache.isis.core.metamodel.facets.collections.collection;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -62,6 +58,10 @@ import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+
+import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -107,7 +107,7 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
     public static class Modify extends CollectionAnnotationFacetFactoryTest {
 
         private void addGetterFacet(final FacetHolder holder) {
-            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder, mockDeploymentCategoryProvider.getDeploymentCategory(),
+            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder, 
                     mockConfiguration,
                     mockSpecificationLoader, 
                     mockAuthenticationSessionProvider,

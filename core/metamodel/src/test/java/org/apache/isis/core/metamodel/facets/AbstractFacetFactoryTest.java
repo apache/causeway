@@ -22,19 +22,16 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.jmock.Expectations;
 import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -67,7 +64,6 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
     protected ServicesInjector stubServicesInjector;
     protected TranslationService mockTranslationService;
-    protected DeploymentCategoryProvider mockDeploymentCategoryProvider;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     protected AuthenticationSession mockAuthenticationSession;
 
@@ -99,6 +95,8 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        
+        // PRODUCTION
 
         facetHolder = new IdentifiedHolderImpl(
                 Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
@@ -109,7 +107,6 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         methodRemover = new ProgrammableMethodRemover();
 
-        mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
         mockConfiguration = context.mock(IsisConfiguration.class);
         stubServicesInjector = context.mock(ServicesInjector.class);
@@ -125,15 +122,11 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
                 stubConfiguration,
                 mockAuthenticationSessionProvider,
                 mockSpecificationLoader,
-                mockDeploymentCategoryProvider,
                 mockPersistenceSessionServiceInternal,
                 mockTranslationService
         ), stubConfiguration);
 
         context.checking(new Expectations() {{
-
-            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
-            will(returnValue(DeploymentCategory.PRODUCTION));
 
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));

@@ -18,11 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.properties.property;
 
-import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -77,6 +72,11 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
+import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
     PropertyAnnotationFacetFactory facetFactory;
@@ -117,7 +117,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     public static class Modify extends PropertyAnnotationFacetFactoryTest {
 
         private void addGetterFacet(final FacetHolder holder) {
-            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder, mockDeploymentCategoryProvider.getDeploymentCategory(),
+            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder,
                     mockConfiguration,
                     mockSpecificationLoader, 
                     mockAuthenticationSessionProvider,

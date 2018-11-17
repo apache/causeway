@@ -185,13 +185,8 @@ public class IsisSystem {
                     configurationOverride
                     );
 
-            IsisContext.primeEnvironment(configurationOverride);
-            
             final IsisSessionFactoryBuilder isisSessionFactoryBuilder = 
-                    new IsisSessionFactoryBuilder(
-                            componentProvider,
-                            IsisContext.getEnvironment().getDeploymentCategory(),
-                            appManifestIfAny);
+                    new IsisSessionFactoryBuilder(componentProvider, appManifestIfAny);
 
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();

@@ -41,8 +41,8 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Resources;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -76,7 +76,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     @Override
     public boolean supportsReloading() {
-        return !deploymentCategoryProvider.getDeploymentCategory().isProduction();
+        return _Context.getEnvironment().getDeploymentType().isPrototyping();
     }
 
     @Override
@@ -221,9 +221,6 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
 
     // -- injected dependencies
-
-    @javax.inject.Inject
-    DeploymentCategoryProvider deploymentCategoryProvider;
 
     @javax.inject.Inject
     MessageService messageService;

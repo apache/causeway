@@ -24,6 +24,10 @@ import java.util.List;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
 
+/**
+* @deprecated no longer supported
+*/
+@Deprecated
 public class AuthenticationRequestExploration extends AuthenticationRequestAbstract {
 
     private static final String EXPLORATION_USER = "exploration";

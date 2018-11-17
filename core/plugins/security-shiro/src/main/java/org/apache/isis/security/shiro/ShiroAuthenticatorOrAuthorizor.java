@@ -23,8 +23,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authc.AuthenticationException;
@@ -46,9 +44,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
@@ -78,8 +76,6 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     private final IsisConfiguration configuration;
     private final boolean autoLogout;
 
-    private DeploymentCategory deploymentCategory;
-
     public ShiroAuthenticatorOrAuthorizor(final IsisConfiguration configuration) {
         this.configuration = configuration;
         autoLogout = configuration.getBoolean(
@@ -96,21 +92,13 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     // -- init, shutdown
 
     @Override
-    public void init(final DeploymentCategory deploymentCategory) {
-        this.deploymentCategory = deploymentCategory;
+    public void init() {
     }
 
 
     @Override
     public void shutdown() {
     }
-
-    @Override
-    public DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
-    }
-
-
 
     // -- Authenticator API
 

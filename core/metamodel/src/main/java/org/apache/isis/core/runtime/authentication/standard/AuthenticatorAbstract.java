@@ -21,40 +21,28 @@ package org.apache.isis.core.runtime.authentication.standard;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
 public abstract class AuthenticatorAbstract implements Authenticator {
 
     // -- constructor, fields
     private final IsisConfiguration configuration;
-    private DeploymentCategory deploymentCategory;
 
     public AuthenticatorAbstract(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
-
-
     // -- init, shutdown
 
     @Override
-    public void init(final DeploymentCategory deploymentCategory) {
+    public void init() {
         // does nothing.
-        this.deploymentCategory = deploymentCategory;
     }
 
     @Override
     public void shutdown() {
         // does nothing.
     }
-
-    @Override
-    public DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
-    }
-
-
 
     // -- API
 
@@ -89,8 +77,6 @@ public abstract class AuthenticatorAbstract implements Authenticator {
     public void logout(final AuthenticationSession session) {
         // no-op
     }
-
-
 
 
     // -- Injected (via constructor)

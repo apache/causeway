@@ -26,7 +26,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
@@ -38,11 +37,10 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
 
     public ActionParameterChoicesFacetDerivedFromChoicesFacet(
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLookup,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final ObjectAdapterProvider adapterProvider) {
-        super(holder, deploymentCategory, specificationLookup, authenticationSessionProvider, adapterProvider);
+        super(holder, specificationLookup, authenticationSessionProvider, adapterProvider);
     }
 
     @Override

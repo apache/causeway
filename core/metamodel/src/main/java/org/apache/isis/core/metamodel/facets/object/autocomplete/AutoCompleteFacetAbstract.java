@@ -23,15 +23,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -46,7 +45,6 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         return AutoCompleteFacet.class;
     }
 
-    private final DeploymentCategory deploymentCategory;
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ObjectAdapterProvider adapterProvider;
     private final ServicesInjector servicesInjector;
@@ -68,7 +66,6 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         this.repositoryClass = repositoryClass;
         this.repositoryMethod = repositoryMethod;
 
-        this.deploymentCategory = servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
         this.adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
         this.servicesInjector = servicesInjector;
         this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
@@ -121,10 +118,6 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
             minLength = MinLengthUtil.determineMinLength(repositoryMethod);
         }
         return minLength;
-    }
-
-    protected DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
     }
 
     protected AuthenticationSession getAuthenticationSession() {

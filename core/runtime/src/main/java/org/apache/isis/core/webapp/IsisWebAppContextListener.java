@@ -34,7 +34,6 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.webapp.modules.WebModule;
 
@@ -83,8 +82,6 @@ public class IsisWebAppContextListener implements ServletContextListener {
                 IsisWebAppConfigProvider.getInstance().getConfigurationBuilder(servletContext);
         isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
 
-        IsisContext.primeEnvironment(isisConfigurationBuilder.getConfiguration());
-
         final List<WebModule> webModules =
                  WebModule.discoverWebModules()
                  .peek(module->module.prepare(servletContext)) // prepare context
@@ -107,9 +104,9 @@ public class IsisWebAppContextListener implements ServletContextListener {
     }
 
     void addConfigurationResourcesForDeploymentType(
-            final IsisConfigurationBuilder isisConfigurationBuilder,
-            final DeploymentType deploymentType) {
-        final String resourceName = deploymentType.name().toLowerCase() + ".properties";
+            final IsisConfigurationBuilder isisConfigurationBuilder) {
+        final String resourceName = 
+                IsisContext.getEnvironment().getDeploymentType().name().toLowerCase() + ".properties";
         isisConfigurationBuilder.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE, IsisConfigurationDefault.ContainsPolicy.IGNORE);
     }
 

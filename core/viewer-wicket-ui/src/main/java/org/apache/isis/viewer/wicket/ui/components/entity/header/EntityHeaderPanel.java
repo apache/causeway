@@ -80,7 +80,7 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
         final ObjectAdapter adapter = model.getObject();
         if (adapter != null) {
             final List<ObjectAction> topLevelActions = ObjectAction.Util
-                    .findTopLevel(adapter, getDeploymentCategory());
+                    .findTopLevel(adapter);
 
             final List<LinkAndLabel> entityActionLinks = LinkAndLabelUtil
                     .asActionLinksForAdditionalLinksPanel(model, topLevelActions, null);

@@ -30,7 +30,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -48,21 +47,18 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ObjectAdapterProvider adapterProvider;
-    private final DeploymentCategory deploymentCategory;
     private SpecificationLoader specificationLoader;
 
     public PropertyAutoCompleteFacetMethod(
             final Method method,
             final Class<?> choicesClass,
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final ObjectAdapterProvider adapterProvider) {
         super(holder);
         this.method = method;
         this.choicesClass = choicesClass;
-        this.deploymentCategory = deploymentCategory;
         this.specificationLoader = specificationLoader;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.adapterProvider = adapterProvider;
@@ -137,10 +133,6 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
 
     protected SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
-    }
-
-    protected DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
     }
 
     protected AuthenticationSession getAuthenticationSession() {

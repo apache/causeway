@@ -18,12 +18,11 @@ package org.apache.isis.viewer.restfulobjects.rendering.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-
-import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -53,14 +52,13 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     @Override
     @Programmatic
     public Response objectRepresentation(
-            final Context rendererContext,
+            final Context renderContext,
             final ObjectAdapter objectAdapter) {
 
-        final Context2 renderContext2 = asContext2(rendererContext);
         final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
             @Override
             public ResponseBuilder apply(final ContentNegotiationService connegService) {
-                return connegService.buildResponse(renderContext2, objectAdapter);
+                return connegService.buildResponse(renderContext, objectAdapter);
             }
         });
 
@@ -75,25 +73,24 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     @Override
     @Programmatic
     public Response objectRepresentation(
-            final Context rendererContext,
+            final Context renderContext,
             final ObjectAdapter objectAdapter,
             final Intent unused) {
-        return objectRepresentation(rendererContext, objectAdapter);
+        return objectRepresentation(renderContext, objectAdapter);
     }
 
 
     @Override
     @Programmatic
     public Response propertyDetails(
-            final Context rendererContext,
+            final Context renderContext,
             final ObjectAndProperty objectAndProperty,
             final MemberReprMode memberReprMode) {
 
-        final Context2 renderContext2 = asContext2(rendererContext);
         final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
             @Override
             public ResponseBuilder apply(final ContentNegotiationService connegService) {
-                return connegService.buildResponse(renderContext2, objectAndProperty);
+                return connegService.buildResponse(renderContext, objectAndProperty);
             }
         });
 
@@ -105,15 +102,14 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     @Override
     @Programmatic
     public Response collectionDetails(
-            final Context rendererContext,
+            final Context renderContext,
             final ObjectAndCollection objectAndCollection,
             final MemberReprMode memberReprMode) {
 
-        final Context2 renderContext2 = asContext2(rendererContext);
         final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
             @Override
             public ResponseBuilder apply(final ContentNegotiationService connegService) {
-                return connegService.buildResponse(renderContext2, objectAndCollection);
+                return connegService.buildResponse(renderContext, objectAndCollection);
             }
         });
 
@@ -127,14 +123,13 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     @Override
     @Programmatic
     public Response actionPrompt(
-            final Context rendererContext,
+            final Context renderContext,
             final ObjectAndAction objectAndAction) {
 
-        final Context2 renderContext2 = asContext2(rendererContext);
         final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
             @Override
             public ResponseBuilder apply(final ContentNegotiationService connegService) {
-                return connegService.buildResponse(renderContext2, objectAndAction);
+                return connegService.buildResponse(renderContext, objectAndAction);
             }
         });
 
@@ -146,30 +141,19 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
     @Override
     @Programmatic
     public Response actionResult(
-            final Context rendererContext,
+            final Context renderContext,
             final ObjectAndActionInvocation objectAndActionInvocation,
             final SelfLink selfLink) {
 
-        final Context2 renderContext2 = asContext2(rendererContext);
         final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
             @Override
             public ResponseBuilder apply(final ContentNegotiationService connegService) {
-                return connegService.buildResponse(renderContext2, objectAndActionInvocation);
+                return connegService.buildResponse(renderContext, objectAndActionInvocation);
             }
         });
 
         assertContentNegotiationServiceHandled(responseBuilder);
         return buildResponse(responseBuilder);
-    }
-
-    private Context2 asContext2(final Context rendererContext) {
-        if (rendererContext instanceof Context2) {
-            final Context2 context = (Context2) rendererContext;
-            return context;
-        }
-        throw new IllegalArgumentException(String.format(
-                "The %s requires that the context to implement %s",
-                RepresentationServiceContentNegotiator.class.getSimpleName(), Context2.class.getName()));
     }
 
     void assertContentNegotiationServiceHandled(final ResponseBuilder responseBuilder) {

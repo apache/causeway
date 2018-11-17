@@ -21,11 +21,10 @@ package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 public interface Authorizor extends ApplicationScopedComponent {
 
-    void init(final DeploymentCategory deploymentCategory);
+    void init();
     void shutdown();
 
     boolean isVisibleInAnyRole(final Identifier identifier);

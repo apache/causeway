@@ -21,11 +21,6 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext2;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext3;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext4;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext5;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext6;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
@@ -104,14 +99,5 @@ public interface RepresentationService {
     interface Context extends RendererContext {
         ObjectAdapterLinkTo getAdapterLinkTo();
     }
-    interface Context2 extends Context, RendererContext2 {
-    }
-    interface Context3 extends Context2, RendererContext3 {
-    }
-    interface Context4 extends Context3, RendererContext4 {
-    }
-    interface Context5 extends Context4, RendererContext5 {
-    }
-    interface Context6 extends Context5, RendererContext6 {
-    }
+    
 }

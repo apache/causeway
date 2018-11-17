@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +38,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -47,7 +46,6 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -93,6 +91,8 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
 
     private final static Logger LOG = LoggerFactory.getLogger(ObjectSpecificationAbstract.class);
@@ -120,7 +120,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     protected final ServicesInjector servicesInjector;
 
-    private final DeploymentCategory deploymentCategory;
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
 
@@ -178,11 +177,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.facetProcessor = facetProcessor;
 
         this.specificationLoader = servicesInjector.getSpecificationLoader();
-        this.deploymentCategory = servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory();
     }
-
-
-
 
     // -- Stuff immediately derivable from class
     @Override
@@ -657,7 +652,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(oa != null) {
             return oa;
         }
-        if(! deploymentCategory.isProduction()) {
+        if(_Context.getEnvironment().getDeploymentType().isPrototyping()) {
             // automatically refresh if not in production
             // (better support for jrebel)
 

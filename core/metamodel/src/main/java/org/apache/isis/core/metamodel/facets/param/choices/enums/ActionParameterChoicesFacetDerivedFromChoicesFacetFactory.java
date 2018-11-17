@@ -50,7 +50,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
 
         FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(
                 facetHolder,
-                getDeploymentCategory(), getSpecificationLoader(),
+                getSpecificationLoader(),
                 getAuthenticationSessionProvider(),
                 adapterProvider));
     }

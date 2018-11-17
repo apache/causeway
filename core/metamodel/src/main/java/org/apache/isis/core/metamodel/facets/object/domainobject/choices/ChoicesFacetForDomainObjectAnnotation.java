@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
@@ -35,7 +34,6 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
     public static Facet create(
             final List<DomainObject> domainObjects,
             final FacetHolder facetHolder,
-            final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
 
@@ -45,7 +43,7 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
                 .findFirst()
                 .map(bounding -> bounding == Bounding.BOUNDED
                 ? new ChoicesFacetForDomainObjectAnnotation(
-                        facetHolder, deploymentCategory,
+                        facetHolder,
                         authenticationSessionProvider, persistenceSessionServiceInternal)
                         : null
                         ).orElse(null);
@@ -53,9 +51,8 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
 
     private ChoicesFacetForDomainObjectAnnotation(
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider, final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
-        super(holder, deploymentCategory, authenticationSessionProvider, persistenceSessionServiceInternal);
+        super(holder, authenticationSessionProvider, persistenceSessionServiceInternal);
     }
 
 }

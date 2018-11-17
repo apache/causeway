@@ -25,7 +25,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
@@ -33,11 +32,10 @@ public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacet
 
     public ActionParameterChoicesFacetNone(
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLookup,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final ObjectAdapterProvider adapterProvider) {
-        super(holder, deploymentCategory, specificationLookup, authenticationSessionProvider, adapterProvider);
+        super(holder, specificationLookup, authenticationSessionProvider, adapterProvider);
     }
 
     @Override

@@ -252,7 +252,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         scalarTypeContainer.addOrReplace(scalarIfCompact, scalarIfRegular);
 
         List<LinkAndLabel> linkAndLabels =
-                LinkAndLabelUtil.asActionLinksForAssociation(this.scalarModel, getDeploymentCategory());
+                LinkAndLabelUtil.asActionLinksForAssociation(this.scalarModel);
 
         final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
         if(inlinePromptConfig.isSupported()) {

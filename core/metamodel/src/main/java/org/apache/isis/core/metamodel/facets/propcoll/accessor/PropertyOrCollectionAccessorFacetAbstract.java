@@ -25,7 +25,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -41,7 +40,6 @@ implements PropertyOrCollectionAccessorFacet {
     private final SpecificationLoader specificationLoader;
     private final IsisConfiguration configuration;
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final DeploymentCategory deploymentCategory;
 
     public static Class<? extends Facet> type() {
         return PropertyOrCollectionAccessorFacet.class;
@@ -50,7 +48,6 @@ implements PropertyOrCollectionAccessorFacet {
     public PropertyOrCollectionAccessorFacetAbstract(
             final ObjectSpecification onType,
             final FacetHolder holder,
-            final DeploymentCategory deploymentCategory,
             final IsisConfiguration configuration,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
@@ -61,7 +58,6 @@ implements PropertyOrCollectionAccessorFacet {
         this.specificationLoader = specificationLoader;
         this.configuration = configuration;
         this.authenticationSessionProvider = authenticationSessionProvider;
-        this.deploymentCategory = deploymentCategory;
     }
 
     @Override
@@ -85,10 +81,6 @@ implements PropertyOrCollectionAccessorFacet {
 
     protected IsisConfiguration getConfiguration() {
         return configuration;
-    }
-
-    public DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
     }
 
     public AuthenticationSession getAuthenticationSession() {

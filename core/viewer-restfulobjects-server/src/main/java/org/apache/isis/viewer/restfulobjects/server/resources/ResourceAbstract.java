@@ -37,7 +37,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -162,10 +161,6 @@ public abstract class ResourceAbstract {
     // //////////////////////////////////////////////////////////////
     // Dependencies (from singletons)
     // //////////////////////////////////////////////////////////////
-
-    protected DeploymentCategory getDeploymentCategory() {
-        return getIsisSessionFactory().getDeploymentCategory();
-    }
 
     protected IsisConfiguration getConfiguration () {
         return getIsisSessionFactory().getConfiguration();

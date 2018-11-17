@@ -42,26 +42,26 @@ public interface ContentNegotiationService {
 
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext,
             final ObjectAdapter objectAdapter);
 
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext,
             final ObjectAndProperty objectAndProperty);
 
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext,
             final ObjectAndCollection objectAndCollection);
 
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext,
             final ObjectAndAction objectAndAction);
 
     @Programmatic
     public Response.ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context renderContext,
             final ObjectAndActionInvocation objectAndActionInvocation);
 }

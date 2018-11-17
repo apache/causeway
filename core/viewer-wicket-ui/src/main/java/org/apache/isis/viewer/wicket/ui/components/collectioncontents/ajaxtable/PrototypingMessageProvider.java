@@ -56,7 +56,7 @@ class PrototypingMessageProvider {
     private static String getTookTimingMessage() {
         
         final boolean isPrototyping = IsisContext.getEnvironment()
-                .getDeploymentCategory().isPrototyping();
+                .getDeploymentType().isPrototyping();
         
         if(!isPrototyping) {
             return "";
