@@ -149,7 +149,7 @@
                     <mml:attr name="position">PANEL_DROPDOWN</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
-                    <mml:attr name="deploymentCategory">PROTOTYPING</mml:attr>
+                    <mml:attr name="deploymentType">PROTOTYPING</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
@@ -265,7 +265,7 @@
                     <mml:attr name="position">PANEL_DROPDOWN</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
-                    <mml:attr name="deploymentCategory">PROTOTYPING</mml:attr>
+                    <mml:attr name="deploymentType">PROTOTYPING</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
@@ -326,7 +326,7 @@
                     <mml:attr name="position">PANEL_DROPDOWN</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.prototype.PrototypeFacetForActionAnnotation">
-                    <mml:attr name="deploymentCategory">PROTOTYPING</mml:attr>
+                    <mml:attr name="deploymentType">PROTOTYPING</mml:attr>
                     <mml:attr name="hiding">true</mml:attr>
                 </mml:facet>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">

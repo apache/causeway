@@ -39,13 +39,7 @@ public final class InteractionUtils {
         facets.forEach(facet->{
             final HidingInteractionAdvisor advisor = (HidingInteractionAdvisor) facet;
             
-            String hides = advisor.hides(context);
-            
-            if(hides!=null) {
-                System.out.println("!!! advisor: " + advisor + " hides " + context.getIdentifier()+ " -> "+hides);    
-            }
-            
-            result.advise(hides, advisor);
+            result.advise(advisor.hides(context), advisor);
         });
         return result;
     }
