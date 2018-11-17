@@ -45,10 +45,22 @@ public interface IsisSystemEnvironment {
     public static final IsisSystemEnvironment DEFAULT = new IsisSystemEnvironment() {
         @Override
         public DeploymentType getDeploymentType() {
+            boolean anyVoteForPrototyping = false;
+            
+            anyVoteForPrototyping|=
+                    "true".equalsIgnoreCase(System.getenv("PROTOTYPING"));
+            
+            anyVoteForPrototyping|=
+                    "server-prototype".equalsIgnoreCase(System.getProperty("isis.deploymentType"));
+            
+            anyVoteForPrototyping|=
+                    "PROTOTYPING".equalsIgnoreCase(System.getProperty("isis.deploymentType"));
+            
             final DeploymentType deploymentType =
-                    "true".equalsIgnoreCase(System.getenv("PROTOTYPING"))
+                    anyVoteForPrototyping
                         ? DeploymentType.PROTOTYPING
                                 : DeploymentType.PRODUCTION;
+            
             return deploymentType;
         }
     };
