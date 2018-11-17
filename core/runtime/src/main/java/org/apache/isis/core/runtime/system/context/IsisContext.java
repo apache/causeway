@@ -139,7 +139,7 @@ public interface IsisContext {
                 return DeploymentType.PROTOTYPING;
             default:
                 throw new IllegalArgumentException(
-                        String.format("unknown deployment type '%s' in config property 's%'", 
+                        String.format("unknown deployment type '%s' in config property '%s'", 
                                 deploymentTypeLiteral, "isis.deploymentType"));
             }
 
