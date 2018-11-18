@@ -30,7 +30,7 @@ public final class SingleUserSession extends AuthenticationSessionAbstract imple
 
     private static final long serialVersionUID = 1L;
 
-    private static final String DEFAULT_USER_NAME = "exploration";
+    private static final String DEFAULT_USER_NAME = "prototyping";
 
     /**
      * Defaults validation code to <tt>""</tt>.

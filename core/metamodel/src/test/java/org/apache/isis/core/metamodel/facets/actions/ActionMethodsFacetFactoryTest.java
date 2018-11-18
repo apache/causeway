@@ -40,11 +40,9 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
@@ -126,29 +124,29 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     }
 
-    public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
-        final ActionNamedFacetFactory facetFactory = new ActionNamedFacetFactory();
-
-        facetFactory.setServicesInjector(mockServicesInjector);
-
-        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
-        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
-
-        class Customer {
-            @SuppressWarnings("unused")
-            public void anActionWithNamedAnnotation() {
-            }
-        }
-        final Method method = findMethod(Customer.class, "anActionWithNamedAnnotation");
-
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
-
-        final Facet facet = facetedMethod.getFacet(NamedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacet);
-        final NamedFacet namedFacet = (NamedFacet) facet;
-        assertEquals("An Action With Named Annotation", namedFacet.value());
-    }
+//    public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
+//        final ActionNamedFacetFactory facetFactory = new ActionNamedFacetFactory();
+//
+//        facetFactory.setServicesInjector(mockServicesInjector);
+//
+//        // mockSpecificationLoader.setLoadSpecificationStringReturn(voidSpec);
+//        allowing_specificationLoader_loadSpecification_any_willReturn(this.voidSpec);
+//
+//        class Customer {
+//            @SuppressWarnings("unused")
+//            public void anActionWithNamedAnnotation() {
+//            }
+//        }
+//        final Method method = findMethod(Customer.class, "anActionWithNamedAnnotation");
+//
+//        facetFactory.process(new ProcessMethodContext(Customer.class, null, method, methodRemover, facetedMethod));
+//
+//        final Facet facet = facetedMethod.getFacet(NamedFacet.class);
+//        assertNotNull(facet);
+//        assertTrue(facet instanceof NamedFacet);
+//        final NamedFacet namedFacet = (NamedFacet) facet;
+//        assertEquals("An Action With Named Annotation", namedFacet.value());
+//    }
 
 
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {

@@ -48,8 +48,7 @@ public interface AuthenticationSession extends Encodable, Serializable {
      * <p>
      * This can be used to confirm that this session has been properly created
      * and the user has been authenticated. It should return an empty string (
-     * <tt>""</tt>) if this is unauthenticated user (i.e., as created within an
-     * exploration system).
+     * <tt>""</tt>) if this is unauthenticated user
      */
     String getValidationCode();
 

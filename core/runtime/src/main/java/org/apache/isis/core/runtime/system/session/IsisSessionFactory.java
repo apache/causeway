@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.plugins.environment.DeploymentType;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.MessageRegistry;
@@ -238,10 +237,8 @@ implements ApplicationScopedComponent, AppManifestProvider {
      * The {@link LogonFixture}, if any, obtained by running fixtures.
      *
      * <p>
-     * Intended to be used when for {@link DeploymentType#SERVER_EXPLORATION
-     * exploration} (instead of an {@link ExplorationSession}) or
-     * {@link DeploymentType#SERVER_PROTOTYPE prototype} deployments (saves logging
-     * in). Should be <i>ignored</i> in other {@link DeploymentType}s.
+     * Intended to be used when for {@link DeploymentType#SERVER_PROTOTYPE prototype} deployments 
+     * (saves logging in). Should be <i>ignored</i> in other {@link DeploymentType}s.
      */
     @Programmatic
     public LogonFixture getLogonFixture() {

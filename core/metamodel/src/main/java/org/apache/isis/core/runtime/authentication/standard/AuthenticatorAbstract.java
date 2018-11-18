@@ -60,16 +60,8 @@ public abstract class AuthenticatorAbstract implements Authenticator {
 
 
     /**
-     * Whether this {@link Authenticator} is valid in the running context (and
+     * Whether this {@link Authenticator} is valid/applicable in the running context (and
      * optionally with respect to the provided {@link AuthenticationRequest}).
-     *
-     * <p>
-     * For example, the <tt>ExplorationAuthenticator</tt> (in the default
-     * runtime) is only available for authentication if running in
-     * <i>exploration mode</i>.
-     *
-     * <p>
-     * TODO: [ISIS-292] should change visibility to <tt>protected</tt> when remove from the API.
      */
     protected abstract boolean isValid(AuthenticationRequest request);
 

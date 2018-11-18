@@ -490,7 +490,7 @@ public class DomainObjectContainer {
      * </p>
      *
      * <p>
-     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * This method is useful during prototyping, but - because the filtering is performed client-side -
      * this method is only really suitable for initial development/prototyping, or for classes with very few
      * instances.  Use {@link #allMatches(Query)} for production code.
      * </p>
@@ -520,7 +520,7 @@ public class DomainObjectContainer {
      * </p>
      *
      * <p>
-     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * This method is useful during prototyping, but - because the filtering is performed client-side -
      * this method is only really suitable for initial development/prototyping, or for classes with very few
      * instances.  Use {@link #allMatches(Query)} for production code.
      * </p>
@@ -569,7 +569,7 @@ public class DomainObjectContainer {
      * that matches the supplied title, or <tt>null</tt> if none.
      *
      * <p>
-     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * This method is useful during prototyping, but - because the filtering is performed client-side -
      * this method is only really suitable for initial development/prototyping, or for classes with very few
      * instances.  Use {@link #firstMatch(Query)} for production code.
      * </p>
@@ -587,7 +587,7 @@ public class DomainObjectContainer {
      * that matches the supplied object as a pattern, or <tt>null</tt> if none.
      *
      * <p>
-     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * This method is useful during prototyping, but - because the filtering is performed client-side -
      * this method is only really suitable for initial development/prototyping, or for classes with very few
      * instances.  Use {@link #firstMatch(Query)} for production code.
      * </p>
@@ -639,7 +639,7 @@ public class DomainObjectContainer {
      * there is more that one instances a run-time exception will be thrown.
      * 
      * <p>
-     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * This method is useful during prototyping, but - because the filtering is performed client-side -
      * this method is only really suitable for initial development/prototyping, or for classes with very few
      * instances.  Use {@link #uniqueMatch(Query)} for production code.
      * </p>
@@ -664,7 +664,7 @@ public class DomainObjectContainer {
      * </p>
      *
      * <p>
-     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * This method is useful during prototyping, but - because the filtering is performed client-side -
      * this method is only really suitable for initial development/prototyping, or for classes with very few
      * instances.  Use {@link #uniqueMatch(Query)} for production code.
      * </p>

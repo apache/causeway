@@ -62,7 +62,7 @@ public class LogonFixtureAuthenticatorTest {
     }
 
     @Test
-    public void canAuthenticateExplorationRequest() throws Exception {
+    public void canAuthenticateLogonFixtureRequest() throws Exception {
         assertThat(authenticator.canAuthenticate(logonFixtureRequest.getClass()), is(true));
     }
 
@@ -70,29 +70,5 @@ public class LogonFixtureAuthenticatorTest {
     public void canAuthenticateSomeOtherTypeOfRequest() throws Exception {
         assertThat(authenticator.canAuthenticate(someOtherRequest.getClass()), is(false));
     }
-
-//    @Test
-//    public void isValidLogonFixtureRequestWhenRunningInExplorationMode() throws Exception {
-//        authenticator.init(DeploymentCategory.EXPLORING);
-//        assertThat(authenticator.isValid(logonFixtureRequest), is(true));
-//    }
-//
-//    @Test
-//    public void isValidLogonFixtureRequestWhenRunningInPrototypeMode() throws Exception {
-//        authenticator.init(DeploymentCategory.PROTOTYPING);
-//        assertThat(authenticator.isValid(logonFixtureRequest), is(true));
-//    }
-//
-//    @Test
-//    public void isNotValidExplorationRequestWhenRunningInSomethingOtherThanExplorationOrPrototypeMode() throws Exception {
-//        authenticator.init(DeploymentCategory.PRODUCTION);
-//        assertThat(authenticator.isValid(logonFixtureRequest), is(false));
-//    }
-//
-//    @Test
-//    public void isValidSomeOtherTypeOfRequest() throws Exception {
-//        authenticator.init(DeploymentCategory.EXPLORING);
-//        assertThat(authenticator.canAuthenticate(SomeOtherAuthenticationRequest.class), is(false));
-//    }
 
 }

@@ -21,12 +21,10 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.util.List;
 
-import java.util.function.Function;
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
@@ -56,7 +54,7 @@ public enum PageParameterNames {
     ACTION_OWNING_SPEC,
 
     /**
-     * Whether user, exploration, prototype etc.
+     * Whether user, prototype etc.
      */
     ACTION_TYPE,
 

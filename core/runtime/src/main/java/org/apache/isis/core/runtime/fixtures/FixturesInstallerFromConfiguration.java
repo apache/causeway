@@ -34,12 +34,10 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
     public static final String FIXTURES = ConfigurationConstants.ROOT + "fixtures";
 
     /**
-     * @deprecated - just adds to the cognotive load...
+     * @deprecated - just adds to the cognitive load...
      */
     @Deprecated
     private static final String FIXTURES_PREFIX = ConfigurationConstants.ROOT + "fixtures.prefix";
-
-    private static final String EXPLORATION_OBJECTS = ConfigurationConstants.ROOT + "exploration-objects";
 
     public FixturesInstallerFromConfiguration(final IsisSessionFactory isisSessionFactory) {
         super(isisSessionFactory);
@@ -80,21 +78,6 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
         void setFixtures(String[] fixtures) {
             this.fixtures = fixtures;
         }
-
-        void setFixtures(String fixturesStr) {
-            if(fixturesStr != null) {
-                setFixtures(new String[]{fixturesStr});
-            } else {
-                setFixtures(new String[]{});
-            }
-
-        }
-
-        @SuppressWarnings("unused")
-        boolean hasFixtures() {
-            return fixtures != null && fixtures.length != 0;
-        }
-
 
         // -- fixturePrefix
 

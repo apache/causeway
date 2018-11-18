@@ -26,7 +26,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.authentication.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -42,8 +41,6 @@ import org.apache.isis.core.webapp.WebAppConstants;
  * <ul>
  * <li>it looks up from the {@link HttpSession} using the value
  * {@link WebAppConstants#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}</li>
- * <li>failing that, if in exploration mode, then returns an exploration session
- * </li>
  * <li>failing that, if a {@link LogonFixture} has been provided and not already
  * used, will provide an session for that fixture. The {@link HttpSession} also
  * stores the value
@@ -78,14 +75,6 @@ public class AuthenticationSessionStrategyDefault extends AuthenticationSessionS
             return null;
         }
         final LogonFixture logonFixture = sessionFactory.getLogonFixture();
-
-        // see if exploration is supported
-        if (false) {
-            authSession = authenticationManager.authenticate(new AuthenticationRequestExploration(logonFixture));
-            if (authSession != null) {
-                return authSession;
-            }
-        }
 
         final boolean loggedInUsingLogonFixture = httpSession.getAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY) != null;
         if (logonFixture != null && !loggedInUsingLogonFixture) {

@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.system;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.apache.isis.applib.security.UserMemento;
 
@@ -246,7 +246,7 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
         return "five";
     }
 
-    public List getNine() {
+    public List<?> getNine() {
         return collection;
     }
 
@@ -262,10 +262,7 @@ public class JavaObjectWithBasicProgramConventions implements Interface1, Interf
     public String debugTwo(final String parameter) {
         return "action two";
     }
-
-    // exploration method
-    public void explorationSetUp() {
-    }
+    
 }
 
 interface Interface2 {

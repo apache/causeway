@@ -51,7 +51,7 @@ public class LinkAndLabel implements Serializable {
 
         final String name = ObjectAction.Util.nameFor(objectAction);
 
-        final boolean explorationOrPrototype = objectAction.isPrototype();
+        final boolean isPrototype = objectAction.isPrototype();
         final String actionIdentifier = ObjectAction.Util.actionIdentifierFor(objectAction);
         final String description = ObjectAction.Util.descriptionOf(objectAction);
         final String cssClass = ObjectAction.Util.cssClassFor(objectAction, objectAdapter);
@@ -64,7 +64,7 @@ public class LinkAndLabel implements Serializable {
         return new LinkAndLabel(
                 link, name,
                 disabledReasonIfAny, description,
-                blobOrClob, explorationOrPrototype,
+                blobOrClob, isPrototype,
                 actionIdentifier,
                 cssClass, cssClassFa, cssClassFaPosition, actionLayoutPosition,
                 semantics,
