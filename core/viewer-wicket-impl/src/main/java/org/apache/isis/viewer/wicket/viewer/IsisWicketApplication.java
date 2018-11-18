@@ -349,7 +349,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                 log(mmie.getValidationErrors());
             }
 
-            if(IsisContext.getEnvironment().getDeploymentType().isPrototyping()) {
+            if(_Context.isPrototyping()) {
                 DebugDiskDataStore.register(this);
                 LOG.info("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
                 LOG.info("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
@@ -432,7 +432,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
      * app is restarted.
      */
     protected String defaultEncryptionKeyIfNotConfigured() {
-        return IsisContext.getEnvironment().getDeploymentType().isPrototyping()
+        return _Context.isPrototyping()
                 ? "PrototypingEncryptionKey"
                         : UUID.randomUUID().toString();
     }
@@ -466,7 +466,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     }
 
     protected void configureWicketSourcePlugin() {
-        if(IsisContext.getEnvironment().getDeploymentType().isPrototyping()) {
+        if(_Context.isPrototyping()) {
             WicketSource.configure(this);
         }
     }
@@ -732,7 +732,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     @Override //[ahuber] final on purpose! to switch DeploymentType, do this consistent with IsisContext.
     public final RuntimeConfigurationType getConfigurationType() {
-        return IsisContext.getEnvironment().getDeploymentType().isPrototyping()
+        return _Context.isPrototyping()
                 ? RuntimeConfigurationType.DEVELOPMENT
                         : RuntimeConfigurationType.DEPLOYMENT;
     }

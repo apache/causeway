@@ -24,7 +24,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
 
 import static java.util.Objects.requireNonNull;
@@ -66,7 +66,7 @@ final class WebModule_Wicket implements WebModule  {
                 configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.basePath", "/wicket");
         
         {
-            deploymentMode = IsisContext.getEnvironment().getDeploymentType().isPrototyping()
+            deploymentMode = _Context.isPrototyping()
                     ? "development" : "deployment";
         }
         

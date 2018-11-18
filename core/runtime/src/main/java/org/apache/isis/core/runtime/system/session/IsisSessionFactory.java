@@ -33,6 +33,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -144,7 +145,7 @@ implements ApplicationScopedComponent, AppManifestProvider {
             fixtureInstaller.installFixtures();
 
             // only allow logon fixtures if not in production mode.
-            if (!IsisContext.getEnvironment().getDeploymentType().isProduction()) {
+            if (_Context.isPrototyping()) {
                 logonFixture = fixtureInstaller.getLogonFixture();
             }
 

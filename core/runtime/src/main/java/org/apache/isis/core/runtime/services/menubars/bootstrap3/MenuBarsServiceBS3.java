@@ -48,6 +48,7 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -60,7 +61,6 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @DomainService(nature = NatureOfService.DOMAIN)
@@ -169,7 +169,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
 
         menuBars.setMetadataError(
                 "Exactly one menu must have 'unreferencedActions' flag set; found " + size + " such menus");
-        if(!IsisContext.getEnvironment().getDeploymentType().isProduction()) {
+        if(_Context.isPrototyping()) {
             messageService.warnUser("Menubars metadata errors; check the error log");
         }
         LOG.error("Menubar layout metadata errors:\n\n{}\n\n", jaxbService.toXml(menuBars));

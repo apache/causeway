@@ -41,7 +41,7 @@ public class LogonFixtureAuthenticator extends AuthenticatorAbstract {
 
     @Override
     protected final boolean isValid(final AuthenticationRequest request) {
-        return _Context.getEnvironment().getDeploymentType().isPrototyping();
+        return _Context.isPrototyping();
     }
 
 

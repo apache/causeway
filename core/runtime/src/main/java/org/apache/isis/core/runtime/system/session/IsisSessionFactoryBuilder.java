@@ -114,7 +114,7 @@ public class IsisSessionFactoryBuilder {
         // ValueSemanticsProvider for a date value type) needs to use the Clock singleton
         // we do this after loading the services to allow a service to prime a different clock
         // implementation (eg to use an NTP time service).
-        if (!IsisContext.getEnvironment().getDeploymentType().isProduction() && !Clock.isInitialized()) {
+        if (_Context.isPrototyping() && !Clock.isInitialized()) {
             FixtureClock.initialize();
         }
 

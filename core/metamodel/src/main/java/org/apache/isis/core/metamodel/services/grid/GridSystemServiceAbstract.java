@@ -173,7 +173,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
             }
         } else {
 
-            if(_Context.getEnvironment().getDeploymentType().isPrototyping()) {
+            if(_Context.isPrototyping()) {
                 messageService.warnUser("Grid metadata errors for " + grid.getDomainClass().getName() + "; check the error log");
             }
             LOG.error("Grid metadata errors:\n\n{}\n\n", jaxbService.toXml(grid));

@@ -281,7 +281,7 @@ public interface ObjectAction extends ObjectMember {
             final List<ObjectAction> topLevelActions = _Lists.newArrayList();
 
             addTopLevelActions(adapter, ActionType.USER, topLevelActions);
-            if(_Context.getEnvironment().getDeploymentType().isPrototyping()) {
+            if(_Context.isPrototyping()) {
                 addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
             }
             return topLevelActions;
@@ -316,7 +316,7 @@ public interface ObjectAction extends ObjectMember {
             final List<ObjectAction> associatedActions = _Lists.newArrayList();
 
             addActions(adapter, ActionType.USER, association, associatedActions);
-            if(_Context.getEnvironment().getDeploymentType().isPrototyping()) {
+            if(_Context.isPrototyping()) {
                 addActions(adapter, ActionType.PROTOTYPE, association, associatedActions);
             }
 

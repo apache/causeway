@@ -241,9 +241,15 @@ public final class _Context {
 
     // -- ENVIRONMENT
     
+    /** framework internal, exposed by IsisContext */
     public static IsisSystemEnvironment getEnvironment() {
         return getOrElse(IsisSystemEnvironment.class, 
                 IsisSystemEnvironmentPlugin.get()::getIsisSystemEnvironment);
+    }
+    
+    /** framework internal, shortcut for convenience */
+    public static boolean isPrototyping() {
+        return getEnvironment().getDeploymentType().isPrototyping();
     }
 
     // -- HELPER

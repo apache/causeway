@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.commons.internal.context._Context;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -90,7 +90,7 @@ public class TranslationServicePo implements TranslationService {
     }
 
     protected boolean isPrototypeOrTest() {
-        return !IsisContext.getEnvironment().getDeploymentType().isProduction();
+        return _Context.isPrototyping();
     }
 
     @Programmatic

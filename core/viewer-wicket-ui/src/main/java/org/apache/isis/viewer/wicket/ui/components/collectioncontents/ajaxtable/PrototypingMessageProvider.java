@@ -25,6 +25,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.base._Timing.StopWatch;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
@@ -55,10 +56,7 @@ class PrototypingMessageProvider {
     
     private static String getTookTimingMessage() {
         
-        final boolean isPrototyping = IsisContext.getEnvironment()
-                .getDeploymentType().isPrototyping();
-        
-        if(!isPrototyping) {
+        if(!_Context.isPrototyping()) {
             return "";
         }
         

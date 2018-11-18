@@ -76,7 +76,7 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     @Override
     public boolean supportsReloading() {
-        return _Context.getEnvironment().getDeploymentType().isPrototyping();
+        return _Context.isPrototyping();
     }
 
     @Override

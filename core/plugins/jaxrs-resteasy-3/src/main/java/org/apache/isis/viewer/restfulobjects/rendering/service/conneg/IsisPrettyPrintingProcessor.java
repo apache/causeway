@@ -24,6 +24,7 @@ import javax.xml.bind.Marshaller;
 import org.jboss.resteasy.annotations.DecorateTypes;
 import org.jboss.resteasy.spi.DecoratorProcessor;
 
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -42,8 +43,7 @@ public class IsisPrettyPrintingProcessor implements DecoratorProcessor<Marshalle
 
     protected boolean shouldPrettyPrint() {
         try {
-            return getConfiguration().getBoolean(KEY_PRETTY_PRINT, 
-                    IsisContext.getEnvironment().getDeploymentType().isPrototyping());
+            return getConfiguration().getBoolean(KEY_PRETTY_PRINT, _Context.isPrototyping());
         } catch (Exception e) {
             return true;
         }

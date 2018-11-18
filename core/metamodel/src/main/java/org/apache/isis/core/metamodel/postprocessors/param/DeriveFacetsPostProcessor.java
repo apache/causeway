@@ -482,7 +482,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
     private List<ActionType> inferActionTypes() {
         final List<ActionType> actionTypes = _Lists.newArrayList();
         actionTypes.add(ActionType.USER);
-        if (_Context.getEnvironment().getDeploymentType().isPrototyping()) {
+        if (_Context.isPrototyping()) {
             actionTypes.add(ActionType.PROTOTYPE);
         }
         return actionTypes;
