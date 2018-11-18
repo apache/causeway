@@ -44,13 +44,9 @@ public abstract class PrototypeFacetAbstract extends MarkerFacetAbstract impleme
     @Override
     public String hides(
             final VisibilityContext<? extends VisibilityEvent> ic) {
-        return getDeploymentType().isProduction()
+        return deploymentType.isProduction()
                 ? "Prototyping action not visible in production mode"
                         : null;
-    }
-
-    protected DeploymentType getDeploymentType() {
-        return deploymentType;
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
