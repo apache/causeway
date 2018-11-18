@@ -353,23 +353,23 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                 DebugDiskDataStore.register(this);
                 LOG.info("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
                 LOG.info("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
-            }
 
-            if(!getDebugSettings().isDevelopmentUtilitiesEnabled()) {
-                boolean enableDevUtils = configuration
-                        .getBoolean(ENABLE_DEVELOPMENT_UTILITIES_KEY, ENABLE_DEVELOPMENT_UTILITIES_DEFAULT);
-                if(enableDevUtils) {
-                    getDebugSettings().setDevelopmentUtilitiesEnabled(true);
-
-                    // copied from DebugBarInitializer
-                    // this is hacky, but need to do this because IInitializer#init() called before
-                    // the Application's #init() is called.
-                    // an alternative, better, design might be to move Isis' own initialization into an
-                    // implementation of IInitializer?
-                    DebugBar.registerContributor(VersionDebugContributor.DEBUG_BAR_CONTRIB, this);
-                    DebugBar.registerContributor(InspectorDebugPanel.DEBUG_BAR_CONTRIB, this);
-                    DebugBar.registerContributor(SessionSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
-                    DebugBar.registerContributor(PageSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
+                if(!getDebugSettings().isDevelopmentUtilitiesEnabled()) {
+                    boolean enableDevUtils = configuration
+                            .getBoolean(ENABLE_DEVELOPMENT_UTILITIES_KEY, ENABLE_DEVELOPMENT_UTILITIES_DEFAULT);
+                    if(enableDevUtils) {
+                        getDebugSettings().setDevelopmentUtilitiesEnabled(true);
+    
+                        // copied from DebugBarInitializer
+                        // this is hacky, but need to do this because IInitializer#init() called before
+                        // the Application's #init() is called.
+                        // an alternative, better, design might be to move Isis' own initialization into an
+                        // implementation of IInitializer?
+                        DebugBar.registerContributor(VersionDebugContributor.DEBUG_BAR_CONTRIB, this);
+                        DebugBar.registerContributor(InspectorDebugPanel.DEBUG_BAR_CONTRIB, this);
+                        DebugBar.registerContributor(SessionSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
+                        DebugBar.registerContributor(PageSizeDebugPanel.DEBUG_BAR_CONTRIB, this);
+                    }
                 }
             }
 
