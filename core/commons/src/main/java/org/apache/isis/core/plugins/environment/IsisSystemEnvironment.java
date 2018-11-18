@@ -46,18 +46,33 @@ public interface IsisSystemEnvironment {
         @Override
         public DeploymentType getDeploymentType() {
             boolean anyVoteForPrototyping = false;
+            boolean anyVoteForProduction = false;
+            
+            // system environment priming (lowest prio)
             
             anyVoteForPrototyping|=
                     "true".equalsIgnoreCase(System.getenv("PROTOTYPING"));
             
+            // system property priming (medium prio)
+            
             anyVoteForPrototyping|=
-                    "server_prototype".equalsIgnoreCase(System.getProperty("isis.deploymentType"));
+                    "true".equalsIgnoreCase(System.getProperty("PROTOTYPING"));
             
             anyVoteForPrototyping|=
                     "PROTOTYPING".equalsIgnoreCase(System.getProperty("isis.deploymentType"));
             
+            // system property override (highest prio)
+            
+            anyVoteForProduction|=
+                    "false".equalsIgnoreCase(System.getProperty("PROTOTYPING"));
+            
+            anyVoteForProduction|=
+                    "PRODUCTION".equalsIgnoreCase(System.getProperty("isis.deploymentType"));
+            
+            final boolean isPrototyping = anyVoteForPrototyping && !anyVoteForProduction;
+            
             final DeploymentType deploymentType =
-                    anyVoteForPrototyping
+                    isPrototyping
                         ? DeploymentType.PROTOTYPING
                                 : DeploymentType.PRODUCTION;
             
