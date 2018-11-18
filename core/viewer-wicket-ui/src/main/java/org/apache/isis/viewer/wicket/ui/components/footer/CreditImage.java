@@ -21,13 +21,22 @@ package org.apache.isis.viewer.wicket.ui.components.footer;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 
+import static org.apache.isis.commons.internal.resources._Resources.isLocalResource;
+import static org.apache.isis.commons.internal.resources._Resources.prependContextPathIfPresent;
+
 public class CreditImage extends WebComponent {
 
+    private static final long serialVersionUID = 1L;
+    
     private final String imageUrl;
 
     public CreditImage(final String id, final String imageUrl) {
         super(id);
-        this.imageUrl = imageUrl;
+        
+        this.imageUrl = 
+                isLocalResource(imageUrl)
+                    ? prependContextPathIfPresent(imageUrl)
+                        : imageUrl;
     }
 
     @Override

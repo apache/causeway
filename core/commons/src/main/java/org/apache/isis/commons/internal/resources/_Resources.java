@@ -16,20 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.commons.internal.resources;
-
-import static org.apache.isis.commons.internal.base._With.ifPresentElseThrow;
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
+
+import static org.apache.isis.commons.internal.base._With.ifPresentElseThrow;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>
@@ -160,6 +161,21 @@ public final class _Resources {
     public final static void putRestfulPath(String restfulPath) {
         _Context.put(_Resources_RestfulPath.class, new _Resources_RestfulPath(restfulPath), false);
     }
+    
+    // -- LOCAL vs EXTERNAL resource path
+    
+    private static final Predicate<String> externalResourcePattern = 
+            Pattern.compile("^\\w+?://.*$").asPredicate(); 
+    
+    /**
+     * Returns whether the {@code resourcePath} is intended local and relative 
+     * to the web-app's context root. 
+     * @param resourcePath
+     */
+    public static boolean isLocalResource(String resourcePath) {
+        requires(resourcePath, "resourcePath");
+        return !externalResourcePattern.test(resourcePath);
+    }
 
     // -- HELPER
 
@@ -187,6 +203,8 @@ public final class _Resources {
         }
         return name;
     }
+
+
 
 
 
