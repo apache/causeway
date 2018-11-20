@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class AutoCompleteFacetForDomainObjectAnnotation extends AutoCompleteFacetAbstract {
 
-    private final Class<?> repositoryClass;
     private final String actionName;
 
     public AutoCompleteFacetForDomainObjectAnnotation(
@@ -36,16 +35,9 @@ public class AutoCompleteFacetForDomainObjectAnnotation extends AutoCompleteFace
             final Method repositoryMethod,
             final ServicesInjector servicesInjector) {
         super(facetHolder, repositoryClass, repositoryMethod, servicesInjector);
-        this.repositoryClass = repositoryClass;
         this.actionName = repositoryMethod.getName();
     }
 
-    /**
-     * Introduced for testing only.
-     */
-    public Class<?> getRepositoryClass() {
-        return repositoryClass;
-    }
 
     /**
      * Introduced for testing only.

@@ -54,6 +54,7 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
+import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacetForDomainObjectAnnotation;
@@ -103,7 +104,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     private final MetaModelValidatorForDeprecatedAnnotation boundedValidator = new MetaModelValidatorForDeprecatedAnnotation(Bounded.class);
     private final MetaModelValidatorForDeprecatedAnnotation immutableValidator = new MetaModelValidatorForDeprecatedAnnotation(Immutable.class);
     private final MetaModelValidatorForDeprecatedAnnotation objectTypeValidator = new MetaModelValidatorForDeprecatedAnnotation(ObjectType.class);
-    private final MetaModelValidatorForValidationFailures autoCompleteInvalid = new MetaModelValidatorForValidationFailures();
+    private final MetaModelValidatorForValidationFailures autoCompleteMethodInvalid = new MetaModelValidatorForValidationFailures();
     private final MetaModelValidatorForMixinTypes mixinTypeValidator = new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
 
@@ -221,9 +222,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         final Class<?> repositoryClass = annotation.repository();
         final String actionName = annotation.action();
 
-        if(!isServiceType(cls, "@AutoComplete", repositoryClass)) {
-            return null;
-        }
         final Method repositoryMethod = findRepositoryMethod(cls, "@AutoComplete", repositoryClass, actionName);
         if(repositoryMethod == null) {
             return null;
@@ -246,9 +244,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         }
         final String actionName = domainObject.autoCompleteAction();
 
-        if(!isServiceType(cls, "@DomainObject", repositoryClass)) {
-            return null;
-        }
         final Method repositoryMethod = findRepositoryMethod(cls, "@DomainObject", repositoryClass, actionName);
         if(repositoryMethod == null) {
             return null;
@@ -256,19 +251,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 
         return new AutoCompleteFacetForDomainObjectAnnotation(
                         facetHolder, repositoryClass, repositoryMethod, servicesInjector);
-    }
-
-    private boolean isServiceType(
-            final Class<?> cls,
-            final String annotationName,
-            final Class<?> repositoryClass) {
-        final boolean isRegistered = servicesInjector.isRegisteredService(repositoryClass);
-        if(!isRegistered) {
-            autoCompleteInvalid.addFailure(
-                    "%s annotation on %s specifies unknown repository '%s'",
-                    annotationName, cls.getName(), repositoryClass.getName());
-        }
-        return isRegistered;
     }
 
     private Method findRepositoryMethod(
@@ -285,7 +267,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 }
             }
         }
-        autoCompleteInvalid.addFailure(
+        autoCompleteMethodInvalid.addFailure(
                 "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
                 annotationName, cls.getName(), methodName, repositoryClass.getName());
         return null;
@@ -575,6 +557,19 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                             otherSpec.getFullIdentifier(),
                             objectSpecId);
                 }
+
+                final AutoCompleteFacet autoCompleteFacet = thisSpec.getFacet(AutoCompleteFacet.class);
+                if(autoCompleteFacet != null && !autoCompleteFacet.isNoop() && autoCompleteFacet instanceof AutoCompleteFacetAbstract) {
+                    final AutoCompleteFacetAbstract facet = (AutoCompleteFacetForDomainObjectAnnotation) autoCompleteFacet;
+                    final Class<?> repositoryClass = facet.getRepositoryClass();
+                    final boolean isRegistered = servicesInjector.isRegisteredService(repositoryClass);
+                    if(!isRegistered) {
+                        validationFailures.add(
+                                "@DomainObject annotation on %s specifies unknown repository '%s'",
+                                thisSpec.getFullIdentifier(), repositoryClass.getName());
+                    }
+
+                }
             }
 
         }));
@@ -586,7 +581,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         metaModelValidator.add(immutableValidator);
         metaModelValidator.add(objectTypeValidator);
 
-        metaModelValidator.add(autoCompleteInvalid);
+        metaModelValidator.add(autoCompleteMethodInvalid);
         metaModelValidator.add(mixinTypeValidator);
     }
 
