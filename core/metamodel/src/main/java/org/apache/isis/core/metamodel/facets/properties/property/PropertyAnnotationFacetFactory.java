@@ -19,18 +19,37 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property;
 
-import org.apache.isis.applib.annotation.*;
+import java.lang.reflect.Method;
+
+import javax.annotation.Nullable;
+
+import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Mandatory;
+import org.apache.isis.applib.annotation.MaxLength;
+import org.apache.isis.applib.annotation.MustSatisfy;
+import org.apache.isis.applib.annotation.NotPersisted;
+import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.annotation.PostsPropertyChangedEvent;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyInteraction;
+import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.*;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -50,7 +69,18 @@ import org.apache.isis.core.metamodel.facets.properties.property.mandatory.Manda
 import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetInvertedByOptionalAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForMaxLengthAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.maxlength.MaxLengthFacetForPropertyAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.property.modify.*;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromDefault;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForDomainEventFromPropertyInteractionAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyClearFacetForPostsPropertyChangedEventAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetAbstract;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetDefault;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyInteractionAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromDefault;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyInteractionAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForPostsPropertyChangedEventAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForNotPersistedAnnotationOnProperty;
@@ -62,13 +92,11 @@ import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropert
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.util.EventUtil;
-
-import javax.annotation.Nullable;
-import java.lang.reflect.Method;
 
 public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
 
@@ -108,6 +136,9 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     void processModify(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
+
+        final Class<?> cls = processMethodContext.getCls();
+        final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         final PropertyOrCollectionAccessorFacet getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
@@ -136,21 +167,21 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // search for @PropertyInteraction(value=...)
         if(propertyInteraction != null) {
-            propertyDomainEventType = propertyInteraction.value();
+            propertyDomainEventType = defaultFromDomainObjectIfRequired(typeSpec, propertyInteraction.value());
             propertyDomainEventFacet = propertyInteractionValidator.flagIfPresent(
                     new PropertyDomainEventFacetForPropertyInteractionAnnotation(
                         propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder), processMethodContext);
         } else
         // search for @Property(domainEvent=...)
-        if(property != null && property.domainEvent() != null) {
-            propertyDomainEventType = property.domainEvent();
+        if(property != null) {
+            propertyDomainEventType = defaultFromDomainObjectIfRequired(typeSpec, property.domainEvent());
             propertyDomainEventFacet = new PropertyDomainEventFacetForPropertyAnnotation(
                     propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
 
         } else
         // else use default event type
         {
-            propertyDomainEventType = PropertyDomainEvent.Default.class;
+            propertyDomainEventType = defaultFromDomainObjectIfRequired(typeSpec, PropertyDomainEvent.Default.class);
             propertyDomainEventFacet = new PropertyDomainEventFacetDefault(
                     propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
         }
@@ -227,6 +258,20 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             FacetUtil.addFacet(replacementFacet);
         }
     }
+
+    private static Class<? extends PropertyDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
+            final ObjectSpecification typeSpec,
+            final Class<? extends PropertyDomainEvent<?,?>> propertyDomainEventType) {
+        if (propertyDomainEventType == PropertyDomainEvent.Default.class) {
+            final PropertyDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
+                    typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            if (typeFromDomainObject != null) {
+                return typeFromDomainObject.getEventType();
+            }
+        }
+        return propertyDomainEventType;
+    }
+
 
 
     void processHidden(final ProcessMethodContext processMethodContext) {

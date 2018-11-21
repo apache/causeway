@@ -70,9 +70,11 @@ import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeO
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.CollectionUtils;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
@@ -105,6 +107,9 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
     void processModify(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
+
+        final Class<?> cls = processMethodContext.getCls();
+        final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         final PropertyOrCollectionAccessorFacet getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
@@ -145,21 +150,21 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
         // search for @CollectionInteraction(value=...)
         if(collectionInteraction != null) {
-            collectionDomainEventType = collectionInteraction.value();
+            collectionDomainEventType = defaultFromDomainObjectIfRequired(typeSpec, collectionInteraction.value());
             collectionDomainEventFacet = collectionInteractionValidator.flagIfPresent(
                     new CollectionDomainEventFacetForCollectionInteractionAnnotation(
                         collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder), processMethodContext);
         } else
         // search for @Collection(domainEvent=...)
-        if(collection != null && collection.domainEvent() != null) {
-            collectionDomainEventType = collection.domainEvent();
+        if(collection != null) {
+            collectionDomainEventType = defaultFromDomainObjectIfRequired(typeSpec, collection.domainEvent());
             collectionDomainEventFacet = new CollectionDomainEventFacetForCollectionAnnotation(
                     collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
 
         } else
         // else use default event type
         {
-            collectionDomainEventType = CollectionDomainEvent.Default.class;
+            collectionDomainEventType = defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class);
             collectionDomainEventFacet = new CollectionDomainEventFacetDefault(
                     collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
         }
@@ -236,6 +241,20 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
         }
 
     }
+
+    private static Class<? extends CollectionDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
+            final ObjectSpecification typeSpec,
+            final Class<? extends CollectionDomainEvent<?,?>> collectionDomainEventType) {
+        if (collectionDomainEventType == CollectionDomainEvent.Default.class) {
+            final CollectionDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
+                    typeSpec.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            if (typeFromDomainObject != null) {
+                return typeFromDomainObject.getEventType();
+            }
+        }
+        return collectionDomainEventType;
+    }
+
 
     void processHidden(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();

@@ -34,6 +34,8 @@ import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.applib.services.eventbus.ObjectCreatedEvent;
 import org.apache.isis.applib.services.eventbus.ObjectLoadedEvent;
 import org.apache.isis.applib.services.eventbus.ObjectPersistedEvent;
@@ -41,6 +43,7 @@ import org.apache.isis.applib.services.eventbus.ObjectPersistingEvent;
 import org.apache.isis.applib.services.eventbus.ObjectRemovingEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatedEvent;
 import org.apache.isis.applib.services.eventbus.ObjectUpdatingEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.Nullable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -68,6 +71,9 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.Au
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetFromBoundedAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForJdoPersistenceCapableAnnotation;
@@ -124,6 +130,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         processObjectType(processClassContext);
         processNature(processClassContext);
         processLifecycleEvents(processClassContext);
+        processDomainEvents(processClassContext);
 
     }
 
@@ -391,7 +398,21 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         processLifecycleEventRemoving(domainObject, holder);
         processLifecycleEventUpdated(domainObject, holder);
         processLifecycleEventUpdating(domainObject, holder);
+    }
 
+
+    private void processDomainEvents(final ProcessClassContext processClassContext) {
+
+        final Class<?> cls = processClassContext.getCls();
+        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
+        if(domainObject == null) {
+            return;
+        }
+        final FacetHolder holder = processClassContext.getFacetHolder();
+
+        processDomainEventAction(domainObject, holder);
+        processDomainEventProperty(domainObject, holder);
+        processDomainEventCollection(domainObject, holder);
     }
 
     private void processLifecycleEventCreated(final DomainObject domainObject, final FacetHolder holder) {
@@ -509,6 +530,39 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 ObjectUpdatingEvent.Default.class,
                 "isis.reflector.facet.domainObjectAnnotation.updatingLifecycleEvent.postForDefault",
                 getConfiguration())) {
+            FacetUtil.addFacet(facet);
+        }
+    }
+
+    private void processDomainEventAction(final DomainObject domainObject, final FacetHolder holder) {
+        final Class<? extends ActionDomainEvent<?>> domainEvent = domainObject.actionDomainEvent();
+
+        if(domainEvent != ActionDomainEvent.Default.class) {
+            final ActionDomainEventDefaultFacetForDomainObjectAnnotation facet =
+                    new ActionDomainEventDefaultFacetForDomainObjectAnnotation(
+                        holder, domainEvent, getSpecificationLoader());
+            FacetUtil.addFacet(facet);
+        }
+    }
+
+    private void processDomainEventProperty(final DomainObject domainObject, final FacetHolder holder) {
+        final Class<? extends PropertyDomainEvent<?,?>> domainEvent = domainObject.propertyDomainEvent();
+
+        if(domainEvent != PropertyDomainEvent.Default.class) {
+            final PropertyDomainEventDefaultFacetForDomainObjectAnnotation facet =
+                    new PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
+                        holder, domainEvent, getSpecificationLoader());
+            FacetUtil.addFacet(facet);
+        }
+    }
+
+    private void processDomainEventCollection(final DomainObject domainObject, final FacetHolder holder) {
+        final Class<? extends CollectionDomainEvent<?,?>> domainEvent = domainObject.collectionDomainEvent();
+
+        if(domainEvent != CollectionDomainEvent.Default.class) {
+            final CollectionDomainEventDefaultFacetForDomainObjectAnnotation facet =
+                    new CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
+                        holder, domainEvent, getSpecificationLoader());
             FacetUtil.addFacet(facet);
         }
     }

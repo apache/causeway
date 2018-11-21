@@ -85,6 +85,7 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.CollectionUtils;
@@ -172,19 +173,19 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
 
             // search for @ActionInteraction(value=...)
             if(actionInteraction != null) {
-                actionDomainEventType = actionInteraction.value();
+                actionDomainEventType = defaultFromDomainObjectIfRequired(typeSpec, actionInteraction.value());
                 actionDomainEventFacet = new ActionDomainEventFacetForActionInteractionAnnotation(
                         actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
             } else
             // search for @Action(domainEvent=...)
-            if(action != null && action.domainEvent() != null) {
-                actionDomainEventType = action.domainEvent();
+            if(action != null) {
+                actionDomainEventType = defaultFromDomainObjectIfRequired(typeSpec, action.domainEvent());
                 actionDomainEventFacet = new ActionDomainEventFacetForActionAnnotation(
                         actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
             } else
             // else use default event type
             {
-                actionDomainEventType = ActionDomainEvent.Default.class;
+                actionDomainEventType = defaultFromDomainObjectIfRequired(typeSpec, ActionDomainEvent.Default.class);
                 actionDomainEventFacet = new ActionDomainEventFacetDefault(
                         actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
             }
@@ -236,6 +237,19 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract
         } finally {
             processMethodContext.removeMethod(actionMethod);
         }
+    }
+
+    private static Class<? extends ActionDomainEvent<?>> defaultFromDomainObjectIfRequired(
+            final ObjectSpecification typeSpec,
+            final Class<? extends ActionDomainEvent<?>> actionDomainEventType) {
+        if (actionDomainEventType == ActionDomainEvent.Default.class) {
+            final ActionDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
+                    typeSpec.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            if (typeFromDomainObject != null) {
+                return typeFromDomainObject.getEventType();
+            }
+        }
+        return actionDomainEventType;
     }
 
     void processHidden(final ProcessMethodContext processMethodContext) {
