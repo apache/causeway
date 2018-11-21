@@ -210,6 +210,22 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
     }
     // endregion
 
+
+
+    // region > subject
+
+    /**
+     * The subject of the event, which will be either the {@link #getSource() source} for a regular action, or the
+     * {@link #getMixedIn() mixed-in} domain object for a mixin.
+     */
+    public Object getSubject() {
+        final Object mixedIn = getMixedIn();
+        return mixedIn != null ? mixedIn : getSource();
+    }
+
+
+    //endregion
+
     //region > arguments
     private List<Object> arguments;
     /**
