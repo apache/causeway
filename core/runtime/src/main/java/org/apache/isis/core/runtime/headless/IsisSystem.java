@@ -27,7 +27,7 @@ import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -77,12 +77,12 @@ public class IsisSystem {
 
         protected AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
 
-        protected IsisConfigurationDefault configuration = new IsisConfigurationDefault();
+        protected IsisConfigurationBuilder configurationBuilder = new IsisConfigurationBuilder();
 
         protected AppManifest appManifestIfAny;
 
-        public T with(IsisConfiguration configuration) {
-            this.configuration = (IsisConfigurationDefault) configuration;
+        public T with(IsisConfigurationBuilder configurationBuilder) {
+            this.configurationBuilder = configurationBuilder;
             return uncheckedCast(this);
         }
 
@@ -100,7 +100,7 @@ public class IsisSystem {
             final IsisSystem isisSystem =
                     new IsisSystem(
                             appManifestIfAny,
-                            configuration,
+                            configurationBuilder,
                             authenticationRequest);
             return configure(uncheckedCast(isisSystem));
         }
@@ -138,7 +138,7 @@ public class IsisSystem {
 
     // these fields 'xxxForComponentProvider' are used to initialize the IsisComponentProvider, but shouldn't be used thereafter.
     protected final AppManifest appManifestIfAny;
-    protected final IsisConfiguration configurationOverride;
+    protected final IsisConfigurationBuilder configurationBuilder;
 
     protected final AuthenticationRequest authenticationRequestIfAny;
     protected AuthenticationSession authenticationSession;
@@ -146,10 +146,10 @@ public class IsisSystem {
 
     protected IsisSystem(
             final AppManifest appManifestIfAny,
-            final IsisConfiguration configurationOverride,
+            final IsisConfigurationBuilder configurationBuilder,
             final AuthenticationRequest authenticationRequestIfAny) {
         this.appManifestIfAny = appManifestIfAny;
-        this.configurationOverride = configurationOverride;
+        this.configurationBuilder = configurationBuilder;
         this.authenticationRequestIfAny = authenticationRequestIfAny;
     }
 
@@ -182,10 +182,10 @@ public class IsisSystem {
         if(firstTime) {
             componentProvider = new IsisComponentProviderDefault(
                     appManifestIfAny,
-                    configurationOverride
+                    configurationBuilder
                     );
             
-            IsisContext.EnvironmentPrimer.primeEnvironment(configurationOverride);
+            IsisContext.EnvironmentPrimer.primeEnvironment(configurationBuilder);
 
             final IsisSessionFactoryBuilder isisSessionFactoryBuilder = 
                     new IsisSessionFactoryBuilder(componentProvider, appManifestIfAny);

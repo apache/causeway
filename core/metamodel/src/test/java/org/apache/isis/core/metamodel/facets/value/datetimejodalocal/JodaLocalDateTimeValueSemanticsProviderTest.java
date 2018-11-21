@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.metamodel.facets.value.datetimejodalocal;
 
-import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -45,24 +45,14 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
     @Mock
     ServicesInjector mockServicesInjector;
 
-    @Mock
-    IsisConfigurationDefault mockConfiguration;
-
     JodaLocalDateTimeValueSemanticsProvider provider;
 
     @Before
     public void setUp() throws Exception {
-        context.checking(new Expectations() {{
-
-            ignoring(mockFacetHolder);
-
-            allowing(mockServicesInjector).getConfigurationServiceInternal();
-            will(returnValue(mockConfiguration));
-
-            allowing(mockConfiguration).getString("isis.value.format.datetime","medium");
-            will(returnValue("iso_encoding"));
-        }});
-
+        
+        IsisConfigurationBuilder configBilder = _Config.configurationBuilderForTesting();
+        configBilder.put("isis.value.format.datetime", "iso_encoding");
+        
         provider = new JodaLocalDateTimeValueSemanticsProvider(mockFacetHolder, mockServicesInjector);
 
     }

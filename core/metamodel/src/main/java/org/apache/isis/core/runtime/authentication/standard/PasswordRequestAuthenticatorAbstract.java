@@ -19,14 +19,13 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 
 public abstract class PasswordRequestAuthenticatorAbstract extends AuthenticatorAbstract {
 
-    public PasswordRequestAuthenticatorAbstract(final IsisConfiguration configuration) {
-        super(configuration);
+    public PasswordRequestAuthenticatorAbstract() {
+        super();
     }
 
     @Override

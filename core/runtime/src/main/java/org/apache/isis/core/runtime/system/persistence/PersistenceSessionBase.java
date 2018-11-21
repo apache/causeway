@@ -34,6 +34,7 @@ import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metrics.MetricsService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.util.ToString;
@@ -118,7 +119,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         this.fixturesInstalledFlag = fixturesInstalledFlag;
 
         // injected
-        this.configuration = servicesInjector.getConfigurationServiceInternal();
+        this.configuration = _Config.getConfiguration();
         this.specificationLoader = servicesInjector.getSpecificationLoader();
         this.authenticationSession = authenticationSession;
 

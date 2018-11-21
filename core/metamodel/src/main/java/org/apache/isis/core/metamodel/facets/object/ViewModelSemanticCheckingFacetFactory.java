@@ -171,7 +171,7 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
 
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(validator);
     }
 

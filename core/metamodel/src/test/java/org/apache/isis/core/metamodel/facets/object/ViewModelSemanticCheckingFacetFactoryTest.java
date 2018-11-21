@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.object;
 
-import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -26,7 +25,8 @@ import org.junit.Test;
 
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.Nature;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -42,9 +41,6 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-
-    @Mock
-    private IsisConfigurationDefault mockConfiguration;
 
 
     @Mock
@@ -55,7 +51,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
     private ValidationFailures processThenRefine(final Class<?> cls) {
         facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, null));
         final MetaModelValidatorComposite metaModelValidator = new MetaModelValidatorComposite();
-        facetFactory.refineMetaModelValidator(metaModelValidator, null);
+        facetFactory.refineMetaModelValidator(metaModelValidator);
 
         final ValidationFailures validationFailures = new ValidationFailures();
         metaModelValidator.validate(validationFailures);
@@ -65,17 +61,11 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
     @Before
     public void setUp() throws Exception {
 
-        context.checking(new Expectations() {{
-            allowing(mockConfiguration).getBoolean(with(equalTo("isis.reflector.facets.ViewModelSemanticCheckingFacetFactory.enable")), with(any(boolean.class)));
-            will(returnValue(true));
-
-        }});
+        _Context.clear();
+        _Config.configurationBuilderForTesting()
+        .add("isis.reflector.facets.ViewModelSemanticCheckingFacetFactory.enable", "true");
+        
         facetFactory = new ViewModelSemanticCheckingFacetFactory();
-
-        context.checking(new Expectations() {{
-            allowing(mockServicesInjector).getConfigurationServiceInternal();
-            will(returnValue(mockConfiguration));
-        }});
 
         facetFactory.setServicesInjector(mockServicesInjector);
     }

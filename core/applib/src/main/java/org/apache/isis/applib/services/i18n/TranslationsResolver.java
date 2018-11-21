@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.i18n;
 
 import java.util.List;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 public interface TranslationsResolver {

@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.runtime.system;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.datanucleus.enhancement.Persistable;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -29,9 +27,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -92,7 +90,7 @@ public class ObjectMemberAbstractTest {
     private SpecificationLoader mockSpecificationLoader;
 
     ServicesInjector stubServicesInjector;
-    private IsisConfigurationDefault stubConfiguration;
+    
 
     @Mock
     private ObjectSpecification mockSpecForCustomer;
@@ -104,9 +102,11 @@ public class ObjectMemberAbstractTest {
     public void setUp() throws Exception {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
-        stubConfiguration = new IsisConfigurationDefault();
-        stubServicesInjector = new ServicesInjector(_Lists.<Object>of(
-                mockSpecificationLoader, mockSpecificationLoader, mockPersistenceSessionServiceInternal), stubConfiguration);
+        stubServicesInjector = ServicesInjector.builderForTesting()
+                .addServices(_Lists.<Object>of(
+                        mockSpecificationLoader, 
+                        mockPersistenceSessionServiceInternal))
+                .build();
 
         context.checking(new Expectations() {{
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();

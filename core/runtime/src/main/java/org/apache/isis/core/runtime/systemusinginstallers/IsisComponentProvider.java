@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
-import javax.jdo.annotations.PersistenceCapable;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.isis.applib.AppManifest;
@@ -46,13 +45,13 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassFunctions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract.DeprecatedPolicy;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -71,6 +70,8 @@ import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 /**
  *
  */
@@ -79,34 +80,31 @@ public abstract class IsisComponentProvider {
     // -- constructor, fields
 
     private final AppManifest appManifest;
-    private final IsisConfigurationDefault configuration;
+    private final IsisConfigurationBuilder configurationBuilder;
     protected final List<Object> services;
     protected final AuthenticationManager authenticationManager;
     protected final AuthorizationManager authorizationManager;
 
     public IsisComponentProvider(
+            final IsisConfigurationBuilder configurationBuilder,
             final AppManifest appManifest,
-            final IsisConfiguration configuration,
             final AuthenticationManager authenticationManager,
             final AuthorizationManager authorizationManager){
 
-        if(appManifest == null) {
-            throw new IllegalArgumentException("AppManifest is required");
-        }
-
-        this.appManifest = appManifest;
-        this.configuration = (IsisConfigurationDefault) configuration; // REVIEW: HACKY
-
+        this.configurationBuilder = requires(configurationBuilder, "configurationBuilder");
+        this.appManifest = requires(appManifest, "appManifest");
+        
         putAppManifestKey(appManifest);
         findAndRegisterTypes(appManifest);
         specifyServicesAndRegisteredEntitiesUsing(appManifest);
 
         addToConfigurationUsing(appManifest);
 
-        this.services = new ServicesInstallerFromConfigurationAndAnnotation(getConfiguration()).getServices();
+        this.services = new ServicesInstallerFromConfigurationAndAnnotation().getServices();
 
         final String fixtureClassNamesCsv = classNamesFrom(getAppManifest().getFixtures());
-        putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
+        
+        configurationBuilder.add(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
 
         this.authenticationManager = authenticationManager;
         this.authorizationManager = authorizationManager;
@@ -116,21 +114,14 @@ public abstract class IsisComponentProvider {
         return appManifest;
     }
 
-    public IsisConfigurationDefault getConfiguration() {
-        return configuration;
-    }
-
-
-
     // -- helpers (appManifest)
 
     private void putAppManifestKey(final AppManifest appManifest) {
         // required to prevent RegisterEntities validation from complaining
         // if it can't find any @PersistenceCapable entities in a module
         // that contains only services.
-        putConfigurationProperty(
-                SystemConstants.APP_MANIFEST_KEY, appManifest.getClass().getName()
-                );
+        configurationBuilder.add(
+                SystemConstants.APP_MANIFEST_KEY, appManifest.getClass().getName() );
     }
 
     private void findAndRegisterTypes(final AppManifest appManifest) {
@@ -241,8 +232,8 @@ public abstract class IsisComponentProvider {
         final Stream<String> packageNames = modulePackageNamesFrom(appManifest);
         final String packageNamesCsv = packageNames.collect(Collectors.joining(","));
 
-        putConfigurationProperty(ServicesInstallerFromAnnotation.PACKAGE_PREFIX_KEY, packageNamesCsv);
-        putConfigurationProperty(RegisterEntities.PACKAGE_PREFIX_KEY, packageNamesCsv);
+        configurationBuilder.add(ServicesInstallerFromAnnotation.PACKAGE_PREFIX_KEY, packageNamesCsv);
+        configurationBuilder.add(RegisterEntities.PACKAGE_PREFIX_KEY, packageNamesCsv);
 
         final List<Class<?>> additionalServices = appManifest.getAdditionalServices();
         if(additionalServices != null) {
@@ -252,9 +243,9 @@ public abstract class IsisComponentProvider {
     }
 
     private void appendToPropertyCsvValue(final String servicesKey, final String additionalServicesCsv) {
-        final String existingServicesCsv = configuration.getString(servicesKey);
+        final String existingServicesCsv = configurationBuilder.peekAtString(servicesKey);
         final String servicesCsv = join(existingServicesCsv, additionalServicesCsv);
-        putConfigurationProperty(servicesKey, servicesCsv);
+        configurationBuilder.add(servicesKey, servicesCsv);
     }
 
     private static String join(final String csv1, final String csv2) {
@@ -303,32 +294,10 @@ public abstract class IsisComponentProvider {
         final Map<String, String> configurationProperties = appManifest.getConfigurationProperties();
         if (configurationProperties != null) {
             for (Map.Entry<String, String> configProp : configurationProperties.entrySet()) {
-                addConfigurationProperty(configProp.getKey(), configProp.getValue());
+                configurationBuilder.add(configProp.getKey(), configProp.getValue());
             }
         }
     }
-
-    /**
-     * TODO: hacky, {@link IsisConfiguration} is meant to be immutable...
-     */
-    void putConfigurationProperty(final String key, final String value) {
-        if(value == null) {
-            return;
-        }
-        this.configuration.put(key, value);
-    }
-
-    /**
-     * TODO: hacky, {@link IsisConfiguration} is meant to be immutable...
-     */
-    void addConfigurationProperty(final String key, final String value) {
-        if(value == null) {
-            return;
-        }
-        this.configuration.add(key, value);
-    }
-
-
 
     // -- provideAuth*
 
@@ -340,15 +309,13 @@ public abstract class IsisComponentProvider {
         return authorizationManager;
     }
 
-
-
     // -- provideServiceInjector
 
-    public ServicesInjector provideServiceInjector(final IsisConfiguration configuration) {
-        return new ServicesInjector(services, configuration);
+    public ServicesInjector provideServiceInjector() {
+        return ServicesInjector.builderOf(configurationBuilder)
+                .addServices(services)
+                .build();
     }
-
-
 
     // -- provideSpecificationLoader
 
@@ -361,24 +328,27 @@ public abstract class IsisComponentProvider {
         final MetaModelValidator mmv = createMetaModelValidator();
 
         return JavaReflectorHelper.createObjectReflector(
-                configuration, programmingModel, metaModelRefiners,
+                programmingModel, metaModelRefiners,
                 mmv,
                 servicesInjector);
     }
 
     protected MetaModelValidator createMetaModelValidator() {
+        
         final String metaModelValidatorClassName =
-                configuration.getString(
+                configurationBuilder.peekAtString(
                         ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME,
                         ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);
         return InstanceUtil.createInstance(metaModelValidatorClassName, MetaModelValidator.class);
     }
 
     protected ProgrammingModel createProgrammingModel() {
+        
+        final DeprecatedPolicy deprecatedPolicy = DeprecatedPolicy.parse(configurationBuilder);
 
-        final ProgrammingModel programmingModel = new ProgrammingModelFacetsJava5(configuration);
-        ProgrammingModel.Util.includeFacetFactories(configuration, programmingModel);
-        ProgrammingModel.Util.excludeFacetFactories(configuration, programmingModel);
+        final ProgrammingModel programmingModel = new ProgrammingModelFacetsJava5(deprecatedPolicy);
+        ProgrammingModel.Util.includeFacetFactories(configurationBuilder, programmingModel);
+        ProgrammingModel.Util.excludeFacetFactories(configurationBuilder, programmingModel);
         return programmingModel;
     }
 

@@ -20,10 +20,10 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.Matchers;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Contributed;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -67,10 +67,8 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
                     return "Joe";
                 }
             }
-
+            
             context.checking(new Expectations() {{
-            	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-            	will(returnValue(null));
             	
                 allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
@@ -107,9 +105,6 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-            	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-            	will(returnValue(null));
-            	
                 allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
@@ -146,8 +141,6 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-            	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-            	will(returnValue(null));
             	
                 allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
@@ -188,8 +181,6 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-            	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-            	will(returnValue(null));
             	
                 allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
@@ -228,9 +219,6 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-            	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-            	will(returnValue(null));
-            	
                 allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
@@ -270,9 +258,6 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-            	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-            	will(returnValue(null));            	
-            	
                 allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
@@ -312,10 +297,6 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-            	
-            	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-            	will(returnValue(null));
-            	
                 allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
 
@@ -356,8 +337,6 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-            	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-            	will(returnValue(null));
             	
                 allowing(mockSpecificationLoader).loadSpecification(CustomerService.class);
                 will(returnValue(mockObjSpec));
@@ -398,9 +377,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
             }
 
             context.checking(new Expectations() {{
-            	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-            	will(returnValue(null));
-            	
+           	
                 allowing(mockSpecificationLoader).loadSpecification(Customer.class);
                 will(returnValue(mockObjSpec));
 

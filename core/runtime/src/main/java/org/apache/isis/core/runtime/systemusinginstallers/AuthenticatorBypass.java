@@ -18,15 +18,10 @@
  */
 package org.apache.isis.core.runtime.systemusinginstallers;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 
 class AuthenticatorBypass extends AuthenticatorAbstract {
-
-    public AuthenticatorBypass(final IsisConfiguration configuration) {
-        super(configuration);
-    }
 
     @Override
     protected boolean isValid(final AuthenticationRequest request) {

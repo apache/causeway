@@ -21,12 +21,10 @@ package org.apache.isis.core.metamodel.services;
 
 import java.util.List;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.commons.internal.collections._Lists;
 
 public class ServicesInjectorDefaultTest_validateServices {
 
@@ -47,12 +45,10 @@ public class ServicesInjectorDefaultTest_validateServices {
     public static class ValidateServicesTestValidateServices extends ServicesInjectorDefaultTest_validateServices {
 
         List<Object> serviceList;
-        IsisConfigurationDefault stubConfiguration;
 
         @Before
         public void setUp() throws Exception {
             serviceList = _Lists.newArrayList();
-            stubConfiguration = new IsisConfigurationDefault();
         }
 
         @Test(expected=IllegalStateException.class)
@@ -62,7 +58,9 @@ public class ServicesInjectorDefaultTest_validateServices {
             serviceList.add(new DomainServiceWithSomeId());
             serviceList.add(new DomainServiceWithDuplicateId());
 
-            servicesInjector = ServicesInjector.forTesting(serviceList, stubConfiguration, null);
+            servicesInjector = ServicesInjector.builderForTesting()
+                    .addServices(serviceList)
+                    .build();
 
             // when
             servicesInjector.validateServices();
@@ -74,7 +72,9 @@ public class ServicesInjectorDefaultTest_validateServices {
             serviceList.add(new DomainServiceWithSomeId());
             serviceList.add(new DomainServiceWithDifferentId());
 
-            servicesInjector = ServicesInjector.forTesting(serviceList, stubConfiguration, null);
+            servicesInjector = ServicesInjector.builderForTesting()
+                    .addServices(serviceList)
+                    .build();
 
             // when
             servicesInjector.validateServices();

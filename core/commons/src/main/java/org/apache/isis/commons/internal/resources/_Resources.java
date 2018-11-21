@@ -25,6 +25,8 @@ import java.nio.charset.Charset;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.commons.internal.base._Bytes;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
@@ -77,7 +79,7 @@ public final class _Resources {
         final InputStream is = load(contextClass, resourceName);
         return _Strings.ofBytes(_Bytes.of(is), charset);
     }
-    
+
     /**
      * @param resourceName
      * @return The resource location as an URL, or null if the resource could not be found.
@@ -150,9 +152,9 @@ public final class _Resources {
         return ifPresentElseThrow(getRestfulPathIfAny(), 
                 ()->new NullPointerException(
                         "Could not find BasePath for the REST Service "
-                        + "config value on the context."));
+                                + "config value on the context."));
     }
-    
+
     /**
      * Stores the {@code restfulPath} as an application scoped resource-object.
      * @param restfulPath
@@ -161,12 +163,12 @@ public final class _Resources {
     public final static void putRestfulPath(String restfulPath) {
         _Context.put(_Resources_RestfulPath.class, new _Resources_RestfulPath(restfulPath), false);
     }
-    
+
     // -- LOCAL vs EXTERNAL resource path
-    
+
     private static final Predicate<String> externalResourcePattern = 
             Pattern.compile("^\\w+?://.*$").asPredicate(); 
-    
+
     /**
      * Returns whether the {@code resourcePath} is intended local and relative 
      * to the web-app's context root. 
@@ -175,6 +177,18 @@ public final class _Resources {
     public static boolean isLocalResource(String resourcePath) {
         requires(resourcePath, "resourcePath");
         return !externalResourcePattern.test(resourcePath);
+    }
+
+    /**
+     * To build a path from chunks {@code 'a' + 'b' -> 'a/b'}, also handling cases eg.
+     * {@code 'a/' + '/b' -> 'a/b'}
+     * 
+     * @param extendee
+     * @param suffix
+     * @return
+     */
+    public static String combinePath(@Nullable String extendee, @Nullable String suffix) {
+        return _Strings.combineWithDelimiter(extendee, suffix, "/");
     }
 
     // -- HELPER
@@ -203,12 +217,6 @@ public final class _Resources {
         }
         return name;
     }
-
-
-
-
-
     
-
 
 }

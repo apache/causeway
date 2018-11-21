@@ -16,10 +16,6 @@
  */
 package org.apache.isis.core.runtime.services;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
@@ -39,9 +35,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class ServiceInstantiatorTestUsingCodegenPlugin {
 
@@ -58,7 +57,6 @@ public class ServiceInstantiatorTestUsingCodegenPlugin {
     public void setUp() throws Exception {
 
         serviceInstantiator = new ServiceInstantiator();
-        serviceInstantiator.setConfiguration(new IsisConfigurationDefault());
     }
 
     @Test

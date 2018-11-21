@@ -20,17 +20,9 @@
 package org.apache.isis.core.runtime.authentication.standard;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 
 public abstract class AuthenticatorAbstract implements Authenticator {
-
-    // -- constructor, fields
-    private final IsisConfiguration configuration;
-
-    public AuthenticatorAbstract(final IsisConfiguration configuration) {
-        this.configuration = configuration;
-    }
 
     // -- init, shutdown
 
@@ -69,14 +61,6 @@ public abstract class AuthenticatorAbstract implements Authenticator {
     public void logout(final AuthenticationSession session) {
         // no-op
     }
-
-
-    // -- Injected (via constructor)
-
-    public IsisConfiguration getConfiguration() {
-        return configuration;
-    }
-
 
 
 }

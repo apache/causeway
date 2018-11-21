@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -39,7 +38,7 @@ import org.apache.isis.objectstore.jdo.metamodel.specloader.validator.JdoMetaMod
 public class PersistenceSessionFactoryMetamodelRefiner implements MetaModelRefiner {
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel, IsisConfiguration configuration) {
+    public void refineProgrammingModel(ProgrammingModel programmingModel) {
         programmingModel.addFactory(
                 new JdoPersistenceCapableAnnotationFacetFactory(), ProgrammingModel.Position.BEGINNING);
         programmingModel.addFactory(new JdoDatastoreIdentityAnnotationFacetFactory());
@@ -61,8 +60,7 @@ public class PersistenceSessionFactoryMetamodelRefiner implements MetaModelRefin
 
     @Override
     public void refineMetaModelValidator(
-            MetaModelValidatorComposite metaModelValidator,
-            IsisConfiguration configuration) {
+            MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(new JdoMetaModelValidator());
         metaModelValidator.add(new MetaModelValidatorToCheckObjectSpecIdsUnique());
         metaModelValidator.add(new MetaModelValidatorToCheckModuleExtent());

@@ -22,7 +22,6 @@ import java.util.Set;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Plugin;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethodFactory;
@@ -157,10 +156,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelPlugin.FacetFact
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelPlugin.FactoryCollector;
 
 public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
-
-    public ProgrammingModelFacetsJava5(final IsisConfiguration configuration) {
-        this(DeprecatedPolicy.parse(configuration));
-    }
 
     public ProgrammingModelFacetsJava5(final DeprecatedPolicy deprecatedPolicy) {
         super(deprecatedPolicy);

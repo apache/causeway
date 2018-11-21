@@ -79,8 +79,6 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
-    private IsisConfiguration mockConfiguration;
-    @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
@@ -282,7 +280,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         // and given
         facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(mockOnType, getPasswordMethod, mockPasswordMember,
-                mockConfiguration, mockSpecificationLoader,
+                mockSpecificationLoader,
                 mockAuthenticationSessionProvider, mockAdapterManager
         ));
         context.checking(new Expectations() {

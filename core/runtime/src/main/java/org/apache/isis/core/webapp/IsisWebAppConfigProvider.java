@@ -109,7 +109,7 @@ public class IsisWebAppConfigProvider {
         requires(key, "key");
         requires(defaultValue, "defaultValue");
         
-        final String configValue = getConfigurationBuilder(servletContext).peekAt(key);
+        final String configValue = getConfigurationBuilder(servletContext).peekAtString(key);
         return ifPresentElse(configValue, defaultValue);
     }
     
@@ -121,7 +121,7 @@ public class IsisWebAppConfigProvider {
      */
     public static IsisWebAppConfigProvider getInstance() {
         return getOrThrow(IsisWebAppConfigProvider.class, 
-                ()->new IllegalStateException("No config provider registered on this context."));
+                ()->new IllegalStateException("No config provider registered on current context."));
     }
     
     public static IsisWebAppConfigProvider registerInstanceIfAbsent() {

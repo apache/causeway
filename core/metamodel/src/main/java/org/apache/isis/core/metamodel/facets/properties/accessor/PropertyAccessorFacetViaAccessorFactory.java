@@ -57,7 +57,6 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
         FacetUtil.addFacet(
                 new PropertyAccessorFacetViaAccessor(
                         typeSpec, accessorMethod, property,
-                        getConfiguration(),
                         getSpecificationLoader(),
                         getAuthenticationSessionProvider(),
                         adapterProvider

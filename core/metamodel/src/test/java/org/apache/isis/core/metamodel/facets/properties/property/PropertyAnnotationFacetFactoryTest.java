@@ -118,7 +118,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
         private void addGetterFacet(final FacetHolder holder) {
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder,
-                    mockConfiguration,
                     mockSpecificationLoader, 
                     mockAuthenticationSessionProvider,
                     mockPersistenceSessionServiceInternal
@@ -337,10 +336,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             // expect
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
-            context.checking(new Expectations() {{
-                oneOf(mockConfiguration).getBoolean("isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault", true);
-                will(returnValue(true));
-            }});
+            
+            resetConfig()
+            .put("isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault", "true");
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,

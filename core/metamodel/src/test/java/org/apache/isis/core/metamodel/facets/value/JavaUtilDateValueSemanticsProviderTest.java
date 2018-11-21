@@ -24,7 +24,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,12 +42,10 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
 
     @Before
     public void setUpObjects() throws Exception {
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.value.format.datetime");
-                will(returnValue(null));
-            }
-        });
+        
+        configurationBuilderForTesting
+        .put("isis.value.format.datetime", null);
+
 
         TestClock.initialize();
         date = new java.util.Date(0);

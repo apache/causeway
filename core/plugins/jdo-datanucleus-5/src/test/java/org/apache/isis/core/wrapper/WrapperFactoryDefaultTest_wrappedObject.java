@@ -38,8 +38,8 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
@@ -105,8 +105,6 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private ObjectSpecification mockOnType;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
-    @Mock
-    private IsisConfiguration mockConfiguration;
 
     @Mock
     private IsisSessionFactory mockIsisSessionFactory;
@@ -306,10 +304,11 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     public void shouldBeAbleToReadVisibleProperty() {
 
         allowingEmployeeHasSmithAdapter();
+        
+        _Config.configurationBuilderForTesting()
+        .put("isis.reflector.facet.filterVisibility", "true");
 
         context.checking(new Expectations() {{
-            oneOf(mockConfiguration).getBoolean("isis.reflector.facet.filterVisibility", true);
-            will(returnValue(true));
 
             allowing(mockAdapterForStringSmith).getSpecification();
             will(returnValue(mockStringSpec));
@@ -345,15 +344,15 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     public void shouldBeAbleToModifyEnabledPropertyUsingSetter() {
 
         allowingJonesStringValueAdapter();
+        
+        _Config.configurationBuilderForTesting()
+        .put("isis.reflector.facet.filterVisibility", "true");
 
         context.checking(new Expectations() {
             {
                 allowing(mockAdapterForStringJones).titleString(null);
 
                 ignoring(mockCommand);
-
-                oneOf(mockConfiguration).getBoolean("isis.reflector.facet.filterVisibility", true);
-                will(returnValue(true));
 
                 ignoring(mockStringSpec);
             }
@@ -421,7 +420,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
             Method init, Method accessor, Method modify, Method clear, Method hide, Method disable, Method validate) {
         FacetedMethod facetedMethod = FacetedMethod.createForProperty(accessor.getDeclaringClass(), accessor);
         FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(mockOnType, accessor, facetedMethod,
-                mockConfiguration, mockSpecificationLoader,
+                mockSpecificationLoader,
                 mockAuthenticationSessionProvider, mockAdapterManager
         ));
         FacetUtil.addFacet(new PropertyInitializationFacetViaSetterMethod(init, facetedMethod));

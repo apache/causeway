@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -93,9 +93,9 @@ MetaModelValidatorRefiner {
     }
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
 
-        final boolean doCheck = configuration.getBoolean(
+        final boolean doCheck = _Config.getConfiguration().getBoolean(
                 ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY,
                 ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_DEFAULT);
 

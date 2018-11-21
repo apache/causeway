@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -45,11 +46,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     private final List<Authenticator> authenticators = _Lists.newArrayList();
 
     private RandomCodeGenerator randomCodeGenerator;
-    private final IsisConfiguration configuration;
-
-    public AuthenticationManagerStandard(final IsisConfiguration configuration) {
-        this.configuration = configuration;
-    }
+    
 
     // //////////////////////////////////////////////////////////
     // init
@@ -232,7 +229,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     // //////////////////////////////////////////////////////////
 
     protected IsisConfiguration getConfiguration() {
-        return configuration;
+        return _Config.getConfiguration();
     }
 
 }

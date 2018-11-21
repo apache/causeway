@@ -16,21 +16,17 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 public class FacetedMethodsBuilderContext {
     public final SpecificationLoader specificationLoader;
     public final FacetProcessor facetProcessor;
-    public final ConfigurationServiceInternal configService;
 
     public FacetedMethodsBuilderContext(
             final SpecificationLoader specificationLoader,
-            final FacetProcessor facetProcessor,
-            final ConfigurationServiceInternal configService) {
+            final FacetProcessor facetProcessor) {
         this.specificationLoader = specificationLoader;
         this.facetProcessor = facetProcessor;
-        this.configService = configService;
     }
 }

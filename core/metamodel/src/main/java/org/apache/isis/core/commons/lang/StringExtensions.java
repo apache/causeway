@@ -26,6 +26,7 @@ import java.util.StringTokenizer;
 
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.resources._Resources;
 
 public final class StringExtensions {
 
@@ -290,19 +291,7 @@ public final class StringExtensions {
     }
 
     public static String combinePath(final String extendee, final String suffix) {
-        if (_Strings.isNullOrEmpty(extendee) && _Strings.isNullOrEmpty(suffix)) {
-            return "";
-        }
-        if (_Strings.isNullOrEmpty(extendee)) {
-            return suffix;
-        }
-        if (_Strings.isNullOrEmpty(suffix)) {
-            return extendee;
-        }
-        if (extendee.endsWith("/") || suffix.startsWith("/")) {
-            return extendee + suffix;
-        }
-        return extendee + "/" + suffix;
+        return _Resources.combinePath(extendee, suffix);
     }
 
     /**

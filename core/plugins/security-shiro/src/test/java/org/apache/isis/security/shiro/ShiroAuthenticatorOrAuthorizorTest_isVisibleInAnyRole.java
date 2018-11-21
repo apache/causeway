@@ -24,7 +24,6 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.Factory;
 import org.apache.shiro.util.ThreadContext;
-import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
@@ -32,7 +31,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -56,12 +57,10 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
     	
         // PRODUCTION
         
-    	context.checking(new Expectations() {{
-            allowing(mockConfiguration).getBoolean("isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated", false);
-            will(returnValue(false));
-        }});
+        IsisConfigurationBuilder configBuilder = _Config.configurationBuilderForTesting();
+        configBuilder.add("isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated", "false");
     	
-        authOrAuth = new ShiroAuthenticatorOrAuthorizor(mockConfiguration);
+        authOrAuth = new ShiroAuthenticatorOrAuthorizor();
         authOrAuth.init();
     }
 

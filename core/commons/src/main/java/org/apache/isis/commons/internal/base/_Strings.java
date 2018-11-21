@@ -23,6 +23,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.size;
 import static org.apache.isis.commons.internal.base._Strings_SplitIterator.splitIterator;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -237,6 +238,40 @@ public final class _Strings {
         }
         return input + suffix;
     }
+    
+    // -- REDUCTION (BINARY OPERATIOR)
+    
+    /**    
+     * Combines 2 strings {@code left} and {@code right} into a single string, such that left
+     * and right are delimited by the {@code delimiter} and such that
+     * the result does not introduce a sequence of delimiters, like for example when building file-system 
+     * paths from chunks.
+     *    
+     * @param left
+     * @param right
+     * @param delimiter
+     * @return non-null
+     */
+    public static String combineWithDelimiter(
+            @Nullable String left, @Nullable String right, String delimiter) {
+        
+        requiresNotEmpty(delimiter, "pathDelimiter");
+        
+        if (isNullOrEmpty(left) && isNullOrEmpty(right)) {
+            return "";
+        }
+        if (isNullOrEmpty(left)) {
+            return right;
+        }
+        if (isNullOrEmpty(right)) {
+            return left;
+        }
+        if (left.endsWith(delimiter) || right.startsWith(delimiter)) {
+            return left + right;
+        }
+        return left + delimiter + right;
+    }
+    
 
     // -- PADDING
 

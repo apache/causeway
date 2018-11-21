@@ -47,7 +47,8 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
     public static Facet create(
             final List<DomainObjectLayout> domainObjectLayouts,
             final ServicesInjector servicesInjector,
-            final IsisConfiguration configuration, final FacetHolder facetHolder) {
+            final IsisConfiguration configuration, 
+            final FacetHolder facetHolder) {
 
         return domainObjectLayouts.stream()
                 .map(DomainObjectLayout::titleUiEvent)
@@ -59,7 +60,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
                         configuration))
                 .findFirst()
                 .map(titleUiEventClass -> {
-                    final TranslationService translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
+                    final TranslationService translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);
                     final ObjectSpecification facetHolderAsSpec = (ObjectSpecification) facetHolder; // bit naughty...
                     final String translationContext = facetHolderAsSpec.getCorrespondingClass().getCanonicalName();
                     final EventBusService eventBusService = servicesInjector.lookupServiceElseFail(EventBusService.class);

@@ -36,7 +36,8 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceMenuOrder;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
@@ -71,14 +72,12 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     private final ServiceInstantiator serviceInstantiator;
 
-    public ServicesInstallerFromAnnotation(final IsisConfigurationDefault isisConfiguration) {
-        this(new ServiceInstantiator(), isisConfiguration);
+    public ServicesInstallerFromAnnotation() {
+        this(new ServiceInstantiator());
     }
 
-    public ServicesInstallerFromAnnotation(
-            final ServiceInstantiator serviceInstantiator,
-            final IsisConfigurationDefault isisConfiguration) {
-        super(NAME, isisConfiguration);
+    public ServicesInstallerFromAnnotation(final ServiceInstantiator serviceInstantiator) {
+        super(NAME);
         this.serviceInstantiator = serviceInstantiator;
     }
 
@@ -112,17 +111,13 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
             return;
         }
 
-        if(getConfiguration() == null) {
-            throw new IllegalStateException("No IsisConfiguration injected - aborting");
-        }
+        final IsisConfiguration configuration = _Config.getConfigurationElseThrow();
+        
         try {
-
-            // lazily copy over the configuration to the instantiator
-            serviceInstantiator.setConfiguration(getConfiguration());
 
             if(packagePrefixes == null) {
                 this.packagePrefixes = PACKAGE_PREFIX_STANDARD;
-                String packagePrefixes = getConfiguration().getString(PACKAGE_PREFIX_KEY);
+                String packagePrefixes = configuration.getString(PACKAGE_PREFIX_KEY);
                 if(!_Strings.isNullOrEmpty(packagePrefixes)) {
                     this.packagePrefixes = this.packagePrefixes + "," + packagePrefixes;
                 }

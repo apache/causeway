@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
@@ -57,7 +56,7 @@ public class BookmarkPolicyFacetFallbackFactory extends FacetFactoryAbstract imp
      * Violation if there is an action that is bookmarkable but does not have safe action semantics.
      */
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
 
             @Override

@@ -19,14 +19,13 @@
 
 package org.apache.isis.core.security.authorization;
 
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandardInstallerAbstract;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 
 public class BypassAuthorizationManagerInstaller extends AuthorizationManagerStandardInstallerAbstract {
 
-    public BypassAuthorizationManagerInstaller(final IsisConfigurationDefault isisConfiguration) {
-        super("bypass", isisConfiguration);
+    public BypassAuthorizationManagerInstaller() {
+        super("bypass");
     }
 
     @Override

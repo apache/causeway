@@ -27,7 +27,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
 
@@ -39,7 +38,6 @@ public class LogonFixtureAuthenticatorTest {
 
     private final Mockery mockery = new JUnit4Mockery();
 
-    private IsisConfiguration mockConfiguration;
     private LogonFixtureAuthenticator authenticator;
 
     private AuthenticationRequestLogonFixture logonFixtureRequest;
@@ -54,11 +52,10 @@ public class LogonFixtureAuthenticatorTest {
 
     @Before
     public void setUp() {
-        mockConfiguration = mockery.mock(IsisConfiguration.class);
 
         logonFixtureRequest = new AuthenticationRequestLogonFixture(new LogonFixture("joebloggs"));
         someOtherRequest = new SomeOtherAuthenticationRequest();
-        authenticator = new LogonFixtureAuthenticator(mockConfiguration);
+        authenticator = new LogonFixtureAuthenticator();
     }
 
     @Test

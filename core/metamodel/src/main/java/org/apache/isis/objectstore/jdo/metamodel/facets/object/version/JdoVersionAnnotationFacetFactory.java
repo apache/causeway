@@ -59,7 +59,7 @@ public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
     }
 

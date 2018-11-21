@@ -24,7 +24,6 @@ import java.util.List;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -38,39 +37,10 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
     // Constructor
     // /////////////////////////////////////////////////////////
 
-    public AuthorizationManagerStandard(final IsisConfiguration configuration) {
-        super(configuration);
+    public AuthorizationManagerStandard() {
+        super();
         // avoid null pointers
-        authorizor = new Authorizor() {
-
-            @Override
-            public void init() {
-            }
-
-            @Override
-            public void shutdown() {
-            }
-
-            @Override
-            public boolean isVisibleInRole(final String user, final Identifier identifier) {
-                return true;
-            }
-
-            @Override
-            public boolean isUsableInRole(final String role, final Identifier identifier) {
-                return true;
-            }
-
-            @Override
-            public boolean isVisibleInAnyRole(Identifier identifier) {
-                return true;
-            }
-
-            @Override
-            public boolean isUsableInAnyRole(Identifier identifier) {
-                return true;
-            }
-        };
+        authorizor = Authorizor.nop();
     }
 
     // /////////////////////////////////////////////////////////
@@ -150,12 +120,12 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
     // //////////////////////////////////////////////////
 
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite baseMetaModelValidator, IsisConfiguration configuration) {
+    public void refineMetaModelValidator(MetaModelValidatorComposite baseMetaModelValidator) {
         // no-op
     }
 
     @Override
-    public void refineProgrammingModel(ProgrammingModel baseProgrammingModel, IsisConfiguration configuration) {
+    public void refineProgrammingModel(ProgrammingModel baseProgrammingModel) {
         final AuthorizationFacetFactory facetFactory = new AuthorizationFacetFactory(this);
         baseProgrammingModel.addFactory(facetFactory);
     }

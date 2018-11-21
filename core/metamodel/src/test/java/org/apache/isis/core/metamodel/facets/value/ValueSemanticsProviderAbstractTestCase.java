@@ -19,14 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.apache.isis.core.unittestsupport.jmocking.JMockActions.returnArgument;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-
 import java.util.Locale;
 
 import org.jmock.Expectations;
@@ -37,7 +29,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -46,11 +40,17 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 public abstract class ValueSemanticsProviderAbstractTestCase {
 
@@ -64,8 +64,6 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Mock
     protected FacetHolder mockFacetHolder;
     @Mock
-    protected ConfigurationServiceInternal mockConfiguration;
-    @Mock
     protected ServicesInjector mockServicesInjector;
     @Mock
     protected PersistenceSessionServiceInternal mockSessionServiceInternal;
@@ -75,24 +73,17 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
     protected ObjectAdapter mockAdapter;
+    
+    protected IsisConfigurationBuilder configurationBuilderForTesting;
 
     @Before
     public void setUp() throws Exception {
         Locale.setDefault(Locale.UK);
-
+        
+        configurationBuilderForTesting = _Config.configurationBuilderForTesting();
+        
         context.checking(new Expectations() {
             {
-                allowing(mockConfiguration).getString(with(any(String.class)), with(any(String.class)));
-                will(returnArgument(1));
-
-                allowing(mockConfiguration).getBoolean(with(any(String.class)), with(any(Boolean.class)));
-                will(returnArgument(1));
-
-                allowing(mockConfiguration).getString("isis.locale");
-                will(returnValue(null));
-
-                allowing(mockServicesInjector).getConfigurationServiceInternal();
-                will(returnValue(mockConfiguration));
 
                 allowing(mockServicesInjector).getAuthenticationSessionProvider();
                 will(returnValue(mockAuthenticationSessionProvider));

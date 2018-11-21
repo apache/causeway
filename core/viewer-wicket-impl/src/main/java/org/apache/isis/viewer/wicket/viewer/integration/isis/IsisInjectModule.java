@@ -28,17 +28,11 @@ import com.google.inject.Singleton;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.plugins.environment.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderUsingInstallers;
 
 public class IsisInjectModule extends AbstractModule {
 
@@ -75,15 +69,6 @@ public class IsisInjectModule extends AbstractModule {
         }
     };
 
-    //private final DeploymentCategory deploymentCategory;
-    private final IsisConfigurationDefault isisConfiguration;
-
-    public IsisInjectModule(
-            final IsisConfigurationDefault isisConfiguration) {
-        this.isisConfiguration = isisConfiguration;
-        //this.deploymentCategory = IsisContext.getEnvironment().getDeploymentCategory();
-    }
-
     /**
      * Allows the {@link AppManifest} to be programmatically bound in.
      *
@@ -97,39 +82,25 @@ public class IsisInjectModule extends AbstractModule {
         bind(AppManifest.class).toInstance(APP_MANIFEST_NOOP);
     }
 
-    /**
-     * Simply as provided in the constructor.
-     */
-    @Provides
-    @Singleton
-    protected IsisConfiguration provideConfiguration() {
-        return isisConfiguration;
-    }
-
-    @Provides
-    @Singleton
-    protected DeploymentType provideDeploymentType() {
-        return IsisContext.getEnvironment().getDeploymentType();
-    }
-
-    @Provides
-    @com.google.inject.Inject
-    @Singleton
-    protected IsisSessionFactory provideIsisSessionFactory(
-            final AppManifest appManifestIfExplicitlyBound) {
-
-        final AppManifest appManifestToUse = determineAppManifest(appManifestIfExplicitlyBound);
-
-        final IsisComponentProvider componentProvider =
-                new IsisComponentProviderUsingInstallers(appManifestToUse, isisConfiguration);
-
-        final IsisSessionFactoryBuilder builder =
-                new IsisSessionFactoryBuilder(componentProvider, componentProvider.getAppManifest());
-
-        // as a side-effect, if the metamodel turns out to be invalid, then
-        // this will push the MetaModelInvalidException into IsisContext.
-        return builder.buildSessionFactory();
-    }
+//TODO[2039]
+//    @Provides
+//    @com.google.inject.Inject
+//    @Singleton
+//    protected IsisSessionFactory provideIsisSessionFactory(
+//            final AppManifest appManifestIfExplicitlyBound) {
+//
+//        final AppManifest appManifestToUse = determineAppManifest(appManifestIfExplicitlyBound);
+//
+//        final IsisComponentProvider componentProvider =
+//                new IsisComponentProviderUsingInstallers(appManifestToUse);
+//
+//        final IsisSessionFactoryBuilder builder =
+//                new IsisSessionFactoryBuilder(componentProvider, componentProvider.getAppManifest());
+//
+//        // as a side-effect, if the metamodel turns out to be invalid, then
+//        // this will push the MetaModelInvalidException into IsisContext.
+//        return builder.buildSessionFactory();
+//    }
 
     @Provides
     @com.google.inject.Inject
@@ -145,7 +116,7 @@ public class IsisInjectModule extends AbstractModule {
                 ? appManifestIfExplicitlyBound
                         : null;
 
-        return appManifestFrom(appManifest, isisConfiguration);
+        return appManifestFrom(appManifest);
     }
 
 
@@ -155,12 +126,11 @@ public class IsisInjectModule extends AbstractModule {
      * for an <tt>isis.appManifest</tt> entry instead.
      */
     private static AppManifest appManifestFrom(
-            final AppManifest appManifestFromConstructor,
-            final IsisConfiguration configuration) {
+            final AppManifest appManifestFromConstructor) {
         if(appManifestFromConstructor != null) {
             return appManifestFromConstructor;
         }
-        final String appManifestFromConfiguration = configuration.getString(SystemConstants.APP_MANIFEST_KEY);
+        final String appManifestFromConfiguration = _Config.getConfiguration().getString(SystemConstants.APP_MANIFEST_KEY);
         return appManifestFromConfiguration != null
                 ? InstanceUtil.createInstance(appManifestFromConfiguration, AppManifest.class)
                         : null;

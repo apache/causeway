@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodUtil;
@@ -160,8 +161,7 @@ public class FacetedMethodsBuilder {
         this.facetProcessor = facetedMethodsBuilderContext.facetProcessor;
         this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
 
-        this.explicitAnnotationsForActions = facetedMethodsBuilderContext.configService.getBoolean("isis.reflector.explicitAnnotations.action");
-
+        this.explicitAnnotationsForActions = _Config.getConfiguration().explicitAnnotationsForActions();
     }
 
     // ////////////////////////////////////////////////////////////////////////////

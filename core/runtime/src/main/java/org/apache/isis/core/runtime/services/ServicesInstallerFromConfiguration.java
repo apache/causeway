@@ -30,8 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstract  {
@@ -47,14 +47,12 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
 
     private final ServiceInstantiator serviceInstantiator;
 
-    public ServicesInstallerFromConfiguration(final IsisConfigurationDefault isisConfiguration) {
-        this(new ServiceInstantiator(), isisConfiguration);
+    public ServicesInstallerFromConfiguration() {
+        this(new ServiceInstantiator());
     }
 
-    ServicesInstallerFromConfiguration(
-            final ServiceInstantiator serviceInstantiator,
-            final IsisConfigurationDefault isisConfiguration) {
-        super(NAME, isisConfiguration);
+    ServicesInstallerFromConfiguration(final ServiceInstantiator serviceInstantiator) {
+        super(NAME);
         this.serviceInstantiator = serviceInstantiator;
     }
 
@@ -72,11 +70,9 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
         if(initialized) {
             return;
         }
-
         try {
-            // lazily copy over the configuration to the instantiator
-            serviceInstantiator.setConfiguration(getConfiguration());
-
+            // ensure we have a config
+            _Config.getConfigurationElseThrow();
         } finally {
             initialized = true;
         }
@@ -90,9 +86,6 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
     @Override
     public List<Object> getServices() {
         LOG.info("installing {}", this.getClass().getName());
-
-        // rather nasty, lazily copy over the configuration to the instantiator
-        serviceInstantiator.setConfiguration(getConfiguration());
 
         if(serviceList == null) {
 
@@ -116,7 +109,7 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
     private void appendConfiguredServices(
             final SortedMap<String, SortedSet<String>> positionedServices) {
 
-        final String configuredServices = getConfiguration().getString(SERVICES_KEY);
+        final String configuredServices = _Config.getConfigurationElseThrow().getString(SERVICES_KEY);
         if (configuredServices == null) {
             return;
         }

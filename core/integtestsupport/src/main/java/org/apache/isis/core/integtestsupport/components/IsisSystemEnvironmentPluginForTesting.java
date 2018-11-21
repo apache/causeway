@@ -2,7 +2,6 @@ package org.apache.isis.core.integtestsupport.components;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.plugins.environment.DeploymentType;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironmentPlugin;
@@ -38,8 +37,7 @@ public class IsisSystemEnvironmentPluginForTesting implements IsisSystemEnvironm
     // HELPER
 
     private IsisConfiguration getConfiguration() {
-        // TODO just a stub
-        IsisConfigurationDefault configuration = new IsisConfigurationDefault();
+        IsisConfiguration configuration = IsisConfiguration.loadDefault();
         return configuration;
     }
 

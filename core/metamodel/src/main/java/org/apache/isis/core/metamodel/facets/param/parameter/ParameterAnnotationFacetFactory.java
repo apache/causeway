@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 import javax.validation.constraints.Pattern;
 
 import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
@@ -145,7 +144,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
 
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(conflictingOptionalityValidator);
     }
 

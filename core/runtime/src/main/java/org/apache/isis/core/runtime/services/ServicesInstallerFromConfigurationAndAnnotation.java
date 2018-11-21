@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 public class ServicesInstallerFromConfigurationAndAnnotation extends ServicesInstallerAbstract  {
@@ -41,19 +40,17 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends ServicesIns
     private final ServicesInstallerFromAnnotation servicesInstallerFromAnnotation;
 
 
-    public ServicesInstallerFromConfigurationAndAnnotation(final IsisConfigurationDefault isisConfiguration) {
-        this(new ServiceInstantiator(), isisConfiguration);
+    public ServicesInstallerFromConfigurationAndAnnotation() {
+        this(new ServiceInstantiator());
     }
 
     public ServicesInstallerFromConfigurationAndAnnotation(
-            final ServiceInstantiator serviceInstantiator,
-            final IsisConfigurationDefault isisConfiguration) {
-        super(NAME, isisConfiguration);
+            final ServiceInstantiator serviceInstantiator) {
+        super(NAME);
 
         this.serviceInstantiator = serviceInstantiator;
-        servicesInstallerFromConfiguration = new ServicesInstallerFromConfiguration(serviceInstantiator,
-                isisConfiguration);
-        servicesInstallerFromAnnotation = new ServicesInstallerFromAnnotation(serviceInstantiator, isisConfiguration);
+        servicesInstallerFromConfiguration = new ServicesInstallerFromConfiguration(serviceInstantiator);
+        servicesInstallerFromAnnotation = new ServicesInstallerFromAnnotation(serviceInstantiator);
     }
 
 

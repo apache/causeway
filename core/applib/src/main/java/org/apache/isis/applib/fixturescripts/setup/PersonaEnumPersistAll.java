@@ -20,7 +20,6 @@ package org.apache.isis.applib.fixturescripts.setup;
 
 import java.util.List;
 
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.applib.fixturescripts.FixtureScript;

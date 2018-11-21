@@ -43,11 +43,9 @@ import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
@@ -71,10 +69,9 @@ public class ServicesInjector implements ApplicationScopedComponent, ServiceRegi
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicesInjector.class);
 
-    public static final String KEY_SET_PREFIX = "isis.services.injector.setPrefix";
-    public static final String KEY_INJECT_PREFIX = "isis.services.injector.injectPrefix";
+    private static final String KEY_SET_PREFIX = "isis.services.injector.setPrefix";
+    private static final String KEY_INJECT_PREFIX = "isis.services.injector.injectPrefix";
 
-    // -- CONSTRUCTOR, FIELDS
     /**
      * This is mutable internally, but only ever exposed (in {@link #streamRegisteredServices()}).
      */
@@ -93,37 +90,42 @@ public class ServicesInjector implements ApplicationScopedComponent, ServiceRegi
     private final boolean autowireSetters;
     private final boolean autowireInject;
 
-    public ServicesInjector(final List<Object> services, final IsisConfiguration configuration) {
-        this(services, null, configuration);
+    // -- BUILDER
+    
+    public static ServicesInjectorBuilder builder() {
+        return new ServicesInjectorBuilder();
     }
-
-    public static ServicesInjector forTesting(
-            final List<Object> services,
-            final IsisConfigurationDefault configuration,
-            final InjectorMethodEvaluator injectorMethodEvaluator) {
-        return new ServicesInjector(services, injectorMethodEvaluator, defaultAutowiring(configuration));
+    
+    public static ServicesInjectorBuilder builderOf(IsisConfigurationBuilder configBuilder) {
+        return builder()
+                .autowireSetters(configBuilder.peekAtBoolean(KEY_SET_PREFIX, true))
+                .autowireInject(configBuilder.peekAtBoolean(KEY_INJECT_PREFIX, true));
     }
-
-    private static IsisConfiguration defaultAutowiring(final IsisConfigurationDefault configuration) {
-        configuration.put(KEY_SET_PREFIX, ""+true);
-        configuration.put(KEY_INJECT_PREFIX, ""+false);
-        return configuration;
+    
+    public static ServicesInjectorBuilder builderForTesting() {
+        return builder()
+                .autowireSetters(true)
+                .autowireInject(false);
     }
+    
+    // -- CONSTRUCTOR (NOT EXPOSED)
 
-    private ServicesInjector(
+    ServicesInjector(
             final List<Object> services,
             final InjectorMethodEvaluator injectorMethodEvaluator,
-            final IsisConfiguration configuration) {
+            final boolean autowireSetters,
+            final boolean autowireInject
+            ) {
         
-        this.services = new ArrayList<>(services);//_Lists.unmodifiable(services);
+        this.services = new ArrayList<>(services);
 
         this.injectorMethodEvaluator =
                 injectorMethodEvaluator != null
                 ? injectorMethodEvaluator
                         : new InjectorMethodEvaluatorDefault();
 
-        this.autowireSetters = configuration.getBoolean(KEY_SET_PREFIX, true);
-        this.autowireInject = configuration.getBoolean(KEY_INJECT_PREFIX, false);
+        this.autowireSetters = autowireSetters;
+        this.autowireInject = autowireInject;
     }
 
     public boolean isRegisteredService(final Class<?> cls) {
@@ -485,12 +487,13 @@ public class ServicesInjector implements ApplicationScopedComponent, ServiceRegi
                         : (persistenceSessionServiceInternal = lookupServiceElseFail(PersistenceSessionServiceInternal.class));
     }
 
-    private ConfigurationServiceInternal configurationServiceInternal;
-    @Programmatic
-    public ConfigurationServiceInternal getConfigurationServiceInternal() {
-        return configurationServiceInternal != null
-                ? configurationServiceInternal
-                        : (configurationServiceInternal = lookupServiceElseFail(ConfigurationServiceInternal.class));
-    }
+//TODO[2039]    
+//    private ConfigurationServiceInternal configurationServiceInternal;
+//    @Programmatic
+//    public ConfigurationServiceInternal getConfigurationServiceInternal() {
+//        return configurationServiceInternal != null
+//                ? configurationServiceInternal
+//                        : (configurationServiceInternal = lookupServiceElseFail(ConfigurationServiceInternal.class));
+//    }
 
 }

@@ -19,10 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +27,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.longs.LongValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.longs.LongWrapperValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -45,12 +44,8 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         allowMockAdapterToReturn(longObj);
         holder = new FacetHolderImpl();
 
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.value.format.long");
-                will(returnValue(null));
-            }
-        });
+        configurationBuilderForTesting
+        .put("isis.value.format.long", null);
 
         setValue(value = new LongWrapperValueSemanticsProvider(holder, mockServicesInjector));
     }

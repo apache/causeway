@@ -43,13 +43,9 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
         integer = Integer.valueOf(32);
         allowMockAdapterToReturn(integer);
 
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.value.format.int");
-                will(returnValue(null));
-            }
-        });
-
+        configurationBuilderForTesting
+        .put("isis.value.format.int", null);
+        
         holder = new FacetHolderImpl();
         setValue(value = new IntWrapperValueSemanticsProvider(holder, mockServicesInjector));
     }

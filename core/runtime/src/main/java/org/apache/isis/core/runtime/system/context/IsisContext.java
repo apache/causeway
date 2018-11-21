@@ -28,6 +28,7 @@ import java.util.function.Supplier;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
@@ -113,9 +114,9 @@ public interface IsisContext {
         }
         
         @Deprecated
-        public static void primeEnvironment(IsisConfiguration configurationOverride) {
+        public static void primeEnvironment(IsisConfigurationBuilder configurationBuilder) {
             
-            final String deploymentTypeLiteral = configurationOverride.getString("isis.deploymentType");
+            final String deploymentTypeLiteral = configurationBuilder.peekAtString("isis.deploymentType");
             if(_Strings.isNullOrEmpty(deploymentTypeLiteral)) {
                 return; // do nothing
             }

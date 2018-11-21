@@ -61,6 +61,7 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
                 return null;
             }
         }
+        
         final Method method = findMethod(Customer.class, "foz");
 
         context.checking(new Expectations() {
@@ -73,10 +74,6 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
                 will(returnValue(null));
-
-                allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-                will(returnValue(null));
-
             }
         });
 
@@ -113,9 +110,6 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
                 will(returnValue(null));
 
-                allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-                will(returnValue(null));
-
             }
         });
 
@@ -142,9 +136,6 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
 
             context.checking(new Expectations() {
                 {
-                	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-                	will(returnValue(null));
-                	
                     allowing(mockSpecificationLoader).loadSpecification(Customer.class);
                     will(returnValue(mockObjSpec));
 
@@ -180,9 +171,6 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
 
             context.checking(new Expectations() {
                 {
-                	allowing(mockConfiguration).getString("isis.viewer.wicket.promptStyle");
-                	will(returnValue(null));                	
-                	
                     allowing(mockSpecificationLoader).loadSpecification(Customer.class);
                     will(returnValue(mockObjSpec));
 

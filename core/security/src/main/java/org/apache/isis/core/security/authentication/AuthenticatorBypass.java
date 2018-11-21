@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.security.authentication;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 
@@ -30,10 +29,6 @@ import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstrac
  * Intended for testing use only.
  */
 public class AuthenticatorBypass extends AuthenticatorAbstract {
-
-    public AuthenticatorBypass(final IsisConfiguration configuration) {
-        super(configuration);
-    }
 
     @Override
     public boolean isValid(final AuthenticationRequest request) {

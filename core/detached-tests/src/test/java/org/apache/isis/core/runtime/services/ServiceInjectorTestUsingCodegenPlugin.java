@@ -16,9 +16,6 @@
  */
 package org.apache.isis.core.runtime.services;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -36,10 +33,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ServiceInjectorTestUsingCodegenPlugin {
 
@@ -52,17 +50,16 @@ public class ServiceInjectorTestUsingCodegenPlugin {
     @Before
     public void setUp() throws Exception {
 
-        final IsisConfiguration configuration = new IsisConfigurationDefault();
-        
         serviceInstantiator = new ServiceInstantiator();
-        serviceInstantiator.setConfiguration(configuration);
         
-        final Object[] services = {
+        final List<Object> services = _Lists.of(
                 serviceInstantiator.createInstance(SingletonCalculator.class),
                 serviceInstantiator.createInstance(AccumulatingCalculator.class)
-                };
+                );
         
-        serviceInjector = new ServicesInjector(_Lists.of(services), configuration);
+        serviceInjector = ServicesInjector.builderForTesting()
+                .addServices(services)
+                .build();
     }
 
     @Test

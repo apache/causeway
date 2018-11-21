@@ -19,10 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,6 +28,9 @@ import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseExce
 import org.apache.isis.core.metamodel.facets.value.floats.FloatValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.floats.FloatWrapperValueSemanticsProvider;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
     private FloatValueSemanticsProviderAbstract value;
@@ -40,12 +39,9 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Before
     public void setUpObjects() throws Exception {
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.value.format.float");
-                will(returnValue(null));
-            }
-        });
+        
+        configurationBuilderForTesting
+        .put("isis.value.format.float", null);
 
         float1 = new Float(32.5f);
         allowMockAdapterToReturn(float1);

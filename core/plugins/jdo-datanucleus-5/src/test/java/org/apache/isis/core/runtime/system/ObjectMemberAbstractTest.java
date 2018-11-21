@@ -19,15 +19,6 @@
 
 package org.apache.isis.core.runtime.system;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 import org.datanucleus.enhancement.Persistable;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -39,7 +30,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -69,6 +59,15 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdap
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 public class ObjectMemberAbstractTest {
 
     @Rule
@@ -89,7 +88,6 @@ public class ObjectMemberAbstractTest {
     private SpecificationLoader mockSpecificationLoader;
 
     ServicesInjector stubServicesInjector;
-    private IsisConfigurationDefault stubConfiguration;
 
     @Mock
     private ObjectSpecification mockSpecForCustomer;
@@ -101,9 +99,11 @@ public class ObjectMemberAbstractTest {
     public void setUp() throws Exception {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
-        stubConfiguration = new IsisConfigurationDefault();
-        stubServicesInjector = new ServicesInjector(_Lists.<Object>of(
-                mockSpecificationLoader, mockSpecificationLoader, mockPersistenceSessionServiceInternal), stubConfiguration);
+        stubServicesInjector = ServicesInjector.builderForTesting()
+                .addServices(_Lists.<Object>of(
+                        mockSpecificationLoader, 
+                        mockPersistenceSessionServiceInternal))
+                .build(); 
 
         context.checking(new Expectations() {{
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();

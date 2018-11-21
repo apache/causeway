@@ -31,8 +31,10 @@ import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -67,9 +69,6 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     protected TranslationService mockTranslationService;
 
     @Mock
-    protected IsisConfigurationDefault mockConfiguration;
-
-    @Mock
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
 
     protected IdentifiedHolder facetHolder;
@@ -101,15 +100,18 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
         }
     }
 
+    protected IsisConfigurationBuilder resetConfig() {
+        _Context.clear();
+        return _Config.configurationBuilderForTesting();
+    }
+    
+    
     @Before
     public void setUpFacetedMethodAndParameter() throws Exception {
 
         // PRODUCTION
-
+        
         context.checking(new Expectations() {{
-
-            allowing(mockServicesInjector).getConfigurationServiceInternal();
-            will(returnValue(mockConfiguration));
 
             allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
             will(returnValue(mockPersistenceSessionServiceInternal));

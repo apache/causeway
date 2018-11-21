@@ -37,7 +37,6 @@ import org.apache.isis.applib.events.lifecycle.ObjectUpdatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectUpdatingEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -460,7 +459,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
     // //////////////////////////////////////
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
 
         metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
             @Override
@@ -511,17 +510,11 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
     // //////////////////////////////////////
 
-
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
         super.setServicesInjector(servicesInjector);
-        //TODO [ahuber] unused because of side effects ?
-        IsisConfiguration configuration = getConfiguration();
-
         this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
-
     }
-
 
     // //////////////////////////////////////
 

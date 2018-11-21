@@ -38,7 +38,6 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -109,7 +108,7 @@ public class isisWicketModule_bindingsStandard_Test {
 	private static class ConfigModule extends AbstractModule {
 		@Override 
 		protected void configure() {
-			bind(IsisConfiguration.class).to(IsisConfigurationDefault.class);
+			bind(IsisConfiguration.class).to(IsisConfiguration.class);
 		}
 	}
 

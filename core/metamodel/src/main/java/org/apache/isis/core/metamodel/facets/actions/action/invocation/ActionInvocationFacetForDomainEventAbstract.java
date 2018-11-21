@@ -54,6 +54,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -117,7 +118,7 @@ implements ImperativeFacet {
         this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
         this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
         this.servicesInjector = servicesInjector;
-        this.configuration = servicesInjector.getConfigurationServiceInternal();
+        this.configuration = _Config.getConfiguration();
         this.domainEventHelper = new DomainEventHelper(this.servicesInjector);
     }
 

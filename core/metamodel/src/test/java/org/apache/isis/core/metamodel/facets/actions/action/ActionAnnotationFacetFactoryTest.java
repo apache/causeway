@@ -111,10 +111,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).getConfigurationServiceInternal();
-            will(returnValue(mockConfiguration));
-
         }});
 
         actionMethod = findMethod(Customer.class, "someAction");
@@ -166,11 +162,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
             expectRemoveMethod(actionMethod);
 
-            context.checking(new Expectations() {{
-                allowing(mockConfiguration).getBoolean("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", true);
-                will(returnValue(true));
-            }});
-
+            resetConfig()
+            .put("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", "true");
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(
@@ -290,11 +283,8 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
             expectRemoveMethod(actionMethod);
 
-            context.checking(new Expectations() {{
-                allowing(mockConfiguration).getBoolean("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", true);
-                will(returnValue(true));
-            }});
-
+            resetConfig()
+            .put("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", "true");
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(
@@ -1166,20 +1156,12 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
     }
 
     void allowingCommandConfigurationToReturn(final String value) {
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.services.command.actions");
-                will(returnValue(value));
-            }
-        });
+        resetConfig()
+        .put("isis.services.command.actions", value);
     }
     void allowingPublishingConfigurationToReturn(final String value) {
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.services.publish.actions");
-                will(returnValue(value));
-            }
-        });
+        resetConfig()
+        .put("isis.services.publish.actions", value);
     }
 
 }

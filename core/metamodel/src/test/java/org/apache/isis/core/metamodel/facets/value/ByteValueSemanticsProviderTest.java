@@ -19,10 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,6 +27,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.bytes.ByteValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.bytes.ByteWrapperValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -45,13 +44,9 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         allowMockAdapterToReturn(byteObj);
         holder = new FacetHolderImpl();
 
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.value.format.byte");
-                will(returnValue(null));
-            }
-        });
-
+        configurationBuilderForTesting
+        .put("isis.value.format.byte", null);
+        
         setValue(value = new ByteWrapperValueSemanticsProvider(holder, mockServicesInjector));
     }
 

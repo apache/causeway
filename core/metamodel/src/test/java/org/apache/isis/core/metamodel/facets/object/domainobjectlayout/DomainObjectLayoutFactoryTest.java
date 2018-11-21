@@ -106,7 +106,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                super.resetConfig();
             }
 
             @Test
@@ -143,6 +143,11 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
         }
 
         public static class ForViewModelLayout extends Bookmarking {
+            
+            @Before
+            public void setUp2() throws Exception {
+                super.resetConfig();
+            }
 
             @Test
             public void whenSpecified() {
@@ -189,7 +194,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                super.resetConfig();
             }
 
             @Before
@@ -272,7 +277,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                super.resetConfig();
             }
 
 
@@ -353,7 +358,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                super.resetConfig();
             }
 
             @Test
@@ -431,7 +436,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                super.resetConfig();
             }
 
             @Test
@@ -509,7 +514,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                super.resetConfig();
             }
 
             @Test
@@ -587,7 +592,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                super.resetConfig();
             }
 
             @Test

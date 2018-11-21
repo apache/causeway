@@ -28,8 +28,7 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
@@ -49,50 +48,49 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
 
     public IsisComponentProviderUsingInstallers(
             final AppManifest appManifest,
-            final IsisConfiguration configuration) {
+            final IsisConfigurationBuilder configurationBuilder) {
+        
         this(appManifest,
-                (IsisConfigurationDefault) configuration, // REVIEW: HACKY
-                new InstallerLookup(configuration));
+                configurationBuilder,
+                new InstallerLookup(configurationBuilder));
     }
-
+    
     public IsisComponentProviderUsingInstallers(
             final AppManifest appManifest,
-            final IsisConfigurationDefault configuration,
+            final IsisConfigurationBuilder configurationBuilder,
             final InstallerLookup installerLookup) {
-        this(configuration, appManifest,
-                lookupAuthenticationManager(appManifest, installerLookup, configuration),
-                lookupAuthorizationManager(appManifest, installerLookup, configuration));
+        this(configurationBuilder, appManifest,
+                lookupAuthenticationManager(appManifest, installerLookup, configurationBuilder),
+                lookupAuthorizationManager(appManifest, installerLookup, configurationBuilder));
     }
 
     private IsisComponentProviderUsingInstallers(
-            final IsisConfiguration configuration,
+            final IsisConfigurationBuilder configurationBuilder,
             final AppManifest appManifest,
             final AuthenticationManager authenticationManager,
             final AuthorizationManager authorizationManager){
-        super(appManifest, configuration, authenticationManager, authorizationManager);
+        super(configurationBuilder, appManifest, authenticationManager, authorizationManager);
     }
-
-
 
     // -- constructor helpers (factories)
 
     private static AuthenticationManager lookupAuthenticationManager(
             final AppManifest appManifest, final InstallerLookup installerLookup,
-            final IsisConfigurationDefault configuration) {
+            final IsisConfigurationBuilder configurationBuilder) {
 
         final String authenticationMechanism = appManifest.getAuthenticationMechanism();
         final AuthenticationManagerInstaller authenticationInstaller =
                 installerLookup.authenticationManagerInstaller(authenticationMechanism);
 
         // no longer used, could probably remove
-        configuration.put(SystemConstants.AUTHENTICATION_INSTALLER_KEY, authenticationMechanism);
+        configurationBuilder.put(SystemConstants.AUTHENTICATION_INSTALLER_KEY, authenticationMechanism);
 
         return authenticationInstaller.createAuthenticationManager();
     }
 
     private static AuthorizationManager lookupAuthorizationManager(
             final AppManifest appManifest, final InstallerLookup installerLookup,
-            final IsisConfigurationDefault configuration) {
+            final IsisConfigurationBuilder configurationBuilder) {
 
         final String authorizationMechanism = appManifest.getAuthorizationMechanism();
 
@@ -101,7 +99,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
                 installerLookup.authorizationManagerInstaller(authorizationMechanism);
 
         // no longer used, could probably remove
-        configuration.put(SystemConstants.AUTHORIZATION_INSTALLER_KEY, authorizationMechanism);
+        configurationBuilder.put(SystemConstants.AUTHORIZATION_INSTALLER_KEY, authorizationMechanism);
 
         return authorizationInstaller.createAuthorizationManager();
     }
@@ -131,11 +129,11 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
 
         // -- constructor, fields
 
-        private final IsisConfiguration isisConfiguration;
+        private final IsisConfigurationBuilder configurationBuilder;
         private final List<Installer> installerList = _Lists.newArrayList();
 
-        public InstallerLookup(final IsisConfiguration isisConfiguration) throws InstanceCreationException {
-            this.isisConfiguration = isisConfiguration;
+        public InstallerLookup(final IsisConfigurationBuilder configurationBuilder) throws InstanceCreationException {
+            this.configurationBuilder = configurationBuilder;
 
             final List<String> installerClassNames = _Lists.of(
                     "org.apache.isis.core.security.authentication.BypassAuthenticationManagerInstaller", // bypass
@@ -149,7 +147,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
                     continue;
                 }
                 try {
-                    final Installer object = (Installer) InstanceUtil.createInstance(className, isisConfiguration);
+                    final Installer object = (Installer) InstanceUtil.createInstance(className); //[2039] second arg removed
                     LOG.debug("created component installer: {} - {}", object.getName(), className);
                     installerList.add(object);
                 } catch (final UnavailableClassException e) {
@@ -218,7 +216,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
                 final String key,
                 final String defaultImpl) {
             if (reqImpl == null) {
-                reqImpl = isisConfiguration.getString(key, defaultImpl);
+                reqImpl = configurationBuilder.peekAtString(key, defaultImpl);
             }
             if (reqImpl == null) {
                 return null;

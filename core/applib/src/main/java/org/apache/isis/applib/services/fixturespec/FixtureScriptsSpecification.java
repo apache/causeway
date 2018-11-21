@@ -19,8 +19,8 @@ package org.apache.isis.applib.services.fixturespec;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.FixtureResultList;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.fixturescripts.FixtureScriptWithExecutionStrategy;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 /**
  * Pulls together the various state that influences the behaviour of {@link FixtureScripts} service.

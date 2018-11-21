@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -92,9 +92,9 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
 
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
 
-        final boolean serviceActionsOnly = configuration.getBoolean(
+        final boolean serviceActionsOnly = _Config.getConfiguration().getBoolean(
                 ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_KEY,
                 ISIS_REFLECTOR_VALIDATOR_SERVICE_ACTIONS_ONLY_DEFAULT);
         if (serviceActionsOnly) {
@@ -135,7 +135,7 @@ public class DomainServiceFacetAnnotationFactory extends FacetFactoryAbstract im
             }));
         }
 
-        boolean mixinsOnly = configuration.getBoolean(
+        boolean mixinsOnly = _Config.getConfiguration().getBoolean(
                 ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_KEY,
                 ISIS_REFLECTOR_VALIDATOR_MIXINS_ONLY_DEFAULT);
         if (mixinsOnly) {

@@ -19,8 +19,6 @@
 
 package org.apache.isis.applib.services.config;
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -30,8 +28,6 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
 
 @XmlRootElement(name = "configurationProperty")
 @XmlType(
@@ -72,7 +68,7 @@ public class ConfigurationProperty implements Comparable<ConfigurationProperty> 
 
     @XmlElement(required = true)
     public String getValue() {
-        return Util.maskIfProtected(key, value);
+        return value;
     }
 
     public void setValue(final String value) {
@@ -84,32 +80,5 @@ public class ConfigurationProperty implements Comparable<ConfigurationProperty> 
     public int compareTo(final ConfigurationProperty other) {
         return _NullSafe.compareNullsLast(getKey(), other.getKey());
     }
-
-    public static class Util {
-
-        private static final List<String> PROTECTED_KEYS =
-                _Lists.of("password", "apiKey", "authToken");
-
-
-        private Util(){}
-
-        static boolean isProtected(final String key) {
-            if(_Strings.isNullOrEmpty(key)) {
-                return false;
-            }
-            final String toLowerCase = key.toLowerCase();
-            for (String protectedKey : PROTECTED_KEYS) {
-                if(toLowerCase.contains(protectedKey.toLowerCase())) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public static String maskIfProtected(final String key, final String value) {
-            return isProtected(key) ? "********" : value;
-        }
-    }
-
 
 }

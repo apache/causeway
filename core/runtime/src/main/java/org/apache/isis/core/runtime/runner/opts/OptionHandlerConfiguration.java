@@ -19,20 +19,20 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
-import static org.apache.isis.core.runtime.runner.Constants.CONFIGURATION_LONG_OPT;
-import static org.apache.isis.core.runtime.runner.Constants.CONFIGURATION_OPT;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
+
+import static org.apache.isis.core.runtime.runner.Constants.CONFIGURATION_LONG_OPT;
+import static org.apache.isis.core.runtime.runner.Constants.CONFIGURATION_OPT;
 
 public class OptionHandlerConfiguration extends OptionHandlerAbstract {
 
@@ -56,7 +56,10 @@ public class OptionHandlerConfiguration extends OptionHandlerAbstract {
         if (configurationResource == null) {
             return;
         }
-        isisConfigurationBuilder.addConfigurationResource(configurationResource, NotFoundPolicy.FAIL_FAST, IsisConfigurationDefault.ContainsPolicy.IGNORE);
+        isisConfigurationBuilder.addConfigurationResource(
+                configurationResource, 
+                NotFoundPolicy.FAIL_FAST, 
+                IsisConfiguration.ContainsPolicy.IGNORE);
     }
 
 }
