@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
@@ -77,7 +77,7 @@ public class IsisSystem {
 
         protected AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
 
-        protected IsisConfigurationBuilder configurationBuilder = new IsisConfigurationBuilder();
+        protected IsisConfigurationBuilder configurationBuilder = IsisConfigurationBuilder.empty();
 
         protected AppManifest appManifestIfAny;
 
@@ -180,12 +180,12 @@ public class IsisSystem {
 
         boolean firstTime = isisSessionFactory == null;
         if(firstTime) {
-            componentProvider = new IsisComponentProviderDefault(
-                    appManifestIfAny,
-                    configurationBuilder
-                    );
+
+            componentProvider = IsisComponentProvider.builder()
+                    .appManifest(appManifestIfAny)
+                    .build();
             
-            IsisContext.EnvironmentPrimer.primeEnvironment(configurationBuilder);
+            _Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
 
             final IsisSessionFactoryBuilder isisSessionFactoryBuilder = 
                     new IsisSessionFactoryBuilder(componentProvider, appManifestIfAny);

@@ -51,7 +51,6 @@ import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactoryMetamodelRefiner;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderDefault2;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.CommandDtoUtils;
@@ -73,7 +72,11 @@ public class IsisSessionFactoryBuilder {
     private final IsisTimeZoneInitializer timeZoneInitializer;
 
     public IsisSessionFactoryBuilder(final AppManifest appManifest) {
-        this(new IsisComponentProviderDefault2(appManifest, null), appManifest);
+        this(IsisComponentProvider.builder()
+                .appManifest(appManifest)
+                .addConfigPackageAsResourceStreamSource()
+                .build(),
+                appManifest);
     }
 
     public IsisSessionFactoryBuilder(

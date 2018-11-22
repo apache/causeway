@@ -33,7 +33,7 @@ public class IsisConfigurationBuilder_PeekConfigurationTest extends TestCase {
 
     @Override
     protected void setUp() throws Exception {
-    	configurationBuilder = new IsisConfigurationBuilder();
+    	configurationBuilder = IsisConfigurationBuilder.empty();
     	configurationBuilder.add("isis.test", "val");
     }
 

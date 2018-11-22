@@ -65,10 +65,9 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     @Before
     public void setUp() throws Exception {
+        _Config.clear();
         facetFactory = new DomainObjectAnnotationFacetFactory();
-
         facetFactory.setServicesInjector(mockServicesInjector);
-
     }
 
     @After

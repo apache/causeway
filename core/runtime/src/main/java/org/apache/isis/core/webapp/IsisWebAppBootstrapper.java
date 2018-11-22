@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.config.IsisConfiguration.ContainsPolicy;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
@@ -64,11 +65,8 @@ public final class IsisWebAppBootstrapper implements ServletContextListener {
             final String webInfDir = servletContext.getRealPath("/WEB-INF");
             loggingConfigurer.configureLogging(webInfDir, emptyStringArray);
 
-            final IsisConfigurationBuilder isisConfigurationBuilder = 
-                    IsisWebAppConfigProvider.getInstance().getConfigurationBuilder(servletContext);
-            isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
-
-            addConfigurationResourcesForDeploymentType(isisConfigurationBuilder);
+            IsisWebAppConfigHelper.initConfigurationFrom(servletContext);
+            _Config.acceptBuilder(this::addConfigurationResourcesForDeploymentType);
 
         } catch (final RuntimeException e) {
             LOG.error("startup failed", e);

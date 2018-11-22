@@ -34,7 +34,7 @@ public class PrimerForEnvironmentVariableISIS_OPTS_Test {
 
     @Before
     public void setUp() throws Exception {
-        builder = new IsisConfigurationBuilder();
+        builder = IsisConfigurationBuilder.empty();
     }
 
     @Test

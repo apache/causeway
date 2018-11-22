@@ -25,9 +25,6 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixtures.LogonFixture;
@@ -72,8 +69,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerExc
 public class IsisSessionFactory
 implements ApplicationScopedComponent, AppManifestProvider {
 
-    @SuppressWarnings("unused")
-    private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactory.class);
+    //private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactory.class);
 
     // -- constructor, fields, accessors
 

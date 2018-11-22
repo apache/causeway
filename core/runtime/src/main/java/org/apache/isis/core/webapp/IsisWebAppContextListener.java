@@ -31,11 +31,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.config.IsisConfiguration.ContainsPolicy;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.webapp.modules.WebModule;
+import org.apache.isis.core.webapp.modules.WebModuleContext;
 
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 import static org.apache.isis.commons.internal.resources._Resources.putContextPathIfPresent;
@@ -76,28 +78,23 @@ public class IsisWebAppContextListener implements ServletContextListener {
         
         putContextPathIfPresent(servletContext.getContextPath());
         
-        final IsisWebAppConfigProvider configProvider = IsisWebAppConfigProvider.registerInstanceIfAbsent();
+        IsisWebAppConfigHelper.initConfigurationFrom(servletContext);
+        _Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
 
-        final IsisConfigurationBuilder isisConfigurationBuilder =
-                IsisWebAppConfigProvider.getInstance().getConfigurationBuilder(servletContext);
-        isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
+        final WebModuleContext webModuleContext = new WebModuleContext(servletContext);
         
-        IsisContext.EnvironmentPrimer.primeEnvironment(isisConfigurationBuilder);
-
         final List<WebModule> webModules =
                  WebModule.discoverWebModules()
-                 .peek(module->module.prepare(servletContext)) // prepare context
+                 .peek(module->module.prepare(webModuleContext)) // prepare context
                  .collect(Collectors.toList());
 
-        // put the list of viewer names "isis.viewers" into a context parameter
-        WebModule.ContextUtil.commitViewers(servletContext);
-        // invalidate config such that next IsisConfigurationBuilder that gets obtained is reinitialized
-        configProvider.invalidate();  
+        // commit negotiated properties to configuration subsystem 
+        webModuleContext.commit();
         
         LOG.info("=== PHASE 2 === Initializing the ServletContext");
         
         webModules.stream()
-        .filter(module->module.isApplicable(servletContext)) // filter those WebModules that are applicable
+        .filter(module->module.isApplicable(webModuleContext)) // filter those WebModules that are applicable
         .forEach(module->addListener(servletContext, module));
         
         activeListeners.forEach(listener->listener.contextInitialized(event));

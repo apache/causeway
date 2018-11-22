@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.webapp.modules;
 
-import static org.apache.isis.commons.internal.base._Strings.isEmpty;
-
 import java.util.stream.Stream;
 
 import javax.servlet.Filter;
@@ -29,7 +27,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebListener;
 
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.webapp.IsisWebAppContextListener;
 
 /**
@@ -53,26 +50,26 @@ public interface WebModule {
     /**
      * Before initializing any WebModule we call each WebModule's prepare method 
      * to allow for a WebModule to leave information useful for other modules on 
-     * the shared ServletContext.
+     * the shared WebModuleContext.
      * 
-     * @param ctx ServletContext
+     * @param ctx WebModuleContext
      */
-    default public void prepare(ServletContext ctx) {}
+    default public void prepare(WebModuleContext ctx) {}
     
     /**
-     * Expected to be called after all WebModules had a chance to prepare the ServletContext.
+     * Expected to be called after all WebModules had a chance to prepare the WebModuleContext.
      * Sets this WebModule's {@link Filter}s, {@link Servlet}s or {@link WebListener}s 
-     * up and registers them with the given {@link ServletContext} {@code ctx}.
+     * up and registers them with the {@link ServletContext} as provided via {@code ctx}.
      * @param ctx ServletContext
      */
     public ServletContextListener init(ServletContext ctx) throws ServletException;
     
     /**
-     * Expected to be called after all WebModules had a chance to prepare the ServletContext.
-     * @param ctx ServletContext
+     * Expected to be called after all WebModules had a chance to prepare the WebModuleContext.
+     * @param ctx WebModuleContext
      * @return whether this module is applicable/usable
      */
-    public boolean isApplicable(ServletContext ctx);
+    public boolean isApplicable(WebModuleContext ctx);
     
     // -- DISCOVERY 
     
@@ -94,86 +91,6 @@ public interface WebModule {
                 new WebModule_RestEasy(), // default REST provider
                 new WebModule_LogOnExceptionLogger() // log any logon exceptions, filters after all others
                 );
-    }
-    
-    // -- UTILITY
-    
-    static final class ContextUtil {
-        
-        /**
-         * This key was deprecated from config, but we still use it for reference. It is auto-populated 
-         * such that it can be looked up, to see what viewers have been discovered by the framework.
-         */
-        private final static String ISIS_VIEWERS = "isis.viewers";
-        
-        /**
-         * Tell other modules that a bootstrapper is present.
-         * @param ctx
-         * @param bootstrapper
-         */
-        public static void registerBootstrapper(ServletContext ctx, WebModule bootstrapper) {
-            ctx.setAttribute("isis.bootstrapper", bootstrapper);    
-        }
-        
-        /**
-         * @param ctx
-         * @return whether this context has a bootstrapper registered
-         */
-        public static boolean hasBootstrapper(ServletContext ctx) {
-            return ctx.getAttribute("isis.bootstrapper")!=null;    
-        }
-        
-        /**
-         *  Adds to the list of viewer names "isis.viewers"
-         * @param ctx
-         * @param viewerName
-         */
-        public static void registerViewer(ServletContext ctx, String viewerName) {
-            String viewers = (String) ctx.getAttribute(ISIS_VIEWERS);
-            if(isEmpty(viewers)) {
-                viewers = viewerName;
-            } else {
-                viewers = viewers + "," + viewerName;
-            }
-            ctx.setAttribute(ISIS_VIEWERS, viewers);
-        }
-        
-        /**
-         * Puts the list of viewer names "isis.viewers" into a context parameter.
-         * @param ctx
-         */
-        public static void commitViewers(ServletContext ctx) {
-            String viewers = (String) ctx.getAttribute(ISIS_VIEWERS);
-            if(!isEmpty(viewers)) {
-                ctx.setInitParameter(ISIS_VIEWERS, viewers);    
-            }
-        }
-        
-        /**
-         *  Adds to the list of protected path names "isis.protected"
-         * @param ctx
-         * @param path
-         */
-        public static void registerProtectedPath(ServletContext ctx, String path) {
-            String list = (String) ctx.getAttribute("isis.protected");
-            if(isEmpty(list)) {
-                list = path;
-            } else {
-                list = list + "," + path;
-            }
-            ctx.setAttribute("isis.protected", list);
-        }
-        
-        /**
-         * Streams the protected path names "isis.protected".
-         * @param ctx
-         */
-        public static Stream<String> streamProtectedPaths(ServletContext ctx) {
-            final String list = (String) ctx.getAttribute("isis.protected");
-            return _Strings.splitThenStream(list, ",");
-        }
-        
-        
     }
     
     

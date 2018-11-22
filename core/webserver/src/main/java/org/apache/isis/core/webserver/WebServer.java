@@ -46,7 +46,6 @@ import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixture;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureFromEnvironmentVariable;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerHelp;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerSystemProperties;
-import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
 import org.apache.isis.core.webserver.config.WebServerConfigBuilder;
 import org.apache.isis.core.webserver.internal.OptionHandlerPort;
 import org.apache.isis.core.webserver.internal.OptionHandlerStartupMode;
@@ -144,7 +143,7 @@ public class WebServer {
                     ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY;
     }
 
-    private Server createJettyServerAndBindConfig(final IsisConfiguration configuration) {
+    private Server createJettyServerAndBindConfig(IsisConfiguration configuration) {
 
         final int port = configuration.getInteger(
                 EMBEDDED_WEB_SERVER_PORT_KEY, EMBEDDED_WEB_SERVER_PORT_DEFAULT);
@@ -156,9 +155,6 @@ public class WebServer {
         final Server jettyServer = new Server(port);
         final WebAppContext context = new WebAppContext(SRC_MAIN_WEBAPP, webappContextPath);
         jettyServer.setHandler(context);
-
-        final IsisWebAppConfigProvider configProvider = IsisWebAppConfigProvider.registerInstanceIfAbsent();
-        configProvider.addConfig(configuration.asMap());
 
         return jettyServer;
     }

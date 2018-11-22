@@ -10,21 +10,23 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
 
+import static org.apache.isis.config.internal._Config.acceptBuilder;
+
 public class WebServerConfigBuilder {
     
-    private final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilder();
-    
     public WebServerConfigBuilder() {
-        isisConfigurationBuilder.addResourceStreamSources(resourceStreamSources());
+        acceptBuilder(builder->{
+            builder.addResourceStreamSources(resourceStreamSources());    
+        });
     }
 
     public boolean parseAndPrimeWith(final List<OptionHandler> optionHandlers, final String[] args) {
@@ -39,9 +41,15 @@ public class WebServerConfigBuilder {
         final boolean parsedOk = parseAndPrimeWith(options, optionHandlers, args);
 
         if(parsedOk) {
-            for (final OptionHandler optionHandler : optionHandlers) {
-                isisConfigurationBuilder.primeWith(optionHandler);
-            }
+            
+            acceptBuilder(builder->{
+                
+                for (final OptionHandler optionHandler : optionHandlers) {
+                    builder.primeWith(optionHandler);
+                }
+                
+            });
+            
         }
 
         return parsedOk;
@@ -79,7 +87,7 @@ public class WebServerConfigBuilder {
     }
 
     public IsisConfiguration build() {
-        return isisConfigurationBuilder.build();
+        return _Config.getConfiguration();
     }
     
 }

@@ -46,7 +46,7 @@ final class WebModule_StaticResources implements WebModule  {
     }
     
     @Override
-    public void prepare(ServletContext ctx) {
+    public void prepare(WebModuleContext ctx) {
         // nothing special required
     }
 
@@ -71,7 +71,7 @@ final class WebModule_StaticResources implements WebModule  {
     }
 
     @Override
-    public boolean isApplicable(ServletContext ctx) {
+    public boolean isApplicable(WebModuleContext ctx) {
         return true;
     }
 

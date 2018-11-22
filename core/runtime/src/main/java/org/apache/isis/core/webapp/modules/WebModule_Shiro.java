@@ -18,15 +18,15 @@
  */
 package org.apache.isis.core.webapp.modules;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
-import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
+import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 
 /**
  * Package private mixin for WebModule implementing WebModule.
@@ -79,7 +79,7 @@ final class WebModule_Shiro implements WebModule  {
     }
 
     @Override
-    public boolean isApplicable(ServletContext ctx) {
+    public boolean isApplicable(WebModuleContext ctx) {
         try {
             getDefaultClassLoader().loadClass(SHIRO_LISTENER_CLASS_NAME);
             return true;

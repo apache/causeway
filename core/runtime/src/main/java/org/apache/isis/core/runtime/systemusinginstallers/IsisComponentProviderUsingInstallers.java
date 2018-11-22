@@ -42,8 +42,8 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 
-public class IsisComponentProviderUsingInstallers extends IsisComponentProvider {
-
+class IsisComponentProviderUsingInstallers  {
+/*
     // -- constructors
 
     public IsisComponentProviderUsingInstallers(
@@ -104,7 +104,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
         return authorizationInstaller.createAuthorizationManager();
     }
 
-
+*/
 
 
     /**
@@ -122,6 +122,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
      *
      * @deprecated - intention is to replace in future using CDI
      */
+    /*
     @Deprecated
     static class InstallerLookup implements ApplicationScopedComponent {
 
@@ -229,7 +230,6 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProvider 
             return installer;
         }
 
-
-
     }
+    */
 }

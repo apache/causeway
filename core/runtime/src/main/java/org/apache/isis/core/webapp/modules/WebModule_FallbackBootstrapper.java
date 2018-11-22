@@ -37,15 +37,14 @@ final class WebModule_FallbackBootstrapper implements WebModule  {
 
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
-        ctx.setInitParameter("deploymentType", "SERVER_PROTOTYPE");
         return ctx.createListener(IsisWebAppBootstrapper.class);
     }
 
     @Override
-    public boolean isApplicable(ServletContext ctx) {
+    public boolean isApplicable(WebModuleContext ctx) {
         // not required if another bootstrapper module is on the context 
         // e.g. the Wicket module
-        return !ContextUtil.hasBootstrapper(ctx);
+        return !ctx.hasBootstrapper();
     }
     
 }

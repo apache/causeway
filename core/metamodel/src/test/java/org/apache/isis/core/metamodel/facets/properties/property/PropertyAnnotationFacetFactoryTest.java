@@ -106,6 +106,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
     @Before
     public void setUp() throws Exception {
+        _Config.clear();
         facetFactory = new PropertyAnnotationFacetFactory();
         facetFactory.setServicesInjector(mockServicesInjector);
     }
@@ -328,6 +329,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             }
 
             // given
+            _Config.put("isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault", true);
+            
             final Class<?> cls = Customer.class;
             propertyMethod = findMethod(Customer.class, "getName");
 
@@ -337,8 +340,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             // expect
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
-            
-            _Config.put("isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault", true);
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,
