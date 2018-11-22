@@ -20,7 +20,7 @@ package org.apache.isis.core.commons.configbuilder;
 
 import java.util.Map;
 
-public class PrimerForEnvironmentVariablesIsisPrefix implements IsisConfigurationBuilder.Primer {
+class PrimerForEnvironmentVariablesIsisPrefix implements IsisConfigurationBuilder.Primer {
     @Override
     public void prime(final IsisConfigurationBuilder builder) {
         final Map<String, String> envVars = System.getenv();

@@ -17,15 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.webapp.config;
+package org.apache.isis.core.commons.resource;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 
-import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceAbstract;
+import org.apache.isis.commons.internal.resources._Resources;
 
 public class ResourceStreamSourceForWebInf extends ResourceStreamSourceAbstract {
 
@@ -50,7 +49,7 @@ public class ResourceStreamSourceForWebInf extends ResourceStreamSourceAbstract 
 
     @Override
     public InputStream doReadResource(final String resourcePath) throws IOException {
-        final String fullyQualifiedResourcePath = StringExtensions.combinePath(configurationDirectory, resourcePath);
+        final String fullyQualifiedResourcePath = _Resources.combinePath(configurationDirectory, resourcePath);
         return servletContext.getResourceAsStream(fullyQualifiedResourcePath);
     }
 

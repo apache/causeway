@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 
-public class PrimerForEnvironmentVariableISIS_OPTS implements IsisConfigurationBuilder.Primer {
+class PrimerForEnvironmentVariableISIS_OPTS implements IsisConfigurationBuilder.Primer {
 
     public static final String OPT_ENV = "ISIS_OPTS";
     public static final String SEPARATOR_ENV = "ISIS_OPTS_SEPARATOR";

@@ -218,11 +218,6 @@ public interface IsisConfiguration {
         return getBoolean("isis.reflector.explicitAnnotations.action");
     }
 
-    static IsisConfiguration empty() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     static IsisConfiguration loadDefault() {
         // TODO Auto-generated method stub
         return null;

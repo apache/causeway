@@ -24,7 +24,7 @@ import java.util.Properties;
 
 import org.apache.isis.commons.internal.collections._Maps;
 
-public class PrimerForSystemProperties implements IsisConfigurationBuilder.Primer {
+class PrimerForSystemProperties implements IsisConfigurationBuilder.Primer {
 
     @Override
     public void prime(final IsisConfigurationBuilder builder) {

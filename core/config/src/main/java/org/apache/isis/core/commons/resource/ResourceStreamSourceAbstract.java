@@ -26,7 +26,7 @@ import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class ResourceStreamSourceAbstract implements ResourceStreamSource {
+abstract class ResourceStreamSourceAbstract implements ResourceStreamSource {
 
     private static Logger LOG = LoggerFactory.getLogger(ResourceStreamSourceAbstract.class);
 

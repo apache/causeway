@@ -35,8 +35,8 @@ import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceForWebInf;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
-import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 
 /**
  * Provides IsisConfigurationBuilder instances.
