@@ -146,6 +146,10 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             return;
         }
 
+        // following only runs for regular properties, not for mixins.
+        // those are tackled in the post-processing, when more of the metamodel is available to us
+
+
         //
         // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
@@ -259,7 +263,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         }
     }
 
-    private static Class<? extends PropertyDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
+    public static Class<? extends PropertyDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
             final ObjectSpecification typeSpec,
             final Class<? extends PropertyDomainEvent<?,?>> propertyDomainEventType) {
         if (propertyDomainEventType == PropertyDomainEvent.Default.class) {

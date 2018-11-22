@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 public abstract class ActionDomainEventFacetAbstract
         extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
 
+    private Class<? extends ActionDomainEvent<?>> eventType;
     private final TranslationService translationService;
     private final String translationContext;
 
@@ -63,6 +64,7 @@ public abstract class ActionDomainEventFacetAbstract
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader) {
         super(type(), holder, eventType, specificationLoader);
+        this.eventType = eventType;
 
         this.translationService = servicesInjector.lookupService(TranslationService.class);
         // sadness: same as in TranslationFactory
@@ -70,6 +72,23 @@ public abstract class ActionDomainEventFacetAbstract
 
         domainEventHelper = new DomainEventHelper(servicesInjector);
     }
+
+    @Override
+    public Class<?> value() {
+        return eventType;
+    }
+
+    protected Class eventType() {
+        return eventType;
+    }
+
+    public Class<? extends ActionDomainEvent<?>> getEventType() {
+        return eventType;
+    }
+    public void setEventType(final Class<? extends ActionDomainEvent<?>> eventType) {
+        this.eventType = eventType;
+    }
+
 
 
     @Override
@@ -145,15 +164,6 @@ public abstract class ActionDomainEventFacetAbstract
         }
 
         return null;
-    }
-
-    protected Class eventType() {
-        return value();
-    }
-
-    public Class<? extends ActionDomainEvent<?>> getEventType() {
-        //noinspection unchecked
-        return eventType();
     }
 
 }

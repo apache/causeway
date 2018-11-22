@@ -50,12 +50,32 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader) {
         super(CollectionDomainEventFacet.class, holder, eventType, specificationLoader);
+        this.eventType = eventType;
 
         this.translationService = servicesInjector.lookupService(TranslationService.class);
         // sadness: same as in TranslationFactory
         this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
 
         domainEventHelper = new DomainEventHelper(servicesInjector);
+    }
+
+    private Class<? extends CollectionDomainEvent<?, ?>> eventType;
+
+    private Class<?> eventType() {
+        return value();
+    }
+
+    @Override
+    public Class<?> value() {
+        return eventType;
+    }
+
+    public Class<? extends CollectionDomainEvent<?, ?>> getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(final Class<? extends CollectionDomainEvent<?, ?>> eventType) {
+        this.eventType = eventType;
     }
 
     @Override
@@ -65,7 +85,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.HIDE,
                         eventType(), null,
-                        getIdentified(), ic.getTarget(),
+                        getIdentified(), ic.getTarget(), ic.getMixedIn(),
                         CollectionDomainEvent.Of.ACCESS,
                         null);
         if (event != null && event.isHidden()) {
@@ -81,7 +101,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.DISABLE,
                         eventType(), null,
-                        getIdentified(), ic.getTarget(),
+                        getIdentified(), ic.getTarget(), ic.getMixedIn(),
                         CollectionDomainEvent.Of.ACCESS,
                         null);
         if (event != null && event.isDisabled()) {
@@ -97,6 +117,10 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
     @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
 
+        // if this is a mixin, then this ain't true.
+        if(!(ic instanceof ProposedHolder)) {
+            return null;
+        }
         final ProposedHolder catc = (ProposedHolder) ic;
         final Object proposed = catc.getProposed().getObject();
 
@@ -109,7 +133,7 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.VALIDATE,
                         eventType(), null,
-                        getIdentified(), ic.getTarget(),
+                        getIdentified(), ic.getTarget(), ic.getMixedIn(),
                         of,
                         proposed);
         if (event != null && event.isInvalid()) {
@@ -121,18 +145,6 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
         }
 
         return null;
-    }
-
-    private Class<?> eventType() {
-        return value();
-    }
-
-    /**
-     * For testing.
-     */
-    public Class<? extends CollectionDomainEvent<?, ?>> getEventType() {
-        Class eventType = eventType();
-        return eventType;
     }
 
 }

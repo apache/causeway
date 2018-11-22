@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
 import java.util.Map;
 import java.util.Set;
+
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -32,7 +33,6 @@ import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-
 
 public abstract class CollectionAddToFacetForDomainEventFromAbstract
     extends SingleValueFacetAbstract<Class<? extends CollectionDomainEvent<?,?>>>
@@ -86,13 +86,14 @@ public abstract class CollectionAddToFacetForDomainEventFromAbstract
 
         // either doesn't contain object, or doesn't have set semantics, so
         // execute the add wrapped between the executing and executed events ...
+        final ObjectAdapter mixedInAdapter = null;
 
         // ... post the executing event
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.EXECUTING,
                         eventType(), null,
-                        getIdentified(), targetAdapter,
+                        getIdentified(), targetAdapter, mixedInAdapter,
                         CollectionDomainEvent.Of.ADD_TO,
                         referencedObject);
 
@@ -103,7 +104,7 @@ public abstract class CollectionAddToFacetForDomainEventFromAbstract
         domainEventHelper.postEventForCollection(
                 AbstractDomainEvent.Phase.EXECUTED,
                 value(), verify(event),
-                getIdentified(), targetAdapter,
+                getIdentified(), targetAdapter, mixedInAdapter,
                 CollectionDomainEvent.Of.ADD_TO,
                 referencedObject);
     }

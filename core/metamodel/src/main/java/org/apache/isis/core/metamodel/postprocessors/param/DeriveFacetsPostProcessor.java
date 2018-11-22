@@ -19,22 +19,35 @@
 
 package org.apache.isis.core.metamodel.postprocessors.param;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.collections.collection.CollectionAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacet;
+import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetAbstract;
+import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.DisabledFacetOnCollectionDerivedFromImmutable;
 import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.DisabledFacetOnCollectionDerivedFromImmutableFactory;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType;
@@ -42,6 +55,9 @@ import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.Descr
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.CopyImmutableFacetOntoMembersFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromRecreatableObject;
@@ -60,6 +76,7 @@ import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.Desc
 import org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterDerivedFromType;
 import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromType;
 import org.apache.isis.core.metamodel.facets.param.typicallen.fromtype.TypicalLengthFacetOnParameterDerivedFromTypeFacetFactory;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.enums.PropertyChoicesFacetDerivedFromChoicesFacetFactory;
@@ -68,6 +85,10 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.Proper
 import org.apache.isis.core.metamodel.facets.properties.defaults.fromtype.PropertyDefaultFacetDerivedFromTypeFactory;
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutable;
 import org.apache.isis.core.metamodel.facets.properties.disabled.fromimmutable.DisabledFacetOnPropertyDerivedFromImmutableFactory;
+import org.apache.isis.core.metamodel.facets.properties.property.PropertyAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacet;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetAbstract;
+import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertyDomainEventFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromType;
 import org.apache.isis.core.metamodel.facets.properties.typicallen.fromtype.TypicalLengthFacetOnPropertyDerivedFromTypeFacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ObjectSpecificationPostProcessor;
@@ -84,8 +105,11 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
@@ -97,6 +121,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
     private SpecificationLoader specificationLoader;
     private AuthenticationSessionProvider authenticationSessionProvider;
     private PersistenceSessionServiceInternal adapterManager;
+    private ServicesInjector servicesInjector;
 
     @Override
     public void postProcess(final ObjectSpecification objectSpecification) {
@@ -112,6 +137,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         final List<OneToOneAssociation> properties = objectSpecification.getProperties(Contributed.INCLUDED);
 
         // for each action, ...
+
         for (final ObjectAction objectAction : objectActions) {
 
             // ... for each action parameter
@@ -131,6 +157,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
             // corresponds to CopyImmutableFacetOntoMembersFactory.  However, ImmutableFacet only ever disables for
             // properties and collections, so no point in copying over.
 
+            tweakActionDomainEventForMixin(objectSpecification, objectAction);
         }
 
         // for each property, ...
@@ -142,6 +169,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
             derivePropertyDisabledFromViewModel(property);
             derivePropertyOrCollectionImmutableFromSpec(property);
             derivePropertyDisabledFromImmutable(property);
+            tweakPropertyMixinDomainEvent(objectSpecification, property);
         }
 
 
@@ -196,6 +224,109 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
                 // using the associated collection for its values.
                 for (final ObjectActionParameter scalarParam : compatibleScalarParams) {
                     addCollectionParamChoicesFacetIfNoneAlready(collection, scalarParam);
+                }
+            }
+
+            deriveCollectionDomainEventForMixins(objectSpecification, collection);
+        }
+    }
+
+    private void tweakActionDomainEventForMixin(
+            final ObjectSpecification objectSpecification,
+            final ObjectAction objectAction) {
+        if(objectAction instanceof ObjectActionMixedIn) {
+            // unlike collection and property mixins, there is no need to create the DomainEventFacet, it will
+            // have been created in the ActionAnnotationFacetFactory
+            final ActionDomainEventDefaultFacetForDomainObjectAnnotation actionDomainEventDefaultFacet =
+                    objectSpecification.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+
+            if(actionDomainEventDefaultFacet != null) {
+                final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) objectAction;
+                final ActionDomainEventFacet actionFacet = actionMixedIn.getFacet(ActionDomainEventFacet.class);
+                if (actionFacet instanceof ActionDomainEventFacetAbstract) {
+                    final ActionDomainEventFacetAbstract facetAbstract = (ActionDomainEventFacetAbstract) actionFacet;
+                    if (facetAbstract.getEventType() == ActionDomainEvent.Default.class) {
+                        final ActionDomainEventFacetAbstract existing = (ActionDomainEventFacetAbstract) actionFacet;
+                        existing.setEventType(actionDomainEventDefaultFacet.getEventType());
+                    }
+                }
+            }
+        }
+    }
+
+    private void deriveCollectionDomainEventForMixins(
+            final ObjectSpecification objectSpecification,
+            final OneToManyAssociation collection) {
+
+        if(collection instanceof OneToManyAssociationMixedIn) {
+            final OneToManyAssociationMixedIn collectionMixin = (OneToManyAssociationMixedIn) collection;
+            final FacetedMethod facetedMethod = collectionMixin.getFacetedMethod();
+            final Method method = facetedMethod != null ? facetedMethod.getMethod() : null;
+
+            if(method != null) {
+                // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
+                // ignoring stuff which is deprecated for Isis v2
+                final Collection collectionAnnot = Annotations.getAnnotation(method, Collection.class);
+                if(collectionAnnot != null) {
+                    final Class<? extends CollectionDomainEvent<?, ?>> collectionDomainEventType =
+                            CollectionAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
+                                    objectSpecification, collectionAnnot.domainEvent());
+                    final CollectionDomainEventFacetForCollectionAnnotation collectionDomainEventFacet = new CollectionDomainEventFacetForCollectionAnnotation(
+                            collectionDomainEventType, servicesInjector, specificationLoader, collection);
+                    FacetUtil.addFacet(collectionDomainEventFacet);
+                }
+
+                final CollectionDomainEventDefaultFacetForDomainObjectAnnotation collectionDomainEventDefaultFacet =
+                        objectSpecification.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+                if(collectionDomainEventDefaultFacet != null) {
+                    final CollectionDomainEventFacet collectionFacet = collection.getFacet(CollectionDomainEventFacet.class);
+                    if (collectionFacet instanceof CollectionDomainEventFacetAbstract) {
+                        final CollectionDomainEventFacetAbstract facetAbstract = (CollectionDomainEventFacetAbstract) collectionFacet;
+                        if (facetAbstract.getEventType() == CollectionDomainEvent.Default.class) {
+                            final CollectionDomainEventFacetAbstract existing = (CollectionDomainEventFacetAbstract) collectionFacet;
+                            existing.setEventType(collectionDomainEventDefaultFacet.getEventType());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void tweakPropertyMixinDomainEvent(
+            final ObjectSpecification objectSpecification,
+            final OneToOneAssociation property) {
+
+        if(property instanceof OneToOneAssociationMixedIn) {
+            final OneToOneAssociationMixedIn propertyMixin = (OneToOneAssociationMixedIn) property;
+            final FacetedMethod facetedMethod = propertyMixin.getFacetedMethod();
+            final Method method = facetedMethod != null ? facetedMethod.getMethod() : null;
+
+            if(method != null) {
+                // this is basically a subset of the code that is in CollectionAnnotationFacetFactory,
+                // ignoring stuff which is deprecated for Isis v2
+                final Property propertyAnnot = Annotations.getAnnotation(method, Property.class);
+                if(propertyAnnot != null) {
+                    final Class<? extends PropertyDomainEvent<?, ?>> propertyDomainEventType =
+                            PropertyAnnotationFacetFactory.defaultFromDomainObjectIfRequired(
+                                    objectSpecification, propertyAnnot.domainEvent());
+                    final PropertyOrCollectionAccessorFacet getterFacetIfAny = null;
+                    final PropertyDomainEventFacetForPropertyAnnotation propertyDomainEventFacet =
+                            new PropertyDomainEventFacetForPropertyAnnotation(
+                                propertyDomainEventType, getterFacetIfAny,
+                                servicesInjector, specificationLoader, property);
+                    FacetUtil.addFacet(propertyDomainEventFacet);
+                }
+            }
+            final PropertyDomainEventDefaultFacetForDomainObjectAnnotation propertyDomainEventDefaultFacet =
+                objectSpecification.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            if(propertyDomainEventDefaultFacet != null) {
+                final PropertyDomainEventFacet propertyFacet = property.getFacet(PropertyDomainEventFacet.class);
+                if (propertyFacet instanceof PropertyDomainEventFacetAbstract) {
+                    final PropertyDomainEventFacetAbstract facetAbstract = (PropertyDomainEventFacetAbstract) propertyFacet;
+                    if (facetAbstract.getEventType() == PropertyDomainEvent.Default.class) {
+                        final PropertyDomainEventFacetAbstract existing = (PropertyDomainEventFacetAbstract) propertyFacet;
+                        existing.setEventType(propertyDomainEventDefaultFacet.getEventType());
+                    }
                 }
             }
         }
@@ -498,10 +629,16 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
 
     @Override
     public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
         deploymentCategoryProvider = servicesInjector.getDeploymentCategoryProvider();
         specificationLoader = servicesInjector.getSpecificationLoader();
         authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
         adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
     }
+
+    private ServicesInjector getServicesInjector() {
+        return servicesInjector;
+    }
+
 
 }

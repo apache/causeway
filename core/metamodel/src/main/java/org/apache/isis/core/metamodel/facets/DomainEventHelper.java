@@ -192,6 +192,7 @@ public class DomainEventHelper {
             final PropertyDomainEvent<?, ?> existingEvent,
             final IdentifiedHolder identified,
             final ObjectAdapter targetAdapter,
+            final ObjectAdapter mixedInAdapter,
             final Object oldValue,
             final Object newValue) {
 
@@ -206,6 +207,12 @@ public class DomainEventHelper {
             } else {
                 // all other phases, create a new event
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
+
+                // copy over if have
+                if(mixedInAdapter != null ) {
+                    event.setMixedIn(mixedInAdapter.getObject());
+                }
+
             }
 
             event.setEventPhase(phase);
@@ -283,6 +290,7 @@ public class DomainEventHelper {
             final CollectionDomainEvent<?, ?> existingEvent,
             final IdentifiedHolder identified,
             final ObjectAdapter targetAdapter,
+            final ObjectAdapter mixedInAdapter,
             final CollectionDomainEvent.Of of,
             final Object reference) {
         try {
@@ -295,6 +303,11 @@ public class DomainEventHelper {
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Identifier identifier = identified.getIdentifier();
                 event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
+
+                // copy over if have
+                if(mixedInAdapter != null ) {
+                    event.setMixedIn(mixedInAdapter.getObject());
+                }
             }
 
             event.setEventPhase(phase);

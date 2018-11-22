@@ -117,6 +117,11 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
             return;
         }
 
+
+
+        // following only runs for regular collections, not for mixins.
+        // those are tackled in the post-processing, when more of the metamodel is available to us
+
         //
         // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating advisor
         //
@@ -242,7 +247,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
     }
 
-    private static Class<? extends CollectionDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
+    public static Class<? extends CollectionDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
             final ObjectSpecification typeSpec,
             final Class<? extends CollectionDomainEvent<?,?>> collectionDomainEventType) {
         if (collectionDomainEventType == CollectionDomainEvent.Default.class) {
@@ -380,6 +385,8 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
         return null;
     }
+
+
 
 
     // //////////////////////////////////////

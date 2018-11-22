@@ -139,6 +139,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             final ObjectAdapter targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        final ObjectAdapter mixedInAdapter = null;
         setOrClearProperty(Style.CLEAR,
                 owningProperty, targetAdapter, null, interactionInitiatedBy);
 
@@ -150,6 +151,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             final ObjectAdapter newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        final ObjectAdapter mixedInAdapter = null;
         setOrClearProperty(Style.SET,
                 owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
 
@@ -162,11 +164,12 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             final ObjectAdapter newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        final ObjectAdapter mixedInAdapter = null;
         getPersistenceSessionServiceInternal().executeWithinTransaction(
                 new TransactionalClosure(){
                     @Override
                     public void execute() {
-                        doSetOrClearProperty(style, owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
+                        doSetOrClearProperty(style, owningProperty, targetAdapter, mixedInAdapter, newValueAdapter, interactionInitiatedBy);
                     }
                 }
         );
@@ -179,6 +182,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
             final Style style,
             final OneToOneAssociation owningProperty,
             final ObjectAdapter targetAdapter,
+            final ObjectAdapter mixedInAdapter,
             final ObjectAdapter newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -250,7 +254,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
                                         domainEventHelper.postEventForProperty(
                                                 AbstractDomainEvent.Phase.EXECUTING,
                                                 eventType(), null,
-                                                getIdentified(), targetAdapter,
+                                                getIdentified(), targetAdapter, mixedInAdapter,
                                                 oldValue, newValue);
 
 
@@ -271,7 +275,7 @@ public abstract class PropertySetterOrClearFacetForDomainEventAbstract
                                     domainEventHelper.postEventForProperty(
                                             AbstractDomainEvent.Phase.EXECUTED,
                                             eventType(), verify(event),
-                                            getIdentified(), targetAdapter,
+                                            getIdentified(), targetAdapter, mixedInAdapter,
                                             oldValue, actualNewValue);
                                 }
 

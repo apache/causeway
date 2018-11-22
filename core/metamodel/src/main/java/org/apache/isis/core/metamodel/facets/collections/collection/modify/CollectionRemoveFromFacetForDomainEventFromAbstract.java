@@ -86,13 +86,14 @@ public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
 
         // contains the element, so
         // execute the remove wrapped between the executing and executed events ...
+        final ObjectAdapter mixedInAdapter = null;
 
         // ... post the executing event
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.EXECUTING,
                         eventType(), null,
-                        getIdentified(), targetAdapter,
+                        getIdentified(), targetAdapter, null,
                         CollectionDomainEvent.Of.REMOVE_FROM,
                         referencedObject);
 
@@ -103,7 +104,7 @@ public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
         domainEventHelper.postEventForCollection(
                 AbstractDomainEvent.Phase.EXECUTED,
                 value(), verify(event),
-                getIdentified(), targetAdapter,
+                getIdentified(), targetAdapter, mixedInAdapter,
                 CollectionDomainEvent.Of.REMOVE_FROM,
                 referencedObject);
     }
