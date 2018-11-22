@@ -5,7 +5,8 @@
 :_imagesdir: images/
 
 
-Whenever a domain object (or list of domain objects) is to be rendered, the framework fires off multiple domain events for every property, collection and action of the domain object.  In the cases of the domain object's properties, the events that are fired are:
+Whenever a domain object (or list of domain objects) is to be rendered, the framework fires off multiple domain events for every property, collection and action of the domain object.
+In the cases of the domain object's properties, the events that are fired are:
 
 * hide phase: to check that the property is visible (has not been hidden)
 * disable phase: to check that the property is usable (has not been disabled)
@@ -15,7 +16,8 @@ Whenever a domain object (or list of domain objects) is to be rendered, the fram
 
 Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
 
-By default the event raised is `PropertyDomainEvent.Default`. For example:
+By default the event raised is `PropertyDomainEvent.Default`.
+For example:
 
 [source,java]
 ----
@@ -26,10 +28,8 @@ public class ToDoItem {
 }
 ----
 
-The `domainEvent()` attribute allows a custom subclass to be emitted allowing more precise subscriptions (to those
-subclasses) to be defined instead.  This attribute is also supported for
- xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[actions] and
- xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[properties].
+The `domainEvent()` attribute allows a custom subclass to be emitted allowing more precise subscriptions (to those subclasses) to be defined instead.
+This attribute is also supported for xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[actions] and xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[properties].
 
 
 For example:
@@ -56,7 +56,8 @@ This substantially reduces the boilerplate in the subclasses because no explicit
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
+The examples below use the Guava API.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -77,17 +78,13 @@ or can be fine-grained (by subscribing to specific event subtypes):
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class SomeSubscriber extends AbstractSubscriber {
-    @com.google.common.eventbus.Subscribe
-    public void on(ToDoItem.DueByChangedEvent ev) {
+    @org.axonframework.eventhandling.annotation.EventHandler // if using axon
+    @com.google.common.eventbus.Subscribe                     public void on(ToDoItem.DueByChangedEvent ev) {
         ...
     }
 }
 ----
 
-[TIP]
-====
-If the AxonFramework is being used, replace `@com.google.common.eventbus.Subscribe` with `@org.axonframework.eventhandling.annotation.EventHandler`.
-====
 
 The subscriber's method is called (up to) 5 times:
 
@@ -97,7 +94,8 @@ The subscriber's method is called (up to) 5 times:
 * steps to perform prior to the property being modified
 * steps to perform after the property has been modified.
 
-The subscriber can distinguish these by calling `ev.getEventPhase()`. Thus the general form is:
+The subscriber can distinguish these by calling `ev.getEventPhase()`.
+Thus the general form is:
 
 [source,java]
 ----
@@ -123,25 +121,22 @@ public void on(PropertyDomainEvent ev) {
 }
 ----
 
-It is also possible to abort the transaction during the executing or executed phases by throwing an exception. If the exception is a subtype of `RecoverableException` then the exception will be rendered as a user-friendly warning (eg Growl/toast) rather than an error.
+It is also possible to abort the transaction during the executing or executed phases by throwing an exception.
+If the exception is a subtype of `RecoverableException` then the exception will be rendered as a user-friendly warning (eg Growl/toast) rather than an error.
 
 
 
 
 == Default, Doop and Noop events
 
-If the `domainEvent` attribute is not explicitly specified (is left as its default value, `PropertyDomainEvent.Default`),
-then the framework will, by default, post an event.
+If the `domainEvent` attribute is not explicitly specified (is left as its default value, `PropertyDomainEvent.Default`), then the framework will, by default, post an event.
 
-If this is not required, then the `isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault`
-configuration property can be set to "false"; this will disable posting.
+If this is not required, then the `isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault` configuration property can be set to "false"; this will disable posting.
 
 On the other hand, if the `domainEvent` has been explicitly specified to some subclass, then an event will be posted.
-The framework provides `PropertyDomainEvent.Doop` as such a subclass, so setting the `domainEvent` attribute to this class
-will ensure that the event to be posted, irrespective of the configuration property setting.
+The framework provides `PropertyDomainEvent.Doop` as such a subclass, so setting the `domainEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration property setting.
 
-And, conversely, the framework also provides `PropertyDomainEvent.Noop`; if `domainEvent` attribute is set to this class,
-then no event will be posted.
+And, conversely, the framework also provides `PropertyDomainEvent.Noop`; if `domainEvent` attribute is set to this class, then no event will be posted.
 
 
 
@@ -149,6 +144,6 @@ then no event will be posted.
 
 == Raising events programmatically
 
-Normally events are only raised for interactions through the UI. However, events can be raised programmatically by
-wrapping the target object using the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] service.
+Normally events are only raised for interactions through the UI.
+However, events can be raised programmatically by wrapping the target object using the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] service.
 

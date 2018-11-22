@@ -17,7 +17,8 @@ Another use case is to maintain "last updated by"/"last updated at" properties.
 While you can roll your own, note that the framework provides built-in support for this use case through the xref:../rgcms/rgcms.adoc#_rgcms_classes_roles_Timestampable[`Timestampable`] role interface.
 ====
 
-By default the event raised is `ObjectPersistingEvent.Default`. For example:
+By default the event raised is `ObjectPersistingEvent.Default`.
+For example:
 
 [source,java]
 ----
@@ -88,18 +89,14 @@ public class SomeSubscriber extends AbstractSubscriber {
 
 == Default, Doop and Noop events
 
-If the `persistingLifecycleEvent` attribute is not explicitly specified (is left as its default value, `ObjectPersistingEvent.Default`),
-then the framework will, by default, post an event.
+If the `persistingLifecycleEvent` attribute is not explicitly specified (is left as its default value, `ObjectPersistingEvent.Default`), then the framework will, by default, post an event.
 
-If this is not required, then the `isis.reflector.facet.domainObjectAnnotation.persistingLifecycleEvent.postForDefault`
-configuration property can be set to "false"; this will disable posting.
+If this is not required, then the `isis.reflector.facet.domainObjectAnnotation.persistingLifecycleEvent.postForDefault` configuration property can be set to "false"; this will disable posting.
 
 On the other hand, if the `persistingLifecycleEvent` has been explicitly specified to some subclass, then an event will be posted.
-The framework provides `ObjectPersistingEvent.Doop` as such a subclass, so setting the `persistingLifecycleEvent` attribute to this class
-will ensure that the event to be posted, irrespective of the configuration property setting.
+The framework provides `ObjectPersistingEvent.Doop` as such a subclass, so setting the `persistingLifecycleEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration property setting.
 
-And, conversely, the framework also provides `ObjectPersistingEvent.Noop`; if `persistingLifecycleEvent` attribute is set to this class,
-then no event will be posted.
+And, conversely, the framework also provides `ObjectPersistingEvent.Noop`; if `persistingLifecycleEvent` attribute is set to this class, then no event will be posted.
 
 
 

@@ -5,18 +5,17 @@
 :_imagesdir: images/
 
 
-Whenever a (persistent) domain object has been modified and has been updated in the database, an "updated" lifecycle
-event is fired.
+Whenever a (persistent) domain object has been modified and has been updated in the database, an "updated" lifecycle event is fired.
 
-Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and can
-use the event to obtain a reference to the domain object.
+Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and can use the event to obtain a reference to the domain object.
 
 [WARNING]
 ====
 The object should _not_ be modified during the updated callback.
 ====
 
-By default the event raised is `ObjectUpdatedEvent.Default`. For example:
+By default the event raised is `ObjectUpdatedEvent.Default`.
+For example:
 
 [source,java]
 ----
@@ -26,8 +25,8 @@ public class ToDoItemDto {
 }
 ----
 
-The purpose of the `updatedLifecycleEvent()` attribute is to allows a custom subclass to be emitted instead.  A similar
-attribute is available for other lifecycle events.
+The purpose of the `updatedLifecycleEvent()` attribute is to allows a custom subclass to be emitted instead.
+A similar attribute is available for other lifecycle events.
 
 For example:
 
@@ -90,18 +89,14 @@ public class SomeSubscriber extends AbstractSubscriber {
 
 == Default, Doop and Noop events
 
-If the `updatedLifecycleEvent` attribute is not explicitly specified (is left as its default value, `ObjectUpdatedEvent.Default`),
-then the framework will, by default, post an event.
+If the `updatedLifecycleEvent` attribute is not explicitly specified (is left as its default value, `ObjectUpdatedEvent.Default`), then the framework will, by default, post an event.
 
-If this is not required, then the `isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault`
-configuration property can be set to "false"; this will disable posting.
+If this is not required, then the `isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault` configuration property can be set to "false"; this will disable posting.
 
 On the other hand, if the `updatedLifecycleEvent` has been explicitly specified to some subclass, then an event will be posted.
-The framework provides `ObjectUpdatedEvent.Doop` as such a subclass, so setting the `updatedLifecycleEvent` attribute to this class
-will ensure that the event to be posted, irrespective of the configuration property setting.
+The framework provides `ObjectUpdatedEvent.Doop` as such a subclass, so setting the `updatedLifecycleEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration property setting.
 
-And, conversely, the framework also provides `ObjectUpdatedEvent.Noop`; if `updatedLifecycleEvent` attribute is set to this class,
-then no event will be posted.
+And, conversely, the framework also provides `ObjectUpdatedEvent.Noop`; if `updatedLifecycleEvent` attribute is set to this class, then no event will be posted.
 
 
 

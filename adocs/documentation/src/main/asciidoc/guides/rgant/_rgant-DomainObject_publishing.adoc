@@ -43,17 +43,14 @@ public class InterestRate {
 
 == `publishingPayloadFactory()`
 
-The (optional) related `publishingPayloadFactory()` specifies the class to use to create the (payload of the) event to
-be published by the publishing factory.
+The (optional) related `publishingPayloadFactory()` specifies the class to use to create the (payload of the) event to be published by the publishing factory.
 
-Rather than simply broadcast that the object was changed, the payload factory allows a "fatter" payload to be
-instantiated that can eagerly push commonly-required information to all subscribers. For at least some subscribers
-this should avoid the necessity to query back for additional information.
+Rather than simply broadcast that the object was changed, the payload factory allows a "fatter" payload to be instantiated that can eagerly push commonly-required information to all subscribers.
+For at least some subscribers this should avoid the necessity to query back for additional information.
 
 
 [WARNING]
 ====
-Be aware that this attribute is only honoured by the (deprecated)
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`], so should itself be considered as deprecated.  It
-is ignored by the replacement xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`],
+Be aware that this attribute is only honoured by the (deprecated) xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`], so should itself be considered as deprecated.
+It is ignored by the replacement xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`],
 ====

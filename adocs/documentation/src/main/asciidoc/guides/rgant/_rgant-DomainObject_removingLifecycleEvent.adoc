@@ -13,12 +13,12 @@ One possible application is to maintain a full-text search database using link:h
 
 [NOTE]
 ====
-Another use case is to maintain "last updated by"/"last updated at" properties.  While you can roll your own, note that
-the framework provides built-in support for this use case through the
-xref:../rgcms/rgcms.adoc#_rgcms_classes_roles_Timestampable[`Timestampable`] role interface.
+Another use case is to maintain "last updated by"/"last updated at" properties.
+While you can roll your own, note that the framework provides built-in support for this use case through the xref:../rgcms/rgcms.adoc#_rgcms_classes_roles_Timestampable[`Timestampable`] role interface.
 ====
 
-By default the event raised is `ObjectRemovingEvent.Default`. For example:
+By default the event raised is `ObjectRemovingEvent.Default`.
+For example:
 
 [source,java]
 ----
@@ -28,8 +28,8 @@ public class ToDoItemDto {
 }
 ----
 
-The purpose of the `removingLifecycleEvent()` attribute is to allows a custom subclass to be emitted instead.  A similar
-attribute is available for other lifecycle events.
+The purpose of the `removingLifecycleEvent()` attribute is to allows a custom subclass to be emitted instead.
+A similar attribute is available for other lifecycle events.
 
 For example:
 
@@ -91,18 +91,14 @@ public class SomeSubscriber extends AbstractSubscriber {
 
 == Default, Doop and Noop events
 
-If the `removingLifecycleEvent` attribute is not explicitly specified (is left as its default value, `ObjectRemovingEvent.Default`),
-then the framework will, by default, post an event.
+If the `removingLifecycleEvent` attribute is not explicitly specified (is left as its default value, `ObjectRemovingEvent.Default`), then the framework will, by default, post an event.
 
-If this is not required, then the `isis.reflector.facet.domainObjectAnnotation.removingLifecycleEvent.postForDefault`
-configuration property can be set to "false"; this will disable posting.
+If this is not required, then the `isis.reflector.facet.domainObjectAnnotation.removingLifecycleEvent.postForDefault` configuration property can be set to "false"; this will disable posting.
 
 On the other hand, if the `removingLifecycleEvent` has been explicitly specified to some subclass, then an event will be posted.
-The framework provides `ObjectRemovingEvent.Doop` as such a subclass, so setting the `removingLifecycleEvent` attribute to this class
-will ensure that the event to be posted, irrespective of the configuration property setting.
+The framework provides `ObjectRemovingEvent.Doop` as such a subclass, so setting the `removingLifecycleEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration property setting.
 
-And, conversely, the framework also provides `ObjectRemovingEvent.Noop`; if `removingLifecycleEvent` attribute is set to this class,
-then no event will be posted.
+And, conversely, the framework also provides `ObjectRemovingEvent.Noop`; if `removingLifecycleEvent` attribute is set to this class, then no event will be posted.
 
 
 
