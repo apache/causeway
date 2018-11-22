@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -39,8 +40,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     @Before
     public void setUpObjects() throws Exception {
         
-        configurationBuilderForTesting
-        .put("isis.value.format.double", null);
+        _Config.put("isis.value.format.double", null);
 
         holder = new FacetHolderImpl();
         setValue(new DoubleWrapperValueSemanticsProvider(holder, mockServicesInjector));

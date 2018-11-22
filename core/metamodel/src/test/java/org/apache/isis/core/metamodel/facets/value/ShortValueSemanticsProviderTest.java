@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -40,8 +41,7 @@ public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     @Before
     public void setUpObjects() throws Exception {
 
-        configurationBuilderForTesting
-        .put("isis.value.format.short", null);
+        _Config.put("isis.value.format.short", null);
         
         short1 = Short.valueOf((short) 32);
         allowMockAdapterToReturn(short1);

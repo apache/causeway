@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.value;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -40,8 +41,7 @@ public class FloatValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     @Before
     public void setUpObjects() throws Exception {
         
-        configurationBuilderForTesting
-        .put("isis.value.format.float", null);
+        _Config.put("isis.value.format.float", null);
 
         float1 = new Float(32.5f);
         allowMockAdapterToReturn(float1);

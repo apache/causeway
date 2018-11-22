@@ -100,12 +100,6 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
         }
     }
 
-    protected IsisConfigurationBuilder resetConfig() {
-        _Context.clear();
-        return _Config.configurationBuilderForTesting();
-    }
-    
-    
     @Before
     public void setUpFacetedMethodAndParameter() throws Exception {
 

@@ -58,26 +58,10 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
 
     // //////////////////////////////////////
 
-
     @Override
     public void init() {
-        initIfRequired();
+        // nothing to do
     }
-
-    private boolean initialized = false;
-
-    protected void initIfRequired() {
-        if(initialized) {
-            return;
-        }
-        try {
-            // ensure we have a config
-            _Config.getConfigurationElseThrow();
-        } finally {
-            initialized = true;
-        }
-    }
-
 
     // //////////////////////////////////////
 
@@ -109,7 +93,7 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
     private void appendConfiguredServices(
             final SortedMap<String, SortedSet<String>> positionedServices) {
 
-        final String configuredServices = _Config.getConfigurationElseThrow().getString(SERVICES_KEY);
+        final String configuredServices = _Config.getConfiguration().getString(SERVICES_KEY);
         if (configuredServices == null) {
             return;
         }

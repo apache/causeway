@@ -111,13 +111,13 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
             return;
         }
 
-        final IsisConfiguration configuration = _Config.getConfigurationElseThrow();
-        
         try {
 
             if(packagePrefixes == null) {
                 this.packagePrefixes = PACKAGE_PREFIX_STANDARD;
-                String packagePrefixes = configuration.getString(PACKAGE_PREFIX_KEY);
+                String packagePrefixes = 
+                        _Config.applyConfig(config->config.getString(PACKAGE_PREFIX_KEY));
+                        
                 if(!_Strings.isNullOrEmpty(packagePrefixes)) {
                     this.packagePrefixes = this.packagePrefixes + "," + packagePrefixes;
                 }

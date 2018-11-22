@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -42,8 +43,7 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
     public void setUp() throws Exception {
         super.setUp();
         
-        configurationBuilderForTesting
-        .put("isis.value.format.decimal", null);
+        _Config.put("isis.value.format.decimal", null);
 
         bigDecimal = new BigDecimal("34132.199");
         allowMockAdapterToReturn(bigDecimal);

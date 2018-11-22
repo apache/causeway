@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
@@ -42,8 +43,7 @@ public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProvide
     @Before
     public void setUpObjects() throws Exception {
         
-        configurationBuilderForTesting
-        .put("isis.value.format.time", null);
+        _Config.put("isis.value.format.time", null);
 
         final Calendar c = Calendar.getInstance();
         c.setTimeZone(TimeZone.getTimeZone("GMT"));

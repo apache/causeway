@@ -19,18 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.integer.IntValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.integer.IntWrapperValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -43,8 +43,7 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
         integer = Integer.valueOf(32);
         allowMockAdapterToReturn(integer);
 
-        configurationBuilderForTesting
-        .put("isis.value.format.int", null);
+        _Config.put("isis.value.format.int", null);
         
         holder = new FacetHolderImpl();
         setValue(value = new IntWrapperValueSemanticsProvider(holder, mockServicesInjector));

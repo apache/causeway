@@ -24,6 +24,7 @@ import java.math.BigInteger;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -43,8 +44,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         bigInt = new BigInteger("132199");
         allowMockAdapterToReturn(bigInt);
 
-        configurationBuilderForTesting
-        .put("isis.value.format.int", null);
+        _Config.put("isis.value.format.int", null);
 
         holder = new FacetHolderImpl();
         setValue(new BigIntegerValueSemanticsProvider(holder, mockServicesInjector));

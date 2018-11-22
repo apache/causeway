@@ -25,7 +25,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -50,8 +49,9 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
     @Before
     public void setUp() throws Exception {
         
-        IsisConfigurationBuilder configBilder = _Config.configurationBuilderForTesting();
-        configBilder.put("isis.value.format.datetime", "iso_encoding");
+        _Config.acceptBuilder(config->{
+            config.put("isis.value.format.datetime", "iso_encoding");
+        });
         
         provider = new JodaLocalDateTimeValueSemanticsProvider(mockFacetHolder, mockServicesInjector);
 

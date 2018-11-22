@@ -31,7 +31,6 @@ import org.junit.Test;
 
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -74,13 +73,11 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Mock
     protected ObjectAdapter mockAdapter;
     
-    protected IsisConfigurationBuilder configurationBuilderForTesting;
-
     @Before
     public void setUp() throws Exception {
-        Locale.setDefault(Locale.UK);
         
-        configurationBuilderForTesting = _Config.configurationBuilderForTesting();
+        _Config.clear();
+        Locale.setDefault(Locale.UK);
         
         context.checking(new Expectations() {
             {

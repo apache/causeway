@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -57,6 +58,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     
     @Before
     public void setUp() throws Exception {
+        _Config.clear();
         facetFactory = new DomainObjectLayoutFacetFactory();
         facetFactory.setServicesInjector(mockServicesInjector);
     }
@@ -107,7 +109,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                super.resetConfig();
+                _Config.clear();
             }
 
             @Test @Ignore //FIXME[2039]
@@ -147,7 +149,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             
             @Before
             public void setUp2() throws Exception {
-                super.resetConfig();
+                _Config.clear();
             }
 
             @Test
@@ -195,7 +197,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                super.resetConfig();
+                _Config.clear();
             }
 
             @Before
@@ -278,7 +280,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                super.resetConfig();
+                _Config.clear();
             }
 
 
@@ -359,7 +361,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                super.resetConfig();
+                _Config.clear();
             }
 
             @Test @Ignore //FIXME[2039]
@@ -437,7 +439,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                super.resetConfig();
+                _Config.clear();
             }
 
             @Test @Ignore //FIXME[2039]
@@ -515,7 +517,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                super.resetConfig();
+                _Config.clear();
             }
 
             @Test @Ignore //FIXME[2039]
@@ -593,7 +595,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                super.resetConfig();
+                _Config.clear();
             }
 
             @Test @Ignore //FIXME[2039]

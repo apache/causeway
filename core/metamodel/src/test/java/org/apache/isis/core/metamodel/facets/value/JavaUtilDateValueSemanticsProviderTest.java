@@ -27,6 +27,7 @@ import java.util.TimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -43,9 +44,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
     @Before
     public void setUpObjects() throws Exception {
         
-        configurationBuilderForTesting
-        .put("isis.value.format.datetime", null);
-
+        _Config.put("isis.value.format.datetime", null);
 
         TestClock.initialize();
         date = new java.util.Date(0);

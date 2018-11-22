@@ -23,6 +23,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.value.Percentage;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.value.percentage.PercentageValueSemanticsProvider;
@@ -37,8 +38,7 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
     @Before
     public void setUpObjects() throws Exception {
         
-        configurationBuilderForTesting
-        .put("isis.value.format.percentage", null);
+        _Config.put("isis.value.format.percentage", null);
 
         percentage = new Percentage(0.105f);
         allowMockAdapterToReturn(percentage);

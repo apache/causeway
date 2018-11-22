@@ -38,6 +38,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -162,8 +163,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
             expectRemoveMethod(actionMethod);
 
-            resetConfig()
-            .put("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", "true");
+            _Config.put("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", true);
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(
@@ -283,8 +283,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
             expectRemoveMethod(actionMethod);
 
-            resetConfig()
-            .put("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", "true");
+            _Config.put("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", true);
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(
@@ -1156,12 +1155,11 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
     }
 
     void allowingCommandConfigurationToReturn(final String value) {
-        resetConfig()
-        .put("isis.services.command.actions", value);
+        _Config.put("isis.services.command.actions", value);
     }
+
     void allowingPublishingConfigurationToReturn(final String value) {
-        resetConfig()
-        .put("isis.services.publish.actions", value);
+        _Config.put("isis.services.publish.actions", value);
     }
 
 }

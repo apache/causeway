@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.HasUniqueId;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -89,7 +90,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
 
     protected void allowingConfigurationToReturn(final String name, final String value) {
-        resetConfig().put(name, value);
+        _Config.put(name, value);
     }
 
     protected void ignoringConfiguration() {

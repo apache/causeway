@@ -434,10 +434,8 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         // given
         final String className = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$MyValueWithSemanticsProviderSpecifiedUsingConfiguration";
 
-        _Context.clear();
-        IsisConfigurationBuilder configurationBuilderForTesting = _Config.configurationBuilderForTesting();
-        
-        configurationBuilderForTesting.put(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
+        _Config.clear();
+        _Config.put(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
 
         // when
         facetFactory.process(new ProcessClassContext(MyValueWithSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
@@ -489,11 +487,8 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
 
         // given
         final String className = "org.apache.isis.core.metamodel.facets.object.value.ValueFacetAnnotationOrConfigurationFactoryTest$NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration";
-        _Context.clear();
-        IsisConfigurationBuilder configurationBuilderForTesting = _Config.configurationBuilderForTesting();
-
-        configurationBuilderForTesting.put(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
-
+        _Config.clear();
+        _Config.put(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
 
         // when
         facetFactory.process(new ProcessClassContext(NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));

@@ -304,8 +304,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         allowingEmployeeHasSmithAdapter();
 
-        _Config.configurationBuilderForTesting()
-        .put("isis.reflector.facet.filterVisibility", "true");
+        _Config.put("isis.reflector.facet.filterVisibility", true);
         
         context.checking(new Expectations() {{
 
@@ -344,8 +343,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         allowingJonesStringValueAdapter();
         
-        _Config.configurationBuilderForTesting()
-        .put("isis.reflector.facet.filterVisibility", "true");
+        _Config.put("isis.reflector.facet.filterVisibility", true);
 
         context.checking(new Expectations() {
             {

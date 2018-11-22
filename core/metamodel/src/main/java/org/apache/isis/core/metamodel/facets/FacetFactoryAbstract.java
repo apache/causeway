@@ -76,7 +76,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInje
     }
 
     protected IsisConfiguration getConfiguration() {
-        return _Config.getConfigurationElseThrow();
+        return _Config.getConfiguration();
     }
 
 
