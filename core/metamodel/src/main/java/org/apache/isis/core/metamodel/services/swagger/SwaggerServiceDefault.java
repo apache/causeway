@@ -18,13 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.swagger;
 
-import static org.apache.isis.commons.internal.base._Strings.prefix;
-import static org.apache.isis.commons.internal.base._With.ifPresentElse;
-import static org.apache.isis.commons.internal.resources._Resources.getRestfulPathIfAny;
-import static org.apache.isis.commons.internal.resources._Resources.prependContextPathIfPresent;
-
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
@@ -36,6 +29,11 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.metamodel.services.swagger.internal.SwaggerSpecGenerator;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+
+import static org.apache.isis.commons.internal.base._Strings.prefix;
+import static org.apache.isis.commons.internal.base._With.ifPresentElse;
+import static org.apache.isis.commons.internal.resources._Resources.getRestfulPathIfAny;
+import static org.apache.isis.commons.internal.resources._Resources.prependContextPathIfPresent;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -49,7 +47,7 @@ public class SwaggerServiceDefault implements SwaggerService {
     private String basePath;
 
     @PostConstruct
-    public void init(final Map<String,String> properties) {
+    public void init() {
 
         final String restfulPath = ifPresentElse(getRestfulPathIfAny(), "undefined");
         

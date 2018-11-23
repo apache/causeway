@@ -16,10 +16,6 @@
  */
 package org.apache.isis.core.runtime.services.eventbus;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -30,6 +26,11 @@ import org.junit.rules.ExpectedException;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.config.internal._Config;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class EventBusServiceDefaultUsingAxonSimpleTest {
 
@@ -104,9 +105,10 @@ public class EventBusServiceDefaultUsingAxonSimpleTest {
         @Test
         public void allow_late_registration_means_can_register_after_post() throws Exception {
             // given
-            eventBusService.init(_Maps.unmodifiable(
-                    EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "true",
-                    EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, EVENTBUS_IMPL_NAME));
+            _Config.put(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, true);
+            _Config.put(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, EVENTBUS_IMPL_NAME);
+            eventBusService.init();
+            
             assertThat(eventBusService.isAllowLateRegistration(), is(true));
             assertThat(eventBusService.getImplementation(), is(EVENTBUS_IMPL_NAME));
 
@@ -122,9 +124,10 @@ public class EventBusServiceDefaultUsingAxonSimpleTest {
         @Test
         public void disallow_late_registration_means_cannot_register_after_post() throws Exception {
             // given
-            eventBusService.init(_Maps.unmodifiable(
-                    EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "false",
-                    EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, EVENTBUS_IMPL_NAME));
+            _Config.put(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, false);
+            _Config.put(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, EVENTBUS_IMPL_NAME);
+            eventBusService.init();
+            
             assertThat(eventBusService.isAllowLateRegistration(), is(false));
             assertThat(eventBusService.getImplementation(), is(EVENTBUS_IMPL_NAME));
 
@@ -140,9 +143,10 @@ public class EventBusServiceDefaultUsingAxonSimpleTest {
         @Test
         public void disallow_late_registration_means_can_register_before_post() throws Exception {
             // given
-            eventBusService.init(_Maps.unmodifiable(
-                    EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "false",
-                    EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, EVENTBUS_IMPL_NAME));
+            _Config.put(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, false);
+            _Config.put(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, EVENTBUS_IMPL_NAME);
+            eventBusService.init();
+            
             assertThat(eventBusService.isAllowLateRegistration(), is(false));
             assertThat(eventBusService.getImplementation(), is(EVENTBUS_IMPL_NAME));
 
@@ -159,9 +163,9 @@ public class EventBusServiceDefaultUsingAxonSimpleTest {
         @Test
         public void multiple_subscribers_receive_same_event_if_same_type() throws Exception {
             // given
-            eventBusService.init(_Maps.unmodifiable(
-                    EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "false",
-                    EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, EVENTBUS_IMPL_NAME));
+            _Config.put(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, false);
+            _Config.put(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, EVENTBUS_IMPL_NAME);
+            eventBusService.init();
             assertThat(eventBusService.isAllowLateRegistration(), is(false));
             assertThat(eventBusService.getImplementation(), is(EVENTBUS_IMPL_NAME));
 
@@ -191,9 +195,9 @@ public class EventBusServiceDefaultUsingAxonSimpleTest {
         @Test
         public void multiple_subscribers_eventlistener() throws Exception {
             // given
-            eventBusService.init(_Maps.unmodifiable(
-                    EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, "false",
-                    EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, EVENTBUS_IMPL_NAME));
+            _Config.put(EventBusServiceDefault.KEY_ALLOW_LATE_REGISTRATION, false);
+            _Config.put(EventBusServiceDefault.KEY_EVENT_BUS_IMPLEMENTATION, EVENTBUS_IMPL_NAME);
+            eventBusService.init();
             assertThat(eventBusService.isAllowLateRegistration(), is(false));
             assertThat(eventBusService.getImplementation(), is(EVENTBUS_IMPL_NAME));
 

@@ -390,18 +390,6 @@ implements ApplicationScopedComponent, AppManifestProvider {
     }
 
     /**
-     * Derived from {@link #getServicesInjector()}.
-     *
-     * @deprecated - use {@link #getServicesInjector()} instead.
-     */
-    @Programmatic
-    @Deprecated
-    public List<Object> getServices() {
-        return servicesInjector.streamServices().collect(Collectors.toList());
-    }
-
-
-    /**
      * The {@link ApplicationScopedComponent application-scoped}
      * {@link SpecificationLoader}.
      */

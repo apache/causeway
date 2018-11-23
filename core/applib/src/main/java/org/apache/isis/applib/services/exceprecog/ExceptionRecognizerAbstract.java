@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.services.exceprecog;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -54,7 +53,8 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
      * <p>
      * This key is primarily for diagnostic purposes, to log the exception regardless.
      */
-    private static final String KEY_LOG_RECOGNIZED_EXCEPTIONS = "isis.services.exceprecog.logRecognizedExceptions";
+    private static final String KEY_LOG_RECOGNIZED_EXCEPTIONS = 
+            "isis.services.exceprecog.logRecognizedExceptions";
 
 
     /**
@@ -118,9 +118,10 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
 
     @Override
     @PostConstruct
-    public void init(Map<String, String> properties) {
-        final String prop = properties.get(KEY_LOG_RECOGNIZED_EXCEPTIONS);
-        this.logRecognizedExceptions = Boolean.parseBoolean(prop);
+    public void init() {
+      //FIXME[2039]        
+//        final String prop = properties.get(KEY_LOG_RECOGNIZED_EXCEPTIONS);
+//        this.logRecognizedExceptions = Boolean.parseBoolean(prop);
     }
 
     @Override
@@ -166,5 +167,5 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
 
     @javax.inject.Inject
     protected TranslationService translationService;
-
+    
 }

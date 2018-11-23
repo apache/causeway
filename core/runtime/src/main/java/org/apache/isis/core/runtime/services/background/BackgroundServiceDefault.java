@@ -93,7 +93,7 @@ public class BackgroundServiceDefault implements BackgroundService {
 
     @Programmatic
     @PostConstruct
-    public void init(Map<String,String> props) {
+    public void init() {
         if(usesBuiltinExecutor()) {
             builtinExecutor = new BuiltinExecutor();
         }

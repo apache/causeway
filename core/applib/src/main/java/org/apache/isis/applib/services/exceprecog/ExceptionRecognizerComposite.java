@@ -125,11 +125,11 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
      *     Typical usage:
      * </p>
      * <pre>
-     *    public void init(Map&lt;String,String> properties) {
+     *    public void init() {
      *        add(new ExceptionRecognizerForThisException());
      *        add(new ExceptionRecognizerForThatException());
      *        add(new ExceptionRecognizerForTheOtherException());
-     *        super.init(properties);
+     *        super.init();
      *    }
      * </pre>
      *
@@ -137,9 +137,9 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
     @PostConstruct
     @Override
     @Programmatic
-    public void init(final Map<String, String> properties) {
+    public void init() {
         injectServices();
-        initRecognizers(properties);
+        initRecognizers();
     }
 
     protected void injectServices() {
@@ -150,9 +150,9 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
         }
     }
 
-    protected void initRecognizers(final Map<String, String> properties) {
+    protected void initRecognizers() {
         for (final ExceptionRecognizer ers : exceptionRecognizers) {
-            ers.init(properties);
+            ers.init();
         }
     }
 

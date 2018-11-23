@@ -17,7 +17,6 @@
 package org.apache.isis.core.runtime.services.command;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -59,7 +58,7 @@ public class CommandDtoServiceInternalDefault implements CommandDtoServiceIntern
 
     @Programmatic
     @PostConstruct
-    public void init(Map<String,String> props) {
+    public void init() {
     }
 
     // //////////////////////////////////////

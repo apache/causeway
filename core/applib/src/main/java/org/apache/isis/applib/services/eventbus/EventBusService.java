@@ -86,7 +86,7 @@ public abstract class EventBusService {
      */
     @Programmatic
     @PostConstruct
-    public void init(final Map<String, String> properties) {
+    public void init() {
         hasPosted = false; // reset state
     }
 

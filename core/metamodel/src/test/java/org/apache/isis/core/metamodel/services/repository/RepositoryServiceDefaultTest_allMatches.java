@@ -19,9 +19,7 @@
 
 package org.apache.isis.core.metamodel.services.repository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -31,6 +29,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -46,6 +45,7 @@ public class RepositoryServiceDefaultTest_allMatches {
 
     @Before
     public void setUp() throws Exception {
+        _Config.clear();
         repositoryService = new RepositoryServiceInternalDefault() {
             @Override <T> List<T> submitQuery(final Query<T> query) {
                 return null;
@@ -57,8 +57,7 @@ public class RepositoryServiceDefaultTest_allMatches {
     @Test
     public void whenAutoflush() throws Exception {
         // given
-        Map map = new HashMap();
-        repositoryService.init(map);
+        repositoryService.init();
         // expect
         context.checking(new Expectations() {{
             oneOf(mockTransactionService).flushTransaction();
@@ -70,10 +69,8 @@ public class RepositoryServiceDefaultTest_allMatches {
     @Test
     public void whenDisableAutoflush() throws Exception {
         // given
-        Map map = new HashMap() {{
-            put("isis.services.container.disableAutoFlush", "true");
-        }};
-        repositoryService.init(map);
+        _Config.put("isis.services.container.disableAutoFlush", true);
+        repositoryService.init();
         // expect
         context.checking(new Expectations() {{
             never(mockTransactionService).flushTransaction();
@@ -85,10 +82,8 @@ public class RepositoryServiceDefaultTest_allMatches {
     @Test
     public void whenDisableAutoflushSetToFalse() throws Exception {
         // given
-        Map map = new HashMap() {{
-            put("isis.services.container.disableAutoFlush", "false");
-        }};
-        repositoryService.init(map);
+        _Config.put("isis.services.container.disableAutoFlush", false);
+        repositoryService.init();
         // expect
         context.checking(new Expectations() {{
             oneOf(mockTransactionService).flushTransaction();

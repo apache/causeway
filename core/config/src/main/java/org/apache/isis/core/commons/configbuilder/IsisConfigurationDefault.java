@@ -31,6 +31,7 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
@@ -204,18 +205,19 @@ class IsisConfigurationDefault implements IsisConfiguration {
     @Override
     public boolean getBoolean(final String name, final boolean defaultValue) {
         String value = getPropertyElseNull(name);
-        if (value == null) {
+        if (_Strings.isNullOrEmpty(value)) {
             return defaultValue;
         }
         value = value.toLowerCase();
-        if (value.equals("on") || value.equals("yes") || value.equals("true") || value.equals("")) {
+        if (value.equals("on") || value.equals("yes") || value.equals("true") ) {
             return true;
         }
         if (value.equals("off") || value.equals("no") || value.equals("false")) {
             return false;
         }
 
-        throw new IsisConfigurationException("Illegal flag for " + name + "; must be one of on, off, yes, no, true or false");
+        throw new IsisConfigurationException("Illegal flag for " + name
+                + "; must be one of on, off, yes, no, true or false");
     }
 
     /**

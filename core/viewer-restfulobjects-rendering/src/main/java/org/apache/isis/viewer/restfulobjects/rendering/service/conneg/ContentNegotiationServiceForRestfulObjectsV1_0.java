@@ -20,7 +20,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -59,6 +58,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectColle
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
+import static org.apache.isis.config.internal._Config.getConfiguration;
+
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
@@ -69,9 +70,9 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     @PostConstruct
-    public void init(final Map<String, String> properties) {
-        final String strictAcceptCheckingStr = properties.get("isis.viewer.restfulobjects.strictAcceptChecking");
-        this.strictAcceptChecking = "true".equalsIgnoreCase(strictAcceptCheckingStr);
+    public void init() {
+        this.strictAcceptChecking = getConfiguration()
+                .getBoolean("isis.viewer.restfulobjects.strictAcceptChecking", false);
     }
 
     @Override

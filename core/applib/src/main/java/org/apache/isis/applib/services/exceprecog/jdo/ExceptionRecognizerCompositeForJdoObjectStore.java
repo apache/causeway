@@ -46,25 +46,23 @@ import org.apache.isis.commons.internal.base._Strings;
         )
 public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionRecognizerComposite {
 
-    public static final String KEY_DISABLE = "isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable";
+    public static final String KEY_DISABLE = 
+            "isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable";
 
     @Override
     @Programmatic
     @PostConstruct
-    public void init(Map<String,String> properties) {
-        final boolean disabled = getElseFalse(properties, KEY_DISABLE);
-        if(disabled) {
-            return;
-        }
+    public void init() {
+        
+//FIXME[2039]        
+//        final boolean disabled = getElseFalse(properties, KEY_DISABLE);
+//        if(disabled) {
+//            return;
+//        }
 
         addChildren();
 
-        super.init(properties);
-    }
-
-    private static boolean getElseFalse(final Map<String, String> properties, final String key) {
-        final String value = properties.get(key);
-        return !_Strings.isNullOrEmpty(value) && Boolean.parseBoolean(value);
+        super.init();
     }
 
     protected void addChildren() {

@@ -73,7 +73,7 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @PostConstruct
     @Programmatic
-    public void init(Map<String,String> properties) {
+    public void init() {
         metaModelExporter = new MetaModelExporter(specificationLookup);
     }
 
