@@ -148,7 +148,7 @@ class MetaModelServiceDefaultTest {
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         
-        jaxbMarshaller.marshal(domainMembers, System.out);
+        jaxbMarshaller.marshal(domainMembers, noopOutput());
     }
     
     

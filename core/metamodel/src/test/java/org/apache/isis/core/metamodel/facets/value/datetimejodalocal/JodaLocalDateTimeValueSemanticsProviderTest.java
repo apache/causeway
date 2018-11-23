@@ -48,7 +48,7 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
 
     @Before
     public void setUp() throws Exception {
-        
+        _Config.clear();
         _Config.acceptBuilder(config->{
             config.put("isis.value.format.datetime", "iso_encoding");
         });
