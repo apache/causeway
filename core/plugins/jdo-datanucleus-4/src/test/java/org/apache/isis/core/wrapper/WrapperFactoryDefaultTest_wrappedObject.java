@@ -138,6 +138,8 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         // PRODUCTION
         
+        _Config.clear();
+        
         employeeRepository = new EmployeeRepositoryImpl();
 
         employeeDO = new Employee();

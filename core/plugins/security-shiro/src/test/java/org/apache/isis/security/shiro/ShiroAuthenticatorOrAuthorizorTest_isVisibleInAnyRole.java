@@ -56,6 +56,7 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
     	
         // PRODUCTION
         
+        _Config.clear();
         _Config.put("isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated", false);
     	
         authOrAuth = new ShiroAuthenticatorOrAuthorizor();
