@@ -292,7 +292,7 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
 
     @Override
     public IsisConfiguration build() {
-
+        
         dumpResourcesToLog();
 
         final IsisConfigurationDefault copy = new IsisConfigurationDefault(resourceStreamSourceChain);

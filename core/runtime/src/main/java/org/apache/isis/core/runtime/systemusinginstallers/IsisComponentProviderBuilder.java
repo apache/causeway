@@ -26,6 +26,16 @@ public class IsisComponentProviderBuilder {
         return this;
     }
     
+    public IsisComponentProviderBuilder authenticationManager(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+        return this;
+    }
+    
+    public IsisComponentProviderBuilder authorizationManager(AuthorizationManager authorizationManager) {
+        this.authorizationManager = authorizationManager;
+        return this;
+    }
+    
     public IsisComponentProviderBuilder addResourceStreamSource(ResourceStreamSource source) {
         resourceStreamSources.add(source);
         return this;

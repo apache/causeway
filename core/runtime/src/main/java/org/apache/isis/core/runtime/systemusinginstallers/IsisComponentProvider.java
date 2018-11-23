@@ -85,6 +85,20 @@ public final class IsisComponentProvider {
     public static IsisComponentProviderBuilder builder() {
         return new IsisComponentProviderBuilder();
     }
+    
+    // -- BUILDER - USING INSTALLERS
+    
+    public static IsisComponentProviderBuilder builderUsingInstallers(AppManifest appManifest) {
+        
+        final IsisComponentProviderHelper_UsingInstallers helper = 
+                new IsisComponentProviderHelper_UsingInstallers(appManifest);
+        
+        return builder()
+                .appManifest(appManifest)
+                .authenticationManager(helper.authenticationManager)
+                .authorizationManager(helper.authorizationManager);
+    }
+    
 
     // -- constructor, fields
 

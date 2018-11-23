@@ -63,6 +63,7 @@ public interface IsisConfigurationBuilder {
 
     String[] peekAtList(String key);
 
+    /** internal only **/
     IsisConfiguration build();
 
     /**

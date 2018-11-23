@@ -76,6 +76,7 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
@@ -299,22 +300,23 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             requestCycleListeners.add(requestCycleListenerForIsis);
             requestCycleListeners.add(new PageRequestHandlerTracker());
 
-            configuration = _Config.getConfiguration(); 
-            
             //
             // create IsisSessionFactory
             //
             final IsisInjectModule isisModule = newIsisModule();
-            final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule(configuration));
+            final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
             initWicketComponentInjection(injector);
-
+            
             injector.injectMembers(this); // populates this.isisSessionFactory
-
+            Ensure.ensure("IsisSessionFactory should have been injected.", this.isisSessionFactory != null);
+            
             if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
                 WebRequestCycleForIsis webRequestCycleForIsis = (WebRequestCycleForIsis) requestCycleListenerForIsis;
                 webRequestCycleForIsis.setPageClassRegistry(pageClassRegistry);
             }
 
+            configuration = _Config.getConfiguration();
+            
             this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
 
             configureSecurity(configuration);
@@ -541,10 +543,9 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     /**
      * Override if required
-     * @param isisConfiguration
      */
-    protected Module newIsisWicketModule(final IsisConfiguration isisConfiguration) {
-        return new IsisWicketModule(getServletContext(), isisConfiguration);
+    protected Module newIsisWicketModule() {
+        return new IsisWicketModule(getServletContext());
     }
 
     // //////////////////////////////////////

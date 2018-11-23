@@ -33,6 +33,8 @@ import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 
 public class IsisInjectModule extends AbstractModule {
 
@@ -82,25 +84,25 @@ public class IsisInjectModule extends AbstractModule {
         bind(AppManifest.class).toInstance(APP_MANIFEST_NOOP);
     }
 
-//TODO[2039]
-//    @Provides
-//    @com.google.inject.Inject
-//    @Singleton
-//    protected IsisSessionFactory provideIsisSessionFactory(
-//            final AppManifest appManifestIfExplicitlyBound) {
-//
-//        final AppManifest appManifestToUse = determineAppManifest(appManifestIfExplicitlyBound);
-//
-//        final IsisComponentProvider componentProvider =
-//                new IsisComponentProviderUsingInstallers(appManifestToUse);
-//
-//        final IsisSessionFactoryBuilder builder =
-//                new IsisSessionFactoryBuilder(componentProvider, componentProvider.getAppManifest());
-//
-//        // as a side-effect, if the metamodel turns out to be invalid, then
-//        // this will push the MetaModelInvalidException into IsisContext.
-//        return builder.buildSessionFactory();
-//    }
+    @Provides
+    @com.google.inject.Inject
+    @Singleton
+    protected IsisSessionFactory provideIsisSessionFactory(
+            final AppManifest appManifestIfExplicitlyBound) {
+        
+        final AppManifest appManifestToUse = determineAppManifest(appManifestIfExplicitlyBound);
+
+        final IsisComponentProvider componentProvider = IsisComponentProvider
+                .builderUsingInstallers(appManifestToUse)
+                .build();
+
+        final IsisSessionFactoryBuilder builder =
+                new IsisSessionFactoryBuilder(componentProvider, componentProvider.getAppManifest());
+
+        // as a side-effect, if the metamodel turns out to be invalid, then
+        // this will push the MetaModelInvalidException into IsisContext.
+        return builder.buildSessionFactory();
+    }
 
     @Provides
     @com.google.inject.Inject

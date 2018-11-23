@@ -96,8 +96,9 @@ public class _Config {
     // -- HELPER -- BUILDER
     
     private static IsisConfigurationBuilder getConfigurationBuilder() {
-        IsisConfigurationBuilder builder = getLifecycleResource().getBuilder()
-                .orElseThrow(_Config::configurationAlreadyInUse);
+        _Config_LifecycleResource lifecycle = getLifecycleResource();
+        IsisConfigurationBuilder builder = lifecycle.getBuilder()
+                .orElseThrow(lifecycle::configurationAlreadyInUse);
         return builder;
     }
     
@@ -117,15 +118,6 @@ public class _Config {
     private static _Config_LifecycleResource createLifecycleResource() {
         return new _Config_LifecycleResource(createBuilder());
     }
-    
-    // -- HELPER -- EXCEPTIONS
-    
-    private static IllegalStateException configurationAlreadyInUse() {
-        return new IllegalStateException("The IsisConfigurationBuilder is no longer valid, because it has "
-                + "already built the IsisConfiguration for this application's life-cycle.");
-    }
-
-    
 
 //    /**
 //     * Sets the current context's configuration supplier via provided parameter. Will not override

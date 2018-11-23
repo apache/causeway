@@ -34,7 +34,7 @@ class _Config_LifecycleResource {
     _Config_LifecycleResource(final IsisConfigurationBuilder builder) {
         requires(builder, "builder");
         this.builder = builder;
-        this.configuration = _Lazy.threadSafe(builder::build);
+        this.configuration = _Lazy.threadSafe(this::build);
     }
     
     IsisConfiguration getConfiguration() {
@@ -46,6 +46,33 @@ class _Config_LifecycleResource {
             return Optional.of(builder);    
         }
         return Optional.empty();
+    }
+
+    private IsisConfiguration build() {
+        
+        // we throw an exception, catch it and keep it for later, to provide
+        // causal information, in case the builder is accessed after it already
+        // built the configuration
+        try {
+            throw new IllegalStateException("Configuration Build Event");
+        } catch(IllegalStateException e) {
+            this.configurationBuildStacktrace = e;
+        }
+        
+        return builder.build();
+        
+    }
+    
+    // -- HELPER -- EXCEPTIONS
+    
+    private IllegalStateException configurationBuildStacktrace;
+    
+    IllegalStateException configurationAlreadyInUse() {
+        
+        IllegalStateException cause = configurationBuildStacktrace;
+        
+        return new IllegalStateException("The IsisConfigurationBuilder is no longer valid, because it has "
+                + "already built the IsisConfiguration for this application's life-cycle.", cause);
     }
     
 

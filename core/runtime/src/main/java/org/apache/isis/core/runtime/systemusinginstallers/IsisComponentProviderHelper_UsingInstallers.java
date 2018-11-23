@@ -26,9 +26,9 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
@@ -42,55 +42,44 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 
-class IsisComponentProviderUsingInstallers  {
-/*
+class IsisComponentProviderHelper_UsingInstallers  {
+
+    final AppManifest appManifest;
+    final AuthenticationManager authenticationManager;
+    final AuthorizationManager authorizationManager;
+    
     // -- constructors
 
-    public IsisComponentProviderUsingInstallers(
-            final AppManifest appManifest,
-            final IsisConfigurationBuilder configurationBuilder) {
-        
-        this(appManifest,
-                configurationBuilder,
-                new InstallerLookup(configurationBuilder));
+    IsisComponentProviderHelper_UsingInstallers(final AppManifest appManifest) {
+        this(appManifest, new InstallerLookup());
     }
     
-    public IsisComponentProviderUsingInstallers(
+    private IsisComponentProviderHelper_UsingInstallers(
             final AppManifest appManifest,
-            final IsisConfigurationBuilder configurationBuilder,
             final InstallerLookup installerLookup) {
-        this(configurationBuilder, appManifest,
-                lookupAuthenticationManager(appManifest, installerLookup, configurationBuilder),
-                lookupAuthorizationManager(appManifest, installerLookup, configurationBuilder));
+        
+        this.appManifest = appManifest;
+        this.authenticationManager = lookupAuthenticationManager(appManifest, installerLookup);
+        this.authorizationManager = lookupAuthorizationManager(appManifest, installerLookup);
     }
-
-    private IsisComponentProviderUsingInstallers(
-            final IsisConfigurationBuilder configurationBuilder,
-            final AppManifest appManifest,
-            final AuthenticationManager authenticationManager,
-            final AuthorizationManager authorizationManager){
-        super(configurationBuilder, appManifest, authenticationManager, authorizationManager);
-    }
-
-    // -- constructor helpers (factories)
-
+    
+    // -- HELPER
+ 
     private static AuthenticationManager lookupAuthenticationManager(
-            final AppManifest appManifest, final InstallerLookup installerLookup,
-            final IsisConfigurationBuilder configurationBuilder) {
+            final AppManifest appManifest, final InstallerLookup installerLookup) {
 
         final String authenticationMechanism = appManifest.getAuthenticationMechanism();
         final AuthenticationManagerInstaller authenticationInstaller =
                 installerLookup.authenticationManagerInstaller(authenticationMechanism);
 
         // no longer used, could probably remove
-        configurationBuilder.put(SystemConstants.AUTHENTICATION_INSTALLER_KEY, authenticationMechanism);
+        //_Config.put(SystemConstants.AUTHENTICATION_INSTALLER_KEY, authenticationMechanism);
 
         return authenticationInstaller.createAuthenticationManager();
     }
 
     private static AuthorizationManager lookupAuthorizationManager(
-            final AppManifest appManifest, final InstallerLookup installerLookup,
-            final IsisConfigurationBuilder configurationBuilder) {
+            final AppManifest appManifest, final InstallerLookup installerLookup) {
 
         final String authorizationMechanism = appManifest.getAuthorizationMechanism();
 
@@ -99,12 +88,10 @@ class IsisComponentProviderUsingInstallers  {
                 installerLookup.authorizationManagerInstaller(authorizationMechanism);
 
         // no longer used, could probably remove
-        configurationBuilder.put(SystemConstants.AUTHORIZATION_INSTALLER_KEY, authorizationMechanism);
+        //_Config.put(SystemConstants.AUTHORIZATION_INSTALLER_KEY, authorizationMechanism);
 
         return authorizationInstaller.createAuthorizationManager();
     }
-
-*/
 
 
     /**
@@ -122,7 +109,7 @@ class IsisComponentProviderUsingInstallers  {
      *
      * @deprecated - intention is to replace in future using CDI
      */
-    /*
+    
     @Deprecated
     static class InstallerLookup implements ApplicationScopedComponent {
 
@@ -130,11 +117,10 @@ class IsisComponentProviderUsingInstallers  {
 
         // -- constructor, fields
 
-        private final IsisConfigurationBuilder configurationBuilder;
         private final List<Installer> installerList = _Lists.newArrayList();
 
-        public InstallerLookup(final IsisConfigurationBuilder configurationBuilder) throws InstanceCreationException {
-            this.configurationBuilder = configurationBuilder;
+        public InstallerLookup() throws InstanceCreationException {
+            
 
             final List<String> installerClassNames = _Lists.of(
                     "org.apache.isis.core.security.authentication.BypassAuthenticationManagerInstaller", // bypass
@@ -217,7 +203,7 @@ class IsisComponentProviderUsingInstallers  {
                 final String key,
                 final String defaultImpl) {
             if (reqImpl == null) {
-                reqImpl = configurationBuilder.peekAtString(key, defaultImpl);
+                reqImpl = _Config.peekAtString(key, defaultImpl);
             }
             if (reqImpl == null) {
                 return null;
@@ -231,5 +217,5 @@ class IsisComponentProviderUsingInstallers  {
         }
 
     }
-    */
+    
 }

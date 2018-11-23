@@ -88,9 +88,8 @@ public class isisWicketModule_bindingsStandard_Test {
 	public void setUp() throws Exception {
 	    
 	    _Config.clear();
-		final IsisConfiguration isisConfiguration = _Config.getConfiguration(); 
 		        
-        isisWicketModule = new IsisWicketModule(mockServletContext, isisConfiguration);
+        isisWicketModule = new IsisWicketModule(mockServletContext);
 
         context.checking(new Expectations() {{
             allowing(mockServletContext);
