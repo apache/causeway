@@ -18,25 +18,33 @@
  */
 package domainapp.application;
 
-import org.apache.isis.applib.AppManifestAbstract2;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+import javax.enterprise.inject.Produces;
 
-import domainapp.dom.HelloWorldModule;
+import org.apache.isis.applib.Module;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 
 /**
  * Bootstrap the application.
  */
-public class HelloWorldAppManifest extends AppManifestAbstract2 {
+public class HelloWorldAppConfig {  // <<< managed and discovered by IoC container
 
-    public static final Builder BUILDER = Builder
-            .forModule(new HelloWorldModule())
-            .withConfigurationPropertiesFile(HelloWorldAppManifest.class, "isis-non-changing.properties")
-            .withAuthMechanism("shiro");
-
-    public HelloWorldAppManifest() {
-        super(BUILDER);
-        System.err.println("!!!!!!! HelloWorldAppManifest");
-        _Exceptions.dumpStackTrace(System.err, 0, 1000);
+    @Produces
+    public IsisConfiguration isisConfiguration () {
+        
+     // code contributed by user ...
+        
+        //ResourceStreamSource resourceStreamSource = ResourceStreamSourceCurrentClassClassPath
+        //_Config.acceptBuilder(builder->builder.addResourceStreamSource(resourceStreamSource));
+        return _Config.getConfiguration();        
+                //. FromConfig("isis.properties");
     }
 
+
+    @Produces
+    public Module appModule() {
+        // code contributed by user ...
+        return new HelloWorldAppManifest().getModule(); 
+    }
 }
+

@@ -256,6 +256,39 @@ public interface AppManifest {
         //endregion
 
     }
+    
+    // -- NOOP
+    
+    static final AppManifest NOOP = new AppManifest() {
+        @Override public List<Class<?>> getModules() {
+            return null;
+        }
+        @Override public List<Class<?>> getAdditionalServices() {
+            return null;
+        }
+
+        @Override public String getAuthenticationMechanism() {
+            return null;
+        }
+
+        @Override public String getAuthorizationMechanism() {
+            return null;
+        }
+
+        @Override public List<Class<? extends FixtureScript>> getFixtures() {
+            return null;
+        }
+
+        @Override public Map<String, String> getConfigurationProperties() {
+            return null;
+        }
+    };
+    
+    public static AppManifest noop() {
+        return NOOP;
+    }
+    
+    // -- UTIL
 
     public static class Util {
 

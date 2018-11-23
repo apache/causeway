@@ -28,6 +28,7 @@ import com.google.inject.Singleton;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -35,6 +36,8 @@ import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
+
+import static org.apache.isis.commons.internal.base._With.computeIfAbsent;
 
 public class IsisInjectModule extends AbstractModule {
 
@@ -46,30 +49,7 @@ public class IsisInjectModule extends AbstractModule {
      *     {@link #provideIsisSessionFactory(AppManifest)} created} .
      * </p>
      */
-    private static final AppManifest APP_MANIFEST_NOOP = new AppManifest() {
-        @Override public List<Class<?>> getModules() {
-            return null;
-        }
-        @Override public List<Class<?>> getAdditionalServices() {
-            return null;
-        }
-
-        @Override public String getAuthenticationMechanism() {
-            return null;
-        }
-
-        @Override public String getAuthorizationMechanism() {
-            return null;
-        }
-
-        @Override public List<Class<? extends FixtureScript>> getFixtures() {
-            return null;
-        }
-
-        @Override public Map<String, String> getConfigurationProperties() {
-            return null;
-        }
-    };
+    private static final AppManifest APP_MANIFEST_NOOP = AppManifest.noop();
 
     /**
      * Allows the {@link AppManifest} to be programmatically bound in.
@@ -87,21 +67,32 @@ public class IsisInjectModule extends AbstractModule {
     @Provides
     @com.google.inject.Inject
     @Singleton
-    protected IsisSessionFactory provideIsisSessionFactory(
-            final AppManifest appManifestIfExplicitlyBound) {
+    protected IsisSessionFactory provideIsisSessionFactory(final AppManifest boundAppManifest) {
         
-        final AppManifest appManifestToUse = determineAppManifest(appManifestIfExplicitlyBound);
+        System.err.println("!!!!!!!!!! provideIsisSessionFactory STAGE 1 "+Thread.currentThread().getName());
+        
+        final AppManifest appManifestToUse = determineAppManifest(boundAppManifest);
 
+        System.err.println("!!!!!!!!!! provideIsisSessionFactory STAGE 2 "+Thread.currentThread().getName());
+        
         final IsisComponentProvider componentProvider = IsisComponentProvider
                 .builderUsingInstallers(appManifestToUse)
                 .build();
+        
+        System.err.println("!!!!!!!!!! provideIsisSessionFactory STAGE 3 "+Thread.currentThread().getName());
 
         final IsisSessionFactoryBuilder builder =
                 new IsisSessionFactoryBuilder(componentProvider, componentProvider.getAppManifest());
+        
+        System.err.println("!!!!!!!!!! provideIsisSessionFactory STAGE 4 "+Thread.currentThread().getName());
 
         // as a side-effect, if the metamodel turns out to be invalid, then
         // this will push the MetaModelInvalidException into IsisContext.
-        return builder.buildSessionFactory();
+        IsisSessionFactory sessionFactory = builder.buildSessionFactory();
+        
+        System.err.println("!!!!!!!!!! ............. provideIsisSessionFactory DONE "+Thread.currentThread().getName());
+        
+        return sessionFactory;
     }
 
     @Provides
@@ -111,28 +102,26 @@ public class IsisInjectModule extends AbstractModule {
         return isisSessionFactory.getServicesInjector();
     }
 
-
-    private AppManifest determineAppManifest(final AppManifest appManifestIfExplicitlyBound) {
-        final AppManifest appManifest =
-                appManifestIfExplicitlyBound != APP_MANIFEST_NOOP
-                ? appManifestIfExplicitlyBound
-                        : null;
-
-        return appManifestFrom(appManifest);
-    }
-
-
+    // -- HELPER
+    
     /**
      * If an {@link AppManifest} was explicitly provided (eg from the Guice <tt>IsisWicketModule</tt> when running
      * unde the Wicket viewer) then use that; otherwise read the <tt>isis.properties</tt> config file and look
      * for an <tt>isis.appManifest</tt> entry instead.
      */
-    private static AppManifest appManifestFrom(
-            final AppManifest appManifestFromConstructor) {
-        if(appManifestFromConstructor != null) {
-            return appManifestFromConstructor;
-        }
-        final String appManifestFromConfiguration = _Config.getConfiguration().getString(SystemConstants.APP_MANIFEST_KEY);
+    private AppManifest determineAppManifest(final AppManifest boundAppManifest) {
+        final AppManifest appManifest =
+                boundAppManifest != APP_MANIFEST_NOOP
+                ? boundAppManifest
+                        : null;
+
+        return computeIfAbsent(appManifest, IsisInjectModule::getAppManifestFromConfig);
+    }
+
+    private static AppManifest getAppManifestFromConfig() {
+
+        System.err.println("WARNING: accessing Configuration prior to it being built"); //TODO[2039] ... use logger 
+        final String appManifestFromConfiguration = _Config.peekAtString(SystemConstants.APP_MANIFEST_KEY);
         return appManifestFromConfiguration != null
                 ? InstanceUtil.createInstance(appManifestFromConfiguration, AppManifest.class)
                         : null;

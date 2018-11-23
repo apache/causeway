@@ -54,10 +54,12 @@ class _Config_LifecycleResource {
         // causal information, in case the builder is accessed after it already
         // built the configuration
         try {
-            throw new IllegalStateException("Configuration Build Event");
+            throw new IllegalStateException("IsisConfiguration Build (previously already triggered by ...)");
         } catch(IllegalStateException e) {
             this.configurationBuildStacktrace = e;
         }
+        
+        System.err.println("!!!!!!! IsisConfiguration BUILT");
         
         return builder.build();
         
