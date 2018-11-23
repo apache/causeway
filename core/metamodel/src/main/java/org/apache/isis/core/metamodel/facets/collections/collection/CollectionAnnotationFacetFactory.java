@@ -54,8 +54,10 @@ import org.apache.isis.core.metamodel.facets.collections.collection.typeof.TypeO
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
@@ -76,12 +78,20 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
     void processModify(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
+
+        final Class<?> cls = processMethodContext.getCls();
+        final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
         final FacetHolder holder = processMethodContext.getFacetHolder();
 
         final PropertyOrCollectionAccessorFacet getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
         if(getterFacet == null) {
             return;
         }
+
+
+
+        // following only runs for regular collections, not for mixins.
+        // those are tackled in the post-processing, when more of the metamodel is available to us
 
         //
         // Set up CollectionDomainEventFacet, which will act as the hiding/disabling/validating advisor
@@ -96,10 +106,10 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
                 .map(domainEvent ->
                 (CollectionDomainEventFacetAbstract)
                 new CollectionDomainEventFacetForCollectionAnnotation(
-                        domainEvent, servicesInjector, getSpecificationLoader(), holder))
+                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent), servicesInjector, getSpecificationLoader(), holder))
                 .orElse(
                         new CollectionDomainEventFacetDefault(
-                                CollectionDomainEvent.Default.class, servicesInjector, getSpecificationLoader(), holder)
+                                defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class), servicesInjector, getSpecificationLoader(), holder)
                         );
         if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
             FacetUtil.addFacet(collectionDomainEventFacet);
@@ -155,6 +165,20 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
     }
+
+    public static Class<? extends CollectionDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
+            final ObjectSpecification typeSpec,
+            final Class<? extends CollectionDomainEvent<?,?>> collectionDomainEventType) {
+        if (collectionDomainEventType == CollectionDomainEvent.Default.class) {
+            final CollectionDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
+                    typeSpec.getFacet(CollectionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            if (typeFromDomainObject != null) {
+                return typeFromDomainObject.getEventType();
+            }
+        }
+        return collectionDomainEventType;
+    }
+
 
     void processHidden(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
@@ -252,7 +276,6 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
         return null;
     }
-
 
 
 }

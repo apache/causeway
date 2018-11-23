@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -42,6 +40,8 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 public class DomainEventHelper {
 
@@ -175,6 +175,7 @@ public class DomainEventHelper {
             final PropertyDomainEvent<S, T> existingEvent,
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
+            final ManagedObject mixedInAdapter,
             final T oldValue,
             final T newValue) {
 
@@ -189,6 +190,12 @@ public class DomainEventHelper {
             } else {
                 // all other phases, create a new event
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
+
+                // copy over if have
+                if(mixedInAdapter != null ) {
+                    event.setMixedIn(mixedInAdapter.getPojo());
+                }
+
             }
 
             event.setEventPhase(phase);
@@ -264,6 +271,7 @@ public class DomainEventHelper {
             final CollectionDomainEvent<S, T> existingEvent,
             final IdentifiedHolder identified,
             final ManagedObject targetAdapter,
+            final ManagedObject mixedInAdapter,
             final CollectionDomainEvent.Of of,
             final T reference) {
         try {
@@ -276,6 +284,11 @@ public class DomainEventHelper {
                 final S source = uncheckedCast(ObjectAdapter.Util.unwrapPojo(targetAdapter));
                 final Identifier identifier = identified.getIdentifier();
                 event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
+
+                // copy over if have
+                if(mixedInAdapter != null ) {
+                    event.setMixedIn(mixedInAdapter.getPojo());
+                }
             }
 
             event.setEventPhase(phase);

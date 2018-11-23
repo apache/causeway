@@ -6,12 +6,14 @@
 
 
 
-The `paged()` attribute specifies the number of rows to display in a standalone collection, as returned from an action invocation. This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-CollectionLayout_paged[collections] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_paged[view models].
+The `paged()` attribute specifies the number of rows to display in a standalone collection, as returned from an action invocation.
+This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-CollectionLayout_paged[collections] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_paged[view models].
 
 
 [WARNING]
 ====
-The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] currently does not support paging.   The xref:../ugvw/ugvw.adoc#[Wicket viewer] _does_ support paging, but note that the paging is performed client-side rather than server-side.
+The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] currently does not support paging.
+The xref:../ugvw/ugvw.adoc#[Wicket viewer] _does_ support paging, but note that the paging is performed client-side rather than server-side.
 
 We therefore recommend that large collections should instead be modelled as actions (to allow filtering to be applied to limit the number of rows).
 ====

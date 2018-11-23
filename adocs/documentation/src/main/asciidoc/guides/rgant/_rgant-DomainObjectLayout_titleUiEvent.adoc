@@ -6,22 +6,21 @@
 
 
 Whenever a domain object is to be rendered, the framework fires off a title UI event to obtain a title for the object.
-This is as an alternative to implementing xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method, or
-using the xref:../rgant/rgant.adoc#_rgant-Title[`@Title`] annotation, within the class itself.  (If either
-`title()` or `@Title` are present, then they will take precedence).
+This is as an alternative to implementing xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method, or using the xref:../rgant/rgant.adoc#_rgant-Title[`@Title`] annotation, within the class itself.
+(If either `title()` or `@Title` are present, then they will take precedence).
 
 Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and can
-use obtain a reference to the domain object from the event.  From this they can, if they wish, specify a title for
-the domain object using the event's API.
+use obtain a reference to the domain object from the event.
+From this they can, if they wish, specify a title for the domain object using the event's API.
 
 [NOTE]
 ====
-The feature was originally introduced so that xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated
-xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model]s could be kept as minimal as possible, just defining the data.
+The feature was originally introduced so that xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model]s could be kept as minimal as possible, just defining the data.
 UI events allow subscribers to provide UI hints, while xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixin]s can be used to provide the behaviour.
 ====
 
-By default the event raised is `TitleUiEvent.Default`. For example:
+By default the event raised is `TitleUiEvent.Default`.
+For example:
 
 [source,java]
 ----
@@ -31,8 +30,8 @@ public class ToDoItemDto {
 }
 ----
 
-The purpose of the `titleUiEvent()` attribute is to allows a custom subclass to be emitted instead.  A similar
-attribute is available for icon names and CSS classes.
+The purpose of the `titleUiEvent()` attribute is to allows a custom subclass to be emitted instead.
+A similar attribute is available for icon names and CSS classes.
 
 For example:
 
@@ -86,26 +85,21 @@ public class SomeSubscriber extends AbstractSubscriber {
 }
 ----
 
-The subscriber should then use either `TitleUiEvent#setTranslatableTitle(...)` or `TitleUiEvent#setTitle(...)` to
-actually specify the title to be used.
+The subscriber should then use either `TitleUiEvent#setTranslatableTitle(...)` or `TitleUiEvent#setTitle(...)` to actually specify the title to be used.
 
 
 
 
 == Default, Doop and Noop events
 
-If the `titleUiEvent` attribute is not explicitly specified (is left as its default value, `TitleUiEvent.Default`),
-then the framework will, by default, post an event.
+If the `titleUiEvent` attribute is not explicitly specified (is left as its default value, `TitleUiEvent.Default`), then the framework will, by default, post an event.
 
-If this is not required, then the `isis.reflector.facet.domainObjectLayoutAnnotation.titleUiEvent.postForDefault`
-configuration property can be set to "false"; this will disable posting.
+If this is not required, then the `isis.reflector.facet.domainObjectLayoutAnnotation.titleUiEvent.postForDefault` configuration property can be set to "false"; this will disable posting.
 
 On the other hand, if the `titleUiEvent` has been explicitly specified to some subclass, then an event will be posted.
-The framework provides `TitleUiEvent.Doop` as such a subclass, so setting the `titleUiEvent` attribute to this class
-will ensure that the event to be posted, irrespective of the configuration property setting.
+The framework provides `TitleUiEvent.Doop` as such a subclass, so setting the `titleUiEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration property setting.
 
-And, conversely, the framework also provides `TitleUiEvent.Noop`; if `titleUiEvent` attribute is set to this class,
-thn no event will be posted.
+And, conversely, the framework also provides `TitleUiEvent.Noop`; if `titleUiEvent` attribute is set to this class, thn no event will be posted.
 
 
 == Raising events programmatically

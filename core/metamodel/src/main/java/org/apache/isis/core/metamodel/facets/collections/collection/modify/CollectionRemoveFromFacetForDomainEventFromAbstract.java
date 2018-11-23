@@ -91,13 +91,14 @@ implements CollectionRemoveFromFacet {
 
         // contains the element, so
         // execute the remove wrapped between the executing and executed events ...
+        final ObjectAdapter mixedInAdapter = null;
 
         // ... post the executing event
         final CollectionDomainEvent<?, ?> event =
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.EXECUTING,
                         getEventType(), null,
-                        getIdentified(), targetAdapter,
+                        getIdentified(), targetAdapter, mixedInAdapter,
                         CollectionDomainEvent.Of.REMOVE_FROM,
                         referencedObject);
 
@@ -107,8 +108,8 @@ implements CollectionRemoveFromFacet {
         // ... and post the executed event
         domainEventHelper.postEventForCollection(
                 AbstractDomainEvent.Phase.EXECUTED,
-                getEventType(), uncheckedCast((CollectionDomainEvent<?, ?>)event),
-                getIdentified(), targetAdapter,
+                getEventType(), uncheckedCast(event),
+                getIdentified(), targetAdapter, mixedInAdapter,
                 CollectionDomainEvent.Of.REMOVE_FROM,
                 referencedObject);
     }

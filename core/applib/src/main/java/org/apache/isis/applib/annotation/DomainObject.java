@@ -24,6 +24,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.events.domain.ActionDomainEvent;
+import org.apache.isis.applib.events.domain.CollectionDomainEvent;
+import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectLoadedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectPersistedEvent;
@@ -238,4 +241,82 @@ public @interface DomainObject {
      * </p>
      */
     Class<? extends ObjectRemovingEvent<?>> removingLifecycleEvent() default ObjectRemovingEvent.Default.class;
+
+
+    /**
+     * Indicates that an invocation of <i>any</i> action of the domain object (that do not themselves specify their own
+     * <tt>&#64;Action(domainEvent=...)</tt> should be posted to the
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using the specified custom
+     * (subclass of) {@link ActionDomainEvent}.
+     *
+     * <p>For example:
+     * </p>
+     *
+     * <pre>
+     * &#64;DomainObject(actionDomainEvent=SomeObject.GenericActionDomainEvent.class)
+     * public class SomeObject{
+     *     public static class GenericActionDomainEvent extends ActionDomainEvent&lt;Object&gt; { ... }
+     *
+     *     public void changeStartDate(final Date startDate) { ...}
+     *     ...
+     * }
+     * </pre>
+     *
+     * <p>
+     *     This will result in all actions as a more specific type to use) to emit this event.
+     * </p>
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * It must also use <tt>Object</tt> as its generic type.  This is to allow mixins to also emit the same event.
+     * </p>
+     */
+    Class<? extends ActionDomainEvent<?>> actionDomainEvent() default ActionDomainEvent.Default.class;
+
+    /**
+     * Indicates that changes to <i>any</i> property of the domain object (that do not themselves specify their own
+     * <tt>&#64;Property(domainEvent=...)</tt> should be posted to the
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using the specified custom
+     * (subclass of) {@link PropertyDomainEvent}.
+     *
+     * <p>For example:
+     * </p>
+     *
+     * <pre>
+     * &#64;DomainObject(propertyDomainEvent=SomeObject.GenericPropertyDomainEvent.class)
+     * public class SomeObject{
+     *
+     *    public LocalDate getStartDate() { ...}
+     * }
+     * </pre>
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * It must also use <tt>Object</tt> as its generic type.  This is to allow mixins to also emit the same event.
+     * </p>
+     */
+    Class<? extends PropertyDomainEvent<?,?>> propertyDomainEvent() default PropertyDomainEvent.Default.class;
+
+    /**
+     * Indicates that changes to <i>any</i> collection of the domain object (that do not themselves specify their own
+     * <tt>&#64;Collection(domainEvent=...)</tt>  should be posted to the
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
+     * {@link CollectionDomainEvent}.
+     *
+     * <p>For example:
+     * </p>
+     * <pre>
+     * &#64;DomainObject(collectionDomainEvent=Order.GenericCollectionDomainEvent.class)
+     * public class Order {
+     *
+     *   public SortedSet&lt;OrderLine&gt; getLineItems() { ...}
+     * }
+     * </pre>
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * It must also use <tt>Object</tt> as its generic type.  This is to allow mixins to also emit the same event.
+     * </p>
+     */
+    Class<? extends CollectionDomainEvent<?,?>> collectionDomainEvent() default CollectionDomainEvent.Default.class;
+
 }

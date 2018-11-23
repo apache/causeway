@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToF
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 
-
 public abstract class CollectionAddToFacetForDomainEventFromAbstract
 extends SingleValueFacetAbstract<Class<? extends CollectionDomainEvent<?,?>>>
 implements CollectionAddToFacet {
@@ -90,6 +89,7 @@ implements CollectionAddToFacet {
 
         // either doesn't contain object, or doesn't have set semantics, so
         // execute the add wrapped between the executing and executed events ...
+        final ObjectAdapter mixedInAdapter = null;
 
         // ... post the executing event
         
@@ -97,7 +97,7 @@ implements CollectionAddToFacet {
                 domainEventHelper.postEventForCollection(
                         AbstractDomainEvent.Phase.EXECUTING,
                         getEventType(), null,
-                        getIdentified(), targetAdapter,
+                        getIdentified(), targetAdapter, mixedInAdapter,
                         CollectionDomainEvent.Of.ADD_TO,
                         referencedObject);
 
@@ -107,8 +107,8 @@ implements CollectionAddToFacet {
         // ... post the executed event
         domainEventHelper.postEventForCollection(
                 AbstractDomainEvent.Phase.EXECUTED,
-                getEventType(), uncheckedCast((CollectionDomainEvent<?, ?>)event),
-                getIdentified(), targetAdapter,
+                getEventType(), uncheckedCast(event),
+                getIdentified(), targetAdapter, mixedInAdapter,
                 CollectionDomainEvent.Of.ADD_TO,
                 referencedObject);
     }

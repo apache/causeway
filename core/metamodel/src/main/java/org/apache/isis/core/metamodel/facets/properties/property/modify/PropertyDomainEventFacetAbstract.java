@@ -19,10 +19,11 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
-import org.apache.isis.applib.events.domain.AbstractDomainEvent;
-import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import java.util.Map;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.events.domain.AbstractDomainEvent;
+import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
@@ -41,30 +42,54 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
 public abstract class PropertyDomainEventFacetAbstract
 extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
 
     private final DomainEventHelper domainEventHelper;
 
-    private final PropertyOrCollectionAccessorFacet getterFacet;
+    private final PropertyOrCollectionAccessorFacet getterFacetIfAny;
     private final TranslationService translationService;
     private final String translationContext;
 
+    /**
+     * @param getterFacetIfAny - will be null if this is for a mixin {@link OneToOneAssociationMixedIn}.
+     */
     public PropertyDomainEventFacetAbstract(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-                    final PropertyOrCollectionAccessorFacet getterFacet,
+                    final PropertyOrCollectionAccessorFacet getterFacetIfAny,
                     final FacetHolder holder,
                     final ServicesInjector servicesInjector,
                     final SpecificationLoader specificationLoader) {
         super(PropertyDomainEventFacet.class, holder, eventType, specificationLoader);
-        this.getterFacet = getterFacet;
+        this.eventType = eventType;
+        this.getterFacetIfAny = getterFacetIfAny;
 
         this.translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
         // sadness: same as in TranslationFactory
         this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
 
         domainEventHelper = new DomainEventHelper(servicesInjector);
+    }
+
+    private Class<? extends PropertyDomainEvent<?, ?>> eventType;
+
+    @Override
+    public Class<?> value() {
+        return eventType;
+    }
+
+    public <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {
+        return _Casts.uncheckedCast(eventType);
+    }
+
+    /**
+     * Can be overwritten if this facet is on a mixin where the subject (mixedInType) is annotated with
+     * {@link DomainObject#propertyDomainEvent()}.
+     */
+    public void setEventType(final Class<? extends PropertyDomainEvent<?, ?>> eventType) {
+        this.eventType = eventType;
     }
 
     @Override
@@ -74,7 +99,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.HIDE,
                         getEventType(), null,
-                        getIdentified(), ic.getTarget(),
+                        getIdentified(), ic.getTarget(), ic.getMixedIn(),
                         null, null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
@@ -89,7 +114,7 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.DISABLE,
                         getEventType(), null,
-                        getIdentified(), ic.getTarget(),
+                        getIdentified(), ic.getTarget(), ic.getMixedIn(),
                         null, null);
         if (event != null && event.isDisabled()) {
             final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
@@ -104,15 +129,25 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
     @Override
     public String invalidates(ValidityContext<? extends ValidityEvent> ic) {
 
-        final Object oldValue = getterFacet.getProperty(ic.getTarget(),
-                ic.getInitiatedBy());
-        final Object proposedValue = proposedFrom(ic);
+        if(getterFacetIfAny == null) {
+            return null;
+        }
+
+        // if this is a mixin, then this ain't true.
+        if(!(ic instanceof ProposedHolder)) {
+            return null;
+        }
+        final ProposedHolder ph = (ProposedHolder) ic;
+
+        final Object oldValue = getterFacetIfAny.getProperty(ic.getTarget(), ic.getInitiatedBy());
+        final ManagedObject proposedAdapter = ph.getProposed();
+        final Object proposedValue = proposedAdapter != null ? proposedAdapter.getPojo() : null;
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.VALIDATE,
                         getEventType(), null,
-                        getIdentified(), ic.getTarget(),
+                        getIdentified(), ic.getTarget(), ic.getMixedIn(),
                         oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
             final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
@@ -125,19 +160,11 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
         return null;
     }
 
-    private static Object proposedFrom(ValidityContext<? extends ValidityEvent> ic) {
-        final ProposedHolder ph = (ProposedHolder) ic;
-        final ManagedObject proposedAdapter = ph.getProposed();
-        return proposedAdapter != null? proposedAdapter.getPojo(): null;
-    }
 
-    public <S, T> Class<? extends PropertyDomainEvent<S, T>> getEventType() {
-        return _Casts.uncheckedCast(value());
-    }
-
-    @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
+    @Override
+    public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        attributeMap.put("getterFacet", getterFacet);
+        attributeMap.put("getterFacet", getterFacetIfAny);
     }
 
 }

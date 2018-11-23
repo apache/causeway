@@ -22,12 +22,16 @@ package org.apache.isis.core.metamodel.facets.collections.collection;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class CollectionAnnotationFacetFactoryTest_typeOf extends AbstractFacetFactoryTest {
 
@@ -58,6 +62,11 @@ public class CollectionAnnotationFacetFactoryTest_typeOf extends AbstractFacetFa
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
+        context.checking(new Expectations() {{
+            allowing(mockSpecificationLoader).loadSpecification(Customer.class);
+            will(returnValue(mockCustomerSpec));
+        }});
+
         facetFactory.process(new ProcessMethodContext(Customer.class, null, actionMethod, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
@@ -77,6 +86,12 @@ public class CollectionAnnotationFacetFactoryTest_typeOf extends AbstractFacetFa
                 return null;
             }
         }
+
+        context.checking(new Expectations() {{
+            allowing(mockSpecificationLoader).loadSpecification(Customer.class);
+            will(returnValue(mockCustomerSpec));
+        }});
+
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
@@ -89,6 +104,8 @@ public class CollectionAnnotationFacetFactoryTest_typeOf extends AbstractFacetFa
 
     }
 
+    @Mock
+    ObjectSpecification mockCustomerSpec;
 
     public void testTypeOfFacetIsInferredForCollectionFromOrderArray() {
         class Order {
@@ -100,6 +117,11 @@ public class CollectionAnnotationFacetFactoryTest_typeOf extends AbstractFacetFa
             }
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
+
+        context.checking(new Expectations() {{
+            allowing(mockSpecificationLoader).loadSpecification(Customer.class);
+            will(returnValue(mockCustomerSpec));
+        }});
 
         facetFactory.process(new ProcessMethodContext(Customer.class, null, collectionAccessorMethod, methodRemover, facetedMethod));
 

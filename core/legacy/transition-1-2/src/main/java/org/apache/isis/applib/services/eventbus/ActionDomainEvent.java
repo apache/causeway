@@ -146,22 +146,6 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     
 
 
-    // region > mixedIn
-    private Object mixedIn;
-
-    /**
-     * Populated only for mixins; holds the underlying domain object that the mixin contributes to.
-     */
-    public Object getMixedIn() {
-        return mixedIn;
-    }
-    /**
-     * Not API - set by the framework.
-     */
-    public void setMixedIn(final Object mixedIn) {
-        this.mixedIn = mixedIn;
-    }
-    // endregion
 
     // -- arguments
     private List<Object> arguments;

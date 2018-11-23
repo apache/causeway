@@ -5,7 +5,8 @@
 :_imagesdir: images/
 
 
-The `named()` attribute explicitly specifies the domain object's name, overriding the name that would normally be inferred from the Java source code.  The attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-ActionLayout_named[actions], xref:../rgant/rgant.adoc#_rgant-CollectionLayout_named[collections], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[properties], xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[parameters], xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_named[view models] and xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[domain services].
+The `named()` attribute explicitly specifies the domain object's name, overriding the name that would normally be inferred from the Java source code.
+The attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-ActionLayout_named[actions], xref:../rgant/rgant.adoc#_rgant-CollectionLayout_named[collections], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[properties], xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[parameters], xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_named[view models] and xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[domain services].
 
 
 [TIP]

@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 public abstract class ActionDomainEventFacetAbstract
 extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
 
+    private Class<? extends ActionDomainEvent<?>> eventType;
     private final TranslationService translationService;
     private final String translationContext;
 
@@ -63,6 +64,7 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
                     final ServicesInjector servicesInjector,
                     final SpecificationLoader specificationLoader) {
         super(type(), holder, eventType, specificationLoader);
+        this.eventType = eventType;
 
         this.translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);
         // sadness: same as in TranslationFactory
@@ -70,6 +72,23 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
 
         domainEventHelper = new DomainEventHelper(servicesInjector);
     }
+
+    @Override
+    public Class<?> value() {
+        return eventType;
+    }
+
+    protected Class eventType() {
+        return eventType;
+    }
+
+    public <S> Class<? extends ActionDomainEvent<S>> getEventType() {
+        return _Casts.uncheckedCast(eventType);
+    }
+    public void setEventType(final Class<? extends ActionDomainEvent<?>> eventType) {
+        this.eventType = eventType;
+    }
+
 
 
     @Override
@@ -152,10 +171,6 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
         }
 
         return null;
-    }
-
-    public <S> Class<? extends ActionDomainEvent<S>> getEventType() {
-        return _Casts.uncheckedCast(value());
     }
 
 }

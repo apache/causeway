@@ -97,11 +97,9 @@ If the `iconUiEvent` attribute is not explicitly specified (is left as its defau
 If this is not required, then the `isis.reflector.facet.domainObjectLayoutAnnotation.iconUiEvent.postForDefault` configuration property can be set to "false"; this will disable posting.
 
 On the other hand, if the `iconUiEvent` has been explicitly specified to some subclass, then an event will be posted.
-The framework provides `IconUiEvent.Doop` as such a subclass, so setting the `iconUiEvent` attribute to this class
-will ensure that the event to be posted, irrespective of the configuration property setting.
+The framework provides `IconUiEvent.Doop` as such a subclass, so setting the `iconUiEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration property setting.
 
-And, conversely, the framework also provides `IconUiEvent.Noop`; if `iconUiEvent` attribute is set to this class,
-then no event will be posted.
+And, conversely, the framework also provides `IconUiEvent.Noop`; if `iconUiEvent` attribute is set to this class, then no event will be posted.
 
 
 

@@ -54,12 +54,6 @@ public @interface Collection {
      * </pre>
      *
      * <p>
-     * Only domain services should be registered as subscribers; only domain services are guaranteed to be instantiated and
-     * resident in memory.  The typical implementation of a domain service subscriber is to identify the impacted entities,
-     * load them using a repository, and then to delegate to the event to them.
-     * </p>
-     *
-     * <p>
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */

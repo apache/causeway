@@ -77,6 +77,7 @@ public class Smoke_IntegTest extends DomainAppIntegTestAbstract {
 
         // when
         wrap(fred).setNotes("These are some notes");
+        transactionService.flushTransaction();
 
         // then
         assertThat(wrap(fred).getNotes()).isEqualTo("These are some notes");
