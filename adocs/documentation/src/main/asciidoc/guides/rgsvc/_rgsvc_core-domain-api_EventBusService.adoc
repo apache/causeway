@@ -117,9 +117,8 @@ will propagate an instance of the default `o.a.i.applib.services.eventbus.Action
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class MySubscribingDomainService
-    @Programmatic
-    @org.axonframework.eventhandling.EventHandler   // if using axon
-    @com.google.common.eventbus.Subscribe           // if using guava
+    @org.axonframework.eventhandling.EventHandler       // if using axon
+    @com.google.common.eventbus.Subscribe               // if using guava
     public void on(ActionDomainEvent ev) { ... }
     ...
 }

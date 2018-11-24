@@ -71,6 +71,10 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
     }
 
+    public Class<?> getRepositoryClass() {
+        return repositoryClass;
+    }
+
     @Override
     public List<ObjectAdapter> execute(
             final String search,

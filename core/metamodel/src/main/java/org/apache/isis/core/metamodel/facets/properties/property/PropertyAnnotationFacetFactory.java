@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -67,6 +68,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFace
 import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.isis.core.metamodel.util.EventUtil;
@@ -99,12 +101,19 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     void processModify(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
+
+        final Class<?> cls = processMethodContext.getCls();
+        final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
         final FacetedMethod holder = processMethodContext.getFacetHolder();
 
         final PropertyOrCollectionAccessorFacet getterFacet = holder.getFacet(PropertyOrCollectionAccessorFacet.class);
         if(getterFacet == null) {
             return;
         }
+
+        // following only runs for regular properties, not for mixins.
+        // those are tackled in the post-processing, when more of the metamodel is available to us
+
 
         //
         // Set up PropertyDomainEventFacet, which will act as the hiding/disabling/validating advisor
@@ -117,9 +126,9 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
                 .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
                 .findFirst()
                 .map(domainEvent -> (PropertyDomainEventFacetAbstract) new PropertyDomainEventFacetForPropertyAnnotation(
-                        domainEvent, getterFacet, servicesInjector, getSpecificationLoader(), holder))
+                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent), getterFacet, servicesInjector, getSpecificationLoader(), holder))
                 .orElse(new PropertyDomainEventFacetDefault(
-                        PropertyDomainEvent.Default.class, getterFacet, servicesInjector, getSpecificationLoader(),
+                        defaultFromDomainObjectIfRequired(typeSpec, PropertyDomainEvent.Default.class), getterFacet, servicesInjector, getSpecificationLoader(),
                         holder));
 
         if(EventUtil.eventTypeIsPostable(
@@ -171,6 +180,20 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             FacetUtil.addFacet(replacementFacet);
         }
     }
+
+    public static Class<? extends PropertyDomainEvent<?,?>> defaultFromDomainObjectIfRequired(
+            final ObjectSpecification typeSpec,
+            final Class<? extends PropertyDomainEvent<?,?>> propertyDomainEventType) {
+        if (propertyDomainEventType == PropertyDomainEvent.Default.class) {
+            final PropertyDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
+                    typeSpec.getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            if (typeFromDomainObject != null) {
+                return typeFromDomainObject.getEventType();
+            }
+        }
+        return propertyDomainEventType;
+    }
+
 
 
     void processHidden(final ProcessMethodContext processMethodContext) {

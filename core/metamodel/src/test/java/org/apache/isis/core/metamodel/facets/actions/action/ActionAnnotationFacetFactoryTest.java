@@ -66,6 +66,7 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
@@ -114,6 +115,10 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
+            
+            allowing(mockTypeSpec).getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            will(returnValue(null));
+
         }});
 
         actionMethod = findMethod(Customer.class, "someAction");

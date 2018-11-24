@@ -54,6 +54,7 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetForActionAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
@@ -111,10 +112,10 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                     .findFirst()
                     .map(domainEvent ->
                     (ActionDomainEventFacetAbstract) new ActionDomainEventFacetForActionAnnotation(
-                            domainEvent, servicesInjector, getSpecificationLoader(), holder))
+                            defaultFromDomainObjectIfRequired(typeSpec, domainEvent), servicesInjector, getSpecificationLoader(), holder))
                     .orElse(
                             new ActionDomainEventFacetDefault(
-                                    ActionDomainEvent.Default.class, servicesInjector, getSpecificationLoader(), holder)
+                                    defaultFromDomainObjectIfRequired(typeSpec, ActionDomainEvent.Default.class), servicesInjector, getSpecificationLoader(), holder)
                             );
 
             if(EventUtil.eventTypeIsPostable(
@@ -147,6 +148,19 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         } finally {
             processMethodContext.removeMethod(actionMethod);
         }
+    }
+
+    private static Class<? extends ActionDomainEvent<?>> defaultFromDomainObjectIfRequired(
+            final ObjectSpecification typeSpec,
+            final Class<? extends ActionDomainEvent<?>> actionDomainEventType) {
+        if (actionDomainEventType == ActionDomainEvent.Default.class) {
+            final ActionDomainEventDefaultFacetForDomainObjectAnnotation typeFromDomainObject =
+                    typeSpec.getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            if (typeFromDomainObject != null) {
+                return typeFromDomainObject.getEventType();
+            }
+        }
+        return actionDomainEventType;
     }
 
     void processHidden(final ProcessMethodContext processMethodContext) {

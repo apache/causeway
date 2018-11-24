@@ -5,8 +5,7 @@
 :_imagesdir: images/
 
 
-Whenever a (just created, still transient) domain object has been saved (INSERTed in)to the database, a "persisted" lifecycle
-event is fired.
+Whenever a (just created, still transient) domain object has been saved (INSERTed in)to the database, a "persisted" lifecycle event is fired.
 
 Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and can use the event to obtain a reference to the domain object.
 The subscriber could then, for example, maintain an external datastore.
@@ -16,7 +15,8 @@ The subscriber could then, for example, maintain an external datastore.
 The object should _not_ be modified during the persisted callback.
 ====
 
-By default the event raised is `ObjectPersistedEvent.Default`. For example:
+By default the event raised is `ObjectPersistedEvent.Default`.
+For example:
 
 [source,java]
 ----
@@ -89,18 +89,14 @@ public class SomeSubscriber extends AbstractSubscriber {
 
 == Default, Doop and Noop events
 
-If the `persistedLifecycleEvent` attribute is not explicitly specified (is left as its default value, `ObjectPersistedEvent.Default`),
-then the framework will, by default, post an event.
+If the `persistedLifecycleEvent` attribute is not explicitly specified (is left as its default value, `ObjectPersistedEvent.Default`), then the framework will, by default, post an event.
 
-If this is not required, then the `isis.reflector.facet.domainObjectAnnotation.persistedLifecycleEvent.postForDefault`
-configuration property can be set to "false"; this will disable posting.
+If this is not required, then the `isis.reflector.facet.domainObjectAnnotation.persistedLifecycleEvent.postForDefault` configuration property can be set to "false"; this will disable posting.
 
 On the other hand, if the `persistedLifecycleEvent` has been explicitly specified to some subclass, then an event will be posted.
-The framework provides `ObjectPersistedEvent.Doop` as such a subclass, so setting the `persistedLifecycleEvent` attribute to this class
-will ensure that the event to be posted, irrespective of the configuration property setting.
+The framework provides `ObjectPersistedEvent.Doop` as such a subclass, so setting the `persistedLifecycleEvent` attribute to this class will ensure that the event to be posted, irrespective of the configuration property setting.
 
-And, conversely, the framework also provides `ObjectPersistedEvent.Noop`; if `persistedLifecycleEvent` attribute is set to this class,
-then no event will be posted.
+And, conversely, the framework also provides `ObjectPersistedEvent.Noop`; if `persistedLifecycleEvent` attribute is set to this class, then no event will be posted.
 
 
 

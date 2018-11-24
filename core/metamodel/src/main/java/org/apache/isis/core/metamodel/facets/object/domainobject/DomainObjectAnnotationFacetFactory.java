@@ -28,6 +28,9 @@ import javax.annotation.PostConstruct;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.events.domain.ActionDomainEvent;
+import org.apache.isis.applib.events.domain.CollectionDomainEvent;
+import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectLoadedEvent;
 import org.apache.isis.applib.events.lifecycle.ObjectPersistedEvent;
@@ -48,6 +51,7 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
+import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacetForDomainObjectAnnotation;
@@ -58,6 +62,9 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleE
 import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.choices.ChoicesFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForJdoPersistenceCapableAnnotation;
@@ -84,7 +91,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
 implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
-    private final MetaModelValidatorForValidationFailures autoCompleteInvalid = new MetaModelValidatorForValidationFailures();
+    private final MetaModelValidatorForValidationFailures autoCompleteMethodInvalid = new MetaModelValidatorForValidationFailures();
     private final MetaModelValidatorForMixinTypes mixinTypeValidator = new MetaModelValidatorForMixinTypes("@DomainObject#nature=MIXIN");
 
 
@@ -104,6 +111,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
         processObjectType(processClassContext);
         processNature(processClassContext);
         processLifecycleEvents(processClassContext);
+        processDomainEvents(processClassContext);
 
     }
 
@@ -188,26 +196,12 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
         return domainObjects.stream()
                 .map(domainObject -> new Annot(domainObject))
                 .filter(a -> a.autoCompleteRepository != Object.class)
-                .filter(a -> isServiceType(cls, "@DomainObject", a.autoCompleteRepository))
                 .peek(a -> a.repositoryMethod = findRepositoryMethod(cls, "@DomainObject", a.autoCompleteRepository, a.autoCompleteAction))
                 .filter(a -> a.repositoryMethod != null)
                 .findFirst()
                 .map(a -> new AutoCompleteFacetForDomainObjectAnnotation(
                         facetHolder, a.autoCompleteRepository, a.repositoryMethod, servicesInjector))
                 .orElse(null);
-    }
-
-    private boolean isServiceType(
-            final Class<?> cls,
-            final String annotationName,
-            final Class<?> repositoryClass) {
-        final boolean isRegistered = servicesInjector.isRegisteredService(repositoryClass);
-        if(!isRegistered) {
-            autoCompleteInvalid.addFailure(
-                    "%s annotation on %s specifies unknown repository '%s'",
-                    annotationName, cls.getName(), repositoryClass.getName());
-        }
-        return isRegistered;
     }
 
     private Method findRepositoryMethod(
@@ -224,7 +218,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
                 }
             }
         }
-        autoCompleteInvalid.addFailure(
+        autoCompleteMethodInvalid.addFailure(
                 "%s annotation on %s specifies method '%s' that does not exist in repository '%s'",
                 annotationName, cls.getName(), methodName, repositoryClass.getName());
         return null;
@@ -327,7 +321,21 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
         processLifecycleEventRemoving(domainObjects, holder);
         processLifecycleEventUpdated(domainObjects, holder);
         processLifecycleEventUpdating(domainObjects, holder);
+    }
 
+
+    private void processDomainEvents(final ProcessClassContext processClassContext) {
+
+        final Class<?> cls = processClassContext.getCls();
+        final List<DomainObject> domainObjects = Annotations.getAnnotations(cls, DomainObject.class);
+        if(domainObjects == null) {
+            return;
+        }
+        final FacetHolder holder = processClassContext.getFacetHolder();
+
+        processDomainEventAction(domainObjects, holder);
+        processDomainEventProperty(domainObjects, holder);
+        processDomainEventCollection(domainObjects, holder);
     }
 
     private void processLifecycleEventCreated(final List<DomainObject> domainObjects, final FacetHolder holder) {
@@ -456,6 +464,37 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
         .ifPresent(FacetUtil::addFacet);
     }
 
+    private void processDomainEventAction(final List<DomainObject> domainObjects, final FacetHolder holder) {
+        domainObjects.stream()
+        .map(DomainObject::actionDomainEvent)
+        .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
+        .findFirst()
+        .map(domainEvent -> new ActionDomainEventDefaultFacetForDomainObjectAnnotation(
+                        holder, domainEvent, getSpecificationLoader()))
+        .ifPresent(FacetUtil::addFacet);
+
+    }
+
+    private void processDomainEventProperty(final List<DomainObject> domainObjects, final FacetHolder holder) {
+        domainObjects.stream()
+        .map(DomainObject::propertyDomainEvent)
+        .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
+        .findFirst()
+        .map(domainEvent -> new PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
+                        holder, domainEvent, getSpecificationLoader()))
+        .ifPresent(FacetUtil::addFacet);
+    }
+
+    private void processDomainEventCollection(final List<DomainObject> domainObjects, final FacetHolder holder) {
+        domainObjects.stream()
+        .map(DomainObject::collectionDomainEvent)
+        .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
+        .findFirst()
+        .map(domainEvent -> new CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
+                        holder, domainEvent, getSpecificationLoader()))
+        .ifPresent(FacetUtil::addFacet);
+    }
+
     // //////////////////////////////////////
 
     @Override
@@ -500,11 +539,24 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
                                     otherSpec.getFullIdentifier(),
                                     objectSpecId);
                 }
+
+                final AutoCompleteFacet autoCompleteFacet = thisSpec.getFacet(AutoCompleteFacet.class);
+                if(autoCompleteFacet != null && !autoCompleteFacet.isNoop() && autoCompleteFacet instanceof AutoCompleteFacetAbstract) {
+                    final AutoCompleteFacetAbstract facet = (AutoCompleteFacetForDomainObjectAnnotation) autoCompleteFacet;
+                    final Class<?> repositoryClass = facet.getRepositoryClass();
+                    final boolean isRegistered = servicesInjector.isRegisteredService(repositoryClass);
+                    if(!isRegistered) {
+                        validationFailures.add(
+                                "@DomainObject annotation on %s specifies unknown repository '%s'",
+                                thisSpec.getFullIdentifier(), repositoryClass.getName());
+                    }
+
+                }
             }
 
         }));
 
-        metaModelValidator.add(autoCompleteInvalid);
+        metaModelValidator.add(autoCompleteMethodInvalid);
         metaModelValidator.add(mixinTypeValidator);
     }
 

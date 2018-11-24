@@ -19,10 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import java.sql.Timestamp;
 import java.util.Map;
-
 import java.util.Objects;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
@@ -51,6 +49,8 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
 extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
@@ -138,6 +138,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final ObjectAdapter targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        final ObjectAdapter mixedInAdapter = null;
         setOrClearProperty(Style.CLEAR,
                 owningProperty, targetAdapter, null, interactionInitiatedBy);
 
@@ -161,8 +162,9 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final ObjectAdapter newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
+        final ObjectAdapter mixedInAdapter = null;
         getPersistenceSessionServiceInternal().executeWithinTransaction(()->{
-            doSetOrClearProperty(style, owningProperty, targetAdapter, newValueAdapter, interactionInitiatedBy);
+            doSetOrClearProperty(style, owningProperty, targetAdapter, mixedInAdapter, newValueAdapter, interactionInitiatedBy);
         });
 
     }
@@ -171,6 +173,7 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final Style style,
             final OneToOneAssociation owningProperty,
             final ObjectAdapter targetAdapter,
+            final ObjectAdapter mixedInAdapter,
             final ObjectAdapter newValueAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
@@ -242,9 +245,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                                 domainEventHelper.postEventForProperty(
                                         AbstractDomainEvent.Phase.EXECUTING,
                                         getEventType(), null,
-                                        getIdentified(), targetAdapter,
+                                        getIdentified(), targetAdapter, mixedInAdapter,
                                         oldValue, newValue);
-
 
                         // set event onto the execution
                         currentExecution.setEvent(event);
@@ -262,8 +264,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
                             // ... post the executed event
                             domainEventHelper.postEventForProperty(
                                     AbstractDomainEvent.Phase.EXECUTED,
-                                    getEventType(), uncheckedCast((PropertyDomainEvent<?, ?>)event),
-                                    getIdentified(), targetAdapter,
+                                    getEventType(), uncheckedCast(event),
+                                    getIdentified(), targetAdapter, mixedInAdapter,
                                     oldValue, actualNewValue);
                         }
 

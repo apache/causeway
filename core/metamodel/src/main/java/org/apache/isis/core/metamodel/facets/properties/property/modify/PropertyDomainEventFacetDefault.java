@@ -24,14 +24,18 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
 public class PropertyDomainEventFacetDefault extends PropertyDomainEventFacetAbstract {
 
+    /**
+     * @param getterFacetIfAny - will be null if this is for a mixin {@link OneToOneAssociationMixedIn}.
+     */
     public PropertyDomainEventFacetDefault(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-                    final PropertyOrCollectionAccessorFacet getterFacet,
+                    final PropertyOrCollectionAccessorFacet getterFacetIfAny,
                     final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
-        super(eventType, getterFacet, holder, servicesInjector, specificationLoader);
+        super(eventType, getterFacetIfAny, holder, servicesInjector, specificationLoader);
     }
 
 }

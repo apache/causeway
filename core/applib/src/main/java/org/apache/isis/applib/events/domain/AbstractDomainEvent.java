@@ -55,6 +55,38 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
         return source != null ? source : new Object();
     }
 
+    // - mixedIn
+
+    private Object mixedIn;
+
+    /**
+     * Populated only for mixins; holds the underlying domain object that the mixin contributes to.
+     */
+    public Object getMixedIn() {
+        return mixedIn;
+    }
+    /**
+     * Not API - set by the framework.
+     */
+    public void setMixedIn(final Object mixedIn) {
+        this.mixedIn = mixedIn;
+    }
+
+
+
+    // -- Subject
+
+    /**
+     * The subject of the event, which will be either the {@link #getSource() source} for a regular action, or the
+     * {@link #getMixedIn() mixed-in} domain object for a mixin.
+     */
+    public Object getSubject() {
+        final Object mixedIn = getMixedIn();
+        return mixedIn != null ? mixedIn : getSource();
+    }
+
+
+
     // -- Phase
 
     public enum Phase {
