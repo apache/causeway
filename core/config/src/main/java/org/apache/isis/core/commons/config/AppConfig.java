@@ -16,24 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application;
-
-import org.apache.isis.applib.AppManifestAbstract2;
-
-import domainapp.dom.HelloWorldModule;
+package org.apache.isis.core.commons.config;
 
 /**
- * Bootstrap the application.
+ * Entry-point for Application Bootstrapping
+ *  
+ * @since 2.0.0-M2
  */
-public class HelloWorldAppManifest extends AppManifestAbstract2 {
+@FunctionalInterface
+public interface AppConfig {
 
-    public static final Builder BUILDER = Builder
-            .forModule(new HelloWorldModule())
-            .withConfigurationPropertiesFile(HelloWorldAppManifest.class, "isis-non-changing.properties")
-            .withAuthMechanism("shiro");
-
-    public HelloWorldAppManifest() {
-        super(BUILDER);
-    }
-
+    public IsisConfiguration isisConfiguration();
+    
 }

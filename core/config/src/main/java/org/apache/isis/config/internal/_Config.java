@@ -118,24 +118,6 @@ public class _Config {
     private static _Config_LifecycleResource createLifecycleResource() {
         return new _Config_LifecycleResource(createBuilder());
     }
-
-//    /**
-//     * Sets the current context's configuration supplier via provided parameter. Will not override
-//     * any ConfigSupplier instance, that is already registered with the current context, 
-//     * because the ConfigSupplier is expected to be a singleton within an application's 
-//     * life-cycle.
-//     */
-//    public static void registerConfigurationSupplierIfNotAlready(ConfigSupplier configSupplier) {
-//        requires(configSupplier, "configSupplier");
-//        _Context.computeIfAbsent(ConfigSupplier.class, __->configSupplier);
-//    }
-//    
-//    public static IsisConfigurationBuilder configurationBuilderForTesting() {
-//        final IsisConfigurationBuilder builder = new IsisConfigurationBuilder();
-//        final ConfigSupplier configSupplier = new _Config_SupplierUsingBuilder(builder);
-//        registerConfigurationSupplierIfNotAlready(configSupplier);
-//        return builder; 
-//    }
     
     
 }

@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.system;
 
-import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -32,11 +31,6 @@ public final class SystemConstants {
     public static final String MSG_ARE_YOU_SURE = "Are you sure?";
     public static final String MSG_CONFIRM = "Confirm";
     public static final String MSG_CANCEL = "Cancel";
-
-    /**
-     * Key used to lookup {@link AppManifest} (if any) from the {@link IsisConfiguration}.
-     */
-    public static final String APP_MANIFEST_KEY = ConfigurationConstants.ROOT + "appManifest";
 
     /**
      * Key used to lookup {@link AuthenticationManager authentication manager}

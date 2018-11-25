@@ -27,7 +27,6 @@ import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -77,14 +76,7 @@ public class IsisSystem {
 
         protected AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
 
-        protected IsisConfigurationBuilder configurationBuilder = IsisConfigurationBuilder.empty();
-
-        protected AppManifest appManifestIfAny;
-
-        public T with(IsisConfigurationBuilder configurationBuilder) {
-            this.configurationBuilder = configurationBuilder;
-            return uncheckedCast(this);
-        }
+        protected AppManifest appManifest;
 
         public T with(AuthenticationRequest authenticationRequest) {
             this.authenticationRequest = authenticationRequest;
@@ -92,15 +84,14 @@ public class IsisSystem {
         }
 
         public T with(AppManifest appManifest) {
-            this.appManifestIfAny = appManifest;
+            this.appManifest = appManifest;
             return uncheckedCast(this);
         }
 
         public S build() {
             final IsisSystem isisSystem =
                     new IsisSystem(
-                            appManifestIfAny,
-                            configurationBuilder,
+                            appManifest != null ? appManifest : AppManifest.noop(),
                             authenticationRequest);
             return configure(uncheckedCast(isisSystem));
         }
@@ -137,19 +128,16 @@ public class IsisSystem {
     // -- constructor, fields
 
     // these fields 'xxxForComponentProvider' are used to initialize the IsisComponentProvider, but shouldn't be used thereafter.
-    protected final AppManifest appManifestIfAny;
-    protected final IsisConfigurationBuilder configurationBuilder;
+    protected final AppManifest appManifest;
 
     protected final AuthenticationRequest authenticationRequestIfAny;
     protected AuthenticationSession authenticationSession;
 
 
     protected IsisSystem(
-            final AppManifest appManifestIfAny,
-            final IsisConfigurationBuilder configurationBuilder,
+            final AppManifest appManifest,
             final AuthenticationRequest authenticationRequestIfAny) {
-        this.appManifestIfAny = appManifestIfAny;
-        this.configurationBuilder = configurationBuilder;
+        this.appManifest = appManifest;
         this.authenticationRequestIfAny = authenticationRequestIfAny;
     }
 
@@ -182,13 +170,13 @@ public class IsisSystem {
         if(firstTime) {
 
             componentProvider = IsisComponentProvider.builder()
-                    .appManifest(appManifestIfAny)
+                    .appManifest(appManifest)
                     .build();
             
             _Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
 
             final IsisSessionFactoryBuilder isisSessionFactoryBuilder = 
-                    new IsisSessionFactoryBuilder(componentProvider, appManifestIfAny);
+                    new IsisSessionFactoryBuilder(componentProvider, appManifest);
 
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();

@@ -21,12 +21,19 @@ package org.apache.isis.core.commons.config;
 
 import java.util.List;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 
 public final class ConfigurationConstants {
     
     public static final String ROOT = "isis.";
+    
+    /**
+     * Key used to lookup {@link AppManifest} (if any) from the {@link IsisConfiguration}.
+     */
+    public static final String APP_MANIFEST_KEY = ConfigurationConstants.ROOT + "appManifest";
+
 
     public static final String LIST_SEPARATOR = ",";
     public static final String DELIMITER = ".";

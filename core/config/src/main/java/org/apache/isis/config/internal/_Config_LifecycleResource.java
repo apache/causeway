@@ -20,6 +20,8 @@ package org.apache.isis.config.internal;
 
 import java.util.Optional;
 
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
@@ -59,7 +61,8 @@ class _Config_LifecycleResource {
             this.configurationBuildStacktrace = e;
         }
         
-        System.err.println("!!!!!!! IsisConfiguration BUILT");
+        // Logging in the context of IsisConfiguration
+        LoggerFactory.getLogger(IsisConfiguration.class).info("=== BUILT/DONE ===");
         
         return builder.build();
         

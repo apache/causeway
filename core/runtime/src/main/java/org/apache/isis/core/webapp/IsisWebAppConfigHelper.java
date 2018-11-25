@@ -40,8 +40,6 @@ public final class IsisWebAppConfigHelper {
     private static final Logger LOG = LoggerFactory.getLogger(IsisWebAppConfigHelper.class);
     private IsisWebAppConfigHelper() {}
     
-    //private final Map<String, String> additionalConfig = _Maps.newHashMap();
-    
     /**
      * Initializes the IsisConfiguration subsystem with all currently available configuration values. 
      * @param servletContext

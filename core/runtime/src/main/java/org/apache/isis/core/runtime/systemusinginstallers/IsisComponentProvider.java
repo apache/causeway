@@ -46,6 +46,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassFunctions;
@@ -66,8 +67,6 @@ import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.IsisSystemException;
-import org.apache.isis.core.runtime.system.SystemConstants;
-import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
@@ -140,7 +139,7 @@ public final class IsisComponentProvider {
         // required to prevent RegisterEntities validation from complaining
         // if it can't find any @PersistenceCapable entities in a module
         // that contains only services.
-        _Config.put(SystemConstants.APP_MANIFEST_KEY, appManifest.getClass().getName() );
+        _Config.put(ConfigurationConstants.APP_MANIFEST_KEY, appManifest.getClass().getName() );
     }
 
     private void findAndRegisterTypes(final AppManifest appManifest) {
@@ -253,7 +252,6 @@ public final class IsisComponentProvider {
 
         acceptBuilder(builder->{
             builder.add(ServicesInstallerFromAnnotation.PACKAGE_PREFIX_KEY, packageNamesCsv);
-            builder.add(RegisterEntities.PACKAGE_PREFIX_KEY, packageNamesCsv);    
         });
 
         final List<Class<?>> additionalServices = appManifest.getAdditionalServices();
@@ -314,15 +312,18 @@ public final class IsisComponentProvider {
     private void addToConfigurationUsing(final AppManifest appManifest) {
         final Map<String, String> configurationProperties = appManifest.getConfigurationProperties();
         
+        if (configurationProperties == null) {
+            return;
+        }
+        
         acceptBuilder(builder->{
         
-            if (configurationProperties != null) {
-                for (Map.Entry<String, String> configProp : configurationProperties.entrySet()) {
-                    builder.add(configProp.getKey(), configProp.getValue());
-                }
+            for (Map.Entry<String, String> configProp : configurationProperties.entrySet()) {
+                builder.add(configProp.getKey(), configProp.getValue());
             }
-            
+        
         });
+        
         
     }
 

@@ -20,31 +20,18 @@ package domainapp.application;
 
 import javax.enterprise.inject.Produces;
 
-import org.apache.isis.applib.Module;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.commons.config.AppConfig;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
 /**
- * Bootstrap the application.
+ * Tells the ServiceLoader which AppManifest to use to bootstrap the Application.  
  */
-public class HelloWorldAppConfig {  // <<< managed and discovered by IoC container
+public class HelloWorldAppConfig implements AppConfig {
 
     @Produces
     public IsisConfiguration isisConfiguration () {
-        
-     // code contributed by user ...
-        
-        //ResourceStreamSource resourceStreamSource = ResourceStreamSourceCurrentClassClassPath
-        //_Config.acceptBuilder(builder->builder.addResourceStreamSource(resourceStreamSource));
-        return _Config.getConfiguration();        
-                //. FromConfig("isis.properties");
+        return IsisConfiguration.buildFromAppManifest(new HelloWorldAppManifest());
     }
-
-
-    @Produces
-    public Module appModule() {
-        // code contributed by user ...
-        return new HelloWorldAppManifest().getModule(); 
-    }
+    
 }
 

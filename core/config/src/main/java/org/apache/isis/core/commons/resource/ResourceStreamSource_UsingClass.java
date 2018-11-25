@@ -16,24 +16,34 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application;
 
-import org.apache.isis.applib.AppManifestAbstract2;
+package org.apache.isis.core.commons.resource;
 
-import domainapp.dom.HelloWorldModule;
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.isis.commons.internal.resources._Resources;
 
 /**
- * Bootstrap the application.
+ * Load relative to the class-path context of the specified class.
+ * @since 2.0.0-M2
  */
-public class HelloWorldAppManifest extends AppManifestAbstract2 {
+public class ResourceStreamSource_UsingClass extends ResourceStreamSourceAbstract {
 
-    public static final Builder BUILDER = Builder
-            .forModule(new HelloWorldModule())
-            .withConfigurationPropertiesFile(HelloWorldAppManifest.class, "isis-non-changing.properties")
-            .withAuthMechanism("shiro");
+    private final Class<?> contextClass;
+    
+    public ResourceStreamSource_UsingClass(Class<?> contextClass) {
+        this.contextClass = contextClass;
+    }
 
-    public HelloWorldAppManifest() {
-        super(BUILDER);
+    @Override
+    protected InputStream doReadResource(final String resourcePath) throws IOException {
+        return _Resources.load(contextClass, resourcePath);
+    }
+
+    @Override
+    public String getName() {
+        return "classpath of '" + contextClass.getName() + "'";
     }
 
 }

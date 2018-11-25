@@ -61,7 +61,7 @@
     
     	<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-commons</artifactId>
+            <artifactId>isis-core-applib</artifactId>
         </dependency>
     
         <!-- TESTS -->
@@ -82,6 +82,11 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+        	<groupId>org.apache.isis.core</groupId>
+        	<artifactId>isis-core-applib</artifactId>
+        	<type>test-jar</type>
+        </dependency>
     </dependencies>
 
     <profiles>

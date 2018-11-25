@@ -20,6 +20,9 @@ package org.apache.isis.core.commons.configbuilder;
 
 import java.util.List;
 
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.Module;
+import org.apache.isis.applib.PropertyResource;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
@@ -27,6 +30,8 @@ import org.apache.isis.core.commons.resource.ResourceStreamSource;
 public interface IsisConfigurationBuilder {
     
     void addDefaultConfigurationResourcesAndPrimers();
+    
+    void addPropertyResource(PropertyResource propertyResource);
 
     void addResourceStreamSource(ResourceStreamSource resourceStreamSource);
     void addResourceStreamSources(ResourceStreamSource... resourceStreamSources);
@@ -62,6 +67,20 @@ public interface IsisConfigurationBuilder {
     boolean peekAtBoolean(String key, boolean defaultValue);
 
     String[] peekAtList(String key);
+    
+    /**
+     * Walks the module tree starting at the topModule to resolve all key/value pairs that 
+     * contribute to the configuration.
+     * @param topModule
+     * @since 2.0.0-M2
+     */
+    void addTopModule(Module topModule);
+    
+    /**
+     * @param appManifest
+     * @since 2.0.0-M2
+     */
+    void addAppManifest(AppManifest appManifest);
 
     /** internal only **/
     IsisConfiguration build();
@@ -82,5 +101,7 @@ public interface IsisConfigurationBuilder {
     static IsisConfigurationBuilder empty() {
         return new IsisConfigurationBuilderDefault();
     }
+
+    
 
 }

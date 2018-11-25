@@ -31,6 +31,7 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -59,6 +60,7 @@ class IsisConfigurationDefault implements IsisConfiguration {
      * derived lazily from {@link #properties}.
      */
     private Properties applicationProperties;
+    private AppManifest appManifest;
 
     // ////////////////////////////////////////////////
     // Constructor
@@ -77,6 +79,20 @@ class IsisConfigurationDefault implements IsisConfiguration {
         return resourceStreamSource != null ? resourceStreamSource.getName() : null;
     }
 
+    // ////////////////////////////////////////////////
+    // Property - Manifest
+    // ////////////////////////////////////////////////
+    
+    @Override
+    public AppManifest getAppManifest() {
+        return appManifest;
+    }
+    
+    public void setAppManifest(AppManifest appManifest) {
+        this.appManifest = appManifest;
+    }
+    
+    
     // ////////////////////////////////////////////////
     // ResourceStreamSource
     // ////////////////////////////////////////////////
@@ -140,10 +156,10 @@ class IsisConfigurationDefault implements IsisConfiguration {
         if (properties.containsKey(key)) {
             switch (policy) {
             case IGNORE:
-                LOG.info("ignoring {}={} as value already set (with {})", key, value, properties.get(key));
+                LOG.info("ignoring '{}' = '{}' as value already set (with {})", key, value, properties.get(key));
                 break;
             case OVERWRITE:
-                LOG.info("overwriting {}={} (previous value was {})", key, value, properties.get(key));
+                LOG.info("overwriting '{}' = '{}' (previous value was {})", key, value, properties.get(key));
                 properties.put(key, value);
                 break;
             case EXCEPTION:
@@ -151,7 +167,7 @@ class IsisConfigurationDefault implements IsisConfiguration {
                         "Configuration already has a key {}, value of {}%s, value of %s", key, properties.get(key)));
             }
         } else {
-            LOG.info("adding {} = {}", key , ConfigurationConstants.maskIfProtected(key, value));
+            LOG.info("adding '{}' = '{}'", key , ConfigurationConstants.maskIfProtected(key, value));
             properties.put(key, value);
         }
     }

@@ -22,21 +22,24 @@ package org.apache.isis.core.commons.configbuilder;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.AppManifestAbstract2;
+import org.apache.isis.applib.Module;
+import org.apache.isis.applib.PropertyResource;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfiguration.ContainsPolicy;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.isis.core.commons.resource.ResourceStreamSource_UsingClass;
 
 /**
  * Holds a mutable set of properties representing the configuration.
@@ -260,6 +263,35 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
         LOG.debug("priming configurations for '{}'", primer);
         primer.prime(this);
     }
+    
+    // -- LOAD MODULE TREE
+    
+    @Override
+    public void addTopModule(Module topModule) {
+        final AppManifestAbstract2.Builder manifestBuilder = AppManifestAbstract2.Builder
+                .forModule(topModule);
+        final AppManifestAbstract2 manifest = new AppManifestAbstract2(manifestBuilder) {};
+        addAppManifest(manifest);
+    }
+    
+    @Override
+    public void addAppManifest(AppManifest appManifest) {
+        configuration.setAppManifest(appManifest);
+        appManifest.getConfigurationProperties().forEach((k, v)->{
+            put(k, v);
+        });
+    }
+        
+    // -- LOAD SINGLE RESOURCE
+        
+    @Override
+    public void addPropertyResource(PropertyResource propertyResource) {
+        IsisConfigurationDefault.ContainsPolicy ignorePolicy = IsisConfigurationDefault.ContainsPolicy.IGNORE;
+        NotFoundPolicy continuePolicy = NotFoundPolicy.CONTINUE;
+        
+        addResourceStreamSource(new ResourceStreamSource_UsingClass(propertyResource.getResourceContext()));
+        addConfigurationResource(propertyResource.getResourceName(), continuePolicy, ignorePolicy);
+    }
 
     // -- PEEKING
     
@@ -293,16 +325,21 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
     @Override
     public IsisConfiguration build() {
         
-        dumpResourcesToLog();
+        if (LOG.isDebugEnabled()) {
+            dumpResourcesToLog();    
+        }
 
-        final IsisConfigurationDefault copy = new IsisConfigurationDefault(resourceStreamSourceChain);
-        final Properties props = new Properties();
-        props.putAll(configuration.asMap());
-        copy.add(props, ContainsPolicy.OVERWRITE);
+        final IsisConfigurationDefault ref = configuration;
+
+//TODO[2039] no need to copy        
+//        final IsisConfigurationDefault copy = new IsisConfigurationDefault(resourceStreamSourceChain);
+//        final Properties props = new Properties();
+//        props.putAll(configuration.asMap());
+//        copy.add(props, ContainsPolicy.OVERWRITE);
 
         configuration = null; // once built this builder is no longer usable
         
-        return copy;
+        return ref;
     }
 
     // -- dumpResourcesToLog, toString
@@ -312,19 +349,15 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
      */
     @Override
     public void dumpResourcesToLog() {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Configuration resources FOUND:");
-            for (String resource : configurationResourcesFound) {
-                LOG.debug("*  {}", resource);
-            }
-            LOG.debug("Configuration resources NOT FOUND (but not needed):");
-            for (String resource : configurationResourcesNotFound) {
-                LOG.debug("*  {}", resource);
-            }
+        LOG.info("Configuration resources FOUND:");
+        for (String resource : configurationResourcesFound) {
+            LOG.info("*  {}", resource);
+        }
+        LOG.info("Configuration resources NOT FOUND (but not needed):");
+        for (String resource : configurationResourcesNotFound) {
+            LOG.info("*  {}", resource);
         }
     }
-
-    
 
     //TODO[2039]
     //    private final static ToString<IsisConfigurationBuilder> toString =

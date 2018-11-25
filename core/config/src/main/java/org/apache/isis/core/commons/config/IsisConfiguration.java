@@ -24,8 +24,16 @@ import java.awt.Font;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.Module;
+import org.apache.isis.applib.PropertyResource;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.config.internal._Config.acceptBuilder;
+import static org.apache.isis.config.internal._Config.clear;
+import static org.apache.isis.config.internal._Config.getConfiguration;
 
 /**
  * Immutable set of properties representing the configuration of the running
@@ -61,6 +69,39 @@ public interface IsisConfiguration {
         EXCEPTION
     }
     
+    /**
+     * 
+     * @param topModule
+     * @param additionalPropertyResources
+     * @return
+     * @since 2.0.0-M2
+     */
+    static IsisConfiguration buildFromModuleTree(Module topModule, PropertyResource ... additionalPropertyResources) {
+        clear();
+        acceptBuilder(builder->{
+            stream(additionalPropertyResources)
+            .forEach(builder::addPropertyResource);
+            builder.addTopModule(topModule);
+        });
+        return getConfiguration();
+    }
+    
+    /**
+     * 
+     * @param topModule
+     * @param additionalPropertyResources
+     * @return
+     * @since 2.0.0-M2
+     */
+    static IsisConfiguration buildFromAppManifest(AppManifest appManifest) {
+        clear();
+        acceptBuilder(builder->{
+            builder.addAppManifest(appManifest);
+        });
+        return getConfiguration();
+    }
+    
+    public AppManifest getAppManifest();
 
     /**
      * Creates a new IsisConfiguration containing the properties starting with
@@ -218,6 +259,7 @@ public interface IsisConfiguration {
         return getBoolean("isis.reflector.explicitAnnotations.action");
     }
 
+    @Deprecated /* experimental */
     static IsisConfiguration loadDefault() {
         // TODO Auto-generated method stub
         return null;
