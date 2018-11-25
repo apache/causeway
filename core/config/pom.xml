@@ -63,6 +63,15 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-applib</artifactId>
         </dependency>
+        
+        <!-- [2039] only to discover persistence capable classes, not required if every 
+        	relevant entity is annotated with @DomainObject-->
+		<dependency>
+        	<groupId>javax.jdo</groupId>
+        	<artifactId>jdo-api</artifactId>
+        	<version>${jdo-api.version}</version>
+        	<scope>provided</scope>
+        </dependency>
     
         <!-- TESTS -->
         <dependency>
@@ -87,6 +96,7 @@
         	<artifactId>isis-core-applib</artifactId>
         	<type>test-jar</type>
         </dependency>
+
     </dependencies>
 
     <profiles>

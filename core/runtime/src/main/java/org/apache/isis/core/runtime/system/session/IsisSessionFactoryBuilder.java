@@ -74,7 +74,7 @@ public class IsisSessionFactoryBuilder {
     public IsisSessionFactoryBuilder(final AppManifest appManifest) {
         this(IsisComponentProvider.builder()
                 .appManifest(appManifest)
-                .addConfigPackageAsResourceStreamSource()
+//                .addConfigPackageAsResourceStreamSource()
                 .build(),
                 appManifest);
     }

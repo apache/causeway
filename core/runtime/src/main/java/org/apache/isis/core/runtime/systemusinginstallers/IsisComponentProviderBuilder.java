@@ -19,7 +19,7 @@ public class IsisComponentProviderBuilder {
     private AppManifest appManifest;
     private AuthenticationManager authenticationManager;
     private AuthorizationManager authorizationManager;
-    private final List<ResourceStreamSource> resourceStreamSources = _Lists.newArrayList();
+//    private final List<ResourceStreamSource> resourceStreamSources = _Lists.newArrayList();
     
     public IsisComponentProviderBuilder appManifest(AppManifest appManifest) {
         this.appManifest = appManifest;
@@ -36,21 +36,21 @@ public class IsisComponentProviderBuilder {
         return this;
     }
     
-    public IsisComponentProviderBuilder addResourceStreamSource(ResourceStreamSource source) {
-        resourceStreamSources.add(source);
-        return this;
-    }
+//    public IsisComponentProviderBuilder addResourceStreamSource(ResourceStreamSource source) {
+//        resourceStreamSources.add(source);
+//        return this;
+//    }
     
     // -- SHORTCUTS
     
-    /**
-     * Default will read <tt>isis.properties</tt> (and other optional property files) from the 'config'
-     * package on the current classpath.
-     */
-    public IsisComponentProviderBuilder addConfigPackageAsResourceStreamSource() {
-        addResourceStreamSource(ResourceStreamSourceContextLoaderClassPath.create("config"));
-        return this;
-    }
+//    /**
+//     * Default will read <tt>isis.properties</tt> (and other optional property files) from the 'config'
+//     * package on the current classpath.
+//     */
+//    public IsisComponentProviderBuilder addConfigPackageAsResourceStreamSource() {
+//        addResourceStreamSource(ResourceStreamSourceContextLoaderClassPath.create("config"));
+//        return this;
+//    }
     
     // -- BUILD
     
@@ -62,9 +62,9 @@ public class IsisComponentProviderBuilder {
         authorizationManager = computeIfAbsent(authorizationManager, 
                 AuthorizationManagerStandard::new);
         
-        acceptBuilder(builder->{
-            resourceStreamSources.forEach(builder::addResourceStreamSource);
-        });
+//        acceptBuilder(builder->{
+//            resourceStreamSources.forEach(builder::addResourceStreamSource);
+//        });
         
         return new IsisComponentProvider(appManifest, authenticationManager, authorizationManager);
     }

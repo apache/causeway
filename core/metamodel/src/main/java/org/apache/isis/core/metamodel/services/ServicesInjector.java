@@ -41,9 +41,10 @@ import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -93,13 +94,11 @@ public class ServicesInjector implements ApplicationScopedComponent, ServiceRegi
     // -- BUILDER
     
     public static ServicesInjectorBuilder builder() {
-        return new ServicesInjectorBuilder();
-    }
-    
-    public static ServicesInjectorBuilder builderOf(IsisConfigurationBuilder configBuilder) {
-        return builder()
-                .autowireSetters(configBuilder.peekAtBoolean(KEY_SET_PREFIX, true))
-                .autowireInject(configBuilder.peekAtBoolean(KEY_INJECT_PREFIX, true));
+        final IsisConfiguration config = _Config.getConfiguration();
+        return new ServicesInjectorBuilder()
+                .addService(config)
+                .autowireSetters(config.getBoolean(KEY_SET_PREFIX, true))
+                .autowireInject(config.getBoolean(KEY_INJECT_PREFIX, true));
     }
     
     public static ServicesInjectorBuilder builderForTesting() {

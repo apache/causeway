@@ -31,7 +31,8 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.AppManifest2;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -60,7 +61,7 @@ class IsisConfigurationDefault implements IsisConfiguration {
      * derived lazily from {@link #properties}.
      */
     private Properties applicationProperties;
-    private AppManifest appManifest;
+    private AppManifest2 appManifest;
 
     // ////////////////////////////////////////////////
     // Constructor
@@ -84,12 +85,23 @@ class IsisConfigurationDefault implements IsisConfiguration {
     // ////////////////////////////////////////////////
     
     @Override
-    public AppManifest getAppManifest() {
+    public AppManifest2 getAppManifest() {
         return appManifest;
     }
     
-    public void setAppManifest(AppManifest appManifest) {
+    public void setAppManifest(AppManifest2 appManifest) {
         this.appManifest = appManifest;
+    }
+    
+    // ////////////////////////////////////////////////
+    // Module Package Names
+    // ////////////////////////////////////////////////
+    
+    _Lazy<Integer> typeDiscovery = _Lazy.threadSafe(ModulePackageHelper::triggerTypeDiscovery);
+    
+    @Override
+    public void triggerTypeDiscovery() {
+        typeDiscovery.get();
     }
     
     

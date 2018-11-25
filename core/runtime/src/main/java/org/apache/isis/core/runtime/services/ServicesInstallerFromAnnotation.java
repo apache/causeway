@@ -25,50 +25,27 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import javax.annotation.PreDestroy;
 
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceMenuOrder;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
-import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
-import org.apache.isis.core.plugins.classdiscovery.ClassDiscoveryPlugin;
 
 public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
-    // -- constants
 
     //private static final Logger LOG = LoggerFactory.getLogger(ServicesInstallerFromAnnotation.class);
 
     public static final String NAME = "annotation";
-    public final static String PACKAGE_PREFIX_KEY = "isis.services.ServicesInstallerFromAnnotation.packagePrefix";
+    
+//[2039]    
+//    public final static String PACKAGE_PREFIX_KEY = "isis.services.ServicesInstallerFromAnnotation.packagePrefix";
 
-    /**
-     * These package prefixes (core and modules) are always included.
-     *
-     * <p>
-     * It's important that any services annotated {@link org.apache.isis.applib.annotation.DomainService} and residing
-     * in any of these packages must have no side-effects.
-     *
-     * <p>
-     *     Services are ordered according to the {@link org.apache.isis.applib.annotation.DomainService#menuOrder() menuOrder},
-     *     with the first service found used.
-     * </p>
-     */
-    public final static String PACKAGE_PREFIX_STANDARD =
-            AppManifest.Registry.FRAMEWORK_PROVIDED_SERVICES.stream()
-            .collect(Collectors.joining(","));
-
-    // -- constructor, fields
 
     private final ServiceInstantiator serviceInstantiator;
 
@@ -79,21 +56,6 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     public ServicesInstallerFromAnnotation(final ServiceInstantiator serviceInstantiator) {
         super(NAME);
         this.serviceInstantiator = serviceInstantiator;
-    }
-
-
-    // -- packagePrefixes
-    private String packagePrefixes;
-
-    /**
-     * For integration testing.
-     *
-     * <p>
-     *     Otherwise these are read from the {@link org.apache.isis.core.commons.config.IsisConfiguration}
-     * </p>
-     */
-    public void withPackagePrefixes(final String... packagePrefixes) {
-        this.packagePrefixes = _NullSafe.stream(packagePrefixes).collect(Collectors.joining(","));
     }
 
 
@@ -112,16 +74,8 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
         }
 
         try {
-
-            if(packagePrefixes == null) {
-                this.packagePrefixes = PACKAGE_PREFIX_STANDARD;
-                String packagePrefixes = 
-                        _Config.applyConfig(config->config.getString(PACKAGE_PREFIX_KEY));
-                        
-                if(!_Strings.isNullOrEmpty(packagePrefixes)) {
-                    this.packagePrefixes = this.packagePrefixes + "," + packagePrefixes;
-                }
-            }
+           
+            _Config.getConfiguration().triggerTypeDiscovery(); // registers types in registry
 
         } finally {
             initialized = true;
@@ -154,6 +108,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
             appendServices(positionedServices);
 
             this.services = ServicesInstallerUtils.instantiateServicesFrom(positionedServices, serviceInstantiator);
+            
         }
         return services;
     }
@@ -164,14 +119,16 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     public void appendServices(final SortedMap<String, SortedSet<String>> positionedServices) {
         initIfRequired();
 
-        final List<String> packagePrefixList = asList(packagePrefixes);
-
         Set<Class<?>> domainServiceTypes = AppManifest.Registry.instance().getDomainServiceTypes();
         if(domainServiceTypes == null) {
-            // if no appManifest
-            final ClassDiscovery discovery = ClassDiscoveryPlugin.get().discover(packagePrefixList);
-
-            domainServiceTypes = discovery.getTypesAnnotatedWith(DomainService.class);
+            //[2039]
+//            // if no appManifest
+//            final ClassDiscovery discovery = ClassDiscoveryPlugin.get().discover(modulePackageNames);
+//
+//            domainServiceTypes = discovery.getTypesAnnotatedWith(DomainService.class);
+            
+            _Exceptions.throwUnexpectedCodeReach();
+            
         }
 
         final List<Class<?>> domainServiceClasses = _Lists.filter(domainServiceTypes, instantiatable());
@@ -181,7 +138,11 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
             // we want the class name in order to instantiate it
             // (and *not* the value of the @DomainServiceLayout(named=...) annotation attribute)
             final String fullyQualifiedClassName = cls.getName();
-            final String name = nameOf(cls);
+            //final String name = nameOf(cls);
+            
+            if(fullyQualifiedClassName.contains("Headless"))
+                System.out.println("!!!! " + fullyQualifiedClassName);
+            
 
             ServicesInstallerUtils.appendInPosition(positionedServices, order, fullyQualifiedClassName);
         }
@@ -191,20 +152,20 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     // -- helpers: nameOf, asList
 
-    private static String nameOf(final Class<?> cls) {
-        final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
-        String name = domainServiceLayout != null ? domainServiceLayout.named(): null;
-        if(name == null) {
-            name = cls.getName();
-        }
-        return name;
-    }
+//    private static String nameOf(final Class<?> cls) {
+//        final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
+//        String name = domainServiceLayout != null ? domainServiceLayout.named(): null;
+//        if(name == null) {
+//            name = cls.getName();
+//        }
+//        return name;
+//    }
 
-    private static List<String> asList(final String csv) {
-        return _Strings.splitThenStream(csv, ",")
-        .map(String::trim)
-        .collect(Collectors.toList());
-    }
+//    private static List<String> asList(final String csv) {
+//        return _Strings.splitThenStream(csv, ",")
+//        .map(String::trim)
+//        .collect(Collectors.toList());
+//    }
 
 
     // -- domain events

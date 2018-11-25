@@ -157,7 +157,7 @@ public interface AppManifest {
      */
     public final static class Registry {
 
-        public final static List<String> FRAMEWORK_PROVIDED_SERVICES = Collections.unmodifiableList(Arrays.asList(
+        public final static List<String> FRAMEWORK_PROVIDED_SERVICE_PACKAGES = Collections.unmodifiableList(Arrays.asList(
                 "org.apache.isis.applib",
                 "org.apache.isis.core.wrapper" ,
                 "org.apache.isis.core.metamodel.services" ,
@@ -167,7 +167,8 @@ public interface AppManifest {
                 "org.apache.isis.viewer.restfulobjects.rendering.service" ,
                 "org.apache.isis.objectstore.jdo.datanucleus.service.support" ,
                 "org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" ,
-                "org.apache.isis.viewer.wicket.viewer.services"));
+                "org.apache.isis.viewer.wicket.viewer.services", 
+                "org.apache.isis.core.integtestsupport.components"));
 
         private static Registry instance = new Registry();
         public static Registry instance() {

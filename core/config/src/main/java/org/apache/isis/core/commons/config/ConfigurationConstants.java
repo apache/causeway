@@ -31,6 +31,7 @@ public final class ConfigurationConstants {
     
     /**
      * Key used to lookup {@link AppManifest} (if any) from the {@link IsisConfiguration}.
+     * @deprecated AppManifest lookup changed with 2.0.0-M2
      */
     public static final String APP_MANIFEST_KEY = ConfigurationConstants.ROOT + "appManifest";
 

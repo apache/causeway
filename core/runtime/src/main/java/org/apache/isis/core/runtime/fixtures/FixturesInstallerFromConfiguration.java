@@ -19,10 +19,12 @@
 
 package org.apache.isis.core.runtime.fixtures;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -31,29 +33,29 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
 
     private static final Logger LOG = LoggerFactory.getLogger(FixturesInstallerFromConfiguration.class);
 
-    public static final String FIXTURES = ConfigurationConstants.ROOT + "fixtures";
+//    public static final String FIXTURES = ConfigurationConstants.ROOT + "fixtures";
 
-    /**
-     * @deprecated - just adds to the cognitive load...
-     */
-    @Deprecated
-    private static final String FIXTURES_PREFIX = ConfigurationConstants.ROOT + "fixtures.prefix";
+//    /**
+//     * @deprecated - just adds to the cognitive load...
+//     */
+//    @Deprecated
+//    private static final String FIXTURES_PREFIX = ConfigurationConstants.ROOT + "fixtures.prefix";
 
     public FixturesInstallerFromConfiguration(final IsisSessionFactory isisSessionFactory) {
         super(isisSessionFactory);
     }
 
-    @Override
     protected void addFixturesTo(final FixturesInstallerDelegate delegate) {
-
-        final FixtureConfig fixtureConfig = getFixtureConfig();
+        
+        final List<Class<? extends FixtureScript>> fixtureClasses = 
+                configuration.getAppManifest().getFixtures();
 
         try {
             boolean fixtureLoaded = false;
-            for (final String element : fixtureConfig.getFixtures()) {
-                final String fixtureFullyQualifiedName = fixtureConfig.getFixturePrefix() + element;
-                LOG.info("  adding fixture {}", fixtureFullyQualifiedName);
-                final Object fixture = InstanceUtil.createInstance(fixtureFullyQualifiedName);
+            for (final Class<? extends FixtureScript> fixtureClass : fixtureClasses) {
+                
+                LOG.info("  adding fixture {}", fixtureClass.getName());
+                final Object fixture = InstanceUtil.createInstance(fixtureClass);
                 fixtureLoaded = true;
                 delegate.addFixture(fixture);
             }
@@ -65,47 +67,69 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
         }
     }
 
-    private static class FixtureConfig {
+    
+//TODO[2039] remove    
+//    @Override
+//    protected void addFixturesTo(final FixturesInstallerDelegate delegate) {
+//
+//        final FixtureConfig fixtureConfig = getFixtureConfig();
+//
+//        try {
+//            boolean fixtureLoaded = false;
+//            for (final String element : fixtureConfig.getFixtures()) {
+//                final String fixtureFullyQualifiedName = fixtureConfig.getFixturePrefix() + element;
+//                LOG.info("  adding fixture {}", fixtureFullyQualifiedName);
+//                final Object fixture = InstanceUtil.createInstance(fixtureFullyQualifiedName);
+//                fixtureLoaded = true;
+//                delegate.addFixture(fixture);
+//            }
+//            if (!fixtureLoaded) {
+//                LOG.debug("No fixtures loaded from configuration");
+//            }
+//        } catch (final IllegalArgumentException | SecurityException e) {
+//            throw new IsisException(e);
+//        }
+//    }
+//
+//    private static class FixtureConfig {
+//
+//        // -- fixtures
+//
+//        private String[] fixtures;
+//
+//        String[] getFixtures() {
+//            return fixtures;
+//        }
+//
+//        void setFixtures(String[] fixtures) {
+//            this.fixtures = fixtures;
+//        }
+//
+//        // -- fixturePrefix
+//
+//        private String fixturePrefix;
+//        String getFixturePrefix() {
+//            return fixturePrefix;
+//        }
+//
+//        void setFixturePrefix(String fixturePrefix) {
+//            fixturePrefix = fixturePrefix == null ? "" : fixturePrefix.trim();
+//            if (fixturePrefix.length() > 0 && !fixturePrefix.endsWith(ConfigurationConstants.DELIMITER)) {
+//                fixturePrefix = fixturePrefix + ConfigurationConstants.DELIMITER;
+//            }
+//
+//            this.fixturePrefix = fixturePrefix;
+//        }
+//
+//    }
 
-        // -- fixtures
-
-        private String[] fixtures;
-
-        String[] getFixtures() {
-            return fixtures;
-        }
-
-        void setFixtures(String[] fixtures) {
-            this.fixtures = fixtures;
-        }
-
-        // -- fixturePrefix
-
-        private String fixturePrefix;
-        String getFixturePrefix() {
-            return fixturePrefix;
-        }
-
-        void setFixturePrefix(String fixturePrefix) {
-            fixturePrefix = fixturePrefix == null ? "" : fixturePrefix.trim();
-            if (fixturePrefix.length() > 0 && !fixturePrefix.endsWith(ConfigurationConstants.DELIMITER)) {
-                fixturePrefix = fixturePrefix + ConfigurationConstants.DELIMITER;
-            }
-
-            this.fixturePrefix = fixturePrefix;
-        }
-
-
-
-    }
-
-    private FixtureConfig getFixtureConfig() {
-        final FixtureConfig fixtureConfig = new FixtureConfig();
-
-        fixtureConfig.setFixtures(configuration.getList(FIXTURES));
-        fixtureConfig.setFixturePrefix(configuration.getString(FIXTURES_PREFIX));
-
-        return fixtureConfig;
-    }
+//    private FixtureConfig getFixtureConfig() {
+//        final FixtureConfig fixtureConfig = new FixtureConfig();
+//
+//        fixtureConfig.setFixtures(configuration.getList(FIXTURES));
+//        //fixtureConfig.setFixturePrefix(configuration.getString(FIXTURES_PREFIX));
+//
+//        return fixtureConfig;
+//    }
 
 }

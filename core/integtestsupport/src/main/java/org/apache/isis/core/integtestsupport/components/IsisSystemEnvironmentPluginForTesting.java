@@ -11,6 +11,7 @@ import org.apache.isis.core.plugins.environment.IsisSystemEnvironmentPlugin;
  * Java 7 ServiceLoader mechanism.
  *  
  * @since 2.0.0-M2
+ * @deprecated [2039] experimental
  */
 public class IsisSystemEnvironmentPluginForTesting implements IsisSystemEnvironmentPlugin {
 

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.systemusinginstallers;
+package org.apache.isis.core.commons.configbuilder;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -40,7 +40,8 @@ public class IsisComponentProvider_within_Test {
         final String budgetAssignmentPackageWithDot =
                 SomeServiceNotToInclude.class.getPackage().getName()  + ".";
 
-        final Set<Class<?>> within = IsisComponentProvider.withinPackageAndNotAnonymous(Arrays.asList(budgetPackageWithDot),
+        final Set<Class<?>> within = ModulePackageHelper.withinPackageAndNotAnonymous(
+                Arrays.asList(budgetPackageWithDot),
                 _Sets.of(SomeServiceToInclude.class, SomeServiceNotToInclude.class));
 
         Assert.assertThat(within.size(), is(equalTo(1)));

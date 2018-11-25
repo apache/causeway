@@ -247,7 +247,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
         // --- prepare the configuration prior to init()
         
-        prepareConfigurationBuilder(getServletContext());
+        prepareConfigurationBuilder(getServletContext()); // FIXME[2039] do this in the ServletContextListener
         
         super.internalInit();
 
@@ -284,7 +284,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         // that's suitable for the entire web-application to use as default.
         _Context.setDefaultClassLoader(this.getClass().getClassLoader(), true);
         
-        final IsisConfiguration configuration;
+        final IsisConfiguration configuration = _Config.getConfiguration();
         
         List<Future<Object>> futures = null;
         try {
@@ -303,8 +303,10 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             //
             // create IsisSessionFactory
             //
-            final IsisInjectModule isisModule = newIsisModule();
-            final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
+            final Injector injector = Guice.createInjector(
+                    newIsisModule(), 
+                    newIsisWicketModule(configuration));
+            
             initWicketComponentInjection(injector);
             
             injector.injectMembers(this); // populates this.isisSessionFactory
@@ -314,8 +316,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                 WebRequestCycleForIsis webRequestCycleForIsis = (WebRequestCycleForIsis) requestCycleListenerForIsis;
                 webRequestCycleForIsis.setPageClassRegistry(pageClassRegistry);
             }
-
-            configuration = _Config.getConfiguration();
             
             this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
 
@@ -544,7 +544,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     /**
      * Override if required
      */
-    protected Module newIsisWicketModule() {
+    protected Module newIsisWicketModule(IsisConfiguration isisConfiguration) {
         return new IsisWicketModule(getServletContext());
     }
 

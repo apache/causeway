@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +36,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository;
 import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
-import org.apache.isis.applib.services.config.ConfigurationService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -57,6 +54,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.config.internal._Config.getConfiguration;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -88,13 +88,10 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     }
 
     private boolean isEagerInitialize() {
-        final String configuredValue = configurationService.getProperty(KEY);
+        final String configuredValue = getConfiguration().getString(KEY);
         return "eager".equalsIgnoreCase(configuredValue) ||
                 "eagerly".equalsIgnoreCase(configuredValue);
     }
-
-
-
 
     // -- initializeIfRequired
 
@@ -556,9 +553,6 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     @javax.inject.Inject
     ServiceRegistry serviceRegistry;
-
-    @javax.inject.Inject
-    ConfigurationService configurationService;
 
     @javax.inject.Inject
     SpecificationLoader specificationLoader;

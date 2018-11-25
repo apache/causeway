@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.systemusinginstallers;
+package org.apache.isis.core.commons.configbuilder;
 
 import java.lang.annotation.Annotation;
 import java.util.LinkedHashSet;

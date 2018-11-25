@@ -273,9 +273,6 @@ public class EmailServiceDefault implements EmailService {
     }
     // endregion
 
-
-    // endregion
-
     @javax.inject.Inject
     IsisConfiguration configuration;
 

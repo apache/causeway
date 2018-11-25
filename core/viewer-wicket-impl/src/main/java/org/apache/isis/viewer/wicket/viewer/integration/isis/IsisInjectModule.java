@@ -24,8 +24,8 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.config.AppConfigLocator;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
@@ -35,15 +35,20 @@ public class IsisInjectModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        AppConfigLocator.getAppConfig().isisConfiguration();
+        
+        System.err.println("!!!!!!!!!! IsisInjectModule.configure "+Thread.currentThread().getName());
+        
+        IsisConfiguration isisConfiguration = AppConfigLocator.getAppConfig().isisConfiguration();
+        bind(IsisConfiguration.class).toInstance(isisConfiguration);
     }
 
     @Provides
     @com.google.inject.Inject
     @Singleton
-    protected IsisSessionFactory provideIsisSessionFactory() {
+    protected IsisSessionFactory provideIsisSessionFactory(IsisConfiguration isisConfiguration) {
         
-        AppManifest appManifest = _Config.getConfiguration().getAppManifest();
+        AppManifest appManifest = isisConfiguration.getAppManifest();
+        
         
         System.err.println("!!!!!!!!!! provideIsisSessionFactory STAGE 1 "+Thread.currentThread().getName());
 
