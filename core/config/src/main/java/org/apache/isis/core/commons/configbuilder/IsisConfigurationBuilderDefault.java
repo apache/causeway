@@ -21,6 +21,7 @@ package org.apache.isis.core.commons.configbuilder;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -64,26 +65,51 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
 
     // -- constructor, fields
 
-    private final ResourceStreamSourceChainOfResponsibility resourceStreamSourceChain;
+    private /*final*/ ResourceStreamSourceChainOfResponsibility resourceStreamSourceChain;
 
     private IsisConfigurationDefault configuration;
 
     private final Set<String> configurationResourcesFound = _Sets.newLinkedHashSet();
     private final Set<String> configurationResourcesNotFound = _Sets.newLinkedHashSet();
 
-    public IsisConfigurationBuilderDefault() {
-        this(ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY));
-    }
+//    public IsisConfigurationBuilderDefault() {
+//        this(ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY));
+//    }
 
-    public IsisConfigurationBuilderDefault(final ResourceStreamSource... resourceStreamSources) {
-        this(createComposite(Arrays.asList(resourceStreamSources)));
-    }
+//    private IsisConfigurationBuilderDefault(final ResourceStreamSource... resourceStreamSources) {
+//        this(createComposite(Arrays.asList(resourceStreamSources)));
+//    }
 
-    public IsisConfigurationBuilderDefault(final List<ResourceStreamSource> resourceStreamSources) {
-        this(createComposite(resourceStreamSources));
+//    private IsisConfigurationBuilderDefault(final List<ResourceStreamSource> resourceStreamSources) {
+//        this(createComposite(resourceStreamSources));
+//    }
+    
+    // -- FACTORIES
+    
+    static IsisConfigurationBuilder empty() {
+        ResourceStreamSourceChainOfResponsibility chain = createComposite(Collections.emptyList());
+        IsisConfigurationBuilderDefault builder = new IsisConfigurationBuilderDefault(chain);
+        return builder;
     }
+    
+    static IsisConfigurationBuilderDefault getDefault() {
+        
+        ResourceStreamSourceChainOfResponsibility chain = createComposite(Arrays.asList(
+                ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY)        
+                ));
+        IsisConfigurationBuilderDefault builder = new IsisConfigurationBuilderDefault(chain);
+        
+        builder.addDefaultPrimers();
+        
+        builder.addDefaultConfigurationResources();
+        
+        return builder;
+        
+    }
+    
+    // -- 
 
-    public IsisConfigurationBuilderDefault(final ResourceStreamSourceChainOfResponsibility resourceStreamSourceChain) {
+    private IsisConfigurationBuilderDefault(final ResourceStreamSourceChainOfResponsibility resourceStreamSourceChain) {
         this.resourceStreamSourceChain = resourceStreamSourceChain;
         configuration = new IsisConfigurationDefault(resourceStreamSourceChain);
     }
@@ -100,11 +126,6 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
         return composite;
     }
 
-    @Override
-    public void addDefaultConfigurationResourcesAndPrimers() {
-        addDefaultConfigurationResources();
-        addDefaultPrimers();
-    }
 
     private void addDefaultConfigurationResources() {
         IsisConfigurationDefault.ContainsPolicy ignorePolicy = IsisConfigurationDefault.ContainsPolicy.IGNORE;
@@ -361,5 +382,7 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
         return String.format("IsisConfigurationBuilder {resourceStream=%s, configResources=%s}", 
                 resourceStreamSourceChain, configurationResourcesFound);
     }
+
+   
 
 }

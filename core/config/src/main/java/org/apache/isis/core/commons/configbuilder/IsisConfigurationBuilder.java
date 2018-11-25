@@ -29,8 +29,6 @@ import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
 public interface IsisConfigurationBuilder {
     
-    void addDefaultConfigurationResourcesAndPrimers();
-    
     void addPropertyResource(PropertyResource propertyResource);
 
     void addResourceStreamSource(ResourceStreamSource resourceStreamSource);
@@ -98,8 +96,12 @@ public interface IsisConfigurationBuilder {
 
     // -- FACTORIES
     
+    static IsisConfigurationBuilder getDefault() {
+        return IsisConfigurationBuilderDefault.getDefault();
+    }
+
     static IsisConfigurationBuilder empty() {
-        return new IsisConfigurationBuilderDefault();
+        return IsisConfigurationBuilderDefault.empty();
     }
 
     

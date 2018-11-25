@@ -103,7 +103,7 @@ public class _Config {
     }
     
     private static IsisConfigurationBuilder createBuilder() {
-        final IsisConfigurationBuilder builder = IsisConfigurationBuilder.empty(); 
+        final IsisConfigurationBuilder builder = IsisConfigurationBuilder.getDefault(); 
         return builder;
     }
 

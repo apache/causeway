@@ -46,13 +46,14 @@ class PrimerForServletContext implements IsisConfigurationBuilder.Primer {
     public void prime(final IsisConfigurationBuilder builder) {
         final ServletContext servletContext  = _Context.getIfAny(ServletContext.class);
         if(servletContext==null) {
+            System.out.println("!!!! no servlet context to prime from");
             return;
         }
+        System.out.println("!!!! priming from servlet context");
         
         asMap(servletContext).forEach((k, v)->builder.put(k, v));
         addServletContextConstants(servletContext, builder);
         addResourceStreamSources(servletContext, builder);
-        builder.addDefaultConfigurationResourcesAndPrimers();
         
         final String loggingPropertiesDir = 
                 ifPresentElseGet(
