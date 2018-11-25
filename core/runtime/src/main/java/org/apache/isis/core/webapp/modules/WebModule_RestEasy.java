@@ -23,7 +23,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.webapp.IsisSessionFilter;
 
 import static java.util.Objects.requireNonNull;
@@ -64,8 +63,8 @@ final class WebModule_RestEasy implements WebModule  {
         }
         
         // try to fetch restfulPath from config else fallback to default
-        final String restfulPath = _Config
-                .peekAtString(KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
+        final String restfulPath = ctx.getConfiguration()
+                .getString(KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
                 
         putRestfulPath(restfulPath);
         

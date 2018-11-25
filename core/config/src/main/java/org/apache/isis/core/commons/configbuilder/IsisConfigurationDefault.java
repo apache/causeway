@@ -94,16 +94,14 @@ class IsisConfigurationDefault implements IsisConfiguration {
     }
     
     // ////////////////////////////////////////////////
-    // Module Package Names
+    // Type Discovery
     // ////////////////////////////////////////////////
     
-    _Lazy<Integer> typeDiscovery = _Lazy.threadSafe(ModulePackageHelper::triggerTypeDiscovery);
+    _Lazy<Integer> typeDiscovery = _Lazy.threadSafe(()->ModulePackageHelper.runTypeDiscovery(this.getAppManifest()));
     
-    @Override
     public void triggerTypeDiscovery() {
         typeDiscovery.get();
     }
-    
     
     // ////////////////////////////////////////////////
     // ResourceStreamSource

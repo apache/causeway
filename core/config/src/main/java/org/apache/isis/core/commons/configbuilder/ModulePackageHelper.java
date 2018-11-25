@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.isis.applib.AppManifest;
@@ -43,7 +42,6 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.reflection._Reflect;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
 import org.apache.isis.core.plugins.classdiscovery.ClassDiscoveryPlugin;
 
@@ -52,10 +50,10 @@ import org.apache.isis.core.plugins.classdiscovery.ClassDiscoveryPlugin;
  */
 class ModulePackageHelper {
 
-    public static int triggerTypeDiscovery() {
+    public static int runTypeDiscovery(final AppManifest appManifest) {
         
         final List<String> moduleAndFrameworkPackages = 
-                findAndRegisterTypes(_Config.getConfiguration().getAppManifest());
+                findAndRegisterTypes(appManifest);
         
         return moduleAndFrameworkPackages.size();
         

@@ -16,56 +16,77 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.webapp;
+package org.apache.isis.core.commons.configbuilder;
+
+import java.util.Enumeration;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.commons.config.WebAppConstants;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceForWebInf;
-import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
+import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 
-/**
- *  
- * @since 2.0.0-M2
- */
-public final class IsisWebAppConfigHelper {
+import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
+
+class PrimerForServletContext implements IsisConfigurationBuilder.Primer {
+
+    private static final Logger LOG = LoggerFactory.getLogger(PrimerForServletContext.class);
     
-    private static final Logger LOG = LoggerFactory.getLogger(IsisWebAppConfigHelper.class);
-    private IsisWebAppConfigHelper() {}
     
-    /**
-     * Initializes the IsisConfiguration subsystem with all currently available configuration values. 
-     * @param servletContext
-     * @return
-     */
-    public static void initConfigurationFrom(final ServletContext servletContext) {
-        _Config.acceptBuilder(builder->{
-            builder.primeWith(new OptionHandlerInitParameters(servletContext));
-//            additionalConfig.forEach((k, v)->builder.put(k, v));
-            addServletContextConstants(servletContext, builder);
-            addResourceStreamSources(servletContext, builder);
-            builder.addDefaultConfigurationResourcesAndPrimers();
-        });
+    @Override
+    public void prime(final IsisConfigurationBuilder builder) {
+        final ServletContext servletContext  = _Context.getIfAny(ServletContext.class);
+        if(servletContext==null) {
+            return;
+        }
+        
+        asMap(servletContext).forEach((k, v)->builder.put(k, v));
+        addServletContextConstants(servletContext, builder);
+        addResourceStreamSources(servletContext, builder);
+        builder.addDefaultConfigurationResourcesAndPrimers();
+        
+        final String loggingPropertiesDir = 
+                ifPresentElseGet(
+                        servletContext.getInitParameter("isis.config.dir"),
+                        ()->servletContext.getRealPath("/WEB-INF"));
+    
+        final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
+        loggingConfigurer.configureLogging(loggingPropertiesDir, new String[0]);
+
     }
-    
-  
+
     // -- HELPER
 
+    private static Map<String, String> asMap(ServletContext servletContext) {
+        Enumeration<String> initParameterNames = servletContext.getInitParameterNames();
+        final Map<String,String> map = _Maps.newTreeMap();
+        while(initParameterNames.hasMoreElements()) {
+            final String initParameterName = initParameterNames.nextElement();
+            final String initParameterValue = servletContext.getInitParameter(initParameterName);
+            if (initParameterName.startsWith("isis.")) {
+                map.put(initParameterName, initParameterValue);
+            }
+        }
+        return map;
+    }
+    
     private static void addServletContextConstants(
             final ServletContext servletContext,
             final IsisConfigurationBuilder isisConfigurationBuilder) {
-        
+
         final String webappDir = servletContext.getRealPath("/");
         isisConfigurationBuilder.add(WebAppConstants.WEB_APP_DIR, webappDir);
     }
-    
+
     private static void addResourceStreamSources(
             final ServletContext servletContext,
             final IsisConfigurationBuilder builder) {
@@ -84,5 +105,4 @@ public final class IsisWebAppConfigHelper {
         }
     }
 
-    
 }

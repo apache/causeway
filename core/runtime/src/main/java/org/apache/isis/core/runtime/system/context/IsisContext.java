@@ -28,13 +28,10 @@ import java.util.function.Supplier;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.plugins.environment.DeploymentType;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
-import org.apache.isis.core.plugins.environment.IsisSystemEnvironmentPlugin;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -96,56 +93,57 @@ public interface IsisContext {
         return _Context.getEnvironment();
     }
 
-    /**
-     * @deprecated use the {@link IsisSystemEnvironmentPlugin} SPI instead
-     */
-    @Deprecated
-    public static class EnvironmentPrimer {
-
-        /**
-         * For integration testing allows to prime the environment via provided parameters. Will not override
-         * any IsisSystemEnvironment instance, that is already registered with the current context, because the 
-         * IsisSystemEnvironment is expected to be an immutable singleton within an application's life-cycle.
-         * @deprecated use the {@link IsisSystemEnvironmentPlugin} SPI instead
-         */
-        @Deprecated
-        public static void primeEnvironment(DeploymentType deploymentType) {
-            _Context.computeIfAbsent(IsisSystemEnvironment.class, __->IsisSystemEnvironment.of(deploymentType));
-        }
-        
-        @Deprecated
-        public static void primeEnvironment(IsisConfigurationBuilder configurationBuilder) {
-            
-            final String deploymentTypeLiteral = configurationBuilder.peekAtString("isis.deploymentType");
-            if(_Strings.isNullOrEmpty(deploymentTypeLiteral)) {
-                return; // do nothing
-            }
-            
-            // at this point, the deploymentType seems explicitly set via config
-            
-            // throws if type can not be parsed
-            final DeploymentType deploymentType = 
-                    parseDeploymentType(deploymentTypeLiteral.toLowerCase());
-            primeEnvironment(deploymentType);
-        }
-
-        private static DeploymentType parseDeploymentType(String deploymentTypeLiteral) {
-            
-            switch(deploymentTypeLiteral) {
-            case "server_prototype":
-            case "prototyping":
-                return DeploymentType.PROTOTYPING;
-            case "server":
-            case "production":
-                return DeploymentType.PROTOTYPING;
-            default:
-                throw new IllegalArgumentException(
-                        String.format("unknown deployment type '%s' in config property '%s'", 
-                                deploymentTypeLiteral, "isis.deploymentType"));
-            }
-
-        }
-    }
+//[2039]    
+//    /**
+//     * @deprecated use the {@link IsisSystemEnvironmentPlugin} SPI instead
+//     */
+//    @Deprecated
+//    public static class EnvironmentPrimer {
+//
+//        /**
+//         * For integration testing allows to prime the environment via provided parameters. Will not override
+//         * any IsisSystemEnvironment instance, that is already registered with the current context, because the 
+//         * IsisSystemEnvironment is expected to be an immutable singleton within an application's life-cycle.
+//         * @deprecated use the {@link IsisSystemEnvironmentPlugin} SPI instead
+//         */
+//        @Deprecated
+//        public static void primeEnvironment(DeploymentType deploymentType) {
+//            _Context.computeIfAbsent(IsisSystemEnvironment.class, __->IsisSystemEnvironment.of(deploymentType));
+//        }
+//        
+//        @Deprecated
+//        public static void primeEnvironment(IsisConfigurationBuilder configurationBuilder) {
+//            
+//            final String deploymentTypeLiteral = configurationBuilder.peekAtString("isis.deploymentType");
+//            if(_Strings.isNullOrEmpty(deploymentTypeLiteral)) {
+//                return; // do nothing
+//            }
+//            
+//            // at this point, the deploymentType seems explicitly set via config
+//            
+//            // throws if type can not be parsed
+//            final DeploymentType deploymentType = 
+//                    parseDeploymentType(deploymentTypeLiteral.toLowerCase());
+//            primeEnvironment(deploymentType);
+//        }
+//
+//        private static DeploymentType parseDeploymentType(String deploymentTypeLiteral) {
+//            
+//            switch(deploymentTypeLiteral) {
+//            case "server_prototype":
+//            case "prototyping":
+//                return DeploymentType.PROTOTYPING;
+//            case "server":
+//            case "production":
+//                return DeploymentType.PROTOTYPING;
+//            default:
+//                throw new IllegalArgumentException(
+//                        String.format("unknown deployment type '%s' in config property '%s'", 
+//                                deploymentTypeLiteral, "isis.deploymentType"));
+//            }
+//
+//        }
+//    }
 
     
     // -- LIFE-CYCLING

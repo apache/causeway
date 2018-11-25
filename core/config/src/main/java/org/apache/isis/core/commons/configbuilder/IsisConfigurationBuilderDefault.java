@@ -151,6 +151,7 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
         primeWith(new PrimerForSystemProperties());
         primeWith(new PrimerForEnvironmentVariablesIsisPrefix());
         primeWith(new PrimerForEnvironmentVariableISIS_OPTS());
+        primeWith(new PrimerForServletContext());
     }
 
     // -- addResourceStreamSource, addResourceStreamSources
@@ -324,19 +325,15 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
 
     @Override
     public IsisConfiguration build() {
+
+        configuration.triggerTypeDiscovery();
         
         if (LOG.isDebugEnabled()) {
             dumpResourcesToLog();    
         }
 
         final IsisConfigurationDefault ref = configuration;
-
-//TODO[2039] no need to copy        
-//        final IsisConfigurationDefault copy = new IsisConfigurationDefault(resourceStreamSourceChain);
-//        final Properties props = new Properties();
-//        props.putAll(configuration.asMap());
-//        copy.add(props, ContainsPolicy.OVERWRITE);
-
+        
         configuration = null; // once built this builder is no longer usable
         
         return ref;
@@ -359,16 +356,10 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
         }
     }
 
-    //TODO[2039]
-    //    private final static ToString<IsisConfigurationBuilder> toString =
-    //            ToString.<IsisConfigurationBuilder>
-    //    toString("resourceStream", x->x.resourceStreamSourceChain)
-    //    .thenToString("configResources", x->x.configurationResourcesFound)
-    //    ;
-    //
-    //    @Override
-    //    public String toString() {
-    //        return toString.toString(this);
-    //    }
+    @Override
+    public String toString() {
+        return String.format("IsisConfigurationBuilder {resourceStream=%s, configResources=%s}", 
+                resourceStreamSourceChain, configurationResourcesFound);
+    }
 
 }

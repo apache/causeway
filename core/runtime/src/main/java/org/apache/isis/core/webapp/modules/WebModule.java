@@ -79,7 +79,8 @@ public interface WebModule {
     static Stream<WebModule> discoverWebModules() {
         
         //TODO [ahuber] instead of providing a static list of modules, modules could be discovered on 
-        // the class-path (in case we have plugins that provide such modules).
+        // the class-path (in case we have plugins that provide such modules). 
+        // We could use the AppManifest instead.
         // We need yet to decide a mechanism, that enforces a certain ordering of these modules, since
         // this influences the order in which filters are processed.
         
@@ -87,7 +88,6 @@ public interface WebModule {
                 new WebModule_Shiro(), // filters before all others
                 new WebModule_StaticResources(),
                 new WebModule_Wicket(),
-                new WebModule_FallbackBootstrapper(), // not required if the Wicket module is in use
                 new WebModule_RestEasy(), // default REST provider
                 new WebModule_LogOnExceptionLogger() // log any logon exceptions, filters after all others
                 );

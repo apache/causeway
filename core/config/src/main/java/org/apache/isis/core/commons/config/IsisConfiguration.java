@@ -108,13 +108,6 @@ public interface IsisConfiguration {
     public AppManifest2 getAppManifest();
 
     /**
-     * @since 2.0.0-M2
-     * @deprecated [2039] only used to trigger type discovery with registration 
-     */
-    public void triggerTypeDiscovery();
-    
-
-    /**
      * Creates a new IsisConfiguration containing the properties starting with
      * the specified prefix. The names of the new properties will have the
      * prefixed stripped. This is similar to the {@link #getProperties(String)}

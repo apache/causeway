@@ -29,8 +29,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 
-import javax.servlet.ServletContext;
-
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.google.inject.Guice;
@@ -79,11 +77,9 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
-import org.apache.isis.core.webapp.IsisWebAppConfigHelper;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -174,8 +170,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     public static final boolean ENABLE_DEVELOPMENT_UTILITIES_DEFAULT = false;
     public static final BootswatchTheme BOOTSWATCH_THEME_DEFAULT = BootswatchTheme.Flatly;
 
-    private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
-
     /**
      * Convenience locator, down-casts inherited functionality.
      */
@@ -244,26 +238,15 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
         // this doesn't seem to accomplish anything
         // experimental.addListenerToStripRemovedComponentsFromAjaxTargetResponse();
-
-        // --- prepare the configuration prior to init()
-        
-        prepareConfigurationBuilder(getServletContext()); // FIXME[2039] do this in the ServletContextListener
         
         super.internalInit();
 
     }
     
-    private void prepareConfigurationBuilder(ServletContext ctx) {
-        final String isisConfigDir = ctx.getInitParameter("isis.config.dir");
-        configureLogging(isisConfigDir);
-        IsisWebAppConfigHelper.initConfigurationFrom(ctx);
-    }
-
     private static AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {
         ajaxRequestTarget.registerRespondListener( new TargetRespondListenerToResetQueryResultCache() );
         return ajaxRequestTarget;
     }
-
 
     @Override
     public Application setAjaxRequestTargetProvider(Function<Page, AjaxRequestTarget> ajaxRequestTargetProvider) {
@@ -279,10 +262,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
      */
     @Override
     protected void init() {
-        
-        //[ahuber] the implementing class is assumed to be loaded be a class-loader
-        // that's suitable for the entire web-application to use as default.
-        _Context.setDefaultClassLoader(this.getClass().getClassLoader(), true);
         
         final IsisConfiguration configuration = _Config.getConfiguration();
         
@@ -519,22 +498,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     /**
      * Factored out for easy (informal) pluggability.
      */
-    protected void configureLogging(String isisConfigDir) {
-        final String loggingPropertiesDir;
-        if(isisConfigDir != null) {
-            loggingPropertiesDir = isisConfigDir;
-        } else {
-            loggingPropertiesDir = getServletContext().getRealPath("/WEB-INF");
-        }
-
-        loggingConfigurer.configureLogging(loggingPropertiesDir, new String[0]);
-    }
-
-    // //////////////////////////////////////
-
-    /**
-     * Factored out for easy (informal) pluggability.
-     */
     protected IRequestCycleListener newWebRequestCycleForIsis() {
         return new WebRequestCycleForIsis();
     }
@@ -607,18 +570,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         setHeaderResponseDecorator(response -> {
             return new ResourceAggregator(new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS"));
         });
-
-        //[ahuber] no longer supported since wicket 8
-        //		setHeaderResponseDecorator(new IHeaderResponseDecorator()
-        //		{
-        //			@Override
-        //			public IHeaderResponse decorate(IHeaderResponse response)
-        //			{
-        //				// use this header resource decorator to load all JavaScript resources in the page
-        //				// footer (after </body>)
-        //				return new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS");
-        //			}
-        //		});
     }
 
     // //////////////////////////////////////

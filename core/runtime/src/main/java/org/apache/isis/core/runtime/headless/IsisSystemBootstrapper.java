@@ -50,28 +50,12 @@ public class IsisSystemBootstrapper {
     private static ThreadLocal<AppManifest2> isftAppManifest = new ThreadLocal<>();
 
     private final IsisConfiguration isisConfiguration;
-//    private final AppManifest2 appManifest2;
     private final LeveledLogger logger;
     
     public static IsisSystemBootstrapper of(LogConfig logConfig, IsisConfiguration isisConfiguration) {
         return new IsisSystemBootstrapper(logConfig, isisConfiguration);
     }
     
-//[2039]
-//    public IsisSystemBootstrapper(
-//            final LogConfig logConfig,
-//            final Module module) {
-//        this(logConfig, AppManifestAbstract2.Builder.forModule(module).build());
-//    }
-//
-//    public IsisSystemBootstrapper(
-//            final LogConfig logConfig,
-//            final AppManifest2 appManifest2) {
-//
-//        this.appManifest2 = appManifest2;
-//        this.logger = new LeveledLogger(LOG, logConfig.getTestLoggingLevel());
-//    }
-
     private IsisSystemBootstrapper(
             final LogConfig logConfig,
             final IsisConfiguration isisConfiguration) {
@@ -79,23 +63,9 @@ public class IsisSystemBootstrapper {
         Ensure.ensure("Should have an IsisConfiguration!", isisConfiguration!=null);
         Ensure.ensure("Should have an AppManifest!", isisConfiguration.getAppManifest()!=null);
 
-//        this.appManifest2 = isisConfiguration.getAppManifest();
         this.isisConfiguration = isisConfiguration;
         this.logger = new LeveledLogger(LOG, logConfig.getTestLoggingLevel());
     }
-    
-//    
-//    public AppManifest2 getAppManifest2() {
-//        return appManifest2;
-//    }
-//
-//    /**
-//     * Corresponding to {@link AppManifest2} provided in {@link #IsisSystemBootstrapper(LogConfig, AppManifest2)}, or
-//     * (equivalently) the {@link Module} provided directly in {@link #IsisSystemBootstrapper(LogConfig, Module)}.
-//     */
-//    public Module getModule() {
-//        return appManifest2.getModule();
-//    }
 
     public IsisSystem bootstrapIfRequired() {
         bootstrapUsingConfig();

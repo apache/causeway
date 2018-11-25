@@ -75,7 +75,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
         try {
            
-            _Config.getConfiguration().triggerTypeDiscovery(); // registers types in registry
+//            _Config.getConfiguration().triggerTypeDiscovery(); // registers types in registry
 
         } finally {
             initialized = true;

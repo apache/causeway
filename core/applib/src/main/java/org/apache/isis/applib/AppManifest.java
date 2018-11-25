@@ -339,7 +339,6 @@ public interface AppManifest {
             // automatically install any fixtures that might have been registered
             map.put(ISIS_PERSISTOR_DATANUCLEUS + "install-fixtures", "true");
             map.put(ISIS_PERSISTOR + "enforceSafeSemantics", "false");
-            map.put("isis.deploymentType", "server_prototype");
             map.put("isis.services.eventbus.allowLateRegistration", "true");
 
             return map;

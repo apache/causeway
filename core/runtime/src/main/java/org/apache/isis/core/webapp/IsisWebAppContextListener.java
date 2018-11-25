@@ -31,7 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.commons.config.AppConfigLocator;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfiguration.ContainsPolicy;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
@@ -76,10 +77,13 @@ public class IsisWebAppContextListener implements ServletContextListener {
         // IsisWicketApplication#init() or others that better know what ClassLoader to use as application default.
         _Context.setDefaultClassLoader(Thread.currentThread().getContextClassLoader(), false);
         
+        _Context.putSingleton(ServletContext.class, servletContext);
+        
         putContextPathIfPresent(servletContext.getContextPath());
         
-        IsisWebAppConfigHelper.initConfigurationFrom(servletContext);
-        _Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
+        IsisConfiguration isisConfiguration = AppConfigLocator.getAppConfig().isisConfiguration();
+        
+        //[2039]_Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
 
         final WebModuleContext webModuleContext = new WebModuleContext(servletContext);
         

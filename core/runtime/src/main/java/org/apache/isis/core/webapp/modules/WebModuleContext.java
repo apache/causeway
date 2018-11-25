@@ -24,6 +24,7 @@ import javax.servlet.ServletContext;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 
 /**
  * 
@@ -32,25 +33,31 @@ import org.apache.isis.config.internal._Config;
  */
 public class WebModuleContext {
 
-    /**
-     * This key was deprecated from config, but we still use it for reference. It is auto-populated 
-     * such that it can be looked up, to see what viewers have been discovered by the framework.
-     */
-    private final static String ISIS_VIEWERS = "isis.viewers";
-    private final static String ISIS_PROTECTED = "isis.protected";
+//    /**
+//     * This key was deprecated from config, but we still use it for reference. It is auto-populated 
+//     * such that it can be looked up, to see what viewers have been discovered by the framework.
+//     */
+//    private final static String ISIS_VIEWERS = "isis.viewers";
+//    private final static String ISIS_PROTECTED = "isis.protected";
     
     private boolean hasBootstrapper = false;
     private final StringBuilder viewers = new StringBuilder();
     private final StringBuilder protectedPath = new StringBuilder();
     
     private final ServletContext servletContext;
+    private final IsisConfiguration isisConfiguration;
     
     public WebModuleContext(ServletContext servletContext) {
         this.servletContext = servletContext;
+        this.isisConfiguration = _Config.getConfiguration();
     }
     
     public ServletContext getServletContext() {
         return servletContext;
+    }
+    
+    public IsisConfiguration getConfiguration() {
+        return isisConfiguration;
     }
 
     /**
@@ -102,10 +109,11 @@ public class WebModuleContext {
      * Commits all properties to current life-cycle's config.
      */
     public void commit() {
-        _Config.acceptBuilder(builder->{
-            builder.add(ISIS_VIEWERS, viewers.toString());
-            builder.add(ISIS_PROTECTED, protectedPath.toString());
-        });
+//[2039] can no longer write to config        
+//        _Config.acceptBuilder(builder->{
+//            builder.add(ISIS_VIEWERS, viewers.toString());
+//            builder.add(ISIS_PROTECTED, protectedPath.toString());
+//        });
     }
     
 }

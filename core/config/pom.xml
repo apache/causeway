@@ -72,6 +72,13 @@
         	<version>${jdo-api.version}</version>
         	<scope>provided</scope>
         </dependency>
+        
+        <!-- [2039] only to configure log4j from servlet context resources -->
+		<dependency>
+        	<groupId>org.apache.isis.core</groupId>
+        	<artifactId>isis-core-log4j</artifactId>
+        	<scope>provided</scope>
+        </dependency>
     
         <!-- TESTS -->
         <dependency>
@@ -96,6 +103,7 @@
         	<artifactId>isis-core-applib</artifactId>
         	<type>test-jar</type>
         </dependency>
+
 
     </dependencies>
 

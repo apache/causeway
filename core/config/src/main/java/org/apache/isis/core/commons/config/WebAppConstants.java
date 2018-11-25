@@ -17,10 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.core.webapp;
+package org.apache.isis.core.commons.config;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 
 public final class WebAppConstants {
 
