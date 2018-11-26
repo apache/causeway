@@ -28,13 +28,13 @@ import java.util.List;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public abstract class Parser<T> {
     public T valueOf(final List<String> str) {
@@ -173,7 +173,9 @@ public abstract class Parser<T> {
                 if (str == null) {
                     return null;
                 }
-                return str.equals("yes") ? Boolean.TRUE : Boolean.FALSE;
+                return "yes".equalsIgnoreCase(str) || "true".equalsIgnoreCase(str)
+                        ? Boolean.TRUE
+                        : Boolean.FALSE;
             }
 
             @Override

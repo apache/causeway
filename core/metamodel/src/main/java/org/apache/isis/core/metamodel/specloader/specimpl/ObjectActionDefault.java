@@ -285,6 +285,18 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
 
     //region > validate
 
+    /**
+     * The Validates all arguments individually (by calling same helper that
+     * {@link #isEachIndividualArgumentValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)} delegates to)
+     * and if there are no validation errors, then validates the entire argument
+     * set (by calling same helper that
+     * {@link #isArgumentSetValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)} delegates to).
+     *
+     * <p>
+     * The two other validation methods mentioned above are separated out to allow viewers (such as the RO viewer) to
+     * call the validation phases separately.
+     * </p>
+     */
     @Override
     public Consent isProposedArgumentSetValid(
             final ObjectAdapter targetObject,
@@ -302,7 +314,33 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
         return resultSet.createConsent();
     }
 
-    protected void validateArgumentsIndividually(
+    /**
+     * Normally action validation is all performed by
+     * {@link #isProposedArgumentSetValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}, which calls
+     * {@link #isEachIndividualArgumentValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy) this method} to
+     * validate arguments individually, and then
+     * {@link #isArgumentSetValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy) validate argument set}
+     * afterwards.
+     *
+     * <p>
+     * This method is in the API to allow viewers (eg the RO viewer) to call the different phases of validation
+     * individually.
+     * </p>
+     */
+    @Override
+    public Consent isEachIndividualArgumentValid(
+            final ObjectAdapter objectAdapter,
+            final ObjectAdapter[] proposedArguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        final InteractionResultSet resultSet = new InteractionResultSet();
+
+        validateArgumentsIndividually(objectAdapter, proposedArguments, interactionInitiatedBy, resultSet);
+
+        return resultSet.createConsent();
+    }
+
+    private void validateArgumentsIndividually(
             final ObjectAdapter objectAdapter,
             final ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy,
@@ -317,6 +355,31 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                 InteractionUtils.isValidResultSet(getParameter(i), ic, resultSet);
             }
         }
+    }
+
+    /**
+     * Normally action validation is all performed by
+     * {@link #isProposedArgumentSetValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}, which calls
+     * {@link #isEachIndividualArgumentValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)} to
+     * validate arguments individually, and then
+     * {@link #isArgumentSetValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy) this method} to
+     * validate the entire argument set afterwards.
+     *
+     * <p>
+     * This method is in the API to allow viewers (eg the RO viewer) to call the different phases of validation
+     * individually.
+     * </p>
+     */
+    @Override
+    public Consent isArgumentSetValid(
+            final ObjectAdapter objectAdapter,
+            final ObjectAdapter[] proposedArguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        final InteractionResultSet resultSet = new InteractionResultSet();
+        validateArgumentSet(objectAdapter, proposedArguments, interactionInitiatedBy, resultSet);
+
+        return resultSet.createConsent();
     }
 
     protected void validateArgumentSet(

@@ -34,9 +34,11 @@ import com.google.common.collect.FluentIterable;
 import org.jboss.resteasy.spi.Failure;
 
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.rendering.HasHttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.rendering.ExceptionWithBody;
+import org.apache.isis.viewer.restfulobjects.rendering.ExceptionWithHttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.server.mappers.entity.ExceptionDetail;
 import org.apache.isis.viewer.restfulobjects.server.mappers.entity.ExceptionPojo;
 import org.apache.isis.viewer.restfulobjects.server.resources.serialization.SerializationStrategy;
@@ -50,6 +52,14 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
         final RestfulResponse.HttpStatusCode httpStatusCode = determineStatusCode(ex);
         final String message = messageFor(ex);
 
+        if(ex instanceof ExceptionWithBody) {
+            final ExceptionWithBody exceptionWithBody = (ExceptionWithBody) ex;
+            final JsonRepresentation body = exceptionWithBody.getBody();
+            if(body != null) {
+                return buildResponse(httpStatusCode, message, body);
+            }
+        }
+
         final ExceptionPojo exceptionPojo =
                 new ExceptionPojo(
                         httpStatusCode.getStatusCode(), message,
@@ -57,6 +67,24 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
                 );
 
         return buildResponse(httpStatusCode, exceptionPojo);
+    }
+
+    private Response buildResponse(
+            final RestfulResponse.HttpStatusCode httpStatusCode,
+            final String message,
+            final JsonRepresentation body) {
+        final ResponseBuilder builder = Response.status(httpStatusCode.getJaxrsStatusType());
+        if (message != null) {
+            builder.header(RestfulResponse.Header.WARNING.getName(), RestfulResponse.Header.WARNING.render(message));
+        }
+
+        final SerializationStrategy serializationStrategy = SerializationStrategy.JSON;
+
+        // hmm; the mediaType doesn't seem to be specified in the RO spec
+        builder.type(serializationStrategy.type(RepresentationType.GENERIC));
+        builder.entity(body.toString());
+
+        return builder.build();
     }
 
     private RestfulResponse.HttpStatusCode determineStatusCode(final T ex) {
@@ -68,9 +96,9 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
             statusCode = RestfulResponse.HttpStatusCode.statusFor(failure.getErrorCode());
         } else if(!FluentIterable.from(chain).filter(RecoverableException.class).isEmpty()) {
             statusCode = RestfulResponse.HttpStatusCode.OK;
-        } else if(ex instanceof HasHttpStatusCode) {
-            HasHttpStatusCode hasHttpStatusCode = (HasHttpStatusCode) ex;
-            statusCode = hasHttpStatusCode.getHttpStatusCode();
+        } else if(ex instanceof ExceptionWithHttpStatusCode) {
+            ExceptionWithHttpStatusCode exceptionWithHttpStatusCode = (ExceptionWithHttpStatusCode) ex;
+            statusCode = exceptionWithHttpStatusCode.getHttpStatusCode();
         } else {
             statusCode = RestfulResponse.HttpStatusCode.INTERNAL_SERVER_ERROR;
         }

@@ -18,9 +18,9 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering;
 
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
-public interface HasHttpStatusCode {
+public interface ExceptionWithBody {
 
-    HttpStatusCode getHttpStatusCode();
+    JsonRepresentation getBody();
 }

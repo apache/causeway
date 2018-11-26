@@ -128,15 +128,33 @@ public interface ObjectAction extends ObjectMember {
 
     //endregion
 
-    //region > isProposedArgumentSetValid
+    //region > isProposedArgumentSetValid, isEachIndividualArgumentValid, isArgumentSetValid
 
     /**
      * Whether the provided argument set is valid, represented as a {@link Consent}.
+     *
+     * <p>
+     *     Basically just calls (the helper methods also called by) first
+     *     {@link #isEachIndividualArgumentValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)} and then
+     *     {@link #isArgumentSetValid(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}.  Those methods are
+     *     separated out so that viewers have more fine-grained control.
+     * </p>
      */
     Consent isProposedArgumentSetValid(
             ObjectAdapter object,
             ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy);
+
+    Consent isEachIndividualArgumentValid(
+            ObjectAdapter objectAdapter,
+            ObjectAdapter[] proposedArguments,
+            InteractionInitiatedBy interactionInitiatedBy);
+
+    Consent isArgumentSetValid(
+            ObjectAdapter objectAdapter,
+            ObjectAdapter[] proposedArguments,
+            InteractionInitiatedBy interactionInitiatedBy);
+
 
     //endregion
 

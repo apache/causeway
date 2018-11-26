@@ -176,13 +176,32 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
                 interactionInitiatedBy);
         return removeElementFromArray(serviceChoices, contributeeParam, new ObjectAdapter[][]{});
     }
-        
+
+    @Override
     public Consent isProposedArgumentSetValid(
             final ObjectAdapter contributee,
             final ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        ObjectAdapter[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
+        final ObjectAdapter[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
         return serviceAction.isProposedArgumentSetValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
+    }
+
+    @Override
+    public Consent isEachIndividualArgumentValid(
+            final ObjectAdapter contributee,
+            final ObjectAdapter[] proposedArguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        final ObjectAdapter[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
+        return serviceAction.isEachIndividualArgumentValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
+    }
+
+    @Override
+    public Consent isArgumentSetValid(
+            final ObjectAdapter contributee,
+            final ObjectAdapter[] proposedArguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        final ObjectAdapter[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
+        return serviceAction.isArgumentSetValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
     }
 
     @Override
@@ -194,9 +213,9 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
 
         setupCommand(targetAdapter, argumentAdapters);
 
+        final ObjectAdapter[] serviceArguments = argsPlusContributee(targetAdapter, argumentAdapters);
         return serviceAction.executeInternal(
-                getServiceAdapter(), mixedInAdapter, argsPlusContributee(targetAdapter, argumentAdapters),
-                interactionInitiatedBy);
+                getServiceAdapter(), mixedInAdapter, serviceArguments, interactionInitiatedBy);
     }
 
 

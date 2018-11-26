@@ -65,8 +65,7 @@ public class ObjectActionArgHelper {
                 // validate individual arg
                 final ObjectActionParameter parameter = parameters.get(i);
                 final Object argPojo = argAdapter!=null?argAdapter.getObject():null;
-                final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, InteractionInitiatedBy.USER
-                );
+                final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, InteractionInitiatedBy.USER);
                 if (reasonNotValid != null) {
                     argRepr.mapPut("invalidReason", reasonNotValid);
                     valid = false;
@@ -77,16 +76,19 @@ public class ObjectActionArgHelper {
             }
         }
 
-        // validate all args
+        // validate entire argument set
         final ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
-        final Consent consent = action.isProposedArgumentSetValid(objectAdapter, argArray, InteractionInitiatedBy.USER);
+        final Consent consent = action.isArgumentSetValid(objectAdapter, argArray, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             arguments.mapPut("x-ro-invalidReason", consent.getReason());
             valid = false;
         }
 
         if(!valid) {
-            throw RestfulObjectsApplicationException.createWithBody(RestfulResponse.HttpStatusCode.VALIDATION_FAILED, arguments, "Validation failed, see body for details");
+            throw RestfulObjectsApplicationException.createWithBody(
+                    RestfulResponse.HttpStatusCode.VALIDATION_FAILED,
+                    arguments,
+                    "Validation failed, see body for details");
         }
 
         return argAdapters;
