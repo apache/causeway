@@ -24,7 +24,8 @@ import java.util.regex.Pattern;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -76,9 +77,9 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
     @Override
     public void refineMetaModelValidator(
-            final MetaModelValidatorComposite metaModelValidator,
-            final IsisConfiguration configuration) {
+            final MetaModelValidatorComposite metaModelValidator) {
 
+        final IsisConfiguration configuration = _Config.getConfiguration();
         final boolean validateFromClause = configuration.getBoolean(
                 ISIS_REFLECTOR_VALIDATOR_JDOQL_FROM_CLAUSE_KEY,
                 ISIS_REFLECTOR_VALIDATOR_JDOQL_FROM_CLAUSE_DEFAULT);

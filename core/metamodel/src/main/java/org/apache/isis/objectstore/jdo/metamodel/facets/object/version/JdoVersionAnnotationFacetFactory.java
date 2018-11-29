@@ -21,7 +21,7 @@ package org.apache.isis.objectstore.jdo.metamodel.facets.object.version;
 
 import javax.jdo.annotations.Version;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -59,7 +59,7 @@ public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
     }
 

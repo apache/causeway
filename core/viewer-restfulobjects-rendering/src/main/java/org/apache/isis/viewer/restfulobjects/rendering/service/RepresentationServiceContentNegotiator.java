@@ -17,7 +17,6 @@
 package org.apache.isis.viewer.restfulobjects.rendering.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
@@ -45,7 +44,7 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
 
 
     @PostConstruct
-    public void init(final Map<String, String> properties) {
+    public void init() {
     }
 
 

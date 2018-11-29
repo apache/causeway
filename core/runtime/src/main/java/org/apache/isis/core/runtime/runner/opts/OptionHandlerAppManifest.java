@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
-import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_LONG_OPT;
-import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_OPT;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
@@ -29,11 +26,14 @@ import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.builder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
-import org.apache.isis.core.runtime.system.SystemConstants;
+
+import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_LONG_OPT;
+import static org.apache.isis.core.runtime.runner.Constants.APP_MANIFEST_OPT;
 
 public class OptionHandlerAppManifest extends OptionHandlerAbstract {
 
@@ -66,7 +66,7 @@ public class OptionHandlerAppManifest extends OptionHandlerAbstract {
         if (appManifestClassName == null) {
             return;
         }
-        prime(isisConfigurationBuilder, SystemConstants.APP_MANIFEST_KEY, appManifestClassName);
+        prime(isisConfigurationBuilder, ConfigurationConstants.APP_MANIFEST_KEY, appManifestClassName);
     }
 
     static void prime(IsisConfigurationBuilder isisConfigurationBuilder, String key, String value) {

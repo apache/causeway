@@ -40,12 +40,6 @@ public class RegisterEntities {
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(RegisterEntities.class);
 
-    /**
-     * @deprecated - no longer used; instead an AppManifest must be specified.
-     */
-    @Deprecated
-    public final static String PACKAGE_PREFIX_KEY = "isis.persistor.datanucleus.RegisterEntities.packagePrefix";
-
     private final _Lazy<Set<String>> entityTypes = _Lazy.threadSafe(this::findEntityTypes);
 
     public Set<String> getEntityTypes() {

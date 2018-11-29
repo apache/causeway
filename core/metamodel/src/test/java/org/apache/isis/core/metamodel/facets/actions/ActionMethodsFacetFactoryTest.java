@@ -32,7 +32,6 @@ import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -62,7 +61,6 @@ import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefau
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
@@ -78,7 +76,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private ServicesInjector mockServicesInjector;
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    private ConfigurationServiceInternal stubConfigurationServiceInternal;
     private TranslationService mockTranslationService;
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
 
@@ -93,7 +90,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         mockPersistenceSessionServiceInternal = context.mock(PersistenceSessionServiceInternal.class);
 
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-        stubConfigurationServiceInternal = new IsisConfigurationDefault(null);
 
         final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
 
@@ -110,9 +106,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
             allowing(mockServicesInjector).getAuthenticationSessionProvider();
             will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).getConfigurationServiceInternal();
-            will(returnValue(stubConfigurationServiceInternal));
 
             allowing(mockServicesInjector).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));

@@ -31,10 +31,8 @@ import org.junit.rules.ExpectedException;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -42,6 +40,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract.DeprecatedPolicy;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -67,7 +66,6 @@ public abstract class SpecificationLoaderTestAbstract {
     private MessageService mockMessageService;
     
     ServicesInjector stubServicesInjector;
-    IsisConfigurationDefault stubConfiguration;
 
     // is loaded by subclasses
     protected ObjectSpecification specification;
@@ -89,20 +87,15 @@ public abstract class SpecificationLoaderTestAbstract {
 
         }});
 
-        stubConfiguration = new IsisConfigurationDefault(null);
-
-        stubServicesInjector =
-                new ServicesInjector(
-                    _Lists.of(
-                        mockAuthenticationSessionProvider,
-                        stubConfiguration,
-                        mockPersistenceSessionServiceInternal,
-                            mockMessageService,
-                        mockGridService),
-                    stubConfiguration);
+        stubServicesInjector = ServicesInjector.builderForTesting()
+                    .addService(mockAuthenticationSessionProvider)
+                    .addService(mockPersistenceSessionServiceInternal)
+                    .addService(mockMessageService)
+                    .addService(mockGridService)
+                    .build();
 
         specificationLoader = new SpecificationLoader(
-                stubConfiguration, new ProgrammingModelFacetsJava5(stubConfiguration),
+                new ProgrammingModelFacetsJava5(DeprecatedPolicy.HONOUR),
                 new MetaModelValidatorDefault(), stubServicesInjector);
 
         stubServicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);

@@ -157,7 +157,7 @@ public interface AppManifest {
      */
     public final static class Registry {
 
-        public final static List<String> FRAMEWORK_PROVIDED_SERVICES = Collections.unmodifiableList(Arrays.asList(
+        public final static List<String> FRAMEWORK_PROVIDED_SERVICE_PACKAGES = Collections.unmodifiableList(Arrays.asList(
                 "org.apache.isis.applib",
                 "org.apache.isis.core.wrapper" ,
                 "org.apache.isis.core.metamodel.services" ,
@@ -167,7 +167,8 @@ public interface AppManifest {
                 "org.apache.isis.viewer.restfulobjects.rendering.service" ,
                 "org.apache.isis.objectstore.jdo.datanucleus.service.support" ,
                 "org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" ,
-                "org.apache.isis.viewer.wicket.viewer.services"));
+                "org.apache.isis.viewer.wicket.viewer.services", 
+                "org.apache.isis.core.integtestsupport.components"));
 
         private static Registry instance = new Registry();
         public static Registry instance() {
@@ -256,6 +257,39 @@ public interface AppManifest {
         //endregion
 
     }
+    
+    // -- NOOP
+    
+    static final AppManifest NOOP = new AppManifest() {
+        @Override public List<Class<?>> getModules() {
+            return null;
+        }
+        @Override public List<Class<?>> getAdditionalServices() {
+            return null;
+        }
+
+        @Override public String getAuthenticationMechanism() {
+            return null;
+        }
+
+        @Override public String getAuthorizationMechanism() {
+            return null;
+        }
+
+        @Override public List<Class<? extends FixtureScript>> getFixtures() {
+            return null;
+        }
+
+        @Override public Map<String, String> getConfigurationProperties() {
+            return null;
+        }
+    };
+    
+    public static AppManifest noop() {
+        return NOOP;
+    }
+    
+    // -- UTIL
 
     public static class Util {
 
@@ -305,7 +339,6 @@ public interface AppManifest {
             // automatically install any fixtures that might have been registered
             map.put(ISIS_PERSISTOR_DATANUCLEUS + "install-fixtures", "true");
             map.put(ISIS_PERSISTOR + "enforceSafeSemantics", "false");
-            map.put("isis.deploymentType", "server_prototype");
             map.put("isis.services.eventbus.allowLateRegistration", "true");
 
             return map;

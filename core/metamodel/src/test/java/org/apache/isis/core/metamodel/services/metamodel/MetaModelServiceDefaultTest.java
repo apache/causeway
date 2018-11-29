@@ -43,7 +43,6 @@ import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -58,7 +57,6 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 class MetaModelServiceDefaultTest {
 
-    IsisConfigurationDefault stubConfiguration;
     ServicesInjector stubServicesInjector;
     MetaModelServiceDefault mockMetaModelService;
     SpecificationLoader specificationLoader;
@@ -73,15 +71,15 @@ class MetaModelServiceDefaultTest {
         
         JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
         
-        stubConfiguration = new IsisConfigurationDefault();
-
         stubServicesInjector =
-                new ServicesInjector(_Lists.of(context.mock(
+                ServicesInjector.builderForTesting()
+                .addServices(_Lists.of(context.mock(
                         PersistenceSessionServiceInternal.class
-                        )), stubConfiguration);
+                        )))
+                .build();
         
         specificationLoader = 
-                new SpecificationLoader(stubConfiguration, null, null, stubServicesInjector);
+                new SpecificationLoader(null, null, stubServicesInjector);
         
         stubServicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);
         
@@ -150,7 +148,7 @@ class MetaModelServiceDefaultTest {
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         
-        jaxbMarshaller.marshal(domainMembers, System.out);
+        jaxbMarshaller.marshal(domainMembers, noopOutput());
     }
     
     

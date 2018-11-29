@@ -19,13 +19,10 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
-
 public abstract class AuthenticatorDefault extends AuthenticatorAbstract {
 
-    public AuthenticatorDefault(final IsisConfiguration configuration) {
-        super(configuration);
+    public AuthenticatorDefault() {
+        super();
     }
-
 
 }

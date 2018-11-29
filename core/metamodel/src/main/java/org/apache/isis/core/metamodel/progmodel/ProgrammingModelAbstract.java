@@ -24,7 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.builder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -46,6 +47,12 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
             boolean ignoreDep = configuration.getBoolean(KEY_IGNORE_DEPRECATED, false);
             return ignoreDep ? IGNORE : HONOUR;
         }
+        
+        public static DeprecatedPolicy parse(final IsisConfigurationBuilder configuration) {
+            boolean ignoreDep = configuration.peekAtBoolean(KEY_IGNORE_DEPRECATED, false);
+            return ignoreDep ? IGNORE : HONOUR;
+        }
+        
     }
 
     protected final DeprecatedPolicy deprecatedPolicy;
@@ -153,11 +160,11 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
     }
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
         for (final FacetFactory facetFactory : getList()) {
             if(facetFactory instanceof MetaModelValidatorRefiner) {
                 final MetaModelValidatorRefiner metaModelValidatorRefiner = (MetaModelValidatorRefiner) facetFactory;
-                metaModelValidatorRefiner.refineMetaModelValidator(metaModelValidator, configuration);
+                metaModelValidatorRefiner.refineMetaModelValidator(metaModelValidator);
             }
         }
     }

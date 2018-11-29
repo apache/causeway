@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
@@ -55,6 +54,8 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.authorization.IsisPermission;
+
+import static org.apache.isis.config.internal._Config.getConfiguration;
 
 /**
  * If Shiro is configured for both {@link AuthenticationManagerInstaller authentication} and
@@ -73,21 +74,13 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
     private static final boolean ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_DEFAULT = false;
 
     // -- constructor and fields
-    private final IsisConfiguration configuration;
     private final boolean autoLogout;
 
-    public ShiroAuthenticatorOrAuthorizor(final IsisConfiguration configuration) {
-        this.configuration = configuration;
-        autoLogout = configuration.getBoolean(
+    public ShiroAuthenticatorOrAuthorizor() {
+        autoLogout = getConfiguration().getBoolean(
                 ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_KEY,
                 ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_DEFAULT);
     }
-
-    public IsisConfiguration getConfiguration() {
-        return configuration;
-    }
-
-
 
     // -- init, shutdown
 

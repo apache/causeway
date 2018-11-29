@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.util;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 
 public final class EventUtil {
 

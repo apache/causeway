@@ -19,16 +19,16 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.value.Percentage;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.value.percentage.PercentageValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
 
 public class PercentageValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
     private PercentageValueSemanticsProvider adapter;
@@ -37,12 +37,8 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Before
     public void setUpObjects() throws Exception {
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.value.format.percentage");
-                will(returnValue(null));
-            }
-        });
+        
+        _Config.put("isis.value.format.percentage", null);
 
         percentage = new Percentage(0.105f);
         allowMockAdapterToReturn(percentage);

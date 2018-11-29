@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib;
 
-import static org.apache.isis.commons.internal.collections._Maps.newLinkedHashMap;
-
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +28,8 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+
+import static org.apache.isis.commons.internal.collections._Maps.newLinkedHashMap;
 
 /**
  * Represents a collection of entities and domain services that provide a set of coherent functionality under a

@@ -16,8 +16,6 @@
  */
 package org.apache.isis.core.runtime.services.eventbus;
 
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 
@@ -26,10 +24,13 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.plugins.eventbus.EventBusPlugin;
 import org.apache.isis.core.runtime.services.RequestScopedService;
+
+import static org.apache.isis.config.internal._Config.getConfiguration;
 
 /**
  * Holds common runtime logic for EventBusService implementations.
@@ -79,9 +80,10 @@ public abstract class EventBusServiceDefault extends EventBusService {
     @Override
     @Programmatic
     @PostConstruct
-    public void init(final Map<String, String> properties) {
-        this.allowLateRegistration = getElseFalse(properties, KEY_ALLOW_LATE_REGISTRATION);
-        this.implementation = getNormalized(properties.get(KEY_EVENT_BUS_IMPLEMENTATION));
+    public void init() {
+        IsisConfiguration configuration = getConfiguration();
+        this.allowLateRegistration = configuration.getBoolean(KEY_ALLOW_LATE_REGISTRATION, false);
+        this.implementation = getNormalized(configuration.getString(KEY_EVENT_BUS_IMPLEMENTATION));
     }
 
     private static String getNormalized(final String implementation) {
@@ -100,12 +102,6 @@ public abstract class EventBusServiceDefault extends EventBusService {
 
         }
     }
-
-    private static boolean getElseFalse(final Map<String, String> properties, final String key) {
-        final String value = properties.get(key);
-        return !_Strings.isNullOrEmpty(value) && Boolean.parseBoolean(value);
-    }
-
 
     protected boolean allowLateRegistration;
     boolean isAllowLateRegistration() {

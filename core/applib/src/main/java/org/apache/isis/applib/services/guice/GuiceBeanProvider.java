@@ -17,6 +17,7 @@
 package org.apache.isis.applib.services.guice;
 
 import java.lang.annotation.Annotation;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**

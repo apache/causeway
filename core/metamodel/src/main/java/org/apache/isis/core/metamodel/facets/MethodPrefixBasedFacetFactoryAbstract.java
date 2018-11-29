@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -66,7 +66,7 @@ implements MethodPrefixBasedFacetFactory {
     }
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
         if(orphanValidation == OrphanValidation.DONT_VALIDATE) {
             return;
         }
@@ -75,7 +75,7 @@ implements MethodPrefixBasedFacetFactory {
             @Override
             public boolean visit(final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
 
-                boolean noParamsOnly = configuration.getBoolean(
+                boolean noParamsOnly = _Config.getConfiguration().getBoolean(
                         MethodPrefixBasedFacetFactoryAbstract.ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_KEY,
                         MethodPrefixBasedFacetFactoryAbstract.ISIS_REFLECTOR_VALIDATOR_NO_PARAMS_ONLY_DEFAULT);
 

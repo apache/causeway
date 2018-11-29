@@ -18,10 +18,9 @@
  */
 package org.apache.isis.applib.services.exceprecog;
 
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 
@@ -72,7 +71,7 @@ public interface ExceptionRecognizer {
 
     @Programmatic
     @PostConstruct
-    public void init(Map<String, String> properties);
+    public void init();
 
     @Programmatic
     @PreDestroy

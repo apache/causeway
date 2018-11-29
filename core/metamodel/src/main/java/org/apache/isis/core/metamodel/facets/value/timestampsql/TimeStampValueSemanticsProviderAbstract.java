@@ -26,7 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 import org.apache.isis.core.metamodel.services.ServicesInjector;

@@ -30,8 +30,9 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.LocaleUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -98,7 +99,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
         this.equalByContent = (equalByContent == EqualByContent.HONOURED);
         this.defaultValue = defaultValue;
 
-        this.configuration = context.getConfigurationServiceInternal();
+        this.configuration = _Config.getConfiguration();
         this.context = context;
     }
 

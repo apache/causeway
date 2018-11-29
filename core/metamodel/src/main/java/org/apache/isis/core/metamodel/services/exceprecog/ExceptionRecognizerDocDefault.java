@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.services.exceprecog;
 
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -47,9 +45,9 @@ implements ExceptionRecognizer {
     @Programmatic
     @PostConstruct
     @Override
-    public void init(Map<String, String> properties) {
+    public void init() {
         serviceRegistry.injectServicesInto(recognizer);
-        recognizer.init(properties);
+        recognizer.init();
     }
 
     @Programmatic

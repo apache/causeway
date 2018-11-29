@@ -22,28 +22,41 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
-public class PropertyResource {
-    private final Class<?> propertiesFileContext;
-    private final String propertiesFile;
+public final class PropertyResource {
+    private final Class<?> resourceContext;
+    private final String resourceName;
 
-    PropertyResource(final Class<?> propertiesFileContext, final String propertiesFile) {
-        this.propertiesFileContext = propertiesFileContext;
-        this.propertiesFile = propertiesFile;
+    /**
+     * @since 2.0.0-M2
+     */
+    public static PropertyResource ofClassContext(final Class<?> resourceContext, final String resourceName) {
+        return new PropertyResource(resourceContext, resourceName);
+    }
+    
+    PropertyResource(final Class<?> resourceContext, final String resourceName) {
+        this.resourceContext = resourceContext;
+        this.resourceName = resourceName;
     }
 
-    Class<?> getPropertiesFileContext() {
-        return propertiesFileContext;
+    /**
+     * @since 2.0.0-M2
+     */
+    public Class<?> getResourceContext() {
+        return resourceContext;
     }
 
-    String getPropertiesFile() {
-        return propertiesFile;
+    /**
+     * @since 2.0.0-M2
+     */
+    public String getResourceName() {
+        return resourceName;
     }
 
-    void loadPropsInto(
-            final Map<String, String> props) {
+    void loadPropsInto(final Map<String, String> props) {
+        
         final Properties properties = new Properties();
         try {
-            try (final InputStream stream = propertiesFileContext.getResourceAsStream(propertiesFile)) {
+            try (final InputStream stream = resourceContext.getResourceAsStream(resourceName)) {
                 properties.load(stream);
                 for (Object key : properties.keySet()) {
                     final Object value = properties.get(key);
@@ -54,7 +67,7 @@ public class PropertyResource {
             }
         } catch (Exception e) {
             throw new RuntimeException(
-                    String.format("Failed to load '%s' file relative to %s", getPropertiesFile(), getPropertiesFileContext().getName()), e);
+                    String.format("Failed to load '%s' file relative to %s", getResourceName(), getResourceContext().getName()), e);
         }
     }
 }

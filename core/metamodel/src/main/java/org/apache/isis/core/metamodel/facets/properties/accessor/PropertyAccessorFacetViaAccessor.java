@@ -24,8 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -47,11 +47,10 @@ implements ImperativeFacet {
             final ObjectSpecification typeSpec,
             final Method method,
             final FacetHolder holder,
-            final IsisConfiguration isisConfiguration,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final ObjectAdapterProvider adapterProvider) {
-        super(typeSpec, holder, isisConfiguration, specificationLoader, authenticationSessionProvider, adapterProvider);
+        super(typeSpec, holder, specificationLoader, authenticationSessionProvider, adapterProvider);
         this.method = method;
     }
 
@@ -79,7 +78,7 @@ implements ImperativeFacet {
             return null;
         }
 
-        boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
+        boolean filterForVisibility = _Config.getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
         if(filterForVisibility) {
             final ObjectAdapter referencedAdapter = getObjectAdapterProvider().adapterFor(referencedObject);
             final boolean visible = ObjectAdapter.Util

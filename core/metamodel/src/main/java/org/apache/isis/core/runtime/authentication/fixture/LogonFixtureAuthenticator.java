@@ -20,15 +20,14 @@
 package org.apache.isis.core.runtime.authentication.fixture;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
 
 public class LogonFixtureAuthenticator extends AuthenticatorAbstract {
 
-    public LogonFixtureAuthenticator(final IsisConfiguration configuration) {
-        super(configuration);
+    public LogonFixtureAuthenticator() {
+        super();
     }
 
     /**

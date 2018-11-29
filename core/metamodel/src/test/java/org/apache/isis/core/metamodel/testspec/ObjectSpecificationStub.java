@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -37,8 +36,6 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -60,14 +57,10 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
      */
     private ObjectSpecId specId;
 
-    private ServicesInjector servicesInjector;
     private ObjectSpecification elementSpecification;
 
     public ObjectSpecificationStub(final Class<?> type) {
         this(type.getName());
-        IsisConfigurationDefault stubConfiguration = new IsisConfigurationDefault(null);
-        this.servicesInjector = new ServicesInjector(Collections.emptyList(), stubConfiguration);
-        servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, stubConfiguration);
     }
 
     @Override

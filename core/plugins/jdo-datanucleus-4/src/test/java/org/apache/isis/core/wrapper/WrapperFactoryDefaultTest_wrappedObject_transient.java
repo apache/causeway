@@ -39,7 +39,6 @@ import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -79,8 +78,6 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     
-    @Mock
-    private IsisConfiguration mockConfiguration;
     @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
@@ -283,7 +280,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         // and given
         facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(mockOnType, getPasswordMethod, mockPasswordMember,
-                mockConfiguration, mockSpecificationLoader,
+                mockSpecificationLoader,
                 mockAuthenticationSessionProvider, mockAdapterManager
         ));
         context.checking(new Expectations() {

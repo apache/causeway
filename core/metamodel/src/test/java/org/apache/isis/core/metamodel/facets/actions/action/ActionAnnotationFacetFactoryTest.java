@@ -38,6 +38,7 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -107,15 +108,14 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         
         // PRODUCTION
         
+        _Config.clear();
+        
         facetFactory = new ActionAnnotationFacetFactory();
 
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
-
-            allowing(mockServicesInjector).getConfigurationServiceInternal();
-            will(returnValue(mockConfiguration));
-
+            
             allowing(mockTypeSpec).getFacet(ActionDomainEventDefaultFacetForDomainObjectAnnotation.class);
             will(returnValue(null));
 
@@ -170,11 +170,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
             expectRemoveMethod(actionMethod);
 
-            context.checking(new Expectations() {{
-                allowing(mockConfiguration).getBoolean("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", true);
-                will(returnValue(true));
-            }});
-
+            _Config.put("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", true);
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(
@@ -294,11 +290,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             allowingLoadSpecificationRequestsFor(cls, actionMethod.getReturnType());
             expectRemoveMethod(actionMethod);
 
-            context.checking(new Expectations() {{
-                allowing(mockConfiguration).getBoolean("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", true);
-                will(returnValue(true));
-            }});
-
+            _Config.put("isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", true);
 
             // when
             final ProcessMethodContext processMethodContext = new ProcessMethodContext(
@@ -1170,20 +1162,11 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
     }
 
     void allowingCommandConfigurationToReturn(final String value) {
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.services.command.actions");
-                will(returnValue(value));
-            }
-        });
+        _Config.put("isis.services.command.actions", value);
     }
+
     void allowingPublishingConfigurationToReturn(final String value) {
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.services.publish.actions");
-                will(returnValue(value));
-            }
-        });
+        _Config.put("isis.services.publish.actions", value);
     }
 
 }

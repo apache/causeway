@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -60,9 +60,9 @@ implements MetaModelValidatorRefiner {
     }
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
 
-        final boolean doCheck = configuration.getBoolean(
+        final boolean doCheck = _Config.getConfiguration().getBoolean(
                 ISIS_REFLECTOR_VALIDATOR_ACTION_COLLECTION_PARAMETER_CHOICES_KEY,
                 ISIS_REFLECTOR_VALIDATOR_ACTION_COLLECTION_PARAMETER_CHOICES_DEFAULT);
 

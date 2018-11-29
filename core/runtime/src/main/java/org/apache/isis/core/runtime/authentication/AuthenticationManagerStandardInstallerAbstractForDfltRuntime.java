@@ -20,8 +20,6 @@
 package org.apache.isis.core.runtime.authentication;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.authentication.fixture.LogonFixtureAuthenticator;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
@@ -29,10 +27,8 @@ import org.apache.isis.core.runtime.authentication.standard.AuthenticationManage
 public abstract class AuthenticationManagerStandardInstallerAbstractForDfltRuntime extends AuthenticationManagerStandardInstallerAbstract {
 
 
-    public AuthenticationManagerStandardInstallerAbstractForDfltRuntime(
-            final String name,
-            final IsisConfigurationDefault isisConfiguration) {
-        super(name, isisConfiguration);
+    public AuthenticationManagerStandardInstallerAbstractForDfltRuntime(final String name) {
+        super(name);
     }
 
     /**
@@ -48,12 +44,11 @@ public abstract class AuthenticationManagerStandardInstallerAbstractForDfltRunti
      */
     @Override
     protected AuthenticationManagerStandard createAuthenticationManagerStandard() {
-        final IsisConfiguration configuration = getConfiguration();
-
-        final AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard(configuration);
+        
+        final AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard();
 
         // we add to start to ensure that these special case authenticators are always consulted first
-        authenticationManager.addAuthenticatorToStart(new LogonFixtureAuthenticator(configuration));
+        authenticationManager.addAuthenticatorToStart(new LogonFixtureAuthenticator());
 
         return authenticationManager;
     }

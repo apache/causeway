@@ -18,10 +18,6 @@
  */
 package org.apache.isis.core.webapp.modules;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
-import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
@@ -29,6 +25,10 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.commons.internal.collections._Arrays;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.context._Context.getDefaultClassLoader;
+import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpectedCodeReach;
 
 /**
  * Package private mixin for WebModule implementing WebModule.
@@ -38,8 +38,9 @@ final class WebModule_LogOnExceptionLogger implements WebModule  {
 
     private final static String LOGONLOGGER_FILTER_CLASS_NAME = 
             "org.apache.isis.core.webapp.diagnostics.IsisLogOnExceptionFilter";
-
-    private final static String LOGONLOGGER_FILTER_NAME = "IsisLogOnExceptionFilter";
+    private final static String LOGONLOGGER_FILTER_NAME = 
+            "IsisLogOnExceptionFilter";
+    private WebModuleContext webModuleContext;
 
 
     @Override
@@ -47,6 +48,11 @@ final class WebModule_LogOnExceptionLogger implements WebModule  {
         return "LogOn Exception Logger";
     }
 
+    @Override
+    public void prepare(WebModuleContext ctx) {
+        this.webModuleContext = ctx;
+    }
+    
     @Override
     public ServletContextListener init(ServletContext ctx) throws ServletException {
 
@@ -64,13 +70,13 @@ final class WebModule_LogOnExceptionLogger implements WebModule  {
             return null; // filter was already registered somewhere else (eg web.xml)
         }
 
-        reg.addMappingForUrlPatterns(null, true, getProtectedUrlPatterns(ctx) ); // filter is forced last
+        reg.addMappingForUrlPatterns(null, true, getProtectedUrlPatterns() ); // filter is forced last
 
         return null; // does not provide a listener
     }
 
     @Override
-    public boolean isApplicable(ServletContext ctx) {
+    public boolean isApplicable(WebModuleContext ctx) {
         try {
             getDefaultClassLoader().loadClass(LOGONLOGGER_FILTER_CLASS_NAME);
             return true;
@@ -81,8 +87,8 @@ final class WebModule_LogOnExceptionLogger implements WebModule  {
 
     // -- HELPER
     
-    private String[] getProtectedUrlPatterns(ServletContext ctx) {
-        return ContextUtil.streamProtectedPaths(ctx)
+    private String[] getProtectedUrlPatterns() {
+        return webModuleContext.streamProtectedPaths()
         .collect(_Arrays.toArray(String.class));
     }
 

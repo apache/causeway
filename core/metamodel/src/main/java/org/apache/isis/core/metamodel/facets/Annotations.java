@@ -45,6 +45,7 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.commons.reflection.Reflect;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -84,36 +85,7 @@ public final class Annotations  {
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
     public static <T extends Annotation> T getAnnotation(final Class<?> cls, final Class<T> annotationClass) {
-        if (cls == null) {
-            return null;
-        }
-        final T annotation = cls.getAnnotation(annotationClass);
-        if (annotation != null) {
-            return annotation;
-        }
-
-        // search superclasses
-        final Class<?> superclass = cls.getSuperclass();
-        if (superclass != null) {
-            try {
-                final T annotationFromSuperclass = getAnnotation(superclass, annotationClass);
-                if (annotationFromSuperclass != null) {
-                    return annotationFromSuperclass;
-                }
-            } catch (final SecurityException e) {
-                // fall through
-            }
-        }
-
-        // search implemented interfaces
-        final Class<?>[] interfaces = cls.getInterfaces();
-        for (final Class<?> iface : interfaces) {
-            final T annotationFromInterface = getAnnotation(iface, annotationClass);
-            if (annotationFromInterface != null) {
-                return annotationFromInterface;
-            }
-        }
-        return null;
+        return _Reflect.getAnnotation(cls, annotationClass);
     }
 
 

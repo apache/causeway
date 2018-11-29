@@ -60,7 +60,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
         FacetUtil.addFacet(
                 new CollectionAccessorFacetViaAccessor(
                         typeSpec, accessorMethod, holder,
-                        getConfiguration(), getSpecificationLoader(),
+                        getSpecificationLoader(),
                         getAuthenticationSessionProvider(), adapterProvider
                         ));
 

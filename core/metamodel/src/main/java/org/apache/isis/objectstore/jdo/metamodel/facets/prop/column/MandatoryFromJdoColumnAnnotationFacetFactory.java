@@ -25,7 +25,6 @@ import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -114,7 +113,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
     }
 
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
     }
 

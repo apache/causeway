@@ -19,6 +19,7 @@
 package org.apache.isis.applib.services.linking;
 
 import java.net.URI;
+
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**

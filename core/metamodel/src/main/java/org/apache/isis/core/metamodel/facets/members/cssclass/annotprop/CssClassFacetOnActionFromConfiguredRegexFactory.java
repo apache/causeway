@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
@@ -57,7 +56,7 @@ public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract im
 
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(mixinTypeValidator);
     }
 

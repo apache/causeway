@@ -23,6 +23,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
@@ -163,6 +164,42 @@ public final class _Reflect {
                 }, false);
     }
 
+    /**
+     * Searches for annotation on provided class, and if not found for the
+     * superclass.
+     */
+    public static <T extends Annotation> T getAnnotation(final Class<?> cls, final Class<T> annotationClass) {
+        if (cls == null) {
+            return null;
+        }
+        final T annotation = cls.getAnnotation(annotationClass);
+        if (annotation != null) {
+            return annotation;
+        }
+
+        // search superclasses
+        final Class<?> superclass = cls.getSuperclass();
+        if (superclass != null) {
+            try {
+                final T annotationFromSuperclass = getAnnotation(superclass, annotationClass);
+                if (annotationFromSuperclass != null) {
+                    return annotationFromSuperclass;
+                }
+            } catch (final SecurityException e) {
+                // fall through
+            }
+        }
+
+        // search implemented interfaces
+        final Class<?>[] interfaces = cls.getInterfaces();
+        for (final Class<?> iface : interfaces) {
+            final T annotationFromInterface = getAnnotation(iface, annotationClass);
+            if (annotationFromInterface != null) {
+                return annotationFromInterface;
+            }
+        }
+        return null;
+    }
 
 
 }

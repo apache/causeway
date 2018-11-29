@@ -24,7 +24,6 @@ import java.util.stream.Stream;
 import javax.jdo.annotations.Column;
 import javax.jdo.annotations.IdentityType;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -93,7 +92,7 @@ public class MaxLengthDerivedFromJdoColumnAnnotationFacetFactory extends FacetFa
      * @see org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner#refineMetaModelValidator(org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite, org.apache.isis.core.commons.config.IsisConfiguration)
      */
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
     }
 

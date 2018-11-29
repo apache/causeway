@@ -50,9 +50,13 @@ public class BS3MenuBarsTest {
 
         Map<String, String> schemas = jaxbService.toXsd(menuBars, JaxbService.IsisSchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
-            System.out.println(entry.getKey() + ":");
-            System.out.println(entry.getValue());
+            println(entry.getKey() + ":");
+            println(entry.getValue());
         }
+    }
+    
+    private void println(String string) {
+        //for test debugging only
     }
 
 }

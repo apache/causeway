@@ -30,9 +30,9 @@ import org.junit.Before;
 import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -67,9 +67,6 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     protected TranslationService mockTranslationService;
 
     @Mock
-    protected IsisConfigurationDefault mockConfiguration;
-
-    @Mock
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
 
     protected IdentifiedHolder facetHolder;
@@ -84,7 +81,10 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     protected OneToManyAssociation mockOneToManyAssociation;
     @Mock
     protected OneToOneActionParameter mockOneToOneActionParameter;
-
+    @Mock
+    protected EventBusService mockEventBusService;
+    
+    
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
 
@@ -105,11 +105,8 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     public void setUpFacetedMethodAndParameter() throws Exception {
 
         // PRODUCTION
-
+        
         context.checking(new Expectations() {{
-
-            allowing(mockServicesInjector).getConfigurationServiceInternal();
-            will(returnValue(mockConfiguration));
 
             allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
             will(returnValue(mockPersistenceSessionServiceInternal));
@@ -123,6 +120,9 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
+            allowing(mockServicesInjector).lookupServiceElseFail(EventBusService.class);
+            will(returnValue(mockEventBusService));
+            
             allowing(mockServicesInjector).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));
 

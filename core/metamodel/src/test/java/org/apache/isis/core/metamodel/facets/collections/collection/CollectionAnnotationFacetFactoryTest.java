@@ -108,7 +108,6 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
 
         private void addGetterFacet(final FacetHolder holder) {
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder, 
-                    mockConfiguration,
                     mockSpecificationLoader, 
                     mockAuthenticationSessionProvider,
                     mockPersistenceSessionServiceInternal

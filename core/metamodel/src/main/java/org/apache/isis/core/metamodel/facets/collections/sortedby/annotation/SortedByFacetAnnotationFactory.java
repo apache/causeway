@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.collections.sortedby.annotation;
 import java.util.Comparator;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -54,7 +54,7 @@ public class SortedByFacetAnnotationFactory extends FacetFactoryAbstract impleme
     }
 
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
     }
 

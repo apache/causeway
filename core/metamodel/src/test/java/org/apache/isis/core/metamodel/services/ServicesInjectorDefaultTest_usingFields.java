@@ -19,19 +19,19 @@
 
 package org.apache.isis.core.metamodel.services;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.Arrays;
 
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.services.repository.RepositoryServiceInternalDefault;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.applib.services.repository.RepositoryService;
+import org.apache.isis.core.metamodel.services.repository.RepositoryServiceInternalDefault;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ServicesInjectorDefaultTest_usingFields {
 
@@ -82,8 +82,9 @@ public class ServicesInjectorDefaultTest_usingFields {
         service1 = new SomeDomainService1();
         service3 = new SomeDomainService3();
         service2 = new SomeDomainService2();
-        final IsisConfigurationDefault stubConfiguration = new IsisConfigurationDefault();
-        injector = new ServicesInjector(Arrays.asList(container, service1, service3, service2), stubConfiguration);
+        injector = ServicesInjector.builderForTesting()
+                .addServices(Arrays.asList(container, service1, service3, service2))
+                .build();
     }
 
     @Test

@@ -30,8 +30,6 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -40,6 +38,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import junit.framework.TestCase;
@@ -69,15 +68,13 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
     protected PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
 
-    protected IsisConfigurationDefault stubConfiguration;
     protected SpecificationLoader mockSpecificationLoader;
-    protected IsisConfiguration mockConfiguration;
     protected ProgrammableMethodRemover methodRemover;
 
     protected FacetHolder facetHolder;
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
-
+    
     public static class IdentifiedHolderImpl extends FacetHolderImpl implements IdentifiedHolder {
 
         private Identifier identifier;
@@ -97,7 +94,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         super.setUp();
         
         // PRODUCTION
-
+        
         facetHolder = new IdentifiedHolderImpl(
                 Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
@@ -108,23 +105,22 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         methodRemover = new ProgrammableMethodRemover();
 
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-        mockConfiguration = context.mock(IsisConfiguration.class);
-        stubServicesInjector = context.mock(ServicesInjector.class);
+        
         mockTranslationService = context.mock(TranslationService.class);
-        stubConfiguration = new IsisConfigurationDefault();
         mockAuthenticationSession = context.mock(AuthenticationSession.class);
 
         mockPersistenceSessionServiceInternal = context.mock(PersistenceSessionServiceInternal.class);
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
-        stubServicesInjector = new ServicesInjector(_Lists.of(
-                stubConfiguration,
+        stubServicesInjector = ServicesInjector.builderForTesting()
+                .addServices(_Lists.of(
                 mockAuthenticationSessionProvider,
                 mockSpecificationLoader,
                 mockPersistenceSessionServiceInternal,
                 mockTranslationService
-        ), stubConfiguration);
+                ))
+                .build();
 
         context.checking(new Expectations() {{
 

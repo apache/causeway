@@ -25,10 +25,10 @@ import java.util.List;
 
 import java.util.Objects;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.IsisConfiguration;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 
 

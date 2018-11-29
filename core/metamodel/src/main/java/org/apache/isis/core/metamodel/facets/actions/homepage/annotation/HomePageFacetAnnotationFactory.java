@@ -19,15 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.actions.homepage.annotation;
 
-import static org.apache.isis.commons.internal.functions._Predicates.not;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
@@ -42,6 +39,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+
+import static org.apache.isis.commons.internal.functions._Predicates.not;
 
 public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner{
 
@@ -63,7 +62,7 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
      * @see org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner#refineMetaModelValidator(org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite, org.apache.isis.core.commons.config.IsisConfiguration)
      */
     @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
+    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
     }
 

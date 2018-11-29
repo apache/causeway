@@ -22,10 +22,11 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Function;
 
-import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.base._NullSafe;
 
 /**
  * Provides fluent composition for Objects' equals, hashCode and toString.

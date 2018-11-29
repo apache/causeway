@@ -18,8 +18,6 @@
  */
 package org.apache.isis.applib.services.exceprecog;
 
-import java.util.Map;
-
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
@@ -52,7 +50,7 @@ public class ExceptionRecognizerCompositeTest {
         }
 
         @Override
-        public void init(Map<String, String> properties) {
+        public void init() {
         }
 
         @Override

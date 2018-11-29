@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -55,7 +55,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
     }
 
     /**
-     * We simply attach all facets we can find; the {@link #refineMetaModelValidator(org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite, org.apache.isis.core.commons.config.IsisConfiguration) meta-model validation} will detect if multiple interfaces/annotations have
+     * We simply attach all facets we can find; the {@link #refineMetaModelValidator(org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite, org.apache.isis.config.IsisConfiguration) meta-model validation} will detect if multiple interfaces/annotations have
      * been attached.
      */
     @Override
@@ -101,7 +101,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
     // //////////////////////////////////////
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator) {
         metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
 
             @Override

@@ -1207,6 +1207,22 @@ ${license.additional-notes}
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
+            
+            <!-- config -->
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-config</artifactId>
+                <version>${project.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-config</artifactId>
+                <version>${project.version}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
 	        
             <!-- provides @Nullable -->
             <dependency>
@@ -2101,9 +2117,9 @@ ${license.additional-notes}
         </profile>
 
         <profile>
-            <id>jdk10plus</id>
+            <id>jdk11plus</id>
             <activation>
-                <jdk>[10,)</jdk>
+                <jdk>[11,)</jdk>
             </activation>
             <build>
                 <plugins>
@@ -2114,8 +2130,8 @@ ${license.additional-notes}
                         <configuration>
                             <showDeprecation>true</showDeprecation>
                             <showWarnings>true</showWarnings>
-                            <source>10</source>
-                            <target>10</target>
+                            <source>11</source>
+                            <target>11</target>
                             <!-- TODO on build WARNING: __add-opens has no effect at compile time -->
                             <compilerArgs>
                                 <arg>--add-opens</arg>
@@ -2429,6 +2445,7 @@ ${license.additional-notes}
     <modules>
         <module>schema</module>
         <module>commons</module>
+        <module>config</module>
         <module>applib</module>
         <module>log4j</module>
         <module>metamodel</module>

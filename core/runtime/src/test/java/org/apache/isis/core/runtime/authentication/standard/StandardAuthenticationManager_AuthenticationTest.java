@@ -31,7 +31,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 
@@ -45,19 +44,17 @@ public class StandardAuthenticationManager_AuthenticationTest {
 
     private AuthenticationManagerStandard authenticationManager;
 
-    private IsisConfiguration mockConfiguration;
     private RandomCodeGenerator mockRandomCodeGenerator;
     private Authenticator mockAuthenticator;
     private AuthenticationSession mockAuthSession;
 
     @Before
     public void setUp() throws Exception {
-        mockConfiguration = mockery.mock(IsisConfiguration.class);
         mockRandomCodeGenerator = mockery.mock(RandomCodeGenerator.class);
         mockAuthenticator = mockery.mock(Authenticator.class);
         mockAuthSession = mockery.mock(AuthenticationSession.class);
 
-        authenticationManager = new AuthenticationManagerStandard(mockConfiguration);
+        authenticationManager = new AuthenticationManagerStandard();
         authenticationManager.addAuthenticator(mockAuthenticator);
         authenticationManager.setRandomCodeGenerator(mockRandomCodeGenerator);
 

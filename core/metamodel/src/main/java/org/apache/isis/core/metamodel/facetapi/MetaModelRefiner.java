@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facetapi;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
@@ -34,6 +33,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 public interface MetaModelRefiner extends MetaModelValidatorRefiner {
 
     @Programmatic
-    void refineProgrammingModel(ProgrammingModel programmingModel, IsisConfiguration configuration);
+    void refineProgrammingModel(ProgrammingModel programmingModel);
 
 }

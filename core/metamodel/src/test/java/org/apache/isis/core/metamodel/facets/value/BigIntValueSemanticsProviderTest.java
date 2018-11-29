@@ -19,19 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.math.BigInteger;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -44,12 +44,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         bigInt = new BigInteger("132199");
         allowMockAdapterToReturn(bigInt);
 
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.value.format.int");
-                will(returnValue(null));
-            }
-        });
+        _Config.put("isis.value.format.int", null);
 
         holder = new FacetHolderImpl();
         setValue(new BigIntegerValueSemanticsProvider(holder, mockServicesInjector));

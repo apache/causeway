@@ -19,21 +19,19 @@
 
 package org.apache.isis.core.commons.components;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public abstract class InstallerAbstract implements Installer {
 
     // -- constructor, fields
 
     private final String name;
-    private final IsisConfiguration isisConfiguration;
 
     /**
      * Subclasses should pass in the type defined as a constant in the
@@ -45,11 +43,8 @@ public abstract class InstallerAbstract implements Installer {
      * <tt>PersistenceMechanismInstaller</tt> should pass this constant value up
      * to this constructor.
      */
-    public InstallerAbstract(
-            final String name,
-            final IsisConfiguration isisConfiguration) {
+    public InstallerAbstract(final String name) {
         this.name = name;
-        this.isisConfiguration = isisConfiguration;
     }
 
 
@@ -57,11 +52,6 @@ public abstract class InstallerAbstract implements Installer {
     public String getName() {
         return name;
     }
-
-    public IsisConfiguration getConfiguration() {
-        return isisConfiguration;
-    }
-
 
     // -- init, shutdown
 

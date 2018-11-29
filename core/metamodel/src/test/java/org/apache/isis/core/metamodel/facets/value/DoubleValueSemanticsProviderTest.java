@@ -19,17 +19,17 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.doubles.DoubleWrapperValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -39,13 +39,8 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
     @Before
     public void setUpObjects() throws Exception {
-
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.value.format.double");
-                will(returnValue(null));
-            }
-        });
+        
+        _Config.put("isis.value.format.double", null);
 
         holder = new FacetHolderImpl();
         setValue(new DoubleWrapperValueSemanticsProvider(holder, mockServicesInjector));

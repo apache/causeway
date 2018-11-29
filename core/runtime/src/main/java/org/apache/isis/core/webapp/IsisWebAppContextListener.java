@@ -31,11 +31,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.commons.config.NotFoundPolicy;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.config.AppConfigLocator;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.NotFoundPolicy;
+import org.apache.isis.config.IsisConfiguration.ContainsPolicy;
+import org.apache.isis.config.builder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.webapp.modules.WebModule;
+import org.apache.isis.core.webapp.modules.WebModuleContext;
 
 import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 import static org.apache.isis.commons.internal.resources._Resources.putContextPathIfPresent;
@@ -74,30 +77,27 @@ public class IsisWebAppContextListener implements ServletContextListener {
         // IsisWicketApplication#init() or others that better know what ClassLoader to use as application default.
         _Context.setDefaultClassLoader(Thread.currentThread().getContextClassLoader(), false);
         
+        _Context.putSingleton(ServletContext.class, servletContext);
+        
         putContextPathIfPresent(servletContext.getContextPath());
         
-        final IsisWebAppConfigProvider configProvider = IsisWebAppConfigProvider.registerInstanceIfAbsent();
-
-        final IsisConfigurationBuilder isisConfigurationBuilder =
-                IsisWebAppConfigProvider.getInstance().getConfigurationBuilder(servletContext);
-        isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
+        @SuppressWarnings("unused") // finalize the config (build and regard immutable)
+        IsisConfiguration isisConfiguration = AppConfigLocator.getAppConfig().isisConfiguration();
         
-        IsisContext.EnvironmentPrimer.primeEnvironment(isisConfigurationBuilder.getConfiguration());
+        //[2039] environment priming no longer suppoerted
+        //_Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
 
+        final WebModuleContext webModuleContext = new WebModuleContext(servletContext);
+        
         final List<WebModule> webModules =
                  WebModule.discoverWebModules()
-                 .peek(module->module.prepare(servletContext)) // prepare context
+                 .peek(module->module.prepare(webModuleContext)) // prepare context
                  .collect(Collectors.toList());
 
-        // put the list of viewer names "isis.viewers" into a context parameter
-        WebModule.ContextUtil.commitViewers(servletContext);
-        // invalidate config such that next IsisConfigurationBuilder that gets obtained is reinitialized
-        configProvider.invalidate();  
-        
         LOG.info("=== PHASE 2 === Initializing the ServletContext");
         
         webModules.stream()
-        .filter(module->module.isApplicable(servletContext)) // filter those WebModules that are applicable
+        .filter(module->module.isApplicable(webModuleContext)) // filter those WebModules that are applicable
         .forEach(module->addListener(servletContext, module));
         
         activeListeners.forEach(listener->listener.contextInitialized(event));
@@ -109,7 +109,7 @@ public class IsisWebAppContextListener implements ServletContextListener {
             final IsisConfigurationBuilder isisConfigurationBuilder) {
         final String resourceName = 
                 IsisContext.getEnvironment().getDeploymentType().name().toLowerCase() + ".properties";
-        isisConfigurationBuilder.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE, IsisConfigurationDefault.ContainsPolicy.IGNORE);
+        isisConfigurationBuilder.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE, ContainsPolicy.IGNORE);
     }
 
     @Override

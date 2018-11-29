@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -38,7 +37,6 @@ implements PropertyOrCollectionAccessorFacet {
     private final ObjectSpecification onType;
     private final ObjectAdapterProvider adapterProvider;
     private final SpecificationLoader specificationLoader;
-    private final IsisConfiguration configuration;
     private final AuthenticationSessionProvider authenticationSessionProvider;
 
     public static Class<? extends Facet> type() {
@@ -48,7 +46,6 @@ implements PropertyOrCollectionAccessorFacet {
     public PropertyOrCollectionAccessorFacetAbstract(
             final ObjectSpecification onType,
             final FacetHolder holder,
-            final IsisConfiguration configuration,
             final SpecificationLoader specificationLoader,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final ObjectAdapterProvider adapterProvider) {
@@ -56,7 +53,6 @@ implements PropertyOrCollectionAccessorFacet {
         this.onType = onType;
         this.adapterProvider = adapterProvider;
         this.specificationLoader = specificationLoader;
-        this.configuration = configuration;
         this.authenticationSessionProvider = authenticationSessionProvider;
     }
 
@@ -77,10 +73,6 @@ implements PropertyOrCollectionAccessorFacet {
 
     protected SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
-    }
-
-    protected IsisConfiguration getConfiguration() {
-        return configuration;
     }
 
     public AuthenticationSession getAuthenticationSession() {

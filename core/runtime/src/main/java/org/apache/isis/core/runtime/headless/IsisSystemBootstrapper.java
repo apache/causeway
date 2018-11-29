@@ -27,14 +27,14 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
-import org.apache.isis.applib.AppManifestAbstract2;
-import org.apache.isis.applib.Module;
 import org.apache.isis.applib.fixtures.TickingFixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.runtime.headless.logging.LeveledLogger;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -47,40 +47,28 @@ public class IsisSystemBootstrapper {
     /**
      * The {@link AppManifest2} used to bootstrap the {@link IsisSystem} (on the thread-local)
      */
-    private static ThreadLocal<AppManifest2> isftAppManifest = new ThreadLocal<>();
+    private static ThreadLocal<AppManifest> isftAppManifest = new ThreadLocal<>();
 
-
-    private final AppManifest2 appManifest2;
+    private final IsisConfiguration isisConfiguration;
     private final LeveledLogger logger;
-
-    public IsisSystemBootstrapper(
-            final LogConfig logConfig,
-            final Module module) {
-        this(logConfig, AppManifestAbstract2.Builder.forModule(module).build());
+    
+    public static IsisSystemBootstrapper of(LogConfig logConfig, IsisConfiguration isisConfiguration) {
+        return new IsisSystemBootstrapper(logConfig, isisConfiguration);
     }
-
-    public IsisSystemBootstrapper(
+    
+    private IsisSystemBootstrapper(
             final LogConfig logConfig,
-            final AppManifest2 appManifest2) {
+            final IsisConfiguration isisConfiguration) {
+        
+        Ensure.ensure("Should have an IsisConfiguration!", isisConfiguration!=null);
+        Ensure.ensure("Should have an AppManifest!", isisConfiguration.getAppManifest()!=null);
 
-        this.appManifest2 = appManifest2;
+        this.isisConfiguration = isisConfiguration;
         this.logger = new LeveledLogger(LOG, logConfig.getTestLoggingLevel());
     }
 
-    public AppManifest2 getAppManifest2() {
-        return appManifest2;
-    }
-
-    /**
-     * Corresponding to {@link AppManifest2} provided in {@link #IsisSystemBootstrapper(LogConfig, AppManifest2)}, or
-     * (equivalently) the {@link Module} provided directly in {@link #IsisSystemBootstrapper(LogConfig, Module)}.
-     */
-    public Module getModule() {
-        return appManifest2.getModule();
-    }
-
     public IsisSystem bootstrapIfRequired() {
-        bootstrapUsing(appManifest2);
+        bootstrapUsingConfig();
 
         return IsisSystem.get();
     }
@@ -95,9 +83,9 @@ public class IsisSystemBootstrapper {
     }
 
 
-    private void bootstrapUsing(AppManifest2 appManifest2) {
+    private void bootstrapUsingConfig() {
 
-        final SystemState systemState = determineSystemState(appManifest2);
+        final SystemState systemState = determineSystemState(isisConfiguration.getAppManifest());
         switch (systemState) {
 
         case BOOTSTRAPPED_SAME_MODULES:
@@ -114,7 +102,7 @@ public class IsisSystemBootstrapper {
         case NOT_BOOTSTRAPPED:
 
             long t0 = System.currentTimeMillis();
-            setupSystem(appManifest2);
+            setupSystem(isisConfiguration);
             long t1 = System.currentTimeMillis();
 
             log("##########################################################################");
@@ -146,19 +134,17 @@ public class IsisSystemBootstrapper {
         return m1Modules.containsAll(m2Modules) && m2Modules.containsAll(m1Modules);
     }
 
-    private static IsisSystem setupSystem(final AppManifest2 appManifest2) {
+    private static IsisSystem setupSystem(IsisConfiguration isisConfiguration) {
 
         final IsisSystem isft =
-                IsisSystem.builder()
-                    .with(appManifest2)
-                    .build();
+                IsisSystem.ofConfiguration(isisConfiguration);
 
         isft.setUpSystem();
 
         // save both the system and the manifest
         // used to bootstrap the system onto thread-local
         IsisSystem.set(isft);
-        isftAppManifest.set(appManifest2);
+        isftAppManifest.set(isisConfiguration.getAppManifest());
 
         return isft;
     }

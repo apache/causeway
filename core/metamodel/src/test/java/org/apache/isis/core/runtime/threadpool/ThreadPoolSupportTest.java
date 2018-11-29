@@ -50,9 +50,6 @@ class ThreadPoolSupportTest {
     
     @Test
     void shouldPreserveSequence_whenNoThread() {
-        
-        System.out.println(""+pool);
-        
         buffer.append("A");
         buffer.append("B");
         buffer.append("C");

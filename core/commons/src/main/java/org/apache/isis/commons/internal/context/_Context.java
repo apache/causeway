@@ -26,11 +26,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironmentPlugin;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.ifPresentElseGet;
 import static org.apache.isis.commons.internal.base._With.ifPresentElseThrow;
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -124,9 +124,21 @@ public final class _Context {
         requires(type, "type");
         requires(factory, "factory");
 
+        final String key = toKey(type);
+        
         // let writes to the map be atomic
         synchronized (singletonMap) {
-            return _Casts.uncheckedCast(singletonMap.computeIfAbsent(toKey(type), __->factory.apply(type)));
+            
+            // Note: cannot just use 'singletonMap.computeIfAbsent(toKey(type), __->factory.apply(type));'
+            // here because it does not allow for modification of singletonMap inside the factory call
+            
+            final T existingIfAny =  _Casts.uncheckedCast(singletonMap.get(key));
+            if(existingIfAny!=null) {
+                return existingIfAny;
+            }
+            final T t = factory.apply(type);
+            singletonMap.put(key, t);
+            return t;
         }
     }
 
@@ -159,6 +171,18 @@ public final class _Context {
         return ifPresentElseThrow(getIfAny(type), onNotFound);
     }
 
+    // -- REMOVAL
+    
+    public static void remove(Class<?> type) {
+        // let writes to the map be atomic
+        synchronized (singletonMap) {
+            singletonMap.remove(toKey(type));
+        }
+        tryClose(type);
+    }
+    
+    // -- CLEARING
+    
     /**
      * Removes any singleton references from the current context. <br/>
      * Any singletons that implement the AutoClosable interface are being closed.
@@ -175,16 +199,8 @@ public final class _Context {
     }
 
     private static void closeAnyClosables(List<Object> objects) {
-        _NullSafe.stream(objects)
-        .filter(singleton->singleton instanceof AutoCloseable)
-        .map(singleton->(AutoCloseable)singleton)
-        .forEach(autoCloseable->{
-            try {
-                autoCloseable.close();
-            } catch (Exception e) {
-                // [ahuber] nothing we can do here, so ignore
-            }
-        });
+        stream(objects)
+        .forEach(_Context::tryClose);
     }
 
     // -- DEFAULT CLASSLOADER
@@ -251,14 +267,30 @@ public final class _Context {
     public static boolean isPrototyping() {
         return getEnvironment().getDeploymentType().isPrototyping();
     }
+    
+    /** framework internal, shortcut for convenience */
+    public static boolean isUnitTesting() {
+        return getEnvironment().isUnitTesting();
+    }
 
     // -- HELPER
 
     private static String toKey(Class<?> type) {
         return type.getName();
     }
-
-
+    
+    private static void tryClose(Object singleton) {
+        if(singleton==null) {
+            return;
+        }
+        if(singleton instanceof AutoCloseable) {
+            try {
+                ((AutoCloseable)singleton).close();
+            } catch (Exception e) {
+                // [ahuber] nothing we can do here, so ignore
+            }
+        }
+    }
 
 
 }

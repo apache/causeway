@@ -33,13 +33,15 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.config.services.view.ConfigurationViewServiceDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -51,7 +53,6 @@ import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactoryMetamodelRefiner;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderDefault2;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.CommandDtoUtils;
@@ -72,16 +73,10 @@ public class IsisSessionFactoryBuilder {
     private final IsisLocaleInitializer localeInitializer;
     private final IsisTimeZoneInitializer timeZoneInitializer;
 
-    public IsisSessionFactoryBuilder(final AppManifest appManifest) {
-        this(new IsisComponentProviderDefault2(appManifest, null), appManifest);
-    }
-
-    public IsisSessionFactoryBuilder(
-            final IsisComponentProvider componentProvider,
-            final AppManifest appManifest) {
+    public IsisSessionFactoryBuilder(final IsisComponentProvider componentProvider) {
 
         this.componentProvider = componentProvider;
-        this.appManifest = appManifest;
+        this.appManifest = componentProvider.getAppManifest();
 
         this.localeInitializer = new IsisLocaleInitializer();
         this.timeZoneInitializer = new IsisTimeZoneInitializer();
@@ -104,7 +99,7 @@ public class IsisSessionFactoryBuilder {
         LOG.info("initialising Isis System");
         LOG.info("working directory: {}", new File(".").getAbsolutePath());
 
-        final IsisConfigurationDefault configuration = componentProvider.getConfiguration();
+        final IsisConfiguration configuration = _Config.getConfiguration();
         LOG.info("resource stream source: {}", configuration.getResourceStreamSource());
 
         localeInitializer.initLocale(configuration);
@@ -124,9 +119,11 @@ public class IsisSessionFactoryBuilder {
             // everything added to ServicesInjector will be able to @javax.inject.Inject'ed
             // the IsisSessionFactory will look up each of these components from the ServicesInjector
 
-            final ServicesInjector servicesInjector = componentProvider.provideServiceInjector(configuration);
-            servicesInjector.addFallbackIfRequired(ConfigurationServiceInternal.class, configuration);
+            final ServicesInjector servicesInjector = componentProvider.provideServiceInjector();
 
+            // ConfigurationService
+            servicesInjector.addFallbackIfRequired(ConfigurationViewService.class, new ConfigurationViewServiceDefault());
+            
             // fixtureScripts
             servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
 
@@ -146,7 +143,7 @@ public class IsisSessionFactoryBuilder {
             servicesInjector.addFallbackIfRequired(SpecificationLoader.class, specificationLoader);
 
             // persistenceSessionFactory
-            final PersistenceSessionFactory persistenceSessionFactory = PersistenceSessionFactory.of(/*configuration*/);
+            final PersistenceSessionFactory persistenceSessionFactory = PersistenceSessionFactory.get(/*configuration*/);
             servicesInjector.addFallbackIfRequired(PersistenceSessionFactory.class, persistenceSessionFactory);
 
 
@@ -207,11 +204,11 @@ public class IsisSessionFactoryBuilder {
                     },
                     new Callable<Object>() {
                         @Override public Object call() {
-                            persistenceSessionFactory.init(configuration);
+                            persistenceSessionFactory.init();
                             return null;
                         }
                         public String toString() {
-                            return "persistenceSessionFactory#init(...)";
+                            return "persistenceSessionFactory#init()";
                         }
                     },
                     new Callable<Object>() {

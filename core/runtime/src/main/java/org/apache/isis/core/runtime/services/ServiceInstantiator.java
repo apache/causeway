@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
@@ -79,24 +78,6 @@ public final class ServiceInstantiator {
 
     // //////////////////////////////////////
 
-
-    /**
-     * initially null, but checked before first use that has been set (through {@link #setConfiguration(org.apache.isis.core.commons.config.IsisConfiguration)}).
-     */
-    private Map<String, String> props;
-
-    public void setConfiguration(IsisConfiguration configuration) {
-        this.props = configuration.asMap();
-    }
-
-    private void ensureInitialized() {
-        if(props == null) {
-            throw new IllegalStateException("IsisConfiguration properties not set on ServiceInstantiator prior to first-use");
-        }
-    }
-
-    // //////////////////////////////////////
-
     public Object createInstance(String type) {
         final Class<?> cls = loadClass(type);
         if(cls == null || cls.isAnonymousClass()) {
@@ -119,7 +100,6 @@ public final class ServiceInstantiator {
     // //////////////////////////////////////
 
     public <T> T createInstance(final Class<T> cls) {
-        ensureInitialized();
         if(cls.isAnnotationPresent(RequestScoped.class)) {
             return instantiateRequestScopedProxy(cls);
         } else {
@@ -241,7 +221,8 @@ public final class ServiceInstantiator {
         if(numParams == 0) {
             MethodExtensions.invoke(postConstructMethod, service);
         } else {
-            MethodExtensions.invoke(postConstructMethod, service, new Object[]{props});
+            //TODO[2039] MethodExtensions.invoke(postConstructMethod, service, new Object[]{props});
+            throw new UnsupportedOperationException("post-construct methods must not take any arguments");
         }
     }
 

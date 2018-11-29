@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.PostConstruct;
@@ -46,7 +45,7 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     @Override
     @Programmatic
     @PostConstruct
-    public void init(Map<String, String> properties) {}
+    public void init() {}
 
     @Override
     @Programmatic

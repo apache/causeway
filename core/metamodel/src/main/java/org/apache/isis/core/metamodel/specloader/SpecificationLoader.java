@@ -31,8 +31,9 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
@@ -42,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFac
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -95,7 +95,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     private final ProgrammingModel programmingModel;
     private final FacetProcessor facetProcessor;
 
-    private final IsisConfiguration configuration;
     private final ServicesInjector servicesInjector;
 
     private final MetaModelValidator metaModelValidator;
@@ -110,12 +109,9 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
 
     public SpecificationLoader(
-            final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
             final MetaModelValidator metaModelValidator,
             final ServicesInjector servicesInjector) {
-
-        this.configuration = configuration;
 
         this.servicesInjector = servicesInjector;
         this.programmingModel = programmingModel;
@@ -217,8 +213,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
             callables.add(callable);
         }
         ThreadPoolSupport threadPoolSupport = ThreadPoolSupport.getInstance();
-        final boolean parallelize =
-                configuration.getBoolean(INTROSPECTOR_PARALLELIZE_KEY, INTROSPECTOR_PARALLELIZE_DEFAULT);
+        final boolean parallelize = _Config.getConfiguration()
+                .getBoolean(INTROSPECTOR_PARALLELIZE_KEY, INTROSPECTOR_PARALLELIZE_DEFAULT);
         List<Future<Object>> futures;
         if(parallelize) {
             futures = threadPoolSupport.invokeAll(callables);
@@ -481,11 +477,10 @@ public class SpecificationLoader implements ApplicationScopedComponent {
         if (FreeStandingList.class.isAssignableFrom(cls)) {
             return new ObjectSpecificationOnStandaloneList(servicesInjector, facetProcessor);
         } else {
-            final ConfigurationServiceInternal configService = servicesInjector.lookupServiceElseFail(
-                    ConfigurationServiceInternal.class);
+
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
                     new FacetedMethodsBuilderContext(
-                            this, facetProcessor, configService);
+                            this, facetProcessor);
 
             final NatureOfService natureOfServiceIfAny = natureOfServiceFrom(cls, fallback);
 
@@ -629,7 +624,7 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     @Programmatic
     public IsisConfiguration getConfiguration() {
-        return configuration;
+        return _Config.getConfiguration();
     }
 
     @Programmatic

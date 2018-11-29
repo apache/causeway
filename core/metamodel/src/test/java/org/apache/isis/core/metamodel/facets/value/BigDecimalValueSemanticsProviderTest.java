@@ -19,19 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.math.BigDecimal;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -42,12 +42,8 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.value.format.decimal");
-                will(returnValue(null));
-            }
-        });
+        
+        _Config.put("isis.value.format.decimal", null);
 
         bigDecimal = new BigDecimal("34132.199");
         allowMockAdapterToReturn(bigDecimal);

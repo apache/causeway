@@ -33,8 +33,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;

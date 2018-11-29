@@ -22,7 +22,6 @@ package org.apache.isis.core.runtime.authorization.standard;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.InstallerAbstract;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 
@@ -30,15 +29,13 @@ public abstract class AuthorizationManagerStandardInstallerAbstract
 extends InstallerAbstract
 implements AuthorizationManagerInstaller {
 
-    public AuthorizationManagerStandardInstallerAbstract(
-            final String name,
-            final IsisConfigurationDefault isisConfiguration) {
-        super(name, isisConfiguration);
+    public AuthorizationManagerStandardInstallerAbstract(final String name) {
+        super(name);
     }
 
     @Override
     public AuthorizationManager createAuthorizationManager() {
-        final AuthorizationManagerStandard authorizationManager = new AuthorizationManagerStandard(getConfiguration());
+        final AuthorizationManagerStandard authorizationManager = new AuthorizationManagerStandard();
         final Authorizor authorizor = createAuthorizor();
         authorizationManager.setAuthorizor(authorizor);
         return authorizationManager;

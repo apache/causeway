@@ -19,18 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortWrapperValueSemanticsProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
 
@@ -40,13 +40,9 @@ public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Before
     public void setUpObjects() throws Exception {
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.value.format.short");
-                will(returnValue(null));
-            }
-        });
 
+        _Config.put("isis.value.format.short", null);
+        
         short1 = Short.valueOf((short) 32);
         allowMockAdapterToReturn(short1);
 

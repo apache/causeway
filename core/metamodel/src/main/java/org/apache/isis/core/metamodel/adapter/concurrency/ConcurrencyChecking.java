@@ -23,7 +23,7 @@ import java.util.concurrent.Callable;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 
 public enum ConcurrencyChecking {
     NO_CHECK,

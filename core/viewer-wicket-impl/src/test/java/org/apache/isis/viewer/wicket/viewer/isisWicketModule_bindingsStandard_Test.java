@@ -27,6 +27,7 @@ import javax.servlet.ServletContext;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Provider;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -37,8 +38,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
@@ -58,9 +59,6 @@ public class isisWicketModule_bindingsStandard_Test {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
-
-    @Mock
-    private IsisConfiguration mockIsisConfiguration;
 
     @Mock
     private ServletContext mockServletContext;
@@ -88,10 +86,12 @@ public class isisWicketModule_bindingsStandard_Test {
 
 	@Before
 	public void setUp() throws Exception {
-		isisWicketModule = new IsisWicketModule(mockServletContext, mockIsisConfiguration);
+	    
+	    _Config.clear();
+		        
+        isisWicketModule = new IsisWicketModule(mockServletContext);
 
         context.checking(new Expectations() {{
-            allowing(mockIsisConfiguration);
             allowing(mockServletContext);
         }});
 
@@ -107,9 +107,15 @@ public class isisWicketModule_bindingsStandard_Test {
 	// -- CONFIGURATION BINDING
 
 	private static class ConfigModule extends AbstractModule {
-		@Override 
+
+        @Override 
 		protected void configure() {
-			bind(IsisConfiguration.class).to(IsisConfigurationDefault.class);
+			bind(IsisConfiguration.class).toProvider(new Provider<IsisConfiguration>() {
+                @Override
+                public IsisConfiguration get() {
+                    return _Config.getConfiguration();
+                }
+            });
 		}
 	}
 

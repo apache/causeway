@@ -41,8 +41,8 @@ public class IsisJdoSupportPlugin5 implements IsisJdoMetamodelPlugin, IsisJdoRun
     }
 
     @Override
-    public PersistenceSessionFactory getPersistenceSessionFactory(/*ConfigurationServiceInternal isisConfiguration*/) {
-        return new PersistenceSessionFactory5(/*isisConfiguration*/);
+    public PersistenceSessionFactory getPersistenceSessionFactory() {
+        return new PersistenceSessionFactory5();
     }
 
 }

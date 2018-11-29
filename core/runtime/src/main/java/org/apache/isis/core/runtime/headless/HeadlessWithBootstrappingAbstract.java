@@ -29,7 +29,9 @@ import org.apache.isis.applib.Module;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.runtime.headless.logging.LeveledLogger;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.headless.logging.LogStream;
@@ -71,6 +73,8 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
             final LogConfig logConfig,
             final Module module) {
 
+        IsisSystemEnvironment.setUnitTesting(true);
+         
         this.logConfig = logConfig;
         this.logger = new LeveledLogger(LOG, logConfig.getTestLoggingLevel());
 
@@ -95,8 +99,8 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
                 !_Strings.isNullOrEmpty(moduleFqcn)
                 ? InstanceUtil.createInstance(moduleFqcn, Module.class)
                         : module;
-                this.isisSystemBootstrapper =
-                        new IsisSystemBootstrapper(logConfig, moduleToUse);
+        this.isisSystemBootstrapper =
+                IsisSystemBootstrapper.of(logConfig, IsisConfiguration.buildFromModuleTree(moduleToUse));
     }
 
 

@@ -25,7 +25,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
 
 import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
@@ -36,7 +35,7 @@ import static org.apache.isis.commons.internal.exceptions._Exceptions.unexpected
 
 /**
  * Package private mixin for WebModule implementing WebModule.
- * @since 2.0.0
+ * @since 2.0.0-M2
  */
 final class WebModule_Wicket implements WebModule  {
 
@@ -55,28 +54,26 @@ final class WebModule_Wicket implements WebModule  {
     }
     
     @Override
-    public void prepare(ServletContext ctx) {
+    public void prepare(WebModuleContext ctx) {
         
         if(!isAvailable()) {
             return;
         }
 
-        final IsisWebAppConfigProvider configProvider = IsisWebAppConfigProvider.getInstance();
         pathConfigValue = 
-                configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.basePath", "/wicket");
+                ctx.getConfiguration().getString("isis.viewer.wicket.basePath", "/wicket");
         
-        {
-            deploymentMode = _Context.isPrototyping()
-                    ? "development" : "deployment";
-        }
+        deploymentMode = _Context.isPrototyping()
+                    ? "development" 
+                            : "deployment";
         
         appConfigValue = 
-                configProvider.peekAtOrDefault(ctx, "isis.viewer.wicket.app",
+                ctx.getConfiguration().getString("isis.viewer.wicket.app",
                         "org.apache.isis.viewer.wicket.viewer.IsisWicketApplication");
         
-        ContextUtil.registerBootstrapper(ctx, this);
-        ContextUtil.registerViewer(ctx, "wicket");
-        ContextUtil.registerProtectedPath(ctx, suffix(prefix(pathConfigValue, "/"), "/") + "*" );
+        ctx.setHasBootstrapper();
+        ctx.addViewer("wicket");
+        ctx.addProtectedPath(suffix(prefix(pathConfigValue, "/"), "/") + "*");
     }
 
     @Override
@@ -107,7 +104,7 @@ final class WebModule_Wicket implements WebModule  {
     }
 
     @Override
-    public boolean isApplicable(ServletContext ctx) {
+    public boolean isApplicable(WebModuleContext ctx) {
         return isAvailable();
     }
 

@@ -22,9 +22,9 @@ package org.apache.isis.core.metamodel.facets.collections.layout.annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
 import java.util.SortedSet;
-import org.apache.isis.commons.internal.collections._Sets;
+
 import org.apache.isis.applib.annotation.CollectionLayout;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -40,15 +40,9 @@ import static org.junit.Assert.assertThat;
 public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public void testCollectionLayoutAnnotationNamed() {
-        final CollectionLayoutFacetFactory facetFactory = new CollectionLayoutFacetFactory() {
-            @Override protected IsisConfiguration getConfiguration() {
-                return stubConfiguration;
-            }
-        };
-
+        final CollectionLayoutFacetFactory facetFactory = new CollectionLayoutFacetFactory();
 
         class Customer {
-            @SuppressWarnings("unused")
             @CollectionLayout(named = "1st names")
             public SortedSet<String> getFirstNames() {
                 return _Sets.newTreeSet();
@@ -66,14 +60,9 @@ public class NamedFacetForCollectionLayoutAnnotationFactoryTest extends Abstract
     }
 
     public void testCollectionLayoutAnnotationNamedEscapedFalse() {
-        final CollectionLayoutFacetFactory facetFactory = new CollectionLayoutFacetFactory() {
-            @Override protected IsisConfiguration getConfiguration() {
-                return stubConfiguration;
-            }
-        };
+        final CollectionLayoutFacetFactory facetFactory = new CollectionLayoutFacetFactory();
 
         class Customer {
-            @SuppressWarnings("unused")
             @CollectionLayout(named = "1st names", namedEscaped = false)
             public Set<String> getFirstNames() {
                 return _Sets.newTreeSet();

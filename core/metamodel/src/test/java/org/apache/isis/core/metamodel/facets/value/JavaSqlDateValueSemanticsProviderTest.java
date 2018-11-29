@@ -25,10 +25,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -45,12 +45,8 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Before
     public void setUpObjects() throws Exception {
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.value.format.date");
-                will(returnValue(null));
-            }
-        });
+        
+        _Config.put("isis.value.format.date", null);
 
         TestClock.initialize();
         date = new Date(0);

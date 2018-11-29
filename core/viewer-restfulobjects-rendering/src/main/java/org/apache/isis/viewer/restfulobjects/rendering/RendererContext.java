@@ -23,8 +23,8 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.services.ServicesInjector;

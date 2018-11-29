@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
@@ -29,13 +29,14 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class ValueFacetAnnotation extends ValueFacetAbstract {
 
-    private static String semanticsProviderName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
+    private static String semanticsProviderName(final Class<?> annotatedClass) {
         final Value annotation = annotatedClass.getAnnotation(Value.class);
         final String semanticsProviderName = annotation.semanticsProviderName();
         if (!_Strings.isNullOrEmpty(semanticsProviderName)) {
             return semanticsProviderName;
         }
-        return ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(annotatedClass, configuration);
+        return ValueSemanticsProviderUtil
+                .semanticsProviderNameFromConfiguration(annotatedClass, _Config.getConfiguration());
     }
 
     private static Class<?> semanticsProviderClass(final Class<?> annotatedClass) {
@@ -43,12 +44,24 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
         return annotation.semanticsProviderClass();
     }
 
-    public ValueFacetAnnotation(final Class<?> annotatedClass, final FacetHolder holder, final ServicesInjector context) {
-        this(semanticsProviderName(annotatedClass, context.getConfigurationServiceInternal()), semanticsProviderClass(annotatedClass), holder, context);
+    public ValueFacetAnnotation(
+            final Class<?> annotatedClass, 
+            final FacetHolder holder, 
+            final ServicesInjector injector) {
+        
+        this(semanticsProviderName(annotatedClass), 
+                semanticsProviderClass(annotatedClass), holder, injector);
     }
 
-    private ValueFacetAnnotation(final String candidateSemanticsProviderName, final Class<?> candidateSemanticsProviderClass, final FacetHolder holder, final ServicesInjector context) {
-        super(ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(candidateSemanticsProviderClass, candidateSemanticsProviderName), AddFacetsIfInvalidStrategy.DO_ADD, holder, context);
+    private ValueFacetAnnotation(
+            final String candidateSemanticsProviderName, 
+            final Class<?> candidateSemanticsProviderClass, 
+            final FacetHolder holder, 
+            final ServicesInjector injector) {
+        
+        super(ValueSemanticsProviderUtil
+                .valueSemanticsProviderOrNull(candidateSemanticsProviderClass, candidateSemanticsProviderName), 
+                AddFacetsIfInvalidStrategy.DO_ADD, holder, injector);
     }
 
     /**

@@ -25,9 +25,8 @@ import java.util.stream.Collectors;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -38,8 +37,6 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 
 /**
  * Wraps a plain {@link IsisSessionFactoryBuilder}.
@@ -48,7 +45,7 @@ import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
  *     This is a simplification of <tt>IsisSystemForTest</tt>, removing dependencies on junit and specsupport.
  * </p>
  */
-public class IsisSystem {
+public final class IsisSystem {
 
     // -- getElseNull, get, set
 
@@ -71,85 +68,26 @@ public class IsisSystem {
         ISFT.set(isft);
     }
 
-    // -- Builder
 
-    public static class Builder<T extends Builder<T, S>, S extends IsisSystem> {
-
-        protected AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
-
-        protected IsisConfigurationDefault configuration = new IsisConfigurationDefault();
-
-        protected AppManifest appManifestIfAny;
-
-        public T with(IsisConfiguration configuration) {
-            this.configuration = (IsisConfigurationDefault) configuration;
-            return uncheckedCast(this);
-        }
-
-        public T with(AuthenticationRequest authenticationRequest) {
-            this.authenticationRequest = authenticationRequest;
-            return uncheckedCast(this);
-        }
-
-        public T with(AppManifest appManifest) {
-            this.appManifestIfAny = appManifest;
-            return uncheckedCast(this);
-        }
-
-        public S build() {
-            final IsisSystem isisSystem =
-                    new IsisSystem(
-                            appManifestIfAny,
-                            configuration,
-                            authenticationRequest);
-            return configure(uncheckedCast(isisSystem));
-        }
-
-        protected S configure(final S isisSystem) {
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                @Override
-                public synchronized void run() {
-                    try {
-                        isisSystem.closeSession();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        if(isisSystem.isisSessionFactory != null) {
-                            isisSystem.isisSessionFactory.destroyServicesAndShutdown();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-            return isisSystem;
-        }
-
+    public static IsisSystem ofConfiguration(IsisConfiguration isisConfiguration) {
+        
+        AppManifest appManifest = isisConfiguration.getAppManifest();
+        AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
+        
+        return new IsisSystem(appManifest, authenticationRequest);
     }
-
-    public static <T extends Builder<T, S>, S extends IsisSystem> Builder<T, S> builder() {
-        return new Builder<>();
-    }
-
+    
     // -- constructor, fields
 
-    // these fields 'xxxForComponentProvider' are used to initialize the IsisComponentProvider, but shouldn't be used thereafter.
-    protected final AppManifest appManifestIfAny;
-    protected final IsisConfiguration configurationOverride;
-
+    protected final AppManifest appManifest;
     protected final AuthenticationRequest authenticationRequestIfAny;
     protected AuthenticationSession authenticationSession;
 
 
-    protected IsisSystem(
-            final AppManifest appManifestIfAny,
-            final IsisConfiguration configurationOverride,
+    private IsisSystem(
+            final AppManifest appManifest,
             final AuthenticationRequest authenticationRequestIfAny) {
-        this.appManifestIfAny = appManifestIfAny;
-        this.configurationOverride = configurationOverride;
+        this.appManifest = appManifest;
         this.authenticationRequestIfAny = authenticationRequestIfAny;
     }
 
@@ -180,15 +118,15 @@ public class IsisSystem {
 
         boolean firstTime = isisSessionFactory == null;
         if(firstTime) {
-            componentProvider = new IsisComponentProviderDefault(
-                    appManifestIfAny,
-                    configurationOverride
-                    );
+
+            componentProvider = IsisComponentProvider.builder(appManifest)
+                    .build();
             
-            IsisContext.EnvironmentPrimer.primeEnvironment(configurationOverride);
+            //[2039] environment priming removed 
+            // _Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
 
             final IsisSessionFactoryBuilder isisSessionFactoryBuilder = 
-                    new IsisSessionFactoryBuilder(componentProvider, appManifestIfAny);
+                    new IsisSessionFactoryBuilder(componentProvider);
 
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();
@@ -266,5 +204,6 @@ public class IsisSystem {
         final ServicesInjector servicesInjector = isisSessionFactory.getServicesInjector();
         return servicesInjector.lookupServiceElseFail(serviceClass);
     }
+
 
 }

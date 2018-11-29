@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.services.repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -43,6 +42,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
+import static org.apache.isis.config.internal._Config.getConfiguration;
+
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
@@ -53,8 +54,8 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     @Programmatic
     @PostConstruct
-    public void init(Map<String, String> properties) {
-        final boolean disableAutoFlush = Boolean.parseBoolean(properties.get(KEY_DISABLE_AUTOFLUSH));
+    public void init() {
+        final boolean disableAutoFlush = getConfiguration().getBoolean(KEY_DISABLE_AUTOFLUSH, false);
         this.autoFlush = !disableAutoFlush;
     }
 

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.webserver;
 
-import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.core.webserver.WebServer.StartupMode;
 
 public final class WebServerConstants {

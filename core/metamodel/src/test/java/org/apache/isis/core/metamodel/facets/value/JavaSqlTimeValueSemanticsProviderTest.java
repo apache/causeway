@@ -23,11 +23,11 @@ import java.sql.Time;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
@@ -42,12 +42,8 @@ public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProvide
 
     @Before
     public void setUpObjects() throws Exception {
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString("isis.value.format.time");
-                will(returnValue(null));
-            }
-        });
+        
+        _Config.put("isis.value.format.time", null);
 
         final Calendar c = Calendar.getInstance();
         c.setTimeZone(TimeZone.getTimeZone("GMT"));

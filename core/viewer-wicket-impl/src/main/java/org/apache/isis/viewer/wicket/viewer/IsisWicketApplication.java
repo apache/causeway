@@ -71,17 +71,15 @@ import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
-import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -172,8 +170,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     public static final boolean ENABLE_DEVELOPMENT_UTILITIES_DEFAULT = false;
     public static final BootswatchTheme BOOTSWATCH_THEME_DEFAULT = BootswatchTheme.Flatly;
 
-    private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
-
     /**
      * Convenience locator, down-casts inherited functionality.
      */
@@ -216,7 +212,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     @com.google.inject.Inject
     private WicketViewerSettings settings;
 
-    private IsisConfigurationDefault isisConfiguration;
     private final IsisWicketApplication_Experimental experimental;
 
 
@@ -243,34 +238,15 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
         // this doesn't seem to accomplish anything
         // experimental.addListenerToStripRemovedComponentsFromAjaxTargetResponse();
-
-        // --- prepare the configuration prior to init()
-        
-        isisConfiguration = prepareConfiguration();
         
         super.internalInit();
 
     }
     
-    private IsisConfigurationDefault prepareConfiguration() {
-        
-        final String isisConfigDir = getServletContext().getInitParameter("isis.config.dir");
-        configureLogging(isisConfigDir);
-        
-        final IsisConfigurationBuilder isisConfigurationBuilder = IsisWebAppConfigProvider.getInstance()
-                .getConfigurationBuilder(getServletContext());
-        isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();
-
-        final IsisConfigurationDefault configuration = isisConfigurationBuilder.getConfiguration();
-        
-        return configuration;
-    }
-
     private static AjaxRequestTarget decorate(final AjaxRequestTarget ajaxRequestTarget) {
         ajaxRequestTarget.registerRespondListener( new TargetRespondListenerToResetQueryResultCache() );
         return ajaxRequestTarget;
     }
-
 
     @Override
     public Application setAjaxRequestTargetProvider(Function<Page, AjaxRequestTarget> ajaxRequestTargetProvider) {
@@ -287,18 +263,13 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     @Override
     protected void init() {
         
-        //[ahuber] the implementing class is assumed to be loaded be a class-loader
-        // that's suitable for the entire web-application to use as default.
-        _Context.setDefaultClassLoader(this.getClass().getClassLoader(), true);
+        final IsisConfiguration configuration = _Config.getConfiguration();
         
         List<Future<Object>> futures = null;
         try {
             super.init();
 
             futures = startBackgroundInitializationThreads();
-
-            final IsisConfigurationDefault configuration = requireNonNull(isisConfiguration, 
-                    "Configuration must be prepared prior to init().");
 
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
@@ -311,17 +282,20 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             //
             // create IsisSessionFactory
             //
-            final IsisInjectModule isisModule = newIsisModule(configuration);
-            final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule(isisConfiguration));
+            final Injector injector = Guice.createInjector(
+                    newIsisModule(), 
+                    newIsisWicketModule(configuration));
+            
             initWicketComponentInjection(injector);
-
+            
             injector.injectMembers(this); // populates this.isisSessionFactory
-
+            Ensure.ensure("IsisSessionFactory should have been injected.", this.isisSessionFactory != null);
+            
             if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
                 WebRequestCycleForIsis webRequestCycleForIsis = (WebRequestCycleForIsis) requestCycleListenerForIsis;
                 webRequestCycleForIsis.setPageClassRegistry(pageClassRegistry);
             }
-
+            
             this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
 
             configureSecurity(configuration);
@@ -386,7 +360,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             ThreadPoolSupport.getInstance().join(futures);
         }
 
-        final String themeName = isisConfiguration.getString(
+        final String themeName = configuration.getString(
                 "isis.viewer.wicket.themes.initial", BOOTSWATCH_THEME_DEFAULT.name());
         BootswatchTheme bootswatchTheme;
         try {
@@ -458,8 +432,9 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     }
 
     protected void configureWicketSourcePluginIfNecessary() {
-        final IsisConfigurationDefault configuration = requireNonNull(isisConfiguration, 
-                "Configuration must be prepared prior to init().");
+        final IsisConfiguration configuration = _Config.getConfiguration();
+        requireNonNull(configuration, "Configuration must be prepared prior to init().");
+        
         if(isWicketSourcePluginEnabled(configuration)) {
             configureWicketSourcePlugin();
         }
@@ -523,22 +498,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     /**
      * Factored out for easy (informal) pluggability.
      */
-    protected void configureLogging(String isisConfigDir) {
-        final String loggingPropertiesDir;
-        if(isisConfigDir != null) {
-            loggingPropertiesDir = isisConfigDir;
-        } else {
-            loggingPropertiesDir = getServletContext().getRealPath("/WEB-INF");
-        }
-
-        loggingConfigurer.configureLogging(loggingPropertiesDir, new String[0]);
-    }
-
-    // //////////////////////////////////////
-
-    /**
-     * Factored out for easy (informal) pluggability.
-     */
     protected IRequestCycleListener newWebRequestCycleForIsis() {
         return new WebRequestCycleForIsis();
     }
@@ -547,10 +506,9 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     /**
      * Override if required
-     * @param isisConfiguration
      */
-    protected Module newIsisWicketModule(final IsisConfiguration isisConfiguration) {
-        return new IsisWicketModule(getServletContext(), isisConfiguration);
+    protected Module newIsisWicketModule(IsisConfiguration isisConfiguration) {
+        return new IsisWicketModule(getServletContext());
     }
 
     // //////////////////////////////////////
@@ -612,18 +570,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         setHeaderResponseDecorator(response -> {
             return new ResourceAggregator(new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS"));
         });
-
-        //[ahuber] no longer supported since wicket 8
-        //		setHeaderResponseDecorator(new IHeaderResponseDecorator()
-        //		{
-        //			@Override
-        //			public IHeaderResponse decorate(IHeaderResponse response)
-        //			{
-        //				// use this header resource decorator to load all JavaScript resources in the page
-        //				// footer (after </body>)
-        //				return new JavaScriptFilteredIntoFooterHeaderResponse(response, "footerJS");
-        //			}
-        //		});
     }
 
     // //////////////////////////////////////
@@ -739,8 +685,8 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     
     // //////////////////////////////////////
 
-    protected IsisInjectModule newIsisModule(final IsisConfigurationDefault isisConfiguration) {
-        return new IsisInjectModule(isisConfiguration);
+    protected IsisInjectModule newIsisModule() {
+        return new IsisInjectModule();
     }
 
     // //////////////////////////////////////

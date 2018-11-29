@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.plugins.environment;
 
+import org.apache.isis.commons.internal.base._Lazy;
+
 /**
  * Represents configuration, that is available in an early phase of bootstrapping. 
  * It is regarded immutable for an application's life-cycle.
@@ -29,6 +31,7 @@ public interface IsisSystemEnvironment {
     // -- INTERFACE
     
     public DeploymentType getDeploymentType();
+    public boolean isUnitTesting();
     
     // -- FACTORIES
     
@@ -36,15 +39,46 @@ public interface IsisSystemEnvironment {
         return DEFAULT;
     }
     
-    public static IsisSystemEnvironment of(DeploymentType deploymentType) {
-        return ()->deploymentType;        
-    }
+    // -- INIT
 
+    /**
+     * For framework internal unit tests.<p>
+     * Let the framework know what context we are running on.
+     * Must be set prior to configuration bootstrapping.
+     * @param isUnitTesting
+     */
+    public static void setUnitTesting(boolean isUnitTesting) {
+        System.setProperty("UNITTESTING", ""+isUnitTesting);
+    }
+    
+    /**
+     * To set the framework's deployment-type programmatically.<p>
+     * Must be set prior to configuration bootstrapping.
+     * @param isPrototyping
+     */
+    public static void setPrototyping(boolean isPrototyping) {
+        System.setProperty("PROTOTYPING", ""+isPrototyping);
+    }
+    
     // -- DEFAULT IMPLEMENTATION
     
     public static final IsisSystemEnvironment DEFAULT = new IsisSystemEnvironment() {
+        
         @Override
         public DeploymentType getDeploymentType() {
+            return deploymentType.get();
+        }
+
+        @Override
+        public boolean isUnitTesting() {
+            return "true".equalsIgnoreCase(System.getProperty("UNITTESTING"));
+        }
+        
+        // -- HELPER
+        
+        private _Lazy<DeploymentType> deploymentType = _Lazy.threadSafe(this::decideDeploymentType); 
+        
+        private DeploymentType decideDeploymentType() {
             boolean anyVoteForPrototyping = false;
             boolean anyVoteForProduction = false;
             
@@ -78,6 +112,8 @@ public interface IsisSystemEnvironment {
             
             return deploymentType;
         }
+
+        
     };
         
     

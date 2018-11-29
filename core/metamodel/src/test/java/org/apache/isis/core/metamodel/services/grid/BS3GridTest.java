@@ -140,7 +140,7 @@ public class BS3GridTest {
         final String schemaLocations = gridServiceDefault.tnsAndSchemaLocation(bs3Grid);
         String xml = jaxbService.toXml(bs3Grid,
                 _Maps.unmodifiable(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
-        System.out.println(xml);
+        println(xml);
 
         BS3Grid bs3Pageroundtripped = jaxbService.fromXml(BS3Grid.class, xml);
         String xmlRoundtripped = jaxbService.toXml(bs3Pageroundtripped,
@@ -148,7 +148,7 @@ public class BS3GridTest {
         assertThat(xml, is(equalTo(xmlRoundtripped)));
 
 
-        System.out.println("==========");
+        println("==========");
 
         dumpXsd(bs3Grid);
     }
@@ -156,8 +156,13 @@ public class BS3GridTest {
     protected void dumpXsd(final BS3Grid bs3Page) {
         Map<String, String> schemas = jaxbService.toXsd(bs3Page, JaxbService.IsisSchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
-            System.out.println(entry.getKey() + ":");
-            System.out.println(entry.getValue());
+            println(entry.getKey() + ":");
+            println(entry.getValue());
         }
     }
+    
+    private void println(String string) {
+        //for test debugging only
+    }
+    
 }

@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.spec.Specification;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -101,11 +102,16 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             allowing(mockSpecificationLoader).loadSpecification(returnType);
             will(returnValue(mockReturnTypeSpec));
+            
+            allowing(mockTypeSpec).getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
+            will(returnValue(null));
+            
         }});
     }
 
     @Before
     public void setUp() throws Exception {
+        _Config.clear();
         facetFactory = new PropertyAnnotationFacetFactory();
         facetFactory.setServicesInjector(mockServicesInjector);
     }
@@ -119,7 +125,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
         private void addGetterFacet(final FacetHolder holder) {
             FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(mockOnType, holder,
-                    mockConfiguration,
                     mockSpecificationLoader, 
                     mockAuthenticationSessionProvider,
                     mockPersistenceSessionServiceInternal
@@ -341,6 +346,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
             }
 
             // given
+            _Config.put("isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault", true);
+            
             final Class<?> cls = Customer.class;
             propertyMethod = findMethod(Customer.class, "getName");
 
@@ -350,13 +357,6 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
 
             // expect
             allowingLoadSpecificationRequestsFor(cls, propertyMethod.getReturnType());
-            context.checking(new Expectations() {{
-                oneOf(mockConfiguration).getBoolean("isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault", true);
-                will(returnValue(true));
-
-                allowing(mockTypeSpec).getFacet(PropertyDomainEventDefaultFacetForDomainObjectAnnotation.class);
-                will(returnValue(null));
-            }});
 
             // when
             final FacetFactory.ProcessMethodContext processMethodContext = new FacetFactory.ProcessMethodContext(cls, null,

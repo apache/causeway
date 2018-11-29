@@ -172,7 +172,7 @@ class Generation {
 //                        objectSpecification.getCorrespondingClass().getName())
 //                .toSortedList(Ordering.natural());
 //        final String all = Joiner.on(",").join(specs);
-//        System.out.println(all);
+//        System .out.println(all);
 //    }
 
     void appendObjectPathsAndDefinitions() {

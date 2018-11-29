@@ -18,8 +18,6 @@
  */
 package org.apache.isis.core.runtime.services.i18n.po;
 
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -33,6 +31,8 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.internal.context._Context;
+
+import static org.apache.isis.config.internal._Config.getConfiguration;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -58,9 +58,9 @@ public class TranslationServicePo implements TranslationService {
 
     @Programmatic
     @PostConstruct
-    public void init(final Map<String,String> config) {
+    public void init() {
 
-        final String translationMode = config.get(KEY_PO_MODE);
+        final String translationMode = getConfiguration().getString(KEY_PO_MODE);
 
         final boolean translationDisabled = TranslationService.Mode.DISABLED.matches(translationMode);
         if(translationDisabled) {

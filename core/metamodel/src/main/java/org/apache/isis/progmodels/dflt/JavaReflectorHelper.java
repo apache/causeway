@@ -21,10 +21,6 @@ package org.apache.isis.progmodels.dflt;
 
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -33,14 +29,12 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 
 public final class JavaReflectorHelper  {
-
-    @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(JavaReflectorHelper.class);
+    
+    //private static final Logger LOG = LoggerFactory.getLogger(JavaReflectorHelper.class);
 
     private JavaReflectorHelper(){}
 
     public static SpecificationLoader createObjectReflector(
-            final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
             final Collection<MetaModelRefiner> metaModelRefiners,
             final MetaModelValidator mmv,
@@ -48,13 +42,13 @@ public final class JavaReflectorHelper  {
 
         MetaModelValidatorComposite metaModelValidator = MetaModelValidatorComposite.asComposite(mmv);
         for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
-            metaModelRefiner.refineProgrammingModel(programmingModel, configuration);
-            metaModelRefiner.refineMetaModelValidator(metaModelValidator, configuration);
+            metaModelRefiner.refineProgrammingModel(programmingModel);
+            metaModelRefiner.refineMetaModelValidator(metaModelValidator);
         }
 
-        programmingModel.refineMetaModelValidator(metaModelValidator, configuration);
+        programmingModel.refineMetaModelValidator(metaModelValidator);
 
-        return new SpecificationLoader(configuration, programmingModel, metaModelValidator, servicesInjector);
+        return new SpecificationLoader(programmingModel, metaModelValidator, servicesInjector);
     }
 
 }

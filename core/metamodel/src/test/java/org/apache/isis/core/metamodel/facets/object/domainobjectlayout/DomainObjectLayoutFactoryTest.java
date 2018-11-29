@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
@@ -56,6 +57,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     
     @Before
     public void setUp() throws Exception {
+        _Config.clear();
         facetFactory = new DomainObjectLayoutFacetFactory();
         facetFactory.setServicesInjector(mockServicesInjector);
     }
@@ -106,7 +108,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                _Config.clear();
             }
 
             @Test
@@ -143,6 +145,11 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
         }
 
         public static class ForViewModelLayout extends Bookmarking {
+            
+            @Before
+            public void setUp2() throws Exception {
+                _Config.clear();
+            }
 
             @Test
             public void whenSpecified() {
@@ -189,11 +196,12 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                _Config.clear();
             }
 
             @Before
             public void setUp() throws Exception {
+                _Config.clear();
                 super.setUp();
             }
 
@@ -222,7 +230,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
-                assertNull(facet);
+                assertNotNull(facet);
 
                 expectNoMethodsRemoved();
             }
@@ -272,7 +280,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                _Config.clear();
             }
 
 
@@ -353,7 +361,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                _Config.clear();
             }
 
             @Test
@@ -431,7 +439,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                _Config.clear();
             }
 
             @Test
@@ -509,7 +517,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                _Config.clear();
             }
 
             @Test
@@ -587,7 +595,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp2() throws Exception {
-                context.ignoring(mockConfiguration);
+                _Config.clear();
             }
 
             @Test

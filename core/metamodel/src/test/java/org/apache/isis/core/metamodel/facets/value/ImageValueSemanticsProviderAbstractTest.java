@@ -19,23 +19,22 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
-import static org.junit.Assert.assertEquals;
-
 import java.awt.Image;
 
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal;
-import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemanticsProviderAbstract;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.junit.Assert.assertEquals;
 
 public class ImageValueSemanticsProviderAbstractTest {
 
@@ -49,18 +48,12 @@ public class ImageValueSemanticsProviderAbstractTest {
     private ServicesInjector mockServicesInjector;
 
     @Mock
-    private ConfigurationServiceInternal mockConfiguration;
+    private IsisConfiguration mockConfiguration;
 
     private TestImageSemanticsProvider adapter;
 
     @Before
     public void setUp() throws Exception {
-
-        context.checking(new Expectations() {{
-            allowing(mockServicesInjector).getConfigurationServiceInternal();
-            will(returnValue(mockConfiguration));
-
-        }});
 
         adapter = new TestImageSemanticsProvider(mockFacetHolder, mockServicesInjector);
     }

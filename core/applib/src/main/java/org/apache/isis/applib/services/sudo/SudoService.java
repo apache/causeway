@@ -22,8 +22,8 @@ package org.apache.isis.applib.services.sudo;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.user.UserService;
 
 /**
  * Intended only for use by fixture scripts and integration tests, allows a block of code to execute

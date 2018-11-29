@@ -19,13 +19,15 @@
 package domainapp.application;
 
 import org.apache.isis.applib.AppManifestAbstract2;
+import org.apache.isis.config.AppConfig;
+import org.apache.isis.config.IsisConfiguration;
 
 import domainapp.dom.HelloWorldModule;
 
 /**
  * Bootstrap the application.
  */
-public class HelloWorldAppManifest extends AppManifestAbstract2 {
+public class HelloWorldAppManifest extends AppManifestAbstract2 implements AppConfig {
 
     public static final Builder BUILDER = Builder
             .forModule(new HelloWorldModule())
@@ -34,6 +36,12 @@ public class HelloWorldAppManifest extends AppManifestAbstract2 {
 
     public HelloWorldAppManifest() {
         super(BUILDER);
+    }
+
+    // Tells the ServiceLoader which AppManifest to use to bootstrap the IsisConfiguration.
+    @Override
+    public IsisConfiguration isisConfiguration () {
+        return IsisConfiguration.buildFromAppManifest(new HelloWorldAppManifest());
     }
 
 }

@@ -31,6 +31,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.WebAppConstants;
+
 import com.google.common.io.CharSource;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
@@ -40,7 +42,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
-import org.apache.isis.core.webapp.WebAppConstants;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 

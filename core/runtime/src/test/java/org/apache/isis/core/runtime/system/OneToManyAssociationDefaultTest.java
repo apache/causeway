@@ -19,10 +19,6 @@
 
 package org.apache.isis.core.runtime.system;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -33,7 +29,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -48,6 +43,10 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class OneToManyAssociationDefaultTest {
 
@@ -85,18 +84,18 @@ public class OneToManyAssociationDefaultTest {
     private CollectionAddToFacet mockCollectionAddToFacet;
 
     private ServicesInjector stubServicesInjector;
-    private IsisConfigurationDefault stubConfiguration;
 
     private OneToManyAssociation association;
 
     @Before
     public void setUp() {
-        stubConfiguration = new IsisConfigurationDefault();
-        stubServicesInjector = new ServicesInjector(_Lists.of(
+        stubServicesInjector = ServicesInjector.builderForTesting()
+                .addServices(_Lists.of(
                 mockAuthenticationSessionProvider,
                 mockSpecificationLoader,
                 mockMessageService,
-                mockPersistenceSessionServiceInternal), stubConfiguration);
+                mockPersistenceSessionServiceInternal))
+                .build();
 
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();

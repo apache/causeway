@@ -19,15 +19,18 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 import java.util.UUID;
+
+import org.jmock.Expectations;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Bounding;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.services.HasUniqueId;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -51,11 +54,10 @@ import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObj
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.jmock.Expectations;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -63,10 +65,9 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     @Before
     public void setUp() throws Exception {
+        _Config.clear();
         facetFactory = new DomainObjectAnnotationFacetFactory();
-
         facetFactory.setServicesInjector(mockServicesInjector);
-
     }
 
     @After
@@ -88,25 +89,12 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     }
 
     protected void allowingConfigurationToReturn(final String name, final String value) {
-        context.checking(new Expectations() {
-            {
-                allowing(mockConfiguration).getString(name);
-                will(returnValue(value));
-
-                // anything else
-                ignoring(mockConfiguration);
-            }
-        });
+        _Config.put(name, value);
     }
 
     protected void ignoringConfiguration() {
-        context.checking(new Expectations() {
-            {
-                ignoring(mockConfiguration);
-            }
-        });
-    }
 
+    }
 
     public static class Auditing extends DomainObjectAnnotationFacetFactoryTest {
 
@@ -443,7 +431,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
                     will(returnValue(true));
                     
                     // anything else
-                    ignoring(mockConfiguration);
+                    
                 }
             });
             

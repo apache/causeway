@@ -25,18 +25,16 @@ import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.appmanifest.AppManifestProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -71,8 +69,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerExc
 public class IsisSessionFactory
 implements ApplicationScopedComponent, AppManifestProvider {
 
-    @SuppressWarnings("unused")
-    private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactory.class);
+    //private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactory.class);
 
     // -- constructor, fields, accessors
 
@@ -90,7 +87,7 @@ implements ApplicationScopedComponent, AppManifestProvider {
 
         this.servicesInjector = servicesInjector;
 
-        this.configuration = servicesInjector.getConfigurationServiceInternal();
+        this.configuration = _Config.getConfiguration();
         this.specificationLoader = servicesInjector.getSpecificationLoader();
         this.authenticationManager = servicesInjector.getAuthenticationManager();
         this.authorizationManager = servicesInjector.getAuthorizationManager();
@@ -391,18 +388,6 @@ implements ApplicationScopedComponent, AppManifestProvider {
     public ServicesInjector getServicesInjector() {
         return servicesInjector;
     }
-
-    /**
-     * Derived from {@link #getServicesInjector()}.
-     *
-     * @deprecated - use {@link #getServicesInjector()} instead.
-     */
-    @Programmatic
-    @Deprecated
-    public List<Object> getServices() {
-        return servicesInjector.streamServices().collect(Collectors.toList());
-    }
-
 
     /**
      * The {@link ApplicationScopedComponent application-scoped}

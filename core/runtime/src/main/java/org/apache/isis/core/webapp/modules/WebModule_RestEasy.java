@@ -24,7 +24,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
 import org.apache.isis.core.webapp.IsisSessionFilter;
-import org.apache.isis.core.webapp.IsisWebAppConfigProvider;
 
 import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
@@ -57,24 +56,23 @@ final class WebModule_RestEasy implements WebModule  {
     }
     
     @Override
-    public void prepare(ServletContext ctx) {
+    public void prepare(WebModuleContext ctx) {
         
         if(!isApplicable(ctx)) {
             return;
         }
         
         // try to fetch restfulPath from config else fallback to default
-        final String restfulPath = 
-                IsisWebAppConfigProvider.getInstance()
-                .peekAtOrDefault(ctx, KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
+        final String restfulPath = ctx.getConfiguration()
+                .getString(KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
                 
         putRestfulPath(restfulPath);
         
         this.restfulPathConfigValue = restfulPath; // store locally for reuse
         
         // register this module as a viewer
-        ContextUtil.registerViewer(ctx, "restfulobjects");
-        ContextUtil.registerProtectedPath(ctx, suffix(prefix(restfulPath, "/"), "/") + "*" );
+        ctx.addViewer("restfulobjects");
+        ctx.addProtectedPath(suffix(prefix(restfulPath, "/"), "/") + "*" );
     }
 
     @Override
@@ -136,7 +134,7 @@ final class WebModule_RestEasy implements WebModule  {
     }
 
     @Override
-    public boolean isApplicable(ServletContext ctx) {
+    public boolean isApplicable(WebModuleContext ctx) {
         try {
             getDefaultClassLoader().loadClass(RESTEASY_BOOTSTRAPPER);
             return true;

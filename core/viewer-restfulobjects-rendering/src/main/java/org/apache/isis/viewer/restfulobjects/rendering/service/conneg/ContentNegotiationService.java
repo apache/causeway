@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
-import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ws.rs.core.Response;
@@ -35,7 +33,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 public interface ContentNegotiationService {
 
     @PostConstruct
-    public void init(Map<String, String> properties);
+    public void init();
 
     @PreDestroy
     public void shutdown();
