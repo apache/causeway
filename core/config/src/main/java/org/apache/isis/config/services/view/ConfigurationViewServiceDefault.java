@@ -25,6 +25,8 @@ import java.util.TreeSet;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.services.confview.ConfigurationProperty;
+import org.apache.isis.applib.services.confview.ConfigurationViewService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.ConfigurationConstants;

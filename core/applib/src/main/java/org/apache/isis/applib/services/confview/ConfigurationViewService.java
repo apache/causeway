@@ -17,10 +17,19 @@
  *  under the License.
  */
 
-/**
- * The {@link org.apache.isis.config.services.view.ConfigurationViewService} allows domain objects to read the
- * configuration properties aggregated from the various configuration files.
- *
- * @see <a href="http://isis.apache.org/guides/rgsvc/rgsvc.html#_rgsvc_core-domain-api_ConfigurationService">Reference guide</a>
- */
-package org.apache.isis.config.services.view;
+package org.apache.isis.applib.services.confview;
+
+import java.util.Set;
+
+import org.apache.isis.applib.annotation.Programmatic;
+
+public interface ConfigurationViewService {
+
+    /**
+     * Returns all properties, each as an instance of {@link ConfigurationProperty} (a view model).
+     * Mask sensitive values if required.
+     */
+    @Programmatic
+    Set<ConfigurationProperty> allProperties();
+
+}

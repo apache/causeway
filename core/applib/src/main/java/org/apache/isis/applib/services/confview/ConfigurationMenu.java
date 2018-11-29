@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.config.services.view;
+package org.apache.isis.applib.services.confview;
 
 import java.util.Set;
 
