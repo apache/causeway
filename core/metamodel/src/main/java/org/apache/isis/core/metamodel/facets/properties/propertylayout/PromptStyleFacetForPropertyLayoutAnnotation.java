@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.PropertyLayout;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleConfiguration;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;

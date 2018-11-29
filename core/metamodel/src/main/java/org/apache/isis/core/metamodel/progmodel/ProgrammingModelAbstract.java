@@ -24,8 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.builder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactory;

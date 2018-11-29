@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.promptStyle;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 
 
 public class PromptStyleConfiguration {

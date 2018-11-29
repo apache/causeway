@@ -31,7 +31,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.config.WebAppConstants;
+import org.apache.isis.config.WebAppConstants;
 
 import com.google.common.io.CharSource;
 import com.google.common.io.Files;

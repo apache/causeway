@@ -73,7 +73,6 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
 import static org.hamcrest.CoreMatchers.is;

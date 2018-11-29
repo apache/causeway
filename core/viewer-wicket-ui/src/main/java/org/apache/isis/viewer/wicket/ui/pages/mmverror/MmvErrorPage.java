@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.IsisConfiguration;
+
 import com.google.inject.name.Named;
 
 import org.apache.wicket.Application;
@@ -39,7 +41,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 

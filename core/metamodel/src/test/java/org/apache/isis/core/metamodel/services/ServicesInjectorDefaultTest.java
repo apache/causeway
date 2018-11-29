@@ -31,7 +31,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.config.builder.IsisConfigurationBuilder;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 

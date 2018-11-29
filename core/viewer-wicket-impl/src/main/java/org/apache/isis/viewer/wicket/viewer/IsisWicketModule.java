@@ -29,8 +29,8 @@ import com.google.inject.name.Names;
 
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;

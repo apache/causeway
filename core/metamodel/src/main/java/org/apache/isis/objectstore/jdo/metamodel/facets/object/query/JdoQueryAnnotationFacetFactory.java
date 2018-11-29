@@ -24,8 +24,8 @@ import java.util.regex.Pattern;
 import javax.jdo.annotations.Queries;
 import javax.jdo.annotations.Query;
 
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;

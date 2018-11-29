@@ -22,8 +22,8 @@ import java.util.Map;
 import javax.jdo.PersistenceManager;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;

@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;

@@ -26,7 +26,7 @@ import java.util.Map;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;

@@ -26,8 +26,8 @@ import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.builder.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;

@@ -31,8 +31,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;

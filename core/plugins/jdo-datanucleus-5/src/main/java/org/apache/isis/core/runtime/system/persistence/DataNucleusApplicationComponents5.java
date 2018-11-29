@@ -34,8 +34,8 @@ import org.datanucleus.metadata.MetaDataManager;
 import org.datanucleus.store.schema.SchemaAwareStoreManager;
 
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;

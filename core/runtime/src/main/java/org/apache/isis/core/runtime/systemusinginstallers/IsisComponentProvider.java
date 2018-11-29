@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -50,8 +50,6 @@ public final class IsisComponentProvider {
     // -- BUILDER - DEFAULT
     
     public static IsisComponentProviderBuilder builder(AppManifest appManifest) {
-        // ensure we the appmanifest on the config
-        
         return new IsisComponentProviderBuilder()
                 .appManifest(appManifest);
     }

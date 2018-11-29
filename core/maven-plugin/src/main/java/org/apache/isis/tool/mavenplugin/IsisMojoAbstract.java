@@ -32,9 +32,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.config.AppConfigLocator;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;

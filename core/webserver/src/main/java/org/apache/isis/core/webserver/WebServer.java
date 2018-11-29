@@ -32,8 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.ObjectExtensions;

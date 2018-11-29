@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 
 /**
  * A service that sends email notifications when specific events occur

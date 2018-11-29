@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.encodeable;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 

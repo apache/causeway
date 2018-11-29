@@ -19,8 +19,8 @@
 package domainapp.application;
 
 import org.apache.isis.applib.AppManifestAbstract2;
-import org.apache.isis.core.commons.config.AppConfig;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.AppConfig;
+import org.apache.isis.config.IsisConfiguration;
 
 import domainapp.dom.HelloWorldModule;
 

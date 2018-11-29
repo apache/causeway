@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.defaults.annotcfg;
 
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultsProviderUtil;

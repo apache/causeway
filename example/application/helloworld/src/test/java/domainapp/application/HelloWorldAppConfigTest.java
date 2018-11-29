@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.core.commons.config.AppConfigLocator;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.AppConfigLocator;
+import org.apache.isis.config.IsisConfiguration;
 
 class HelloWorldAppConfigTest {
 

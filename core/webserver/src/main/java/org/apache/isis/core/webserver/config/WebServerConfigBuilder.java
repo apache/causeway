@@ -10,12 +10,12 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
-import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.isis.config.resource.ResourceStreamSource;
+import org.apache.isis.config.resource.ResourceStreamSourceContextLoaderClassPath;
+import org.apache.isis.config.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
 

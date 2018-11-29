@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.action.publishing;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.object.domainobject.Util;
 
 public enum PublishActionsConfiguration {

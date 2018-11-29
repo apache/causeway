@@ -32,10 +32,10 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;

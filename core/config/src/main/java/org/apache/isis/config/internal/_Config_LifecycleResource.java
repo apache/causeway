@@ -23,8 +23,8 @@ import java.util.Optional;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.builder.IsisConfigurationBuilder;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 

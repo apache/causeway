@@ -24,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
+import org.apache.isis.config.WebAppConstants;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.WebAppConstants;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.system.context.IsisContext;

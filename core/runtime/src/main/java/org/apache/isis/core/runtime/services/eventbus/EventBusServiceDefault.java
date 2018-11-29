@@ -24,7 +24,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.plugins.eventbus.EventBusPlugin;

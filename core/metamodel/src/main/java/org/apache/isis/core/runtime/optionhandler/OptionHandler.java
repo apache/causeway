@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.optionhandler;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.config.builder.IsisConfigurationBuilder;
 
 public interface OptionHandler extends IsisConfigurationBuilder.Primer {
 

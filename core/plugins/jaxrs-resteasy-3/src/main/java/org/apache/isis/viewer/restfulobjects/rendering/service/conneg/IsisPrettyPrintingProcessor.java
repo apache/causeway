@@ -25,7 +25,7 @@ import org.jboss.resteasy.annotations.DecorateTypes;
 import org.jboss.resteasy.spi.DecoratorProcessor;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 

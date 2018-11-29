@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.runtime.system;
 
-import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;

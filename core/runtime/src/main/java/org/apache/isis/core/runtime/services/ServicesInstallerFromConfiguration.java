@@ -30,8 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstract  {

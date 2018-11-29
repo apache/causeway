@@ -23,8 +23,8 @@ import java.util.stream.Stream;
 import javax.servlet.ServletContext;
 
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 
 /**
  * 

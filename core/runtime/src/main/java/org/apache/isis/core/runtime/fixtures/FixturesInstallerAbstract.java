@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 public abstract class FixturesInstallerAbstract {

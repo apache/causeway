@@ -22,8 +22,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.builder.IsisConfigurationBuilder;
 
 /**
  * @since 2.0.0-M2

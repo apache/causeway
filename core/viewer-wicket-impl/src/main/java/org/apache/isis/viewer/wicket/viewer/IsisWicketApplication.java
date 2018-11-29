@@ -71,9 +71,9 @@ import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;

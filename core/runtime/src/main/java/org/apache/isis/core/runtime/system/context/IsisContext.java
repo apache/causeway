@@ -27,7 +27,8 @@ import java.util.function.Supplier;
 
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
@@ -191,10 +192,6 @@ public interface IsisContext {
         return getSessionFactory().getServicesInjector();
     }
 
-    public static String getVersion() {
-        return "2.0.0-M2";
-    }
-    
     public static StringBuilder dumpConfig() {
         
         final StringBuilder sb = new StringBuilder();
@@ -207,9 +204,11 @@ public interface IsisContext {
             return sb;
         }
 
-        final Map<String, String> map = new TreeMap<>(configuration.asMap());
+        final Map<String, String> map = 
+                ConfigurationConstants.maskIfProtected(configuration.asMap(), TreeMap::new);
 
-        String head = String.format("ISIS %s (%s) ", getVersion(), IsisContext.getEnvironment().getDeploymentType().name());
+        String head = String.format("ISIS %s (%s) ", 
+                IsisConfiguration.getVersion(), getEnvironment().getDeploymentType().name());
         final int fillCount = 46-head.length();
         final int fillLeft = fillCount/2;
         final int fillRight = fillCount-fillLeft;

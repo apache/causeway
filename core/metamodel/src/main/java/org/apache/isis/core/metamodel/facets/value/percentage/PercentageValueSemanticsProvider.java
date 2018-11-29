@@ -26,7 +26,7 @@ import java.text.ParseException;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Percentage;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
