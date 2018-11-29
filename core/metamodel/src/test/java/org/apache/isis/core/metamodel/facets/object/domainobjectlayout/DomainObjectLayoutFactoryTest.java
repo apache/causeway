@@ -23,7 +23,6 @@ import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -202,6 +201,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
 
             @Before
             public void setUp() throws Exception {
+                _Config.clear();
                 super.setUp();
             }
 
@@ -230,7 +230,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
-                assertNull(facet);
+                assertNotNull(facet);
 
                 expectNoMethodsRemoved();
             }
