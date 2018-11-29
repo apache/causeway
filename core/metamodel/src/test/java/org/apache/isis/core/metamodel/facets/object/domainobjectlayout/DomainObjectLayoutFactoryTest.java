@@ -112,7 +112,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 _Config.clear();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenSpecified() {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
@@ -131,7 +131,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 expectNoMethodsRemoved();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenDefaults() {
 
                 final Class<?> cls = CustomerWithDefaults.class;
@@ -205,7 +205,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 super.setUp();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenSpecified() {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
@@ -222,7 +222,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 expectNoMethodsRemoved();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenDefaults() {
 
                 final Class<?> cls = CustomerWithDefaults.class;
@@ -284,7 +284,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             }
 
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenSpecified() {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
@@ -302,7 +302,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 expectNoMethodsRemoved();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenDefaults() {
 
                 final Class<?> cls = CustomerWithDefaults.class;
@@ -364,7 +364,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 _Config.clear();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenSpecified() {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
@@ -381,7 +381,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 expectNoMethodsRemoved();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenDefaults() {
 
                 final Class<?> cls = CustomerWithDefaults.class;
@@ -442,7 +442,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 _Config.clear();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenSpecified() {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
@@ -459,7 +459,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 expectNoMethodsRemoved();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenDefaults() {
 
                 final Class<?> cls = CustomerWithDefaults.class;
@@ -520,7 +520,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 _Config.clear();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenSpecified() {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
@@ -537,7 +537,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 expectNoMethodsRemoved();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenDefaults() {
 
                 final Class<?> cls = CustomerWithDefaults.class;
@@ -598,7 +598,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 _Config.clear();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenSpecified() {
 
                 final Class<?> cls = DomainObjectLayoutFactoryTest.Customer.class;
@@ -615,7 +615,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 expectNoMethodsRemoved();
             }
 
-            @Test @Ignore //FIXME[2039]
+            @Test
             public void whenDefaults() {
 
                 final Class<?> cls = CustomerWithDefaults.class;

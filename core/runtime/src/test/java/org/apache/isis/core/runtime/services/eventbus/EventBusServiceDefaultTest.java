@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isIn;
@@ -36,7 +37,10 @@ public class EventBusServiceDefaultTest {
 
     @Before
     public void setUp() throws Exception {
-        _Config.clear();
+        
+        _Config.clear(); 
+        IsisSystemEnvironment.setUnitTesting(true);
+        
         eventBusService = new EventBusServiceDefault() {
         	{
         		serviceRegistry = new ServiceRegistry() {

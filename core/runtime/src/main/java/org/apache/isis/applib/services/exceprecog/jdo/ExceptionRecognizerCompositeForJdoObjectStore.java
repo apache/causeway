@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.config.internal._Config;
 
 /**
  * Convenience implementation of the {@link ExceptionRecognizer} domain service that
@@ -54,11 +55,10 @@ public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionReco
     @PostConstruct
     public void init() {
         
-//FIXME[2039]        
-//        final boolean disabled = getElseFalse(properties, KEY_DISABLE);
-//        if(disabled) {
-//            return;
-//        }
+        final boolean disabled = _Config.getConfiguration().getBoolean(KEY_DISABLE, false);
+        if(disabled) {
+            return;
+        }
 
         addChildren();
 

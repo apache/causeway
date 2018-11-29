@@ -30,6 +30,7 @@ import org.junit.Before;
 import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -80,7 +81,10 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     protected OneToManyAssociation mockOneToManyAssociation;
     @Mock
     protected OneToOneActionParameter mockOneToOneActionParameter;
-
+    @Mock
+    protected EventBusService mockEventBusService;
+    
+    
     protected FacetedMethod facetedMethod;
     protected FacetedMethodParameter facetedMethodParameter;
 
@@ -116,6 +120,9 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
             allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
             will(returnValue(mockAuthenticationSessionProvider));
 
+            allowing(mockServicesInjector).lookupServiceElseFail(EventBusService.class);
+            will(returnValue(mockEventBusService));
+            
             allowing(mockServicesInjector).getSpecificationLoader();
             will(returnValue(mockSpecificationLoader));
 

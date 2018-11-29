@@ -16,16 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.exceprecog.jdo;
+package org.apache.isis.core.runtime.services.exceprecog.jdo;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.apache.isis.applib.services.exceprecog.jdo.ExceptionRecognizerCompositeForJdoObjectStore;
+import org.apache.isis.config.internal._Config;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-
-import java.util.Collections;
-
-import org.apache.isis.commons.internal.collections._Maps;
-import org.junit.Before;
-import org.junit.Test;
 
 public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
 
@@ -34,6 +34,7 @@ public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
 
     @Before
     public void setUp() throws Exception {
+        _Config.clear();
         
         called = new boolean[1];
         recog = new ExceptionRecognizerCompositeForJdoObjectStore() {
@@ -52,23 +53,26 @@ public class ExceptionRecognizerCompositeForJdoObjectStoreTest {
         assertThat(called[0], is(true));
     }
 
-  //FIXME[2039]    
-//    @Test
-//    public void whenDisabledFlagSetToTrue() throws Exception {
-//        // when
-//        recog.init(_Maps.unmodifiable(ExceptionRecognizerCompositeForJdoObjectStore.KEY_DISABLE, "true"));
-//
-//        // then
-//        assertThat(called[0], is(false));
-//    }
-//
-//    @Test
-//    public void whenDisabledFlagSetToFalse() throws Exception {
-//        // when
-//    	recog.init(_Maps.unmodifiable(ExceptionRecognizerCompositeForJdoObjectStore.KEY_DISABLE, "false"));
-//
-//        // then
-//        assertThat(called[0], is(true));
-//    }
+    
+    @Test
+    public void whenDisabledFlagSetToTrue() throws Exception {
+        
+        // when
+        _Config.put(ExceptionRecognizerCompositeForJdoObjectStore.KEY_DISABLE, true);
+        recog.init();
+
+        // then
+        assertThat(called[0], is(false));
+    }
+
+    @Test
+    public void whenDisabledFlagSetToFalse() throws Exception {
+        // when
+        _Config.put(ExceptionRecognizerCompositeForJdoObjectStore.KEY_DISABLE, false);
+        recog.init();
+
+        // then
+        assertThat(called[0], is(true));
+    }
 
 }
