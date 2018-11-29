@@ -53,7 +53,8 @@ import static org.apache.isis.commons.internal.base._With.requires;
  * {@link ServicesInjector#addFallbackIfRequired(Class, Object)}.
  *
  * <p>
- *     If an integration test is running, then the <code>IsisConfigurationForJdoIntegTests</code> will be used instead.
+ *     If an integration test is running, then the <code>IsisConfigurationForJdoIntegTests</code> 
+ *     will be used instead.
  * </p>
  */
 //[2039] @DomainObject(objectType=...) fixes meta-data validation complaining, otherwise not required ...

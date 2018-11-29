@@ -55,8 +55,10 @@ public class _Config {
     }
     
     /**
+     * Most likely used for testing.
+     * <p>
      * Throws away any configuration resources currently on this life-cycle's context.
-     * Makes a new config builder singleton instance available. Most likely used for testing.
+     * Makes a new config builder singleton instance lazily available. 
      */
     public static void clear() {
         _Context.remove(_Config_LifecycleResource.class);

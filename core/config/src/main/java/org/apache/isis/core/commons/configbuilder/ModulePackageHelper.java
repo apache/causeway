@@ -185,8 +185,8 @@ class ModulePackageHelper {
                 return true;
             }
         }
-        System.out.println("!!! skipping " + className);
-        
+        //TODO [2039] we may need to re-think this policy, there should not be surprising use-cases
+        LOG.warn("Skipping a service for registration because due to not being part of the packagess to include: " + className);
         return false;
     }
 

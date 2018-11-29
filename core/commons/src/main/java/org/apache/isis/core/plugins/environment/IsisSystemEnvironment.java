@@ -52,7 +52,19 @@ public interface IsisSystemEnvironment {
             
         };
     }
+    
+    // -- INIT
 
+    /**
+     * For framework internal unit tests.<p>
+     * Let the framework know what context we are running on.
+     * Must be set prior to configuration bootstrapping.
+     * @param isUnitTesting
+     */
+    public static void setUnitTesting(boolean isUnitTesting) {
+        System.setProperty("UNITTESTING", ""+isUnitTesting);
+    }
+    
     // -- DEFAULT IMPLEMENTATION
     
     public static final IsisSystemEnvironment DEFAULT = new IsisSystemEnvironment() {

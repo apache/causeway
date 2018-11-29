@@ -18,15 +18,12 @@
  */
 package org.apache.isis.core.unittestsupport.jmocking;
 
-import junit.framework.AssertionFailedError;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.apache.isis.commons.internal.base._Casts;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -38,9 +35,14 @@ import org.junit.runners.model.Statement;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
 
+import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
+
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.junit.Assert.fail;
+
+import junit.framework.AssertionFailedError;
 
 
 /**
@@ -67,6 +69,7 @@ public class JUnitRuleMockery2 extends JUnit4Mockery implements MethodRule {
      * Factory method.
      */
     public static JUnitRuleMockery2 createFor(final Mode mode) {
+        IsisSystemEnvironment.setUnitTesting(true);
         final JUnitRuleMockery2 jUnitRuleMockery2 = new JUnitRuleMockery2();
         if (mode == Mode.INTERFACES_AND_CLASSES) {
             jUnitRuleMockery2.setImposteriser(Imposterisers.getDefault());

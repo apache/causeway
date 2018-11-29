@@ -31,6 +31,7 @@ import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.runtime.headless.logging.LeveledLogger;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.headless.logging.LogStream;
@@ -72,10 +73,8 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
             final LogConfig logConfig,
             final Module module) {
 
-        // let the framework know what context we are running on
-        // this system property is looked up by the default implementation of IsisSystemEnvironment
-        System.setProperty("UNITTESTING", "true"); 
-        
+        IsisSystemEnvironment.setUnitTesting(true);
+         
         this.logConfig = logConfig;
         this.logger = new LeveledLogger(LOG, logConfig.getTestLoggingLevel());
 

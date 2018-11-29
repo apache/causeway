@@ -80,19 +80,19 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
         return builder;
     }
     
-    static IsisConfigurationBuilderDefault getDefault() {
+    static IsisConfigurationBuilder getDefault() {
+        
+        if(_Context.isUnitTesting()) {
+            return empty();
+        }
         
         final ResourceStreamSourceChainOfResponsibility chain = createComposite(Arrays.asList(
                 ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY)        
                 ));
         final IsisConfigurationBuilderDefault builder = new IsisConfigurationBuilderDefault(chain);
         
-        final NotFoundPolicy continuePolicy = _Context.isUnitTesting()
-                ? NotFoundPolicy.CONTINUE
-                        : NotFoundPolicy.FAIL_FAST; 
-        
         builder.addDefaultPrimers();
-        builder.addTopLevelDefaultConfigurationResource(continuePolicy);
+        builder.addTopLevelDefaultConfigurationResource();
         builder.addDefaultConfigurationResources();
         
         return builder;
@@ -118,9 +118,9 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
         return composite;
     }
 
-    private void addTopLevelDefaultConfigurationResource(NotFoundPolicy continuePolicy) {
+    private void addTopLevelDefaultConfigurationResource() {
         addConfigurationResource(ConfigurationConstants.DEFAULT_CONFIG_FILE, 
-                continuePolicy, ContainsPolicy.IGNORE);
+                NotFoundPolicy.FAIL_FAST, ContainsPolicy.IGNORE);
     }
 
     private void addDefaultConfigurationResources() {
@@ -341,7 +341,9 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
     @Override
     public IsisConfiguration build() {
 
-        configuration.triggerTypeDiscovery();
+        if(configuration.getAppManifest()!=null) {
+            configuration.triggerTypeDiscovery();
+        }
         
         if (LOG.isDebugEnabled()) {
             dumpResourcesToLog();    
