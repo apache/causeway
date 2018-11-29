@@ -47,7 +47,7 @@ public class IsisSystemBootstrapper {
     /**
      * The {@link AppManifest2} used to bootstrap the {@link IsisSystem} (on the thread-local)
      */
-    private static ThreadLocal<AppManifest2> isftAppManifest = new ThreadLocal<>();
+    private static ThreadLocal<AppManifest> isftAppManifest = new ThreadLocal<>();
 
     private final IsisConfiguration isisConfiguration;
     private final LeveledLogger logger;

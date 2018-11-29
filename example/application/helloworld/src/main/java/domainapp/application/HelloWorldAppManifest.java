@@ -38,7 +38,7 @@ public class HelloWorldAppManifest extends AppManifestAbstract2 implements AppCo
         super(BUILDER);
     }
 
-    // Tells the ServiceLoader which AppManifest to use to bootstrap the Configuration.
+    // Tells the ServiceLoader which AppManifest to use to bootstrap the IsisConfiguration.
     @Override
     public IsisConfiguration isisConfiguration () {
         return IsisConfiguration.buildFromAppManifest(new HelloWorldAppManifest());

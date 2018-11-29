@@ -31,7 +31,7 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.AppManifest2;
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -41,6 +41,8 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationException;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 
 /**
@@ -61,7 +63,7 @@ class IsisConfigurationDefault implements IsisConfiguration {
      * derived lazily from {@link #properties}.
      */
     private Properties applicationProperties;
-    private AppManifest2 appManifest;
+    private AppManifest appManifest;
 
     // ////////////////////////////////////////////////
     // Constructor
@@ -85,11 +87,12 @@ class IsisConfigurationDefault implements IsisConfiguration {
     // ////////////////////////////////////////////////
     
     @Override
-    public AppManifest2 getAppManifest() {
+    public AppManifest getAppManifest() {
         return appManifest;
     }
     
-    public void setAppManifest(AppManifest2 appManifest) {
+    public void setAppManifest(AppManifest appManifest) {
+        requires(appManifest, "appManifest");
         this.appManifest = appManifest;
     }
     

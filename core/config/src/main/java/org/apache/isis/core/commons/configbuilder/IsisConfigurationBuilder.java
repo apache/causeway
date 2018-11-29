@@ -20,7 +20,7 @@ package org.apache.isis.core.commons.configbuilder;
 
 import java.util.List;
 
-import org.apache.isis.applib.AppManifest2;
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.PropertyResource;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -78,7 +78,7 @@ public interface IsisConfigurationBuilder {
      * @param appManifest
      * @since 2.0.0-M2
      */
-    void addAppManifest(AppManifest2 appManifest);
+    void addAppManifest(AppManifest appManifest);
 
     /** internal only **/
     IsisConfiguration build();

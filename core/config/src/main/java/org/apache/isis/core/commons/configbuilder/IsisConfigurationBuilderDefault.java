@@ -28,7 +28,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.AppManifest2;
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifestAbstract2;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.PropertyResource;
@@ -100,7 +100,6 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
         IsisConfigurationBuilderDefault builder = new IsisConfigurationBuilderDefault(chain);
         
         builder.addDefaultPrimers();
-        
         builder.addDefaultConfigurationResources();
         
         return builder;
@@ -297,7 +296,7 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
     }
     
     @Override
-    public void addAppManifest(AppManifest2 appManifest) {
+    public void addAppManifest(AppManifest appManifest) {
         configuration.setAppManifest(appManifest);
         appManifest.getConfigurationProperties().forEach((k, v)->{
             put(k, v);

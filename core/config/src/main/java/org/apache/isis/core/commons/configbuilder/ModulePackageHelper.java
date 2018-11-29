@@ -27,6 +27,9 @@ import java.util.stream.Stream;
 
 import javax.xml.bind.annotation.XmlElement;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
@@ -45,10 +48,14 @@ import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
 import org.apache.isis.core.plugins.classdiscovery.ClassDiscoveryPlugin;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 /**
  * @since 2.0.0-M2
  */
 class ModulePackageHelper {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(ModulePackageHelper.class);
 
     public static int runTypeDiscovery(final AppManifest appManifest) {
         
@@ -77,7 +84,11 @@ class ModulePackageHelper {
     
     private static List<String> findAndRegisterTypes(final AppManifest appManifest) {
         
-        System.out.println("!!!!!!!!!!!!!! findAndRegisterTypes");
+        requires(appManifest, "appManifest");
+        
+        LOG.info(String.format(
+                "Discover the application's domain and register all types using manifest '%s' ...",
+                appManifest.getClass().getName()) );
         
         final AppManifest.Registry registry = AppManifest.Registry.instance();
 

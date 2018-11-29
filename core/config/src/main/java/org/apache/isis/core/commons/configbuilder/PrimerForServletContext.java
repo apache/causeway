@@ -41,15 +41,14 @@ class PrimerForServletContext implements IsisConfigurationBuilder.Primer {
 
     private static final Logger LOG = LoggerFactory.getLogger(PrimerForServletContext.class);
     
-    
     @Override
     public void prime(final IsisConfigurationBuilder builder) {
         final ServletContext servletContext  = _Context.getIfAny(ServletContext.class);
         if(servletContext==null) {
-            System.out.println("!!!! no servlet context to prime from");
+            LOG.info("No servlet context found to prime configuration from.");
             return;
         }
-        System.out.println("!!!! priming from servlet context");
+        LOG.info("Priming configuration from servlet context ...");
         
         asMap(servletContext).forEach((k, v)->builder.put(k, v));
         addServletContextConstants(servletContext, builder);

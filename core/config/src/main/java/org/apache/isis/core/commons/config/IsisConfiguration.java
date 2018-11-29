@@ -22,10 +22,9 @@ package org.apache.isis.core.commons.config;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.applib.AppManifest2;
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.PropertyResource;
 import org.apache.isis.core.commons.configbuilder.IsisConfigurationBuilder;
@@ -94,7 +93,7 @@ public interface IsisConfiguration {
      * @return
      * @since 2.0.0-M2
      */
-    static IsisConfiguration buildFromAppManifest(AppManifest2 appManifest) {
+    static IsisConfiguration buildFromAppManifest(AppManifest appManifest) {
         clear();
         acceptBuilder(builder->{
             builder.addAppManifest(appManifest);
@@ -105,7 +104,7 @@ public interface IsisConfiguration {
     /**
      * @since 2.0.0-M2
      */
-    public AppManifest2 getAppManifest();
+    public AppManifest getAppManifest();
 
     /**
      * Creates a new IsisConfiguration containing the properties starting with
@@ -262,13 +261,6 @@ public interface IsisConfiguration {
     default boolean explicitAnnotationsForActions() {
         return getBoolean("isis.reflector.explicitAnnotations.action");
     }
-
-    @Deprecated /* experimental */
-    static IsisConfiguration loadDefault() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     
 
 }
