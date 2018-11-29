@@ -142,11 +142,6 @@ class ModulePackageHelper {
 
         // add in any explicitly registered services...
         domainServiceTypes.addAll(appManifest.getAdditionalServices());
-        
-        domainServiceTypes.forEach(s->{
-            if(s.getName().contains("Headless"))
-                System.out.println("!!!!!!!!!!!!!! * "+s);
-        });
 
         // Reflections seems to have a bug whereby it will return some classes outside the
         // set of packages that we want (think this is to do with the fact that it matches based on

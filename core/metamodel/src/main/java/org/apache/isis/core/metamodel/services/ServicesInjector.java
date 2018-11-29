@@ -486,13 +486,4 @@ public class ServicesInjector implements ApplicationScopedComponent, ServiceRegi
                         : (persistenceSessionServiceInternal = lookupServiceElseFail(PersistenceSessionServiceInternal.class));
     }
 
-//TODO[2039]    
-//    private ConfigurationServiceInternal configurationServiceInternal;
-//    @Programmatic
-//    public ConfigurationServiceInternal getConfigurationServiceInternal() {
-//        return configurationServiceInternal != null
-//                ? configurationServiceInternal
-//                        : (configurationServiceInternal = lookupServiceElseFail(ConfigurationServiceInternal.class));
-//    }
-
 }

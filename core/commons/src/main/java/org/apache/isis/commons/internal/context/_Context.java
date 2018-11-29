@@ -124,9 +124,21 @@ public final class _Context {
         requires(type, "type");
         requires(factory, "factory");
 
+        final String key = toKey(type);
+        
         // let writes to the map be atomic
         synchronized (singletonMap) {
-            return _Casts.uncheckedCast(singletonMap.computeIfAbsent(toKey(type), __->factory.apply(type)));
+            
+            // Note: cannot just use 'singletonMap.computeIfAbsent(toKey(type), __->factory.apply(type));'
+            // here because it does not allow for modification of singletonMap inside the factory call
+            
+            final T existingIfAny =  _Casts.uncheckedCast(singletonMap.get(key));
+            if(existingIfAny!=null) {
+                return existingIfAny;
+            }
+            final T t = factory.apply(type);
+            singletonMap.put(key, t);
+            return t;
         }
     }
 
@@ -255,6 +267,11 @@ public final class _Context {
     public static boolean isPrototyping() {
         return getEnvironment().getDeploymentType().isPrototyping();
     }
+    
+    /** framework internal, shortcut for convenience */
+    public static boolean isUnitTesting() {
+        return getEnvironment().isUnitTesting();
+    }
 
     // -- HELPER
 
@@ -274,10 +291,6 @@ public final class _Context {
             }
         }
     }
-
-
-
-
 
 
 }

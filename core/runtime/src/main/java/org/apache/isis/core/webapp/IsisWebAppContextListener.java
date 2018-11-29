@@ -81,9 +81,11 @@ public class IsisWebAppContextListener implements ServletContextListener {
         
         putContextPathIfPresent(servletContext.getContextPath());
         
+        @SuppressWarnings("unused") // finalize the config (build and regard immutable)
         IsisConfiguration isisConfiguration = AppConfigLocator.getAppConfig().isisConfiguration();
         
-        //[2039]_Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
+        //[2039] environment priming no longer suppoerted
+        //_Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
 
         final WebModuleContext webModuleContext = new WebModuleContext(servletContext);
         
@@ -92,9 +94,6 @@ public class IsisWebAppContextListener implements ServletContextListener {
                  .peek(module->module.prepare(webModuleContext)) // prepare context
                  .collect(Collectors.toList());
 
-        // commit negotiated properties to configuration subsystem 
-        webModuleContext.commit();
-        
         LOG.info("=== PHASE 2 === Initializing the ServletContext");
         
         webModules.stream()

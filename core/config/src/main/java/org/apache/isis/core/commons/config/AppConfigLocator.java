@@ -47,7 +47,7 @@ public final class AppConfigLocator {
             throw new IsisException("Failed to locate the AppManifest using config properties.", e);
         }
         
-        AppManifest appManifest;
+        final AppManifest appManifest;
         try {
             appManifest = appManifestClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
@@ -55,6 +55,7 @@ public final class AppConfigLocator {
                     String.format("Failed to create instance of AppManifest '%s'.", appManifestClass), e);
         }
         
+        // Note: AppConfig is a FunctionalInterface
         return ()->IsisConfiguration.buildFromAppManifest(appManifest);
         
     }

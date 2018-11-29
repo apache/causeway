@@ -33,8 +33,10 @@ import org.apache.isis.applib.AppManifestAbstract2;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.PropertyResource;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration.ContainsPolicy;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
@@ -63,26 +65,12 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationBuilderDefault.class);
 
-    // -- constructor, fields
-
-    private /*final*/ ResourceStreamSourceChainOfResponsibility resourceStreamSourceChain;
+    private final ResourceStreamSourceChainOfResponsibility resourceStreamSourceChain;
 
     private IsisConfigurationDefault configuration;
 
     private final Set<String> configurationResourcesFound = _Sets.newLinkedHashSet();
     private final Set<String> configurationResourcesNotFound = _Sets.newLinkedHashSet();
-
-//    public IsisConfigurationBuilderDefault() {
-//        this(ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY));
-//    }
-
-//    private IsisConfigurationBuilderDefault(final ResourceStreamSource... resourceStreamSources) {
-//        this(createComposite(Arrays.asList(resourceStreamSources)));
-//    }
-
-//    private IsisConfigurationBuilderDefault(final List<ResourceStreamSource> resourceStreamSources) {
-//        this(createComposite(resourceStreamSources));
-//    }
     
     // -- FACTORIES
     
@@ -94,12 +82,17 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
     
     static IsisConfigurationBuilderDefault getDefault() {
         
-        ResourceStreamSourceChainOfResponsibility chain = createComposite(Arrays.asList(
+        final ResourceStreamSourceChainOfResponsibility chain = createComposite(Arrays.asList(
                 ResourceStreamSourceFileSystem.create(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY)        
                 ));
-        IsisConfigurationBuilderDefault builder = new IsisConfigurationBuilderDefault(chain);
+        final IsisConfigurationBuilderDefault builder = new IsisConfigurationBuilderDefault(chain);
+        
+        final NotFoundPolicy continuePolicy = _Context.isUnitTesting()
+                ? NotFoundPolicy.CONTINUE
+                        : NotFoundPolicy.FAIL_FAST; 
         
         builder.addDefaultPrimers();
+        builder.addTopLevelDefaultConfigurationResource(continuePolicy);
         builder.addDefaultConfigurationResources();
         
         return builder;
@@ -125,12 +118,14 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
         return composite;
     }
 
+    private void addTopLevelDefaultConfigurationResource(NotFoundPolicy continuePolicy) {
+        addConfigurationResource(ConfigurationConstants.DEFAULT_CONFIG_FILE, 
+                continuePolicy, ContainsPolicy.IGNORE);
+    }
 
     private void addDefaultConfigurationResources() {
-        IsisConfigurationDefault.ContainsPolicy ignorePolicy = IsisConfigurationDefault.ContainsPolicy.IGNORE;
+        ContainsPolicy ignorePolicy = ContainsPolicy.IGNORE;
         NotFoundPolicy continuePolicy = NotFoundPolicy.CONTINUE;
-
-        addConfigurationResource(ConfigurationConstants.DEFAULT_CONFIG_FILE, NotFoundPolicy.FAIL_FAST, ignorePolicy);
 
         addConfigurationResource(ConfigurationConstants.WEB_CONFIG_FILE, continuePolicy, ignorePolicy);
         addConfigurationResource("war.properties", continuePolicy, ignorePolicy);

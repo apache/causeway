@@ -72,6 +72,10 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
             final LogConfig logConfig,
             final Module module) {
 
+        // let the framework know what context we are running on
+        // this system property is looked up by the default implementation of IsisSystemEnvironment
+        System.setProperty("UNITTESTING", "true"); 
+        
         this.logConfig = logConfig;
         this.logger = new LeveledLogger(LOG, logConfig.getTestLoggingLevel());
 
@@ -96,8 +100,8 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
                 !_Strings.isNullOrEmpty(moduleFqcn)
                 ? InstanceUtil.createInstance(moduleFqcn, Module.class)
                         : module;
-                this.isisSystemBootstrapper =
-                        IsisSystemBootstrapper.of(logConfig, IsisConfiguration.buildFromModuleTree(moduleToUse));
+        this.isisSystemBootstrapper =
+                IsisSystemBootstrapper.of(logConfig, IsisConfiguration.buildFromModuleTree(moduleToUse));
     }
 
 

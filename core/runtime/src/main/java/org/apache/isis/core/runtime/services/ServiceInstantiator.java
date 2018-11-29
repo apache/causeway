@@ -78,24 +78,6 @@ public final class ServiceInstantiator {
 
     // //////////////////////////////////////
 
-//TODO[2039]
-//    /**
-//     * initially null, but checked before first use that has been set (through {@link #setConfiguration(org.apache.isis.core.commons.config.IsisConfiguration)}).
-//     */
-//    private Map<String, String> props;
-//
-//    public void setConfiguration(IsisConfiguration configuration) {
-//        this.props = configuration.asMap();
-//    }
-//
-//    private void ensureInitialized() {
-//        if(props == null) {
-//            throw new IllegalStateException("IsisConfiguration properties not set on ServiceInstantiator prior to first-use");
-//        }
-//    }
-
-    // //////////////////////////////////////
-
     public Object createInstance(String type) {
         final Class<?> cls = loadClass(type);
         if(cls == null || cls.isAnonymousClass()) {

@@ -33,14 +33,6 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
 
     private static final Logger LOG = LoggerFactory.getLogger(FixturesInstallerFromConfiguration.class);
 
-//    public static final String FIXTURES = ConfigurationConstants.ROOT + "fixtures";
-
-//    /**
-//     * @deprecated - just adds to the cognitive load...
-//     */
-//    @Deprecated
-//    private static final String FIXTURES_PREFIX = ConfigurationConstants.ROOT + "fixtures.prefix";
-
     public FixturesInstallerFromConfiguration(final IsisSessionFactory isisSessionFactory) {
         super(isisSessionFactory);
     }
@@ -67,69 +59,5 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
         }
     }
 
-    
-//TODO[2039] remove    
-//    @Override
-//    protected void addFixturesTo(final FixturesInstallerDelegate delegate) {
-//
-//        final FixtureConfig fixtureConfig = getFixtureConfig();
-//
-//        try {
-//            boolean fixtureLoaded = false;
-//            for (final String element : fixtureConfig.getFixtures()) {
-//                final String fixtureFullyQualifiedName = fixtureConfig.getFixturePrefix() + element;
-//                LOG.info("  adding fixture {}", fixtureFullyQualifiedName);
-//                final Object fixture = InstanceUtil.createInstance(fixtureFullyQualifiedName);
-//                fixtureLoaded = true;
-//                delegate.addFixture(fixture);
-//            }
-//            if (!fixtureLoaded) {
-//                LOG.debug("No fixtures loaded from configuration");
-//            }
-//        } catch (final IllegalArgumentException | SecurityException e) {
-//            throw new IsisException(e);
-//        }
-//    }
-//
-//    private static class FixtureConfig {
-//
-//        // -- fixtures
-//
-//        private String[] fixtures;
-//
-//        String[] getFixtures() {
-//            return fixtures;
-//        }
-//
-//        void setFixtures(String[] fixtures) {
-//            this.fixtures = fixtures;
-//        }
-//
-//        // -- fixturePrefix
-//
-//        private String fixturePrefix;
-//        String getFixturePrefix() {
-//            return fixturePrefix;
-//        }
-//
-//        void setFixturePrefix(String fixturePrefix) {
-//            fixturePrefix = fixturePrefix == null ? "" : fixturePrefix.trim();
-//            if (fixturePrefix.length() > 0 && !fixturePrefix.endsWith(ConfigurationConstants.DELIMITER)) {
-//                fixturePrefix = fixturePrefix + ConfigurationConstants.DELIMITER;
-//            }
-//
-//            this.fixturePrefix = fixturePrefix;
-//        }
-//
-//    }
-
-//    private FixtureConfig getFixtureConfig() {
-//        final FixtureConfig fixtureConfig = new FixtureConfig();
-//
-//        fixtureConfig.setFixtures(configuration.getList(FIXTURES));
-//        //fixtureConfig.setFixturePrefix(configuration.getString(FIXTURES_PREFIX));
-//
-//        return fixtureConfig;
-//    }
 
 }

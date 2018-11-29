@@ -104,16 +104,6 @@ public class WebModuleContext {
         final String list = protectedPath.toString();
         return _Strings.splitThenStream(list, ",");
     }
-    
-    /**
-     * Commits all properties to current life-cycle's config.
-     */
-    public void commit() {
-//[2039] can no longer write to config        
-//        _Config.acceptBuilder(builder->{
-//            builder.add(ISIS_VIEWERS, viewers.toString());
-//            builder.add(ISIS_PROTECTED, protectedPath.toString());
-//        });
-    }
+
     
 }

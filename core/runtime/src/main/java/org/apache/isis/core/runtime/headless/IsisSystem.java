@@ -77,62 +77,6 @@ public final class IsisSystem {
         return new IsisSystem(appManifest, authenticationRequest);
     }
     
-    
-    // -- Builder
-//TODO[2039] remove
-//    public static class Builder<T extends Builder<T, S>, S extends IsisSystem> {
-//
-//        protected AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
-//
-//        protected AppManifest appManifest;
-//
-//        public T with(AuthenticationRequest authenticationRequest) {
-//            this.authenticationRequest = authenticationRequest;
-//            return uncheckedCast(this);
-//        }
-//
-//        public T with(AppManifest appManifest) {
-//            this.appManifest = appManifest;
-//            return uncheckedCast(this);
-//        }
-//
-//        public S build() {
-//            final IsisSystem isisSystem =
-//                    new IsisSystem(
-//                            appManifest != null ? appManifest : AppManifest.noop(),
-//                            authenticationRequest);
-//            return configure(uncheckedCast(isisSystem));
-//        }
-//
-//        protected S configure(final S isisSystem) {
-//            Runtime.getRuntime().addShutdownHook(new Thread() {
-//                @Override
-//                public synchronized void run() {
-//                    try {
-//                        isisSystem.closeSession();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    try {
-//                        if(isisSystem.isisSessionFactory != null) {
-//                            isisSystem.isisSessionFactory.destroyServicesAndShutdown();
-//                        }
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-//
-//            return isisSystem;
-//        }
-//
-//    }
-//
-//    public static <T extends Builder<T, S>, S extends IsisSystem> Builder<T, S> builder() {
-//        return new Builder<>();
-//    }
-
     // -- constructor, fields
 
     protected final AppManifest appManifest;
@@ -179,7 +123,8 @@ public final class IsisSystem {
                     .appManifest(appManifest)
                     .build();
             
-            //[2039] _Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
+            //[2039] environment priming removed 
+            // _Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
 
             final IsisSessionFactoryBuilder isisSessionFactoryBuilder = 
                     new IsisSessionFactoryBuilder(componentProvider, appManifest);

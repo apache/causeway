@@ -29,6 +29,7 @@ public interface IsisSystemEnvironment {
     // -- INTERFACE
     
     public DeploymentType getDeploymentType();
+    public boolean isUnitTesting();
     
     // -- FACTORIES
     
@@ -36,8 +37,20 @@ public interface IsisSystemEnvironment {
         return DEFAULT;
     }
     
-    public static IsisSystemEnvironment of(DeploymentType deploymentType) {
-        return ()->deploymentType;        
+    public static IsisSystemEnvironment of(DeploymentType deploymentType, boolean isUnitTesting) {
+        return new IsisSystemEnvironment() {
+
+            @Override
+            public DeploymentType getDeploymentType() {
+                return deploymentType;
+            }
+
+            @Override
+            public boolean isUnitTesting() {
+                return isUnitTesting;
+            }
+            
+        };
     }
 
     // -- DEFAULT IMPLEMENTATION
@@ -77,6 +90,11 @@ public interface IsisSystemEnvironment {
                                 : DeploymentType.PRODUCTION;
             
             return deploymentType;
+        }
+
+        @Override
+        public boolean isUnitTesting() {
+            return "true".equalsIgnoreCase(System.getProperty("UNITTESTING"));
         }
     };
         

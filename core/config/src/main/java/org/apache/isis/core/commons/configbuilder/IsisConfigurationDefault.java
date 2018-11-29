@@ -32,6 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -54,6 +56,8 @@ import static org.apache.isis.commons.internal.base._With.requires;
  *     If an integration test is running, then the <code>IsisConfigurationForJdoIntegTests</code> will be used instead.
  * </p>
  */
+//[2039] @DomainObject(objectType=...) fixes meta-data validation complaining, otherwise not required ...
+@DomainObject(nature=Nature.INMEMORY_ENTITY, objectType="internal.IsisConfiguration") 
 class IsisConfigurationDefault implements IsisConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationDefault.class);

@@ -261,6 +261,8 @@ public interface IsisConfiguration {
     default boolean explicitAnnotationsForActions() {
         return getBoolean("isis.reflector.explicitAnnotations.action");
     }
+
+ 
     
 
 }

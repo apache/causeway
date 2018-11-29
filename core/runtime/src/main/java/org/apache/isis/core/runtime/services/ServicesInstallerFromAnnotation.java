@@ -31,22 +31,17 @@ import javax.annotation.PreDestroy;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceMenuOrder;
 import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
-public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
+import static org.apache.isis.commons.internal.base._With.requires;
 
+public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     //private static final Logger LOG = LoggerFactory.getLogger(ServicesInstallerFromAnnotation.class);
 
     public static final String NAME = "annotation";
     
-//[2039]    
-//    public final static String PACKAGE_PREFIX_KEY = "isis.services.ServicesInstallerFromAnnotation.packagePrefix";
-
-
     private final ServiceInstantiator serviceInstantiator;
 
     public ServicesInstallerFromAnnotation() {
@@ -63,23 +58,6 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     @Override
     public void init() {
-        initIfRequired();
-    }
-
-    private boolean initialized = false;
-
-    protected void initIfRequired() {
-        if(initialized) {
-            return;
-        }
-
-        try {
-           
-//            _Config.getConfiguration().triggerTypeDiscovery(); // registers types in registry
-
-        } finally {
-            initialized = true;
-        }
     }
 
     @Override
@@ -100,7 +78,6 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     @Override
     public List<Object> getServices() {
-        initIfRequired();
 
         if(this.services == null) {
 
@@ -117,19 +94,9 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
     // -- appendServices
 
     public void appendServices(final SortedMap<String, SortedSet<String>> positionedServices) {
-        initIfRequired();
 
         Set<Class<?>> domainServiceTypes = AppManifest.Registry.instance().getDomainServiceTypes();
-        if(domainServiceTypes == null) {
-            //[2039]
-//            // if no appManifest
-//            final ClassDiscovery discovery = ClassDiscoveryPlugin.get().discover(modulePackageNames);
-//
-//            domainServiceTypes = discovery.getTypesAnnotatedWith(DomainService.class);
-            
-            _Exceptions.throwUnexpectedCodeReach();
-            
-        }
+        requires(domainServiceTypes, "domainServiceTypes");
 
         final List<Class<?>> domainServiceClasses = _Lists.filter(domainServiceTypes, instantiatable());
         for (final Class<?> cls : domainServiceClasses) {
@@ -138,35 +105,10 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
             // we want the class name in order to instantiate it
             // (and *not* the value of the @DomainServiceLayout(named=...) annotation attribute)
             final String fullyQualifiedClassName = cls.getName();
-            //final String name = nameOf(cls);
-            
-            if(fullyQualifiedClassName.contains("Headless"))
-                System.out.println("!!!! " + fullyQualifiedClassName);
-            
 
             ServicesInstallerUtils.appendInPosition(positionedServices, order, fullyQualifiedClassName);
         }
     }
-
-
-
-    // -- helpers: nameOf, asList
-
-//    private static String nameOf(final Class<?> cls) {
-//        final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
-//        String name = domainServiceLayout != null ? domainServiceLayout.named(): null;
-//        if(name == null) {
-//            name = cls.getName();
-//        }
-//        return name;
-//    }
-
-//    private static List<String> asList(final String csv) {
-//        return _Strings.splitThenStream(csv, ",")
-//        .map(String::trim)
-//        .collect(Collectors.toList());
-//    }
-
 
     // -- domain events
     public static abstract class PropertyDomainEvent<T>

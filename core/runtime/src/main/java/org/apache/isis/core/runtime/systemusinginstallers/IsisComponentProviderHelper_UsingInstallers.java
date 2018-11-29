@@ -134,7 +134,8 @@ class IsisComponentProviderHelper_UsingInstallers  {
                     continue;
                 }
                 try {
-                    final Installer object = (Installer) InstanceUtil.createInstance(className); //[2039] second arg removed
+                    //[2039] second arg removed, OK?
+                    final Installer object = (Installer) InstanceUtil.createInstance(className); 
                     LOG.debug("created component installer: {} - {}", object.getName(), className);
                     installerList.add(object);
                 } catch (final UnavailableClassException e) {

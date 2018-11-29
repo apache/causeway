@@ -45,24 +45,16 @@ public class IsisInjectModule extends AbstractModule {
         
         AppManifest appManifest = isisConfiguration.getAppManifest();
         
-        System.err.println("!!!!!!!!!! provideIsisSessionFactory STAGE 1 "+Thread.currentThread().getName());
-
         final IsisComponentProvider componentProvider = IsisComponentProvider
                 .builderUsingInstallers(appManifest)
                 .build();
         
-        System.err.println("!!!!!!!!!! provideIsisSessionFactory STAGE 2 "+Thread.currentThread().getName());
-
         final IsisSessionFactoryBuilder builder =
                 new IsisSessionFactoryBuilder(componentProvider, appManifest);
         
-        System.err.println("!!!!!!!!!! provideIsisSessionFactory STAGE 3 "+Thread.currentThread().getName());
-
         // as a side-effect, if the metamodel turns out to be invalid, then
         // this will push the MetaModelInvalidException into IsisContext.
         IsisSessionFactory sessionFactory = builder.buildSessionFactory();
-        
-        System.err.println("!!!!!!!!!! ............. provideIsisSessionFactory DONE "+Thread.currentThread().getName());
         
         return sessionFactory;
     }
