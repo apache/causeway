@@ -71,20 +71,10 @@ public class IsisSessionFactoryBuilder {
     private final IsisLocaleInitializer localeInitializer;
     private final IsisTimeZoneInitializer timeZoneInitializer;
 
-    public IsisSessionFactoryBuilder(final AppManifest appManifest) {
-        this(IsisComponentProvider.builder()
-                .appManifest(appManifest)
-//                .addConfigPackageAsResourceStreamSource()
-                .build(),
-                appManifest);
-    }
-
-    public IsisSessionFactoryBuilder(
-            final IsisComponentProvider componentProvider,
-            final AppManifest appManifest) {
+    public IsisSessionFactoryBuilder(final IsisComponentProvider componentProvider) {
 
         this.componentProvider = componentProvider;
-        this.appManifest = appManifest;
+        this.appManifest = componentProvider.getAppManifest();
 
         this.localeInitializer = new IsisLocaleInitializer();
         this.timeZoneInitializer = new IsisTimeZoneInitializer();

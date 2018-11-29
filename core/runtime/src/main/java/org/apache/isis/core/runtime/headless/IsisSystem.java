@@ -127,7 +127,7 @@ public final class IsisSystem {
             // _Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
 
             final IsisSessionFactoryBuilder isisSessionFactoryBuilder = 
-                    new IsisSessionFactoryBuilder(componentProvider, appManifest);
+                    new IsisSessionFactoryBuilder(componentProvider);
 
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();

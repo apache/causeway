@@ -32,12 +32,15 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
+import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
 
 public abstract class IsisMojoAbstract extends AbstractMojo {
@@ -57,14 +60,20 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
 
         new IsisLoggingConfigurer(Level.INFO).configureLogging(".", new String[]{});
-
+        _Config.clear();
+        IsisSystemEnvironment.setUnitTesting(true);
+        
         final ContextForMojo context = new ContextForMojo(mavenProject, getLog());
 
         final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
 
-        final AppManifest manifest = InstanceUtil.createInstance(this.appManifest, AppManifest.class);
-
-        final IsisSessionFactoryBuilder isisSessionFactoryBuilder = new IsisSessionFactoryBuilder(manifest);
+        final AppManifest appManifest = InstanceUtil.createInstance(this.appManifest, AppManifest.class);
+        final IsisComponentProvider isisComponentProvider = IsisComponentProvider.builder()
+            .appManifest(appManifest)
+            .build();
+        final IsisSessionFactoryBuilder isisSessionFactoryBuilder = 
+                new IsisSessionFactoryBuilder(isisComponentProvider);
+        
         IsisSessionFactory isisSessionFactory = null;
         try {
             isisSessionFactory = isisSessionFactoryBuilder.buildSessionFactory();
