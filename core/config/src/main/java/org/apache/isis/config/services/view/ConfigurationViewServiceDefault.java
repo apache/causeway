@@ -16,48 +16,30 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config.service;
+package org.apache.isis.config.services.view;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.config.ConfigurationProperty;
-import org.apache.isis.applib.services.config.ConfigurationService;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-
+/**
+ * @since 2.0.0-M2
+ */
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
         )
-public class ConfigurationServiceDefault implements ConfigurationService {
+public class ConfigurationViewServiceDefault implements ConfigurationViewService {
     
-    @Override
-    public String getProperty(String name) {
-        return getProperty(name, null);
-    }
-
-    @Override
-    public String getProperty(String name, String defaultValue) {
-        return mapIfPresentElse(config.get().get(name), ConfigurationProperty::getValue, defaultValue);
-    }
-
-    @Override
-    public List<String> getPropertyNames() {
-        return new ArrayList<>(config.get().keySet());
-    }
-
     @Override
     public Set<ConfigurationProperty> allProperties() {
         return new TreeSet<>(config.get().values());

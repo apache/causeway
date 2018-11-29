@@ -17,33 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.services.config;
+package org.apache.isis.config.services.view;
 
-import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
-public interface ConfigurationService {
-
-    /**
-     * Get the configuration property with the specified name.
-     */
-    @Programmatic
-    String getProperty(String name);
-
-    /**
-     * Get the configuration property with the specified name and if it doesn't
-     * exist then return the specified default value.
-     */
-    @Programmatic
-    String getProperty(String name, String defaultValue);
-
-    /**
-     * Get the names of all the available properties.
-     */
-    @Programmatic
-    List<String> getPropertyNames();
+public interface ConfigurationViewService {
 
     /**
      * Returns all properties, each as an instance of {@link ConfigurationProperty} (a view model).

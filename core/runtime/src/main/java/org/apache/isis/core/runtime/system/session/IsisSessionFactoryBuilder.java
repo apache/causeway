@@ -33,12 +33,12 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.applib.services.config.ConfigurationService;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.config.service.ConfigurationServiceDefault;
+import org.apache.isis.config.services.view.ConfigurationViewService;
+import org.apache.isis.config.services.view.ConfigurationViewServiceDefault;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -122,7 +122,7 @@ public class IsisSessionFactoryBuilder {
             final ServicesInjector servicesInjector = componentProvider.provideServiceInjector();
 
             // ConfigurationService
-            servicesInjector.addFallbackIfRequired(ConfigurationService.class, new ConfigurationServiceDefault());
+            servicesInjector.addFallbackIfRequired(ConfigurationViewService.class, new ConfigurationViewServiceDefault());
             
             // fixtureScripts
             servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());

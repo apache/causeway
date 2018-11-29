@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.applib.services.config;
+package org.apache.isis.config.services.view;
 
 import java.util.Set;
 
@@ -32,16 +32,16 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
-        objectType = "isisApplib.ConfigurationServiceMenu"
+        objectType = "isisApplib.ConfigurationMenu"
         )
 @DomainServiceLayout(
         menuBar = DomainServiceLayout.MenuBar.TERTIARY,
         menuOrder = "500.900"
         )
-public class ConfigurationServiceMenu {
+public class ConfigurationMenu {
 
     public static abstract class ActionDomainEvent
-    extends IsisApplibModule.ActionDomainEvent<ConfigurationServiceMenu> {
+    extends IsisApplibModule.ActionDomainEvent<ConfigurationMenu> {
         private static final long serialVersionUID = 1L;
     }
 
@@ -63,6 +63,6 @@ public class ConfigurationServiceMenu {
     }
 
     @javax.inject.Inject
-    private ConfigurationService configurationService;
+    private ConfigurationViewService configurationService;
 
 }

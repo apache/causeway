@@ -18,13 +18,14 @@
  */
 package org.apache.isis.applib;
 
-import static org.apache.isis.commons.internal.collections._Lists.lastElementIfAny;
-
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+
+import com.google.common.base.Predicate;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -32,7 +33,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.applib.services.config.ConfigurationService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
@@ -43,8 +43,10 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 
-import com.google.common.base.Predicate;
+import static org.apache.isis.commons.internal.collections._Lists.lastElementIfAny;
 
 @DomainService(nature=NatureOfService.DOMAIN)
 @Deprecated
@@ -58,7 +60,6 @@ public class DomainObjectContainer {
 	@Inject private TransactionService transactionService;
 	@Inject private ServiceRegistry serviceRegistry;
 	@Inject private MessageService messageService;
-	@Inject private ConfigurationService configurationService;
 	@Inject private UserService userService;
 	
     /**
@@ -414,30 +415,30 @@ public class DomainObjectContainer {
 
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.config.ConfigurationService#getProperty(String)} instead.
+     * @deprecated - use {@link IsisConfiguration#getProperty(String)} instead.
      */
     @Deprecated
     @Programmatic
     public String getProperty(String name) {
-    	return configurationService.getProperty(name);
+    	return _Config.getConfiguration().getString(name);
     }
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.config.ConfigurationService#getProperty(String, String)} instead.
+     * @deprecated - use {@link IsisConfiguration#getProperty(String, String)} instead.
      */
     @Deprecated
     @Programmatic
     public String getProperty(String name, String defaultValue) {
-    	return configurationService.getProperty(name, defaultValue);	
+    	return _Config.getConfiguration().getString(name, defaultValue);
     }
 
     /**
-     * @deprecated - use {@link org.apache.isis.applib.services.config.ConfigurationService#getPropertyNames()} instead.
+     * @deprecated - use {@link IsisConfiguration#asMap()} instead.
      */
     @Deprecated
     @Programmatic
     public List<String> getPropertyNames() {
-    	return configurationService.getPropertyNames();
+        return new ArrayList<>(_Config.getConfiguration().asMap().keySet());
     }
 
     /**
