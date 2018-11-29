@@ -119,8 +119,7 @@ public final class IsisSystem {
         boolean firstTime = isisSessionFactory == null;
         if(firstTime) {
 
-            componentProvider = IsisComponentProvider.builder()
-                    .appManifest(appManifest)
+            componentProvider = IsisComponentProvider.builder(appManifest)
                     .build();
             
             //[2039] environment priming removed 

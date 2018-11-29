@@ -33,6 +33,8 @@ import org.apache.maven.project.MavenProject;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.commons.config.AppConfigLocator;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
@@ -60,7 +62,6 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
 
         new IsisLoggingConfigurer(Level.INFO).configureLogging(".", new String[]{});
-        _Config.clear();
         IsisSystemEnvironment.setUnitTesting(true);
         
         final ContextForMojo context = new ContextForMojo(mavenProject, getLog());
@@ -68,9 +69,10 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
 
         final AppManifest appManifest = InstanceUtil.createInstance(this.appManifest, AppManifest.class);
-        final IsisComponentProvider isisComponentProvider = IsisComponentProvider.builder()
-            .appManifest(appManifest)
-            .build();
+        IsisConfiguration.buildFromAppManifest(appManifest); // build and finalize config
+        
+        final IsisComponentProvider isisComponentProvider = IsisComponentProvider.builder(appManifest)
+                .build();
         final IsisSessionFactoryBuilder isisSessionFactoryBuilder = 
                 new IsisSessionFactoryBuilder(isisComponentProvider);
         

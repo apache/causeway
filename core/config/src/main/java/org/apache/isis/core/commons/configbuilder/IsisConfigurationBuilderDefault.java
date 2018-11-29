@@ -343,6 +343,8 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
 
         if(configuration.getAppManifest()!=null) {
             configuration.triggerTypeDiscovery();
+        } else {
+            LOG.info("Skipping domain type discovery due to missing AppManifest.");
         }
         
         if (LOG.isDebugEnabled()) {

@@ -47,10 +47,13 @@ import static org.apache.isis.config.internal._Config.getConfiguration;
  */
 public final class IsisComponentProvider {
     
-    // -- BUILDER
+    // -- BUILDER - DEFAULT
     
-    public static IsisComponentProviderBuilder builder() {
-        return new IsisComponentProviderBuilder();
+    public static IsisComponentProviderBuilder builder(AppManifest appManifest) {
+        // ensure we the appmanifest on the config
+        
+        return new IsisComponentProviderBuilder()
+                .appManifest(appManifest);
     }
     
     // -- BUILDER - USING INSTALLERS
@@ -60,14 +63,13 @@ public final class IsisComponentProvider {
         final IsisComponentProviderHelper_UsingInstallers helper = 
                 new IsisComponentProviderHelper_UsingInstallers(appManifest);
         
-        return builder()
-                .appManifest(appManifest)
+        return builder(appManifest)
                 .authenticationManager(helper.authenticationManager)
                 .authorizationManager(helper.authorizationManager);
     }
     
 
-    // -- constructor, fields
+    // -- CONSTRUCTOR
 
     private final AppManifest appManifest;
     protected final List<Object> services;
@@ -87,6 +89,8 @@ public final class IsisComponentProvider {
         this.authorizationManager = authorizationManager;
     }
 
+    // --
+    
     public AppManifest getAppManifest() {
         return appManifest;
     }
