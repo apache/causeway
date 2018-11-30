@@ -1,12 +1,11 @@
 package org.apache.isis.config;
 
-import javax.enterprise.inject.spi.CDI;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.base._Casts;
+import org.apache.isis.commons.internal.cdi._CDI;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.config.builder.IsisConfigurationBuilder;
@@ -50,16 +49,7 @@ public final class AppConfigLocator {
     }
     
     private static AppConfig lookupAppConfig_UsingCDI() {
-        try {
-            final CDI<Object> cdi = CDI.current();
-            if(cdi==null) {
-                return null;
-            }
-            return cdi.select(AppConfig.class).get();
-        } catch (Exception e) {
-            // ignore
-        }
-        return null;        
+        return _CDI.getManagedBean(AppConfig.class).orElse(null);
     }
     
     private static AppConfig lookupAppConfig_UsingServiceLoader() {

@@ -37,6 +37,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.cdi._CDI;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Multimaps;
@@ -332,6 +333,11 @@ public class ServicesInjector implements ApplicationScopedComponent, ServiceRegi
                 return;
             }
         }
+        
+        // fallback and try CDI
+        _CDI.getManagedBean(typeToBeInjected, _CDI.filterQualifiers(field.getAnnotations()))
+        .ifPresent(bean->invokeInjectorField(field, object, bean));
+        
     }
 
     private void autowireViaPrefixedMethods(
