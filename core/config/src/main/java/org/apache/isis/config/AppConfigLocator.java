@@ -1,5 +1,7 @@
 package org.apache.isis.config;
 
+import javax.enterprise.inject.spi.CDI;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,15 +25,50 @@ public final class AppConfigLocator {
     // -- HELPER
     
     private static AppConfig lookupAppConfig() {
+        
+        AppConfig appConfig;
+        
+        appConfig = lookupAppConfig_UsingCDI();
+        if(appConfig!=null) {
+            LOG.info(String.format("Located AppConfig '%s' via CDI.", appConfig.getClass().getName()));
+            return appConfig;
+        }
+        
+        appConfig = lookupAppConfig_UsingServiceLoader();
+        if(appConfig!=null) {
+            LOG.info(String.format("Located AppConfig '%s' via ServiceLoader.", appConfig.getClass().getName()));
+            return appConfig;
+        }
+        
+        appConfig = lookupAppConfig_UsingConfigProperties();
+        if(appConfig!=null) {
+            LOG.info(String.format("Located AppConfig '%s' using config properties.", appConfig.getClass().getName()));
+            return appConfig;    
+        }
+        
+        throw new IsisException("Failed to locate the AppManifest");
+    }
+    
+    private static AppConfig lookupAppConfig_UsingCDI() {
+        try {
+            final CDI<Object> cdi = CDI.current();
+            if(cdi==null) {
+                return null;
+            }
+            return cdi.select(AppConfig.class).get();
+        } catch (Exception e) {
+            // ignore
+        }
+        return null;        
+    }
+    
+    private static AppConfig lookupAppConfig_UsingServiceLoader() {
+        
         return _Plugin.getOrElse(AppConfig.class,
                 ambiguousPlugins->{
                     throw _Plugin.ambiguityNonRecoverable(AppConfig.class, ambiguousPlugins);
                 },
-                ()->{
-                    LOG.warn("Failed to locate AppConfig via ServiceLoader, falling back to "
-                            + "search utilizing config properties.");
-                    return lookupAppConfig_UsingConfigProperties();
-                });
+                ()->null);
     }
     
     // to support pre 2.0.0-M2 behavior    
@@ -59,6 +96,8 @@ public final class AppConfigLocator {
         return ()->IsisConfiguration.buildFromAppManifest(appManifest);
         
     }
+    
+    
     
 
 }

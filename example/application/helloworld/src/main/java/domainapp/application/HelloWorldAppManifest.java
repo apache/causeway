@@ -27,6 +27,7 @@ import domainapp.dom.HelloWorldModule;
 /**
  * Bootstrap the application.
  */
+@javax.ejb.Singleton // only if you want AppConfig to be managed by CDI (if available), otherwise not required
 public class HelloWorldAppManifest extends AppManifestAbstract2 implements AppConfig {
 
     public static final Builder BUILDER = Builder
@@ -38,10 +39,10 @@ public class HelloWorldAppManifest extends AppManifestAbstract2 implements AppCo
         super(BUILDER);
     }
 
-    // Tells the ServiceLoader which AppManifest to use to bootstrap the IsisConfiguration.
+    // Implementing AppConfig, to tell the framework how to bootstrap the configuration.
     @Override
     public IsisConfiguration isisConfiguration () {
-        return IsisConfiguration.buildFromAppManifest(new HelloWorldAppManifest());
+        return IsisConfiguration.buildFromAppManifest(this);
     }
 
 }

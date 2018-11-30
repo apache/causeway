@@ -20,6 +20,7 @@ package org.apache.isis.applib;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -86,7 +87,7 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
         return withAdditionalModules(Arrays.asList(modules));
     }
 
-    public B withAdditionalModules(final List<Class<?>> modules) {
+    public B withAdditionalModules(final Collection<Class<?>> modules) {
         if(modules == null) {
             return self();
         }
@@ -98,7 +99,7 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
         return withAdditionalServices(Arrays.asList(additionalServices));
     }
 
-    public B withAdditionalServices(final List<Class<?>> additionalServices) {
+    public B withAdditionalServices(final Collection<Class<?>> additionalServices) {
         if(additionalServices == null) {
             return self();
         }

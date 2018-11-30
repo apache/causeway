@@ -44,7 +44,7 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static org.apache.isis.commons.internal.collections._Lists.lastElementIfAny;
 
@@ -420,7 +420,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public String getProperty(String name) {
-    	return _Config.getConfiguration().getString(name);
+    	return IsisContext.getConfiguration().getString(name);
     }
 
     /**
@@ -429,7 +429,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public String getProperty(String name, String defaultValue) {
-    	return _Config.getConfiguration().getString(name, defaultValue);
+    	return IsisContext.getConfiguration().getString(name, defaultValue);
     }
 
     /**
@@ -438,7 +438,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public List<String> getPropertyNames() {
-        return new ArrayList<>(_Config.getConfiguration().asMap().keySet());
+        return new ArrayList<>(IsisContext.getConfiguration().asMap().keySet());
     }
 
     /**

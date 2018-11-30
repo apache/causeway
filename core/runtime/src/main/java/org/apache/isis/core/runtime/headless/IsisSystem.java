@@ -93,9 +93,6 @@ public final class IsisSystem {
 
     // -- setup (also componentProvider)
 
-    // populated at #setupSystem
-    protected IsisComponentProvider componentProvider;
-
     IsisSystem setUpSystem() throws RuntimeException {
         try {
             initIfRequiredThenOpenSession();
@@ -119,7 +116,7 @@ public final class IsisSystem {
         boolean firstTime = isisSessionFactory == null;
         if(firstTime) {
 
-            componentProvider = IsisComponentProvider.builder(appManifest)
+            final IsisComponentProvider componentProvider = IsisComponentProvider.builder(appManifest)
                     .build();
             
             //[2039] environment priming removed 
