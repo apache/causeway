@@ -101,6 +101,11 @@ public class DomainResourceHelper {
         }
 
         @Override
+        public boolean isValidateOnly() {
+            return rendererContext.isValidateOnly();
+        }
+
+        @Override
         public List<MediaType> getAcceptableMediaTypes() {
             return rendererContext.getAcceptableMediaTypes();
         }
@@ -351,6 +356,12 @@ public class DomainResourceHelper {
         final ObjectActionArgHelper argHelper = new ObjectActionArgHelper(rendererContext, objectAdapter, action);
 
         final List<ObjectAdapter> argAdapters = argHelper.parseAndValidateArguments(arguments);
+
+        if(rendererContext.isValidateOnly()) {
+            // nothing more to do.
+            // if there had been a validation error, then an exception would have been thrown above.
+            return Response.noContent().build();
+        }
 
         // invoke
         final ObjectAdapter mixedInAdapter = null; // action will automatically fill in if a mixin

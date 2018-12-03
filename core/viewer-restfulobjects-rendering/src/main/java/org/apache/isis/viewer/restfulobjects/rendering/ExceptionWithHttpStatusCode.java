@@ -16,23 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.server.mappers;
+package org.apache.isis.viewer.restfulobjects.rendering;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Provider;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+public interface ExceptionWithHttpStatusCode {
 
-@Provider
-public class ExceptionMapperForRestfulObjectsApplication extends ExceptionMapperAbstract<RestfulObjectsApplicationException> {
-
-    @Override
-    public Response toResponse(final RestfulObjectsApplicationException ex) {
-        final JsonRepresentation body = ex.getBody();
-        final String bodyStr = body != null ? body.toString() : null;
-        return buildResponse(ex);
-    }
-
-
+    HttpStatusCode getHttpStatusCode();
 }

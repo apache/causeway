@@ -36,6 +36,8 @@ import javax.ws.rs.core.Response;
 import org.apache.isis.commons.internal.base._Strings;
 import com.google.common.io.Resources;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -71,6 +73,12 @@ import org.apache.isis.viewer.restfulobjects.server.resources.serialization.Seri
 
 @Path("/objects")
 public class DomainObjectResourceServerside extends ResourceAbstract implements DomainObjectResource {
+
+    private final static Logger LOG = Logger.getLogger(DomainObjectResourceServerside.class);
+
+    public DomainObjectResourceServerside() {
+        LOG.debug("<init>");
+    }
 
     // //////////////////////////////////////////////////////////
     // persist

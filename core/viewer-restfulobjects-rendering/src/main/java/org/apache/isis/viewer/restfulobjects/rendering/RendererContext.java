@@ -50,6 +50,7 @@ public interface RendererContext {
     Where getWhere();
 
     List<List<String>> getFollowLinks();
+    boolean isValidateOnly();
 
     boolean honorUiHints();
 

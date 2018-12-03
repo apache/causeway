@@ -73,6 +73,7 @@ public class ResourceContext implements RendererContext {
     private final PersistenceSession persistenceSession;
 
     private List<List<String>> followLinks;
+    private boolean validateOnly;
 
     private final Where where;
     private final RepresentationService.Intent intent;
@@ -132,6 +133,7 @@ public class ResourceContext implements RendererContext {
         ensureDomainModelQueryParamSupported();
 
         this.followLinks = Collections.unmodifiableList(getArg(RequestParameter.FOLLOW_LINKS));
+        this.validateOnly = getArg(RequestParameter.VALIDATE_ONLY);
     }
 
     private void ensureDomainModelQueryParamSupported() {
@@ -252,6 +254,10 @@ public class ResourceContext implements RendererContext {
     @Override
     public List<List<String>> getFollowLinks() {
         return followLinks;
+    }
+    @Override
+    public boolean isValidateOnly() {
+        return validateOnly;
     }
 
     @Override

@@ -177,7 +177,9 @@ public abstract class Parser<T> {
                 if (str == null) {
                     return null;
                 }
-                return str.equals("yes") ? Boolean.TRUE : Boolean.FALSE;
+                return "yes".equalsIgnoreCase(str) || "true".equalsIgnoreCase(str)
+                        ? Boolean.TRUE
+                        : Boolean.FALSE;
             }
 
             @Override

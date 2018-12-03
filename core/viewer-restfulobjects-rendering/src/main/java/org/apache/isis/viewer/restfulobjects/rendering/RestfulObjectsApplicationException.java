@@ -21,25 +21,39 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 
-public class RestfulObjectsApplicationException extends RuntimeException implements HasHttpStatusCode {
+public class RestfulObjectsApplicationException
+        extends RuntimeException
+        implements ExceptionWithHttpStatusCode, ExceptionWithBody {
+
+    private static final long serialVersionUID = 1L;
 
     public static final RestfulObjectsApplicationException create(final HttpStatusCode httpStatusCode) {
         return createWithCause(httpStatusCode, null);
     }
 
-    public static RestfulObjectsApplicationException createWithMessage(final HttpStatusCode httpStatusCode, final String message, final Object... args) {
-        return createWithCauseAndMessage(httpStatusCode, (Exception) null, message, args);
+    public static RestfulObjectsApplicationException createWithMessage(
+            final HttpStatusCode httpStatusCode,
+            final String message, final Object... args) {
+        return createWithCauseAndMessage(httpStatusCode, null, message, args);
     }
 
-    public static RestfulObjectsApplicationException createWithCause(final HttpStatusCode httpStatusCode, final Exception cause) {
+    public static RestfulObjectsApplicationException createWithCause(
+            final HttpStatusCode httpStatusCode,
+            final Exception cause) {
         return createWithCauseAndMessage(httpStatusCode, cause, null);
     }
 
-    public static RestfulObjectsApplicationException createWithCauseAndMessage(final HttpStatusCode httpStatusCode, final Exception cause, final String message, final Object... args) {
+    public static RestfulObjectsApplicationException createWithCauseAndMessage(
+            final HttpStatusCode httpStatusCode,
+            final Exception cause,
+            final String message, final Object... args) {
         return new RestfulObjectsApplicationException(httpStatusCode, formatString(message, args), cause, null);
     }
 
-    public static RestfulObjectsApplicationException createWithBody(final HttpStatusCode httpStatusCode, final JsonRepresentation body, final String message, final Object... args) {
+    public static RestfulObjectsApplicationException createWithBody(
+            final HttpStatusCode httpStatusCode,
+            final JsonRepresentation body,
+            final String message, final Object... args) {
         return new RestfulObjectsApplicationException(httpStatusCode, formatString(message, args), null, body);
     }
 
@@ -47,11 +61,14 @@ public class RestfulObjectsApplicationException extends RuntimeException impleme
         return formatStr != null ? String.format(formatStr, args) : null;
     }
 
-    private static final long serialVersionUID = 1L;
     private final HttpStatusCode httpStatusCode;
     private final JsonRepresentation body;
 
-    protected RestfulObjectsApplicationException(final HttpStatusCode httpStatusCode, final String message, final Throwable cause, final JsonRepresentation body) {
+    protected RestfulObjectsApplicationException(
+            final HttpStatusCode httpStatusCode,
+            final String message,
+            final Throwable cause,
+            final JsonRepresentation body) {
         super(message, cause);
         this.httpStatusCode = httpStatusCode;
         this.body = body;
@@ -62,6 +79,7 @@ public class RestfulObjectsApplicationException extends RuntimeException impleme
         return httpStatusCode;
     }
 
+    @Override
     public JsonRepresentation getBody() {
         return body;
     }
