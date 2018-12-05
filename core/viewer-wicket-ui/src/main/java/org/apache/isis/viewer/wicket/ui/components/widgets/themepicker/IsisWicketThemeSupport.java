@@ -47,6 +47,7 @@ public interface IsisWicketThemeSupport {
      */
     static final String ENABLED_THEMES_KEY  = "isis.viewer.wicket.themes.enabled";
     static final String DEFAULT_THEME_KEY  = "isis.viewer.wicket.themes.initial";
+    static final String THEME_SUPPORT_PROVIDER_KEY  = "isis.viewer.wicket.themes.provider";
     static final Class<? extends IsisWicketThemeSupport> THEME_SUPPORT_DEFAULT_CLASS = 
             IsisWicketThemeSupportDefault.class;
     
@@ -64,7 +65,7 @@ public interface IsisWicketThemeSupport {
         final IsisConfiguration configuration = IsisContext.getConfiguration();
         
         final String themeSupportClassName = configuration.getString(
-                "isis.viewer.wicket.themes.provider", THEME_SUPPORT_DEFAULT_CLASS.getName());
+                THEME_SUPPORT_PROVIDER_KEY, THEME_SUPPORT_DEFAULT_CLASS.getName());
         
         try {
             
