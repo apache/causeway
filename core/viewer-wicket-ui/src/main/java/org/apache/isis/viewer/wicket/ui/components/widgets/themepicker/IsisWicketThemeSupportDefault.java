@@ -45,7 +45,7 @@ import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvid
 /**
  * @since 2.0.0-M2
  */
-class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
+public class IsisWicketThemeSupportDefault implements IsisWicketThemeSupport {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisWicketThemeSupportDefault.class);
     
