@@ -18,17 +18,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.IsisConfiguration;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -39,10 +28,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.string.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
@@ -64,7 +51,8 @@ import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitThemeProvider;
  */
 public class ThemeChooser extends Panel {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ThemeChooser.class);
+    //private static final Logger LOG = LoggerFactory.getLogger(ThemeChooser.class);
+    private static final long serialVersionUID = 1L;
 
     /**
      * A configuration setting which value determines whether the theme chooser should be available in the footer
@@ -73,15 +61,10 @@ public class ThemeChooser extends Panel {
     private static final boolean SHOW_THEME_PICKER_DEFAULT = false;
 
     /**
-     * A configuration setting which value could be a comma separated list of enabled theme names
-     */
-    private static final String ENABLED_THEMES_KEY  = "isis.viewer.wicket.themes.enabled";
-
-    /**
      * The name of the cookie that stores the last user selection
      */
     private static final String ISIS_THEME_COOKIE_NAME = "isis.viewer.wicket.themes.selected";
-
+    
     /**
      * Constructor
      *
@@ -97,9 +80,10 @@ public class ThemeChooser extends Panel {
             // if anything other than the default, then we do NOT initialize
             // (on the assumption that it is a persistent store and we don't want to overwrite).
         }
-
-        ListView<String> themesView = new ListView<String>("themes", getThemeNames()) {
-
+        
+        ListView<String> themesView = new ListView<String>("themes", getThemeSupport().getEnabledThemeNames()) {
+            private static final long serialVersionUID = 1L;
+            
             @Override
             protected void populateItem(ListItem<String> item) {
                 final String themeName = item.getModelObject();
@@ -108,6 +92,7 @@ public class ThemeChooser extends Panel {
                     item.add(AttributeModifier.append("class", "active"));
                 }
                 item.add(new AjaxLink<Void>("themeLink") {
+                    private static final long serialVersionUID = 1L;
                     // use Ajax link because Link's url looks like /ENTITY:3 and this confuses the browser
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -136,7 +121,7 @@ public class ThemeChooser extends Panel {
 
     private void setActiveTheme(String activeTheme) {
         IBootstrapSettings bootstrapSettings = Bootstrap.getSettings();
-        ITheme theme = getThemeByName(activeTheme);
+        ITheme theme = getThemeSupport().getThemeProvider().byName(activeTheme);
         getActiveThemeProvider().setActiveTheme(theme);
         if (theme instanceof BootstrapThemeTheme) {
             bootstrapSettings.setThemeProvider(new SingleThemeProvider(theme));
@@ -145,24 +130,6 @@ public class ThemeChooser extends Panel {
         } else if (theme instanceof VegibitTheme) {
             bootstrapSettings.setThemeProvider(new VegibitThemeProvider((VegibitTheme) theme));
         }
-    }
-
-    private ITheme getThemeByName(String themeName) {
-        ITheme theme;
-        try {
-            if ("bootstrap-theme".equals(themeName)) {
-                theme = new BootstrapThemeTheme();
-            } else if (themeName.startsWith("veg")) {
-                theme = VegibitTheme.valueOf(themeName);
-            } else {
-                theme = BootswatchTheme.valueOf(themeName);
-            }
-        } catch (Exception x) {
-            LOG.warn("Cannot find a theme with name '{}' in all available theme providers: {}", themeName, x.getMessage());
-            // fallback to Bootstrap default theme if the parsing by name failed somehow
-            theme = new BootstrapThemeTheme();
-        }
-        return theme;
     }
 
     private ActiveThemeProvider getActiveThemeProvider() {
@@ -177,56 +144,6 @@ public class ThemeChooser extends Panel {
         Attributes.addClass(tag, "dropdown");
     }
 
-    private List<String> getThemeNames() {
-        final BootstrapThemeTheme bootstrapTheme = new BootstrapThemeTheme();
-        List<BootswatchTheme> bootswatchThemes = Arrays.asList(BootswatchTheme.values());
-        //        List<VegibitTheme> vegibitThemes = Arrays.asList(VegibitTheme.values());
-
-        List<String> allThemes = new ArrayList<>();
-        allThemes.add(bootstrapTheme.name());
-
-        for (ITheme theme : bootswatchThemes) {
-            allThemes.add(theme.name());
-        }
-
-        //        for (ITheme theme : vegibitThemes) {
-        //            allThemes.add(theme.name());
-        //        }
-
-        allThemes = filterThemes(allThemes);
-
-        return allThemes;
-    }
-
-    /**
-     * Filters which themes to show in the drop up by using the provided values
-     * in {@value #ENABLED_THEMES_KEY}
-     *
-     * @param allThemes All available themes
-     * @return A list of all enabled themes
-     */
-    private List<String> filterThemes(List<String> allThemes) {
-        List<String> enabledThemes;
-
-        final String[] enabledThemesArray = getConfiguration().getList(ENABLED_THEMES_KEY);
-        if (enabledThemesArray.length > 0) {
-            final Set<String> enabledThemesSet = _NullSafe.stream(enabledThemesArray)
-                    .collect(Collectors.toSet());
-
-            Iterable<String> enabled = Iterables.filter(allThemes, new Predicate<String>() {
-                @Override
-                public boolean apply(String themeName) {
-                    return enabledThemesSet.contains(themeName);
-                }
-            });
-
-            enabledThemes = _Lists.newArrayList(enabled);
-        } else {
-            enabledThemes = allThemes;
-        }
-
-        return enabledThemes;
-    }
 
     @Override
     protected void onConfigure() {
@@ -236,6 +153,10 @@ public class ThemeChooser extends Panel {
         setVisible(shouldShow);
     }
 
+    private IsisWicketThemeSupport getThemeSupport() {
+        return IsisWicketThemeSupport.getInstance();
+    }
+    
     private IsisConfiguration getConfiguration() {
         return getIsisSessionFactory().getConfiguration();
     }

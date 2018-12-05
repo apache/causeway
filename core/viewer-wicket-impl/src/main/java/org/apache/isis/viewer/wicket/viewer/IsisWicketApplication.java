@@ -33,7 +33,6 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.Module;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
@@ -92,6 +91,7 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.components.scalars.string.MultiLineStringPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2BootstrapCssReference;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2JsReference;
+import org.apache.isis.viewer.wicket.ui.components.widgets.themepicker.IsisWicketThemeSupport;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
@@ -105,13 +105,12 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleFo
 import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
 
 import static java.util.Objects.requireNonNull;
+import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
-import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
-import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
@@ -168,7 +167,6 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
      */
     public static final String ENABLE_DEVELOPMENT_UTILITIES_KEY = "isis.viewer.wicket.developmentUtilities.enable";
     public static final boolean ENABLE_DEVELOPMENT_UTILITIES_DEFAULT = false;
-    public static final BootswatchTheme BOOTSWATCH_THEME_DEFAULT = BootswatchTheme.Flatly;
 
     /**
      * Convenience locator, down-casts inherited functionality.
@@ -284,7 +282,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             //
             final Injector injector = Guice.createInjector(
                     newIsisModule(), 
-                    newIsisWicketModule(configuration));
+                    newIsisWicketModule());
             
             initWicketComponentInjection(injector);
             
@@ -360,18 +358,10 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             ThreadPoolSupport.getInstance().join(futures);
         }
 
-        final String themeName = configuration.getString(
-                "isis.viewer.wicket.themes.initial", BOOTSWATCH_THEME_DEFAULT.name());
-        BootswatchTheme bootswatchTheme;
-        try {
-            bootswatchTheme = BootswatchTheme.valueOf(themeName);
-        } catch(Exception ex) {
-            bootswatchTheme = BOOTSWATCH_THEME_DEFAULT;
-            LOG.warn("Did not recognise configured bootswatch theme '{}', defaulting to '{}'", bootswatchTheme);
-
-        }
-        IBootstrapSettings settings = Bootstrap.getSettings();
-        settings.setThemeProvider(new BootswatchThemeProvider(bootswatchTheme));
+        acceptIfPresent(IsisWicketThemeSupport.getInstance(), themeSupport->{
+            IBootstrapSettings settings = Bootstrap.getSettings();
+            settings.setThemeProvider(themeSupport.getThemeProvider());
+        });
 
     }
     
@@ -507,7 +497,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     /**
      * Override if required
      */
-    protected Module newIsisWicketModule(IsisConfiguration isisConfiguration) {
+    protected IsisWicketModule newIsisWicketModule() {
         return new IsisWicketModule(getServletContext());
     }
 
