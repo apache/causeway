@@ -37,7 +37,6 @@ public class PrototypeFacetForActionAnnotation extends PrototypeFacetAbstract {
         
         return actions.stream()
                 .map(Action::restrictTo)
-                .filter(restrictTo -> restrictTo != RestrictTo.NOT_SPECIFIED)
                 .filter(restrictTo -> restrictTo == RestrictTo.PROTOTYPING)
                 .findFirst()
                 .map(restrictTo -> new PrototypeFacetForActionAnnotation(holder, deploymentType))
