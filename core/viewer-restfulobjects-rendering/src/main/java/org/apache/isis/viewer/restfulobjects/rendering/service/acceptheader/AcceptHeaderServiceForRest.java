@@ -18,22 +18,23 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
-
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.SetMultimap;
-import com.google.common.net.MediaType;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._NullSafe;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
@@ -66,36 +67,26 @@ public class AcceptHeaderServiceForRest implements AcceptHeaderService {
 
 
     @Provider
-    public static class RequestFilter implements javax.ws.rs.container.ContainerRequestFilter
-    {
+    public static class RequestFilter implements ContainerRequestFilter  {
         @Override
         public void filter(final ContainerRequestContext requestContext) throws IOException {
-            List<javax.ws.rs.core.MediaType> acceptableMediaTypes = requestContext.getAcceptableMediaTypes();
-
-            final List<MediaType> mediaTypes =
-                    _Lists.newArrayList(
-                            _Lists.map(acceptableMediaTypes, (
-                                        @Nullable
-                                        final javax.ws.rs.core.MediaType input) -> {
-                                    if (input == null) {
-                                        return null;
-                                    }
-                                    final MediaType mediaType = MediaType.create(input.getType(), input.getSubtype());
-                                    final SetMultimap<String, String> parameters = Multimaps.forMap(input.getParameters());
-                                    return mediaType.withParameters(parameters);
-                            })
-                            );
+            final List<MediaType> acceptableMediaTypes = requestContext.getAcceptableMediaTypes();
+            
+            final List<MediaType> mediaTypes = stream(acceptableMediaTypes)
+            .filter(_NullSafe::isPresent)
+            .collect(Collectors.toList());
+            
             setMediaTypes(mediaTypes);
         }
     }
 
     @Provider
-    public static class ResponseFilter implements javax.ws.rs.container.ContainerResponseFilter
-    {
+    public static class ResponseFilter implements ContainerResponseFilter {
         @Override
         public void filter(
-                final ContainerRequestContext requestContext, final ContainerResponseContext responseContext)
-                        throws IOException {
+                final ContainerRequestContext requestContext, 
+                final ContainerResponseContext responseContext) throws IOException {
+            
             removeMediaTypes();
         }
     }

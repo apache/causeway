@@ -20,7 +20,7 @@ package org.apache.isis.applib.services.acceptheader;
 
 import java.util.List;
 
-import com.google.common.net.MediaType;
+import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Programmatic;
 

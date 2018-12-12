@@ -35,11 +35,6 @@
     </properties>
 
     <dependencies>
-        <!-- [ahuber] there is still the goal of removing guava from ro-applib -->    
-    	<dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>log4j</groupId>

@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.node.NullNode;
-import com.google.common.collect.Maps;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -36,6 +35,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -94,7 +94,7 @@ public final class JsonValueEncoder {
         }
     }
 
-    private static Map<ObjectSpecId, JsonValueConverter> converterBySpec = Maps.newLinkedHashMap();
+    private static Map<ObjectSpecId, JsonValueConverter> converterBySpec = _Maps.newLinkedHashMap();
 
     private static void putConverter(JsonValueConverter jvc) {
         final List<ObjectSpecId> specIds = jvc.getSpecIds();

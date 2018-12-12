@@ -19,22 +19,26 @@
 package org.apache.isis.viewer.restfulobjects.applib;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
 
 public class JsonFixture {
 
     private JsonFixture() {
     }
 
-    public static JsonNode readJson(final String resourceName) throws JsonParseException, JsonMappingException, IOException {
-        return JsonMapper.instance().read(Resources.toString(Resources.getResource(JsonFixture.class, resourceName), Charsets.UTF_8), JsonNode.class);
+    public static JsonNode readJson(final String resourceName) 
+            throws JsonParseException, JsonMappingException, IOException {
+        
+        String json = _Resources.loadAsString(JsonFixture.class, resourceName, StandardCharsets.UTF_8);
+        
+        return JsonMapper.instance().read(json, JsonNode.class);
     }
 
 }

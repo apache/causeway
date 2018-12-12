@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.server.mappers;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
@@ -28,19 +29,18 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.ExceptionMapper;
 
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.server.IsisJaxrsServerPlugin;
 import org.apache.isis.viewer.restfulobjects.rendering.ExceptionWithBody;
 import org.apache.isis.viewer.restfulobjects.rendering.ExceptionWithHttpStatusCode;
+import org.apache.isis.viewer.restfulobjects.server.IsisJaxrsServerPlugin;
 import org.apache.isis.viewer.restfulobjects.server.mappers.entity.ExceptionDetail;
 import org.apache.isis.viewer.restfulobjects.server.mappers.entity.ExceptionPojo;
 import org.apache.isis.viewer.restfulobjects.server.resources.serialization.SerializationStrategy;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Throwables;
-import com.google.common.collect.FluentIterable;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public abstract class ExceptionMapperAbstract<T extends Throwable> implements ExceptionMapper<T> {
 
@@ -87,7 +87,6 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
     }
 
     private RestfulResponse.HttpStatusCode determineStatusCode(final T ex) {
-        final List<Throwable> chain = Throwables.getCausalChain(ex);
 
         RestfulResponse.HttpStatusCode statusCode;
 
@@ -95,8 +94,10 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
         if(statusCode!=null) {
             return statusCode;
         }
+        
+        final Optional<RecoverableException> recoverableIfAny = recoverableFor(ex);
 
-        if(!FluentIterable.from(chain).filter(RecoverableException.class).isEmpty()) {
+        if(recoverableIfAny.isPresent()) {
             statusCode = RestfulResponse.HttpStatusCode.OK;
         } else if(ex instanceof ExceptionWithHttpStatusCode) {
             ExceptionWithHttpStatusCode exceptionWithHttpStatusCode = (ExceptionWithHttpStatusCode) ex;
@@ -108,12 +109,24 @@ public abstract class ExceptionMapperAbstract<T extends Throwable> implements Ex
     }
 
     private static String messageFor(final Throwable ex) {
-        final List<Throwable> chain = Throwables.getCausalChain(ex);
-        final Optional<RecoverableException> recoverableIfAny =
-                FluentIterable.from(chain).filter(RecoverableException.class).first();
+        
+        final Optional<RecoverableException> recoverableIfAny = recoverableFor(ex);
+                
         return (recoverableIfAny.isPresent() ? recoverableIfAny.get() : ex).getMessage();
     }
 
+    private static Optional<RecoverableException> recoverableFor(final Throwable ex) {
+        final List<Throwable> chain = _Exceptions.getCausalChain(ex);
+        
+        final Optional<RecoverableException> recoverableIfAny = stream(chain)
+        .filter(t->t instanceof RecoverableException)
+        .map(t->(RecoverableException)t)
+        .findFirst();
+        
+        return recoverableIfAny;
+    }
+    
+    
     private ExceptionDetail detailIfRequired(
             final RestfulResponse.HttpStatusCode httpStatusCode,
             final Throwable ex) {

@@ -18,20 +18,21 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
+
 import static org.apache.isis.viewer.restfulobjects.applib.JsonFixture.readJson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import com.google.common.base.Charsets;
 
 public class JsonRepresentationTest_asInputStream {
 
@@ -45,12 +46,9 @@ public class JsonRepresentationTest_asInputStream {
     @Test
     public void asInputStream() throws IOException {
         final InputStream array = jsonRepresentation.asInputStream();
-
-        final ByteArrayOutputStream to = new ByteArrayOutputStream();
-        com.google.common.io.ByteStreams.copy(array, to);
-
-        final String jsonStr = to.toString(Charsets.UTF_8.name());
-
+                
+        final String jsonStr = _Strings.ofBytes(_Bytes.of(array), StandardCharsets.UTF_8);
+        
         assertThat(jsonStr, is(not(nullValue())));
     }
 

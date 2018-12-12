@@ -20,15 +20,13 @@ package org.apache.isis.viewer.restfulobjects.server.authentication;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.google.common.base.Splitter;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyAbstract;
@@ -61,6 +59,7 @@ public class AuthenticationSessionStrategyHeader extends AuthenticationSessionSt
         if (rolesStr == null) {
             return Collections.emptyList();
         }
-        return _Lists.newArrayList(Splitter.on(",").split(rolesStr));
+        return _Strings.splitThenStream(rolesStr, ",")
+                .collect(Collectors.toList());
     }
 }

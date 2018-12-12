@@ -24,9 +24,8 @@ import java.util.stream.Stream;
 
 import javax.ws.rs.core.MediaType;
 
-import com.google.common.collect.Maps;
-
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -42,7 +41,7 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     private final LinkFollowSpecs linkFollower;
     private final RepresentationType representationType;
     protected final JsonRepresentation representation;
-    private final Map<String,String> mediaTypeParams = Maps.newLinkedHashMap();
+    private final Map<String,String> mediaTypeParams = _Maps.newLinkedHashMap();
 
     private final InteractionInitiatedBy interactionInitiatedBy;
 

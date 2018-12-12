@@ -18,12 +18,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
-import java.net.URL;
-import java.nio.charset.Charset;
+import java.io.InputStream;
 import java.util.Properties;
 
-import com.google.common.io.Resources;
-
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -88,9 +86,9 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
 
     private static String versionFromManifest() {
         try {
-            URL resource = Resources.getResource(META_INF_POM_PROPERTIES);
+            final InputStream resource = _Resources.load(VersionReprRenderer.class, META_INF_POM_PROPERTIES);
             Properties p = new Properties();
-            p.load(Resources.asCharSource(resource, Charset.defaultCharset()).openStream());
+            p.load(resource);
             return p.getProperty("version");
         } catch (final Exception ex) {
             return "UNKNOWN";

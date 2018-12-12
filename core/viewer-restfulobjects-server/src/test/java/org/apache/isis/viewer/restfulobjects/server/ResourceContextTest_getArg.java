@@ -24,14 +24,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
 
-import com.google.common.collect.Maps;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -151,7 +150,7 @@ public class ResourceContextTest_getArg {
 
 
     private void givenServletRequestParameterMapEmpty() {
-        final HashMap<Object, Object> parameterMap = Maps.newHashMap();
+        final HashMap<Object, Object> parameterMap = _Maps.newHashMap();
         context.checking(new Expectations() {
             {
                 oneOf(mockHttpServletRequest).getParameterMap();

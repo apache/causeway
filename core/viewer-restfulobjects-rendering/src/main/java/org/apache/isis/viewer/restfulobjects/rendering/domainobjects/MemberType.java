@@ -21,31 +21,30 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.util.Map;
 
 import org.apache.isis.applib.util.Enums;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacet;
+import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.facets.actions.validate.ActionValidationFacet;
-import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacet;
-import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
-import org.apache.isis.core.metamodel.facets.properties.validating.PropertyValidateFacet;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
 
-import com.google.common.collect.ImmutableMap;
-
 public enum MemberType {
 
     PROPERTY("properties/", RepresentationType.OBJECT_PROPERTY,
-            ImmutableMap.of(
+            _Maps.unmodifiable(
                     "modify", MutatorSpec.of(Rel.MODIFY, PropertyValidateFacet.class, PropertySetterFacet.class, RestfulHttpMethod.PUT, BodyArgs.ONE),
                     "clear", MutatorSpec.of(Rel.CLEAR, PropertyValidateFacet.class, PropertyClearFacet.class, RestfulHttpMethod.DELETE, BodyArgs.NONE))) {
         @Override
@@ -58,7 +57,7 @@ public enum MemberType {
      * {@link CollectionSemantics#getAddToKey()}
      */
     COLLECTION("collections/", RepresentationType.OBJECT_COLLECTION,
-            ImmutableMap.of(
+            _Maps.unmodifiable(
                     "addToSet", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, RestfulHttpMethod.PUT, BodyArgs.ONE),
                     "addToList", MutatorSpec.of(Rel.ADD_TO, CollectionValidateAddToFacet.class, CollectionAddToFacet.class, RestfulHttpMethod.POST, BodyArgs.ONE), "removeFrom", MutatorSpec.of(Rel.REMOVE_FROM, CollectionValidateRemoveFromFacet.class, CollectionRemoveFromFacet.class, RestfulHttpMethod.DELETE, BodyArgs.ONE))) {
         @Override
@@ -71,7 +70,7 @@ public enum MemberType {
      * {@link ActionSemantics#getInvokeKey()}
      */
     ACTION("actions/", RepresentationType.OBJECT_ACTION,
-            ImmutableMap.of(
+            _Maps.unmodifiable(
                     "invokeQueryOnly", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.GET, BodyArgs.MANY, "invoke"),
                     "invokeIdempotent", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.PUT, BodyArgs.MANY, "invoke"),
                     "invoke", MutatorSpec.of(Rel.INVOKE, ActionValidationFacet.class, ActionInvocationFacet.class, RestfulHttpMethod.POST, BodyArgs.MANY, "invoke"))) {

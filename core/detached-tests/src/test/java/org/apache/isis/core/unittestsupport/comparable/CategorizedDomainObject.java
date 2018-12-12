@@ -16,10 +16,11 @@
  */
 package org.apache.isis.core.unittestsupport.comparable;
 
-import com.google.common.collect.Ordering;
-
+import static org.apache.isis.commons.internal.base._NullSafe.compareNullsFirst;
 
 public class CategorizedDomainObject implements Comparable<CategorizedDomainObject> {
+
+    // --
 
     private Integer category;
 
@@ -31,7 +32,7 @@ public class CategorizedDomainObject implements Comparable<CategorizedDomainObje
         this.category = category;
     }
 
-
+    // --
 
     private Integer subcategory;
 
@@ -43,28 +44,16 @@ public class CategorizedDomainObject implements Comparable<CategorizedDomainObje
         this.subcategory = subcategory;
     }
 
-
+    // --
 
     @Override
     public int compareTo(CategorizedDomainObject other) {
-        return ORDER_BY_CATEGORY.compound(ORDER_BY_SUBCATEGORY).compare(this, other);
+        int c = compareNullsFirst(this.getCategory(), other.getCategory());
+        if(c!=0) {
+            return c;
+        }
+        return compareNullsFirst(this.getSubcategory(), other.getSubcategory());        
     }
-
-    private static Ordering<CategorizedDomainObject> ORDER_BY_CATEGORY = new Ordering<CategorizedDomainObject>() {
-        @Override
-        public int compare(CategorizedDomainObject left, CategorizedDomainObject right) {
-            return Ordering.natural().nullsFirst().compare(left.getCategory(), right.getCategory());
-        }
-    };
-
-    private static Ordering<CategorizedDomainObject> ORDER_BY_SUBCATEGORY = new Ordering<CategorizedDomainObject>() {
-        @Override
-        public int compare(CategorizedDomainObject left, CategorizedDomainObject right) {
-            return Ordering.natural().nullsFirst().compare(left.getSubcategory(), right.getSubcategory());
-        }
-
-    };
-
 
 
 }

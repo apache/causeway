@@ -18,11 +18,14 @@ package org.apache.isis.viewer.restfulobjects.rendering.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.google.common.base.Charsets;
-import com.google.common.io.ByteStreams;
+
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
@@ -41,8 +44,7 @@ public final class Util {
      */
     public static String asStringUtf8(final InputStream body) {
         try {
-            final byte[] byteArray = ByteStreams.toByteArray(body);
-            return new String(byteArray, Charsets.UTF_8);
+            return _Strings.ofBytes(_Bytes.of(body), StandardCharsets.UTF_8);
         } catch (final IOException e) {
             throw RestfulObjectsApplicationException.createWithCauseAndMessage(RestfulResponse.HttpStatusCode.BAD_REQUEST, e, "could not read body");
         }

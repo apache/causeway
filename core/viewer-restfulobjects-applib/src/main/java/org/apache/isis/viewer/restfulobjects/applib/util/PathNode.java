@@ -31,8 +31,6 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
-import com.google.common.base.Splitter;
-
 public class PathNode {
     private static final Pattern NODE = Pattern.compile("^([^\\[]*)(\\[(.+)\\])?$");
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
@@ -84,8 +82,9 @@ public class PathNode {
         final Map<String, String> criteria = _Maps.newHashMap();
         final String criteriaStr = nodeMatcher.group(3);
         if (criteriaStr != null) {
-
-            for (final String criterium : Splitter.on(WHITESPACE).split(criteriaStr)) {
+            
+            _Strings.splitThenStream(criteriaStr, WHITESPACE)
+            .forEach(criterium->{
                 final Matcher keyValueMatcher = LIST_CRITERIA_SYNTAX.matcher(criterium);
                 if (keyValueMatcher.matches()) {
                     criteria.put(keyValueMatcher.group(1), keyValueMatcher.group(2));
@@ -93,7 +92,8 @@ public class PathNode {
                     // take content as a map criteria
                     criteria.put(criterium, null);
                 }
-            }
+            });
+            
         }
 
         return new PathNode(key, criteria);

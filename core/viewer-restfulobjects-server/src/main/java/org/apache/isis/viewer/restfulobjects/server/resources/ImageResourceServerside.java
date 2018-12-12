@@ -19,14 +19,15 @@
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import com.google.common.io.Resources;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.resources._Resources;
 
 @Path("/image")
 public class ImageResourceServerside extends ResourceAbstract {
@@ -36,8 +37,8 @@ public class ImageResourceServerside extends ResourceAbstract {
     @Produces("image/png")
     public Response image() throws IOException {
 
-        URL resource = Resources.getResource(getClass(), "SimpleObject.png");
-        byte[] bytes = Resources.toByteArray(resource);
+        final InputStream resource = _Resources.load(getClass(), "SimpleObject.png");
+        final byte[] bytes = _Bytes.of(resource);
 
         //        Response.ResponseBuilder response = Response.ok(file);
         //        response.header("Content-Disposition",

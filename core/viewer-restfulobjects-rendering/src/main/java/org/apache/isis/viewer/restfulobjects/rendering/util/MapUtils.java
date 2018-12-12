@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.rendering.util;
 import java.util.Collections;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
+import org.apache.isis.commons.internal.collections._Maps;
 
 public final class MapUtils {
 
@@ -32,7 +32,7 @@ public final class MapUtils {
         if (keyOrValues.length % 2 != 0) {
             throw new IllegalArgumentException("Must provide an even number of arguments");
         }
-        final Map<String, String> map = Maps.newLinkedHashMap();
+        final Map<String, String> map = _Maps.newLinkedHashMap();
         String key = null;
         for (final String keyOrValue : keyOrValues) {
             if (key != null) {

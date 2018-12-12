@@ -18,7 +18,6 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -33,9 +32,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.commons.internal.base._Strings;
-import com.google.common.io.Resources;
-
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.annotation.Where;
@@ -46,6 +42,9 @@ import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.links.Link;
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.commons.internal.base._Bytes;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.commons.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -243,12 +242,16 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         byte[] toBytes() {
             String imageName =  getImageName();
-            URL resource = Resources.getResource(domainClass, imageName);
+            
             try {
-                return Resources.toByteArray(resource);
+                
+                final InputStream resource = _Resources.load(domainClass, imageName);
+                return _Bytes.of(resource);
+                
             } catch (IOException e) {
                 return null;
             }
+            
         }
     }
 

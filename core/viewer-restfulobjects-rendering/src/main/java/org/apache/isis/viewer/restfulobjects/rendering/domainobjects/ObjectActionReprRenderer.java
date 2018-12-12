@@ -21,11 +21,11 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.node.NullNode;
-import org.apache.isis.commons.internal.collections._Lists;
-import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -146,7 +146,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             }
             representation.mapPut("parameters", parameters);
         } else {
-            final Map<String,Object> parameters = Maps.newLinkedHashMap();
+            final Map<String,Object> parameters = _Maps.newLinkedHashMap();
             for (int i = 0; i < objectMember.getParameterCount(); i++) {
                 final ObjectActionParameter param = objectMember.getParameters().get(i);
                 final Object paramDetails = paramDetails(param, getInteractionInitiatedBy());
