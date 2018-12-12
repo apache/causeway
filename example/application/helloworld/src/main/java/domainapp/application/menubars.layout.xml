@@ -103,7 +103,7 @@
         <mb3:menu>
             <mb3:named>Configuration Service Menu</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="isisApplib.ConfigurationServiceMenu" id="configuration">
+                <mb3:serviceAction objectType="isisApplib.ConfigurationMenu" id="configuration">
                     <cpt:named>Configuration</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
