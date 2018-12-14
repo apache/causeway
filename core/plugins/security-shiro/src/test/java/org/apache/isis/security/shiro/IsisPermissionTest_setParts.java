@@ -30,19 +30,19 @@ public class IsisPermissionTest_setParts {
     @Test
     public void noVeto() throws Exception {
         IsisPermission ip = new IsisPermission("com.mycompany.myapp:Customer:changeAddress:r");
-        assertThat(ip.toString(), is("[com.mycompany.myapp]:[customer]:[changeaddress]:[r]"));
+        assertThat(ip.toString(), is("com.mycompany.myapp:customer:changeaddress:r"));
     }
 
     @Test
     public void withVetoableDomain() throws Exception {
         IsisPermission ip = new IsisPermission("foo/com.mycompany.myapp:Customer:changeAddress:r");
-        assertThat(ip.toString(), is("foo/[com.mycompany.myapp]:[customer]:[changeaddress]:[r]"));
+        assertThat(ip.toString(), is("foo/com.mycompany.myapp:customer:changeaddress:r"));
     }
 
     @Test
     public void withVetoAndVetoableDomain() throws Exception {
         IsisPermission ip = new IsisPermission("!foo/com.mycompany.myapp:Customer:changeAddress:r");
-        assertThat(ip.toString(), is("!foo/[com.mycompany.myapp]:[customer]:[changeaddress]:[r]"));
+        assertThat(ip.toString(), is("!foo/com.mycompany.myapp:customer:changeaddress:r"));
     }
 
     
