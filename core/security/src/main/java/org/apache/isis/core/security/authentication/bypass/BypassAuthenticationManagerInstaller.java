@@ -17,27 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.core.security.authentication;
+package org.apache.isis.core.security.authentication.bypass;
 
-import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
+import java.util.List;
+
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.runtime.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
 
 /**
- * Implementation that bypasses authentication.
+ * Run Isis with open access.
  *
- * <p>
- * Intended for testing use only.
+ * To install, use
+ * <pre>
+ * isis.authentication=none
+ * </pre>
  */
-public class AuthenticatorBypass extends AuthenticatorAbstract {
+public class BypassAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
 
-    @Override
-    public boolean isValid(final AuthenticationRequest request) {
-        return true;
+    public BypassAuthenticationManagerInstaller() {
+        super("bypass");
     }
 
     @Override
-    public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
-        return true;
+    protected List<Authenticator> createAuthenticators() {
+        return _Lists.of(new AuthenticatorBypass());
     }
 
 }

@@ -17,41 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.core.security.authorization;
+package org.apache.isis.core.security.authentication.singleuser;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.runtime.authorization.standard.Authorizor;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-public class AuthorizorBypass implements Authorizor {
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
 
-    @Override
-    public void init() {
-        // does nothing
+/**
+ * Requests corresponding to an {@link SingleUserSession}.
+ */
+public class AuthenticationRequestSingleUser extends AuthenticationRequestAbstract {
+
+    private static final String SINGLE_USER_NAME = "self";
+    private static final String SINGLE_USER_ROlE_NAME = "default_role";
+    private final List<String> roles;
+
+    public AuthenticationRequestSingleUser() {
+        super(SINGLE_USER_NAME);
+        roles = Collections.unmodifiableList(Arrays.asList(SINGLE_USER_ROlE_NAME));
     }
 
     @Override
-    public void shutdown() {
-        // does nothing
-    }
-
-    @Override
-    public boolean isUsableInRole(final String role, final Identifier identifier) {
-        return true;
-    }
-
-    @Override
-    public boolean isVisibleInRole(final String user, final Identifier identifier) {
-        return true;
-    }
-
-    @Override
-    public boolean isVisibleInAnyRole(Identifier identifier) {
-        return true;
-    }
-
-    @Override
-    public boolean isUsableInAnyRole(Identifier identifier) {
-        return true;
+    public List<String> getRoles() {
+        return roles;
     }
 
 }

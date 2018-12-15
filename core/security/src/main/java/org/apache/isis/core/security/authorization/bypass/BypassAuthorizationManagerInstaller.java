@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.security.authorization;
+package org.apache.isis.core.security.authorization.bypass;
 
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandardInstallerAbstract;
 import org.apache.isis.core.runtime.authorization.standard.Authorizor;

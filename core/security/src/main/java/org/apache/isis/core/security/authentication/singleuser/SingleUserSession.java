@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.authentication.singleuser;
+package org.apache.isis.core.security.authentication.singleuser;
 
 import java.io.IOException;
 

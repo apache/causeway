@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.authentication;
+package org.apache.isis.core.security.authentication;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.runtime.authentication.fixture.LogonFixtureAuthenticator;

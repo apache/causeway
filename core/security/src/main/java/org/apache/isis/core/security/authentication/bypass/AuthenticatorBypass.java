@@ -17,31 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.authentication.singleuser;
+package org.apache.isis.core.security.authentication.bypass;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 
 /**
- * Requests corresponding to an {@link SingleUserSession}.
+ * Implementation that bypasses authentication.
+ *
+ * <p>
+ * Intended for testing use only.
  */
-public class AuthenticationRequestSingleUser extends AuthenticationRequestAbstract {
+public class AuthenticatorBypass extends AuthenticatorAbstract {
 
-    private static final String SINGLE_USER_NAME = "self";
-    private static final String SINGLE_USER_ROlE_NAME = "default_role";
-    private final List<String> roles;
-
-    public AuthenticationRequestSingleUser() {
-        super(SINGLE_USER_NAME);
-        roles = Collections.unmodifiableList(Arrays.asList(SINGLE_USER_ROlE_NAME));
+    @Override
+    public boolean isValid(final AuthenticationRequest request) {
+        return true;
     }
 
     @Override
-    public List<String> getRoles() {
-        return roles;
+    public boolean canAuthenticate(final Class<? extends AuthenticationRequest> authenticationRequestClass) {
+        return true;
     }
 
 }

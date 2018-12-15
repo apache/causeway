@@ -17,31 +17,41 @@
  *  under the License.
  */
 
-package org.apache.isis.core.security.authentication;
+package org.apache.isis.core.security.authorization.bypass;
 
-import java.util.List;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.runtime.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
-import org.apache.isis.core.runtime.authentication.standard.Authenticator;
+public class AuthorizorBypass implements Authorizor {
 
-/**
- * Run Isis with open access.
- *
- * To install, use
- * <pre>
- * isis.authentication=none
- * </pre>
- */
-public class BypassAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstractForDfltRuntime {
-
-    public BypassAuthenticationManagerInstaller() {
-        super("bypass");
+    @Override
+    public void init() {
+        // does nothing
     }
 
     @Override
-    protected List<Authenticator> createAuthenticators() {
-        return _Lists.of(new AuthenticatorBypass());
+    public void shutdown() {
+        // does nothing
+    }
+
+    @Override
+    public boolean isUsableInRole(final String role, final Identifier identifier) {
+        return true;
+    }
+
+    @Override
+    public boolean isVisibleInRole(final String user, final Identifier identifier) {
+        return true;
+    }
+
+    @Override
+    public boolean isVisibleInAnyRole(Identifier identifier) {
+        return true;
+    }
+
+    @Override
+    public boolean isUsableInAnyRole(Identifier identifier) {
+        return true;
     }
 
 }
