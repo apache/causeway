@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.security.shiro.util.Util;
 
 public class PermissionToRoleMapperFromString implements PermissionToRoleMapper {
 

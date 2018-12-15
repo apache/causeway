@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.shiro.util;
+package org.apache.isis.security.shiro.permrolemapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 
-public class Util {
+class Util {
 
     public static Map<String, Set<String>> parse(String permissionsByRoleStr) {
         final Map<String, Set<String>> permsByRole = _Maps.newHashMap();

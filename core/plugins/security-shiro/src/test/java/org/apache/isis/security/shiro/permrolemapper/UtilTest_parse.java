@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.security.shiro.util;
+package org.apache.isis.security.shiro.permrolemapper;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
+
+import org.apache.isis.security.shiro.permrolemapper.Util;
 
 public class UtilTest_parse {
 
