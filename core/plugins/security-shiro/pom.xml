@@ -81,7 +81,7 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
+            <artifactId>isis-core-security</artifactId>
         </dependency>
 	
         <dependency>

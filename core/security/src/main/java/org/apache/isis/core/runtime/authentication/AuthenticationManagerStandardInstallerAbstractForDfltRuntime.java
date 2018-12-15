@@ -24,7 +24,8 @@ import org.apache.isis.core.runtime.authentication.fixture.LogonFixtureAuthentic
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
 
-public abstract class AuthenticationManagerStandardInstallerAbstractForDfltRuntime extends AuthenticationManagerStandardInstallerAbstract {
+public abstract class AuthenticationManagerStandardInstallerAbstractForDfltRuntime 
+extends AuthenticationManagerStandardInstallerAbstract {
 
 
     public AuthenticationManagerStandardInstallerAbstractForDfltRuntime(final String name) {
@@ -32,8 +33,8 @@ public abstract class AuthenticationManagerStandardInstallerAbstractForDfltRunti
     }
 
     /**
-     * Returns an instance of {@link AuthenticationManagerStandard} that has no need to log in when running in
-     * prototyping mode.
+     * Returns an instance of {@link AuthenticationManagerStandard} that has no need to log in when 
+     * running in prototyping mode.
      *
      * <p>
      * Specifically:
