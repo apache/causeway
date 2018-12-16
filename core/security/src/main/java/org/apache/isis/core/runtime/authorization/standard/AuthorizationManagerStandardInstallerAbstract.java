@@ -22,6 +22,7 @@ package org.apache.isis.core.runtime.authorization.standard;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.components.InstallerAbstract;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -58,14 +59,13 @@ implements AuthorizationManagerInstaller {
         final String authorizationManagerStandardClsName = 
                 "org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandard";
         
-        Class<? extends AuthorizationManager> cls = 
-                (Class<? extends AuthorizationManager>) _Context
-                .loadClassAndInitialize(authorizationManagerStandardClsName);
+        final Class<? extends AuthorizationManager> cls = _Casts.uncheckedCast(
+                _Context.loadClassAndInitialize(authorizationManagerStandardClsName));
         
-        AuthorizationManager authorizationManager = cls.newInstance();
+        final AuthorizationManager authorizationManager = cls.newInstance();
         final Authorizor authorizor = createAuthorizor();
         
-        cls.getMethod("setAuthorizor", new Class[] {Authorizor.class})
+        cls.getDeclaredMethod("setAuthorizor", new Class[] {Authorizor.class})
         .invoke(authorizationManager, new Object[] {authorizor});
         
         return authorizationManager;
