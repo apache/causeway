@@ -25,7 +25,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerAbstract;
 
@@ -62,7 +61,7 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
     // /////////////////////////////////////////////////////////
 
     @Override
-    public boolean isUsable(final AuthenticationSession session, final ManagedObject target, final Identifier identifier) {
+    public boolean isUsable(final AuthenticationSession session, final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
         }
@@ -81,7 +80,7 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
     }
 
     @Override
-    public boolean isVisible(final AuthenticationSession session, final ManagedObject target, final Identifier identifier) {
+    public boolean isVisible(final AuthenticationSession session, final Identifier identifier) {
         if (isPerspectiveMember(identifier)) {
             return true;
         }

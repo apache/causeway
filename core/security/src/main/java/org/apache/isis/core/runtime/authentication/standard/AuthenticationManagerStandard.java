@@ -26,13 +26,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.RegistrationDetails;
@@ -216,12 +216,14 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     // Debugging
     // //////////////////////////////////////////////////////////
 
+    private final static ToString<AuthenticationManagerStandard> toString =
+            ToString.<AuthenticationManagerStandard>toString("class", obj->obj.getClass().getSimpleName())
+            .thenToString("authenticators", obj->""+obj.authenticators.size())
+            .thenToString("users", obj->""+obj.userByValidationCode.size());
+    
     @Override
     public String toString() {
-        final ToString str = ToString.createAnonymous(this);
-        str.append("authenticators", authenticators.size());
-        str.append("users", userByValidationCode.size());
-        return str.toString();
+        return toString.toString(this);
     }
 
     // //////////////////////////////////////////////////////////

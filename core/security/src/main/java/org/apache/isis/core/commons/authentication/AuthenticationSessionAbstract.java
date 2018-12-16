@@ -31,10 +31,10 @@ import java.util.Objects;
 
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
-import org.apache.isis.core.commons.util.ToString;
 
 public abstract class AuthenticationSessionAbstract implements AuthenticationSession, Serializable {
 
@@ -154,15 +154,15 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return new UserMemento(getUserName(), roles);
     }
 
-
-
     // -- toString
+    
+    private final static ToString<AuthenticationSessionAbstract> toString = ToString
+            .toString("name", AuthenticationSessionAbstract::getUserName)
+            .thenToString("code", AuthenticationSessionAbstract::getValidationCode);
 
     @Override
     public String toString() {
-        return new ToString(this).append("name", getUserName()).append("code", getValidationCode()).toString();
+        return toString.toString(this);
     }
-
-
 
 }
