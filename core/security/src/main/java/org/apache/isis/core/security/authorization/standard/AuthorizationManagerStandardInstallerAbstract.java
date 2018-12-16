@@ -20,6 +20,7 @@
 package org.apache.isis.core.security.authorization.standard;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.commons.internal.base._Casts;
@@ -42,15 +43,14 @@ implements AuthorizationManagerInstaller {
         try {
             return createAuthorizationManagerReflective();
             
-        } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException
-                | InvocationTargetException
-                | NoSuchMethodException | SecurityException | InstantiationException e) {
+        } catch (Exception e) {
             
             throw new RuntimeException("unable to create AuthorizationManager reflective", e);
             
         }
     }
     
+    //TODO[2040] maybe, there's a way to this more straight forward, without resorting to reflection 
     private AuthorizationManager createAuthorizationManagerReflective() 
             throws ClassNotFoundException, IllegalAccessException, IllegalArgumentException, 
             InvocationTargetException, 
@@ -65,13 +65,16 @@ implements AuthorizationManagerInstaller {
         final AuthorizationManager authorizationManager = cls.newInstance();
         final Authorizor authorizor = createAuthorizor();
         
-        cls.getDeclaredMethod("setAuthorizor", new Class[] {Authorizor.class})
-        .invoke(authorizationManager, new Object[] {authorizor});
+        Method setter = cls.getDeclaredMethod("setAuthorizor", new Class[] {Authorizor.class});
+        
+        setter.setAccessible(true);
+        setter.invoke(authorizationManager, new Object[] {authorizor});
+        setter.setAccessible(false);
         
         return authorizationManager;
     }
     
-//TODO[2040] first attempt to decouple modules 'security' and 'metamodel' left us with having
+    //TODO[2040] first attempt to decouple modules 'security' and 'metamodel' left us with having
     // to replace this direct code with a reflective one
 //    @Override
 //    public AuthorizationManager createAuthorizationManager() {
