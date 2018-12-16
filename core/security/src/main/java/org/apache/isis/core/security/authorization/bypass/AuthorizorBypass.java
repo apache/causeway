@@ -20,7 +20,7 @@
 package org.apache.isis.core.security.authorization.bypass;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.runtime.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 public class AuthorizorBypass implements Authorizor {
 

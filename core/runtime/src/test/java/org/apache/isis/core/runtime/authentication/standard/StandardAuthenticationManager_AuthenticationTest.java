@@ -30,9 +30,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.security.authentication.AuthenticationRequest;
+import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.core.security.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authentication.standard.RandomCodeGenerator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

@@ -27,8 +27,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract;
-import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
+import org.apache.isis.core.security.authentication.AuthenticationRequestAbstract;
+import org.apache.isis.core.security.authentication.fixtures.AuthenticationRequestLogonFixture;
+import org.apache.isis.core.security.authentication.fixtures.LogonFixtureAuthenticator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

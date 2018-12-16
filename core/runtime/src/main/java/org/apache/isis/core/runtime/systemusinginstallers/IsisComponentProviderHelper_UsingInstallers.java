@@ -35,12 +35,12 @@ import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.factory.UnavailableClassException;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
-import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManagerInstaller;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManagerInstaller;
 
 class IsisComponentProviderHelper_UsingInstallers  {
 

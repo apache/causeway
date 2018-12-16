@@ -21,10 +21,10 @@ package org.apache.isis.core.runtime.system;
 
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
-import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManagerInstaller;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManagerInstaller;
 
 public final class SystemConstants {
     

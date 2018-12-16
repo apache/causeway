@@ -22,12 +22,12 @@ package org.apache.isis.core.runtime.system.session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 /**
  * Analogous to (and in essence a wrapper for) a JDO <code>PersistenceManager</code>;

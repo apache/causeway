@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -38,6 +36,8 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements AutoCompleteFacet {
 

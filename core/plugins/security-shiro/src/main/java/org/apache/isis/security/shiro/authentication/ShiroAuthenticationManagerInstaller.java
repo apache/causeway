@@ -21,8 +21,8 @@ package org.apache.isis.security.shiro.authentication;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.runtime.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
+import org.apache.isis.core.security.authentication.standard.Authenticator;
 import org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor;
 
 public class ShiroAuthenticationManagerInstaller

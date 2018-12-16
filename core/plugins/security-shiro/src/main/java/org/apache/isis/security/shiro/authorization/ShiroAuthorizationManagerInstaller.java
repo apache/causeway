@@ -18,8 +18,8 @@
  */
 package org.apache.isis.security.shiro.authorization;
 
-import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandardInstallerAbstract;
-import org.apache.isis.core.runtime.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authorization.standard.AuthorizationManagerStandardInstallerAbstract;
+import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.ShiroAuthenticatorOrAuthorizor;
 
 public class ShiroAuthorizationManagerInstaller extends AuthorizationManagerStandardInstallerAbstract {

@@ -39,7 +39,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -68,6 +67,7 @@ import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFa
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.classEqualTo;
 import static org.hamcrest.CoreMatchers.is;

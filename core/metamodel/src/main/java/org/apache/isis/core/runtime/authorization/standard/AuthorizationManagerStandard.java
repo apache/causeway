@@ -23,10 +23,11 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.sudo.SudoService;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerAbstract;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
 

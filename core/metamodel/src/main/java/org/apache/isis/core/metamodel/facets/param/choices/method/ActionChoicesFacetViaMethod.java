@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -37,6 +35,8 @@ import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacetAbs
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract implements ImperativeFacet {
 

@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -35,6 +34,7 @@ import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollect
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class PropertyAccessorFacetViaAccessor
 extends PropertyOrCollectionAccessorFacetAbstract

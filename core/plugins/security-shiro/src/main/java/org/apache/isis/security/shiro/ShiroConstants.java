@@ -20,7 +20,7 @@
 package org.apache.isis.security.shiro;
 
 import org.apache.isis.config.ConfigurationConstants;
-import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManagerInstaller;
 import org.apache.isis.security.shiro.authentication.ShiroAuthenticationManagerInstaller;
 
 public final class ShiroConstants {

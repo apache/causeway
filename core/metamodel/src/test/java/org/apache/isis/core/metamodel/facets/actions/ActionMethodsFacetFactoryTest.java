@@ -30,8 +30,6 @@ import org.jmock.Expectations;
 
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -64,6 +62,8 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.ObjectSpecificationStub;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {

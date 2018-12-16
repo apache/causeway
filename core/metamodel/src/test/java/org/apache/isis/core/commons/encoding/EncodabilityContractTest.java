@@ -33,7 +33,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 public abstract class EncodabilityContractTest {
 

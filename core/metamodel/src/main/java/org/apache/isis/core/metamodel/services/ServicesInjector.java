@@ -44,7 +44,6 @@ import org.apache.isis.commons.internal.collections._Multimaps;
 import org.apache.isis.commons.internal.collections._Multimaps.ListMultimap;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -52,8 +51,9 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;

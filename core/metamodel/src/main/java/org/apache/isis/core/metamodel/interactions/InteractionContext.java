@@ -24,12 +24,12 @@ import javax.annotation.Nullable;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.wrapper.events.InteractionEvent;
 import org.apache.isis.commons.internal.base._Tuples;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 /**
  * Represents an interaction between the framework and (a {@link Facet} of) the

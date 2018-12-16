@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.postprocessors.param;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -32,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class ActionParameterChoicesFacetFromParentedCollection extends ActionParameterChoicesFacetAbstract {
 

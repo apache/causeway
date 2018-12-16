@@ -33,7 +33,6 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.appmanifest.AppManifestProvider;
@@ -41,8 +40,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.plugins.environment.DeploymentType;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.MessageRegistry;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -51,6 +48,9 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 /**
  * Is the factory of {@link IsisSession}s, also holding a reference to the current session using

@@ -27,8 +27,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.reflection.Reflect;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -37,6 +35,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.navparent.NavigableParentFacet;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentTestSamples.DomainObjectA;
 import org.apache.isis.core.metamodel.facets.object.navparent.method.NavigableParentFacetMethod;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 

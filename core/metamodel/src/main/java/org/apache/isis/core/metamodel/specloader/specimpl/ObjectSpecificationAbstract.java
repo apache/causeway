@@ -39,7 +39,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.util.ToString;
@@ -89,6 +88,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;

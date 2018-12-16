@@ -28,8 +28,6 @@ import org.junit.Rule;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -39,6 +37,8 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import junit.framework.TestCase;

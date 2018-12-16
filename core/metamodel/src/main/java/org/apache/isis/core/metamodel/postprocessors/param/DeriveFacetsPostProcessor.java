@@ -31,7 +31,6 @@ import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -107,6 +106,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionParameterA
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.

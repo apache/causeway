@@ -21,14 +21,14 @@ package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.applib.services.wrapper.events.UsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 public abstract class AuthorizationFacetAbstract extends FacetAbstract implements AuthorizationFacet {
 

@@ -20,7 +20,6 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -31,6 +30,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.ObjectAdapterFactories;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 /**
  * package private mixin for ObjectAdapterContext

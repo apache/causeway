@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.members.hidden.forsession;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,6 +31,7 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class HideForSessionFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 

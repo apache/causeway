@@ -16,13 +16,13 @@
  */
 package org.apache.isis.core.runtime.sessiontemplate;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 public abstract class AbstractIsisSessionTemplate {
 

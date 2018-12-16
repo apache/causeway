@@ -38,7 +38,6 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -56,8 +55,9 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;

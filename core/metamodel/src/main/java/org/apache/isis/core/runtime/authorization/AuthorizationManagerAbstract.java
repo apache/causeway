@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtime.authorization;
 
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 public abstract class AuthorizationManagerAbstract implements AuthorizationManager, MetaModelRefiner {
 

@@ -22,7 +22,6 @@ package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 import java.util.Iterator;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -32,6 +31,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 public class PojoAdapterBuilder {
 

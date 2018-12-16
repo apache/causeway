@@ -21,9 +21,9 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;

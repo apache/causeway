@@ -24,7 +24,6 @@ import java.util.IllegalFormatException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -40,6 +39,7 @@ import org.apache.isis.core.metamodel.interactions.ParseValueContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class ParseableFacetUsingParser extends FacetAbstract implements ParseableFacet {
 

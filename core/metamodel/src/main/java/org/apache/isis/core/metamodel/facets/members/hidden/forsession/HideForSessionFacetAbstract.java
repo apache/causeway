@@ -20,12 +20,12 @@
 package org.apache.isis.core.metamodel.facets.members.hidden.forsession;
 
 import org.apache.isis.applib.services.wrapper.events.VisibilityEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 /**
  * Hide a property, collection or action based on the current session.

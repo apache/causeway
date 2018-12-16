@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.runtime.authorization.standard;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 public class AuthorizationFacetImpl extends AuthorizationFacetAbstract {
 

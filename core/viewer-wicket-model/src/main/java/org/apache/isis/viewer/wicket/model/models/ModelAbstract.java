@@ -21,12 +21,12 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the

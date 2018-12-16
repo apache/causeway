@@ -26,16 +26,16 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.headless.auth.AuthenticationRequestNameOnly;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
+import org.apache.isis.core.security.authentication.AuthenticationRequest;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 
 
 /**

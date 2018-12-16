@@ -45,14 +45,14 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.core.runtime.authentication.standard.Authenticator;
-import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
-import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
-import org.apache.isis.core.runtime.authorization.standard.Authorizor;
+import org.apache.isis.core.security.authentication.AuthenticationRequest;
+import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManagerInstaller;
+import org.apache.isis.core.security.authentication.standard.Authenticator;
+import org.apache.isis.core.security.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManagerInstaller;
+import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.authorization.IsisPermission;
 
 import static org.apache.isis.config.internal._Config.getConfiguration;

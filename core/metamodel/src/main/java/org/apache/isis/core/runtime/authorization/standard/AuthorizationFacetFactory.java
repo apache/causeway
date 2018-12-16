@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 public class AuthorizationFacetFactory extends FacetFactoryAbstract {
 

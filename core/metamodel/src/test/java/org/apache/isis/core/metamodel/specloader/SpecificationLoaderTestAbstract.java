@@ -32,7 +32,6 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -44,6 +43,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract.Depreca
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;

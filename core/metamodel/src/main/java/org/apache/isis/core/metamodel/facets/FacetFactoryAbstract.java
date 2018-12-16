@@ -24,11 +24,11 @@ import java.util.List;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInjectorAware {
 

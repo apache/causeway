@@ -24,7 +24,6 @@ import static org.junit.Assert.assertSame;
 
 import java.util.Date;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -34,6 +33,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.jmock.Expectations;

@@ -24,8 +24,8 @@ import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.datanucleus.enhancement.Persistable;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 public class Utils {
 

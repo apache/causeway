@@ -26,7 +26,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.webapp.IsisSessionFilter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;

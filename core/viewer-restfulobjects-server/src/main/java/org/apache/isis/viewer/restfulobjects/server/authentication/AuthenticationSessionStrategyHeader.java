@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.standard.SimpleSession;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyAbstract;
 
 /**

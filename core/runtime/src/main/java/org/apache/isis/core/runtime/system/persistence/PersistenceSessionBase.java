@@ -36,7 +36,6 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -44,6 +43,7 @@ import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 
 abstract class PersistenceSessionBase implements PersistenceSession {

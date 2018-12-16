@@ -36,8 +36,8 @@ import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
 
 /**
  * Represents the currently executing scenario, allowing information to be shared

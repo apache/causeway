@@ -22,8 +22,8 @@ package org.apache.isis.core.security.authentication.bypass;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.runtime.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authentication.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManagerStandardInstallerAbstractForDfltRuntime;
+import org.apache.isis.core.security.authentication.standard.Authenticator;
 
 /**
  * Run Isis with open access.
