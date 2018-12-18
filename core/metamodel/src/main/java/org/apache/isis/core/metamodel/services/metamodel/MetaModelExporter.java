@@ -93,28 +93,14 @@ class MetaModelExporter {
         // these are added into a map for lookups in phase 2
         final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = Maps.newHashMap();
         for (final ObjectSpecification specification : specificationLookup.allSpecifications()) {
-            if(notInPackagePrefixes(specification, config)) {
-                continue;
-            }
-            if(config.isIgnoreMixins() && specification.isMixin()) {
-                continue;
-            }
-            if(config.isIgnoreInterfaces() && specification.getCorrespondingClass().isInterface()) {
-                continue;
-            }
-            if(config.isIgnoreAbstractClasses() && Modifier.isAbstract(specification.getCorrespondingClass().getModifiers())) {
-                continue;
-            }
-            if(config.isIgnoreBuiltInValueTypes() && isValueType(specification)) {
-                continue;
-            }
-
             DomainClassDto domainClassType = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClassType);
         }
 
         // phase 2: now flesh out the domain class types, passing the map for lookups of the domainClassTypes that
         // correspond to each object members types.
+        //
+        // we do this in phases, just in case we discover new types along the way as we introspect the members.
         final List<ObjectSpecification> processed = Lists.newArrayList();
         List<ObjectSpecification> toProcess =
                 remaining(domainClassByObjectSpec.keySet(), processed);
@@ -147,13 +133,24 @@ class MetaModelExporter {
         }
 
         // phase 3: now copy all domain classes into the metamodel
-        for (final DomainClassDto domainClass : Lists.newArrayList(domainClassByObjectSpec.values())) {
-            metamodelDto.getDomainClassDto().add(domainClass);
+        for (final ObjectSpecification objectSpecification : Lists.newArrayList(domainClassByObjectSpec.keySet())) {
+            if(shouldIgnore(config, objectSpecification)) {
+                continue;
+            }
+            metamodelDto.getDomainClassDto().add(domainClassByObjectSpec.get(objectSpecification));
         }
 
         sortDomainClasses(metamodelDto.getDomainClassDto());
 
         return metamodelDto;
+    }
+
+    private boolean shouldIgnore(final MetaModelService6.Config config, final ObjectSpecification specification) {
+        return notInPackagePrefixes(specification, config) ||
+           config.isIgnoreMixins() && specification.isMixin() ||
+           config.isIgnoreInterfaces() && specification.getCorrespondingClass().isInterface() ||
+           config.isIgnoreAbstractClasses() && Modifier.isAbstract(specification.getCorrespondingClass().getModifiers()) ||
+           config.isIgnoreBuiltInValueTypes() && isValueType(specification);
     }
 
     private static <T> List<T> remaining(final java.util.Collection<T> processed, final java.util.Collection<T> other) {
