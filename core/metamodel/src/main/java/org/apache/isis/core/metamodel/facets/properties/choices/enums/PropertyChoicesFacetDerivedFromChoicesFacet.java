@@ -24,9 +24,9 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 
 public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoicesFacetAbstract {
 

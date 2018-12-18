@@ -26,12 +26,13 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 
 public class SpecificationLoaderTest_array extends SpecificationLoaderTestAbstract {
 
     @Override
     protected ObjectSpecification loadSpecification(final SpecificationLoader reflector) {
-        return reflector.loadSpecification(ReflectorTestPojo[].class);
+        return reflector.loadSpecification(ReflectorTestPojo[].class, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
     }
 
     @Test

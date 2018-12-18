@@ -77,7 +77,7 @@ import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 /**
- * 
+ *
  */
 public abstract class IsisComponentProvider {
 
@@ -152,7 +152,9 @@ public abstract class IsisComponentProvider {
 
         final Set<Class<?>> domainServiceTypes = Sets.newLinkedHashSet();
         domainServiceTypes.addAll(reflections.getTypesAnnotatedWith(DomainService.class));
+
         domainServiceTypes.addAll(reflections.getTypesAnnotatedWith(DomainServiceLayout.class));
+
 
         final Set<Class<?>> persistenceCapableTypes = Sets.newLinkedHashSet();
         persistenceCapableTypes.addAll(reflections.getTypesAnnotatedWith(PersistenceCapable.class));
@@ -162,17 +164,17 @@ public abstract class IsisComponentProvider {
         // we therefore try to limit the set of fixture types eagerly introspected at startup
         final Set<Class<? extends FixtureScript>> fixtureScriptTypes = Sets.newLinkedHashSet();
         fixtureScriptTypes.addAll(
-            FluentIterable.from(reflections.getSubTypesOf(FixtureScript.class)).
-                filter(new Predicate<Class<?>>(){
-                    @Override
-                    public boolean apply(@Nullable final Class<?> aClass) {
-                        // ignore as a fixture script if annotated with @Programmatic
-                        // (though directly implementing DiscoverableFixtureScript takes precedence and will NOT ignore)
-                        return DiscoverableFixtureScript.class.isAssignableFrom(aClass) ||
-                        Annotations.getAnnotation(aClass, Programmatic.class) == null;
-                    }
-                })
-                .toList());
+                FluentIterable.from(reflections.getSubTypesOf(FixtureScript.class)).
+                        filter(new Predicate<Class<?>>(){
+                            @Override
+                            public boolean apply(@Nullable final Class<?> aClass) {
+                                // ignore as a fixture script if annotated with @Programmatic
+                                // (though directly implementing DiscoverableFixtureScript takes precedence and will NOT ignore)
+                                return DiscoverableFixtureScript.class.isAssignableFrom(aClass) ||
+                                        Annotations.getAnnotation(aClass, Programmatic.class) == null;
+                            }
+                        })
+                        .toList());
 
         final Set<Class<?>> domainObjectTypes = Sets.newLinkedHashSet();
         domainObjectTypes.addAll(reflections.getTypesAnnotatedWith(DomainObject.class));
@@ -208,12 +210,12 @@ public abstract class IsisComponentProvider {
 
         // for a tiny bit of efficiency, we append a '.' to each package name here, outside the loops
         List<String> packagesWithDotSuffix =
-            FluentIterable.from(moduleAndFrameworkPackages).transform(new Function<String, String>() {
-                @Nullable @Override
-                public String apply(@Nullable final String s) {
-                    return s != null ? s + "." : null;
-                }
-            }).toList();
+                FluentIterable.from(moduleAndFrameworkPackages).transform(new Function<String, String>() {
+                    @Nullable @Override
+                    public String apply(@Nullable final String s) {
+                        return s != null ? s + "." : null;
+                    }
+                }).toList();
 
         registry.setDomainServiceTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, domainServiceTypes));
         registry.setPersistenceCapableTypes(withinPackageAndNotAnonymous(packagesWithDotSuffix, persistenceCapableTypes));

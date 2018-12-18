@@ -89,11 +89,11 @@ public class MaskFacetOnPropertyAnnotationFactory extends FacetFactoryAbstract i
         return annotation != null ? new MaskFacetOnPropertyAnnotation(annotation.value(), null, holder) : null;
     }
 
-    private boolean addMaskFacetAndCorrespondingTitleFacet(final Mask annotation, final Class<?> cls, final AbstractProcessWithMethodContext processContext) {
+    private void addMaskFacetAndCorrespondingTitleFacet(final Mask annotation, final Class<?> cls, final AbstractProcessWithMethodContext processContext) {
         final FacetHolder facetHolder = processContext.getFacetHolder();
         final MaskFacet maskFacet = validator.flagIfPresent(createMaskFacet(annotation, facetHolder), processContext);
         if (maskFacet == null) {
-            return false;
+            return;
         }
         FacetUtil.addFacet(maskFacet);
 
@@ -103,7 +103,6 @@ public class MaskFacetOnPropertyAnnotationFactory extends FacetFactoryAbstract i
             final TitleFacet titleFacet = new TitleFacetBasedOnMask(maskFacet, underlyingTitleFacet);
             FacetUtil.addFacet(titleFacet);
         }
-        return true;
     }
 
     @Override

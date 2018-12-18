@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.notcontributed.derived;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.Facet;

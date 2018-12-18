@@ -328,7 +328,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     /**
      * For mixins
      */
-    protected ObjectAdapter mixinAdapterFor(
+    ObjectAdapter mixinAdapterFor(
             final Class<?> mixinType,
             final ObjectAdapter mixedInAdapter) {
         final ObjectSpecification objectSpecification = getSpecificationLoader().loadSpecification(mixinType);
@@ -337,7 +337,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return getPersistenceSessionService().adapterFor(mixinPojo);
     }
 
-    public static String determineNameFrom(final ObjectAction mixinAction) {
+    static String determineNameFrom(final ObjectAction mixinAction) {
         return StringExtensions.asCapitalizedName(suffix(mixinAction));
     }
 
@@ -350,7 +350,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return suffix.replaceAll(" ","");
     }
 
-    static String suffix(final ObjectAction mixinAction) {
+    private static String suffix(final ObjectAction mixinAction) {
         return deriveMemberNameFrom(mixinAction.getOnType().getSingularName());
     }
 

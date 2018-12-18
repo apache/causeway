@@ -54,6 +54,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
@@ -102,7 +103,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
-        implements MetaModelValidatorRefiner, PostConstructMethodCache {
+        implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFacetFactory {
 
     private final MetaModelValidatorForDeprecatedAnnotation auditedValidator = new MetaModelValidatorForDeprecatedAnnotation(Audited.class);
     private final MetaModelValidatorForDeprecatedAnnotation publishedObjectValidator = new MetaModelValidatorForDeprecatedAnnotation(PublishedObject.class);
@@ -120,6 +121,11 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
     }
 
     @Override
+    public void process(final ProcessObjectSpecIdContext processClassContext) {
+        processObjectType(processClassContext);
+    }
+
+    @Override
     public void process(final ProcessClassContext processClassContext) {
 
         processAuditing(processClassContext);
@@ -127,7 +133,6 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         processAutoComplete(processClassContext);
         processBounded(processClassContext);
         processEditing(processClassContext);
-        processObjectType(processClassContext);
         processNature(processClassContext);
         processLifecycleEvents(processClassContext);
         processDomainEvents(processClassContext);
@@ -156,7 +161,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         // check for the deprecated annotation first
         final Audited annotation = Annotations.getAnnotation(cls, Audited.class);
         auditableFacet = auditedValidator.flagIfPresent(
-                            AuditableFacetForAuditedAnnotation.create(annotation, holder), null);
+                AuditableFacetForAuditedAnnotation.create(annotation, holder), null);
 
         // else check for @DomainObject(auditing=....)
         if(auditableFacet == null) {
@@ -188,7 +193,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         final PublishedObject publishedObject = Annotations.getAnnotation(processClassContext.getCls(),
                 PublishedObject.class);
         publishedObjectFacet = publishedObjectValidator.flagIfPresent(
-                                    PublishedObjectFacetForPublishedObjectAnnotation.create(publishedObject, facetHolder));
+                PublishedObjectFacetForPublishedObjectAnnotation.create(publishedObject, facetHolder));
 
         // else check from @DomainObject(publishing=...)
         if(publishedObjectFacet == null) {
@@ -234,7 +239,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
             return null;
         }
         return new AutoCompleteFacetForAutoCompleteAnnotation(
-                        facetHolder, repositoryClass, repositoryMethod, servicesInjector);
+                facetHolder, repositoryClass, repositoryMethod, servicesInjector);
     }
 
     private AutoCompleteFacet createFor(
@@ -257,7 +262,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         }
 
         return new AutoCompleteFacetForDomainObjectAnnotation(
-                        facetHolder, repositoryClass, repositoryMethod, servicesInjector);
+                facetHolder, repositoryClass, repositoryMethod, servicesInjector);
     }
 
     private Method findRepositoryMethod(
@@ -288,10 +293,10 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         // check for the deprecated @Bounded annotation first
         final Bounded annotation = Annotations.getAnnotation(processClassContext.getCls(), Bounded.class);
         Facet facet = boundedValidator.flagIfPresent(
-            ChoicesFacetFromBoundedAnnotation.create(annotation, processClassContext.getFacetHolder(),
-                    getDeploymentCategory(),
-                    getAuthenticationSessionProvider(),
-                    persistenceSessionServiceInternal));
+                ChoicesFacetFromBoundedAnnotation.create(annotation, processClassContext.getFacetHolder(),
+                        getDeploymentCategory(),
+                        getAuthenticationSessionProvider(),
+                        persistenceSessionServiceInternal));
 
         // else check from @DomainObject(bounded=...)
         if(facet == null) {
@@ -322,17 +327,17 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         FacetUtil.addFacet(facet);
     }
 
-    void processObjectType(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
-        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
-        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+    void processObjectType(final ProcessObjectSpecIdContext context) {
+        final Class<?> cls = context.getCls();
+        final FacetHolder facetHolder = context.getFacetHolder();
 
         // check for the deprecated annotation first
-        final ObjectType annotation = Annotations.getAnnotation(processClassContext.getCls(), ObjectType.class);
+        final ObjectType annotation = Annotations.getAnnotation(cls, ObjectType.class);
         Facet facet = objectTypeValidator.flagIfPresent(
-                ObjectSpecIdFacetFromObjectTypeAnnotation.create(annotation, processClassContext.getFacetHolder()));
+                ObjectSpecIdFacetFromObjectTypeAnnotation.create(annotation, facetHolder));
 
         // else check from @DomainObject(objectType=...)
+        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         if(facet == null) {
             facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObject, facetHolder);
         }
@@ -540,7 +545,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         if(domainEvent != ActionDomainEvent.Default.class) {
             final ActionDomainEventDefaultFacetForDomainObjectAnnotation facet =
                     new ActionDomainEventDefaultFacetForDomainObjectAnnotation(
-                        holder, domainEvent, getSpecificationLoader());
+                            holder, domainEvent, getSpecificationLoader());
             FacetUtil.addFacet(facet);
         }
     }
@@ -551,7 +556,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         if(domainEvent != PropertyDomainEvent.Default.class) {
             final PropertyDomainEventDefaultFacetForDomainObjectAnnotation facet =
                     new PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
-                        holder, domainEvent, getSpecificationLoader());
+                            holder, domainEvent, getSpecificationLoader());
             FacetUtil.addFacet(facet);
         }
     }
@@ -562,7 +567,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         if(domainEvent != CollectionDomainEvent.Default.class) {
             final CollectionDomainEventDefaultFacetForDomainObjectAnnotation facet =
                     new CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
-                        holder, domainEvent, getSpecificationLoader());
+                            holder, domainEvent, getSpecificationLoader());
             FacetUtil.addFacet(facet);
         }
     }
@@ -606,7 +611,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                     }
                     validationFailures.add(
                             "%s: cannot have two entities with same object type (@Discriminator, @DomainObject(objectType=...), @ObjectType or @PersistenceCapable(schema=...)); %s " +
-                            "has same value (%s).",
+                                    "has same value (%s).",
                             existingSpec.getFullIdentifier(),
                             otherSpec.getFullIdentifier(),
                             objectSpecId);

@@ -19,9 +19,12 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.Map;
+
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
@@ -32,7 +35,11 @@ import org.apache.isis.core.metamodel.services.container.query.QueryFindByPatter
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.persistence.query.*;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
 
 public class PersistenceQueryFactory {
 

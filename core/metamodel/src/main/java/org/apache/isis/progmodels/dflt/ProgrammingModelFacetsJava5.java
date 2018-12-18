@@ -192,6 +192,7 @@ import org.apache.isis.core.metamodel.facets.value.shortint.ShortPrimitiveValueF
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.time.TimeValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.facets.value.timejodalocal.JodaLocalTimeValueFacetSimpleFactory;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.timestamp.TimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
@@ -508,6 +509,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new JodaLocalDateValueFacetUsingSemanticsProviderFactory());
         addFactory(new JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory());
         addFactory(new JodaDateTimeValueFacetUsingSemanticsProviderFactory());
+        addFactory(new JodaLocalTimeValueFacetSimpleFactory());
 
         // written to not trample over TypeOf if already installed
         addFactory(new CollectionFacetFactory());

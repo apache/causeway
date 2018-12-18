@@ -99,11 +99,7 @@ public class MetaModelServiceDefault implements MetaModelService6 {
     public void rebuild(final Class<?> domainType) {
         specificationLookup.invalidateCache(domainType);
         gridService.remove(domainType);
-        final ObjectSpecification objectSpecification = specificationLookup.loadSpecification(domainType);
-        // ensure the spec is fully rebuilt
-        objectSpecification.getObjectActions(Contributed.INCLUDED);
-        objectSpecification.getAssociations(Contributed.INCLUDED);
-        specificationLookup.postProcess(objectSpecification);
+        specificationLookup.loadSpecification(domainType);
     }
 
     // //////////////////////////////////////

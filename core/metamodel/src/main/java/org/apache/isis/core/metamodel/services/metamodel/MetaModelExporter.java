@@ -115,8 +115,15 @@ class MetaModelExporter {
 
         // phase 2: now flesh out the domain class types, passing the map for lookups of the domainClassTypes that
         // correspond to each object members types.
-        for (final ObjectSpecification specification : Lists.newArrayList(domainClassByObjectSpec.keySet())) {
-            addFacetsAndMembersTo(specification, domainClassByObjectSpec, config);
+        final List<ObjectSpecification> processed = Lists.newArrayList();
+        List<ObjectSpecification> toProcess =
+                remaining(domainClassByObjectSpec.keySet(), processed);
+        while(!toProcess.isEmpty()) {
+            for (final ObjectSpecification specification : toProcess) {
+                addFacetsAndMembersTo(specification, domainClassByObjectSpec, config);
+            }
+            processed.addAll(toProcess);
+            toProcess = remaining(domainClassByObjectSpec.keySet(), processed);
         }
 
         // phase 2.5: check no duplicates
@@ -147,6 +154,12 @@ class MetaModelExporter {
         sortDomainClasses(metamodelDto.getDomainClassDto());
 
         return metamodelDto;
+    }
+
+    private static <T> List<T> remaining(final java.util.Collection<T> processed, final java.util.Collection<T> other) {
+        final List<T> x = Lists.newArrayList(processed);
+        x.removeAll(other);
+        return x;
     }
 
     private boolean notInPackagePrefixes(

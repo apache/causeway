@@ -205,6 +205,12 @@ public class FacetedMethodsBuilder {
     // ////////////////////////////////////////////////////////////////////////////
 
 
+    public void introspectObjectSpecId() {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("introspecting {}: objectSpecId", getClassName());
+        }
+        getFacetProcessor().processObjectSpecId(introspectedClass, spec);
+    }
     public Properties introspectClass() {
         if (LOG.isInfoEnabled()) {
             LOG.info("introspecting {}: class-level details", getClassName());
@@ -273,7 +279,7 @@ public class FacetedMethodsBuilder {
                     }
 
                     if(!support.services() &&
-                       getSpecificationLoader().isServiceClass(domainClass)) {
+                            getSpecificationLoader().isServiceClass(domainClass)) {
                         continue;
                     }
 
@@ -324,7 +330,8 @@ public class FacetedMethodsBuilder {
         for (final Method method : associationCandidateMethods) {
             specificationTraverser.traverseTypes(method, typesToLoad);
         }
-        getSpecificationLoader().loadSpecifications(typesToLoad, introspectedClass);
+        getSpecificationLoader().loadSpecifications(typesToLoad, introspectedClass,
+                IntrospectionState.TYPE_INTROSPECTED);
 
         // now create FacetedMethods for collections and for properties
         final List<FacetedMethod> associationFacetedMethods = Lists.newArrayList();
@@ -429,12 +436,12 @@ public class FacetedMethodsBuilder {
 
     /**
      * REVIEW: I'm not sure why we do two passes here.
-     * 
+     *
      * <p>
      * Perhaps it's important to skip helpers first. I doubt it, though.
      */
     private List<FacetedMethod> findActionFacetedMethods(
-            final MethodScope methodScope, 
+            final MethodScope methodScope,
             final Properties metadataProperties) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("introspecting {}: actions", getClassName());
@@ -445,10 +452,10 @@ public class FacetedMethodsBuilder {
     }
 
     private List<FacetedMethod> findActionFacetedMethods(
-            final MethodScope methodScope, 
-            final RecognisedHelpersStrategy recognisedHelpersStrategy, 
+            final MethodScope methodScope,
+            final RecognisedHelpersStrategy recognisedHelpersStrategy,
             final Properties metadataProperties) {
-        
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("  looking for action methods");
         }
@@ -471,9 +478,9 @@ public class FacetedMethodsBuilder {
     }
 
     private FacetedMethod findActionFacetedMethod(
-            final MethodScope methodScope, 
-            final RecognisedHelpersStrategy recognisedHelpersStrategy, 
-            final Method actionMethod, 
+            final MethodScope methodScope,
+            final RecognisedHelpersStrategy recognisedHelpersStrategy,
+            final Method actionMethod,
             final Properties metadataProperties) {
 
         if (!representsAction(actionMethod, methodScope, recognisedHelpersStrategy)) {
@@ -485,9 +492,9 @@ public class FacetedMethodsBuilder {
     }
 
     private FacetedMethod createActionFacetedMethod(
-            final Method actionMethod, 
+            final Method actionMethod,
             final Properties metadataProperties) {
-        
+
         if (!isAllParamTypesValid(actionMethod)) {
             return null;
         }
@@ -516,8 +523,8 @@ public class FacetedMethodsBuilder {
     }
 
     private boolean representsAction(
-            final Method actionMethod, 
-            final MethodScope methodScope, 
+            final Method actionMethod,
+            final MethodScope methodScope,
             final RecognisedHelpersStrategy recognisedHelpersStrategy) {
 
         if (!MethodUtil.inScope(actionMethod, methodScope)) {
@@ -527,7 +534,8 @@ public class FacetedMethodsBuilder {
         final List<Class<?>> typesToLoad = new ArrayList<Class<?>>();
         specificationTraverser.traverseTypes(actionMethod, typesToLoad);
 
-        final boolean anyLoadedAsNull = getSpecificationLoader().loadSpecifications(typesToLoad);
+        final boolean anyLoadedAsNull = getSpecificationLoader()
+                .loadSpecifications(typesToLoad, null, IntrospectionState.TYPE_INTROSPECTED);
         if (anyLoadedAsNull) {
             return false;
         }
@@ -586,10 +594,10 @@ public class FacetedMethodsBuilder {
      * but appends to provided {@link List} (collecting parameter pattern).
      */
     private void findAndRemovePrefixedNonVoidMethods(
-            final MethodScope methodScope, 
-            final String prefix, 
-            final Class<?> returnType, 
-            final int paramCount, 
+            final MethodScope methodScope,
+            final String prefix,
+            final Class<?> returnType,
+            final int paramCount,
             final List<Method> methodListToAppendTo) {
         final List<Method> matchingMethods = findAndRemovePrefixedMethods(methodScope, prefix, returnType, false, paramCount);
         methodListToAppendTo.addAll(matchingMethods);
@@ -600,10 +608,10 @@ public class FacetedMethodsBuilder {
      * removing it from the {@link #methods array of methods} if found.
      */
     private List<Method> findAndRemovePrefixedMethods(
-            final MethodScope methodScope, 
-            final String prefix, 
-            final Class<?> returnType, 
-            final boolean canBeVoid, 
+            final MethodScope methodScope,
+            final String prefix,
+            final Class<?> returnType,
+            final boolean canBeVoid,
             final int paramCount) {
         return MethodUtil.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
     }

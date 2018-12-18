@@ -21,8 +21,10 @@ package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
@@ -41,7 +43,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  *
  */
 class SpecificationCacheDefault {
-    
+
     private final Map<String, ObjectSpecification> specByClassName = Maps.newHashMap();
     private Map<ObjectSpecId, String> classNameBySpecId;
 
@@ -53,7 +55,7 @@ class SpecificationCacheDefault {
         specByClassName.put(className, spec);
         recache(spec);
     }
-    
+
 
     public void clear() {
         specByClassName.clear();
@@ -63,7 +65,7 @@ class SpecificationCacheDefault {
         return Collections.unmodifiableCollection(specByClassName.values());
     }
 
-    public ObjectSpecification getByObjectType(ObjectSpecId objectSpecID) {
+    public ObjectSpecification getByObjectType(final ObjectSpecId objectSpecID) {
         if (!isInitialized()) {
             throw new IllegalStateException("SpecificationCache by object type has not yet been initialized");
         }
@@ -72,14 +74,23 @@ class SpecificationCacheDefault {
     }
 
     synchronized void init() {
-        final Collection<ObjectSpecification> objectSpecifications = allSpecifications();
         final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
-        for (final ObjectSpecification objSpec : objectSpecifications) {
-            final ObjectSpecId objectSpecId = objSpec.getSpecId();
-            if (objectSpecId == null) {
-                continue;
+
+        final List<ObjectSpecification> cachedSpecifications = Lists.newArrayList();
+        while(true) {
+            final Collection<ObjectSpecification> newSpecifications = Lists.newArrayList(allSpecifications());
+            newSpecifications.removeAll(cachedSpecifications);
+            if(newSpecifications.isEmpty()) {
+                break;
             }
-            specById.put(objectSpecId, objSpec);
+            for (final ObjectSpecification objSpec : newSpecifications) {
+                final ObjectSpecId objectSpecId = objSpec.getSpecId();
+                if (objectSpecId == null) {
+                    continue;
+                }
+                specById.put(objectSpecId, objSpec);
+            }
+            cachedSpecifications.addAll(newSpecifications);
         }
 
         internalInit(specById);
@@ -126,7 +137,7 @@ class SpecificationCacheDefault {
         }
         classNameBySpecId.put(spec.getSpecId(), spec.getCorrespondingClass().getName());
     }
-    
+
     boolean isInitialized() {
         return classNameBySpecId != null;
     }

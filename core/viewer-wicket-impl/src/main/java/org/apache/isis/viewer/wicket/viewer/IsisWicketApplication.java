@@ -407,8 +407,8 @@ public class IsisWicketApplication
 
             if(getDeploymentCategory().isPrototyping()) {
                 DebugDiskDataStore.register(this);
-                LOG.info("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
-                LOG.info("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
+                LOG.debug("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
+                LOG.debug("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
             }
 
             if(!getDebugSettings().isDevelopmentUtilitiesEnabled()) {
@@ -429,10 +429,10 @@ public class IsisWicketApplication
                 }
             }
 
-            LOG.info("storeSettings.inmemoryCacheSize        : {}", getStoreSettings().getInmemoryCacheSize());
-            LOG.info("storeSettings.asynchronousQueueCapacity: {}", getStoreSettings().getAsynchronousQueueCapacity());
-            LOG.info("storeSettings.maxSizePerSession        : {}", getStoreSettings().getMaxSizePerSession());
-            LOG.info("storeSettings.fileStoreFolder          : {}", getStoreSettings().getFileStoreFolder());
+            LOG.debug("storeSettings.inmemoryCacheSize        : {}", getStoreSettings().getInmemoryCacheSize());
+            LOG.debug("storeSettings.asynchronousQueueCapacity: {}", getStoreSettings().getAsynchronousQueueCapacity());
+            LOG.debug("storeSettings.maxSizePerSession        : {}", getStoreSettings().getMaxSizePerSession());
+            LOG.debug("storeSettings.fileStoreFolder          : {}", getStoreSettings().getFileStoreFolder());
 
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.

@@ -199,6 +199,8 @@ public interface AppManifest {
         private Set<Class<?>> mixinTypes;
 
         /**
+         * Along with {@link #getDomainServiceTypes()}, these are introspected eagerly.
+         *
          * @return <tt>null</tt> if no appManifest is defined
          */
         public Set<Class<?>> getMixinTypes() {

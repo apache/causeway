@@ -88,7 +88,6 @@
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
                     <mml:attr name="value">NON_IDEMPOTENT</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated">
                     <mml:attr name="context">domainapp.modules.simple.dom.impl.SimpleObjects#create()</mml:attr>
                     <mml:attr name="originalText">Create</mml:attr>
@@ -191,7 +190,6 @@
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
                     <mml:attr name="value">SAFE</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated">
                     <mml:attr name="context">domainapp.modules.simple.dom.impl.SimpleObjects#findByName()</mml:attr>
                     <mml:attr name="originalText">Find By Name</mml:attr>
@@ -294,7 +292,6 @@
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.action.semantics.ActionSemanticsFacetForActionAnnotation">
                     <mml:attr name="value">SAFE</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated">
                     <mml:attr name="context">domainapp.modules.simple.dom.impl.SimpleObjects#listAll()</mml:attr>
                     <mml:attr name="originalText">List All</mml:attr>

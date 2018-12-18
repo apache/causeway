@@ -22,13 +22,16 @@ package org.apache.isis.core.metamodel.facets.object.objectspecid;
 import org.datanucleus.testing.dom.CustomerAsProxiedByDataNucleus;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
@@ -47,7 +50,7 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFa
     public void installsFacet_passedThroughClassSubstitutor() {
         expectNoMethodsRemoved();
 
-        facetFactory.process(new ProcessClassContext(CustomerAsProxiedByDataNucleus.class, mockMethodRemover, facetHolder));
+        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(CustomerAsProxiedByDataNucleus.class, facetHolder));
 
         final ObjectSpecIdFacet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
         

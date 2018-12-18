@@ -161,10 +161,10 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
         if (properties.containsKey(key)) {
             switch (policy) {
             case IGNORE:
-                LOG.info("ignoring {}={} as value already set (with {})", key, value, properties.get(key));
+                LOG.debug("ignoring {}={} as value already set (with {})", key, value, properties.get(key));
                 break;
             case OVERWRITE:
-                LOG.info("overwriting {}={} (previous value was {})", key, value, properties.get(key));
+                LOG.debug("overwriting {}={} (previous value was {})", key, value, properties.get(key));
                 properties.put(key, value);
                 break;
             case EXCEPTION:
@@ -172,7 +172,7 @@ public class IsisConfigurationDefault implements ConfigurationServiceInternal {
                         "Configuration already has a key {}, value of {}%s, value of %s", key, properties.get(key)));
             }
         } else {
-            LOG.info("adding {} = {}", key , safe(key, value));
+            LOG.debug("adding {} = {}", key , safe(key, value));
             properties.put(key, value);
         }
     }

@@ -71,7 +71,6 @@
                 <mml:facet id="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet" fqcn="org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics">
                     <mml:attr name="value">domainapp.modules.simple.dom.impl.SimpleObject</mml:attr>
                 </mml:facet>
-                <mml:facet id="org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType"/>
                 <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated">
                     <mml:attr name="context">domainapp.application.services.homepage.HomePageViewModel#objects</mml:attr>
                     <mml:attr name="originalText">Objects</mml:attr>

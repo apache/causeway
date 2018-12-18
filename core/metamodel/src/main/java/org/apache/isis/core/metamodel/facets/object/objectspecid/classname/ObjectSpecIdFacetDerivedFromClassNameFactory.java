@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -44,8 +45,9 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAbstract implements
-        MetaModelValidatorRefiner {
+public class ObjectSpecIdFacetDerivedFromClassNameFactory
+        extends FacetFactoryAbstract
+        implements MetaModelValidatorRefiner, ObjectSpecIdFacetFactory {
 
     public static final String ISIS_REFLECTOR_VALIDATOR_EXPLICIT_OBJECT_TYPE_KEY =
             "isis.reflector.validator.explicitObjectType";
@@ -59,20 +61,26 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAb
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final FacetHolder facetHolder = processClassContaxt.getFacetHolder();
+    public void process(final ProcessObjectSpecIdContext processClassContext) {
+        final FacetHolder facetHolder = processClassContext.getFacetHolder();
         // don't trash existing facet
         if(facetHolder.containsDoOpFacet(ObjectSpecIdFacet.class)) {
             return;
         }
-        final Class<?> originalClass = processClassContaxt.getCls();
-        final Class<?> substitutedClass = classSubstitutor.getClass(originalClass);
+        final Class<?> cls = processClassContext.getCls();
+        final Class<?> substitutedClass = classSubstitutor.getClass(cls);
 
-        ObjectSpecIdFacet objectSpecIdFacet = createObjectSpecIdFacet(facetHolder, substitutedClass);
+        final ObjectSpecIdFacet objectSpecIdFacet = createObjectSpecIdFacet(facetHolder, substitutedClass);
         FacetUtil.addFacet(objectSpecIdFacet);
     }
 
-    private static ObjectSpecIdFacet createObjectSpecIdFacet(final FacetHolder facetHolder, final Class<?> substitutedClass) {
+    @Override
+    public void process(final ProcessClassContext processClassContext) {
+        // now a no-op.
+    }
+
+    private static ObjectSpecIdFacet createObjectSpecIdFacet(
+            final FacetHolder facetHolder, final Class<?> substitutedClass) {
         final boolean isService = isService(facetHolder);
         if (isService) {
             final String id = ServiceUtil.id(substitutedClass);
@@ -120,8 +128,8 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAb
                         }
                         ObjectSpecIdFacet objectSpecIdFacet = objectSpec.getFacet(ObjectSpecIdFacet.class);
                         if(objectSpecIdFacet instanceof ObjectSpecIdFacetDerivedFromClassName &&
-                           // as a special case, don't enforce this for fixture scripts... we never invoke actions on fixture scripts anyway
-                           !FixtureScript.class.isAssignableFrom(objectSpec.getCorrespondingClass()) ) {
+                                // as a special case, don't enforce this for fixture scripts... we never invoke actions on fixture scripts anyway
+                                !FixtureScript.class.isAssignableFrom(objectSpec.getCorrespondingClass()) ) {
 
                             validationFailures.add(
                                     "%s: the object type must be specified explicitly ('%s' config property).  Defaulting the object type from the package/class/package name can lead to data migration issues for apps deployed to production (if the class is subsequently refactored).  Use @Discriminator, @DomainObject(objectType=...) or @PersistenceCapable(schema=...) to specify explicitly.",
@@ -177,4 +185,5 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactory extends FacetFactoryAb
         }
         return false;
     }
+
 }

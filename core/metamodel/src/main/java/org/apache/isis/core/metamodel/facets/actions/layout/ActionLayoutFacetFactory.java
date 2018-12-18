@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.promptStyle.PromptStyleFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-
 public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
     public ActionLayoutFacetFactory() {
@@ -141,7 +140,7 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
         }
     }
 
-    protected boolean isContributingServiceOrMixinObject(final ProcessMethodContext processMethodContext) {
+    private boolean isContributingServiceOrMixinObject(final ProcessMethodContext processMethodContext) {
         final Class<?> cls =  processMethodContext.getCls();
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(cls);
 

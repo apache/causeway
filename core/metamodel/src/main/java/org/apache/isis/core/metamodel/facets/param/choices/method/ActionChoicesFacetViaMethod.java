@@ -34,12 +34,12 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.facets.CollectionUtils;
 
 public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract implements ImperativeFacet {
 

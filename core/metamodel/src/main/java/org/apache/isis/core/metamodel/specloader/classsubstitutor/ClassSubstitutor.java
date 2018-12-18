@@ -50,8 +50,8 @@ public class ClassSubstitutor {
     //region > getClass(Class)
 
     public Class<?> getClass(final Class<?> cls) {
-    	
-    	if (cls == null) {
+
+        if (cls == null) {
             return null;
         }
 
@@ -92,16 +92,16 @@ public class ClassSubstitutor {
      * For any classes registered as ignored, {@link #getClass(Class)} will
      * return <tt>null</tt>.
      */
-    private boolean ignore(final Class<?> q) {
-        return classesToIgnore.add(q);
+    private void ignore(final Class<?> q) {
+        classesToIgnore.add(q);
     }
 
     /**
      * For any classes registered as ignored, {@link #getClass(Class)} will
      * return <tt>null</tt>.
      */
-    private boolean ignore(final String className) {
-        return classNamesToIgnore.add(className);
+    private void ignore(final String className) {
+        classNamesToIgnore.add(className);
     }
 
     private boolean shouldIgnore(final Class<?> cls) {

@@ -222,7 +222,7 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         return properties;
     }
 
-    static Map<String, JdoNamedQuery> catalogNamedQueries(
+    static void catalogNamedQueries(
             Set<String> persistableClassNames, final SpecificationLoader specificationLoader) {
         final Map<String, JdoNamedQuery> namedQueryByName = Maps.newHashMap();
         for (final String persistableClassName: persistableClassNames) {
@@ -235,7 +235,6 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
                 namedQueryByName.put(namedQuery.getName(), namedQuery);
             }
         }
-        return namedQueryByName;
     }
 
     public PersistenceManagerFactory getPersistenceManagerFactory() {

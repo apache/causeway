@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 
 import junit.framework.Assert;
 
@@ -73,6 +74,7 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
         abstract class Customer implements Persistable {
         }
 
+        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
@@ -85,6 +87,7 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
         abstract class Customer implements Persistable {
         }
 
+        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
         final Facet facet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
@@ -95,6 +98,8 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
         @PersistenceCapable()
         abstract class Customer implements Persistable {
         }
+
+        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
         final JdoPersistenceCapableFacet entityFacet = facetHolder
@@ -106,6 +111,8 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
         @PersistenceCapable()
         abstract class Customer implements Persistable {
         }
+
+        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
         final JdoPersistenceCapableFacet entityFacet = facetHolder
@@ -118,6 +125,7 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
         abstract class Customer implements Persistable {
         }
 
+        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
         final JdoPersistenceCapableFacet entityFacet = facetHolder
@@ -130,6 +138,7 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
         abstract class Customer implements Persistable {
         }
 
+        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
         final JdoPersistenceCapableFacet entityFacet = facetHolder
@@ -142,6 +151,7 @@ public class GivenJdoPersistenceCapableAnnotationFacetFactoryTest extends
         abstract class Customer implements Persistable {
         }
 
+        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
         facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
 
         assertNoMethodsRemoved();

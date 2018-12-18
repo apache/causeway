@@ -57,7 +57,7 @@ public class OptionHandlerInitParameters extends OptionHandlerAbstract {
     @Override
     public void prime(final IsisConfigurationBuilder isisConfigurationBuilder) {
         Map<String,String> additionalProperties = asMap(servletContext);
-        LOG.info("priming configuration builder: {} properties to prime", additionalProperties.size());
+        LOG.debug("priming configuration builder: {} properties to prime", additionalProperties.size());
         addConfigurationProperties(isisConfigurationBuilder, additionalProperties);
     }
 
@@ -78,7 +78,7 @@ public class OptionHandlerInitParameters extends OptionHandlerAbstract {
         for (final String propertyKey : additionalProperties.keySet()) {
             final String propertyValue = additionalProperties.get(propertyKey);
 
-            LOG.info("priming: {}={}", propertyKey, propertyValue);
+            LOG.debug("priming: {}={}", propertyKey, propertyValue);
             isisConfigurationBuilder.add(propertyKey, propertyValue);
         }
     }

@@ -260,7 +260,7 @@ public class IsisSessionFactoryBuilder {
             );
 
             ThreadPoolSupport.getInstance().joinGatherFailures(futures);
-            specificationLoader.postProcess();
+
 
             persistenceSessionFactory.catalogNamedQueries(specificationLoader);
 
