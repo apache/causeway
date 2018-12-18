@@ -5,6 +5,6 @@ public class ConfigPropertyEnum<E extends Enum<E>> extends ConfigPropertyAbstrac
         super(key, defaultValue);
     }
     public E from(final IsisConfiguration configuration) {
-        return Enum.valueOf(defaultValue.getDeclaringClass(), configuration.getString(key, defaultValue.name()));
+        return Enum.valueOf(defaultValue.getDeclaringClass(), configuration.getString(key, defaultValue.name()).toUpperCase());
     }
 }

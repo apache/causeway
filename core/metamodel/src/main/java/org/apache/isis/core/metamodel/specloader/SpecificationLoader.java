@@ -37,10 +37,12 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.ConfigPropertyBoolean;
+import org.apache.isis.core.commons.config.ConfigPropertyEnum;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
@@ -94,8 +96,38 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     public static final ConfigPropertyBoolean CONFIG_PROPERTY_PARALLELIZE =
             new ConfigPropertyBoolean("isis.reflector.introspector.parallelize", true);
 
-    public static final ConfigPropertyBoolean CONFIG_PROPERTY_FULL_INTROSPECTION =
-            new ConfigPropertyBoolean("isis.reflector.introspector.fullIntrospection", false);
+    public static enum IntrospectionMode {
+        /**
+         * Lazy (don't introspect members for most classes unless required), irrespective of the deployment mode.
+         */
+        LAZY{
+            @Override
+            public boolean isFullIntrospect(final DeploymentCategory category) {
+                return false;
+            }
+        },
+        /**
+         * If production deployment mode, then full, otherwise lazy.
+         */
+        LAZY_UNLESS_PRODUCTION {
+            @Override public boolean isFullIntrospect(final DeploymentCategory category) {
+                return category.isProduction();
+            }
+        },
+        /**
+         * Full introspection, irrespective of deployment mode.
+         */
+        FULL {
+            @Override
+            public boolean isFullIntrospect(final DeploymentCategory category) {
+                return true;
+            }
+        };
+
+        public abstract boolean isFullIntrospect(final DeploymentCategory category);
+    }
+    public static final ConfigPropertyEnum<IntrospectionMode> CONFIG_PROPERTY_MODE =
+            new ConfigPropertyEnum<>("isis.reflector.introspector.mode", IntrospectionMode.LAZY_UNLESS_PRODUCTION);
 
 
     //region > constructor, fields
@@ -217,8 +249,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
         logAfter(cachedSpecifications);
 
-        final boolean validate = CONFIG_PROPERTY_FULL_INTROSPECTION.from(configuration);
-        if(validate) {
+        final IntrospectionMode mode = CONFIG_PROPERTY_MODE.from(configuration);
+        if(mode.isFullIntrospect(servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory())) {
             LOG.info("Introspecting all cached specs up to {}", IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
             introspect(cachedSpecifications, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         }
@@ -385,8 +417,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     @Programmatic
     public void validateAndAssert() {
-        final Boolean validate = CONFIG_PROPERTY_FULL_INTROSPECTION.from(configuration);
-        if(!validate) {
+        final IntrospectionMode mode = CONFIG_PROPERTY_MODE.from(configuration);
+        if(!mode.isFullIntrospect(servicesInjector.getDeploymentCategoryProvider().getDeploymentCategory())) {
             LOG.info("Meta model validation skipped (full introspection of metamodel not configured)");
             return;
         }
