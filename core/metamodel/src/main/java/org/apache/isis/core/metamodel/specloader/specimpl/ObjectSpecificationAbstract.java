@@ -661,8 +661,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(contributed.isIncluded() && !contributeeAndMixedInAssociationsAdded) {
             synchronized (this.associations) {
                 List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
-                associations.addAll(createContributeeAssociations());
-                associations.addAll(createMixedInAssociations());
+                if(isPersistenceCapableOrViewModel()) {
+                    associations.addAll(createContributeeAssociations());
+                    associations.addAll(createMixedInAssociations());
+                }
                 sortAndUpdateAssociations(associations);
                 contributeeAndMixedInAssociationsAdded = true;
             }
