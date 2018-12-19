@@ -83,6 +83,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
+import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
 import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.favicon.Favicon;
@@ -121,7 +122,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final String ID_BOOKMARKED_PAGES = "bookmarks";
 
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
-    
+    private static final String ID_ACTION_PROMPT_SIDEBAR = "actionPromptSidebar";
+
     private static final String ID_PAGE_TITLE = "pageTitle";
 
     private static final String ID_FAVICON = "favicon";
@@ -208,6 +210,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             themeDiv.add(footer);
 
             addActionPromptModalWindow(themeDiv);
+            addActionPromptSidebar(themeDiv);
 
             this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
 
@@ -290,6 +293,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
         response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
         response.render(CssHeaderItem.forReference(new BootstrapOverridesCssResourceReference()));
+        response.render(CssHeaderItem.forReference(new SidebarCssResourceReference()));
         contributeThemeSpecificOverrides(response);
 
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
@@ -464,9 +468,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     // ///////////////////////////////////////////////////////////////////
     
     private ActionPromptModalWindow actionPromptModalWindow;
+    private ActionPromptSidebar actionPromptSidebar;
 
     public ActionPrompt getActionPrompt() {
-        return actionPromptModalWindow;
+        return actionPromptSidebar;
     }
 
     private void addActionPromptModalWindow(final MarkupContainer parent) {
@@ -474,7 +479,12 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         parent.addOrReplace(actionPromptModalWindow);
     }
 
-    
+    private void addActionPromptSidebar(final MarkupContainer parent) {
+        actionPromptSidebar = ActionPromptSidebar.newSidebar(ID_ACTION_PROMPT_SIDEBAR);
+        parent.addOrReplace(actionPromptSidebar);
+    }
+
+
     // ///////////////////////////////////////////////////////////////////
     // UI Hint
     // ///////////////////////////////////////////////////////////////////

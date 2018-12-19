@@ -174,6 +174,11 @@ $(function() {
         }
     );
 
+    $('#menu-toggle').click(function(e) {
+        e.preventDefault();
+        $('#wrapper').toggleClass('toggled');
+    });
+
 /*
     $('.editing .editable').parent().hover(function () {
         var inputEl = $(this).find("> .editable")
