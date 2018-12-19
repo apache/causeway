@@ -140,30 +140,18 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private final List<ComponentType> childComponentIds;
 
-    /**
-     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
-     */
     @com.google.inject.Inject
     @Named("applicationName")
     private String applicationName;
 
-    /**
-     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
-     */
     @com.google.inject.Inject(optional = true)
     @Named("applicationCss")
     private String applicationCss;
     
-    /**
-     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
-     *///
     @com.google.inject.Inject(optional = true)
     @Named("applicationJs")
     private String applicationJs;
 
-    /**
-     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
-     */
     @com.google.inject.Inject
     private PageClassRegistry pageClassRegistry;
 
@@ -471,6 +459,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private ActionPromptSidebar actionPromptSidebar;
 
     public ActionPrompt getActionPrompt() {
+//        return actionPromptModalWindow;
         return actionPromptSidebar;
     }
 

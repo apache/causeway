@@ -34,7 +34,9 @@
                                 <c:action id="delete">
                                     <c:describedAs>Deletes this object from the persistent datastore</c:describedAs>
                                 </c:action>
-                                <c:property id="name" namedEscaped="true"/>
+                                <c:property id="name" namedEscaped="true">
+                                    <c:action id="updateName" promptStyle="DIALOG"/>
+                                </c:property>
                                 <c:property id="notes" namedEscaped="true" multiLine="10" hidden="ALL_TABLES"/>
                             </c:fieldSet>
                         </bs3:col>

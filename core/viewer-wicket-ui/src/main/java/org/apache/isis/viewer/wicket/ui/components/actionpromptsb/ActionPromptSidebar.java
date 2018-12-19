@@ -28,10 +28,16 @@ public class ActionPromptSidebar extends GenericPanel<Void> implements ActionPro
 
     private static final long serialVersionUID = 1L;
 
+    private CloseHandler closeHandlerIfAny;
+
     public ActionPromptSidebar(final String id) {
         super(id);
 
+        setOutputMarkupId(true);
+        setOutputMarkupPlaceholderTag(true);
+
         add(new Label(getTitleId(), "(no action)"));
+
         add(new WebMarkupContainer(getContentId()));
     }
 
@@ -51,27 +57,46 @@ public class ActionPromptSidebar extends GenericPanel<Void> implements ActionPro
 
 
     @Override
-    public void setTitle(final Component component, final AjaxRequestTarget target) {
-
+    public void setTitle(final Component titleComponent, final AjaxRequestTarget target) {
+        titleComponent.setMarkupId(getTitleId());
+        addOrReplace(titleComponent);
     }
 
     @Override
-    public void setPanel(final Component component, final AjaxRequestTarget target) {
-
+    public void setPanel(final Component contentComponent, final AjaxRequestTarget target) {
+        contentComponent.setMarkupId(getContentId());
+        addOrReplace(contentComponent);
     }
 
     @Override
     public void showPrompt(final AjaxRequestTarget target) {
-        target.appendJavaScript("$('#wrapper').toggleClass('toggled')");
+        setVisible(true);
+        show(target);
+        target.add(this);
     }
 
     @Override
     public void closePrompt(final AjaxRequestTarget target) {
-        target.appendJavaScript("$('#wrapper').toggleClass('toggled')");
+
+        if (target != null) {
+            hide(target);
+        }
+        setVisible(false);
+        if(closeHandlerIfAny != null) {
+            closeHandlerIfAny.close(target);
+        }
     }
 
     @Override
     public void setOnClose(final CloseHandler closeHandler) {
-
+        this.closeHandlerIfAny = closeHandler;
     }
+
+    private void show(final AjaxRequestTarget target) {
+        target.appendJavaScript("$('#wrapper').removeClass('toggled')");
+    }
+    private void hide(final AjaxRequestTarget target) {
+        target.appendJavaScript("$('#wrapper').addClass('toggled')");
+    }
+
 }

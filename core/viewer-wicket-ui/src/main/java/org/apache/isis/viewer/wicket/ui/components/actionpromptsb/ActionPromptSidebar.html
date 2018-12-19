@@ -24,17 +24,19 @@
       lang="en">
 <body>
 <wicket:panel>
+<!--
     <li class="sidebar-brand">
-        <h4 wicket:id="header">Action header</h4>
-
     </li>
-    <div wicket:id="content"></div>
+-->
+    <div class="sidebar-panel">
+        <div class="sidebar-header">
+            <h4 wicket:id="header">Action Name</h4>
+        </div>
+        <div class="sidebar-content">
+            <div wicket:id="content"></div>
+        </div>
+    </div>
+
 </wicket:panel>
-    <script>
-        $("#menu-toggle").click(function(e) {
-            e.preventDefault();
-            $("#wrapper").toggleClass("toggled");
-        });
-    </script>
 </body>
 </html>
