@@ -35,9 +35,4 @@ public class CssClassFaFacetForDomainObjectLayoutFactory extends CssClassFaFacet
         final CssClassFaPosition position = CssClassFaPosition.from(domainObjectLayout.cssClassFaPosition());
         return cssClassFa != null ? new CssClassFaFacetForDomainObjectLayoutAnnotation(cssClassFa, position, holder) : null;
     }
-
-    private CssClassFaFacetForDomainObjectLayoutFactory(final String value, final CssClassFaPosition position,
-            final FacetHolder holder) {
-        super(value, position, holder);
-    }
 }

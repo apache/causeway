@@ -38,8 +38,4 @@ public class CssClassFaFacetForViewModelLayoutFactory extends CssClassFaFacetAbs
                 holder) : null;
     }
 
-    private CssClassFaFacetForViewModelLayoutFactory(final String value, final CssClassFaPosition position,
-            final FacetHolder holder) {
-        super(value, position, holder);
-    }
 }
