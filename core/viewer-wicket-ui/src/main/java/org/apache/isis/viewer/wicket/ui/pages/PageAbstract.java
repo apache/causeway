@@ -63,6 +63,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.ConfigPropertyEnum;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -80,6 +81,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.DialogMode;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
@@ -106,6 +108,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static Logger LOG = LoggerFactory.getLogger(PageAbstract.class);
 
     private static final long serialVersionUID = 1L;
+    
+    public static final ConfigPropertyEnum<DialogMode> CONFIG_DIALOG_MODE =
+            new ConfigPropertyEnum<>("isis.viewer.wicket.dialogMode", DialogMode.SIDEBAR);
 
     /**
      * @see <a href="http://github.com/brandonaaron/livequery">livequery</a>
@@ -459,8 +464,14 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private ActionPromptSidebar actionPromptSidebar;
 
     public ActionPrompt getActionPrompt() {
-//        return actionPromptModalWindow;
-        return actionPromptSidebar;
+        final DialogMode dialogMode = CONFIG_DIALOG_MODE.from(getConfiguration());
+        switch (dialogMode) {
+            case SIDEBAR:
+                return actionPromptSidebar;
+            case MODAL:
+            default:
+                return actionPromptModalWindow;
+        }
     }
 
     private void addActionPromptModalWindow(final MarkupContainer parent) {
