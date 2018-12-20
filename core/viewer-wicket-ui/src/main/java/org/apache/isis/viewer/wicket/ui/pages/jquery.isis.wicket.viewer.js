@@ -174,6 +174,17 @@ $(function() {
         }
     );
 
+    $('#menu-toggle').click(function(e) {
+        e.preventDefault();
+        $('#wrapper').toggleClass('toggled');
+    });
+
+    $('#sidebar-wrapper').keyup(function(e) {
+        if (e.keyCode == 27) {
+           $('#wrapper').addClass('toggled');
+        }
+    });
+
 /*
     $('.editing .editable').parent().hover(function () {
         var inputEl = $(this).find("> .editable")

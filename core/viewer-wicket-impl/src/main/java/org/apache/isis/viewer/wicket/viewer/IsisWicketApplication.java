@@ -345,6 +345,10 @@ public class IsisWicketApplication
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
 
             getResourceSettings().setParentFolderPlaceholder("$up$");
+//            getResourceSettings().setCachingStrategy(
+//                    new FilenameWithVersionResourceCachingStrategy(
+//                            new CachingResourceVersion(
+//                                    new MessageDigestResourceVersion())));
 
             final IsisConfigurationBuilder isisConfigurationBuilder = obtainConfigBuilder();
             isisConfigurationBuilder.addDefaultConfigurationResourcesAndPrimers();

@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.string;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.AbstractTextComponent;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -73,7 +74,13 @@ public class MultiLineStringPanel extends ScalarPanelTextFieldParseableAbstract 
             final String id,
             final IModel<String> inlinePromptModel) {
         final Fragment fragment = new Fragment(id, "textareaInlinePrompt", this);
-        final TextArea<String> inlinePromptTextArea = new TextArea<>("scalarValue", inlinePromptModel);
+        final TextArea<String> inlinePromptTextArea = new TextArea<String>("scalarValue", inlinePromptModel) {
+
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.put("tabindex","-1");
+            }
+        };
         setRowsAndMaxLengthAttributesOn(inlinePromptTextArea);
         fragment.add(inlinePromptTextArea);
         return fragment;

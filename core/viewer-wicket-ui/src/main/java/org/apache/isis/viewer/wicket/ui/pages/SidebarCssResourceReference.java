@@ -16,21 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.viewer.wicket.ui.pages;
 
-.bootstrap-datetimepicker-widget {
-    background-color: #ffffff;
-    color: #000000;
-}
+import org.apache.wicket.request.resource.CssResourceReference;
 
-.sidebar-panel :focus,
-h4.iconAndTitle a:focus,
-ul.nav-tabs li.active a:focus,
-ul.nav-tabs li a:focus,
-fieldset.inputFormTable :focus,
-li.additionalLinkItem a:focus,
-a.scalarValueInlinePromptLink:focus textarea,
-:focus {
-    outline: none;
-    border-color: #0ce3ac;
-    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px #0ce3ac;
+/**
+ * A CSS resource reference that provides CSS rules which override the CSS rules
+ * provided by the currently active Bootstrap theme.
+ * Usually the overrides rules are about sizes and weights, but should not change any colors
+ */
+public class SidebarCssResourceReference extends CssResourceReference {
+
+    public SidebarCssResourceReference() {
+        super(SidebarCssResourceReference.class, "simple-sidebar.css");
+    }
 }

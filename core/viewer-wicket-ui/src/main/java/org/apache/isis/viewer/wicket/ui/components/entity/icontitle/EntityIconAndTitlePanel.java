@@ -112,17 +112,15 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
 
         final WebMarkupContainer entityLinkWrapper = new WebMarkupContainer(ID_ENTITY_LINK_WRAPPER);
 
-        final AbstractLink link = createIconAndTitle(adapter);
-        entityLinkWrapper.addOrReplace(link);
-        
+        entityLinkWrapper.addOrReplace(createLinkWithIconAndTitle(adapter));
+
         return entityLinkWrapper;
     }
 
-    private AbstractLink createIconAndTitle(final ObjectAdapter adapterIfAny) {
+    private AbstractLink createLinkWithIconAndTitle(final ObjectAdapter adapterIfAny) {
         final AbstractLink link = createDynamicallyVisibleLink();
 
         if(adapterIfAny != null) {
-            final String title = determineTitle();
 
             final String iconName = adapterIfAny.getIconName();
             final CssClassFaFacet cssClassFaFacet = adapterIfAny.getSpecification().getFacet(CssClassFaFacet.class);
@@ -136,7 +134,9 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
                 Components.permanentlyHide(link, ID_ENTITY_ICON);
             }
 
-            link.addOrReplace(this.label = newLabel(ID_ENTITY_TITLE, titleAbbreviated(title)));
+            final String title = determineTitle();
+            this.label = newLabel(ID_ENTITY_TITLE, titleAbbreviated(title));
+            link.addOrReplace(this.label);
 
             String entityTypeName = adapterIfAny.getSpecification().getSingularName();
             link.add(new AttributeModifier("title", entityTypeName + ": " + title));

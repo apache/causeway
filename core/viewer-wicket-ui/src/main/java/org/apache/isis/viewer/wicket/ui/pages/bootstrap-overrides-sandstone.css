@@ -20,3 +20,20 @@
 .input-group-sm > .input-group-addon {
     padding: 0 11px;
 }
+
+
+
+.sidebar-panel :focus,
+h4.iconAndTitle a:focus,
+ul.nav-tabs li.active a:focus,
+ul.nav-tabs li a:focus,
+a.navbar-brand:focus,
+fieldset.inputFormTable :focus,
+li.additionalLinkItem a:focus,
+a.scalarValueInlinePromptLink:focus textarea,
+:focus {
+    outline: none;
+    border-color: #93c54b;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px #93c54b;
+}
+
