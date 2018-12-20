@@ -42,8 +42,8 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -96,36 +96,6 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     public static final ConfigPropertyBoolean CONFIG_PROPERTY_PARALLELIZE =
             new ConfigPropertyBoolean("isis.reflector.introspector.parallelize", true);
 
-    public static enum IntrospectionMode {
-        /**
-         * Lazy (don't introspect members for most classes unless required), irrespective of the deployment mode.
-         */
-        LAZY{
-            @Override
-            public boolean isFullIntrospect(final DeploymentCategory category) {
-                return false;
-            }
-        },
-        /**
-         * If production deployment mode, then full, otherwise lazy.
-         */
-        LAZY_UNLESS_PRODUCTION {
-            @Override public boolean isFullIntrospect(final DeploymentCategory category) {
-                return category.isProduction();
-            }
-        },
-        /**
-         * Full introspection, irrespective of deployment mode.
-         */
-        FULL {
-            @Override
-            public boolean isFullIntrospect(final DeploymentCategory category) {
-                return true;
-            }
-        };
-
-        public abstract boolean isFullIntrospect(final DeploymentCategory category);
-    }
     public static final ConfigPropertyEnum<IntrospectionMode> CONFIG_PROPERTY_MODE =
             new ConfigPropertyEnum<>("isis.reflector.introspector.mode", IntrospectionMode.LAZY_UNLESS_PRODUCTION);
 
@@ -476,11 +446,32 @@ public class SpecificationLoader implements ApplicationScopedComponent {
     }
 
     @Programmatic
+    public ObjectSpecification peekSpecification(final Class<?> type) {
+
+        final Class<?> substitutedType = classSubstitutor.getClass(type);
+        if (substitutedType == null) {
+            return null;
+        }
+
+        final String typeName = substitutedType.getName();
+        ObjectSpecification spec = cache.get(typeName);
+        if (spec != null) {
+            return spec;
+        }
+
+        return null;
+    }
+
+    @Programmatic
     public ObjectSpecification loadSpecification(final Class<?> type, final IntrospectionState upTo) {
         final ObjectSpecification spec = internalLoadSpecification(type, null, upTo);
         if(spec == null) {
             return null;
         }
+
+        // TODO: review, is this now needed?
+        //  We now create the ObjectSpecIdFacet immediately after creating the ObjectSpecification,
+        //  so the cache shouldn't need updating here also.
         if(cache.isInitialized()) {
             // umm.  It turns out that anonymous inner classes (eg org.estatio.dom.WithTitleGetter$ToString$1)
             // don't have an ObjectSpecId; hence the guard.
@@ -638,7 +629,8 @@ public class SpecificationLoader implements ApplicationScopedComponent {
 
     @Programmatic
     public boolean isServiceClass(Class<?> cls) {
-        return this.servicesInjector.isRegisteredService(cls);
+        final ObjectSpecification objectSpecification = peekSpecification(cls);
+        return objectSpecification != null && objectSpecification.containsDoOpFacet(DomainServiceFacet.class);
     }
 
     //endregion

@@ -311,14 +311,51 @@ If the setting is changed to disabled then this may reduce application start-up 
 
 In general, parallelisation should result in faster bootstrap times.
 
+|`isis.reflector.introspect.` +
+`mode`
+|`lazy`,`lazy_unless_production`,`full` +
+(`lazy_unless_production`)
+|How complete to build the metamodel during bootstrapping.
+
+Setting to `lazy` In general, parallelisation should result in faster bootstrap times.
+This is discussed further below.
+
+
+[IMPORTANT]
+====
+Metamodel validation is only done after full introspection.
+====
+
 
 |===
+
+
+=== Lazy vs Full introspection.
+
+The framework performs classpath scanning to identify all domain classes (domain services, mixins, entities, view models and fixture scripts), and the class-level facets for all of these are always created during bootstrapping.
+
+In addition, the members for all domain services and mixins are also created, because these can give rise to contributed members of the entities/view models.
+
+Lazy introspection means that the class members (properties, collections and actions) and their respective facets are _not_ created for all of the entities/view models in the domain model.
+Instead these are created only on first access.
+The purpose of this is primarily to speed up bootstrapping during development.
+
+To enable lazy introspection, either set the `isis.reflector.introspect.mode` configuration property to "lazy" or to "lazy_unless_production" (the latter only if also running with a deployment type of "production").
+
+However, the trade-off is that metamodel validation is _not_ performed in lazy mode.
+
+[TIP]
+====
+Note that integration tests are run in `production` mode, and so by default these perform full introspection.
+This can be overridden when calling the superclass (`IntegrationTestAbstract3`)'s contributor with `IntrospectionMode.LAZY`.
+====
 
 
 
 [[__rgcfg_configuring-core_metamodel-validation]]
 == MetaModel Validation
 
+Metamodel validation is only done if full introspection is configured, see the `isis.reflector.introspect.mode` configuration property.
 
 .Metamodel Validation
 [cols="2a,1,3a", options="header"]

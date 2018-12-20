@@ -24,7 +24,7 @@ These are executed automatically (and in the correct order) within integration t
 [IMPORTANT]
 ====
 Implementations of `Module` are expected to have value-semantics.
-Each `Module` can declare its respective dependencies (using `Module#getDependencies()`) simply by instantiating the `Module`s on which it depends.
+Each `Module` can declare its respective dependencies (using `Module#getDependencies()`) simply by instantiating the ``Module``s on which it depends.
 Any duplicates from the computed graph of all dependencies are automatically eliminated.
 ====
 
@@ -188,6 +188,6 @@ The `AppManifest` implementation must (necessarily) reference all the modules wt
 (As noted above), the `IntegrationTestAbstract3` adapter class is bootstrapped from a `Module` rather than an `AppManifest`.
 This therefore allows the integration tests to reside alongside the module that they exercise, and to bootstrap only the subset of the application required (that is, the module being tested and any of its transitive dependencies)..
 
-For more on `IntegrationTestAbstract3`, see the xref:../ugtst/ugtst.adoc#__ugtst_integ-test-support_abstract-class_IntegrationTestAbstract3[testing user guide].
+For more on `IntegrationTestAbstract3`, see the xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support_bootstrapping[testing user guide].
 
 

@@ -28,3 +28,21 @@ where `DomainAppApplicationModule` in turn declares all the dependencies that ma
 If required, the `Module` can be customised first using the various `withXxx(...)` methods to specify addition modules, domain services and configuration properties.
 
 
+== Faster Bootstrapping
+
+The `IntegrationTestAbstract3` superclass also allows the introspection mode to be specified, which can reduce the time to bootstrap the test.
+
+By default integration tests are run in "production" deployment mode, so with the `isis.reflector.introspection.mode` set to its default of "lazy_unless_production" this will actually result in full introspection of the Apache Isis metamodel.
+The _does_ have the benefit that the metamodel will be validated, but - as mentioned - with the corresponding downside of taking longer to bootstrap.
+
+To bootstrap lazily, override as follows:
+
+[source,java]
+----
+public abstract class DomainAppIntegTestAbstract extends IntegrationTestAbstract3 {
+
+    public DomainAppIntegTestAbstract() {
+        super(new DomainAppApplicationModule(), IntrospectionMode.LAZY);
+    }
+}
+----
