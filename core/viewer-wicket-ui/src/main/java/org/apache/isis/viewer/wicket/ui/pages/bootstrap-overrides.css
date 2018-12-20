@@ -1032,3 +1032,16 @@ such as https://chrome.google.com/webstore/detail/focus-indicator/heeoeadndnhebm
     display: block;
 }
 
+
+h4.iconAndTitle a {
+    outline: none;
+    display: inline-block;
+}
+h4.iconAndTitle a span.entityTitle:focus {
+    outline: none;
+}
+h4.iconAndTitle a:focus {
+    text-decoration: none;
+}
+
+

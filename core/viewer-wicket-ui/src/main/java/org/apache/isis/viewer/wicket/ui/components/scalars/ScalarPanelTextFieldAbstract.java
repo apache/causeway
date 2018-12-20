@@ -186,7 +186,12 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected Component createInlinePromptComponent(
             final String id,
             final IModel<String> inlinePromptModel) {
-        final Fragment fragment = new Fragment(id, "textInlinePrompt", this);
+        final Fragment fragment = new Fragment(id, "textInlinePrompt", this) {
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.put("tabindex","-1");
+            }
+        };
         final Label label = new Label("scalarValue", inlinePromptModel);
         fragment.add(label);
         return fragment;
