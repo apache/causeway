@@ -78,10 +78,10 @@ public class ActionPromptSidebar extends GenericPanel<Void> implements ActionPro
     @Override
     public void closePrompt(final AjaxRequestTarget target) {
 
+        setVisible(false);
         if (target != null) {
             hide(target);
         }
-        setVisible(false);
         if(closeHandlerIfAny != null) {
             closeHandlerIfAny.close(target);
         }
