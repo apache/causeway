@@ -621,8 +621,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
                 if(autoCompleteFacet != null && !autoCompleteFacet.isNoop() && autoCompleteFacet instanceof AutoCompleteFacetAbstract) {
                     final AutoCompleteFacetAbstract facet = (AutoCompleteFacetForDomainObjectAnnotation) autoCompleteFacet;
                     final Class<?> repositoryClass = facet.getRepositoryClass();
-                    final boolean isRegistered = servicesInjector.isRegisteredService(repositoryClass);
-                    if(!isRegistered) {
+                    final boolean isService = getSpecificationLoader().isServiceClass(repositoryClass);
+                    if(!isService) {
                         validationFailures.add(
                                 "@DomainObject annotation on %s specifies unknown repository '%s'",
                                 thisSpec.getFullIdentifier(), repositoryClass.getName());
