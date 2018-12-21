@@ -27,10 +27,6 @@
     background-color: #ecf0f1;
 }
 
-.list-inline > li {
-    padding-left: 0px;
-    padding-right: 0px;
-}
 
 .sidebar-panel :focus,
 h4.iconAndTitle a:focus,

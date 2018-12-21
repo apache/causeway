@@ -1045,3 +1045,7 @@ h4.iconAndTitle a:focus {
 }
 
 
+.list-inline > li {
+    padding-left: 0px;
+    padding-right: 0px;
+}
