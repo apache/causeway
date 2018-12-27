@@ -56,6 +56,17 @@ public final class _Reflect {
 
     // -- PREDICATES
 
+    public static boolean same(Method method, Method superMethod) {
+        if(!method.getName().equals(superMethod.getName())) {
+            return false;
+        }
+        if(method.getParameterCount()!=superMethod.getParameterCount()) {
+            return false;
+        }
+        return _Arrays.testAllMatch(method.getParameters(), superMethod.getParameters(), 
+                (p1, p2)->p1.getType().equals(p2.getType()));
+    }
+    
     /**
      * Returns whether a {@link Member} is accessible.
      * @param m Member to check
@@ -204,6 +215,35 @@ public final class _Reflect {
     }
     
     /**
+     * Stream all interfaces implemented by given {@code type}.
+     * @param type (nullable)
+     * @return non-null
+     */
+    public static Stream<Class<?>> streamAllInterfaces(@Nullable Class<?> type) {
+        return StreamSupport.stream(
+                new Spliterators.AbstractSpliterator<Class<?>>(Long.MAX_VALUE,
+                        Spliterator.ORDERED|Spliterator.IMMUTABLE|Spliterator.NONNULL) {
+                    Class<?> current = type;
+                    
+                    @Override
+                    public boolean tryAdvance(Consumer<? super Class<?>> action) {
+                        if(current == null) return false;
+                        recur(current, action);
+                        current = current.getSuperclass();
+                        return true;
+                    }
+
+                    private void recur(Class<?> iface, Consumer<? super Class<?>> action) {
+                        action.accept(iface);
+                        for(Class<?> subIface : iface.getInterfaces()) {
+                            recur(subIface, action);
+                        }
+                    }
+                    
+                }, false);
+    }
+    
+    /**
      * Stream all types of given {@code type}, up the super class hierarchy starting with self, 
      * then append all interfaces of given {@code type}.
      * @param type (nullable)
@@ -212,7 +252,7 @@ public final class _Reflect {
     public static Stream<Class<?>> streamTypeHierarchyAndInterfaces(
             @Nullable Class<?> type) {
         
-        return Stream.concat(streamTypeHierarchy(type), stream(type.getInterfaces()));
+        return Stream.concat(streamTypeHierarchy(type), streamAllInterfaces(type));
     }
     
     // -- ANNOTATIONS
@@ -310,19 +350,6 @@ public final class _Reflect {
         .findFirst()
         .orElse(null);
         
-    }
-
-    // -- HELPER
-    
-    private static boolean same(Method method, Method superMethod) {
-        if(!method.getName().equals(superMethod.getName())) {
-            return false;
-        }
-        if(method.getParameterCount()!=superMethod.getParameterCount()) {
-            return false;
-        }
-        return _Arrays.testAllMatch(method.getParameters(), superMethod.getParameters(), 
-                (p1, p2)->p1.equals(p2));
     }
 
 

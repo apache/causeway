@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.beans.IntrospectionException;
 import java.lang.annotation.Annotation;
 import java.lang.invoke.MethodHandle;
@@ -210,54 +212,54 @@ public final class Annotations  {
         if (method == null) {
             return null;
         }
-        final Class<?> methodDeclaringClass = method.getDeclaringClass();
-        final String methodName = method.getName();
-
         final T annotation = method.getAnnotation(annotationClass);
         if (annotation != null) {
             return annotation;
         }
-
+        
+        final Class<?> methodDeclaringClass = method.getDeclaringClass();
 
         // search for field
         if ( shouldSearchForField(annotationClass) ) {
-
-            List<String> fieldNameCandidates = fieldNameCandidatesFor(methodName);
-            for (String fieldNameCandidate : fieldNameCandidates) {
-                try {
-                    final Field field = methodDeclaringClass.getDeclaredField(fieldNameCandidate);
-                    final T fieldAnnotation = field.getAnnotation(annotationClass);
-                    if(fieldAnnotation != null) {
-                        return fieldAnnotation;
-                    }
-                } catch (NoSuchFieldException e) {
-                    // fall through FIXME heap pollution
+            final Field field = firstDeclaredField_matching(
+                    methodDeclaringClass, isFieldForGetter(method)); 
+            if(field!=null) {
+                final T fieldAnnotation = field.getAnnotation(annotationClass);
+                if(fieldAnnotation != null) {
+                    return fieldAnnotation;
                 }
             }
+            
         }
 
         // search superclasses
         final Class<?> superclass = methodDeclaringClass.getSuperclass();
         if (superclass != null) {
-            try {
-                final Method parentClassMethod = superclass.getMethod(methodName, method.getParameterTypes());
-                return getAnnotation(parentClassMethod, annotationClass);
-            } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through FIXME heap pollution
+            final Method parentClassMethod = 
+                    firstDeclaredMethod_matching(method, superclass, isSuperMethodFor(method)); 
+            
+            if(parentClassMethod!=null) {
+                final T methodAnnotation = getAnnotation(parentClassMethod, annotationClass);
+                if(methodAnnotation != null) {
+                    return methodAnnotation;
+                }
             }
         }
 
         // search implemented interfaces
         final Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
         for (final Class<?> iface : interfaces) {
-            try {
-                final Method ifaceMethod = iface.getMethod(methodName, method.getParameterTypes());
-                return getAnnotation(ifaceMethod, annotationClass);
-            } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through FIXME heap pollution
+            final Method ifaceMethod = 
+                    firstDeclaredMethod_matching(method, iface, isSuperMethodFor(method));
+         
+            if(ifaceMethod!=null) {
+                final T methodAnnotation = getAnnotation(ifaceMethod, annotationClass);
+                if(methodAnnotation != null) {
+                    return methodAnnotation;
+                }
             }
         }
-
+        
         return null;
     }
 
@@ -281,55 +283,47 @@ public final class Annotations  {
         }
 
 
-
         // search for field
         if ( shouldSearchForField(annotationClass) ) {
-
-            final List<String> fieldNameCandidates = fieldNameCandidatesFor(method.getName());
-            for (String fieldNameCandidate : fieldNameCandidates) {
-                try {
-                    final Field field = method.getDeclaringClass().getDeclaredField(fieldNameCandidate);
-                    for(final Annotation annotation: field.getAnnotations()) {
-                        append(annotation, annotationClass, annotationAndDepths);
-                    }
-                } catch (NoSuchFieldException e) {
-                    // fall through FIXME heap pollution
+            declaredFields_matching(method.getDeclaringClass(), isFieldForGetter(method), field->{
+                for(final Annotation annotation: field.getAnnotations()) {
+                    append(annotation, annotationClass, annotationAndDepths);
                 }
-            }
+            }); 
         }
         if(!annotationAndDepths.isEmpty()) {
             return AnnotationAndDepth.sorted(annotationAndDepths);
         }
 
-
         // search superclasses
         final Class<?> superclass = method.getDeclaringClass().getSuperclass();
         if (superclass != null) {
-            try {
-                final Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
-                final List<T> annotationsFromSuperclass = getAnnotations(parentClassMethod, annotationClass);
+            final Method parentClassMethod = 
+                    firstDeclaredMethod_matching(method, superclass, isSuperMethodFor(method)); 
+            
+            if(parentClassMethod!=null) {
+                final List<T> annotationsFromSuperclass = 
+                        getAnnotations(parentClassMethod, annotationClass);
                 if(!annotationsFromSuperclass.isEmpty()) {
                     return annotationsFromSuperclass;
                 }
-            } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through FIXME heap pollution
             }
         }
-
+        
         // search implemented interfaces
         final Class<?>[] interfaces = method.getDeclaringClass().getInterfaces();
         for (final Class<?> iface : interfaces) {
-            try {
-                final Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
+            final Method ifaceMethod = 
+                    firstDeclaredMethod_matching(method, iface, isSuperMethodFor(method));
+         
+            if(ifaceMethod!=null) {
                 final List<T> annotationsFromInterfaces = getAnnotations(ifaceMethod, annotationClass);
                 if(!annotationsFromInterfaces.isEmpty()) {
                     return annotationsFromInterfaces;
                 }
-            } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through
             }
         }
-
+        
         return Collections.emptyList();
     }
 
@@ -486,17 +480,6 @@ public final class Annotations  {
             return method.getName();
         }
 
-        //        public Object value(final Object obj)  {
-        //            try {
-        //                return method.invoke(obj);
-        //            } catch (final InvocationTargetException e) {
-        //                ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
-        //                return null;
-        //            } catch (final IllegalAccessException e) {
-        //                throw new MetaModelException("illegal access of " + method, e);
-        //            }
-        //        }
-
         public Method getMethod() {
             return method;
         }
@@ -525,15 +508,6 @@ public final class Annotations  {
             return Reflect.handleOf(field);
         }
 
-        //        public Object value(final Object obj)  {
-        //            try {
-        //                field.setAccessible(true);
-        //                return field.get(obj);
-        //            } catch (final IllegalAccessException e) {
-        //                throw new MetaModelException("illegal access of " + field, e);
-        //            }
-        //        }
-
         public Field getField() {
             return field;
         }
@@ -541,7 +515,7 @@ public final class Annotations  {
         public Optional<Method> getGetter(Class<?> originatingClass) {
             try {
                 return Optional.ofNullable(
-                        Reflect.getGetter(originatingClass, field.getName())	);
+                        Reflect.getGetter(originatingClass, field.getName())    );
             } catch (IntrospectionException e) {
                 e.printStackTrace();
             }
@@ -550,8 +524,8 @@ public final class Annotations  {
 
     }
 
-    private static List<Class<?>> fieldAnnotationClasses = Collections.unmodifiableList(
-            Arrays.<Class<?>>asList(
+    private static List<Class<?>> fieldAnnotationClasses = 
+            _Lists.of(
                     Property.class,
                     PropertyLayout.class,
                     Collection.class,
@@ -564,8 +538,8 @@ public final class Annotations  {
                     XmlJavaTypeAdapter.class,
                     XmlTransient.class,
                     javax.jdo.annotations.Column.class
-                    )
             );
+    
     private static boolean shouldSearchForField(final Class<?> annotationClass) {
         return fieldAnnotationClasses.contains(annotationClass);
     }
@@ -602,39 +576,13 @@ public final class Annotations  {
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
-    public static boolean isAnnotationPresent(final Method method, final Class<? extends Annotation> annotationClass) {
+    public static boolean isAnnotationPresent(
+            final Method method, 
+            final Class<? extends Annotation> annotationClass) {
         if (method == null) {
             return false;
         }
-        final boolean present = method.isAnnotationPresent(annotationClass);
-        if (present) {
-            return true;
-        }
-
-        final Class<?> methodDeclaringClass = method.getDeclaringClass();
-
-        // search superclasses
-        final Class<?> superclass = methodDeclaringClass.getSuperclass();
-        if (superclass != null) {
-            try {
-                final Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
-                return isAnnotationPresent(parentClassMethod, annotationClass);
-            } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through FIXME heap pollution
-            }
-        }
-
-        // search implemented interfaces
-        final Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
-        for (final Class<?> iface : interfaces) {
-            try {
-                final Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
-                return isAnnotationPresent(ifaceMethod, annotationClass);
-            } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through FIXME heap pollution
-            }
-        }
-        return false;
+        return _Reflect.getAnnotation(method, annotationClass, true, true)!=null;
     }
 
     /**
@@ -663,6 +611,74 @@ public final class Annotations  {
         }
 
         return Collections.emptyList();
+    }
+    
+    // -- HELPER
+
+    private static Method firstDeclaredMethod_matching(
+            Method method,
+            Class<?> type, 
+            Predicate<Method> filter) {
+        
+        return stream(type.getDeclaredMethods())
+                .filter(filter)
+                .findFirst()
+                .orElse(null);
+    }
+    
+    private static Field firstDeclaredField_matching(
+            Class<?> type, 
+            Predicate<Field> filter) {
+        
+        return stream(type.getDeclaredFields())
+                .filter(filter)
+                .findFirst()
+                .orElse(null);
+    }
+    
+    private static void declaredFields_matching(
+            Class<?> type, 
+            Predicate<Field> filter, 
+            Consumer<Field> onField) {
+        
+        stream(type.getDeclaredFields())
+        .filter(filter)
+        .forEach(onField);
+        
+    }
+    
+    // -- HELPER - PREDICATES
+    
+    private static Predicate<Method> isSuperMethodFor(final Method method) {
+        return m->_Reflect.same(method, m);
+    }
+    
+    private static Predicate<Field> isFieldForGetter(final Method getter) {
+        return field->{
+            int beginIndex;
+            final String methodName = getter.getName();
+            if (methodName.startsWith("get")) {
+                beginIndex = 3;
+            } else if (methodName.startsWith("is")) {
+                beginIndex = 2;
+            } else {
+                return false;
+            }
+            if(methodName.length()==beginIndex) {
+                return false;
+            }
+            final String suffix = methodName.substring(beginIndex);
+            final char c = suffix.charAt(0);
+            final char lower = Character.toLowerCase(c);
+            final String candidate = "" + lower + suffix.substring(1);
+            if(field.getName().equals(candidate)) {
+                return true;
+            }
+            if(field.getName().equals("_" + candidate)) {
+                return true;
+            }
+            return false;
+        };
     }
 
 }
