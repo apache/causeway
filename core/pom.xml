@@ -2121,9 +2121,11 @@ ${license.additional-notes}
         </profile>
 
         <profile>
-            <id>jdk11plus</id>
+            <id>jdk11</id>
             <activation>
-                <jdk>[11,)</jdk>
+            	<!-- disabled for now, because we have not found a way to enforce jdk8 
+            	profile when following condition evaluates true -->
+<!--                 <jdk>[11,)</jdk> -->
             </activation>
             <build>
                 <plugins>
