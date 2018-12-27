@@ -231,7 +231,7 @@ public final class Annotations  {
                         return fieldAnnotation;
                     }
                 } catch (NoSuchFieldException e) {
-                    // fall through
+                    // fall through FIXME heap pollution
                 }
             }
         }
@@ -243,7 +243,7 @@ public final class Annotations  {
                 final Method parentClassMethod = superclass.getMethod(methodName, method.getParameterTypes());
                 return getAnnotation(parentClassMethod, annotationClass);
             } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through
+                // fall through FIXME heap pollution
             }
         }
 
@@ -254,7 +254,7 @@ public final class Annotations  {
                 final Method ifaceMethod = iface.getMethod(methodName, method.getParameterTypes());
                 return getAnnotation(ifaceMethod, annotationClass);
             } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through
+                // fall through FIXME heap pollution
             }
         }
 
@@ -293,7 +293,7 @@ public final class Annotations  {
                         append(annotation, annotationClass, annotationAndDepths);
                     }
                 } catch (NoSuchFieldException e) {
-                    // fall through
+                    // fall through FIXME heap pollution
                 }
             }
         }
@@ -312,7 +312,7 @@ public final class Annotations  {
                     return annotationsFromSuperclass;
                 }
             } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through
+                // fall through FIXME heap pollution
             }
         }
 
@@ -620,7 +620,7 @@ public final class Annotations  {
                 final Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
                 return isAnnotationPresent(parentClassMethod, annotationClass);
             } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through
+                // fall through FIXME heap pollution
             }
         }
 
@@ -631,7 +631,7 @@ public final class Annotations  {
                 final Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
                 return isAnnotationPresent(ifaceMethod, annotationClass);
             } catch (final SecurityException | NoSuchMethodException e) {
-                // fall through
+                // fall through FIXME heap pollution
             }
         }
         return false;

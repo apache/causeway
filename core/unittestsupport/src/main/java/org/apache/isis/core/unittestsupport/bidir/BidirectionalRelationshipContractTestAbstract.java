@@ -59,7 +59,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
     @Override
     protected void applyContractTest(Class<?> entityType) {
-        final Set<Field> mappedByFields = streamAllFields(entityType)
+        final Set<Field> mappedByFields = streamAllFields(entityType, true)
                 .filter(ReflectUtils.persistentMappedBy)
                 .collect(toHashSet());
 
@@ -85,7 +85,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
         // getMethod
         final String getMethod = StringUtils.methodNamed("get", p.childField);
-        final Set<Method> getMethods = streamAllMethods(p.entityType)
+        final Set<Method> getMethods = streamAllMethods(p.entityType, true)
                 .filter(withConcreteMethodNamed(getMethod))
                 .collect(toHashSet());
 
@@ -98,7 +98,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         if(Collection.class.isAssignableFrom(returnType)) {
             // addToMethod
             final String addToMethod = StringUtils.methodNamed("addTo", p.childField);
-            final Set<Method> addToMethods = streamAllMethods(p.entityType)
+            final Set<Method> addToMethods = streamAllMethods(p.entityType, true)
                     .filter(withConcreteMethodNamed(addToMethod))
                     .filter(withMethodParametersCount(1))
                     .filter(withEntityParameter())
@@ -113,7 +113,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
             // removeFromMethod
             final String removeFromMethod = StringUtils.methodNamed("removeFrom", p.childField);
-            final Set<Method> removeFromMethods = streamAllMethods(p.entityType)
+            final Set<Method> removeFromMethods = streamAllMethods(p.entityType, true)
                     .filter(withConcreteMethodNamed(removeFromMethod))
                     .filter(withMethodParametersCount(1))
                     .filter(withEntityParameter())
@@ -138,7 +138,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
             // modify
             String modifyMethod = StringUtils.methodNamed("modify", p.childField);
-            final Set<Method> modifyMethods = streamAllMethods(p.entityType)
+            final Set<Method> modifyMethods = streamAllMethods(p.entityType, true)
                     .filter(withConcreteMethodNamed(modifyMethod))
                     .filter(withMethodParametersCount(1))
                     .filter(withEntityParameter())
@@ -153,7 +153,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
             // clear
             String clearMethod = StringUtils.methodNamed("clear", p.childField);
-            final Set<Method> clearMethods = streamAllMethods(p.entityType)
+            final Set<Method> clearMethods = streamAllMethods(p.entityType, true)
                     .filter(withConcreteMethodNamed(clearMethod))
                     .filter(withMethodParametersCount(0))
                     .collect(toHashSet());
@@ -219,7 +219,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
     private void process(Parent p, Child c) {
 
         // mappedBy field
-        final Set<Field> parentFields = streamAllFields(c.entityType)
+        final Set<Field> parentFields = streamAllFields(c.entityType, true)
                 .filter(withName(p.mappedBy))
                 .filter(withTypeAssignableFrom(p.entityType))
                 .collect(toHashSet());
@@ -229,7 +229,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
         // getter
         String getterMethod = StringUtils.methodNamed("get", c.parentField);
-        final Set<Method> getterMethods = streamAllMethods(c.entityType)
+        final Set<Method> getterMethods = streamAllMethods(c.entityType, true)
                 .filter(withConcreteMethodNamed(getterMethod))
                 .filter(withMethodParametersCount(0))
                 .filter(withReturnTypeAssignableFrom(p.entityType))
@@ -240,7 +240,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
         // modify
         String modifyMethod = StringUtils.methodNamed("modify", c.parentField);
-        final Set<Method> modifyMethods = streamAllMethods(c.entityType)
+        final Set<Method> modifyMethods = streamAllMethods(c.entityType, true)
                 .filter(withConcreteMethodNamed(modifyMethod))
                 .filter(withMethodParametersCount(1))
                 .filter(withParametersAssignableFrom(p.entityType))
@@ -255,7 +255,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
 
         // clear
         String clearMethod = StringUtils.methodNamed("clear", c.parentField);
-        final Set<Method> clearMethods = streamAllMethods(c.entityType)
+        final Set<Method> clearMethods = streamAllMethods(c.entityType, true)
                 .filter(withConcreteMethodNamed(clearMethod))
                 .filter(withMethodParametersCount(0))
                 .collect(toHashSet());

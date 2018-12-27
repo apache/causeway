@@ -47,7 +47,7 @@ public abstract class InjectServiceMethodMustBeFinalContractTestAbstract extends
 
     @Override
     protected void applyContractTest(Class<?> entityType) {
-        final Set<Method> injectMethods = _Reflect.streamAllMethods(entityType)
+        final Set<Method> injectMethods = _Reflect.streamAllMethods(entityType, true)
                 .filter(withPrefix("inject"))
                 .collect(toHashSet());
 

@@ -23,6 +23,7 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 import java.lang.reflect.Array;
 import java.util.Collection;
+import java.util.function.BiPredicate;
 import java.util.stream.Collector;
 
 import javax.annotation.Nullable;
@@ -48,6 +49,61 @@ public final class _Arrays {
     private _Arrays(){}
 
     // -- PREDICATES
+    
+    /**
+     * Whether given {@code test} predicate evaluates 'true' for any given pair of elements 
+     * {@code array1[index]} and {@code array2[index]}, with {@code index=[0..n-1]} and {@code n} 
+     * the number of elements of {@code array1/2}.  
+     * @param array1 - nullable
+     * @param array2 - nullable
+     * @param test - a predicate
+     * @return whether there is any matching pair; false - if array1 and array2 are both empty 
+     * @throws IllegalArgumentException - if array lengths do not match 
+     * @throws NullPointerException - if {@code test} is null
+     */
+    public static <T> boolean testAnyMatch(
+            @Nullable final T[] array1, 
+            @Nullable final T[] array2, 
+            final BiPredicate<T, T> test) {
+        
+        final int s1 = _NullSafe.size(array1);
+        final int s2 = _NullSafe.size(array2);
+        if(s1!=s2) {
+            throw new IllegalArgumentException("Array length missmatch");
+        }
+        if(s1==0) {
+            return false;
+        }
+        requires(test, "test");
+        
+        for(int i=0; i<s1; ++i) {
+            if(test.test(array1[i], array2[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+
+    /**
+     * Whether given {@code test} predicate evaluates 'true' for all given pairs of elements 
+     * {@code array1[index]} and {@code array2[index]}, with {@code index=[0..n-1]} and {@code n} 
+     * the number of elements of {@code array1/2}.  
+     * @param array1 - nullable
+     * @param array2 - nullable
+     * @param test - a predicate
+     * @return whether all pairs match; true - if array1 and array2 are both empty 
+     * @throws IllegalArgumentException - if array lengths do not match 
+     * @throws NullPointerException - if {@code test} is null
+     */
+    public static <T> boolean testAllMatch(
+            @Nullable final T[] array1, 
+            @Nullable final T[] array2, 
+            final BiPredicate<T, T> test) {
+        requires(test, "test");
+        return !testAnyMatch(array1, array2, test.negate());
+    }
+            
 
     /**
      * @param cls

@@ -38,7 +38,7 @@ public abstract class SortedSetsContractTestAbstract extends AbstractApplyToAllC
 
     @Override
     protected void applyContractTest(Class<?> entityType) {
-        final Set<Field> collectionFields = _Reflect.streamAllFields(entityType)
+        final Set<Field> collectionFields = _Reflect.streamAllFields(entityType, true)
                 .filter(withTypeAssignableTo(Collection.class))
                 .collect(toHashSet());
 
