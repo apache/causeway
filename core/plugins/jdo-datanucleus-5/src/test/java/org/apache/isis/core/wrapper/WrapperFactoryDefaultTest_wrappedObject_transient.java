@@ -38,7 +38,6 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -78,6 +77,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     private ObjectAdapterProvider mockAdapterManager;
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+
     @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
@@ -118,7 +118,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     public void setUp() throws Exception {
 
         // PRODUCTION
-        
+
         employeeDO = new Employee();
         employeeDO.setName("Smith");
         

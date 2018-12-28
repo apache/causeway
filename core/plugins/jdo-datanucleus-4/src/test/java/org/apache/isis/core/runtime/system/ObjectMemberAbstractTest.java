@@ -90,7 +90,6 @@ public class ObjectMemberAbstractTest {
     private SpecificationLoader mockSpecificationLoader;
 
     ServicesInjector stubServicesInjector;
-    
 
     @Mock
     private ObjectSpecification mockSpecForCustomer;
@@ -124,8 +123,8 @@ public class ObjectMemberAbstractTest {
                 mockAuthenticationSession,
                 mockSpecificationLoader, 
                 null);
-        
-        
+
+
         transientAdapter = PojoAdapterBuilder.create()
                 .with(mockSpecificationLoader)
                 .with(Persistence.TRANSIENT)

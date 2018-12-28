@@ -105,6 +105,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private ObjectSpecification mockOnType;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
+
     @Mock
     private IsisSessionFactory mockIsisSessionFactory;
 
@@ -307,7 +308,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
         allowingEmployeeHasSmithAdapter();
 
         _Config.put("isis.reflector.facet.filterVisibility", true);
-        
+
         context.checking(new Expectations() {{
 
             allowing(mockAdapterForStringSmith).getSpecification();

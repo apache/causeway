@@ -124,6 +124,7 @@ public class PojoAdapterBuilder {
         return this;
     }
 
+    //test only
     public PojoAdapterBuilder withOid(String oidAndTitle) {
         final Iterator<String> iterator = _Strings.splitThenStream(oidAndTitle, "|").iterator(); 
                 

@@ -19,10 +19,13 @@
 
 package org.apache.isis.core.runtime.persistence.adapterfactory.pojo;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
 import java.util.Date;
+
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
@@ -36,11 +39,9 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession4;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 public class PojoAdapterTest {
 
@@ -65,8 +66,13 @@ public class PojoAdapterTest {
     public void setUp() throws Exception {
         domainObject = new RuntimeTestPojo();
         
-        adapter = PojoAdapter.of(domainObject, Factory.persistentOf(ObjectSpecId.of("CUS"), "1"), mockAuthenticationSession,
-                mockSpecificationLoader, mockPersistenceSession);
+        adapter = PojoAdapter.of(
+                domainObject,
+                Factory.persistentOf(ObjectSpecId.of("CUS"), "1"),
+                mockAuthenticationSession,
+                mockSpecificationLoader,
+                mockPersistenceSession);
+
         adapter.setVersion(mockVersion);
         
         allowUnimportantMethodCallsOn(mockVersion);

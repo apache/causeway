@@ -306,7 +306,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     public void shouldBeAbleToReadVisibleProperty() {
 
         allowingEmployeeHasSmithAdapter();
-        
+
         _Config.put("isis.reflector.facet.filterVisibility", true);
 
         context.checking(new Expectations() {{

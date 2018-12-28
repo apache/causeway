@@ -27,10 +27,11 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 
 public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -75,7 +76,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
         abstract class Customer implements Persistable {
         }
         
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
+        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
         
         final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
         assertNotNull(facet);
@@ -98,7 +99,7 @@ public class GivenJdoDiscriminatorAnnotationFacetFactoryTest extends AbstractFac
         abstract class Customer implements Persistable {
         }
 
-        facetFactory.process(new FacetFactory.ProcessClassContext(Customer.class, methodRemover, facetHolder));
+        facetFactory.process(new ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext(Customer.class, facetHolder));
 
         final ObjectSpecIdFacet discriminatorValueFacet = facetHolder.getFacet(ObjectSpecIdFacet.class);
         assertEquals(ObjectSpecId.of("CUS"), discriminatorValueFacet.value());
