@@ -34,6 +34,7 @@ include::_ugvro_hints-and-tips_angular-tips.adoc[leveloffset=+1,lines=3..-1]
 include::_ugvro_hints-and-tips_pretty-printing.adoc[leveloffset=+1,lines=3..-1]
 include::_ugvro_hints-and-tips_restful-image-property.adoc[leveloffset=+1,lines=3..-1]
 include::_ugvro_hints-and-tips_view-model-as-parameter.adoc[leveloffset=+1,lines=3..-1]
+include::_ugvro_hints-and-tips_troubleshooting.adoc[leveloffset=+1,lines=3..-1]
 
 // end::inclusions[]
 
