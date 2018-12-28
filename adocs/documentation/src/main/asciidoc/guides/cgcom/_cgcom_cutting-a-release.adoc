@@ -111,17 +111,7 @@ The only mention of `SNAPSHOT` should be in the `revision` property of the root 
 Previously we used the `maven-release-plugin` which took responsibility for bumping the `<version>` from -SNAPSHOT to release, and then onto the next -SNAPSHOT.
 However, this plugin does not seem to be compatible with the support for `${revision}` property introduced in Maven 3.5.0 in order https://maven.apache.org/maven-ci-friendly.html[to support CI/CD use cases]; at least we couldn't make it work.
 
-So, instead, we perform the edit of ${revision}` manually before.
-
-In the three `pom.xml` files (for `core` and the two archetypes) the property is defined:
-
-[source,xml,subs="attributes+"]
-----
-<properties>
-    <revision>{isisdev}</revision>
-    ...
-</properties>
-----
+So, instead, we perform the edit of `${revision}` in the three `pom.xml` files (for `core` and the two archetypes):
 
 Change all of these to the release version, using:
 
@@ -132,6 +122,17 @@ sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/simpl
 sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/helloworld/pom.xml
 git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's to ${ISISREL}"
 ----
+
+so that they should read:
+
+[source,xml,subs="attributes+"]
+----
+<properties>
+    <revision>{isisrel}</revision>
+    ...
+</properties>
+----
+
 
 After release, there is a xref:cgcom.adoc#__cgcom_cutting-a-release_bump-revision-to-ISISDEV[similar step at the end] to update to the next development `SNAPSHOT`.
 
