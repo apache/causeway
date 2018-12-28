@@ -146,7 +146,7 @@ public final class _Reflect {
             @Nullable Class<?> type,
             final boolean ignoreAccess) {
         
-        return streamTypeHierarchyAndInterfaces(type)
+        return streamTypeHierarchy(type, /*includeInterfaces*/ false) // interfaces don't have fields
                 .filter(Object.class::equals) // do not process Object class.
                 .flatMap(t->streamFields(t, ignoreAccess));
     }
@@ -182,7 +182,7 @@ public final class _Reflect {
             final boolean ignoreAccess
             ) {
         
-        return streamTypeHierarchyAndInterfaces(type)
+        return streamTypeHierarchy(type, /*includeInterfaces*/ true)
                 .filter(t->!t.equals(Object.class)) // do not process Object class.
                 .flatMap(t->streamMethods(t, ignoreAccess));
     }
@@ -192,9 +192,10 @@ public final class _Reflect {
     /**
      * Stream all types of given {@code type}, up the super class hierarchy starting with self
      * @param type (nullable)
+     * @param includeInterfaces - whether to include all interfaces implemented by given {@code type}.
      * @return non-null
      */
-    public static Stream<Class<?>> streamTypeHierarchy(@Nullable Class<?> type) {
+    public static Stream<Class<?>> streamTypeHierarchy(@Nullable Class<?> type, boolean includeInterfaces) {
 
         // https://stackoverflow.com/questions/40240450/java8-streaming-a-class-hierarchy?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
         // Java 9+ will allow ...
@@ -208,31 +209,15 @@ public final class _Reflect {
                     public boolean tryAdvance(Consumer<? super Class<?>> action) {
                         if(current == null) return false;
                         action.accept(current);
+                        if(includeInterfaces) {
+                            for(Class<?> subIface : current.getInterfaces()) {
+                                recur(subIface, action);
+                            }
+                        }
                         current = current.getSuperclass();
                         return true;
                     }
-                }, false);
-    }
-    
-    /**
-     * Stream all interfaces implemented by given {@code type}.
-     * @param type (nullable)
-     * @return non-null
-     */
-    public static Stream<Class<?>> streamAllInterfaces(@Nullable Class<?> type) {
-        return StreamSupport.stream(
-                new Spliterators.AbstractSpliterator<Class<?>>(Long.MAX_VALUE,
-                        Spliterator.ORDERED|Spliterator.IMMUTABLE|Spliterator.NONNULL) {
-                    Class<?> current = type;
                     
-                    @Override
-                    public boolean tryAdvance(Consumer<? super Class<?>> action) {
-                        if(current == null) return false;
-                        recur(current, action);
-                        current = current.getSuperclass();
-                        return true;
-                    }
-
                     private void recur(Class<?> iface, Consumer<? super Class<?>> action) {
                         action.accept(iface);
                         for(Class<?> subIface : iface.getInterfaces()) {
@@ -241,18 +226,6 @@ public final class _Reflect {
                     }
                     
                 }, false);
-    }
-    
-    /**
-     * Stream all types of given {@code type}, up the super class hierarchy starting with self, 
-     * then append all interfaces of given {@code type}.
-     * @param type (nullable)
-     * @return non-null
-     */
-    public static Stream<Class<?>> streamTypeHierarchyAndInterfaces(
-            @Nullable Class<?> type) {
-        
-        return Stream.concat(streamTypeHierarchy(type), streamAllInterfaces(type));
     }
     
     // -- ANNOTATIONS
