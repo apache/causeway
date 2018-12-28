@@ -190,14 +190,6 @@ Investigate and fix any reported violations, typically by either:
 * updating the `&lt;excludes&gt;` element for the `apache-rat-plugin` plugin to ignore test files, log files and any other non-source code files
 * also look to remove any stale `&lt;exclude&gt;` entries
 
-To add missing headers, use the groovy script `addmissinglicenses.groovy` (in the `scripts` directory) to automatically insert missing headers for certain file types. The actual files checked are those with extensions specified in the line `def fileEndings = [&quot;.java&quot;, &quot;.htm&quot;]`:
-
-[source,bash]
-----
-groovy ../scripts/addmissinglicenses.groovy -x
-----
-
-(If the `-x` is omitted then the script is run in "dry run" mode).
 Once you've fixed all issues, confirm once more that `apache-rat-plugin` no longer reports any license violations, this time leaving the `rat.numUnapprovedLicenses` property to its default, 0:
 
 [source,bash]
@@ -216,7 +208,14 @@ Without appropriate additional configuration, this would result in the generated
 Fortunately, Maven allows the missing information to be provided by configuring the `maven-remote-resources-plugin`.
 This is stored in the `src/main/appended-resources/supplemental-models.xml` file, relative to the root of each releasable module.
 
-To capture the missing license information, use:
+It's first necessary to have built the framework locally at least once:
+
+[source,bash,subs="attributes+"]
+----
+mvn clean install -o
+----
+
+Once this is done, capture the missing license information using:
 
 [source,bash,subs="attributes+"]
 ----
