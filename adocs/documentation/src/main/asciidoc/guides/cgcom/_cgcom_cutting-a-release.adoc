@@ -68,7 +68,7 @@ env | grep ISIS | sort
 (One should exist already, xref:../cgcom/cgcom.adoc#__cgcom_post-release-successful_update-jira_create-new-jira[created at] the beginning of the development cycle now completing).
 <3> adjust as required (Tomcat is used to smoke test the simpleapp archetype)
 
-Obviously, alter `$ISISDEV` and `$ISISREL` as required, and bump `$ISISRC` for re-releasing following an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] releases.
+Obviously, alter `$ISISDEV` and ``$ISISREL`` as required (``$ISISDEV`` should be the snapshot after ``$ISISREL``), and bump ``$ISISRC`` for re-releasing following an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] release.
 
 [IMPORTANT]
 ====
