@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 export ISISREL=1.17.0
 export ISISDEV=1.18.0-SNAPSHOT
-export JIRA=ISIS-1916
+export JIRA=ISIS-1899
 
 export ISISTMP=/c/tmp   # or as required
 export ISISPAR=$ISISREL

@@ -94,33 +94,14 @@ git checkout -b $ISISBRANCH
 The release is performed on a branch; if we are successful, this branch will be merged back into master.
 
 
-Double check that the version number of the parent pom should reflect the branch name that you are now on (with a `-SNAPSHOT` suffix).
-This will normally have been done already during earlier development; but confirm that it has been updated.
-If it has not, make the change.
-
-Double check that the version number of the core POM (`core/pom.xml`) should reflect the branch name that you are now on.
-For example, if releasing version `{isisnext}`, the POM should read:
-
-[source,xml,subs="attributes+"]
-----
-<groupId>org.apache.isis.core</groupId>
-<artifactId>isis</artifactId>
-<version>{isisdev}</version>
-----
-
-Also, check that there are no snapshot dependencies:
+Check that there are no snapshot dependencies:
 
 [source,bash,subs="attributes+"]
 ----
 grep SNAPSHOT `/bin/find . -name pom.xml | grep -v target | grep -v mothball | sort`
 ----
 
-The only mention of `SNAPSHOT` should be for the Isis modules about to be released.
-
-[TIP]
-====
-Obviously, don't update Apache Isis' `SNAPSHOT` references; these get updated by the `mvn release:prepare` command we run later.
-====
+The only mention of `SNAPSHOT` should be in the `revision` property of the root `core/pom.xml` file.
 
 
 
