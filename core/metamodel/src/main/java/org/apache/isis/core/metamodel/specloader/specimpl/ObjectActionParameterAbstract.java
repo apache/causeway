@@ -87,7 +87,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     /**
      * Gets the proposed value of the {@link ManagedObject} (downcast as a
-     * {@link MutableProposedHolder}, wrapping the proposed value into a
+     * <code>MutableProposedHolder</code>, wrapping the proposed value into a
      * {@link ObjectAdapter}.
      */
     @Override
@@ -428,11 +428,11 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
             // check type, but wrap first
             // (eg we treat int.class and java.lang.Integer.class as compatible with each other)
-            final Class<? extends Object> choiceClass = object.getClass();
+            final Class<?> choiceClass = object.getClass();
             final Class<?> paramClass = paramSpec.getCorrespondingClass();
 
-            final Class<? extends Object> choiceWrappedClass = ClassExtensions.asWrappedIfNecessary(choiceClass);
-            final Class<? extends Object> paramWrappedClass = ClassExtensions.asWrappedIfNecessary(paramClass);
+            final Class<?> choiceWrappedClass = ClassExtensions.asWrappedIfNecessary(choiceClass);
+            final Class<?> paramWrappedClass = ClassExtensions.asWrappedIfNecessary(paramClass);
 
             final ObjectSpecification choiceWrappedSpec = specificationLookup.loadSpecification(choiceWrappedClass);
             final ObjectSpecification paramWrappedSpec = specificationLookup.loadSpecification(paramWrappedClass);

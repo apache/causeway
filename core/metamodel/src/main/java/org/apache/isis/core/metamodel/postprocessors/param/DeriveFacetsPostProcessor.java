@@ -354,9 +354,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         }
         final ObjectSpecification returnSpec = objectAction.getReturnType();
         final DescribedAsFacet specFacet = returnSpec.getFacet(DescribedAsFacet.class);
-        //TODO: this ought to check if a do-op; if you come across this, you can probably change it (just taking smaller steps for now)
-        //if(existsAndIsDoOp(specFacet)) {
-        if(specFacet != null) {
+        if(existsAndIsDoOp(specFacet)) {
             FacetUtil.addFacet(new DescribedAsFacetOnMemberDerivedFromType(specFacet, facetedMethodFor(objectAction)));
         }
     }
@@ -490,9 +488,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
         }
         final ObjectSpecification returnSpec = objectAssociation.getSpecification();
         final DescribedAsFacet specFacet = returnSpec.getFacet(DescribedAsFacet.class);
-        //TODO: this ought to check if a do-op; if you come across this, you can probably change it (just taking smaller steps for now)
-        //if(existsAndIsDoOp(specFacet)) {
-        if(specFacet != null) {
+        if(existsAndIsDoOp(specFacet)) {
             FacetUtil.addFacet(
                     new DescribedAsFacetOnMemberDerivedFromType(specFacet, facetedMethodFor(objectAssociation)));
         }

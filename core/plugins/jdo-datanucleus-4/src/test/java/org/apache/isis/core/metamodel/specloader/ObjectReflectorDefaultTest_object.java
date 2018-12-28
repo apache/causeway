@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAbstract {
 
-    public abstract static class TestDomainObject implements Persistable {
+    abstract static class TestDomainObject implements Persistable {
     }
 
     @Override

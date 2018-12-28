@@ -48,17 +48,9 @@ import static org.apache.isis.commons.internal.base._With.requires;
 
 
 /**
- * This object will typically be registered as the implementation of the {@link ConfigurationServiceInternal}
- * (internal) domain service, using
- * {@link ServicesInjector#addFallbackIfRequired(Class, Object)}.
- *
- * <p>
- *     If an integration test is running, then the <code>IsisConfigurationForJdoIntegTests</code> 
- *     will be used instead.
- * </p>
+ * This object is the default implementation of the {@link IsisConfiguration} domain service.
  */
-//[2039] @DomainObject(objectType=...) fixes meta-data validation complaining, otherwise not required ...
-@DomainObject(nature=Nature.INMEMORY_ENTITY, objectType="internal.IsisConfiguration") 
+@DomainObject(nature=Nature.INMEMORY_ENTITY, objectType="internal.IsisConfiguration")
 class IsisConfigurationDefault implements IsisConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationDefault.class);
@@ -174,10 +166,10 @@ class IsisConfigurationDefault implements IsisConfiguration {
         if (properties.containsKey(key)) {
             switch (policy) {
             case IGNORE:
-                LOG.info("ignoring '{}' = '{}' as value already set (with {})", key, value, properties.get(key));
+                LOG.debug("ignoring '{}' = '{}' as value already set (with '{}')", key, value, properties.get(key));
                 break;
             case OVERWRITE:
-                LOG.info("overwriting '{}' = '{}' (previous value was {})", key, value, properties.get(key));
+                LOG.debug("overwriting '{}' = '{}' (previous value was '{}')", key, value, properties.get(key));
                 properties.put(key, value);
                 break;
             case EXCEPTION:
@@ -185,7 +177,7 @@ class IsisConfigurationDefault implements IsisConfiguration {
                         "Configuration already has a key {}, value of {}%s, value of %s", key, properties.get(key)));
             }
         } else {
-            LOG.info("adding '{}' = '{}'", key , ConfigurationConstants.maskIfProtected(key, value));
+            LOG.debug("adding '{}' = '{}'", key , ConfigurationConstants.maskIfProtected(key, value));
             properties.put(key, value);
         }
     }

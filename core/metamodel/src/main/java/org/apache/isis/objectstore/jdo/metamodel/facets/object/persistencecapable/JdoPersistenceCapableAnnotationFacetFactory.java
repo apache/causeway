@@ -28,16 +28,22 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 
-
-public class JdoPersistenceCapableAnnotationFacetFactory extends FacetFactoryAbstract {
+/**
+ * Implements {@link ObjectSpecIdFacetFactory} only because is a prereq of {@link DomainObjectAnnotationFacetFactory}.
+ */
+public class JdoPersistenceCapableAnnotationFacetFactory
+        extends FacetFactoryAbstract
+        implements ObjectSpecIdFacetFactory {
 
     public JdoPersistenceCapableAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(ProcessClassContext processClassContext) {
+    public void process(ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
 
         // only applies to JDO entities; ignore any view models

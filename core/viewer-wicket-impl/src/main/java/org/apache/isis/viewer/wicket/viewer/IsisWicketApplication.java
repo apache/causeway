@@ -136,7 +136,7 @@ import net.ftlines.wicketsource.WicketSource;
  * make the {@link ComponentFactory} defined within it available.
  *
  * <p>
- * Alternatively, {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule(IsisConfiguration)}.
+ * Alternatively, {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule()}.
  * This mechanism allows a number of other aspects to be customized.
  */
 public class IsisWicketApplication
@@ -271,6 +271,10 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
             getRequestCycleSettings().setRenderStrategy(RequestCycleSettings.RenderStrategy.REDIRECT_TO_RENDER);
             getResourceSettings().setParentFolderPlaceholder("$up$");
+//            getResourceSettings().setCachingStrategy(
+//                    new FilenameWithVersionResourceCachingStrategy(
+//                            new CachingResourceVersion(
+//                                    new MessageDigestResourceVersion())));
 
             RequestCycleListenerCollection requestCycleListeners = getRequestCycleListeners();
             IRequestCycleListener requestCycleListenerForIsis = newWebRequestCycleForIsis();
@@ -323,8 +327,8 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
             if(_Context.isPrototyping()) {
                 DebugDiskDataStore.register(this);
-                LOG.info("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
-                LOG.info("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
+                LOG.debug("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
+                LOG.debug("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
 
                 if(!getDebugSettings().isDevelopmentUtilitiesEnabled()) {
                     boolean enableDevUtils = configuration
@@ -345,10 +349,10 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                 }
             }
 
-            LOG.info("storeSettings.inmemoryCacheSize        : {}", getStoreSettings().getInmemoryCacheSize());
-            LOG.info("storeSettings.asynchronousQueueCapacity: {}", getStoreSettings().getAsynchronousQueueCapacity());
-            LOG.info("storeSettings.maxSizePerSession        : {}", getStoreSettings().getMaxSizePerSession());
-            LOG.info("storeSettings.fileStoreFolder          : {}", getStoreSettings().getFileStoreFolder());
+            LOG.debug("storeSettings.inmemoryCacheSize        : {}", getStoreSettings().getInmemoryCacheSize());
+            LOG.debug("storeSettings.asynchronousQueueCapacity: {}", getStoreSettings().getAsynchronousQueueCapacity());
+            LOG.debug("storeSettings.maxSizePerSession        : {}", getStoreSettings().getMaxSizePerSession());
+            LOG.debug("storeSettings.fileStoreFolder          : {}", getStoreSettings().getFileStoreFolder());
 
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.

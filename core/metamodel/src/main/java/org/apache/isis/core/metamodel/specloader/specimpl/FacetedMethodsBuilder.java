@@ -177,6 +177,12 @@ public class FacetedMethodsBuilder {
     // ////////////////////////////////////////////////////////////////////////////
 
 
+    public void introspectObjectSpecId() {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("introspecting {}: objectSpecId", getClassName());
+        }
+        getFacetProcessor().processObjectSpecId(introspectedClass, spec);
+    }
     public void introspectClass() {
         if (LOG.isInfoEnabled()) {
             LOG.info("introspecting {}: class-level details", getClassName());
@@ -232,7 +238,8 @@ public class FacetedMethodsBuilder {
         for (final Method method : associationCandidateMethods) {
             specificationTraverser.traverseTypes(method, typesToLoad);
         }
-        getSpecificationLoader().loadSpecifications(typesToLoad, introspectedClass);
+        getSpecificationLoader().loadSpecifications(typesToLoad, introspectedClass,
+                IntrospectionState.TYPE_INTROSPECTED);
 
         // now create FacetedMethods for collections and for properties
         final List<FacetedMethod> associationFacetedMethods = _Lists.newArrayList();
@@ -434,7 +441,8 @@ public class FacetedMethodsBuilder {
         final List<Class<?>> typesToLoad = new ArrayList<Class<?>>();
         specificationTraverser.traverseTypes(actionMethod, typesToLoad);
 
-        final boolean anyLoadedAsNull = getSpecificationLoader().loadSpecifications(typesToLoad);
+        final boolean anyLoadedAsNull = getSpecificationLoader()
+                .loadSpecifications(typesToLoad, null, IntrospectionState.TYPE_INTROSPECTED);
         if (anyLoadedAsNull) {
             return false;
         }

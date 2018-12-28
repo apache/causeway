@@ -88,20 +88,13 @@ public class ClassSubstitutor {
     private final Set<Class<?>> classesToIgnore = _Sets.newHashSet();
     private final Set<String> classNamesToIgnore = _Sets.newHashSet();
 
-//    /**
-//     * For any classes registered as ignored, {@link #getClass(Class)} will
-//     * return <tt>null</tt>.
-//     */
-//    private boolean ignore(final Class<?> q) {
-//        return classesToIgnore.add(q);
-//    }
 
     /**
      * For any classes registered as ignored, {@link #getClass(Class)} will
      * return <tt>null</tt>.
      */
-    private boolean ignore(final String className) {
-        return classNamesToIgnore.add(className);
+    private void ignore(final String className) {
+        classNamesToIgnore.add(className);
     }
 
     private boolean shouldIgnore(final Class<?> cls) {

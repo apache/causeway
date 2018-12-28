@@ -840,6 +840,12 @@ Setting this option retains the behaviour of the viewer pre-`1.15.0`.
 (`_true_`)
 | Whether to show an indicator for a no-arg action button that it has been clicked.
 
+|`isis.viewer.wicket.` +
+`dialogMode`
+| `sidebar`,`modal` +
+(`_sidebar_`)
+| Whether action prompts with a style of `DIALOG` - as in, `@ActionLayout(promptStyle="DIALOG")` - should be rendered using a sidebar or alternatively in a modal dialog box.
+
 
 
 |===

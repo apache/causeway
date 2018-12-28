@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.Ob
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
+import static org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -49,13 +50,13 @@ public class ObjectTypeAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
         @DomainObject(objectType = "CUS")
         class Customer {
         }
-        
+
         expectNoMethodsRemoved();
-        
-        facetFactory.processObjectType(new ProcessClassContext(Customer.class, mockMethodRemover, facetHolder));
+
+        facetFactory.processObjectType(new ProcessObjectSpecIdContext(Customer.class, facetHolder));
 
         final ObjectSpecIdFacet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
-        
+
         assertThat(facet, is(not(nullValue())));
         assertThat(facet instanceof ObjectSpecIdFacetForDomainObjectAnnotation, is(true));
         assertThat(facet.value(), is(ObjectSpecId.of("CUS")));

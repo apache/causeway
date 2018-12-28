@@ -103,15 +103,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     public void rebuild(final Class<?> domainType) {
         specificationLookup.invalidateCache(domainType);
         gridService.remove(domainType);
-        final ObjectSpecification objectSpecification = specificationLookup.loadSpecification(domainType);
-        //FIXME[ISIS-1976] the following might be optimized away by the JVM, since the results are not used
-        
-        // ensure the spec is fully rebuilt
-        objectSpecification.streamObjectActions(Contributed.INCLUDED)
-            .collect(Collectors.toList());
-        objectSpecification.streamAssociations(Contributed.INCLUDED)
-            .collect(Collectors.toList());
-        specificationLookup.postProcess(objectSpecification);
+        specificationLookup.loadSpecification(domainType);
     }
 
     // //////////////////////////////////////

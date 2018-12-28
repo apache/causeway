@@ -23,12 +23,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 
 public class SpecificationLoaderTest_value extends SpecificationLoaderTestAbstract {
 
     @Override
     protected ObjectSpecification loadSpecification(final SpecificationLoader reflector) {
-        return reflector.loadSpecification(String.class);
+        return reflector.loadSpecification(String.class, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
     }
 
     @Test

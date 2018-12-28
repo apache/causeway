@@ -157,6 +157,10 @@ abstract class ModuleOrBuilderAbstract<B extends ModuleOrBuilderAbstract<B>> {
         return self();
     }
 
+    public B withConfigurationProperty(final Map.Entry<String, String> keyValue) {
+        return withConfigurationProperty(keyValue.getKey(), keyValue.getValue());
+    }
+
     @XmlTransient
     public Map<String,String> getIndividualConfigProps() {
         return individualConfigProps;

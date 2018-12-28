@@ -22,7 +22,7 @@
     <body>
         <wicket:panel>
             <li class="dropdown" wicket:id="menuItems">
-                <a tabindex="-1" href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><span wicket:id="name"></span> <span class="caret"></span></a>
+                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><span wicket:id="name"></span> <span class="caret"></span></a>
                 <ul wicket:id="topMenu" class="dropdown-menu multi-level" role="menu">
                     <li wicket:id="subMenuItems">
                         <wicket:container wicket:id="content"></wicket:container>
@@ -37,7 +37,7 @@
             </wicket:fragment>
 
             <wicket:fragment wicket:id="folderItem">
-                <a wicket:id="folderName" tabindex="-1"></a>
+                <a wicket:id="folderName" ></a>
                 <ul class="dropdown-menu">
                     <li wicket:id="subMenuItems">
                         <wicket:container wicket:id="content"></wicket:container>

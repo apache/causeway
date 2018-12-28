@@ -64,6 +64,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.property.ConfigPropertyEnum;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -81,9 +82,11 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.DialogMode;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
+import org.apache.isis.viewer.wicket.ui.components.actionpromptsb.ActionPromptSidebar;
 import org.apache.isis.viewer.wicket.ui.components.bookmarkedpages.BookmarkedPagesPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.favicon.Favicon;
@@ -106,6 +109,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static Logger LOG = LoggerFactory.getLogger(PageAbstract.class);
 
     private static final long serialVersionUID = 1L;
+    
+    public static final ConfigPropertyEnum<DialogMode> CONFIG_DIALOG_MODE =
+            new ConfigPropertyEnum<>("isis.viewer.wicket.dialogMode", DialogMode.SIDEBAR);
 
     /**
      * @see <a href="http://github.com/brandonaaron/livequery">livequery</a>
@@ -122,6 +128,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final String ID_BOOKMARKED_PAGES = "bookmarks";
 
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
+    private static final String ID_ACTION_PROMPT_SIDEBAR = "actionPromptSidebar";
 
     private static final String ID_PAGE_TITLE = "pageTitle";
 
@@ -139,30 +146,17 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private final List<ComponentType> childComponentIds;
 
-    /**
-     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
-     */
     @com.google.inject.Inject
     @Named("applicationName")
     private String applicationName;
 
-    /**
-     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
-     */
     @com.google.inject.Inject(optional = true)
     @Named("applicationCss")
     private String applicationCss;
-
-    /**
-     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
-     *///
     @com.google.inject.Inject(optional = true)
     @Named("applicationJs")
     private String applicationJs;
 
-    /**
-     * {@link com.google.inject.Inject Inject}ed when {@link #init() initialized}.
-     */
     @com.google.inject.Inject
     private PageClassRegistry pageClassRegistry;
 
@@ -202,18 +196,19 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
                             : new EmptyPanel("debugBar").setVisible(false);
                     add(debugBar);
 
-                    MarkupContainer header = createPageHeader("header");
-                    themeDiv.add(header);
+            MarkupContainer header = createPageHeader("header");
+            themeDiv.add(header);
 
-                    MarkupContainer footer = createPageFooter("footer");
-                    themeDiv.add(footer);
+            MarkupContainer footer = createPageFooter("footer");
+            themeDiv.add(footer);
 
-                    addActionPromptModalWindow(themeDiv);
+            addActionPromptModalWindow(themeDiv);
+            addActionPromptSidebar(themeDiv);
 
-                    this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
+            this.childComponentIds = Collections.unmodifiableList(Arrays.asList(childComponentIds));
 
-                    // ensure that all collected JavaScript contributions are loaded at the page footer
-                    add(new HeaderResponseContainer("footerJS", "footerJS"));
+            // ensure that all collected JavaScript contributions are loaded at the page footer
+            add(new HeaderResponseContainer("footerJS", "footerJS"));
 
         } catch(final RuntimeException ex) {
 
@@ -292,6 +287,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
         response.render(CssHeaderItem.forReference(FontAwesomeCssReference.instance()));
         response.render(CssHeaderItem.forReference(new BootstrapOverridesCssResourceReference()));
+        response.render(CssHeaderItem.forReference(new SidebarCssResourceReference()));
         contributeThemeSpecificOverrides(response);
 
         response.render(JavaScriptReferenceHeaderItem.forReference(JQUERY_LIVEQUERY_JS));
@@ -466,15 +462,28 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     // ///////////////////////////////////////////////////////////////////
 
     private ActionPromptModalWindow actionPromptModalWindow;
+    private ActionPromptSidebar actionPromptSidebar;
 
     @Override
     public ActionPrompt getActionPrompt() {
-        return actionPromptModalWindow;
+        final DialogMode dialogMode = CONFIG_DIALOG_MODE.from(getConfiguration());
+        switch (dialogMode) {
+            case SIDEBAR:
+                return actionPromptSidebar;
+            case MODAL:
+            default:
+                return actionPromptModalWindow;
+        }
     }
 
     private void addActionPromptModalWindow(final MarkupContainer parent) {
         actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
         parent.addOrReplace(actionPromptModalWindow);
+    }
+
+    private void addActionPromptSidebar(final MarkupContainer parent) {
+        actionPromptSidebar = ActionPromptSidebar.newSidebar(ID_ACTION_PROMPT_SIDEBAR);
+        parent.addOrReplace(actionPromptSidebar);
     }
 
 

@@ -30,6 +30,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
@@ -613,7 +614,12 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
     protected Component createInlinePromptComponent(
             final String id, final IModel<String> inlinePromptModel) {
-        return new Label(id, inlinePromptModel);
+        return new Label(id, inlinePromptModel) {
+            @Override protected void onComponentTag(final ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.put("tabindex","-1");
+            }
+        };
     }
 
     // ///////////////////////////////////////////////////////////////////

@@ -41,6 +41,8 @@ import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
+import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory;
+import org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -238,6 +240,29 @@ public class FacetProcessor implements ServicesInjectorAware {
         }
 
         return false;
+    }
+
+    public void processObjectSpecId(final Class<?> cls, final FacetHolder facetHolder) {
+        final List<ObjectSpecIdFacetFactory> factoryList = getObjectSpecIfFacetFactoryList();
+        for (final ObjectSpecIdFacetFactory facetFactory : factoryList) {
+            facetFactory.process(new ProcessObjectSpecIdContext(cls, facetHolder));
+        }
+    }
+
+    private List<ObjectSpecIdFacetFactory> objectSpecIfFacetFactoryList = null;
+    private List<ObjectSpecIdFacetFactory> getObjectSpecIfFacetFactoryList() {
+        if(objectSpecIfFacetFactoryList == null) {
+            List<ObjectSpecIdFacetFactory> facetFactories = _Lists.newArrayList();
+            final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT);
+            for (final FacetFactory facetFactory : factoryList) {
+                if (facetFactory instanceof ObjectSpecIdFacetFactory) {
+                    final ObjectSpecIdFacetFactory objectSpecIdFacetFactory = (ObjectSpecIdFacetFactory) facetFactory;
+                    facetFactories.add(objectSpecIdFacetFactory);
+                }
+            }
+            objectSpecIfFacetFactoryList = Collections.unmodifiableList(facetFactories);
+        }
+        return objectSpecIfFacetFactoryList;
     }
 
     /**

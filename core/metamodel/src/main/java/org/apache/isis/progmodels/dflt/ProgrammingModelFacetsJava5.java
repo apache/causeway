@@ -144,6 +144,7 @@ import org.apache.isis.core.metamodel.facets.value.percentage.PercentageValueFac
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortPrimitiveValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.shortint.ShortWrapperValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueFacetUsingSemanticsProviderFactory;
+import org.apache.isis.core.metamodel.facets.value.timejodalocal.JodaLocalTimeValueFacetSimpleFactory;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.timestampsql.JavaSqlTimeStampValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.value.url.URLValueFacetUsingSemanticsProviderFactory;
@@ -365,6 +366,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new JodaLocalDateValueFacetUsingSemanticsProviderFactory());
         addFactory(new JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory());
         addFactory(new JodaDateTimeValueFacetUsingSemanticsProviderFactory());
+        addFactory(new JodaLocalTimeValueFacetSimpleFactory());
 
         // java 8 time values
         addFactory(new Jdk8LocalDateValueFacetUsingSemanticsProviderFactory());

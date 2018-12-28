@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import javax.ws.rs.HEAD;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +47,7 @@ import org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred;
@@ -63,8 +66,10 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
+import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
+import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
@@ -98,41 +103,45 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
             final ServicesInjector servicesInjector,
             final FacetProcessor facetProcessor,
-            final NatureOfService natureOfServiceIfAny) {
+            final NatureOfService natureOfServiceIfAny,
+            final PostProcessor postProcessor) {
         super(correspondingClass, determineShortName(correspondingClass),
-                servicesInjector, facetProcessor);
+                servicesInjector, facetProcessor, postProcessor);
 
         this.isService = natureOfServiceIfAny != null;
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
+
+        facetProcessor.processObjectSpecId(correspondingClass, this);
     }
 
-    // -- introspectTypeHierarchyAndMembers
     @Override
-    public void introspectTypeHierarchyAndMembers() {
+    protected void introspectTypeHierarchy() {
 
-        if(isNotIntrospected()) {
-            facetedMethodsBuilder.introspectClass();
-        }
+        facetedMethodsBuilder.introspectClass();
 
         // name
-        if(isNotIntrospected()) {
-            addNamedFacetAndPluralFacetIfRequired();
-        }
+        addNamedFacetAndPluralFacetIfRequired();
 
         // go no further if a value
         if(this.containsFacet(ValueFacet.class)) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("skipping full introspection for value type {}", getFullIdentifier());
+                LOG.debug("skipping type hierarchy introspection for value type {}", getFullIdentifier());
+            }
+            return;
+        }
+
+        final DomainServiceFacet facet = getFacet(DomainServiceFacet.class);
+        final boolean serviceWithNatureOfDomain = facet != null && facet.getNatureOfService() == NatureOfService.DOMAIN;
+        if (serviceWithNatureOfDomain) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("skipping type hierarchy introspection for domain service with natureOfService = DOMAIN {}", getFullIdentifier());
             }
             return;
         }
 
         // superclass
-        if(isNotIntrospected()) {
-            final Class<?> superclass = getCorrespondingClass().getSuperclass();
-            updateSuperclass(superclass);
-        }
-
+        final Class<?> superclass = getCorrespondingClass().getSuperclass();
+        loadSpecOfSuperclass(superclass);
 
         // walk superinterfaces
 
@@ -155,32 +164,28 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             }
         }
 
-        if(isNotIntrospected()) {
-            updateAsSubclassTo(interfaceSpecList);
-        }
-        if(isNotIntrospected()) {
-            updateInterfaces(interfaceSpecList);
-        }
+        updateAsSubclassTo(interfaceSpecList);
+        updateInterfaces(interfaceSpecList);
 
-        updateAssociationsAndActions();
     }
 
-    private synchronized void updateAssociationsAndActions() {
+    protected synchronized void introspectMembers() {
+
+        if(this.containsFacet(ValueFacet.class)) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("skipping full introspection for value type {}", getFullIdentifier());
+            }
+            return;
+        }
 
         // associations and actions
-        if(isNotIntrospected()) {
-            final List<ObjectAssociation> associations = createAssociations();
-            sortAndUpdateAssociations(associations);
-        }
+        final List<ObjectAssociation> associations = createAssociations();
+        sortAndUpdateAssociations(associations);
 
-        if(isNotIntrospected()) {
-            final List<ObjectAction> actions = createActions();
-            sortCacheAndUpdateActions(actions);
-        }
+        final List<ObjectAction> actions = createActions();
+        sortCacheAndUpdateActions(actions);
 
-        if(isNotIntrospected()) {
-            updateFromFacetValues();
-        }
+        postProcess();
     }
 
     private void addNamedFacetAndPluralFacetIfRequired() {
@@ -304,6 +309,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id, final List<ObjectSpecification> parameters) {
+        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         final Stream<ObjectAction> actions =
                 streamObjectActions(type, Contributed.INCLUDED);
         return firstAction(actions, id, parameters);
@@ -311,6 +317,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     @Override
     public ObjectAction getObjectAction(final ActionType type, final String id) {
+        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+
         final Stream<ObjectAction> actions =
                 streamObjectActions(type, Contributed.INCLUDED);
         return firstAction(actions, id);
@@ -318,6 +326,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     @Override
     public ObjectAction getObjectAction(final String id) {
+        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+
         final Stream<ObjectAction> actions =
                 streamObjectActions(ActionType.ALL, Contributed.INCLUDED);
         return firstAction(actions, id);
@@ -377,6 +387,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // -- getMember, catalog... (not API)
 
     public ObjectMember getMember(final Method method) {
+        introspectUpTo(IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+
         if (membersByMethod == null) {
             this.membersByMethod = catalogueMembers();
         }

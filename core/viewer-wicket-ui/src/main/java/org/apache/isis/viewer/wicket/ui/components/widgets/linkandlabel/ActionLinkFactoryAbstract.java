@@ -26,7 +26,9 @@ import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -55,7 +57,6 @@ import org.apache.isis.viewer.wicket.model.models.ToggledMementosProvider;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionFormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
@@ -165,16 +166,16 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(actionLink.getPage());
             final ActionPrompt prompt = promptProvider.getActionPrompt();
 
-            // REVIEW: I wonder if this is still needed after the ISIS-1613 rework?
-            final ActionPromptHeaderPanel titlePanel =
-                    ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                            new Callable<ActionPromptHeaderPanel>() {
-                                @Override
-                                public ActionPromptHeaderPanel call() throws Exception {
-                                    final String titleId = prompt.getTitleId();
-                                    return new ActionPromptHeaderPanel(titleId, actionModel);
-                                }
-                            });
+//            // REVIEW: I wonder if this is still needed after the ISIS-1613 rework?
+//            final ActionPromptHeaderPanel titlePanel =
+//                    PersistenceSession.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
+//                            new Callable<ActionPromptHeaderPanel>() {
+//                                @Override
+//                                public ActionPromptHeaderPanel call() throws Exception {
+//                                    final String titleId = prompt.getTitleId();
+//                                    return new ActionPromptHeaderPanel(titleId, actionModel);
+//                                }
+//                            });
 
 
             //
@@ -190,7 +191,14 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                 actionParametersPanel.setShowHeader(false);
 
-                prompt.setTitle(titlePanel, target);
+                final Label label = new Label(prompt.getTitleId(), new AbstractReadOnlyModel<String>() {
+                    @Override
+                    public String getObject() {
+                        final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+                        return action.getName();
+                    }
+                });
+                prompt.setTitle(label, target);
                 prompt.setPanel(actionParametersPanel, target);
                 actionParametersPanel.setActionPrompt(prompt);
                 prompt.showPrompt(target);
@@ -305,6 +313,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         return IsisContext.getSessionFactory();
     }
 
+    private SpecificationLoader getSpecificationLoader() {
+        return getIsisSessionFactory().getSpecificationLoader();
+    }
 
 
 }
