@@ -46,7 +46,7 @@
     <inceptionYear>2010</inceptionYear>
 
     <properties>
-        <revision>1.0.0-SNAPSHOT</revision>
+        <revision>1.17.0</revision>
         <isis.version>${revision}</isis.version>
 
         <isis.skipTests>false</isis.skipTests>
