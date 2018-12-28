@@ -55,6 +55,7 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
+import static org.apache.isis.core.metamodel.facets.ObjectSpecIdFacetFactory.ProcessObjectSpecIdContext;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -713,7 +714,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         @Test
         public void whenDomainObjectAndObjectTypeSetToTrue() {
 
-            facetFactory.process(new ProcessClassContext(CustomerWithDomainObjectAndObjectTypeSet.class, mockMethodRemover, facetHolder));
+            facetFactory.process(new ProcessObjectSpecIdContext(CustomerWithDomainObjectAndObjectTypeSet.class, facetHolder));
 
             final Facet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
             Assert.assertNotNull(facet);
