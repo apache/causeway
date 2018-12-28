@@ -492,6 +492,7 @@
                             <exclude>**/application.js</exclude>
 
                             <exclude>**/jquery.zclip.js</exclude>
+                            <exclude>**/simple-sidebar.css</exclude>
                             <exclude>**/bootstrap-growl.js</exclude>
                             <exclude>**/moment.js</exclude>
 
