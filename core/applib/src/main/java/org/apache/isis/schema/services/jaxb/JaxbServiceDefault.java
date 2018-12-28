@@ -22,6 +22,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
@@ -68,7 +69,11 @@ public class JaxbServiceDefault extends JaxbService.Simple {
             try {
                 final String elementObjectType = list.getElementObjectType();
                 final Class<?> elementType = metaModelService5.fromObjectType(elementObjectType);
-                return JAXBContext.newInstance(domainClass, elementType);
+                if (elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
+                    return JAXBContext.newInstance(domainClass, elementType);
+                } else {
+                    return JAXBContext.newInstance(domainClass);
+                }
             } catch (JAXBException e) {
                 throw new RuntimeException(e);
             }
