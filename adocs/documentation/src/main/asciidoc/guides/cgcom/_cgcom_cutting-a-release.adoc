@@ -134,7 +134,7 @@ so that they should read:
 ----
 
 
-After release, there is a xref:cgcom.adoc#__cgcom_cutting-a-release_bump-revision-to-ISISDEV[similar step at the end] to update to the next development `SNAPSHOT`.
+After release, there is a xref:cgcom.adoc#__cgcom_cutting-a-release_bump-revision-to-ISISDEV[similar step at the end] to update back to `1.0.0-SNAPSHOT`.
 
 
 
@@ -758,16 +758,22 @@ Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See 
 == Bump `revision` property to `$ISISDEV`
 
 At the beginning of the release process we bumped the `revision` property to the release version, ie `${ISISREL}`.
-With the release now deployed we now need to bump the revision up to the next development version, ie `${ISISDEV}`.
+With the release now deployed we now need to bump the revision back down to the base snapshot, ie `1.0.0-SNAPSHOT`.
+
+[NOTE]
+====
+Previously we bumped to the next development snapshot.
+However, this approach doesn't play well with CI/CD when Apache Isis is mounted as a git submodule, so instead we always use `1.0.0-SNAPSHOT` for all development work.
+====
 
 In the root of the Apache Isis repo, we do this for all three ``pom.xml``s with:
 
 [source,bash,subs="attributes+"]
 ----
-sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" core/pom.xml
-sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/simpleapp/pom.xml
-sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/helloworld/pom.xml
-git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's to ${ISISDEV}"
+sed -i -E "s|<revision>[^<]+<|<revision>1.0.0-SNAPSHOT<|g" core/pom.xml
+sed -i -E "s|<revision>[^<]+<|<revision>1.0.0-SNAPSHOT<|g" example/application/simpleapp/pom.xml
+sed -i -E "s|<revision>[^<]+<|<revision>1.0.0-SNAPSHOT<|g" example/application/helloworld/pom.xml
+git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's back to 1.0.0-SNAPSHOT"
 ----
 
 
