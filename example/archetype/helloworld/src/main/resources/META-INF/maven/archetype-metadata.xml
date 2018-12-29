@@ -17,64 +17,63 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<archetype-descriptor xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0" name="helloworld" xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <fileSets>
-        <fileSet filtered="true" encoding="UTF-8">
-            <directory>src/main/java</directory>
-            <includes>
-                <include>**/*.java</include>
-                <include>**/*.xml</include>
-                <include>**/*.html</include>
-                <include>**/*.properties</include>
-            </includes>
-        </fileSet>
-        <fileSet encoding="UTF-8">
-            <directory>src/main/java</directory>
-            <includes>
-                <include>**/*.png</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
-            <directory>src/main/webapp</directory>
-            <includes>
-                <include>**/*.xml</include>
-                <include>**/*.html</include>
-                <include>**/*.properties</include>
-            </includes>
-        </fileSet>
-        <fileSet encoding="UTF-8">
-            <directory>src/main/webapp</directory>
-            <includes>
-                <include>**/*.css</include>
-                <include>**/*.ico</include>
-                <include>**/*.gif</include>
-                <include>**/*.ini</include>
-                <include>**/*.md</include>
-                <include>**/*.ttf</include>
-                <include>**/*.png</include>
-                <include>**/*.js</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
-            <directory>src/test/java</directory>
-            <includes>
-                <include>**/*.java</include>
-            </includes>
-        </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
-            <directory/>
-            <includes>
-                <include>logging-dn-enhance.properties</include>
-            </includes>
-        </fileSet>
-        <fileSet encoding="UTF-8">
-            <directory/>
-            <includes>
-                <include>.gitattributes</include>
-                <include>.gitignore</include>
-                <include>enhance-all.sh</include>
-                <include>README.adoc</include>
-            </includes>
-        </fileSet>
-    </fileSets>
+<archetype-descriptor xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="helloworld" xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd">
+  <fileSets>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>src/main/java</directory>
+      <includes>
+        <include>**/*.java</include>
+        <include>**/*.xml</include>
+        <include>**/*.properties</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory>src/main/java</directory>
+      <includes>
+        <include>**/*.png</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>src/main/webapp</directory>
+      <includes>
+        <include>**/*.xml</include>
+        <include>**/*.html</include>
+        <include>**/*.properties</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory>src/main/webapp</directory>
+      <includes>
+        <include>**/*.css</include>
+        <include>**/*.ico</include>
+        <include>**/*.gif</include>
+        <include>**/*.ini</include>
+        <include>**/*.md</include>
+        <include>**/*.ttf</include>
+        <include>**/*.png</include>
+        <include>**/*.js</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>src/test/java</directory>
+      <includes>
+        <include>**/*.java</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory/>
+      <includes>
+        <include>logging-dn-enhance.properties</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory/>
+      <includes>
+        <include>.gitattributes</include>
+        <include>.gitignore</include>
+        <include>enhance-all.sh</include>
+        <include>README.adoc</include>
+      </includes>
+    </fileSet>
+  </fileSets>
 </archetype-descriptor>

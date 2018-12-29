@@ -22,19 +22,20 @@
     <parent>
         <groupId>org.incode</groupId>
         <artifactId>incode-build</artifactId>
-        <version>2</version>
+        <version>2.5</version>
     </parent>
 
     <groupId>${groupId}</groupId>
     <artifactId>${artifactId}</artifactId>
     <version>${version}</version>
 
-    <name>HelloWorld</name>
+    <name>Apache Isis App - HelloWorld</name>
 
     <packaging>war</packaging>
 
     <properties>
-        <isis.version>1.16.2</isis.version>
+        <revision>1.17.0</revision>
+        <isis.version>${revision}</isis.version>
 
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>
@@ -85,54 +86,36 @@
                     </mixins>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <pomElements>
+                        <dependencyManagement>resolve</dependencyManagement>
+                        <dependencies>resolve</dependencies>
+                    </pomElements>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>apache.snapshots</id>
-            <name>Apache Snapshots</name>
-            <url>https://repository.apache.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>cloudbees.estatio.snapshots</id>
-            <url>http://repository-estatio.forge.cloudbees.com/snapshot/</url>
-            <name>CloudBees Snapshots (and Interim Releases)</name>
-            <releases>
-                <updatePolicy>never</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </releases>
-            <snapshots>
-                <updatePolicy>never</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-            <layout>default</layout>
-        </repository>
-        <repository>
-            <id>sonatype-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <snapshots>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>cloudbees.estatio.snapshots</id>
-            <name>CloudBees Snapshots (and Interim Releases)</name>
-            <releases>
-                <updatePolicy>never</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </releases>
-            <url>http://repository-estatio.forge.cloudbees.com/snapshot/</url>
-            <layout>default</layout>
-        </pluginRepository>
-    </pluginRepositories>
 
     <dependencyManagement>
         <dependencies>
@@ -147,9 +130,17 @@
     </dependencyManagement>
 
     <dependencies>
+
+        <!-- ISIS API -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-applib</artifactId>
+        </dependency>
+
+        <!-- OTHER DEPENDENCIES -->
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
         </dependency>
 
         <dependency>
@@ -157,16 +148,14 @@
             <artifactId>isis-mavendeps-webapp</artifactId>
             <type>pom</type>
         </dependency>
+
+
+        <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.isis.mavendeps</groupId>
             <artifactId>isis-mavendeps-testing</artifactId>
             <scope>test</scope>
             <type>pom</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
         </dependency>
 
     </dependencies>
@@ -181,18 +170,82 @@
             </activation>
             <build>
                 <directory>target-ide</directory>
-		        <plugins>
-		        	<!-- eclipse doesn't seem to support maven mixins config, so repeat here -->
-					<plugin>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<configuration>
-							<source>${compiler-plugin.source}</source>
-							<target>${compiler-plugin.target}</target>
-							<compilerArgument />
-						</configuration>
-					</plugin>
-		        </plugins>
-		    </build>
+                <plugins>
+                    <!-- eclipse doesn't seem to support maven mixins config, so repeat here -->
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <source>${compiler-plugin.source}</source>
+                            <target>${compiler-plugin.target}</target>
+                            <compilerArgument />
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>skinny-war</id>
+            <activation>
+                <property>
+                    <name>skinny-war</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven-war-plugin.version}</version>
+                        <configuration>
+                            <warName>${maven-war-plugin.warName}</warName>
+                            <packagingExcludes>%regex[WEB-INF/lib/(?!helloworld).*.jar]</packagingExcludes>
+                            <archive>
+                                <manifest>
+                                    <addClasspath>false</addClasspath>
+                                </manifest>
+                                <manifestEntries>
+                                    <Build-Time>${maven.build.timestamp}</Build-Time>
+                                    <Build-Host>${agent.name}</Build-Host>
+                                    <Build-User>${user.name}</Build-User>
+                                    <Build-Maven>Maven ${maven.version}</Build-Maven>
+                                    <Build-Java>${java.version}</Build-Java>
+                                    <Build-OS>${os.name}</Build-OS>
+                                    <Build-Label>${project.version}</Build-Label>
+                                </manifestEntries>
+                            </archive>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!--
+        using:
+        mvn -s .m2/settings.xml -D deploy-to-tomcat tomcat7:deploy-only
+         -->
+        <profile>
+            <id>deploy-to-tomcat</id>
+            <activation>
+                <property>
+                    <name>deploy-to-tomcat</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <configuration>
+                            <url>http://localhost:8080/manager/text</url>
+                            <server>tomcat-server</server>
+                            <path>/ROOT</path>
+                            <warFile>${project.build.directory}/${maven-war-plugin.warName}.war</warFile>
+                            <update>true</update>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
