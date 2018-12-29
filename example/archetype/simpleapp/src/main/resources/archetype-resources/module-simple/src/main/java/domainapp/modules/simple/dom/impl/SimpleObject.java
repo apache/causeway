@@ -27,9 +27,7 @@ import javax.jdo.annotations.VersionStrategy;
 import com.google.common.collect.ComparisonChain;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Auditing;
-import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
@@ -37,7 +35,6 @@ import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.Publishing;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
@@ -45,6 +42,9 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 
 import lombok.AccessLevel;
+import static org.apache.isis.applib.annotation.CommandReification.ENABLED;
+import static org.apache.isis.applib.annotation.SemanticsOf.IDEMPOTENT;
+import static org.apache.isis.applib.annotation.SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "simple")
 @javax.jdo.annotations.DatastoreIdentity(strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY, column="id")
@@ -67,7 +67,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     private String notes;
 
 
-    @Action(semantics = SemanticsOf.IDEMPOTENT, command = CommandReification.ENABLED, publishing = Publishing.ENABLED, associateWith = "name")
+    @Action(semantics = IDEMPOTENT, command = ENABLED, publishing = Publishing.ENABLED, associateWith = "name")
     public SimpleObject updateName(
             @Parameter(maxLength = 40)
             @ParameterLayout(named = "Name")
@@ -85,7 +85,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     }
 
 
-    @Action(semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE)
+    @Action(semantics = NON_IDEMPOTENT_ARE_YOU_SURE)
     public void delete() {
         final String title = titleService.titleOf(this);
         messageService.informUser(String.format("'%s' deleted", title));
@@ -93,8 +93,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
     }
 
 
-
-    //region > toString, compareTo
     @Override
     public String toString() {
         return getName();
@@ -105,10 +103,8 @@ public class SimpleObject implements Comparable<SimpleObject> {
                 .compare(this.getName(), other.getName())
                 .result();
     }
-    //endregion
 
 
-    //region > injected services
     @javax.inject.Inject
     @javax.jdo.annotations.NotPersistent
     @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
@@ -123,6 +119,5 @@ public class SimpleObject implements Comparable<SimpleObject> {
     @javax.jdo.annotations.NotPersistent
     @lombok.Getter(AccessLevel.NONE) @lombok.Setter(AccessLevel.NONE)
     MessageService messageService;
-    //endregion
 
 }

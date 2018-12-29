@@ -17,62 +17,62 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.isis.archetype</groupId>
-    <artifactId>simpleapp-archetype</artifactId>
-    <version>1.16.3-SNAPSHOT</version>
-    <packaging>maven-archetype</packaging>
-    <name>simpleapp-archetype</name>
-    <build>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.archetype</groupId>
-                <artifactId>archetype-packaging</artifactId>
-                <version>3.0.1</version>
-            </extension>
-        </extensions>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-archetype-plugin</artifactId>
-                    <version>3.0.1</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
-    <description>This module defines a standard parent POM to use for various Incode applications and modules.  
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.isis.archetype</groupId>
+  <artifactId>simpleapp-archetype</artifactId>
+  <version>1.17.0</version>
+  <packaging>maven-archetype</packaging>
+  <name>simpleapp-archetype</name>
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>archetype-packaging</artifactId>
+        <version>3.0.1</version>
+      </extension>
+    </extensions>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-archetype-plugin</artifactId>
+          <version>3.0.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+  <description>This module defines a standard parent POM to use for various Incode applications and modules.  
         Its primary purpose is to make it easy to use a set up maven mixins (https://github.com/odavid/maven-plugins)
         within child POMs.  Specifically this means locking down the versions of plugins using pluginManagement.
         
         It does NOT define any mixins for Apache Isis.</description>
-    <url>https://github.com/incodehq/incode-build/simpleapp</url>
-    <developers>
-        <developer>
-            <id>danhaywood</id>
-            <name>Dan Haywood</name>
-            <email>dan@haywood-associates.co.uk</email>
-        </developer>
-    </developers>
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <scm>
-        <connection>scm:git:git@github.com:incodehq/incode-build.git/simpleapp</connection>
-        <developerConnection>scm:git:git@github.com:incodehq/incode-build.git/simpleapp</developerConnection>
-        <url>git@github.com:incodehq/incode-build.git/simpleapp</url>
-    </scm>
-    <parent>
-        <groupId>org.apache.isis.core</groupId>
-        <artifactId>isis</artifactId>
-        <version>1.16.3-SNAPSHOT</version>
-        <relativePath>../../../core/pom.xml</relativePath>
-    </parent>
-    <properties>
-        <archetype.test.skip>true</archetype.test.skip>
-    </properties>
+  <url>https://github.com/incodehq/incode-build/simpleapp</url>
+  <developers>
+    <developer>
+      <id>danhaywood</id>
+      <name>Dan Haywood</name>
+      <email>dan@haywood-associates.co.uk</email>
+    </developer>
+  </developers>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:git@github.com:incodehq/incode-build.git/simpleapp</connection>
+    <developerConnection>scm:git:git@github.com:incodehq/incode-build.git/simpleapp</developerConnection>
+    <url>git@github.com:incodehq/incode-build.git/simpleapp</url>
+  </scm>
+  <parent>
+    <groupId>org.apache.isis.core</groupId>
+    <artifactId>isis</artifactId>
+    <version>1.17.0</version>
+    <relativePath>../../../core/pom.xml</relativePath>
+  </parent>
+  <properties>
+    <archetype.test.skip>true</archetype.test.skip>
+  </properties>
 </project>

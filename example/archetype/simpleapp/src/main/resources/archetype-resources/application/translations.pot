@@ -23,7 +23,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-03-10 13:41:00+\n"
+"POT-Creation-Date: 2018-12-29 11:37:59+\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -51,13 +51,18 @@ msgid "Act"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.appfeat.ApplicationMemberType#ACTION
-msgid "Action"
+#: org.apache.isis.applib.domain.DomainObjectList#actionArguments
+msgid "Action Arguments"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.xactn.TransactionService$Policy#ALWAYS
-msgid "Always"
+#: org.apache.isis.applib.domain.DomainObjectList#actionId
+msgid "Action Id"
+msgstr ""
+
+
+#: org.apache.isis.applib.domain.DomainObjectList#actionOwningType
+msgid "Action Owning Type"
 msgstr ""
 
 
@@ -66,8 +71,18 @@ msgid "Are you sure?"
 msgstr ""
 
 
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#AUDIT_ENTRY
+msgid "Audit Entry"
+msgstr ""
+
+
 #: org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder
 msgid "Cancel"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetClass
+msgid "Class"
 msgstr ""
 
 
@@ -76,8 +91,8 @@ msgid "Clear translation cache"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.appfeat.ApplicationMemberType#COLLECTION
-msgid "Collection"
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#COMMAND
+msgid "Command"
 msgstr ""
 
 
@@ -116,119 +131,32 @@ msgid "Delete"
 msgstr ""
 
 
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+msgid "Detail"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+msgid "Domain Change"
+msgstr ""
+
+
 #: domainapp.modules.simple.dom.impl.SimpleObject#downloadJdoMetadata()
 msgid "Download Jdo Metadata"
 msgstr ""
 
 
+#: domainapp.application.fixture.scenarios.DomainAppDemo#downloadLayoutXml()
 #: domainapp.application.services.homepage.HomePageViewModel#downloadLayoutXml()
 #: domainapp.modules.simple.dom.impl.SimpleObject#downloadLayoutXml()
-#: java.io.Serializable#downloadLayoutXml()
-#: java.lang.Comparable#downloadLayoutXml()
-#: java.lang.Iterable#downloadLayoutXml()
-#: java.lang.Object#downloadLayoutXml()
-#: java.util.Collection#downloadLayoutXml()
-#: java.util.List#downloadLayoutXml()
-#: java.util.Set#downloadLayoutXml()
-#: javax.jdo.listener.InstanceLifecycleListener#downloadLayoutXml()
-#: javax.jdo.listener.LoadLifecycleListener#downloadLayoutXml()
-#: javax.jdo.listener.StoreLifecycleListener#downloadLayoutXml()
-#: org.apache.isis.applib.AbstractService#downloadLayoutXml()
-#: org.apache.isis.applib.AbstractSubscriber#downloadLayoutXml()
 #: org.apache.isis.applib.AbstractViewModel#downloadLayoutXml()
 #: org.apache.isis.applib.ViewModel#downloadLayoutXml()
-#: org.apache.isis.applib.conmap.spi.CommandDtoProcessorService#downloadLayoutXml()
-#: org.apache.isis.applib.fixtures.InstallableFixture#downloadLayoutXml()
+#: org.apache.isis.applib.domain.DomainObjectList#downloadLayoutXml()
+#: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript#downloadLayoutXml()
 #: org.apache.isis.applib.fixturescripts.FixtureResult#downloadLayoutXml()
 #: org.apache.isis.applib.fixturescripts.FixtureScript#downloadLayoutXml()
-#: org.apache.isis.applib.fixturescripts.FixtureScripts#downloadLayoutXml()
-#: org.apache.isis.applib.services.HasTransactionId#downloadLayoutXml()
-#: org.apache.isis.applib.services.WithTransactionScope#downloadLayoutXml()
-#: org.apache.isis.applib.services.acceptheader.AcceptHeaderService#downloadLayoutXml()
-#: org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository#downloadLayoutXml()
-#: org.apache.isis.applib.services.audit.AuditerService#downloadLayoutXml()
-#: org.apache.isis.applib.services.background.BackgroundService#downloadLayoutXml()
-#: org.apache.isis.applib.services.background.BackgroundService2#downloadLayoutXml()
-#: org.apache.isis.applib.services.bookmark.BookmarkService#downloadLayoutXml()
-#: org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService#downloadLayoutXml()
-#: org.apache.isis.applib.services.command.Command#downloadLayoutXml()
-#: org.apache.isis.applib.services.command.CommandExecutorService#downloadLayoutXml()
-#: org.apache.isis.applib.services.command.spi.CommandService#downloadLayoutXml()
+#: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#downloadLayoutXml()
 #: org.apache.isis.applib.services.config.ConfigurationProperty#downloadLayoutXml()
-#: org.apache.isis.applib.services.config.ConfigurationService#downloadLayoutXml()
-#: org.apache.isis.applib.services.conmap.ContentMappingService#downloadLayoutXml()
-#: org.apache.isis.applib.services.email.EmailService#downloadLayoutXml()
-#: org.apache.isis.applib.services.eventbus.EventBusService#downloadLayoutXml()
-#: org.apache.isis.applib.services.exceprecog.ExceptionRecognizer#downloadLayoutXml()
-#: org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite#downloadLayoutXml()
-#: org.apache.isis.applib.services.factory.FactoryService#downloadLayoutXml()
-#: org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider#downloadLayoutXml()
-#: org.apache.isis.applib.services.grid.GridLoaderService#downloadLayoutXml()
-#: org.apache.isis.applib.services.grid.GridService#downloadLayoutXml()
-#: org.apache.isis.applib.services.grid.GridSystemService#downloadLayoutXml()
-#: org.apache.isis.applib.services.homepage.HomePageProviderService#downloadLayoutXml()
-#: org.apache.isis.applib.services.i18n.TranslationService#downloadLayoutXml()
-#: org.apache.isis.applib.services.jaxb.JaxbService#downloadLayoutXml()
-#: org.apache.isis.applib.services.jaxb.JaxbService$Simple#downloadLayoutXml()
-#: org.apache.isis.applib.services.jdosupport.IsisJdoSupport0#downloadLayoutXml()
-#: org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2#downloadLayoutXml()
-#: org.apache.isis.applib.services.layout.LayoutService#downloadLayoutXml()
-#: org.apache.isis.applib.services.layout.LayoutService2#downloadLayoutXml()
-#: org.apache.isis.applib.services.memento.MementoService#downloadLayoutXml()
-#: org.apache.isis.applib.services.menu.MenuBarsLoaderService#downloadLayoutXml()
-#: org.apache.isis.applib.services.menu.MenuBarsService#downloadLayoutXml()
-#: org.apache.isis.applib.services.message.MessageService#downloadLayoutXml()
-#: org.apache.isis.applib.services.metamodel.MetaModelService#downloadLayoutXml()
-#: org.apache.isis.applib.services.metrics.MetricsService#downloadLayoutXml()
-#: org.apache.isis.applib.services.publish.PublisherService#downloadLayoutXml()
-#: org.apache.isis.applib.services.queryresultscache.QueryResultCacheControl#downloadLayoutXml()
-#: org.apache.isis.applib.services.queryresultscache.QueryResultsCache#downloadLayoutXml()
-#: org.apache.isis.applib.services.registry.ServiceRegistry#downloadLayoutXml()
-#: org.apache.isis.applib.services.repository.RepositoryService#downloadLayoutXml()
-#: org.apache.isis.applib.services.routing.RoutingService#downloadLayoutXml()
-#: org.apache.isis.applib.services.sessmgmt.SessionManagementService#downloadLayoutXml()
-#: org.apache.isis.applib.services.sudo.SudoService#downloadLayoutXml()
-#: org.apache.isis.applib.services.sudo.SudoService$Spi#downloadLayoutXml()
-#: org.apache.isis.applib.services.swagger.SwaggerService#downloadLayoutXml()
-#: org.apache.isis.applib.services.tablecol.TableColumnOrderService#downloadLayoutXml()
-#: org.apache.isis.applib.services.title.TitleService#downloadLayoutXml()
-#: org.apache.isis.applib.services.urlencoding.UrlEncodingService#downloadLayoutXml()
-#: org.apache.isis.applib.services.user.UserService#downloadLayoutXml()
-#: org.apache.isis.applib.services.userprof.UserProfileService#downloadLayoutXml()
-#: org.apache.isis.applib.services.userreg.EmailNotificationService#downloadLayoutXml()
-#: org.apache.isis.applib.services.wrapper.WrapperFactory#downloadLayoutXml()
-#: org.apache.isis.applib.services.xactn.TransactionService#downloadLayoutXml()
-#: org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService#downloadLayoutXml()
-#: org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract#downloadLayoutXml()
-#: org.apache.isis.core.commons.authentication.AuthenticationSessionProvider#downloadLayoutXml()
-#: org.apache.isis.core.commons.components.ApplicationScopedComponent#downloadLayoutXml()
-#: org.apache.isis.core.commons.components.Component#downloadLayoutXml()
-#: org.apache.isis.core.commons.config.IsisConfiguration#downloadLayoutXml()
-#: org.apache.isis.core.commons.config.IsisConfigurationDefault#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.adapter.mgr.AdapterManager#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerBase#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.facetapi.MetaModelRefiner#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.services.ServicesInjectorAware#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.services.appmanifest.AppManifestProvider#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.services.grid.GridSystemServiceAbstract#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal#downloadLayoutXml()
-#: org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal#downloadLayoutXml()
-#: org.apache.isis.core.runtime.authentication.AuthenticationManager#downloadLayoutXml()
-#: org.apache.isis.core.runtime.authorization.AuthorizationManager#downloadLayoutXml()
-#: org.apache.isis.core.runtime.authorization.AuthorizationManagerAbstract#downloadLayoutXml()
-#: org.apache.isis.core.runtime.persistence.FixturesInstalledFlag#downloadLayoutXml()
-#: org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault#downloadLayoutXml()
-#: org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory#downloadLayoutXml()
-#: org.apache.isis.core.runtime.system.transaction.TransactionalClosure#downloadLayoutXml()
-#: org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService#downloadLayoutXml()
-#: org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService#downloadLayoutXml()
-#: org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceAbstract#downloadLayoutXml()
 msgid "Download Layout Xml"
 msgstr ""
 
@@ -258,9 +186,8 @@ msgid "Download Translations"
 msgstr ""
 
 
-#: org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternalNoop#executeWithinTransaction()
-#: org.apache.isis.core.runtime.services.persistsession.PersistenceSessionServiceInternalDefault#executeWithinTransaction()
-msgid "Execute Within Transaction"
+#: org.apache.isis.applib.domain.DomainObjectList#elementObjectType
+msgid "Element Object Type"
 msgstr ""
 
 
@@ -293,11 +220,6 @@ msgid "Fixture script"
 msgstr ""
 
 
-#: org.apache.isis.applib.fixturescripts.FixtureScript#friendlyName
-msgid "Friendly Name"
-msgstr ""
-
-
 #: org.apache.isis.applib.services.hsqldb.HsqlDbManagerMenu#hsqlDbManager()
 msgid "HSQL DB Manager"
 msgstr ""
@@ -314,13 +236,8 @@ msgid "Id"
 msgstr ""
 
 
-#: org.apache.isis.applib.annotation.SemanticsOf#IDEMPOTENT
-msgid "Idempotent"
-msgstr ""
-
-
-#: org.apache.isis.applib.annotation.SemanticsOf#IDEMPOTENT_ARE_YOU_SURE
-msgid "Idempotent Are You Sure"
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+msgid "Identifiers"
 msgstr ""
 
 
@@ -349,6 +266,11 @@ msgid "List All"
 msgstr ""
 
 
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetAction
+msgid "Member"
+msgstr ""
+
+
 #: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusIdLong
 #: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionLong
 #: org.apache.isis.core.metamodel.services.jdosupport.Persistable_datanucleusVersionTimestamp
@@ -369,33 +291,8 @@ msgid "Name"
 msgstr ""
 
 
-#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureFactory#newApplicationFeature()
-msgid "New Application Feature"
-msgstr ""
-
-
-#: org.apache.isis.core.metamodel.services.xactn.TransactionServiceDefault#nextTransaction()
-msgid "Next Transaction"
-msgstr ""
-
-
-#: org.apache.isis.applib.annotation.SemanticsOf#NON_IDEMPOTENT
-msgid "Non Idempotent"
-msgstr ""
-
-
-#: org.apache.isis.applib.annotation.SemanticsOf#NON_IDEMPOTENT_ARE_YOU_SURE
-msgid "Non Idempotent Are You Sure"
-msgstr ""
-
-
 #: org.apache.isis.applib.services.layout.LayoutService$Style#NORMALIZED
 msgid "Normalized"
-msgstr ""
-
-
-#: org.apache.isis.applib.annotation.SemanticsOf#NOT_SPECIFIED
-msgid "Not Specified"
 msgstr ""
 
 
@@ -404,120 +301,34 @@ msgid "Notes"
 msgstr ""
 
 
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#targetStr
+msgid "Object"
+msgstr ""
+
+
 #: domainapp.application.services.homepage.HomePageViewModel#objects
+#: org.apache.isis.applib.domain.DomainObjectList#objects
 msgid "Objects"
 msgstr ""
 
 
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#openTargetObject()
+msgid "Open"
+msgstr ""
+
+
+#: domainapp.application.fixture.scenarios.DomainAppDemo#openRestApi()
 #: domainapp.application.services.homepage.HomePageViewModel#openRestApi()
 #: domainapp.modules.simple.dom.impl.SimpleObject#openRestApi()
-#: java.io.Serializable#openRestApi()
-#: java.lang.Comparable#openRestApi()
-#: java.lang.Iterable#openRestApi()
-#: java.lang.Object#openRestApi()
-#: java.util.Collection#openRestApi()
-#: java.util.List#openRestApi()
-#: java.util.Set#openRestApi()
-#: javax.jdo.listener.InstanceLifecycleListener#openRestApi()
-#: javax.jdo.listener.LoadLifecycleListener#openRestApi()
-#: javax.jdo.listener.StoreLifecycleListener#openRestApi()
-#: org.apache.isis.applib.AbstractService#openRestApi()
-#: org.apache.isis.applib.AbstractSubscriber#openRestApi()
 #: org.apache.isis.applib.AbstractViewModel#openRestApi()
 #: org.apache.isis.applib.ViewModel#openRestApi()
-#: org.apache.isis.applib.conmap.spi.CommandDtoProcessorService#openRestApi()
-#: org.apache.isis.applib.fixtures.InstallableFixture#openRestApi()
+#: org.apache.isis.applib.domain.DomainObjectList#openRestApi()
+#: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript#openRestApi()
 #: org.apache.isis.applib.fixturescripts.FixtureResult#openRestApi()
 #: org.apache.isis.applib.fixturescripts.FixtureScript#openRestApi()
-#: org.apache.isis.applib.fixturescripts.FixtureScripts#openRestApi()
-#: org.apache.isis.applib.services.HasTransactionId#openRestApi()
-#: org.apache.isis.applib.services.WithTransactionScope#openRestApi()
-#: org.apache.isis.applib.services.acceptheader.AcceptHeaderService#openRestApi()
-#: org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository#openRestApi()
-#: org.apache.isis.applib.services.audit.AuditerService#openRestApi()
-#: org.apache.isis.applib.services.background.BackgroundService#openRestApi()
-#: org.apache.isis.applib.services.background.BackgroundService2#openRestApi()
-#: org.apache.isis.applib.services.bookmark.BookmarkService#openRestApi()
-#: org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService#openRestApi()
-#: org.apache.isis.applib.services.command.Command#openRestApi()
-#: org.apache.isis.applib.services.command.CommandExecutorService#openRestApi()
-#: org.apache.isis.applib.services.command.spi.CommandService#openRestApi()
+#: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#openRestApi()
 #: org.apache.isis.applib.services.config.ConfigurationProperty#openRestApi()
-#: org.apache.isis.applib.services.config.ConfigurationService#openRestApi()
-#: org.apache.isis.applib.services.conmap.ContentMappingService#openRestApi()
-#: org.apache.isis.applib.services.email.EmailService#openRestApi()
-#: org.apache.isis.applib.services.eventbus.EventBusService#openRestApi()
-#: org.apache.isis.applib.services.exceprecog.ExceptionRecognizer#openRestApi()
-#: org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite#openRestApi()
-#: org.apache.isis.applib.services.factory.FactoryService#openRestApi()
-#: org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider#openRestApi()
-#: org.apache.isis.applib.services.grid.GridLoaderService#openRestApi()
-#: org.apache.isis.applib.services.grid.GridService#openRestApi()
-#: org.apache.isis.applib.services.grid.GridSystemService#openRestApi()
-#: org.apache.isis.applib.services.homepage.HomePageProviderService#openRestApi()
-#: org.apache.isis.applib.services.i18n.TranslationService#openRestApi()
-#: org.apache.isis.applib.services.jaxb.JaxbService#openRestApi()
-#: org.apache.isis.applib.services.jaxb.JaxbService$Simple#openRestApi()
-#: org.apache.isis.applib.services.jdosupport.IsisJdoSupport0#openRestApi()
-#: org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2#openRestApi()
-#: org.apache.isis.applib.services.layout.LayoutService#openRestApi()
-#: org.apache.isis.applib.services.layout.LayoutService2#openRestApi()
-#: org.apache.isis.applib.services.memento.MementoService#openRestApi()
-#: org.apache.isis.applib.services.menu.MenuBarsLoaderService#openRestApi()
-#: org.apache.isis.applib.services.menu.MenuBarsService#openRestApi()
-#: org.apache.isis.applib.services.message.MessageService#openRestApi()
-#: org.apache.isis.applib.services.metamodel.MetaModelService#openRestApi()
-#: org.apache.isis.applib.services.metrics.MetricsService#openRestApi()
-#: org.apache.isis.applib.services.publish.PublisherService#openRestApi()
-#: org.apache.isis.applib.services.queryresultscache.QueryResultCacheControl#openRestApi()
-#: org.apache.isis.applib.services.queryresultscache.QueryResultsCache#openRestApi()
-#: org.apache.isis.applib.services.registry.ServiceRegistry#openRestApi()
-#: org.apache.isis.applib.services.repository.RepositoryService#openRestApi()
-#: org.apache.isis.applib.services.routing.RoutingService#openRestApi()
-#: org.apache.isis.applib.services.sessmgmt.SessionManagementService#openRestApi()
-#: org.apache.isis.applib.services.sudo.SudoService#openRestApi()
-#: org.apache.isis.applib.services.sudo.SudoService$Spi#openRestApi()
-#: org.apache.isis.applib.services.swagger.SwaggerService#openRestApi()
 #: org.apache.isis.applib.services.swagger.SwaggerServiceMenu#openRestApi()
-#: org.apache.isis.applib.services.tablecol.TableColumnOrderService#openRestApi()
-#: org.apache.isis.applib.services.title.TitleService#openRestApi()
-#: org.apache.isis.applib.services.urlencoding.UrlEncodingService#openRestApi()
-#: org.apache.isis.applib.services.user.UserService#openRestApi()
-#: org.apache.isis.applib.services.userprof.UserProfileService#openRestApi()
-#: org.apache.isis.applib.services.userreg.EmailNotificationService#openRestApi()
-#: org.apache.isis.applib.services.wrapper.WrapperFactory#openRestApi()
-#: org.apache.isis.applib.services.xactn.TransactionService#openRestApi()
-#: org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService#openRestApi()
-#: org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract#openRestApi()
-#: org.apache.isis.core.commons.authentication.AuthenticationSessionProvider#openRestApi()
-#: org.apache.isis.core.commons.components.ApplicationScopedComponent#openRestApi()
-#: org.apache.isis.core.commons.components.Component#openRestApi()
-#: org.apache.isis.core.commons.config.IsisConfiguration#openRestApi()
-#: org.apache.isis.core.commons.config.IsisConfigurationDefault#openRestApi()
-#: org.apache.isis.core.metamodel.adapter.mgr.AdapterManager#openRestApi()
-#: org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerBase#openRestApi()
-#: org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider#openRestApi()
-#: org.apache.isis.core.metamodel.facetapi.MetaModelRefiner#openRestApi()
-#: org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner#openRestApi()
-#: org.apache.isis.core.metamodel.services.ServicesInjectorAware#openRestApi()
-#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature#openRestApi()
-#: org.apache.isis.core.metamodel.services.appmanifest.AppManifestProvider#openRestApi()
-#: org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal#openRestApi()
-#: org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal#openRestApi()
-#: org.apache.isis.core.metamodel.services.grid.GridSystemServiceAbstract#openRestApi()
-#: org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal#openRestApi()
-#: org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal#openRestApi()
-#: org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal#openRestApi()
-#: org.apache.isis.core.runtime.authentication.AuthenticationManager#openRestApi()
-#: org.apache.isis.core.runtime.authorization.AuthorizationManager#openRestApi()
-#: org.apache.isis.core.runtime.authorization.AuthorizationManagerAbstract#openRestApi()
-#: org.apache.isis.core.runtime.persistence.FixturesInstalledFlag#openRestApi()
-#: org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault#openRestApi()
-#: org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory#openRestApi()
-#: org.apache.isis.core.runtime.system.transaction.TransactionalClosure#openRestApi()
-#: org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService#openRestApi()
-#: org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService#openRestApi()
-#: org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceAbstract#openRestApi()
 msgid "Open Rest Api"
 msgstr ""
 
@@ -531,6 +342,16 @@ msgstr ""
 #: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
 #: org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault#runFixtureScriptWithAutoComplete(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
 msgid "Parameters"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#postValue
+msgid "Post Value"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#preValue
+msgid "Pre Value"
 msgstr ""
 
 
@@ -549,8 +370,8 @@ msgid "Prop"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.appfeat.ApplicationMemberType#PROPERTY
-msgid "Property"
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#propertyId
+msgid "Property Id"
 msgstr ""
 
 
@@ -569,114 +390,27 @@ msgid "Public"
 msgstr ""
 
 
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#PUBLISHED_EVENT
+msgid "Published Event"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract$ChangeType#PUBLISHED_INTERACTION
+msgid "Published Interaction"
+msgstr ""
+
+
+#: domainapp.application.fixture.scenarios.DomainAppDemo#rebuildMetamodel()
 #: domainapp.application.services.homepage.HomePageViewModel#rebuildMetamodel()
 #: domainapp.modules.simple.dom.impl.SimpleObject#rebuildMetamodel()
-#: java.io.Serializable#rebuildMetamodel()
-#: java.lang.Comparable#rebuildMetamodel()
-#: java.lang.Iterable#rebuildMetamodel()
-#: java.lang.Object#rebuildMetamodel()
-#: java.util.Collection#rebuildMetamodel()
-#: java.util.List#rebuildMetamodel()
-#: java.util.Set#rebuildMetamodel()
-#: javax.jdo.listener.InstanceLifecycleListener#rebuildMetamodel()
-#: javax.jdo.listener.LoadLifecycleListener#rebuildMetamodel()
-#: javax.jdo.listener.StoreLifecycleListener#rebuildMetamodel()
-#: org.apache.isis.applib.AbstractService#rebuildMetamodel()
-#: org.apache.isis.applib.AbstractSubscriber#rebuildMetamodel()
 #: org.apache.isis.applib.AbstractViewModel#rebuildMetamodel()
 #: org.apache.isis.applib.ViewModel#rebuildMetamodel()
-#: org.apache.isis.applib.conmap.spi.CommandDtoProcessorService#rebuildMetamodel()
-#: org.apache.isis.applib.fixtures.InstallableFixture#rebuildMetamodel()
+#: org.apache.isis.applib.domain.DomainObjectList#rebuildMetamodel()
+#: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript#rebuildMetamodel()
 #: org.apache.isis.applib.fixturescripts.FixtureResult#rebuildMetamodel()
 #: org.apache.isis.applib.fixturescripts.FixtureScript#rebuildMetamodel()
-#: org.apache.isis.applib.fixturescripts.FixtureScripts#rebuildMetamodel()
-#: org.apache.isis.applib.services.HasTransactionId#rebuildMetamodel()
-#: org.apache.isis.applib.services.WithTransactionScope#rebuildMetamodel()
-#: org.apache.isis.applib.services.acceptheader.AcceptHeaderService#rebuildMetamodel()
-#: org.apache.isis.applib.services.appfeat.ApplicationFeatureRepository#rebuildMetamodel()
-#: org.apache.isis.applib.services.audit.AuditerService#rebuildMetamodel()
-#: org.apache.isis.applib.services.background.BackgroundService#rebuildMetamodel()
-#: org.apache.isis.applib.services.background.BackgroundService2#rebuildMetamodel()
-#: org.apache.isis.applib.services.bookmark.BookmarkService#rebuildMetamodel()
-#: org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService#rebuildMetamodel()
-#: org.apache.isis.applib.services.command.Command#rebuildMetamodel()
-#: org.apache.isis.applib.services.command.CommandExecutorService#rebuildMetamodel()
-#: org.apache.isis.applib.services.command.spi.CommandService#rebuildMetamodel()
+#: org.apache.isis.applib.fixturescripts.SimpleFixtureScript#rebuildMetamodel()
 #: org.apache.isis.applib.services.config.ConfigurationProperty#rebuildMetamodel()
-#: org.apache.isis.applib.services.config.ConfigurationService#rebuildMetamodel()
-#: org.apache.isis.applib.services.conmap.ContentMappingService#rebuildMetamodel()
-#: org.apache.isis.applib.services.email.EmailService#rebuildMetamodel()
-#: org.apache.isis.applib.services.eventbus.EventBusService#rebuildMetamodel()
-#: org.apache.isis.applib.services.exceprecog.ExceptionRecognizer#rebuildMetamodel()
-#: org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite#rebuildMetamodel()
-#: org.apache.isis.applib.services.factory.FactoryService#rebuildMetamodel()
-#: org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider#rebuildMetamodel()
-#: org.apache.isis.applib.services.grid.GridLoaderService#rebuildMetamodel()
-#: org.apache.isis.applib.services.grid.GridService#rebuildMetamodel()
-#: org.apache.isis.applib.services.grid.GridSystemService#rebuildMetamodel()
-#: org.apache.isis.applib.services.homepage.HomePageProviderService#rebuildMetamodel()
-#: org.apache.isis.applib.services.i18n.TranslationService#rebuildMetamodel()
-#: org.apache.isis.applib.services.jaxb.JaxbService#rebuildMetamodel()
-#: org.apache.isis.applib.services.jaxb.JaxbService$Simple#rebuildMetamodel()
-#: org.apache.isis.applib.services.jdosupport.IsisJdoSupport0#rebuildMetamodel()
-#: org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2#rebuildMetamodel()
-#: org.apache.isis.applib.services.layout.LayoutService#rebuildMetamodel()
-#: org.apache.isis.applib.services.layout.LayoutService2#rebuildMetamodel()
-#: org.apache.isis.applib.services.memento.MementoService#rebuildMetamodel()
-#: org.apache.isis.applib.services.menu.MenuBarsLoaderService#rebuildMetamodel()
-#: org.apache.isis.applib.services.menu.MenuBarsService#rebuildMetamodel()
-#: org.apache.isis.applib.services.message.MessageService#rebuildMetamodel()
-#: org.apache.isis.applib.services.metamodel.MetaModelService#rebuildMetamodel()
-#: org.apache.isis.applib.services.metrics.MetricsService#rebuildMetamodel()
-#: org.apache.isis.applib.services.publish.PublisherService#rebuildMetamodel()
-#: org.apache.isis.applib.services.queryresultscache.QueryResultCacheControl#rebuildMetamodel()
-#: org.apache.isis.applib.services.queryresultscache.QueryResultsCache#rebuildMetamodel()
-#: org.apache.isis.applib.services.registry.ServiceRegistry#rebuildMetamodel()
-#: org.apache.isis.applib.services.repository.RepositoryService#rebuildMetamodel()
-#: org.apache.isis.applib.services.routing.RoutingService#rebuildMetamodel()
-#: org.apache.isis.applib.services.sessmgmt.SessionManagementService#rebuildMetamodel()
-#: org.apache.isis.applib.services.sudo.SudoService#rebuildMetamodel()
-#: org.apache.isis.applib.services.sudo.SudoService$Spi#rebuildMetamodel()
-#: org.apache.isis.applib.services.swagger.SwaggerService#rebuildMetamodel()
-#: org.apache.isis.applib.services.tablecol.TableColumnOrderService#rebuildMetamodel()
-#: org.apache.isis.applib.services.title.TitleService#rebuildMetamodel()
-#: org.apache.isis.applib.services.urlencoding.UrlEncodingService#rebuildMetamodel()
-#: org.apache.isis.applib.services.user.UserService#rebuildMetamodel()
-#: org.apache.isis.applib.services.userprof.UserProfileService#rebuildMetamodel()
-#: org.apache.isis.applib.services.userreg.EmailNotificationService#rebuildMetamodel()
-#: org.apache.isis.applib.services.wrapper.WrapperFactory#rebuildMetamodel()
-#: org.apache.isis.applib.services.xactn.TransactionService#rebuildMetamodel()
-#: org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService#rebuildMetamodel()
-#: org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract#rebuildMetamodel()
-#: org.apache.isis.core.commons.authentication.AuthenticationSessionProvider#rebuildMetamodel()
-#: org.apache.isis.core.commons.components.ApplicationScopedComponent#rebuildMetamodel()
-#: org.apache.isis.core.commons.components.Component#rebuildMetamodel()
-#: org.apache.isis.core.commons.config.IsisConfiguration#rebuildMetamodel()
-#: org.apache.isis.core.commons.config.IsisConfigurationDefault#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.adapter.mgr.AdapterManager#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerBase#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.facetapi.MetaModelRefiner#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.services.ServicesInjectorAware#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.services.appfeat.ApplicationFeature#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.services.appmanifest.AppManifestProvider#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.services.configinternal.ConfigurationServiceInternal#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.services.grid.GridSystemServiceAbstract#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal#rebuildMetamodel()
-#: org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal#rebuildMetamodel()
-#: org.apache.isis.core.runtime.authentication.AuthenticationManager#rebuildMetamodel()
-#: org.apache.isis.core.runtime.authorization.AuthorizationManager#rebuildMetamodel()
-#: org.apache.isis.core.runtime.authorization.AuthorizationManagerAbstract#rebuildMetamodel()
-#: org.apache.isis.core.runtime.persistence.FixturesInstalledFlag#rebuildMetamodel()
-#: org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault#rebuildMetamodel()
-#: org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory#rebuildMetamodel()
-#: org.apache.isis.core.runtime.system.transaction.TransactionalClosure#rebuildMetamodel()
-#: org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService#rebuildMetamodel()
-#: org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService#rebuildMetamodel()
-#: org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceAbstract#rebuildMetamodel()
 msgid "Rebuild Metamodel"
 msgstr ""
 
@@ -708,17 +442,10 @@ msgid "Run Fixture Script"
 msgstr ""
 
 
-#: org.apache.isis.applib.annotation.SemanticsOf#SAFE
-msgid "Safe"
-msgstr ""
-
-
-#: org.apache.isis.applib.annotation.SemanticsOf#SAFE_AND_REQUEST_CACHEABLE
-msgid "Safe And Request Cacheable"
-msgstr ""
-
-
+#: domainapp.application.fixture.scenarios.DomainAppDemo
+#: org.apache.isis.applib.fixturescripts.DiscoverableFixtureScript
 #: org.apache.isis.applib.fixturescripts.FixtureScript
+#: org.apache.isis.applib.fixturescripts.SimpleFixtureScript
 msgid "Script"
 msgstr ""
 
@@ -745,13 +472,38 @@ msgid "Switch To Writing Translations"
 msgstr ""
 
 
-#: org.apache.isis.applib.services.xactn.TransactionService$Policy#UNLESS_MARKED_FOR_ABORT
-msgid "Unless Marked For Abort"
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+msgid "Target"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract
+msgid "TargetStr"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#timestamp
+msgid "Timestamp"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#transactionId
+msgid "Transaction Id"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#type
+msgid "Type"
 msgstr ""
 
 
 #: domainapp.modules.simple.dom.impl.SimpleObject#updateName()
 msgid "Update Name"
+msgstr ""
+
+
+#: org.apache.isis.objectstore.jdo.applib.service.DomainChangeJdoAbstract#user
+msgid "User"
 msgstr ""
 
 

@@ -298,7 +298,7 @@
         </init-param>
         <init-param>
             <param-name>passThru</param-name>
-            <param-value>/restful/swagger</param-value>
+            <param-value>/restful/swagger,/restful/health</param-value>
         </init-param>
     </filter>
     <filter-mapping>

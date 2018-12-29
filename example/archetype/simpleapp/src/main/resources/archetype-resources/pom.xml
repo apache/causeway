@@ -22,23 +22,23 @@
     <parent>
         <groupId>org.incode</groupId>
         <artifactId>incode-build</artifactId>
-        <version>2.3</version>
+        <version>2.5</version>
     </parent>
 
     <groupId>${groupId}</groupId>
     <artifactId>${artifactId}</artifactId>
     <version>${version}</version>
 
-    <name>SimpleApp Parent</name>
+    <name>Apache Isis App - SimpleApp Parent</name>
 
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.16.3-SNAPSHOT</revision>
-	
-        <isis.version>1.16.2</isis.version>
+        <revision>1.17.0</revision>
+        <isis.version>${revision}</isis.version>
 
-        <lombok.version>1.18.0</lombok.version>
+        <!-- bumping to 1.18.4 causes a conflict with DataNucleus' annotation processor. -->
+        <lombok.version>1.18.2</lombok.version>
 
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>
@@ -70,6 +70,10 @@
                 <version>1.0.0</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
+                    <pomElements>
+                        <dependencyManagement>resolve</dependencyManagement>
+                        <dependencies>resolve</dependencies>
+                    </pomElements>
                 </configuration>
                 <executions>
                     <execution>
@@ -104,23 +108,23 @@
 
             <!-- this project's own modules -->
             <dependency>
-                <groupId>${project.groupId}</groupId>
+                <groupId>${groupId}</groupId>
                 <artifactId>${rootArtifactId}-module-simple</artifactId>
                 <version>${version}</version>
             </dependency>
             <dependency>
-                <groupId>${project.groupId}</groupId>
+                <groupId>${groupId}</groupId>
                 <artifactId>${rootArtifactId}-module-simple</artifactId>
                 <version>${version}</version>
                 <type>test-jar</type>
             </dependency>
             <dependency>
-                <groupId>${project.groupId}</groupId>
+                <groupId>${groupId}</groupId>
                 <artifactId>${rootArtifactId}-application</artifactId>
                 <version>${version}</version>
             </dependency>
             <dependency>
-                <groupId>${project.groupId}</groupId>
+                <groupId>${groupId}</groupId>
                 <artifactId>${rootArtifactId}-webapp</artifactId>
                 <version>${version}</version>
             </dependency>

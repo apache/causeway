@@ -19,7 +19,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application.integtests;
+package domainapp.application.integtests.smoke;
 
 import java.util.List;
 
@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 
+import domainapp.application.integtests.DomainAppIntegTestAbstract;
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjects;
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,0 +1,67 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mml:domainClassDto id="java.lang.Long" xmlns:mml="http://isis.apache.org/schema/metamodel">
+    <mml:facets>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.all.named.NamedFacet" fqcn="org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred">
+            <mml:attr name="escaped">true</mml:attr>
+            <mml:attr name="value">Long</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet" fqcn="org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetFallback">
+            <mml:attr name="bookmarkPolicy">NEVER</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet" fqcn="org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider"/>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet" fqcn="org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder"/>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.grid.GridFacet" fqcn="org.apache.isis.core.metamodel.facets.object.grid.GridFacetDefault"/>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet" fqcn="org.apache.isis.core.metamodel.facets.object.value.ImmutableFacetViaValueSemantics">
+            <mml:attr name="disabling">true</mml:attr>
+            <mml:attr name="when">ALWAYS</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet" fqcn="org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFallback">
+            <mml:attr name="columns">[4,0,0,8]</mml:attr>
+            <mml:attr name="left">General</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.NotPersistableFacetNull">
+            <mml:attr name="disabling">true</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet" fqcn="org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassName">
+            <mml:attr name="derived">true</mml:attr>
+            <mml:attr name="value">java.lang.Long</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.objectvalidprops.ObjectValidPropertiesFacet" fqcn="org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImpl">
+            <mml:attr name="validating">true</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.paged.PagedFacet" fqcn="org.apache.isis.core.metamodel.facets.fallback.PagedFacetFromConfiguration">
+            <mml:attr name="derived">true</mml:attr>
+            <mml:attr name="value">25</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet" fqcn="org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser"/>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.plural.PluralFacet" fqcn="org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred">
+            <mml:attr name="derived">true</mml:attr>
+            <mml:attr name="value">Longs</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.title.TitleFacet" fqcn="org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetUsingParser"/>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet" fqcn="org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacetViaValueSemantics"/>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.object.value.ValueFacet" fqcn="org.apache.isis.core.metamodel.facets.object.value.vsp.ValueFacetUsingSemanticsProvider"/>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet" fqcn="org.apache.isis.core.metamodel.facets.object.value.MaxLengthFacetUsingParser2">
+            <mml:attr name="parser">org.apache.isis.core.metamodel.facets.value.longs.LongWrapperValueSemanticsProvider</mml:attr>
+            <mml:attr name="validating">true</mml:attr>
+            <mml:attr name="value">18</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet" fqcn="org.apache.isis.core.metamodel.facets.object.value.TypicalLengthFacetUsingParser"/>
+        <mml:facet id="org.apache.isis.core.metamodel.facets.value.longs.LongValueFacet" fqcn="org.apache.isis.core.metamodel.facets.value.longs.LongWrapperValueSemanticsProvider">
+            <mml:attr name="adaptedClass">java.lang.Long</mml:attr>
+            <mml:attr name="defaultValue">0</mml:attr>
+            <mml:attr name="equalByContent">true</mml:attr>
+            <mml:attr name="format">java.text.DecimalFormat@674dc</mml:attr>
+            <mml:attr name="immutable">true</mml:attr>
+            <mml:attr name="maxLength">18</mml:attr>
+            <mml:attr name="typicalLength">18</mml:attr>
+        </mml:facet>
+        <mml:facet id="org.apache.isis.core.runtime.authorization.standard.AuthorizationFacet" fqcn="org.apache.isis.core.runtime.authorization.standard.AuthorizationFacetImpl">
+            <mml:attr name="disabling">true</mml:attr>
+            <mml:attr name="hiding">true</mml:attr>
+        </mml:facet>
+    </mml:facets>
+</mml:domainClassDto>
