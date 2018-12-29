@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.viewer;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -563,8 +564,13 @@ public class IsisWicketApplication
         if(resourceName == null) {
             return fallback;
         }
+        final URL resource = Resources.getResource(contextClass, resourceName);
+        return readLines(resource, fallback);
+    }
+
+    protected static String readLines(final URL resource, final String fallback) {
         try {
-            List<String> readLines = Resources.readLines(Resources.getResource(contextClass, resourceName), Charsets.UTF_8);
+            List<String> readLines = Resources.readLines(resource, Charsets.UTF_8);
             return Joiner.on("\n").join(readLines);
         } catch (IOException | IllegalArgumentException e) {
             return fallback;

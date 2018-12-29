@@ -20,6 +20,8 @@
 package org.apache.isis.viewer.wicket.viewer;
 
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.servlet.ServletContext;
 
@@ -150,8 +152,14 @@ public class IsisWicketModule extends AbstractModule {
                     .toProvider(
                             new Provider<String>() {
                         @Override public String get() {
-                            return readLines(getClass(), welcomeFile,
-                                    isisConfigIfAny.getString("isis.viewer.wicket.welcome.text"));
+                            final String fallback = isisConfigIfAny.getString("isis.viewer.wicket.welcome.text");
+                            final URL resource;
+                            try {
+                                resource = servletContext.getResource(prefix("/", welcomeFile));
+                                return readLines(resource, fallback);
+                            } catch (MalformedURLException e) {
+                                return fallback;
+                            }
                         }
                     });
             bind(String.class).annotatedWith(Names.named("applicationVersion"))
@@ -168,5 +176,9 @@ public class IsisWicketModule extends AbstractModule {
                         return servletContext.getResourceAsStream("/META-INF/MANIFEST.MF");
                     }
                 });
+    }
+
+    private static String prefix(final String prefix, final String text) {
+        return text.startsWith(prefix) ? text : prefix + text;
     }
 }
