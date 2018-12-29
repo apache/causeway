@@ -16,14 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+
 import groovy.xml.XmlUtil
-
-import javax.xml.transform.OutputKeys
-import javax.xml.transform.Transformer
-import javax.xml.transform.TransformerFactory
-import javax.xml.transform.stream.StreamResult
-import javax.xml.transform.stream.StreamSource
-
 
 def cli = new CliBuilder(usage: 'updateGeneratedArchetypeSources.groovy -n [name] -v [version]')
 cli.with {
@@ -41,26 +35,6 @@ cli.with {
 def BASE="target/generated-sources/archetype/"
 def ROOT=BASE + "src/main/resources/"
 
-def license_using_xml_comments="""<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one
-  or more contributor license agreements.  See the NOTICE file
-  distributed with this work for additional information
-  regarding copyright ownership.  The ASF licenses this file
-  to you under the Apache License, Version 2.0 (the
-  "License"); you may not use this file except in compliance
-  with the License.  You may obtain a copy of the License at
-  
-         http://www.apache.org/licenses/LICENSE-2.0
-         
-  Unless required by applicable law or agreed to in writing,
-  software distributed under the License is distributed on an
-  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, either express or implied.  See the License for the
-  specific language governing permissions and limitations
-  under the License.
--->
-"""
 
 def supplemental_models_text="""<?xml version="1.0" encoding="UTF-8"?>
 <!--
@@ -117,7 +91,7 @@ println "updating ${pomFile.path}"
 // read file, ignoring XML pragma
 def pomFileText = stripXmlPragma(pomFile)
 
-def pomXml = new XmlSlurper(false,true).parseText(pomFileText)
+def pomXml = new XmlSlurper(false,false).parseText(pomFileText)
 pomXml.appendNode {
   parent {
     groupId("org.apache.isis.core")
@@ -133,56 +107,11 @@ def fragmentToAdd = new XmlSlurper( false, true ).parseText( '''<properties>
 </properties>''' )
 pomXml.appendNode(fragmentToAdd)
 
-def pomSmb = new groovy.xml.StreamingMarkupBuilder().bind {
-    mkp.declareNamespace("":"http://maven.apache.org/POM/4.0.0")
-    mkp.yield(pomXml)
-}
 
-
-def pomTempFile = File.createTempFile("temp",".xml")
-def indentedXml = indentXml(pomSmb.toString())
-pomTempFile.text = indentedXml
-def pomXmlText = stripXmlPragma(pomTempFile)
-
-
-pomFile.text = 
-    license_using_xml_comments + 
-    pomXmlText
+pomFile.text = serializeWithLicense(pomXml)
 
 
 
-///////////////////////////////////////////////////////
-////
-//// update archetype's resource's dom/pom.xml's activeByDefault=true
-////
-///////////////////////////////////////////////////////
-//
-//def pomDomFile=new File(BASE+"src/main/resources/archetype-resources/dom/pom.xml")
-//
-//println "updating ${pomDomFile.path}"
-//
-//// read file, ignoring XML pragma
-//def pomDomFileText = stripXmlPragma(pomDomFile)
-//
-//def pomDomXml = new XmlSlurper(false,true).parseText(pomDomFileText)
-//
-//pomDomXml.profiles.profile.activation.activeByDefault='true'
-//
-//def pomDomSmb = new groovy.xml.StreamingMarkupBuilder().bind {
-//     mkp.declareNamespace("":"http://maven.apache.org/POM/4.0.0")
-//     mkp.yield(pomDomXml)
-//}
-//
-//
-//def pomDomTempFile = File.createTempFile("temp",".xml")
-//def indentedDomXml = indentXml(pomDomSmb.toString())
-//pomDomTempFile.text = indentedDomXml
-//def pomDomXmlText = stripXmlPragma(pomDomTempFile)
-//
-//
-//pomDomFile.text = 
-//    license_using_xml_comments + 
-//    pomDomXmlText
 
 
 
@@ -201,27 +130,15 @@ println "updating ${metaDataFile.path}"
 // read file, ignoring XML pragma
 def metaDataFileText = stripXmlPragma(metaDataFile)
 
-def metaDataXml = new XmlSlurper().parseText(metaDataFileText)
+def metaDataXml = new XmlSlurper(false,false).parseText(metaDataFileText)
 metaDataXml.modules.module.fileSets.fileSet.each { fileSet ->
     if(fileSet.directory=='ide/eclipse') {
         fileSet.@filtered='true'
     }
 }
 
-def metaDataSmb = new groovy.xml.StreamingMarkupBuilder().bind {
-    mkp.xmlDeclaration()
-    mkp.declareNamespace("":"http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0")
-    mkp.yield(metaDataXml)
-}
 
-def tempFile = File.createTempFile("temp",".xml")
-tempFile.text = indentXml(metaDataSmb.toString())
-def metaDataXmlText = stripXmlPragma(tempFile)
-
-
-metaDataFile.text = 
-    license_using_xml_comments + 
-    metaDataXmlText
+metaDataFile.text = serializeWithLicense(metaDataXml)
 
 
 /////////////////////////////////////////////////////
@@ -270,15 +187,32 @@ supplementalModelsFile.text = supplemental_models_text
 //
 ///////////////////////////////////////////////////
 
-String indentXml(xml) {
-    def factory = TransformerFactory.newInstance()
-    factory.setAttribute("indent-number", 4);
+String serializeWithLicense(xmlNode) {
 
-    Transformer transformer = factory.newTransformer()
-    transformer.setOutputProperty(OutputKeys.INDENT, 'yes')
-    StreamResult result = new StreamResult(new StringWriter())
-    transformer.transform(new StreamSource(new ByteArrayInputStream(xml.toString().bytes)), result)
-    return result.writer.toString().replaceAll("\\?><", "\\?>\n<")
+    def pragma="""<?xml version="1.0" encoding="UTF-8"?>"""
+    def license_using_xml_comments="""<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+  
+         http://www.apache.org/licenses/LICENSE-2.0
+         
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+"""
+
+    def xmlText = XmlUtil.serialize( new groovy.xml.StreamingMarkupBuilder().bind { mkp.yield(xmlNode) } )
+    return xmlText.replace(pragma, license_using_xml_comments)
 }
 
 String stripXmlPragma(File file) {
@@ -286,4 +220,5 @@ String stripXmlPragma(File file) {
     file.filterLine(sw) { ! (it =~ /^\<\?xml/ ) }
     return sw.toString()
 }
+
 
