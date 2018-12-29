@@ -785,10 +785,10 @@ Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See 
 
 
 [[__cgcom_cutting-a-release_bump-revision-to-ISISDEV]]
-== Bump `revision` property to `$ISISDEV`
+== Reset `revision` property
 
 At the beginning of the release process we bumped the `revision` property to the release version, ie `${ISISREL}`.
-With the release now deployed we now need to bump the revision back down to the base snapshot, ie `1.0.0-SNAPSHOT`.
+With the release now deployed we now need to reset the revision back down to the base snapshot, ie `1.0.0-SNAPSHOT`.
 
 [NOTE]
 ====
