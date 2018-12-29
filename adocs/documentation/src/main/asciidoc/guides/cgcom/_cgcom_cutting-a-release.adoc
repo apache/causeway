@@ -400,8 +400,6 @@ popd
 ----
 mvn install -Dmavenmixin-docker -D docker-plugin.imageName=test/simpleapp
 docker container run -p 8080:8080 --name simpleapp -d test/simpleapp
-
-#winpty docker exec -it simpleapp bash
 ----
 +
 [NOTE]
@@ -419,6 +417,29 @@ image::{_imagesdir}docker/026-docker-nat-private.png[width="600px",link="{_image
 This can be done using the "Local Security Policy" application.
 ====
 
+Optionally, you can connect to the running container:
+
+* on Mac/Linux:
++
+[source,bash]
+----
+docker exec -it simpleapp sh
+----
+
+* on Windows
++
+[source,bash]
+----
+winpty docker exec -it simpleapp sh
+----
+
+You can then tail the log of the Tomcat instance:
+
+[source,bash]
+----
+cd /opt/*tomcat*/logs
+tail -f catalina.*.log
+----
 
 This too should be accessed at link:http://localhost:8080[localhost:8080].
 
