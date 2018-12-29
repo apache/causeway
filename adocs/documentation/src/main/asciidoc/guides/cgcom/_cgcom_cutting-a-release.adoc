@@ -311,9 +311,9 @@ In this section we release `simpleapp`, in the following xref:cgcom.adoc#__cgcom
 
 [NOTE]
 ====
-If releasing using Windows and Maven >= 3.3.3, then there is an issue that requires a small workaround.
+If releasing using Windows, then there is an issue that requires a small workaround.
 
-In Maven 3.3.3 the `mvn.bat` file was removed, replaced instead with `mvn.cmd`.
+In Maven 3.3.3 and later, the `mvn.bat` file was removed, replaced instead with `mvn.cmd`.
 However, `maven-archetype-plugin:2.4` only uses `mvn.bat`; this causes the `archetype:create-from-project` goal to fail.
 The fix is simple: just copy `mvn.cmd` to `mvn.bat`.
 ====
