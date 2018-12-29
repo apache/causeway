@@ -521,6 +521,16 @@ mvn clean install -o
 mvn -pl webapp jetty:run              # runs as mvn jetty plugin
 ----
 
+Also check that the generated app can be built as a Docker image:
+
+[source,bash]
+----
+mvn install -Dmavenmixin-docker -D docker-plugin.imageName=test/myapp
+docker container run -p 8080:8080 --name myapp -d test/myapp
+sleep 10 && curl http://localhost:8080
+docker container kill myapp
+docker container rm myapp
+----
 
 [[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_deploy]]
 === Deploy
