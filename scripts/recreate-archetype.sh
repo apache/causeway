@@ -66,7 +66,8 @@ for a in .project .classpath .settings bin .idea neo4j_DB target-ide; do /bin/fi
 echo "mvn archetype:create-from-project ..."
 mvn org.apache.maven.plugins:maven-archetype-plugin:3.0.1:create-from-project
 
-echo "copy over Dockerfile since seems to be excluded for some reason ... "
+# https://issues.apache.org/jira/browse/ARCHETYPE-548
+echo "copy over Dockerfile since seems to be excluded (bug: ARCHETYPE-548) ... "
 mkdir -p target/generated-sources/archetype/src/main/resources/archetype-resources/webapp/src/main/resources/docker
 cp webapp/src/main/resources/docker/Dockerfile target/generated-sources/archetype/src/main/resources/archetype-resources/webapp/src/main/resources/docker/.
 

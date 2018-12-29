@@ -137,6 +137,20 @@ metaDataXml.modules.module.fileSets.fileSet.each { fileSet ->
     }
 }
 
+// https://issues.apache.org/jira/browse/ARCHETYPE-548
+metaDataXml.modules.module.each { module ->
+    if(module.@dir=='webapp') {
+        module.fileSets.fileSet.each { fileSet ->
+            if(fileSet.directory=='src/main/resources') {
+                fileSet.includes.include.each { include ->
+                    if(include == '**/*.') {
+                        include.replaceBody "**/*"
+                    }
+                }
+            }
+        }
+    }
+}
 
 metaDataFile.text = serializeWithLicense(metaDataXml)
 
