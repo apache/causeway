@@ -58,43 +58,11 @@ These also include top-level overrides for CSS and Javascript.
 |Description
 
 |`isis.viewer.wicket.` +
-`application.name`
-|Apache Isis ™
-|Identifies the application on the sign-in page (unless a `brandLogoSignin` image is configured) and on top-left in the header (unless a `brandLogoHeader` image is configured).
-
-|`isis.viewer.wicket.` +
-`application.css`
-|`scripts/application.css`
-|File to read any custom CSS, relative to `src/main/webapp` directory.
-
-|`isis.viewer.wicket.` +
-`application.js`
-|`scripts/application.js`
-|File to read any custom Javascript, relative to `src/main/webapp` directory.
-
-|`isis.viewer.wicket.` +
 `application.about`
 |Apache Isis ™
 |Label used on the about page.
 
 If not specified, then `application.name` is used instead.
-
-|`isis.viewer.wicket.` +
-`welcome.file`
-|`welcome.html`
-|Location of the HTML file (relative to `src/main/webapp`) whose contents should be displayed on the application's home page.
-
-Note though that if a xref:../../guides/rgant/rgant.adoc#_rgant-HomePage[@HomePage] action exists, then that will take precedence.
-
-If no welcome file exists, then the value of `welcome.text` is shown as a fallback.
-
-|`isis.viewer.wicket.` +
-`welcome.text`
-|
-|Text to be displayed on the application's home page, used as a fallback if `welcome.file` is not specified.
-
-Note though that if a xref:../../guides/rgant/rgant.adoc#_rgant-HomePage[@HomePage] action exists, then that will take precedence.
-
 
 |`isis.viewer.wicket.` +
 `application.` +
@@ -118,6 +86,38 @@ This is rendered on the sign-in page.
 An image with a size of 400x40 works well.
 
 If not specified, the `application.name` is used instead.
+
+|`isis.viewer.wicket.` +
+`application.css`
+|`scripts/application.css`
+|File to read any custom CSS, relative to `src/main/webapp` directory.
+
+|`isis.viewer.wicket.` +
+`application.js`
+|`scripts/application.js`
+|File to read any custom Javascript, relative to `src/main/webapp` directory.
+
+|`isis.viewer.wicket.` +
+`application.name`
+|Apache Isis ™
+|Identifies the application on the sign-in page (unless a `brandLogoSignin` image is configured) and on top-left in the header (unless a `brandLogoHeader` image is configured).
+
+
+|`isis.viewer.wicket.` +
+`welcome.file`
+|`welcome.html`
+|Location of the HTML file (relative to `src/main/webapp`) whose contents should be displayed on the application's home page.
+
+Note though that if a xref:../../guides/rgant/rgant.adoc#_rgant-HomePage[@HomePage] action exists, then that will take precedence.
+
+If no welcome file exists, then the value of `welcome.text` is shown as a fallback.
+
+|`isis.viewer.wicket.` +
+`welcome.text`
+|
+|Text to be displayed on the application's home page, used as a fallback if `welcome.file` is not specified.
+
+Note though that if a xref:../../guides/rgant/rgant.adoc#_rgant-HomePage[@HomePage] action exists, then that will take precedence.
 
 
 |===
@@ -655,13 +655,15 @@ These configuration properties influence the way in which date/times are rendere
 `datePattern`
 | date format +
 (`dd-MM-yyyy`)
-|The `SimpleDateFormat` used to render dates.  For the date picker (which uses `moment.js` library), this is converted dynamically into the corresponding `moment.js` format.
+|The `SimpleDateFormat` used to render dates.
+For the date picker (which uses `moment.js` library), this is converted dynamically into the corresponding `moment.js` format.
 
 |`isis.viewer.wicket.` +
 `dateTimePattern`
 | date/time format +
 (`dd-MM-yyyy HH:mm`)
-|The `SimpleDateFormat` used to render date/times.  For the date picker (which uses `moment.js` library), this is
+|The `SimpleDateFormat` used to render date/times.
+For the date picker (which uses `moment.js` library), this is
 converted dynamically into the corresponding `moment.js` format.
 
 |`isis.viewer.wicket.` +
@@ -670,8 +672,8 @@ converted dynamically into the corresponding `moment.js` format.
 (`2100-01-01T00:00:00.000Z`)
 |Specifies a maximum date after which dates may not be specified.
 
-See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate[datetimepicker reference docs] for
-further details.  The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
+See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#maxdate[datetimepicker reference docs] for further details.
+The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
 for further details).
 
 |`isis.viewer.wicket.` +
@@ -680,9 +682,8 @@ for further details).
 (`1900-01-01T00:00:00.000Z`)
 |Specifies a minimum date before which dates may not be specified.
 
-See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#mindate[datetimepicker reference docs] for
-further details.  The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here]
-for further details).
+See link:http://eonasdan.github.io/bootstrap-datetimepicker/Options/#mindate[datetimepicker reference docs] for further details.
+The string must be in ISO date format (see link:https://github.com/moment/moment/issues/1407[here] for further details).
 
 
 |`isis.viewer.wicket.` +
