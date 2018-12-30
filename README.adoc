@@ -2,71 +2,91 @@
 
 _http://isis.apache.org[Apache Isis] software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or a RESTful API._
 
-Start learning about Apache Isis using our https://isis.apache.org/guides/ugfun.html#_ugfun_getting-started_helloworld-archetype["Hello World"] Maven archetype.
-Build your own apps using our https://isis.apache.org/guides/ugfun.html#_ugfun_getting-started_simpleapp-archetype["SimpleApp"] Maven archetype.
+Start learning about Apache Isis using our http://isis.apache.org/guides/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype["Hello World"] Maven archetype.
+Build your own apps using our http://isis.apache.org/guides/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype["SimpleApp"] Maven archetype.
 
-For help and support, join the http://isis.apache.org/support.html[mailing lists]. To contribute to our documentation, see our https://github.com/apache/isis/tree/master/adocs/documentation[Asciidoctor source].
+For help and support, join the http://isis.apache.org/support.html[mailing lists].
+To contribute to our documentation, see our https://github.com/apache/isis/tree/master/adocs/documentation[Asciidoctor source].
 
 
 
 
 == Core Features
 
-Isis automatically generates the UI from the domain classes. The following screenshots are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example], which you are free to fork and use as you will. The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/0669d6e2acc5bcad1d9978a4514a17bcf7beab1f/dom/src/main/java/todoapp/dom/module/todoitem[here]. 
+Isis automatically generates the UI from the domain classes.
+The following screenshots are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example], which you are free to fork and use as you will.
+The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/0669d6e2acc5bcad1d9978a4514a17bcf7beab1f/dom/src/main/java/todoapp/dom/module/todoitem[here].
 
-The todoapp also integrates with a number of other modules provided by the link:http://platform.incode.org[Incode Platform].  Please note that these modules are not part of ASF, but they *are* all licensed under Apache License 2.0 and are maintained by Apache the Isis committers.
+The todoapp also integrates with a number of other modules provided by the link:http://platform.incode.org[Incode Platform].
+Please note that these modules are not part of ASF, but they *are* all licensed under Apache License 2.0 and are maintained by Apache the Isis committers.
 
 === Sign-in
 
-Apache Isis integrates with http://shiro.apache.org[Apache Shiro]. The core framework supports file-based realms, while the (non-ASF) link:http://platform.incode.org[Incode Platform]'s link:http://platform.incode.org/modules/spi/security/spi-security.html[security module] provides a well-features subdomain of users, roles and permissions against features derived from the Isis metamodel. The example todoapp integrates with the security module.
+Apache Isis integrates with http://shiro.apache.org[Apache Shiro].
+The core framework supports file-based realms, while the (non-ASF) link:http://platform.incode.org[Incode Platform]'s link:http://platform.incode.org/modules/spi/security/spi-security.html[security module] provides a well-features subdomain of users, roles and permissions against features derived from the Isis metamodel.
+The example todoapp integrates with the security module.
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/010-login.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/010-login.png"]
 
 === Install Fixtures
 
-Apache Isis has lots of features to help you prototype and then fully test your application. One such are fixture scripts, which allow pre-canned data to be installed in the running application. This is great to act as the starting point for identifying new stories; later on when the feature is being implemented, the same fixture script can be re-used within that feature's integration tests. (More on tests later).
+Apache Isis has lots of features to help you prototype and then fully test your application.
+One such are fixture scripts, which allow pre-canned data to be installed in the running application.
+This is great to act as the starting point for identifying new stories; later on when the feature is being implemented, the same fixture script can be re-used within that feature's integration tests.
+(More on tests later).
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/020-install-fixtures.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/images/isis-in-pictures/020-install-fixtures.png"]
 
 === Dashboard and View Models
 
-Most of the time the end-user interacts with representations of persistent domain entities, but Isis also supports view models which can aggregate data from multiple sources. The todoapp example uses a "dashboard" view model to list todo items not yet done vs those completed.
+Most of the time the end-user interacts with representations of persistent domain entities, but Isis also supports view models which can aggregate data from multiple sources.
+The todoapp example uses a "dashboard" view model to list todo items not yet done vs those completed.
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/030-dashboard-view-model.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/030-dashboard-view-model.png"]
 
-In general we recommend to initially focus only on domain entities; this will help drive out a good domain model. Later on view models can be introduced in support of specific use cases.
+In general we recommend to initially focus only on domain entities; this will help drive out a good domain model.
+Later on view models can be introduced in support of specific use cases.
 
 === Domain Entity
 
-The screenshot below is of the todoapp's `ToDoItem` domain entity. Like all web pages, this UI is generated at runtime, directly from the domain object itself. There are no controllers or HTML to write.
+The screenshot below is of the todoapp's `ToDoItem` domain entity.
+Like all web pages, this UI is generated at runtime, directly from the domain object itself.
+There are no controllers or HTML to write.
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/040-domain-entity.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/040-domain-entity.png"]
 
-In addition to the domain entity, Apache Isis allows layout metadata hints to be provided, for example to specify the grouping of properties, the positioning of those groups into columns, the association of actions (the buttons) with properties or collections, the icons on the buttons, and so on. This metadata can be specified either as annotations or in JSON form; the benefit of the latter is that it can be updated (and the UI redrawn) without restarting the app.
+In addition to the domain entity, Apache Isis allows layout metadata hints to be provided, for example to specify the grouping of properties, the positioning of those groups into columns, the association of actions (the buttons) with properties or collections, the icons on the buttons, and so on.
+This metadata can be specified either as annotations or in JSON form; the benefit of the latter is that it can be updated (and the UI redrawn) without restarting the app.
 
 Any production-ready app will require this metadata but (like the view models discussed above) this metadata can be added gradually on top of the core domain model.
 
 === Edit properties
 
-By default properties on domain entities are editable, meaning they can be changed directly. In the todoapp example, the `ToDoItem`'s description is one such editable property:
+By default properties on domain entities are editable, meaning they can be changed directly.
+In the todoapp example, the `ToDoItem`'s description is one such editable property:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/050-edit-property.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/050-edit-property.png"]
 
-Note that some of the properties are read-only even in edit mode; individual properties can be made non-editable. It is also possible to make all properties disabled and thus enforce changes only through actions (below).
+Note that some of the properties are read-only even in edit mode; individual properties can be made non-editable.
+It is also possible to make all properties disabled and thus enforce changes only through actions (below).
 
 === Actions
 
-The other way to modify an entity is to an invoke an action. In the screenshot below the `ToDoItem`'s category and subcategory can be updated together using an action:
+The other way to modify an entity is to an invoke an action.
+In the screenshot below the `ToDoItem`'s category and subcategory can be updated together using an action:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/060-invoke-action.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/060-invoke-action.png"]
 
-There are no limitations on what an action can do; it might just update a single object, it could update multiple objects. Or, it might not update any objects at all, but could instead perform some other activity, such as sending out email or printing a document.
+There are no limitations on what an action can do; it might just update a single object, it could update multiple objects.
+Or, it might not update any objects at all, but could instead perform some other activity, such as sending out email or printing a document.
 
-In general though, all actions are associated with some object, and are (at least initially) also implemented by that object: good old-fashioned encapsulation. We sometimes use the term "behaviourally complete" for such domain objects.
+In general though, all actions are associated with some object, and are (at least initially) also implemented by that object: good old-fashioned encapsulation.
+We sometimes use the term "behaviourally complete" for such domain objects.
 
 === Mixins
 
-As an alternative to placing actions (business logic) on a domain object, it can instead be placed inside a mixin object.  When an object is rendered by Apache Isis, the mixin "contributes" its behaviour to the domain object (similar to aspect-oriented traits).
+As an alternative to placing actions (business logic) on a domain object, it can instead be placed inside a mixin object.
+When an object is rendered by Apache Isis, the mixin "contributes" its behaviour to the domain object (similar to aspect-oriented traits).
 
 In the screenshot below the highlighted "export as xml" action, the "relative priority" property (and "previous" and "next" actions) the "similar to" collection and the two "as DTO" actions are all contributed by mixins:
 
@@ -81,7 +101,8 @@ image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/as
 
 == Extensible Views
 
-The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wicket], and has been architected to be extensible. For example, when a collection of objects is rendered, this is just one several views, as shown in the selector drop-down:
+The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wicket], and has been architected to be extensible.
+For example, when a collection of objects is rendered, this is just one several views, as shown in the selector drop-down:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/070-pluggable-views.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/070-pluggable-views.png"]
 
@@ -94,11 +115,13 @@ Similarly the (non-ASF) link:https://platform.incode.org/modules/wkt/fullcalenda
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/090-fullcalendar2-view.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/090-fullcalendar2-view.png"]
 
 
-Yet another "view" (though this one is rather simpler) is that provided by the (non-ASF) link:https://platform.incode.org/modules/wkt/excel/wkt-excel.html[excel component]. This provides a download button to the table as a spreadsheet:
+Yet another "view" (though this one is rather simpler) is that provided by the (non-ASF) link:https://platform.incode.org/modules/wkt/excel/wkt-excel.html[excel component].
+This provides a download button to the table as a spreadsheet:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/100-excel-view-and-docx.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/100-excel-view-and-docx.png"]
 
-The screenshot above also shows an "export to Word" action. This is _not_ a view but instead is a (contributed) action that uses the (non-ASF) link:https://platform.incode.org/modules/lib/excel/lib-docx.html[docx library] module to perform a "mail-merge":
+The screenshot above also shows an "export to Word" action.
+This is _not_ a view but instead is a (contributed) action that uses the (non-ASF) link:https://platform.incode.org/modules/lib/docx/lib-docx.html[docx library] module to perform a "mail-merge":
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/110-docx.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/110-docx.png"]
 
@@ -117,17 +140,22 @@ In the security menu is access to the rich set of functionality provided by the 
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/130-security.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/130-security.png"]
 
-In the prototyping menu is the ability to download a GNU gettext `.po` file for translation. This file can then be translated into multiple languages so that your app can support different locales. Note that this feature is part of Apache Isis core:
+In the prototyping menu is the ability to download a GNU gettext `.po` file for translation.
+This file can then be translated into multiple languages so that your app can support different locales. Note that this feature is part of Apache Isis core:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/140-i18n.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/140-i18n.png"]
 
-The Incode Platform also provides a module for managing link:http://platform.incode.org/modules/dom/settings/dom-settings.html[application and user settings]. Most apps (the todoapp example included) won't expose these services directly, but will usually wrap them in their own app-specific settings service that trivially delegates to the settings module's services:
+The Incode Platform also provides a module for managing link:http://platform.incode.org/modules/dom/settings/dom-settings.html[application and user settings].
+Most apps (the todoapp example included) won't expose these services directly, but will usually wrap them in their own app-specific settings service that trivially delegates to the settings module's services:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/150-appsettings.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/150-appsettings.png"]
 
 === Multi-tenancy support
 
-Of the various modules in the Incode Platform, the link:http://platform.incode.org/modules/spi/security/spi-security.html[security module] has the most features. One significant feature is the ability to associate users and objects with a "tenancy". The todoapp uses this feature so that different users' list of todo items are kept separate from one another. A user with administrator is able to switch their own "tenancy" to the tenancy of some other user, in order to access the objects in that tenancy:
+Of the various modules in the Incode Platform, the link:http://platform.incode.org/modules/spi/security/spi-security.html[security module] has the most features.
+One significant feature is the ability to associate users and objects with a "tenancy".
+The todoapp uses this feature so that different users' list of todo items are kept separate from one another.
+A user with administrator is able to switch their own "tenancy" to the tenancy of some other user, in order to access the objects in that tenancy:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/160-switch-tenancy.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/160-switch-tenancy.png"]
 
@@ -135,7 +163,8 @@ For more details, see the security module's link:http://platform.incode.org/modu
 
 === Me
 
-Most of the security module's domain services are on the "security" menu, which would normally be accessible only to administrators. Kept separate is the "me" action:
+Most of the security module's domain services are on the "security" menu, which would normally be accessible only to administrators.
+Kept separate is the "me" action:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/170-me.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/170-me.png"]
 
@@ -143,11 +172,13 @@ Assuming they have been granted permissions, this allows a user to access an ent
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/180-app-user-entity.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/180-app-user-entity.png"]
 
-If not all of these properties are required, then they can be hidden either using security or though Isis' internal event bus (described below). Conversely, additional properties can be "grafted onto" the user using the contributed properties/collections discussed previously.
+If not all of these properties are required, then they can be hidden either using security or though Isis' internal event bus (described below).
+Conversely, additional properties can be "grafted onto" the user using the contributed properties/collections discussed previously.
 
 === Themes
 
-Apache Isis' Wicket viewer uses link:http://getbootstrap.com[Twitter Bootstrap], which means that it can be themed. If more than one theme has been configured for the app, then the viewer allows the end-user to switch their theme:
+Apache Isis' Wicket viewer uses link:http://getbootstrap.com[Twitter Bootstrap], which means that it can be themed.
+If more than one theme has been configured for the app, then the viewer allows the end-user to switch their theme:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/190-switch-theme.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/190-switch-theme.png"]
 
@@ -155,7 +186,8 @@ image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/as
 
 == REST API
 
-In addition to Isis' Wicket viewer, it also provides a fully fledged REST API, as an implementation of the http://restfulobjects.org[Restful Objects] specification. The screenshot below shows accessing this REST API using a Chrome plugin:
+In addition to Isis' Wicket viewer, it also provides a fully fledged REST API, as an implementation of the http://restfulobjects.org[Restful Objects] specification.
+The screenshot below shows accessing this REST API using a Chrome plugin:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/200-rest-api.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/200-rest-api.png"]
 
@@ -165,16 +197,21 @@ Like the Wicket viewer, the REST API is generated automatically from the domain 
 
 == Integration Testing Support
 
-Earlier on we noted that Apache Isis allows fixtures to be installed through the UI. These same fixture scripts can be reused within integration tests. For example, the code snippet below shows how the `FixtureScripts` service injected into an integration test can then be used to set up data:
+Earlier on we noted that Apache Isis allows fixtures to be installed through the UI.
+These same fixture scripts can be reused within integration tests.
+For example, the code snippet below shows how the `FixtureScripts` service injected into an integration test can then be used to set up data:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/210-fixture-scripts.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/210-fixture-scripts.png"]
 
-The tests themselves are run in junit. While these are integration tests (so talking to a real database), they are no more complex than a regular unit test:
+The tests themselves are run in junit.
+While these are integration tests (so talking to a real database), they are no more complex than a regular unit test:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/220-testing-happy-case.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/220-testing-happy-case.png"]
 
 
-To simulate the business rules enforced by Apache Isis, the domain object can be "wrapped" in a proxy. For example, if using the Wicket viewer then Apache Isis will enforce the rule (implemented in the `ToDoItem` class itself) that a completed item cannot have the "completed" action invoked upon it. The wrapper simulates this by throwing an appropriate exception:
+To simulate the business rules enforced by Apache Isis, the domain object can be "wrapped" in a proxy.
+For example, if using the Wicket viewer then Apache Isis will enforce the rule (implemented in the `ToDoItem` class itself) that a completed item cannot have the "completed" action invoked upon it.
+The wrapper simulates this by throwing an appropriate exception:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/230-testing-wrapper-factory.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/230-testing-wrapper-factory.png"]
 
@@ -185,7 +222,8 @@ image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/as
 
 Contributions, discussed earlier, are an important tool in ensuring that the packages within your Apache Isis application are decoupled; by extracting out actions the order of dependency between packages can effectively be reversed.
 
-Another important tool to ensure your codebase remains maintainable is Isis' internal event bus. It is probably best explained by example; the code below says that the "complete" action should emit a `ToDoItem.Completed` event:
+Another important tool to ensure your codebase remains maintainable is Isis' internal event bus.
+It is probably best explained by example; the code below says that the "complete" action should emit a `ToDoItem.Completed` event:
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/240-domain-events.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/240-domain-events.png"]
 
@@ -197,9 +235,14 @@ And this test verifies that completing an action causes the subscriber to be cal
 
 image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/260-domain-event-test.png[link="https://raw.github.com/apache/isis/master/adocs/documentation/src/main/asciidoc/pages/isis-in-pictures/images/isis-in-pictures/260-domain-event-test.png"]
 
-In fact, the domain event is fired not once, but (up to) 5 times. It is called 3 times prior to execution, to check that the action is visible, enabled and that arguments are valid. It is then additionally called prior to execution, and also called after execution. What this means is that a subscriber can in either veto access to an action of some publishing object, and/or it can perform cascading updates if the action is allowed to proceed.
+In fact, the domain event is fired not once, but (up to) 5 times.
+It is called 3 times prior to execution, to check that the action is visible, enabled and that arguments are valid.
+It is then additionally called prior to execution, and also called after execution.
+What this means is that a subscriber can in either veto access to an action of some publishing object, and/or it can perform cascading updates if the action is allowed to proceed.
 
-Moreover, domain events are fired for all properties and collections, not just actions. Thus, subscribers can therefore switch on or switch off different parts of an application. Indeed, the example todoapp demonstrates this.
+Moreover, domain events are fired for all properties and collections, not just actions.
+Thus, subscribers can therefore switch on or switch off different parts of an application.
+Indeed, the example todoapp demonstrates this.
 
 
 
@@ -208,7 +251,7 @@ Moreover, domain events are fired for all properties and collections, not just a
 
 The Apache Isis http://isis.apache.org[website] has lots of useful information and is being continually updated.
 
-Or, you can just start coding using the http://isis.apache.org/intro/getting-started/simple-archetype.html[Maven archetype].
+Or, you can just start coding using one of the http://isis.apache.org/guides/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype[Maven archetype]s.
 
 And if you need help or support, join the http://isis.apache.org/support.html[mailing lists].
 
