@@ -102,6 +102,15 @@ If not specified, the `application.name` is used instead.
 |Apache Isis ™
 |Identifies the application on the sign-in page (unless a `brandLogoSignin` image is configured) and on top-left in the header (unless a `brandLogoHeader` image is configured).
 
+|`isis.viewer.wicket.` +
+`application.version`
+|(none)
+|The version of the application, eg `1.0`, `1.1`, or something more complex such as `20181115.2011.EST-1862.8d8e1c16`.
+
+If present, then this will be shown in the footer on every page as well as on the about page.
+
+See below for further discussion on this topic.
+
 
 |`isis.viewer.wicket.` +
 `welcome.file`
@@ -122,6 +131,68 @@ Note though that if a xref:../../guides/rgant/rgant.adoc#_rgant-HomePage[@HomePa
 
 |===
 
+
+
+
+=== Application versioning
+
+If the `isis.viewer.wicket.application.version` configuration property is present, then this will be shown in the footer on every page as well as on the about page.
+
+However, maintaining this configuration property manually is likely to be error prone.
+An alternative approach is to configure your build system to generate a version identifier automatically.
+
+For example, the version `20181115.2011.EST-1862.8d8e1c16` consists of four parts:
+
+* the date of the build
+* the time of the build (to the nearest minute)
+* the branch
+* the git shaId
+
+This can be computed using a simple script, for example:
+
+[source,bash]
+----
+DATE=$(date +%Y%m%d.%H%M)
+BRANCH=$(echo $GIT_BRANCH | sed 's|^rel/||g' | sed 's|[.]|_|g' | awk -F/ '{ print $NF }')
+GIT_SHORT_COMMIT=$(echo $GIT_COMMIT | cut -c1-8)
+REVISION=$DATE.$BRANCH.$GIT_SHORT_COMMIT
+----
+
+where `$GIT_BRANCH` and `$GIT_COMMIT` are provided by the CI server/build environment.
+
+This environment variable can be passed into the (Maven) build using a system property, for example:
+
+[source,bash]
+----
+mvn -Drevision=$REVISION clean install
+----
+
+If we provide a file `application-version.properties` is in the same package as the app manifest file, but in the `src/main/resources` directory:
+
+[source,ini]
+.application-version.properties
+----
+isis.viewer.wicket.application.version=${revision}
+----
+
+then Maven will automatically interpolate the actual revision when this file is copied over to the build (ie `target/classes`) directory.
+
+Finally, this file can be loaded in the app manifest using:
+
+[source,java]
+----
+public class MyAppManifest extends AppManifestAbstract2 {
+
+    public static final AppManifestAbstract2.Builder BUILDER =
+            AppManifestAbstract2.Builder.forModule(new MyApplicationModule())
+            .withConfigurationPropertiesFile(
+                    MyAppManifest.class, "application-version.properties");
+
+    public MyAppManifest() {
+        super(BUILDER);
+    }
+}
+----
 
 
 
