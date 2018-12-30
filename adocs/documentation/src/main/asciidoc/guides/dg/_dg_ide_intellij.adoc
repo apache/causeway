@@ -272,7 +272,7 @@ Let's see how to run both the app and the tests.
 [[__dg_ide_intellij_running_the-app]]
 === Running the App
 
-Once you've imported your Isis application, we should run it.  We do this by creating a Run configuration, using `Run > Edit Configurations`.
+Once you've imported your Apache Isis application, we should run it.  We do this by creating a Run configuration, using `Run > Edit Configurations`.
 
 Set up the details as follows:
 

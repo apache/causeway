@@ -26,7 +26,7 @@ You'll need:
 
 == Run the archetype
 
-Run the simpleapp archetype to build an empty Isis application.
+Run the simpleapp archetype to build an empty Apache Isis application.
 With the *nix bash shell, use:
 
 

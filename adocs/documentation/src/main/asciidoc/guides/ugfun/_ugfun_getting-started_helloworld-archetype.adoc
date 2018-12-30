@@ -181,7 +181,7 @@ This annotation is what identifies the class as an entity, so that Apache Isis p
 
 ** is also annotated with Isis' own `@DomainObject`.
 +
-This isn't mandatory, but since entities are the real building blocks on which Isis applications are built, it's very common to use this annotation.
+This isn't mandatory, but since entities are the real building blocks on which Apache Isis applications are built, it's very common to use this annotation.
 
 ** also uses various Project Lombok annotations to remove boilerplate.
 

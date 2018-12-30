@@ -183,7 +183,7 @@ image::https://raw.github.com/apache/isis/master/adocs/documentation/src/main/as
 
 == Internal Event Bus
 
-Contributions, discussed earlier, are an important tool in ensuring that the packages within your Isis application are decoupled; by extracting out actions the order of dependency between packages can effectively be reversed.
+Contributions, discussed earlier, are an important tool in ensuring that the packages within your Apache Isis application are decoupled; by extracting out actions the order of dependency between packages can effectively be reversed.
 
 Another important tool to ensure your codebase remains maintainable is Isis' internal event bus. It is probably best explained by example; the code below says that the "complete" action should emit a `ToDoItem.Completed` event:
 

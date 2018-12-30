@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-This section discusses features of the wicket viewer from the perspective of an end-user actually using your Isis application.
+This section discusses features of the wicket viewer from the perspective of an end-user actually using your Apache Isis application.
 
 
 include::_ugvw_features_recent-pages.adoc[leveloffset=+1]

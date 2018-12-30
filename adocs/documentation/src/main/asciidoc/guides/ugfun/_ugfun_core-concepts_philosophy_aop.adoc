@@ -11,7 +11,7 @@ Richard Pawson -- the originator of Naked Objects pattern -- lists Alan Kay as a
 It's certainly true that to develop an Apache Isis application you will need to have good object oriented modelling skills.
 But given that all the mainstream languages for developing business systems are object oriented (Java, C#, Ruby), that's not such a stretch.
 
-However, what you'll also find as you write your applications is that in some ways an Isis application is more aspect-oriented than it is object oriented.
+However, what you'll also find as you write your applications is that in some ways an Apache Isis application is more aspect-oriented than it is object oriented.
 Given that aspect-orientation -- as a programming paradigm at least -- hasn't caught on, that statement probably needs unpacking a little.
 
 
@@ -48,7 +48,7 @@ Again, this is all transparent to the user.
 
 Apache Isis also has an internal event bus (you can switch between an underlying implementation of Gauva or Axon).
 A domain event is fired whenever an object is interacted with, and this allows any subscribers to influence the operation (or even veto it).
-This is a key mechanism in ensuring that Isis applications are maintainable, and we discuss it in depth in the section on  xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling[Decoupling].
+This is a key mechanism in ensuring that Apache Isis applications are maintainable, and we discuss it in depth in the section on  xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling[Decoupling].
 But fundamentally its relying on this AOP concept of interceptors.
 
 Finally, Isis also a feature that is akin to AOP mix-ins.

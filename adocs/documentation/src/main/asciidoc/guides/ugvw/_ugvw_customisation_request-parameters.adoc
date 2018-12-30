@@ -6,7 +6,7 @@
 
 
 
-The Wicket viewer provides some support such that an Isis application can be embedded within a host webapp, for example within an iframe.
+The Wicket viewer provides some support such that an Apache Isis application can be embedded within a host webapp, for example within an iframe.
 
 Currently this support consists simply of being able to suppress the header and/or footer.
 

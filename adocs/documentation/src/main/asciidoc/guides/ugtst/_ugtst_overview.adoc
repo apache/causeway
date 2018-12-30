@@ -58,7 +58,7 @@ image::{_imagesdir}testing/integ-tests.png[width="700px",link="{_imagesdir}testi
 
 If the test invokes an action that is disabled, then the wrapper will throw an appropriate exception.  If the action is ok to invoke, it delegates through.
 
-What this means is that an Isis application can be tested end-to-end without having to deploy it onto a webserver; the whole app can be tested while running in-memory.  Although integration tests re (necessarily) slower than unit tests, they are not any harder to write (in fact, in some respects they are easier).
+What this means is that an Apache Isis application can be tested end-to-end without having to deploy it onto a webserver; the whole app can be tested while running in-memory.  Although integration tests re (necessarily) slower than unit tests, they are not any harder to write (in fact, in some respects they are easier).
 
 
 

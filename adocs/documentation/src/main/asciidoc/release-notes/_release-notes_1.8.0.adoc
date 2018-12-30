@@ -30,7 +30,7 @@ Apache Isis 1.8.0 incorporates the Wicket viewer, which was previously a separat
 * link:https://issues.apache.org/jira/browse/ISIS-967[ISIS-967] - Let the LayoutMetadataReader implementation(s) be configured using isis.properties.
 * link:https://issues.apache.org/jira/browse/ISIS-983[ISIS-983] - Embedded Neo4J support
 * link:https://issues.apache.org/jira/browse/ISIS-985[ISIS-985] - Filter collections so that objects that are not visible to the current user are not shown.
-* link:https://issues.apache.org/jira/browse/ISIS-987[ISIS-987] - register for an Isis application.
+* link:https://issues.apache.org/jira/browse/ISIS-987[ISIS-987] - register for an Apache Isis application.
 * link:https://issues.apache.org/jira/browse/ISIS-990[ISIS-990] - Optional UserProfileService to allow the user profile information to be customized.
 * link:https://issues.apache.org/jira/browse/ISIS-995[ISIS-995] - Allow the label of a property to be rendered as HTML.  Also, allow the label of boolean panels to be rendered on the right hand side.
 * link:https://issues.apache.org/jira/browse/ISIS-999[ISIS-999] - Provide a log to administrator of which users logged in and logged out
@@ -97,7 +97,7 @@ Apache Isis 1.8.0 incorporates the Wicket viewer, which was previously a separat
 * link:https://issues.apache.org/jira/browse/ISIS-941[ISIS-941] - Wicket viewer shouldn&#39;t try to flush properties that are disabled.
 * link:https://issues.apache.org/jira/browse/ISIS-942[ISIS-942] - Auditing broken for deleted objects.
 * link:https://issues.apache.org/jira/browse/ISIS-943[ISIS-943] - ObjectContracts#equals should be more resilient.
-* link:https://issues.apache.org/jira/browse/ISIS-946[ISIS-946] - Isis application won&#39;t run from Eclipse
+* link:https://issues.apache.org/jira/browse/ISIS-946[ISIS-946] - Apache Isis application won&#39;t run from Eclipse
 * link:https://issues.apache.org/jira/browse/ISIS-954[ISIS-954] - Duplicate menu items in the application menu
 * link:https://issues.apache.org/jira/browse/ISIS-961[ISIS-961] - Throwing exception in application code does NOT abort the transaction (it should, of course).
 * link:https://issues.apache.org/jira/browse/ISIS-966[ISIS-966] - Restful viewer doesn&#39;t return a JSON representation when hits a 500 internally (instead getting an HTML page)

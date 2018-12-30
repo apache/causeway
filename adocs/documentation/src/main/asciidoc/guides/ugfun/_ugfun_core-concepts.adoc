@@ -4,7 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 
-This introductory chapter should give you a good about what Apache Isis actually *is*: the fundamental ideas and principles that it builds upon, how it compares with other frameworks, what the fundamental building blocks are for actually writing an Isis application, and what services and features the framework provides for you to leverage in your own apps.
+This introductory chapter should give you a good about what Apache Isis actually *is*: the fundamental ideas and principles that it builds upon, how it compares with other frameworks, what the fundamental building blocks are for actually writing an Apache Isis application, and what services and features the framework provides for you to leverage in your own apps.
 
 Parts of this chapter have been adapted from Dan Haywood's 2009 book, 'Domain Driven Design using Naked Objects'.
 We've also added some new insights and made sure the material we've used is relevant to Apache Isis.

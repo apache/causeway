@@ -7,7 +7,7 @@
 
 From link:http://isis.markmail.org/thread/kb4442niwwbnghey[this thread] on the Apache Isis users mailing list:
 
-* _Is it possible to have each of our resellers (using our Isis application) use there own theme/branding with their own logo and colors?
+* _Is it possible to have each of our resellers (using our Apache Isis application) use there own theme/branding with their own logo and colors?
 Would this also be possible for the login page, possibly depending on the used host name?_
 
 
