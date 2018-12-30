@@ -10,6 +10,7 @@ This section discusses features of the wicket viewer from the perspective of an 
 
 include::_ugvw_features_recent-pages.adoc[leveloffset=+1]
 include::_ugvw_features_bookmarked-pages.adoc[leveloffset=+1]
+include::_ugvw_features_sidebar-vs-modal-dialogs.adoc[leveloffset=+1]
 include::_ugvw_features_hints-and-copy-url.adoc[leveloffset=+1]
 include::_ugvw_features_titles-in-tables.adoc[leveloffset=+1]
 include::_ugvw_features_blob-attachments.adoc[leveloffset=+1]

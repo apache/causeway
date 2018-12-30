@@ -470,7 +470,15 @@ The property can be overridden on a property-by-property basis using xref:../rga
 Note that `inline_as_if_edit` does not make sense for a configuration property default, and will instead be interpreted as `inline`.
 
 
+|`isis.viewer.wicket.` +
+`dialogMode`
+| `sidebar`,`modal` +
+(`_sidebar_`)
+| Whether action prompts with a style of `DIALOG` - as in, `@ActionLayout(promptStyle="DIALOG")` - should be rendered using a sidebar or alternatively in a modal dialog box.
 
+See the discussion on the xref:../ugvw/ugvw.adoc#_ugvw_features_sidebar-vs-modal-dialogs[sidebar vs modal dialogs] feature for further details.
+
+p
 
 
 |===
@@ -748,7 +756,7 @@ Enabling this setting can significantly slow down rendering performance of the W
 
 
 
-[[_ugvw_configuration-properties_presentation]]
+[[_ugvw_configuration-properties_feature-toggles]]
 == Feature Toggles
 
 These configuration properties are used to enable/disable features that are either on the way to becoming the default behaviour (but can temporarily be disabled) or conversely for features that are to be removed (but can temporarily be left as enabled).
@@ -828,13 +836,6 @@ Setting this option retains the behaviour of the viewer pre-`1.15.0`.
 | `true`,`false` +
 (`_true_`)
 | Whether to show an indicator for a no-arg action button that it has been clicked.
-
-|`isis.viewer.wicket.` +
-`dialogMode`
-| `sidebar`,`modal` +
-(`_sidebar_`)
-| Whether action prompts with a style of `DIALOG` - as in, `@ActionLayout(promptStyle="DIALOG")` - should be rendered using a sidebar or alternatively in a modal dialog box.
-
 
 
 |===
