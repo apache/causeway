@@ -144,8 +144,8 @@ Configuration properties that influence the behaviour and appearance of the sign
 `rememberMe.cookieKey`
 | ascii chars +
 (`_isisWicketRememberMe_`)
-|Cookie key holding the (encrypted) 'rememberMe' user/password.  There is generally no need to
-change this.  +
+|Cookie key holding the (encrypted) 'rememberMe' user/password.
+There is generally no need to change this.
 
 Valid values as per link:http://stackoverflow.com/a/1969339/56880[this StackOverflow answer].
 
@@ -153,10 +153,9 @@ Valid values as per link:http://stackoverflow.com/a/1969339/56880[this StackOver
 `rememberMe.encryptionKey`
 | any string +
 (in prod, a random UUID each time)
-|Encryption key is used to encrypt the rememberMe user/password.  +
+|Encryption key is used to encrypt the rememberMe user/password.
 
-Apache Isis leverages link:http://wicket.apache.org[Apache Wicket]'s rememberMe support which holds remembered
-user/passwords in an encrypted cookie.
+Apache Isis leverages link:http://wicket.apache.org[Apache Wicket]'s rememberMe support which holds remembered user/passwords in an encrypted cookie.
 
 If a hard-coded and publicly known value were to be used (as was the case prior to `1.13.0`), then it would be possible for rememberMe user/password to be intercepted and decrypted, possibly compromising access.
 This configuration property therefore allows a private key to be specified, baked into the application.
@@ -567,7 +566,14 @@ These configuration properties control the switching of themes.
 |`isis.viewer.wicket.` +
 `themes.enabled`
 | comma separated list ...
-| ... of bootswatch themes.  Only applies if `themes.showChooser`==`true`.
+| \... of bootswatch themes.  Only applies if `themes.showChooser`==`true`.
+
+See further discussion below.
+
+|`isis.viewer.wicket.` +
+`themes.initial`
+| theme name
+| Which theme to show initially.
 
 See further discussion below.
 
@@ -592,6 +598,11 @@ This can be overridden using the following configuration property:
 ----
 isis.viewer.wicket.themes.initial=Darky
 ----
+
+[TIP]
+====
+Set this configuration property to different values for different environments (dev, test, prod) so you can know at a glance which environment you are connected to.
+====
 
 The end-user can also be given the choice of changing the theme:
 
