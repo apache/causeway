@@ -16,16 +16,10 @@ if [ $? -ne 0 ]; then
     TOFIX="$TOFIX\nexport ISISTMP=/c/tmp"
 fi
 
-env | grep ISISDEV >/dev/null
-if [ $? -ne 0 ]; then
-    echo "\$ISISDEV not set!"
-    TOFIX="$TOFIX\nexport ISISDEV=1.7.0-SNAPSHOT"
-fi
-
 env | grep ISISREL >/dev/null
 if [ $? -ne 0 ]; then
     echo "\$ISISREL not set!"
-    TOFIX="$TOFIX\nexport ISISDEV=1.6.0"
+    TOFIX="$TOFIX\nexport ISISREL=1.6.0"
 fi
 
 env | grep ISISRC >/dev/null

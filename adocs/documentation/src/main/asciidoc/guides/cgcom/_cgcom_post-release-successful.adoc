@@ -426,8 +426,6 @@ git branch -d release-{isisnext}-RC1              # branch no longer needed
 ----
 
 
-Finally, update helloworld's `pom.xml` and simpleapp's root `pom.xml` to reference the next SNAPSHOT release (`{isisdevafter}`)
-
 
 
 == Update dependencies
