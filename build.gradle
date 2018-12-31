@@ -1,0 +1,185 @@
+group 'kroviz'
+version '0.0.1-PREVIEW'
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.6'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+buildscript {
+//    ext.kotlinVersion = '1.2.30'
+    ext.production = (findProperty('prod') ?: 'false') == 'true'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap" }
+        maven { url "https://kotlin.bintray.com/kotlinx" }
+    }
+    dependencies {
+        classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}"
+        classpath "org.jetbrains.kotlin:kotlin-frontend-plugin:${frontendPluginVersion}"
+    }
+}
+
+apply plugin: 'kotlin2js'
+apply plugin: 'kotlin-platform-js'
+if (production) {
+    apply plugin: 'kotlin-dce-js'
+}
+apply plugin: 'org.jetbrains.kotlin.frontend'
+apply plugin: 'kotlinx-serialization'
+apply plugin: 'com.moowork.node'
+apply plugin: 'com.moowork.grunt'
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url 'https://plugins.gradle.org/m2/' }
+    maven { url 'https://kotlin.bintray.com/kotlinx' }
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    maven { url 'https://dl.bintray.com/gbaldeck/kotlin' }
+    maven { url 'https://dl.bintray.com/rjaros/kotlin' }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:${kotlinVersion}"
+    compile "pl.treksoft:kvision:${kvisionVersion}"
+    compile "pl.treksoft:kvision-bootstrap:${kvisionVersion}"
+    compile "pl.treksoft:kvision-select:${kvisionVersion}"
+    compile "pl.treksoft:kvision-datetime:${kvisionVersion}"
+    compile "pl.treksoft:kvision-spinner:${kvisionVersion}"
+    compile "pl.treksoft:kvision-richtext:${kvisionVersion}"
+    compile "pl.treksoft:kvision-upload:${kvisionVersion}"
+    compile "pl.treksoft:kvision-handlebars:${kvisionVersion}"
+    compile "pl.treksoft:kvision-i18n:${kvisionVersion}"
+    testCompile "org.jetbrains.kotlin:kotlin-test-js:${kotlinVersion}"
+}
+
+kotlinFrontend {
+    webpackBundle {
+        bundleName = "main"
+        contentPath = file('src/main/web')
+        mode = production ? "production" : "development"
+    }
+    define "PRODUCTION", production
+}
+
+node {
+    download true
+}
+
+compileKotlin2Js {
+    kotlinOptions {
+        metaInfo = true
+        outputFile = "$project.buildDir.path/js/${project.name}.js"
+        sourceMap = true
+        sourceMapEmbedSources = 'always'
+        moduleKind = 'umd'
+    }
+}
+
+compileTestKotlin2Js {
+    kotlinOptions {
+        outputFile = "$project.buildDir.path/js-tests/${project.name}-tests.js"
+        moduleKind = 'umd'
+    }
+}
+
+task yarnConfig(type: YarnTask) {
+    args = ['config', 'delete', 'proxy']
+}
+
+// Downloads JS dependencies
+task yarnInstall(type: YarnTask/*, dependsOn: [yarnConfig]*/) {
+    args = ['install']
+}
+
+// Creates minified, packed main.bundle.js at build/dist
+/*task bundle(type: YarnTask, dependsOn: [runDceKotlinJs, yarnInstall]) {
+    args = ["run", "bundle"]
+    assemble.dependsOn bundle
+} */
+
+// Copies files from src/main/resouces to build/dist. These resources will be served by dev server
+task copyStaticResources(type: Copy) {
+    from sourceSets.main.resources
+    into "${buildDir}/dist"
+    bundle.dependsOn copyStaticResources
+}
+
+// Extracts JS libs from included dependencies to node_modules in build directory:
+task populateNodeModules(type: Copy, dependsOn: compileKotlin2Js) {
+    from compileKotlin2Js.destinationDir
+
+    configurations.testCompile.each {
+        from zipTree(it.absolutePath).matching { include '*.js' }
+    }
+
+    into "${buildDir}/node_modules"
+}
+
+// Starts dev server that serves built application in dev mode
+/*task run(type: YarnTask, dependsOn: [copyStaticResources, populateNodeModules, yarnInstall]) {
+    args = ["run", "start"]
+}  */
+
+// Test runner
+task runKarma(type: YarnTask, dependsOn: [populateNodeModules, yarnInstall]) {
+    args = ['test']
+    test.dependsOn runKarma
+}
+
+task pot(type: GruntTask) {
+    args = ["pot"]
+}
+
+task po2json(type: GruntTask) {
+    args = ["default"]
+    inputs.dir(file('translation'))
+    outputs.dir(file('build/js'))
+    outputs.dir(file('build/kotlin-js-min/main'))
+}
+
+pot.dependsOn 'installGrunt'
+pot.dependsOn 'npmInstall'
+po2json.dependsOn 'installGrunt'
+po2json.dependsOn 'npmInstall'
+
+task copyResources(type: Copy) {
+    from "src/main/resources"
+    into file(buildDir.path + "/js")
+}
+
+task copyResourcesForDce() {
+    doLast {
+        copy {
+            from "src/main/resources"
+            ext.modulesDir = new File("${buildDir.path}/node_modules_imported/")
+            modulesDir.eachDir {
+                if (it.name.startsWith("kvision")) {
+                    from(it) {
+                        include "css/**"
+                        include "img/**"
+                        include "js/**"
+                    }
+                }
+            }
+            into file(buildDir.path + "/kotlin-js-min/main")
+        }
+    }
+}
+
+afterEvaluate {
+/*    if (production) {
+        tasks.getByName("copyResourcesForDce") { dependsOn(runDceKotlinJs) }
+    } */
+    tasks.getByName("webpack-bundle") {
+        dependsOn(po2json, copyResources, copyResourcesForDce)
+    }
+    tasks.getByName("webpack-run") { dependsOn(po2json, copyResources) }
+    tasks.getByName("karma-start") { dependsOn(po2json, copyResources) }
+}
