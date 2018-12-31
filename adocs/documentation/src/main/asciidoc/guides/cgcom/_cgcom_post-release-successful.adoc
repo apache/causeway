@@ -253,6 +253,31 @@ Log the new release in the link:https://reporter.apache.org/addrelease.html?isis
 
 
 
+
+== Release image to Docker hub
+
+This is currently a placeholder.
+
+The idea is to use `isis-webdocker` to create a new image, then upload:
+
+[source,bash]
+----
+cd core
+mvn -Drevision=$ISISREL -pl isis-webdocker -D package-docker
+----
+
+
+
+[NOTE]
+====
+This is currently dependent on https://issues.apache.org/jira/browse/INFRA-17518[INFRA-17518].
+====
+
+
+Once this has been implemented, we also need to update the documentation for helloworld and simpleapp in order to explain how to build and deploy a skinny war to a running container.
+
+
+
 == Update website
 
 In the main `isis` repo (ie containing the asciidoc source):
