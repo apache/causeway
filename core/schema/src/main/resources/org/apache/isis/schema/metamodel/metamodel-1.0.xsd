@@ -54,7 +54,7 @@
                         </xs:element>
                         <xs:element name="properties" minOccurs="0">
                             <xs:annotation>
-                                <xs:documentation>Optional because domain services have properties.
+                                <xs:documentation>The properties, if any, of this domain class.  This will include any mixin properties.
                                 </xs:documentation>
                             </xs:annotation>
                             <xs:complexType>
@@ -65,7 +65,7 @@
                         </xs:element>
                         <xs:element name="collections" minOccurs="0">
                             <xs:annotation>
-                                <xs:documentation>Optional because domain services have collections.
+                                <xs:documentation>The collections, if any, of this domain class.  This will include any mixin collections.
                                 </xs:documentation>
                             </xs:annotation>
                             <xs:complexType>
@@ -75,6 +75,10 @@
                             </xs:complexType>
                         </xs:element>
                         <xs:element name="actions" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation>The actions, if any, of this domain class.  This will include any mixin actions.
+                                </xs:documentation>
+                            </xs:annotation>
                             <xs:complexType>
                                 <xs:sequence>
                                     <xs:element name="act" type="action" minOccurs="0" maxOccurs="unbounded"/>
@@ -174,7 +178,7 @@
                 <xs:sequence>
                     <xs:element name="returnType" type="xs:IDREF">
                         <xs:annotation>
-                            <xs:documentation>(A reference to) the return type of this collection, eg a String or a Customer.
+                            <xs:documentation>A (reference to) the return type of this action, eg a String or a Customer.
                                 Corresponds to ObjectAction#getReturnType() in the internal metamodel.
                             </xs:documentation>
                         </xs:annotation>
@@ -289,7 +293,7 @@
                 </xs:annotation>
                 <xs:attribute name="name" type="xs:string">
                     <xs:annotation>
-                        <xs:documentation>The name of the attribute value, unique across all facet attributes of a facet.
+                        <xs:documentation>The name of the attribute, unique across all facet attributes of a facet.
                         </xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
