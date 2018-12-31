@@ -119,6 +119,8 @@ The production classes for `myapp-application` module (in `src/main/java`) are:
 >>>>>>> isis-non-changing.properties
 >>>>>>> menubars.layout.xml
 >>>>>> services
+>>>>>>> healthcheck
+>>>>>>>> HealthCheckServiceImpl.java
 >>>>>>> homepage
 >>>>>>>> HomePageService.java
 >>>>>>>> HomePageViewModel.java
@@ -126,7 +128,9 @@ The production classes for `myapp-application` module (in `src/main/java`) are:
 >>>>>>>> HomePageViewModel.layout.png
 ----
 
-The `DomainAppAppManifest` is the key class here, typically being used to bootstrap the application.
+==== Manifest
+
+The `DomainAppAppManifest` is the most important class here, typically being used to bootstrap the application.
 It is quite short:
 
 [source,java]
@@ -187,8 +191,11 @@ The `menubars.layout.xml` file also resides in the same package as the manifest;
 
 There are also several variations on the app manifest; these can be used to bootstrap the application with fixtures, or disabling security.
 
-The `domainapp.application.services` package contains the `HomePageService` domain service.
-This simply has a single action annotated with `@HomePage`:
+==== Domain Services
+
+The `domainapp.application.services` package contains two SPI implementations.
+
+The `HomePageService` domain service simply has a single action annotated with `@HomePage`:
 
 [source,java]
 ----
@@ -201,6 +208,13 @@ public HomePageViewModel homePage() {
 
 which returns the `HomePageViewModel` for use as the home page.
 The `HomePageViewModel` itself just renders a collection of ``SimpleObject``s in a list (`HomePageViewModel.layout.xml` defines the UI layout).
+
+The other SPI implementation is the `HealthCheckServiceImpl` domain service, which is used to indicate if the application is running healthily.
+This is exposed as the `/restful/health` REST endpoint.
+The implementation itself simply runs a query on the `SimpleObjects` repository service, thus checking that the database is configured correctly and available.
+
+
+==== Fixtures
 
 The final package in the application module is `domainapp.application.fixture`.
 The important class here is `DomainAppDemo`, a fixture script that can be used to setup the application with some dummy data.
