@@ -117,10 +117,7 @@ Change all of these to the release version, using:
 
 [source,bash,subs="attributes+"]
 ----
-sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" core/pom.xml
-sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/simpleapp/pom.xml
-sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/helloworld/pom.xml
-git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's to ${ISISREL}"
+sh scripts/version-bump.sh ${ISISJIRA} ${ISISREL}
 ----
 
 so that they should read:
@@ -157,7 +154,6 @@ Set additional environment variables for the core "artifact":
 [source,bash,subs="attributes+"]
 ----
 export ISISART=isis
-export ISISCOR="Y"
 
 env | grep ISIS | sort
 ----
@@ -800,10 +796,7 @@ In the root of the Apache Isis repo, we do this for all three ``pom.xml``s with:
 
 [source,bash,subs="attributes+"]
 ----
-sed -i -E "s|<revision>[^<]+<|<revision>1.0.0-SNAPSHOT<|g" core/pom.xml
-sed -i -E "s|<revision>[^<]+<|<revision>1.0.0-SNAPSHOT<|g" example/application/simpleapp/pom.xml
-sed -i -E "s|<revision>[^<]+<|<revision>1.0.0-SNAPSHOT<|g" example/application/helloworld/pom.xml
-git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's back to 1.0.0-SNAPSHOT"
+sh scripts/version-reset.sh ${ISISJIRA}
 ----
 
 
