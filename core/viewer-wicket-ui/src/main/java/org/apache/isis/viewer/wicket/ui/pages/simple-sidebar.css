@@ -64,10 +64,6 @@ body {
     list-style: none;
 }
 
-.sidebar-nav li {
-    text-indent: 20px;
-    line-height: 40px;
-}
 
 .sidebar-nav li a {
     display: block;
