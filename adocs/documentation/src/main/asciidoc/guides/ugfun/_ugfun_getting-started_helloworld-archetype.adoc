@@ -209,49 +209,32 @@ In the Apache Isis community we generally prefer to use annotations, but neverth
 </persistence>
 ----
 
-Finally, in the `domainapp.webapp` we have `HelloWorldApplication`.
-This is required to bootstrap the Wicket viewer (it is configured in `WEB-INF/web.xml`).
-Internally it uses Google Guice to configure various static resources served up by Wicket:
-
-[source,java]
-----
-public class HelloWorldApplication extends IsisWicketApplication {
-    ...
-    protected Module newIsisWicketModule() {
-        final Module isisDefaults = super.newIsisWicketModule();
-        final Module overrides = new AbstractModule() {
-            @Override
-            protected void configure() {
-                ...
-            }
-        };
-        return Modules.override(isisDefaults).with(overrides);
-    }
-}
-----
-
-The `configure()` method is the place to change the name of the application for example, or to change the initial about and welcome messages.
-The text of the welcome page shown by the Wicket viewer can be found in `welcome.html`, loaded from the classpath and in the same package as `HelloWorldApplication`.
-
 Under `src/main/webapp` we have various resources that are used to configure the webapp, or that are served up by the running webapp:
 
 [monotree]
 ----
-> about/
->> index.html
-> css/
->> application.css
-> scripts/
->> application.js
-> swagger-ui/
-> WEB-INF/
->> isis.properties
->> logging.properties
->> shiro.ini
->> web.xml
+> src/
+>> main/
+>>> webapp/
+>>> welcome.html
+>>>> about/
+>>>>> index.html
+>>>> css/
+>>>>> application.css
+>>>> scripts/
+>>>>> application.js
+>>>> swagger-ui/
+>>>> WEB-INF/
+>>>>> isis.properties
+>>>>> logging.properties
+>>>>> shiro.ini
+>>>>> web.xml
 ----
 
 Most important of these is `WEB-INF/web.xml`, which bootstraps both the Wicket viewer and the Restful Objects viewer (the REST API derived from the domain object model).
+
+The text of the welcome page shown by the Wicket viewer can be found in `welcome.html`.
+This is shown in the absence of a home page action/view model.
 
 The `about/index.html` is the page shown at the root of the package, providing links to either the Wicket viewer or to the Swagger UI.
 In a production application this is usually replaced with a page that does an HTTP 302 redirect to the Wicket viewer.
