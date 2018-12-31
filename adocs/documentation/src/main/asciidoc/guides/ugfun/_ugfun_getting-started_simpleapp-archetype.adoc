@@ -274,12 +274,30 @@ The integration tests meanwhile are in `domainapp.application.integtests`:
 >>>>> application/
 >>>>>> integtests/
 >>>>>>> DomainAppIntegTestAbstract.java
->>>>>>> Smoke_IntegTest.java
+>>>>>>> mml/
+>>>>>>>> approved/
+>>>>>>>> received/
+>>>>>>>> MetaModelService_IntegTest.java
+>>>>>>> smoke/
+>>>>>>>> Smoke_IntegTest.java
 ----
 
-The `Smoke_IntegTest` inherits `DomainAppIntegTestAbstract`, which in turn inherits from `IntegrationTestAbstract3` and uses the `DomainAppApplicationModule` previously discussed.
+There are two different sets of tests.
+
+* The `Smoke_IntegTest` performs a number of high-level smoke tests, to check that the core functionality works correctly.
++
+This test inherits `DomainAppIntegTestAbstract`, which in turn inherits from `IntegrationTestAbstract3` and uses the `DomainAppApplicationModule` previously discussed.
++
 Moreover, the `Smoke_IntegTest` uses the same `DomainAppDemo` fixture script.
 The application and the smoke tests therefore run with the exact same state, making debugging easy.
+
+* The `MetaModelService_IntegTest` demonstrates how to use approval tests to verify that the metamodel is unchanged between releases of Apache Isis.
++
+By default this test does nothing; it is activated by setting system properties ("lockdown.learn" or "lockdown.verify").
+When in "learn" mode, the test calls the `MetaModelService` to export an XML representation of the internal metamodel.
+These can then be moved from the `received` directory to the `approved` directory, as "known-to-good".
++
+Then, if Apache Isis is updated, then the "verify" test can be called to check that the metamodel created by the new version of the framework is the same as the previous version.
 
 With regard to the naming of these various BDD specs and integration tests, they follow the naming convention required by the (non-ASF) link:http://github.com/danhaywood/java-mavenmixin-surefire["surefire" mavenmixin] that configures the maven surefire plugin.
 
