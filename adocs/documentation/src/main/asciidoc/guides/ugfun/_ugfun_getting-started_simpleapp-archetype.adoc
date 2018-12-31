@@ -116,6 +116,7 @@ The production classes for `myapp-application` module (in `src/main/java`) are:
 >>>>>>> DomainAppAppManifestBypassSecurity.java
 >>>>>>> DomainAppAppManifestWithFixtures.java
 >>>>>>> DomainAppAppManifestWithFixturesBypassSecurity.java
+>>>>>>> isis-non-changing.properties
 >>>>>>> menubars.layout.xml
 >>>>>> services
 >>>>>>> homepage
@@ -123,23 +124,6 @@ The production classes for `myapp-application` module (in `src/main/java`) are:
 >>>>>>>> HomePageViewModel.java
 >>>>>>>> HomePageViewModel.layout.xml
 >>>>>>>> HomePageViewModel.layout.png
-----
-
-There are also supporting files in this package in `src/main/resources`:
-
-[monotree]
-----
-> src/
->> main/
->>> resources/
->>>> domainapp/
->>>>> application/
->>>>>> manifest/
->>>>>>> authentication_shiro.properties
->>>>>>> isis.properties
->>>>>>> persistor_datanucleus.properties
->>>>>>> viewer_restfulobjects.properties
->>>>>>> viewer_wicket.properties
 ----
 
 The `DomainAppAppManifest` is the key class here, typically being used to bootstrap the application.
@@ -151,12 +135,8 @@ public class DomainAppAppManifest extends AppManifestAbstract2 {
 
     public static final Builder BUILDER = Builder
             .forModule(new DomainAppApplicationModule())
-            .withConfigurationPropertiesFile(DomainAppAppManifest.class,
-                    "isis.properties",
-                    "authentication_shiro.properties",
-                    "persistor_datanucleus.properties",
-                    "viewer_restfulobjects.properties",
-                    "viewer_wicket.properties")
+            .withConfigurationPropertiesFile(
+                    DomainAppAppManifest.class, "isis-non-changing.properties")
             .withAuthMechanism("shiro");
 
     public DomainAppAppManifest() {
@@ -164,6 +144,12 @@ public class DomainAppAppManifest extends AppManifestAbstract2 {
     }
 }
 ----
+
+Rather than implement `AppManifest` directly, `DomainAppAppManifest` uses the builder provided by the convenience `AppManifestAbstract2`), to define three things:
+
+* a list of modules - there's just one, `DomainAppApplicationModule`
+* the location of a configuration file, `isis-non-changing.properties`, read in as a resource from the classpath
+* specifying an authentication/authorisation mechanism, in this case Apache Shiro integration.
 
 The manifest uses the builder defined by `AppManifestAbstract2` and references a single top-level (Isis) module, namely `DomainAppApplicationModule`:
 
@@ -183,8 +169,19 @@ The primary purpose of the module class is to identify packages and subpackages 
 The transitive dependencies between modules are automatically resolved.
 The net effect is that all the domain services and entities in this module as well as those modules referenced are included into the app.
 
-Going back to the manifest, it also defines a number of static configuration files, all loaded from the classpath.
-Each file contains configuration setting for a different part of the runtime (`isis.properties` for the core framework, shiro for security, datanucleus for the objectstore, and the two viewers).
+Going back to the manifest, it also defines the `isis-non-changing.properties` configuration properties, loaded as a static resource from the classpath.
+
+You'll find that there's also a similar file called `isis.properties`, which resides at `WEB-INF/isis.properties`.
+This also provides configuration options (the framework simply combines them) but those in `WEB-INF/isis.properties` are restricted to settings that are likely to change from environment to environment, most notably JDBC URL connection strings.
+Separating these out makes it easy to reconfigure the application to run against different databases in different environments (dev, test, production etc).
+
+Finally, the app manifest identifies Apache Shiro for authentication and authorisation.
+Shiro in turn is configured using the `WEB-INF/shiro.ini` file.
+
+[TIP]
+====
+The security integration provided by Apache Isis and Shiro is quite sophisticated; to get started though you can just login using username: `sven`, password: `pass`.
+====
 
 The `menubars.layout.xml` file also resides in the same package as the manifest; this defines the menubar structure.
 

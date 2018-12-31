@@ -66,7 +66,8 @@ Under `src/main/java` we have:
 >>>> domainapp/
 >>>>> application/
 >>>>>> HelloWorldAppManifest.java
->>>>>> isis.properties
+>>>>>> isis-non-changing.properties
+>>>>>> menubars.layout.xml
 >>>>> dom/
 >>>>>> HelloWorldModule.java
 >>>>>> impl/
@@ -108,7 +109,7 @@ public class HelloWorldAppManifest extends AppManifestAbstract {
 }
 ----
 
-Rather than implement `AppManifest` directly, `HelloWorldAppManifest` uses the builder provided by the convenience `AppManifestAbstract`); as you'll find when you work on bigger applications, it's common to have variations around the app manifest, so the builder makes it easy to create these variations without lots of boilerplate.
+Rather than implement `AppManifest` directly, `HelloWorldAppManifest` uses the builder provided by the convenience `AppManifestAbstract2`); as you'll find when you work on bigger applications, it's common to have variations around the app manifest, so the builder makes it easy to create these variations without lots of boilerplate.
 
 For now, we see that (using the builder) the app manifest defines three things:
 
@@ -146,7 +147,7 @@ The helloworld application doesn't provide any examples of these.
 The app manifest also identifies the `isis-non-changing.properties` file (in the same package as `HelloWorldAppManifest`) as containing various configuration options.
 The helloworld application uses these for settings that are unlikely to change and so are loaded as a static resource from the classpath.
 
-You'll find that there's also a file called `isis.properties`, which resides in the `WEB-INF/isis.properties`.
+You'll find that there's also a similar file called `isis.properties`, which resides at `WEB-INF/isis.properties`.
 This also provides configuration options (the framework simply combines them) but those in `WEB-INF/isis.properties` are restricted to settings that are likely to change from environment to environment, most notably JDBC URL connection strings.
 Separating these out makes it easy to reconfigure the application to run against different databases in different environments (dev, test, production etc).
 
@@ -157,6 +158,8 @@ Shiro in turn is configured using the `WEB-INF/shiro.ini` file.
 ====
 The security integration provided by Apache Isis and Shiro is quite sophisticated; to get started though you can just login using username: `sven`, password: `pass`.
 ====
+
+The `menubars.layout.xml` file also resides in the same package as the manifest; this defines the menubar structure.
 
 In the `domainapp.dom` module ("dom" stands for "domain object model") is the `HelloWorldModule`:
 
