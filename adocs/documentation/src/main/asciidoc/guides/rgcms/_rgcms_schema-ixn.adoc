@@ -6,10 +6,8 @@
 
 
 
-The interaction ("ixn") schema defines the serialized form of an action invocation or a property
-edit.
-In fact, it actually defines a call-graph of such executions for those cases where the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] is used to execute sub-actions/property edits.
+The interaction ("ixn") schema defines the serialized form of an action invocation or a property edit.
+In fact, it actually defines a call-graph of such executions for those cases where the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] is used to execute sub-actions/property edits.
 
 Each execution identifies the target object, the member to invoke, and the arguments.
 It also captures metrics about the execution, and the result of the execution (eg return value of an action invocation).

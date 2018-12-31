@@ -57,7 +57,8 @@ The `objectState` attribute can usually be omitted (indicating a persistent obje
 xref:../rgant/rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`] annotation (`schema` and/or `table` attributes), or to the (JDO) xref:../rgant/rgant.adoc#_rgant-Discriminator[`@Discriminator`] annotation.
 If none is specified, then the fully qualified class name will be used.
 <4> the object identifier (aka primary key), converted to string form.
-<5> the `bookmarkObjectState` enumerates the possible persistence states of the referenced object.  In previous versions of the schema the attribute was defaulted to "persistent"; the "persistent" state is assumed if the attribute is omitted.
+<5> the `bookmarkObjectState` enumerates the possible persistence states of the referenced object.
+In previous versions of the schema the attribute was defaulted to "persistent"; the "persistent" state is assumed if the attribute is omitted.
 <6> Models a list of OIDs.
 This is used by the xref:../rgcms/rgcms.adoc#_rgcms_schema_cmd["cmd" schema] to represent the
 intention to perform a bulk actions (against a number of selected objects).
@@ -68,11 +69,11 @@ The element form can still be used, but is deprecated.
 The `oidDto` complex type is used in a number of places by the framework:
 
 * first, as a means of serializing JAXB view model/DTOs (annotated with
-xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]), that reference domain entities. +
+xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]), that reference domain entities.
 +
 These references are serialized instead into OIDs
 
-* second, as references to the target of a command representing the _intention_ to invoke an action or edit a property, as described by the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd["cmd" (command)] schema. +
+* second, as references to the target of a command representing the _intention_ to invoke an action or edit a property, as described by the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd["cmd" (command)] schema.
 +
 They are also used to represent references to any action arguments/properties that take domain object entities/view models.
 
