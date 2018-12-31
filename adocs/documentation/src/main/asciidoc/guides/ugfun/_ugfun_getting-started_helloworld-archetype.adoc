@@ -60,22 +60,22 @@ Under `src/main/java` we have:
 
 [monotree]
 ----
-> domainapp/
->> application/
->>> HelloWorldAppManifest.java
->>> isis.properties
->> dom/
->>> HelloWorldModule.java
->>> impl/
->>>> HelloWorldObject.java
->>>> HelloWorldObject.layout.xml
->>>> HelloWorldObject.png
->>>> HelloWorldObjects.java
->> app/
->>> HelloWorldApplication.java
->>> welcome.html
-> META-INF/
->> persistence.xml
+> src/
+>> main/
+>>> java/
+>>>> domainapp/
+>>>>> application/
+>>>>>> HelloWorldAppManifest.java
+>>>>>> isis.properties
+>>>>> dom/
+>>>>>> HelloWorldModule.java
+>>>>>> impl/
+>>>>>>> HelloWorldObject.java
+>>>>>>> HelloWorldObject.layout.xml
+>>>>>>> HelloWorldObject.png
+>>>>>>> HelloWorldObjects.java
+>>>> META-INF/
+>>>>> persistence.xml
 ----
 
 
@@ -98,7 +98,8 @@ The class is only small, so is worth showing here in its entirety:
 public class HelloWorldAppManifest extends AppManifestAbstract {
     public static final Builder BUILDER = Builder
             .forModules(HelloWorldModule.class)
-            .withConfigurationPropertiesFile(HelloWorldAppManifest.class, "isis.properties")
+            .withConfigurationPropertiesFile(
+                HelloWorldAppManifest.class, "isis-non-changing.properties")
             .withAuthMechanism("shiro");
 
     public HelloWorldAppManifest() {
@@ -112,11 +113,11 @@ Rather than implement `AppManifest` directly, `HelloWorldAppManifest` uses the b
 For now, we see that (using the builder) the app manifest defines three things:
 
 * a list of modules - there's just one, `HelloWorldModule` for this class
-* the location of a configuration file, `isis.properties`, read in as a resource from the classpath
+* the location of a configuration file, `isis-non-changing.properties`, read in as a resource from the classpath
 * specifying an authentication/authorisation mechanism, in this case Apache Shiro integration.
 
-In Apache Isis a module is simply an empty class, which is used simply to obtain a package name.
-The framework uses classpath scanning to find certain classes; rather than scan the entire classpath it limits its search to the package(s) obtained from the modules.
+In Apache Isis a module has various responsibilities, but the most important is simply its location.
+The framework uses classpath scanning to find certain classes; rather than scan the entire classpath it limits its search to the package(s) of the application's module(s).
 
 The packages are scanned to identify three types of classes:
 
@@ -132,7 +133,6 @@ In the helloworld application, the only entity is `HelloWorldObject`.
 These are classes that are annotated with the framework's `@DomainService` annotation.
 Depending on their nature, services are used to build up the menu, or are available to call programmatically, eg repositories.
 The framework instantiates an instance of each and will automatically inject the services into other domain objects and services.
-
 +
 In the helloworld application, the only domain service  is `HelloWorldObjects`.
 This appears in the menu, and also acts as a repository for the `HelloWorldObject` entity.
@@ -143,10 +143,10 @@ These are classes that extend from the applib `FixtureScript` class, and are use
 +
 The helloworld application doesn't provide any examples of these.
 
-The app manifest also identifies the `isis.properties` file (in the same package as `HelloWorldAppManifest`) as containing various configuration options.
+The app manifest also identifies the `isis-non-changing.properties` file (in the same package as `HelloWorldAppManifest`) as containing various configuration options.
 The helloworld application uses these for settings that are unlikely to change and so are loaded as a static resource from the classpath.
 
-You'll find that there's another file called `isis.properties` that's in `WEB-INF/isis.properties`.
+You'll find that there's also a file called `isis.properties`, which resides in the `WEB-INF/isis.properties`.
 This also provides configuration options (the framework simply combines them) but those in `WEB-INF/isis.properties` are restricted to settings that are likely to change from environment to environment, most notably JDBC URL connection strings.
 Separating these out makes it easy to reconfigure the application to run against different databases in different environments (dev, test, production etc).
 
@@ -183,8 +183,6 @@ This annotation is what identifies the class as an entity, so that Apache Isis p
 +
 This isn't mandatory, but since entities are the real building blocks on which Apache Isis applications are built, it's very common to use this annotation.
 
-** also uses various Project Lombok annotations to remove boilerplate.
-
 * `HelloWorldObject.layout.xml` defines the layout of the members (properties and actions) of the `HelloWorldObject`.
 +
 Layout files are optional - Apache Isis is an implementation of the naked objects pattern, after all - but in most cases you'll find it easiest to use one
@@ -208,6 +206,12 @@ In the Apache Isis community we generally prefer to use annotations, but neverth
     <persistence-unit name="helloworld"/>
 </persistence>
 ----
+
+[NOTE]
+====
+In previous versions of Apache Isis the simple app defined its own subclass of `IsisWicketApplication` in `src/main/java`.
+This is generally no longer required because configuration properties now exist that can be set instead.
+====
 
 Under `src/main/webapp` we have various resources that are used to configure the webapp, or that are served up by the running webapp:
 
@@ -269,11 +273,14 @@ Under `src/test/java` we have:
 
 [monotree]
 ----
-> domainapp/
->> dom/
->>> impl/
->>>> HelloWorldObjectTest_delete.java
->>>> HelloWorldObjectTest_updateName.java
+> src/
+>> test/
+>>> java/
+>>>> domainapp/
+>>>>> dom/
+>>>>>> impl/
+>>>>>>> HelloWorldObjectTest_delete.java
+>>>>>>> HelloWorldObjectTest_updateName.java
 ----
 
 These are very simple unit tests of `HelloWorldObject`.
