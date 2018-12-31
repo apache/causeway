@@ -31,7 +31,6 @@ import org.approvaltests.reporters.DiffReporter;
 import org.approvaltests.reporters.QuietReporter;
 import org.approvaltests.reporters.UseReporter;
 import org.approvaltests.writers.ApprovalTextWriter;
-import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -53,14 +52,11 @@ public class MetaModelService_IntegTest extends DomainAppIntegTestAbstract {
     @Inject
     JaxbService jaxbService;
 
-    @Before
-    public void setUp() throws Exception {
-
-    }
-
 
     //
     // learn...
+    //
+    // ... move the resultant files in "received" directory over to "approved".
     //
     @UseReporter(QuietReporter.class)
     @Test
@@ -94,11 +90,13 @@ public class MetaModelService_IntegTest extends DomainAppIntegTestAbstract {
     //
     // verify ...
     //
+    // ... ie compare the current metamodel to that previously captured.
+    //
     @UseReporter(DiffReporter.class)
     @Test
     public void _2_verify() throws Exception {
 
-        //assumeThat(System.getProperty("lockdown.verify"), is(notNullValue()));
+        assumeThat(System.getProperty("lockdown.verify"), is(notNullValue()));
 
         // when
         MetamodelDto metamodelDto =

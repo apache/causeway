@@ -92,18 +92,13 @@
           <includes>
             <include>**/*.java</include>
             <include>**/*.xml</include>
+            <include>**/*.properties</include>
           </includes>
         </fileSet>
         <fileSet encoding="UTF-8">
           <directory>src/main/java</directory>
           <includes>
             <include>**/*.png</include>
-          </includes>
-        </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
-          <directory>src/main/resources</directory>
-          <includes>
-            <include>**/*.properties</include>
           </includes>
         </fileSet>
         <fileSet filtered="true" encoding="UTF-8">
@@ -143,14 +138,6 @@
     </module>
     <module name="${rootArtifactId}-webapp" id="${rootArtifactId}-webapp" dir="webapp">
       <fileSets>
-        <fileSet filtered="true" encoding="UTF-8">
-          <directory>src/main/java</directory>
-          <includes>
-            <include>**/*.java</include>
-            <include>**/*.html</include>
-            <include>**/*.properties</include>
-          </includes>
-        </fileSet>
         <fileSet filtered="true" encoding="UTF-8">
           <directory>src/main/webapp</directory>
           <includes>
