@@ -7,8 +7,8 @@
 
 This section describes a (slightly hacky) way of allowing logins using query args, eg http://localhost:8080/?user=sven&pass=pass[http://localhost:8080/?user=sven&pass=pass].  This might be useful while prototyping or demonstrating a scenario involving multiple different interacting users.
 
-
-Add the following code to your application's subclass of `IsisWicketApplication`:
+First, you'll need to subclass `IsisWicketApplication` (and register in `web.xml`).
+Then, override `newSession()`:
 
 [source,ini]
 ----

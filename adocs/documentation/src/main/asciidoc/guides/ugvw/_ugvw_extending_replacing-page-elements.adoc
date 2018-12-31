@@ -104,7 +104,7 @@ Previously we suggested using "replace" rather than "add"; however this has uncl
 ====
 
 
-Finally (as for other customizations), you need to adjust the Guice bindings in your custom subclass of `IsisWicketApplication`:
+Finally, you'll need to subclass `IsisWicketApplication` (register in `web.xml`)and then adjust the Guice bindings returned in the Guice `Module` returned by `newIsisWicketModule()`:
 
 [source,java]
 ----
