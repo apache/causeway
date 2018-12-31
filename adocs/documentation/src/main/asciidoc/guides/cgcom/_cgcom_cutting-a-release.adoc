@@ -504,7 +504,8 @@ mvn archetype:generate  \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=$ISISCPN-archetype
+    -D archetypeArtifactId=$ISISCPN-archetype \
+    -B
 ----
 
 Build the newly generated app and test:
@@ -690,7 +691,8 @@ mvn archetype:generate  \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=$ISISCPN-archetype
+    -D archetypeArtifactId=$ISISCPN-archetype \
+    -B
 ----
 
 Build the newly generated app and test:
