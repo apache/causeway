@@ -63,6 +63,9 @@
                 <mb3:serviceAction objectType="isisApplib.MetaModelServicesMenu" id="downloadMetaModel">
                     <cpt:named>Download Meta Model (CSV)</cpt:named>
                 </mb3:serviceAction>
+                <mb3:serviceAction objectType="isisApplib.MetaModelServicesMenu" id="downloadMetaModelXml">
+                    <cpt:named>Download Meta Model (XML)</cpt:named>
+                </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
                 <mb3:serviceAction objectType="isisApplib.SwaggerServiceMenu" id="openSwaggerUi">

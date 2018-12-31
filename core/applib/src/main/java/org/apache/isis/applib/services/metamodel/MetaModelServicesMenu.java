@@ -19,12 +19,16 @@
 package org.apache.isis.applib.services.metamodel;
 
 import java.util.List;
+import java.util.SortedSet;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
+import javax.inject.Inject;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
@@ -36,7 +40,9 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
+import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
@@ -53,10 +59,12 @@ public class MetaModelServicesMenu {
     }
 
     private final MimeType mimeTypeTextCsv;
+    private final MimeType mimeTypeTextXml;
 
     public MetaModelServicesMenu() {
         try {
             mimeTypeTextCsv = new MimeType("text", "csv");
+            mimeTypeTextXml = new MimeType("application", "xml");
         } catch (final MimeTypeParseException ex) {
             throw new RuntimeException(ex);
         }
@@ -96,6 +104,74 @@ public class MetaModelServicesMenu {
 
     // //////////////////////////////////////
 
+    public static class DownloadMetaModelXmlEvent extends ActionDomainEvent {
+    }
+
+    @Action(
+            domainEvent = DownloadMetaModelXmlEvent.class,
+            semantics = SemanticsOf.SAFE,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            cssClassFa = "fa-download",
+            named = "Download Meta Model (XML)"
+    )
+    @MemberOrder(sequence="500.500.2")
+    public Clob downloadMetaModelXml(
+            @ParameterLayout(named = "Packages")
+            final List<String> packages,
+            @ParameterLayout(named = ".xml file name")
+            final String xmlFileName) {
+
+        MetaModelService6.Config config =
+                new MetaModelService6.Config()
+                        .withIgnoreNoop()
+                        .withIgnoreAbstractClasses()
+                        .withIgnoreInterfaces()
+                        .withIgnoreBuiltInValueTypes();
+        for (final String pkg : packages) {
+            config = config.withPackagePrefix(pkg);
+        }
+        final MetamodelDto metamodelDto =  metaModelService.exportMetaModel(config);
+
+        final String asXml = jaxbService.toXml(metamodelDto);
+
+        return new Clob(
+                Util.withSuffix(xmlFileName, "xml"),
+                mimeTypeTextXml, asXml);
+    }
+
+    public String validateDownloadMetaModelXml(List<String> packagePrefixes, final String xmlFileName) {
+        if(packagePrefixes == null || packagePrefixes.isEmpty()) {
+            return "At least one package must be selected";
+        }
+        return null;
+    }
+
+    public List<String> choices0DownloadMetaModelXml() {
+        final List<DomainMember> export = metaModelService.export();
+        final SortedSet<String> packages = Sets.newTreeSet();
+        for (final DomainMember domainMember : export) {
+            final String packageName = domainMember.getPackageName();
+            final List<String> split = Splitter.on(".").splitToList(packageName);
+            final StringBuilder buf = new StringBuilder();
+            for (final String part : split) {
+                if(buf.length() > 0) {
+                    buf.append(".");
+                }
+                buf.append(part);
+                packages.add(buf.toString());
+            }
+        }
+        return Lists.newArrayList(packages);
+    }
+
+    public String default1DownloadMetaModelXml() {
+        return "metamodel.xml";
+    }
+
+    // //////////////////////////////////////
+
     private static StringBuilder asBuf(final List<String> list) {
         final StringBuilder buf = new StringBuilder();
         for (final String row : list) {
@@ -112,8 +188,6 @@ public class MetaModelServicesMenu {
         }
         return list;
     }
-
-
 
     private static String header() {
         return "classType,packageName,className,memberType,memberName,numParams,contributed?,contributedBy,mixedIn?,mixin,hidden,disabled,choices,autoComplete,default,validate";
@@ -141,6 +215,8 @@ public class MetaModelServicesMenu {
 
 
     @javax.inject.Inject
-    MetaModelService metaModelService;
+    MetaModelService6 metaModelService;
+    @Inject
+    JaxbService jaxbService;
 
 }

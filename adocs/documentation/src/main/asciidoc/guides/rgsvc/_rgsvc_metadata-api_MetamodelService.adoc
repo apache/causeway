@@ -95,6 +95,5 @@ The framework provides a default implementation of this service, `o.a.i.c.m.serv
 [[_rgsvc_metadata-api_MetamodelService_related_services]]
 == Related Services
 
-The `MetaModelServiceMenu` provides a method to download all domain members as a CSV.
-Internally this calls `MetaModelService#export()`.
-Under the covers this uses the API provided by the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ApplicationFeatureRepository[`ApplicationFeatureRepository`] domain service.
+The `MetaModelServiceMenu` provides a method to download all domain members as a CSV (by calling `MetaModelService#export()`) or as an XML (by calling `MetaModelService6#exportMetaModel(...)`.
+
