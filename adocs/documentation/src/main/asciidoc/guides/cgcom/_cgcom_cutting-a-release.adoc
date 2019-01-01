@@ -860,17 +860,43 @@ I've cut a release for Apache Isis Core and the two archetypes:
 * HelloWorld Archetype {isisnext}
 * SimpleApp Archetype {isisnext}
 
-The source code artifacts have been uploaded to staging repositories on repository.apache.org:
-
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/core/isis/{isisnext}/isis-{isisnext}-source-release.zip
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/helloworld-archetype/{isisnext}/helloworld-archetype-{isisnext}-source-release.zip
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/simpleapp-archetype/{isisnext}/simpleapp-archetype-{isisnext}-source-release.zip
-
+The source code artifacts have been uploaded to staging repositories on repository.apache.org.
 For each zip there is a corresponding signature file (append .asc to the zip's url).
 
 In the source code repo the code has been tagged as isis-{isisnext}-RC1, helloworld-archetype-{isisnext}-RC1 and simpleapp-archetype-{isisnext}-RC1; see https://github.com/apache/isis/tags
 
-For instructions on how to verify the release (build from binaries and/or use in Maven directly), see https://isis.apache.org/guides/cgcom/cgcom.html#_cgcom_verifying-releases
+To verify the source code, you can use the following commands (in an empty directory):
+
+    NEXUSREPONUM=10xx
+    VERSION={isisnext}
+
+    curl http://www.apache.org/dist/isis/KEYS > /tmp/KEYS
+    gpg --import /tmp/KEYS
+
+    rm -rf isis-$VERSION*
+    rm -rf simpleapp-archetype-$VERSION*
+    rm -rf helloworld-archetype-$VERSION*
+
+    curl -O -L https://raw.githubusercontent.com/apache/isis/06f947ad7a0968c34d8e6941a77e12aa0196cd17/scripts/verify-isis-release.sh
+
+    chmod +x ./verify-isis-release.sh
+    ./verify-isis-release.sh $NEXUSREPONUM $VERSION
+
+
+Assuming this completes successfully, you can then test the two applications generated from the `simpleapp` and `helloworld` archetypes:
+
+    pushd test-simpleapp/myapp
+    mvn -pl webapp jetty:run
+    popd
+
+and
+
+    pushd test-helloworld/myapp
+    mvn jetty:run
+    popd
+
+
+For more details, see https://isis.apache.org/guides/cgcom/cgcom.html#_cgcom_verifying-releases
 
 Please verify the release and cast your vote.  The vote will be open for a minimum of 72 hours.
 
@@ -883,7 +909,7 @@ Remember to update:
 
 * the version number (`{isisnext}` or whatever)
 * the release candidate number (`RC1` or whatever)
-* the repository id, as provided by Nexus earlier (`orgapacheisis-10xx` or whatever)
+* the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`10xx` or whatever)
 
 Note that the email also references the procedure for other committers to xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verify the release].
 

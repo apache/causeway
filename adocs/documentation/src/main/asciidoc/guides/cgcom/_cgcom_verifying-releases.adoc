@@ -38,76 +38,103 @@ Details of how to do this are also documented below.
 [[__cgcom_verifying-releases_prerequisites]]
 == Prerequisites
 
-To verify the source ZIP files, you will need to have imported the public keys used for signing Apache Isis releases.
-These can be downloaded from the root of the Apache Isis source tree.
+You will also require the following commands/tools:
 
-Since the Apache Isis source is mirrored on github.com, you can just use:
+* `bash`
++
+to run shell script
 
-[source,bash]
-----
-curl http://www.apache.org/dist/isis/KEYS > /tmp/KEYS
-gpg --import /tmp/KEYS
-----
+* `curl`
++
+to download the ZIP files
 
+* `gpg`
++
+to verify signatures
 
-Also, we will be rebuilding Isis from source.
-Therefore delete all Isis artifacts from your local Maven repo:
+* `unzip`
++
+to unzip the ZIP files
 
-[source,bash]
-----
-rm -rf ~/.m2/repository/org/apache/isis
-----
+* JDK 7
+
+* Apache Maven (`mvn`) 3.5.0+
++
+to build the code
+
 
 
 [[__cgcom_verifying-releases_verifying-source-artifacts]]
 == Verifying source artifacts
 
-You can either verify the source artifacts xref:../cgcom/cgcom.adoc#\__cgcom_verifying-releases_manual-procedure[manually], or use a script that xref:../cgcom/cgcom.adoc#__cgcom_verifying-releases_automated-procedure[automates] the steps.
+The easiest way to verify the source artifacts is to use a script that automates the steps.
+Run these commands (they should also be listed in the VOTE email):
 
 
-[[__cgcom_verifying-releases_manual-procedure]]
-=== Manual procedure
+[source,bash,subs="attributes+"]
+----
+NEXUSREPONUM=10xx                   # <1>
+VERSION={isisnext}
 
-The following section describes the steps to perform to manually verify a release.
+curl http://www.apache.org/dist/isis/KEYS > /tmp/KEYS
+gpg --import /tmp/KEYS
 
-==== Download the artifacts
+rm -rf isis-$VERSION*
+rm -rf simpleapp-archetype-$VERSION*
+rm -rf helloworld-archetype-$VERSION*
 
-Download both the ZIP and .ASC files from the location specified in the voting email.
-To verify that the signature is correct, use:
+curl -O -L https://gist.githubusercontent.com/danhaywood/9b052f68ef56cfdbeb3eb1603c5f772a/raw/a083599d34a502a18c5ccfd4a4d26f18352ca0e4/verify-isis-release.sh
 
+chmod +x ./verify-isis-release.sh
+./verify-isis-release.sh $NEXUSREPONUM $VERSION
+----
+<1> Adjust as per VOTE email.
+
+Just copy and paste these commands to your terminal, and run.
+
+The `verify-isis-release.sh` script performs the following:
+
+* it downloads artifacts (`.zip` files and `.asc` files from the staging repository hosted on the Apache (Nexus) repository server.
++
+The location of this repository will be in the VOTE email.
+
+* it verifies that the signatures are correct
++
+in other words, to confirm that the release was created by an Apache Isis committer
+
+* builds all the framework code from source
++
+that is, `core`, `simpleapp-archetype` and `helloworld-archetype`
+
+* generates and build an app for each of the two archetypes
+
+Assuming this completes successfully, you can then test the two applications generated from the `simpleapp` and `helloworld` archetypes:
+
+* Test out simpleapp using:
++
 [source,bash]
 ----
-gpg --verify isis-x.y.z.zip.asc isis-x.y.z.zip
+pushd test-simpleapp/myapp
+mvn -pl webapp jetty:run
+popd
 ----
 
-==== Building source artifacts
-
-Assuming the ZIP file verifies, it should be unpacked, and then the artifact built from source.
-
-To build Apache Isis core, first clean out the local repository cache:
-
-[source]
+* Test out helloworld using:
++
+[source,bash]
 ----
-rm -rf ~/.m2/repository/org/apache/isis
+pushd test-helloworld/myapp
+mvn jetty:run
+popd
 ----
 
-and then build using:
-
-[source]
-----
-mvn clean install -Dskip.git
-----
-
-[IMPORTANT]
-====
-The `-Dskip.git` is required in order to temporarily disable the `git-commit-id-plugin` (which expects to be run within a git repository).
-====
+You can if you wish perform some additional optional checks, listed in the sections below.
+Alternatively, you can xref:cgcom.adoc#__cgcom_verifying-releases_casting-a-vote[cast your vote].
 
 
-Optionally, confirm that the versions of the Isis artifacts now cached in your local repository are correct.
 
-
-==== Verifying binary artifacts
+[[__cgcom_verifying-releases_binary-artifacts]]
+== (Optional) Verifying binary artifacts
 
 You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld archetype] or the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] and running the resultant app.
 
@@ -150,54 +177,6 @@ If you forget to deactive the profile, there should be no adverse effects; Maven
 
 
 
-[[__cgcom_verifying-releases_automated-procedure]]
-=== Automated procedure
-
-To save some time in verifying an Apache Isis release we've assembled a script to automate the process.
-The script is tested on Mac OSX and Linux. Windows users can use Cygwin or http://msysgit.github.io/[msysgit].
-
-It's _recommended_ that you start this process in an empty directory:
-
-[source,bash]
-----
-mkdir ~/verify-isis-release
-cd ~/verify-isis-release
-----
-
-
-==== Copy script to local machine
-
-Download this link:https://gist.github.com/danhaywood/9b052f68ef56cfdbeb3eb1603c5f772a[gist], save to `verify-isis-release.sh`.
-
-
-==== Create an input file
-
-The input file is a plain `urls.txt` file containing all urls to the packages to be verified.
-Here's a sample of the release from Apache Isis 1.12.0:
-
-[source]
-----
-http://repository.apache.org/content/repositories/orgapacheisis-1058/org/apache/isis/core/isis/1.12.0/isis-1.12.0-source-release.zip
-http://repository.apache.org/content/repositories/orgapacheisis-1059/org/apache/isis/archetype/helloworld-archetype/1.12.0/helloworld-archetype-1.12.0-source-release.zip
-http://repository.apache.org/content/repositories/orgapacheisis-1059/org/apache/isis/archetype/simpleapp-archetype/1.12.0/simpleapp-archetype-1.12.0-source-release.zip
-----
-
-You will find the actual list of URLs to be verified in the vote mail on the dev mailing list.
-
-
-
-==== Execute the script
-
-Execute...
-
-[source,bash]
-----
-sh verify-isis-release.sh
-----
-
-\... and get yourself a cup of coffee.
-
-
 
 
 [[__cgcom_verifying-releases_creadur]]
@@ -222,61 +201,7 @@ In this report, each binary will have three links listed after its name '(licens
 
 
 
-
-
-== Test the archetypes
-
-Assuming that everything builds ok, then test the archetypes (adjust version as necessary):
-
-* First the `helloworld` archetype: +
-+
-[source,bash,subs="attributes+"]
-----
-mvn archetype:generate  \
-    -D archetypeCatalog=local \
-    -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=helloworld-archetype \
-    -D archetypeVersion={isisnext} \
-    -D groupId=com.mycompany \
-    -D artifactId=myhelloworld \
-    -D version=1.0-SNAPSHOT \
-    -B \
-    -o
-
-cd myhelloworld
-mvn clean install jetty:run -o
-----
-+
-Adjust the version as necessary.
-
-* Next, the `simpleapp` archetype: +
-+
-[source,bash,subs="attributes+"]
-----
-cd ..
-
-mvn archetype:generate  \
-    -D archetypeCatalog=local \
-    -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion={isisnext} \
-    -D groupId=com.mycompany \
-    -D artifactId=mysimpleapp \
-    -D version=1.0-SNAPSHOT \
-    -B \
-    -o
-
-cd mysimpleapp
-mvn clean install -o && mvn -pl webapp jetty:run -o
-----
-+
-Adjust the version as necessary.
-
-If the archetypes run up ok, then it's time to xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[vote]!
-
-
-
-
+[[__cgcom_verifying-releases_casting-a-vote]]
 == Casting a Vote
 
 When you have made the above checks (and any other checks you think may be relevant), cast your vote by replying to the email thread on the mailing list.
