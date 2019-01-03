@@ -101,42 +101,36 @@ The production classes for `myapp-application` module (in `src/main/java`) are:
 
 [monotree]
 ----
-> domainapp/
->> application/
->>> DomainAppApplicationModule.java
->>> fixture/
->>>> DomainAppFixtureScriptsSpecificationProvider.java
->>>> scenarios/
->>>>> DomainAppDemo.java
->>> manifest/
->>>> DomainAppAppManifest.java
->>>> DomainAppAppManifestBypassSecurity.java
->>>> DomainAppAppManifestWithFixtures.java
->>>> DomainAppAppManifestWithFixturesBypassSecurity.java
->>>> menubars.layout.xml
->>> services
->>>> homepage
->>>>> HomePageService.java
->>>>> HomePageViewModel.java
->>>>> HomePageViewModel.layout.xml
->>>>> HomePageViewModel.layout.png
+> src/
+>> main/
+>>> java/
+>>>> domainapp/
+>>>>> application/
+>>>>>> DomainAppApplicationModule.java
+>>>>>> fixture/
+>>>>>>> DomainAppFixtureScriptsSpecificationProvider.java
+>>>>>>> scenarios/
+>>>>>>>> DomainAppDemo.java
+>>>>>> manifest/
+>>>>>>> DomainAppAppManifest.java
+>>>>>>> DomainAppAppManifestBypassSecurity.java
+>>>>>>> DomainAppAppManifestWithFixtures.java
+>>>>>>> DomainAppAppManifestWithFixturesBypassSecurity.java
+>>>>>>> isis-non-changing.properties
+>>>>>>> menubars.layout.xml
+>>>>>> services
+>>>>>>> healthcheck
+>>>>>>>> HealthCheckServiceImpl.java
+>>>>>>> homepage
+>>>>>>>> HomePageService.java
+>>>>>>>> HomePageViewModel.java
+>>>>>>>> HomePageViewModel.layout.xml
+>>>>>>>> HomePageViewModel.layout.png
 ----
 
-There are also supporting files in this package in `src/main/resources`:
+==== Manifest
 
-[monotree]
-----
-> domainapp/
->> application/
->>> manifest/
->>>> authentication_shiro.properties
->>>> isis.properties
->>>> persistor_datanucleus.properties
->>>> viewer_restfulobjects.properties
->>>> viewer_wicket.properties
-----
-
-The `DomainAppAppManifest` is the key class here, typically being used to bootstrap the application.
+The `DomainAppAppManifest` is the most important class here, typically being used to bootstrap the application.
 It is quite short:
 
 [source,java]
@@ -145,12 +139,8 @@ public class DomainAppAppManifest extends AppManifestAbstract2 {
 
     public static final Builder BUILDER = Builder
             .forModule(new DomainAppApplicationModule())
-            .withConfigurationPropertiesFile(DomainAppAppManifest.class,
-                    "isis.properties",
-                    "authentication_shiro.properties",
-                    "persistor_datanucleus.properties",
-                    "viewer_restfulobjects.properties",
-                    "viewer_wicket.properties")
+            .withConfigurationPropertiesFile(
+                    DomainAppAppManifest.class, "isis-non-changing.properties")
             .withAuthMechanism("shiro");
 
     public DomainAppAppManifest() {
@@ -158,6 +148,12 @@ public class DomainAppAppManifest extends AppManifestAbstract2 {
     }
 }
 ----
+
+Rather than implement `AppManifest` directly, `DomainAppAppManifest` uses the builder provided by the convenience `AppManifestAbstract2`), to define three things:
+
+* a list of modules - there's just one, `DomainAppApplicationModule`
+* the location of a configuration file, `isis-non-changing.properties`, read in as a resource from the classpath
+* specifying an authentication/authorisation mechanism, in this case Apache Shiro integration.
 
 The manifest uses the builder defined by `AppManifestAbstract2` and references a single top-level (Isis) module, namely `DomainAppApplicationModule`:
 
@@ -177,15 +173,29 @@ The primary purpose of the module class is to identify packages and subpackages 
 The transitive dependencies between modules are automatically resolved.
 The net effect is that all the domain services and entities in this module as well as those modules referenced are included into the app.
 
-Going back to the manifest, it also defines a number of static configuration files, all loaded from the classpath.
-Each file contains configuration setting for a different part of the runtime (`isis.properties` for the core framework, shiro for security, datanucleus for the objectstore, and the two viewers).
+Going back to the manifest, it also defines the `isis-non-changing.properties` configuration properties, loaded as a static resource from the classpath.
+
+You'll find that there's also a similar file called `isis.properties`, which resides at `WEB-INF/isis.properties`.
+This also provides configuration options (the framework simply combines them) but those in `WEB-INF/isis.properties` are restricted to settings that are likely to change from environment to environment, most notably JDBC URL connection strings.
+Separating these out makes it easy to reconfigure the application to run against different databases in different environments (dev, test, production etc).
+
+Finally, the app manifest identifies Apache Shiro for authentication and authorisation.
+Shiro in turn is configured using the `WEB-INF/shiro.ini` file.
+
+[TIP]
+====
+The security integration provided by Apache Isis and Shiro is quite sophisticated; to get started though you can just login using username: `sven`, password: `pass`.
+====
 
 The `menubars.layout.xml` file also resides in the same package as the manifest; this defines the menubar structure.
 
 There are also several variations on the app manifest; these can be used to bootstrap the application with fixtures, or disabling security.
 
-The `domainapp.application.services` package contains the `HomePageService` domain service.
-This simply has a single action annotated with `@HomePage`:
+==== Domain Services
+
+The `domainapp.application.services` package contains two SPI implementations.
+
+The `HomePageService` domain service simply has a single action annotated with `@HomePage`:
 
 [source,java]
 ----
@@ -199,6 +209,13 @@ public HomePageViewModel homePage() {
 which returns the `HomePageViewModel` for use as the home page.
 The `HomePageViewModel` itself just renders a collection of ``SimpleObject``s in a list (`HomePageViewModel.layout.xml` defines the UI layout).
 
+The other SPI implementation is the `HealthCheckServiceImpl` domain service, which is used to indicate if the application is running healthily.
+This is exposed as the `/restful/health` REST endpoint.
+The implementation itself simply runs a query on the `SimpleObjects` repository service, thus checking that the database is configured correctly and available.
+
+
+==== Fixtures
+
 The final package in the application module is `domainapp.application.fixture`.
 The important class here is `DomainAppDemo`, a fixture script that can be used to setup the application with some dummy data.
 This is used in the app itself when running in prototype mode (against an in-memory database), and can also be used by integration tests.
@@ -211,15 +228,18 @@ The BDD specs (run using Cucumber) reside under `domain.application.bdd`:
 
 [monotree]
 ----
-> domainapp/
->> application/
->>> bdd/
->>>> specglue/
->>>>> BootstrappingGlue.java
->>>>> CatalogOfFixturesGlue.java
->>>> specs/
->>>>> RunIntegBddSpecs.java
->>>>> SimpleObjectSpec_listAllAndCreate.feature
+> src/
+>> test/
+>>> java/
+>>>> domainapp/
+>>>>> application/
+>>>>>> bdd/
+>>>>>>> specglue/
+>>>>>>>> BootstrappingGlue.java
+>>>>>>>> CatalogOfFixturesGlue.java
+>>>>>>> specs/
+>>>>>>>> RunIntegBddSpecs.java
+>>>>>>>> SimpleObjectSpec_listAllAndCreate.feature
 ----
 
 Here the `BootstrappingGlue` glue class inherits from the framework's `HeadlessWithBootstrappingAbstract` class, and bootstraps using the `DomainAppApplicationModule` mentioned above.
@@ -247,16 +267,37 @@ The integration tests meanwhile are in `domainapp.application.integtests`:
 
 [monotree]
 ----
-> domainapp/
->> application/
->>> integtests/
->>>> DomainAppIntegTestAbstract.java
->>>> Smoke_IntegTest.java
+> src/
+>> test/
+>>> java/
+>>>> domainapp/
+>>>>> application/
+>>>>>> integtests/
+>>>>>>> DomainAppIntegTestAbstract.java
+>>>>>>> mml/
+>>>>>>>> approved/
+>>>>>>>> received/
+>>>>>>>> MetaModelService_IntegTest.java
+>>>>>>> smoke/
+>>>>>>>> Smoke_IntegTest.java
 ----
 
-The `Smoke_IntegTest` inherits `DomainAppIntegTestAbstract`, which in turn inherits from `IntegrationTestAbstract3` and uses the `DomainAppApplicationModule` previously discussed.
+There are two different sets of tests.
+
+* The `Smoke_IntegTest` performs a number of high-level smoke tests, to check that the core functionality works correctly.
++
+This test inherits `DomainAppIntegTestAbstract`, which in turn inherits from `IntegrationTestAbstract3` and uses the `DomainAppApplicationModule` previously discussed.
++
 Moreover, the `Smoke_IntegTest` uses the same `DomainAppDemo` fixture script.
 The application and the smoke tests therefore run with the exact same state, making debugging easy.
+
+* The `MetaModelService_IntegTest` demonstrates how to use approval tests to verify that the metamodel is unchanged between releases of Apache Isis.
++
+By default this test does nothing; it is activated by setting system properties ("lockdown.learn" or "lockdown.verify").
+When in "learn" mode, the test calls the `MetaModelService` to export an XML representation of the internal metamodel.
+These can then be moved from the `received` directory to the `approved` directory, as "known-to-good".
++
+Then, if Apache Isis is updated, then the "verify" test can be called to check that the metamodel created by the new version of the framework is the same as the previous version.
 
 With regard to the naming of these various BDD specs and integration tests, they follow the naming convention required by the (non-ASF) link:http://github.com/danhaywood/java-mavenmixin-surefire["surefire" mavenmixin] that configures the maven surefire plugin.
 
@@ -281,23 +322,26 @@ Under `src/main/java` we have:
 
 [monotree]
 ----
-> domainapp/
->> modules/
->>> simple/
->>>> SimpleModule.java
->>>> SimpleModuleManifest.java
->>>> dom/
->>>>> impl/
->>>>>> SimpleObject.java
->>>>>> SimpleObject.layout.xml
->>>>>> SimpleObject.png
->>>>>> SimpleObjectMenu.java
->>>>>> SimpleObjectRepository.java
->>>> fixture/
->>>>> SimpleObject_persona.java
->>>>> SimpleObjectBuilder.java
-> META-INF/
->> persistence.xml
+> src/
+>> main/
+>>> java/
+>>>> domainapp/
+>>>>> modules/
+>>>>>> simple/
+>>>>>>> SimpleModule.java
+>>>>>>> SimpleModuleManifest.java
+>>>>>>> dom/
+>>>>>>>> impl/
+>>>>>>>>> SimpleObject.java
+>>>>>>>>> SimpleObject.layout.xml
+>>>>>>>>> SimpleObject.png
+>>>>>>>>> SimpleObjectMenu.java
+>>>>>>>>> SimpleObjectRepository.java
+>>>>>>> fixture/
+>>>>>>>> SimpleObject_persona.java
+>>>>>>>> SimpleObjectBuilder.java
+>>>> META-INF/
+>>>>> persistence.xml
 ----
 
 The `SimpleModule` is the (single) module class referenced from the previously discussed `DomainAppApplicationModule`, meaning that all the entities, domain services and fixtures within it are included within the application.
@@ -331,20 +375,23 @@ There are also unit tests and "glue" for the BDD specs:
 
 [monotree]
 ----
-> domainapp/
->> modules/
->>> simple/
->>>> dom/
->>>>> impl/
->>>>>> SimpleObject_Test.java
->>>>>> SimpleObjectRepository_Test.java
->>>> integtests/
->>>>> SimpleModuleIntegTestAbstract.java
->>>>>> tests/
->>>>>>> SimpleObject_IntegTest.java
->>>>>>> SimpleObjectMenu_IntegTest.java
->>>>> specglue/
->>>>>> SimpleObjectMenuGlue.java
+> src/
+>> test/
+>>> java/
+>>>> domainapp/
+>>>>> modules/
+>>>>>> simple/
+>>>>>>> dom/
+>>>>>>>> impl/
+>>>>>>>>> SimpleObject_Test.java
+>>>>>>>>> SimpleObjectRepository_Test.java
+>>>>>>> integtests/
+>>>>>>>> SimpleModuleIntegTestAbstract.java
+>>>>>>>>> tests/
+>>>>>>>>>> SimpleObject_IntegTest.java
+>>>>>>>>>> SimpleObjectMenu_IntegTest.java
+>>>>>>>> specglue/
+>>>>>>>>> SimpleObjectMenuGlue.java
 ----
 
 The simpleapp application has both "local" integration tests (defined within the `myapp-module-simple` module) and also "global" integration tests (the "smoke" tests in `myapp-application` module).
@@ -360,36 +407,30 @@ This is used to run Isis' own xref:../rgmvn/rgmvn.adoc#[maven plugin] to xref:..
 
 === myapp-webapp
 
-Finally, in the `myapp-webapp` module we have the classes and configuration to package and bootstrap the application as a webapp.
-
-Under `src/main/java` there is:
-
-[monotree]
-----
-> domainapp/
->> webapp/
->>> welcome.html
-----
-
-The text of the welcome page shown by the Wicket viewer can be found in `welcome.html`, loaded from the classpath and in the same package as `DomainApplication`.
-
-Under `src/main/webapp` we have various resources that are used to configure the webapp, or that are served up by the running webapp:
+Finally, in the `myapp-webapp` module we have the configuration to package and bootstrap the application as a webapp.
+Under `src/main/webapp` are various resources, used either to configure the webapp, or that are served up by the running webapp:
 
 [monotree]
 ----
-> about/
->> index.html
-> css/
->> application.css
-> scripts/
->> application.js
-> swagger-ui/
-> WEB-INF/
->> isis.properties
->> logging.properties
->> shiro.ini
->> translations.po
->> web.xml
+> src/
+>> main/
+>>> webapp/
+>>>> src/
+>>>>> main/
+>>>>>> webapp/
+>>>>>>> about/
+>>>>>>>> index.html
+>>>>>>> css/
+>>>>>>>> application.css
+>>>>>>> scripts/
+>>>>>>>> application.js
+>>>>>>> swagger-ui/
+>>>>>>> WEB-INF/
+>>>>>>>> isis.properties
+>>>>>>>> logging.properties
+>>>>>>>> shiro.ini
+>>>>>>>> translations.po
+>>>>>>>> web.xml
 ----
 
 Most important of these is `WEB-INF/web.xml`, which bootstraps both the Wicket viewer and the Restful Objects viewer, along with Shiro security.
@@ -403,7 +444,6 @@ This is done using a webapp context listener:
   <listener>
       <listener-class>org.apache.isis.core.webapp.IsisWebAppContextListener</listener-class>
   </listener>
-
   ...
 </web-app>
 ----
@@ -450,6 +490,30 @@ The files in `src/main/jettyconsole` provide a splash image (if not run in headl
 This uses the Dockerfile residing in `docker/Dockerfile` (under `src/main/resources`).
 
 * also, the xref:../rgmvn/rgmvn.adoc#[Apache Isis Maven plugin] is also configured to generate a xref:../rgmvn/rgmvn.adoc#_rgmvn_swagger[swagger] spec file for the entire application, in the `xxx-webapp` module
+
+Under `src/main/resources` there is:
+
+[monotree]
+----
+> src/
+>> main/
+>>> resources/
+>>>> docker/
+>>>>> Dockerfile
+----
+
+As you might expect, this is used to create a Docker image.
+The `Dockerfile` is very simple; the built webapp is deployed as the ROOT.war into Apache Tomcat:
+
+[source,Dockerfile]
+.Dockerfile
+----
+FROM incodehq/tomcat
+RUN rm -rf ${DEPLOYMENT_DIR}/ROOT
+COPY ${docker-plugin.resource.include} ${DEPLOYMENT_DIR}/ROOT.war
+EXPOSE 8080
+----
+
 
 Now you know your way around the code generated by the archetype, lets see how to build the app and run it.
 

@@ -85,6 +85,14 @@ public class SimpleObjects {
                 .executeUnique();
     }
 
+    @Programmatic
+    public void ping() {
+        TypesafeQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
+        final QSimpleObject candidate = QSimpleObject.candidate();
+        q.range(0,2);
+        q.orderBy(candidate.name.asc());
+        q.executeList();
+    }
 
     public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {}
     @Action(domainEvent = CreateDomainEvent.class)

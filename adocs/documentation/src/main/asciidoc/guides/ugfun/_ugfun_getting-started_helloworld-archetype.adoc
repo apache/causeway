@@ -60,22 +60,23 @@ Under `src/main/java` we have:
 
 [monotree]
 ----
-> domainapp/
->> application/
->>> HelloWorldAppManifest.java
->>> isis.properties
->> dom/
->>> HelloWorldModule.java
->>> impl/
->>>> HelloWorldObject.java
->>>> HelloWorldObject.layout.xml
->>>> HelloWorldObject.png
->>>> HelloWorldObjects.java
->> app/
->>> HelloWorldApplication.java
->>> welcome.html
-> META-INF/
->> persistence.xml
+> src/
+>> main/
+>>> java/
+>>>> domainapp/
+>>>>> application/
+>>>>>> HelloWorldAppManifest.java
+>>>>>> isis-non-changing.properties
+>>>>>> menubars.layout.xml
+>>>>> dom/
+>>>>>> HelloWorldModule.java
+>>>>>> impl/
+>>>>>>> HelloWorldObject.java
+>>>>>>> HelloWorldObject.layout.xml
+>>>>>>> HelloWorldObject.png
+>>>>>>> HelloWorldObjects.java
+>>>> META-INF/
+>>>>> persistence.xml
 ----
 
 
@@ -98,7 +99,8 @@ The class is only small, so is worth showing here in its entirety:
 public class HelloWorldAppManifest extends AppManifestAbstract {
     public static final Builder BUILDER = Builder
             .forModules(HelloWorldModule.class)
-            .withConfigurationPropertiesFile(HelloWorldAppManifest.class, "isis.properties")
+            .withConfigurationPropertiesFile(
+                HelloWorldAppManifest.class, "isis-non-changing.properties")
             .withAuthMechanism("shiro");
 
     public HelloWorldAppManifest() {
@@ -107,16 +109,16 @@ public class HelloWorldAppManifest extends AppManifestAbstract {
 }
 ----
 
-Rather than implement `AppManifest` directly, `HelloWorldAppManifest` uses the builder provided by the convenience `AppManifestAbstract`); as you'll find when you work on bigger applications, it's common to have variations around the app manifest, so the builder makes it easy to create these variations without lots of boilerplate.
+Rather than implement `AppManifest` directly, `HelloWorldAppManifest` uses the builder provided by the convenience `AppManifestAbstract2`); as you'll find when you work on bigger applications, it's common to have variations around the app manifest, so the builder makes it easy to create these variations without lots of boilerplate.
 
 For now, we see that (using the builder) the app manifest defines three things:
 
 * a list of modules - there's just one, `HelloWorldModule` for this class
-* the location of a configuration file, `isis.properties`, read in as a resource from the classpath
+* the location of a configuration file, `isis-non-changing.properties`, read in as a resource from the classpath
 * specifying an authentication/authorisation mechanism, in this case Apache Shiro integration.
 
-In Apache Isis a module is simply an empty class, which is used simply to obtain a package name.
-The framework uses classpath scanning to find certain classes; rather than scan the entire classpath it limits its search to the package(s) obtained from the modules.
+In Apache Isis a module has various responsibilities, but the most important is simply its location.
+The framework uses classpath scanning to find certain classes; rather than scan the entire classpath it limits its search to the package(s) of the application's module(s).
 
 The packages are scanned to identify three types of classes:
 
@@ -132,7 +134,6 @@ In the helloworld application, the only entity is `HelloWorldObject`.
 These are classes that are annotated with the framework's `@DomainService` annotation.
 Depending on their nature, services are used to build up the menu, or are available to call programmatically, eg repositories.
 The framework instantiates an instance of each and will automatically inject the services into other domain objects and services.
-
 +
 In the helloworld application, the only domain service  is `HelloWorldObjects`.
 This appears in the menu, and also acts as a repository for the `HelloWorldObject` entity.
@@ -143,10 +144,10 @@ These are classes that extend from the applib `FixtureScript` class, and are use
 +
 The helloworld application doesn't provide any examples of these.
 
-The app manifest also identifies the `isis.properties` file (in the same package as `HelloWorldAppManifest`) as containing various configuration options.
+The app manifest also identifies the `isis-non-changing.properties` file (in the same package as `HelloWorldAppManifest`) as containing various configuration options.
 The helloworld application uses these for settings that are unlikely to change and so are loaded as a static resource from the classpath.
 
-You'll find that there's another file called `isis.properties` that's in `WEB-INF/isis.properties`.
+You'll find that there's also a similar file called `isis.properties`, which resides at `WEB-INF/isis.properties`.
 This also provides configuration options (the framework simply combines them) but those in `WEB-INF/isis.properties` are restricted to settings that are likely to change from environment to environment, most notably JDBC URL connection strings.
 Separating these out makes it easy to reconfigure the application to run against different databases in different environments (dev, test, production etc).
 
@@ -157,6 +158,8 @@ Shiro in turn is configured using the `WEB-INF/shiro.ini` file.
 ====
 The security integration provided by Apache Isis and Shiro is quite sophisticated; to get started though you can just login using username: `sven`, password: `pass`.
 ====
+
+The `menubars.layout.xml` file also resides in the same package as the manifest; this defines the menubar structure.
 
 In the `domainapp.dom` module ("dom" stands for "domain object model") is the `HelloWorldModule`:
 
@@ -181,9 +184,7 @@ This annotation is what identifies the class as an entity, so that Apache Isis p
 
 ** is also annotated with Isis' own `@DomainObject`.
 +
-This isn't mandatory, but since entities are the real building blocks on which Isis applications are built, it's very common to use this annotation.
-
-** also uses various Project Lombok annotations to remove boilerplate.
+This isn't mandatory, but since entities are the real building blocks on which Apache Isis applications are built, it's very common to use this annotation.
 
 * `HelloWorldObject.layout.xml` defines the layout of the members (properties and actions) of the `HelloWorldObject`.
 +
@@ -209,49 +210,38 @@ In the Apache Isis community we generally prefer to use annotations, but neverth
 </persistence>
 ----
 
-Finally, in the `domainapp.webapp` we have `HelloWorldApplication`.
-This is required to bootstrap the Wicket viewer (it is configured in `WEB-INF/web.xml`).
-Internally it uses Google Guice to configure various static resources served up by Wicket:
-
-[source,java]
-----
-public class HelloWorldApplication extends IsisWicketApplication {
-    ...
-    protected Module newIsisWicketModule() {
-        final Module isisDefaults = super.newIsisWicketModule();
-        final Module overrides = new AbstractModule() {
-            @Override
-            protected void configure() {
-                ...
-            }
-        };
-        return Modules.override(isisDefaults).with(overrides);
-    }
-}
-----
-
-The `configure()` method is the place to change the name of the application for example, or to change the initial about and welcome messages.
-The text of the welcome page shown by the Wicket viewer can be found in `welcome.html`, loaded from the classpath and in the same package as `HelloWorldApplication`.
+[NOTE]
+====
+In previous versions of Apache Isis the simple app defined its own subclass of `IsisWicketApplication` in `src/main/java`.
+This is generally no longer required because configuration properties now exist that can be set instead.
+====
 
 Under `src/main/webapp` we have various resources that are used to configure the webapp, or that are served up by the running webapp:
 
 [monotree]
 ----
-> about/
->> index.html
-> css/
->> application.css
-> scripts/
->> application.js
-> swagger-ui/
-> WEB-INF/
->> isis.properties
->> logging.properties
->> shiro.ini
->> web.xml
+> src/
+>> main/
+>>> webapp/
+>>> welcome.html
+>>>> about/
+>>>>> index.html
+>>>> css/
+>>>>> application.css
+>>>> scripts/
+>>>>> application.js
+>>>> swagger-ui/
+>>>> WEB-INF/
+>>>>> isis.properties
+>>>>> logging.properties
+>>>>> shiro.ini
+>>>>> web.xml
 ----
 
 Most important of these is `WEB-INF/web.xml`, which bootstraps both the Wicket viewer and the Restful Objects viewer (the REST API derived from the domain object model).
+
+The text of the welcome page shown by the Wicket viewer can be found in `welcome.html`.
+This is shown in the absence of a home page action/view model.
 
 The `about/index.html` is the page shown at the root of the package, providing links to either the Wicket viewer or to the Swagger UI.
 In a production application this is usually replaced with a page that does an HTTP 302 redirect to the Wicket viewer.
@@ -286,11 +276,14 @@ Under `src/test/java` we have:
 
 [monotree]
 ----
-> domainapp/
->> dom/
->>> impl/
->>>> HelloWorldObjectTest_delete.java
->>>> HelloWorldObjectTest_updateName.java
+> src/
+>> test/
+>>> java/
+>>>> domainapp/
+>>>>> dom/
+>>>>>> impl/
+>>>>>>> HelloWorldObjectTest_delete.java
+>>>>>>> HelloWorldObjectTest_updateName.java
 ----
 
 These are very simple unit tests of `HelloWorldObject`.

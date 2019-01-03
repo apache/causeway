@@ -362,12 +362,14 @@ Its definition is:
     <filter-name>WicketFilter</filter-name>
     <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
     <init-param>
-        <param-name>applicationClassName</param-name>                   <!--1-->
-        <param-value>domainapp.webapp.SimpleApplication</param-value>
+        <param-name>applicationClassName</param-name>
+        <param-value>org.apache.isis.viewer.wicket.viewer.IsisWicketApplication</param-value>
     </init-param>
 </filter>
 ----
-<1> specify the application (subclass of `IsisWicketApplication`) to use
+
+This is generally boilerplate.
+It is possible to specify a subclass of `IsisWicketApplication` (and in earlier versions of the framework this was generally required), but there now exist sufficient configuration properties that subclassing is generally not required.
 
 Its mapping is:
 

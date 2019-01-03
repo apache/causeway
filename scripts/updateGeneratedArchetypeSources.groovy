@@ -16,6 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+
+import groovy.xml.XmlUtil
+
 def cli = new CliBuilder(usage: 'updateGeneratedArchetypeSources.groovy -n [name] -v [version]')
 cli.with {
     n(longOpt: 'name', args: 1, required: true, argName: 'name', 'Application name (eg \'simpleapp\' or \'helloworld\')')
@@ -87,8 +90,18 @@ def pomFile=new File(BASE+"pom.xml")
 
 println "updating ${pomFile.path}"
 
-def pomXml = new XmlSlurper(false,false).parseText(pomFile.text)
+// read file, ignoring XML pragma
+def pomFileText = stripXmlPragma(pomFile)
 
+def pomXml = new XmlSlurper(false,false).parseText(pomFileText)
+pomXml.appendNode {
+  parent {
+    groupId("org.apache.isis.core")
+    artifactId("isis")
+    version(isis_version)
+    relativePath("../../../core/pom.xml")
+  }
+}
 pomXml.groupId='org.apache.isis.archetype'
 
 pomXml.appendNode(new XmlSlurper( false, false ).parseText( '''
@@ -156,6 +169,7 @@ pomXml.appendNode(new XmlSlurper( false, false ).parseText( '''
 pomFile.text = withLicense(pomXml)
 
 
+pomFile.text = serializeWithLicense(pomXml)
 
 /////////////////////////////////////////////////////
 //
@@ -189,7 +203,7 @@ resourcePomXmlFile.text = withLicense(resourcePomXml)
 
 /////////////////////////////////////////////////////
 //
-// update the .launch files
+// update the pom files parent version
 //
 /////////////////////////////////////////////////////
 
@@ -208,28 +222,44 @@ new File(ROOT+"BASE+\"src/main/resources/archetype-resources/").eachDirRecurse()
     }
 }
 
-
 /////////////////////////////////////////////////////
 //
 // update archetype-metadata.xml
 //
 /////////////////////////////////////////////////////
 
-
 def metaDataFile=new File(ROOT+"META-INF/maven/archetype-metadata.xml")
 
 println "updating ${metaDataFile.path}"
 
-def metaDataXml = new XmlSlurper(false,false).parseText(metaDataFile.text)
 
+// read file, ignoring XML pragma
+def metaDataFileText = stripXmlPragma(metaDataFile)
+
+def metaDataXml = new XmlSlurper(false,false).parseText(metaDataFileText)
 metaDataXml.modules.module.fileSets.fileSet.each { fileSet ->
     if(fileSet.directory=='ide/eclipse') {
         fileSet.@filtered='true'
     }
 }
 
+// https://issues.apache.org/jira/browse/ARCHETYPE-548
+metaDataXml.modules.module.each { module ->
+    if(module.@dir=='webapp') {
+        module.fileSets.fileSet.each { fileSet ->
+            if(fileSet.directory=='src/main/resources') {
+                fileSet.includes.include.each { include ->
+                    if(include == '**/*.') {
+                        include.replaceBody "**/*"
+                    }
+                }
+            }
+        }
+    }
+}
 
-metaDataFile.text = withLicense(metaDataXml)
+metaDataFile.text = serializeWithLicense(metaDataXml)
+
 
 
 ///////////////////////////////////////////////////
@@ -251,9 +281,9 @@ supplementalModelsFile.text = supplemental_models_text
 //
 ///////////////////////////////////////////////////
 
+String serializeWithLicense(xmlNode) {
 
-String withLicense(pomXml) {
-
+    def pragma="""<?xml version="1.0" encoding="UTF-8"?>"""
     def license_using_xml_comments="""<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
@@ -275,7 +305,14 @@ String withLicense(pomXml) {
 -->
 """
 
-    return license_using_xml_comments +
-            groovy.xml.XmlUtil.serialize(pomXml).replaceFirst("<\\?xml version=\"1.0\".*\\?>", "")
-
+    def xmlText = XmlUtil.serialize( new groovy.xml.StreamingMarkupBuilder().bind { mkp.yield(xmlNode) } )
+    return xmlText.replace(pragma, license_using_xml_comments)
 }
+
+String stripXmlPragma(File file) {
+    def sw = new StringWriter()
+    file.filterLine(sw) { ! (it =~ /^\<\?xml/ ) }
+    return sw.toString()
+}
+
+

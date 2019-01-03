@@ -61,6 +61,12 @@ public interface MetaModelService {
      * <p>
      *     Used by {@link MetaModelServicesMenu} to return a downloadable CSV.
      * </p>
+     *
+     * <p>
+     *     Note that {@link MetaModelService6#exportMetaModel(MetaModelService6.Config)} provides a superset of the functionality provided by this method.
+     * </p>
+     *
+     * @see MetaModelService6
      */
     @Programmatic
     DomainModel getDomainModel();

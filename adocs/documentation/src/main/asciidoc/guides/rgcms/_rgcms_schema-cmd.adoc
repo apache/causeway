@@ -5,8 +5,7 @@
 :_imagesdir: images/
 
 
-The command ("cmd") schema defines the serialized form of the __intention__ to invoke an action or to
-edit a property.
+The command ("cmd") schema defines the serialized form of the __intention__ to invoke an action or to edit a property.
 It can be supplemented with optional timings capturing the actual invocation of a command (introduced to support the replication of commands in a master/slave arrangement).
 
 
@@ -63,14 +62,14 @@ The `commandDto` root element is defined as:
     ...
 </xs:schema>
 ----
-<1> the command schema has a namespace URI of "http://isis.apache.org/schema/cmd".  Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
+<1> the command schema has a namespace URI of "http://isis.apache.org/schema/cmd".
+Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
 <2> uses complex types defined in the xref:../rgcms/rgcms.adoc#_rgcms_schema_common["common" schema].
 <3> definition of the `commandDto` root element.
 The corresponding XML will use this as its top-level element.
 <4> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
 <5> unique identifier for the transaction in which this command is created.
-The transaction Id is used to correlate to the xref:../rgcms/rgcms.adoc#_rgcms_schema_interaction[interaction] that executes the command, and to any
-xref:../rgcms/rgcms.adoc#_rgcms_schema_changes[changes] to domain objects occurring as a side-effect of that interaction.
+The transaction Id is used to correlate to the xref:../rgcms/rgcms.adoc#_rgcms_schema_interaction[interaction] that executes the command, and to any xref:../rgcms/rgcms.adoc#_rgcms_schema_changes[changes] to domain objects occurring as a side-effect of that interaction.
 <6> the name of the user who created the command (whose intention it is to invoke the action/edit the property).
 <7> the target object (or objects) to be invoked.
 A bulk action will create multiple commands, each with only a single target.

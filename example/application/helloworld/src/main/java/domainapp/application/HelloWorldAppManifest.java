@@ -32,7 +32,8 @@ public class HelloWorldAppManifest extends AppManifestAbstract2 implements AppCo
 
     public static final Builder BUILDER = Builder
             .forModule(new HelloWorldModule())
-            .withConfigurationPropertiesFile(HelloWorldAppManifest.class, "isis-non-changing.properties")
+            .withConfigurationPropertiesFile(
+                    HelloWorldAppManifest.class, "isis-non-changing.properties")
             .withAuthMechanism("shiro");
 
     public HelloWorldAppManifest() {

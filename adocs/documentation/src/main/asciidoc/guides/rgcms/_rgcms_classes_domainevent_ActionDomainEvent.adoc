@@ -36,9 +36,8 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     public List<String> getParameterNames();
     public List<Class<?>> getParameterTypes();
 
-    public Object getMixedIn();                                             // <5>
-    public List<Object> getArguments();                                     // <6>
-    public Object getReturnValue();                                         // <7>
+    public List<Object> getArguments();                                     // <5>
+    public Object getReturnValue();                                         // <6>
 }
 ----
 <1> The `Default` nested static class is the default for the xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`]
@@ -47,6 +46,5 @@ Whether this raises an event or not depends upon the `isis.reflector.facet.actio
 <2> The `Noop` class is provided as a convenience to indicate that an event should _not_ be posted (irrespective of the configuration property setting).
 <3> Similarly, the `Doop` class is provided as a convenience to indicate that an event _should_ be raised (irrespective of the configuration property setting).
 <4> Deprecated, use xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] or (better)  xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]instead.
-<5> Populated only for mixins; holds the underlying domain object that the mixin contributes to.
-<6> The arguments being used to invoke the action; populated during validate phase and subsequent phases.
-<7> The value returned by the action; populated only in the executed phase.
+<5> The arguments being used to invoke the action; populated during validate phase and subsequent phases.
+<6> The value returned by the action; populated only in the executed phase.

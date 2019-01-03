@@ -63,7 +63,7 @@
 * link:https://issues.apache.org/jira/browse/ISIS-640[ISIS-640] - Extend MementoService.Memento API so that can also return the set of keys held in the Memento
 * link:https://issues.apache.org/jira/browse/ISIS-651[ISIS-651] - Modifications to enable JRebel support
 * link:https://issues.apache.org/jira/browse/ISIS-659[ISIS-659] - Extend MementoServiceDefault service to handle Bookmarks and also enums (as well as simple values)
-* link:https://issues.apache.org/jira/browse/ISIS-665[ISIS-665] - ObjectActionImpl should escalate a thrown Isis ApplicationException to its underlying cause if the transaction is in a state of mustAbort.
+* link:https://issues.apache.org/jira/browse/ISIS-665[ISIS-665] - ObjectActionImpl should escalate a thrown Apache Isis ApplicationException to its underlying cause if the transaction is in a state of mustAbort.
 * link:https://issues.apache.org/jira/browse/ISIS-668[ISIS-668] - out&quot; services.
 * link:https://issues.apache.org/jira/browse/ISIS-670[ISIS-670] - Replace AuditingService and AuditingService2 with new AuditingService3 API, more consistent with other APIs
 * link:https://issues.apache.org/jira/browse/ISIS-671[ISIS-671] - Add a ReifiableActionFacet and @Reifiable annotation as a way to restrict which ReifiableActions are persisted.  Enable background task service to hint that an ReifiableAction should be persisted even if not annotated.
@@ -209,7 +209,7 @@
 * link:https://issues.apache.org/jira/browse/ISIS-623[ISIS-623] - Make the default logging of JDO and IsisSytemForTest less verbose
 * link:https://issues.apache.org/jira/browse/ISIS-651[ISIS-651] - Modifications to enable JRebel support
 * link:https://issues.apache.org/jira/browse/ISIS-657[ISIS-657] - JDO objectstore service implemenations should use &quot;IsisXxx&quot; as a common prefix to any tables.
-* link:https://issues.apache.org/jira/browse/ISIS-665[ISIS-665] - ObjectActionImpl should escalate a thrown Isis ApplicationException to its underlying cause if the transaction is in a state of mustAbort.
+* link:https://issues.apache.org/jira/browse/ISIS-665[ISIS-665] - ObjectActionImpl should escalate a thrown Apache Isis ApplicationException to its underlying cause if the transaction is in a state of mustAbort.
 * link:https://issues.apache.org/jira/browse/ISIS-667[ISIS-667] - up/rationalization of JDO domain service impls
 * link:https://issues.apache.org/jira/browse/ISIS-670[ISIS-670] - Replace AuditingService and AuditingService2 with new AuditingService3 API, more consistent with other APIs
 * link:https://issues.apache.org/jira/browse/ISIS-671[ISIS-671] - Add a ReifiableActionFacet and @Reifiable annotation as a way to restrict which ReifiableActions are persisted.  Enable background task service to hint that an ReifiableAction should be persisted even if not annotated.

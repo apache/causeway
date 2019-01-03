@@ -28,46 +28,66 @@ The API of the class is:
 ----
 public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
 
-    public Phase getEventPhase();                                   // <1>
-    public S getSource();                                           // <2>
-    public Identifier getIdentifier();                              // <3>
+    public S getSource();                                           // <1>
+    public Object getMixedIn();                                     // <2>
+    public Object getSubject();                                     // <3>
 
-    public void hide();                                             // <4>
-    public boolean isHidden();                                      // <5>
+    public Identifier getIdentifier();                              // <4>
 
-    public void disable(final String reason);                       // <6>
+    public Phase getEventPhase();                                   // <5>
+
+    public void hide();                                             // <6>
+    public boolean isHidden();                                      // <7>
+
+    public void disable(final String reason);                       // <8>
     public void disable(final TranslatableString reason);
-    public String getDisabledReason();                              // <7>
+    public String getDisabledReason();                              // <9>
     public TranslatableString getDisabledReasonTranslatable();
     public boolean isDisabled();
 
-    public void invalidate(final String reason);                    // <8>
+    public void invalidate(final String reason);                    // <10>
     public void invalidate(final TranslatableString reason);
-    public String getInvalidityReason();                            // <9>
+    public String getInvalidityReason();                            // <11>
     public TranslatableString getInvalidityReasonTranslatable();
     public boolean isInvalid();
 
-    public void veto(final String reason, final Object... args);    // <10>
+    public void veto(final String reason, final Object... args);    // <12>
     public void veto(final TranslatableString translatableReason);
 
-    public Object get(Object key);                                  // <11>
+    public Object get(Object key);                                  // <13>
     public void put(Object key, Object value);
 }
 ----
-<1> Whether the framework is checking visibility, enablement, validity or actually executing
+<1> The domain object raising this event.
++
+For a "regular" action, property or collection then this will be the target domain object.
+But for a "mixin" action, this will be an instance of the mixin itself.
+
+<2> For a "mixin", this will be the target object that is being contributed to.
++
+For a "regular" action, this will return `null`.
+
+<3> Returns the domain object being interacted with, irrespective of whether this is a "regular" action/property/collection or a "mixin".
++
+* For a regular member, this will return the same as `getSource()`.
++
+* For a mixin, this will return the same as `getMixedIn()`.
+
+<4> Identifier of the action, property or collection being interacted with.
+
+<5> Whether the framework is checking visibility, enablement, validity or actually executing
 (invoking action, editing property), as per the `Phase` enum (defined below).
-<2> The domain object raising this event
-<3> Identifier of the action, property or collection being interacted with.
-<4> API for subscribers to hide the member
-<5> Used by the framework to determine if the member should be hidden (not rendered)
-<6> API for subscribers to disable the member, specifying the reason why (possibly translated)
-<7> Used by the framework to determine whether the member should be disabled (greyed out) when rendered.
-<8> API for subscribers to invalidate an interaction, eg invalid arguments to an action
-<9> Used by the framework to determine whether the interaction is invalid and should be blocked (eg pressing OK shows
+
+<6> API for subscribers to hide the member
+<7> Used by the framework to determine if the member should be hidden (not rendered)
+<8> API for subscribers to disable the member, specifying the reason why (possibly translated)
+<9> Used by the framework to determine whether the member should be disabled (greyed out) when rendered.
+<10> API for subscribers to invalidate an interaction, eg invalid arguments to an action
+<11> Used by the framework to determine whether the interaction is invalid and should be blocked (eg pressing OK shows
 message)
-<10> Convenience API for subscribers to veto; will automatically call either `hide()`, `disable(...)` or
+<12> Convenience API for subscribers to veto; will automatically call either `hide()`, `disable(...)` or
 `invalidate(...)` based on the phase
-<11> Mechanism to allow subscribers to share arbitrary information between phases.  One event instance is used for both
+<13> Mechanism to allow subscribers to share arbitrary information between phases.  One event instance is used for both
 the hide and disable phases, and a different event instance is shared between validate/pre-execute/post-execute.
 
 The referenced `Phase` enum is in turn:

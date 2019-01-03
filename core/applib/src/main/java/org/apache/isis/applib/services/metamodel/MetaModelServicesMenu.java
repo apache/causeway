@@ -18,7 +18,9 @@
  */
 package org.apache.isis.applib.services.metamodel;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,10 +41,10 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.metamodel.MetaModelService.Config;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 @DomainService(
@@ -59,10 +61,12 @@ public class MetaModelServicesMenu {
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<MetaModelServicesMenu> { private static final long serialVersionUID = 1L; }
 
     private final MimeType mimeTypeTextCsv;
+    private final MimeType mimeTypeTextXml;
 
     public MetaModelServicesMenu() {
         try {
             mimeTypeTextCsv = new MimeType("text", "csv");
+            mimeTypeTextXml = new MimeType("application", "xml");
         } catch (final MimeTypeParseException ex) {
             throw new RuntimeException(ex);
         }
@@ -72,63 +76,7 @@ public class MetaModelServicesMenu {
 
     public static class DownloadMetaModelEvent extends ActionDomainEvent { private static final long serialVersionUID = 1L; }
 
-    @Action(
-            domainEvent = DownloadMetaModelEvent.class,
-            semantics = SemanticsOf.SAFE,
-            restrictTo = RestrictTo.PROTOTYPING
-            )
-    @ActionLayout(
-            cssClassFa = "fa-download",
-            named = "Download Meta Model (XML)"
-            )
-    @MemberOrder(sequence="500.500.1")
-    public Clob downloadMetaModelXml(
-            
-            @ParameterLayout(named = ".xml file name")
-            @Parameter(optionality=Optionality.MANDATORY)
-            final String fileName,
-            
-            @ParameterLayout(
-                named = "Package Prefix", 
-                describedAs="Subset of the complete meta model, only including packages starting with given prefix.")
-            @Parameter(optionality=Optionality.MANDATORY)
-            final String packagePrefix,
-            
-            @ParameterLayout(named = "Ignore Interfaces")
-            @Parameter(optionality=Optionality.MANDATORY)
-            final boolean ignoreInterfaces
-            
-            ) {
 
-        Config modelConfig = new MetaModelService.Config()
-                .withIgnoreNoop()
-                .withIgnoreAbstractClasses()
-                .withIgnoreBuiltInValueTypes()
-                .withPackagePrefix(packagePrefix);
-        
-        if(ignoreInterfaces) {
-            modelConfig = modelConfig.withIgnoreInterfaces();
-        }
-        
-        final MetamodelDto metamodelDto = metaModelService.exportMetaModel(modelConfig);
-        final String xml = toXml(metamodelDto); 
-        return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
-    }
-
-    public String default0DownloadMetaModelXml() {
-        return "metamodel.xml";
-    }
-    
-    public String default1DownloadMetaModelXml() {
-        return "domainapp";
-    }
-    
-    public boolean default2DownloadMetaModelXml() {
-        return true;
-    }
-    
-    // //////////////////////////////////////
-    
     @Action(
             domainEvent = DownloadMetaModelEvent.class,
             semantics = SemanticsOf.SAFE,
@@ -156,15 +104,95 @@ public class MetaModelServicesMenu {
         return "metamodel.csv";
     }
 
-    // -- XML HELPER
-    
-    @Inject JaxbService jaxbService;
-    
     private String toXml(MetamodelDto model) {
-        return jaxbService.toXml(model);    
+        return jaxbService.toXml(model);
     }
-    
-    // -- CSV HELPER
+
+
+    // //////////////////////////////////////
+
+
+    public static class DownloadMetaModelXmlEvent extends ActionDomainEvent {
+    }
+
+    @Action(
+            domainEvent = DownloadMetaModelXmlEvent.class,
+            semantics = SemanticsOf.SAFE,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            cssClassFa = "fa-download",
+            named = "Download Meta Model (XML)"
+    )
+    @MemberOrder(sequence="500.500.2")
+    public Clob downloadMetaModelXml(
+            @ParameterLayout(named = ".xml file name")
+            final String fileName,
+            @ParameterLayout(named = "Packages",
+                    describedAs="Subset of the complete meta model, only including packages starting with given prefix.")
+            final List<String> packages,
+            @ParameterLayout(named = "Ignore Interfaces")
+            @Parameter(optionality=Optionality.MANDATORY)
+            final boolean ignoreInterfaces
+    ) {
+
+        MetaModelService.Config config =
+                new MetaModelService.Config()
+                        .withIgnoreNoop()
+                        .withIgnoreAbstractClasses()
+                        .withIgnoreInterfaces()
+                        .withIgnoreBuiltInValueTypes();
+        for (final String pkg : packages) {
+            config = config.withPackagePrefix(pkg);
+        }
+        if(ignoreInterfaces) {
+            config = config.withIgnoreInterfaces();
+        }
+
+
+        final MetamodelDto metamodelDto =  metaModelService.exportMetaModel(config);
+
+        final String xml = jaxbService.toXml(metamodelDto);
+        return new Clob(_Strings.asFileNameWithExtension(fileName,  ".xml"), "text/xml", xml);
+    }
+
+    public String validateDownloadMetaModelXml(
+            final String fileName, final List<String> packagePrefixes, final boolean ignoreInterfaces) {
+        if(packagePrefixes == null || packagePrefixes.isEmpty()) {
+            return "At least one package must be selected";
+        }
+        return null;
+    }
+
+    public String default0DownloadMetaModelXml() {
+        return "metamodel.xml";
+    }
+
+    public List<String> choices1DownloadMetaModelXml() {
+        final DomainModel domainModel = metaModelService.getDomainModel();
+        final List<DomainMember> export = domainModel.getDomainMembers();
+        final SortedSet<String> packages = _Sets.newTreeSet();
+        for (final DomainMember domainMember : export) {
+            final String packageName = domainMember.getPackageName();
+            final String[] split = packageName.split("[.]");
+            final StringBuilder buf = new StringBuilder();
+            for (final String part : split) {
+                if(buf.length() > 0) {
+                    buf.append(".");
+                }
+                buf.append(part);
+                packages.add(buf.toString());
+            }
+        }
+        return new ArrayList<>(packages);
+    }
+
+    public boolean default2DownloadMetaModelXml() {
+        return true;
+    }
+
+
+    // //////////////////////////////////////
 
     private static StringBuilder asBuf(final List<String> list) {
         final StringBuilder buf = new StringBuilder();
@@ -211,5 +239,7 @@ public class MetaModelServicesMenu {
 
     @javax.inject.Inject
     MetaModelService metaModelService;
+    @Inject
+    JaxbService jaxbService;
 
 }

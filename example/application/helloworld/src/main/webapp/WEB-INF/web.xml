@@ -31,5 +31,4 @@
     <listener>
         <listener-class>org.apache.isis.core.webapp.IsisWebAppContextListener</listener-class>
     </listener>
-  
 </web-app>

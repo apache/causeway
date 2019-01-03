@@ -222,7 +222,7 @@
         <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
         <init-param>
             <param-name>applicationClassName</param-name>
-            <param-value>domainapp.webapp.DomainApplication</param-value>
+            <param-value>org.apache.isis.viewer.wicket.viewer.IsisWicketApplication</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -299,7 +299,7 @@
         </init-param>
         <init-param>
             <param-name>passThru</param-name>
-            <param-value>/restful/swagger</param-value>
+            <param-value>/restful/swagger,/restful/health</param-value>
         </init-param>
     </filter>
     <filter-mapping>

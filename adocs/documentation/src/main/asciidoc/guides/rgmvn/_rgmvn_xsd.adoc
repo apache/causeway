@@ -34,7 +34,7 @@ Defaults to `false`; if set then the call to xref:../rgsvc/rgsvc.adoc#_rgsvc_int
 
 As a convenience to any (Java) consumers, the XSDs generated from the view models can then in turn be generated
 into DTOs.  The original view models and these DTOs are similar but not identical: while the view models can only be used
-within the Isis application (they may reference underlying domain entities) whereas the DTO classes generated from the
+within the Apache Isis application (they may reference underlying domain entities) whereas the DTO classes generated from the
 XSDs can be used standalone, eg by a Java subscriber running on an ESB such as Apache Camel.
 
 The rest of this section explains how to configure a new `xsd` submodule that uses the `isis-maven-plugin` along with

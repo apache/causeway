@@ -54,7 +54,6 @@ For example:
 [source,bash,subs="attributes+"]
 ----
 export ISISTMP=/c/tmp                               # <1>
-export ISISDEV={isisdev}
 export ISISREL={isisnext}
 export ISISRC=RC1
 export ISISBRANCH=release-$ISISREL-$ISISRC
@@ -68,7 +67,7 @@ env | grep ISIS | sort
 (One should exist already, xref:../cgcom/cgcom.adoc#__cgcom_post-release-successful_update-jira_create-new-jira[created at] the beginning of the development cycle now completing).
 <3> adjust as required (Tomcat is used to smoke test the simpleapp archetype)
 
-Obviously, alter `$ISISDEV` and `$ISISREL` as required, and bump `$ISISRC` for re-releasing following an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] releases.
+Obviously, alter ``$ISISREL`` as required, and bump ``$ISISRC`` for re-releasing following an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] release.
 
 [IMPORTANT]
 ====
@@ -94,33 +93,14 @@ git checkout -b $ISISBRANCH
 The release is performed on a branch; if we are successful, this branch will be merged back into master.
 
 
-Double check that the version number of the parent pom should reflect the branch name that you are now on (with a `-SNAPSHOT` suffix).
-This will normally have been done already during earlier development; but confirm that it has been updated.
-If it has not, make the change.
-
-Double check that the version number of the core POM (`core/pom.xml`) should reflect the branch name that you are now on.
-For example, if releasing version `{isisnext}`, the POM should read:
-
-[source,xml,subs="attributes+"]
-----
-<groupId>org.apache.isis.core</groupId>
-<artifactId>isis</artifactId>
-<version>{isisdev}</version>
-----
-
-Also, check that there are no snapshot dependencies:
+Check that there are no snapshot dependencies:
 
 [source,bash,subs="attributes+"]
 ----
 grep SNAPSHOT `/bin/find . -name pom.xml | grep -v target | grep -v mothball | sort`
 ----
 
-The only mention of `SNAPSHOT` should be for the Isis modules about to be released.
-
-[TIP]
-====
-Obviously, don't update Apache Isis' `SNAPSHOT` references; these get updated by the `mvn release:prepare` command we run later.
-====
+The only mention of `SNAPSHOT` should be in the `revision` property of the root `core/pom.xml` file.
 
 
 
@@ -130,29 +110,27 @@ Obviously, don't update Apache Isis' `SNAPSHOT` references; these get updated by
 Previously we used the `maven-release-plugin` which took responsibility for bumping the `<version>` from -SNAPSHOT to release, and then onto the next -SNAPSHOT.
 However, this plugin does not seem to be compatible with the support for `${revision}` property introduced in Maven 3.5.0 in order https://maven.apache.org/maven-ci-friendly.html[to support CI/CD use cases]; at least we couldn't make it work.
 
-So, instead, we perform the edit of ${revision}` manually before.
-
-In the three `pom.xml` files (for `core` and the two archetypes) the property is defined:
-
-[source,xml,subs="attributes+"]
-----
-<properties>
-    <revision>{isisdev}</revision>
-    ...
-</properties>
-----
+So, instead, we perform the edit of `${revision}` in the three `pom.xml` files (for `core` and the two archetypes):
 
 Change all of these to the release version, using:
 
 [source,bash,subs="attributes+"]
 ----
-sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" core/pom.xml
-sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/simpleapp/pom.xml
-sed -i -E "s|<revision>[^<]+<|<revision>${ISISREL}<|g" example/application/helloworld/pom.xml
-git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's to ${ISISREL}"
+sh scripts/version-bump.sh ${ISISJIRA} ${ISISREL}
 ----
 
-After release, there is a xref:cgcom.adoc#__cgcom_cutting-a-release_bump-revision-to-ISISDEV[similar step at the end] to update to the next development `SNAPSHOT`.
+so that they should read:
+
+[source,xml,subs="attributes+"]
+----
+<properties>
+    <revision>{isisrel}</revision>
+    ...
+</properties>
+----
+
+
+After release, there is a xref:cgcom.adoc#__cgcom_cutting-a-release_reset-revision[similar step at the end] to reset back to `1.0.0-SNAPSHOT`.
 
 
 
@@ -175,7 +153,6 @@ Set additional environment variables for the core "artifact":
 [source,bash,subs="attributes+"]
 ----
 export ISISART=isis
-export ISISCOR="Y"
 
 env | grep ISIS | sort
 ----
@@ -208,14 +185,6 @@ Investigate and fix any reported violations, typically by either:
 * updating the `&lt;excludes&gt;` element for the `apache-rat-plugin` plugin to ignore test files, log files and any other non-source code files
 * also look to remove any stale `&lt;exclude&gt;` entries
 
-To add missing headers, use the groovy script `addmissinglicenses.groovy` (in the `scripts` directory) to automatically insert missing headers for certain file types. The actual files checked are those with extensions specified in the line `def fileEndings = [&quot;.java&quot;, &quot;.htm&quot;]`:
-
-[source,bash]
-----
-groovy ../scripts/addmissinglicenses.groovy -x
-----
-
-(If the `-x` is omitted then the script is run in "dry run" mode).
 Once you've fixed all issues, confirm once more that `apache-rat-plugin` no longer reports any license violations, this time leaving the `rat.numUnapprovedLicenses` property to its default, 0:
 
 [source,bash]
@@ -234,7 +203,14 @@ Without appropriate additional configuration, this would result in the generated
 Fortunately, Maven allows the missing information to be provided by configuring the `maven-remote-resources-plugin`.
 This is stored in the `src/main/appended-resources/supplemental-models.xml` file, relative to the root of each releasable module.
 
-To capture the missing license information, use:
+It's first necessary to have built the framework locally at least once:
+
+[source,bash,subs="attributes+"]
+----
+mvn clean install -o
+----
+
+Once this is done, capture the missing license information using:
 
 [source,bash,subs="attributes+"]
 ----
@@ -330,9 +306,9 @@ In this section we release `simpleapp`, in the following xref:cgcom.adoc#__cgcom
 
 [NOTE]
 ====
-If releasing using Windows and Maven >= 3.3.3, then there is an issue that requires a small workaround.
+If releasing using Windows, then there is an issue that requires a small workaround.
 
-In Maven 3.3.3 the `mvn.bat` file was removed, replaced instead with `mvn.cmd`.
+In Maven 3.3.3 and later, the `mvn.bat` file was removed, replaced instead with `mvn.cmd`.
 However, `maven-archetype-plugin:2.4` only uses `mvn.bat`; this causes the `archetype:create-from-project` goal to fail.
 The fix is simple: just copy `mvn.cmd` to `mvn.bat`.
 ====
@@ -419,8 +395,6 @@ popd
 ----
 mvn install -Dmavenmixin-docker -D docker-plugin.imageName=test/simpleapp
 docker container run -p 8080:8080 --name simpleapp -d test/simpleapp
-
-#winpty docker exec -it simpleapp bash
 ----
 +
 [NOTE]
@@ -438,6 +412,29 @@ image::{_imagesdir}docker/026-docker-nat-private.png[width="600px",link="{_image
 This can be done using the "Local Security Policy" application.
 ====
 
+Optionally, you can connect to the running container:
+
+* on Mac/Linux:
++
+[source,bash]
+----
+docker exec -it simpleapp sh
+----
+
+* on Windows
++
+[source,bash]
+----
+winpty docker exec -it simpleapp sh
+----
+
+You can then tail the log of the Tomcat instance:
+
+[source,bash]
+----
+cd /opt/*tomcat*/logs
+tail -f catalina.*.log
+----
 
 This too should be accessed at link:http://localhost:8080[localhost:8080].
 
@@ -507,7 +504,8 @@ mvn archetype:generate  \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=$ISISCPN-archetype
+    -D archetypeArtifactId=$ISISCPN-archetype \
+    -B
 ----
 
 Build the newly generated app and test:
@@ -519,6 +517,16 @@ mvn clean install -o
 mvn -pl webapp jetty:run              # runs as mvn jetty plugin
 ----
 
+Also check that the generated app can be built as a Docker image:
+
+[source,bash]
+----
+mvn install -Dmavenmixin-docker -D docker-plugin.imageName=test/myapp
+docker container run -p 8080:8080 --name myapp -d test/myapp
+sleep 10 && curl http://localhost:8080
+docker container kill myapp
+docker container rm myapp
+----
 
 [[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_deploy]]
 === Deploy
@@ -683,7 +691,8 @@ mvn archetype:generate  \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D archetypeGroupId=org.apache.isis.archetype \
-    -D archetypeArtifactId=$ISISCPN-archetype
+    -D archetypeArtifactId=$ISISCPN-archetype \
+    -B
 ----
 
 Build the newly generated app and test:
@@ -772,20 +781,23 @@ Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See 
 
 
 
-[[__cgcom_cutting-a-release_bump-revision-to-ISISDEV]]
-== Bump `revision` property to `$ISISDEV`
+[[__cgcom_cutting-a-release_reset-revision]]
+== Reset `revision` property
 
 At the beginning of the release process we bumped the `revision` property to the release version, ie `${ISISREL}`.
-With the release now deployed we now need to bump the revision up to the next development version, ie `${ISISDEV}`.
+With the release now deployed we now need to reset the revision back down to the base snapshot, ie `1.0.0-SNAPSHOT`.
+
+[NOTE]
+====
+Previously we bumped to the next development snapshot.
+However, this approach doesn't play well with CI/CD when Apache Isis is mounted as a git submodule, so instead we always use `1.0.0-SNAPSHOT` for all development work.
+====
 
 In the root of the Apache Isis repo, we do this for all three ``pom.xml``s with:
 
 [source,bash,subs="attributes+"]
 ----
-sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" core/pom.xml
-sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/simpleapp/pom.xml
-sed -i -E "s|<revision>[^<]+<|<revision>${ISISDEV}<|g" example/application/helloworld/pom.xml
-git commit -am "${ISISJIRA}: bumps revision property across all pom.xml's to ${ISISDEV}"
+sh scripts/version-reset.sh ${ISISJIRA}
 ----
 
 
@@ -848,17 +860,43 @@ I've cut a release for Apache Isis Core and the two archetypes:
 * HelloWorld Archetype {isisnext}
 * SimpleApp Archetype {isisnext}
 
-The source code artifacts have been uploaded to staging repositories on repository.apache.org:
-
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/core/isis/{isisnext}/isis-{isisnext}-source-release.zip
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/helloworld-archetype/{isisnext}/helloworld-archetype-{isisnext}-source-release.zip
-* http://repository.apache.org/content/repositories/orgapacheisis-10xx/org/apache/isis/archetype/simpleapp-archetype/{isisnext}/simpleapp-archetype-{isisnext}-source-release.zip
-
+The source code artifacts have been uploaded to staging repositories on repository.apache.org.
 For each zip there is a corresponding signature file (append .asc to the zip's url).
 
 In the source code repo the code has been tagged as isis-{isisnext}-RC1, helloworld-archetype-{isisnext}-RC1 and simpleapp-archetype-{isisnext}-RC1; see https://github.com/apache/isis/tags
 
-For instructions on how to verify the release (build from binaries and/or use in Maven directly), see https://isis.apache.org/guides/cgcom/cgcom.html#_cgcom_verifying-releases
+To verify the source code, you can use the following commands (in an empty directory):
+
+    NEXUSREPONUM=10xx
+    VERSION={isisnext}
+
+    curl http://www.apache.org/dist/isis/KEYS > /tmp/KEYS
+    gpg --import /tmp/KEYS
+
+    rm -rf isis-$VERSION*
+    rm -rf simpleapp-archetype-$VERSION*
+    rm -rf helloworld-archetype-$VERSION*
+
+    curl -O -L https://raw.githubusercontent.com/apache/isis/06f947ad7a0968c34d8e6941a77e12aa0196cd17/scripts/verify-isis-release.sh
+
+    chmod +x ./verify-isis-release.sh
+    ./verify-isis-release.sh $NEXUSREPONUM $VERSION
+
+
+Assuming this completes successfully, you can then test the two applications generated from the `simpleapp` and `helloworld` archetypes:
+
+    pushd test-simpleapp/myapp
+    mvn -pl webapp jetty:run
+    popd
+
+and
+
+    pushd test-helloworld/myapp
+    mvn jetty:run
+    popd
+
+
+For more details, see https://isis.apache.org/guides/cgcom/cgcom.html#_cgcom_verifying-releases
 
 Please verify the release and cast your vote.  The vote will be open for a minimum of 72 hours.
 
@@ -871,7 +909,7 @@ Remember to update:
 
 * the version number (`{isisnext}` or whatever)
 * the release candidate number (`RC1` or whatever)
-* the repository id, as provided by Nexus earlier (`orgapacheisis-10xx` or whatever)
+* the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`10xx` or whatever)
 
 Note that the email also references the procedure for other committers to xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verify the release].
 

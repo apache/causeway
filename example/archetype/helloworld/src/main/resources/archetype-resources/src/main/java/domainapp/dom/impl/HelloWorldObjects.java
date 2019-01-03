@@ -53,7 +53,10 @@ public class HelloWorldObjects {
 
     @Action(semantics = SemanticsOf.SAFE)
     @MemberOrder(sequence = "2")
-    public List<HelloWorldObject> findByName(final String name) {
+    public List<HelloWorldObject> findByName(
+            @Parameter(maxLength = 40)
+            @ParameterLayout(named = "Name")
+            final String name) {
     	JDOQLTypedQuery<HelloWorldObject> q = isisJdoSupport.newTypesafeQuery(HelloWorldObject.class);
         final QHelloWorldObject cand = QHelloWorldObject.candidate();
         q = q.filter(

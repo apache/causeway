@@ -83,7 +83,7 @@ public class HealthResourceServerside extends ResourceAbstract implements Health
         @Override
         protected void doExecuteWithTransaction(final Object context) {
             super.doExecuteWithTransaction(context);
-            init(RepresentationType.VERSION, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
+            init(RepresentationType.HEALTH, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
             final HealthReprRenderer renderer = new HealthReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
             final Health health;

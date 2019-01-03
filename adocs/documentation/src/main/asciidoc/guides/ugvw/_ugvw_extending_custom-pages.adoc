@@ -70,7 +70,7 @@ public class MyPageClassList extends PageClassListDefault {
 
 
 You then need to register your custom `PageClassList`.
-This is done by adjusting the Guice bindings (part of Apache Isis' bootstrapping) in a custom subclass of `IsisWicketApplication`:
+This is done by subclassing `IsisWicketApplication` (register the subclass in `web.xml`) and adjusting the Guice bindings of the guice `Module` returned by the `newIsisWicketModule()` method:
 
 [source,java]
 ----

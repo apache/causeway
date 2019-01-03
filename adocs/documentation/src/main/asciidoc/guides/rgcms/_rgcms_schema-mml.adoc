@@ -1,0 +1,362 @@
+[[_rgcms_schema-mml]]
+= MetaModel
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../../
+:_imagesdir: images/
+
+
+
+The metamodel ("mml") schema defines the serialized form of the metamodel, used by the framework to render and interact with the application's domain objects.
+
+The top-level metamodel consists of a set of domain classes, which in turn contain members (actions, properties and collections).
+Actions also have action parameters.
+All of the elements of the metamodel (domain classes, domain class members and action parameters) can have multiple facets associated with them.
+Some facets relate to presentational aspects (for example the name), others to the domain layer (for example the presence of a `validateXxx()` method to enforce business rules).
+
+
+[[__rgcms_schema-mml_metamodelDto]]
+== `metamodelDto`
+
+The `metamodelDto` root element is defined as:
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/metamodel"        <!--1-->
+           elementFormDefault="qualified"
+           xmlns="http://isis.apache.org/schema/metamodel"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="metamodelDto">                                        <!--2-->
+        <xs:complexType>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">               <!--3-->
+                <xs:element ref="domainClassDto"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    ...
+</xs:schema>
+----
+<1> the metamodel schema has a namespace URI of "http://isis.apache.org/schema/mml".
+Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
+<2> definition of the `metamodelDto` root element.
+The corresponding XML will use this as its top-level element.
+<6> consists of a list of `domainClassDto`, defined below.
+
+
+
+[[__rgcms_schema-mml_domainClassDto]]
+== `domainClassDto`
+
+The `domainClassDto` element describes the behaviour and structure of a single domain class within the metamodel.
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/mml" ... >
+    ...
+    <xs:element name="domainClassDto">                                          <!--1-->
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="facetHolder">                               <!--2-->
+                    <xs:sequence>
+                        <xs:element name="majorVersion" type="xs:string"        <!--3-->
+                                    minOccurs="0" maxOccurs="1" default="1"/>
+                        <xs:element name="minorVersion" type="xs:string"
+                                    minOccurs="0" maxOccurs="1" default="0"/>
+                        <xs:element name="properties" minOccurs="0">            <!--4-->
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="prop" type="property"
+                                                minOccurs="0" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="collections" minOccurs="0">           <!--5-->
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="coll" type="collection"
+                                                minOccurs="0" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element name="actions" minOccurs="0">               <!--6-->
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="act" type="action"
+                                                minOccurs="0" maxOccurs="unbounded"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="id" type="xs:ID"/>                      <!--7-->
+                    <xs:attribute name="service" type="xs:boolean"/>            <!--8-->
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    ...
+</xs:schema>
+----
+<1> `domainClassDto` is defined as an element so that if necessary each domain class can be serialized to XML independently (rather than only within an outer `metamodelDto`.
+
+<2> extends from `facetHolder` type, defined below.
++
+This allows a map of facets to be associated with the domain class.
+
+<3> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
+
+<4> the collection of properties (if any) of this domain class.
++
+This will include any mixin properties.
+<5> the collection of collections (if any) of this domain class.
++
+This will include any mixin collections.
+<6> the collection of actions (if any) of this domain class.
++
+This will include any mixin actions.
+
+<7> The fully qualified class name of the underlying Java class.
++
+This is declared as 'xs:ID' so can be referenced elsewhere (using 'xs:IDREF').
+
+<8> Whether this is domain type is a domain service
+
+
+[[__rgcms_schema-mml_member]]
+== `member`
+
+The `member` (abstract) complex type is the supertype for properties, collections and actions.
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/mml" ... >
+    ...
+    <xs:complexType name="member">
+        <xs:complexContent>
+            <xs:extension base="facetHolder">                           <!--1-->
+                <xs:attribute name="id" type="xs:string"/>              <!--2-->
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    ...
+</xs:schema>
+----
+<1> Inherits from `facetHolder`, allowing a set of facets to be associated with the member.
+<2> The id of the member, which should be unique within the domain class.
++
+[NOTE]
+====
+This assumes no overloading of method names.
+====
+
+
+[[__rgcms_schema-mml_property]]
+== `property`
+
+The `property` complex type represent a scalar association returning a single value (eg `getFirstName()`).
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/mml" ... >
+    ...
+    <xs:complexType name="property">
+        <xs:complexContent>
+            <xs:extension base="member">                        <!--1-->
+                <xs:sequence>
+                    <xs:element name="type" type="xs:IDREF"/>   <!--2-->
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    ...
+</xs:schema>
+----
+<1> Extends from `member` complex type, defined above.
+Every property therefore has an id (unique within the domain class), and a set of facets.
+<2> A (reference to ) the type of this property, eg a String or a Customer.
++
+This will be the value of the `id` of some other `domainClassDto`.
+
+
+[[__rgcms_schema-mml_collection]]
+== `collection`
+
+Like `property` (above), the `collection` complex types represent an association, but this time one that is a vector, in other words returning multiple instances (eg `getOrders()`).
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/mml" ... >
+    ...
+    <xs:complexType name="collection">
+        <xs:complexContent>
+            <xs:extension base="member">                            <!--1-->
+                <xs:sequence>
+                    <xs:element name="type" type="xs:IDREF"/>       <!--2-->
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    ...
+</xs:schema>
+----
+<1> Extends from `member` complex type, defined above.
+Every collection therefore has an id (unique within the domain class), and a set of facets.
+<2> A (reference to ) the _element_ type of this collection, eg a Customer.
++
+This will be the value of the `id` of some other `domainClassDto`.
+
+
+[[__rgcms_schema-mml_action]]
+== `action`
+
+The `action` complex type represents a behaviour of the domain object.
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/mml" ... >
+    ...
+    <xs:complexType name="action">
+        <xs:complexContent>
+            <xs:extension base="member">                                                <!--1-->
+                <xs:sequence>
+                    <xs:element name="returnType" type="xs:IDREF"/>                     <!--2-->
+                    <xs:element name="params">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="param" type="param"                   <!--3-->
+                                            minOccurs="0" maxOccurs="unbounded"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
+    ...
+</xs:schema>
+----
+<1> Extends from `member` complex type, defined above.
+Every action therefore has an id (unique within the domain class), and a set of facets.
+<2> (A reference to) the return type of this action, eg a String or a Customer.
+<3> Each action has a collection of parameters (possibly none).
+
+
+[[__rgcms_schema-mml_action-parameters]]
+== Action parameters
+
+The `param` (abstract) complex type represents a parameter of an `action`.
+The concrete implementations are either `scalarParam` or `vectorParam`.
+
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/mml" ... >
+    ...
+    <xs:complexType name="param">                                   <!--1-->
+        <xs:complexContent>
+            <xs:extension base="facetHolder">                       <!--2-->
+                <xs:sequence>
+                    <xs:element name="type" type="xs:IDREF"/>       <!--3-->
+                </xs:sequence>
+                <xs:attribute name="id" type="xs:string"/>          <!--4-->
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="scalarParam">                             <!--5-->
+        <xs:complexContent>
+            <xs:extension base="param">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="vectorParam">                             <!--6-->
+        <xs:complexContent>
+            <xs:extension base="param">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    ...
+</xs:schema>
+----
+<1> defines the `param` (abstract) complex type
+<2> inherits from `facetHolder`, allowing a set of facets to be associated with the action parameter.
+<3> A (reference to) the type of this action parameter, eg a String or a Customer.
++
+For vector parameters, this is the _element_ type of the collection parameter.
+<4> The id of the parameter, which should be unique within the action.
+<5> defines the `scalarParam` (concrete) complex type
+<6> defines the `vectorParam` (concrete) complex type
+
+
+[[__rgcms_schema-mml_action-facetholder-and-facet]]
+== `facetHolder` and `facet`
+
+The `facetHolder` (abstract) complex type defines a collection of ``facet``s, where a `facet` is in effect just a type and an implementation.
+In most cases the type has a particular purpose, for example representing the means to obtain the icon of a domain class, or the name of a parameter.
+
+Each `facet` can also have bag of associated attributes (each attribute is just a tuple of key/value pairs).
+The meaning of the attributes depends on the facet implementation.
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/mml" ... >
+    ...
+    <xs:complexType name="facetHolder">                         <!--1-->
+        <xs:sequence>
+            <xs:element name="facets" minOccurs="0">            <!--2-->
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="facet" type="facet"
+                                    minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="facet">                               <!--3-->
+        <xs:sequence>
+            <xs:element name="attr" type="facetAttr"            <!--4-->
+                        minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string"/>              <!--5-->
+        <xs:attribute name="fqcn" type="xs:string"/>            <!--6-->
+    </xs:complexType>
+
+    <xs:complexType name="facetAttr">                           <!--7-->
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="name" type="xs:string"/>    <!--8-->
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    ...
+</xs:schema>
+----
+<1> defines the `facetHolder` (abstract) complex type
+
+<2> \... which contains a set of ``facet``s
+
+<3> defines the `facet` complex type
+
+<4> \... which contains a set of ``facetAttr``s.
++
+The meaning of the attributes depends on the implementation of the facet.
+
+<5> the identifier of the _type_ of the facet, well-known by the framework as representing a certain semantic (eg icon name or name of an action parameter)
+
+<6> the fully qualified class name of the implementation of the facet
+
+<7> defines the `facetAttr` complex type
+
+<8> the name of the attribute, unique across all facet attributes of a facet.
++
+Note this complexType extends from `xs:string,` which defines the attribute's corresponding value.
+

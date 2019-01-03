@@ -74,6 +74,10 @@
                     <mixins>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
+                            <artifactId>standard</artifactId>
+                        </mixin>
+                        <mixin>
+                            <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>datanucleusenhance</artifactId>
                         </mixin>
                         <mixin>
@@ -86,10 +90,6 @@
                         </mixin>
                         <mixin>
                             <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>standard</artifactId>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
                             <artifactId>staticanalysis</artifactId>
                         </mixin>
                         <mixin>
@@ -99,38 +99,11 @@
                     </mixins>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.isis.tool</groupId>
-                <artifactId>isis-maven-plugin</artifactId>
-                <version>${isis.version}</version>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>validate</goal>
-                        </goals>
-                        <configuration>
-                            <appManifest>${isis-maven-plugin.validate.appManifest}</appManifest>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>${project.groupId}</groupId>
-                        <artifactId>${project.artifactId}</artifactId>
-                        <version>${project.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.hsqldb</groupId>
-                        <artifactId>hsqldb</artifactId>
-                        <version>2.3.1</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
         </plugins>
     </build>
 
     <dependencies>
+
     
     	<!-- ISIS API -->
     	
@@ -138,32 +111,14 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-applib</artifactId>
         </dependency>
-        
-        <!-- ISIS CORE PLUGINS -->
-        
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-core</artifactId>
         </dependency>
-        
+
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-plugins-discovery-reflections</artifactId>
-        </dependency>
-    
-      	<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-plugins-eventbus-guava</artifactId>
-        </dependency>
-    
-    	<dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-plugins-jaxrs-resteasy-3</artifactId>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-core</artifactId>
         </dependency>
 
         <!-- TESTS -->
@@ -181,5 +136,48 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>isis-validate</id>
+            <activation>
+                <property>
+                    <name>!skip.isis-validate</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.isis.tool</groupId>
+                        <artifactId>isis-maven-plugin</artifactId>
+                        <version>${isis.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>validate</goal>
+                                </goals>
+                                <configuration>
+                                    <appManifest>${isis-maven-plugin.validate.appManifest}</appManifest>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>${project.artifactId}</artifactId>
+                                <version>${project.version}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.hsqldb</groupId>
+                                <artifactId>hsqldb</artifactId>
+                                <version>2.3.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

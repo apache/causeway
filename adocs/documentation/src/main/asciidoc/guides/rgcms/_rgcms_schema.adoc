@@ -9,6 +9,8 @@ Most applications need to integrate with other apps in the enterprise.  To facil
 Apache Isis defines a number of standard XSD schemas:
 
 
+* the xref:../rgcms/rgcms.adoc#_rgcms_schema-mml[metamodel] schema, which allows the internal metamodel to be exported in a canonical fashion
+
 * the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd[command] schema, which captures the __intention__ of a user
 to invoke an action or edit a property
 
@@ -25,6 +27,7 @@ corresponding applib objects (`Command`, `Interaction.Execution` and `PublishedO
 
 The sections below discuss these schemas in more detail.
 
+include::_rgcms_schema-mml.adoc[leveloffset=+1]
 include::_rgcms_schema-cmd.adoc[leveloffset=+1]
 include::_rgcms_schema-ixn.adoc[leveloffset=+1]
 include::_rgcms_schema-chg.adoc[leveloffset=+1]

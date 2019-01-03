@@ -6,7 +6,7 @@
 
 
 
-This chapter pulls together a number of more advanced techniques that we've discovered and developed while building our own Isis applications.
+This chapter pulls together a number of more advanced techniques that we've discovered and developed while building our own Apache Isis applications.
 
 
 

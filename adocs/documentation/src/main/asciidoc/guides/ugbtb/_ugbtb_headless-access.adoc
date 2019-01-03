@@ -4,7 +4,7 @@
 :_basedir: ../../
 :_imagesdir: images/
 
-This section tackles the topic of enabling access to an Isis application directly, or at least, not through either the xref:../ugvw/ugvw.adoc#[Wicket] or xref:../ugvro/ugvro.adoc#[Restful] viewers.
+This section tackles the topic of enabling access to an Apache Isis application directly, or at least, not through either the xref:../ugvw/ugvw.adoc#[Wicket] or xref:../ugvro/ugvro.adoc#[Restful] viewers.
 
 There are several main use-cases:
 
@@ -12,7 +12,7 @@ There are several main use-cases:
 
 * integration from other systems, eg for a subscriber on a pub/sub mechanism such as Camel, pushing changes through an Apache Isis domain model.
 
-* leveraging an Isis application within a batch process
+* leveraging an Apache Isis application within a batch process
 
 Note that the calling thread runs in the same process space as the Apache Isis domain object model (must be physically linked to the JAR files containing the domain classes).  For use cases where the calling thread runs in some other process space (eg migrating data from a legacy system), then the xref:../ugvro/ugvro.adoc#[Restful Objects viewer] is usually the way to go.
 

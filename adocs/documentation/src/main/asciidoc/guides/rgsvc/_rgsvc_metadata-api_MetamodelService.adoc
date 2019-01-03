@@ -43,20 +43,40 @@ public interface MetaModelService {
     CommandDtoProcessor commandDtoProcessorFor(         // <8>
                         String memberIdentifier);
 
+    MetamodelDto pexportMetaModel(final Config config);
+
+    public static class Config {
+        public Config withIgnoreNoop() { ... }
+        public Config withIgnoreInterfaces() { ... }
+        public Config withIgnoreAbstractClasses() { ... }
+        public Config withIgnoreBuiltInValueTypes() { ... }
+        public Config withIgnoreMixins() { ... }
+        public Config withPackagePrefix(final String packagePrefix) { ... }
+    }
 }
 ----
 <1> reverse lookup of a domain class' object type
+
 <2> lookup of a domain class' object type
+
 <3> invalidate and rebuild the internal metadata (an `ObjectSpecification`) for the specified domain type.
+
 <4> returns a list of representations of each of member of each domain class.
+
 <5> what sort of object a domain type is (or bookmark) represents
+
 <6> whether to throw an exception or return `Sort.UNKNOWN` if the object type is not recognized.  (The overloads with no `Mode` parameter default to strict mode).
+
 <7> returns the `AppManifest` used to bootstrap the application.
 If an `AppManifest2` was used (from a `Module`), then this is also returned (else just `null`).
+
 <8> obtain an implementation of `CommandDtoProcessor` (if any) as per an xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#commandDtoProcessor()`] or xref:../rgant/rgant.adoc#_rgant-Property_command[`@Property#commandDtoProcessor()`].
 +
 This is used by the xref:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService_implementations[framework-provided implementations] of `ContentMappingService`.
 
+<9> Exports the entire metamodel as a DTO, serializable into XML using JAXB.
++
+The `Config` property specifies which package(s) to include and can be used to ignore certain elements.
 
 
 [[_rgsvc_metadata-api_MetamodelService_implementation]]
@@ -69,6 +89,5 @@ The framework provides a default implementation of this service, `o.a.i.c.m.serv
 [[_rgsvc_metadata-api_MetamodelService_related_services]]
 == Related Services
 
-The `MetaModelServiceMenu` provides a method to download all domain members as a CSV.
-Internally this calls `MetaModelService#export()`.
-Under the covers this uses the API provided by the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ApplicationFeatureRepository[`ApplicationFeatureRepository`] domain service.
+The `MetaModelServiceMenu` provides a method to download all domain members as a CSV (by calling `MetaModelService#export()`) or as an XML (by calling `MetaModelService6#exportMetaModel(...)`.
+

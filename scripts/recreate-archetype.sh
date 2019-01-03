@@ -16,16 +16,10 @@ if [ $? -ne 0 ]; then
     TOFIX="$TOFIX\nexport ISISTMP=/c/tmp"
 fi
 
-env | grep ISISDEV >/dev/null
-if [ $? -ne 0 ]; then
-    echo "\$ISISDEV not set!"
-    TOFIX="$TOFIX\nexport ISISDEV=1.7.0-SNAPSHOT"
-fi
-
 env | grep ISISREL >/dev/null
 if [ $? -ne 0 ]; then
     echo "\$ISISREL not set!"
-    TOFIX="$TOFIX\nexport ISISDEV=1.6.0"
+    TOFIX="$TOFIX\nexport ISISREL=1.6.0"
 fi
 
 env | grep ISISRC >/dev/null
@@ -66,7 +60,8 @@ for a in .project .classpath .settings bin .idea neo4j_DB target-ide; do /bin/fi
 echo "mvn -Drevision=$ISISREL archetype:create-from-project ..."
 mvn -Drevision=$ISISREL org.apache.maven.plugins:maven-archetype-plugin:3.0.1:create-from-project
 
-echo "copy over Dockerfile since seems to be excluded for some reason ... "
+# https://issues.apache.org/jira/browse/ARCHETYPE-548
+echo "copy over Dockerfile since seems to be excluded (bug: ARCHETYPE-548) ... "
 mkdir -p target/generated-sources/archetype/src/main/resources/archetype-resources/webapp/src/main/resources/docker
 cp webapp/src/main/resources/docker/Dockerfile target/generated-sources/archetype/src/main/resources/archetype-resources/webapp/src/main/resources/docker/.
 
