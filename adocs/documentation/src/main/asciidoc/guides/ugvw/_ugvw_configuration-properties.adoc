@@ -444,8 +444,10 @@ Either/both of `name` and `image` must be defined for the credit to be rendered 
 
 Optional.
 
-|
-|
+|`isis.viewer.wicket.showFooter`
+| `true`,`false` +
+(`_true_`)
+| Whether to show the footer at all.
 
 |===
 
