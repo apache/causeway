@@ -135,8 +135,7 @@
         <guava.version>19.0</guava.version>
 
         <hamcrest.version>1.3</hamcrest.version>
-        <assertj.version>3.6.2</assertj.version>
-        
+
         <reflections.version>0.9.10</reflections.version>
         <findbugs-annotations.version>2.0.1</findbugs-annotations.version>
 
@@ -180,7 +179,8 @@
         <htmlparser.version>2.1</htmlparser.version>
 
         <junit.version>5.3.1</junit.version>
-        
+        <assertj.version>3.11.1</assertj.version>
+
         <!-- 2.8.1 depends on cglib-nodep 3.1 whereas axonframework depends on 2.2.2 -->
         <jmock.version>2.6.0</jmock.version>
         <easymock.version>2.5.2</easymock.version>

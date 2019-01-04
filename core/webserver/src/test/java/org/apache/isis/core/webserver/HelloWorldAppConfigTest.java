@@ -1,4 +1,4 @@
-package domainapp.application;
+package org.apache.isis.core.webserver;
 
 import java.util.Map;
 
@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import org.apache.isis.config.AppConfigLocator;
 import org.apache.isis.config.IsisConfiguration;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class HelloWorldAppConfigTest {
 
@@ -22,13 +24,17 @@ class HelloWorldAppConfigTest {
 
     @Test
     void test() {
-        
+
+        // when
         IsisConfiguration isisConfiguration = AppConfigLocator.getAppConfig().isisConfiguration();
+
+        // then
         Assertions.assertNotNull(isisConfiguration);
         
         Map<String, String> config = isisConfiguration.asMap();
         Assertions.assertNotNull(config);
-        Assertions.assertTrue(config.size()>20);
+        assertThat(config).hasSize(1);
+        assertThat(config.get("isis.appManifest")).isEqualTo(DummyAppManifest.class.getName());
     }
 
 }
