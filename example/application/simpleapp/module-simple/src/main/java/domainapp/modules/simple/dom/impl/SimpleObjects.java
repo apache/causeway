@@ -71,6 +71,16 @@ public class SimpleObjects {
                 .executeList();
     }
 
+    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {}
+    @Action(domainEvent = CreateDomainEvent.class)
+    @MemberOrder(sequence = "3")
+    public SimpleObject create(
+            @Name final String name
+    ) {
+        return repositoryService.persist(new SimpleObject(name));
+    }
+
+
     @Programmatic
     public SimpleObject findByNameExact(final String name) {
     	JDOQLTypedQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
@@ -91,14 +101,6 @@ public class SimpleObjects {
         q.executeList();
     }
 
-    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {}
-    @Action(domainEvent = CreateDomainEvent.class)
-    @MemberOrder(sequence = "3")
-    public SimpleObject create(
-            @Name final String name
-    ) {
-        return repositoryService.persist(new SimpleObject(name));
-    }
 
     @javax.inject.Inject
     RepositoryService repositoryService;
