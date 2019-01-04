@@ -13,7 +13,7 @@ Domain objects that take part in such a navigable-tree-structure need to declare
 That's all the framework needs, in order to build a navigable-tree.
 With version 2.0 we introduced the `Navigable` enum to use with the `@PropertyLayout` annotation to allow declarative specification of a domain object's navigable parent.
 
-In other words: a domain object or view may declare it's parent (with respect to the navigable tree-structure it is part of) via use of a `@PropertyLayout(navigable=Navigable.PARENT)` annotation.
+In other words: a domain object or view may declare its parent (with respect to the navigable tree-structure it is part of) via use of a `@PropertyLayout(navigable=Navigable.PARENT)` annotation.
 
 
 == Screenshots
@@ -57,7 +57,7 @@ This results in a navigable tree-structure ...
 
 Company > Employee > PhoneNumber
 
-=== How to use Navigable.PARENT
+=== How to use `Navigable.PARENT`
 
 . Any use of `@PropertyLayout(navigable=Navigable.PARENT)` with Java interfaces is simply ignored.
 These do not contribute to the domain meta model.
@@ -68,7 +68,7 @@ These do not contribute to the domain meta model.
 
 .. \... a method: then must be a no-arg method returning a non-primitive type (e.g. a getter)
 
-.. \... a field: then the field must be of non-primitive type and must also have a getter (as specified by the Java Beans Standard, particularly to allow `@PropertyLayout(navigable=Navigable.PARENT)` annotations on fields that use the lombok @Getter annotation)
+.. \... a field: then the field must be of non-primitive type and must also have a getter (as specified by the Java Beans Standard, particularly to allow `@PropertyLayout(navigable=Navigable.PARENT)` annotations on fields that use the lombok `@Getter` annotation)
 
 . Starting from the current domain-object, we search the object's class inheritance hierarchy (super class, super super class, ...), until we find the first class that has a `@PropertyLayout(navigable=Navigable.PARENT)` annotation.
 That's the one we use to resolve the current domain-object's navigable parent.
