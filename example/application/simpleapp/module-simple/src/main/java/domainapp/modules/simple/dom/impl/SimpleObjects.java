@@ -29,12 +29,13 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
 import org.apache.isis.applib.services.repository.RepositoryService;
+
+import domainapp.modules.simple.dom.types.Name;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
@@ -59,8 +60,7 @@ public class SimpleObjects {
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
     @MemberOrder(sequence = "2")
     public List<SimpleObject> findByName(
-            @ParameterLayout(named="Name")
-            final String name
+            @Name final String name
     ) {
     	JDOQLTypedQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
         final QSimpleObject cand = QSimpleObject.candidate();
@@ -95,8 +95,8 @@ public class SimpleObjects {
     @Action(domainEvent = CreateDomainEvent.class)
     @MemberOrder(sequence = "3")
     public SimpleObject create(
-            @ParameterLayout(named="Name")
-            final String name) {
+            @Name final String name
+    ) {
         return repositoryService.persist(new SimpleObject(name));
     }
 
