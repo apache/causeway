@@ -343,3 +343,48 @@ To document, in particular how to use in the helloworld/simpleapp archetypes.
 
 NB: ISIS-1969: the Docker image isn't yet being released, pending https://issues.apache.org/jira/browse/INFRA-17518[INFRA-17518].
 
+=== Plugin architecture (ISIS-1753 and others)
+
+* describe the plugin architecture in general, use of ServiceLoader etc
+* describe in particular the event bus plugin architecture (ISIS-1753)
+* describe in particular the other plugins (objectstore, security, resteasy, bytecode enhancement, ...)
+
+=== Ticket (for ErrorReportingService) is now an interface, not a class (ISIS-1955)
+
+\... and so any concrete implementations will need to be changed
+
+
+=== Override hsqldb for integtests (ISIS-1958)
+
+sample usage:
+
+[source,java]
+----
+public abstract class MyIntegTestAbstract extends IntegrationTestJupiter {
+
+  public MyIntegTestAbstract() {
+    super(new MyModule()
+      .withAdditionalModules(...)
+      ...
+      .withConfigurationProperties(databaseConfigForTest())
+    );
+  }
+
+  private static Map<String, String> databaseConfigForTest() {
+    Map<String, String> map = new HashMap<>();
+
+    // for refernce see AppManifest.Util.withJavaxJdoRunInMemoryProperties(map)
+
+    map.put(AppManifest.Util.ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionURL", "jdbc:mariadb://127.0.0.1/demo");
+    map.put(AppManifest.Util.ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionDriverName", "org.mariadb.jdbc.MariaDbDataSource");
+    map.put(AppManifest.Util.ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionUserName", "sven");
+    map.put(AppManifest.Util.ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionPassword", "pass");
+
+    return map;
+  }
+  ...
+
+}
+----
+
+
