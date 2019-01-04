@@ -4,6 +4,140 @@ Search also for: "TODO: v2: " in the .adoc documentation.
 
 == Migration Notes 2.0.0-M1 to 2.0.0-M2
 
+=== Table Tree Viewer (ISIS-898)
+
+also: ISIS-1943,ISIS-1944,ISIS-1947
+
+needs documenting how to use.
+
+public API is:
+
+* `TreeAdapter`
+* `TreeNode` and `LazyTreeNode`
+* `TreePath`
+* `TreeNode`
+
+eg in `isis-2-demo`,
+
+
+implementation of `TreeAdapter`:
+
+[source,java]
+----
+public class FileSystemTreeAdapter implements TreeAdapter<FileNode> {
+
+	@Override
+	public Optional<FileNode> parentOf(FileNode value) {
+		if(value.getType()==FileNode.Type.FileSystemRoot) {
+			return Optional.empty();
+		}
+		val parentFolderIfAny = value.asFile().getParentFile();
+		if(parentFolderIfAny==null) {
+			return Optional.empty(); // unexpected code reach, but just in case
+		}
+		return Optional.ofNullable(parentFolderIfAny)
+				.map(FileNodeFactory::toFileNode);
+	}
+
+	@Override
+	public int childCountOf(FileNode value) {
+		return (int) streamChildFiles(value).count();
+	}
+
+	@Override
+	public Stream<FileNode> childrenOf(FileNode value) {
+		return streamChildFiles(value)
+				.map(FileNodeFactory::toFileNode);
+	}
+
+	// -- HELPER
+	private static Stream<File> streamChildFiles(FileNode value){
+		val file = value.asFile();
+		val childFiles = file.listFiles();
+		if(childFiles==null) {
+			return Stream.empty();
+		}
+		return Stream.of(childFiles)
+				.filter(f->!f.isHidden());
+	}
+}
+----
+
+where `FileNode` doesn't, actually, need to implement `TreeNode`, it's just a regular view model:
+
+[source,java]
+----
+@XmlRootElement(name="FileNode")
+@DomainObject(nature=Nature.VIEW_MODEL)
+@ToString
+public class FileNode {
+
+	public static enum Type {
+		FileSystemRoot,
+		Folder,
+		File
+	}
+
+	@Getter @Setter protected String path;
+	@Getter @Setter protected Type type;
+
+	public String title() {
+		if(path==null) {
+			return null;
+		}
+		val file = asFile();
+		return file.getName().length()!=0 ? file.getName() : file.toString();
+	}
+
+	public String iconName() {
+		return type!=null ? type.name() : "";
+	}
+
+	// -- BREADCRUMB SUPPORT
+
+	@PropertyLayout(navigable=Navigable.PARENT, hidden=Where.EVERYWHERE)
+	public FileNode getParent() {
+	    val parentFile = asFile().getParentFile();
+	    return parentFile!=null ? FileNodeFactory.toFileNode(parentFile) : null;
+	}
+
+	// -- INIT
+
+	void init(File file) {
+		this.path = file.getAbsolutePath();
+		if(file.isDirectory()) {
+			type = isRoot(file) ? Type.FileSystemRoot : Type.Folder;
+		} else {
+			type = Type.File;
+		}
+	}
+
+	// -- HELPER
+
+	File asFile() {
+		return new File(path);
+	}
+
+	private static boolean isRoot(File file) {
+		return file.getParent()==null;
+	}
+}
+----
+
+
+=== isis-core-wrapper removed (ISIS-1838/1839)
+
+
+=== guice removed from applib and core (ISIS-1892)
+
+
+=== web.xml now much simpler (ISIS-1895)
+
+
+
+
+
+
 === @MemberGroupLayout was removed
 
 === Axon Eventbus Plugin
@@ -103,7 +237,7 @@ ObjectAdapter is no longer holding a reference to an ObjectSpecification for the
 ServicesInjector was removed. New interface ServiceInjector and ServiceRegistry redefined.
 //TODO work in progress with ISIS-2033
 
-=== JAXB XmlAdapters
+=== JAXB XmlAdapters (ISIS-1972)
 
 We do now provide JAXB XmlAdapters for Java built-in temporal types in 'applib': org.apache.isis.applib.adapters.JaxbAdapters
  
@@ -313,6 +447,8 @@ _@PostConstuct_ methods declared with domain objects no longer get passed over t
 
 === Wicket-Viewer
 
+==== custom theme providers (ISIS-2047)
+
 Customize the ThemeChooser by providing your own implementation of IsisWicketThemeSupport
 
 [source,java]
@@ -327,6 +463,10 @@ to be configured using
 ----
 isis.viewer.wicket.themes.provider=org.my.IsisWicketThemeSupport
 ----
+
+=== Removed o.a.i.WebServer (ISIS-2067)
+
+might need to reinstate, or long-term will have SpringBoot etc do the bootstrapping.
 
 
 == Migration Notes 1.x to 2.0.0-M1
