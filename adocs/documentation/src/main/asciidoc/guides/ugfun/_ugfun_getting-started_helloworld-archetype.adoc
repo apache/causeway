@@ -358,7 +358,7 @@ This can also be combined with `datanucleus:enhance` to ensure that the xref:../
 
 Here's what the setup looks like in IntelliJ IDEA:
 
-TODO-v2: update this images; should basically show `mvn datanucleus:enhance jetty:run -o`
+TODO: v2: update this images; should basically show `mvn datanucleus:enhance jetty:run -o`
 
 
 

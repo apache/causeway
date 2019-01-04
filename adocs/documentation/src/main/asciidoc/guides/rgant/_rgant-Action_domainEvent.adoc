@@ -157,7 +157,7 @@ For this use, the default action domain event can be annotated using `@DomainObj
 )
 public class ToDoItem {
     public static class ActionDomainEventDefault
-        extends org.apache.isis.applib.services.eventbus.ActionDomainEvent<Object> { }
+        extends org.apache.isis.applib.events.domain.ActionDomainEvent<Object> { }
     ...
 
     public void updateDescription(final String description) {

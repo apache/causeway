@@ -8,7 +8,10 @@
 
 The Wicket viewer provides a secondary navigation scheme that allows users to quickly access domain objects, that are organized in a hierarchical manner. 
 
-This hierarchy can be understood as a navigable tree-structure, where the navigable tree-nodes are either domain objects or domain views. Domain objects that take part in such a navigable-tree-structure need to declare their actual navigable parent within this hierarchy. That's all the framework needs, in order to build a navigable-tree. With version 2.0 we introduced the `Navigable` enum to use with the `@PropertyLayout` annotation to allow declarative specification of a domain object's navigable parent. 
+This hierarchy can be understood as a navigable tree-structure, where the navigable tree-nodes are either domain objects or domain views.
+Domain objects that take part in such a navigable-tree-structure need to declare their actual navigable parent within this hierarchy.
+That's all the framework needs, in order to build a navigable-tree.
+With version 2.0 we introduced the `Navigable` enum to use with the `@PropertyLayout` annotation to allow declarative specification of a domain object's navigable parent.
 
 In other words: a domain object or view may declare it's parent (with respect to the navigable tree-structure it is part of) via use of a `@PropertyLayout(navigable=Navigable.PARENT)` annotation.
 
@@ -56,17 +59,26 @@ Company > Employee > PhoneNumber
 
 === How to use Navigable.PARENT
 
-. Any use of `@PropertyLayout(navigable=Navigable.PARENT)` with Java interfaces is simply ignored. These do not contribute to the domain meta model.
+. Any use of `@PropertyLayout(navigable=Navigable.PARENT)` with Java interfaces is simply ignored.
+These do not contribute to the domain meta model.
+
 . Any class (abstract or concrete) may at most have one `@PropertyLayout` annotation, having `navigable=Navigable.PARENT` 'flag' set (on either a method or a field); otherwise meta-model validation will fail.
+
 . The annotated member (method or field), when ...
-.. ... a method: then must be a no-arg method returning a non-primitive type (e.g. a getter)
-.. ... a field: then the field must be of non-primitive type and must also have a getter (as specified by the Java Beans Standard, particularly to allow `@PropertyLayout(navigable=Navigable.PARENT)` annotations on fields that use the lombok @Getter annotation)
-. Starting from the current domain-object, we search the object's class inheritance hierarchy (super class, super super class, ...), until we find the first class that has a `@PropertyLayout(navigable=Navigable.PARENT)` annotation. That's the one we use to resolve the current domain-object's navigable parent.
+
+.. \... a method: then must be a no-arg method returning a non-primitive type (e.g. a getter)
+
+.. \... a field: then the field must be of non-primitive type and must also have a getter (as specified by the Java Beans Standard, particularly to allow `@PropertyLayout(navigable=Navigable.PARENT)` annotations on fields that use the lombok @Getter annotation)
+
+. Starting from the current domain-object, we search the object's class inheritance hierarchy (super class, super super class, ...), until we find the first class that has a `@PropertyLayout(navigable=Navigable.PARENT)` annotation.
+That's the one we use to resolve the current domain-object's navigable parent.
 
 
 == User Experience
 
-When viewing a domain object that is part of a hierarchical structure, one can easily navigate to any parent of this object. Horizontally arranged text links separated by the 'greater than' symbol (>) are provided below the main menu. (Traditionally called breadcrumbs.)
+When viewing a domain object that is part of a hierarchical structure, one can easily navigate to any parent of this object.
+Horizontally arranged text links separated by the 'greater than' symbol (>) are provided below the main menu.
+(Traditionally called breadcrumbs.)
 
 
 
@@ -78,7 +90,8 @@ The navigable tree-structure, as provided by the 'Where am I' feature, is declar
 
 == Configuration
 
-By default, the 'Where am I' feature will show a maximum of 64 links. This can be overridden using a property (in `isis.properties`), for example:
+By default, the 'Where am I' feature will show a maximum of 64 links.
+This can be overridden using a property (in `isis.properties`), for example:
 
 [source,ini]
 ----

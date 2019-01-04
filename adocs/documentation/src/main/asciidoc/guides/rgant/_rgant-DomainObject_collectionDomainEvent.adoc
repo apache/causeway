@@ -18,7 +18,7 @@ For example:
 )
 public class ToDoItem {
     public static class CollectionDomainEventDefault
-        extends org.apache.isis.applib.services.eventbus.CollectionDomainEvent<Object> { }
+        extends org.apache.isis.applib.events.domain.CollectionDomainEvent<Object> { }
     ...
 
     @Getter @Setter

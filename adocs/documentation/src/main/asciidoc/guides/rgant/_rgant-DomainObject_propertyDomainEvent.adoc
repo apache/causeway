@@ -18,7 +18,7 @@ For example:
 )
 public class ToDoItem {
     public static class PropertyDomainEventDefault
-        extends org.apache.isis.applib.services.eventbus.PropertyDomainEvent<Object> { }
+        extends org.apache.isis.applib.events.domain.PropertyDomainEvent<Object> { }
     ...
 
     @Getter @Setter

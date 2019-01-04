@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-TODO: 2.0: This is out of date.  Instead we set system property or environment vars, as per `IsisSystemEnvironment`.  This is also pluggable.
+TODO: v2: This is out of date.  Instead we set system property or environment vars, as per `IsisSystemEnvironment`.  This is also pluggable.
 
 Apache Isis distinguishes between the application being run in development mode vs running in production mode.  The framework calls this the "deployment type" (corresponding internally to the `DeploymentType` class).
 
@@ -98,18 +98,5 @@ In this case the deployment type is specified through an Apache Isis-specific co
 
 == Overriding the deployment type
 
-TODO: 2.0: see env var or system properties, as per `IsisSystemEnvironment`.
-
-If bootstrapping the application using Apache Isis' xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_cmd-line[`org.apache.isis.WebServer`] then it is possible to override the deployment type using the `-t` (or `--type`) flag.
-
-For example:
-
-[source,bash]
-----
-java -jar ... org.apache.isis.WebServer -t SERVER
-----
-
-where "..." is the (usually rather long) list of JAR files and class directories that will make up your application.
-
-This works for both the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
+TODO: v2: see env var or system properties, as per `IsisSystemEnvironment`.
 

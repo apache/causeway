@@ -1,5 +1,7 @@
 :toc:
 
+Search also for: "TODO: v2: " in the .adoc documentation.
+
 == Migration Notes 2.0.0-M1 to 2.0.0-M2
 
 === @MemberGroupLayout was removed
@@ -325,3 +327,19 @@ to be configured using
 ----
 isis.viewer.wicket.themes.provider=org.my.IsisWicketThemeSupport
 ----
+
+
+== Migration Notes 1.x to 2.0.0-M1
+
+This stuff needs to be properly documented
+
+=== java.time support (ISIS-1636)
+
+to document
+
+=== web-docker (ISIS-1969)
+
+To document, in particular how to use in the helloworld/simpleapp archetypes.
+
+NB: ISIS-1969: the Docker image isn't yet being released, pending https://issues.apache.org/jira/browse/INFRA-17518[INFRA-17518].
+

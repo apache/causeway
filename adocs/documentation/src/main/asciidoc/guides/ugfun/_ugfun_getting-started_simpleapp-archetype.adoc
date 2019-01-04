@@ -620,7 +620,7 @@ It is important though to ensure that the xref:../dg/dg.adoc#_dg_hints-and-tips_
 
 Here's what the setup looks like in IntelliJ IDEA:
 
-TODO-v2: update these images.  Basically need to run "mvn datanucleus:enhance" as a pre-goal in the module-simple module, then "mvn jetty:run" in the webapp module.
+TODO: v2: update these images.  Basically need to run "mvn datanucleus:enhance" as a pre-goal in the module-simple module, then "mvn jetty:run" in the webapp module.
 
 
 

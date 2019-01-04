@@ -13,8 +13,8 @@
 
 The default implementation of `UrlEncodingService` provided by the framework has changed:
 
-* in 1.16.x the implementation is *** TODO: look up ***
-* in 2.0.0-M1 this is changed to `UrlEncodingServiceWithCompression`
+* in 1.16.x the implementation is `o.a.i.applib.services.urlencoding.UrlEncodingServiceUsingBaseEncoding`
+* in 2.0.0-M1 this is changed to `o.a.i.applib.services.urlencoding.UrlEncodingServiceWithCompression`
 
 This new implementation increases the state that can be encoded within the URL (approx 8000 characters) by first gzipping the state prior to base64 encoding the characters.
 
@@ -244,3 +244,7 @@ Consequently in 2.0.0-M1 this API has been split into three:
 * `IsisJdoSupport_v3_2` (defined in `isis-core-plugins-jdo-datanucleus-5`) extends `IsisJdoSupport` with JDO 3.2-specific APIs
 
 
+
+== Swagger UI
+
+Swagger UI is now reinstated as a webjar, so there is no need to have any swagger UI files in the webapp (ISIS-1908).

@@ -37,7 +37,7 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerSer
 |override the method name to use on the auto-complete repository
 
 
-|xref:../rgant/rgant.adoc#_rgant-DomainObject_bounded[`bounded()`]
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_bounding[`bounding()`]
 |`true`, `false` +
 (`false`)
 |Whether the number of instances of this domain class is relatively small (a "bounded" set), such that instances could be selected from a drop-down list box or similar.
@@ -133,7 +133,7 @@ public class Customer {
 
 include::_rgant-DomainObject_auditing.adoc[leveloffset=+1]
 include::_rgant-DomainObject_autoCompleteRepository.adoc[leveloffset=+1]
-include::_rgant-DomainObject_bounded.adoc[leveloffset=+1]
+include::_rgant-DomainObject_bounding.adoc[leveloffset=+1]
 include::_rgant-DomainObject_createdLifecycleEvent.adoc[leveloffset=+1]
 include::_rgant-DomainObject_editing.adoc[leveloffset=+1]
 include::_rgant-DomainObject_loadedLifecycleEvent.adoc[leveloffset=+1]

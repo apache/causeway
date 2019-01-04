@@ -111,7 +111,7 @@ For example:
 public class Product { ... }
 ----
 
-For more on this, see xref:../rgant/rgant.adoc#_rgant-DomainObject_bounded[`@DomainObject#bounded()`].
+For more on this, see xref:../rgant/rgant.adoc#_rgant-DomainObject_bounding[`@DomainObject#bounding()`].
 
 Or, if the data type is an enum, then a drop-down will be provided automatically.
 A payment method is a good example of this:

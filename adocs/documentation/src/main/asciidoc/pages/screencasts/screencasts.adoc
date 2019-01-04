@@ -452,7 +452,7 @@ How to use the supporting xref:../../guides/rgcms/rgcms.adoc#_rgcms_methods_pref
 
 
 |link:https://www.youtube.com/watch?v=qAJDGxztWIQ[044^] +
-How to use xref:../../guides/rgant/rgant.adoc#_rgant-DomainObject_bounded[`@DomainObject#bounded()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
+How to use xref:../../guides/rgant/rgant.adoc#_rgant-DomainObject_bounding[`@DomainObject#bounding()`] so that a drop-down list is automatically provided for any parameters to actions that are for (domain entity) reference types.
 |||||||||x||
 
 

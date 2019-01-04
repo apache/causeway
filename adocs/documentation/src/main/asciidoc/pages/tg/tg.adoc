@@ -343,7 +343,7 @@ In this section we focus on scalar reference properties.
 * add some xref:../../guides/ugfun/ugfun.adoc#_ugfun_programming-model_properties[reference properties]
 * update the corresponding domain service (for creation actoin)
 * use different techniques to obtain references (shown in drop-down list box)
-** use the xref:../../guides/rgant/rgant.adoc#_rgant-DomainObject_bounded[`@DomainObjectLayout(bounded=...)`] annotation on the referenced type if there are only a small number (bounded) of instances
+** use the xref:../../guides/rgant/rgant.adoc#_rgant-DomainObject_bounding[`@DomainObjectLayout(bounding=...)`] annotation on the referenced type if there are only a small number (bounded) of instances
 ** use a xref:../../guides/rgcms/rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`] supporting method
 *** on a property
 *** on an action parameter

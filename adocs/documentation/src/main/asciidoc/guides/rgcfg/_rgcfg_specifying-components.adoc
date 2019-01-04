@@ -11,7 +11,7 @@ Bootstrapping an Apache Isis application involves identifying both:
 * the major components (authentication, persistence mechanisms, viewers) of Apache Isis, and also
 * specifying the domain services and persistent entities that make up the application itself.
 
-The recommended approach is to use an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`], specified either programmatically or through the configuration properties.
+This is done using an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`], specified either programmatically or through the configuration properties.
 This allows the components, services and entities to be specified from a single class.
 
 To specify the `AppManifest` as a configuration property, use:
