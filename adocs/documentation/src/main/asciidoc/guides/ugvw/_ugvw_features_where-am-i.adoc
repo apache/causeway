@@ -95,13 +95,13 @@ This can be overridden using a property (in `isis.properties`), for example:
 
 [source,ini]
 ----
-isis.viewer.whereAmI.maxParentChainLength=20
+isis.viewer.wicket.whereAmI.maxParentChainLength=20
 ----
 
 To disable the 'Where am I' feature, override the default (=enabled) by using a property (in `isis.properties`):
 
 [source,ini]
 ----
-isis.viewer.whereAmI.enabled=false
+isis.viewer.wicket.whereAmI.enabled=false
 ----
 

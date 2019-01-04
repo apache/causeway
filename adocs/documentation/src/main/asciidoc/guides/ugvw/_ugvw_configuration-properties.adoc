@@ -601,7 +601,8 @@ These configuration properties enable or disable the mechanisms for locating pre
 (_default value_)
 |Description
 
-|`isis.viewer.whereAmI.` +
+|`isis.viewer.wicket` +
+`whereAmI.` +
 `maxParentChainLength`
 | +ve int +
 (`_64_`)
@@ -870,7 +871,8 @@ These configuration properties are used to enable/disable features that are eith
 (_default value_)
 |Description
 
-|`isis.viewer.whereAmI.enabled`
+|`isis.viewer.wicket.` +
+`whereAmI.enabled`
 | `true`,`false` +
 (`_true_`)
 | To disable the xref:ugvw.adoc#_ugvw_features_where-am-i["Where am I"] feature.
