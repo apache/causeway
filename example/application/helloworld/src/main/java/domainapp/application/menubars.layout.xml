@@ -99,6 +99,9 @@
                 <mb3:serviceAction objectType="isisApplib.HsqlDbManagerMenu" id="hsqlDbManager">
                     <cpt:named>HSQL DB Manager</cpt:named>
                 </mb3:serviceAction>
+                <mb3:serviceAction objectType="isisApplib.H2ManagerMenu" id="openH2Console">
+                    <cpt:named>H2 Console</cpt:named>
+                </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
     </mb3:secondary>
