@@ -56,6 +56,10 @@
         <datanucleus-jodatime.version>5.2.0-m1</datanucleus-jodatime.version>
         <hsqldb.version>2.4.1</hsqldb.version>
 
+        <!-- override incode-build -->
+        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
+        <maven-surefire-report-plugin.version>2.22.1</maven-surefire-report-plugin.version>
+
         <failOnMissingWebXml>false</failOnMissingWebXml>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
