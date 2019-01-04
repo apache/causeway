@@ -20,6 +20,10 @@ Description
 
 TLP releases:
 
+  * isis-2.0.0-M1                                  : 31 Jul 2018
+  * helloworld-archetype-2.0.0-M1                  : 31 Jul 2018
+  * simpleapp-archetype-2.0.0-M1                   : 31 Jul 2018
+
   * isis-1.16.2                                    :  5 Mar 2018
   * helloworld-archetype-1.16.2                    :  5 Mar 2018
   * simpleapp-archetype-1.16.2                     :  5 Mar 2018
@@ -155,16 +159,16 @@ Resources:
  
   item           type   URL
   -------------  -----  -----------------------------------------------------
-  Source code    git    https://git.apache.org/repos/asf/isis.git
-  Source code    gitrw  https://git-wip-us.apache.org/repos/asf/isis.git
-  Status file    www    https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=blob_plain;f=STATUS;hb=HEAD
+  Source code    git    https://github.com/apache/isis.git
+  Source code    gitrw  https://github.com/apache/isis.git
+  Status file    www    https://raw.githubusercontent.com/apache/isis/master/STATUS
   Website        www    http://isis.apache.org
   Mailing list   dev    dev@isis.apache.org
   Mailing list   users  users@isis.apache.org
   JIRA           www    http://issues.apache.org/jira/browse/ISIS
   Wiki           www    http://cwiki.apache.org/confluence/display/ISIS/Index
-  CI             www    http://builds.apache.org/hudson/job/isis-trunk-windows
-  Fisheye        www    https://fisheye6.atlassian.com/graph/isis-git
+  CI             www    https://builds.apache.org/view/I/view/Isis/job/Isis%20master%20jdk8/
+  Fisheye        www    https://fisheye.apache.org/changelog/isis-git
 
 
 Team:
