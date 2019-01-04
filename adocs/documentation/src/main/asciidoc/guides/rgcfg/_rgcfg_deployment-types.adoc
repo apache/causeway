@@ -5,6 +5,8 @@
 :_imagesdir: images/
 
 
+TODO: 2.0: This is out of date.  Instead we set system property or environment vars, as per `IsisSystemEnvironment`.  This is also pluggable.
+
 Apache Isis distinguishes between the application being run in development mode vs running in production mode.  The framework calls this the "deployment type" (corresponding internally to the `DeploymentType` class).
 
 (For mostly historical reasons) development mode is actually called `SERVER_PROTOTYPE`, while production mode is called just `SERVER`.  (There is also a deprecated mode called `SERVER_EXPLORATION`; for all intents and purposes this can considered as an alias of `SERVER_PROTOTYPE`).
@@ -95,6 +97,8 @@ In this case the deployment type is specified through an Apache Isis-specific co
 
 
 == Overriding the deployment type
+
+TODO: 2.0: see env var or system properties, as per `IsisSystemEnvironment`.
 
 If bootstrapping the application using Apache Isis' xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_cmd-line[`org.apache.isis.WebServer`] then it is possible to override the deployment type using the `-t` (or `--type`) flag.
 

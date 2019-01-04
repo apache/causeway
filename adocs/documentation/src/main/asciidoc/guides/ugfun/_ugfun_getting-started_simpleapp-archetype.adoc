@@ -615,15 +615,13 @@ Once more, see link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-
 
 Most of the time, though, you'll probably want to run the app from within your IDE.
 The mechanics of doing this will vary by IDE; see the xref:../dg/dg.adoc#_dg_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.
-Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:../dg/dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+One way to do this is to run through Maven with `jetty:run`.
+It is important though to ensure that the xref:../dg/dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
-image::{_imagesdir}getting-started/simpleapp-webapp.png[width="600px",link="{_imagesdir}getting-started/simpleapp-webapp.png"]
+TODO-v2: update these images.  Basically need to run "mvn datanucleus:enhance" as a pre-goal in the module-simple module, then "mvn jetty:run" in the webapp module.
 
-with the maven goal to run the DataNucleus enhancer (discussed in more detail xref:../dg/dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[here]) before launch defined as:
-
-image::{_imagesdir}getting-started/simpleapp-webapp-before-launch.png[width="600px",link="{_imagesdir}getting-started/simpleapp-webapp-before-launch.png"]
 
 
 

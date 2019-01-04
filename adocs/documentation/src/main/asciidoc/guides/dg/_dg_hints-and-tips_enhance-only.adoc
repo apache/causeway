@@ -11,7 +11,7 @@ From the Apache Isis mailing list is:
 
 Yes, you can; here's one way:
 
-* Duplicate your run configuration for running the webapp
+* Create Duplicate your run configuration for running the webapp
 ** the one where the main class is `org.apache.isis.WebServer`
 ** there's a button for this on the run configurations dialog.
 * then, on your copy change the main class to `org.apache.isis.Dummy`

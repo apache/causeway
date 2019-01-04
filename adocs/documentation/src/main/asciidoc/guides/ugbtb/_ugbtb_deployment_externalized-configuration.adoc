@@ -62,12 +62,6 @@ Most (if not all) servlet containers will provide a means to define context para
 
 
 
-[NOTE]
-====
-Note that running the app using Apache Isis' `org.apache.isis.WebServer` bootstrapper does not use externalized Apache Isis configuration.
-====
-
-
 
 
 
