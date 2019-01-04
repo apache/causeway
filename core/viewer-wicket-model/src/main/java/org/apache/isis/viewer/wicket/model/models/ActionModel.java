@@ -25,6 +25,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -471,7 +473,9 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
                 final Object routeTo = routingService.route(result);
                 return routeTo != null? getPersistenceSession().adapterFor(routeTo): null;
             })
+            .map(Optional::ofNullable)
             .findFirst()
+            .flatMap(Function.identity())
             .orElse(resultAdapter);
         
     }
