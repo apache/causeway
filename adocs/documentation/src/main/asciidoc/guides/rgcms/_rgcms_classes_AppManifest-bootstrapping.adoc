@@ -321,25 +321,3 @@ public abstract class DomainAppIntegTestAbstract extends IntegrationTestAbstract
 
 
 
-[[__rgcms_classes_AppManifest-bootstrapping_subsidiary-goals]]
-== Subsidiary Goals
-
-There are a number of subsidiary goals of the `AppManifest` class (though not all of these are fully implemented):
-
-* Allow different integration tests to run with different manifests.
-
-** Normally the running application is shared (on a thread-local) between integration tests.
-What the framework could perhaps do is to be intelligent enough to keep track of the manifest in use for each integration test and tear down the shared state if the "next" test uses a different manifest
-
-* Provide a programmatic way to contribute elements of `web.xml`.
-
-* Provide a programmatic way to configure Shiro security.
-
-* Anticipate the module changes forthcoming in Java 9.
-
-** Eventually we see that the `AppManifest` class acting as an "aggregator", with the list of modules will become Java 9 modules each advertising the types that they export.
-** It might even be possible for ``AppManifest``s to be switched on and off dynamically (eg if Java9 is compatible with OSGi, being one of the design goals).
-
-
-
-

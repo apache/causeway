@@ -68,7 +68,8 @@ If you are using an LDAP realm and want to enable user-self registration then yo
 
 == Restful Objects Viewer
 
-Unlike the Wicket viewer, the xref:../ugvro/ugvro.adoc#[Restful Objects viewer] does *not* provide any sort of login page; rather it provides a pluggable authentication strategy, delegated to by the `IsisSessionFilter` filter defined in `web.xml`.  The authentication strategy is responsible for ensuring that a session is available for the REST resource.
+Unlike the Wicket viewer, the xref:../ugvro/ugvro.adoc#[Restful Objects viewer] does *not* provide any sort of login page; rather it provides a pluggable authentication strategy, delegated to by the `IsisSessionFilter` filter (set up by the framework's web bootstrapping).
+The authentication strategy is responsible for ensuring that a session is available for the REST resource.
 
 The API of `AuthenticationSessionStrategy` is simply:
 
@@ -102,6 +103,8 @@ As you can see, none of these should be considered production-quality.
 
 The strategy is configured in `web.xml`; for example:
 
+TODO: v2: this has changed, I think, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
+
 [source,xml]
 ----
 <filter>
@@ -128,7 +131,10 @@ The strategy is configured in `web.xml`; for example:
 <3> which paths are allowed to be accessed directly, without a session.  The `/restful/swagger` path provides access to the SwaggerResource that dynamically generates swagger schema definition files from the Apache Isis metamodel.
 
 
+
 The above filter must then be chained before the servlet that actually handles the REST requests:
+
+TODO: v2: this has changed, I think, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
 
 [source,xml]
 ----
@@ -185,6 +191,8 @@ public class CustomRestfulObjectsApplication extends RestfulObjectsApplication {
 ----
 
 * Register your application class in `web.xml` instead of the default: +
++
+TODO: v2: this may have changed, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
 +
 [source,xml]
 ----

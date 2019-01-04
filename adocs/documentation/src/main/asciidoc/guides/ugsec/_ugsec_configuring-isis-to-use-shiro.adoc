@@ -62,6 +62,9 @@ Setting it to `true` may cause a race condition resulting in exceptions being lo
 
 == Bootstrapping Shiro
 
+TODO: v2: this configuration is no longer required in `web.xml`, instead is configured programmatically by the framework (`WebModule_Shiro`).
+
+
 The Shiro environment (in essence, thread-locals holding the security credentials) needs to be bootstrapped using the following settings in the `WEB-INF/web.xml` file:
 
 [source,xml]
