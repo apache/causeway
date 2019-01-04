@@ -629,6 +629,8 @@ However, Apache Isis can be configured to read config files from an xref:../ugbt
 
 Thus, if in `web.xml` the external configuration directory has been set:
 
+TODO: v2: this almost certainly no longer workd, because we now set up configuration very early on.
+
 [source,xml]
 ----
 <context-param>
@@ -639,7 +641,7 @@ Thus, if in `web.xml` the external configuration directory has been set:
 
 Then this directory will be used as the base for searching for translations (rather than the default 'WEB-INF/' directory).
 
-=== Force read mode
+=== Force read mode, or disable
 
 As noted above, if running in prototype mode then `TranslationServicePo` will be in write mode, if in production mode then will be in read mode.
 To force read mode (ie use translations) even if in prototype mode, add the following configuration property to `isis.properties`:
@@ -647,6 +649,15 @@ To force read mode (ie use translations) even if in prototype mode, add the foll
 [source,ini]
 ----
 isis.services.translation.po.mode=read
+----
+
+It's also possible to disable the service complelely.
+This can sometimes be useful in integration tests.
+
+[source,ini]
+----
+isis.services.translation.po.mode=disables
+----
 ----
 
 == Supporting services

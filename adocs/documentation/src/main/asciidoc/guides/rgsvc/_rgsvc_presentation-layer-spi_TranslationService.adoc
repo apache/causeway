@@ -6,7 +6,9 @@
 
 
 
-The `TranslationService` is the cornerstone of Apache Isis' i18n support.  Its role is to be able to provide translated versions of the various elements within the Apache Isis metamodel (service and object classes, properties, collections, actions, action parameters) and also to translate business rule (disable/valid) messages, and exceptions.  These translations provide for both singular and plural forms.
+The `TranslationService` is the cornerstone of Apache Isis' i18n support.
+Its role is to be able to provide translated versions of the various elements within the Apache Isis metamodel (service and object classes, properties, collections, actions, action parameters) and also to translate business rule (disable/valid) messages, and exceptions.
+These translations provide for both singular and plural forms.
 
 
 [NOTE]
@@ -74,9 +76,11 @@ The default implementation of this domain service recognises the following confi
 
 |`isis.services.` +
 `translation.` +
-`po.mode`
-| `read`,`write`
-|Whether to force the `TranslationService` into either read or write mode. +
+`p`
+| `read`,`write`,`disabled`
+|Whether to force the `TranslationService` into either read or write mode.
+It can also be disabled.
+This can be useful for integration tests.
 
 See xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translation service.
 
