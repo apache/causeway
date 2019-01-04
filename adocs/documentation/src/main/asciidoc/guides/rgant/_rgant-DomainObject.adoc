@@ -23,8 +23,7 @@ The table below summarizes the annotation's attributes.
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |indicates whether each of the changed properties of an object should be submitted to the registered
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] (deprecated) or (its replacement)
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditingService[`AuditingService`] (deprecated) or (its replacement) xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]
 
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`autoCompleteRepository()`]
@@ -64,7 +63,8 @@ The default "reserved" method name is `$$`.
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`nature()`]
 |`NOT_SPECIFIED`, `JDO_ENTITY`, `EXTERNAL_ENTITY`, `INMEMORY_ENTITY`, `MIXIN`, `VIEW_MODEL` (`NOT_SPECIFIED`)
-|whether the domain object logically is an entity (part of the domain layer) or is a view model (part of the application layer); or is a mixin.  If an entity, indicates how its persistence is managed.
+|whether the domain object logically is an entity (part of the domain layer) or is a view model (part of the application layer); or is a mixin.
+If an entity, indicates how its persistence is managed.
 
 
 |xref:../rgant/rgant.adoc#_rgant-DomainObject_objectType[`objectType()`]

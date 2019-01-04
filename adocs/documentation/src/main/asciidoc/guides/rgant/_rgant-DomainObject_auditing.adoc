@@ -19,9 +19,7 @@ no changed properties of objects are audited
 
 If there is no configuration property in `isis.properties` then auditing is automatically enabled for domain objects.
 
-This default can be overridden on an object-by-object basis; if `auditing()` is set to `ENABLED` then changed
-properties of instances of the domain class are audited irrespective of the configured value; if set to `DISABLED` then
-the changed properties of instances are _not_ audited, again irrespective of the configured value.
+This default can be overridden on an object-by-object basis; if `auditing()` is set to `ENABLED` then changed properties of instances of the domain class are audited irrespective of the configured value; if set to `DISABLED` then the changed properties of instances are _not_ audited, again irrespective of the configured value.
 
 For example:
 

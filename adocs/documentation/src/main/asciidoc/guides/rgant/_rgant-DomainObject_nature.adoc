@@ -6,7 +6,8 @@
 
 
 
-The `nature()` attribute is used to characterize the domain object as either an entity (part of the domain layer) or as a view model (part of the application layer).  If the domain object should be thought of as an entity, it also captures how the persistence of that entity is managed.
+The `nature()` attribute is used to characterize the domain object as either an entity (part of the domain layer) or as a view model (part of the application layer).
+If the domain object should be thought of as an entity, it also captures how the persistence of that entity is managed.
 
 For example:
 
@@ -30,19 +31,22 @@ indicates that the domain object is an entity whose persistence is managed inter
 
 * `EXTERNAL_ENTITY` +
 +
-indicates that the domain objecct is a wrapper/proxy/stub (choose your term) to an entity that is managed by some related external system.  For example, the domain object may hold just the URI to a RESTful resource of some third party REST service, or the id of some system accessible over SOAP. +
+indicates that the domain objecct is a wrapper/proxy/stub (choose your term) to an entity that is managed by some related external system.
+For example, the domain object may hold just the URI to a RESTful resource of some third party REST service, or the id of some system accessible over SOAP.
 +
-The identity of an external entity is determined solely by the state of entity's properties.  The framework will automatically recreate the domain object each time it is interacted with.
+The identity of an external entity is determined solely by the state of entity's properties.
+The framework will automatically recreate the domain object each time it is interacted with.
 
 * `INMEMORY_ENTITY` +
 +
-indicates that the domain object is a wrapper/proxy/stub to a "synthetic" entity, for example one that is constructed from some sort of internal memory data structure. +
+indicates that the domain object is a wrapper/proxy/stub to a "synthetic" entity, for example one that is constructed from some sort of internal memory data structure.
 +
-The identity of an inmemory entity is determined solely by the state of entity's properties.  The framework will automatically recreate the domain object each time it is interacted with.
+The identity of an inmemory entity is determined solely by the state of entity's properties.
+The framework will automatically recreate the domain object each time it is interacted with.
 
 * `MIXIN` +
 +
-indicates that the domain object is part of the domain layer, and is contributing behaviour to objects of some other type as a mixin (also known as a trait). +
+indicates that the domain object is part of the domain layer, and is contributing behaviour to objects of some other type as a mixin (also known as a trait).
 +
 Equivalent to annotating with xref:../rgant/rgant.adoc#_rgant-Mixin[`@Mixin`].  For further discussion on using mixins, see xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] in the user guide.
 
@@ -51,7 +55,8 @@ Equivalent to annotating with xref:../rgant/rgant.adoc#_rgant-Mixin[`@Mixin`].  
 +
 indicates that the domain object is conceptually part of the application layer, and exists to surfaces behaviour and/or state that is aggregate of one or more domain entities.
 
-Those natures that indicate the domain object is an entity (of some sort or another) mean then that the domain object is considered to be part of the domain model layer.  As such the domain object's class cannot be annotated with xref:../rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`] or implement the xref:../rgcms/rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface.
+Those natures that indicate the domain object is an entity (of some sort or another) mean then that the domain object is considered to be part of the domain model layer.
+As such the domain object's class cannot be annotated with xref:../rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`] or implement the xref:../rgcms/rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface.
 
 
 [NOTE]

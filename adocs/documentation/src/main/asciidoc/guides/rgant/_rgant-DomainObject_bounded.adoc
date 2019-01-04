@@ -6,9 +6,12 @@
 
 
 
-Some domain classes are immutable to the user, and moreover have only a fixed number of instances.  Often these are "reference" ("standing") data, or lookup data/pick lists.  Typical examples could include categories, countries, states, and tax or interest rate tables.
+Some domain classes are immutable to the user, and moreover have only a fixed number of instances.
+Often these are "reference" ("standing") data, or lookup data/pick lists.
+Typical examples could include categories, countries, states, and tax or interest rate tables.
 
-Where the number of instances is relatively small, ie bounded, then the `bounded()` attribute can be used as a hint.  For such domain objects the framework will automatically allow instances to be selected; xref:../ugvw/ugvw.adoc#[Wicket viewer] displays these as a drop-down list.
+Where the number of instances is relatively small, ie bounded, then the `bounded()` attribute can be used as a hint.
+For such domain objects the framework will automatically allow instances to be selected; xref:../ugvw/ugvw.adoc#[Wicket viewer] displays these as a drop-down list.
 
 
 For example:
@@ -28,7 +31,8 @@ public class Currency {
 
 [TIP]
 ====
-There is nothing to prevent you from using this attribute for regular mutable entities, and indeed this is sometimes worth doing during early prototyping.  However, if there is no realistic upper bound to the number of instances of an entity that might be created, generally you should use xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] supporting method or the xref:../rgant/rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`@DomainObject#autoCompleteRepository()`] attribute instead.
+There is nothing to prevent you from using this attribute for regular mutable entities, and indeed this is sometimes worth doing during early prototyping.
+However, if there is no realistic upper bound to the number of instances of an entity that might be created, generally you should use xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] supporting method or the xref:../rgant/rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`@DomainObject#autoCompleteRepository()`] attribute instead.
 ====
 
 
