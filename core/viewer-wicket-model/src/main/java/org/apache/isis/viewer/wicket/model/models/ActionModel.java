@@ -25,8 +25,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -50,6 +48,7 @@ import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.LocalResourcePath;
 import org.apache.isis.applib.value.NamedWithMimeType;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -468,14 +467,12 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         final Object result = resultAdapter != null ? resultAdapter.getPojo() : null;
         
         return routingServices
-            .filter(routingService->routingService.canRoute(result))        
-            .map(routingService->{
-                final Object routeTo = routingService.route(result);
-                return routeTo != null? getPersistenceSession().adapterFor(routeTo): null;
-            })
-            .map(Optional::ofNullable)
+            .filter(routingService->routingService.canRoute(result))
+            .map(routingService->routingService.route(result))
+            .filter(_NullSafe::isPresent)
+            .map(routeTo->getPersistenceSession().adapterFor(routeTo))
+            .filter(_NullSafe::isPresent)
             .findFirst()
-            .flatMap(Function.identity())
             .orElse(resultAdapter);
         
     }
