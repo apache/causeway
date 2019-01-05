@@ -19,6 +19,9 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import static org.apache.isis.commons.internal.base._Strings.prefix;
+import static org.apache.isis.viewer.wicket.viewer.IsisWicketApplication.readLines;
+
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -51,8 +54,6 @@ import org.apache.isis.viewer.wicket.viewer.registries.pages.PageNavigationServi
 import org.apache.isis.viewer.wicket.viewer.services.EmailNotificationServiceWicket;
 import org.apache.isis.viewer.wicket.viewer.services.EmailServiceWicket;
 import org.apache.isis.viewer.wicket.viewer.settings.WicketViewerSettingsDefault;
-
-import static org.apache.isis.viewer.wicket.viewer.IsisWicketApplication.readLines;
 
 /**
  * To override
@@ -121,11 +122,14 @@ public class IsisWicketModule extends AbstractModule {
                     final String fallback = getConfiguration().getString("isis.viewer.wicket.welcome.text");
                     final URL resource;
                     try {
-                        resource = servletContext.getResource(prefix("/", welcomeFile));
-                        return readLines(resource, fallback);
+                        resource = servletContext.getResource(prefix(welcomeFile.get(), "/"));
+                        if(resource!=null) {
+                            return readLines(resource, fallback);    
+                        }
                     } catch (MalformedURLException e) {
-                        return fallback;
+                        // fall through
                     }
+                    return fallback;
                 });
 
         bind(String.class).annotatedWith(Names.named("applicationVersion"))
@@ -153,8 +157,5 @@ public class IsisWicketModule extends AbstractModule {
     private IsisConfiguration getConfiguration() {
         return _Config.getConfiguration();
     }
-    private static String prefix(final String prefix, final Provider<String> textProvider) {
-        final String text = textProvider.get();
-        return text.startsWith(prefix) ? text : prefix + text;
-    }
+ 
 }
