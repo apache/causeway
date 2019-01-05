@@ -8,7 +8,7 @@ Search also for: "TODO: v2: " in the .adoc documentation.
 
 also: ISIS-1943,ISIS-1944,ISIS-1947
 
-needs documenting how to use.
+NOTE: TODO - needs documenting how to use.
 
 public API is:
 
@@ -133,9 +133,7 @@ public class FileNode {
 
 === web.xml now much simpler (ISIS-1895)
 
-
-
-
+NOTE: see 'Servlet Context' below
 
 
 === @MemberGroupLayout was removed
@@ -471,19 +469,88 @@ might need to reinstate, or long-term will have SpringBoot etc do the bootstrapp
 
 == Migration Notes 1.x to 2.0.0-M1
 
-This stuff needs to be properly documented
-
 === java.time support (ISIS-1636)
 
-to document
+The framework supports following temporal values from the Java Time API (and Joda):
+
+==== Date only
+
+* java.sql.Date
+* java.time.LocalDate (since 2.0.0-M1)
+* org.joda.time.LocalDate
+
+==== Date and Time
+
+* java.util.Date
+* java.sql.Timestamp
+* java.time.LocalDateTime (since 2.0.0-M1)
+* java.time.OffsetDateTime (since 2.0.0-M1)
+* org.joda.time.DateTime
+* org.joda.time.LocalDateTime
+
+==== View Model Example
+
+If used with JAXB View Models, you need to specify specific XmlAdapters as provided by org.apache.isis.applib.util.JaxbAdapters.*. See this JAXB Viewmodel example using lombok:
+
+[source,java]
+----
+@XmlRootElement(name = "Demo")
+@XmlType
+@XmlAccessorType(XmlAccessType.FIELD)
+@DomainObject(nature=Nature.VIEW_MODEL)
+public class TemporalDemo {
+
+    // -- DATE ONLY (LOCAL TIME)
+    
+    @XmlElement @XmlJavaTypeAdapter(SqlDateAdapter.class)
+    @Getter @Setter private java.sql.Date javaSqlDate;
+    
+    @XmlElement @XmlJavaTypeAdapter(LocalDateAdapter.class)
+    @Getter @Setter private LocalDate javaLocalDate;
+    
+    // -- DATE AND TIME (LOCAL TIME)
+    
+    @XmlElement @XmlJavaTypeAdapter(DateAdapter.class)
+    @Getter @Setter private Date javaUtilDate;
+    
+    @XmlElement @XmlJavaTypeAdapter(SqlTimestampAdapter.class)
+    @Getter @Setter private java.sql.Timestamp javaSqlTimestamp;
+        
+    @XmlElement @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    @Getter @Setter private LocalDateTime javaLocalDateTime;
+    
+    // -- DATE AND TIME (WITH TIMEZONE OFFSET)
+
+    @XmlElement @XmlJavaTypeAdapter(OffsetDateTimeAdapter.class)
+    @Getter @Setter private OffsetDateTime javaOffsetDateTime;
+    
+    // --
+    
+    public void initDefaults() {
+        
+        log.info("TemporalDemo::initDefaults");
+        
+        javaUtilDate = new Date();
+        javaSqlDate = new java.sql.Date(System.currentTimeMillis());
+        javaSqlTimestamp = new java.sql.Timestamp(System.currentTimeMillis());
+        
+        javaLocalDate = LocalDate.now();
+        javaLocalDateTime = LocalDateTime.now();
+        javaOffsetDateTime = OffsetDateTime.now();
+    }
+    
+}
+----
 
 === web-docker (ISIS-1969)
 
-To document, in particular how to use in the helloworld/simpleapp archetypes.
+NOTE: TODO - To document, in particular how to use in the helloworld/simpleapp archetypes.
 
 NB: ISIS-1969: the Docker image isn't yet being released, pending https://issues.apache.org/jira/browse/INFRA-17518[INFRA-17518].
 
 === Plugin architecture (ISIS-1753 and others)
+
+NOTE: TODO ...
 
 * describe the plugin architecture in general, use of ServiceLoader etc
 * describe in particular the event bus plugin architecture (ISIS-1753)
@@ -491,8 +558,7 @@ NB: ISIS-1969: the Docker image isn't yet being released, pending https://issues
 
 === Ticket (for ErrorReportingService) is now an interface, not a class (ISIS-1955)
 
-\... and so any concrete implementations will need to be changed
-
+NOTE: TODO - ... and so any concrete implementations will need to be changed
 
 === Override hsqldb for integtests (ISIS-1958)
 
