@@ -651,12 +651,12 @@ To force read mode (ie use translations) even if in prototype mode, add the foll
 isis.services.translation.po.mode=read
 ----
 
-It's also possible to disable the service complelely.
+It's also possible to disable the service completely (using values 'disable' or 'disabled').
 This can sometimes be useful in integration tests.
 
 [source,ini]
 ----
-isis.services.translation.po.mode=disables
+isis.services.translation.po.mode=disable
 ----
 ----
 
