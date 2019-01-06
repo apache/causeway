@@ -10,7 +10,9 @@ include::../../__versions.adoc[]
 The release process consists of:
 
 * the release manager xref:../cgcom/cgcom.adoc#_cgcom_cutting-a-release[cutting the release]
+
 * members of the Apache Isis PMC xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verifying] and voting on the release
+
 * the release manager performing post-release tasks, for either a successful or an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] vote (former documented below)
 
 For a vote to succeed, there must be +3 votes from PMC members, and the vote must have been open at least 72 hours.
@@ -62,8 +64,8 @@ sh scripts/promoterctag.sh helloworld-archetype-{isisnext} RC1
 sh scripts/promoterctag.sh simpleapp-archetype-{isisnext} RC1
 ----
 
-This script pushes the tag under `refs/tags/rel`.  As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs),
-this path is 'protected' and is unmodifiable (guaranteeing the provenance that the ASF needs for releases).
+This script pushes the tag under `refs/tags/rel`.
+As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs), this path is 'protected' and is unmodifiable (guaranteeing the provenance that the ASF needs for releases).
 
 Then, continue onto the next section for the steps to promote and announce the release.
 
@@ -332,10 +334,9 @@ For more information on DOAP files, see these http://projects.apache.org/doap.ht
 
 * commit the `.adoc` changes
 
-Now we need to publish the website.
+Now we need to publish the website:
 
 * locate `template/document.html.erb` file, and remove `-SNAPSHOT` from the navbar, so that it reads something like:
-
 +
 [source,html,subs="attributes+"]
 ----
@@ -343,19 +344,16 @@ Now we need to publish the website.
 ----
 
 * publish to the `isis-site` repo.
-
 +
 This will have published to the `SNAPSHOT` directory of the `isis-site` repo.
 
 Now, in the `isis-site` repo itself:
 
 * double check that a copy of `current` exists as a named directory under `content/versions`
-
 +
 If for any reason it isn't there, then create a copy (under `content/versions`) before it gets deleted in the step below.
 
 * delete the `current` version and then rename the just-published `SNAPSHOT` as `current`:
-
 +
 [source,bash]
 ----
@@ -364,7 +362,6 @@ mv content/versions/SNAPSHOT content/versions/current
 ----
 
 * take a copy of the new `current` version as its appropriately named version:
-
 +
 For example:
 +
@@ -374,7 +371,6 @@ cp -rf content/versions/current content/versions/{isisnext}
 ----
 
 * update the new named version's `index.html` with one that will redirect back to the home page.
-
 +
 You can take a copy from one of the older named versions, or just use this text:
 +
@@ -405,7 +401,6 @@ And, we also need to make sure that any future publishing of snapshots has the c
 Therefore:
 
 * locate `template/document.html.erb` file, and add in `-SNAPSHOT` for version in the navbar:
-
 +
 [source,html,subs="attributes+"]
 ----
