@@ -19,6 +19,7 @@
 
 .ui-tooltip {
 	max-width: 300px;
+	color: rgb(70, 69, 69);
 	background-color: WhiteSmoke;
     text-align: center;
     padding: 5px 10px;

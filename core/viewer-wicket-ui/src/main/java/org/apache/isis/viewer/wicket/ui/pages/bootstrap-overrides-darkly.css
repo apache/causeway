@@ -34,3 +34,8 @@ a.scalarValueInlinePromptLink:focus textarea,
     border-color: #0ce3ac;
     box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px #0ce3ac;
 }
+
+.ui-tooltip {
+    color: White;
+    background-color: rgb(34, 34, 34);
+}
