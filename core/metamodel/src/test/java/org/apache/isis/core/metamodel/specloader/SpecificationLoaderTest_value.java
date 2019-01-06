@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -33,13 +32,11 @@ public class SpecificationLoaderTest_value extends SpecificationLoaderTestAbstra
         return reflector.loadSpecification(String.class, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
     }
 
-    @Ignore("broken")
     @Test
     public void testType() throws Exception {
         Assert.assertTrue(specification.isNotCollection());
     }
 
-    @Ignore("broken")
     @Test
     public void testName() throws Exception {
         Assert.assertEquals(String.class.getName(), specification.getFullIdentifier());

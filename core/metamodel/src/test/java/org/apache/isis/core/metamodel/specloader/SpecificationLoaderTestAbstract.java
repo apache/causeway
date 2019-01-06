@@ -19,18 +19,21 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
+import org.hamcrest.Description;
 import org.jmock.Expectations;
+import org.jmock.api.Action;
+import org.jmock.api.Invocation;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.services.grid.GridService;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -65,6 +68,8 @@ public abstract class SpecificationLoaderTestAbstract {
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
     private MessageService mockMessageService;
+    @Mock
+    private TranslationService mockTranslationService;
     
     ServicesInjector stubServicesInjector;
 
@@ -85,6 +90,24 @@ public abstract class SpecificationLoaderTestAbstract {
 
             ignoring(mockPersistenceSessionServiceInternal);
             ignoring(mockMessageService);
+            
+            allowing(mockTranslationService).getMode();
+            will(returnValue(TranslationService.Mode.DISABLED));
+            
+            context.checking(new Expectations() {{
+                allowing(mockTranslationService).translate(with(any(String.class)), with(any(String.class)));
+                will(new Action() {
+                    @Override
+                    public Object invoke(final Invocation invocation) throws Throwable {
+                        return invocation.getParameter(1);
+                    }
+
+                    @Override
+                    public void describeTo(final Description description) {
+                        description.appendText("Returns parameter #1");
+                    }
+                });
+            }});
 
         }});
 
@@ -93,6 +116,7 @@ public abstract class SpecificationLoaderTestAbstract {
                     .addService(mockPersistenceSessionServiceInternal)
                     .addService(mockMessageService)
                     .addService(mockGridService)
+                    .addService(mockTranslationService)
                     .build();
 
         specificationLoader = new SpecificationLoader(
@@ -121,35 +145,30 @@ public abstract class SpecificationLoaderTestAbstract {
 
     protected abstract ObjectSpecification loadSpecification(SpecificationLoader reflector);
 
-    @Ignore("broken")
     @Test
     public void testCollectionFacet() throws Exception {
         final Facet facet = specification.getFacet(CollectionFacet.class);
         Assert.assertNull(facet);
     }
 
-    @Ignore("broken")
     @Test
     public void testTypeOfFacet() throws Exception {
         final TypeOfFacet facet = specification.getFacet(TypeOfFacet.class);
         Assert.assertNull(facet);
     }
 
-    @Ignore("broken")
     @Test
     public void testNamedFaced() throws Exception {
         final Facet facet = specification.getFacet(NamedFacet.class);
         Assert.assertNotNull(facet);
     }
 
-    @Ignore("broken")
     @Test
     public void testPluralFaced() throws Exception {
         final Facet facet = specification.getFacet(PluralFacet.class);
         Assert.assertNotNull(facet);
     }
 
-    @Ignore("broken")
     @Test
     public void testDescriptionFacet() throws Exception {
         final Facet facet = specification.getFacet(DescribedAsFacet.class);

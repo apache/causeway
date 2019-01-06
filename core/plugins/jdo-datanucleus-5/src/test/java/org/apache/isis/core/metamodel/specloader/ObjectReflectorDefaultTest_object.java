@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.specloader;
 
 import org.datanucleus.enhancement.Persistable;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -44,19 +43,16 @@ public class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAb
         return reflector.loadSpecification(TestDomainObject.class);
     }
 
-    @Ignore("broken")
     @Test
     public void testType() throws Exception {
         Assert.assertTrue(specification.isNotCollection());
     }
 
-    @Ignore("broken")
     @Test
     public void testName() throws Exception {
         Assert.assertEquals(TestDomainObject.class.getName(), specification.getFullIdentifier());
     }
 
-    @Ignore("broken")
     @Test
     public void testStandardFacets() throws Exception {
         Assert.assertNotNull(specification.getFacet(NamedFacet.class));
@@ -66,14 +62,12 @@ public class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAb
         Assert.assertNotNull(specification.getFacet(ObjectValidPropertiesFacet.class));
     }
 
-    @Ignore("broken")
     @Test
     public void testNoCollectionFacet() throws Exception {
         final Facet facet = specification.getFacet(CollectionFacet.class);
         Assert.assertNull(facet);
     }
 
-    @Ignore("broken")
     @Test
     public void testNoTypeOfFacet() throws Exception {
         final TypeOfFacet facet = specification.getFacet(TypeOfFacet.class);
