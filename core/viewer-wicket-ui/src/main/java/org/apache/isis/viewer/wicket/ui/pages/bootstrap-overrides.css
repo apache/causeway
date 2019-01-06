@@ -1052,4 +1052,5 @@ h4.iconAndTitle a:focus {
 .list-inline > li {
     padding-left: 0px;
     padding-right: 0px;
+    padding-bottom: 5px; /* multiple action buttons, when line-breaking, need some vertical space */
 }
