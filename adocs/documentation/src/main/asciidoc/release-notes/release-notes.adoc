@@ -22,12 +22,12 @@ This table summarises all releases of Apache Isis to date.
 | JIRA relnotes
 
 | xref:release-notes.adoc#_release-notes_1.17.0[1.17.0]
-| dd-mm-yyyy
-| TODO
-|
-|
-|
-| TODO
+| 06-01-2019
+| Sidebar dialogs, metamodel export
+| 4
+| 17
+| 9
+| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342854[Release notes for 1.17.0]
 
 | xref:release-notes.adoc#_release-notes_1.16.2[1.16.2]
 | 05-03-2018

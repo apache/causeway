@@ -415,7 +415,7 @@ Therefore:
 
 * publish the website once more (from the `isis` main repo).
 
-* Finally, preview the changes (using `sh preview-html.sh` in the `isis-site`).
+* Finally, preview the changes (using `sh preview.sh` in the `isis-site`).
 
 If everything looks ok, then push the changes to make live.
 
