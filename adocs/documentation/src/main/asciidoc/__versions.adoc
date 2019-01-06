@@ -1,4 +1,4 @@
-:isiscurr: 1.16.2
-:isisnext: 1.17.0
-:isisnextafter: 1.18.0
+:isiscurr: 1.17.0
+:isisnext: 1.18.0
+:isisnextafter: 1.19.0
 :isisdevafter: {isisnextafter}-SNAPSHOT

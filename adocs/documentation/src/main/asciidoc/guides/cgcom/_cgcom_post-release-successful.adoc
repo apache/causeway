@@ -229,6 +229,12 @@ From the root directory, generate the release notes for the current release, in 
 sh scripts/jira-release-notes.sh ISIS {isisnext} > /tmp/1
 ----
 
+[NOTE]
+====
+This script uses 'jq' to parse JSON.
+See the script itself for details of how to install this utility.
+====
+
 
 === Close tickets
 
