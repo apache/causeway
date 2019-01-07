@@ -31,13 +31,11 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -57,7 +55,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionModel>
-        implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvider, ActionPromptProvider {
+        implements CollectionCountProvider, CollectionSelectorProvider, BulkActionsProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -131,18 +129,6 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         bulkActionsHelper = new BulkActionsHelper(entityCollectionModel);
     }
 
-    //region > ActionPromptModalWindowProvider
-
-    public ActionPromptModalWindow getActionPrompt(final PromptStyle promptStyle) {
-        return actionPromptModalWindow;
-    }
-
-    @Override
-    public void closePrompt(final AjaxRequestTarget target) {
-        actionPromptModalWindow.closePrompt(target);
-    }
-
-    //endregion
 
     //region > BulkActionsProvider
 
