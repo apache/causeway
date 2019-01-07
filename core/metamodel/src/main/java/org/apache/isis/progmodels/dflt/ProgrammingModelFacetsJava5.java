@@ -103,6 +103,7 @@ import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethod
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutablemarkerifc.ImmutableFacetMarkerInterfaceFactory;
+import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.mask.annotation.MaskFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.maxlen.annotation.MaxLengthFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFactory;
@@ -409,6 +410,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new TitleFacetViaMethodsFactory());
         addFactory(new IconFacetMethodFactory());
         addFactory(new CssClassFacetMethodFactory());
+        addFactory(new LayoutFacetFactory());
 
 
         addFactory(new DomainServiceLayoutFacetFactory());
