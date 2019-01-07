@@ -49,8 +49,9 @@ public class Object_rebuildMetamodel {
             position = ActionLayout.Position.PANEL_DROPDOWN
     )
     @MemberOrder(name = "datanucleusIdLong", sequence = "800.1")
-    public void act() {
+    public Object act() {
         metaModelService.rebuild(object.getClass());
+        return this;
     }
 
     @javax.inject.Inject
