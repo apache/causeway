@@ -689,8 +689,9 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     protected void addEditPropertyTo(
             final MarkupContainer scalarIfRegularFormGroup) {
 
+        final PromptStyle promptStyle = scalarModel.getPromptStyle();
         if(  scalarModel.canEnterEditMode() &&
-            (scalarModel.getPromptStyle().isDialog() ||
+            (promptStyle.isDialog() ||
             !getInlinePromptConfig().isSupported())) {
 
             final WebMarkupContainer editProperty = new WebMarkupContainer(ID_EDIT_PROPERTY);
@@ -701,7 +702,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 protected void onEvent(AjaxRequestTarget target) {
 
                     final ActionPrompt prompt = ActionPromptProvider.Util
-                            .getFrom(ScalarPanelAbstract2.this).getActionPrompt();
+                            .getFrom(ScalarPanelAbstract2.this).getActionPrompt(promptStyle);
 
                     PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(prompt.getTitleId(),
                             ScalarPanelAbstract2.this.scalarModel);

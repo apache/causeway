@@ -168,18 +168,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
         if(inlinePromptContext == null || promptStyle.isDialog()) {
             final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(actionLink.getPage());
-            final ActionPrompt prompt = promptProvider.getActionPrompt();
-
-//            // REVIEW: I wonder if this is still needed after the ISIS-1613 rework?
-//            final ActionPromptHeaderPanel titlePanel =
-//                    PersistenceSession.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-//                            new Callable<ActionPromptHeaderPanel>() {
-//                                @Override
-//                                public ActionPromptHeaderPanel call() throws Exception {
-//                                    final String titleId = prompt.getTitleId();
-//                                    return new ActionPromptHeaderPanel(titleId, actionModel);
-//                                }
-//                            });
+            final ActionPrompt prompt = promptProvider.getActionPrompt(promptStyle);
 
 
             //

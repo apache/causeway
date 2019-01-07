@@ -36,9 +36,23 @@ public enum PromptStyle {
      */
     AS_CONFIGURED,
     /**
-     * Use a dialog for the prompt
+     * Use a dialog for the prompt.
+     *
+     * <p>
+     *     This will be either modal dialog (same as if {@link #DIALOG_MODAL} was selected) or sidebar (same as if
+     *     {@link #DIALOG_SIDEBAR} was selected) depending on the value of the
+     *     <code>isis.viweer.wicket.dialogMode</code> configuration property.
+     * </p>
      */
     DIALOG,
+    /**
+     * Use a dialog for the prompt, rendered in a sidebar.
+     */
+    DIALOG_SIDEBAR,
+    /**
+     * Use a dialog for the prompt, rendered in a modal dialog.
+     */
+    DIALOG_MODAL,
     /**
      * Show the form inline, temporarily replacing the rendering of the property.
      */
@@ -64,7 +78,7 @@ public enum PromptStyle {
      */
     INLINE_AS_IF_EDIT;
 
-    public boolean isDialog() { return this == DIALOG; }
+    public boolean isDialog() { return this == DIALOG || this == DIALOG_MODAL || this == DIALOG_SIDEBAR; }
     public boolean isInline() { return this == INLINE; }
     public boolean isInlineAsIfEdit() { return this == INLINE_AS_IF_EDIT; }
 

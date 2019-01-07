@@ -43,7 +43,6 @@ import org.apache.wicket.util.string.AppendingStringBuffer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
@@ -188,10 +187,10 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
     }
 
     protected void closePromptIfAny(final AjaxRequestTarget target) {
-        final ActionPrompt actionPromptIfAny =
-                ActionPromptProvider.Util.getFrom(parentPanel).getActionPrompt();
-        if (actionPromptIfAny != null) {
-            actionPromptIfAny.closePrompt(target);
+
+        final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(parentPanel);
+        if(promptProvider != null) {
+            promptProvider.closePrompt(target);
         }
     }
 

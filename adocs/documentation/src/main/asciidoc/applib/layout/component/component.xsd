@@ -162,6 +162,8 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="AS_CONFIGURED"/>
       <xs:enumeration value="DIALOG"/>
+      <xs:enumeration value="DIALOG_SIDEBAR"/>
+      <xs:enumeration value="DIALOG_MODAL"/>
       <xs:enumeration value="INLINE"/>
       <xs:enumeration value="INLINE_AS_IF_EDIT"/>
     </xs:restriction>

@@ -31,6 +31,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.devutils.debugbar.DebugBar;
 import org.apache.wicket.devutils.debugbar.IDebugBarContributor;
@@ -60,6 +61,7 @@ import org.apache.wicket.request.resource.ResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -463,15 +465,33 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private ActionPromptModalWindow actionPromptModalWindow;
     private ActionPromptSidebar actionPromptSidebar;
 
-    public ActionPrompt getActionPrompt() {
-        final DialogMode dialogMode = CONFIG_DIALOG_MODE.from(getConfiguration());
-        switch (dialogMode) {
-            case SIDEBAR:
-                return actionPromptSidebar;
-            case MODAL:
-            default:
-                return actionPromptModalWindow;
+    public ActionPrompt getActionPrompt(final PromptStyle promptStyle) {
+        switch (promptStyle) {
+        case AS_CONFIGURED:
+        case DIALOG:
+            final DialogMode dialogMode = CONFIG_DIALOG_MODE.from(getConfiguration());
+            switch (dialogMode) {
+                case SIDEBAR:
+                    return actionPromptSidebar;
+                case MODAL:
+                default:
+                    return actionPromptModalWindow;
+            }
+        case DIALOG_SIDEBAR:
+            return actionPromptSidebar;
+        case DIALOG_MODAL:
+            return actionPromptModalWindow;
+        case INLINE:
+        case INLINE_AS_IF_EDIT:
+        default:
+            throw new IllegalArgumentException(String.format("PromptStyle '%s' not supported", promptStyle));
         }
+    }
+
+    @Override
+    public void closePrompt(final AjaxRequestTarget target) {
+        actionPromptSidebar.closePrompt(target);
+        actionPromptModalWindow.closePrompt(target);
     }
 
     private void addActionPromptModalWindow(final MarkupContainer parent) {

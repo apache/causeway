@@ -31,6 +31,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.common.OnSelectionHandler;
@@ -132,8 +133,13 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
 
     //region > ActionPromptModalWindowProvider
 
-    public ActionPromptModalWindow getActionPrompt() {
+    public ActionPromptModalWindow getActionPrompt(final PromptStyle promptStyle) {
         return actionPromptModalWindow;
+    }
+
+    @Override
+    public void closePrompt(final AjaxRequestTarget target) {
+        actionPromptModalWindow.closePrompt(target);
     }
 
     //endregion
