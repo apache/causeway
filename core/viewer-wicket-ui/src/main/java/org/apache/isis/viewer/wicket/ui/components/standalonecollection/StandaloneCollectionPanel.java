@@ -41,7 +41,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsLinkFactory;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
@@ -62,13 +61,11 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
     private static final String ID_STANDALONE_COLLECTION = "standaloneCollection";
     private static final String ID_ACTION_NAME = "actionName";
 
-    private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
     private static final String ID_ADDITIONAL_LINK = "additionalLink";
 
     private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
 
-    private final ActionPromptModalWindow actionPromptModalWindow;
     private final CollectionSelectorPanel selectorDropdownPanel;
     private final BulkActionsHelper bulkActionsHelper;
 
@@ -94,10 +91,6 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
                 CssClassAppender.asCssStyle("isis-" + action.getOnType().getSpecId().asString().replace('.', '-') + "-" + action.getId()));
         CssClassAppender.appendCssClassTo(outerDiv,
                 CssClassAppender.asCssStyle("isis-" + entityCollectionModel.getTypeOfSpecification().getSpecId().asString().replace('.','-')));
-
-        // action prompt
-        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
-        outerDiv.addOrReplace(actionPromptModalWindow);
 
         // selector
         final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry());
