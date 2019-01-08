@@ -267,7 +267,7 @@ public class GridLoaderServiceDefault implements GridLoaderService2 {
         final List<String> candidateResourceNames = Lists.newArrayList();
         if(dcal.layoutIfAny != null) {
             candidateResourceNames.add(
-                    String.format("%s.layout.%s.xml", dcal.domainClass.getSimpleName(), dcal.layoutIfAny));
+                    String.format("%s-%s.layout.xml", dcal.domainClass.getSimpleName(), dcal.layoutIfAny));
         }
         candidateResourceNames.add(
                 String.format("%s.layout.xml", dcal.domainClass.getSimpleName()));
@@ -286,28 +286,6 @@ public class GridLoaderServiceDefault implements GridLoaderService2 {
         return null;
     }
 
-
-    enum Type {
-        DEFAULT {
-            @Override
-            protected String suffix() {
-                return ".xml";
-            }
-        },
-        FALLBACK {
-            @Override
-            protected String suffix() {
-                return ".fallback.xml";
-            }
-        };
-
-        private String resourceNameFor(final DomainClassAndLayout dcal) {
-            return dcal.domainClass.getSimpleName() + ".layout" + (dcal.layoutIfAny != null ? dcal
-                    .layoutIfAny + "." : "") + suffix();
-        }
-
-        protected abstract String suffix();
-    }
 
     //region > injected dependencies
 
