@@ -6,7 +6,7 @@
 
 
 The `promptStyle()` attribute is used to specify whether, when invoking an action associated with a domain object property, the parameters for the action are prompted either in modal dialog box, a (non-modal) sidebar dialog box, or is prompted using an inline panel (replacing the property on the page).
-For more on sidebar vs modal dialogs, see p#_ugvw_features_sidebar-vs-modal-dialogs[Wicket viewer features].
+For more on sidebar vs modal dialogs, see xref:../ugvw/ugvw.adoc#_ugvw_features_sidebar-vs-modal-dialogs[Wicket viewer features].
 
 The prompt style is influenced by two xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties[configuration properties]:
 
@@ -47,6 +47,6 @@ Assuming that the corresponding property is not itself editable, this means that
 The net effect is that a property conceptually consisting of different parts (eg a name, an address or a date) can be updated using an action that lets each separate part be specified independently.
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
-NOTE: FIXME - provide .layout.xml example here
+

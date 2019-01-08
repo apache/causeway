@@ -5,9 +5,14 @@
 :_imagesdir: images/
 
 
-Every object is represented by an icon; this is based on the domain object's simple name.  The xref:../ugvw/ugvw.adoc#[Wicket viewer] searches for the image in the same package as the `.class` file for the domain object or in the `images` package. It will find any matching name and one of the followign suffexes `png`, `gif`, `jpeg`, `jpg`, `svg`. If none is found, then `Default.png` will be used as fallback.
+Every object is represented by an icon; this is based on the domain object's simple name.
+The xref:../ugvw/ugvw.adoc#[Wicket viewer] searches for the image in the same package as the `.class` file for the domain object or in the `images` package.
+It will find any matching name and one of the following suffixes `.png`, `.gif`, `.jpeg`, `.jpg` or `.svg`.
+If none is found, then `Default.png` will be used as fallback.
 
-The `iconName()` allows the icon that to be used to change for individual object instances.  These are usually quite subtle, for example to reflect the particular status of an object.  The value returned by the `iconName()` method is added as a suffix to the base icon name.
+The `iconName()` allows the icon that to be used to change for individual object instances.
+These are usually quite subtle, for example to reflect the particular status of an object.
+The value returned by the `iconName()` method is added as a suffix to the base icon name.
 
 For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add an overlay for todo items that have been completed:
 
@@ -15,7 +20,7 @@ image::{_imagesdir}reference-methods/reserved/iconName/differing.png[width="200p
 
 
 
-The screenshot below shows the location of these png icon files:
+The screenshot below shows the location of these `.png` icon files:
 
 image::{_imagesdir}reference-methods/reserved/iconName/png-files.png[width="200px",link="{_imagesdir}reference-methods/reserved/iconName/png-files.png"]
 
@@ -33,4 +38,11 @@ public class ToDoItem ... {
 }
 ----
 
-See also xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`] and xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
+== See also
+
+See also:
+
+* xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
+* xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`]
+* xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
+* xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_layout[`layout()`]
