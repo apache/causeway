@@ -51,7 +51,7 @@ public class Object_rebuildMetamodel {
     @MemberOrder(name = "datanucleusIdLong", sequence = "800.1")
     public Object act() {
         metaModelService.rebuild(object.getClass());
-        return this;
+        return object;
     }
 
     @javax.inject.Inject
