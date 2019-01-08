@@ -469,6 +469,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         switch (promptStyle) {
         case AS_CONFIGURED:
         case DIALOG:
+        case INLINE:
+        case INLINE_AS_IF_EDIT:
+        default:
             final DialogMode dialogMode = CONFIG_DIALOG_MODE.from(getConfiguration());
             switch (dialogMode) {
                 case SIDEBAR:
@@ -481,10 +484,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             return actionPromptSidebar;
         case DIALOG_MODAL:
             return actionPromptModalWindow;
-        case INLINE:
-        case INLINE_AS_IF_EDIT:
-        default:
-            throw new IllegalArgumentException(String.format("PromptStyle '%s' not supported", promptStyle));
         }
     }
 
