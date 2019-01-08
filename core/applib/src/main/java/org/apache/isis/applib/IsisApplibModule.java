@@ -32,6 +32,8 @@ public class IsisApplibModule extends ModuleAbstract {
             extends org.apache.isis.applib.services.eventbus.IconUiEvent<S> { }
     public abstract static class CssClassUiEvent<S>
             extends org.apache.isis.applib.services.eventbus.CssClassUiEvent<S> { }
+    public abstract static class LayoutUiEvent<S>
+            extends org.apache.isis.applib.services.eventbus.LayoutUiEvent<S> { }
     //endregion
 
     //region > domain event classes

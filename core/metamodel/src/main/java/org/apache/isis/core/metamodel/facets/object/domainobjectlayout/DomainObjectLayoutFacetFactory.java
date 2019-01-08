@@ -49,6 +49,9 @@ public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
         FacetUtil.addFacet(
                 CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent.create(
                         domainObjectLayout, servicesInjector, getConfiguration(), facetHolder));
+        FacetUtil.addFacet(
+                LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent.create(
+                        domainObjectLayout, servicesInjector, getConfiguration(), facetHolder));
 
         FacetUtil.addFacet(
                 CssClassFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));

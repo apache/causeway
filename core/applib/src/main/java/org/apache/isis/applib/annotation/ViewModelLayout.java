@@ -58,8 +58,6 @@ public @interface ViewModelLayout {
      */
     String cssClassFa() default "";
 
-    // //////////////////////////////////////
-
     /**
      * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
      * icon. The icon could be rendered on the left or the right of the object's title.
@@ -105,7 +103,7 @@ public @interface ViewModelLayout {
      * If annotated on a type, then the page size refers to standalone
      * collections (eg as returned from a repository query).
      */
-    public int paged() default -1;
+    int paged() default -1;
 
 
     // //////////////////////////////////////
