@@ -53,6 +53,7 @@
     <xs:attribute name="namedEscaped" type="xs:boolean"/>
     <xs:attribute name="position" type="tns:position"/>
     <xs:attribute name="promptStyle" type="tns:promptStyle"/>
+    <xs:attribute name="redirect" type="tns:redirect"/>
   </xs:complexType>
 
   <xs:complexType name="serviceAction">
@@ -119,6 +120,7 @@
     <xs:attribute name="paged" type="xs:int"/>
   </xs:complexType>
 
+
   <xs:simpleType name="bookmarkPolicy">
     <xs:restriction base="xs:string">
       <xs:enumeration value="AS_ROOT"/>
@@ -166,6 +168,14 @@
       <xs:enumeration value="DIALOG_MODAL"/>
       <xs:enumeration value="INLINE"/>
       <xs:enumeration value="INLINE_AS_IF_EDIT"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="redirect">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AS_CONFIGURED"/>
+      <xs:enumeration value="EVEN_IF_SAME"/>
+      <xs:enumeration value="ONLY_IF_DIFFERS"/>
     </xs:restriction>
   </xs:simpleType>
 

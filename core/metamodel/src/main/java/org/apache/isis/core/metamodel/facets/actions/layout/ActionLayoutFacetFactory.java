@@ -31,6 +31,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
+import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
+import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacetFallback;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -128,6 +130,14 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
             actionPositionFacet = new ActionPositionFacetFallback(holder);
         }
         FacetUtil.addFacet(actionPositionFacet);
+
+
+        // redirectPolicy
+        RedirectFacet redirectFacet = RedirectFacetFromActionLayoutAnnotation.create(actionLayout, holder);
+        if(redirectFacet == null) {
+            redirectFacet = new RedirectFacetFallback(holder);
+        }
+        FacetUtil.addFacet(redirectFacet);
 
 
         // contributing

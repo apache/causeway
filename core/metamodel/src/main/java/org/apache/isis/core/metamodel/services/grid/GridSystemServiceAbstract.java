@@ -64,6 +64,7 @@ import org.apache.isis.core.metamodel.facets.actions.layout.DescribedAsFacetForA
 import org.apache.isis.core.metamodel.facets.actions.layout.HiddenFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.NamedFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.PromptStyleFacetForActionXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.RedirectFacetFromActionXml;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -298,6 +299,7 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
                 FacetUtil.addOrReplaceFacet(HiddenFacetForActionXml.create(actionLayoutData, objectAction));
                 FacetUtil.addOrReplaceFacet(NamedFacetForActionXml.create(actionLayoutData, objectAction));
                 FacetUtil.addOrReplaceFacet(PromptStyleFacetForActionXml.create(actionLayoutData, objectAction));
+                FacetUtil.addOrReplaceFacet(RedirectFacetFromActionXml.create(actionLayoutData, objectAction));
             }
 
             @Override

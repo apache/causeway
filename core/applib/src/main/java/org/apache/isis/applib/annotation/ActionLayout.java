@@ -133,6 +133,14 @@ public @interface ActionLayout {
     // //////////////////////////////////////
 
     /**
+     * If the action returns its target, then determines whether to update the page or
+     * instead to redirect (forcing a re-rendering of a new page).
+     */
+    Redirect redirectPolicy() default Redirect.AS_CONFIGURED;
+
+    // //////////////////////////////////////
+
+    /**
      * For actions of domain services that can be viewed and contributed (that is, whose
      * {@link DomainService#nature() nature} is either {@link org.apache.isis.applib.annotation.NatureOfService#VIEW}
      * or {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY}), specifies how the
