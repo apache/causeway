@@ -24,7 +24,6 @@ import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetAbstract;
 
 public class LayoutFacetMethod extends LayoutFacetAbstract {
 
@@ -36,9 +35,12 @@ public class LayoutFacetMethod extends LayoutFacetAbstract {
     }
 
     @Override
-    public String layout(final ObjectAdapter owningAdapter) {
+    public String layout(final ObjectAdapter objectAdapterIfAny) {
+        if(objectAdapterIfAny == null) {
+            return null;
+        }
         try {
-            return (String) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+            return (String) ObjectAdapter.InvokeUtils.invoke(method, objectAdapterIfAny);
         } catch (final RuntimeException ex) {
             return null;
         }

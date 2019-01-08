@@ -30,9 +30,9 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 public class LayoutFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String ICON_NAME_PREFIX = "iconName";
+    private static final String LAYOUT_METHOD_NAME = "layout";
 
-    private static final String[] PREFIXES = { ICON_NAME_PREFIX, };
+    private static final String[] PREFIXES = { LAYOUT_METHOD_NAME, };
 
     public LayoutFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -43,7 +43,7 @@ public class LayoutFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, ICON_NAME_PREFIX, String.class, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, LAYOUT_METHOD_NAME, String.class, NO_PARAMETERS_TYPES);
 
         final LayoutFacet facet;
         if (method == null) {

@@ -23,13 +23,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Resources;
 
@@ -41,7 +41,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.grid.Grid;
-import org.apache.isis.applib.services.grid.GridLoaderService;
+import org.apache.isis.applib.services.grid.GridLoaderService2;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -50,16 +50,81 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class GridLoaderServiceDefault implements GridLoaderService {
+public class GridLoaderServiceDefault implements GridLoaderService2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(GridLoaderServiceDefault.class);
 
 
+    static class DomainClassAndLayout {
+        private final Class<?> domainClass;
+        private final String layoutIfAny;
+
+        DomainClassAndLayout(final Class<?> domainClass, final String layoutIfAny) {
+            this.domainClass = domainClass;
+            this.layoutIfAny = layoutIfAny;
+        }
+
+        @Override public boolean equals(final Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+
+            final DomainClassAndLayout that = (DomainClassAndLayout) o;
+
+            if (domainClass != null ? !domainClass.equals(that.domainClass) : that.domainClass != null)
+                return false;
+            return layoutIfAny != null ? layoutIfAny.equals(that.layoutIfAny) : that.layoutIfAny == null;
+        }
+
+        @Override public int hashCode() {
+            int result = domainClass != null ? domainClass.hashCode() : 0;
+            result = 31 * result + (layoutIfAny != null ? layoutIfAny.hashCode() : 0);
+            return result;
+        }
+
+        @Override public String toString() {
+            return "domainClass=" + domainClass +
+                    ", layout='" + layoutIfAny + '\'';
+        }
+    }
+
     // for better logging messages (used only in prototyping mode)
-    private final Map<Class<?>, String> badXmlByClass = Maps.newHashMap();
+    private final Map<DomainClassAndLayout, String> badXmlByDomainClassAndLayout = Maps.newHashMap();
+
+    static class DomainClassAndLayoutAndXml {
+        private final DomainClassAndLayout domainClassAndLayout;
+        private final String xml;
+
+        @Override public boolean equals(final Object o) {
+            if (this == o)
+                return true;
+            if (o == null || getClass() != o.getClass())
+                return false;
+
+            final DomainClassAndLayoutAndXml that = (DomainClassAndLayoutAndXml) o;
+
+            if (domainClassAndLayout != null ?
+                    !domainClassAndLayout.equals(that.domainClassAndLayout) :
+                    that.domainClassAndLayout != null)
+                return false;
+            return xml != null ? xml.equals(that.xml) : that.xml == null;
+        }
+
+        @Override public int hashCode() {
+            int result = domainClassAndLayout != null ? domainClassAndLayout.hashCode() : 0;
+            result = 31 * result + (xml != null ? xml.hashCode() : 0);
+            return result;
+        }
+
+        DomainClassAndLayoutAndXml(final DomainClassAndLayout domainClassAndLayout, final String xml) {
+            this.domainClassAndLayout = domainClassAndLayout;
+            this.xml = xml;
+        }
+    }
 
     // cache (used only in prototyping mode)
-    private final Map<String, Grid> gridByXml = Maps.newHashMap();
+    private final Map<DomainClassAndLayoutAndXml, Grid> gridByDomainClassAndLayoutAndXml = Maps.newHashMap();
 
     private JAXBContext jaxbContext;
 
@@ -93,45 +158,48 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     @Override
     public void remove(final Class<?> domainClass) {
+        final String layoutIfAny = null;
+        final DomainClassAndLayout dcal = new DomainClassAndLayout(domainClass, layoutIfAny);
         if(!supportsReloading()) {
             return;
         }
-        badXmlByClass.remove(domainClass);
-        final String xml = loadXml(domainClass);
+        badXmlByDomainClassAndLayout.remove(dcal);
+        final String xml = loadXml(dcal);
         if(xml == null) {
             return;
         }
-        gridByXml.remove(xml);
+        gridByDomainClassAndLayoutAndXml.remove(new DomainClassAndLayoutAndXml(dcal, xml));
     }
 
     @Override
     @Programmatic
     public boolean existsFor(final Class<?> domainClass) {
-        return resourceNameFor(domainClass) != null;
+        return resourceNameFor(new DomainClassAndLayout(domainClass, null)) != null;
     }
 
     @Override
-    @Programmatic
-    public Grid load(final Class<?> domainClass) {
-        final String xml = loadXml(domainClass);
+    public Grid load(final Class<?> domainClass, final String layoutIfAny) {
+        final DomainClassAndLayout dcal = new DomainClassAndLayout(domainClass, layoutIfAny);
+        final String xml = loadXml(dcal);
         if(xml == null) {
             return null;
         }
 
+        final DomainClassAndLayoutAndXml dcalax = new DomainClassAndLayoutAndXml(dcal, xml);
         if(supportsReloading()) {
-            final Grid grid = gridByXml.get(xml);
+            final Grid grid = gridByDomainClassAndLayoutAndXml.get(dcalax);
             if(grid != null) {
                 return grid;
             }
 
-            final String badXml = badXmlByClass.get(domainClass);
+            final String badXml = badXmlByDomainClassAndLayout.get(dcal);
             if(badXml != null) {
                 if(Objects.equals(xml, badXml)) {
                     // seen this before and already logged; just quit
                     return null;
                 } else {
                     // this different XML might be good
-                    badXmlByClass.remove(domainClass);
+                    badXmlByDomainClassAndLayout.remove(dcal);
                 }
             }
         }
@@ -141,23 +209,23 @@ public class GridLoaderServiceDefault implements GridLoaderService {
                 // shouldn't occur, indicates that initialization failed to locate any GridSystemService implementations.
                 return null;
             }
-            
+
             final Grid grid = (Grid) jaxbService.fromXml(jaxbContext, xml);
             grid.setDomainClass(domainClass);
             if(supportsReloading()) {
-                gridByXml.put(xml, grid);
+                gridByDomainClassAndLayoutAndXml.put(dcalax, grid);
             }
             return grid;
         } catch(Exception ex) {
 
             if(supportsReloading()) {
                 // save fact that this was bad XML, so that we don't log again if called next time
-                badXmlByClass.put(domainClass, xml);
+                badXmlByDomainClassAndLayout.put(dcal, xml);
             }
 
             // note that we don't blacklist if the file exists but couldn't be parsed;
             // the developer might fix so we will want to retry.
-            final String resourceName = resourceNameFor(domainClass);
+            final String resourceName = resourceNameFor(dcal);
             final String message = "Failed to parse " + resourceName + " file (" + ex.getMessage() + ")";
             if(supportsReloading()) {
                 container.warnUser(message);
@@ -168,32 +236,46 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         }
     }
 
-    private String loadXml(final Class<?> domainClass) {
-        final String resourceName = resourceNameFor(domainClass);
+    @Override
+    @Programmatic
+    public Grid load(final Class<?> domainClass) {
+        return load(domainClass, null);
+    }
+
+    private String loadXml(final DomainClassAndLayout dcal) {
+        final String resourceName = resourceNameFor(dcal);
         if(resourceName == null) {
-            LOG.debug("Failed to locate layout file for '{}'", domainClass.getName());
+            LOG.debug("Failed to locate layout file for '{}'", dcal.toString());
             return null;
         }
         try {
-            return resourceContentOf(domainClass, resourceName);
+            return resourceContentOf(dcal, resourceName);
         } catch (IOException ex) {
             LOG.debug(
                     "Failed to locate file {} (relative to {}.class)",
-                    resourceName, domainClass.getName(), ex);
+                    resourceName, dcal.domainClass.getName(), ex);
             return null;
         }
     }
 
-    private static String resourceContentOf(final Class<?> cls, final String resourceName) throws IOException {
-        final URL url = Resources.getResource(cls, resourceName);
+    private static String resourceContentOf(final DomainClassAndLayout dcal, final String resourceName) throws IOException {
+        final URL url = Resources.getResource(dcal.domainClass, resourceName);
         return Resources.toString(url, Charset.defaultCharset());
     }
 
-    String resourceNameFor(final Class<?> domainClass) {
-        for (final Type type : Type.values()) {
-            final String candidateResourceName = resourceNameFor(domainClass, type);
+    String resourceNameFor(final DomainClassAndLayout dcal) {
+        final List<String> candidateResourceNames = Lists.newArrayList();
+        if(dcal.layoutIfAny != null) {
+            candidateResourceNames.add(
+                    String.format("%s.layout.%s.xml", dcal.domainClass.getSimpleName(), dcal.layoutIfAny));
+        }
+        candidateResourceNames.add(
+                String.format("%s.layout.xml", dcal.domainClass.getSimpleName()));
+        candidateResourceNames.add(
+                String.format("%s.layout.fallback.xml", dcal.domainClass.getSimpleName()));
+        for (final String candidateResourceName : candidateResourceNames) {
             try {
-                final URL resource = Resources.getResource(domainClass, candidateResourceName);
+                final URL resource = Resources.getResource(dcal.domainClass, candidateResourceName);
                 if (resource != null) {
                     return candidateResourceName;
                 }
@@ -204,33 +286,28 @@ public class GridLoaderServiceDefault implements GridLoaderService {
         return null;
     }
 
+
     enum Type {
         DEFAULT {
             @Override
             protected String suffix() {
-                return ".layout.xml";
+                return ".xml";
             }
         },
         FALLBACK {
             @Override
             protected String suffix() {
-                return ".layout.fallback.xml";
+                return ".fallback.xml";
             }
         };
 
-        private String resourceNameFor(final Class<?> domainClass) {
-            return domainClass.getSimpleName() + suffix();
+        private String resourceNameFor(final DomainClassAndLayout dcal) {
+            return dcal.domainClass.getSimpleName() + ".layout" + (dcal.layoutIfAny != null ? dcal
+                    .layoutIfAny + "." : "") + suffix();
         }
 
         protected abstract String suffix();
     }
-
-    private String resourceNameFor(
-            final Class<?> domainClass,
-            final Type type) {
-        return type.resourceNameFor(domainClass);
-    }
-
 
     //region > injected dependencies
 

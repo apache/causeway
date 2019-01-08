@@ -22,10 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.layout.grid.Grid;
-import org.apache.isis.applib.services.grid.GridService;
+import org.apache.isis.applib.services.grid.GridService2;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class GridFacetDefault
@@ -42,33 +44,35 @@ public class GridFacetDefault
 
     public static GridFacet create(
             final FacetHolder facetHolder,
-            final GridService gridService) {
+            final GridService2 gridService) {
         return new GridFacetDefault(facetHolder, gridService);
     }
 
-    private final GridService gridService;
+    private final GridService2 gridService;
 
     private Grid grid;
 
     private GridFacetDefault(
             final FacetHolder facetHolder,
-            final GridService gridService) {
+            final GridService2 gridService) {
         super(GridFacetDefault.type(), facetHolder, Derivation.NOT_DERIVED);
         this.gridService = gridService;
     }
 
-    public Grid getGrid() {
+    public Grid getGrid(final ObjectAdapter objectAdapterIfAny) {
         if (!gridService.supportsReloading() && this.grid != null) {
             return this.grid;
         }
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
-        this.grid = load(domainClass);
+        final LayoutFacet layoutFacet = getFacetHolder().getFacet(LayoutFacet.class);
+        final String layout = layoutFacet != null ? layoutFacet.layout(objectAdapterIfAny) : null;
+        this.grid = load(domainClass, layout);
 
         return this.grid;
     }
 
-    private Grid load(final Class<?> domainClass) {
-        Grid grid = gridService.load(domainClass);
+    private Grid load(final Class<?> domainClass, final String layout) {
+        Grid grid = gridService.load(domainClass, layout);
         if(grid == null) {
             grid = gridService.defaultGridFor(domainClass);
         }

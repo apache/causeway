@@ -24,6 +24,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -47,10 +48,11 @@ public class EntityLinksSelectorPanelFactory extends EntityComponentFactoryAbstr
     public Component createComponent(final String id, final IModel<?> model) {
         final EntityModel entityModel = (EntityModel) model;
 
+        final ObjectAdapter objectAdapter = entityModel.getObject();
         final ObjectSpecification specification = entityModel.getTypeOfSpecification();
         final GridFacet facet = specification.getFacet(GridFacet.class);
 
-        final Grid grid = facet.getGrid();
+        final Grid grid = facet.getGrid(objectAdapter);
         if (grid != null) {
             if(grid instanceof BS3Grid) {
                 final BS3Grid bs3Grid = (BS3Grid) grid;

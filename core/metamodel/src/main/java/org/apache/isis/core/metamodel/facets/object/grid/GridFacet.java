@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.grid;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.layout.LayoutService;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -34,7 +35,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface GridFacet extends Facet {
 
-    Grid getGrid();
+    Grid getGrid(final ObjectAdapter objectAdapter);
 
 
 }

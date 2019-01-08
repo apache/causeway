@@ -31,7 +31,7 @@ public class LayoutFacetFallback extends LayoutFacetAbstract {
     }
 
     @Override
-    public String layout(final ObjectAdapter owningAdapter) {
+    public String layout(final ObjectAdapter objectAdapterIfAny) {
         return null;
     }
 

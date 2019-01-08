@@ -159,7 +159,7 @@ public class EntityPage extends PageAbstract {
             // the facet should always exist, in fact
             // just enough to ask for the metadata.
             // This will cause the current ObjectSpec to be updated as a side effect.
-            final Grid unused = gridFacet.getGrid();
+            final Grid unused = gridFacet.getGrid(objectAdapter);
         }
 
         if(titleString == null) {

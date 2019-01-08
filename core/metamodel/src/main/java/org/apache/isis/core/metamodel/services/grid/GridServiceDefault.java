@@ -32,15 +32,15 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.grid.Grid;
-import org.apache.isis.applib.services.grid.GridLoaderService;
-import org.apache.isis.applib.services.grid.GridService;
+import org.apache.isis.applib.services.grid.GridLoaderService2;
+import org.apache.isis.applib.services.grid.GridService2;
 import org.apache.isis.applib.services.grid.GridSystemService;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + Integer.MAX_VALUE
 )
-public class GridServiceDefault implements GridService {
+public class GridServiceDefault implements GridService2 {
 
     private static final Logger LOG = LoggerFactory.getLogger(GridServiceDefault.class);
 
@@ -72,6 +72,12 @@ public class GridServiceDefault implements GridService {
     @Programmatic
     public Grid load(final Class<?> domainClass) {
         return gridLoaderService.load(domainClass);
+    }
+
+    @Override
+    @Programmatic
+    public Grid load(final Class<?> domainClass, final String layout) {
+        return gridLoaderService.load(domainClass, layout);
     }
 
     // //////////////////////////////////////
@@ -200,7 +206,7 @@ public class GridServiceDefault implements GridService {
 
 
     @javax.inject.Inject
-    GridLoaderService gridLoaderService;
+    GridLoaderService2 gridLoaderService;
 
     @javax.inject.Inject
     List<GridSystemService> gridSystemServices;

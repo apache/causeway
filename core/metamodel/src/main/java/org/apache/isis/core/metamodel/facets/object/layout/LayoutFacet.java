@@ -33,5 +33,5 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface LayoutFacet extends Facet {
 
-    public String layout(final ObjectAdapter object);
+    public String layout(final ObjectAdapter objectAdapterIfAny);
 }

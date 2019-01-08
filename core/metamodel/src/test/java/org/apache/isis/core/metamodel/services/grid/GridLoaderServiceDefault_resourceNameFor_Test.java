@@ -36,23 +36,23 @@ public class GridLoaderServiceDefault_resourceNameFor_Test {
 
     @Test
     public void when_default_exists() {
-        final String s = gridLoaderServiceDefault.resourceNameFor(Foo.class);
+        final String s = gridLoaderServiceDefault.resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo.class, null));
         Assert.assertThat(s, is(equalTo("Foo.layout.xml")));
     }
 
     @Test
     public void when_fallback_exists() {
-        final String s = gridLoaderServiceDefault.resourceNameFor(Foo2.class);
+        final String s = gridLoaderServiceDefault.resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo2.class, null));
         Assert.assertThat(s, is(equalTo("Foo2.layout.fallback.xml")));
     }
     @Test
     public void when_default_and_fallback_both_exist() {
-        final String s = gridLoaderServiceDefault.resourceNameFor(Foo3.class);
+        final String s = gridLoaderServiceDefault.resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo3.class, null));
         Assert.assertThat(s, is(equalTo("Foo3.layout.xml")));
     }
     @Test
     public void when_neither_exist() {
-        final String s = gridLoaderServiceDefault.resourceNameFor(Foo4.class);
+        final String s = gridLoaderServiceDefault.resourceNameFor(new GridLoaderServiceDefault.DomainClassAndLayout(Foo4.class, null));
         Assert.assertNull(s);
     }
 }

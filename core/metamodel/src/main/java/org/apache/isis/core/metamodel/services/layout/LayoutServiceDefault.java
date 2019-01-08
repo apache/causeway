@@ -72,7 +72,7 @@ public class LayoutServiceDefault implements LayoutService2 {
         if (style == Style.CURRENT) {
             final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainClass);
             final GridFacet facet = objectSpec.getFacet(GridFacet.class);
-            return facet != null? facet.getGrid(): null;
+            return facet != null? facet.getGrid(null): null;
         }
 
         // don't use the grid from the facet, because it will be modified subsequently.

@@ -309,7 +309,8 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         if(gridFacet == null) {
             builder = Responses.ofNotFound();
         } else {
-            Grid grid = gridFacet.getGrid();
+            final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
+            Grid grid = gridFacet.getGrid(objectAdapter);
             addLinks(domainType, instanceId, grid);
             builder = Response.status(Response.Status.OK)
                     .entity(serializationStrategy.entity(grid))
