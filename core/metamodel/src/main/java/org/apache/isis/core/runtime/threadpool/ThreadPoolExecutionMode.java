@@ -18,8 +18,9 @@
  */
 package org.apache.isis.core.runtime.threadpool;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-
+/**
+ *  ThreadPollSupport's executions mode where the enum's ordinal corresponds to the level of concurrency.
+ */
 public enum ThreadPoolExecutionMode {
 
     /**
@@ -54,20 +55,11 @@ public enum ThreadPoolExecutionMode {
     public static ThreadPoolExecutionMode honorHighestConcurrencyAllowed(
             ThreadPoolExecutionMode proposedExecutionMode) {
         
-        switch (ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED) {
-        case PARALLEL:
-            return proposedExecutionMode;
-            
-        case SEQUENTIAL:
-            return ThreadPoolExecutionMode.SEQUENTIAL;
-            
-        case SEQUENTIAL_WITHIN_CALLING_THREAD:
-            return ThreadPoolExecutionMode.SEQUENTIAL_WITHIN_CALLING_THREAD;
-            
-        default:
-            throw _Exceptions.unmatchedCase(ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED);
-        }
+        final int upper = ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED.ordinal();
+        final int proposed = proposedExecutionMode.ordinal();
+        final int bounded = proposed>upper ? upper : proposed; 
         
+        return ThreadPoolExecutionMode.values()[bounded];
     }
     
 }
