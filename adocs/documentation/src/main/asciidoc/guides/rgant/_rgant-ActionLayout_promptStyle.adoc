@@ -47,6 +47,9 @@ Assuming that the corresponding property is not itself editable, this means that
 The net effect is that a property conceptually consisting of different parts (eg a name, an address or a date) can be updated using an action that lets each separate part be specified independently.
 
 
+== Alternatives
+
+
 As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 

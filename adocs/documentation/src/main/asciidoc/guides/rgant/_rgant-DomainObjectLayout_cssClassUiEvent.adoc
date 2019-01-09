@@ -114,3 +114,7 @@ Normally events are only raised for interactions through the UI.
 However, events can be raised programmatically by calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] API directly.
 
 
+== See also
+
+This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClassUiEvent[view models].
+

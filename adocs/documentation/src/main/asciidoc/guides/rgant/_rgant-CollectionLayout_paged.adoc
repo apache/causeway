@@ -5,12 +5,14 @@
 :_imagesdir: images/
 
 
-The `paged()` attribute specifies the number of rows to display in a (parented) collection. This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_paged[domain objects] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_paged[view models].
+The `paged()` attribute specifies the number of rows to display in a (parented) collection.
+
 
 
 [WARNING]
 ====
-The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] currently does not support paging.   The xref:../ugvw/ugvw.adoc#[Wicket viewer] _does_ support paging, but note that the paging is performed client-side rather than server-side.
+The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] currently does not support paging.
+The xref:../ugvw/ugvw.adoc#[Wicket viewer] _does_ support paging, but note that the paging is performed client-side rather than server-side.
 
 We therefore recommend that large collections should instead be modelled as actions (to allow filtering to be applied to limit the number of rows).
 ====
@@ -31,16 +33,14 @@ It is also possible to specify a global default for the page size of standalone 
 
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+== Alternatives
 
-NOTE: FIXME - change to .layout.xml syntax instead.
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
-[source,javascript]
-----
-"details": {
-    "collectionLayout": {
-        "paged": 15
-    }
-}
-----
 
+== See also
+
+This attribute can also be applied to:
+
+* xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_paged[domain objects]
+* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_paged[view models].

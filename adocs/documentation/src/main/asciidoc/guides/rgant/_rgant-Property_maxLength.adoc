@@ -6,10 +6,12 @@
 
 
 
-The `maxLength()` attribute applies only to `String` properties, indicating the maximum number of characters that the user may enter (for example in a text field in the UI).  The attribute It is ignored if applied to properties of any other type.  This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-Parameter_maxLength[parameters].
+The `maxLength()` attribute applies only to `String` properties, indicating the maximum number of characters that the user may enter (for example in a text field in the UI).
+The attribute It is ignored if applied to properties of any other type.
 
 
-That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:../rgant/rgant.adoc#_rgant-Column[`@Column`] will in any case need to be specified.  Apache Isis can infer the `maxLength` semantic directly from the equivalent `@Column#length()` annotation/attribute.
+That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:../rgant/rgant.adoc#_rgant-Column[`@Column`] will in any case need to be specified.
+Apache Isis can infer the `maxLength` semantic directly from the equivalent `@Column#length()` annotation/attribute.
 
 For example:
 
@@ -29,7 +31,8 @@ In this case there is therefore no need for the `@Property#maxLength()` attribut
 
 == Non-persistent properties
 
-Of course, not every property is persistent (it could instead be derived), and neither is every domain object an entity (it could be a view model).  For these non persistable properties the `maxLength()` attribute is still required.
+Of course, not every property is persistent (it could instead be derived), and neither is every domain object an entity (it could be a view model).
+For these non persistable properties the `maxLength()` attribute is still required.
 
 For example:
 
@@ -46,4 +49,9 @@ public class Customer {
 <1> a non persisted (derived) property
 <2> implementation would most likely derive full name from constituent parts (eg first name, middle initial, last name)
 <3> implementation would most likely parse the input and update the constituent parts
+
+
+== See also
+
+This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-Parameter_maxLength[parameters].
 

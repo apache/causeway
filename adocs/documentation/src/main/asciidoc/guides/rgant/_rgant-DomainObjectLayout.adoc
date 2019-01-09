@@ -62,6 +62,11 @@ The table below summarizes the annotation's attributes.
 (`IconUiEvent.Default`)
 |the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the icon (name) for the domain object.
 
+|xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_layoutUiEvent[`layoutUiEvent()`]
+|subtype of `LayoutUiEvent` +
+(`LayoutUiEvent.Default`)
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the layout (name) for the domain object.
+
 |xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_named[`named()`]
 |String.
 |to override the name inferred from the action's name in code. +
@@ -124,6 +129,7 @@ include::_rgant-DomainObjectLayout_cssClassFa.adoc[leveloffset=+1]
 include::_rgant-DomainObjectLayout_cssClassUiEvent.adoc[leveloffset=+1]
 include::_rgant-DomainObjectLayout_describedAs.adoc[leveloffset=+1]
 include::_rgant-DomainObjectLayout_iconUiEvent.adoc[leveloffset=+1]
+include::_rgant-DomainObjectLayout_layoutUiEvent.adoc[leveloffset=+1]
 include::_rgant-DomainObjectLayout_named.adoc[leveloffset=+1]
 include::_rgant-DomainObjectLayout_paged.adoc[leveloffset=+1]
 include::_rgant-DomainObjectLayout_plural.adoc[leveloffset=+1]

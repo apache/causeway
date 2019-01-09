@@ -1,11 +1,15 @@
-[[_rgant-ViewModelLayout_cssClass]]
-= `cssClass()`
+[[_rgant-ViewModelLayout_iconUiEvent]]
+= iconUiEvent()
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../../
 :_imagesdir: images/
 
 
+Whenever a view model is to be rendered, the framework fires off an icon UI event to obtain an icon (name) for the object (if possible).
+This is as an alternative to implementing xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] reserved method.
+(If `iconName()` is present, then it will take precedence).
 
-The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the view model.   xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
+This attribute is the same as xref:rgant.adoc#_rgant_DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`], but for view models instead of entities.
 
-This is equivalent to xref:rgant.adoc#_rgant_DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`], but for view models instead of entities.
+A default event that is emitted if none specified, unless the `isis.reflector.facet.viewModelLayoutAnnotation.iconUiEvent.postForDefault` configuration property is set to "false".
+

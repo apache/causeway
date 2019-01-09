@@ -5,12 +5,14 @@
 :_imagesdir: images/
 
 
-The `hidden()` attribute indicates where (in the UI) the collection should be hidden from the user.  This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-ActionLayout_hidden[actions] and xref:../rgant/rgant.adoc#_rgant-PropertyLayout_hidden[properties].
+The `hidden()` attribute indicates where (in the UI) the collection should be hidden from the user.
+
 
 
 [TIP]
 ====
-It is also possible to use xref:../rgant/rgant.adoc#_rgant-Collection_hidden[`@Collection#hidden()`] to hide an action at the domain layer.  Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
+It is also possible to use xref:../rgant/rgant.adoc#_rgant-Collection_hidden[`@Collection#hidden()`] to hide an action at the domain layer.
+Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
 For example:
@@ -28,32 +30,34 @@ public class ToDoItem {
 
 The acceptable values for the `where` parameter are:
 
-* `Where.EVERYWHERE` or `Where.ANYWHERE` +
+* `Where.EVERYWHERE` or `Where.ANYWHERE`
 +
 The collection should be hidden everywhere.
 
-* `Where.ANYWHERE` +
+* `Where.ANYWHERE`
 +
 Synonym for everywhere.
 
-* `Where.OBJECT_FORMS` +
+* `Where.OBJECT_FORMS`
 +
 The collection should be hidden when displayed within an object form.
 
-* `Where.NOWHERE` +
+* `Where.NOWHERE`
 +
 The collection should not be hidden.
 
 The other values of the `Where` enum have no meaning for a collection.
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+== Alternatives
 
-NOTE: FIXME - change to .layout.xml syntax instead.
 
-[source,javascript]
-----
-"dependencies": {
-    "collectionLayout": { "hidden": "EVERYWHERE" }
-}
-----
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+
+
+== See also
+
+This attribute can also be applied to:
+
+* xref:../rgant/rgant.adoc#_rgant-ActionLayout_hidden[actions]
+* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_hidden[properties].

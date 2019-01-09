@@ -5,10 +5,8 @@
 :_imagesdir: images/
 
 
-The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the property.   xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
-
-This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[domain objects], xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClass[view models], xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[actions] xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[collections] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[parameters].
-
+The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the property.
+xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
 For example:
 
@@ -23,15 +21,19 @@ public class ToDoItem {
 
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+== Alternatives
 
-NOTE: FIXME - change to .layout.xml syntax instead.
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
-[source,javascript]
-----
-"dueBy": {
-    "propertyLayout": { "cssClass": "x-key" }
-}
-----
+
+== See also
+
+This attribute can also be applied to:
+
+* xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[domain objects]
+* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClass[view models]
+* xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[actions]
+* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[collections]
+* xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[parameters].
 
 

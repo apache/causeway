@@ -23,6 +23,6 @@ public class Customer {
 }
 ----
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+== Alternatives
 
-NOTE: FIXME - provide a .layout.xml example here.
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.

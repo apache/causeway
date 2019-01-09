@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.services.eventbus.CssClassUiEvent;
+import org.apache.isis.applib.services.eventbus.IconUiEvent;
+import org.apache.isis.applib.services.eventbus.LayoutUiEvent;
+import org.apache.isis.applib.services.eventbus.TitleUiEvent;
+
 /**
  * Layout hints for view models.
  *
@@ -44,6 +49,49 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ViewModelLayout {
+
+    /**
+     * Which subclass of {@link TitleUiEvent} should be used to obtain a title.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends TitleUiEvent<?>> titleUiEvent() default TitleUiEvent.Default.class;
+
+    // //////////////////////////////////////
+
+    /**
+     * Which subclass of {@link IconUiEvent} should be used to obtain an icon.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends IconUiEvent<?>> iconUiEvent() default IconUiEvent.Default.class;
+
+    // //////////////////////////////////////
+
+    /**
+     * Which subclass of {@link CssClassUiEvent} should be used to obtain a CSS class.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends CssClassUiEvent<?>> cssClassUiEvent() default CssClassUiEvent.Default.class;
+
+    // //////////////////////////////////////
+
+    /**
+     * Which subclass of {@link LayoutUiEvent} should be used to obtain a layout.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends LayoutUiEvent<?>> layoutUiEvent() default LayoutUiEvent.Default.class;
+
 
     /**
      * Indicates the css class that a domain class (type) should have.

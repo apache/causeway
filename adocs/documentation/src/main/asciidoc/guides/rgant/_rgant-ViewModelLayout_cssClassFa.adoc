@@ -9,33 +9,5 @@
 
 The `cssClassFa()` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered as the domain object's icon.
 
-These attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[domain objects] to specify the object's icon, and to xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[actions] to specify an icon for the action's representation as a button or menu item.
-
-
-If necessary the icon specified can be overridden by a particular object instance using the xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] method.
-
-
-
-
-For example:
-
-[source,java]
-----
-@ViewModel
-@ViewModelLayout(
-    cssClassFa="fa-piechart"
-)
-public class CategoryPieChart { ... }
-----
-
-There can be multiple "fa-" classes, eg to mirror or rotate the icon. There is no need to include the mandatory `fa` "marker" CSS class; it will be automatically added to the list.  The `fa-` prefix can also be omitted from the class names; it will be prepended to each if required.
-
-
-The related `cssClassFaPosition()` attribute is currently unused for domain objects; the icon is always rendered to the left.
-
-
-[NOTE]
-====
-The similar xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClass[`@ViewModelLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
-====
+This is equivalent to xref:rgant.adoc#_rgant_DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`], but for view models instead of entities.
 

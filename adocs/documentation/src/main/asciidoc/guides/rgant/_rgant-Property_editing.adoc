@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `editing()` attribute can be used to prevent a property from being modified or cleared, ie to make it read-only. This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-Collection_editing[collections], and can also be specified for the xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[domain object].
+The `editing()` attribute can be used to prevent a property from being modified or cleared, ie to make it read-only.
 
 The related `editingDisabledReason()` attribute specifies the a hard-coded reason why the property cannot be modified directly.
 
@@ -41,3 +41,9 @@ To reiterate, it is _not_ possible to enable editing for a property if editing h
 
 
 
+== See also
+
+This attribute can also be specified for:
+
+* xref:../rgant/rgant.adoc#_rgant-Collection_editing[collections]
+* xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[domain object].

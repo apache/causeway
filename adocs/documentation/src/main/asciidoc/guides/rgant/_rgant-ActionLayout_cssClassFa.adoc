@@ -31,26 +31,9 @@ public class ToDoItem {
 There can be multiple "fa-" classes, eg to mirror or rotate the icon. There is no need to include the mandatory `fa` "marker" CSS class; it will be automatically added to the list.  The `fa-` prefix can also be omitted from the class names; it will be prepended to each if required.
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+== Alternatives
 
-NOTE: FIXME - change to .layout.xml syntax instead.
-
-[source,javascript]
-----
-"previous": {
-    "actionLayout": {
-        "cssClassFa": "fa-step-backward",
-        "cssClassFaPosition": "LEFT"
-    }
-},
-"next": {
-    "actionLayout": {
-        "cssClassFa": "fa-step-forward",
-        "cssClassFaPosition": "RIGHT"
-    }
-}
-----
-
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 
 [NOTE]

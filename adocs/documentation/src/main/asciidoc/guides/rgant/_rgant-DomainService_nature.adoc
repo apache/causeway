@@ -5,7 +5,9 @@
 :_imagesdir: images/
 
 
-By default, a domain service's actions will be rendered in the application menu bar _and_ be contributed _and_ appear in the REST API _and_ (of course) be available to invoke programmatically wherever that domain service is injected.  This is great for initial prototyping, but later on you may prefer to add a little more structure.  This is the purpose of the `nature()` attribute: to indicates the intent of (all of) the actions defined within the domain service.
+By default, a domain service's actions will be rendered in the application menu bar _and_ be contributed _and_ appear in the REST API _and_ (of course) be available to invoke programmatically wherever that domain service is injected.
+This is great for initial prototyping, but later on you may prefer to add a little more structure.
+This is the purpose of the `nature()` attribute: to indicates the intent of (all of) the actions defined within the domain service.
 
 The values of the enum are:
 
@@ -19,7 +21,7 @@ The service's actions appear on menus and in the REST API, but are not contribut
 
 * `VIEW_CONTRIBUTIONS_ONLY` +
 +
-The service's actions are intended only to be used as contributed actions/associations to domain objects and view models. +
+The service's actions are intended only to be used as contributed actions/associations to domain objects and view model
 +
 The related xref:../rgant/rgant.adoc#_rgant-ActionLayout_contributedAs[`@ActionLayout#contributedAs()`] determines whether any given (1-arg) action is contributed as an association rather than an action.
 
@@ -50,7 +52,8 @@ public class LoanContributions {                                  // <1>
     public Borrower newLoan(Borrower borrower, Book book) { ... }
 }
 ----
-<1> `Contributions` as a suffix for a domain service that contributes a number of actions to ``Borrower``s.  Note that `Borrower` could be a (marker) interface, so this functionality is "mixed in" merely by the class (eg `LibraryMember`) implementing this interface
+<1> `Contributions` as a suffix for a domain service that contributes a number of actions to ``Borrower``s.
+Note that `Borrower` could be a (marker) interface, so this functionality is "mixed in" merely by the class (eg `LibraryMember`) implementing this interface
 <2> actions contibuted as associations (a collection in this case) must have safe semantics
 
 

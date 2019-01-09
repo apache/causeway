@@ -6,7 +6,8 @@
 
 
 
-Properties can be hidden at the domain-level, indicating that they are not visible to the end-user.  This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-ActionLayout_hidden[actions] and xref:../rgant/rgant.adoc#_rgant-CollectionLayout_hidden[collections].
+Properties can be hidden at the domain-level, indicating that they are not visible to the end-user.
+
 
 [TIP]
 ====
@@ -64,3 +65,11 @@ tables. Annotating with `@Property(where=Where.NOWHERE)` overrides this.
 ====
 The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] has only partial support for these `Where` enums.
 ====
+
+
+== See also
+
+This attribute can also be applied to:
+
+* xref:../rgant/rgant.adoc#_rgant-ActionLayout_hidden[actions]
+* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_hidden[collections].

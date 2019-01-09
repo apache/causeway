@@ -167,10 +167,46 @@ In order for these events to fire the class must be annotated using `@DomainObje
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
+`layoutUiEvent.postForDefault`
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_layoutUiEvent[`@DomainObjectLayout#layoutUiEvent()`] is not specified (is set to `LayoutUiEvent.Default`).
+
+|`isis.reflector.facet.` +
+`domainObjectLayoutAnnotation.` +
 `titleUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
 |Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
+
+
+|`isis.reflector.facet.` +
+`viewModelLayoutAnnotation.` +
+`cssClassUiEvent.postForDefault`
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClassUiEvent[`@ViewModelLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
+
+|`isis.reflector.facet.` +
+`viewModelLayoutAnnotation.` +
+`iconUiEvent.postForDefault`
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_iconUiEvent[`@ViewModelLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
+
+|`isis.reflector.facet.` +
+`viewModelLayoutAnnotation.` +
+`layoutUiEvent.postForDefault`
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_layoutUiEvent[`@ViewModelLayout#layoutUiEvent()`] is not specified (is set to `LayoutUiEvent.Default`).
+
+|`isis.reflector.facet.` +
+`viewModelLayoutAnnotation.` +
+`titleUiEvent.postForDefault`
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_titleUiEvent[`@ViewModelLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
 
 
 

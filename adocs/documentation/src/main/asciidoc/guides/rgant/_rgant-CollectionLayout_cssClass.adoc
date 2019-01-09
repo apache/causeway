@@ -7,7 +7,6 @@
 
 The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the collection.   xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
-This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[domain objects], xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClass[view models], xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[actions], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[properties] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[parameters].
 
 
 For example:
@@ -24,14 +23,13 @@ public class ToDoItem {
 ----
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+== Alternatives
 
-NOTE: FIXME - change to .layout.xml syntax instead.
 
-[source,javascript]
-----
-"dependencies": {
-    "collectionLayout": { "cssClass": "x-important" }
-}
-----
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
+
+== See also
+
+
+This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[domain objects], xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClass[view models], xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[actions], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[properties] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[parameters].

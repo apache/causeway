@@ -20,24 +20,15 @@ public class Order {
 ----
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
-
-NOTE: FIXME - change to .layout.xml syntax instead.
-
-[source,javascript]
-----
-"details": {
-    "collectionLayout": {
-        "render": "EAGERLY"
-    }
-}
-----
-
-
 [NOTE]
 ====
 Note that xref:../ugfun/ugfun.adoc#_ugfun_how-tos_contributed-members[contributed collections] (which, under the covers are just action invocations against a domain service) are always rendered eagerly.
 
 Also, if a xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`] attribute has been specified then that will take precedence over the value of the `render()` attribute.
 ====
+
+== Alternatives
+
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+
 

@@ -5,7 +5,8 @@
 :_imagesdir: images/
 
 
-The `named()` attribute explicitly specifies the domain service's name, overriding the name that would normally be inferred from the Java source code.  This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-ActionLayout_named[actions], xref:../rgant/rgant.adoc#_rgant-CollectionLayout_named[collections], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[properties], xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[parameters], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_named[domain objects] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_named[view models].
+The `named()` attribute explicitly specifies the domain service's name, overriding the name that would normally be inferred from the Java source code.
+
 
 
 [TIP]
@@ -27,3 +28,13 @@ public class CustomerRepository {
 ----
 
 
+== See also
+
+This attribute can also be specified for:
+
+* xref:../rgant/rgant.adoc#_rgant-ActionLayout_named[actions]
+* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_named[collections]
+* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[properties]
+* xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[parameters]
+* xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_named[domain objects]
+* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_named[view models].

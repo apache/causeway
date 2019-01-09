@@ -6,7 +6,7 @@
 
 
 
-The `named()` attribute explicitly specifies the action parameter's name. This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-ActionLayout_named[actions], xref:../rgant/rgant.adoc#_rgant-CollectionLayout_named[collections], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[properties], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_named[domain objects], xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_named[view models] and xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[domain services].
+The `named()` attribute explicitly specifies the action parameter's name.
 
 Unlike most other aspects of the Apache Isis metamodel, the name of method parameters cannot (prior to Java 8, at least) be inferred from the Java source code.
 Without other information, Apache Isis uses the object's type (`int`, `String` etc) as the name instead.
@@ -47,3 +47,15 @@ public class Customer {
 ====
 The framework also provides a separate, powerful mechanism for xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[internationalization].
 ====
+
+== See also
+
+This attribute can also be specified for:
+
+* xref:../rgant/rgant.adoc#_rgant-ActionLayout_named[actions]
+* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_named[collections]
+* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[properties]
+* xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_named[domain objects]
+* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_named[view models]
+* xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[domain services].
+

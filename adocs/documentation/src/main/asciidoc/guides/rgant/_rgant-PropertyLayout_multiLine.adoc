@@ -24,22 +24,12 @@ public class BugReport {
 Here the `stepsToReproduce` will be displayed in a text area of 10 rows.
 
 
-
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
-
-NOTE: FIXME - change to .layout.xml syntax instead.
-
-[source,javascript]
-----
-"stepsToReproduce": {
-    "propertyLayout": {
-        "numberOfLines": 10
-    }
-}
-----
-
-
 [NOTE]
 ====
 If set > 1 (as would normally be the case), then the default xref:../rgant/rgant.adoc#_rgant-PropertyLayout_labelPosition[`labelPosition`] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
 ====
+
+== Alternatives
+
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+

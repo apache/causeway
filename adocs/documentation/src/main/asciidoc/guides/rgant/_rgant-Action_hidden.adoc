@@ -7,7 +7,7 @@
 
 
 
-Actions can be hidden at the domain-level, indicating that they are not visible to the end-user. This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-Property_hidden[properties] and xref:../rgant/rgant.adoc#_rgant-Collection_hidden[collections].
+Actions can be hidden at the domain-level, indicating that they are not visible to the end-user.
 
 [TIP]
 ====
@@ -47,4 +47,11 @@ For actions of domain services the visibility is dependent upon its xref:../rgan
 ====
 
 
+
+== See also
+
+This attribute can also be applied to:
+
+* xref:../rgant/rgant.adoc#_rgant-Property_hidden[properties]
+* xref:../rgant/rgant.adoc#_rgant-Collection_hidden[collections].
 

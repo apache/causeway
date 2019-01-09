@@ -5,11 +5,13 @@
 :_imagesdir: images/
 
 
-The `named()` attribute explicitly specifies the action's name, overriding the name that would normally be inferred from the Java source code.  This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-CollectionLayout_named[collections], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[properties], xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[parameters], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_named[domain objects], xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_named[view models] and xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[domain services].
+The `named()` attribute explicitly specifies the action's name, overriding the name that would normally be inferred from the Java source code.
+
 
 [TIP]
 ====
-Following the link:http://en.wikipedia.org/wiki/Don%27t_repeat_yourself[don't repeat yourself] principle, we recommend that you only use this attribute when the desired name cannot be used in Java source code.  Examples of that include a name that would be a reserved Java keyword (eg "package"), or a name that has punctuation, eg apostrophes.
+Following the link:http://en.wikipedia.org/wiki/Don%27t_repeat_yourself[don't repeat yourself] principle, we recommend that you only use this attribute when the desired name cannot be used in Java source code.
+Examples of that include a name that would be a reserved Java keyword (eg "package"), or a name that has punctuation, eg apostrophes.
 ====
 
 
@@ -25,22 +27,21 @@ public class Customer {
 ----
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
-
-NOTE: FIXME - change to .layout.xml syntax instead.
-
-[source,javascript]
-----
-"obtainCreditRating": {
-    "actionLayout": { "named": "Get credit rating" }
-}
-----
+== Alternatives
 
 
-[TIP]
-====
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+
 The framework also provides a separate, powerful mechanism for xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[internationalization].
-====
 
 
 
+== See also
+
+This attribute can also be specified for:
+* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_named[collections]
+* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[properties]
+* xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[parameters]
+* xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_named[domain objects]
+* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_named[view models]
+* xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[domain services].
