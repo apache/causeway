@@ -58,6 +58,17 @@ class ThreadPoolSupportTest {
     
     @Test
     void shouldPreserveSequence_whenSequentialExecution() {
+        runSequentialExecutionWithMode(ThreadPoolExecutionMode.SEQUENTIAL);
+    }
+    
+    @Test
+    void shouldPreserveSequence_whenSequentialExecutionWithinCallingThread() {
+        runSequentialExecutionWithMode(ThreadPoolExecutionMode.SEQUENTIAL_WITHIN_CALLING_THREAD);
+    }
+    
+    // -- HELPER
+    
+    void runSequentialExecutionWithMode(ThreadPoolExecutionMode executionMode) {
         
         final List<Future<Object>> futures = _Lists.newArrayList();
         
@@ -75,7 +86,7 @@ class ThreadPoolSupportTest {
         );
         
         for(int i=0; i<256; ++i) {
-            final List<Future<Object>> taskFutures = pool.invokeAllSequential(tasks);
+            final List<Future<Object>> taskFutures = pool.invokeAll(executionMode, tasks);
             pool.joinGatherFailures(taskFutures);
             futures.addAll(taskFutures);
         }
@@ -97,8 +108,6 @@ class ThreadPoolSupportTest {
         Assertions.assertEquals("", result_allowedSequencesRemoved);
         
     }
-    
-    // -- HELPER
     
     /** thread-safe StringBuffer */
     private static class Buffer {

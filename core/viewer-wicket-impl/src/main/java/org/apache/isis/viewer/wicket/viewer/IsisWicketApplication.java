@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.viewer;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -371,11 +372,11 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     }
     
     protected List<Future<Object>> startBackgroundInitializationThreads() {
-        return ThreadPoolSupport.getInstance().invokeAll(
+        return ThreadPoolSupport.getInstance().invokeAll(Arrays.asList(
                 Executors.callable(this::configureWebJars),
                 Executors.callable(this::configureWicketBootstrap),
                 Executors.callable(this::configureWicketSelect2)
-            );
+            ));
     }
 
     /**

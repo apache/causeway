@@ -19,7 +19,12 @@
 
 package org.apache.isis.core.runtime.threadpool;
 
-import java.util.Arrays;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +34,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -42,15 +48,9 @@ import javax.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
-
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.base._With.requires;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * ThreadPoolSupport is application-scoped, meaning ThreadPoolSupport is closed on
@@ -64,6 +64,8 @@ public final class ThreadPoolSupport implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(ThreadPoolSupport.class);
 
+    public static ThreadPoolExecutionMode HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = ThreadPoolExecutionMode.PARALLEL;
+    
     private final static int KEEP_ALIVE_TIME_SECS = 5;
     private final static int QUEUE_CAPACITY = Integer.MAX_VALUE;
 
@@ -95,7 +97,6 @@ public final class ThreadPoolSupport implements AutoCloseable {
                 TimeUnit.SECONDS,
                 workQueueFactory.get(),
                 threadFactory);
-        
     }
     
     /*
@@ -126,8 +127,56 @@ public final class ThreadPoolSupport implements AutoCloseable {
         requires(computation, "computation");
         return CompletableFuture.supplyAsync(computation, getExecutor());
     }
-    
 
+    /**
+     * Executes specified {@code callables} on the default executor.  
+     * See {@link ThreadPoolExecutor#invokeAll(java.util.Collection)}
+     * @param proposedExecutionMode - if 'higher concurrency than allowed' is replaced by 'highest-allowed' 
+     * @param callables - nullable
+     * @return non-null
+     */
+    public List<Future<Object>> invokeAll(
+            final ThreadPoolExecutionMode proposedExecutionMode,
+            @Nullable final List<Callable<Object>> callables) {
+
+        if(isEmpty(callables)) {
+            return emptyList();
+        }
+
+        requires(proposedExecutionMode, "proposedExecutionMode");
+
+        final ThreadPoolExecutionMode executionMode = 
+                ThreadPoolExecutionMode.honorHighestConcurrencyAllowed(proposedExecutionMode);
+
+        switch (executionMode) {
+        case PARALLEL:
+            return invokeAll(concurrentExecutor, callables);
+
+        case SEQUENTIAL:
+        {
+            final Future<List<Object>> commonFuture = 
+                    uncheckedCast(invokeAll(concurrentExecutor, 
+                            singletonList(toSingleTask(callables))).get(0));
+
+            return IntStream.range(0, callables.size())
+                    .mapToObj(index->new FutureWithIndexIntoFutureOfList<Object>(commonFuture, index))
+                    .collect(toList());
+        }
+
+        case SEQUENTIAL_WITHIN_CALLING_THREAD:
+        {
+            return callables.stream()
+            .map(FutureTask::new)
+            .peek(FutureTask::run) // immediately run task on submission
+            .collect(toList());
+        }
+
+        default:
+            throw _Exceptions.unmatchedCase(ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED);
+        }
+
+    }
+    
     /**
      * Executes specified {@code callables} on the default executor.  
      * See {@link ThreadPoolExecutor#invokeAll(java.util.Collection)}
@@ -135,48 +184,56 @@ public final class ThreadPoolSupport implements AutoCloseable {
      * @return non-null
      */
     public List<Future<Object>> invokeAll(@Nullable final List<Callable<Object>> callables) {
-        return invokeAll(concurrentExecutor, callables);
+        return invokeAll(HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED, callables);
     }
 
-    /**
-     * Executes specified {@code callables} on the default executor.
-     * See {@link ThreadPoolExecutor#invokeAll(java.util.Collection)}
-     * @param callables nullable
-     * @return non-null
-     */
-    @SafeVarargs
-    public final List<Future<Object>> invokeAll(final Callable<Object>... callables) {
-        return invokeAll(Arrays.asList(callables));
-    }
+//TODO [ahuber] I'm proposing removal, in order to not bloat this class and since wrapping vargs 
+// on the callers side with Arrays.asList(...) is trivial
+//    /**
+//     * Executes specified {@code callables} on the default executor.
+//     * See {@link ThreadPoolExecutor#invokeAll }
+//     * @param executionMode
+//     * @param callables nullable
+//     * @return non-null
+//     */
+//    @SafeVarargs
+//    public final List<Future<Object>> invokeAll(
+//            final ThreadPoolExecutionMode executionMode, 
+//            final Callable<Object>... callables) {
+//        
+//        requires(executionMode, "executionMode");
+//        requires(callables, "callables");
+//        return invokeAll(executionMode, Arrays.asList(callables));
+//    }
 
-    /**
-     * Wraps specified {@code callables} into a single task, which is then executed on the default executor.    
-     * The single task itself executes specified {@code callables} in sequence, one by one.
-     * @param callables nullable
-     * @return non-null
-     */
-    public List<Future<Object>> invokeAllSequential(@Nullable final List<Callable<Object>> callables) {
-        if(_NullSafe.isEmpty(callables)) {
-            return emptyList();
-        }
-        final Future<List<Object>> commonFuture = 
-                uncheckedCast(invokeAll(singletonList(toSingleTask(callables))).get(0));
-
-        return IntStream.range(0, callables.size())
-        .mapToObj(index->new FutureWithIndexIntoFutureOfList<Object>(commonFuture, index))
-        .collect(toList());
-    }
-
-    /**
-     * Wraps specified {@code callables} into a single task, which is then executed on the default executor.    
-     * The single task itself executes specified {@code callables} in sequence, one by one.
-     * @param callables nullable
-     * @return non-null
-     */
-    @SafeVarargs
-    public final List<Future<Object>> invokeAllSequential(final Callable<Object>... callables) {
-        return invokeAllSequential(Arrays.asList(callables));
-    }
+//    /**
+//     * Wraps specified {@code callables} into a single task, which is then executed on the default executor.    
+//     * The single task itself executes specified {@code callables} in sequence, one by one.
+//     * @param callables nullable
+//     * @return non-null
+//     */
+//    public List<Future<Object>> invokeAllSequential(@Nullable final List<Callable<Object>> callables) {
+//        if(_NullSafe.isEmpty(callables)) {
+//            return emptyList();
+//        }
+//        final Future<List<Object>> commonFuture = 
+//                uncheckedCast(invokeAll(singletonList(toSingleTask(callables))).get(0));
+//
+//        return IntStream.range(0, callables.size())
+//        .mapToObj(index->new FutureWithIndexIntoFutureOfList<Object>(commonFuture, index))
+//        .collect(toList());
+//    }
+//
+//    /**
+//     * Wraps specified {@code callables} into a single task, which is then executed on the default executor.    
+//     * The single task itself executes specified {@code callables} in sequence, one by one.
+//     * @param callables nullable
+//     * @return non-null
+//     */
+//    @SafeVarargs
+//    public final List<Future<Object>> invokeAllSequential(final Callable<Object>... callables) {
+//        return invokeAllSequential(Arrays.asList(callables));
+//    }
 
 
     /**
