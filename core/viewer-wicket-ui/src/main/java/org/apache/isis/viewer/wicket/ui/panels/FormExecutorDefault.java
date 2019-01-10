@@ -47,6 +47,7 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -59,6 +60,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
@@ -164,9 +166,16 @@ implements FormExecutor {
             // hook to close prompt etc.
             onExecuteAndProcessResults(targetIfAny);
 
-            if (resultDiffersOrAlwaysRedirect(targetAdapter, resultAdapter) ||
-                    hasBlobsOrClobs(page)                                       ||
-                    targetIfAny == null                                             ) {
+            final M model = this.model;
+            RedirectFacet redirectFacet = null;
+            if(model instanceof ActionModel) {
+                final ActionModel actionModel = (ActionModel) model;
+                redirectFacet = actionModel.getActionMemento().getAction(getSpecificationLoader()).getFacet(RedirectFacet.class);
+            }
+
+            if (shouldRedirect(targetAdapter, resultAdapter, redirectFacet) ||
+                hasBlobsOrClobs(page)                                       ||
+                targetIfAny == null                                             ) {
 
                 redirectTo(resultAdapter, targetIfAny);
 
@@ -242,32 +251,55 @@ implements FormExecutor {
         }
     }
 
-    private boolean resultDiffersOrAlwaysRedirect(
+    private boolean shouldRedirect(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter resultAdapter,
+            final RedirectFacet redirectFacet) {
+
+        switch (redirectFacet.policy()) {
+
+        case EVEN_IF_SAME:
+        default:
+            return true;
+
+        case AS_CONFIGURED:
+            final boolean redirectEvenIfSameObject = getSettings().isRedirectEvenIfSameObject();
+            if (redirectEvenIfSameObject) {
+                return true;
+            }
+            // fall through to...
+
+        case ONLY_IF_DIFFERS:
+            return differs(targetAdapter, resultAdapter);
+        }
+    }
+
+    private static boolean differs(
             final ObjectAdapter targetAdapter,
             final ObjectAdapter resultAdapter) {
+
         final ObjectAdapterMemento targetOam = ObjectAdapterMemento.createOrNull(targetAdapter);
         final ObjectAdapterMemento resultOam = ObjectAdapterMemento.createOrNull(resultAdapter);
 
-        return resultDiffersOrAlwaysRedirect(targetOam, resultOam);
+        return differs(targetOam, resultOam);
     }
 
-    private boolean resultDiffersOrAlwaysRedirect(
+    private static boolean differs(
             final ObjectAdapterMemento targetOam,
             final ObjectAdapterMemento resultOam) {
 
         final Bookmark resultBookmark = resultOam != null ? resultOam.asHintingBookmark() : null;
         final Bookmark targetBookmark = targetOam != null ? targetOam.asHintingBookmark() : null;
 
-        return resultDiffersOrAlwaysRedirect(targetBookmark, resultBookmark);
+        return differs(targetBookmark, resultBookmark);
     }
 
-    private boolean resultDiffersOrAlwaysRedirect(
+    private static boolean differs(
             final Bookmark targetBookmark,
             final Bookmark resultBookmark) {
-        final boolean redirectEvenIfSameObject = getSettings().isRedirectEvenIfSameObject();
 
         if(resultBookmark == null && targetBookmark == null) {
-            return redirectEvenIfSameObject;
+            return true;
         }
         if (resultBookmark == null || targetBookmark == null) {
             return true;
@@ -275,7 +307,7 @@ implements FormExecutor {
         final String resultBookmarkStr = asStr(resultBookmark);
         final String targetBookmarkStr = asStr(targetBookmark);
 
-        return !Objects.equals(resultBookmarkStr, targetBookmarkStr)  || redirectEvenIfSameObject;
+        return !Objects.equals(resultBookmarkStr, targetBookmarkStr);
     }
 
     private boolean hasBlobsOrClobs(final Page page) {

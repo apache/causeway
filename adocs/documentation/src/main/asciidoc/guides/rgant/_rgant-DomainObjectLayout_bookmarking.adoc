@@ -65,4 +65,7 @@ The nesting can be done to any level; the Estatio screenshot also shows a bookma
 
 
 
+== See also
+
+This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_bookmarking[view models].
 

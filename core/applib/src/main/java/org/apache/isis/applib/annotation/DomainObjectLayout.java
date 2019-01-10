@@ -28,6 +28,7 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.events.ui.IconUiEvent;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
+import org.apache.isis.applib.services.eventbus.LayoutUiEvent;
 
 /**
  * Layout hints for domain objects.
@@ -69,6 +70,17 @@ public @interface DomainObjectLayout {
      */
     Class<? extends CssClassUiEvent<?>> cssClassUiEvent() default CssClassUiEvent.Default.class;
 
+    // //////////////////////////////////////
+
+    /**
+     * Which subclass of {@link LayoutUiEvent} should be used to obtain a layout.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends LayoutUiEvent<?>> layoutUiEvent() default LayoutUiEvent.Default.class;
+
     /**
      * Indicates the css class that a domain class (type) should have.
      */
@@ -89,7 +101,7 @@ public @interface DomainObjectLayout {
      * <p>
      *     This attribute is currently ignored by Isis viewers.
      * </p>
-s     */
+     */
     CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;
 
     enum CssClassFaPosition {

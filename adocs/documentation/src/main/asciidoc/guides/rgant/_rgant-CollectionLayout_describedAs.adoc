@@ -24,16 +24,8 @@ public class ToDoItem {
 ----
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+== Alternatives
 
-NOTE: FIXME - change to .layout.xml syntax instead.
 
-[source,javascript]
-----
-"dependencies": {
-    "collectionLayout": {
-        "describedAs": "Other todo items that must be completed before this one"
-    }
-}
-----
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 

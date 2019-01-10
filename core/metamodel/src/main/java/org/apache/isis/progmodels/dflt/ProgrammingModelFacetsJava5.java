@@ -78,6 +78,7 @@ import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilt
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.RemoveMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancementTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForMixinAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.navparent.annotation.NavigableParentAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
@@ -308,6 +309,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(new IconFacetMethodFactory());
         addFactory(new NavigableParentAnnotationFacetFactory());
         addFactory(new CssClassFacetMethodFactory());
+        addFactory(new LayoutFacetFactory());
 
         addFactory(new DomainServiceLayoutFacetFactory());
         addFactory(new DomainObjectLayoutFacetFactory());

@@ -126,7 +126,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             builder = Responses.ofNotFound();
             return builder.build();
         } else {
-            Grid grid = gridFacet.getGrid();
+            Grid grid = gridFacet.getGrid(null);
             builder = Response.status(Response.Status.OK)
                     .entity(serializationStrategy.entity(grid))
                     .type(serializationStrategy.type(RepresentationType.LAYOUT));

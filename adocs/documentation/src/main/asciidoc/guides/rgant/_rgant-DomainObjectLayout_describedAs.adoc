@@ -7,18 +7,28 @@
 
 The `describedAs()` attribute is used to provide a short description of the domain object to the user.
 In the xref:../ugvw/ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.
-The attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-CollectionLayout_describedAs[collections],  xref:../rgant/rgant.adoc#_rgant-PropertyLayout_describedAs[properties], xref:../rgant/rgant.adoc#_rgant-ActionLayout_describedAs[actions], xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[parameters] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
 
 For example:
 
 [source,java]
 ----
-@DomainObjectLayout(describedAs="A customer who may have originally become known to us via " +
-             "the marketing system or who may have contacted us directly.")
+@DomainObjectLayout(
+    describedAs="A customer who may have originally become known to us via the marketing system or who may have contacted us directly."
+ )
 public class ProspectiveSale {
    ...
 }
 ----
 
 
+
+== See also
+
+The attribute can also be specified for:
+
+* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_describedAs[collections]
+* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_describedAs[properties]
+* xref:../rgant/rgant.adoc#_rgant-ActionLayout_describedAs[actions]
+* xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[parameters] and
+* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
 

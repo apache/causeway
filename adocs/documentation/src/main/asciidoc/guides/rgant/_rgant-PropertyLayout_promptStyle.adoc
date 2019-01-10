@@ -27,4 +27,3 @@ Note that the value `INLINE_AS_IF_EDIT` does not make sense for properties; if s
 
 Alternatively, the `promptStyle()` can be specified using xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layouts].
 
-NOTE: FIXME - provide an example here

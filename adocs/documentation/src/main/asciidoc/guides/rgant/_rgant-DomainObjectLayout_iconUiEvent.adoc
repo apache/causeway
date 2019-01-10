@@ -106,7 +106,10 @@ And, conversely, the framework also provides `IconUiEvent.Noop`; if `iconUiEvent
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI.
-However, events can be raised programmatically either by calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] API directly, or as a result of calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_TitleService[`TitleService`]'s
-`iconNameOf(...)` method.
+However, events can be raised programmatically by calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] API directly.
 
+
+== See also
+
+This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_iconNameUiEvent[view models].
 

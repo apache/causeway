@@ -25,16 +25,15 @@ public class BusRoute {
 ----
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+[NOTE]
+====
+This attribute takes precedence over any value for the xref:../rgant/rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout#render()`] attribute.  For example, if the
+`defaultView` attribute is defined to "table", then the table will be show even if `render` is set to `LAZILY`.
+====
 
-NOTE: FIXME - change to .layout.xml syntax instead.
 
-[source,javascript]
-----
-"dependencies": {
-    "collectionLayout": {
-        "defaultView": "map"
-    }
-}
-----
+== Alternatives
+
+
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 

@@ -67,15 +67,8 @@ image::{_imagesdir}reference-annotations/ActionLayout/position-PANEL_DROPDOWN.pn
 If there are multiple actions associated with a single property then the positioning can be mix'ed-and-match'ed as required.  If the `PANEL` or `PANEL_DROPDOWN` are used, then (as the screenshots above show) the actions from potentially multiple properties grouped by that panel will be shown together.
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+== Alternatives
 
-NOTE: FIXME - change to .layout.xml syntax instead.
-
-[source,javascript]
-----
-"obtainCreditRating": {
-    "actionLayout": { "named": "Get credit rating" }
-}
-----
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 The fact that the layout is dynamic (does not require a rebuild/restart) is particularly useful in that the look-n-feel can be easily experimented with and adjusted.

@@ -53,6 +53,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.wicket.model.common.OnConcurrencyExceptionHandler;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.collection.bulk.BulkActionsProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns.ColumnAbstract;
@@ -182,8 +183,10 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
             // the facet should always exist, in fact
             // just enough to ask for the metadata.
             // This will cause the current ObjectSpec to be updated as a side effect.
-            final Grid grid = gridFacet.getGrid();
-            
+            final EntityModel entityModel = getModel().getEntityModel();
+            final ObjectAdapter objectAdapterIfAny = entityModel != null ? entityModel.getObject() : null;
+            final Grid grid = gridFacet.getGrid(objectAdapterIfAny);
+
             
             final Map<String, Integer> propertyIdOrderWithinGrid = new HashMap<>();
             grid.getAllPropertiesById().forEach((propertyId, __)->{

@@ -5,7 +5,8 @@
 :_imagesdir: images/
 
 
-Collections can be hidden at the domain-level, indicating that they are not visible to the end-user.  This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-Action_hidden[actions] and xref:../rgant/rgant.adoc#_rgant-Property_hidden[properties].
+Collections can be hidden at the domain-level, indicating that they are not visible to the end-user.
+
 
 [TIP]
 ====
@@ -53,3 +54,10 @@ The xref:../ugvw/ugvw.adoc#[Wicket viewer] suppresses collections when displayin
 
 The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] by default suppress collections when rendering a domain object.
 ====
+
+== See also
+
+This attribute can also be applied to:
+
+* xref:../rgant/rgant.adoc#_rgant-Action_hidden[actions]
+* xref:../rgant/rgant.adoc#_rgant-Property_hidden[properties].

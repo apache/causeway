@@ -5,30 +5,6 @@
 :_imagesdir: images/
 
 
-The `paged()` attribute specifies the number of rows to display in a standalone collection, as returned from an action invocation.  This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-CollectionLayout_paged[collections] and xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_paged[domain objects].
+The `paged()` attribute specifies the number of rows to display in a standalone collection, as returned from an action invocation.
 
-
-
-[WARNING]
-====
-The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] currently does not support paging.   The xref:../ugvw/ugvw.adoc#[Wicket viewer] _does_ support paging, but note that the paging is performed client-side rather than server-side.
-
-We therefore recommend that large collections should instead be modelled as actions (to allow filtering to be applied to limit the number of rows).
-====
-
-
-For example:
-
-[source,java]
-----
-@ViewModel
-@ViewModelLayout(paged=15)
-public class OrderAnalysis {
-    ...
-}
-----
-
-
-It is also possible to specify a global default for the page size of standalone collections, using the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.viewer.paged.standalone`.
-
-
+This attribute is the same as xref:rgant.adoc#_rgant_DomainObjectLayout_paged[`@DomainObjectLayout#paged()`], but for view models instead of entities.

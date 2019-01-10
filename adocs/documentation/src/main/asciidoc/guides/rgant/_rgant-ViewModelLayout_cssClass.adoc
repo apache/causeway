@@ -8,23 +8,4 @@
 
 The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the view model.   xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
-This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[domain objects], xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[actions] xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[properties],  xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[collections] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[parameters].
-
-
-For example:
-
-[source,java]
-----
-@ViewModel
-@ViewModelLayout(cssClass="x-analysis")
-public class CategoryPieChart { ... }
-----
-
-
-
-
-[NOTE]
-====
-The similar xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClassFa[`@ViewModelLayout#cssClassFa()`] annotation attribute is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered as the icon for classes.
-====
-
+This is equivalent to xref:rgant.adoc#_rgant_DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`], but for view models instead of entities.

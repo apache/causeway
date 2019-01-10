@@ -55,7 +55,8 @@ import org.apache.isis.schema.utils.jaxbadapters.PersistentEntitiesAdapter;
 @DomainObjectLayout(
         titleUiEvent = DomainObjectList.TitleUiEvent.class,
         iconUiEvent = DomainObjectList.IconUiEvent.class,
-        cssClassUiEvent = DomainObjectList.CssClassUiEvent.class
+        cssClassUiEvent = DomainObjectList.CssClassUiEvent.class,
+        layoutUiEvent = DomainObjectList.LayoutUiEvent.class
         )
 public class DomainObjectList {
 
@@ -63,6 +64,7 @@ public class DomainObjectList {
     public static class TitleUiEvent extends IsisApplibModule.TitleUiEvent<DomainObjectList>{ private static final long serialVersionUID = 1L; }
     public static class IconUiEvent extends IsisApplibModule.IconUiEvent<DomainObjectList>{ private static final long serialVersionUID = 1L; }
     public static class CssClassUiEvent extends IsisApplibModule.CssClassUiEvent<DomainObjectList>{ private static final long serialVersionUID = 1L; }
+    public static class LayoutUiEvent extends IsisApplibModule.LayoutUiEvent<DomainObjectList>{ private static final long serialVersionUID = 1L; }
 
 
     // -- domain event classes

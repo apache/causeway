@@ -20,15 +20,6 @@ public class Customer {
 ----
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
+== Alternatives
 
-NOTE: FIXME - change to .layout.xml syntax instead.
-
-[source,javascript]
-----
-"firstName:" {
-    "propertyLayout": {
-        "describedAs": "The name that the customer has indicated that they wish to be addressed as (e.g. Johnny rather than Jonathan)"
-     }
-}
-----
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.

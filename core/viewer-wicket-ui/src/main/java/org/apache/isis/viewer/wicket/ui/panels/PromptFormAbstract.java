@@ -20,22 +20,6 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
 
-import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
-import org.apache.isis.viewer.wicket.model.models.FormExecutor;
-import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
-import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
-import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
-import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
-import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -55,6 +39,21 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.util.string.AppendingStringBuffer;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions.FluentException;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
+import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
+import org.apache.isis.viewer.wicket.model.models.FormExecutor;
+import org.apache.isis.viewer.wicket.model.models.FormExecutorContext;
+import org.apache.isis.viewer.wicket.model.models.ParentEntityModelProvider;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber2;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
+import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
+import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
+import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 
 public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapter>
 & ParentEntityModelProvider
@@ -192,10 +191,10 @@ implements ScalarModelSubscriber2 {
     }
 
     protected void closePromptIfAny(final AjaxRequestTarget target) {
-        final ActionPrompt actionPromptIfAny =
-                ActionPromptProvider.Util.getFrom(parentPanel).getActionPrompt();
-        if (actionPromptIfAny != null) {
-            actionPromptIfAny.closePrompt(target);
+
+        final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(parentPanel);
+        if(promptProvider != null) {
+            promptProvider.closePrompt(target);
         }
     }
 

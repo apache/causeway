@@ -8,8 +8,6 @@
 
 The `cssClassFa()` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered as the domain object's icon.
 
-These attributes can also be applied to xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClassFa[view models] to specify the object's icon, and to xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[actions] to specify an icon for the action's representation as a button or menu item.
-
 If necessary the icon specified can be overridden by a particular object instance using the xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] method.
 
 
@@ -37,4 +35,11 @@ The related `cssClassFaPosition()` attribute is currently unused for domain obje
 The similar xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
 ====
 
+
+== See also
+
+These attributes can also be applied to:
+
+* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClassFa[view models] to specify the object's icon, and
+* xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[actions] to specify an icon for the action's representation as a button or menu item.
 

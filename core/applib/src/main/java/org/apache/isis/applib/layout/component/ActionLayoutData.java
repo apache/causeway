@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.links.Link;
 
@@ -220,6 +221,19 @@ HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
 
     public void setPromptStyle(PromptStyle promptStyle) {
         this.promptStyle = promptStyle;
+    }
+
+
+
+    private Redirect redirect;
+
+    @XmlAttribute(required = false)
+    public Redirect getRedirect() {
+        return redirect;
+    }
+
+    public void setRedirect(Redirect redirect) {
+        this.redirect = redirect;
     }
 
 

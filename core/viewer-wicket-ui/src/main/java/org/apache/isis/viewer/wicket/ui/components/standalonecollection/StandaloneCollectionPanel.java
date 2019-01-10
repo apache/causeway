@@ -28,12 +28,10 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
-import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
-import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
 import org.apache.isis.viewer.wicket.ui.components.collection.count.CollectionCountProvider;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
@@ -43,17 +41,15 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionModel>
-implements CollectionCountProvider, CollectionSelectorProvider, ActionPromptProvider {
+implements CollectionCountProvider, CollectionSelectorProvider {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_STANDALONE_COLLECTION = "standaloneCollection";
     private static final String ID_ACTION_NAME = "actionName";
 
-    private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
 
-    private final ActionPromptModalWindow actionPromptModalWindow;
     private final CollectionSelectorPanel selectorDropdownPanel;
 
 
@@ -74,10 +70,6 @@ implements CollectionCountProvider, CollectionSelectorProvider, ActionPromptProv
                 CssClassAppender.asCssStyle("isis-" + action.getOnType().getSpecId().asString().replace('.', '-') + "-" + action.getId()));
         CssClassAppender.appendCssClassTo(outerDiv,
                 CssClassAppender.asCssStyle("isis-" + entityCollectionModel.getTypeOfSpecification().getSpecId().asString().replace('.','-')));
-
-        // action prompt
-        this.actionPromptModalWindow = ActionPromptModalWindow.newModalWindow(ID_ACTION_PROMPT_MODAL_WINDOW);
-        outerDiv.addOrReplace(actionPromptModalWindow);
 
         // selector
         final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry());
@@ -105,13 +97,6 @@ implements CollectionCountProvider, CollectionSelectorProvider, ActionPromptProv
 
         final ComponentFactoryRegistry componentFactoryRegistry = getComponentFactoryRegistry();
         componentFactoryRegistry.addOrReplaceComponent(outerDiv, ComponentType.COLLECTION_CONTENTS, entityCollectionModel);
-    }
-
-    // -- ActionPromptModalWindowProvider
-
-    @Override
-    public ActionPromptModalWindow getActionPrompt() {
-        return actionPromptModalWindow;
     }
 
 

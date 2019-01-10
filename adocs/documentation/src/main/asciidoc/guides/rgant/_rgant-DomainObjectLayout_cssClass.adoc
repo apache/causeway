@@ -6,16 +6,16 @@
 
 
 
-The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the domain object.   xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
-
-This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[domain objects], xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClass[view models], xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[actions] xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[properties],  xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[collections] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[parameters].
+The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the domain object.
+xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
 
 For example:
 
 [source,java]
 ----
-@DomainObject(
+@DomainObject
+@DomainObjectLayout(
     cssClass="x-core-entity"
 )
 public class ToDoItem { ... }
@@ -26,9 +26,18 @@ public class ToDoItem { ... }
 
 [NOTE]
 ====
-The similar xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`] annotation attribute is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons]
-to be rendered as the icon for classes.
+The similar xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`] annotation attribute is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered as the icon for classes.
 ====
 
 
+
+== See also
+
+This attribute can also be applied to:
+
+* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClass[view models]
+* xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[actions]
+* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[properties],
+* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[collections]
+* xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[parameters].
 

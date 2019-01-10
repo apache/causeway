@@ -8,7 +8,7 @@
 
 There are three attributes related to enforcing regular expressions:
 
-* The `regexPattern()` attribute validates the contents of any string parameter with respect to a regular expression pattern. It is ignored if applied to parameters of any other type. This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-Property_regexPattern[properties].
+* The `regexPattern()` attribute validates the contents of any string parameter with respect to a regular expression pattern. It is ignored if applied to parameters of any other type.
 
 * The `regexPatternFlags()` attribute specifies flags that modify the handling of the pattern.  The values are those
 that would normally be passed to `java.util.regex.Pattern#compile(String,int)`.
@@ -35,3 +35,8 @@ public class Customer {
 ----
 <1> Note that there is currently no i18n support for this phrase.
 
+
+
+== See also
+
+This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-Property_regexPattern[properties].

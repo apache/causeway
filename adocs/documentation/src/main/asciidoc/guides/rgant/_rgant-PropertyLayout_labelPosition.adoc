@@ -7,9 +7,10 @@
 
 
 
-The `labelPosition()` attribute determines the positioning of labels for properties.  This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-ParameterLayout_labelPosition[parameters].
+The `labelPosition()` attribute determines the positioning of labels for properties.
 
-The positioning of labels is typically `LEFT`, but can be positioned to the `TOP`.  The one exception is xref:../rgant/rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine()`] string properties, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
+The positioning of labels is typically `LEFT`, but can be positioned to the `TOP`.
+The one exception is xref:../rgant/rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine()`] string properties, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
 
 For boolean properties a positioning of `RIGHT` is also allowed; this is ignored for all other types.
 
@@ -58,21 +59,6 @@ image::{_imagesdir}reference-annotations/PropertyLayout/labelPosition-boolean-RI
 
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
-
-NOTE: FIXME - change to .layout.xml syntax instead.
-
-[source,javascript]
-----
-"description": {
-    "propertyLayout": {
-        "labelPosition": "TOP"
-    }
-}
-----
-
-
-
 [TIP]
 .Specifying a default setting for label positions
 ====
@@ -94,4 +80,15 @@ isis.viewers.propertyLayout.labelPosition=LEFT
 
 If these are not present then Apache Isis will render according to internal defaults. At the time of writing, this means labels are to the left for all datatypes except multiline strings.
 ====
+
+
+== Alternatives
+
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+
+
+
+== See also
+
+This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-ParameterLayout_labelPosition[parameters].
 

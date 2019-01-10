@@ -5,19 +5,7 @@
 :_imagesdir: images/
 
 
-The `describedAs()` attribute is used to provide a short description of the view model to the user.  In the xref:../ugvw/ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.  The `describedAs()` attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-CollectionLayout_describedAs[collections],  xref:../rgant/rgant.adoc#_rgant-PropertyLayout_describedAs[properties], xref:../rgant/rgant.adoc#_rgant-ActionLayout_describedAs[actions], xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[parameters] and xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_describedAs[domain objects].
+The `describedAs()` attribute is used to provide a short description of the view model to the user; in the xref:../ugvw/ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.
 
-For example:
-
-[source,java]
-----
-@ViewModel
-@ViewModelLayout(
-    cssClass="x-analysis",
-    cssClassFa="fa-piechart",
-    describedAs="Analysis of todo items by category"
-)
-public class CategoryPieChart { ... }
-----
-
+This attribute is the same as xref:rgant.adoc#_rgant_DomainObjectLayout_describedAs[`@DomainObjectLayout#describedAs()`], but for view models instead of entities.
 

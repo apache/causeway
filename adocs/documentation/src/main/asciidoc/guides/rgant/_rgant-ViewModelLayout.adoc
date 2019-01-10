@@ -36,11 +36,25 @@ The table below summarizes the annotation's attributes.
 |Currently unused.
 
 
+|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClassUiEvent[`cssClassUiEvent()`]
+|subtype of `CssClassUiEvent` +
+(`CssClassUiEvent.Default`)
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain a CSS class for the domain object.
+
+
 |xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_describedAs[`describedAs()`]
 |String.
 |description of this class, eg to be rendered in a tooltip.
 
+|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_iconUiEvent[`iconUiEvent()`]
+|subtype of `IconUiEvent` +
+(`IconUiEvent.Default`)
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the icon (name) for the domain object.
 
+|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_layoutUiEvent[`layoutUiEvent()`]
+|subtype of `LayoutUiEvent` +
+(`LayoutUiEvent.Default`)
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the layout (name) for the domain object.
 
 |xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_named[`named()`]
 |String.
@@ -58,6 +72,11 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |String.
 |the plural name of the class
 
+
+|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_titleUiEvent[`titleUiEvent()`]
+|subtype of `TitleUiEvent` +
+(`TitleUiEvent.Default`)
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the title for the domain object.
 
 |===
 
@@ -77,7 +96,8 @@ For example:
 )
 public class CategoryPieChart { ... }
 ----
-<1> this annotation is intended for use with `@ViewModel`.  If a view model has been specified using the equivalent xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject(nature=Nature.VIEW_MODEL)`], then we recommend you use xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`] instead.
+<1> this annotation is intended for use with `@ViewModel`.
+If a view model has been specified using the equivalent xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject(nature=Nature.VIEW_MODEL)`], then we recommend you use xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`] instead.
 
 
 [NOTE]
@@ -89,11 +109,14 @@ Note that there is (currently) no support for specifying UI hints for view model
 
 include::_rgant-ViewModelLayout_cssClass.adoc[leveloffset=+1]
 include::_rgant-ViewModelLayout_cssClassFa.adoc[leveloffset=+1]
+include::_rgant-ViewModelLayout_cssClassUiEvent.adoc[leveloffset=+1]
 include::_rgant-ViewModelLayout_describedAs.adoc[leveloffset=+1]
+include::_rgant-ViewModelLayout_iconUiEvent.adoc[leveloffset=+1]
+include::_rgant-ViewModelLayout_layoutUiEvent.adoc[leveloffset=+1]
 include::_rgant-ViewModelLayout_named.adoc[leveloffset=+1]
 include::_rgant-ViewModelLayout_paged.adoc[leveloffset=+1]
 include::_rgant-ViewModelLayout_plural.adoc[leveloffset=+1]
-
+include::_rgant-ViewModelLayout_titleUiEvent.adoc[leveloffset=+1]
 
 
 

@@ -45,16 +45,6 @@ Without this annotation, the order would have been inverted (because the natural
 
 
 
+== Alternatives
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead, eg:
-
-NOTE: FIXME - change to .layout.xml syntax instead.
-
-[source,javascript]
-----
-"dependencies": {
-    "collectionLayout": {
-        "sortedBy": "com.mycompany.myapp.dom.ToDoItem.DependenciesComparator"
-    }
-}
-----
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.

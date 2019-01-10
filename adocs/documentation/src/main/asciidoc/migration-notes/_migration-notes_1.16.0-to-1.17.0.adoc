@@ -6,8 +6,30 @@
 
 
 
+== Sidebar Dialogs
 
-TODO
+In this release sidebar dialogs vs modal dialogs is configured globally, and they are enabled by default.
+
+To revert to previous behaviour, set the configuration property:
+
+[source,ini]
+.isis.properties
+----
+isis.viewer.wicket.dialogMode=modal
+----
+
+
+== MetaModelService
+
+To export the metamodel as XML, use `MetaModelService6#exportMetaModel(Config)`.
+
+Why would you want to do this?
+The main reason is as a regression test when moving up to new versions of the framework; you can check that the metamodel built up by the next version is the same as the previous.
+
+
+== Introspection
+
+A number of new configuration properties are available to control how introspection (the building of the framework's internal metamodel) is performed:
 
 * parallelized introspection
 ** specify `isis.reflector.introspector.parallelize`
@@ -16,9 +38,4 @@ TODO
 * lazy introspection
 ** specify `isis.reflector.introspector.mode`
 ** is set to `lazy_unless_production` by default, can switch to `lazy` or `full`
-
-* sidebar dialogs
-** set `isis.viewer.wicket.dialogMode` to `modal` to retain previous behaviour
-
-* new `MetaModelService#exportMetaModel(Config)`
 

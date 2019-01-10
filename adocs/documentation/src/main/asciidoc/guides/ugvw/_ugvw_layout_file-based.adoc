@@ -31,15 +31,26 @@ The `Xxx.layout.xml` file is just the serialized form of a xref:../rgcms/rgcms.a
 These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making iteasy to author such layout files.
 
 
+== Alternative Layouts
+
+A domain object may also have multiple layouts.
+For example, there may be the capability to switch into an "edit" mode, which perhaps hides some class members, shows others (perhaps mixins specific to data entry).
+Another reason might be to support different tenancies/user groups, where different business processes might require a slightly different UI representation.
+
+One way in which the domain object can specify an alternate layout is through its xref:rgcms.adoc#_rgcms_methods_reserved_layout[`layout()`] method.
+If this returns a non-null value, say "edit", then this is used to locate an alternative layout, in the form `Xxx-edit.layout.xml`.
+
 
 == Search Algorithm (Library Support)
 
-For a given domain object `Xxx` the framework initially searches for a file (on the classpath) called `Xxx.layout.xml`.
+For a given domain object `Xxx`, if it has specified a layout `yyy`, then the framework will search for a file `Xxx.yyy.layout.xml` on the classpath.
 
-If this can't be found, then the framework will search for a file named `Xxx.layout.fallback.xml`.
+If no layout has been specified (or if the specified layout cannot be found), then the framework searches for a file called `Xxx.layout.xml`.
+
+Finally, if this can't be found, then the framework will search for a file named `Xxx.layout.fallback.xml`.
 If present, this will be used instead.
 
-This therefore allows libraries that provide a domain entities/view models (for example, the (non-ASF) link:http://platform.incode.org[Incode Platform] modules) to define the UI of these objects using a layout file, while still allowing the consuming application to override that layout if it so requires.
+The "fallback" layout this therefore allows libraries that provide a domain entities/view models (for example, the (non-ASF) link:http://platform.incode.org[Incode Platform] modules) to define the UI of these objects using a layout file, while still allowing the consuming application to override that layout if it so requires.
 
 
 
@@ -107,28 +118,28 @@ This corresponds to the following XML:
 
 [source,xml]
 ----
-    <bs3:row>
-        <bs3:col span="12" unreferencedActions="true">
-            <c:domainObject bookmarking="AS_ROOT"/>
-        </bs3:col>
-    </bs3:row>
-    <bs3:row>
-        <bs3:col span="12">
-            <bs3:tabGroup>
-                <bs3:tab name="Properties">...</bs3:tab>
-                <bs3:tab name="Other">...</bs3:tab>
-                <bs3:tab name="Metadata">...</bs3:tab>
-            </bs3:tabGroup>
-        </bs3:col>
-    </bs3:row>
-    <bs3:row>
-        <bs3:col span="12">
-            <bs3:tabGroup unreferencedCollections="true">
-                <bs3:tab name="Similar to">...</bs3:tab>
-                <bs3:tab name="Dependencies">...</bs3:tab>
-            </bs3:tabGroup>
-        </bs3:col>
-    </bs3:row>
+<bs3:row>
+    <bs3:col span="12" unreferencedActions="true">
+        <c:domainObject bookmarking="AS_ROOT"/>
+    </bs3:col>
+</bs3:row>
+<bs3:row>
+    <bs3:col span="12">
+        <bs3:tabGroup>
+            <bs3:tab name="Properties">...</bs3:tab>
+            <bs3:tab name="Other">...</bs3:tab>
+            <bs3:tab name="Metadata">...</bs3:tab>
+        </bs3:tabGroup>
+    </bs3:col>
+</bs3:row>
+<bs3:row>
+    <bs3:col span="12">
+        <bs3:tabGroup unreferencedCollections="true">
+            <bs3:tab name="Similar to">...</bs3:tab>
+            <bs3:tab name="Dependencies">...</bs3:tab>
+        </bs3:tabGroup>
+    </bs3:col>
+</bs3:row>
 ----
 
 
@@ -146,29 +157,29 @@ This corresponds to the following XML:
 
 [source,xml]
 ----
-            <bs3:tab name="Properties">
-                <bs3:row>
-                    <bs3:col span="6">
-                        <c:fieldSet name="General" id="general" unreferencedProperties="true">
-                            <c:action id="duplicate" position="PANEL_DROPDOWN"/>
-                            <c:action id="delete"/>
-                            <c:property id="description"/>
-                            <c:property id="category"/>
-                            <c:property id="subcategory">
-                                <c:action id="updateCategory"/>
-                                <c:action id="analyseCategory" position="RIGHT"/>
-                            </c:property>
-                            <c:property id="complete">
-                                <c:action id="completed" cssClassFa="fa-thumbs-up"/>
-                                <c:action id="notYetCompleted" cssClassFa="fa-thumbs-down"/>
-                            </c:property>
-                        </c:fieldSet>
-                    </bs3:col>
-                    <bs3:col span="6">
-                        ...
-                    </bs3:col>
-                </bs3:row>
-            </bs3:tab>
+<bs3:tab name="Properties">
+    <bs3:row>
+        <bs3:col span="6">
+            <c:fieldSet name="General" id="general" unreferencedProperties="true">
+                <c:action id="duplicate" position="PANEL_DROPDOWN"/>
+                <c:action id="delete"/>
+                <c:property id="description"/>
+                <c:property id="category"/>
+                <c:property id="subcategory">
+                    <c:action id="updateCategory"/>
+                    <c:action id="analyseCategory" position="RIGHT"/>
+                </c:property>
+                <c:property id="complete">
+                    <c:action id="completed" cssClassFa="fa-thumbs-up"/>
+                    <c:action id="notYetCompleted" cssClassFa="fa-thumbs-down"/>
+                </c:property>
+            </c:fieldSet>
+        </bs3:col>
+        <bs3:col span="6">
+            ...
+        </bs3:col>
+    </bs3:row>
+</bs3:tab>
 ----
 
 The tab defines two columns, each span of 6 (meaning half the width of the page).

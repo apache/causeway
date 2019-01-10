@@ -5,7 +5,8 @@
 :_imagesdir: images/
 
 
-The `typeOf()` attribute specifies the expected type of an element contained within a collection when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.  This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-Action_typeOf[actions].
+The `typeOf()` attribute specifies the expected type of an element contained within a collection when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.
+
 
 For example:
 
@@ -24,3 +25,6 @@ In general we recommend that you use generics instead, eg `SortedSet<Order>`.
 ====
 
 
+== See also
+
+This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-Action_typeOf[actions].

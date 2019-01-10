@@ -39,6 +39,10 @@ public class IsisApplibModule extends ModuleAbstract {
     extends org.apache.isis.applib.events.ui.CssClassUiEvent<S> {
         private static final long serialVersionUID = 1L;
     }
+    public abstract static class LayoutUiEvent<S>
+            extends org.apache.isis.applib.services.eventbus.LayoutUiEvent<S> {
+        private static final long serialVersionUID = 1L;
+    }
 
     // -- DOMAIN EVENT CLASSES
 
