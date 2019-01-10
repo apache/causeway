@@ -19,11 +19,12 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 /**
  * For base subclasses or, more likely, to help write tests.
@@ -97,7 +98,7 @@ public class FacetHolderImpl implements FacetHolder {
                 .stream()
                 .distinct(); //FIXME[ISIS-1976] not sure why this is required for MultiTypedFacet support as was in legacy code
     }
-    
+
     @Override
     public int getFacetCount() {
         return facetsByClass.size();

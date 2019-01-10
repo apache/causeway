@@ -28,12 +28,12 @@ import org.apache.isis.config.NotFoundPolicy;
 import org.apache.isis.config.resource.ResourceStreamSource;
 
 public interface IsisConfigurationBuilder {
-    
-    void addPropertyResource(PropertyResource propertyResource);
 
-    void addResourceStreamSource(ResourceStreamSource resourceStreamSource);
-    void addResourceStreamSources(ResourceStreamSource... resourceStreamSources);
-    void addResourceStreamSources(List<ResourceStreamSource> resourceStreamSources);
+    IsisConfigurationBuilder addPropertyResource(PropertyResource propertyResource);
+
+    IsisConfigurationBuilder addResourceStreamSource(ResourceStreamSource resourceStreamSource);
+    IsisConfigurationBuilder addResourceStreamSources(ResourceStreamSource... resourceStreamSources);
+    IsisConfigurationBuilder addResourceStreamSources(List<ResourceStreamSource> resourceStreamSources);
 
     /**
      * Registers the configuration resource (usually, a file) with the specified
@@ -43,20 +43,20 @@ public interface IsisConfigurationBuilder {
      * If the configuration resource cannot be found then the provided
      * {@link NotFoundPolicy} determines whether an exception is thrown or not.
      */
-    void addConfigurationResource(String configurationResource, NotFoundPolicy notFoundPolicy,
+    IsisConfigurationBuilder addConfigurationResource(String configurationResource, NotFoundPolicy notFoundPolicy,
             IsisConfigurationDefault.ContainsPolicy containsPolicy);
 
     /**
      * Adds additional property; if already present then will _not_ be replaced.
      */
-    void add(String key, String value);
+    IsisConfigurationBuilder add(String key, String value);
 
     /**
      * Adds/updates property; if already present then _will_ be replaced.
      */
-    void put(String key, String value);
+    IsisConfigurationBuilder put(String key, String value);
 
-    void primeWith(Primer primer);
+    IsisConfigurationBuilder primeWith(Primer primer);
 
     String peekAtString(String key);
     String peekAtString(String key, String defaultValue);
@@ -72,13 +72,13 @@ public interface IsisConfigurationBuilder {
      * @param topModule
      * @since 2.0.0-M2
      */
-    void addTopModule(Module topModule);
+    IsisConfigurationBuilder addTopModule(Module topModule);
     
     /**
      * @param appManifest
      * @since 2.0.0-M2
      */
-    void addAppManifest(AppManifest appManifest);
+    IsisConfigurationBuilder addAppManifest(AppManifest appManifest);
 
     /** internal only **/
     IsisConfiguration build();

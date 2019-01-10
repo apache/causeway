@@ -272,10 +272,16 @@ Let's see how to run both the app and the tests.
 [[__dg_ide_intellij_running_the-app]]
 === Running the App
 
-Once you've imported your Apache Isis application, we should run it.
-We do this by creating a Run configuration, using `Run > Edit Configurations`.
+Once you've imported your Apache Isis application, we should run it.  We do this by creating a Run configuration, using `Run > Edit Configurations`.
 
-TODO: describe how to run using `mvn jetty:run`
+Set up the details as follows:
+
+.IntelliJ Running the App - Run Configuration
+image::{_imagesdir}intellij-idea/110-running-the-app/010-run-configuration.png[width="600px",link="{_imagesdir}intellij-idea/110-running-the-app/010-run-configuration.png"]
+
+We specify the `Main class` to be `org.apache.isis.WebServer`; this is a wrapper around Jetty.  It's possible to pass program arguments to this (eg to automatically install fixtures), but for now leave this blank.
+
+Also note that `Use classpath of module` is the webapp module for your app, and that the `working directory` is `$MODULE_DIR$`.
 
 Next, and most importantly, configure the DataNucleus enhancer to run for your `dom` goal.  This can be done by defining a Maven goal to run before the app:
 

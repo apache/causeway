@@ -210,9 +210,9 @@ This will allow the architectural layering of the overall application to be enfo
 
 What then remains is to update the bootstrapping code itself.
 
-There are a couple of contexts in which the framework needs to be bootstrapped:
+There are several different contexts in which the framework needs to be bootstrapped:
 
-* the normal situation is as a "regular" webapp (using the xref:../ugvw/ugvw.adoc#[Wicket viewer]).
+* the first is as a "regular" webapp (using the xref:../ugvw/ugvw.adoc#[Wicket viewer]).
 Here the `AppManifest` just needs to be specified as a configuration property, usually done using the `WEB-INF/isis.properties` configuration file: +
 +
 [source,ini]
@@ -220,7 +220,17 @@ Here the `AppManifest` just needs to be specified as a configuration property, u
 isis.appManifest=domainapp.app.MyAppAppManifest
 ----
 
-* the other main use-case is within an integration test. +
+* the second is also as a webapp, but from within the context of the IDE. +
++
+Here, it's common to use the `org.apache.isis.WebServer` class to launch your application from the xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_cmd-line[command line].
+This allows the `AppManifest` to be specified using the `-m` (or `--manifest`) flag: +
++
+[source,ini]
+----
+java org.apache.isis.WebServer -m com.mycompany.myapp.MyAppAppManifestWithFixtures
+----
+
+* the third case is within an integration test. +
 +
 The code to boostrap an integration test is shown in the xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support_bootstrapping[testing guide], but once again an `AppManifest` is required.
 

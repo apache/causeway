@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 import org.apache.isis.core.runtime.snapshot.XmlSchema.ExtensionData;
 
@@ -37,16 +37,14 @@ public final class FacetUtil {
             return;
         }
         final FacetHolder facetHolder = facet.getFacetHolder();
-        final List<Facet> facets = facetHolder.streamFacets()
-                .filter( each->facet.facetType() == each.facetType() && facet.getClass() == each.getClass() )
-                .collect(Collectors.toList());
-        
-        if(facets.size() == 1) {
-            final Facet existingFacet = facets.get(0);
-            final Facet underlyingFacet = existingFacet.getUnderlyingFacet();
-            facetHolder.removeFacet(existingFacet);
-            facet.setUnderlyingFacet(underlyingFacet);
-        }
+
+        Optional.ofNullable(facetHolder.getFacet(facet.facetType()))
+            .filter(each -> facet.getClass() == each.getClass())
+            .ifPresent(existingFacet -> {
+                final Facet underlyingFacet = existingFacet.getUnderlyingFacet();
+                facetHolder.removeFacet(existingFacet);
+                facet.setUnderlyingFacet(underlyingFacet);
+            } );
         facetHolder.addFacet(facet);
     }
 

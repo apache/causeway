@@ -172,20 +172,23 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
     // -- addResourceStreamSource, addResourceStreamSources
 
     @Override
-    public void addResourceStreamSource(final ResourceStreamSource resourceStreamSource) {
+    public IsisConfigurationBuilder addResourceStreamSource(final ResourceStreamSource resourceStreamSource) {
         addResourceStreamSources(resourceStreamSource);
+        return this;
     }
 
     @Override
-    public void addResourceStreamSources(final ResourceStreamSource... resourceStreamSources) {
+    public IsisConfigurationBuilder addResourceStreamSources(final ResourceStreamSource... resourceStreamSources) {
         addResourceStreamSources(Arrays.asList(resourceStreamSources));
+        return this;
     }
 
     @Override
-    public void addResourceStreamSources(final List<ResourceStreamSource> resourceStreamSources) {
+    public IsisConfigurationBuilder addResourceStreamSources(final List<ResourceStreamSource> resourceStreamSources) {
         for (ResourceStreamSource resourceStreamSource : resourceStreamSources) {
             this.resourceStreamSourceChain.addResourceStreamSource(resourceStreamSource);
         }
+        return this;
     }
 
     // -- addConfigurationResource
@@ -202,10 +205,10 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
      * Must be called before {@link IsisConfigurationBuilderDefault#getConfiguration()}.
      */
     @Override
-    public void addConfigurationResource(
+    public IsisConfigurationBuilder addConfigurationResource(
             final String configurationResource,
             final NotFoundPolicy notFoundPolicy,
-            final IsisConfigurationDefault.ContainsPolicy containsPolicy) {
+            final ContainsPolicy containsPolicy) {
 
         if(LOG.isDebugEnabled()) {
             LOG.debug(String.format(
@@ -213,6 +216,7 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
                     configurationResource, notFoundPolicy));
         }
         loadConfigurationResource(configurationResource, notFoundPolicy, containsPolicy);
+        return this;
     }
 
     /**
@@ -260,53 +264,57 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
      * Adds additional property; if already present then will _not_ be replaced.
      */
     @Override
-    public void add(final String key, final String value) {
+    public IsisConfigurationBuilder add(final String key, final String value) {
         configuration.add(key, value);
+        return this;
     }
 
     /**
      * Adds/updates property; if already present then _will_ be replaced.
      */
     @Override
-    public void put(final String key, final String value) {
+    public IsisConfigurationBuilder put(final String key, final String value) {
         configuration.put(key, value);
+        return this;
     }
 
     // -- PRIMING
 
     @Override
-    public void primeWith(final Primer primer) {
+    public IsisConfigurationBuilder primeWith(final Primer primer) {
         LOG.debug("priming configurations for '{}'", primer);
         primer.prime(this);
+        return this;
     }
     
     // -- LOAD MODULE TREE
     
     @Override
-    public void addTopModule(Module topModule) {
+    public IsisConfigurationBuilder addTopModule(Module topModule) {
         final AppManifestAbstract2.Builder manifestBuilder = AppManifestAbstract2.Builder
                 .forModule(topModule);
         final AppManifestAbstract2 manifest = new AppManifestAbstract2(manifestBuilder) {};
         addAppManifest(manifest);
+        return this;
     }
     
     @Override
-    public void addAppManifest(AppManifest appManifest) {
+    public IsisConfigurationBuilder addAppManifest(AppManifest appManifest) {
         configuration.setAppManifest(appManifest);
-        appManifest.getConfigurationProperties().forEach((k, v)->{
-            put(k, v);
-        });
+        appManifest.getConfigurationProperties().forEach(this::put);
+        return this;
     }
         
     // -- LOAD SINGLE RESOURCE
         
     @Override
-    public void addPropertyResource(PropertyResource propertyResource) {
+    public IsisConfigurationBuilder addPropertyResource(PropertyResource propertyResource) {
         IsisConfigurationDefault.ContainsPolicy ignorePolicy = IsisConfigurationDefault.ContainsPolicy.IGNORE;
         NotFoundPolicy continuePolicy = NotFoundPolicy.CONTINUE;
         
         addResourceStreamSource(new ResourceStreamSource_UsingClass(propertyResource.getResourceContext()));
         addConfigurationResource(propertyResource.getResourceName(), continuePolicy, ignorePolicy);
+        return this;
     }
 
     // -- PEEKING

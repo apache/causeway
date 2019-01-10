@@ -17,29 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.optionhandler;
+package org.apache.isis;
 
-import java.util.ArrayList;
-import java.util.List;
+public class WebServer {
 
-import org.apache.commons.cli.CommandLine;
-
-import org.apache.isis.core.commons.lang.ListExtensions;
-
-public abstract class OptionHandlerAbstract implements OptionHandler {
-
-    public OptionHandlerAbstract() {
+    public static void main(final String[] args) {
+        org.apache.isis.core.webserver.WebServer.main(args);
     }
 
-    protected List<String> getOptionValues(final CommandLine commandLine, final String opt) {
-        final List<String> list = new ArrayList<String>();
-        final String[] optionValues = commandLine.getOptionValues(opt);
-        if (optionValues != null) {
-            for (final String optionValue : optionValues) {
-                ListExtensions.appendDelimitedStringToList(optionValue, list);
-            }
+    public static final class Constants {
+
+        private Constants() {
         }
-        return list;
-    }
 
+        public static final String APP_MANIFEST_OPT = "m";
+        public static final String APP_MANIFEST_LONG_OPT = "manifest";
+
+
+    }
 }

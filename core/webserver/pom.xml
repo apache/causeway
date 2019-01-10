@@ -68,6 +68,12 @@
             <artifactId>jetty-webapp</artifactId>
         </dependency>
 
+        <!-- command line options support  -->
+        <dependency>
+            <groupId>net.sf.jopt-simple</groupId>
+            <artifactId>jopt-simple</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-discovery-reflections</artifactId>

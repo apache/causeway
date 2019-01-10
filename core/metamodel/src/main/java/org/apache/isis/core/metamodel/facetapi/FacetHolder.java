@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -57,12 +56,6 @@ public interface FacetHolder {
      */
     boolean containsDoOpNotDerivedFacet(Class<? extends Facet> facetType);
 
-    /**
-     * Returns all {@link Facet}s matching the specified {@link Predicate}.
-     *
-     * @param predicate
-     * @return
-     */
     Stream<Facet> streamFacets();
 
     /**
