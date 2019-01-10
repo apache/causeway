@@ -595,3 +595,13 @@ public abstract class MyIntegTestAbstract extends IntegrationTestJupiter {
 ----
 
 
+=== Reworked o.a.i.WebServer (ISIS-1067)
+
+Changed parameter flags:
+
+* `-m`, `--manifest`, `--appManifest`
+* `-d`, `--dev`, `--prototype`
+* `-p`, `--port`
+
+Not other flags supported.
+
