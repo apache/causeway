@@ -92,6 +92,10 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
     @Override
     public String title(final ObjectAdapter owningAdapter) {
 
+        if(owningAdapter == null) {
+            return null;
+        }
+
         final TitleUiEvent<Object> titleUiEvent = newTitleUiEvent(owningAdapter);
 
         eventBusService.post(titleUiEvent);

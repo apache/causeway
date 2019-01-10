@@ -80,6 +80,10 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
     @Override
     public String iconName(final ObjectAdapter owningAdapter) {
 
+        if(owningAdapter == null) {
+            return null;
+        }
+
         final IconUiEvent<Object> iconUiEvent = newIconUiEvent(owningAdapter);
 
         eventBusService.post(iconUiEvent);

@@ -83,6 +83,10 @@ public class CssClassFacetViaViewModelLayoutAnnotationUsingCssClassUiEvent exten
     @Override
     public String cssClass(final ObjectAdapter owningAdapter) {
 
+        if(owningAdapter == null) {
+            return null;
+        }
+
         final CssClassUiEvent<Object> cssClassUiEvent = newCssClassUiEvent(owningAdapter);
 
         eventBusService.post(cssClassUiEvent);

@@ -82,6 +82,10 @@ public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent ex
     @Override
     public String cssClass(final ObjectAdapter owningAdapter) {
 
+        if(owningAdapter == null) {
+            return null;
+        }
+
         final CssClassUiEvent<Object> cssClassUiEvent = newCssClassUiEvent(owningAdapter);
 
         eventBusService.post(cssClassUiEvent);

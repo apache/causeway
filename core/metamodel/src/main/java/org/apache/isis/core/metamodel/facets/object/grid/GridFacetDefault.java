@@ -65,7 +65,9 @@ public class GridFacetDefault
         }
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
         final LayoutFacet layoutFacet = getFacetHolder().getFacet(LayoutFacet.class);
-        final String layout = layoutFacet != null ? layoutFacet.layout(objectAdapterIfAny) : null;
+        final String layout = layoutFacet != null && objectAdapterIfAny != null
+                                ? layoutFacet.layout(objectAdapterIfAny)
+                                : null;
         this.grid = load(domainClass, layout);
 
         return this.grid;
