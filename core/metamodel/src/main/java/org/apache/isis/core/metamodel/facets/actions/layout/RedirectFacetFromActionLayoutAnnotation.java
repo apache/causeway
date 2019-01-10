@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Redirect;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -27,12 +29,12 @@ import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacetAbstr
 
 public class RedirectFacetFromActionLayoutAnnotation extends RedirectFacetAbstract {
 
-    public static RedirectFacet create(final ActionLayout actionLayout, final FacetHolder holder) {
-        if(actionLayout == null) {
-            return null;
-        }
-        final Redirect redirect = actionLayout.redirectPolicy();
-        return redirect != null ? new RedirectFacetFromActionLayoutAnnotation(redirect, holder) : null;
+    public static RedirectFacet create(final List<ActionLayout> actionLayouts, final FacetHolder holder) {
+        return actionLayouts.stream()
+                .map(ActionLayout::redirectPolicy)
+                .map(redirect ->  new RedirectFacetFromActionLayoutAnnotation(redirect, holder))
+                .findFirst()
+                .orElse(null);
     }
 
     public RedirectFacetFromActionLayoutAnnotation(

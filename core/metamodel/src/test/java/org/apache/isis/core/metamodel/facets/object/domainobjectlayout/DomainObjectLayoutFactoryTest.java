@@ -263,7 +263,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
-                assertNull(facet);
+                assertNotNull(facet);
 
                 expectNoMethodsRemoved();
             }

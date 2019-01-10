@@ -105,7 +105,7 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
 
 
         // redirectPolicy
-        RedirectFacet redirectFacet = RedirectFacetFromActionLayoutAnnotation.create(actionLayout, holder);
+        RedirectFacet redirectFacet = RedirectFacetFromActionLayoutAnnotation.create(actionLayouts, holder);
         if(redirectFacet == null) {
             redirectFacet = new RedirectFacetFallback(holder);
         }

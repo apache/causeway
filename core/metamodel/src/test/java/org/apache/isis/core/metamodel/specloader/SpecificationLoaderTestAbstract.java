@@ -32,7 +32,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.services.grid.GridService;
+import org.apache.isis.applib.services.grid.GridService2;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.collections._Sets;
@@ -63,7 +63,7 @@ public abstract class SpecificationLoaderTestAbstract {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
-    private GridService mockGridService;
+    private GridService2 mockGridService;
     @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock

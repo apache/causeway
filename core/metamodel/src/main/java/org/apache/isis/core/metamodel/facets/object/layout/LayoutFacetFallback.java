@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.layout;
 
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class LayoutFacetFallback extends LayoutFacetAbstract {
 
@@ -31,7 +31,7 @@ public class LayoutFacetFallback extends LayoutFacetAbstract {
     }
 
     @Override
-    public String layout(final ObjectAdapter objectAdapterIfAny) {
+    public String layout(final ManagedObject objectAdapterIfAny) {
         return null;
     }
 
