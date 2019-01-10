@@ -253,6 +253,10 @@ public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter
             final ObjectAdapter resultAdapter,
             final RedirectFacet redirectFacet) {
 
+        if(redirectFacet == null) {
+            return getSettings().isRedirectEvenIfSameObject();
+        }
+
         switch (redirectFacet.policy()) {
 
         case EVEN_IF_SAME:
