@@ -98,6 +98,10 @@ public class TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent extends Tit
     @Override
     public String title(final ManagedObject owningAdapter) {
 
+        if(owningAdapter == null) {
+            return null;
+        }
+
         final TitleUiEvent<Object> titleUiEvent = newTitleUiEvent(owningAdapter);
 
         eventBusService.post(titleUiEvent);

@@ -79,6 +79,10 @@ public class IconFacetViaViewModelLayoutAnnotationUsingIconUiEvent extends IconF
     @Override
     public String iconName(final ManagedObject owningAdapter) {
 
+        if(owningAdapter == null) {
+            return null;
+        }
+
         final IconUiEvent<Object> iconUiEvent = newIconUiEvent(owningAdapter);
 
         eventBusService.post(iconUiEvent);

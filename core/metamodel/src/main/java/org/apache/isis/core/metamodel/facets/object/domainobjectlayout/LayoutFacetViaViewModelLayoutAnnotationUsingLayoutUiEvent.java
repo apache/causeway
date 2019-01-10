@@ -79,6 +79,10 @@ public class LayoutFacetViaViewModelLayoutAnnotationUsingLayoutUiEvent extends L
     @Override
     public String layout(final ManagedObject owningAdapter) {
 
+        if(owningAdapter == null) {
+            return null;
+        }
+
         final LayoutUiEvent<Object> layoutUiEvent = newLayoutUiEvent(owningAdapter);
 
         eventBusService.post(layoutUiEvent);
