@@ -4,6 +4,7 @@
 :_basedir: ./
 :_imagesdir: images/
 :toc: right
+include::__versions.adoc[]
 
 
 Apache Isis&trade; software is a framework for rapidly developing domain-driven apps in Java.
@@ -25,15 +26,15 @@ If you want to build Apache Isis from formally released source tarballs, you can
 
 Core:
 
-* https://www.apache.org/dyn/closer.cgi/isis/isis-core/isis-1.17.0-source-release.zip[isis-1.17.0] (https://www.apache.org/dist/isis/isis-core/isis-1.17.0-source-release.zip.asc[asc], https://www.apache.org/dist/isis/isis-core/isis-1.17.0-source-release.zip.md5[md5])
+* https://www.apache.org/dyn/closer.cgi/isis/isis-core/isis-{isiscurr}-source-release.zip[isis-{isiscurr}] (https://www.apache.org/dist/isis/isis-core/isis-{isiscurr}-source-release.zip.asc[asc], https://www.apache.org/dist/isis/isis-core/isis-{isiscurr}-source-release.zip.md5[md5])
 
 HelloWorld Archetype:
 
-* https://www.apache.org/dyn/closer.cgi/isis/archetype/helloworld-archetype/helloworld-archetype-1.17.0-source-release.zip[helloworld-archetype-1.17.0] (https://www.apache.org/dist/isis/archetype/helloworld-archetype/helloworld-archetype-1.17.0-source-release.zip.asc[asc], https://www.apache.org/dist/isis/archetype/helloworld-archetype/helloworld-archetype-1.17.0-source-release.zip.md5[md5])
+* https://www.apache.org/dyn/closer.cgi/isis/archetype/helloworld-archetype/helloworld-archetype-{isiscurr}-source-release.zip[helloworld-archetype-{isiscurr}] (https://www.apache.org/dist/isis/archetype/helloworld-archetype/helloworld-archetype-{isiscurr}-source-release.zip.asc[asc], https://www.apache.org/dist/isis/archetype/helloworld-archetype/helloworld-archetype-{isiscurr}-source-release.zip.md5[md5])
 
 SimpleApp Archetype:
 
-* https://www.apache.org/dyn/closer.cgi/isis/archetype/simpleapp-archetype/simpleapp-archetype-1.17.0-source-release.zip[simpleapp-archetype-1.17.0] (https://www.apache.org/dist/isis/archetype/simpleapp-archetype/simpleapp-archetype-1.17.0-source-release.zip.asc[asc], https://www.apache.org/dist/isis/archetype/simpleapp-archetype/simpleapp-archetype-1.17.0-source-release.zip.md5[md5])
+* https://www.apache.org/dyn/closer.cgi/isis/archetype/simpleapp-archetype/simpleapp-archetype-{isiscurr}-source-release.zip[simpleapp-archetype-{isiscurr}] (https://www.apache.org/dist/isis/archetype/simpleapp-archetype/simpleapp-archetype-{isiscurr}-source-release.zip.asc[asc], https://www.apache.org/dist/isis/archetype/simpleapp-archetype/simpleapp-archetype-{isiscurr}-source-release.zip.md5[md5])
 
 
 
@@ -47,26 +48,26 @@ Make sure you get these files from the http://www.apache.org/dist/isis/[main dis
 
 Then verify the signatures using a command such as:
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 pgpk -a KEYS
-pgpv isis-1.17.0-source-release.zip.asc isis-1.17.0-source-release.zip
+pgpv isis-{isiscurr}-source-release.zip.asc isis-{isiscurr}-source-release.zip
 ----
 
 or
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 pgp -ka KEYS
-pgp isis-1.17.0-source-release.zip.asc isis-1.17.0-source-release.zip
+pgp isis-{isiscurr}-source-release.zip.asc isis-{isiscurr}-source-release.zip
 ----
 
 or
 
-[source,bash]
+[source,bash,subs="attributes+"]
 ----
 gpg –import KEYS
-gpg -verify isis-1.17.0-source-release.zip.asc isis-1.17.0-source-release.zip
+gpg -verify isis-{isiscurr}-source-release.zip.asc isis-{isiscurr}-source-release.zip
 ----
 
 
