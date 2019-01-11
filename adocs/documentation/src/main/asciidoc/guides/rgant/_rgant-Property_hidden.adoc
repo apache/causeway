@@ -11,7 +11,8 @@ Properties can be hidden at the domain-level, indicating that they are not visib
 
 [TIP]
 ====
-It is also possible to use xref:../rgant/rgant.adoc#_rgant-Property_hidden[`@Property#hidden()`] to hide an action at the domain layer.  Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
+It is also possible to use xref:../rgant/rgant.adoc#_rgant-Property_hidden[`@Property#hidden()`] to hide an action at the domain layer.
+Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
 For example:
@@ -29,29 +30,30 @@ public class Customer {
 
 The acceptable values for the `where` parameter are:
 
-* `Where.EVERYWHERE` or `Where.ANYWHERE` +
+* `Where.EVERYWHERE` or `Where.ANYWHERE`
 +
 The property should be hidden everywhere.
 
-* `Where.ANYWHERE` +
+* `Where.ANYWHERE`
 +
 Synonym for everywhere.
 
-* `Where.OBJECT_FORMS` +
+* `Where.OBJECT_FORMS`
 +
 The property should be hidden when displayed within an object form.
 
-* `Where.PARENTED_TABLES` +
+* `Where.PARENTED_TABLES`
 +
 The property should be hidden when displayed as a column of a table within a parent object's collection.
 
-* `Where.STANDALONE_TABLES` +
+* `Where.STANDALONE_TABLES`
 +
 The property should be hidden when displayed as a column of a table showing a standalone list of objects, for example as returned by a repository query.
 
-* `Where.ALL_TABLES` +
+* `Where.ALL_TABLES`
 +
-The property should be hidden when displayed as a column of a table, either an object's * collection or a standalone list. This combines `PARENTED_TABLES` and `STANDALONE_TABLES`.
+The property should be hidden when displayed as a column of a table, either an object's * collection or a standalone list.
+This combines `PARENTED_TABLES` and `STANDALONE_TABLES`.
 
 * `Where.NOWHERE` +
 +

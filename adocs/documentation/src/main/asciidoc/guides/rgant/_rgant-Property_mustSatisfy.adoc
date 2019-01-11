@@ -37,10 +37,12 @@ public class Customer {
     ...
 }
 ----
-<1> the `AbstractSpecification` class conveniently handles type-safety and dealing with null values.  The applib also provides `SpecificationAnd` and `SpecificationOr` to allow specifications to be combined "algebraically".
+<1> the `AbstractSpecification` class conveniently handles type-safety and dealing with null values.
+The applib also provides `SpecificationAnd` and `SpecificationOr` to allow specifications to be combined "algebraically".
 
 
-It is also possible to provide translatable reasons.  Rather than implement `Specification`, instead implement `Specification2` which defines the API:
+It is also possible to provide translatable reasons.
+Rather than implement `Specification`, instead implement `Specification2` which defines the API:
 
 [source,java]
 ----

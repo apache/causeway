@@ -47,6 +47,7 @@ import org.apache.isis.core.metamodel.facets.collections.collection.modify.Colle
 import org.apache.isis.core.metamodel.facets.collections.collection.modify.CollectionDomainEventFacetForCollectionAnnotation;
 import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.DisabledFacetOnCollectionDerivedFromImmutable;
 import org.apache.isis.core.metamodel.facets.collections.disabled.fromimmutable.DisabledFacetOnCollectionDerivedFromImmutableFactory;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberDerivedFromType;
 import org.apache.isis.core.metamodel.facets.members.describedas.annotprop.DescribedAsFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
@@ -55,11 +56,17 @@ import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.CollectionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.CopyImmutableFacetOntoMembersFactory;
+import org.apache.isis.core.metamodel.facets.object.projection.ident.IconFacetDerivedFromProjectionFacet;
+import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
+import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacetFromProjectingProperty;
+import org.apache.isis.core.metamodel.facets.object.projection.ident.TitleFacetDerivedFromProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromRecreatableObject;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnCollectionDerivedFromViewModelFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.recreatable.DisabledFacetOnPropertyDerivedFromRecreatableObject;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
@@ -224,7 +231,31 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
             });
             deriveCollectionDomainEventForMixins(objectSpecification, collection);
         });
+        deriveProjectionFacets(objectSpecification);
+    }
 
+    private void deriveProjectionFacets(final ObjectSpecification objectSpecification) {
+        final ProjectionFacet projectionFacet = ProjectionFacetFromProjectingProperty.create(objectSpecification);
+        if (projectionFacet == null) {
+            return;
+        }
+        FacetUtil.addFacet(projectionFacet);
+        final TitleFacet titleFacet = objectSpecification.getFacet(TitleFacet.class);
+        if(canOverwrite(titleFacet)) {
+            FacetUtil.addFacet(new TitleFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+        }
+        final IconFacet iconFacet = objectSpecification.getFacet(IconFacet.class);
+        if(canOverwrite(iconFacet)) {
+            FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+        }
+        final CssClassFacet cssClassFacet = objectSpecification.getFacet(CssClassFacet.class);
+        if(canOverwrite(cssClassFacet)) {
+            FacetUtil.addFacet(new IconFacetDerivedFromProjectionFacet(projectionFacet, objectSpecification));
+        }
+    }
+
+    private static boolean canOverwrite(final Facet facet) {
+        return facet == null || facet.isNoop() || facet.isDerived();
     }
 
     private void tweakActionDomainEventForMixin(

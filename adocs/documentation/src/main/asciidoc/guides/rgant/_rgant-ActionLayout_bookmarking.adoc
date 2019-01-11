@@ -6,7 +6,8 @@
 
 
 
-The `bookmarking()` attribute indicates if an action (with safe xref:../rgant/rgant.adoc#_rgant-Action_semantics[action semantics]) is automatically bookmarked. This attribute is also supported for  xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_bookmarking[domain objects].
+The `bookmarking()` attribute indicates if an action (with safe xref:../rgant/rgant.adoc#_rgant-Action_semantics[action semantics]) is automatically bookmarked.
+
 
 
 
@@ -52,3 +53,8 @@ The enum value `AS_CHILD` has no meaning for actions; it relates only to bookmar
 == Alternatives
 
 As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+
+
+== See also
+
+This attribute is also supported for xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_bookmarking[domain objects].

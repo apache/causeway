@@ -352,6 +352,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     protected void postProcess() {
         postProcessor.postProcess(this);
+        updateFromFacetValues();
     }
 
 

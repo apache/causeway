@@ -46,6 +46,8 @@ import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacet;
+import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.command.CommandFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.fileaccept.FileAcceptFacetForPropertyAnnotation;
@@ -88,6 +90,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         processHidden(processMethodContext);
         processEditing(processMethodContext);
         processCommand(processMethodContext);
+        processProjecting(processMethodContext);
         processPublishing(processMethodContext);
         processMaxLength(processMethodContext);
         processMustSatisfy(processMethodContext);
@@ -239,6 +242,20 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(properties, getConfiguration(), holder, servicesInjector);
 
         FacetUtil.addFacet(commandFacet);
+    }
+
+    void processProjecting(final ProcessMethodContext processMethodContext) {
+
+        final Class<?> cls = processMethodContext.getCls();
+        final Method method = processMethodContext.getMethod();
+        final Property property = Annotations.getAnnotation(method, Property.class);
+        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
+
+        final ProjectingFacet projectingFacet = ProjectingFacetFromPropertyAnnotation
+                .create(property, facetHolder);
+
+        FacetUtil.addFacet(projectingFacet);
+
     }
 
     void processPublishing(final ProcessMethodContext processMethodContext) {

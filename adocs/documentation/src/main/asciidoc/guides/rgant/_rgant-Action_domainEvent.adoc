@@ -31,8 +31,7 @@ public class ToDoItem {
 
 The `domainEvent()` attribute allows a custom subclass to be emitted allowing more precise subscriptions (to those
 subclasses) to be defined instead.
-This attribute is also supported for
-xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[collections] and xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[properties].
+
 
 For example:
 
@@ -174,6 +173,12 @@ Normally events are only raised for interactions through the UI.
 However, events can be raised programmatically either by calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] API directly, or by emulating the UI by wrapping the target object using the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] domain service.
 
 
+== See also
+
+This attribute is also supported for:
+
+* xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[collections] and
+* xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[properties].
 
 
 

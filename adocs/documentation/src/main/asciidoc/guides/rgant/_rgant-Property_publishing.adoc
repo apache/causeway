@@ -8,18 +8,17 @@
 
 
 The `publishing()` attribute determines whether and how a property edit is published via the registered implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
-This attribute is also supported for xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[domain objects], where it controls whether changed objects are published as events, and for xref:../rgant/rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`], where it controls whether property edits are published as events.
 
 A common use case is to notify external "downstream" systems of changes in the state of the Apache Isis application.
 The default value for the attribute is `AS_CONFIGURED`, meaning that the
 xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.publish.properties` is used to
 determine the whether the property is published:
 
-* `all` +
+* `all`
 +
 all property edits are published
 
-* `none` +
+* `none`
 +
 no property edits are published
 
@@ -41,3 +40,15 @@ public class Order {
 ----
 <1> because set to enabled, will be published irrespective of the configured value.
 
+
+== See also
+
+This attribute can also be specified for:
+
+* xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[domain objects]
++
+where it controls whether changed objects are published as events, and for
+
+* xref:../rgant/rgant.adoc#_rgant-Action_publishing[actions]
++
+where it controls whether action invocations are published as events.
