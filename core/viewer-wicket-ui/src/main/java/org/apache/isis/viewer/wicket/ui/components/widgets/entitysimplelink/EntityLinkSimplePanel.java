@@ -41,7 +41,7 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
 
     private static final String ID_ENTITY_ICON_AND_TITLE = "entityIconAndTitle";
     private static final String ID_ENTITY_TITLE_NULL = "entityTitleNull";
-    
+
     public EntityLinkSimplePanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         setType(ObjectAdapter.class);
@@ -97,10 +97,6 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
     @Override
     public void validate() {
         // no-op since immutable
-    }
-    
-    private ObjectAdapter getPendingElseCurrentAdapter() {
-        return getEntityModel().getPendingElseCurrentAdapter();
     }
 
 }

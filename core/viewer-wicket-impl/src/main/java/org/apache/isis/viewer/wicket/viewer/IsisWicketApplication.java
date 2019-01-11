@@ -454,7 +454,7 @@ public class IsisWicketApplication
             bootswatchTheme = BootswatchTheme.valueOf(themeName);
         } catch(Exception ex) {
             bootswatchTheme = BOOTSWATCH_THEME_DEFAULT;
-            LOG.warn("Did not recognise configured bootswatch theme '{}', defaulting to '{}'", bootswatchTheme);
+            LOG.warn("Did not recognise configured bootswatch theme '{}', defaulting to '{}'", themeName, bootswatchTheme);
 
         }
         IBootstrapSettings settings = Bootstrap.getSettings();
