@@ -40,12 +40,14 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 )
 public class SimpleObjects {
 
-    @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
-    public List<SimpleObject> listAll() {
-        return repositoryService.allInstances(SimpleObject.class);
+    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {}
+    @Action(domainEvent = CreateDomainEvent.class)
+    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
+    public SimpleObject create(
+            @ParameterLayout(named="Name")
+            final String name) {
+        return repositoryService.persist(new SimpleObject(name));
     }
-
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, promptStyle = PromptStyle.DIALOG_SIDEBAR)
@@ -72,21 +74,18 @@ public class SimpleObjects {
                 .executeUnique();
     }
 
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
+    public List<SimpleObject> listAll() {
+        return repositoryService.allInstances(SimpleObject.class);
+    }
+
     public void ping() {
         TypesafeQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
         final QSimpleObject candidate = QSimpleObject.candidate();
         q.range(0,2);
         q.orderBy(candidate.name.asc());
         q.executeList();
-    }
-
-    public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {}
-    @Action(domainEvent = CreateDomainEvent.class)
-    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    public SimpleObject create(
-            @ParameterLayout(named="Name")
-            final String name) {
-        return repositoryService.persist(new SimpleObject(name));
     }
 
     @javax.inject.Inject

@@ -25,7 +25,6 @@ import org.datanucleus.query.typesafe.TypesafeQuery;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -66,7 +65,6 @@ public class HelloWorldObjects {
     }
 
     @Action(semantics = SemanticsOf.SAFE, restrictTo = RestrictTo.PROTOTYPING)
-    @MemberOrder(sequence = "3")
     public List<HelloWorldObject> listAll() {
         return repositoryService.allInstances(HelloWorldObject.class);
     }
