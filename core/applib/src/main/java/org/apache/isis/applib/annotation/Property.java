@@ -75,6 +75,21 @@ public @interface Property {
      */
     Where hidden() default Where.NOWHERE;
 
+    /**
+     * If set to {@link Projecting#PROJECTED projected}, then indicates that the owner of this property is a view model
+     * which is a projection of some other entity, and that the property holds a reference to that
+     * &quot;underlying&quot;.
+     *
+     * <p>
+     *     This is used to automatically redirect any bookmarks to the view model (projection) to instead be directed
+     *     at the underlying entity.
+     * </p>
+     *
+     * <p>
+     *     Only one such property should be marked as being a projection with a view model.
+     * </p>
+     */
+    Projecting projecting() default Projecting.NOT_SPECIFIED;
 
 
 
