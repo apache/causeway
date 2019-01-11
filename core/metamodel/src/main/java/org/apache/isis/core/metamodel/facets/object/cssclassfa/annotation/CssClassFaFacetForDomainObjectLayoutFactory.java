@@ -36,7 +36,7 @@ public class CssClassFaFacetForDomainObjectLayoutFactory extends CssClassFaFacet
         return cssClassFa != null ? new CssClassFaFacetForDomainObjectLayoutAnnotation(cssClassFa, position, holder) : null;
     }
 
-    private CssClassFaFacetForDomainObjectLayoutFactory(final String value, final CssClassFaPosition position,
+    private CssClassFaFacetForDomainObjectLayoutFactory(final String value, final CssClassFaPosition position, //NOSONAR false positive: method is used in create()
             final FacetHolder holder) {
         super(value, position, holder);
     }

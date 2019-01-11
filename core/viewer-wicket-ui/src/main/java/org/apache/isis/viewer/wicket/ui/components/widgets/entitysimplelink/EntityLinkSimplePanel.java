@@ -99,8 +99,4 @@ public class EntityLinkSimplePanel extends FormComponentPanelAbstract<ObjectAdap
         // no-op since immutable
     }
 
-    private ObjectAdapter getPendingElseCurrentAdapter() {
-        return getEntityModel().getPendingElseCurrentAdapter();
-    }
-
 }

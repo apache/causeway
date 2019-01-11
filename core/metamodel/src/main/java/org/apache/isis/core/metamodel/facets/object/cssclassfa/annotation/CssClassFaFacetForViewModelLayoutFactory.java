@@ -38,7 +38,7 @@ public class CssClassFaFacetForViewModelLayoutFactory extends CssClassFaFacetAbs
                 holder) : null;
     }
 
-    private CssClassFaFacetForViewModelLayoutFactory(final String value, final CssClassFaPosition position,
+    private CssClassFaFacetForViewModelLayoutFactory(final String value, final CssClassFaPosition position, //NOSONAR false positive; method is used in create()
             final FacetHolder holder) {
         super(value, position, holder);
     }

@@ -69,11 +69,21 @@ public class SnapshotServer {
         fileName = prop.getProperty(prefix + "filename", "log-snapshot-");
         extension = prop.getProperty(prefix + "extension", "txt");
 
-        try( final ServerSocket server = new ServerSocket(port) ) {
+        try (ServerSocket server = new ServerSocket(port)) {
+            writeSnapshot(directoryPath, fileName, extension, server);
+        } catch (final IOException e) {
+            LOG4J.error("failed to start server", e);
+        }
+    }
 
-            while (true) {
-                try {
-                    final Socket s = server.accept();
+    private static void writeSnapshot(
+            final String directoryPath,
+            final String fileName,
+            final String extension,
+            final ServerSocket server) {
+        while (true) {
+            try {
+                final Socket s = server.accept();
 
                     LOG4J.info("receiving log from " + s.getInetAddress().getHostName());
 
@@ -88,16 +98,10 @@ public class SnapshotServer {
                     s.close();
 
                     in.close();
+                    return;
                 } catch (final IOException e) {
-                    LOG4J.error("failed to log", e);
-                }
+                LOG4J.error("failed to log", e);
             }
-
-        } catch (final IOException e) {
-            LOG4J.error("failed to start server", e);
-            return;
         }
-
-
     }
 }

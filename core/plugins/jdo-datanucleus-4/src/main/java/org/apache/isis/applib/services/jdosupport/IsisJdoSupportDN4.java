@@ -118,8 +118,9 @@ public class IsisJdoSupportDN4 implements IsisJdoSupport_v3_1 {
     private static List<Map<String, Object>> executeSql(final java.sql.Connection connection, final String sql) {
         final List<Map<String,Object>> rows = _Lists.newArrayList();
 
-        try(Statement statement = connection.createStatement()) {
-            final ResultSet rs = statement.executeQuery(sql);
+        try(Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            ) {
             final ResultSetMetaData rsmd = rs.getMetaData();
             while(rs.next()) {
                 final Map<String,Object> row = _Maps.newLinkedHashMap();
