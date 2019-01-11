@@ -20,6 +20,7 @@ package domainapp.modules.simple.dom.impl;
 
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.google.common.collect.ComparisonChain;
 
@@ -37,6 +38,7 @@ import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
+import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
 import lombok.AccessLevel;
 import static org.apache.isis.applib.annotation.CommandReification.ENABLED;
@@ -51,6 +53,7 @@ import static org.apache.isis.applib.annotation.SemanticsOf.NON_IDEMPOTENT_ARE_Y
 @DomainObjectLayout()  // causes UI events to be triggered
 @lombok.Getter @lombok.Setter
 @lombok.RequiredArgsConstructor
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 public class SimpleObject implements Comparable<SimpleObject> {
 
     @javax.jdo.annotations.Column(allowsNull = "false", length = 40)
