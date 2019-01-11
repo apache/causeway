@@ -22,17 +22,19 @@ package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 import java.util.concurrent.Callable;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
@@ -43,6 +45,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.model.models.ObjectAdapterModel;
+import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
@@ -153,47 +156,29 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     private AbstractLink createDynamicallyVisibleLink() {
 
         final ObjectAdapterModel entityModel = getModel();
-        return new AjaxLink<Void>(ID_ENTITY_LINK) {
-            @Override
-            public void onClick(final AjaxRequestTarget ajaxRequestTarget) {
 
-                final ObjectAdapter targetAdapter = entityModel.getObject();
-                final ObjectSpecification objectSpecification = targetAdapter.getSpecification();
-                final ProjectionFacet projectionFacet = objectSpecification.getFacet(ProjectionFacet.class);
+        final ObjectAdapter targetAdapter = entityModel.getObject();
+        final ObjectSpecification objectSpecification = targetAdapter.getSpecification();
+        final ProjectionFacet projectionFacet = objectSpecification.getFacet(ProjectionFacet.class);
 
-                final ObjectAdapter redirectToAdapter =
-                        projectionFacet != null ? projectionFacet.projected(targetAdapter) : targetAdapter;
+        final ObjectAdapter redirectToAdapter =
+                projectionFacet != null ? projectionFacet.projected(targetAdapter) : targetAdapter;
 
-                final EntityPage entityPage =
+        final EntityModel redirectToModel = new EntityModel(redirectToAdapter);
+        final PageParameters pageParameters = redirectToModel.getPageParametersWithoutUiHints();
 
-                        // disabling concurrency checking after the layout XML (grid) feature
-                        // was throwing an exception when rebuild grid after invoking action
-                        // not certain why that would be the case, but think it should be
-                        // safe to simply disable while recreating the page to re-render back to user.
-                        AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(
-                                new Callable<EntityPage>() {
-                                    @Override public EntityPage call() throws Exception {
-                                        return new EntityPage(redirectToAdapter, null);
-                                    }
-                                }
-                        );
+        final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
 
-                getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager().flushTransaction();
-
-                // "redirect-after-post"
-                final RequestCycle requestCycle = RequestCycle.get();
-                requestCycle.setResponsePage(entityPage);
-
-            }
-
+        final BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>(ID_ENTITY_LINK, pageClass, pageParameters) {
             @Override
             public boolean isVisible() {
                 final ObjectAdapter targetAdapter = entityModel.getObject();
                 return targetAdapter != null;
             }
-
         };
-        }
+
+        return link;
+    }
 
     private Label newLabel(final String id, final String title) {
         return new Label(id, title);
