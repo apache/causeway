@@ -15,11 +15,11 @@ The default value for the attribute is `AS_CONFIGURED`, meaning that the
 xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.publish.properties` is used to
 determine the whether the property is published:
 
-* `all` +
+* `all`
 +
 all property edits are published
 
-* `none` +
+* `none`
 +
 no property edits are published
 

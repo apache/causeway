@@ -6,9 +6,8 @@
 
 
 
-The `fileAccept()` attribute applies only to xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
-or xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`] parameters, indicating the type of file to accept when
-uploading a new value.   The attribute is also supported on xref:../rgant/rgant.adoc#_rgant-Parameter_fileAccept[parameters].
+The `fileAccept()` attribute applies only to xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`] or xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`] parameters, indicating the type of file to accept when uploading a new value.
+The attribute is also supported on xref:../rgant/rgant.adoc#_rgant-Parameter_fileAccept[parameters].
 
 
 For example:
