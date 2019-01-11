@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class TitleFacetDerivedFromProjectionFacet extends TitleFacetAbstract {
 
@@ -36,9 +37,9 @@ public class TitleFacetDerivedFromProjectionFacet extends TitleFacetAbstract {
     }
 
     @Override
-    public String title(final ObjectAdapter targetAdapter) {
+    public String title(final ManagedObject targetAdapter) {
         final ObjectAdapter projectedAdapter = projectionFacet.projected(targetAdapter);
-        return projectedAdapter.titleString(targetAdapter);
+        return projectedAdapter.titleString(null);
     }
 
     @Override

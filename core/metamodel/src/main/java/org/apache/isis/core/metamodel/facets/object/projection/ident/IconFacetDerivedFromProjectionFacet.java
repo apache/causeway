@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class IconFacetDerivedFromProjectionFacet extends IconFacetAbstract {
 
@@ -36,9 +37,9 @@ public class IconFacetDerivedFromProjectionFacet extends IconFacetAbstract {
     }
 
     @Override
-    public String iconName(final ObjectAdapter targetAdapter) {
+    public String iconName(final ManagedObject targetAdapter) {
         final ObjectAdapter projectedAdapter = projectionFacet.projected(targetAdapter);
-        return projectedAdapter.getIconName();
+        return projectedAdapter.getSpecification().getIconName(projectedAdapter);
     }
 
     @Override

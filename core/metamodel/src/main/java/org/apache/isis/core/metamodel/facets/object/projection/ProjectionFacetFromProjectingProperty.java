@@ -19,17 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.object.projection;
 
-import java.util.List;
-
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-
 import org.apache.isis.applib.annotation.Projecting;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -50,25 +45,22 @@ public class ProjectionFacetFromProjectingProperty extends ProjectionFacetAbstra
     }
 
     public static ProjectionFacet create(final ObjectSpecification objectSpecification) {
-        final List<OneToOneAssociation> properties = objectSpecification.getProperties(Contributed.EXCLUDED);
-        final Optional<OneToOneAssociation> first = FluentIterable.from(properties)
-                .filter(new Predicate<OneToOneAssociation>() {
-                    @Override public boolean apply(final OneToOneAssociation oneToOneAssociation) {
-                        final ProjectingFacet projectingFacet = oneToOneAssociation
+        return objectSpecification.streamProperties(Contributed.EXCLUDED)
+                .filter(otoa -> {
+                        final ProjectingFacet projectingFacet = otoa
                                 .getFacet(ProjectingFacet.class);
                         return projectingFacet != null && !projectingFacet.isNoop()
                                 && projectingFacet.value() == Projecting.PROJECTED;
-                    }
                 })
-                .first();
-        if(first.isPresent()) {
-            return new ProjectionFacetFromProjectingProperty(first.get(), objectSpecification);
-        }
-        return null;
+                .map(otoa -> new ProjectionFacetFromProjectingProperty(otoa, objectSpecification))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
-    public ObjectAdapter projected(final ObjectAdapter owningAdapter) {
-        return projectingProperty.get(owningAdapter);
+    public ObjectAdapter projected(final ManagedObject owningAdapter) {
+        return owningAdapter instanceof ObjectAdapter
+                ? projectingProperty.get((ObjectAdapter) owningAdapter)
+                : null ;
     }
 }

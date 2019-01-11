@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract2;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class CssClassFacetDerivedFromProjectionFacet extends CssClassFacetAbstract2 {
 
@@ -37,7 +38,7 @@ public class CssClassFacetDerivedFromProjectionFacet extends CssClassFacetAbstra
     }
 
     @Override
-    public String cssClass(final ObjectAdapter targetAdapter) {
+    public String cssClass(final ManagedObject targetAdapter) {
         final ObjectAdapter projectedAdapter = projectionFacet.projected(targetAdapter);
         final CssClassFacet cssClassFacet = projectedAdapter.getSpecification().getFacet(CssClassFacet.class);
         return cssClassFacet != null ? cssClassFacet.cssClass(projectedAdapter) : null;
