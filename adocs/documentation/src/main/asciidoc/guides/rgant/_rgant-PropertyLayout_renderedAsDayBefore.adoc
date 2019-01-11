@@ -6,9 +6,12 @@
 
 
 
-The `renderedAsDayBefore()` attribute applies only to date properties whereby the date will be rendered as the day before the value actually held in the domain object.  It is ignored for properties of other types. This attribute is also supported for xref:../rgant/rgant.adoc#_rgant-ParameterLayout_renderedAsDayBefore[parameters].
+The `renderedAsDayBefore()` attribute applies only to date properties whereby the date will be rendered as the day before the value actually held in the domain object.
+It is ignored for properties of other types.
 
-This behaviour might at first glance appear odd, but the rationale is to support the use case of a sequence of instances that represent adjacent intervals of time.  In such cases there would typically be `startDate` and `endDate` properties, eg for all of Q2.  Storing this as a half-closed interval -- eg `[1-Apr-2015, 1-July-2015)` -- can substantially simplify internal algorithms; the `endDate` of one interval will correspond to the `startDate` of the next.
+This behaviour might at first glance appear odd, but the rationale is to support the use case of a sequence of instances that represent adjacent intervals of time.
+In such cases there would typically be `startDate` and `endDate` properties, eg for all of Q2.
+Storing this as a half-closed interval -- eg `[1-Apr-2015, 1-July-2015)` -- can substantially simplify internal algorithms; the `endDate` of one interval will correspond to the `startDate` of the next.
 
 However, from an end-user perspective the requirement may be to render the interval as a fully closed interval; eg the end date should be shown as `30-Jun-2015`.
 
@@ -35,3 +38,9 @@ public class Tenancy {
 == Alternatives
 
 As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+
+
+== See also
+
+This attribute is also supported for xref:../rgant/rgant.adoc#_rgant-ParameterLayout_renderedAsDayBefore[parameters].
+

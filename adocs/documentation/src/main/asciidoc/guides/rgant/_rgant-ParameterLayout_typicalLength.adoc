@@ -6,9 +6,12 @@
 
 
 
-The `typicalLength()` attribute indicates the typical length of a string parameter.  It is ignored for parameters of other types.  The attribute is also supported for xref:../rgant/rgant.adoc#_rgant-PropertyLayout_typicalLength[properties].
+The `typicalLength()` attribute indicates the typical length of a string parameter.
+It is ignored for parameters of other types.
+The attribute is also supported for xref:../rgant/rgant.adoc#_rgant-PropertyLayout_typicalLength[properties].
 
-The information is intended as a hint to the UI to determine the space that should be given to render a particular string parameter.  That said, note that the xref:../ugvw/ugvw.adoc#[Wicket viewer] uses the maximum space available for all fields, so in effect ignores this attribute.
+The information is intended as a hint to the UI to determine the space that should be given to render a particular string parameter.
+That said, note that the xref:../ugvw/ugvw.adoc#[Wicket viewer] uses the maximum space available for all fields, so in effect ignores this attribute.
 
 For example:
 

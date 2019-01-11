@@ -34,7 +34,8 @@ The table below summarizes the annotation's attributes.
 (`LEFT`)
 |in forms, the positioning of the label relative to the property value. +
 
-Default is `LEFT`, unless xref:../rgant/rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine`] in which case `TOP`.  The value `RIGHT` is only supported for boolean parameters.
+Default is `LEFT`, unless xref:../rgant/rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine`] in which case `TOP`.
+The value `RIGHT` is only supported for boolean parameters.
 
 
 |xref:../rgant/rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine()`]
@@ -48,7 +49,8 @@ If set > 1, then then xref:../rgant/rgant.adoc#_rgant-ParameterLayout_labelPosit
 |String
 |the name of this parameter. +
 
-For Java 7 this is generally required. For Java 8, the name can often be inferred from the code so this attribute allows the name to be overridden.  A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+For Java 7 this is generally required. For Java 8, the name can often be inferred from the code so this attribute allows the name to be overridden.
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 
 |`namedEscaped()`

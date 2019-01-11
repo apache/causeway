@@ -39,6 +39,7 @@ The framework also provides a separate, powerful mechanism for xref:../ugbtb/ugb
 == See also
 
 This attribute can also be specified for:
+
 * xref:../rgant/rgant.adoc#_rgant-CollectionLayout_named[collections]
 * xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[properties]
 * xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[parameters]

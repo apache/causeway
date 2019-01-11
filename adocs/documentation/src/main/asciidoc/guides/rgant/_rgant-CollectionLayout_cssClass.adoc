@@ -32,4 +32,10 @@ As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_u
 == See also
 
 
-This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[domain objects], xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClass[view models], xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[actions], xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[properties] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[parameters].
+This attribute can also be applied to:
+
+* xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClass[domain objects]
+* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClass[view models]
+* xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[actions]
+* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[properties]
+* xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[parameters].
