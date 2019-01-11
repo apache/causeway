@@ -110,6 +110,12 @@ In many/most cases you should however use xref:../rgant/rgant.adoc#_rgant-Column
 
 
 
+|xref:../rgant/rgant.adoc#_rgant-Property_publishing[`publishing()`]
+|
+|determines whether the editing of a property should be published.
+
+
+
 
 |xref:../rgant/rgant.adoc#_rgant-Property_regexPattern[`regexPattern()`]
 |regular expression
@@ -172,6 +178,7 @@ include::_rgant-Property_mustSatisfy.adoc[leveloffset=+1]
 include::_rgant-Property_notPersisted.adoc[leveloffset=+1]
 include::_rgant-Property_optionality.adoc[leveloffset=+1]
 include::_rgant-Property_projecting.adoc[leveloffset=+1]
+include::_rgant-Property_publishing.adoc[leveloffset=+1]
 include::_rgant-Property_regexPattern.adoc[leveloffset=+1]
 
 
