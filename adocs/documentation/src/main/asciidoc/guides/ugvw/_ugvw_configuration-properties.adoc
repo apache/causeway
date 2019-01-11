@@ -549,11 +549,18 @@ Note that `inline_as_if_edit` does not make sense for a configuration property d
 `dialogMode`
 | `sidebar`,`modal` +
 (`_sidebar_`)
-| Whether action prompts with a style of `DIALOG` - as in, `@ActionLayout(promptStyle="DIALOG")` - should be rendered using a sidebar or alternatively in a modal dialog box.
+| Whether an action on a domain object (entity or view model) which prompts with a style of `DIALOG` - as in, `@ActionLayout(promptStyle="DIALOG")` - should be rendered using a sidebar or alternatively in a modal dialog box.
 
 See the discussion on the xref:../ugvw/ugvw.adoc#_ugvw_features_sidebar-vs-modal-dialogs[sidebar vs modal dialogs] feature for further details.
 
-p
+|`isis.viewer.wicket.` +
+`dialogModeForMenu`
+| `sidebar`,`modal` +
+(`_sidebar_`)
+| Whether an action for a domain service should be rendered using a sidebar or alternatively in a modal dialog box.
+
+See the discussion on the xref:../ugvw/ugvw.adoc#_ugvw_features_sidebar-vs-modal-dialogs[sidebar vs modal dialogs] feature for further details.
+
 
 
 |===

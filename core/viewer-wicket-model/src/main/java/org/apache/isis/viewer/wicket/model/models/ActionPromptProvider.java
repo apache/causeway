@@ -21,6 +21,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 
 public interface ActionPromptProvider {
 
@@ -44,6 +45,8 @@ public interface ActionPromptProvider {
         }
     }
 
-    public ActionPrompt getActionPrompt(final PromptStyle promptStyle);
+    public ActionPrompt getActionPrompt(
+            final PromptStyle promptStyle,
+            final MetaModelService.Sort sort);
     void closePrompt(final AjaxRequestTarget target);
 }

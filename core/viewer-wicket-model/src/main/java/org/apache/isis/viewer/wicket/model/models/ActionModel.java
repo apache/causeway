@@ -667,6 +667,14 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         if(objectActionOwner.isService()) {
             // tried to move this test into PromptStyleFacetFallback,
             // however it's not that easy to lookup the owning type
+            final PromptStyleFacet facet = getFacet(PromptStyleFacet.class);
+            if (facet != null) {
+                final PromptStyle promptStyle = facet.value();
+                if (promptStyle.isDialog()) {
+                    // could be specified explicitly.
+                    return promptStyle;
+                }
+            }
             return PromptStyle.DIALOG;
         }
         if(objectAction.getParameterCount() == 0) {

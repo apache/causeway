@@ -40,6 +40,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -48,6 +49,7 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -72,6 +74,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+
 
 public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> implements ScalarModelSubscriber2 {
 
@@ -722,8 +725,13 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 @Override
                 protected void onEvent(AjaxRequestTarget target) {
 
+                    final ObjectSpecification specification = scalarModel.getObject().getSpecification();
+                    final MetaModelService metaModelService = getIsisSessionFactory().getServicesInjector()
+                            .lookupServiceElseFail(MetaModelService.class);
+                    final MetaModelService.Sort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
+
                     final ActionPrompt prompt = ActionPromptProvider.Util
-                            .getFrom(ScalarPanelAbstract2.this).getActionPrompt(promptStyle);
+                            .getFrom(ScalarPanelAbstract2.this).getActionPrompt(promptStyle, sort);
 
                     PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(prompt.getTitleId(),
                             ScalarPanelAbstract2.this.scalarModel);

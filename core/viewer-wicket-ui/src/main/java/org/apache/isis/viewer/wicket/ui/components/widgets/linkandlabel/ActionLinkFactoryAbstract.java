@@ -34,9 +34,11 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -164,7 +166,12 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
         if(inlinePromptContext == null || promptStyle.isDialog()) {
             final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(actionLink.getPage());
-            final ActionPrompt prompt = promptProvider.getActionPrompt(promptStyle);
+            final ObjectSpecification specification = actionModel.getTargetAdapter().getSpecification();
+
+            final MetaModelService metaModelService = getIsisSessionFactory().getServicesInjector()
+                    .lookupServiceElseFail(MetaModelService.class);
+            final MetaModelService.Sort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
+            final ActionPrompt prompt = promptProvider.getActionPrompt(promptStyle, sort);
 
 
             //

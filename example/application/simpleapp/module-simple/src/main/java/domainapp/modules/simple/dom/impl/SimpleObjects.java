@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
@@ -39,11 +40,10 @@ import domainapp.modules.simple.dom.types.Name;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
-        objectType = "simple.SimpleObjectMenu",
+        objectType = "simple.SimpleObjects",
         repositoryFor = SimpleObject.class
 )
 @DomainServiceLayout(
-        named = "Simple Objects",
         menuOrder = "10"
 )
 public class SimpleObjects {
@@ -57,7 +57,7 @@ public class SimpleObjects {
 
 
     @Action(semantics = SemanticsOf.SAFE)
-    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
+    @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, promptStyle = PromptStyle.DIALOG_SIDEBAR)
     @MemberOrder(sequence = "2")
     public List<SimpleObject> findByName(
             @Name final String name
@@ -73,6 +73,7 @@ public class SimpleObjects {
 
     public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {}
     @Action(domainEvent = CreateDomainEvent.class)
+    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
     @MemberOrder(sequence = "3")
     public SimpleObject create(
             @Name final String name

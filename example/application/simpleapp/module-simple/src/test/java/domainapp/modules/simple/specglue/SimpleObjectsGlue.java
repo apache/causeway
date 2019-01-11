@@ -30,7 +30,7 @@ import domainapp.modules.simple.dom.impl.SimpleObjects;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class SimpleObjectMenuGlue extends CukeGlueAbstract2 {
+public class SimpleObjectsGlue extends CukeGlueAbstract2 {
 
     @Given("^there are.* (\\d+) simple objects$")
     public void there_are_N_simple_objects(int n) throws Throwable {
