@@ -22,13 +22,13 @@
         <mb3:menu>
             <mb3:named>Simple Objects</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="simple.SimpleObjectMenu" id="create">
+                <mb3:serviceAction objectType="simple.SimpleObjects" id="create">
                     <cpt:named>Create</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="simple.SimpleObjectMenu" id="findByName">
+                <mb3:serviceAction objectType="simple.SimpleObjects" id="findByName">
                     <cpt:named>Find By Name</cpt:named>
                 </mb3:serviceAction>
-                <mb3:serviceAction objectType="simple.SimpleObjectMenu" id="listAll">
+                <mb3:serviceAction objectType="simple.SimpleObjects" id="listAll">
                     <cpt:named>List All</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>

@@ -36,9 +36,12 @@ import domainapp.modules.simple.fixture.SimpleObject_persona;
 import domainapp.modules.simple.integtests.SimpleModuleIntegTestAbstract;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleObjectMenu_IntegTest extends SimpleModuleIntegTestAbstract {
+public class SimpleObjects_IntegTest extends SimpleModuleIntegTestAbstract {
 
-    public static class ListAll extends SimpleObjectMenu_IntegTest {
+    @Inject
+    SimpleObjects menu;
+
+    public static class ListAll extends SimpleObjects_IntegTest {
 
         @Test
         public void happyCase() {
@@ -65,7 +68,7 @@ public class SimpleObjectMenu_IntegTest extends SimpleModuleIntegTestAbstract {
         }
     }
 
-    public static class Create extends SimpleObjectMenu_IntegTest {
+    public static class Create extends SimpleObjects_IntegTest {
 
         @Test
         public void happyCase() {
@@ -113,7 +116,5 @@ public class SimpleObjectMenu_IntegTest extends SimpleModuleIntegTestAbstract {
         }
     }
 
-    @Inject
-    SimpleObjects menu;
 
 }
