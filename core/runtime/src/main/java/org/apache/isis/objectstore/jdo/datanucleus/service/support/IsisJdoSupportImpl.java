@@ -117,8 +117,9 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
     private static List<Map<String, Object>> executeSql(final java.sql.Connection connection, final String sql) {
         final List<Map<String,Object>> rows = Lists.newArrayList();
 
-        try(Statement statement = connection.createStatement()) {
-            final ResultSet rs = statement.executeQuery(sql);
+        try(Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            ) {
             final ResultSetMetaData rsmd = rs.getMetaData();
             while(rs.next()) {
                 final Map<String,Object> row = Maps.newLinkedHashMap();
