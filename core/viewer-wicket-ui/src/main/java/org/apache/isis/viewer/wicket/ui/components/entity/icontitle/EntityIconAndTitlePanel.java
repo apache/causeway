@@ -19,18 +19,13 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
-import java.util.concurrent.Callable;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 
@@ -38,7 +33,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -49,7 +43,6 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionLinkFactory;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
-import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -158,13 +151,19 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         final ObjectAdapterModel entityModel = getModel();
 
         final ObjectAdapter targetAdapter = entityModel.getObject();
-        final ObjectSpecification objectSpecification = targetAdapter.getSpecification();
-        final ProjectionFacet projectionFacet = objectSpecification.getFacet(ProjectionFacet.class);
+        final ObjectAdapterModel redirectToModel;
+        
+        if(targetAdapter != null) {
+            final ProjectionFacet projectionFacet = entityModel.getTypeOfSpecification().getFacet(ProjectionFacet.class);
 
-        final ObjectAdapter redirectToAdapter =
-                projectionFacet != null ? projectionFacet.projected(targetAdapter) : targetAdapter;
+            final ObjectAdapter redirectToAdapter =
+                    projectionFacet != null ? projectionFacet.projected(targetAdapter) : targetAdapter;
 
-        final EntityModel redirectToModel = new EntityModel(redirectToAdapter);
+            redirectToModel = new EntityModel(redirectToAdapter);
+        } else {
+            redirectToModel = entityModel;
+        }
+
         final PageParameters pageParameters = redirectToModel.getPageParametersWithoutUiHints();
 
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
