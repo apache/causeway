@@ -64,6 +64,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.ConfigPropertyEnum;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -113,6 +114,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     
     public static final ConfigPropertyEnum<DialogMode> CONFIG_DIALOG_MODE =
             new ConfigPropertyEnum<>("isis.viewer.wicket.dialogMode", DialogMode.SIDEBAR);
+    public static final ConfigPropertyEnum<DialogMode> CONFIG_DIALOG_MODE_FOR_MENUS =
+            new ConfigPropertyEnum<>("isis.viewer.wicket.dialogModeForMenu", DialogMode.MODAL);
 
     /**
      * @see <a href="http://github.com/brandonaaron/livequery">livequery</a>
@@ -465,26 +468,34 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private ActionPromptModalWindow actionPromptModalWindow;
     private ActionPromptSidebar actionPromptSidebar;
 
-    public ActionPrompt getActionPrompt(final PromptStyle promptStyle) {
+    public ActionPrompt getActionPrompt(
+            final PromptStyle promptStyle,
+            final MetaModelService2.Sort sort) {
+
         switch (promptStyle) {
         case AS_CONFIGURED:
         case DIALOG:
         case INLINE:
         case INLINE_AS_IF_EDIT:
         default:
-            final DialogMode dialogMode = CONFIG_DIALOG_MODE.from(getConfiguration());
+            final ConfigPropertyEnum<DialogMode> configProp =
+                    sort == MetaModelService2.Sort.DOMAIN_SERVICE
+                            ? CONFIG_DIALOG_MODE_FOR_MENUS
+                            : CONFIG_DIALOG_MODE;
+            final DialogMode dialogMode = configProp.from(getConfiguration());
             switch (dialogMode) {
-                case SIDEBAR:
-                    return actionPromptSidebar;
-                case MODAL:
-                default:
-                    return actionPromptModalWindow;
+            case SIDEBAR:
+                return actionPromptSidebar;
+            case MODAL:
+            default:
+                return actionPromptModalWindow;
             }
         case DIALOG_SIDEBAR:
             return actionPromptSidebar;
         case DIALOG_MODAL:
             return actionPromptModalWindow;
         }
+
     }
 
     @Override

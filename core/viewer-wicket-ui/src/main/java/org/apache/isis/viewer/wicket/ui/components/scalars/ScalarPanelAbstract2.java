@@ -43,12 +43,14 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -701,8 +703,13 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             editProperty.add(new AjaxEventBehavior("click") {
                 protected void onEvent(AjaxRequestTarget target) {
 
+                    final ObjectSpecification specification = scalarModel.getObject().getSpecification();
+                    final MetaModelService2 metaModelService2 = getIsisSessionFactory().getServicesInjector()
+                            .lookupService(MetaModelService2.class);
+                    final MetaModelService2.Sort sort = metaModelService2.sortOf(specification.getCorrespondingClass());
+
                     final ActionPrompt prompt = ActionPromptProvider.Util
-                            .getFrom(ScalarPanelAbstract2.this).getActionPrompt(promptStyle);
+                            .getFrom(ScalarPanelAbstract2.this).getActionPrompt(promptStyle, sort);
 
                     PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(prompt.getTitleId(),
                             ScalarPanelAbstract2.this.scalarModel);

@@ -37,9 +37,11 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -168,7 +170,12 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
         if(inlinePromptContext == null || promptStyle.isDialog()) {
             final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(actionLink.getPage());
-            final ActionPrompt prompt = promptProvider.getActionPrompt(promptStyle);
+            final ObjectSpecification specification = actionModel.getTargetAdapter().getSpecification();
+
+            final MetaModelService2 metaModelService2 = getIsisSessionFactory().getServicesInjector()
+                    .lookupService(MetaModelService2.class);
+            final MetaModelService2.Sort sort = metaModelService2.sortOf(specification.getCorrespondingClass());
+            final ActionPrompt prompt = promptProvider.getActionPrompt(promptStyle, sort);
 
 
             //

@@ -95,6 +95,14 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
     }
 
     void processPromptStyle(final FacetHolder holder, final Properties properties, final PropertyLayout propertyLayout) {
+
+        if(holder instanceof FacetedMethod) {
+            final FacetedMethod facetedMethod = (FacetedMethod) holder;
+            if(facetedMethod.getFeatureType() != FeatureType.PROPERTY) {
+                return;
+            }
+        }
+
         PromptStyleFacet promptStyleFacet = PromptStyleFacetOnPropertyFromLayoutProperties
                 .create(properties, holder);
         if(promptStyleFacet == null) {

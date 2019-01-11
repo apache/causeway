@@ -10,9 +10,16 @@ For more on sidebar vs modal dialogs, see xref:../ugvw/ugvw.adoc#_ugvw_features_
 
 The prompt style is influenced by two xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties[configuration properties]:
 
-* if the `promptStyle()` attribute is set to `DIALOG`, then the `isis.viewer.wicket.dialogMode` configuration is used to determine whether to render using a modal dialog or a sidebar.
+* if the `promptStyle()` attribute is set to `DIALOG`, then a configuration property is used to determine whether to render using a modal dialog or a sidebar:
+
+** `isis.viewer.wicket.dialogMode` if the action is for a domain object (entity or view model)
 +
 If the configuration property is not set, then sidebar is used.
+
+** `isis.viewer.wicket.dialogModeForMenu` if the action is for a domain service
++
+If the configuration property is not set, then modal is used.
+
 
 * If the attribute is not set at all, then the `isis.viewer.wicket.promptStyle` configuration property is used to specify the preferred prompt style.
 +
