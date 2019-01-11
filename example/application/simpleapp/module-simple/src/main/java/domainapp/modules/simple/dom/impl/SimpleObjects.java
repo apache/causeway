@@ -26,11 +26,8 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
@@ -39,17 +36,12 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
-        objectType = "simple.SimpleObjects",
-        repositoryFor = SimpleObject.class
-)
-@DomainServiceLayout(
-        menuOrder = "10"
+        objectType = "simple.SimpleObjects"
 )
 public class SimpleObjects {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT)
-    @MemberOrder(sequence = "1")
     public List<SimpleObject> listAll() {
         return repositoryService.allInstances(SimpleObject.class);
     }
@@ -57,7 +49,6 @@ public class SimpleObjects {
 
     @Action(semantics = SemanticsOf.SAFE)
     @ActionLayout(bookmarking = BookmarkPolicy.AS_ROOT, promptStyle = PromptStyle.DIALOG_SIDEBAR)
-    @MemberOrder(sequence = "2")
     public List<SimpleObject> findByName(
             @ParameterLayout(named="Name")
             final String name
@@ -71,7 +62,6 @@ public class SimpleObjects {
                 .executeList();
     }
 
-    @Programmatic
     public SimpleObject findByNameExact(final String name) {
         TypesafeQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
         final QSimpleObject cand = QSimpleObject.candidate();
@@ -82,7 +72,6 @@ public class SimpleObjects {
                 .executeUnique();
     }
 
-    @Programmatic
     public void ping() {
         TypesafeQuery<SimpleObject> q = isisJdoSupport.newTypesafeQuery(SimpleObject.class);
         final QSimpleObject candidate = QSimpleObject.candidate();
@@ -94,7 +83,6 @@ public class SimpleObjects {
     public static class CreateDomainEvent extends ActionDomainEvent<SimpleObjects> {}
     @Action(domainEvent = CreateDomainEvent.class)
     @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
-    @MemberOrder(sequence = "3")
     public SimpleObject create(
             @ParameterLayout(named="Name")
             final String name) {

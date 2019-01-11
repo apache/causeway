@@ -23,11 +23,13 @@ import java.util.List;
 import org.datanucleus.query.typesafe.TypesafeQuery;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
@@ -40,7 +42,7 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 public class HelloWorldObjects {
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    @MemberOrder(sequence = "1")
+    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
     public HelloWorldObject create(
             @Parameter(maxLength = 40)
             @ParameterLayout(named = "Name")
@@ -49,7 +51,7 @@ public class HelloWorldObjects {
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @MemberOrder(sequence = "2")
+    @ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
     public List<HelloWorldObject> findByName(
             @Parameter(maxLength = 40)
             @ParameterLayout(named = "Name")
