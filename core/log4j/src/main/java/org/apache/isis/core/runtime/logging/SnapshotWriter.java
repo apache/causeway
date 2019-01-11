@@ -43,10 +43,10 @@ public class SnapshotWriter {
         final Date date = new Date();
         final File logFile = new File(dir, baseFileName + FORMAT.format(date) + "." + fileExtension);
 
-        final RandomAccessFile index = new RandomAccessFile(indexFile, "rw");
-        index.seek(index.length());
-        index.writeBytes(logFile.getName() + ": " + message + "\n");
-        index.close();
+        try (RandomAccessFile index = new RandomAccessFile(indexFile, "rw")) {
+            index.seek(index.length());
+            index.writeBytes(logFile.getName() + ": " + message + "\n");
+        }
 
         os = new PrintStream(new FileOutputStream(logFile));
     }

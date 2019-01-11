@@ -36,7 +36,7 @@ public class CssClassFaFacetForDomainObjectLayoutAnnotation extends CssClassFaFa
         return cssClassFa != null ? new CssClassFaFacetForDomainObjectLayoutAnnotation(cssClassFa, position, holder) : null;
     }
 
-    public CssClassFaFacetForDomainObjectLayoutAnnotation(final String value, final CssClassFaPosition position,
+    public CssClassFaFacetForDomainObjectLayoutAnnotation(final String value, final CssClassFaPosition position, //NOSONAR false positive: method IS used in create()/stream().map()
             final FacetHolder holder) {
         super(value, position, holder);
     }
