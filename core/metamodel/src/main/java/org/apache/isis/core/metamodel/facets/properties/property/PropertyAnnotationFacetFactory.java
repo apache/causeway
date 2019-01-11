@@ -57,8 +57,8 @@ import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.TitleFacetFormattedByRegex;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.properties.projection.ProjectionFacet;
-import org.apache.isis.core.metamodel.facets.properties.projection.ProjectionFacetFromPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacet;
+import org.apache.isis.core.metamodel.facets.properties.projection.ProjectingFacetFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.command.CommandFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForDisabledAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForPropertyAnnotation;
@@ -348,10 +348,10 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         final Property property = Annotations.getAnnotation(method, Property.class);
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
 
-        final ProjectionFacet projectionFacet = ProjectionFacetFromPropertyAnnotation
+        final ProjectingFacet projectingFacet = ProjectingFacetFromPropertyAnnotation
                 .create(property, facetHolder);
 
-        FacetUtil.addFacet(projectionFacet);
+        FacetUtil.addFacet(projectingFacet);
 
     }
 

@@ -19,12 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
-import java.util.List;
 import java.util.concurrent.Callable;
-
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -36,14 +31,12 @@ import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.ResourceReference;
 
-import org.apache.isis.applib.annotation.Projecting;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.isis.core.metamodel.facets.properties.projection.ProjectionFacet;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -163,27 +156,13 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         return new AjaxLink<Void>(ID_ENTITY_LINK) {
             @Override
             public void onClick(final AjaxRequestTarget ajaxRequestTarget) {
-                final ObjectAdapter targetAdapter = entityModel.getObject();
-                final List<OneToOneAssociation> properties = targetAdapter.getSpecification()
-                        .getProperties(Contributed.EXCLUDED);
-                final Optional<OneToOneAssociation> first = FluentIterable.from(properties)
-                        .filter(new Predicate<OneToOneAssociation>() {
-                            @Override public boolean apply(final OneToOneAssociation oneToOneAssociation) {
-                                final ProjectionFacet projectionFacet = oneToOneAssociation
-                                        .getFacet(ProjectionFacet.class);
-                                return projectionFacet != null && !projectionFacet.isNoop()
-                                        && projectionFacet.value() == Projecting.PROJECTED;
-                            }
-                        })
-                        .first();
 
-                final ObjectAdapter redirectToAdapter;
-                if(first.isPresent()) {
-                    final ObjectAdapter underlyingAdapter = first.get().get(targetAdapter);
-                    redirectToAdapter = underlyingAdapter != null ? underlyingAdapter : targetAdapter;
-                } else {
-                    redirectToAdapter = targetAdapter;
-                }
+                final ObjectAdapter targetAdapter = entityModel.getObject();
+                final ObjectSpecification objectSpecification = targetAdapter.getSpecification();
+                final ProjectionFacet projectionFacet = objectSpecification.getFacet(ProjectionFacet.class);
+
+                final ObjectAdapter redirectToAdapter =
+                        projectionFacet != null ? projectionFacet.projected(targetAdapter) : targetAdapter;
 
                 final EntityPage entityPage =
 

@@ -25,28 +25,28 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 
-public class ProjectionFacetFromPropertyAnnotation extends ProjectionFacetAbstract {
+public class ProjectingFacetFromPropertyAnnotation extends ProjectingFacetAbstract {
 
     public static Class<? extends Facet> type() {
-        return ProjectionFacet.class;
+        return ProjectingFacet.class;
     }
     private final Projecting projecting;
 
-    private ProjectionFacetFromPropertyAnnotation(
+    private ProjectingFacetFromPropertyAnnotation(
             final Projecting projecting,
             final FacetHolder holder) {
         super( holder);
         this.projecting = projecting;
     }
 
-    public static ProjectionFacet create(final Property property, final FacetedMethod facetHolder) {
+    public static ProjectingFacet create(final Property property, final FacetedMethod facetHolder) {
         if(property == null) {
             return null;
         }
         final Projecting projecting = property.projecting();
         switch (projecting) {
             case PROJECTED:
-                return new ProjectionFacetFromPropertyAnnotation(projecting, facetHolder);
+                return new ProjectingFacetFromPropertyAnnotation(projecting, facetHolder);
             case NOT_SPECIFIED:
             default:
                 return null;

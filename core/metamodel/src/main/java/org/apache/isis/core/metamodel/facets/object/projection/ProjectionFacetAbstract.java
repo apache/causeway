@@ -17,13 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.projection;
+package org.apache.isis.core.metamodel.facets.object.projection;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public abstract class ProjectionFacetAbstract extends FacetAbstract
+public abstract class ProjectionFacetAbstract
+        extends FacetAbstract
         implements ProjectionFacet {
 
     public static Class<? extends Facet> type() {

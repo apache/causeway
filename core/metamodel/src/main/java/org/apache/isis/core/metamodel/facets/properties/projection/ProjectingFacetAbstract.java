@@ -19,11 +19,23 @@
 
 package org.apache.isis.core.metamodel.facets.properties.projection;
 
-import org.apache.isis.applib.annotation.Projecting;
-import org.apache.isis.core.metamodel.facets.SingleValueFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
-public interface ProjectionFacet extends SingleValueFacet<Projecting> {
+public abstract class ProjectingFacetAbstract extends FacetAbstract
+        implements ProjectingFacet {
 
-    Projecting value();
+    public static Class<? extends Facet> type() {
+        return ProjectingFacet.class;
+    }
+
+    protected ProjectingFacetAbstract(final FacetHolder holder) {
+        this( holder, Derivation.NOT_DERIVED);
+    }
+
+    protected ProjectingFacetAbstract(final FacetHolder holder, final Derivation derivation) {
+        super( type(), holder, derivation);
+    }
 
 }
