@@ -46,7 +46,7 @@ public class Object_rebuildMetamodel {
     @ActionLayout(
             contributed = Contributed.AS_ACTION,
             cssClassFa = "fa-refresh",
-            position = ActionLayout.Position.PANEL_DROPDOWN
+            position = ActionLayout.Position.PANEL
     )
     @MemberOrder(name = "datanucleusIdLong", sequence = "800.1")
     public Object act() {
