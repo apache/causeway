@@ -36,7 +36,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>2.0.0-M2</revision>
+        <revision>2.0.0-M3-SNAPSHOT</revision>
         <isis.version>${revision}</isis.version>
 
         <!-- bumping to 1.18.4 causes a conflict with DataNucleus' annotation processor. -->
