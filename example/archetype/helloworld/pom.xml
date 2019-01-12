@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.isis.archetype</groupId>
   <artifactId>helloworld-archetype</artifactId>
-  <version>2.0.0-M1</version>
+  <version>2.0.0-M2</version>
   <packaging>maven-archetype</packaging>
   <name>helloworld-archetype</name>
   <build>
@@ -67,10 +67,10 @@
     <url>git@github.com:incodehq/incode-build.git/helloworld</url>
   </scm>
   <parent>
-    <groupId>org.apache</groupId>
-    <artifactId>apache</artifactId>
-    <version>18</version>
-    <relativePath/>
+    <groupId>org.apache.isis.core</groupId>
+    <artifactId>isis</artifactId>
+    <version>2.0.0-M2</version>
+    <relativePath>../../../core/pom.xml</relativePath>
   </parent>
   <properties>
     <archetype.test.skip>true</archetype.test.skip>

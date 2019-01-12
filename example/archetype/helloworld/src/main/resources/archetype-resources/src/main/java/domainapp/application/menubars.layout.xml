@@ -63,11 +63,11 @@
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
-                <mb3:serviceAction objectType="isisApplib.MetaModelServicesMenu" id="downloadMetaModel">
-                    <cpt:named>Download Meta Model (CSV)</cpt:named>
-                </mb3:serviceAction>
                 <mb3:serviceAction objectType="isisApplib.MetaModelServicesMenu" id="downloadMetaModelXml">
                     <cpt:named>Download Meta Model (XML)</cpt:named>
+                </mb3:serviceAction>
+                <mb3:serviceAction objectType="isisApplib.MetaModelServicesMenu" id="downloadMetaModelCsv">
+                    <cpt:named>Download Meta Model (CSV)</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>
             <mb3:section>
@@ -99,6 +99,9 @@
                 <mb3:serviceAction objectType="isisApplib.HsqlDbManagerMenu" id="hsqlDbManager">
                     <cpt:named>HSQL DB Manager</cpt:named>
                 </mb3:serviceAction>
+                <mb3:serviceAction objectType="isisApplib.H2ManagerMenu" id="openH2Console">
+                    <cpt:named>H2 Console</cpt:named>
+                </mb3:serviceAction>
             </mb3:section>
         </mb3:menu>
     </mb3:secondary>
@@ -106,7 +109,7 @@
         <mb3:menu>
             <mb3:named>Configuration Service Menu</mb3:named>
             <mb3:section>
-                <mb3:serviceAction objectType="isisApplib.ConfigurationServiceMenu" id="configuration">
+                <mb3:serviceAction objectType="isisApplib.ConfigurationMenu" id="configuration">
                     <cpt:named>Configuration</cpt:named>
                 </mb3:serviceAction>
             </mb3:section>

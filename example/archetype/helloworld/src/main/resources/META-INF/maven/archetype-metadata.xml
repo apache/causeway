@@ -30,6 +30,7 @@
     <fileSet encoding="UTF-8">
       <directory>src/main/java</directory>
       <includes>
+        <include>**/*.AppConfig</include>
         <include>**/*.png</include>
       </includes>
     </fileSet>
@@ -45,11 +46,7 @@
       <directory>src/main/webapp</directory>
       <includes>
         <include>**/*.css</include>
-        <include>**/*.ico</include>
-        <include>**/*.gif</include>
         <include>**/*.ini</include>
-        <include>**/*.md</include>
-        <include>**/*.ttf</include>
         <include>**/*.png</include>
         <include>**/*.js</include>
       </includes>
@@ -58,6 +55,12 @@
       <directory>src/test/java</directory>
       <includes>
         <include>**/*.java</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>.m2</directory>
+      <includes>
+        <include>**/*.xml</include>
       </includes>
     </fileSet>
     <fileSet filtered="true" encoding="UTF-8">

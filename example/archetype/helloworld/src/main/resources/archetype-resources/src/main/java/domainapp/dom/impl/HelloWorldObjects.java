@@ -26,15 +26,16 @@ import java.util.List;
 import javax.jdo.JDOQLTypedQuery;
 
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Parameter;
-import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport_v3_2;
 import org.apache.isis.applib.services.repository.RepositoryService;
+
+import domainapp.dom.types.Name;
 
 @DomainService(
         nature = NatureOfService.VIEW_MENU_ONLY,
@@ -43,20 +44,16 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 public class HelloWorldObjects {
 
     @Action(semantics = SemanticsOf.NON_IDEMPOTENT)
-    @MemberOrder(sequence = "1")
+    @ActionLayout(promptStyle = PromptStyle.DIALOG_MODAL)
     public HelloWorldObject create(
-            @Parameter(maxLength = 40)
-            @ParameterLayout(named = "Name")
-            final String name) {
+            @Name final String name) {
         return repositoryService.persist(new HelloWorldObject(name));
     }
 
     @Action(semantics = SemanticsOf.SAFE)
-    @MemberOrder(sequence = "2")
+    @ActionLayout(promptStyle = PromptStyle.DIALOG_SIDEBAR)
     public List<HelloWorldObject> findByName(
-            @Parameter(maxLength = 40)
-            @ParameterLayout(named = "Name")
-            final String name) {
+            @Name final String name) {
     	JDOQLTypedQuery<HelloWorldObject> q = isisJdoSupport.newTypesafeQuery(HelloWorldObject.class);
         final QHelloWorldObject cand = QHelloWorldObject.candidate();
         q = q.filter(
@@ -67,7 +64,6 @@ public class HelloWorldObjects {
     }
 
     @Action(semantics = SemanticsOf.SAFE, restrictTo = RestrictTo.PROTOTYPING)
-    @MemberOrder(sequence = "3")
     public List<HelloWorldObject> listAll() {
         return repositoryService.allInstances(HelloWorldObject.class);
     }
