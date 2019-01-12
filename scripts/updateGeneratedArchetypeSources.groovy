@@ -78,8 +78,6 @@ if (!options) {
 application_name=options.n
 isis_version=options.v
 
-println "isis_version = ${isis_version}"
-
 /////////////////////////////////////////////////////
 //
 // update archetype's own pom.xml's groupId
@@ -104,129 +102,25 @@ pomXml.appendNode {
 }
 pomXml.groupId='org.apache.isis.archetype'
 
-pomXml.appendNode(new XmlSlurper( false, false ).parseText( '''
-  <parent>
-    <groupId>org.apache</groupId>
-    <artifactId>apache</artifactId>
-    <version>18</version>
-    <relativePath />
-  </parent>
-''' )
-)
-
-pomXml.appendNode(new XmlSlurper( false, false ).parseText( '''
-<properties>
+def fragmentToAdd = new XmlSlurper( false, true ).parseText( '''<properties>
     <archetype.test.skip>true</archetype.test.skip>
-</properties>
-''' )
-)
-
-pomXml.appendNode(new XmlSlurper( false, false ).parseText( '''
-  <profiles>
-    <profile>
-      <!--
-      as per https://stackoverflow.com/a/28860520/56880
-      allows -Dgpg.passphrase= to be used rather than gpg.useagent
-      inherited from parent.
-      Note that this requires gpg v2.1+
-      -->
-      <id>gpg</id>
-      <activation>
-        <property>
-          <name>gpg.passphrase</name>
-        </property>
-      </activation>
-      <properties>
-        <gpg.useagent>false</gpg.useagent>
-      </properties>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>sign-release-artifacts</id>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-                <configuration>
-                  <gpgArguments>
-                    <arg>--pinentry-mode</arg>
-                    <arg>loopback</arg>
-                  </gpgArguments>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-''' )
-)
-
-pomFile.text = withLicense(pomXml)
+</properties>''' )
+pomXml.appendNode(fragmentToAdd)
 
 
 pomFile.text = serializeWithLicense(pomXml)
 
-/////////////////////////////////////////////////////
-//
-// update archetype's resource's pom.xml's
-// <revision> and <isis.version>
-//
-/////////////////////////////////////////////////////
-
-def resourcePomXmlFile=new File(BASE+"src/main/resources/archetype-resources/pom.xml")
-
-println "updating ${resourcePomXmlFile.path}"
-
-def resourcePomXml = new XmlSlurper(false,false).parseText(resourcePomXmlFile.text)
 
 
-// the properties.revision, meanwhile, is set to the version that is prompted for when the
-// app is first generated from the archetype
-resourcePomXml.properties.revision='${version}'
-
-resourcePomXml.properties['isis.version']=isis_version
-
-resourcePomXml.dependencyManagement.dependencies.dependency.each { dependency ->
-    if(dependency.groupId=='${groupId}') {
-        dependency.version='${project.version}'
-    }
-}
 
 
-resourcePomXmlFile.text = withLicense(resourcePomXml)
-
-
-/////////////////////////////////////////////////////
-//
-// update the pom files parent version
-//
-/////////////////////////////////////////////////////
-
-new File(ROOT+"BASE+\"src/main/resources/archetype-resources/").eachDirRecurse() { dir ->
-
-    dir.eachFileMatch(~/pom[.].xml/) { eachPomXmlFile ->
-
-        println "updating ${eachPomXmlFile.path}"
-
-        def eachPomXml = new XmlSlurper(false,false).parseText(eachPomXmlFile.text)
-        if(eachPomXml.parent.groupId=='${groupId}') {
-            eachPomXml.parent.version='${revision}'
-        }
-
-        eachPomXmlFile.text = withLicense(eachPomXml)
-    }
-}
 
 /////////////////////////////////////////////////////
 //
 // update archetype-metadata.xml
 //
 /////////////////////////////////////////////////////
+
 
 def metaDataFile=new File(ROOT+"META-INF/maven/archetype-metadata.xml")
 
@@ -260,6 +154,32 @@ metaDataXml.modules.module.each { module ->
 
 metaDataFile.text = serializeWithLicense(metaDataXml)
 
+
+/////////////////////////////////////////////////////
+//
+// update the .launch files
+//
+/////////////////////////////////////////////////////
+
+new File(ROOT+"archetype-resources/").eachDirRecurse() { dir ->  
+
+    dir.eachFileMatch(~/.*[.]launch/) { launchFile ->  
+
+        println "updating ${launchFile.path}"
+
+        def launchXml = new XmlSlurper().parseText(launchFile.text)
+        def projectAttr = launchXml.stringAttribute.find { it.@key=="org.eclipse.jdt.launching.PROJECT_ATTR" }
+        String oldValue=projectAttr.@value
+        def newValue = oldValue.replaceAll("${application_name}[^-]*-","\\\${rootArtifactId}-")
+        projectAttr.@value=newValue
+
+        launchFile.text = """#set( \$symbol_pound = '#' )
+#set( \$symbol_dollar = '\$' )
+#set( \$symbol_escape = '\\' )
+"""
+        launchFile.append(XmlUtil.serialize(launchXml))
+     }  
+}
 
 
 ///////////////////////////////////////////////////

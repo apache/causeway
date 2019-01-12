@@ -57,8 +57,8 @@ for a in .project .classpath .settings bin .idea neo4j_DB target-ide; do /bin/fi
 /bin/find . -name "*.log" -exec rm {} \;
 /bin/find . -name "pom.xml.*" -exec rm {} \;
 
-echo "mvn -Drevision=$ISISREL archetype:create-from-project ..."
-mvn -Drevision=$ISISREL org.apache.maven.plugins:maven-archetype-plugin:3.0.1:create-from-project
+echo "mvn archetype:create-from-project ..."
+mvn org.apache.maven.plugins:maven-archetype-plugin:3.0.1:create-from-project
 
 # https://issues.apache.org/jira/browse/ARCHETYPE-548
 echo "copy over Dockerfile since seems to be excluded (bug: ARCHETYPE-548) ... "
