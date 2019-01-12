@@ -1,0 +1,56 @@
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//  Licensed to the Apache Software Foundation (ASF) under one
+//  or more contributor license agreements.  See the NOTICE file
+//  distributed with this work for additional information
+//  regarding copyright ownership.  The ASF licenses this file
+//  to you under the Apache License, Version 2.0 (the
+//          "License"); you may not use this file except in compliance
+//  with the License.  You may obtain a copy of the License at
+//
+//  http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing,
+//  software distributed under the License is distributed on an
+//  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+//  KIND, either express or implied.  See the License for the
+//  specific language governing permissions and limitations
+//  under the License.
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// This gradle script sets up livereload, configured so that any updates to the dom module's classpath will
+// trigger the browser to reload the page.  In particular, this relates to the .layout.xml files which define the
+// grid layout of domain objects.
+//
+// As a prerequisite, the app needs to configured to load the livereload.js script.  This can be done by adding the
+// following configuration property (to viewer_wicket.properties, isis.properties or the AppManifest, as you prefer):
+//
+//    isis.viewer.wicket.liveReloadUrl=http://localhost:35729/livereload.js?snipver=1
+//
+// This gradle script is run using:
+//
+//      gradle -t -b livereload.gradle --offline &
+//
+// To reduce turn-around time further, also use the layouts.gradle script (to automatically copy over the layout.xml
+// files to the classpath).
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+defaultTasks 'liveReload'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.kordamp.gradle:livereload-gradle-plugin:0.2.1'
+    }
+}
+
+apply plugin: 'org.kordamp.gradle.livereload'
+
+liveReload {
+    docRoot new File('target/classes').canonicalPath
+}
+
