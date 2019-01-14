@@ -46,7 +46,7 @@
     <inceptionYear>2010</inceptionYear>
 
     <properties>
-        <revision>2.0.0-M3-SNAPSHOT</revision>
+        <revision>2.0.0-M2</revision>
         <isis.version>${revision}</isis.version>
 
         <isis.skipTests>false</isis.skipTests>
