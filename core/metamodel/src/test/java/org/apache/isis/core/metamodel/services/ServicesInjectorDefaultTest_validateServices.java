@@ -25,6 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 
 public class ServicesInjectorDefaultTest_validateServices {
 
@@ -48,6 +49,7 @@ public class ServicesInjectorDefaultTest_validateServices {
 
         @Before
         public void setUp() throws Exception {
+            IsisSystemEnvironment.setUnitTesting(true);
             serviceList = _Lists.newArrayList();
         }
 
@@ -66,6 +68,7 @@ public class ServicesInjectorDefaultTest_validateServices {
             servicesInjector.validateServices();
         }
 
+        @Test
         public void validate_DomainServicesWithDifferentIds() {
 
             // given
