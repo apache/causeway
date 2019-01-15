@@ -8,6 +8,8 @@ https://gist.github.com/EudesSilva/0329645b9c258e0495544b8a5ccd1454
 ## Build
 Build is done via gradle - under Windows with gitbash:
 
+ ./gradlew.bat tasks # list all gradle tasks
+ ./gradlew.bat webpack-budle # create main.bundle.js
  ./gradlew.bat test --exclude-task npm-install
  
 Internally gradle uses npm for the JS part.

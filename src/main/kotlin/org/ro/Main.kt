@@ -1,5 +1,6 @@
 package org.ro
 
+import org.ro.App
 import pl.treksoft.kvision.hmr.ApplicationBase
 import pl.treksoft.kvision.hmr.module
 import kotlin.browser.document
@@ -27,9 +28,8 @@ fun main(args: Array<String>) {
 }
 
 fun start(state: dynamic): ApplicationBase? {
-    if (document.getElementById("helloworld") == null) return null
+    if (document.getElementById("kvapp") == null) return null
     @Suppress("UnsafeCastFromDynamic")
-    (App.start(state?.appState ?: emptyMap()))
+    App.start(state?.appState ?: emptyMap())
     return App
 }
-
