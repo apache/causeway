@@ -121,13 +121,20 @@ public class LazyTreeNode<T> implements TreeNode<T> {
 
         boolean found = parent.streamChildren()
                 .peek(__->indexOneBased.increment())
-                .anyMatch(sibling->this.equals(sibling));
+                .anyMatch(this::isEqualTo);
 
         if(!found) {
             throw _Exceptions.unexpectedCodeReach();
         }
 
         return indexOneBased.intValue()-1;
+    }
+    
+    private boolean isEqualTo(TreeNode<T> other) {
+        if(other==null) {
+            return false;
+        }
+        return Objects.equals(this.getValue(), other.getValue());
     }
 
 
