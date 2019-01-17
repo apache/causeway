@@ -32,10 +32,8 @@
 
 				<label class="scalarName control-label" wicket:id="scalarName">[Label text]</label> 
 				<span class="scalarValueWrapper">
-					<div class="tree-theme-windows">
-						<span> 
-							<wicket:container wicket:id="scalarValueContainer" />
-						</span> 
+					<div>
+						<wicket:container wicket:id="scalarValueContainer">[regular-tree]</wicket:container>
 						<span class="associatedActionLinksRight"
 							wicket:id="associatedActionLinksRight">[drop down]</span>
 					</div> 
@@ -45,9 +43,7 @@
 				<div class="clearfix"></div>
 			</div>
 
-			<div class="tree-theme-windows">
-				<wicket:container wicket:id="scalarIfCompact"/>
-			</div>
+			<wicket:container wicket:id="scalarIfCompact">[compact-tree]</wicket:container>
 			
 		</div>
 

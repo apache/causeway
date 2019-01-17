@@ -17,28 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.tree;
+package org.apache.isis.viewer.wicket.ui.components.tree.themes;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 
-import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.components.tree.themes.bootstrap.IsisBootstrapTreeTheme;
 
-public class StandaloneTreePanel extends PanelAbstract<ValueModel> {
+public class TreeThemeProviderDefault implements TreeThemeProvider {
 
-    private static final long serialVersionUID = 1L;
-    private static final String ID_TREE = "tree";
-
-    public StandaloneTreePanel(final String id, final ValueModel valueModel) {
-        super(id, valueModel);
-        
-        final Component tree = IsisToWicketTreeAdapter.adapt(ID_TREE, valueModel);
-        final Behavior treeTheme = TreeThemeProvider.get().treeThemeFor(valueModel); 
-        
-        add(tree.add(treeTheme));
+    // other options as provided by wicket-extensions: WindowsTheme, HumanTheme
+    private final Behavior bootstrapTheme = new IsisBootstrapTreeTheme();
+    
+    @Override
+    public Behavior treeThemeFor(Object model) {
+        return bootstrapTheme;
     }
-
 
 }

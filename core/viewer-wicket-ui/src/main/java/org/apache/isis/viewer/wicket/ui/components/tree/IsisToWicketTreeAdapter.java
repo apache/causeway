@@ -1,4 +1,4 @@
-/**
+/*
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
  *  this work for additional information regarding copyright ownership.
@@ -35,7 +35,6 @@ import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.Node;
-import org.apache.wicket.extensions.markup.html.repeater.tree.theme.WindowsTheme;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -46,6 +45,7 @@ import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.applib.tree.TreePath;
 import org.apache.isis.applib.tree.TreeState;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -60,11 +60,13 @@ import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAn
 class IsisToWicketTreeAdapter {
 
     public static EntityTree adapt(String id, ValueModel valueModel) {
-        return new EntityTree(id, toITreeProvider(valueModel), toIModelRepresentingCollapseExpandState(valueModel));
+        return new EntityTree(id, toITreeProvider(valueModel), 
+                toIModelRepresentingCollapseExpandState(valueModel));
     }
 
     public static EntityTree adapt(String id, ScalarModel scalarModel) {
-        return new EntityTree(id, toITreeProvider(scalarModel), toIModelRepresentingCollapseExpandState(scalarModel));
+        return new EntityTree(id, toITreeProvider(scalarModel), 
+                toIModelRepresentingCollapseExpandState(scalarModel));
     }
 
     // -- RENDERING
@@ -81,7 +83,8 @@ class IsisToWicketTreeAdapter {
                 ITreeProvider<TreeModel> provider,
                 TreeExpansionModel collapseExpandState) {
             super(id, provider, collapseExpandState);
-            add(new WindowsTheme()); // TODO not required if Isis provides it's own css styles for tree-nodes
+            System.out.println("!!! EntityTree::new");
+            _Exceptions.dumpStackTrace(System.out, 0, 100);
         }
 
         /**

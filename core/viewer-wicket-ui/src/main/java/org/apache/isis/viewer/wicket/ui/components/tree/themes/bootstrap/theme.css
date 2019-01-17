@@ -1,0 +1,126 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.tree-theme-bootstrap div.tree-subtree {
+  margin: 0px 0px 0px 18px;
+  padding: 0px;
+}
+
+.tree-theme-bootstrap div.tree-branch {
+  margin: 0px;
+  padding: 0px;
+}
+
+.tree-theme-bootstrap div.tree-branch-mid {
+}
+
+.tree-theme-bootstrap div.tree-branch-last {
+}
+
+/* node */
+
+.tree-theme-bootstrap .tree-junction {
+  display: block;
+  float: left;
+  width: 18px;
+}
+
+.tree-theme-bootstrap .tree-junction-expanded {
+  display: block;
+  float: left;
+  width: 18px;
+  background-image: url(tree.gif);
+  background-position: -18px center;
+  background-repeat: no-repeat;
+  text-decoration: none;
+}
+
+.tree-theme-bootstrap .tree-junction-expanded:hover {
+  background-position: -54px center;
+}
+
+.tree-theme-bootstrap .tree-junction-collapsed {
+  display: block;
+  float: left;
+  width: 18px;
+  background-image: url(tree.gif);
+  background-position: 0px center;
+  background-repeat: no-repeat;
+  text-decoration: none;
+}
+
+.tree-theme-bootstrap .tree-junction-collapsed:hover {
+  background-position: -36px center;
+}
+
+.tree-theme-bootstrap span.tree-content {
+  display: block;
+  margin-left: 18px;
+}
+
+/* tabletree */
+
+.tree-theme-bootstrap table {
+  border-spacing: 0px;
+  border-collapse: collapse;
+}
+
+.tree-theme-bootstrap tr.selected {
+  background-color: #fad184;
+}
+
+.tree-theme-bootstrap td {
+  /* allow tree divs to fill complete td (regretfully height 100% on divs does not work) */
+  margin: 0px;
+  padding: 0px;
+}
+
+/* content */
+
+.tree-theme-bootstrap span.tree-content a {
+  color: black;
+  text-decoration: none;
+}
+
+.tree-theme-bootstrap span.tree-content a:hover {
+  text-decoration: underline;
+}
+
+.tree-theme-bootstrap span.tree-content .selected {
+  background-color: #fad184;
+}
+
+.tree-theme-bootstrap .tree-folder-closed {
+  padding-left: 18px;
+  background-image: url(folder.gif);
+  background-position: 0px 50%;
+  background-repeat: no-repeat;
+}
+
+.tree-theme-bootstrap .tree-folder-open {
+  padding-left: 18px;
+  background-image: url(folder.gif);
+  background-position: 0px 50%;
+  background-repeat: no-repeat;
+}
+
+.tree-theme-bootstrap .tree-folder-other {
+  padding-left: 18px;
+  background-image: url(folder-other.gif);
+  background-position: 0px 50%;
+  background-repeat: no-repeat;
+}

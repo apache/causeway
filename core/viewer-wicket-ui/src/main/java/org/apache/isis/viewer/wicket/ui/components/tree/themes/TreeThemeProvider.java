@@ -17,28 +17,34 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.tree;
+package org.apache.isis.viewer.wicket.ui.components.tree.themes;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 
-import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.ui.components.tree.themes.TreeThemeProvider;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.commons.internal.context._Context;
 
-public class StandaloneTreePanel extends PanelAbstract<ValueModel> {
+public interface TreeThemeProvider {
 
-    private static final long serialVersionUID = 1L;
-    private static final String ID_TREE = "tree";
-
-    public StandaloneTreePanel(final String id, final ValueModel valueModel) {
-        super(id, valueModel);
-        
-        final Component tree = IsisToWicketTreeAdapter.adapt(ID_TREE, valueModel);
-        final Behavior treeTheme = TreeThemeProvider.get().treeThemeFor(valueModel); 
-        
-        add(tree.add(treeTheme));
+    // -- INTERFACE
+    
+    /**
+     * @param model - TODO yet just a draft, refine the type 
+     * @return tree-theme to use for given model 
+     */
+    public Behavior treeThemeFor(Object model);
+    
+    // -- LOOKUP
+    
+    /**
+     * Gets the singleton TreeThemeProvider from current context.
+     * <p> 
+     * Note: As of now, we always return a TreeThemeProviderDefault instance. 
+     * Could be made plug-able in the future. 
+     */
+    public static TreeThemeProvider get() {
+        return _Context.computeIfAbsent(
+                TreeThemeProvider.class, 
+                TreeThemeProviderDefault::new);
     }
-
-
+    
 }
