@@ -142,14 +142,14 @@ class ContextTest {
         final AClass instance1 = new AClass();
         final AClass instance2 = new AClass();
         
-        _Context.computeIfAbsent(type, __->instance1);
+        _Context.computeIfAbsent(type, ()->instance1);
         
         {
             final Object actual = _Context.getIfAny(type);
             assertTrue(instance1==actual, "singleton on context is expected to be the same as the 'local' instance1");
         }
         
-        _Context.computeIfAbsent(type, __->instance2); // expected: this call does nothing
+        _Context.computeIfAbsent(type, ()->instance2); // expected: this call does nothing
         
         { 
             final Object actual = _Context.getIfAny(type);

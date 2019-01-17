@@ -113,7 +113,7 @@ public class _Config {
     
     private static _Config_LifecycleResource getLifecycleResource() {
         final _Config_LifecycleResource lifecycle = 
-                _Context.computeIfAbsent(_Config_LifecycleResource.class, __->createLifecycleResource());
+                _Context.computeIfAbsent(_Config_LifecycleResource.class, ()->createLifecycleResource());
         return lifecycle;
     }
 

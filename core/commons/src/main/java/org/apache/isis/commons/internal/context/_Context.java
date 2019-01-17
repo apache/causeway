@@ -141,6 +141,21 @@ public final class _Context {
             return t;
         }
     }
+    
+    /**
+     * If the specified key is not already associated with a value (or is mapped to null),
+     * attempts to compute its value using the given factory supplier and enters it into this map unless null.
+     * @param type
+     * @param factory
+     * @return null, if there is no such instance
+     */
+    public static <T> T computeIfAbsent(Class<? super T> type, Supplier<T> factory) {
+        requires(type, "type");
+        requires(factory, "factory");
+        return computeIfAbsent(type, __->factory.get());
+    }
+    
+    
 
     /**
      * Gets a singleton instance of {@code type} if there is any,

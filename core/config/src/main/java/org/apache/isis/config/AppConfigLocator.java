@@ -36,7 +36,7 @@ public final class AppConfigLocator {
     private AppConfigLocator() { }
     
     public static AppConfig getAppConfig() {
-        return _Context.computeIfAbsent(AppConfig.class, __->lookupAppConfig());
+        return _Context.computeIfAbsent(AppConfig.class, ()->lookupAppConfig());
     }
     
     // -- HELPER

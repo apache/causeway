@@ -54,7 +54,7 @@ public interface IsisWicketThemeSupport {
     // -- LOOKUP
     
     static IsisWicketThemeSupport getInstance() {
-        return _Context.computeIfAbsent(IsisWicketThemeSupport.class, __->createInstance());
+        return _Context.computeIfAbsent(IsisWicketThemeSupport.class, ()->createInstance());
     }
     
     // -- FACTORY

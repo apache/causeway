@@ -56,7 +56,7 @@ class ObjectAdapterContext_ServiceLookup {
     ObjectAdapter lookupServiceAdapterFor(RootOid rootOid) {
         
         final ServicesByIdResource servicesByIdResource =
-                _Context.computeIfAbsent(ServicesByIdResource.class, cls->initLookupResource());
+                _Context.computeIfAbsent(ServicesByIdResource.class, this::initLookupResource);
         
         final Object serviceInstance = servicesByIdResource.lookupServiceInstance(rootOid);
         if(serviceInstance==null) {

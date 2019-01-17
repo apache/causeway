@@ -76,7 +76,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
      * @return the application-scoped singleton ThreadPoolSupport instance
      */
     public static ThreadPoolSupport getInstance() {
-        return _Context.computeIfAbsent(ThreadPoolSupport.class, __-> new ThreadPoolSupport());
+        return _Context.computeIfAbsent(ThreadPoolSupport.class, ThreadPoolSupport::new);
     }
     
     ThreadPoolSupport() {

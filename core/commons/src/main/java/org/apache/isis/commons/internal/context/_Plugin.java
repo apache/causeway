@@ -89,7 +89,7 @@ public final class _Plugin {
     public static <S> S getOrElse(Class<S> pluginClass, Function<Set<S>, S> onAmbiguity, Supplier<S> onNotFound){
 
         // lookup cache first
-        return _Context.computeIfAbsent(pluginClass, __->{
+        return _Context.computeIfAbsent(pluginClass, ()->{
 
             final Set<S> plugins = loadAll(pluginClass);
 
