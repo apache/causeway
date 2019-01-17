@@ -45,7 +45,6 @@ import org.apache.isis.applib.tree.TreeNode;
 import org.apache.isis.applib.tree.TreePath;
 import org.apache.isis.applib.tree.TreeState;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -83,8 +82,6 @@ class IsisToWicketTreeAdapter {
                 ITreeProvider<TreeModel> provider,
                 TreeExpansionModel collapseExpandState) {
             super(id, provider, collapseExpandState);
-            System.out.println("!!! EntityTree::new");
-            _Exceptions.dumpStackTrace(System.out, 0, 100);
         }
 
         /**
