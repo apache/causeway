@@ -43,28 +43,32 @@
   display: block;
   float: left;
   width: 18px;
-  background-image: url(tree.gif);
-  background-position: -18px center;
-  background-repeat: no-repeat;
   text-decoration: none;
 }
 
+.tree-theme-bootstrap .tree-junction-expanded:before {
+  font-family: "Glyphicons Halflings";
+  content: "\e114";
+}
+
 .tree-theme-bootstrap .tree-junction-expanded:hover {
-  background-position: -54px center;
+  
 }
 
 .tree-theme-bootstrap .tree-junction-collapsed {
   display: block;
   float: left;
   width: 18px;
-  background-image: url(tree.gif);
-  background-position: 0px center;
-  background-repeat: no-repeat;
   text-decoration: none;
 }
 
+.tree-theme-bootstrap .tree-junction-collapsed:before {
+  font-family: "Glyphicons Halflings";
+  content: "\e080";
+}
+
 .tree-theme-bootstrap .tree-junction-collapsed:hover {
-  background-position: -36px center;
+  
 }
 
 .tree-theme-bootstrap span.tree-content {
@@ -92,7 +96,6 @@
 /* content */
 
 .tree-theme-bootstrap span.tree-content a {
-  color: black;
   text-decoration: none;
 }
 
@@ -104,23 +107,3 @@
   background-color: #fad184;
 }
 
-.tree-theme-bootstrap .tree-folder-closed {
-  padding-left: 18px;
-  background-image: url(folder.gif);
-  background-position: 0px 50%;
-  background-repeat: no-repeat;
-}
-
-.tree-theme-bootstrap .tree-folder-open {
-  padding-left: 18px;
-  background-image: url(folder.gif);
-  background-position: 0px 50%;
-  background-repeat: no-repeat;
-}
-
-.tree-theme-bootstrap .tree-folder-other {
-  padding-left: 18px;
-  background-image: url(folder-other.gif);
-  background-position: 0px 50%;
-  background-repeat: no-repeat;
-}
