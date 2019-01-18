@@ -39,3 +39,8 @@ a.scalarValueInlinePromptLink:focus textarea,
     color: White;
     background-color: rgb(34, 34, 34);
 }
+
+/* ISIS-2092 fixing Darkly Theme: buttons and fieldset-headers have same background-color */
+.panel-default > .panel-heading {
+    background-color: #515050;
+}
