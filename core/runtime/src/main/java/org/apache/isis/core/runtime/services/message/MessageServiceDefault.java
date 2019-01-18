@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.message.MessageService2;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
@@ -31,7 +31,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
         nature = NatureOfService.DOMAIN,
         menuOrder = "" + (Integer.MAX_VALUE - 1)  // ie before the Noop impl in metamodel
 )
-public class MessageServiceDefault implements MessageService {
+public class MessageServiceDefault implements MessageService2 {
 
     @Override
     public void informUser(final String message) {
@@ -43,7 +43,14 @@ public class MessageServiceDefault implements MessageService {
             final TranslatableString message,
             final Class<?> contextClass,
             final String contextMethod) {
-        String translatedMessage = message.translate(translationService, context(contextClass, contextMethod));
+        return informUser(message, context(contextClass, contextMethod));
+    }
+
+    @Override
+    public String informUser(
+            final TranslatableString message,
+            final String translationContext) {
+        String translatedMessage = message.translate(translationService, translationContext);
         informUser(translatedMessage);
         return translatedMessage;
     }
@@ -58,7 +65,14 @@ public class MessageServiceDefault implements MessageService {
             final TranslatableString message,
             final Class<?> contextClass,
             final String contextMethod) {
-        String translatedMessage = message.translate(translationService, context(contextClass, contextMethod));
+        return warnUser(message, context(contextClass, contextMethod));
+    }
+
+    @Override
+    public String warnUser(
+            final TranslatableString message,
+            final String translationContext) {
+        String translatedMessage = message.translate(translationService, translationContext);
         warnUser(translatedMessage);
         return translatedMessage;
     }
@@ -68,11 +82,19 @@ public class MessageServiceDefault implements MessageService {
         throw new RecoverableException(message);
     }
 
-    @Override public String raiseError(
+    @Override
+    public String raiseError(
             final TranslatableString message,
             final Class<?> contextClass,
             final String contextMethod) {
-        final String translatedMessage = message.translate(translationService, context(contextClass, contextMethod));
+        return raiseError(message, context(contextClass, contextMethod));
+    }
+
+    @Override
+    public String raiseError(
+            final TranslatableString message,
+            final String translationContext) {
+        final String translatedMessage = message.translate(translationService, translationContext);
         raiseError(translatedMessage);
         return translatedMessage;
     }
