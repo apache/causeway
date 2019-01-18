@@ -22,6 +22,8 @@ package org.apache.isis.applib.value;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -102,6 +104,25 @@ public final class Blob implements NamedWithMimeType, Serializable {
     
     public void writeBytesTo(final OutputStream os) throws IOException {
         ByteSource.wrap(bytes).copyTo(os);
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        final Blob blob = (Blob) o;
+        return Objects.equals(mimeType.toString(), blob.mimeType.toString()) &&
+                Arrays.equals(bytes, blob.bytes) &&
+                Objects.equals(name, blob.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(mimeType.toString(), name);
+        result = 31 * result + Arrays.hashCode(bytes);
+        return result;
     }
 
     @Override
