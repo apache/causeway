@@ -238,6 +238,11 @@ implements FormExecutor {
                 // ... display as growl pop-up
                 final MessageBroker messageBroker = getAuthenticationSession().getMessageBroker();
                 messageBroker.setApplicationError(message);
+                
+                //TODO [2089] hotfix to render the error on the same page instead of redirecting;
+                // previous behavior was to fall through and rethrow, which lead to the error never shown
+                return false;
+                //--
             }
 
             // irrespective, capture error in the Command, and propagate
