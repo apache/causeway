@@ -1,6 +1,5 @@
-package org.ro
+package com.example
 
-import com.example.Showcase
 import pl.treksoft.kvision.hmr.ApplicationBase
 import pl.treksoft.kvision.hmr.module
 import pl.treksoft.kvision.routing.Routing
@@ -36,3 +35,4 @@ fun start(state: dynamic): ApplicationBase? {
     Showcase.start(state?.appState ?: emptyMap())
     return Showcase
 }
+
