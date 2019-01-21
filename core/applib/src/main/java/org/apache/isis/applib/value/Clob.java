@@ -22,6 +22,7 @@ package org.apache.isis.applib.value;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.util.Objects;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
@@ -106,6 +107,22 @@ public final class Clob implements NamedWithMimeType, Serializable {
         if(wr!=null && chars!=null){
             wr.append(chars);
         }
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        final Clob clob = (Clob) o;
+        return Objects.equals(name, clob.name) &&
+                Objects.equals(mimeType.toString(), clob.mimeType.toString()) &&
+                Objects.equals(chars, clob.chars);
+    }
+
+    @Override public int hashCode() {
+        return Objects.hash(name, mimeType.toString(), chars);
     }
 
     @Override

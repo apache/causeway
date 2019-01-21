@@ -39,31 +39,53 @@ public class MessageServiceNoop implements MessageService {
             final TranslatableString message,
             final Class<?> contextClass,
             final String contextMethod) {
-        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+        throw notSupported();
+    }
+    
+    @Override
+    public String informUser(TranslatableString message, String translationContext) {
+        throw notSupported();
     }
 
     @Override
     public void warnUser(final String message) {
-        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+        throw notSupported();
     }
 
     @Override public String warnUser(
             final TranslatableString message,
             final Class<?> contextClass,
             final String contextMethod) {
-        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+        throw notSupported();
+    }
+    
+    @Override
+    public String warnUser(TranslatableString message, String translationContext) {
+        throw notSupported();
     }
 
     @Override
     public void raiseError(final String message) {
-        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+        throw notSupported();
     }
 
     @Override public String raiseError(
             final TranslatableString message,
             final Class<?> contextClass,
             final String contextMethod) {
-        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+        throw notSupported();
     }
+    
+    @Override
+    public String raiseError(TranslatableString message, String translationContext) {
+        throw notSupported();
+    }
+    
+    // -- HELPER
+    
+    private static UnsupportedOperationException notSupported() {
+        return new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+    }
+    
 
 }
