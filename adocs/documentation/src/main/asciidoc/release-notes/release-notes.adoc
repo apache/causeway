@@ -351,6 +351,7 @@ This table summarises all releases of Apache Isis to date.
 
 
 
+include::_release-notes_2.0.0-M2.adoc[leveloffset=+1]
 include::_release-notes_1.17.0.adoc[leveloffset=+1]
 include::_release-notes_2.0.0-M1.adoc[leveloffset=+1]
 include::_release-notes_1.16.2.adoc[leveloffset=+1]
