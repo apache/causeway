@@ -321,18 +321,17 @@ mvn -Drevision=$ISISREL \
 In the main `isis` repo (ie containing the asciidoc source):
 
 * Paste in the JIRA-generated release notes generated above, adding to top of `adocs/documentation/src/main/asciidoc/release-notes.adoc`.
++
 Also add a summary line for the release.
 
 * Update the xref:../../__versions.adoc#[`__versions.adoc`] file that declares the current and next releases.
 
-* Update the xref:../../downloads.adoc#[downloads page] with a link to the source release zip file (under https://dist.apache.org/repos/dist/release/isis[https://dist.apache.org/repos/dist/release/isis])
-
-* Update any pages (`.adoc`, `.md`, `.html` etc) that describe how to run the archetype, and ensure they reference the correct version. +
+* Update any pages (`.adoc`, `.md`, `.html` etc) that describe how to run the archetype, and ensure they reference the correct version.
 +
 A search for `archetypeGroupId=org.apache.isis.archetype` should find these pages.
 
 * update the link:../../doap_isis.rdf[DOAP RDF] file (which provides a machine-parseable description of the project) should also be updated with details of the new release.
-Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service. +
+Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service.
 +
 For more information on DOAP files, see these http://projects.apache.org/doap.html[Apache policy docs].
 
