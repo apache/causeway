@@ -48,8 +48,6 @@ This table summarises all releases of Apache Isis to date.
 | 22
 | https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342392[Release notes for 2.0.0-M1]
 
-| link:https://isis.apache.org/versions/1.16.2/release-notes/release-notes.html#_release-notes_1.16.2[1.16.2]
-
 
 | xref:release-notes.adoc#_release-notes_1.16.2[1.16.2]
 | 05-03-2018
@@ -351,37 +349,67 @@ This table summarises all releases of Apache Isis to date.
 
 
 
-include::_release-notes_2.0.0-M2.adoc[leveloffset=+1]
-include::_release-notes_1.17.0.adoc[leveloffset=+1]
-include::_release-notes_2.0.0-M1.adoc[leveloffset=+1]
-include::_release-notes_1.16.2.adoc[leveloffset=+1]
-include::_release-notes_1.16.1.adoc[leveloffset=+1]
-include::_release-notes_1.16.0.adoc[leveloffset=+1]
-include::_release-notes_1.15.1.adoc[leveloffset=+1]
-include::_release-notes_1.15.0.adoc[leveloffset=+1]
-include::_release-notes_1.14.0.adoc[leveloffset=+1]
-include::_release-notes_1.13.2.1.adoc[leveloffset=+1]
-include::_release-notes_1.13.2.adoc[leveloffset=+1]
-include::_release-notes_1.13.2.adoc[leveloffset=+1]
-include::_release-notes_1.13.1.adoc[leveloffset=+1]
-include::_release-notes_1.13.0.adoc[leveloffset=+1]
-include::_release-notes_1.12.2.adoc[leveloffset=+1]
-include::_release-notes_1.12.1.adoc[leveloffset=+1]
-include::_release-notes_1.12.0.adoc[leveloffset=+1]
-include::_release-notes_1.11.1.adoc[leveloffset=+1]
-include::_release-notes_1.11.0.adoc[leveloffset=+1]
-include::_release-notes_1.10.0.adoc[leveloffset=+1]
-include::_release-notes_1.9.0.adoc[leveloffset=+1]
-include::_release-notes_1.8.0.adoc[leveloffset=+1]
-include::_release-notes_1.7.0.adoc[leveloffset=+1]
-include::_release-notes_1.6.0.adoc[leveloffset=+1]
-include::_release-notes_1.5.0.adoc[leveloffset=+1]
-include::_release-notes_1.4.1.adoc[leveloffset=+1]
-include::_release-notes_1.4.0.adoc[leveloffset=+1]
-include::_release-notes_1.3.1.adoc[leveloffset=+1]
-include::_release-notes_1.3.0.adoc[leveloffset=+1]
-include::_release-notes_1.2.0.adoc[leveloffset=+1]
-include::_release-notes_1.1.0.adoc[leveloffset=+1]
-include::_release-notes_1.0.0.adoc[leveloffset=+1]
+== 2019
+
+include::_release-notes_2.0.0-M2.adoc[leveloffset=+2]
+include::_release-notes_1.17.0.adoc[leveloffset=+2]
+
+
+== 2018
+
+include::_release-notes_2.0.0-M1.adoc[leveloffset=+2]
+include::_release-notes_1.16.2.adoc[leveloffset=+2]
+include::_release-notes_1.16.1.adoc[leveloffset=+2]
+include::_release-notes_1.16.0.adoc[leveloffset=+2]
+
+
+== 2017
+
+include::_release-notes_1.15.1.adoc[leveloffset=+2]
+include::_release-notes_1.15.0.adoc[leveloffset=+2]
+include::_release-notes_1.14.0.adoc[leveloffset=+2]
+include::_release-notes_1.13.2.1.adoc[leveloffset=+2]
+
+
+== 2016
+
+include::_release-notes_1.13.2.adoc[leveloffset=+2]
+include::_release-notes_1.13.2.adoc[leveloffset=+2]
+include::_release-notes_1.13.1.adoc[leveloffset=+2]
+include::_release-notes_1.13.0.adoc[leveloffset=+2]
+include::_release-notes_1.12.2.adoc[leveloffset=+2]
+include::_release-notes_1.12.1.adoc[leveloffset=+2]
+include::_release-notes_1.12.0.adoc[leveloffset=+2]
+include::_release-notes_1.11.1.adoc[leveloffset=+2]
+include::_release-notes_1.11.0.adoc[leveloffset=+2]
+
+
+== 2015
+
+include::_release-notes_1.10.0.adoc[leveloffset=+2]
+include::_release-notes_1.9.0.adoc[leveloffset=+2]
+
+
+== 2014
+
+include::_release-notes_1.8.0.adoc[leveloffset=+2]
+include::_release-notes_1.7.0.adoc[leveloffset=+2]
+include::_release-notes_1.6.0.adoc[leveloffset=+2]
+include::_release-notes_1.5.0.adoc[leveloffset=+2]
+include::_release-notes_1.4.1.adoc[leveloffset=+2]
+include::_release-notes_1.4.0.adoc[leveloffset=+2]
+
+
+== 2013
+
+include::_release-notes_1.3.1.adoc[leveloffset=+2]
+include::_release-notes_1.3.0.adoc[leveloffset=+2]
+include::_release-notes_1.2.0.adoc[leveloffset=+2]
+include::_release-notes_1.1.0.adoc[leveloffset=+2]
+
+
+== 2012
+
+include::_release-notes_1.0.0.adoc[leveloffset=+2]
 
 

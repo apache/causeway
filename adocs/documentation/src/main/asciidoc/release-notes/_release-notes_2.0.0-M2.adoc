@@ -8,9 +8,6 @@
 
 
 
-[[r2.0.0-M2]]
-= 2.0.0-M2
-
 This milestone introduces one new feature, namely support for a table tree view in the Wicket viewer.
 It also includes all the features as of Apache Isis 1.17.0.
 
