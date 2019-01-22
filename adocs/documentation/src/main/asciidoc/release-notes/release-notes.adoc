@@ -22,6 +22,14 @@ This table summarises all releases of Apache Isis to date.
 | JIRA relnotes
 
 
+| link:https://isis.apache.org/versions/2.0.0-M2/release-notes/release-notes.html#_release-notes_2.0.0-M2[2.0.0-M2]
+| 22-01-2018
+| Second milestone release for Apache Isis 2.0.0: tree support, initial work on simplifying bootstrapping and configuration, removing dependencies
+| 2
+| 36
+| 13
+| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342393[Release notes for 2.0.0-M2]
+
 | xref:release-notes.adoc#_release-notes_1.17.0[1.17.0]
 | 06-01-2019
 | Sidebar dialogs, metamodel export
