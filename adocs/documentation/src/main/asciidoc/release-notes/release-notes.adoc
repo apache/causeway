@@ -21,6 +21,15 @@ This table summarises all releases of Apache Isis to date.
 | Bugs
 | JIRA relnotes
 
+
+| link:https://isis.apache.org/versions/2.0.0-M2/release-notes/release-notes.html#_release-notes_2.0.0-M2[2.0.0-M2]
+| 22-01-2018
+| Second milestone release for Apache Isis 2.0.0: tree support, initial work on simplifying bootstrapping and configuration, removing dependencies
+| 2
+| 36
+| 13
+| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342393[Release notes for 2.0.0-M2]
+
 | xref:release-notes.adoc#_release-notes_1.17.0[1.17.0]
 | 06-01-2019
 | Sidebar dialogs, metamodel export
@@ -28,6 +37,19 @@ This table summarises all releases of Apache Isis to date.
 | 17
 | 9
 | https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342854[Release notes for 1.17.0]
+
+| link:https://isis.apache.org/versions/2.0.0-M1/release-notes/release-notes.html#_release-notes_2.0.0-M1[2.0.0-M1]
+| 31-07-2018
+| First milestone release for Apache Isis 2.0.0: Java 8 support, DataNucleus 5.1, Wicket 8, meta-annotations, breadcrumbs
+| 6
+| 55
++ 4 tasks
++ 13 sub-tasks
+| 22
+| https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342392[Release notes for 2.0.0-M1]
+
+| link:https://isis.apache.org/versions/1.16.2/release-notes/release-notes.html#_release-notes_1.16.2[1.16.2]
+
 
 | xref:release-notes.adoc#_release-notes_1.16.2[1.16.2]
 | 05-03-2018
@@ -37,7 +59,7 @@ This table summarises all releases of Apache Isis to date.
 | 1
 | https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342822[Release notes for 1.16.2]
 
-| xref:release-notes.adoc#_release-notes_1.16.1[1.16.1]
+| link:https://isis.apache.org/versions/1.16.1/release-notes/release-notes.html#_release-notes_1.16.1[1.16.1]
 | 22-02-2018
 | Parented collections with checkboxes, replay module
 | 4
@@ -45,7 +67,7 @@ This table summarises all releases of Apache Isis to date.
 | 17
 | https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342424[Release notes for v1.16.1]
 
-| xref:release-notes.adoc#_release-notes_1.16.0[1.16.0]
+| link:https://isis.apache.org/versions/1.16.0/release-notes/release-notes.html#_release-notes_1.16.0[1.16.0]
 | 08-01-2018
 | Modules, simplified bootstrapping, menubars.layout.xml
 | 13
@@ -53,7 +75,7 @@ This table summarises all releases of Apache Isis to date.
 | 26
 | https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12342073[Release notes for v1.16.0]
 
-| xref:release-notes.adoc#_release-notes_1.15.1[1.15.1]
+| link:https://isis.apache.org/versions/1.15.1/release-notes/release-notes.html#_release-notes_1.15.1[1.15.1]
 | 25-09-2017
 | Bug fixes, Wicket 7.9.0, Markup valuetype
 | 5
@@ -61,7 +83,7 @@ This table summarises all releases of Apache Isis to date.
 | 9
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12341577[Release notes for v1.15.1]
 
-| xref:release-notes.adoc#_release-notes_1.15.0[1.15.0]
+| link:https://isis.apache.org/versions/1.15.0/release-notes/release-notes.html#_release-notes_1.15.0[1.15.0]
 | 14-08-2017
 | Inline prompts, Wicket 7.x
 | 7
@@ -69,7 +91,7 @@ This table summarises all releases of Apache Isis to date.
 | 34
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12338577[Release notes for v1.15.0]
 
-| xref:release-notes.adoc#_release-notes_1.14.0[1.14.0]
+| link:https://isis.apache.org/versions/1.14.0/release-notes/release-notes.html#_release-notes_1.14.0[1.14.0]
 | 19-02-2017
 | Actions with collection parameters, metamodel validations.
 | 3
@@ -77,7 +99,7 @@ This table summarises all releases of Apache Isis to date.
 | 11
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12338898[Release notes for v1.14.0]
 
-| xref:release-notes.adoc#_release-notes_1.13.2.1[1.13.2.1]
+| link:https://isis.apache.org/versions/1.13.2.1/release-notes/release-notes.html#_release-notes_1.13.2.1[1.13.2.1]
 | 03-jan-2017
 | Patch release for simpleapp archetype only (docker images, regular actions instead of mixins)
 | 0
@@ -85,7 +107,7 @@ This table summarises all releases of Apache Isis to date.
 | 0
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12338937[Release notes for v1.13.2.1]
 
-| xref:release-notes.adoc#_release-notes_1.13.2[1.13.2]
+| link:https://isis.apache.org/versions/1.13.2/release-notes/release-notes.html#_release-notes_1.13.2[1.13.2]
 | 14-dec-2016
 | Patch release, modular simpleapp archetype
 | 2
@@ -93,7 +115,7 @@ This table summarises all releases of Apache Isis to date.
 | 5
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12338744[Release notes for v1.13.2]
 
-| xref:release-notes.adoc#_release-notes_1.13.1[1.13.1]
+| link:https://isis.apache.org/versions/1.13.1/release-notes/release-notes.html#_release-notes_1.13.1[1.13.1]
 | 30-oct-2016
 | Patch release, better support for docker
 | 1
@@ -101,7 +123,7 @@ This table summarises all releases of Apache Isis to date.
 | 21
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12337967[Release notes for v1.13.1]
 
-| xref:release-notes.adoc#_release-notes_1.13.0[1.13.0]
+| link:https://isis.apache.org/versions/1.13.0/release-notes/release-notes.html#_release-notes_1.13.0[1.13.0]
 | 11-jul-2016
 | Commands, interactions and internal refactorings
 | 27
@@ -109,7 +131,7 @@ This table summarises all releases of Apache Isis to date.
 | 23
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12335362[Release notes for v1.13.0]
 
-| xref:release-notes.adoc#_release-notes_1.12.2[1.12.2]
+| link:https://isis.apache.org/versions/1.12.2/release-notes/release-notes.html#_release-notes_1.12.2[1.12.2]
 | 06-jun-2016
 | Bug-fix release
 | 0
@@ -117,7 +139,7 @@ This table summarises all releases of Apache Isis to date.
 | 2
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12335949[Release notes for v1.12.2]
 
-| xref:release-notes.adoc#_release-notes_1.12.1[1.12.1]
+| link:https://isis.apache.org/versions/1.12.1/release-notes/release-notes.html#_release-notes_1.12.1[1.12.1]
 | 12-apr-2016
 | Bug-fix release
 | 0
@@ -125,7 +147,7 @@ This table summarises all releases of Apache Isis to date.
 | 4
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12335484[Release notes for v1.12.1]
 
-| xref:release-notes.adoc#_release-notes_1.12.0[1.12.0]
+| link:https://isis.apache.org/versions/1.12.0/release-notes/release-notes.html#_release-notes_1.12.0[1.12.0]
 | 29-mar-2016
 | Dynamic XML layouts
 | 7
@@ -133,7 +155,7 @@ This table summarises all releases of Apache Isis to date.
 | 21
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12327483[Release notes for v1.12.0]
 
-| xref:release-notes.adoc#_release-notes_1.11.1[1.11.1]
+| link:https://isis.apache.org/versions/1.11.1/release-notes/release-notes.html#_release-notes_1.11.1[1.11.1]
 | 17-jan-2016
 | Re-release under Java 1.7 (using toolchains plugin).
 | 0
@@ -141,7 +163,7 @@ This table summarises all releases of Apache Isis to date.
 | 1
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12334640[Release notes for v1.11.1]
 
-| xref:release-notes.adoc#_release-notes_1.11.0[1.11.0]
+| link:https://isis.apache.org/versions/1.11.0/release-notes/release-notes.html#_release-notes_1.11.0[1.11.0]
 | 02-jan-2016
 | More flexible REST API, view models using JAXB.
 | 9
@@ -149,7 +171,7 @@ This table summarises all releases of Apache Isis to date.
 | 12
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12333974[Release notes for v1.11.0]
 
-| xref:release-notes.adoc#_release-notes_1.10.0[1.10.0]
+| link:https://isis.apache.org/versions/1.10.0/release-notes/release-notes.html#_release-notes_1.10.0[1.10.0]
 | 10-nov-2015
 | New domain services, multi-tenancy support and mixins.
 | 7
@@ -157,7 +179,7 @@ This table summarises all releases of Apache Isis to date.
 | 12
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12333354[Release notes for 1.10.0]
 
-| xref:release-notes.adoc#_release-notes_1.9.0[1.9.0]
+| link:https://isis.apache.org/versions/1.9.0/release-notes/release-notes.html#_release-notes_1.9.0[1.9.0]
 | 1-sep-2015
 | AppManifest, Restful Objects representations and other "under-the-cover" improvements.
 | 18
@@ -165,7 +187,7 @@ This table summarises all releases of Apache Isis to date.
 | 25
 | link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12332806[Release notes for 1.9.0]
 
-| xref:release-notes.adoc#_release-notes_1.8.0[1.8.0]
+| link:https://isis.apache.org/versions/1.8.0/release-notes/release-notes.html#_release-notes_1.8.0[1.8.0]
 | 24-feb-2015
 | Wicket viewer moved into core; todoapp archetype moved to link:http://www.isisaddons.org[Isis Addons] (non-ASF).
 | 27
@@ -174,7 +196,7 @@ This table summarises all releases of Apache Isis to date.
 | * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12328845[core-1.8.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12328847[archetype-1.8.0]
 
-| xref:release-notes.adoc#_release-notes_1.7.0[1.7.0]
+| link:https://isis.apache.org/versions/1.7.0/release-notes/release-notes.html#_release-notes_1.7.0[1.7.0]
 | 18-oct-2014
 | Module functionality previously in 1.6.0 now retired; use link:http://www.isisaddons.org[Isis Addons] (non-ASF) instead.
 | 4
@@ -185,7 +207,7 @@ This table summarises all releases of Apache Isis to date.
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12327441[archetype-simpleapp-1.7.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12327440[archetype-todoapp-1.7.0]
 
-| xref:release-notes.adoc#_release-notes_1.6.0[1.6.0]
+| link:https://isis.apache.org/versions/1.6.0/release-notes/release-notes.html#_release-notes_1.6.0[1.6.0]
 | 28-jul-2014
 | Restful Objects viewer, JDO/Datanucleus Objectstore and Shiro Security all moved into core.  Quickstart-wrj archetype renamed to todoapp; simple-wrj archetype renamed to simpleapp.  Some functionality copied/refactored as link:http://www.isisaddons.org[Isis Addons] (non-ASF).
 | 6
@@ -196,7 +218,7 @@ This table summarises all releases of Apache Isis to date.
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12326462[archetype-simpleapp-1.6.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12326461[archetype-todoapp-1.6.0]
 
-| xref:release-notes.adoc#_release-notes_1.5.0[1.5.0]
+| link:https://isis.apache.org/versions/1.5.0/release-notes/release-notes.html#_release-notes_1.5.0[1.5.0]
 | 08-jun-2014
 | No longer releasing security-file
 | 3
@@ -210,7 +232,7 @@ This table summarises all releases of Apache Isis to date.
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12326528[archetype-simple-wrj-1.5.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12326527[archetype-quickstart-wrj-1.5.0]
 
-| xref:release-notes.adoc#_release-notes_1.4.1[1.4.1]
+| link:https://isis.apache.org/versions/1.4.1/release-notes/release-notes.html#_release-notes_1.4.1[1.4.1]
 | 14-mar-2014
 | Patch release
 | 0
@@ -221,7 +243,7 @@ This table summarises all releases of Apache Isis to date.
 * archetype-simple-wrj-1.4.1
 * archetype-quickstart-wrj-1.4.1
 
-| xref:r1.4.0[1.4.0]
+| link:https://isis.apache.org/versions/1.4.0/release-notes/release-notes.html#_release-notes_1.4.0[1.4.0]
 | 11-mar-2014
 |
 | 56
@@ -236,7 +258,7 @@ This table summarises all releases of Apache Isis to date.
 * archetype-simple-wrj-1.4.0
 * archetype-quickstart-wrj-1.4.0
 
-| xref:release-notes.adoc#_release-notes_1.3.1[1.3.1]
+| link:https://isis.apache.org/versions/1.3.1/release-notes/release-notes.html#_release-notes_1.3.1[1.3.1]
 | 7-nov-2013
 | Patch release
 | 1
@@ -246,7 +268,7 @@ This table summarises all releases of Apache Isis to date.
 * archetype-simple-wrj-1.3.1
 * archetype-quickstart-wrj-1.3.1
 
-| xref:release-notes.adoc#_release-notes_1.3.0[1.3.0]
+| link:https://isis.apache.org/versions/1.3.0/release-notes/release-notes.html#_release-notes_1.3.0[1.3.0]
 | 25-oct-2013
 | WRJ archetype renamed to Quickstart WRJ.  Simple WRJ archetype added.
 | 52
@@ -261,7 +283,7 @@ This table summarises all releases of Apache Isis to date.
 * archetype-simple-wrj-1.3.0
 * archetype-quickstart-wrj-1.3.0
 
-| xref:release-notes.adoc#_release-notes_1.2.0[1.2.0]
+| link:https://isis.apache.org/versions/1.2.0/release-notes/release-notes.html#_release-notes_1.2.0[1.2.0]
 | 30-may-2013
 |
 | 22
@@ -275,7 +297,7 @@ This table summarises all releases of Apache Isis to date.
 * viewer-wicket-1.2.0
 * archetype-wrj-1.0.3
 
-| xref:release-notes.adoc#_release-notes_1.1.0[1.1.0]
+| link:https://isis.apache.org/versions/1.1.0/release-notes/release-notes.html#_release-notes_1.1.0[1.1.0]
 | 31-jan-2013
 |
 | 9
@@ -286,7 +308,7 @@ This table summarises all releases of Apache Isis to date.
 * viewer-wicket-1.1.0
 * archetype-wrj-1.0.2
 
-| xref:r1.0.1[1.0.1]
+| link:https://isis.apache.org/versions/1.0.1/release-notes/release-notes.html#_release-notes_1.0.1[1.0.1]
 | 10-jan-2013
 | Combining RestfulObjects and Wicket viewers into a single webapp, along with Shiro security
 | 1
@@ -295,7 +317,7 @@ This table summarises all releases of Apache Isis to date.
 | * security-shiro-1.0.0
 * archetype-wrj-1.0.1
 
-| xref:release-notes.adoc#_release-notes_1.0.0[1.0.0]
+| link:https://isis.apache.org/versions/1.0.0/release-notes/release-notes.html#_release-notes_1.0.0[1.0.0]
 | 24-dec-2012
 | First release having graduated
 | 8
@@ -329,7 +351,9 @@ This table summarises all releases of Apache Isis to date.
 
 
 
+include::_release-notes_2.0.0-M2.adoc[leveloffset=+1]
 include::_release-notes_1.17.0.adoc[leveloffset=+1]
+include::_release-notes_2.0.0-M1.adoc[leveloffset=+1]
 include::_release-notes_1.16.2.adoc[leveloffset=+1]
 include::_release-notes_1.16.1.adoc[leveloffset=+1]
 include::_release-notes_1.16.0.adoc[leveloffset=+1]
