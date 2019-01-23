@@ -111,13 +111,11 @@ public class _Probe {
     public void println(int indent, CharSequence chars) {
         if(counter.longValue()<maxCalls) {
             counter.increment();
-            final long counterValue = counter.longValue();
-            for(int i=0; i<indent; ++i) {
-                out.print(indentLiteral);
-            }
-            final String message = "["+label+" "+counterValue+"] "+chars; 
-            out.println(String.format(emphasisFormat, message));
-            return;
+            print_line(indent, chars);
+        }
+        
+        if(counter.longValue()<maxCalls) {
+            return; // skip max-action
         }
 
         switch (maxAction) {
@@ -156,7 +154,16 @@ public class _Probe {
         System.err.println(String.format(format, args));
     }
 
-
+    // -- HELPER
+    
+    private void print_line(int indent, CharSequence chars) {
+        final long counterValue = counter.longValue();
+        for(int i=0; i<indent; ++i) {
+            out.print(indentLiteral);
+        }
+        final String message = "["+label+" "+counterValue+"] "+chars; 
+        out.println(String.format(emphasisFormat, message));
+    }
 
 
 }
