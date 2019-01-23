@@ -125,10 +125,12 @@ public class _Probe {
         case IGNORE:
             return;
         case SYSTEM_EXIT:
+            counter.increment();
             print_line(indent, chars);
             System.exit(0);
             return;
         case SYSTEM_EXIT_WITH_STACKTRACE:
+            counter.increment();
             print_line(indent, chars);
             _Exceptions.dumpStackTrace(out, 0, 1000);
             System.exit(0);
