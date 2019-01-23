@@ -2,6 +2,13 @@
 
 Search also for: "TODO: v2: " in the .adoc documentation.
 
+== Migration Notes 2.0.0-M2 to 2.0.0-M3
+
+=== ServicesInjector/ServiceRegistry
+
+ServicesInjector was removed. New interface ServiceInjector and ServiceRegistry redefined.
+//TODO work in progress with ISIS-2033
+
 == Migration Notes 2.0.0-M1 to 2.0.0-M2
 
 === Table Tree Viewer (ISIS-898)
@@ -230,11 +237,6 @@ module 'shiro' moved from `/core` to `/core/plugins` and its maven artifactId ch
 
 ObjectAdapter is no longer holding a reference to an ObjectSpecification for the element type of collections. ObjectAdapter#getElementSpecification() moved to ObjectSpecification#getElementSpecification().
  
-=== ServicesInjector/ServiceRegistry
-
-ServicesInjector was removed. New interface ServiceInjector and ServiceRegistry redefined.
-//TODO work in progress with ISIS-2033
-
 === JAXB XmlAdapters (ISIS-1972)
 
 We do now provide JAXB XmlAdapters for Java built-in temporal types in 'applib': org.apache.isis.applib.adapters.JaxbAdapters
