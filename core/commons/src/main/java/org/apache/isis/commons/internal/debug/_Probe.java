@@ -49,6 +49,7 @@ public class _Probe {
     private PrintStream out = System.out;
     private String label = "Probe";
     private String indentLiteral = "  ";
+    private String emphasisFormat = "__PROBE__ %s";
     
     private final LongAdder counter = new LongAdder();
     { counter.increment(); }
@@ -97,6 +98,11 @@ public class _Probe {
         return this;
     }
     
+    public _Probe emphasisFormat(String emphasisFormat) {
+        this.emphasisFormat = emphasisFormat;
+        return this;
+    }
+    
     // -- INDENTING
     
     public int currentIndent = 0;
@@ -110,7 +116,8 @@ public class _Probe {
             for(int i=0; i<indent; ++i) {
                 out.print(indentLiteral);
             }
-            out.println("["+label+" "+counterValue+"] "+chars);
+            final String message = "["+label+" "+counterValue+"] "+chars; 
+            out.println(String.format(emphasisFormat, message));
             return;
         }
 
