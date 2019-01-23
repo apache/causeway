@@ -89,10 +89,6 @@ public interface IsisConfiguration {
     }
     
     /**
-     * 
-     * @param topModule
-     * @param additionalPropertyResources
-     * @return
      * @since 2.0.0-M2
      */
     static IsisConfiguration buildFromAppManifest(AppManifest appManifest) {

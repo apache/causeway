@@ -18,14 +18,15 @@
  */
 package org.apache.isis.config;
 
+
 /**
  * Entry-point for Application Bootstrapping
- *  
+ *
  * @since 2.0.0-M2
  */
 @FunctionalInterface
 public interface AppConfig {
 
     public IsisConfiguration isisConfiguration();
-    
+
 }

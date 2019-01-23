@@ -1,15 +1,70 @@
+= Migration Notes
+
 :toc:
 
 Search also for: "TODO: v2: " in the .adoc documentation.
 
-== Migration Notes 2.0.0-M2 to 2.0.0-M3
+== 2.0.0-M2 to 2.0.0-M3
 
 === ServicesInjector/ServiceRegistry
 
 ServicesInjector was removed. New interface ServiceInjector and ServiceRegistry redefined.
 //TODO work in progress with ISIS-2033
 
-== Migration Notes 2.0.0-M1 to 2.0.0-M2
+
+== 2.0.0-M1 to 2.0.0-M2
+
+=== AppConfig (ISIS-2039)
+
+`AppConfig` is a new interface that is located through a variety of mechanisms:
+
+* CDI if available, else
+* Java 7's ServiceLoader mechanism (`META-INF/services/org.apache.isis.config.AppConfig` file to be present), else
+* fallback to reading (peeking into) `isis.properties`.
+
+Its API is simply:
+
+[source,java]
+----
+@FunctionalInterface
+public interface AppConfig {
+
+    IsisConfiguration isisConfiguration();
+
+}
+----
+
+The expected idiom is for the application's `AppManifest` to also implement this, eg:
+
+[source,java]
+----
+@javax.ejb.Singleton                                                // <1>
+public class HelloWorldAppManifest extends AppManifestAbstract
+            implements AppConfig {                                  // <2>
+
+    ...
+
+    @Override
+    public IsisConfiguration isisConfiguration () {
+        return IsisConfiguration.buildFromAppManifest(this);
+    }
+}
+----
+<1> only required if the `AppConfig` is to be picked up using CDI
+
+So, we have the `AppManifest` instantiated by CDI etc, and then the `IsisConfiguration` is built in turn from the `AppManifest`.
+Once the `IsisConfiguration` is created, it is immutable.
+And, following the above idiom, the `IsisConfiguration` also makes the `AppManifest` available:
+
+[source,java]
+----
+public interface IsisConfiguration {
+    ...
+    AppManifest getAppManifest();
+    ...
+}
+----
+
 
 === Table Tree Viewer (ISIS-898)
 
@@ -513,7 +568,7 @@ isis.viewer.wicket.themes.provider=org.my.IsisWicketThemeSupport
 might need to reinstate, or long-term will have SpringBoot etc do the bootstrapping.
 
 
-== Migration Notes 1.x to 2.0.0-M1
+== 1.x to 2.0.0-M1
 
 === java.time support (ISIS-1636)
 
