@@ -52,7 +52,6 @@ public class _Probe {
     private String emphasisFormat = "__PROBE__ %s";
     
     private final LongAdder counter = new LongAdder();
-    { counter.increment(); }
     
     private _Probe(long maxCalls, MaxCallsReachedAction maxAction) {
         this.maxCalls = maxCalls;
@@ -110,9 +109,9 @@ public class _Probe {
     // -- PRINTING
 
     public void println(int indent, CharSequence chars) {
-        final long counterValue = counter.longValue(); 
-        if(counterValue<=maxCalls) {
+        if(counter.longValue()<maxCalls) {
             counter.increment();
+            final long counterValue = counter.longValue();
             for(int i=0; i<indent; ++i) {
                 out.print(indentLiteral);
             }
