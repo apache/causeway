@@ -21,12 +21,32 @@ package org.apache.isis.applib.tree;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * Provides the parent/child relationship information between pojos 
+ * to derive a tree-structure. 
+ * 
+ * @param <T> type of the tree nodes that make up the tree structure
+ * 
+ * @since 2.0.0-M2
+ */
 public interface TreeAdapter<T> {
 
+    /**
+     * @param value - tree-node (pojo) 
+     * @return the parent tree-node (pojo) of the specified {@code value} tree-node (pojo)
+     */
     public Optional<T> parentOf(T value);
 
+    /**
+     * @param value - tree-node (pojo)
+     * @return number of child tree-nodes of the specified {@code value} tree-node (pojo)
+     */
     public int childCountOf(T value);
 
+    /**
+     * @param value - tree-node (pojo)
+     * @return stream of child tree-nodes of the specified {@code value} tree-node (pojo)
+     */
     public Stream<T> childrenOf(T value);
 
 }
