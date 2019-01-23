@@ -15,19 +15,40 @@ ServicesInjector was removed. New interface ServiceInjector and ServiceRegistry 
 
 also: ISIS-1943,ISIS-1944,ISIS-1947
 
-NOTE: TODO - needs documenting how to use.
+Note: Currently does not implement a Table Tree View but just a Tree View.
 
 public API is:
 
-* `TreeAdapter`
-* `TreeNode` and `LazyTreeNode`
-* `TreePath`
-* `TreeNode`
+* `TreeAdapter` (provides the parent/child relationship information between pojos to derive a tree-structure) 
+* `TreeNode` (with `LazyTreeNode` as the default implementation)
+* `TreePath` (represents a coordinate-system to navigate any tree-structure)
 
-eg in `isis-2-demo`,
+[source,java]
+----
+public interface TreeAdapter<T> {
 
+    Optional<T> parentOf(T value); // parent tree-node (pojo) of given value tree-node
+    
+    int childCountOf(T value); // number of child tree-nodes of given value tree-node
 
-implementation of `TreeAdapter`:
+    Stream<T> childrenOf(T value); // stream of child tree-nodes of given value tree-node
+
+}
+
+// creating a tree starting at a given tree-node, where MyTreeAdapter implements TreeAdapter<T>
+
+T root = ... // the tree's root (a pojo)
+TreeNode<T> tree = TreeNode.lazy(root, MyTreeAdapter.class); // creates a tree-node with given 'root' as the tree's root
+
+// expand a certain tree-node by specifying it's coordinates (TreePath) within the tree-structure
+
+tree.expand(TreePath.of(0)); // expand the root node
+tree.expand(TreePath.of(0, 1)); // expand the second child of the root node
+----
+
+A full example is showcased in the https://github.com/andi-huber/isis-2-demo/tree/master/src/main/java/domainapp/dom/tree[isis-2-demo] ...
+
+Implementation of `TreeAdapter`
 
 [source,java]
 ----
@@ -128,6 +149,28 @@ public class FileNode {
 	private static boolean isRoot(File file) {
 		return file.getParent()==null;
 	}
+}
+----
+
+And finally the ViewModel that provides the tree for rendering:
+
+[source,java]
+----
+@ViewModel
+public class TreeDemo extends DemoStub {
+	
+	/**
+	 * @return the demo tree view model as a property  
+	 */
+	public TreeNode<FileNode> getFileSystemTree() {
+    		val root = FileNodeFactory.defaultRoot();
+    		val tree = TreeNode.lazy(root, FileSystemTreeAdapter.class);
+    		tree.expand(TreePath.of(0)); // expand the root node
+    		return tree;
+	}
+        
+    }
+	
 }
 ----
 
