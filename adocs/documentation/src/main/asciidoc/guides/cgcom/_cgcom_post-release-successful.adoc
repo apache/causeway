@@ -335,7 +335,7 @@ Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service.
 +
 For more information on DOAP files, see these http://projects.apache.org/doap.html[Apache policy docs].
 
-* Update the https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=blob_plain;f=STATUS;hb=HEAD[STATUS] file (in root of Apache Isis' source) should be updated with details of the new release.
+* Update the link:https://github.com/apache/isis/blob/master/STATUS[STATUS] file (in root of Apache Isis' source) should be updated with details of the new release.
 
 * commit the `.adoc` changes
 

@@ -15,7 +15,7 @@ You can therefore easily check the documentation before raising a pull request (
 
 To help write the Asciidoc text itself, we provide some xref:../dg/dg.adoc#_dg_asciidoc-templates[Asciidoc templates].
 
-Publishing is performed by copying the generated HTML to a different git repository (link:https://git-wip-us.apache.org/repos/asf?p=isis-site.git[isis-site]).
+Publishing is performed by copying the generated HTML to a different git repository (link:https://github.com/apache/isis-site.git[isis-site]).
 Since this can only be done by Apache Isis committers, the process for doing this is described in the xref:../cgcom/cgcom.adoc#_cgcom_asciidoc-publish-procedure[committers' guide].
 This is synced by ASF infrastructure over to link:http://isis.apache.org[isis.apache.org].
 
