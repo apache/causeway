@@ -28,8 +28,14 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  * <h1>- internal use only -</h1>
  * <p>
  * Replacement for the use of System.out.println when adding temporary debug code, 
- * that need to be removed later. 
+ * that needs to be removed later.
  * </p>
+ * <p>EXAMPLE:<br/><pre>{@code 
+ * _Probe probe = 
+ *    _Probe.maxCallsThenExitWithStacktrace(1).label("IsisSessionFactoryDefault");
+ * probe.println("Hallo World!");
+ * }
+ * </pre></p>
  * <p>
  * <b>WARNING</b>: Do <b>NOT</b> use any of the classes provided by this package! <br/>
  * These may be changed or removed without notice!
@@ -112,19 +118,18 @@ public class _Probe {
         if(counter.longValue()<maxCalls) {
             counter.increment();
             print_line(indent, chars);
+            return;
         }
         
-        if(counter.longValue()<maxCalls) {
-            return; // skip max-action
-        }
-
         switch (maxAction) {
         case IGNORE:
             return;
         case SYSTEM_EXIT:
+            print_line(indent, chars);
             System.exit(0);
             return;
         case SYSTEM_EXIT_WITH_STACKTRACE:
+            print_line(indent, chars);
             _Exceptions.dumpStackTrace(out, 0, 1000);
             System.exit(0);
             return;
