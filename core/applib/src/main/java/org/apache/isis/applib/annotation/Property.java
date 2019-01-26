@@ -211,7 +211,7 @@ public @interface Property {
      * <p>
      *     For properties the default value, {@link org.apache.isis.applib.annotation.Optionality#DEFAULT}, usually
      *     means that the property is required unless it has been overridden by {@link javax.jdo.annotations.Column}
-     *     with its {@link javax.jdo.annotations.Column#allowsNull() allowNulls()} attribute set to true.
+     *     with its {@link javax.jdo.annotations.Column#allowsNull() allowsNull()} attribute set to true.
      * </p>
      */
     Optionality optionality() default Optionality.NOT_SPECIFIED;

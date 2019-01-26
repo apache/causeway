@@ -166,9 +166,9 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
 
                     if(underlying.isInvertedSemantics()) {
                         // ie @Optional
-                        validationFailures.add("%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowNulls=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
+                        validationFailures.add("%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
                     } else {
-                        validationFailures.add("%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowNulls=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
+                        validationFailures.add("%s: incompatible Isis' default of required/optional properties vs JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
                     }
                 }
 
@@ -184,7 +184,7 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                     }
                     if(underlying.isInvertedSemantics()) {
                         // ie @Optional
-                        validationFailures.add("%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowNulls=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
+                        validationFailures.add("%s: incompatible usage of Isis' @Optional annotation and @javax.jdo.annotations.Column; use just @javax.jdo.annotations.Column(allowsNull=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
                     } else {
                         validationFailures.add("%s: incompatible default handling of required/optional properties between Isis and JDO; add @javax.jdo.annotations.Column(allowsNull=\"...\")", association.getIdentifier().toClassAndNameIdentityString());
                     }
