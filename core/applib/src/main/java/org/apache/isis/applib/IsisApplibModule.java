@@ -40,7 +40,7 @@ public class IsisApplibModule extends ModuleAbstract {
         private static final long serialVersionUID = 1L;
     }
     public abstract static class LayoutUiEvent<S>
-            extends org.apache.isis.applib.services.eventbus.LayoutUiEvent<S> {
+            extends org.apache.isis.applib.events.ui.LayoutUiEvent<S> {
         private static final long serialVersionUID = 1L;
     }
 

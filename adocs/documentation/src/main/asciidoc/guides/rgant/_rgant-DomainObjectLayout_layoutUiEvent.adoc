@@ -35,7 +35,7 @@ For example:
 )
 public class ToDoItemDto {
     public static class LayoutUiEvent
-        extends org.apache.isis.applib.services.eventbus.LayoutUiEvent<ToDoItemDto> { }
+        extends org.apache.isis.applib.events.ui.LayoutUiEvent<ToDoItemDto> { }
     ...
 }
 ----

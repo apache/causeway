@@ -16,12 +16,11 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.eventbus;
+package org.apache.isis.applib.events.ui;
 
 import java.util.EventObject;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.events.ui.AbstractUiEvent;
 
 /**
  * Emitted for subscribers to obtain a layout hint (equivalent to the <tt>layout()</tt> supporting method).
