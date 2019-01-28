@@ -38,6 +38,7 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
 
     public List<Object> getArguments();                                     // <5>
     public Object getReturnValue();                                         // <6>
+    public void setReturnValue();                                         // <7>
 }
 ----
 <1> The `Default` nested static class is the default for the xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`]
@@ -48,3 +49,4 @@ Whether this raises an event or not depends upon the `isis.reflector.facet.actio
 <4> Deprecated, use xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] or (better)  xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]instead.
 <5> The arguments being used to invoke the action; populated during validate phase and subsequent phases.
 <6> The value returned by the action; populated only in the executed phase.
+<7> Allows the subscriber to effectively change the value returned by the action; may only be called in the executed phase.

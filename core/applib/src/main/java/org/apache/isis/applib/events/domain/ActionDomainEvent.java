@@ -195,7 +195,10 @@ public abstract class ActionDomainEvent<S> extends AbstractDomainEvent<S> {
     }
 
     /**
-     * Not API - set by the framework
+     * Set by the framework.
+     *
+     * Event subscribers can replace the value with some other value if they wish, though only in the
+     * {@link Phase#EXECUTED} phase.
      */
     public void setReturnValue(final Object returnValue) {
         this.returnValue = returnValue;

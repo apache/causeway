@@ -251,7 +251,7 @@ implements ImperativeFacet {
 
                         // invoke method
                         final Object resultPojo = invokeMethodElseFromCache(targetAdapter, argumentAdapters);
-                        final ObjectAdapter resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
+                        ObjectAdapter resultAdapterPossiblyCloned = cloneIfViewModelCloneable(resultPojo, mixinElseRegularAdapter);
 
                         // ... post the executed event
                         
@@ -264,6 +264,10 @@ implements ImperativeFacet {
                                 command,
                                 resultAdapterPossiblyCloned);
 
+                        final Object returnValue = event.getReturnValue();
+                        if(returnValue != resultPojo) {
+                            resultAdapterPossiblyCloned = cloneIfViewModelCloneable(returnValue, mixinElseRegularAdapter);
+                        }
                         return ObjectAdapter.Util.unwrapPojo(resultAdapterPossiblyCloned);
 
                     } catch (Exception e) {
