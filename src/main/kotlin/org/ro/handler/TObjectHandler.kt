@@ -1,17 +1,15 @@
 package org.ro.handler
 
-import kotlinx.serialization.json.JsonObject
-import org.ro.to.TObject
-
 class TObjectHandler : AbstractHandler(), IResponseHandler {
 
-    override fun canHandle(jsonObj: JsonObject): Boolean {
-        return hasMembers(jsonObj) && !isService(jsonObj)
+    override fun canHandle(jsonStr: String): Boolean {
+// FIXME       return hasMembers(jsonObj) && !isService(jsonObj)
+        return false
     }
 
-    override fun doHandle(jsonObj: JsonObject) {
-        val tObj = TObject(jsonObj)
-        logEntry.obj = tObj
+    override fun doHandle(jsonStr: String) {
+// FIXME       val tObj = TObject(jsonObj)
+//        logEntry.obj = tObj
     }
 
 }

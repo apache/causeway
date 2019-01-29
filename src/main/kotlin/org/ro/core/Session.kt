@@ -1,53 +1,55 @@
 package org.ro.core
 
-import kotlinx.io.ByteArrayOutputStream
-import kotlinx.serialization.toUtf8Bytes
+import org.ro.Application
 
 /**
- * - keeps track of connected server,
+ * Keep track of connected server.
  */
 object Session {
     private var user: String = ""
     private var pw: String = ""
     var url: String = ""
-    
+
     fun login(url: String, user: String, pw: String) {
         this.user = user
         this.pw = pw
         this.url = url
-        Globals.view?.statusBar?.user?.title = user
+        Application.statusBar.updateUser(user)
     }
 
     fun getCredentials(): String {
-        var credentials = "$user : $pw"
-        val ba = credentials.toUtf8Bytes().encodeBase64()
-        credentials = ba.toString()
-        return credentials
+        return "$user:$pw".base64encoded
     }
 
     /**
-     * https://gist.github.com/hrules6872/e2d4d02a1e8d3c6328ae5aeabc430b96#file-base64-kt
+     * https://discuss.kotlinlang.org/t/kotlin-native-base64-en-decoder-code/10043
      */
-    private fun ByteArray.encodeBase64(): ByteArray {
-        val table = (CharRange('A', 'Z') + CharRange('a', 'z') + CharRange('0', '9') + '+' + '/').toCharArray()
-        val output = ByteArrayOutputStream()
-        var padding = 0
-        var position = 0
-        while (position < this.size) {
-            var b = this[position].toInt() and 0xFF shl 16 and 0xFFFFFF
-            if (position + 1 < this.size) b = b or (this[position + 1].toInt() and 0xFF shl 8) else padding++
-            if (position + 2 < this.size) b = b or (this[position + 2].toInt() and 0xFF) else padding++
-            for (i in 0 until 4 - padding) {
-                val c = b and 0xFC0000 shr 18
-                output.write(table[c].toInt())
-                b = b shl 6
+    private const val BASE64_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+
+    /**
+     * Base64 encode a string.
+     */
+    val String.base64encoded: String
+        get() {
+            val pad = when (this.length % 3) {
+                1 -> "=="
+                2 -> "="
+                else -> ""
             }
-            position += 3
+            var raw = this
+            (1..pad.length).forEach { raw += 0.toChar() }
+            return StringBuilder().apply {
+                (0 until raw.length step 3).forEach {
+                    val n: Int = (0xFF.and(raw[it].toInt()) shl 16) +
+                            (0xFF.and(raw[it + 1].toInt()) shl 8) +
+                            0xFF.and(raw[it + 2].toInt())
+                    listOf<Int>((n shr 18) and 0x3F,
+                            (n shr 12) and 0x3F,
+                            (n shr 6) and 0x3F,
+                            n and 0x3F).forEach { append(BASE64_SET[it]) }
+                }
+            }.dropLast(pad.length)
+                    .toString() + pad
         }
-        for (i in 0 until padding) {
-            output.write('='.toInt())
-        }
-        return output.toByteArray()
-    }
 
 }

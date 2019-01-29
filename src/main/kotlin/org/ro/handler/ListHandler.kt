@@ -1,13 +1,12 @@
 package org.ro.handler
 
-import kotlinx.serialization.json.JsonObject
 import org.ro.core.event.ListObserver
 import org.ro.to.List
 
 class ListHandler : AbstractHandler(), IResponseHandler {
 
-    override fun canHandle(jsonObj: JsonObject): Boolean {
-        val r = jsonObj["result"].jsonObject
+    override fun canHandle(jsonStr: String): Boolean {
+     /*   val r = jsonObj["result"].jsonObject
         if (r.isEmpty()) {
             return false
         }
@@ -20,11 +19,28 @@ class ListHandler : AbstractHandler(), IResponseHandler {
         if (list.isEmpty()) {
             return false
         }
-        return list.size > 0
+        return list.size > 0     */
+        return false;
     }
 
-    override fun doHandle(jsonObj: JsonObject) {
-        val list = List(jsonObj)
+    fun canHandle_16_2(jsonStr: String): Boolean {
+        //TODO structure of json is changed >= 16.2
+        /*
+        var v: Object = jsonObj.value
+        if ((v == null) || isEmptyObject(v)) {
+            return false
+        }
+        if (v is Array) {
+            var va: Array = v as Array
+            return va.length > 0
+        } 
+        */
+        return false
+    }
+
+
+    override fun doHandle(jsonStr: String) {
+        val list = List()
         logEntry.obj = list
         val lo: ListObserver = logEntry.initListObserver()
         lo.update(logEntry)

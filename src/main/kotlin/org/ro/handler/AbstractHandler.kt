@@ -1,7 +1,6 @@
 package org.ro.handler
 
 import kotlinx.serialization.json.JsonObject
-import org.ro.core.Utils
 import org.ro.core.event.LogEntry
 import org.ro.to.Extensions
 
@@ -19,29 +18,24 @@ open class AbstractHandler : IResponseHandler {
      */
     override fun handle(logEntry: LogEntry) {
         this.logEntry = logEntry
-        val jsonObj: JsonObject? = getJsonObject(logEntry)
-        if (null == jsonObj) {
-            console.log("jsonObj == null : " + logEntry.url)
+        val jsonStr: String? = logEntry.getResponse()
+        if (null === jsonStr) {
+            console.log("jsonStr == null : " + logEntry.url)
         } else {
-            if (canHandle(jsonObj)) {
-                doHandle(jsonObj)
+            if (canHandle(jsonStr)) {
+                doHandle(jsonStr)
             } else {
                 successor!!.handle(logEntry)
             }
         }
     }
-
-    private fun getJsonObject(logEntry: LogEntry): JsonObject? {
-        val jsonStr: String = logEntry.getResponse()
-        return Utils().toJsonObject(jsonStr)
-    }
-
+    
     /**
      * Default implementation - should be overridden in subclasses.
      * @param jsonObj
      * @return
      */
-    override fun canHandle(jsonObj: JsonObject): Boolean {
+    override fun canHandle(jsonStr: String): Boolean {
         return true
     }
 
@@ -50,7 +44,7 @@ open class AbstractHandler : IResponseHandler {
      * @param jsonObj
      * @return
      */
-    override fun doHandle(jsonObj: JsonObject) {
+    override fun doHandle(jsonStr: String) {
     }
 
     fun asExtensions(jsonObj: JsonObject): Extensions {
@@ -60,7 +54,7 @@ open class AbstractHandler : IResponseHandler {
 
     fun hasMembers(jsonObj: JsonObject): Boolean {
         val members = jsonObj["members"].jsonArray
-        return members.size > 0   
+        return members.size > 0
     }
 
     fun isService(jsonObj: JsonObject): Boolean {

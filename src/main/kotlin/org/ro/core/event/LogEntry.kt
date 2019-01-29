@@ -3,7 +3,7 @@ package org.ro.core.event
 import org.ro.view.ImageRepository
 import pl.treksoft.kvision.types.Date
 
-class LogEntry(var url: String, var method: String? = null, private var request: String? = null) {
+class LogEntry(var url: String, var method: String? = null, private var request: String = "") {
     private var icon: Any? = null
 
     init {
@@ -20,23 +20,23 @@ class LogEntry(var url: String, var method: String? = null, private var request:
     var start: Int = createdAt.getMilliseconds()
     var updatedAt: Date? = null
     private var lastAccessedAt: Date? = null
-    private var offset: Int? = null
+    private var offset = 0
     private var fault: String? = null
-    private var requestLength: Int? = null
+    private var requestLength = 0
 
     init {
-        requestLength = request!!.length
+        requestLength = request.length
     }
 
     private var responseLength: Int? = null
-    var response: String = ""
-    private var duration: Int = 0
+    var response = ""
+    private var duration = 0
     var obj: Any? = null
-    var cacheHits: Int = 0
+    var cacheHits = 0
     var observer: ILogEventObserver? = null
 
     // alternative constructor for UI events (eg. from user interaction)
-    constructor(description: String) : this(description, null, null) {
+    constructor(description: String) : this(description, null, "") {
         icon = ImageRepository.BlueIcon
     }
 
@@ -66,7 +66,11 @@ class LogEntry(var url: String, var method: String? = null, private var request:
         this.response = response //.replace("\r\n", "")
         responseLength = response.length
         icon = ImageRepository.GreenIcon
-        observer!!.update(this)
+        if (observer != null) {
+            observer!!.update(this)
+        } else {
+            console.log("[no observer set for $url]")
+        }
     }
 
     fun initListObserver(): ListObserver {

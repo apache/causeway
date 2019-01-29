@@ -1,6 +1,5 @@
 package org.ro.handler
 
-import kotlinx.serialization.json.JsonObject
 import org.ro.core.event.LogEntry
 
 /**
@@ -20,8 +19,8 @@ interface IResponseHandler {
 
     fun handle(logEntry: LogEntry)
 
-    fun canHandle(jsonObj: JsonObject): Boolean
+    fun canHandle(jsonStr: String): Boolean
 
-    fun doHandle(jsonObj: JsonObject)
+    fun doHandle(jsonObj: String)
 }
 

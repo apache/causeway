@@ -1,6 +1,7 @@
 package org.ro.core.event
 
-import org.ro.core.Globals
+import org.ro.core.Session
+import org.ro.handler.Dispatcher
 import org.ro.to.Invokeable
 import org.ro.to.Link
 import org.w3c.dom.events.Event
@@ -11,13 +12,7 @@ import org.w3c.xhr.XMLHttpRequest
  */
 class RoXmlHttpRequest {
     private var xhr = XMLHttpRequest()
-    var url = ""
-
-    init {
-//        super.useProxy = false
-//        addEventListener(FaultEvent.FAULT, xhrFaultHandler)
-//        addEventListener(ResultEvent.RESULT, xhrResultHandler)
-    }
+    private var url = ""
 
     protected fun errorHandler(event: Event, responseText: String) {
         EventLog.fault(url, responseText)
@@ -25,9 +20,10 @@ class RoXmlHttpRequest {
 
     protected fun resultHandler(event: Event, responseText: String) {
         val jsonString: String = responseText
+        console.log(responseText);
         val logEntry: LogEntry? = EventLog.end(url, jsonString)
         if (logEntry != null) {
-            Globals.dispatcher.handle(logEntry)
+            Dispatcher.handle(logEntry)
         }
     }
 
@@ -38,19 +34,19 @@ class RoXmlHttpRequest {
             EventLog.update(url)
         }
         val method = inv.method
-        val credentials: String = Globals.session.getCredentials()
+        val credentials: String = Session.getCredentials()
+        xhr.open(method, url, true)
         xhr.setRequestHeader("Authorization", "Basic $credentials")
-        xhr.setRequestHeader("Content-Type", "application/jsoncharset=UTF-8")
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
         xhr.setRequestHeader("Accept", "application/json")
 
-        xhr.open(method, url, true)
         xhr.onload = { event -> resultHandler(event, xhr.responseText) }
         xhr.onerror = { event -> errorHandler(event, xhr.responseText) }
         xhr.ontimeout = { event -> errorHandler(event, xhr.responseText) }
 
         var body = ""
         if (method == Invokeable().POST) {
-            var l: Link = inv as Link
+            val l: Link = inv as Link
             body = l.getArgumentsAsJsonString()
             xhr.send(body)
         } else {

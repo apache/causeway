@@ -19,7 +19,7 @@ class UrlsTest {
 
     fun setUp() {
         timer = Timer(100, 1)
-        Globals.session.login("http://localhost:8080", "sven", "pass")
+        Session.login("http://localhost:8080", "sven", "pass")
         /*        urls = {}
                 addUrl(URLS.FR_OBJECT)
                 addUrl(URLS.FR_OBJECT_BAZ)
@@ -64,7 +64,7 @@ class UrlsTest {
 
     fun handleLinkComplete(event: TimerEvent, passThroughData: Object): void {
         var href: String = link.href
-        var logEntry: LogEntry = Globals.logFind(href)
+        var logEntry: LogEntry = Eventlog.find(href)
         var resp: String = logEntry.retrieveResponse()
         //TODO handle authentication problem: logEntry.fault="Security error accessing url"
         //  http://localhost:8080/crossdomain.xml

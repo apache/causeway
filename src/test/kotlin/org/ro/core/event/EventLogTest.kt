@@ -21,12 +21,12 @@ class EventLogTest {
         val upUrl: String = URLS.RESTFUL
 
         // when
-        EventLog.start(selfUrl, myFirst, null)
-        EventLog.start(upUrl, myFirst, null)
+        EventLog.start(selfUrl, myFirst)
+        EventLog.start(upUrl, myFirst)
         EventLog.end(selfUrl, selfStr)
         EventLog.end(upUrl, upStr)
-        EventLog.start(selfUrl, myLast, null)
-        EventLog.start(upUrl, myLast, null)
+        EventLog.start(selfUrl, myLast)
+        EventLog.start(upUrl, myLast)
         // then
         val currentSize: Int = EventLog.getEntries()!!.size
         assertEquals(4 + initialSize, currentSize)

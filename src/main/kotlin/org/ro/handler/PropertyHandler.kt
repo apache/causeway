@@ -6,8 +6,8 @@ import org.ro.to.Property
 
 class PropertyHandler : AbstractHandler(), IResponseHandler {
 
-    override fun canHandle(jsonObj: JsonObject): Boolean {
-        val links = jsonObj["links"].jsonArray
+    override fun canHandle(jsonStr: String): Boolean {
+        /*val links =  jsonObj["links"].jsonArray
         if (links.isNotEmpty()) {
             val s = links.size
             var jso: JsonObject
@@ -19,7 +19,7 @@ class PropertyHandler : AbstractHandler(), IResponseHandler {
                 jso = links[4].jsonObject
                 return isLinkDescribedBy(jso)
             }
-        }
+        }       */
         return false
     }
     
@@ -29,8 +29,8 @@ class PropertyHandler : AbstractHandler(), IResponseHandler {
         return (link.rel == Property().DESCRIBED_BY)
     }
 
-    override fun doHandle(jsonObj: JsonObject) {
-        val p = Property(jsonObj)
+    override fun doHandle(jsonStr: String) {
+        val p =  Property()
         p.descriptionLink()?.invoke()
     }
 

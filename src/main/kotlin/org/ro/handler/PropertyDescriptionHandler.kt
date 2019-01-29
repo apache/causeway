@@ -1,21 +1,21 @@
 package org.ro.handler
 
-import kotlinx.serialization.json.JsonObject
-import org.ro.to.Extensions
 import org.ro.to.Property
 
 class PropertyDescriptionHandler : AbstractHandler(), IResponseHandler {
-    override fun canHandle(jsonObj: JsonObject): Boolean {
-        val id = jsonObj.get("id")
+    override fun canHandle(jsonStr: String): Boolean {
+        /*
+        val id = JsonArray() //FIXME jsonObj.get("id")
         if (id.isNull) {
             return false
         }
-        val ext = Extensions(jsonObj)
-        return ext.friendlyName.isNotEmpty()
+        val ext = Extensions() //TODO
+        return ext.friendlyName.isNotEmpty()  */
+        return false
     }
 
-    override fun doHandle(jsonObj: JsonObject) {
-        var p = Property(jsonObj)
+    override fun doHandle(jsonStr: String) {
+        var p = Property()//FIXME Property(jsonObj)
         //FIXME logEntry.object = p
         //FIXME to be handled by Observers
         // Globals.getList().handleProperty(p)

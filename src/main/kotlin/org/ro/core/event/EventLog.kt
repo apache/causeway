@@ -1,8 +1,8 @@
 package org.ro.core.event
 
-import org.ro.core.DisplayManager
-import org.ro.core.Globals
+import org.ro.Application
 import org.ro.core.Utils
+import org.ro.handler.Dispatcher
 import kotlin.js.Date
 
 /**
@@ -16,11 +16,11 @@ import kotlin.js.Date
 object EventLog {
     private var log = mutableListOf<LogEntry>()
 
-    fun start(url: String, method: String, body: String? = null, obs: ILogEventObserver? = null): LogEntry {
+    fun start(url: String, method: String, body: String = "", obs: ILogEventObserver? = null): LogEntry {
         val entry = LogEntry(url, method, body)
         entry.observer = obs
         this.log.add(entry)
-        DisplayManager.updateStatus(entry)
+        updateStatus(entry)
         return entry
     }
 
@@ -28,7 +28,7 @@ object EventLog {
         val entry = LogEntry(description)
         entry.createdAt = Date()
         this.log.add(entry)
-        DisplayManager.updateStatus(entry)
+        updateStatus(entry)
     }
 
     fun update(description: String): LogEntry? {
@@ -43,21 +43,27 @@ object EventLog {
             // Happens with 'Log Entries (x)'
         } else {
             entry.setClose()
-            DisplayManager.updateStatus(entry)
+            updateStatus(entry)
         }
     }
 
     fun end(url: String, response: String): LogEntry? {
         val entry: LogEntry? = this.find(url)
-        entry!!.setSuccess(response)
-        DisplayManager.updateStatus(entry)
+        if (entry != null) {
+            entry.setSuccess(response)
+            updateStatus(entry)
+        } 
         return entry
     }
 
     fun fault(url: String, fault: String) {
         val entry: LogEntry? = this.find(url)
         entry!!.setError(fault)
-        DisplayManager.updateStatus(entry)
+        updateStatus(entry)
+    }
+
+    private fun updateStatus(entry: LogEntry) {
+        Application.statusBar.update(entry)
     }
 
     /**
@@ -76,6 +82,9 @@ object EventLog {
             }
         } else {
             le = this.findView(url)
+        }
+        if (le == null) {
+            console.log("[LogEntry for $url not found]")
         }
         return le
     }
@@ -161,7 +170,7 @@ for (i: Int i <= len i++) {
         val le = this.find(url)
         if ((le != null) && (le.hasResponse() || le.isView())) {
             le.retrieveResponse()
-            Globals.dispatcher.handle(le)
+            Dispatcher.handle(le)
             return true
         }
         return false

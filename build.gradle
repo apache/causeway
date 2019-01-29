@@ -30,6 +30,7 @@ apply plugin: 'kotlinx-serialization'
 repositories {
     jcenter()
     maven { url = 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    maven { url = 'https://plugins.gradle.org/m2/' }
     maven { url = 'https://kotlin.bintray.com/kotlinx' }
     maven { url = 'https://dl.bintray.com/gbaldeck/kotlin' }
     maven { url = 'https://dl.bintray.com/rjaros/kotlin' }

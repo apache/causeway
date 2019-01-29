@@ -9,12 +9,17 @@ open class Invokeable(jsonObj: JsonObject? = null) : LinkedTO(jsonObj) {
     open val PUT = "PUT"
     open val POST = "POST"
     open val DELETE = "DELETE"
-    
+
     internal var href: String = ""
     internal var method: String = ""
 
     fun invoke(obs: ILogEventObserver? = null) {
         RoXmlHttpRequest().invoke(this, obs)
     }
-    
+
+    constructor(url: String) : this() {
+        href = url
+        method = GET
+    }
+
 }

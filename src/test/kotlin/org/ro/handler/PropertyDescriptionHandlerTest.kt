@@ -15,7 +15,7 @@ class PropertyDescriptionHandlerTest {
         val xp = LogEntry("", "GET", null)
         val json: JsonObject = URLS.FR_PROPERTY_DESCRIPTION
         xp.response = JSON.stringify(json)
-        Globals.dispatcher.handle(xp)
+        Dispatcher.handle(xp)
         val selfHref: String? = Utils().getSelfHref(json)
         val act: LogEntry? = log.find(selfHref)
         //FIXME nothing tested right now!

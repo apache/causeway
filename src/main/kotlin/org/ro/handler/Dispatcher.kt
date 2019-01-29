@@ -35,6 +35,7 @@ object Dispatcher {
     }
 
     fun handle(logEntry: LogEntry): Unit {
+//        console.log(logEntry)
         delegate!!.handle(logEntry)
     }
 }
