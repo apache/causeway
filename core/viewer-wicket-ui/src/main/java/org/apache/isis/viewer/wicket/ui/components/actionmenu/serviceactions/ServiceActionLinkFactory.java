@@ -47,7 +47,7 @@ class ServiceActionLinkFactory extends ActionLinkFactoryAbstract {
 
         final AbstractLink link = newLink(linkId, objectAction, toggledMementosProviderIfAny);
 
-        return newLinkAndLabel(objectAdapter, objectAction, link, null);
+        return newLinkAndLabel(objectAdapter, objectAction, link);
     }
 
 

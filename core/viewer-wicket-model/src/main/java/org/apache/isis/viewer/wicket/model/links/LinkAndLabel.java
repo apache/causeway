@@ -46,7 +46,6 @@ public class LinkAndLabel implements Serializable {
             final ObjectAdapter objectAdapter,
             final ObjectAction objectAction,
             final AbstractLink link,
-            final String disabledReasonIfAny,
             final boolean blobOrClob) {
 
         final String name = ObjectAction.Util.nameFor(objectAction);
@@ -63,7 +62,7 @@ public class LinkAndLabel implements Serializable {
 
         return new LinkAndLabel(
                 link, name,
-                disabledReasonIfAny, description,
+                description,
                 blobOrClob, isPrototype,
                 actionIdentifier,
                 cssClass, cssClassFa, cssClassFaPosition, actionLayoutPosition,
@@ -87,7 +86,6 @@ public class LinkAndLabel implements Serializable {
 
     private final AbstractLink link;
     private final String label;
-    private final String disabledReasonIfAny;
     private final String descriptionIfAny;
     private final boolean blobOrClob;
     private final boolean prototype;
@@ -103,7 +101,6 @@ public class LinkAndLabel implements Serializable {
     private LinkAndLabel(
             final AbstractLink link,
             final String label,
-            final String disabledReasonIfAny,
             final String descriptionIfAny,
             final boolean blobOrClob,
             final boolean prototype,
@@ -117,7 +114,6 @@ public class LinkAndLabel implements Serializable {
             final Parameters parameters) {
         this.link = link;
         this.label = label;
-        this.disabledReasonIfAny = disabledReasonIfAny;
         this.descriptionIfAny = descriptionIfAny;
         this.blobOrClob = blobOrClob;
         this.prototype = prototype;
@@ -137,10 +133,6 @@ public class LinkAndLabel implements Serializable {
 
     public String getLabel() {
         return label;
-    }
-
-    public String getReasonDisabledIfAny() {
-        return disabledReasonIfAny;
     }
 
     public String getDescriptionIfAny() {

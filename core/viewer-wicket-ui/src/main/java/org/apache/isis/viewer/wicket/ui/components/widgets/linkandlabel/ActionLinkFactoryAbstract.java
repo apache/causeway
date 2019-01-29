@@ -276,12 +276,11 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
     protected LinkAndLabel newLinkAndLabel(
             final ObjectAdapter objectAdapter,
             final ObjectAction objectAction,
-            final AbstractLink link,
-            final String disabledReasonIfAny) {
+            final AbstractLink link) {
 
         final boolean whetherReturnsBlobOrClob = ObjectAction.Util.returnsBlobOrClob(objectAction);
 
-        return LinkAndLabel.newLinkAndLabel(objectAdapter, objectAction, link, disabledReasonIfAny, whetherReturnsBlobOrClob);
+        return LinkAndLabel.newLinkAndLabel(objectAdapter, objectAction, link, whetherReturnsBlobOrClob);
     }
 
     private InlinePromptContext determineInlinePromptContext() {

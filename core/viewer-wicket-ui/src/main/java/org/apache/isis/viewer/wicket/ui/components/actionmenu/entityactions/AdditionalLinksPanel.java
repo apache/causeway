@@ -127,7 +127,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                                 return first(reasonDisabledIfAny, linkAndLabel.getDescriptionIfAny());
                             }
                         } 
-                        : Model.of(first(linkAndLabel.getReasonDisabledIfAny(), linkAndLabel.getDescriptionIfAny()));
+                        : Model.of(linkAndLabel.getDescriptionIfAny());
                 
                 Tooltips.addTooltip(link, tooltipModel);
 
@@ -141,7 +141,9 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
 
                 SemanticsOf semantics = linkAndLabel.getSemantics();
-                if (linkAndLabel.getParameters().isNoParameters() && linkAndLabel.getReasonDisabledIfAny() == null) {
+                if (linkAndLabel.getParameters().isNoParameters() &&
+                    (link instanceof ActionLink ? ((ActionLink)link).getReasonDisabledIfAny() : null) == null
+                    ) {
                     addConfirmationDialogIfAreYouSureSemantics(link, semantics);
                 }
 

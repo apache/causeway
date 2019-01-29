@@ -54,35 +54,12 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
                     "Object '%s' is not persistent.", objectAdapter.titleString(null)));
         }
 
-        // visibility needs to be determined at point of rendering, by ActionLink itself
-
-        // // check visibility and whether enabled
-        // final Consent visibility =
-        //                objectAction.isVisible(
-        //                        objectAdapter,
-        //                        InteractionInitiatedBy.USER,
-        //                        Where.OBJECT_FORMS);
-        // if (visibility.isVetoed()) {
-        //     return null;
-        // }
-
+        // previously we computed visibility and enablement here, but
+        // this is now done at the point of rendereing
 
         final AbstractLink link = newLink(linkId, objectAction, toggledMementosProviderIfAny);
 
-        // similarly for whether disabled, done at point of rendering
-
-        // final Consent usability =
-        //            objectAction.isUsable(
-        //                    objectAdapter,
-        //                    InteractionInitiatedBy.USER,
-        //                    Where.OBJECT_FORMS);
-        // final String disabledReasonIfAny = usability.getReason();
-        // if(disabledReasonIfAny != null) {
-        //    link.setEnabled(false);
-        // }
-
-        final String disabledReasonIfAny = null;
-        return newLinkAndLabel(objectAdapter, objectAction, link, disabledReasonIfAny);
+        return newLinkAndLabel(objectAdapter, objectAction, link);
     }
 
 
