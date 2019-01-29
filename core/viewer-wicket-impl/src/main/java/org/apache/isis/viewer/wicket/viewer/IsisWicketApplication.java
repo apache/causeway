@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
@@ -457,7 +456,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
         try {
             List<String> readLines = Resources.readLines(resource, Charsets.UTF_8);
             return String.join("\n", readLines);
-        } catch (IOException | IllegalArgumentException e) {
+        } catch (Exception e) {
             return fallback;
         }
     }

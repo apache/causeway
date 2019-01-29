@@ -48,7 +48,7 @@ git clone https://github.com/apache/isis.git
 [[__dg_building-isis_git_installation_configuring-git]]
 ==== Configuring Git
 
-Next up is to configure your user name and password; see also https://git-wip-us.apache.org/[Apache's git] docs:
+Next up is to configure your user name and password:
 
 [source,bash]
 ----

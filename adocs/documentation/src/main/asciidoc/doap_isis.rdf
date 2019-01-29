@@ -867,10 +867,10 @@
     
     
     <repository>
-      <SVNRepository>
-        <location rdf:resource="https://git-wip-us.apache.org/repos/asf/isis.git"/>
-        <browse rdf:resource="https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=summary"/>
-      </SVNRepository>
+      <GITRepository>
+        <location rdf:resource="https://github.com/apache/isis.git"/>
+        <browse rdf:resource="https://github.com/apache/isis"/>
+      </GITRepository>
     </repository>
     <maintainer>
       <foaf:Person>

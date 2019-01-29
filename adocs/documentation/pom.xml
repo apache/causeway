@@ -51,8 +51,8 @@
 
         <build.dir>${project.basedir}/target/site</build.dir>
 
-	    <!-- expects isis-site to be checked out to /c/ASF/isis/isis-site, vs /c/github/apache/isis -->
-        <isis-site.dir>../../../../../ASF/isis/isis-site</isis-site.dir>
+	    <!-- expects isis-site to be checked out to /c/github/apache/isis-site, vs /c/github/apache/isis -->
+        <isis-site.dir>../../../isis-site</isis-site.dir>
         <isis-site-latest.dir>${isis-site.dir}/latest</isis-site-latest.dir>
         <isis-site-content.dir>${isis-site.dir}/content</isis-site-content.dir>
         <isis-site-search.dir>${isis-site.dir}/search</isis-site-search.dir>
