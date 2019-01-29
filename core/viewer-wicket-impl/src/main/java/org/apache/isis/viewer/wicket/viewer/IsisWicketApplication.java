@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
@@ -572,7 +571,7 @@ public class IsisWicketApplication
         try {
             List<String> readLines = Resources.readLines(resource, Charsets.UTF_8);
             return Joiner.on("\n").join(readLines);
-        } catch (IOException | IllegalArgumentException e) {
+        } catch (Exception e) {
             return fallback;
         }
     }
