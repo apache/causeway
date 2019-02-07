@@ -2297,6 +2297,7 @@ ${license.additional-notes}
                   -Dgcpappenginerepo-deploy \
                   -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
                   -Drevision=$REVISION \
+                  -Dskip.assemble-zip \
                   $CORE_ADDITIONAL_OPTS
 
             with .m2/settings.xml as:

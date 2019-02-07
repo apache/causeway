@@ -54,6 +54,7 @@ build-package-push:
           -Dgcpappenginerepo-deploy \
           -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
           -Drevision=$REVISION \
+          -Dskip.assemble-zip \
           $CORE_ADDITIONAL_OPTS
     - >
       mvn -s .m2/settings.xml \
