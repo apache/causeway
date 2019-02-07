@@ -4,6 +4,11 @@
 # - NEXUS_USERNAME
 # - NEXUS_PASSWORD
 # - NEXUS_REPO_URL
+#
+# - GCPAPPENGINEREPO_USERNAME
+# - GCPAPPENGINEREPO_PASSWORD
+# - GCPAPPENGINEREPO_REPO_URL
+#
 # - DOCKER_REGISTRY_USERNAME
 # - DOCKER_REGISTRY_PASSWORD
 # - DOCKER_REGISTRY_EMAIL
@@ -16,7 +21,7 @@
 image: maven:3.5.3-jdk-8
 
 before_script:
-  - export BASELINE=1.16.2
+  - export BASELINE=1.17.0
   - export REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8)
 
 services:
@@ -37,10 +42,19 @@ build-package-push:
     - echo ""
     - echo ""
     - echo "$REVISION"
+    - echo "GCPAPPENGINEREPO_URL=$GCPAPPENGINEREPO_URL"
     - echo ""
     - echo ""
     - echo ""
     - cd core
+    - >
+      mvn -s .m2/settings.xml \
+          --batch-mode \
+          clean deploy \
+          -Dgcpappenginerepo-deploy \
+          -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
+          -Drevision=$REVISION \
+          $CORE_ADDITIONAL_OPTS
     - >
       mvn -s .m2/settings.xml \
           --batch-mode \
