@@ -18,15 +18,10 @@
 # - GCPAPPENGINEREPO_PASSWORD
 # - GCPAPPENGINEREPO_URL
 #
-# - DOCKER_REGISTRY_USERNAME    # eg "apacheisiscommitters"
+# - DOCKER_REGISTRY_USERNAME    # eg "apacheisiscommitters"  (needs to be in the ORG_NAME)
 # - DOCKER_REGISTRY_EMAIL
 # - DOCKER_REGISTRY_PASSWORD
 # - DOCKER_REGISTRY_URL         # eg "https://index.docker.io/v1/"
-#
-#
-# not required?
-#
-# - DOCKER_REGISTRY_NAME        # eg "registry-1.docker.io"
 #
 
 image: maven:3.5.3-jdk-8
@@ -41,6 +36,7 @@ services:
 variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
+  ORG_NAME: "apacheisis"
   APP_NAME: "simpleapp"
 
 stages:
@@ -61,20 +57,9 @@ build-package-push:
     - >
       mvn -s .m2/settings.xml \
           --batch-mode \
-          clean deploy \
-          -Dgcpappenginerepo-deploy \
-          -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
-          -Drevision=$REVISION \
-          -Dskip.assemble-zip \
-          $CORE_ADDITIONAL_OPTS
-    - >
-      mvn -s .m2/settings.xml \
-          --batch-mode \
-          clean deploy \
-          -Drevision=$REVISION \
-          -Dnexus-deploy \
-          -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL \
-          $CORE_ADDITIONAL_OPTS
+          clean install \
+          -DskipTests \
+          -Drevision=$REVISION
     - cd ..
     - echo ""
     - echo ""
@@ -83,28 +68,44 @@ build-package-push:
     - echo ""
     - echo ""
     - echo ""
+    - cd example/application/$APP_NAME
+    - >
+      mvn --batch-mode \
+          install \
+          -Drevision=$REVISION \
+          -Disis.version=$REVISION \
+          $CORE_ADDITIONAL_OPTS \
+          -Dmavenmixin-docker \
+          -Ddocker-plugin.imageName=$ORG_NAME/$APP_NAME
+    - >
+      mvn -s .m2/settings.xml \
+          --batch-mode \
+          docker:push@push-image-tagged \
+          -pl webapp \
+          -DskipTests \
+          -Dskip.isis-validate \
+          -Dskip.isis-swagger \
+          -Drevision=$REVISION \
+          -Disis.version=$REVISION \
+          -Dmavenmixin-docker \
+          -Ddocker-plugin.imageName=$ORG_NAME/$APP_NAME \
+          -Ddocker-plugin.serverId=docker-registry \
+          -Ddocker.registryUrl=$DOCKER_REGISTRY_URL
+    - cd ../../..
 
-#    - cd example/application/$APP_NAME
-#    - >
-#      mvn --batch-mode \
-#          install \
+#      mvn -s .m2/settings.xml \
+#          --batch-mode \
+#          clean deploy \
+#          -Dgcpappenginerepo-deploy \
+#          -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
 #          -Drevision=$REVISION \
-#          -Disis.version=$REVISION \
-#          $CORE_ADDITIONAL_OPTS \
-#          -Dmavenmixin-docker \
-#          -Ddocker-plugin.imageName=$DOCKER_REGISTRY_NAME/$DOCKER_REGISTRY_USERNAME/$APP_NAME
+#          -Dskip.assemble-zip \
+#          $CORE_ADDITIONAL_OPTS
 #    - >
 #      mvn -s .m2/settings.xml \
 #          --batch-mode \
-#          docker:push@push-image-tagged \
-#          -pl webapp \
-#          -DskipTests \
-#          -Dskip.isis-validate \
-#          -Dskip.isis-swagger \
+#          clean deploy \
 #          -Drevision=$REVISION \
-#          -Disis.version=$REVISION \
-#          -Dmavenmixin-docker \
-#          -Ddocker-plugin.imageName=$DOCKER_REGISTRY_NAME/$DOCKER_REGISTRY_USERNAME/$APP_NAME \
-#          -Ddocker-plugin.serverId=docker-registry \
-#          -Ddocker.registryUrl=$DOCKER_REGISTRY_URL
-#    - cd ../../..
+#          -Dnexus-deploy \
+#          -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL \
+#          $CORE_ADDITIONAL_OPTS
