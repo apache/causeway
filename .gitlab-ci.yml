@@ -57,9 +57,20 @@ build-package-push:
     - >
       mvn -s .m2/settings.xml \
           --batch-mode \
-          clean install \
-          -DskipTests \
-          -Drevision=$REVISION
+          clean deploy \
+          -Dgcpappenginerepo-deploy \
+          -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
+          -Drevision=$REVISION \
+          -Dskip.assemble-zip \
+          $CORE_ADDITIONAL_OPTS
+    - >
+      mvn -s .m2/settings.xml \
+          --batch-mode \
+          clean deploy \
+          -Drevision=$REVISION \
+          -Dnexus-deploy \
+          -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL \
+          $CORE_ADDITIONAL_OPTS
     - cd ..
     - echo ""
     - echo ""
@@ -93,19 +104,3 @@ build-package-push:
           -Ddocker.registryUrl=$DOCKER_REGISTRY_URL
     - cd ../../..
 
-#      mvn -s .m2/settings.xml \
-#          --batch-mode \
-#          clean deploy \
-#          -Dgcpappenginerepo-deploy \
-#          -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
-#          -Drevision=$REVISION \
-#          -Dskip.assemble-zip \
-#          $CORE_ADDITIONAL_OPTS
-#    - >
-#      mvn -s .m2/settings.xml \
-#          --batch-mode \
-#          clean deploy \
-#          -Drevision=$REVISION \
-#          -Dnexus-deploy \
-#          -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL \
-#          $CORE_ADDITIONAL_OPTS
