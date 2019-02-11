@@ -1,11 +1,14 @@
 package org.ro.core.event
 
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.json.JSON
 import kotlinx.serialization.json.JsonObject
 import org.ro.core.DisplayManager
 import org.ro.core.Utils
 import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
 import org.ro.layout.Layout
+import org.ro.to.Invokeable
 import org.ro.to.Link
 import org.ro.to.TObject
 
@@ -20,6 +23,7 @@ import org.ro.to.TObject
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler
  */
+@ImplicitReflectionSerializer
 class ListObserver : ILogEventObserver {
     var list: ObjectList = ObjectList()
 
@@ -44,8 +48,7 @@ class ListObserver : ILogEventObserver {
             } else {
                 //TODO eventually set/get LogEntry.tObject
                 val jsonStr: String = le.response
-                val jso: JsonObject? = Utils().toJsonObject(jsonStr)
-                val tObj = TObject(jso)
+                val tObj = JSON.parse(TObject.serializer(), jsonStr)
                 loadLayout(tObj)
                 val oa = ObjectAdapter(tObj)
                 list.add(oa)
@@ -54,7 +57,7 @@ class ListObserver : ILogEventObserver {
 
         if (isLayout(jsonObj)) {
             //TODO if le.tObject is already set it should contain Layout
-            val l = Layout(jsonObj)
+            val l = Layout("no debug info")
             list.setLayout(l)
         }
         //TODO are list & layout the only criteria?
@@ -72,35 +75,39 @@ class ListObserver : ILogEventObserver {
 
     //TODO eventually move to LogEntry
     private fun isList(jsonObj: JsonObject?): Boolean {
-        var b = false
+/*        var b = false
         if (jsonObj!!["resulttype"].toString() == "list") {
             b = true
         }
         if (jsonObj["memberType"].toString() == "collection") {
             b = true
         }
-        return b
+        return b */
+        return false
     }
 
     private fun isObject(jsonObj: JsonObject?): Boolean {
-        val jsonEl = jsonObj!!["instanceId"]
-        return !jsonEl.isNull
+/*        val jsonEl = jsonObj!!["instanceId"]
+        return !jsonEl.isNull */
+        return false
     }
 
     private fun isLayout(jsonObj: JsonObject?): Boolean {
-        val jsonEl = jsonObj!!["row"] 
-        return !jsonEl.isNull
+/*        val jsonEl = jsonObj!!["row"] 
+        return !jsonEl.isNull */
+        return false
     }
 
     private fun loadLayout(tObject: TObject) {
         val link: Link? = tObject.getLayoutLink()
-        val href: String? = link!!.getHref()
+        val href: String = link!!.href
         var le: LogEntry? = null
         if (href != null) {
             le = EventLog.find(href)
         }
         if (le == null) {
-            link.invoke(this)
+            val i = Invokeable(href)
+            i.invoke(this)
         }
     }
 

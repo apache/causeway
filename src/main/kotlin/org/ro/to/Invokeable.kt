@@ -1,25 +1,14 @@
 package org.ro.to
 
-import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.core.event.ILogEventObserver
 import org.ro.core.event.RoXmlHttpRequest
 
-open class Invokeable(jsonObj: JsonObject? = null) : LinkedTO(jsonObj) {
-    open val GET = "GET"
-    open val PUT = "PUT"
-    open val POST = "POST"
-    open val DELETE = "DELETE"
-
-    internal var href: String = ""
-    internal var method: String = ""
+@ImplicitReflectionSerializer
+open class Invokeable(val href: String, val method: String = Method.GET.operation) {
 
     fun invoke(obs: ILogEventObserver? = null) {
         RoXmlHttpRequest().invoke(this, obs)
-    }
-
-    constructor(url: String) : this() {
-        href = url
-        method = GET
     }
 
 }

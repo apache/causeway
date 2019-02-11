@@ -1,5 +1,6 @@
 package org.ro.view
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.core.event.LogEntry
 import pl.treksoft.kvision.html.Label
 import pl.treksoft.kvision.navbar.Navbar
@@ -7,6 +8,7 @@ import pl.treksoft.kvision.navbar.NavbarType
 import pl.treksoft.kvision.panel.FlexJustify
 import pl.treksoft.kvision.panel.HPanel
 
+@ImplicitReflectionSerializer
 class RoStatusBar : Navbar() {
 
     private var urlLabel = Label()

@@ -5,3 +5,5 @@ out/
 /refresh.sh
 package-lock.json
 node_modules/
+/build.log
+/src/test/kotlin/BugTest.kt

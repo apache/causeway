@@ -1,28 +1,16 @@
 package org.ro.to
 
-import kotlinx.serialization.json.JsonObject
-import org.ro.core.Utils
+import kotlinx.serialization.Serializable
 
-class Action(jsonObj: JsonObject? = null) : Member(jsonObj) {
-    var parameterList: MutableList<Parameter> = mutableListOf()
-    var link: Link? = null
-
-    init {
-        memberType = ACTION
-        if (jsonObj != null) {
-            val json = fixDefault(jsonObj)
-            val linkJS = json["link"].jsonObject
-            link = Link(linkJS)
-            val parameters = json["parameters"].jsonArray
-            for (o in parameters) {
-                val p = Parameter(o as JsonObject)
-                parameterList.add(p)
-            }
-        }
-    }
+@Serializable
+class Action(val id: String,
+             val memberType: String,
+             val links: List<Link> = emptyList(),
+             val parameters: List<Parameter> = emptyList(),
+             val extensions: Extensions) {
 
     fun getInvokeLink(): Link? {
-        for (l in linkList) {
+        for (l in this.links) {
             if (l.rel.indexOf(this.id) > 0) {
                 return l
             }
@@ -31,17 +19,10 @@ class Action(jsonObj: JsonObject? = null) : Member(jsonObj) {
     }
 
     fun findParameterByName(name: String): Parameter? {
-        for (p in parameterList) {
+        for (p in this.parameters) {
             if (p.id == name) return p
         }
         return null
-    }
-
-    //Workaround for https://issues.apache.org/jira/browse/ISIS-1850 would break RO Spec 1.0
-    private fun fixDefault(input: JsonObject): JsonObject {
-        val search: String = "\"default\":"
-        val replace: String = "\"defaultChoice\":"
-        return Utils().replace(input, search, replace)
     }
 
 }

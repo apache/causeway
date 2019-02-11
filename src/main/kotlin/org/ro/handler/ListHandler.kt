@@ -1,52 +1,35 @@
 package org.ro.handler
 
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.json.JSON
 import org.ro.core.event.ListObserver
-import org.ro.to.List
+import org.ro.to.Invokeable
+import org.ro.to.ResultList
 
+@ImplicitReflectionSerializer
 class ListHandler : AbstractHandler(), IResponseHandler {
 
+    //TODO structure of json is changed >= 16.2
     override fun canHandle(jsonStr: String): Boolean {
-     /*   val r = jsonObj["result"].jsonObject
-        if (r.isEmpty()) {
+        try {
+            val resultList = JSON.parse(ResultList.serializer(), jsonStr)
+            // "resulttype": "list"
+            return true
+        } catch (ex: Exception) {
+            console.log("[ListHandler fails on: $jsonStr]")
             return false
         }
-        // Prototyping#openRestApi
-        val value = jsonObj["value"]
-        if (value.toString() == "http:/restful/") {
-            return false
-        }
-        val list = value.jsonArray
-        if (list.isEmpty()) {
-            return false
-        }
-        return list.size > 0     */
-        return false;
     }
-
-    fun canHandle_16_2(jsonStr: String): Boolean {
-        //TODO structure of json is changed >= 16.2
-        /*
-        var v: Object = jsonObj.value
-        if ((v == null) || isEmptyObject(v)) {
-            return false
-        }
-        if (v is Array) {
-            var va: Array = v as Array
-            return va.length > 0
-        } 
-        */
-        return false
-    }
-
 
     override fun doHandle(jsonStr: String) {
-        val list = List()
-        logEntry.obj = list
+        val resultList = JSON.parse(ResultList.serializer(), jsonStr)
+        logEntry.obj = resultList
         val lo: ListObserver = logEntry.initListObserver()
         lo.update(logEntry)
-        val members = list.getResult()!!.valueList
+        val members = resultList.result!!.value
         for (l in members) {
-            l.invoke(lo)
+            val i = Invokeable(l.href)
+            i.invoke()
         }
     }
 

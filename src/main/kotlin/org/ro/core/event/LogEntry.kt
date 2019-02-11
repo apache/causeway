@@ -1,8 +1,10 @@
 package org.ro.core.event
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.view.ImageRepository
 import pl.treksoft.kvision.types.Date
 
+@ImplicitReflectionSerializer
 class LogEntry(var url: String, var method: String? = null, private var request: String = "") {
     private var icon: Any? = null
 
@@ -69,7 +71,7 @@ class LogEntry(var url: String, var method: String? = null, private var request:
         if (observer != null) {
             observer!!.update(this)
         } else {
-            console.log("[no observer set for $url]")
+            console.log("[$url hasObserver=false]")
         }
     }
 
@@ -138,7 +140,11 @@ class LogEntry(var url: String, var method: String? = null, private var request:
     }
 
     fun isView(): Boolean {
-        return ImageRepository.BlueIcon == icon
+        return !isUrl()
+    }
+
+    fun isUrl(): Boolean {
+        return url.startsWith("http")
     }
 
     fun isClosedView(): Boolean {

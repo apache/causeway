@@ -1,10 +1,9 @@
 package org.ro.core.model
 
 import org.ro.core.Utils
+import org.ro.generated.Property
 import org.ro.layout.Layout
 import org.ro.to.Extensions
-import org.ro.to.Link
-import org.ro.to.Property
 import org.ro.to.TObject
 
 class ObjectList : Visible {
@@ -53,11 +52,10 @@ class ObjectList : Visible {
 
     private fun initPropertyDescription(): Unit {
         if (layout!!.arePropertyLabelsToBeSet()) {
-            val pls = layout!!.properties
-            var l: Link?
+            val pls = layout!!.properties!!
             for (pl in pls) {
-                l = pl.getLink()
-                l!!.invoke()
+/*FIXME              var  l = pl.getLink()
+                l!!.invoke() */
             }
         }
     }
@@ -65,9 +63,9 @@ class ObjectList : Visible {
     fun handleProperty(p: Property): Unit {
         if (layout == null) {
             //TODO should not happen ...
-            layout = Layout()
+ //           layout = Layout()
         }
-        val e: Extensions? = p.getExtension()
+        val e: Extensions? = p.extensions
         layout!!.addPropertyLabel(p.id, e!!.friendlyName)
     }
 

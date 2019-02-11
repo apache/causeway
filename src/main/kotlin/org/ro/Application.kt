@@ -1,5 +1,6 @@
 package org.ro
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.view.RoMenuBar
 import org.ro.view.RoStatusBar
 import org.ro.view.RoView
@@ -9,6 +10,7 @@ import pl.treksoft.kvision.panel.VPanel.Companion.vPanel
 import pl.treksoft.kvision.require
 import pl.treksoft.kvision.utils.px
 
+@ImplicitReflectionSerializer
 object Application : ApplicationBase {
 
     private lateinit var root: Root

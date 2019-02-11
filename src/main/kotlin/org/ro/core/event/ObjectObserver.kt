@@ -1,5 +1,8 @@
 package org.ro.core.event
 
+import kotlinx.serialization.ImplicitReflectionSerializer
+
+@ImplicitReflectionSerializer
 class ObjectObserver(var baseUrl: String) : ILogEventObserver {
     override fun update(le: LogEntry) {
         //check if all required data has arrived and open tab

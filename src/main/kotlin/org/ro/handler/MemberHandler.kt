@@ -1,23 +1,25 @@
 package org.ro.handler
 
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.json.JSON
 import org.ro.core.DisplayManager
 import org.ro.to.Service
 
+@ImplicitReflectionSerializer
 class MemberHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
-        /*
-        val members = jsonObj["members"]
-        val extensions = jsonObj["extensions"].jsonObject
-        val isService =  extensions["isService"]
-        return (!members.isNull && !isService.isNull) */
-        return false
+        try {
+            val service = JSON.parse(Service.serializer(), jsonStr)
+            return (service.members != null)
+        } catch (ex: Exception) {
+            return false
+        }
     }
 
     override fun doHandle(jsonStr: String) {
-        //val services = kotlinx.serialization.json.JSON.parse(Services.serializer(), jsonStr)
-        val service = Service();
-        val members = service.getMembers()
+        val service = JSON.parse(Service.serializer(), jsonStr)
+        val members = service.members!!
         val mnu = DisplayManager.getMenu()
         val done: Boolean = mnu!!.init(service, members)
         if (done) {

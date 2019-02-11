@@ -1,11 +1,10 @@
 package org.ro.view
 
-import com.example.EditPanel
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.view.tab.RoTabBar
 import pl.treksoft.kvision.core.Border
 import pl.treksoft.kvision.core.BorderStyle
 import pl.treksoft.kvision.core.Col
-import pl.treksoft.kvision.i18n.I18n
 import pl.treksoft.kvision.panel.FlexDir
 import pl.treksoft.kvision.panel.FlexPanel
 import pl.treksoft.kvision.panel.FlexWrap
@@ -13,11 +12,12 @@ import pl.treksoft.kvision.panel.TabPanel
 import pl.treksoft.kvision.utils.px
 import pl.treksoft.kvision.utils.vh
 
+@ImplicitReflectionSerializer
 class RoView() : FlexPanel() {
     
     private var tabPanel = TabPanel {
         border = Border(2.px, BorderStyle.SOLID, Col.SILVER)
-        addTab(I18n.tr("Basic formatting"), EditPanel(), "fa-bars", route = "/basic")
+//        addTab(I18n.tr("Basic formatting"), EditPanel(), "fa-bars", route = "/basic")
     }
     
     init {

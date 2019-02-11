@@ -1,20 +1,22 @@
 package org.ro.handler
 
-import org.ro.URLS
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.core.DisplayManager
 import org.ro.core.Menu
 import org.ro.core.event.LogEntry
+import org.ro.urls.RESTFUL_SERVICES
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 
+@ImplicitReflectionSerializer
 class ServiceHandlerTest {
 
     @Test
-    public fun testService() {
+    fun testService() {
         // given
         // when
-        val le: LogEntry = LogEntry("", "GET", "")
-        le.response = JSON.stringify(URLS.RESTFUL_SERVICES)
+        val le = LogEntry("", "GET", "")
+        le.response = JSON.stringify(RESTFUL_SERVICES.str)
         Dispatcher.handle(le)
         val m1: Menu? = DisplayManager.getMenu()
         // then 

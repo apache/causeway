@@ -1,31 +1,49 @@
 package org.ro.layout
 
-import kotlinx.serialization.json.JsonObject
-import org.ro.URLS
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.json.JSON
+import org.ro.to.FR_OBJECT_LAYOUT
+import org.ro.to.SO_OBJECT_LAYOUT
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@ImplicitReflectionSerializer
 class LayoutTest {
 
     @Test
-    fun testObjectLayout() {
+    fun testParseSimpleObjectLayout() {
         //when
-        val jsonObj = JSON.parse<JsonObject>(URLS.SO_OBJECT_LAYOUT)
-        val lo = Layout(jsonObj)
+        val jsonStr = SO_OBJECT_LAYOUT.str
+        val lo = JSON.parse(Layout.serializer(), jsonStr)
         // then
-        val properties = lo.properties
+        val properties = lo.properties!!
         assertEquals(2, properties.size)
         assertEquals("name", properties[0].id)
         assertEquals("notes", properties[1].id)
+
+        // BUILD UI TEST
+        // layout.rows[1].cols[1].col.tabGroup[0]
+        //ensure tabgroup is TabNavigator
+
+        // then
+        val ui = lo.build()
+        assertEquals(2, ui.getChildren().size)
+
+        val row1 = ui.getChildren()[1]
+        assertEquals(3, row1.getChildren().size)
+
+        val h2 = row1.getChildren()[1]
+        assertEquals(3, h2.getChildren().size)
+
     }
 
     @Test
-    fun testFsObjectLayout() {
+    fun testparseFixtureScriptObjectLayout() {
         // given
-        val jsonObj = JSON.parse<JsonObject>(URLS.FR_OBJECT_LAYOUT)
-        val lo = Layout(jsonObj)
+        val jsonStr = FR_OBJECT_LAYOUT.str
+        val lo = JSON.parse(Layout.serializer(), jsonStr)
         // when
-        val properties = lo.properties
+        val properties = lo.properties!!
         // then
         assertEquals(4, properties.size)
         assertEquals("className", properties[0].id)
@@ -39,25 +57,5 @@ class LayoutTest {
         // (3) http://localhost:8080/restful/domain-types/isisApplib.FixtureResult/properties/className -> extensions.friendlyName
         // (4) 
     }
-
-    @Test
-    fun testBuildObjectLayout() {
-        //when
-        val jsonObj = JSON.parse<JsonObject>(URLS.SO_OBJECT_LAYOUT)
-        val lo = Layout(jsonObj)
-        // layout.rows[1].cols[1].col.tabGroup[0]
-        //ensure tabgroup is TabNavigator
-
-        // then
-        val ui = lo.build()
-        assertEquals(2, ui.getChildren().size)
-
-        //TODO IMPROVE expected values depend on 'debugInfo' applied in Layout classes 
-        val row1 = ui.getChildren()[1]
-        assertEquals(3, row1.getChildren().size)
-
-        val h2 = row1.getChildren()[1]
-        assertEquals(3, h2.getChildren().size)
-    }
-
+    
 }

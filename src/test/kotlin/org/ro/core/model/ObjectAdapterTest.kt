@@ -1,20 +1,19 @@
 package org.ro.core.model
 
-
-import kotlinx.serialization.json.JsonObject
-import org.ro.URLS
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.json.JSON
+import org.ro.to.FR_OBJECT_BAZ
 import org.ro.to.TObject
 import pl.treksoft.kvision.html.Image
-import kotlin.test.Test
-import kotlin.test.assertNotNull 
+import kotlin.test.assertNotNull
 
+@ImplicitReflectionSerializer
 class ObjectAdapterTest {
-    @Test
+
+    // FIXME members has a list of named elements @Test
     fun testObjectBAZ() {
         // given
-        val jsonStr = URLS.FR_OBJECT_BAZ
-        val jsonObj = JSON.parse<JsonObject>(jsonStr)
-        val adaptee = TObject(jsonObj)
+        val adaptee = JSON.parse(TObject.serializer(), FR_OBJECT_BAZ.str)
         assertNotNull(adaptee)
 
         val title = "test title"

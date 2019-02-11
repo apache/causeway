@@ -1,9 +1,7 @@
 package org.ro.view
 
-import kotlinx.serialization.json.JsonObject
-
 class UIUtil {
-    fun decorate(result: UIComponent, s: String, debugInfo: JsonObject?) {
+    fun decorate(result: UIComponent, s: String, debugInfo: String?) {
     }
 
     fun buildFormItem(toString: Any): FormItem? {

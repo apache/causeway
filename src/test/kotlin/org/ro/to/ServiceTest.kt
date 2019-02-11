@@ -1,19 +1,22 @@
 package org.ro.to
 
-import kotlinx.serialization.json.JsonObject
-import org.ro.URLS
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.json.JSON
+import org.ro.urls.RESTFUL_SERVICES
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@ImplicitReflectionSerializer
 class ServiceTest {
 
     @Test
     fun testSimpleObjectMenu() {
-        val jsonObj = JSON.parse<JsonObject>(URLS.SO_MENU)
-        val service = Service(jsonObj)
+        val jsonStr = SO_MENU.str
+        val service = JSON.parse(Service.serializer(), jsonStr)
         assertEquals("Simple Objects", service.title)
-        val actions = service.getMembers()
+        val actions: kotlin.collections.List<Member> = service.members
         assertEquals(3, actions.size)
 
         assertTrue(includesId(actions, "listAll"))
@@ -26,9 +29,9 @@ class ServiceTest {
         //TODO use object-layout / menu layout instead
     }
 
-    private fun includesId(list: MutableList<Invokeable>, id: String): Boolean {
+    private fun includesId(list: kotlin.collections.List<Member>, id: String): Boolean {
         for (m in list) {
-            if ((m as Member).id == id) {
+            if (m.id == id) {
                 return true
             }
         }
@@ -36,10 +39,11 @@ class ServiceTest {
     }
 
     @Test
-    fun test_() {
-        val jsonObj = JSON.parse<JsonObject>(URLS.RESTFUL_SERVICES)
-        val service = Service(jsonObj)
-        val values = service.valueList
+    fun testParseServices() {
+        val jsonStr = RESTFUL_SERVICES.str
+        val services = JSON.parse(Services.serializer(), jsonStr)
+        val values = services.valueList()
+        assertNotNull(values)
         assertEquals(8, values.size)
     }
 

@@ -1,30 +1,22 @@
 package org.ro.layout
 
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.boolean
-import kotlinx.serialization.json.int
+import kotlinx.serialization.Serializable
 import org.ro.to.Link
 
-class PropertyLayout(jsonObj: JsonObject? = null) : MemberLayout() {
-    var action: JsonObject? = null
-    var labelPosition: String? = null
-    var multiLine: Boolean? = null
-    var renderedAsDayBefore: Boolean? = null
-    var typicalLength: Int? = null
-    var unchanging: JsonObject? = null
-
-    init {
-        if (jsonObj != null) {
-            val link = jsonObj["link"].jsonObject
-            linkObject = Link(link)
-            //TODO link (sometimes) has an unexpected value of [object Object] - WTF
-            action = jsonObj["action"].jsonObject
-            labelPosition = jsonObj["labelPosition"].toString()
-            multiLine = jsonObj["multiLine"].boolean
-            renderedAsDayBefore = jsonObj["renderedAsDayBefore"].boolean
-            typicalLength = jsonObj["typicalLength"].int
-            unchanging = jsonObj["unchanging"].jsonObject
-        }
-    }
-
-}
+@Serializable
+data class PropertyLayout(val cssClass: String? = null,        //AbstractLo
+                          val named: String? = null, //MemberLo
+                          val describedAs: String? = null,    //MemberLo
+                          var metadataError: String? = null,   //MemberLo
+                          val link: Link? = null,          //MemberLo
+                          val id: String? = null,           //MemberLo
+                          val hidden: Boolean? = null,       //MemberLo
+                          val namedEscaped: String? = null,    //MemberLo
+                          val promptStyle: String? = null,   //MemberLo
+                          val action: String? = null,
+                          val labelPosition: String? = null,
+                          val multiLine: Boolean? = null,
+                          val renderedAsDayBefore: Boolean? = null,
+                          val typicalLength: Int? = null,
+                          val unchanging: String? = null
+)

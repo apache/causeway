@@ -1,50 +1,31 @@
 package org.ro.to
 
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.int
+import kotlinx.serialization.Optional
+import kotlinx.serialization.Serializable
 
-class Parameter(jsonObj: JsonObject? = null) : BaseTO() {
-    private var num: Int = 0
-    internal var id = ""
-    private var description = ""
-    private var name = ""
-    internal var choiceList: MutableList<Link> = mutableListOf()
-    private var defaultChoiceObject: Link? = null
+@Serializable
+class Parameter(val id: String,
+                val num: Int = 0,
+                val description: String,
+                val name: String,
+                @Optional val choices: List<Link> = emptyList(),
+                @Optional val defaultChoice: Link? = null) {
 
-    init {
-        if (jsonObj != null) {
-            num = jsonObj["num"].int
-            id = jsonObj["id"].toString()
-            description = jsonObj["description"].toString()
-            name = jsonObj["name"].toString()
-            val choices = jsonObj["Choices"].jsonArray
-            for (c in choices) {
-                choiceList.add(Link(c as JsonObject))
-            }
-            val defaultChoice = jsonObj["defaultChoice"].jsonObject
-            defaultChoiceObject = Link(defaultChoice)
-        }
-    }
-
-
-    fun getDefaultChoice(): Link? {
-        return defaultChoiceObject
-    }
 
     fun hasChoices(): Boolean {
-        return (choiceList.size > 0)
+        return choices!!.isNotEmpty()
     }
 
     fun getChoiceListKeys(): MutableList<String> {
         val result: MutableList<String> = mutableListOf()
-        for (c in choiceList) {
+        for (c in choices!!) {
             result.add(c.title)
         }
         return result
     }
 
     fun getHrefByTitle(title: String): String? {
-        for (l in choiceList) {
+        for (l in choices!!) {
             if (l.title == title) {
                 return l.href
             }
@@ -53,9 +34,9 @@ class Parameter(jsonObj: JsonObject? = null) : BaseTO() {
     }
 
     fun findIndexOfDefaultChoice(): Int {
-        val dcTitle = defaultChoiceObject!!.title
+        val dcTitle = defaultChoice!!.title
         var i = 0
-        for (c in choiceList) {
+        for (c in choices!!) {
             i++
             if (c.title == dcTitle) {
                 return i

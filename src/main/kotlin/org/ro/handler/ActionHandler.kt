@@ -1,22 +1,27 @@
 package org.ro.handler
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.JSON
-import org.ro.generated.Action
+import org.ro.to.Action
 
-
+@ImplicitReflectionSerializer
 class ActionHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
-        val action = JSON.parse(Action.serializer(), jsonStr)
-        val ext = action.extensions
-        return ext.actionType.isNotEmpty()
+        try {
+            val action = JSON.parse(Action.serializer(), jsonStr)
+            val ext = action.extensions
+            return ext.actionType.isNotEmpty()
+        } catch (ex: Exception) {
+            return false
+        }
     }
 
     override fun doHandle(jsonStr: String) {
-        val a = JSON.parse(Action.serializer(), jsonStr)
-        console.log("[ActionHandler.doHandle -> Action] $a")
-        val l = a.links!![0]
-/*        when (l!!.method) {
+        val action = JSON.parse(Action.serializer(), jsonStr)
+        console.log("[ActionHandler.doHandle -> Action] $action")
+/*         val l = a.links!![0]
+       when (l!!.method) {
             a.GET -> l.invoke()
             a.POST -> {
                 //FIXME  Prompt(a)

@@ -1,5 +1,6 @@
 package org.ro.handler
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.core.event.LogEntry
 
 /**
@@ -15,12 +16,13 @@ import org.ro.core.event.LogEntry
  *
  * @see org.ro.handler.AbstractHandler for more details
  */
+@ImplicitReflectionSerializer
 interface IResponseHandler {
 
     fun handle(logEntry: LogEntry)
 
     fun canHandle(jsonStr: String): Boolean
 
-    fun doHandle(jsonObj: String)
+    fun doHandle(jsonStr: String)
 }
 

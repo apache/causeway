@@ -66,14 +66,16 @@ kotlinFrontend {
 compileKotlin2Js {
     kotlinOptions.metaInfo = true
     kotlinOptions.outputFile = "$project.buildDir.path/js/${project.name}.js"
-    kotlinOptions.sourceMap = !production
+    kotlinOptions.sourceMap = true //!production
+    kotlinOptions.sourceMapEmbedSources = "always"
     kotlinOptions.moduleKind = 'umd'
 }
 
 compileTestKotlin2Js {
     kotlinOptions.metaInfo = true
     kotlinOptions.outputFile = "$project.buildDir.path/js-tests/${project.name}-tests.js"
-    kotlinOptions.sourceMap = !production
+    kotlinOptions.sourceMap = true //!production
+    kotlinOptions.sourceMapEmbedSources = "always"
     kotlinOptions.moduleKind = 'umd'
 }
 

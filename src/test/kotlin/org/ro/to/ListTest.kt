@@ -1,19 +1,19 @@
 package org.ro.to
 
-import kotlinx.serialization.json.JsonObject
-import org.ro.URLS
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.json.JSON
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@ImplicitReflectionSerializer
 class ListTest {
 
-    // http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/listAll/invoke
     @Test
     fun testListAllInvoke() {
-        val jsonObj = JSON.parse<JsonObject>(URLS.SO_LIST_ALL_INVOKE)
-        val list = List(jsonObj)
-        val linkList = list.getResult()!!.valueList
-        assertEquals(10, linkList.size)
+        val list = JSON.parse(ResultList.serializer(), SO_LIST_ALL_INVOKE.str)
+        val result = list.result!!
+        val valueList = result.value
+        assertEquals(10, valueList.size)
     }
 
 }

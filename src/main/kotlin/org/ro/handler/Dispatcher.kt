@@ -1,11 +1,13 @@
 package org.ro.handler
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.core.event.LogEntry
 
 /**
  * Delegates responses to handlers, acts as Facade.
  * @see: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
  */
+@ImplicitReflectionSerializer
 object Dispatcher {
     private var delegate: IResponseHandler? = null
 

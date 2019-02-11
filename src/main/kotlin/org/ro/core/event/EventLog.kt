@@ -1,7 +1,7 @@
 package org.ro.core.event
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.Application
-import org.ro.core.Utils
 import org.ro.handler.Dispatcher
 import kotlin.js.Date
 
@@ -13,8 +13,9 @@ import kotlin.js.Date
  * @See https://en.wikipedia.org/wiki/Proxy_pattern
  */
 //TODO all invocations should go here in the first place 
+@ImplicitReflectionSerializer
 object EventLog {
-    private var log = mutableListOf<LogEntry>()
+    var log = mutableListOf<LogEntry>()
 
     fun start(url: String, method: String, body: String = "", obs: ILogEventObserver? = null): LogEntry {
         val entry = LogEntry(url, method, body)
@@ -52,7 +53,7 @@ object EventLog {
         if (entry != null) {
             entry.setSuccess(response)
             updateStatus(entry)
-        } 
+        }
         return entry
     }
 
@@ -72,62 +73,67 @@ object EventLog {
      * @return
      */
     fun find(url: String): LogEntry? {
-        val le: LogEntry?
-        if (!this.isViewUrl(url)) {
-            le = if (Utils().endsWith(url, "object-layout") ||
-                    url.indexOf("/properties/") > 0) {
-                this.findSimilar(url)
+        if (isUrl(url)) {
+            console.log("[$url isUrl=true]")
+            if (isRedundant(url)) {
+                return findSimilar(url)
             } else {
-                this.findExact(url)
+                return findExact(url)
             }
         } else {
-            le = this.findView(url)
+            console.log("[$url isUrl=false]")
+            return findView(url)
         }
-        if (le == null) {
-            console.log("[LogEntry for $url not found]")
-        }
-        return le
     }
 
-    private fun isViewUrl(url: String): Boolean {
-        return (url.indexOf("http") < 0)
+    private fun isRedundant(url: String): Boolean {
+        return (urlContains(url, "object-layout") || urlContains(url, "/properties/"))
+    }
+
+    private fun urlContains(url: String, search : String): Boolean {
+        val index = url.indexOf(search)
+        val answer = index >= 0
+        console.log("[$url contains $search=$answer]")
+        return answer
+    }
+
+    private fun isUrl(url: String): Boolean {
+        return url.startsWith("http")
     }
 
     internal fun findExact(url: String): LogEntry? {
         for (le in this.log) {
             // assumes urls are unique !
             if (le.url == url) {
-                console.log("[foundExact] $url")
+                console.log("[$url foundExact=true]")
                 return le
             }
         }
-        console.log("[NOT foundExact] $url")
+        console.log("[$url foundExact=false]")
         return null
     }
 
     internal fun findView(url: String): LogEntry? {
-        if (this.isViewUrl(url)) {
-            for (le in this.log) {
-                if ((le.url == url) && (le.isView())) {
-                    console.log("[foundView] $url")
-                    return le
-                }
+        for (le in log) {
+            if ((le.url == url) && (le.isView())) {
+                console.log("[$url view=true]")
+                return le
             }
         }
-        console.log("[NOT foundView] $url")
+        console.log("[$url view=false]")
         return null
     }
 
     internal fun findSimilar(url: String): LogEntry? {
         val argArray: List<String> = url.split("/")
-        for (le in this.log) {
+        for (le in log) {
             val idxArray: List<String> = le.url.split("/")
-            if (this.areSimilar(argArray, idxArray)) {
-                console.log("[foundSimilar] $url")
+            if (areSimilar(argArray, idxArray)) {
+                console.log("[$url foundSimilar=true]")
                 return le
             }
         }
-        console.log("[NOT foundSimilar] $url")
+        console.log("[$url foundSimilar=false]")
         return null
 
     }
@@ -137,28 +143,20 @@ object EventLog {
             return false
         }
         var diffCnt = 0
-        var len = argArray.size
-        var ai: String
-        var n: Number
-        var isString: Boolean
-/* FIXME        
-for (i: Int i <= len i++) {
-            ai = argArray[i]
-            if (ai != idxArray[i]) {
-                diffCnt += 1
-                n = Number(ai)
-                isString = isNaN(n)
-                // if the difference is a String, it is not allowed and counts double
-                if (isString) {
-                    diffCnt += 1
-                }
-            } 
-        } */
-        return diffCnt <= allowedDiff
-    }
 
-    fun getEntries(): MutableList<LogEntry>? {
-        return this.log
+        var i = 0
+        for (ai: String in argArray) {
+            if (ai != idxArray[i]) {
+                diffCnt++
+                val n = ai.toIntOrNull()
+                // if the difference is a String, it is not allowed and counts double
+                if (n != null) {
+                    diffCnt++
+                }
+            }
+            i++
+        }
+        return diffCnt <= allowedDiff
     }
 
     fun getLogStartTime(): Int? {

@@ -1,10 +1,12 @@
 package org.ro.core
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.Application
 
 /**
  * Keep track of connected server.
  */
+@ImplicitReflectionSerializer
 object Session {
     private var user: String = ""
     private var pw: String = ""

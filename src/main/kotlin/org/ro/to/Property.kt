@@ -1,31 +1,30 @@
-package org.ro.to
+package org.ro.generated
 
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.int
+import kotlinx.serialization.Optional
+import kotlinx.serialization.Serializable
+import org.ro.to.Extensions
+import org.ro.to.Link
+import org.ro.to.Parameter
 
-//FIXME dynamic
-class Property(jsonObj: JsonObject? = null) : Member(jsonObj) {
-    val FRIENDLY_NAME = "friendlyName"
+@Serializable  // is Property a Variant of Member?
+data class Property(val id: String = "",
+                    val memberType: String = "",
+                    val value: String? = null,
+                    val format: String? = null,
+                    val extensions: Extensions? = null,
+                    val disabledReason: String? = null,
+                    val optional: Boolean? = null,
+                    val links: List<Link>? = null,
+                    @Optional val parameters: List<Parameter> = emptyList(),
+                    @Optional val maxLength: Int = 0) {
+
     val DESCRIBED_BY = "describedby"
-    val RETURN_TYPE = "urn:org.restfulobjects:rels/return-type"
-
-    private var parameters: JsonObject? = null
-    private var maxLength: Int? = null
-
-    init {
-        memberType = PROPERTY
-        if (jsonObj != null) {
-            parameters = jsonObj["parameters"].jsonObject
-            maxLength = jsonObj["maxLength"].int
-        }
-    }
 
     fun descriptionLink(): Link? {
-        for (l in linkList) {
+        for (l in links!!) {
             if (l.rel == DESCRIBED_BY)
                 return l
         }
         return null
     }
-
 }

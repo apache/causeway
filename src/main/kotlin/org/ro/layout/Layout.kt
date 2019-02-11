@@ -1,6 +1,7 @@
 package org.ro.layout
 
-import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.Optional
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import org.ro.view.Box
 import org.ro.view.UIUtil
@@ -10,44 +11,29 @@ import org.ro.view.VBox
  * Parse layout specification.
  * In case of non-menu layout, build a UIComponent.
  */
-class Layout(jsonObj: JsonObject? = null) : AbstractLayout(jsonObj) {
-    private var rowList = mutableListOf<RowLayout>()
-    var properties = mutableListOf<PropertyLayout>()
-    private var propertyLabels: JsonObject? = null
+@Serializable
+data class Layout(val cssClass: String? = null,
+             val row: List<RowLayout> = emptyList()) {
+
+    @Optional
+    var propertyLabels: List<String>? = null
+    @Optional
+    var properties: List<PropertyLayout>? = null
+    @Optional
+    val TAB_GROUP: String = "tabGroup"
 
     init {
-        if (jsonObj != null) {
-            val row = jsonObj["row"].jsonArray  // which actually is a list of rows
-            val props = extractProperties(row)
-//            initProperties(props)
-            for (json in row) {
-                val l = RowLayout(json as JsonObject)
-                this.rowList.add(l)
-            }
-        }
-    }
-
-    private fun extractProperties(row: JsonArray) {
-        //TODO refactor train.wreck.s  
-        // var s:Object = findPropertyBy(row, "fieldSet")
-        //FIXME
-        /*
-        var col: Object = row[1].cols[0].col
-        val TAB_GROUP: String = "tabGroup"
-        if (col.ta) {
-            // special case for json1
-            col = col.tabGroup[0].tab[0].row[0].cols[0].col
-        }
-        val pArr = col.fieldSet[0].property
-        return pArr
-        */
-        return 
-    }
-
-    private fun initProperties(props: JsonArray) {
-        for (json in props) {
-            val pl = PropertyLayout(json as JsonObject)
-            this.properties.add(pl)
+        if (row != null) {
+            val rowLo = row[1]
+            var colLo = rowLo.cols!![0]
+/* FIXME
+            if (colLo.tabGroup != null) {
+                // special case for json1
+                val tgLo = colLo.tabGroup!![0]
+                val rLo = tgLo.row[0]
+                colLo = rLo.cols!![0]
+            }      
+            properties = colLo.fieldSet!![0].property   */
         }
     }
 
@@ -63,19 +49,19 @@ class Layout(jsonObj: JsonObject? = null) : AbstractLayout(jsonObj) {
     fun arePropertyLabelsToBeSet(): Boolean {
         val labelSize: Int = propertyLabels!!.size
         var propsSize = 0
-        if (properties.isNotEmpty()) {
-            propsSize = properties.size
-        }
+//FIXME        if (properties.isNotEmpty()) {
+        //     propsSize = properties.size
+        // }
         return (labelSize < propsSize)
     }
 
     fun build(): VBox {
         val result = VBox()
-        UIUtil().decorate(result, "Layout", debugInfo)
+        UIUtil().decorate(result, "Layout", "debug")
         var b: Box
         //TODO iterate over rows, recurse into columns, etc.
         var rowCount: Int = 0
-        for (rl in rowList) {
+        for (rl in row!!) {
             rowCount += 1
             // the first row contains the object titel and actions (for wicket viewer)
             // this is handled here differently (tab)
@@ -88,7 +74,7 @@ class Layout(jsonObj: JsonObject? = null) : AbstractLayout(jsonObj) {
     }
 
     // recurse into attributes/fields/properties and 
-    private fun findPropertyBy(
+    fun findPropertyBy(
             obj: JsonObject, name: String): JsonObject? {
         //FIXME
         /*

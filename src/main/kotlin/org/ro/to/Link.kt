@@ -1,36 +1,24 @@
 package org.ro.to
 
-import kotlinx.serialization.json.JsonObject
-import org.ro.core.model.Adaptable
+import kotlinx.serialization.Optional
+import kotlinx.serialization.SerialId
+import kotlinx.serialization.Serializable
 
-class Link(jsonObj: JsonObject? = null) : Invokeable(jsonObj), Adaptable {
-    var title = ""
-    var rel = ""
-    var type = ""
-    private var args: JsonObject? = null // optional, http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/listAll/invoke
-    var arguments: JsonObject? = null
-    var argumentList = mutableListOf<Argument>()
-
-    init {
-        if (jsonObj != null) {
-            title = jsonObj["title"].toString()
-            rel = jsonObj["rel"].toString()
-            type = jsonObj["type"].toString()
-            args = jsonObj["args"].jsonObject
-            arguments = jsonObj["arguments"].jsonObject
-            val arguments2 = jsonObj["arguments"].jsonArray
-            if (arguments != null) {
-                for (a in arguments2) {
-                    argumentList.add(Argument(a as JsonObject))
-                }
-            }
-        }
-    }
+@Serializable
+data class Link(@SerialId(1) val method: String = "",
+                @SerialId(2) val rel: String = "",
+                @SerialId(3) val href: String = "",
+                @SerialId(4) val type: String = "",
+                @SerialId(5) @Optional val args: List<Argument> = emptyList(),
+                @SerialId(6) @Optional val arguments: List<Argument> = emptyList(),
+                @SerialId(7) @Optional val title: String = ""
+) {
+    //val argumentList: List<Arguments>? = null;
 
     fun setArgument(key: String, value: String): Unit {
         val k: String = key.toLowerCase()
         if (k == "script") {
-            var href = "{ \"href\": " + value + "}"
+//            var href = "{ \"href\": " + value + "}"
 //FIXME            arguments[k).value = href
         } else {
 //FIXME            arguments[k].value = value
@@ -38,12 +26,8 @@ class Link(jsonObj: JsonObject? = null) : Invokeable(jsonObj), Adaptable {
     }
 
     fun getArgumentsAsJsonString(): String {
-        val obj = arguments as JsonObject
-        return JSON.stringify(obj)
-    }
-
-    fun getHref(): String? {
-        return "//FIXME"
+        // return JSON.stringify(args)
+        return "FIXME"
     }
 
 }

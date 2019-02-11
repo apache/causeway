@@ -1,24 +1,26 @@
 package org.ro.core.event
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.core.Session
 import org.ro.handler.Dispatcher
 import org.ro.to.Invokeable
 import org.ro.to.Link
-import org.w3c.dom.events.Event
+import org.ro.to.Method
 import org.w3c.xhr.XMLHttpRequest
 
 /**
  * The name is somewhat misleading, see: https://en.wikipedia.org/wiki/XMLHttpRequest
  */
+@ImplicitReflectionSerializer
 class RoXmlHttpRequest {
     private var xhr = XMLHttpRequest()
     private var url = ""
 
-    protected fun errorHandler(event: Event, responseText: String) {
+    protected fun errorHandler(responseText: String) {
         EventLog.fault(url, responseText)
     }
 
-    protected fun resultHandler(event: Event, responseText: String) {
+    protected fun resultHandler(responseText: String) {
         val jsonString: String = responseText
         console.log(responseText);
         val logEntry: LogEntry? = EventLog.end(url, jsonString)
@@ -40,12 +42,12 @@ class RoXmlHttpRequest {
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
         xhr.setRequestHeader("Accept", "application/json")
 
-        xhr.onload = { event -> resultHandler(event, xhr.responseText) }
-        xhr.onerror = { event -> errorHandler(event, xhr.responseText) }
-        xhr.ontimeout = { event -> errorHandler(event, xhr.responseText) }
+        xhr.onload = { event -> resultHandler(xhr.responseText) }
+        xhr.onerror = { event -> errorHandler(xhr.responseText) }
+        xhr.ontimeout = { event -> errorHandler(xhr.responseText) }
 
         var body = ""
-        if (method == Invokeable().POST) {
+        if (method == Method.POST.operation) {
             val l: Link = inv as Link
             body = l.getArgumentsAsJsonString()
             xhr.send(body)

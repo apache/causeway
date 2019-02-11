@@ -1,5 +1,6 @@
 package org.ro
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import org.ro.core.Session
 import org.ro.to.Invokeable
@@ -16,6 +17,7 @@ data class HostCredential(
         var nix:String
 )
 
+@ImplicitReflectionSerializer
 class LoginDialog : Dialog<Any>(caption = "Connect", closeButton = true, escape = true, animation = true) {
     //Default values
     val url = "http://localhost:8080/"

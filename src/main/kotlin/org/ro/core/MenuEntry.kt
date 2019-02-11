@@ -7,7 +7,7 @@ class MenuEntry(var title: String?, var id: String?, var action: Action) {
     private var itemTitle: String? = null
 
     init {
-        itemId = action.href
+        itemId = action.getInvokeLink()!!.href
         itemTitle = action.id
     }
 

@@ -1,5 +1,6 @@
 package org.ro.core
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.Application
 import org.ro.core.event.EventLog
 import org.ro.core.event.LogEntry
@@ -16,6 +17,7 @@ import org.ro.view.tab.RoTabBar
  * @item Dock
  * etc.
  */
+@ImplicitReflectionSerializer
 object DisplayManager {
 
     fun addView(viewable: Visible): Unit {
@@ -59,12 +61,12 @@ object DisplayManager {
 
     // delegate to Tabs
     fun addEventTab() {
-        val list: MutableList<LogEntry>? = EventLog.getEntries()
+        val list: MutableList<LogEntry>? = EventLog.log
         getTabBar()!!.addEventTab(list)
     }
 
     fun addTreeTab() {
-        val list: MutableList<LogEntry>? = EventLog.getEntries()
+        val list: MutableList<LogEntry>? = EventLog.log 
         getTabBar()!!.addTreeTab(list)
     }
 

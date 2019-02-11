@@ -1,7 +1,6 @@
 package org.ro.core
 
 import org.ro.to.Action
-import org.ro.to.Invokeable
 import org.ro.to.Member
 import org.ro.to.Service
 
@@ -9,7 +8,7 @@ class Menu(private var limit: Int) {
     private var count: Int = 0
     var menuItems: MutableList<MenuEntry> = mutableListOf()
 
-    fun init(service: Service, invokableList: MutableList<Invokeable>): Boolean {
+    fun init(service: Service, invokableList: List<Member>): Boolean {
         for (i in invokableList) {
             val title: String? = service.title
             val id: String? = service.serviceId
@@ -44,7 +43,7 @@ class Menu(private var limit: Int) {
         return result
     }
 
-    fun findAction(url: String): Member? {
+    fun findAction(url: String): Action? {
         for (me in menuItems) {
             if (me.itemId == url) {
                 return me.action

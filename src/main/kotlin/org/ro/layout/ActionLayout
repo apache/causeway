@@ -1,0 +1,20 @@
+package org.ro.layout
+
+import kotlinx.serialization.Serializable
+import org.ro.to.Link
+
+@Serializable
+data class ActionLayout(val cssClass: String? = null,        //AbstractLo
+                        val named: String? = null, //MemberLo
+                        val describedAs: String? = null,    //MemberLo
+                        var metadataError: String? = null,   //MemberLo
+                        val link: Link? = null,          //MemberLo
+                        val id: String? = null,           //MemberLo
+                        val hidden: Boolean? = null,       //MemberLo
+                        val namedEscaped: String? = null,    //MemberLo
+                        val promptStyle: String? = null,   //MemberLo
+                        val bookmarking: String? = null,
+                        val position: String? = null,
+                        val cssClassFa: String? = null,
+                        val cssClassFaPosition: String? = null
+)
