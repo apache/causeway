@@ -23,6 +23,14 @@
 # - DOCKER_REGISTRY_PASSWORD
 # - DOCKER_REGISTRY_URL         # eg "https://index.docker.io/v1/"
 #
+# NB: if deploying to docker hub, then the image is named apacheisis/$APPNAME,
+#     where 'apacheisis' is an org that the user can write to
+#
+#     if deploying to repo.incode.cloud, then the image is docker-dev.incode.cloud/$DOCKER_REGISTRY_USERNAME/$APP_NAME,
+#     where 'docker-dev.incode.cloud' is the repository in Nexus
+#
+#     In both cases, use $DOCKER_REGISTRY_USERNAME/$DOCKER_REGISTRY_PASSWORD credentials to upload
+#
 
 image: maven:3.5.3-jdk-8
 
