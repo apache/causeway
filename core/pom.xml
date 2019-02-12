@@ -2278,7 +2278,61 @@ ${license.additional-notes}
                 </repository>
             </distributionManagement>
         </profile>
-		
+
+        <!--
+        this profile allows builds to be deployed to GCP, hosting a Maven repo backed by Google Storage
+
+        see:
+        https://github.com/renaudcerrato/appengine-maven-repository
+
+            export GCPAPPENGINEREPO_USERNAME=...
+            export GCPAPPENGINEREPO_PASSWORD=...
+            export GCPAPPENGINEREPO_URL=...
+
+            export REVISION=...
+
+              mvn -s .m2/settings.xml \
+                  -B \
+                  clean deploy \
+                  -Dgcpappenginerepo-deploy \
+                  -Dgcpappenginerepo-deploy.repositoryUrl=$GCPAPPENGINEREPO_URL \
+                  -Drevision=$REVISION \
+                  -Dskip.assemble-zip \
+                  $CORE_ADDITIONAL_OPTS
+
+            with .m2/settings.xml as:
+
+            <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+              <servers>
+                <server>
+                  <id>gcpappenginerepo-deploy.serverId</id>
+                  <username>${env.GCPAPPENGINEREPO_USERNAME}</username>
+                  <password>${env.GCPAPPENGINEREPO_PASSWORD}</password>
+                </server>
+              </servers>
+            </settings>
+
+        -->
+        <profile>
+            <id>gcpappenginerepo-deploy</id>
+            <activation>
+                <property>
+                    <name>gcpappenginerepo-deploy</name>
+                </property>
+            </activation>
+            <properties>
+                <gcpappenginerepo-deploy.repositoryUrl>https://my-gcp-project-id.appspot.com</gcpappenginerepo-deploy.repositoryUrl>
+            </properties>
+            <distributionManagement>
+                <repository>
+                    <id>gcpappenginerepo-deploy.serverId</id>
+                    <url>${gcpappenginerepo-deploy.repositoryUrl}</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
         <profile>
             <id>owasp</id>
             <activation>
