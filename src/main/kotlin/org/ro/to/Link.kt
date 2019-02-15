@@ -1,19 +1,16 @@
 package org.ro.to
 
 import kotlinx.serialization.Optional
-import kotlinx.serialization.SerialId
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Link(@SerialId(1) val method: String = "",
-                @SerialId(2) val rel: String = "",
-                @SerialId(3) val href: String = "",
-                @SerialId(4) val type: String = "",
-                @SerialId(5) @Optional val args: List<Argument> = emptyList(),
-                @SerialId(6) @Optional val arguments: List<Argument> = emptyList(),
-                @SerialId(7) @Optional val title: String = ""
-) {
-    //val argumentList: List<Arguments>? = null;
+data class Link(val rel: String = "",
+                val method: String = "",
+                val href: String = "",
+                val type: String = "",
+                @Optional val args: Map<String, Argument> = emptyMap(),
+                @Optional val arguments: Map<String, Argument> = emptyMap(),
+                @Optional val title: String = "") {
 
     fun setArgument(key: String, value: String): Unit {
         val k: String = key.toLowerCase()

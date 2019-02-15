@@ -13,7 +13,7 @@ import org.ro.view.VBox
  */
 @Serializable
 data class Layout(val cssClass: String? = null,
-             val row: List<RowLayout> = emptyList()) {
+                  val row: List<RowLayout> = emptyList()) {
 
     @Optional
     var propertyLabels: List<String>? = null
@@ -47,12 +47,16 @@ data class Layout(val cssClass: String? = null,
     }
 
     fun arePropertyLabelsToBeSet(): Boolean {
-        val labelSize: Int = propertyLabels!!.size
-        var propsSize = 0
+        if (propertyLabels != null) {
+            val labelSize: Int = propertyLabels!!.size
+            val propsSize = 0
 //FIXME        if (properties.isNotEmpty()) {
-        //     propsSize = properties.size
-        // }
-        return (labelSize < propsSize)
+            //     propsSize = properties.size
+            // }
+            return (labelSize < propsSize)
+        } else {
+            return false
+        }
     }
 
     fun build(): VBox {

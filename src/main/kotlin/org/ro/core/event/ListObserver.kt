@@ -1,12 +1,10 @@
 package org.ro.core.event
 
 import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.json.JSON
-import kotlinx.serialization.json.JsonObject
 import org.ro.core.DisplayManager
-import org.ro.core.Utils
 import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
+import org.ro.handler.TObjectHandler
 import org.ro.layout.Layout
 import org.ro.to.Invokeable
 import org.ro.to.Link
@@ -32,30 +30,29 @@ class ListObserver : ILogEventObserver {
         return list
     }
 
+    //TODO rework: method too complex, uses JsonObj (which is not available anymore)
+    // Handlers should set object into le after successful parsing
     override fun update(le: LogEntry) {
-        val jsonObj: JsonObject? = Utils().toJsonObject(le.response)
+        val obj =  le.obj
         val url = le.url
 
-        if (isList(jsonObj)) {
-            val result = jsonObj!!["result"].jsonObject
-            val value = result["value"].jsonArray
-            val size: Int = value.size
-            list.initSize(size)
+        if (obj is ObjectList) {
+            list.initSize(obj.length())
         }
-        if (isObject(jsonObj)) {
+        if (obj is TObject) {
             if (list.isFull()) {
                 console.log("List full, not adding: $url")
             } else {
                 //TODO eventually set/get LogEntry.tObject
                 val jsonStr: String = le.response
-                val tObj = JSON.parse(TObject.serializer(), jsonStr)
+                val tObj = TObjectHandler().parse(jsonStr)
                 loadLayout(tObj)
                 val oa = ObjectAdapter(tObj)
                 list.add(oa)
             }
         }
 
-        if (isLayout(jsonObj)) {
+        if (obj is Layout) {
             //TODO if le.tObject is already set it should contain Layout
             val l = Layout("no debug info")
             list.setLayout(l)
@@ -72,32 +69,7 @@ class ListObserver : ILogEventObserver {
             }
         }
     }
-
-    //TODO eventually move to LogEntry
-    private fun isList(jsonObj: JsonObject?): Boolean {
-/*        var b = false
-        if (jsonObj!!["resulttype"].toString() == "list") {
-            b = true
-        }
-        if (jsonObj["memberType"].toString() == "collection") {
-            b = true
-        }
-        return b */
-        return false
-    }
-
-    private fun isObject(jsonObj: JsonObject?): Boolean {
-/*        val jsonEl = jsonObj!!["instanceId"]
-        return !jsonEl.isNull */
-        return false
-    }
-
-    private fun isLayout(jsonObj: JsonObject?): Boolean {
-/*        val jsonEl = jsonObj!!["row"] 
-        return !jsonEl.isNull */
-        return false
-    }
-
+    
     private fun loadLayout(tObject: TObject) {
         val link: Link? = tObject.getLayoutLink()
         val href: String = link!!.href

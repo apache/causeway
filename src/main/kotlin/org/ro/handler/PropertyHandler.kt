@@ -2,17 +2,21 @@ package org.ro.handler
 
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.JSON
-import org.ro.generated.Property
 import org.ro.to.Invokeable
+import org.ro.to.Property
 
 @ImplicitReflectionSerializer
 class PropertyHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
-        console.log("[PropertyHandler fails on: $jsonStr]")
-        val p = JSON.parse(Property.serializer(), jsonStr)
-        val link = p.descriptionLink();
-        return link != null
+        try {
+            val p = JSON.parse(Property.serializer(), jsonStr)
+            val link = p.descriptionLink();
+            return link != null
+        } catch (ex: Exception) {
+            console.log("[PropertyHandler fails on: $jsonStr]")
+            return false
+        }
     }
 
     override fun doHandle(jsonStr: String) {

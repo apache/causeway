@@ -2,7 +2,7 @@ package org.ro.handler
 
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.JSON
-import org.ro.generated.Property
+import org.ro.to.Property
 
 @ImplicitReflectionSerializer
 class PropertyDescriptionHandler : AbstractHandler(), IResponseHandler {

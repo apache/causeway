@@ -1,18 +1,28 @@
 package org.ro.to
 
 import kotlinx.serialization.Optional
-import kotlinx.serialization.SerialId
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Member(@SerialId(1) val id: String = "",
-                  @SerialId(2) @Optional val links: List<Link> = emptyList(),
-                  @SerialId(3) val memberType: String,
-                  @SerialId(4) @Optional val value: String? = null,
-                  @SerialId(5) @Optional val format: String? = null,
-                  @SerialId(6) val extensions: Extensions? = null,
-                  @SerialId(7) @Optional val disabledReason: String? = null,
-                  @SerialId(8) @Optional val optional: Boolean = false) {
+data class Member(val id: String,
+                  val memberType: String,
+                  @Optional val links: List<Link> = emptyList(),
+/* value can be one of <null | String.class | Link.class> */
+                  // = "" satisfies 2 more tests than = null !!!
+//                  @Optional val value: String = "", 
+                  @Optional val extensions: Extensions? = null,
+                  @Optional val disabledReason: String = "",
+                  @Optional val format: String = "",
+                  @Optional val optional: Boolean = false) {
+
+    fun getInvokeLink(): Link? {
+        for (l in links) {
+            if (l.rel.indexOf(id) > 0) {
+                return l
+            }
+        }
+        return null
+    }
 
     private fun isString(): Boolean {
         return (format == "string") || (extensions!!.xIsisFormat == "string")

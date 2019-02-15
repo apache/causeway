@@ -1,19 +1,20 @@
 package org.ro.core.model
 
 import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.json.JSON
+import org.ro.handler.TObjectHandler
 import org.ro.to.FR_OBJECT_BAZ
-import org.ro.to.TObject
 import pl.treksoft.kvision.html.Image
+import kotlin.test.Test
 import kotlin.test.assertNotNull
 
 @ImplicitReflectionSerializer
 class ObjectAdapterTest {
 
-    // FIXME members has a list of named elements @Test
+    @Test
     fun testObjectBAZ() {
         // given
-        val adaptee = JSON.parse(TObject.serializer(), FR_OBJECT_BAZ.str)
+        val jsonStr = FR_OBJECT_BAZ.str
+        val adaptee = TObjectHandler().parse(jsonStr) 
         assertNotNull(adaptee)
 
         val title = "test title"
@@ -24,8 +25,7 @@ class ObjectAdapterTest {
 
         // then
         val expectedTitle = "domain-app-demo/persist-all/item-3:  Object: Baz"
-        //FIXME
-        /*
+        /* FIXME dynamic
         val actualTitle: String = oa.title
         assertEquals(expectedTitle, actualTitle)
 
@@ -33,7 +33,7 @@ class ObjectAdapterTest {
         assertTrue(oa.hasOwnProperty("instanceId"))
 
         //Expectations: 
-        // 1: adaptee( TObject) has members (memberList?) mapped onto (dynamic) ObjectAdapter properties
+        // 1: adaptee( TObject.kt) has members (memberList?) mapped onto (dynamic) ObjectAdapter properties
         assertFalse(oa.hasOwnProperty("members"))   // only internal (Object) attributes are 'adapted'
         assertTrue(oa.hasOwnProperty("memberList"))    // objectLists need to be public?
         val memberList = oa.memberList
@@ -43,7 +43,7 @@ class ObjectAdapterTest {
         val iconClass: Image = oa.getIcon()
         assertNotNull(iconClass)
 
-        // 3: adaptee( TObject) has links (linkList?) mapped onto (dynamic) ObjectAdapter properties
+        // 3: adaptee( TObject.kt) has links (linkList?) mapped onto (dynamic) ObjectAdapter properties
         assertFalse(oa.hasOwnProperty("links"))   // only internal (Object) attributes are 'adapted'
         assertTrue(oa.hasOwnProperty("linkList"))   // objectLists need to be public?
         assertTrue(adaptee.linkList.size == oa.linkList.length)

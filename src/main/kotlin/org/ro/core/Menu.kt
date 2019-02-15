@@ -1,6 +1,5 @@
 package org.ro.core
 
-import org.ro.to.Action
 import org.ro.to.Member
 import org.ro.to.Service
 
@@ -9,11 +8,10 @@ class Menu(private var limit: Int) {
     var menuItems: MutableList<MenuEntry> = mutableListOf()
 
     fun init(service: Service, invokableList: List<Member>): Boolean {
-        for (i in invokableList) {
+        for (m in invokableList) {
             val title: String? = service.title
             val id: String? = service.serviceId
-            val action = i as Action
-            val me = MenuEntry(title, id, action)
+            val me = MenuEntry(title, id, m)
             menuItems.add(me)
         }
         count += 1
@@ -43,7 +41,7 @@ class Menu(private var limit: Int) {
         return result
     }
 
-    fun findAction(url: String): Action? {
+    fun findAction(url: String): Member? {
         for (me in menuItems) {
             if (me.itemId == url) {
                 return me.action

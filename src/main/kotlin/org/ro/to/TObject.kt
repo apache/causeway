@@ -4,13 +4,18 @@ import kotlinx.serialization.Serializable
 import org.ro.core.model.Adaptable
 import pl.treksoft.kvision.utils.Object
 
+enum class MemberType(val type: String) {
+    ACTION("action"),
+    PROPERTY("property")
+}
+
 @Serializable
-data class TObject(val extensions: Extensions,
-                   val members: List<Member> = emptyList(),
-                   val links: List<Link> = emptyList(),
+data class TObject(val links: List<Link> = emptyList(),
+                   val extensions: Extensions,
                    val title: String = "",
                    val domainType: String = "",
-                   val instanceId: Int = 0) : Adaptable {
+                   val instanceId: String? = null,
+                   val members: Map<String, Member> = emptyMap()) : Adaptable {
 
     fun getId(): String {
         return "$domainType/$instanceId"
@@ -32,9 +37,9 @@ data class TObject(val extensions: Extensions,
 
     fun getProperties(): MutableList<Member> {
         val result = mutableListOf<Member>()
-        for (m in members!!) {
-            if (m.memberType == MemberType.PROPERTY.type) {
-                result.add(m)
+        for (m in members) {
+            if (m.value.memberType == MemberType.PROPERTY.type) {
+                result.add(m.value)
             }
         }
         return result
@@ -54,9 +59,10 @@ data class TObject(val extensions: Extensions,
 
     fun addAsProperty(dynObj: TObject, property: Member) {
         val attribute: Object? = null
-        val value: Any? = property.value
+//        val value: Any? = property.value
+        val value = "//TODO"
         if (value != null) {
-          //  val typeSpec: Any? = property.memberType
+            //  val typeSpec: Any? = property.memberType
             //FIXME attribute = typeSpec(value)
         }
         // if value={} (ie. of class Object), 
@@ -66,7 +72,7 @@ data class TObject(val extensions: Extensions,
             //here the magic of recursive OA's take place
             //FIXME attribute = ObjectAdapter(link, link.title, "Link")
         }
-        val key: String = property.id
+        val key: String = property.id!!
         //FIXME dynObj[key] = attribute
     }
 

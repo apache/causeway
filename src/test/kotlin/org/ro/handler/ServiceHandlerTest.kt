@@ -14,10 +14,11 @@ class ServiceHandlerTest {
     @Test
     fun testService() {
         // given
-        // when
         val le = LogEntry("", "GET", "")
-        le.response = JSON.stringify(RESTFUL_SERVICES.str)
+        le.response = RESTFUL_SERVICES.str
+        // when
         Dispatcher.handle(le)
+        //TODO wait for Dispatcher
         val m1: Menu? = DisplayManager.getMenu()
         // then 
         assertNotNull(m1)

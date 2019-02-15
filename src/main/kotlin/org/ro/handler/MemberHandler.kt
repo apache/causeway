@@ -11,7 +11,7 @@ class MemberHandler : AbstractHandler(), IResponseHandler {
     override fun canHandle(jsonStr: String): Boolean {
         try {
             val service = JSON.parse(Service.serializer(), jsonStr)
-            return (service.members != null)
+            return true
         } catch (ex: Exception) {
             return false
         }
@@ -19,7 +19,7 @@ class MemberHandler : AbstractHandler(), IResponseHandler {
 
     override fun doHandle(jsonStr: String) {
         val service = JSON.parse(Service.serializer(), jsonStr)
-        val members = service.members!!
+        val members = service.getMemberList()
         val mnu = DisplayManager.getMenu()
         val done: Boolean = mnu!!.init(service, members)
         if (done) {

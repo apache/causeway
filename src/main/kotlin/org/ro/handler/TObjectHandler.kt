@@ -9,7 +9,7 @@ class TObjectHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
         try {
-            JSON.parse(TObject.serializer(), jsonStr)
+            parse(jsonStr)
             return true
         } catch (ex: Exception) {
             return false
@@ -17,8 +17,12 @@ class TObjectHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle(jsonStr: String) {
-        val tObject = JSON.parse(TObject.serializer(), jsonStr)
+        val tObject = parse(jsonStr)
         logEntry.obj = tObject
+    }
+
+    fun parse(jsonStr: String): TObject {
+        return JSON.nonstrict.parse(TObject.serializer(), jsonStr)
     }
 
 }

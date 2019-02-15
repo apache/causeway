@@ -1,6 +1,7 @@
 package org.ro.to
 
 import kotlinx.serialization.Optional
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,23 +10,23 @@ class Parameter(val id: String,
                 val description: String,
                 val name: String,
                 @Optional val choices: List<Link> = emptyList(),
-                @Optional val defaultChoice: Link? = null) {
+                @Optional @SerialName("default") val defaultChoice: Link? = null) {
 
 
     fun hasChoices(): Boolean {
-        return choices!!.isNotEmpty()
+        return choices.isNotEmpty()
     }
 
     fun getChoiceListKeys(): MutableList<String> {
         val result: MutableList<String> = mutableListOf()
-        for (c in choices!!) {
+        for (c in choices) {
             result.add(c.title)
         }
         return result
     }
 
     fun getHrefByTitle(title: String): String? {
-        for (l in choices!!) {
+        for (l in choices) {
             if (l.title == title) {
                 return l.href
             }
@@ -36,7 +37,7 @@ class Parameter(val id: String,
     fun findIndexOfDefaultChoice(): Int {
         val dcTitle = defaultChoice!!.title
         var i = 0
-        for (c in choices!!) {
+        for (c in choices) {
             i++
             if (c.title == dcTitle) {
                 return i

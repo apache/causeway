@@ -1,22 +1,23 @@
 package org.ro.layout
 
+import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 import org.ro.to.Link
 
 @Serializable
-data class PropertyLayout(val cssClass: String? = null,        //AbstractLo
-                          val named: String? = null, //MemberLo
-                          val describedAs: String? = null,    //MemberLo
-                          var metadataError: String? = null,   //MemberLo
-                          val link: Link? = null,          //MemberLo
-                          val id: String? = null,           //MemberLo
-                          val hidden: Boolean? = null,       //MemberLo
-                          val namedEscaped: String? = null,    //MemberLo
-                          val promptStyle: String? = null,   //MemberLo
-                          val action: String? = null,
+data class PropertyLayout(val named: String? = null,
+                          val describedAs: String? = null,
+                          @Optional val action: List<ActionLayout> = emptyList(),
+                          var metadataError: String? = null,
+                          val link: Link? = null,
+                          val id: String? = null,
+                          val cssClass: String? = null,
+                          val hidden: String? = null,  //ALL_TABLES     
                           val labelPosition: String? = null,
-                          val multiLine: Boolean? = null,
-                          val renderedAsDayBefore: Boolean? = null,
+                          val multiLine: Int? = 1,  
+                          val namedEscaped: Boolean? = false,
+                          val promptStyle: String? = null,
+                          val renderedAsDayBefore: Boolean? = false,  
                           val typicalLength: Int? = null,
                           val unchanging: String? = null
 )

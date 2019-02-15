@@ -1,8 +1,8 @@
 package org.ro.core
 
-import org.ro.to.Action
+import org.ro.to.Member
 
-class MenuEntry(var title: String?, var id: String?, var action: Action) {
+class MenuEntry(var title: String?, var id: String?, var action: Member) {
     internal var itemId: String? = null
     private var itemTitle: String? = null
 

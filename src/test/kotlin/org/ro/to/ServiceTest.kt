@@ -16,7 +16,7 @@ class ServiceTest {
         val jsonStr = SO_MENU.str
         val service = JSON.parse(Service.serializer(), jsonStr)
         assertEquals("Simple Objects", service.title)
-        val actions: kotlin.collections.List<Member> = service.members
+        val actions: kotlin.collections.List<Member> = service.getMemberList()
         assertEquals(3, actions.size)
 
         assertTrue(includesId(actions, "listAll"))

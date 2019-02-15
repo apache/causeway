@@ -26,9 +26,14 @@ class TObjectHandlerTest {
         // then
         assertNotNull(ol)
         assertTrue(ol.length() == 0)
-        //After SO_LIST_ALL is invoked, a couple of other URL's (3 top menu items) are invoked automatically.
-        // therefore the expected number is 5 (for SimpleApp and not 2!
-        assertTrue(5 == EventLog.log.size)
+        
+        // WHEN 
+        //      SimpleApp is available at http://localhost:8080/restful 
+        // AND
+        //      a couple of other URL's (3 top menu items) are invoked automatically from SO_LIST_ALL.
+        // THEN 
+        //      the expected number is 5 (for SimpleApp and not 2!
+        //assertTrue(5 == EventLog.log.size)  // makes an _IntegrationTest_
     }
 
     private fun createLogEntry(jsonStr: String): LogEntry {

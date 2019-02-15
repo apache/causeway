@@ -1,11 +1,12 @@
 package org.ro.layout
 
 import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.json.JSON
+import org.ro.handler.LayoutHandler
 import org.ro.to.FR_OBJECT_LAYOUT
 import org.ro.to.SO_OBJECT_LAYOUT
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 @ImplicitReflectionSerializer
 class LayoutTest {
@@ -14,9 +15,10 @@ class LayoutTest {
     fun testParseSimpleObjectLayout() {
         //when
         val jsonStr = SO_OBJECT_LAYOUT.str
-        val lo = JSON.parse(Layout.serializer(), jsonStr)
+        val lo = LayoutHandler().parse(jsonStr)
         // then
-        val properties = lo.properties!!
+        val properties = lo.properties
+        assertNotNull(properties)
         assertEquals(2, properties.size)
         assertEquals("name", properties[0].id)
         assertEquals("notes", properties[1].id)
@@ -41,10 +43,11 @@ class LayoutTest {
     fun testparseFixtureScriptObjectLayout() {
         // given
         val jsonStr = FR_OBJECT_LAYOUT.str
-        val lo = JSON.parse(Layout.serializer(), jsonStr)
+        val lo = LayoutHandler().parse(jsonStr)
         // when
-        val properties = lo.properties!!
+        val properties = lo.properties
         // then
+        assertNotNull(properties)
         assertEquals(4, properties.size)
         assertEquals("className", properties[0].id)
         assertEquals("fixtureScriptClassName", properties[1].id)

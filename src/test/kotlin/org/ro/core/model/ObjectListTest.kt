@@ -1,30 +1,30 @@
 package org.ro.core.model
 
 import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.json.JSON
-import org.ro.layout.Layout
+import org.ro.handler.LayoutHandler
+import org.ro.handler.TObjectHandler
 import org.ro.to.SO_0
 import org.ro.to.SO_1
 import org.ro.to.SO_OBJECT_LAYOUT
-import org.ro.to.TObject
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
 @ImplicitReflectionSerializer
 class ObjectListTest {
 
-    //FIXME members has a list of named elements @Test
+    @Test
     fun testParse() {
         var jsonStr = SO_0.str
-        val ro0 = JSON.parse(TObject.serializer(), jsonStr)
+        val ro0 = TObjectHandler().parse(jsonStr)
         ro0.addMembersAsProperties()
 
         jsonStr = SO_1.str
-        val ro1 = JSON.parse(TObject.serializer(), jsonStr)
+        val ro1 = TObjectHandler().parse(jsonStr)
         ro1.addMembersAsProperties()
 
         jsonStr = SO_OBJECT_LAYOUT.str
-        val lyt = JSON.parse(Layout.serializer(), jsonStr)
+        val lyt = LayoutHandler().parse(jsonStr)
 
         val ol = ObjectList()
         ol.initSize(2)

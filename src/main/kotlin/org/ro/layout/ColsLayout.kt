@@ -6,7 +6,7 @@ import org.ro.view.UIUtil
 import org.ro.view.VBox
 
 @Serializable
-data class ColsLayout(val col: List<ColLayout> = emptyList()) {
+data class ColsLayout(val col: ColLayout? = null) {
     fun build(): VBox {
         val result = VBox()
 //        result.label = "tab: $id"

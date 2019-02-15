@@ -35,11 +35,11 @@ class ObjectAdapter(var adaptee: Adaptable,
     // add properties of the adaptee to the adapter dynamically
     fun initPropertyAccessors() {
         //first pass: add properties
-        val s: String = JSON.stringify(adaptee)
-        val o: Object = JSON.parse(s)
+       // val s: String = JSON.stringify(adaptee)
+        //val o: Object = JSON.parse(s)
 //        fromObject(o)
         //second pass: set values from adaptee
-        fromAdaptee(o)
+  //      fromAdaptee(o)
     }
 
     private fun fromObject(obj: Object) {

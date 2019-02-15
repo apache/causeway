@@ -1,28 +1,24 @@
-package org.ro.generated
+package org.ro.to
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
-import org.ro.to.Extensions
-import org.ro.to.Link
-import org.ro.to.Parameter
 
 @Serializable  // is Property a Variant of Member?
 data class Property(val id: String = "",
                     val memberType: String = "",
-                    val value: String? = null,
-                    val format: String? = null,
-                    val extensions: Extensions? = null,
-                    val disabledReason: String? = null,
+                    val links: List<Link> = emptyList(),
                     val optional: Boolean? = null,
-                    val links: List<Link>? = null,
+                    @Optional val title: String? = null,
+                    @Optional val value: String? = null,
+                    val extensions: Extensions? = null,
+                    @Optional val format: String? = null,
+                    @Optional val disabledReason: String? = null,
                     @Optional val parameters: List<Parameter> = emptyList(),
                     @Optional val maxLength: Int = 0) {
 
-    val DESCRIBED_BY = "describedby"
-
     fun descriptionLink(): Link? {
-        for (l in links!!) {
-            if (l.rel == DESCRIBED_BY)
+        for (l in links) {
+            if (l.rel == "describedby")  // introduce enum LinkType?
                 return l
         }
         return null

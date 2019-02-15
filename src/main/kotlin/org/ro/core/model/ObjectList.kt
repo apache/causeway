@@ -1,11 +1,14 @@
 package org.ro.core.model
 
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.core.Utils
-import org.ro.generated.Property
 import org.ro.layout.Layout
 import org.ro.to.Extensions
+import org.ro.to.Invokeable
+import org.ro.to.Property
 import org.ro.to.TObject
 
+@ImplicitReflectionSerializer
 class ObjectList : Visible {
     private var limit: Int = 0
     var list = mutableListOf<ObjectAdapter>()
@@ -50,20 +53,23 @@ class ObjectList : Visible {
         return length() >= limit
     }
 
-    private fun initPropertyDescription(): Unit {
-        if (layout!!.arePropertyLabelsToBeSet()) {
-            val pls = layout!!.properties!!
-            for (pl in pls) {
-/*FIXME              var  l = pl.getLink()
-                l!!.invoke() */
+    private fun initPropertyDescription() {
+        if (layout != null) {
+            if (layout!!.arePropertyLabelsToBeSet()) {
+                val pls = layout!!.properties!!
+                for (pl in pls) {
+                    val l = pl.link
+                    val i = Invokeable(l!!.href)
+                    i.invoke()
+                }
             }
         }
     }
 
-    fun handleProperty(p: Property): Unit {
+    fun handleProperty(p: Property) {
         if (layout == null) {
             //TODO should not happen ...
- //           layout = Layout()
+            //           layout = Layout()
         }
         val e: Extensions? = p.extensions
         layout!!.addPropertyLabel(p.id, e!!.friendlyName)

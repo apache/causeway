@@ -1,24 +1,35 @@
 package org.ro.handler
 
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.json.JSON
+import org.ro.core.Utils
+import org.ro.core.event.EventLog
+import org.ro.core.event.ListObserver
+import org.ro.core.event.LogEntry
+import org.ro.core.model.ObjectList
+import org.ro.to.FR_PROPERTY_DESCRIPTION
+import org.ro.to.Property
 import kotlin.test.Test
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
+@ImplicitReflectionSerializer
 class PropertyDescriptionHandlerTest {
 
     //  BS3.xml <-(link.layout)- FR <-(up)- FR_PROPERTY_DESCRIPTION
     @Test
     fun testService() {
-        /*
+
         // given
-        val log = EventLog
         val lo = ListObserver()
         // when
-        val xp = LogEntry("", "GET", null)
-        val json: JsonObject = URLS.FR_PROPERTY_DESCRIPTION
-        xp.response = JSON.stringify(json)
+        val xp = LogEntry("", "GET")
+        xp.response = FR_PROPERTY_DESCRIPTION.str
         Dispatcher.handle(xp)
-        val selfHref: String? = Utils().getSelfHref(json)
-        val act: LogEntry? = log.find(selfHref)
-        //FIXME nothing tested right now!
+        val selfHref: String? = Utils().getSelfHref(xp.response)
+        assertNotNull(selfHref)
+        val act: LogEntry? = EventLog.find(selfHref)
+
         if (act != null) {
             val obs: ListObserver = act.observer as ListObserver
             val ol: ObjectList = obs.getList()
@@ -32,11 +43,11 @@ class PropertyDescriptionHandlerTest {
             val lyt = ol.getLayout()
             assertNotNull(lyt)
 
-            val id: String = URLS.FR_PROPERTY_DESCRIPTION.id
+            val property = JSON.parse(Property.serializer(), FR_PROPERTY_DESCRIPTION.str)
+            val id: String = "property.id"
             val lbl: String = lyt.getPropertyLabel(id)
             assertNotNull(lbl)
         }
-        */
     }
 
 }

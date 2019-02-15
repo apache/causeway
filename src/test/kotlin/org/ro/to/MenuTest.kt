@@ -15,9 +15,9 @@ class MenuTest {
         //given:
         val jsonStr =  SO_MENU.str
         val s1 = JSON.parse(Service.serializer(), jsonStr)
-        val m1 = s1.members
+        val m1 = s1.getMemberList()
         val s2 = JSON.parse(Service.serializer(), jsonStr)
-        val m2 = s2.members
+        val m2 = s2.getMemberList()
         //when
         val menu = Menu(2)
         menu.init(s1, m1)
@@ -31,7 +31,7 @@ class MenuTest {
     fun testParse() {
         val jsonStr = SO_MENU.str
         val service = JSON.parse(Service.serializer(), jsonStr)
-        val members = service.members
+        val members = service.getMemberList()
         val menu = Menu(1)
         menu.init(service, members)
         assertNotNull(menu)

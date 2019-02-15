@@ -11,7 +11,7 @@ data class RowLayout(val cols: List<ColsLayout> = emptyList(),
                      val cssClass: String? = null,
                      val id: String? = null
 ) {
-    private val maxSpan = 12
+//    private val maxSpan = 12
 
     fun build(): VBox {
         val result = VBox()

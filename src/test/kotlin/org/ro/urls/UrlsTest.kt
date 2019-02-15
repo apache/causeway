@@ -58,7 +58,7 @@ class UrlsTest {
     private fun initLink(href: String): void {
         link = Link()
         link.setHref(href)
-        link.setMethod(Invokeable.GET)
+        link.setMethod(Invokeable.kt.GET)
         link.invoke()
     }
 

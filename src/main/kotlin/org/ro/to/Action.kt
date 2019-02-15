@@ -3,15 +3,15 @@ package org.ro.to
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Action(val id: String,
+data class Action(val id: String,
              val memberType: String,
              val links: List<Link> = emptyList(),
-             val parameters: List<Parameter> = emptyList(),
+             val parameters: Map<String, Parameter> = emptyMap(),
              val extensions: Extensions) {
 
     fun getInvokeLink(): Link? {
-        for (l in this.links) {
-            if (l.rel.indexOf(this.id) > 0) {
+        for (l in links) {
+            if (l.rel.indexOf(id) > 0) {
                 return l
             }
         }
@@ -19,8 +19,8 @@ class Action(val id: String,
     }
 
     fun findParameterByName(name: String): Parameter? {
-        for (p in this.parameters) {
-            if (p.id == name) return p
+        for (p in parameters) {
+            if (p.value.id == name) return p.value
         }
         return null
     }
