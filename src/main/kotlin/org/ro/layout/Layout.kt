@@ -25,15 +25,15 @@ data class Layout(val cssClass: String? = null,
     init {
         if (row != null) {
             val rowLo = row[1]
-            var colLo = rowLo.cols!![0]
-/* FIXME
-            if (colLo.tabGroup != null) {
+            var colsLyt = rowLo.cols!![0]
+
+            if (colsLyt.col?.tabGroup != null) {
                 // special case for json1
-                val tgLo = colLo.tabGroup!![0]
-                val rLo = tgLo.row[0]
-                colLo = rLo.cols!![0]
-            }      
-            properties = colLo.fieldSet!![0].property   */
+                val tgLo = colsLyt.col?.tabGroup!![0]
+                val rLo = tgLo.tab[0]
+                colsLyt = rLo.row[0].cols[0]
+            }
+            properties = colsLyt.col!!.fieldSet!![0].property
         }
     }
 

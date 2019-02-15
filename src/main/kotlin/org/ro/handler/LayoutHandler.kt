@@ -22,8 +22,7 @@ class LayoutHandler : AbstractHandler(), IResponseHandler {
     }
 
     fun parse(jsonStr: String): Layout {
-//        val s2 = Utils().quoteNulls(jsonStr)
-        return JSON./*nonstrict.*/parse(Layout.serializer(), jsonStr)
+        return JSON.parse(Layout.serializer(), jsonStr)
     }
 
 }

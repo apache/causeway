@@ -38,6 +38,7 @@ class ObjectListTest {
         ol.setLayout(lyt)
         assertEquals(2, ol.length())
 
+        assertNotNull(ol.getLayout())
         assertNotNull(ol.getLayout()!!.properties)
     }
 
