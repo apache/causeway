@@ -10,7 +10,7 @@ import pl.treksoft.kvision.utils.Object
  * @see: https://en.wikipedia.org/wiki/Adapter_pattern
  */
 //FIXME dynamic 
-class ObjectAdapter(var adaptee: Adaptable,
+class ObjectAdapter(var adaptee: dynamic,
                     private var label: String? = null,
                     private var typeSpec: String? = null,
                     private var icon: Image? = null) : Visible {

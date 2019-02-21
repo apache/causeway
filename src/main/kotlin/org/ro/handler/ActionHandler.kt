@@ -3,6 +3,8 @@ package org.ro.handler
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.JSON
 import org.ro.to.Action
+import org.ro.to.Invokeable
+import org.ro.to.Method
 
 @ImplicitReflectionSerializer
 class ActionHandler : AbstractHandler(), IResponseHandler {
@@ -20,17 +22,16 @@ class ActionHandler : AbstractHandler(), IResponseHandler {
     override fun doHandle(jsonStr: String) {
         val action = JSON.parse(Action.serializer(), jsonStr)
         console.log("[ActionHandler.doHandle -> Action] $action")
-/*         val l = a.links!![0]
-       when (l!!.method) {
-            a.GET -> l.invoke()
-            a.POST -> {
-                //FIXME  Prompt(a)
-            }  
-            else -> //TODO handle PUT / DELETE
-                // eventually in case of a DELETE, a confirmation needs to be shown
-                console.log("Link Method is PUT or DELETE")
+        val l = action.links[0]
+        when (l.method) {
+            Method.GET.name -> Invokeable(l.href, l.method).invoke()
+            Method.POST.name -> Invokeable(l.href, l.method).invoke()  //FIXME  Prompt(action)
+            Method.PUT.name -> {
+                console.log("Link Method is PUT")
+            }
+            Method.PUT.name -> {
+                console.log("Link Method is DELETE")
+            }
         }
-        l.invoke()
-        */
     }
 }

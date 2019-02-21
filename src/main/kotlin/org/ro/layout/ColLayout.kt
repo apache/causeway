@@ -3,6 +3,8 @@ package org.ro.layout
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 import org.ro.to.Link
+import org.ro.view.HBox
+import org.ro.view.UIComponent
 
 @Serializable
 data class ColLayout(@Optional val domainObject: DomainObjectLayout? = null,
@@ -25,20 +27,19 @@ data class ColLayout(@Optional val domainObject: DomainObjectLayout? = null,
                      @Optional val tabGroup: List<TabGroupLayout> = emptyList(),
                      @Optional val fieldSet: List<FieldSetLayout> = emptyList()
 ) {
-    /*  fun build(): HBox {
-          val result = HBox()
-          UIUtil().decorate(result, "ColLayout", "debug")
-          var b: UIComponent?
-          for (tl in tabGroup) {
-              b = tl.build()
-              result.addChild(b)
-          }
-          for (fsl in fieldSet) {
-              b = fsl.build()
-              result.addChild(b)
-          }
-          // actions will not be rendered as buttons
-          return result
-      }   */
+    fun build(): HBox {
+        val result = HBox("ColLayout")
+        var b: UIComponent
+        for (tgl in tabGroup) {
+            b = tgl.build()
+            result.addChild(b)
+        }
+        for (fsl in fieldSet) {
+            b = fsl.build()
+            result.addChild(b)
+        }
+        // actions will not be rendered as buttons
+        return result
+    }
 
 }

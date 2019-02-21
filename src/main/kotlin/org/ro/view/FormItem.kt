@@ -1,4 +1,4 @@
 package org.ro.view
 
-class FormItem : UIComponent() {
+class FormItem(override val label: String) : UIComponent() {
 }

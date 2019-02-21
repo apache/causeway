@@ -1,4 +1,5 @@
 package org.ro.view
 
-class HBox : Box() {
+class HBox(override val label: String) : Box() {
+
 }

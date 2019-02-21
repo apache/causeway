@@ -1,7 +1,6 @@
 package org.ro.to
 
 import kotlinx.serialization.Serializable
-import org.ro.core.model.Adaptable
 import pl.treksoft.kvision.utils.Object
 
 enum class MemberType(val type: String) {
@@ -15,7 +14,7 @@ data class TObject(val links: List<Link> = emptyList(),
                    val title: String = "",
                    val domainType: String = "",
                    val instanceId: String? = null,
-                   val members: Map<String, Member> = emptyMap()) : Adaptable {
+                   val members: Map<String, Member> = emptyMap()) {
 
     fun getId(): String {
         return "$domainType/$instanceId"
@@ -57,10 +56,10 @@ data class TObject(val links: List<Link> = emptyList(),
         }
     }
 
-    fun addAsProperty(dynObj: TObject, property: Member) {
+    fun addAsProperty(dynObj: TObject, member: Member) {
         val attribute: Object? = null
-//        val value: Any? = property.value
-        val value = "//TODO"
+//        val value: Any? = member.value
+        val value = "//TODO members of type property can be either null|String|Link"
         if (value != null) {
             //  val typeSpec: Any? = property.memberType
             //FIXME attribute = typeSpec(value)
@@ -72,7 +71,7 @@ data class TObject(val links: List<Link> = emptyList(),
             //here the magic of recursive OA's take place
             //FIXME attribute = ObjectAdapter(link, link.title, "Link")
         }
-        val key: String = property.id!!
+        val key: String = member.id
         //FIXME dynObj[key] = attribute
     }
 

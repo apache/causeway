@@ -3,8 +3,6 @@ package org.ro.layout
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
-import org.ro.view.Box
-import org.ro.view.UIUtil
 import org.ro.view.VBox
 
 /**
@@ -16,63 +14,51 @@ data class Layout(val cssClass: String? = null,
                   val row: List<RowLayout> = emptyList()) {
 
     @Optional
-    var propertyLabels: List<String>? = null
+    var propertyLabels = mutableMapOf<String, String>()
     @Optional
     var properties: List<PropertyLayout>? = null
-    @Optional
-    val TAB_GROUP: String = "tabGroup"
 
     init {
-        if (row != null) {
-            val rowLo = row[1]
-            var colsLyt = rowLo.cols!![0]
-
-            if (colsLyt.col?.tabGroup != null) {
-                // special case for json1
-                val tgLo = colsLyt.col?.tabGroup!![0]
-                val rLo = tgLo.tab[0]
-                colsLyt = rLo.row[0].cols[0]
-            }
-            properties = colsLyt.col!!.fieldSet!![0].property
+        console.log("[number of rows: ${row.size}]")
+        val row1 = row[1]
+        var cols = row1.cols[0]
+        val tabGroup = cols.col?.tabGroup
+        if (tabGroup != null) {
+            val tabGroup0 = tabGroup[0]
+            val tab0 = tabGroup0.tab[0]
+            val row0 = tab0.row[0]
+            cols = row0.cols[0]
         }
+        val col = cols.col!!
+        val fieldSet0 = col.fieldSet[0]
+        properties = fieldSet0.property
     }
 
     fun addPropertyLabel(id: String, friendlyName: String) {
-//FIXME        propertyLabels[id) = friendlyName
+        propertyLabels.put(id, friendlyName)
     }
 
-    fun getPropertyLabel(id: String): String {
-//FIXME        return propertyLabels[id)
-        return ""
+    fun getPropertyLabel(id: String): String? {
+        return propertyLabels.get(id)
     }
 
     fun arePropertyLabelsToBeSet(): Boolean {
-        if (propertyLabels != null) {
-            val labelSize: Int = propertyLabels!!.size
-            val propsSize = 0
-//FIXME        if (properties.isNotEmpty()) {
-            //     propsSize = properties.size
-            // }
-            return (labelSize < propsSize)
-        } else {
-            return false
+        val labelSize: Int = propertyLabels.size
+        var propsSize = 0
+        if (properties!!.isNotEmpty()) {
+            propsSize = properties!!.size
         }
+        return (labelSize < propsSize)
     }
 
     fun build(): VBox {
-        val result = VBox()
-        UIUtil().decorate(result, "Layout", "debug")
-        var b: Box
-        //TODO iterate over rows, recurse into columns, etc.
-        var rowCount: Int = 0
-        for (rl in row!!) {
-            rowCount += 1
-            // the first row contains the object titel and actions (for wicket viewer)
-            // this is handled here differently (tab)
-            if (rowCount > 1) {
-                b = rl.build()
-                result.addChild(b)
-            }
+        val result = VBox("Layout" )
+        var b: VBox
+        for (rl in row) {
+            // row[0] (head) contains the object title and actions (for wicket viewer)
+            // this is to be handled differently (tab)
+            b = rl.build()      
+            result.addChild(b)
         }
         return result
     }

@@ -5,7 +5,7 @@ import org.ro.to.Service
 
 class Menu(private var limit: Int) {
     private var count: Int = 0
-    var menuItems: MutableList<MenuEntry> = mutableListOf()
+    var menuItems = mutableListOf<MenuEntry>()
 
     fun init(service: Service, invokableList: List<Member>): Boolean {
         for (m in invokableList) {
@@ -22,7 +22,6 @@ class Menu(private var limit: Int) {
         val titles = mutableListOf<String>()
         for (me in menuItems) {
             titles.add(me.title!!)
-
         }
         return collectUnique(titles)
     }

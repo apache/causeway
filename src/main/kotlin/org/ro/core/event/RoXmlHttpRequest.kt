@@ -48,6 +48,7 @@ class RoXmlHttpRequest {
 
         var body = ""
         if (method == Method.POST.operation) {
+            //FIXME
             val l: Link = inv as Link
             body = l.getArgumentsAsJsonString()
             xhr.send(body)

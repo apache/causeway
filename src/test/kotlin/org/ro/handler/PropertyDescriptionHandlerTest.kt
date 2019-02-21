@@ -19,18 +19,19 @@ class PropertyDescriptionHandlerTest {
     //  BS3.xml <-(link.layout)- FR <-(up)- FR_PROPERTY_DESCRIPTION
     @Test
     fun testService() {
+        if (TestUtil().isSimpleAppAvailable()) {
 
-        // given
-        val lo = ListObserver()
-        // when
-        val xp = LogEntry("", "GET")
-        xp.response = FR_PROPERTY_DESCRIPTION.str
-        Dispatcher.handle(xp)
-        val selfHref: String? = Utils().getSelfHref(xp.response)
-        assertNotNull(selfHref)
-        val act: LogEntry? = EventLog.find(selfHref)
+            // given
+            val lo = ListObserver()
+            val jsonStr = FR_PROPERTY_DESCRIPTION.str
+            // when
+            val xp = LogEntry("", "GET")
+            xp.response = jsonStr
+            Dispatcher.handle(xp)
+            val selfHref: String = Utils().getSelfHref(jsonStr)!!
+            assertNotNull(selfHref)
+            val act: LogEntry = EventLog.find(selfHref)!!
 
-        if (act != null) {
             val obs: ListObserver = act.observer as ListObserver
             val ol: ObjectList = obs.getList()
             // then
@@ -40,12 +41,12 @@ class PropertyDescriptionHandlerTest {
             //val url:String = tObject.getLayoutLink() //"get URL from URLS.FR_PROPERTY_DESCRIPTION"
             // tObject.getLayoutLink
             // will only work, if it has been loaded ...
-            val lyt = ol.getLayout()
+            val lyt = ol.getLayout()!!
             assertNotNull(lyt)
 
             val property = JSON.parse(Property.serializer(), FR_PROPERTY_DESCRIPTION.str)
             val id: String = "property.id"
-            val lbl: String = lyt.getPropertyLabel(id)
+            val lbl: String? = lyt.getPropertyLabel(id)
             assertNotNull(lbl)
         }
     }

@@ -4,7 +4,6 @@ import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 import org.ro.view.FormItem
 import org.ro.view.HBox
-import org.ro.view.UIUtil
 
 @Serializable
 data class FieldSetLayout(val name: String? = null,
@@ -17,12 +16,11 @@ data class FieldSetLayout(val name: String? = null,
                           val unreferencedProperties: Boolean? = false) {
 
     fun build(): HBox {
-        val result = HBox()
-        UIUtil().decorate(result, "FieldSetLayout", "debug")
+        val result = HBox("FieldSetLayout")
         var fi: FormItem?
-        val form: org.ro.view.Form = org.ro.view.Form()
+        val form: org.ro.view.Form = org.ro.view.Form("new Form")
         for (p in property) {
-            fi = UIUtil().buildFormItem(p.toString())
+            fi = FormItem(p.toString())
             form.addElement(fi)
         }
         result.addChild(form)

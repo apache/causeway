@@ -21,9 +21,7 @@ class TObjectTest {
 
     @Test  // http://localhost:8080/restful/objects/simple.SimpleObject/0
     fun testTObjectMembers() {
-        //FIXME authors@ro.org members should be modeled as elements of an Array [] 
-        //Expected '[, kind: [object Object]'
-        // some kind of custom serializer is required to handle it as is
+        //TODO authors@ro.org members should be modeled as elements of an Array [] 
         val jsonStr = SO_0.str
         val to = TObjectHandler().parse(jsonStr)
         assertEquals("Object: Foo", to.links[0].title)

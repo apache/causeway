@@ -1,13 +1,11 @@
 package org.ro.view
 
-open class UIComponent() {
-    var label: String = ""
+open class UIComponent(open val label: String = "not set") {
+    var children = mutableListOf<UIComponent>()
 
-    fun addChild(form: UIComponent?) {
-
+    fun addChild(uic: UIComponent) {
+        children.add(uic)
+        console.log("[UIComponent: ${uic.label} added to: $label (${children.size})]")
     }
 
-    fun getChildren(): MutableList<UIComponent> {
-        return mutableListOf()
-    }
 }

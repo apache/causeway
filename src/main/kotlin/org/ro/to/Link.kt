@@ -1,5 +1,6 @@
 package org.ro.to
 
+import com.github.snabbdom._set
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
@@ -12,19 +13,25 @@ data class Link(val rel: String = "",
                 @Optional val arguments: Map<String, Argument> = emptyMap(),
                 @Optional val title: String = "") {
 
+    //TODO handle args as well?
     fun setArgument(key: String, value: String): Unit {
-        val k: String = key.toLowerCase()
+        val k = key.toLowerCase()
         if (k == "script") {
-//            var href = "{ \"href\": " + value + "}"
-//FIXME            arguments[k).value = href
+            val href = "{ \"href\": " + value + "}"
+            arguments._set(k, href)
         } else {
-//FIXME            arguments[k].value = value
+            arguments._set(k, value)
         }
     }
 
     fun getArgumentsAsJsonString(): String {
-        // return JSON.stringify(args)
-        return "FIXME"
+        if (args != null) {
+            return JSON.stringify(args)
+        }
+        if (arguments != null) {
+            return JSON.stringify(arguments)
+        }
+        return "error"
     }
 
 }

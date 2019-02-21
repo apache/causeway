@@ -1,6 +1,6 @@
 package org.ro.view
 
-class TabNavigator : UIComponent() {
+class TabNavigator(override val label: String) : UIComponent() {
     var percentWidth: Int = 100
         set
     var percentHeight: Int = 100
@@ -8,7 +8,4 @@ class TabNavigator : UIComponent() {
     var tabFocusEnabled: Boolean = true
         set
 
-    fun addChild(b: Box) {
-
-    }
 }
