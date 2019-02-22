@@ -11,6 +11,42 @@ Search also for: "TODO: v2: " in the .adoc documentation.
 ServicesInjector was removed. New interface ServiceInjector and ServiceRegistry redefined.
 //TODO work in progress with ISIS-2033
 
+=== BuilderScripts simplified
+
+The number of required type-parameters for 'BuilderScripts' has been reduced:
+
+[source,java]
+----
+@Accessors(chain = true)
+public class SimpleObjectBuilder 
+extends BuilderScriptAbstract<SimpleObject> { // <= only 1 type param
+
+    @Getter
+    private SimpleObject object;
+
+	...
+}
+
+@AllArgsConstructor
+public enum SimpleObject_persona 
+implements PersonaWithBuilderScript<SimpleObjectBuilder> /* <= only 1 type param */ ... {
+
+    FOO("Foo"),
+    BAR("Bar"),
+	
+	...
+
+    public SimpleObjectBuilder builder() {
+        return new SimpleObjectBuilder().setName(name);
+    }
+
+    public static class PersistAll
+    extends PersonaEnumPersistAll<SimpleObject_persona, SimpleObject> /* <= only 2 type params */ {
+		...
+    }
+}
+----
+
 
 == 2.0.0-M1 to 2.0.0-M2
 

@@ -24,8 +24,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.collections._Lists;
 
 @Programmatic
-public abstract class BuilderScriptAbstract<T,F extends BuilderScriptAbstract<T,F>>
-extends FixtureScript implements WithPrereqs<T,F>, FixtureScriptWithExecutionStrategy {
+public abstract class BuilderScriptAbstract<T>
+extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrategy {
 
     private final FixtureScripts.MultipleExecutionStrategy executionStrategy;
 
@@ -46,25 +46,23 @@ extends FixtureScript implements WithPrereqs<T,F>, FixtureScriptWithExecutionStr
     }
 
     @Programmatic
-    public F build(
+    public BuilderScriptAbstract<T> build(
             final FixtureScript parentFixtureScript,
-            ExecutionContext executionContext) {
+            final ExecutionContext executionContext) {
 
-        final F onFixture = self();
-        parentFixtureScript.serviceRegistry.injectServicesInto(onFixture);
+        parentFixtureScript.serviceRegistry.injectServicesInto(this);
 
         execPrereqs(executionContext);
 
         // returns the fixture script that is run
         // (either this one, or possibly one previously executed).
-        return executionContext.executeChildT(parentFixtureScript, this).self();
+        return executionContext.executeChildT(parentFixtureScript, this);
     }
 
     @Override
     public void execPrereqs(final ExecutionContext executionContext) {
-        final F onFixture = self();
-        for (final WithPrereqs.Block<T,F> prereq : prereqs) {
-            prereq.execute(onFixture, executionContext);
+        for (final WithPrereqs.Block<T> prereq : prereqs) {
+            prereq.execute(this, executionContext);
         }
     }
 
@@ -73,35 +71,33 @@ extends FixtureScript implements WithPrereqs<T,F>, FixtureScriptWithExecutionStr
 
     public abstract T getObject();
 
-    public <P extends PersonaWithBuilderScript<T, F>> T objectFor(
-            final P persona,
+    public T objectFor(
+            final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona,
             final FixtureScript.ExecutionContext ec) {
+        
         if(persona == null) {
             return null;
         }
-        final F fixtureScript = persona.builder();
+        final BuilderScriptAbstract<T> fixtureScript = persona.builder();
         return ec.executeChildT(this, fixtureScript).getObject();
     }
 
-    public <P extends PersonaWithFinder<T>> T findUsing(final P persona) {
+    public T findUsing(final PersonaWithFinder<T> persona) {
         if(persona == null) {
             return null;
         }
         return persona.findUsing(serviceRegistry);
     }
 
-    private final List<WithPrereqs.Block<T,F>> prereqs = _Lists.newArrayList();
+    private final List<WithPrereqs.Block<T>> prereqs = _Lists.newArrayList();
 
     @Override
-    public F setPrereq(WithPrereqs.Block<T,F> prereq) {
+    public BuilderScriptAbstract<T> setPrereq(WithPrereqs.Block<T> prereq) {
         prereqs.add(prereq);
-        return self();
+        return this;
     }
 
-    @SuppressWarnings("unchecked") //[ahuber] it's safe to assume that this object is of type F
-    protected F self() {
-        return (F)this;
-    }
+
 
 }
 

@@ -511,15 +511,17 @@ implements InstallableFixture {
         @Programmatic
         public void executeChild(
                 final FixtureScript callingFixtureScript,
-                final PersonaWithBuilderScript<?, ?> personaWithBuilderScript) {
+                final PersonaWithBuilderScript<?> personaWithBuilderScript) {
+            
             executeChildren(callingFixtureScript, personaWithBuilderScript);
         }
 
         @Programmatic
-        public <T, F extends BuilderScriptAbstract<T, F>> T executeChildT(
+        public <T, F extends BuilderScriptAbstract<T>> T executeChildT(
                 final FixtureScript callingFixtureScript,
-                final PersonaWithBuilderScript<T, F> personaWithBuilderScript) {
-            final F f = executeChildT(callingFixtureScript, personaWithBuilderScript.builder());
+                final PersonaWithBuilderScript<F> personaWithBuilderScript) {
+            final F childFixtureScript = personaWithBuilderScript.builder();
+            final F f = executeChildT(callingFixtureScript, childFixtureScript);
             return f.getObject();
         }
 
@@ -536,14 +538,15 @@ implements InstallableFixture {
         @Programmatic
         public void executeChildren(
                 final FixtureScript callingFixtureScript,
-                final PersonaWithBuilderScript<?, ?>... personaWithBuilderScripts) {
-            for (PersonaWithBuilderScript<?, ?> builder : personaWithBuilderScripts) {
-                executeChild(callingFixtureScript, builder.builder());
+                final PersonaWithBuilderScript<?>... personaWithBuilderScripts) {
+            for (PersonaWithBuilderScript<?> builder : personaWithBuilderScripts) {
+                BuilderScriptAbstract<?> childFixtureScript = builder.builder();
+                executeChild(callingFixtureScript, childFixtureScript);
             }
         }
 
         @Programmatic
-        public <T extends Enum<?> & PersonaWithBuilderScript<?, ?>> void executeChildren(
+        public <T extends Enum<?> & PersonaWithBuilderScript<?>> void executeChildren(
                 final FixtureScript callingFixtureScript,
                 final Class<T> personaClass) {
             executeChildren(callingFixtureScript, personaClass.getEnumConstants());
@@ -576,7 +579,10 @@ implements InstallableFixture {
          * uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
          */
         @Programmatic
-        public void executeChild(final FixtureScript callingFixtureScript, final String localNameOverride, final FixtureScript childFixtureScript) {
+        public void executeChild(
+                final FixtureScript callingFixtureScript, 
+                final String localNameOverride,
+                final FixtureScript childFixtureScript) {
 
             if(childFixtureScript == null) {
                 return;
@@ -592,7 +598,10 @@ implements InstallableFixture {
          * @return the child fixture script.
          */
         @Programmatic
-        public <T extends FixtureScript> T executeChildT(final FixtureScript callingFixtureScript, final String localNameOverride, final T childFixtureScript) {
+        public <T extends FixtureScript> T executeChildT(
+                final FixtureScript callingFixtureScript, 
+                final String localNameOverride, 
+                final T childFixtureScript) {
 
             childFixtureScript.setParentPath(callingFixtureScript.pathWith(""));
             childFixtureScript.withTracing(callingFixtureScript.tracePrintStream); // cascade down
@@ -623,7 +632,7 @@ implements InstallableFixture {
                 previouslyExecutedScript = fixtureScriptByClass.get(childFixtureScript.getClass());
                 if (previouslyExecutedScript == null) {
                     if (childFixtureScript instanceof WithPrereqs) {
-                        final WithPrereqs<?,?> withPrereqs = (WithPrereqs<?,?>) childFixtureScript;
+                        final WithPrereqs<?> withPrereqs = (WithPrereqs<?>) childFixtureScript;
                         withPrereqs.execPrereqs(this);
                     }
                 }
@@ -671,7 +680,7 @@ implements InstallableFixture {
             FixtureScript previouslyExecutedScript = fixtureScriptByValue.get(childFixtureScript);
             if (previouslyExecutedScript == null) {
                 if (childFixtureScript instanceof WithPrereqs) {
-                    final WithPrereqs<?,?> withPrereqs = (WithPrereqs<?,?>) childFixtureScript;
+                    final WithPrereqs<?> withPrereqs = (WithPrereqs<?>) childFixtureScript;
                     withPrereqs.execPrereqs(this);
                 }
             }

@@ -28,7 +28,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
-public class SimpleObjectBuilder extends BuilderScriptAbstract<SimpleObject, SimpleObjectBuilder> {
+public class SimpleObjectBuilder extends BuilderScriptAbstract<SimpleObject> {
 
     @Getter @Setter
     private String name;

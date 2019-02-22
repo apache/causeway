@@ -29,7 +29,9 @@ import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
 import org.apache.isis.commons.internal.collections._Lists;
 
 @Programmatic
-public class PersonaEnumPersistAll<E extends Enum<E> & PersonaWithBuilderScript<T,F>, T, F extends BuilderScriptAbstract<T,F>>
+public class PersonaEnumPersistAll<
+    E extends Enum<E> & PersonaWithBuilderScript<? extends BuilderScriptAbstract<T>>, 
+    T>
 extends FixtureScript
 implements FixtureScriptWithExecutionStrategy {
 
@@ -74,7 +76,7 @@ implements FixtureScriptWithExecutionStrategy {
         }
 
         for (int i = 0; i < number; i++) {
-            final F enumFixture = enumConstants[i].builder();
+            final BuilderScriptAbstract<T> enumFixture = enumConstants[i].builder();
             final T domainObject = ec.executeChildT(this, enumFixture).getObject();
             ec.addResult(this, domainObject);
             objects.add(domainObject);

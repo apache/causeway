@@ -18,14 +18,14 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
-public interface WithPrereqs<T,F extends BuilderScriptAbstract<T,F>> {
+public interface WithPrereqs<T> {
 
-    F setPrereq(Block<T,F> prereq);
+    BuilderScriptAbstract<T> setPrereq(Block<T> prereq);
 
-    void execPrereqs(final FixtureScript.ExecutionContext executionContext);
+    void execPrereqs(FixtureScript.ExecutionContext executionContext);
 
-    interface Block<T,F extends BuilderScriptAbstract<T,F>> {
-        void execute(final F onFixture, final FixtureScript.ExecutionContext executionContext);
+    interface Block<T> {
+        void execute(BuilderScriptAbstract<T> onFixture, FixtureScript.ExecutionContext executionContext);
     }
 
 }

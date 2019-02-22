@@ -53,12 +53,13 @@ public abstract class HeadlessAbstract {
         this.fixtureScripts.runFixtureScript(fixtureScriptList);
     }
 
-    protected <T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final F fixtureScript) {
+    protected <T> T runBuilderScript(final BuilderScriptAbstract<T> fixtureScript) {
         return this.fixtureScripts.runBuilderScript(fixtureScript);
     }
 
-    protected <P extends PersonaWithBuilderScript<T,F>, T,F extends BuilderScriptAbstract<T,F>> T runBuilderScript(final P persona) {
-        return runBuilderScript(persona.builder());
+    protected <T> T runBuilderScript(final PersonaWithBuilderScript<BuilderScriptAbstract<T>> persona) {
+        final BuilderScriptAbstract<T> builderScript = persona.builder();
+        return runBuilderScript(builderScript);
     }
 
 
