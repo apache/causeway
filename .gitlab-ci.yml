@@ -35,7 +35,7 @@
 image: maven:3.5.3-jdk-8
 
 before_script:
-  - export BASELINE=2.0.0-M3
+  - export BASELINE=2.0.0-M2
   - export REVISION=$BASELINE.$(date +%Y%m%d)-$(date +%H%M)-$(echo $CI_COMMIT_SHA | cut -c1-8)
 
 services:
