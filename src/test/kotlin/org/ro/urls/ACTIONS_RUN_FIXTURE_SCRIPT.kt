@@ -1,6 +1,7 @@
 package org.ro.to
 
 object ACTIONS_RUN_FIXTURE_SCRIPT {
+    val url = "http://localhost:8080/restful/services/isisApplib.FixtureScriptsDefault/actions/runFixtureScript"
     val str = """{
         "id": "runFixtureScript",
         "memberType": "action",

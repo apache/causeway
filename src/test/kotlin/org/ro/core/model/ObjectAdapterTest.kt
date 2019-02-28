@@ -1,13 +1,13 @@
 package org.ro.core.model
 
-import kotlinx.serialization.ImplicitReflectionSerializer
+
 import org.ro.handler.TObjectHandler
 import org.ro.to.FR_OBJECT_BAZ
 import pl.treksoft.kvision.html.Image
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 
-@ImplicitReflectionSerializer
+
 class ObjectAdapterTest {
 
     @Test

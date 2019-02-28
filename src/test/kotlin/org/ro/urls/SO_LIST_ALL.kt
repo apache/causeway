@@ -1,6 +1,7 @@
 package org.ro.to
 
 object SO_LIST_ALL {
+    val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/listAll"
     val str = """
         {
         "id": "listAll",

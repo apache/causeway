@@ -1,6 +1,7 @@
 package org.ro.to
 
 object RESTFUL_MENUBARS {
+    val url = ""
     val str = """
             <mb3:menuBars xmlns:cpt="http://isis.apache.org/applib/layout/component"
                           xmlns:mb3="http://isis.apache.org/applib/layout/menubars/bootstrap3"

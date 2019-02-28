@@ -1,6 +1,7 @@
 package org.ro.to
 
 object OBJECT_PROPERTY {
+    val url = "http://localhost:8080/restful/objects/simple.SimpleObject/119/properties/notes"
     val str = """{
         "id": "notes",
         "memberType": "property",

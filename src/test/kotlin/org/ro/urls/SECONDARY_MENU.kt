@@ -1,7 +1,7 @@
 package org.ro.to
 
-// http://localhost:8080/restful/services/isisApplib.MetaModelServicesMenu
 object SECONDARY_MENU {
+    val url = "http://localhost:8080/restful/services/isisApplib.MetaModelServicesMenu"
     val str = """{
         "links": [
         {

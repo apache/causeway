@@ -1,11 +1,11 @@
 package org.ro.core.event
 
-import kotlinx.serialization.ImplicitReflectionSerializer
+
 import org.ro.to.RESTFUL
 import org.ro.urls.RESTFUL_SERVICES
 import kotlin.test.*
 
-@ImplicitReflectionSerializer
+
 class EventLogTest {
 
     @Test

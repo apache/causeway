@@ -1,3 +1,8 @@
+# Toolchain
+* Apache Gradle 
+* Google Chrome (72.0.3626.81)
+* Moesif CORS Plugin (for Chrome)
+
 Kotlin/JS uses `Gradle` for the build, for the JS runtime `NodeJS`, and for the JS dependency management part `npm`.
 
 Depending on the network you are in, you may need to configure the proxy settings. Among the relevant files are:

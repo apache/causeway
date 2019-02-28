@@ -1,6 +1,5 @@
 package org.ro.core
 
-import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.Application
 import org.ro.core.event.EventLog
 import org.ro.core.event.LogEntry
@@ -17,10 +16,10 @@ import org.ro.view.tab.RoTabBar
  * @item Dock
  * etc.
  */
-@ImplicitReflectionSerializer
+
 object DisplayManager {
 
-    fun addView(viewable: Visible): Unit {
+    fun addView(viewable: Visible) {
         val title: String = viewable.tag()
         val le: LogEntry? = EventLog.find(title)
         if (le == null) {

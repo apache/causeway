@@ -1,11 +1,11 @@
 package org.ro.to
 
-import kotlinx.serialization.ImplicitReflectionSerializer
+
 import kotlinx.serialization.json.JSON
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@ImplicitReflectionSerializer
+
 class ListTest {
 
     @Test

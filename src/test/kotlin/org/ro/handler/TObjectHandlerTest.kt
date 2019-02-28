@@ -1,6 +1,5 @@
 package org.ro.handler
 
-import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.core.Utils
 import org.ro.core.event.EventLog
 import org.ro.core.event.LogEntry
@@ -11,12 +10,12 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@ImplicitReflectionSerializer
 class TObjectHandlerTest {
 
     @Test
     fun testService() {
         // given
+        TestUtil().login()
         val ol = ObjectList()
         // when
         val le0: LogEntry = createLogEntry(SO_LIST_ALL.str)

@@ -1,20 +1,20 @@
 package org.ro.handler
 
-import kotlinx.serialization.ImplicitReflectionSerializer
+
 import org.ro.core.event.LogEntry
 
 /**
  * Delegates responses to handlers, acts as Facade.
  * @see: https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern
  */
-@ImplicitReflectionSerializer
+
 object Dispatcher {
-    private var delegate: IResponseHandler? = null
+    private var delegate: IResponseHandler;
 
     //TODO sequence of handlers should follow frequency of invocation in order minimize the time taken by unneeded calls to 'canHandle()'
-    private var first = ServiceHandler()
+    private var first = ServicesHandler()
     private var second = ActionHandler()
-    private var third = MemberHandler()
+    private var third = ServiceHandler()
     private var forth = ListHandler()
     private var fifth = TObjectHandler()
     private var sixth = LayoutHandler()
@@ -36,8 +36,7 @@ object Dispatcher {
         delegate = first
     }
 
-    fun handle(logEntry: LogEntry): Unit {
-//        console.log(logEntry)
-        delegate!!.handle(logEntry)
+    fun handle(logEntry: LogEntry) {
+        delegate.handle(logEntry)
     }
 }

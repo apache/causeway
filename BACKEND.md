@@ -2,6 +2,7 @@
 * (Oracle) JDK 1.8_181 (or higher)
 * Apache Maven 3.6.0
 
+
 # Create a Sample Backend 
 Create from the Apache Isis SimpleApp archetype:
 ```bash
@@ -22,7 +23,7 @@ mvn clean install -DskipTests
 # Dealing with CORS
 
 Nicely done introduction: 
-* https://www.moesif.com/blog/technical/cors/Authoritative-Guide-to-CORS-Cross-Origin-Resource-Sharing-for-REST-APIs/#how-is-origin-defined
+* https://www.moesif.com/blog/technical/cors/Authoritative-Guide-to-CORS-Cross-Origin-Resource-Sharing-for-REST-APIs/#how-is-origin-definedhttps://www.moesif.com/blog/technical/cors/Authoritative-Guide-to-CORS-Cross-Origin-Resource-Sharing-for-REST-APIs/#how-is-origin-defined
 
 ##Amend web.xml 
 

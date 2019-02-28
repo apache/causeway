@@ -1,6 +1,7 @@
 package org.ro.to
 
 object FR_OBJECT_BAZ {
+    val url = "http://localhost:8080/restful/objects/isisApplib.FixtureResult/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1lbWVudG8-PGtleT5kb21haW4tYXBwLWRlbW8vcGVyc2lzdC1hbGwvaXRlbS0zPC9rZXk-PG9iamVjdC5ib29rbWFyaz5zaW1wbGUuU2ltcGxlT2JqZWN0OjUyPC9vYmplY3QuYm9va21hcms-PC9tZW1lbnRvPg=="
     val str = """{
         "links": [
             {

@@ -1,6 +1,7 @@
 package org.ro.to
 
 object ACTIONS_DELETE {
+    val url = "http://localhost:8080/restful/objects/simple.SimpleObject/40/actions/delete"
     val str = """{
         "id": "delete",
         "memberType": "action",

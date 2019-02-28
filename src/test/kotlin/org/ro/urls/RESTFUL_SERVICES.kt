@@ -1,6 +1,7 @@
 package org.ro.urls
 
 object RESTFUL_SERVICES {
+    val url = "http://localhost:8080/restful/services"
     val str = """
         {
         "value": [

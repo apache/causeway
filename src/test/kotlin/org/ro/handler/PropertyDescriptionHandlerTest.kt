@@ -1,19 +1,14 @@
 package org.ro.handler
 
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.json.JSON
-import org.ro.core.Utils
 import org.ro.core.event.EventLog
 import org.ro.core.event.ListObserver
 import org.ro.core.event.LogEntry
 import org.ro.core.model.ObjectList
 import org.ro.to.FR_PROPERTY_DESCRIPTION
-import org.ro.to.Property
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@ImplicitReflectionSerializer
 class PropertyDescriptionHandlerTest {
 
     //  BS3.xml <-(link.layout)- FR <-(up)- FR_PROPERTY_DESCRIPTION
@@ -22,15 +17,19 @@ class PropertyDescriptionHandlerTest {
         if (TestUtil().isSimpleAppAvailable()) {
 
             // given
-            val lo = ListObserver()
-            val jsonStr = FR_PROPERTY_DESCRIPTION.str
+            TestUtil().login()
+            TestUtil().invokeFixtureScript()
+//            val lo = ListObserver()
+            val str = FR_PROPERTY_DESCRIPTION.str
+            val url = FR_PROPERTY_DESCRIPTION.url
             // when
-            val xp = LogEntry("", "GET")
-            xp.response = jsonStr
+            val xp = LogEntry(url, "GET")
+            xp.response = str
+            //EventLog.add(xp)
             Dispatcher.handle(xp)
-            val selfHref: String = Utils().getSelfHref(jsonStr)!!
-            assertNotNull(selfHref)
-            val act: LogEntry = EventLog.find(selfHref)!!
+            val act: LogEntry? = EventLog.find(url)
+            assertNotNull(act)
+            assertNotNull(act.observer)
 
             val obs: ListObserver = act.observer as ListObserver
             val ol: ObjectList = obs.getList()
@@ -44,7 +43,7 @@ class PropertyDescriptionHandlerTest {
             val lyt = ol.getLayout()!!
             assertNotNull(lyt)
 
-            val property = JSON.parse(Property.serializer(), FR_PROPERTY_DESCRIPTION.str)
+            val property = PropertyHandler().parse(FR_PROPERTY_DESCRIPTION.str)
             val id: String = "property.id"
             val lbl: String? = lyt.getPropertyLabel(id)
             assertNotNull(lbl)

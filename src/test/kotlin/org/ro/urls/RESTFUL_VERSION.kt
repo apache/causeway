@@ -1,6 +1,7 @@
 package org.ro.to
 
 object RESTFUL_VERSION {
+    val url = "http://localhost:8080/restful/version"
     val str = """ 
             {
         "links" : [ {

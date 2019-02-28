@@ -1,10 +1,9 @@
 package org.ro.handler
 
-import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.JSON
 import org.ro.layout.Layout
 
-@ImplicitReflectionSerializer
+
 class LayoutHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {

@@ -1,19 +1,17 @@
 package org.ro.to
 
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.json.JSON
+import org.ro.handler.ActionHandler
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@ImplicitReflectionSerializer
 class ActionTest {
 
     @Test
     fun testParseActionGETArgument() {
         val jsonStr = ACTIONS_FIND_BY_NAME.str
-        val action = JSON.parse(Action.serializer(), jsonStr)
+        val action = ActionHandler().parse(jsonStr)
         val linkList = action.links
         assertNotNull(linkList)
         assertEquals(4, linkList.size)
@@ -26,7 +24,7 @@ class ActionTest {
     @Test
     fun testParseActionPOSTArgumentFS() {
         val jsonStr = ACTIONS_RUN_FIXTURE_SCRIPT.str
-        val action = JSON.parse(Action.serializer(), jsonStr)
+        val action = ActionHandler().parse(jsonStr)
         val links = action.links
         assertNotNull(links)
         assertEquals(4, links.size)
@@ -56,7 +54,7 @@ class ActionTest {
     @Test
     fun testParseActionPOSTArgument() {
         val jsonStr = ACTIONS_CREATE.str
-        val action = JSON.parse(Action.serializer(), jsonStr)
+        val action = ActionHandler().parse(jsonStr)
         val links = action.links
         assertEquals(4, links.size)
     }
@@ -64,7 +62,7 @@ class ActionTest {
     @Test
     fun testParseActionPOSTDelete() {
         val jsonStr = ACTIONS_DELETE.str
-        val action = JSON.parse(Action.serializer(), jsonStr)
+        val action = ActionHandler().parse(jsonStr)
         val links = action.links
         assertNotNull(links)
         assertEquals(4, links.size)

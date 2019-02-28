@@ -5,7 +5,7 @@ open class UIComponent(open val label: String = "not set") {
 
     fun addChild(uic: UIComponent) {
         children.add(uic)
-        console.log("[UIComponent: ${uic.label} added to: $label (${children.size})]")
+ //       console.log("[UIComponent: ${uic.label} added to: $label (${children.size})]")
     }
 
 }

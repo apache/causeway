@@ -1,5 +1,8 @@
 package org.ro.handler
 
+import org.ro.core.Session
+import org.ro.core.event.RoXmlHttpRequest
+import org.ro.to.ACTIONS_RUN_FIXTURE_SCRIPT
 import org.w3c.xhr.XMLHttpRequest
 
 class TestUtil() {
@@ -25,5 +28,17 @@ class TestUtil() {
         return answer
     }
 
+    fun login() {
+        Session.login("http://localhost:8080/restful/", "sven", "pass")
+    }
+
+    fun invokeFixtureScript() {
+        val jsonStr = ACTIONS_RUN_FIXTURE_SCRIPT.str
+        val action = ActionHandler().parse(jsonStr)
+        val l = action.getInvokeLink()!!
+        val obs = null //TODO special Observer to be used?
+        console.log("[TestUtil.invokeFixtureScript]")
+        RoXmlHttpRequest().invoke(l, obs)
+    }
 
 }

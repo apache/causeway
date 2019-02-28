@@ -1,9 +1,7 @@
 package org.ro.core.event
 
-import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.core.Utils
 
-@ImplicitReflectionSerializer
 class Node(private var entry:LogEntry) {
     private var children: MutableList<Any>? = mutableListOf()
     private var label: String? = null
@@ -12,7 +10,7 @@ class Node(private var entry:LogEntry) {
         this.label = this.entry.url
     }
 
-    fun addChild(n: Node): Unit {
+    fun addChild(n: Node) {
         children!!.add(n)
     }
 

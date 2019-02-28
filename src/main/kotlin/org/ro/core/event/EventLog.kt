@@ -1,6 +1,5 @@
 package org.ro.core.event
 
-import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.Application
 import org.ro.handler.Dispatcher
 import kotlin.js.Date
@@ -13,7 +12,7 @@ import kotlin.js.Date
  * @See https://en.wikipedia.org/wiki/Proxy_pattern
  */
 //TODO all invocations should go here in the first place 
-@ImplicitReflectionSerializer
+
 object EventLog {
     var log = mutableListOf<LogEntry>()
 
@@ -74,14 +73,13 @@ object EventLog {
      */
     fun find(url: String): LogEntry? {
         if (isUrl(url)) {
-            console.log("[$url isUrl=true]")
             if (isRedundant(url)) {
                 return findSimilar(url)
             } else {
                 return findExact(url)
             }
         } else {
-            console.log("[$url isUrl=false]")
+ //           console.log("[$url isUrl=false]")
             return findView(url)
         }
     }
@@ -93,7 +91,7 @@ object EventLog {
     private fun urlContains(url: String, search : String): Boolean {
         val index = url.indexOf(search)
         val answer = index >= 0
-        console.log("[$url contains $search=$answer]")
+ //       console.log("[$url contains $search=$answer]")
         return answer
     }
 
@@ -105,22 +103,22 @@ object EventLog {
         for (le in this.log) {
             // assumes urls are unique !
             if (le.url == url) {
-                console.log("[$url foundExact=true]")
+ //               console.log("[$url foundExact=true]")
                 return le
             }
         }
-        console.log("[$url foundExact=false]")
+//        console.log("[$url foundExact=false]")
         return null
     }
 
     internal fun findView(url: String): LogEntry? {
         for (le in log) {
             if ((le.url == url) && (le.isView())) {
-                console.log("[$url view=true]")
+ //               console.log("[$url view=true]")
                 return le
             }
         }
-        console.log("[$url view=false]")
+//        console.log("[$url view=false]")
         return null
     }
 
@@ -129,11 +127,11 @@ object EventLog {
         for (le in log) {
             val idxArray: List<String> = le.url.split("/")
             if (areSimilar(argArray, idxArray)) {
-                console.log("[$url foundSimilar=true]")
+//                console.log("[$url foundSimilar=true]")
                 return le
             }
         }
-        console.log("[$url foundSimilar=false]")
+//        console.log("[$url foundSimilar=false]")
         return null
 
     }

@@ -1,10 +1,8 @@
 package org.ro.handler
 
-import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.JSON
 import org.ro.to.TObject
 
-@ImplicitReflectionSerializer
 class TObjectHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {

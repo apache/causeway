@@ -3,11 +3,6 @@ package org.ro.to
 import kotlinx.serialization.Serializable
 import pl.treksoft.kvision.utils.Object
 
-enum class MemberType(val type: String) {
-    ACTION("action"),
-    PROPERTY("property")
-}
-
 @Serializable
 data class TObject(val links: List<Link> = emptyList(),
                    val extensions: Extensions,
@@ -47,7 +42,7 @@ data class TObject(val links: List<Link> = emptyList(),
     /**
      * Post-Constructor fun using dynamic nature of class.
      */
-    fun addMembersAsProperties(): Unit {
+    fun addMembersAsProperties() {
         val members: MutableList<Member> = getProperties()
         for (m in members) {
             if (m.memberType == MemberType.PROPERTY.type) {

@@ -1,6 +1,7 @@
 package org.ro.to
 
 object RESTFUL {
+    val url = "http://localhost:8080/restful/"
     val str = """{
         "links": [{
             "rel": "self",

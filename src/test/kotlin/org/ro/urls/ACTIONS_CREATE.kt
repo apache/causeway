@@ -1,6 +1,7 @@
 package org.ro.to
 
 object ACTIONS_CREATE {
+    val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/create"
     val str = """{
         "id": "create",
         "memberType": "action",

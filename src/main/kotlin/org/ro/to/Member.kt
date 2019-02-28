@@ -3,10 +3,17 @@ package org.ro.to
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
+enum class MemberType(val type: String) {
+    ACTION("action"),
+    PROPERTY("property"),
+    COLLECTION("collection")
+}
+
 @Serializable
 data class Member(val id: String,
                   val memberType: String,
                   @Optional val links: List<Link> = emptyList(),
+        //TODO is a custom serializer required?
 /* value can be one of <null | String.class | Link.class> */
                   // = "" satisfies 2 more tests than = null !!!
 //                  @Optional val value: String = "", 

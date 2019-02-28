@@ -1,6 +1,7 @@
 package org.ro.to
 
 object SO_0 {
+    val url = "http://localhost:8080/restful/objects/simple.SimpleObject/0"
     val str = """{
         "links": [
             {

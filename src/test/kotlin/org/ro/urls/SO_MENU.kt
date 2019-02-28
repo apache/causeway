@@ -1,8 +1,8 @@
 package org.ro.to
 
 object SO_MENU {
-    val str = """ 
-            {
+    val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu"
+    val str = """{
         "links": [
             {
                 "rel": "self",

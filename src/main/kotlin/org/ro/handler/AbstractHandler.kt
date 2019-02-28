@@ -1,13 +1,13 @@
 package org.ro.handler
 
-import kotlinx.serialization.ImplicitReflectionSerializer
+
 import org.ro.core.event.LogEntry
 
 /**
  *  Common 'abstract' superclass of Response Handlers.
  *  Constructor should not be called.
  */
-@ImplicitReflectionSerializer
+
 open class AbstractHandler : IResponseHandler {
     var successor: IResponseHandler? = null
     protected var logEntry = LogEntry("")

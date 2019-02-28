@@ -1,6 +1,7 @@
 package org.ro.to
 
 object RESTFUL_USER {
+    val url = "http://localhost:8080/restful/user"
     val str = """{
         "userName": "sven",
         "roles": ["iniRealm:admin_role"],

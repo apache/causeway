@@ -1,14 +1,13 @@
 package org.ro.to
 
-import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.JSON
+import org.ro.handler.ServicesHandler
 import org.ro.urls.RESTFUL_SERVICES
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@ImplicitReflectionSerializer
 class ServiceTest {
 
     @Test
@@ -26,6 +25,7 @@ class ServiceTest {
         // jsonObj contains '"members": {}' not '"members": []' 
         // in AS this results in an unordered list (Object{}), 
         // but intended is an ordered list (Array[])
+        // or is it a Map?
         //TODO use object-layout / menu layout instead
     }
 
@@ -41,7 +41,7 @@ class ServiceTest {
     @Test
     fun testParseServices() {
         val jsonStr = RESTFUL_SERVICES.str
-        val services = JSON.parse(Services.serializer(), jsonStr)
+        val services = ServicesHandler().parse(jsonStr)
         val values = services.valueList()
         assertNotNull(values)
         assertEquals(8, values.size)

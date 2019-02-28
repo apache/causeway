@@ -1,6 +1,6 @@
 package org.ro.view
 
-import kotlinx.serialization.ImplicitReflectionSerializer
+
 import org.ro.LoginDialog
 import org.ro.core.Menu
 import pl.treksoft.kvision.dropdown.DropDown
@@ -11,7 +11,7 @@ import pl.treksoft.kvision.navbar.Navbar
 import pl.treksoft.kvision.navbar.NavbarType
 import pl.treksoft.kvision.utils.px
 
-@ImplicitReflectionSerializer
+
 class RoMenuBar : Navbar() {
     private var link = Link(tr("URL"), icon = "fa-windows").onClick {
         LoginDialog().show()

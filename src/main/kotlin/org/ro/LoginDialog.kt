@@ -1,9 +1,8 @@
 package org.ro
 
-import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.Serializable
 import org.ro.core.Session
-import org.ro.to.Invokeable
+import org.ro.to.Link
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.form.FormPanel.Companion.formPanel
 import pl.treksoft.kvision.form.text.Text
@@ -17,7 +16,6 @@ data class HostCredential(
         var nix:String
 )
 
-@ImplicitReflectionSerializer
 class LoginDialog : Dialog<Any>(caption = "Connect", closeButton = true, escape = true, animation = true) {
     //Default values
     val url = "http://localhost:8080/"
@@ -57,11 +55,11 @@ class LoginDialog : Dialog<Any>(caption = "Connect", closeButton = true, escape 
         val userIn: String = loginPanel.getChildren()[1].getElement()!!.textContent!!
         val pwIn: String = if (loginPanel.getChildren()[2].getElement()!!.textContent != null) loginPanel.getChildren()[2].getElement()!!.textContent else throw NullPointerException("Expression 'loginPanel.getChildren()[2].getElement()!!.textContent' must not be null")*/
         Session.login(url, username, password)
-        console.log(Session)
+        console.log("[LoginDialog.process: $Session]")
         this.dispose()
 
-        val invokeable = Invokeable ("http://localhost:8080/restful/services/")
-        invokeable.invoke()
+        val link = Link(href= "http://localhost:8080/restful/services/")
+        link.invoke()
     }
 
 }

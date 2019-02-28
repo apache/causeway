@@ -1,13 +1,10 @@
 package org.ro.core.event
 
-import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.core.DisplayManager
 import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
 import org.ro.handler.TObjectHandler
 import org.ro.layout.Layout
-import org.ro.to.Invokeable
-import org.ro.to.Link
 import org.ro.to.TObject
 
 /**
@@ -21,9 +18,9 @@ import org.ro.to.TObject
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler
  */
-@ImplicitReflectionSerializer
+
 class ListObserver : ILogEventObserver {
-    var list: ObjectList = ObjectList()
+    var list = ObjectList()
 
     /* test scope only */
     fun getList(): ObjectList {
@@ -44,7 +41,7 @@ class ListObserver : ILogEventObserver {
                 console.log("List full, not adding: $url")
             } else {
                 //TODO eventually set/get LogEntry.tObject
-                val jsonStr: String = le.response
+                val jsonStr = le.response
                 val tObj = TObjectHandler().parse(jsonStr)
                 loadLayout(tObj)
                 val oa = ObjectAdapter(tObj)
@@ -59,8 +56,8 @@ class ListObserver : ILogEventObserver {
         }
         //TODO are list & layout the only criteria?
         if (list.hasLayout() && list.isFull()) {
-            val le2: LogEntry? = EventLog.find(url)
-            val b: Boolean = (le2 != null) && (le2.isView())
+            val le2 = EventLog.find(url)
+            val b = (le2 != null) && (le2.isView())
             if (b) {
                 console.log("View already opened: $url")
             } else {
@@ -71,15 +68,11 @@ class ListObserver : ILogEventObserver {
     }
     
     private fun loadLayout(tObject: TObject) {
-        val link: Link? = tObject.getLayoutLink()
-        val href: String = link!!.href
-        var le: LogEntry? = null
-        if (href != null) {
-            le = EventLog.find(href)
-        }
+        val link = tObject.getLayoutLink()
+        val href = link!!.href
+        val le = EventLog.find(href)
         if (le == null) {
-            val i = Invokeable(href)
-            i.invoke(this)
+            link.invoke(this)
         }
     }
 

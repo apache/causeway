@@ -1,6 +1,7 @@
 package org.ro.to
 
 object SO_OBJECT_LAYOUT {
+    val url = "no self in here"
     val str = """{
         "row": [
             {

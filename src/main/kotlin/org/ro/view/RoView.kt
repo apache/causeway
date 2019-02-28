@@ -1,6 +1,6 @@
 package org.ro.view
 
-import kotlinx.serialization.ImplicitReflectionSerializer
+
 import org.ro.view.tab.RoTabBar
 import pl.treksoft.kvision.core.Border
 import pl.treksoft.kvision.core.BorderStyle
@@ -12,7 +12,7 @@ import pl.treksoft.kvision.panel.TabPanel
 import pl.treksoft.kvision.utils.px
 import pl.treksoft.kvision.utils.vh
 
-@ImplicitReflectionSerializer
+
 class RoView() : FlexPanel() {
     
     private var tabPanel = TabPanel {
@@ -43,7 +43,7 @@ class RoView() : FlexPanel() {
 //        this.addElement(statusBar)
     }
 
-    fun showDock(toggle: Boolean): Unit {
+    fun showDock(toggle: Boolean) {
         if (toggle) {
             dock = Dock()
         } else {
@@ -52,7 +52,7 @@ class RoView() : FlexPanel() {
         }
     }
 
-    fun showStatus(toggle: Boolean): Unit {
+    fun showStatus(toggle: Boolean) {
         if (toggle) {
             //statusBar = RoStatusBar()
         } else {

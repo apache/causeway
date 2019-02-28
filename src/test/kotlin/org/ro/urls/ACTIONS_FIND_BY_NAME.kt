@@ -1,6 +1,7 @@
 package org.ro.to
 
 object ACTIONS_FIND_BY_NAME {
+    val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/findByName"
     val str = """{
         "id": "findByName",
         "memberType": "action",

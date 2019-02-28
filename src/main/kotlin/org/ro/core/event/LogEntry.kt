@@ -1,10 +1,8 @@
 package org.ro.core.event
 
-import kotlinx.serialization.ImplicitReflectionSerializer
 import org.ro.view.ImageRepository
 import pl.treksoft.kvision.types.Date
 
-@ImplicitReflectionSerializer
 class LogEntry(var url: String, var method: String? = null, private var request: String = "") {
     private var icon: Any? = null
 
@@ -71,7 +69,7 @@ class LogEntry(var url: String, var method: String? = null, private var request:
         if (observer != null) {
             observer!!.update(this)
         } else {
-            console.log("[$url hasObserver=false]")
+ //           console.log("[$url hasObserver=false]")
         }
     }
 

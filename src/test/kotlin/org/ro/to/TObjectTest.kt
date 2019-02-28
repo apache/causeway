@@ -1,6 +1,6 @@
 package org.ro.to
 
-import kotlinx.serialization.ImplicitReflectionSerializer
+
 import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
 import org.ro.handler.TObjectHandler
@@ -8,7 +8,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-@ImplicitReflectionSerializer
+
 class TObjectTest {
 
     @Test

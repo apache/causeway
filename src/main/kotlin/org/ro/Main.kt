@@ -1,12 +1,10 @@
 package org.ro
 
-import kotlinx.serialization.ImplicitReflectionSerializer
 import pl.treksoft.kvision.hmr.ApplicationBase
 import pl.treksoft.kvision.hmr.module
 import pl.treksoft.kvision.routing.Routing
 import kotlin.browser.document
 
-@ImplicitReflectionSerializer
 fun main(args: Array<String>) {
 
     var application: ApplicationBase? = null
@@ -31,7 +29,7 @@ fun main(args: Array<String>) {
     }
 }
 
-@ImplicitReflectionSerializer
+
 fun start(state: dynamic): ApplicationBase? {
     if (document.getElementById("showcase") == null) return null
     @Suppress("UnsafeCastFromDynamic")

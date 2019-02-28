@@ -19,7 +19,6 @@ data class Layout(val cssClass: String? = null,
     var properties: List<PropertyLayout>? = null
 
     init {
-        console.log("[number of rows: ${row.size}]")
         val row1 = row[1]
         var cols = row1.cols[0]
         val tabGroup = cols.col?.tabGroup

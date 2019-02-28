@@ -2,9 +2,9 @@ package org.ro.core
 
 import org.ro.to.Member
 
-class MenuEntry(var title: String?, var id: String?, var action: Member) {
-    internal var itemId: String? = null
-    private var itemTitle: String? = null
+class MenuEntry(val title: String, val id: String, val action: Member) {
+    var itemId: String
+    private var itemTitle: String
 
     init {
         itemId = action.getInvokeLink()!!.href

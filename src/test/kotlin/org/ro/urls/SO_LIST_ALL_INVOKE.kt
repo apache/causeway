@@ -1,6 +1,7 @@
 package org.ro.to
 
 object SO_LIST_ALL_INVOKE {
+    val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/listAll/invoke"
     val str = """{
         "links": [
             {
@@ -16,70 +17,70 @@ object SO_LIST_ALL_INVOKE {
             "value": [
                 {
                     "rel": "urn:org.restfulobjects:rels/element",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/10",
+                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/0",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
                     "title": "Object: Foo"
                 },
                 {
                     "rel": "urn:org.restfulobjects:rels/element",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/11",
+                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/1",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
                     "title": "Object: Bar"
                 },
                 {
                     "rel": "urn:org.restfulobjects:rels/element",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/12",
+                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/2",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
                     "title": "Object: Baz"
                 },
                 {
                     "rel": "urn:org.restfulobjects:rels/element",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/13",
+                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/3",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
                     "title": "Object: Frodo"
                 },
                 {
                     "rel": "urn:org.restfulobjects:rels/element",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/14",
+                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/4",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
                     "title": "Object: Froyo"
                 },
                 {
                     "rel": "urn:org.restfulobjects:rels/element",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/15",
+                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/5",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
                     "title": "Object: Fizz"
                 },
                 {
                     "rel": "urn:org.restfulobjects:rels/element",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/16",
+                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/6",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
                     "title": "Object: Bip"
                 },
                 {
                     "rel": "urn:org.restfulobjects:rels/element",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/17",
+                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/7",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
                     "title": "Object: Bop"
                 },
                 {
                     "rel": "urn:org.restfulobjects:rels/element",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/18",
+                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/8",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
                     "title": "Object: Bang"
                 },
                 {
                     "rel": "urn:org.restfulobjects:rels/element",
-                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/19",
+                    "href": "http://localhost:8080/restful/objects/simple.SimpleObject/9",
                     "method": "GET",
                     "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object\"",
                     "title": "Object: Boo"
