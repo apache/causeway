@@ -35,6 +35,7 @@ import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.tree.ITreeProvider;
 import org.apache.wicket.extensions.markup.html.repeater.tree.NestedTree;
 import org.apache.wicket.extensions.markup.html.repeater.tree.Node;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -58,14 +59,26 @@ import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAn
 
 class IsisToWicketTreeAdapter {
 
-    public static EntityTree adapt(String id, ValueModel valueModel) {
+    public static Component adapt(String id, ValueModel valueModel) {
+        if(valueModel==null || valueModel.getObject()==null) {
+            return emptyTreeComponent(id);
+        }
         return new EntityTree(id, toITreeProvider(valueModel), 
                 toIModelRepresentingCollapseExpandState(valueModel));
     }
 
-    public static EntityTree adapt(String id, ScalarModel scalarModel) {
+    public static Component adapt(String id, ScalarModel scalarModel) {
+        if(scalarModel==null || scalarModel.getObject()==null) {
+            return emptyTreeComponent(id);
+        }
         return new EntityTree(id, toITreeProvider(scalarModel), 
                 toIModelRepresentingCollapseExpandState(scalarModel));
+    }
+    
+    // -- FALLBACK
+    
+    private static Component emptyTreeComponent(String id) {
+        return new Label(id);
     }
 
     // -- RENDERING
