@@ -11,8 +11,6 @@ import kotlin.js.Date
  *
  * @See https://en.wikipedia.org/wiki/Proxy_pattern
  */
-//TODO all invocations should go here in the first place 
-
 object EventLog {
     var log = mutableListOf<LogEntry>()
 
@@ -74,12 +72,11 @@ object EventLog {
     fun find(url: String): LogEntry? {
         if (isUrl(url)) {
             if (isRedundant(url)) {
-                return findSimilar(url)
+                return findEquivalent(url)
             } else {
                 return findExact(url)
             }
         } else {
- //           console.log("[$url isUrl=false]")
             return findView(url)
         }
     }
@@ -88,10 +85,9 @@ object EventLog {
         return (urlContains(url, "object-layout") || urlContains(url, "/properties/"))
     }
 
-    private fun urlContains(url: String, search : String): Boolean {
+    private fun urlContains(url: String, search: String): Boolean {
         val index = url.indexOf(search)
         val answer = index >= 0
- //       console.log("[$url contains $search=$answer]")
         return answer
     }
 
@@ -101,58 +97,49 @@ object EventLog {
 
     internal fun findExact(url: String): LogEntry? {
         for (le in this.log) {
-            // assumes urls are unique !
             if (le.url == url) {
- //               console.log("[$url foundExact=true]")
                 return le
             }
         }
-//        console.log("[$url foundExact=false]")
         return null
     }
 
     internal fun findView(url: String): LogEntry? {
         for (le in log) {
             if ((le.url == url) && (le.isView())) {
- //               console.log("[$url view=true]")
                 return le
             }
         }
-//        console.log("[$url view=false]")
         return null
     }
 
-    internal fun findSimilar(url: String): LogEntry? {
-        val argArray: List<String> = url.split("/")
+    internal fun findEquivalent(url: String): LogEntry? {
         for (le in log) {
-            val idxArray: List<String> = le.url.split("/")
-            if (areSimilar(argArray, idxArray)) {
-//                console.log("[$url foundSimilar=true]")
+            if (areEquivalent(url, le.url)) {
                 return le
             }
         }
-//        console.log("[$url foundSimilar=false]")
         return null
-
     }
 
-    private fun areSimilar(argArray: List<String>, idxArray: List<String>, allowedDiff: Int = 1): Boolean {
-        if (argArray.size != idxArray.size) {
+    private fun areEquivalent(searchUrl: String, compareUrl: String, allowedDiff: Int = 1): Boolean {
+        val searchList: List<String> = searchUrl.split("/")
+        val compareList: List<String> = compareUrl.split("/")
+        if (searchList.size != compareList.size) {
             return false
         }
-        var diffCnt = 0
 
-        var i = 0
-        for (ai: String in argArray) {
-            if (ai != idxArray[i]) {
+        var diffCnt = 0
+        for ((i, s) in searchList.withIndex()) {
+            val c = compareList[i];
+            if (!s.equals(c)) {
                 diffCnt++
-                val n = ai.toIntOrNull()
+                val n = s.toIntOrNull()
                 // if the difference is a String, it is not allowed and counts double
                 if (n != null) {
                     diffCnt++
                 }
             }
-            i++
         }
         return diffCnt <= allowedDiff
     }
@@ -162,6 +149,7 @@ object EventLog {
         return first.start
     }
 
+    //TODO function has a side effect - refactor
     fun isCached(url: String): Boolean {
         val le = this.find(url)
         if ((le != null) && (le.hasResponse() || le.isView())) {

@@ -93,7 +93,7 @@ class EventLogTest {
         val le2 = EventLog.findExact(ol9)
         assertNull(le2)
 
-        val le3 = EventLog.findSimilar(ol9)
+        val le3 = EventLog.findEquivalent(ol9)
         // FIXME 
         /*  assertNotNull(le3)
        assertEquals(ol1, le3.url)

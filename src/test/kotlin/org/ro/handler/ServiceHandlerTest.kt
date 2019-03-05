@@ -24,7 +24,7 @@ class ServiceHandlerTest  () {
             val m1: Menu? = DisplayManager.getMenu()
             // then
             assertNotNull(m1)
-            assertNotNull(m1.menuItems)
+            assertNotNull(m1.list)
         }
     }
 

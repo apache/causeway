@@ -1,4 +1,4 @@
-package org.ro
+package org.ro.view
 
 import kotlinx.serialization.Serializable
 import org.ro.core.Session

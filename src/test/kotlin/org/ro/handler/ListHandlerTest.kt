@@ -19,7 +19,7 @@ class ListHandlerTest {
         le.response = SO_LIST_ALL_INVOKE.str
         Dispatcher.handle(le)
         val lo: ListObserver = le.observer as ListObserver
-        val t1: ObjectList = lo.getList()
+        val t1: ObjectList = lo.list
         // then
         assertNotNull(t1)
 //        assertTrue(Menu.uniqueMenuTitles().size > 2)

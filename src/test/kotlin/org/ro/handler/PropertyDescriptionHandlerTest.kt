@@ -32,7 +32,7 @@ class PropertyDescriptionHandlerTest {
             assertNotNull(act.observer)
 
             val obs: ListObserver = act.observer as ListObserver
-            val ol: ObjectList = obs.getList()
+            val ol: ObjectList = obs.list
             // then
             assertNotNull(ol)
             assertTrue(xp == act)

@@ -16,6 +16,7 @@ class ServiceHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle(jsonStr: String) {
+//       console.log("[ServiceHandler.doHandle] \n$jsonStr")
         val service = parse(jsonStr)
         Menu.add(service)
     }

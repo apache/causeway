@@ -31,8 +31,8 @@ class MenuTest {
         assertTrue(service.getMemberList().size > 0)
         assertTrue(service.getActionList().size > 0)
         Menu.add(service)
-        assertNotNull(Menu.menuItems)
-        assertTrue(Menu.menuItems.size > 0)
+        assertNotNull(Menu.list)
+        assertTrue(Menu.list.size > 0)
     }
 
 }

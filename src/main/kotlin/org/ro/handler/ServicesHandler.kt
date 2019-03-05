@@ -1,6 +1,8 @@
 package org.ro.handler
 
 import kotlinx.serialization.json.JSON
+import org.ro.core.Menu
+import org.ro.core.event.NavigationObserver
 import org.ro.to.Result
 
 /** handles services result */
@@ -18,11 +20,11 @@ class ServicesHandler : AbstractHandler(), IResponseHandler {
     override fun doHandle(jsonStr: String) {
         val services = parse(jsonStr)
         val values = services.valueList()
-        //FIXME use Observer instead? services is the 'up' url of each individual service
-//        DisplayManager.setMenu(menu)
+        Menu.limit = values.size
+        val observer = NavigationObserver(logEntry.url)
         for (l in values) {
-            console.log("[ServiceHandler.doHandle -> invoke]: $l")
-            l.invoke()
+//            console.log("[ServicesHandler.doHandle -> invoke]: $l")
+            l.invoke(observer)
         }
     }
 

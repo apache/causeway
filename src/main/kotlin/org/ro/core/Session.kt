@@ -5,7 +5,6 @@ import org.ro.Application
 /**
  * Keep track of connected server.
  */
-
 object Session {
     private var user: String = ""
     private var pw: String = ""

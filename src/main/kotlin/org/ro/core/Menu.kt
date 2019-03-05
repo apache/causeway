@@ -1,31 +1,41 @@
 package org.ro.core
 
+import org.ro.to.Member
 import org.ro.to.Service
 
 object Menu {
-    //TODO are services required here at all?
-    var menuItems = mutableListOf<MenuEntry>()
+    //TODO check if singleton.Menu and ObjectList can have a common superclass (linit, list<T>, isFull)
+    var limit: Int = 0
+    var list = mutableListOf<MenuEntry>()
+
+    fun isFull(): Boolean {
+        return list.size >= limit
+    }
+
+    override fun toString(): String {
+        return JSON.stringify(this)
+    }
 
     fun add(service: Service) {
         val title = service.title
         val id = service.serviceId
         for (action in service.getActionList()) {
             val me = MenuEntry(title, id, action)
-            menuItems.add(me)
+            list.add(me)
         }
     }
 
     fun uniqueMenuTitles(): MutableList<String> {
         val titles = mutableListOf<String>()
-        for (me in menuItems) {
+        for (me in list) {
             titles.add(me.title)
         }
         return titles.distinct().toMutableList()
     }
-/*    
+    
     fun findEntriesByTitle(title: String): MutableList<MenuEntry> {
         val result = mutableListOf<MenuEntry>()
-        for (me in menuItems) {
+        for (me in list) {
             if (me.title == title) {
                 result.add(me)
             }
@@ -34,12 +44,12 @@ object Menu {
     }
 
     fun findAction(url: String): Member? {
-        for (me in menuItems) {
+        for (me in list) {
             if (me.itemId == url) {
                 return me.action
             }
         }
         return null
     }
-         */
+         
 }
