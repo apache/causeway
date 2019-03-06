@@ -76,7 +76,8 @@ public class ServerSentEventsServlet extends HttpServlet {
                 .orElse(null);
 
         if(eventStream==null) {
-            response.setStatus(404);
+            response.setStatus(200);
+            response.setContentType(null);
             response.flushBuffer();
             return;
         }
@@ -84,7 +85,7 @@ public class ServerSentEventsServlet extends HttpServlet {
         response.setStatus(200);
         response.setContentType("text/event-stream");
         response.setCharacterEncoding("UTF-8");
-        //response.setHeader("Access-Control-Allow-Origin", "*"); //not secure
+        //response.setHeader("Access-Control-Allow-Origin", "*"); // not secure, can be used for debugging
         response.setHeader("Cache-Control", "no-cache,no-store");
         response.flushBuffer();
 

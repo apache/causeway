@@ -26,26 +26,26 @@ function isis_sse_observe(targetId, observing) {
 		return typeof(EventSource) !== "undefined";  
 	}
 
-	function onError(err) {
-		console.log("failed event-stream subscription " + err);
-		updateField("Sorry, it seems the SSE Servlet cannot be reached.<p><small>"+err+"</small></p>");  
+	function onError() {
+		console.log("failed event-stream subscription " + observing);
+		updateField("Sorry, it seems the SSE Servlet cannot be reached.<p><small>"+observing+"</small></p>");  
 	}
 	
 	if(isEventSourceSupported()) {
 
 		try {
+			
 			var source = new EventSource(observing);
 			source.onmessage = function(event) {
 				var decodedData = window.atob(event.data);
 				updateField(decodedData);
 			};
 			
-			source.onerror = function() {
-				onError(observing);
-			};
+			// not sure how to distinguish 'connect error' from stream 'is closed' yet, so not used
+			// source.onerror = onError; 
 			
 		} catch(err) {
-			onError(err);
+			onError();
 		}
 		
 	} else {
