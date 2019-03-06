@@ -16,10 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.applib.events.sse;
 
-import org.apache.isis.applib.value.Markup;
+import java.util.Optional;
 
 /**
  * Server-sent events.
@@ -29,42 +28,10 @@ import org.apache.isis.applib.value.Markup;
  * @since 2.0.0-M3
  *
  */
-public interface EventStreamSource {
+public interface EventStreamService {
 
-    void run(EventStream eventStream);
-    
-    Markup getPayload();
-    
-    // -- PROPERTY ANNOTATION DEFAULT
-    
-    /**
-     * This class is the default for the
-     * {@link org.apache.isis.applib.annotation.Property#observe()} annotation attribute.  
-     */
-    public static final class Noop implements EventStreamSource {
+    Optional<EventStream> lookupByType(Class<?> sourceType);
 
-        @Override
-        public void run(EventStream eventStream) {
-            // just do nothing
-        }
+    void submit(EventStreamSource task);
 
-        @Override
-        public Markup getPayload() {
-            return new Markup();
-        }
-        
-    }
-    
-    // -- BASIC PREDICATES
-    
-    public static boolean isObservable(Class<?> type) {
-        if(type==null) {
-            return false;
-        }
-        if(!EventStreamSource.class.isAssignableFrom(type)) {
-            return false;    
-        }
-        return !type.equals(Noop.class);
-    }
-    
 }

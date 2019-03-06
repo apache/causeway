@@ -58,7 +58,7 @@ final class MarkupComponent_observing  {
         .append("<div id=\"").append(targetId).append("\">\n")
         .append(htmlContent)
         .append("\n</div>\n")
-        .append("<script type=\"text/javascript\">\n")
+        .append("<script type=\"text/javascript\" defer>\n")
         .append(jScriptTemplate
                 .replace("${targetId}", targetId)
                 .replace("${observing}", observingPath))

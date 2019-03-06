@@ -27,6 +27,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.observe.ObserveFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.observe.ObserveFacetAbstract;
 
+/**
+ * 
+ * @since 2.0.0-M3
+ *
+ */
 public class ObserveFacetForPropertyAnnotation extends ObserveFacetAbstract {
 
     public static ObserveFacet create(
@@ -35,7 +40,6 @@ public class ObserveFacetForPropertyAnnotation extends ObserveFacetAbstract {
 
         return properties.stream()
                 .map(Property::observe)
-                .peek(x->System.out.println("..."+x))
                 .filter(EventStreamSource::isObservable)
                 .findFirst()
                 .map(eventStreamType -> new ObserveFacetForPropertyAnnotation(

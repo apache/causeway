@@ -263,6 +263,6 @@ public @interface Property {
      * TODO
      *
      */
-    Class<? extends EventStreamSource> observe() default EventStreamSource.Nop.class;
+    Class<? extends EventStreamSource> observe() default EventStreamSource.Noop.class;
 
 }

@@ -37,6 +37,7 @@ import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.isis.viewer.wicket.ui.util.SSESupport;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.button.DropdownAutoOpenJavaScriptReference;
@@ -134,8 +135,12 @@ public class ServiceActionsPanel extends Panel {
         super.renderHead(response);
         response.render(CssHeaderItem.forReference(new CssResourceReference(ServiceActionsPanel.class, "ServiceActionsPanel.css")));
         Tooltips.renderHead(response);
+        
         response.render(JavaScriptHeaderItem.forReference(DropdownAutoOpenJavaScriptReference.instance()));
         response.render(OnDomReadyHeaderItem.forScript("$('.dropdown-toggle').dropdownHover();"));
+        
+        SSESupport.renderHead(response);
+        
     }
 
 }

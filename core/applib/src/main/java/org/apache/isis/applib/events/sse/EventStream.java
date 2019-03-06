@@ -23,7 +23,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 /**
- * Server-side events.
+ * Server-sent events.
  *  
  * @see https://www.w3schools.com/html/html5_serversentevents.asp
  * 
