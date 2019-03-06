@@ -87,6 +87,7 @@ public interface WebModule {
         return Stream.of(
                 new WebModule_Shiro(), // filters before all others
                 new WebModule_StaticResources(),
+                new WebModule_ServerSentEvents(),
                 new WebModule_Wicket(),
                 new WebModule_RestEasy(), // default REST provider
                 new WebModule_LogOnExceptionLogger() // log any logon exceptions, filters after all others
