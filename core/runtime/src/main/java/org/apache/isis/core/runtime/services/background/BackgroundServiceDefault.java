@@ -16,10 +16,7 @@
  */
 package org.apache.isis.core.runtime.services.background;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-
 import java.lang.reflect.InvocationHandler;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -45,6 +42,8 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.core.plugins.codegen.ProxyFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 /**
  * For command-reification depends on an implementation of

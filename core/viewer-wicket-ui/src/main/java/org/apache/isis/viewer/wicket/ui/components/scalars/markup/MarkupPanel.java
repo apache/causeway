@@ -19,13 +19,16 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
-import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
+
+import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.core.metamodel.facets.objectvalue.observe.ObserveFacet;
+import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldParseableAbstract;
+import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 
 /**
  * Panel for rendering scalars of type {@link org.apache.isis.applib.value.Markup}.
@@ -50,8 +53,9 @@ public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
             // fallback to text editor
             return super.createScalarIfRegularFormGroup();
         }
-
-        final MarkupComponent markupComponent = createMarkupComponent("scalarValueContainer");
+        
+        final MarkupComponent markupComponent = 
+                createMarkupComponent("scalarValueContainer");
 
         getTextField().setLabel(Model.of(getModel().getName()));
 
@@ -74,9 +78,20 @@ public class MarkupPanel extends ScalarPanelTextFieldParseableAbstract {
     // -- HELPER
 
     private MarkupComponent createMarkupComponent(String id) {
-        MarkupComponent markupComponent = new MarkupComponent(id, getModel());
+        MarkupComponent markupComponent = new MarkupComponent(id, getModel(), getEventStreamResource());
         markupComponent.setEnabled(false);
         return markupComponent;
     }
+    
+    private LocalResourcePath getEventStreamResource() {
+        final ObserveFacet observeFacet  = super.scalarModel.getFacet(ObserveFacet.class);
+        if(observeFacet==null) {
+            return null;
+        }
+        final String eventStreamId = observeFacet.getEventStreamType().getName();
+        final LocalResourcePath ssePath = new LocalResourcePath("/sse?eventStream=" + eventStreamId);
+        return ssePath;
+    }
+    
 
 }
