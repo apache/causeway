@@ -30,14 +30,20 @@ class RoMenuBar : Navbar() {
         return mainMenu
     }
 
-    fun amend(menu: Menu) {
+    fun amendMenu() {
         navbar(type = NavbarType.FIXEDTOP) {
             nav {
                 add(buildMainEntry())
-                for (title: String in menu.uniqueMenuTitles()) {
+                for (title: String in Menu.filterUniqueMenuTitles()) {
                     val dd = buildMenuEntry(title)
-                    for (me : MenuEntry in menu.findEntriesByTitle(title)) {
-                        dd.add(buildMenuAction(me.action.id))
+                    for (me : MenuEntry in Menu.filterEntriesByTitle(title)) { 
+                        val menuLink = buildMenuAction(me.action.id)
+                        val execLink = me.action.getInvokeLink()!!
+                        menuLink.onClick {
+                            console.log("[RoMenuBar.amendMenu/Link.invoke] $execLink")
+                            execLink.invoke() }
+                        
+                        dd.add(menuLink)
                     }
                     add(dd)
                 }
@@ -50,11 +56,7 @@ class RoMenuBar : Navbar() {
     }
 
     private fun buildMenuAction(action: String, iconName: String? = null): Link {
-        val link = Link(tr(action), icon = "fa-windows")
-        link.onClick {
-            LoginDialog().show()
-        }
-        return link
+        return Link(tr(action), icon = "fa-windows")
     }
 
     private fun invoke() {

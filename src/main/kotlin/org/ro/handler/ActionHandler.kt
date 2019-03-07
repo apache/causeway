@@ -18,23 +18,23 @@ class ActionHandler : AbstractHandler(), IResponseHandler {
 
     override fun doHandle(jsonStr: String) {
         val action = parse(jsonStr)
-        val l = action.links[0]
-        // l.rel should be neither: (self | up | describedBy )
-        when (l.method) {
-            Method.GET.name -> {
-                console.log("[Link Method is GET]")
+        for (l in action.links) {
+            // l.rel should be neither: (self | up | describedBy )
+            if (l.isInvokeAction()) {
+                console.log("[ActionHandler.doHandle] ${l.method}")
                 console.log("[Link: $l]")
-//                l.invoke()
-            }
-            Method.POST.name -> {
-                console.log("[Link Method is POST]")
-                l.invoke()
-            }  //FIXME  Prompt(action)
-            Method.PUT.name -> {
-                console.log("Link Method is PUT")
-            }
-            Method.PUT.name -> {
-                console.log("Link Method is DELETE")
+                when (l.method) {
+                    Method.GET.name -> {
+                        l.invoke()
+                    }
+                    Method.POST.name -> {
+                        l.invoke()
+                    }  //FIXME  Prompt(action)
+                    Method.PUT.name -> {
+                    }
+                    Method.PUT.name -> {
+                    }
+                }
             }
         }
     }

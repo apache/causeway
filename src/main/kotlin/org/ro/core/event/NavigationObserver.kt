@@ -9,7 +9,7 @@ class NavigationObserver(var baseUrl: String) : ILogEventObserver {
         if (Menu.isFull()) {
             console.log("[NavigationObserver.update] isFull: ${le.url}")
             //FIXME there is an excess of 3/4 items. Why  
-            DisplayManager.amendMenu(Menu)
+            DisplayManager.amendMenu()
         }
     }
 

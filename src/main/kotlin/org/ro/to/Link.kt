@@ -32,6 +32,10 @@ data class Link(val rel: String = "",
     fun invoke(obs: ILogEventObserver? = null) {
         RoXmlHttpRequest().invoke(this, obs)
     }
+    
+    fun isInvokeAction():Boolean {
+        return rel.contains("invokeaction")
+    }
 
     private fun argMap(): Map<String, Argument>? {
         if (args.isNotEmpty()) {

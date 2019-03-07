@@ -1,6 +1,6 @@
 package org.ro.core.event
 
-import org.ro.core.Utils
+import org.ro.to.Link
 
 class Node(private var entry:LogEntry) {
     private var children: MutableList<Any>? = mutableListOf()
@@ -17,8 +17,9 @@ class Node(private var entry:LogEntry) {
     fun getParentUrl(): String? {
         var result: String? = null
         if (entry.hasResponse()) {
-            val response: String = entry.getResponse()
-            result = Utils().getUpHref(response)
+            val response = entry.obj
+            val link = response as Link
+           //TODO result = link.
         }
         return result
     }

@@ -42,8 +42,8 @@ object DisplayManager {
 
     // view operations
 
-    fun amendMenu(menu: Menu) {
-        Application.menuBar.amend(menu)
+    fun amendMenu() {
+        Application.menuBar.amendMenu()
     }
 
     fun dockView(tab: IDockable) {

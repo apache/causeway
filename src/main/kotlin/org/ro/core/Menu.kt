@@ -25,7 +25,7 @@ object Menu {
         }
     }
 
-    fun uniqueMenuTitles(): MutableList<String> {
+    fun filterUniqueMenuTitles(): MutableList<String> {
         val titles = mutableListOf<String>()
         for (me in list) {
             titles.add(me.title)
@@ -33,7 +33,7 @@ object Menu {
         return titles.distinct().toMutableList()
     }
     
-    fun findEntriesByTitle(title: String): MutableList<MenuEntry> {
+    fun filterEntriesByTitle(title: String): MutableList<MenuEntry> {
         val result = mutableListOf<MenuEntry>()
         for (me in list) {
             if (me.title == title) {
