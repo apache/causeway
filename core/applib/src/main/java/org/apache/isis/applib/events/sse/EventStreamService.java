@@ -30,8 +30,13 @@ import java.util.Optional;
  */
 public interface EventStreamService {
 
+    public static enum ExecutionBehavior {
+        SIMPLE,
+        REQUIRES_NEW_SESSION
+    }
+    
     Optional<EventStream> lookupByType(Class<?> sourceType);
 
-    void submit(EventStreamSource task);
+    void submit(EventStreamSource task, ExecutionBehavior executionBehavior);
 
 }
