@@ -9,8 +9,7 @@ import org.ro.view.UIComponent
 data class TabGroupLayout(val cssClass: String? = "",        
                           val metadataError: String? = "",   
                           @Optional val tab: List<TabLayout> = emptyList(),
-                          val unreferencedCollections: Boolean? = false
-) {
+                          val unreferencedCollections: Boolean? = false) {
 
     fun build(): UIComponent {
         val result = TabNavigator("TabGroupLayout")

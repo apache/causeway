@@ -7,12 +7,13 @@ import org.ro.layout.Layout
 class LayoutHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
+        var answer = false
         try {
             val layout = parse(jsonStr)
-            return layout.row.size > 0
+            answer = layout.row.size > 0
         } catch (ex: Exception) {
-            return false
         }
+        return answer;
     }
 
     override fun doHandle(jsonStr: String) {

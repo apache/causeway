@@ -6,14 +6,15 @@ import org.ro.to.Property
 class PropertyHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
+        var answer = false
         try {
             val p = parse(jsonStr)
             val link = p.descriptionLink();
-            return link != null
+            answer = link != null
         } catch (ex: Exception) {
             console.log("[PropertyHandler fails on: $jsonStr]")
-            return false
         }
+        return answer
     }
 
     override fun doHandle(jsonStr: String) {

@@ -9,12 +9,13 @@ import org.ro.to.Result
 class ServicesHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
+        var answer = false
         try {
             parse(jsonStr)
-            return true
+            answer = true
         } catch (ex: Exception) {
-            return false
         }
+        return answer
     }
 
     override fun doHandle(jsonStr: String) {
@@ -23,7 +24,6 @@ class ServicesHandler : AbstractHandler(), IResponseHandler {
         Menu.limit = values.size
         val observer = NavigationObserver(logEntry.url)
         for (l in values) {
-//            console.log("[ServicesHandler.doHandle -> invoke]: $l")
             l.invoke(observer)
         }
     }

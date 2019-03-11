@@ -5,13 +5,14 @@ import org.ro.to.Property
 
 class PropertyDescriptionHandler : AbstractHandler(), IResponseHandler {
     override fun canHandle(jsonStr: String): Boolean {
+        var answer = false
         try {
             val p = parse(jsonStr)
             val ext = p.extensions!!
-            return ext.friendlyName.isNotEmpty()
+            answer = ext.friendlyName.isNotEmpty()
         } catch (ex: Exception) {
-            return false
         }
+        return answer
     }
 
     override fun doHandle(jsonStr: String) {

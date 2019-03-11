@@ -6,19 +6,6 @@ import kotlinx.serialization.Serializable
 import org.ro.core.event.ILogEventObserver
 import org.ro.core.event.RoXmlHttpRequest
 
-enum class Method(val operation: String) {
-    GET("GET"),
-    PUT("PUT"),
-    POST("POST"),
-    DELETE("DELETE")
-}
-
-enum class RelType(val type: String) {
-    SELF("self"),
-    UP("up"),
-    DESCRIBEDBY("describedby")
-}
-
 @Serializable
 data class Link(val rel: String = "",
                 val method: String = Method.GET.operation,
@@ -32,9 +19,12 @@ data class Link(val rel: String = "",
     fun invoke(obs: ILogEventObserver? = null) {
         RoXmlHttpRequest().invoke(this, obs)
     }
-    
-    fun isInvokeAction():Boolean {
-        return rel.contains("invokeaction")
+
+    fun isInvokeAction(): Boolean {
+        var answer = false
+        if (rel.contains("invokeaction")) answer = true
+        if (rel.contains("invoke;action")) answer = true
+        return answer;
     }
 
     private fun argMap(): Map<String, Argument>? {

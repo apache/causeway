@@ -8,12 +8,13 @@ class ListHandler : AbstractHandler(), IResponseHandler {
 
     //TODO structure of json is changed >= 16.2
     override fun canHandle(jsonStr: String): Boolean {
+        var answer = false
         try {
             parse(jsonStr)
-            return true
+            answer= true
         } catch (ex: Exception) {
-            return false
         }
+        return answer
     }
 
     override fun doHandle(jsonStr: String) {

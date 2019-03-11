@@ -6,12 +6,13 @@ import org.ro.to.TObject
 class TObjectHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
+        var answer = false
         try {
             parse(jsonStr)
-            return true
+            answer = true
         } catch (ex: Exception) {
-            return false
         }
+        return answer
     }
 
     override fun doHandle(jsonStr: String) {

@@ -4,18 +4,6 @@ import kotlinx.serialization.Optional
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-enum class MenuBarPosition(val position: String) {
-    PRIMARY("PRIMARY"),
-    SECONDARY("SECONDARY"),
-    TERNARY("TERNARY")
-}
-
-enum class ActionSemantics(val type: String) {
-    IDEMPOTENT("idempotent"),
-    NON_IDEMPOTENT("nonIdempotent"),
-    NON_IDEMPOTENT_ARE_YOU_SURE("nonIdempotentAreYouSure")
-}
-
 @Serializable
 data class Extensions(@Optional val oid: String = "",
                       @Optional val isService: Boolean = false,

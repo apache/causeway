@@ -7,16 +7,16 @@ import org.ro.to.Service
 class ServiceHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
+        var answer = false
         try {
             parse(jsonStr)
-            return true
+            answer = true
         } catch (ex: Exception) {
-            return false
         }
+        return answer
     }
 
     override fun doHandle(jsonStr: String) {
-//       console.log("[ServiceHandler.doHandle] \n$jsonStr")
         val service = parse(jsonStr)
         Menu.add(service)
     }
