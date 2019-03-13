@@ -3,8 +3,7 @@ package org.ro.handler
 import kotlinx.serialization.json.JSON
 import org.ro.to.Action
 import org.ro.to.Method
-import org.ro.view.FormItem
-import org.ro.view.RoDialog
+import org.ro.view.ActionPrompt
 
 class ActionHandler : AbstractHandler(), IResponseHandler {
 
@@ -21,24 +20,17 @@ class ActionHandler : AbstractHandler(), IResponseHandler {
 
     override fun doHandle(jsonStr: String) {
         val action = parse(jsonStr)
-        console.log("[ActionHandler.doHandle] ${action}")
         for (l in action.links) {
             // l.rel should be neither: (self | up | describedBy )
             if (l.isInvokeAction()) {
                 console.log("[ActionHandler.doHandle] ${l.method}")
-                console.log("[Link: $l]")
                 when (l.method) {
                     Method.GET.name -> {
                         l.invoke()
                     }
                     Method.POST.name -> {
-                        val formItems = mutableListOf<FormItem>()
-                        formItems.add(FormItem("Script", "Text", ""))
-                        formItems.add(FormItem("Parameters", "Text", ""))
-                        //FIXME
-                        RoDialog(formItems).show()
-                        l.invoke()
-                    }  //FIXME  Prompt(action)
+                        ActionPrompt(action).open()
+                    }
                     Method.PUT.name -> {
                     }
                     Method.PUT.name -> {

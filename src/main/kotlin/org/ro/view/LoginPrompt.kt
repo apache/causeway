@@ -14,7 +14,7 @@ class LoginPrompt() : Command {
         formItems.add(FormItem("Url", "Text", url))
         formItems.add(FormItem("User", "Text", username))
         formItems.add(FormItem("Password", "Text", password))
-        RoDialog(formItems, this).show()
+        RoDialog(label = "Login", items = formItems, command = this).show()
     }
     
     override fun execute() {
