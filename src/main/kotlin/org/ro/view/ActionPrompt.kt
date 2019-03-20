@@ -6,77 +6,86 @@ import org.ro.to.Link
 import org.ro.to.Parameter
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.form.select.Select
+import pl.treksoft.kvision.form.text.TextArea
 
 class ActionPrompt(val action: Action) : Command {
 
+    lateinit var form: RoDialog
+
     fun open() {
         console.log("[ActionPrompt.open] ${action}")
-        val formItems = mutableListOf<FormItem>()
-        formItems.add(FormItem("Script", "Select", ""))
-        formItems.add(FormItem("Parameters", "TextArea", ""))
-        RoDialog(label = label(), items = formItems, command = this).show()
+        val formItems = buildFormItems()
+        form = RoDialog(
+                label = buildLabel(),
+                items = formItems,
+                command = this)
+        form.show()
     }
 
     override fun execute() {
         console.log("[ActionPrompt.execute]")
-        //FIXME script name is mandatory and needs to be passed
-        val l = action.getInvokeLink()
-        l!!.invoke()
+        val l = extractUserInput()
+        l.invoke()
     }
 
-    private fun label(): String {
+    private fun buildLabel(): String {
         val label = Utils().deCamel(action.id);
         return "Execute: $label"
     }
 
-    protected fun populateForm() {
-        val params: Collection<Parameter> = action.parameters.values
-        for (p: Parameter in params) {
-            //          val fi: FormItem = UIUtil.buildFormItem(p.name);
-            var input: UIComponent;
-            val elements: List<StringPair> = mutableListOf<StringPair>() //p.choices
-            val cb = Select(elements);
-            // cb.dataProvider = VectorList(p.getChoiceListKeys());
-            //cb. = p.findIndexOfDefaultChoice();
-            if (p.defaultChoice != null) {
-                //  fi.required = true;
+    private fun buildFormItems(): List<FormItem> {
+        val formItems = mutableListOf<FormItem>()
+        val parameterList: Collection<Parameter> = action.parameters.values
+        for (p in parameterList) {
+            val v = p.name
+            var type = "TextArea"
+            var content: Any = ""
+            if (p.hasChoices()) {
+                type = "Select"
+                content = buildSelectionList(p)
             }
-            //  input = cb;
-        } /*else {
-            input = Text();
+            val fi = FormItem(v, type, content);
+            formItems.add(fi)
         }
-        fi.addElement(input);
-        form.addElement(fi); */
+        return formItems
     }
 
-
-    fun okHandler() {
-        val l: Link? = action.getInvokeLink();
-        //iterate over FormItems (0,1, but not 2 (buttons)
-        var fi: FormItem;
-        var key: String;
-        var input: UIComponent;
-        var value: String;
-        /*
-        for (i: Int; i < form.numElements; i++) {
-            fi = form.getElementAt(i) as FormItem;
-            key = fi.label;
-            input = fi.getElementAt(0) as UIComponent;
-            if (input is TextInput) {
-                val ti: TextInput = input as TextInput;
-                val = ti.text;
-                l.setArgument(key, value)
-            } else if (input is Select) {
-                val ddl: Select = input as Select;
-                val selection: String = ddl.selectedLabel;
-                val p: Parameter = this.action.findParameterByName(key.toLowerCase());
-                val href: String = p.getHrefByTitle(selection);
-                l.setArgument(key, href)
-            }
+    private fun buildSelectionList(parameter: Parameter): List<StringPair> {
+        val selectionList = mutableListOf<StringPair>()
+        val arguments = parameter.getChoiceListKeys()
+        for (s in arguments) {
+            //val i  = 
+            val sp = StringPair(s, s);
+            selectionList.add(sp)
         }
-            */
-        l!!.invoke();
-        //    close();
+        return selectionList
+    }
+
+    fun extractUserInput(): Link {
+        //TODO function has a sideeffect, ie. amends link with arguments 
+        val link = action.getInvokeLink()!!
+        var value: String? = null
+        var key: String? = null
+        val formPanel = form.panel
+        val kids = formPanel!!.getChildren()
+        //iterate over FormItems (0,1) but not Buttons(2,3)
+        for (i in kids) {
+            when (i) {
+                is TextArea -> {
+                    key = i.id
+                    value = i.getValue()
+                }
+                is Select -> {
+                    key = i.label!!
+                    value = i.getValue()!!
+                    val p: Parameter = action.findParameterByName(key.toLowerCase())!!
+                    val href = p.getHrefByTitle(value)!!
+                }
+            }
+            link.setArgument(key, value)
+        }
+        console.log("[ActionPrompt.extractUserInput]2 $link")
+        return link
     }
 
 }

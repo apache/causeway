@@ -13,14 +13,13 @@ class LoginPrompt() : Command {
         val formItems = mutableListOf<FormItem>()
         formItems.add(FormItem("Url", "Text", url))
         formItems.add(FormItem("User", "Text", username))
-        formItems.add(FormItem("Password", "Text", password))
+        formItems.add(FormItem("Password", "Password", password))
         RoDialog(label = "Login", items = formItems, command = this).show()
     }
     
     override fun execute() {
-        //FIXME url, username, password to be taken from Dialog
+        //FIXME url, username, password to be taken from Dialog, see ActionPrompt.extract
         Session.login(url, username, password)
-        console.log("[LoginPrompt.execute: $Session]")
         val link = Link(href= "http://localhost:8080/restful/services/")
         link.invoke()
     }

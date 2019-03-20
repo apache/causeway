@@ -12,7 +12,6 @@ class PropertyHandler : AbstractHandler(), IResponseHandler {
             val link = p.descriptionLink();
             answer = link != null
         } catch (ex: Exception) {
-            console.log("[PropertyHandler fails on: $jsonStr]")
         }
         return answer
     }

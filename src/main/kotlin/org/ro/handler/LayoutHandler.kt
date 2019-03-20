@@ -3,7 +3,6 @@ package org.ro.handler
 import kotlinx.serialization.json.JSON
 import org.ro.layout.Layout
 
-
 class LayoutHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {

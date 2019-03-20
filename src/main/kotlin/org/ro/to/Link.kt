@@ -37,14 +37,16 @@ data class Link(val rel: String = "",
         return null
     }
 
-    //TODO handle args as well?
-    fun setArgument(key: String, value: String) {
-        val k = key.toLowerCase()
-        if (k == "script") {
-            val href = "{ \"href\": " + value + "}"
-            arguments._set(k, href)
-        } else {
-            arguments._set(k, value)
+    fun setArgument(key: String?, value: String?) {
+        console.log("[link.setArgument] $key, $value")
+        if (key != null) {
+            val k = key.toLowerCase()
+            if (k == "script") {
+                val href = "{ \"href\": " + value + "}"
+                arguments._set(k, href)
+            } else {
+                arguments._set(k, value)
+            }
         }
     }
 
