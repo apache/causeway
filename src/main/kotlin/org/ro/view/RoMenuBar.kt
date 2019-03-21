@@ -23,7 +23,7 @@ class RoMenuBar : Navbar() {
 
     private fun buildMainEntry(): DropDown {
         val mainMenu = buildMenuEntry("Main", iconName = "fa-bars")
-        val link = Link(tr("URL"), icon = "fa-windows").onClick {
+        val link = Link(tr("Connect ..."), icon = "fa-server").onClick {
             LoginPrompt().open()
         }
         mainMenu.add(link)

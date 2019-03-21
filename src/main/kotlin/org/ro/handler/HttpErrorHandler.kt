@@ -12,13 +12,12 @@ class HttpErrorHandler : AbstractHandler(), IResponseHandler {
             answer = true
         } catch (ex: Exception) {
         }
-        console.log("[HttpErrorHandler.canHandle:$answer] $jsonStr")
         return answer
     }
 
     override fun doHandle(jsonStr: String) {
         val e = parse(jsonStr)
-        ErrorAlert("HttpErrorHandler", jsonStr).open()
+        ErrorAlert(e).open()
     }
 
     fun parse(jsonStr: String): HttpError {
