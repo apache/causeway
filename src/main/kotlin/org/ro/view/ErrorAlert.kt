@@ -22,7 +22,6 @@ class ErrorAlert(val error: HttpError) : Command {
         for (s in stackTrace) {
             answer += s + "\n"
         }
-        console.log("[ErrorAlert.toString] $answer")
         return answer
     }
 }

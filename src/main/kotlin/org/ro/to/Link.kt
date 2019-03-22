@@ -38,7 +38,7 @@ data class Link(val rel: String = "",
     }
 
     fun setArgument(key: String?, value: String?) {
-        console.log("[link.setArgument] $key, $value")
+        console.log("[Link.setArgument] $key, $value")
         if (key != null) {
             val k = key.toLowerCase()
             if (k == "script") {

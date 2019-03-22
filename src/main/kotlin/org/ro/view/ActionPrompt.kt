@@ -54,7 +54,6 @@ class ActionPrompt(val action: Action) : Command {
         val selectionList = mutableListOf<StringPair>()
         val arguments = parameter.getChoiceListKeys()
         for (s in arguments) {
-            //val i  = 
             val sp = StringPair(s, s);
             selectionList.add(sp)
         }
@@ -78,13 +77,13 @@ class ActionPrompt(val action: Action) : Command {
                 is Select -> {
                     key = i.label!!
                     value = i.getValue()!!
-                    val p: Parameter = action.findParameterByName(key.toLowerCase())!!
-                    val href = p.getHrefByTitle(value)!!
+//                    val p: Parameter = action.findParameterByName(key.toLowerCase())!!
+//                    val href = p.getHrefByTitle(value)!!
                 }
             }
-            link.setArgument(key, value)
+            if (key != null)
+                link.setArgument(key, value)
         }
-        console.log("[ActionPrompt.extractUserInput]2 $link")
         return link
     }
 
