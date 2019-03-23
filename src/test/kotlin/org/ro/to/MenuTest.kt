@@ -1,7 +1,7 @@
 package org.ro.to
 
-import kotlinx.serialization.json.JSON
 import org.ro.core.Menu
+import org.ro.handler.ServiceHandler
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
@@ -12,8 +12,8 @@ class MenuTest {
     fun testUnique() {
         //given:
         val jsonStr = SO_MENU.str
-        val s1 = JSON.parse(Service.serializer(), jsonStr)
-        val s2 = JSON.parse(Service.serializer(), jsonStr)
+        val s1 = ServiceHandler().parse(jsonStr)
+        val s2 = ServiceHandler().parse(jsonStr)
         //when
         Menu.add(s1)
         Menu.add(s2)
@@ -26,7 +26,7 @@ class MenuTest {
     @Test
     fun testParse() {
         val jsonStr = SO_MENU.str
-        val service = JSON.parse(Service.serializer(), jsonStr)
+        val service = ServiceHandler().parse(jsonStr)
         assertTrue(service.members.size > 0)
         assertTrue(service.getMemberList().size > 0)
         assertTrue(service.getActionList().size > 0)

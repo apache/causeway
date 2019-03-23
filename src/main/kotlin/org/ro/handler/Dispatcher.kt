@@ -18,7 +18,9 @@ object Dispatcher {
     private var sixth = LayoutHandler()
     private var seventh = PropertyHandler()
     private var eighth = PropertyDescriptionHandler()
-    private var nineth = HttpErrorHandler()
+    private var nineth = MemberHandler()
+    private var tenth = HttpErrorHandler()
+    
 
     private var last: DefaultHandler = DefaultHandler()
 
@@ -31,7 +33,8 @@ object Dispatcher {
         sixth.successor = seventh
         seventh.successor = eighth
         eighth.successor = nineth
-        nineth.successor = last
+        nineth.successor = tenth
+        tenth.successor = last
 
         delegate = first
     }

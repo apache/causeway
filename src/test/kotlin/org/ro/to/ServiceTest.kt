@@ -1,6 +1,6 @@
 package org.ro.to
 
-import kotlinx.serialization.json.JSON
+import org.ro.handler.ServiceHandler
 import org.ro.handler.ServicesHandler
 import org.ro.urls.RESTFUL_SERVICES
 import kotlin.test.Test
@@ -13,7 +13,7 @@ class ServiceTest {
     @Test
     fun testSimpleObjectMenu() {
         val jsonStr = SO_MENU.str
-        val service = JSON.parse(Service.serializer(), jsonStr)
+        val service = ServiceHandler().parse(jsonStr)
         assertEquals("Simple Objects", service.title)
         val actions: kotlin.collections.List<Member> = service.getMemberList()
         assertEquals(3, actions.size)
