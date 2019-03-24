@@ -9,6 +9,7 @@ class PropertyHandler : AbstractHandler(), IResponseHandler {
         var answer = false
         try {
             val p = parse(jsonStr)
+            logEntry.obj = p
             val link = p.descriptionLink();
             answer = link != null
         } catch (ex: Exception) {
@@ -17,7 +18,7 @@ class PropertyHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle(jsonStr: String) {
-        val p = parse(jsonStr)
+        val p = logEntry.obj as Property
         val link = p.descriptionLink()!!;
         link.invoke()
     }

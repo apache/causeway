@@ -10,9 +10,11 @@ class TestUtil() {
     //Most Handler Tests are IntegrationTests
     fun isSimpleAppAvailable(): Boolean {
         val xhr = XMLHttpRequest();
-        val url = "http://localhost:8080/restful/"
+        val url = "http://sven:pass@localhost:8080/restful/"
+        login()
+        val credentials: String = Session.getCredentials()
         xhr.open("GET", url, false, "sven", "pass");
-        // xhr.setRequestHeader("Authorization", "Basic $credentials")
+        xhr.setRequestHeader("Authorization", "Basic $credentials")
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
         xhr.setRequestHeader("Accept", "application/json")
 

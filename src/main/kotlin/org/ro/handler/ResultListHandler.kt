@@ -4,13 +4,14 @@ import kotlinx.serialization.json.JSON
 import org.ro.core.event.ListObserver
 import org.ro.to.ResultList
 
-class ListHandler : AbstractHandler(), IResponseHandler {
+class ResultListHandler : AbstractHandler(), IResponseHandler {
 
     //TODO structure of json is changed >= 16.2
     override fun canHandle(jsonStr: String): Boolean {
         var answer = false
         try {
-            parse(jsonStr)
+            val obj = parse(jsonStr)
+            logEntry.obj = obj
             answer= true
         } catch (ex: Exception) {
         }
@@ -18,7 +19,7 @@ class ListHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle(jsonStr: String) {
-        val resultList = parse(jsonStr)
+        val resultList = logEntry.obj as ResultList
         logEntry.obj = resultList
         val lo: ListObserver = logEntry.initListObserver()
         lo.update(logEntry)

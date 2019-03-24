@@ -3,7 +3,7 @@ package org.ro.core.event
 import org.ro.view.ImageRepository
 import pl.treksoft.kvision.types.Date
 
-class LogEntry(var url: String, var method: String? = null, private var request: String = "") {
+class LogEntry(var url: String, var method: String? = null, var request: String = "") {
     private var icon: Any? = null
 
     init {
@@ -147,6 +147,10 @@ class LogEntry(var url: String, var method: String? = null, private var request:
 
     fun isClosedView(): Boolean {
         return ImageRepository.TimesIcon == icon
+    }
+    
+    fun isError(): Boolean {
+        return fault != null
     }
 
 }

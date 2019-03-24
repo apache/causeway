@@ -8,7 +8,8 @@ class MemberHandler : AbstractHandler(), IResponseHandler {
     override fun canHandle(jsonStr: String): Boolean {
         var answer = false
         try {
-            parse(jsonStr)
+            val obj =parse(jsonStr)
+            logEntry.obj = obj
             answer = true
         } catch (ex: Exception) {
         }

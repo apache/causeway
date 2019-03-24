@@ -10,10 +10,10 @@ object Dispatcher {
     private var delegate: IResponseHandler;
 
     //TODO sequence of handlers should follow frequency of invocation in order minimize the time taken by unneeded calls to 'canHandle()'
-    private var first = ServicesHandler()
+    private var first = ResultHandler()
     private var second = ActionHandler()
     private var third = ServiceHandler()
-    private var forth = ListHandler()
+    private var forth = ResultListHandler()
     private var fifth = TObjectHandler()
     private var sixth = LayoutHandler()
     private var seventh = PropertyHandler()

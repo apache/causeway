@@ -9,7 +9,8 @@ class ServiceHandler : AbstractHandler(), IResponseHandler {
     override fun canHandle(jsonStr: String): Boolean {
         var answer = false
         try {
-            parse(jsonStr)
+            val obj =parse(jsonStr)
+            logEntry.obj = obj
             answer = true
         } catch (ex: Exception) {
         }
@@ -17,7 +18,7 @@ class ServiceHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle(jsonStr: String) {
-        val service = parse(jsonStr)
+        val service = logEntry.obj as Service
         Menu.add(service)
     }
 

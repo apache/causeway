@@ -8,6 +8,7 @@ class PropertyDescriptionHandler : AbstractHandler(), IResponseHandler {
         var answer = false
         try {
             val p = parse(jsonStr)
+            logEntry.obj = p
             val ext = p.extensions!!
             answer = ext.friendlyName.isNotEmpty()
         } catch (ex: Exception) {
@@ -16,7 +17,7 @@ class PropertyDescriptionHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle(jsonStr: String) {
-        val p = parse(jsonStr)
+        val p = logEntry.obj as Property
         logEntry.obj = p
         //TODO logEntry.object = p to be handled by Observer?
     }

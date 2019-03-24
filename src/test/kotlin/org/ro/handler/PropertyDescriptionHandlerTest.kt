@@ -17,9 +17,7 @@ class PropertyDescriptionHandlerTest {
         if (TestUtil().isSimpleAppAvailable()) {
 
             // given
-            TestUtil().login()
             TestUtil().invokeFixtureScript()
-//            val lo = ListObserver()
             val str = FR_PROPERTY_DESCRIPTION.str
             val url = FR_PROPERTY_DESCRIPTION.url
             // when

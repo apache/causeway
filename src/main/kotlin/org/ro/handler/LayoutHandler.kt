@@ -9,6 +9,7 @@ class LayoutHandler : AbstractHandler(), IResponseHandler {
         var answer = false
         try {
             val layout = parse(jsonStr)
+            logEntry.obj = layout
             answer = layout.row.size > 0
         } catch (ex: Exception) {
         }
@@ -16,7 +17,7 @@ class LayoutHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle(jsonStr: String) {
-        val layout = parse(jsonStr)
+        val layout = logEntry.obj as Layout
         logEntry.obj = layout
     }
 

@@ -48,10 +48,14 @@ data class Link(val rel: String = "",
                 arguments._set(k, value)
             }
         }
+        console.log("[Link.setArgument] $this")
     }
 
     fun getArgumentsAsJsonString(): String {
-        return JSON.stringify(argMap()!!.values)
+        val args = argMap()
+        console.log("[Link.getArgumentsAsJsonString] $args")
+        val answer =   JSON.stringify(argMap()!!.values)
+        return answer
     }
 
 }

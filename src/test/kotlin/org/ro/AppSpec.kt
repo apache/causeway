@@ -8,6 +8,7 @@ class AppSpec : DomSpec {
     @Test
     fun render() {
         run {
+//            Application.start(mapOf())
             assertTrue(true, "Dummy test")
         }
     }

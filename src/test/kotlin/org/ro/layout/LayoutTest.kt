@@ -13,7 +13,6 @@ class LayoutTest {
     @Test
     fun testParseSimpleObjectLayout() {
         if (TestUtil().isSimpleAppAvailable()) {
-            TestUtil().login()
             //given
             val jsonStr = SO_OBJECT_LAYOUT.str
             //when
@@ -49,7 +48,6 @@ class LayoutTest {
     @Test
     fun testparseFixtureScriptObjectLayout() {
         if (TestUtil().isSimpleAppAvailable()) {
-            TestUtil().login()
             // given
             val jsonStr = FR_OBJECT_LAYOUT.str
             val lo = LayoutHandler().parse(jsonStr)

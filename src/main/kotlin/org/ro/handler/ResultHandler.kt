@@ -6,12 +6,13 @@ import org.ro.core.event.NavigationObserver
 import org.ro.to.Result
 
 /** handles services result */
-class ServicesHandler : AbstractHandler(), IResponseHandler {
+class ResultHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
         var answer = false
         try {
-            parse(jsonStr)
+            val obj = parse(jsonStr)
+            logEntry.obj = obj
             answer = true
         } catch (ex: Exception) {
         }
@@ -19,7 +20,7 @@ class ServicesHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle(jsonStr: String) {
-        val services = parse(jsonStr)
+        val services = logEntry.obj as Result
         val values = services.valueList()
         Menu.limit = values.size
         val observer = NavigationObserver(logEntry.url)
