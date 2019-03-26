@@ -44,7 +44,7 @@ class RoXmlHttpRequest {
 
         var body = ""
         if (method == Method.POST.operation) {
-            body = link.getArgumentsAsJsonString()
+            body = link.argumentsAsBody()
             console.log("[RoXHR.POST body: $body]")
             xhr.send(body)
         } else {

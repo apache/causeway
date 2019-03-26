@@ -50,14 +50,6 @@ object DisplayManager {
         Application.view.dock!!.addView(tab)
     }
 
-    fun getMenu(): Menu? {
-        return Application.menuBar.getMenu()
-    }
-
-    fun setMenu(menu: Menu) {
-        Application.menuBar.setMenu(menu)
-    }
-
     // delegate to Tabs
     fun addEventTab() {
         val list: MutableList<LogEntry>? = EventLog.log

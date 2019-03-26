@@ -1,6 +1,5 @@
 package org.ro.to
 
-import com.github.snabbdom._set
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 import org.ro.core.event.ILogEventObserver
@@ -15,7 +14,7 @@ data class Link(val rel: String = "",
                 @Optional val arguments: Map<String, Argument> = emptyMap(),
                 @Optional val title: String = "") {
 
-    //TODO eventually this function should be delegated
+    //TODO delegate to a facade?
     fun invoke(obs: ILogEventObserver? = null) {
         RoXmlHttpRequest().invoke(this, obs)
     }
@@ -38,24 +37,25 @@ data class Link(val rel: String = "",
     }
 
     fun setArgument(key: String?, value: String?) {
-        console.log("[Link.setArgument] $key, $value")
         if (key != null) {
             val k = key.toLowerCase()
-            if (k == "script") {
-                val href = "{ \"href\": " + value + "}"
-                arguments._set(k, href)
-            } else {
-                arguments._set(k, value)
-            }
+            val v = value!!
+            val arg = arguments.get(k)!!
+            arg.key = k
+            arg.value = v
         }
-        console.log("[Link.setArgument] $this")
     }
 
-    fun getArgumentsAsJsonString(): String {
-        val args = argMap()
-        console.log("[Link.getArgumentsAsJsonString] $args")
-        val answer =   JSON.stringify(argMap()!!.values)
+    fun argumentsAsBody(): String {
+        val args = argMap()!!
+        var answer = "{"
+        val arg1 = args.get("script")!!
+        answer += arg1.asBody()
+        answer += ","
+        val arg2 = args.get("parameters")!!
+        answer += arg2.asBody()
+        answer += "}"
+        console.log("[Link.argumentsAsBody] $answer")
         return answer
     }
-
 }

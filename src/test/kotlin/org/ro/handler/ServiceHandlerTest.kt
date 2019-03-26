@@ -1,6 +1,5 @@
 package org.ro.handler
 
-import org.ro.core.DisplayManager
 import org.ro.core.Menu
 import org.ro.core.event.LogEntry
 import org.ro.urls.RESTFUL_SERVICES
@@ -21,7 +20,7 @@ class ServiceHandlerTest  () {
             // when
             Dispatcher.handle(le)
 
-            val m1: Menu? = DisplayManager.getMenu()
+            val m1: Menu? = null //FIXME DisplayManager.getMenu() how to access RoMenuBar items?
             // then
             assertNotNull(m1)
             assertNotNull(m1.list)

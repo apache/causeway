@@ -1,5 +1,8 @@
 package org.ro.handler
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.ro.core.Session
 import org.ro.core.event.RoXmlHttpRequest
 import org.ro.to.ACTIONS_RUN_FIXTURE_SCRIPT
@@ -43,4 +46,11 @@ class TestUtil() {
         RoXmlHttpRequest().invoke(l, obs)
     }
 
+    fun wait(milliseconds: Long)  {
+        GlobalScope.launch {
+            delay(milliseconds)
+            console.log("[TestUtil.wait] $milliseconds")
+        }
+    }
+    
 }

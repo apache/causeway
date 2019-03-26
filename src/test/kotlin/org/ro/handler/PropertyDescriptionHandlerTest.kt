@@ -25,6 +25,7 @@ class PropertyDescriptionHandlerTest {
             xp.response = str
             //EventLog.add(xp)
             Dispatcher.handle(xp)
+            TestUtil().wait(1000);
             val act: LogEntry? = EventLog.find(url)
             assertNotNull(act)
             assertNotNull(act.observer)

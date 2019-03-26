@@ -2,6 +2,8 @@ package org.ro.view
 
 import org.ro.core.Menu
 import org.ro.core.MenuEntry
+import pl.treksoft.kvision.core.CssSize
+import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.html.Link
 import pl.treksoft.kvision.i18n.I18n.tr
@@ -14,6 +16,9 @@ class RoMenuBar : Navbar() {
 
     init {
         navbar(type = NavbarType.FIXEDTOP) {
+            height = CssSize(10, UNIT.mm)
+            minHeight = CssSize(10, UNIT.mm)
+            maxHeight = CssSize(10, UNIT.mm)
             paddingLeft = 0.px
             nav {
                 add(buildMainEntry())
@@ -22,7 +27,7 @@ class RoMenuBar : Navbar() {
     }
 
     private fun buildMainEntry(): DropDown {
-        val mainMenu = buildMenuEntry("Main", iconName = "fa-bars")
+        val mainMenu = buildMenuEntry("Main", iconName = "fa-eye")  // fa-ankh
         val link = Link(tr("Connect ..."), icon = "fa-server").onClick {
             LoginPrompt().open()
         }
@@ -32,6 +37,9 @@ class RoMenuBar : Navbar() {
 
     fun amendMenu() {
         navbar(type = NavbarType.FIXEDTOP) {
+            height = CssSize(10, UNIT.mm)
+            minHeight = CssSize(10, UNIT.mm)
+            maxHeight = CssSize(10, UNIT.mm)
             nav {
                 add(buildMainEntry())
                 for (title: String in Menu.filterUniqueMenuTitles()) {
@@ -56,18 +64,7 @@ class RoMenuBar : Navbar() {
     }
 
     private fun buildMenuAction(action: String, iconName: String? = null): Link {
-        return Link(tr(action), icon = "fa-windows")
+        return Link(tr(action), icon = "fa-bolt")
     }
 
-    private fun invoke() {
-
-    }
-
-    fun setMenu(menu: Menu) {
-
-    }
-
-    fun getMenu(): Menu? {
-        return null
-    }
 }

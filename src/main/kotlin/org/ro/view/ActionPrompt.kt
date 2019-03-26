@@ -13,7 +13,6 @@ class ActionPrompt(val action: Action) : Command {
     lateinit var form: RoDialog
 
     fun open() {
-        console.log("[ActionPrompt.open] ${action}")
         val formItems = buildFormItems()
         form = RoDialog(
                 label = buildLabel(),
@@ -23,7 +22,6 @@ class ActionPrompt(val action: Action) : Command {
     }
 
     override fun execute() {
-        console.log("[ActionPrompt.execute]")
         val l = extractUserInput()
         l.invoke()
     }
@@ -71,18 +69,21 @@ class ActionPrompt(val action: Action) : Command {
         for (i in kids) {
             when (i) {
                 is TextArea -> {
-                    key = i.id
+                    key = i.label!!
                     value = i.getValue()
                 }
                 is Select -> {
                     key = i.label!!
                     value = i.getValue()!!
-//                    val p: Parameter = action.findParameterByName(key.toLowerCase())!!
-//                    val href = p.getHrefByTitle(value)!!
+                    val p: Parameter = action.findParameterByName(key.toLowerCase())!!
+                    val href = p.getHrefByTitle(value)!!
+                    value = href
                 }
             }
-            if (key != null)
+            console.log("[ActionPrompt.extractUserInput] $key, $value")
+            if (key != null) {
                 link.setArgument(key, value)
+            }
         }
         return link
     }
