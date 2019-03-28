@@ -80,7 +80,6 @@ class ActionPrompt(val action: Action) : Command {
                     value = href
                 }
             }
-            console.log("[ActionPrompt.extractUserInput] $key, $value")
             if (key != null) {
                 link.setArgument(key, value)
             }

@@ -1,64 +1,14 @@
 package org.ro.view
 
-
-import org.ro.view.tab.RoTabBar
-import pl.treksoft.kvision.core.Border
-import pl.treksoft.kvision.core.BorderStyle
-import pl.treksoft.kvision.core.Col
-import pl.treksoft.kvision.panel.FlexDir
-import pl.treksoft.kvision.panel.FlexPanel
-import pl.treksoft.kvision.panel.FlexWrap
 import pl.treksoft.kvision.panel.TabPanel
-import pl.treksoft.kvision.utils.px
-import pl.treksoft.kvision.utils.vh
+import pl.treksoft.kvision.utils.auto
+import pl.treksoft.kvision.utils.perc
 
-
-class RoView() : FlexPanel() {
-    
-    private var tabPanel = TabPanel {
-        border = Border(2.px, BorderStyle.SOLID, Col.SILVER)
-//        addTab(I18n.tr("Basic formatting"), EditPanel(), "fa-bars", route = "/basic")
-    }
-    
+object RoView : TabPanel() {
     init {
-        flexPanel(FlexDir.COLUMN, FlexWrap.WRAP, spacing = 20) {
-            padding = 0.px
-            paddingTop = 50.px
-            height = 100.vh
-            add(tabPanel)
-        }
+        width = 100.perc
+        height = 100.perc
+        marginLeft = auto
+        marginRight = auto
     }
-    var menuBar: RoMenuBar? = null
-        get
-    var dock: Dock? = null
-        get
-    var tabs: RoTabBar? = null
-        get
-
-    init {
-        menuBar = RoMenuBar()
-        tabs = RoTabBar()
-        dock = Dock()
-//        statusBar = RoStatusBar()
-//        this.addElement(statusBar)
-    }
-
-    fun showDock(toggle: Boolean) {
-        if (toggle) {
-            dock = Dock()
-        } else {
-//            body.removeChild(dock)
-            //          body.invalidateDisplayList()
-        }
-    }
-
-    fun showStatus(toggle: Boolean) {
-        if (toggle) {
-            //statusBar = RoStatusBar()
-        } else {
-//            this.removeChild(statusBar)
-            //this.invalidateDisplayList()
-        }
-    }
-
 }

@@ -4,7 +4,6 @@ import org.ro.Application
 import org.ro.core.event.EventLog
 import org.ro.core.event.LogEntry
 import org.ro.core.model.Visible
-import org.ro.view.IDockable
 import org.ro.view.tab.RoTabBar
 
 /**
@@ -37,7 +36,8 @@ object DisplayManager {
 
     // view convenience funs
     private fun getTabBar(): RoTabBar? {
-        return Application.view.tabs
+        //return Application.view.tabs
+        return null
     }
 
     // view operations
@@ -45,28 +45,5 @@ object DisplayManager {
     fun amendMenu() {
         Application.menuBar.amendMenu()
     }
-
-    fun dockView(tab: IDockable) {
-        Application.view.dock!!.addView(tab)
-    }
-
-    // delegate to Tabs
-    fun addEventTab() {
-        val list: MutableList<LogEntry>? = EventLog.log
-        getTabBar()!!.addEventTab(list)
-    }
-
-    fun addTreeTab() {
-        val list: MutableList<LogEntry>? = EventLog.log 
-        getTabBar()!!.addTreeTab(list)
-    }
-
-    fun toggleDock(toggle: Boolean) {
-        Application.view.showDock(toggle)
-    }
-
-    fun toggleStatus(toggle: Boolean) {
-        Application.view.showStatus(toggle)
-    }
-
+    
 }

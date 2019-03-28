@@ -1,0 +1,104 @@
+.Layout Transfer Objects
+[uml,file="uml-layout.png"]
+--
+abstract class AbstractLayout {
+    cssClass
+    fromObject()
+    build()
+}
+
+abstract class MemberLayout {
+    named
+    describedAs
+    metadataError
+    link
+    id
+    hidden
+    namedEscaped
+    promptStyle
+}
+
+class Layout {
+    row 
+}
+
+class RowLayout {
+    cols
+    metadataError
+    id
+}
+
+class ColLayout {
+    metadataError
+    size
+    id
+    span
+    unreferencedActions
+    unreferencedCollections
+    tabGroup
+    fieldSet
+}
+
+class DomainObjectLayout {
+    named
+    describedAs
+    plural
+    metadataError
+    link
+    bookmarking
+    cssClass
+    cssClassFa
+    cssClassFaPosition
+    namedEscaped
+}
+ColLayout -> DomainObjectLayout : domainObject
+
+class FieldSetLayout {
+    name
+    action
+    property
+    metadataError
+    id
+    unreferencedActions
+    unreferencedCollections
+}
+
+class TabLayout {
+    name
+    row 
+}
+
+class PropertyLayout {
+    action
+    labelPosition
+    multiline
+    renderAsDayBefore
+    typicalLength
+    unchanging
+}
+
+class ActionLayout {
+    bookmarking
+    position
+    cssClassFa
+    cssClassFaPosition
+}
+
+MemberLayout <|-- ActionLayout
+AbstractLayout <|-- ColLayout
+AbstractLayout <|-- FieldSetLayout
+AbstractLayout <|-- Layout
+AbstractLayout <|-- MemberLayout
+MemberLayout <|-- PropertyLayout
+AbstractLayout <|-- RowLayout
+AbstractLayout <|-- TabLayout
+
+Layout -> RowLayout
+TabLayout -> RowLayout
+RowLayout -> ColLayout
+ColLayout -> FieldSetLayout
+ColLayout -> TabLayout
+
+FieldSetLayout -> ActionLayout
+FieldSetLayout -> PropertyLayout
+--

@@ -1,0 +1,40 @@
+.Overview Diagram
+[uml,file="uml-overview.png"]
+--
+class ModelWrapper {
+  URL key
+  Object[] dataprovider
+  length()
+  limit
+}
+class xhr.XmlHttpRequest {
+    invoke()
+}
+class xhr.RequestLog {
+    start()
+    end()
+    fault()
+}
+
+abstract class handler.AbstractHandler{
+}
+
+view.MenuBar -> xhr.XmlHttpRequest : invoke 
+xhr.XmlHttpRequest -> remote.RestfulObjects : invoke
+xhr.XmlHttpRequest <- remote.RestfulObjects : json 
+handler.AbstractHandler -> xhr.XmlHttpRequest : invoke
+handler.AbstractHandler <- xhr.XmlHttpRequest : json 
+xhr.XmlHttpRequest -> xhr.RequestLog
+
+class core.ViewRegistry{
+} 
+class core.ObjectRegistry{
+} 
+core.Dispatcher -> handler.AbstractHandler
+
+interface remote.RestfulObjects
+remote.RestfulObjects <|-- remote.ApacheIsis
+remote.RestfulObjects <|-- remote.NakedObjects
+view.LogEntries -> xhr.RequestLog
+
+--

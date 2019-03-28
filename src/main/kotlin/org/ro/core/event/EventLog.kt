@@ -1,5 +1,6 @@
 package org.ro.core.event
 
+import com.lightningkite.kotlin.observable.list.observableListOf
 import org.ro.Application
 import org.ro.handler.Dispatcher
 import kotlin.js.Date
@@ -12,7 +13,7 @@ import kotlin.js.Date
  * @See https://en.wikipedia.org/wiki/Proxy_pattern
  */
 object EventLog {
-    var log = mutableListOf<LogEntry>()
+    var log = observableListOf<LogEntry>()
 
     fun start(url: String, method: String, body: String = "", obs: ILogEventObserver? = null): LogEntry {
         val entry = LogEntry(url, method, body)

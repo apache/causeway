@@ -10,7 +10,6 @@ import pl.treksoft.kvision.i18n.I18n.tr
 import pl.treksoft.kvision.navbar.Nav.Companion.nav
 import pl.treksoft.kvision.navbar.Navbar
 import pl.treksoft.kvision.navbar.NavbarType
-import pl.treksoft.kvision.utils.px
 
 class RoMenuBar : Navbar() {
 
@@ -19,7 +18,8 @@ class RoMenuBar : Navbar() {
             height = CssSize(10, UNIT.mm)
             minHeight = CssSize(10, UNIT.mm)
             maxHeight = CssSize(10, UNIT.mm)
-            paddingLeft = 0.px
+            paddingLeft = CssSize(0, UNIT.mm)
+            paddingTop = CssSize(0, UNIT.mm)
             nav {
                 add(buildMainEntry())
             }
@@ -28,10 +28,22 @@ class RoMenuBar : Navbar() {
 
     private fun buildMainEntry(): DropDown {
         val mainMenu = buildMenuEntry("Main", iconName = "fa-eye")  // fa-ankh
+
         val link = Link(tr("Connect ..."), icon = "fa-server").onClick {
             LoginPrompt().open()
         }
         mainMenu.add(link)
+
+        val log = Link(tr("Show Event Log"), icon = "fa-history").onClick {
+            RoView.addTab(tr("Event Log"), EventLogTable(), "fa-history")
+        }
+        mainMenu.add(log)
+
+        val sample = Link(tr("Sample"), icon = "fa-clone").onClick {
+            RoView.addTab(tr("Sample"), SampleTable(), "fa-clone")
+        }
+        mainMenu.add(sample)
+
         return mainMenu
     }
 
@@ -60,11 +72,15 @@ class RoMenuBar : Navbar() {
     }
 
     private fun buildMenuEntry(title: String, iconName: String? = null): DropDown {
-        return DropDown(tr(title), icon = iconName, forNavbar = true)
+        val label = tr(title)
+        val icon = iconName ?: "fa-bolt"
+        return DropDown(label, icon = icon, forNavbar = true)
     }
 
     private fun buildMenuAction(action: String, iconName: String? = null): Link {
-        return Link(tr(action), icon = "fa-bolt")
+        val label = tr(action)
+        val icon = iconName ?: "fa-bolt" 
+        return Link(label, icon = icon)
     }
 
 }

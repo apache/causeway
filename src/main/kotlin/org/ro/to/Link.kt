@@ -48,14 +48,8 @@ data class Link(val rel: String = "",
 
     fun argumentsAsBody(): String {
         val args = argMap()!!
-        var answer = "{"
         val arg1 = args.get("script")!!
-        answer += arg1.asBody()
-        answer += ","
         val arg2 = args.get("parameters")!!
-        answer += arg2.asBody()
-        answer += "}"
-        console.log("[Link.argumentsAsBody] $answer")
-        return answer
+        return "{" + arg1.asBody() + "," + arg2.asBody() + "}"
     }
 }

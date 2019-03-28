@@ -69,7 +69,7 @@ class LogEntry(var url: String, var method: String? = null, var request: String 
         if (observer != null) {
             observer!!.update(this)
         } else {
- //           console.log("[$url hasObserver=false]")
+            //           console.log("[$url hasObserver=false]")
         }
     }
 
@@ -148,9 +148,14 @@ class LogEntry(var url: String, var method: String? = null, var request: String 
     fun isClosedView(): Boolean {
         return ImageRepository.TimesIcon == icon
     }
-    
+
     fun isError(): Boolean {
         return fault != null
+    }
+
+    fun match(search: String?): Boolean {
+       //FIXME
+        return true 
     }
 
 }
