@@ -2,6 +2,8 @@ package org.ro.view
 
 import org.ro.core.Menu
 import org.ro.core.MenuEntry
+import org.ro.view.table.EventLogTab
+import org.ro.view.table.EventLogTable
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.dropdown.DropDown
@@ -27,22 +29,23 @@ class RoMenuBar : Navbar() {
     }
 
     private fun buildMainEntry(): DropDown {
-        val mainMenu = buildMenuEntry("Main", iconName = "fa-eye")  // fa-ankh
+        val mainMenu = buildMenuEntry("Main", iconName = "fas fa-crow")  // fa-eye wcro
 
         val link = Link(tr("Connect ..."), icon = "fa-server").onClick {
             LoginPrompt().open()
         }
         mainMenu.add(link)
 
-        val log = Link(tr("Show Event Log"), icon = "fa-history").onClick {
-            RoView.addTab(tr("Event Log"), EventLogTable(), "fa-history")
-        }
-        mainMenu.add(log)
-
         val sample = Link(tr("Sample"), icon = "fa-clone").onClick {
             RoView.addTab(tr("Sample"), SampleTable(), "fa-clone")
         }
         mainMenu.add(sample)
+
+        val log = Link(tr("EventLog Table"), icon = "fa-eye").onClick {
+            val tableSpec = EventLogTab().csList
+            RoView.addTab(tr("EventLog Table"), EventLogTable(tableSpec), "fa-eye")
+        }
+        mainMenu.add(log)
 
         return mainMenu
     }

@@ -1,16 +1,20 @@
 package org.ro.core.event
 
 import org.ro.view.ImageRepository
+import org.ro.view.table.ActionMenu
+import pl.treksoft.kvision.html.Icon
 import pl.treksoft.kvision.types.Date
 
-class LogEntry(var url: String, var method: String? = null, var request: String = "") {
-    private var icon: Any? = null
+class LogEntry(val url: String, val method: String? = null, val request: String = "") {
+    var icon: Icon? = null
+    var menu: ActionMenu? = null
 
     init {
-        icon = ImageRepository.YellowIcon
+        icon = Icon("fa-play-circle")
+        menu = ActionMenu("fa-ellipsis-h")
     }
 
-    private var urlTitle: String? = null
+    var urlTitle: String? = null
 
     init {
         urlTitle = stripHostPort(url)
@@ -20,24 +24,24 @@ class LogEntry(var url: String, var method: String? = null, var request: String 
     var start: Int = createdAt.getMilliseconds()
     var updatedAt: Date? = null
     private var lastAccessedAt: Date? = null
-    private var offset = 0
+    var offset = 0
     private var fault: String? = null
-    private var requestLength = 0
+    var requestLength = 0
 
     init {
         requestLength = request.length
     }
 
-    private var responseLength: Int? = null
+    var responseLength: Int? = null
     var response = ""
-    private var duration = 0
+    var duration = 0
     var obj: Any? = null
     var cacheHits = 0
     var observer: ILogEventObserver? = null
 
     // alternative constructor for UI events (eg. from user interaction)
     constructor(description: String) : this(description, null, "") {
-        icon = ImageRepository.BlueIcon
+        icon = Icon("fa-info-circle")
     }
 
     private fun calculate() {
@@ -52,12 +56,12 @@ class LogEntry(var url: String, var method: String? = null, var request: String 
         updatedAt = Date()
         calculate()
         fault = error
-        icon = ImageRepository.RedIcon
+        icon = Icon("fa-times-circle")
     }
 
     fun setClose() {
         updatedAt = Date()
-        icon = ImageRepository.TimesIcon
+        icon = Icon("fa-times-circle")
     }
 
     fun setSuccess(response: String) {
@@ -65,7 +69,7 @@ class LogEntry(var url: String, var method: String? = null, var request: String 
         calculate()
         this.response = response //.replace("\r\n", "")
         responseLength = response.length
-        icon = ImageRepository.GreenIcon
+        icon = Icon("fa-check-circle")
         if (observer != null) {
             observer!!.update(this)
         } else {
@@ -89,7 +93,7 @@ class LogEntry(var url: String, var method: String? = null, var request: String 
      * This is for access from the views only.
      * DomainObjects have to use retrieveResponse,
      * since we want to have access statistics
-     * and a cache fun.
+     * and a cache function.
      * @return
      */
     fun getResponse(): String {
@@ -154,8 +158,11 @@ class LogEntry(var url: String, var method: String? = null, var request: String 
     }
 
     fun match(search: String?): Boolean {
-       //FIXME
-        return true 
+        return search?.let {
+            url?.contains(it, true) ?: false ||
+                    response?.contains(it, true) ?: false ||
+                    method?.contains(it, true) ?: false
+        } ?: true
     }
 
 }

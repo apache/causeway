@@ -2,25 +2,6 @@ package org.ro.core
 
 class Utils {
 
-    fun deCamel(input: String): String {
-        var output = ""
-        var i = 0
-        for (c in input) {
-            if (i == 0) {
-                output += c.toUpperCase()
-            } else {
-                val o = if (c.toUpperCase() == c) {
-                    " $c"
-                } else {
-                    c.toString()
-                }
-                output += o
-            }
-            i++
-        }
-        return output
-    }
-
     fun getSelfHref(jsonStr: String): String? {
         val startStr = "\"rel\": \"self\","
         val stopStr = "\"method\":"
@@ -57,6 +38,27 @@ class Utils {
     fun quoteNulls(input: String): String {
         val output = input.replace(": null", ": \"null\"")
         return output
+    }
+
+    companion object {
+        fun deCamel(input: String): String {
+            var output = ""
+            var i = 0
+            for (c in input) {
+                if (i == 0) {
+                    output += c.toUpperCase()
+                } else {
+                    val o = if (c.toUpperCase() == c) {
+                        " $c"
+                    } else {
+                        c.toString()
+                    }
+                    output += o
+                }
+                i++
+            }
+            return output
+        }
     }
 
 }

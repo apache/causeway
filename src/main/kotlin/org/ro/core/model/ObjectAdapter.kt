@@ -74,7 +74,7 @@ if (this.hasOwnProperty("name")) {
     tag = "noNameNorClassname"
 }
 */
-        tag = Utils().deCamel(tag)
+        tag = Utils.deCamel(tag)
         return tag
     }
 

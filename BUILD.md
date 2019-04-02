@@ -1,3 +1,30 @@
+## Build
+Build is done via gradle - under Windows with gitbash:
+
+* ./gradlew.bat tasks # list all gradle tasks
+* ./gradlew.bat webpack-budle # create main.bundle.js
+* ./gradlew.bat test --exclude-task npm-install
+ 
+Internally gradle uses npm for the JS part.
+
+ npm --verbose 
+ 
+ If task npm-install hangs, try
+ 
+ ./gradlew.bat npm-install --info --debug --stacktrace
+ 
+
+Helps in identifying thing that may go wrong (eg. due to proxy settings).
+ 
+
+
+## Setup
+proxy settings:
+https://jjasonclark.com/how-to-setup-node-behind-web-proxy/
+https://gist.github.com/EudesSilva/0329645b9c258e0495544b8a5ccd1454
+
+
+
 # Toolchain
 * Apache Gradle 
 * Google Chrome (72.0.3626.81)

@@ -83,7 +83,7 @@ class ObjectList : Visible {
         } else {
             title = "noClassnameNorName"
         }  */
-        title = Utils().deCamel(title)
+        title = Utils.deCamel(title)
         return "$title (${length()})"
     }
 

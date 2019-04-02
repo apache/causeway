@@ -1,4 +1,4 @@
-package org.ro.view.tab
+package org.ro.view.table
 
 import org.ro.core.event.LogEntry
 import org.ro.core.model.Visible

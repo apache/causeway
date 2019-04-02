@@ -27,7 +27,7 @@ class ActionPrompt(val action: Action) : Command {
     }
 
     private fun buildLabel(): String {
-        val label = Utils().deCamel(action.id);
+        val label = Utils.deCamel(action.id);
         return "Execute: $label"
     }
 

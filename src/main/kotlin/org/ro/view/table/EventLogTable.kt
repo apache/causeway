@@ -1,4 +1,4 @@
-package org.ro.view
+package org.ro.view.table
 
 import org.ro.core.event.EventLog
 import org.ro.core.event.LogEntry
@@ -10,8 +10,9 @@ import pl.treksoft.kvision.form.check.RadioGroup.Companion.radioGroup
 import pl.treksoft.kvision.form.text.TextInput
 import pl.treksoft.kvision.form.text.TextInput.Companion.textInput
 import pl.treksoft.kvision.form.text.TextInputType
+import pl.treksoft.kvision.html.Icon
 import pl.treksoft.kvision.html.Icon.Companion.icon
-import pl.treksoft.kvision.modal.Confirm
+import pl.treksoft.kvision.modal.Alert
 import pl.treksoft.kvision.panel.FlexAlignItems
 import pl.treksoft.kvision.panel.FlexWrap
 import pl.treksoft.kvision.panel.HPanel.Companion.hPanel
@@ -21,87 +22,66 @@ import pl.treksoft.kvision.table.HeaderCell
 import pl.treksoft.kvision.table.Row
 import pl.treksoft.kvision.table.Table
 import pl.treksoft.kvision.table.TableType
+import pl.treksoft.kvision.types.toStringF
 import pl.treksoft.kvision.utils.px
+import kotlin.js.Date
 
 enum class SortBy {
-    FN, LN, E, F
+    F
 }
 
-class EventLogTable : SimplePanel() {
+class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
 
     private val dataContainer: DataContainer<LogEntry, Row, Table>
     private lateinit var search: TextInput
     private lateinit var types: RadioGroup
-    private var sort = SortBy.FN
+    val table = Table(types = setOf(TableType.STRIPED, TableType.HOVER))
+    private var sort = SortBy.F
         set(value) {
             field = value
             dataContainer.update()
         }
 
     init {
-        padding = 10.px
-
-        val table = Table(types = setOf(TableType.STRIPED, TableType.HOVER)) {
-            addHeaderCell(HeaderCell("urlTitle") {
-                setEventListener {
-                    click = {
-                        sort = SortBy.FN
-                    }
-                }
-            })
-            addHeaderCell(HeaderCell("CreatedAt") {
-                setEventListener {
-                    click = {
-                        sort = SortBy.LN
-                    }
-                }
-            })
-            addHeaderCell(HeaderCell("UpdatedAt") {
-                setEventListener {
-                    click = {
-                        sort = SortBy.E
-                    }
-                }
-            })
-            addHeaderCell(HeaderCell("") {
-                setEventListener {
-                    click = {
-                        sort = SortBy.F
-                    }
-                }
-            })
-            addHeaderCell(HeaderCell(""))
+        for (cd: ColDef in tableSpec) {
+            val hc = HeaderCell(cd.name)
+            table.addHeaderCell(hc)
         }
 
         hPanel(FlexWrap.WRAP, alignItems = FlexAlignItems.CENTER, spacing = 20) {
             search = textInput(TextInputType.SEARCH) {
                 placeholder = "Search ..."
             }
-            types = radioGroup(listOf("all" to "All", "fav" to "Favourites"), "all", inline = true) {
+
+            types = radioGroup(listOf("all" to "All", "err" to "Errors", "scr" to "Screen"), "all", inline = true) {
                 marginBottom = 0.px
             }
+            // types can not be removed or created Empty - why?
         }
         val model = EventLog.log
         val factoryBlock = { logEntry: LogEntry, index: Int, _: Any ->
             Row {
-                cell(logEntry.url)
-                cell(logEntry.createdAt.toDateString())
-                cell {
-                    icon("fa-times") {
-                        title = "Delete"
-                        setEventListener {
-                            click = { e ->
-                                e.stopPropagation()
-                                Confirm.show("Are you sure?", "Do you want to delete this address?") {
-                                    //                                    EditPanel.delete(index)
+                for (cd: ColDef in tableSpec) {
+                    val p = cd.property
+                    val v = p.get(logEntry)
+                    when (v) {
+                        is String -> cell(v)
+                        is Date -> cell(v.toStringF("HH:mm:ss.SSS"))
+                        is Icon -> cell { icon(v.icon) } //IMPROVE use a Custom class holding just the name instead of Icon
+//                        is ActionMenu -> cell { icon(v.iconName) }
+                        is ActionMenu -> cell {
+                            icon(v.iconName) {
+                                title = "View Details"
+                                setEventListener {
+                                    click = { e ->
+                                        e.stopPropagation()
+                                        Alert.show("Details", logEntry.url + "\n" + logEntry.response) {
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
-                }
-                setEventListener {
-                    click = {
-                        //                        EditPanel.edit(index)
+                        else -> cell(v.toString())
                     }
                 }
             }
@@ -119,10 +99,8 @@ class EventLogTable : SimplePanel() {
         dataContainer = dataContainer(
                 model, factoryBlock, table, filter = filterBlock, sorter = {
             when (sort) {
-                SortBy.FN -> it.url.toLowerCase()
-                SortBy.LN -> it.method?.toLowerCase()
-                SortBy.E -> it.cacheHits
-                SortBy.F -> it.response
+                SortBy.F -> it.offset
+                else -> it.cacheHits
             }
         }, sorterType = sorterTypeBlock
         )
@@ -136,7 +114,6 @@ class EventLogTable : SimplePanel() {
                 dataContainer.update()
             }
         }
-
     }
-    
+
 }

@@ -4,7 +4,6 @@ import org.ro.Application
 import org.ro.core.event.EventLog
 import org.ro.core.event.LogEntry
 import org.ro.core.model.Visible
-import org.ro.view.tab.RoTabBar
 
 /**
  * Single point of contact for view components:
@@ -22,7 +21,7 @@ object DisplayManager {
         val title: String = viewable.tag()
         val le: LogEntry? = EventLog.find(title)
         if (le == null) {
-            getTabBar()!!.addView(viewable)
+//            getTabBar()!!.addView(viewable)
             EventLog.add(title)
         } else {
             le.cacheHits += 1
@@ -35,10 +34,6 @@ object DisplayManager {
     }
 
     // view convenience funs
-    private fun getTabBar(): RoTabBar? {
-        //return Application.view.tabs
-        return null
-    }
 
     // view operations
 

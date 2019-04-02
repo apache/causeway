@@ -19,7 +19,6 @@ Build via
 mvn clean install -DskipTests
 ```
 
-
 # Dealing with CORS
 
 Nicely done introduction: 
@@ -68,5 +67,5 @@ Add to webapp\src\main\webapp\WEB-INF\web.xml
 ## Start the Backend
 ```bash
 cd webapp
-mvn jetty:run -Djetty.port=8080
-``` 
+mvn -Djetty.port=8080 jetty:run -DPROTOTYPING
+```
