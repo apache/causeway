@@ -18,7 +18,7 @@ object EventLog {
     fun start(url: String, method: String, body: String = "", obs: ILogEventObserver? = null): LogEntry {
         val entry = LogEntry(url, method, body)
         entry.observer = obs
-        this.log.add(entry)
+        log.add(entry)
         updateStatus(entry)
         return entry
     }
@@ -26,18 +26,18 @@ object EventLog {
     fun add(description: String) {
         val entry = LogEntry(description)
         entry.createdAt = Date()
-        this.log.add(entry)
+        log.add(entry)
         updateStatus(entry)
     }
 
     fun update(description: String): LogEntry? {
-        val entry = this.find(description)
+        val entry = find(description)
         entry!!.updatedAt = Date()
         return entry
     }
 
     fun close(url: String) {
-        val entry = this.findView(url)
+        val entry = findView(url)
         if (null == entry) {
             // Happens with 'Log Entries (x)'
         } else {
@@ -47,7 +47,7 @@ object EventLog {
     }
 
     fun end(url: String, response: String): LogEntry? {
-        val entry: LogEntry? = this.find(url)
+        val entry: LogEntry? = find(url)
         if (entry != null) {
             entry.setSuccess(response)
             updateStatus(entry)
@@ -56,7 +56,7 @@ object EventLog {
     }
 
     fun fault(url: String, fault: String) {
-        val entry: LogEntry? = this.find(url)
+        val entry: LogEntry? = find(url)
         entry!!.setError(fault)
         updateStatus(entry)
     }
@@ -97,7 +97,7 @@ object EventLog {
     }
 
     internal fun findExact(url: String): LogEntry? {
-        for (le in this.log) {
+        for (le in log) {
             if (le.url == url) {
                 return le
             }
