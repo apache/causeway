@@ -1,10 +1,8 @@
 package org.ro.core.event
 
-
 import org.ro.to.RESTFUL
 import org.ro.urls.RESTFUL_SERVICES
 import kotlin.test.*
-
 
 class EventLogTest {
 
@@ -30,24 +28,24 @@ class EventLogTest {
         EventLog.start(upUrl, myLast)
         // then
         val currentSize: Int = EventLog.log.size
-        assertEquals(4 + initialSize, currentSize)
+        assertEquals(4 + initialSize, currentSize) 
 
         // Entries with the same key can be written, but when updated or retrieved the first (oldest) entry should be used
         //when
         val le2: LogEntry? = EventLog.find(selfUrl)
         //then
-        assertNotNull(le2)
-        assertEquals(le2.method, myFirst, "")
-        assertEquals(le2.response.length, selfStr.length)
+        assertNotNull(le2)                   
+        assertEquals(le2.method, myFirst, "")  
+        assertEquals(le2.response.length, selfStr.length)  
         //when
         val leU: LogEntry? = EventLog.find(upUrl)
         //then
-        assertEquals(leU!!.method, myFirst)
+        assertEquals(leU!!.method, myFirst)  
         assertEquals(leU.response.length, upStr.length)
     }
 
     @Test
-    fun testView() {
+    fun testFindView() {
         val h1 = "http://localhost:8080/restful/objects/simple.SimpleObject/51/object-layout"
         val h2 = "http://localhost:8080/restful/objects/simple.SimpleObject/object-layout"
         val i1 = "Test (1)"
@@ -71,6 +69,8 @@ class EventLogTest {
         assertNotNull(le4)
 
         EventLog.close(i1)
+        console.log("[EventLogTest.testFindView] $i1")
+
         assertTrue(le4.isClosedView())
     }
 

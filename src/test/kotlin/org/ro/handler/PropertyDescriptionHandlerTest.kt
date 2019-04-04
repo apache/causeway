@@ -15,17 +15,16 @@ class PropertyDescriptionHandlerTest {
     @Test
     fun testService() {
         if (TestUtil().isSimpleAppAvailable()) {
-
             // given
-            TestUtil().invokeFixtureScript()
             val str = FR_PROPERTY_DESCRIPTION.str
             val url = FR_PROPERTY_DESCRIPTION.url
             // when
             val xp = LogEntry(url, "GET")
             xp.response = str
-            //EventLog.add(xp)
+            EventLog.add(url)
+            EventLog.end(url,str)
             Dispatcher.handle(xp)
-            TestUtil().wait(1000);
+            console.log("[PDHT.testService] $url")
             val act: LogEntry? = EventLog.find(url)
             assertNotNull(act)
             assertNotNull(act.observer)

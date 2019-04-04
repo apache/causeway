@@ -20,7 +20,7 @@ data class FieldSetLayout(val name: String? = null,
         var fi: FormItem?
         val form: org.ro.view.Form = org.ro.view.Form("new Form")
         for (p in property) {
-            val label = p.named!!
+            val label = p.named ?: "label not set"
             val type = "Text"// if mutiline use a different type of input p.multiLine
             val content = "sample content"
             fi = FormItem(label, type, content)

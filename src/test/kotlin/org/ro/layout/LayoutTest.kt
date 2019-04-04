@@ -54,7 +54,7 @@ class LayoutTest {
             // when
             val properties = lo.properties
             // then
-            assertNotNull(properties)
+            assertNotNull(properties)  // (1)
             assertEquals(4, properties.size)
             assertEquals("className", properties[0].id)
             assertEquals("fixtureScriptClassName", properties[1].id)

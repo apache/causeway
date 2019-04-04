@@ -20,7 +20,7 @@ object Dispatcher {
     private var eighth = PropertyDescriptionHandler()
     private var nineth = MemberHandler()
     private var tenth = HttpErrorHandler()
-    
+
 
     private var last: DefaultHandler = DefaultHandler()
 
@@ -40,6 +40,8 @@ object Dispatcher {
     }
 
     fun handle(logEntry: LogEntry) {
+        val cls = delegate::class.simpleName
+        console.log("[Dispatcher.handle] ${cls}")
         delegate.handle(logEntry)
     }
 }

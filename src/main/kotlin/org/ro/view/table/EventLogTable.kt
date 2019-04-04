@@ -1,6 +1,7 @@
 package org.ro.view.table
 
 import org.ro.core.event.EventLog
+import org.ro.core.event.EventState
 import org.ro.core.event.LogEntry
 import pl.treksoft.kvision.data.DataContainer
 import pl.treksoft.kvision.data.DataContainer.Companion.dataContainer
@@ -10,7 +11,6 @@ import pl.treksoft.kvision.form.check.RadioGroup.Companion.radioGroup
 import pl.treksoft.kvision.form.text.TextInput
 import pl.treksoft.kvision.form.text.TextInput.Companion.textInput
 import pl.treksoft.kvision.form.text.TextInputType
-import pl.treksoft.kvision.html.Icon
 import pl.treksoft.kvision.html.Icon.Companion.icon
 import pl.treksoft.kvision.modal.Alert
 import pl.treksoft.kvision.panel.FlexAlignItems
@@ -67,8 +67,7 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
                     when (v) {
                         is String -> cell(v)
                         is Date -> cell(v.toStringF("HH:mm:ss.SSS"))
-                        is Icon -> cell { icon(v.icon) } //IMPROVE use a Custom class holding just the name instead of Icon
-//                        is ActionMenu -> cell { icon(v.iconName) }
+                        is EventState -> cell { icon(v.iconName) } 
                         is ActionMenu -> cell {
                             icon(v.iconName) {
                                 title = "View Details"

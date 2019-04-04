@@ -1,16 +1,23 @@
 package org.ro.core.event
 
-import org.ro.view.ImageRepository
 import org.ro.view.table.ActionMenu
-import pl.treksoft.kvision.html.Icon
 import pl.treksoft.kvision.types.Date
 
+enum class EventState(val id: String, val iconName: String) {
+    INITIAL("INITIAL", "fa-power-off") ,
+    RUNNING("RUNNING", "fa-play-circle"),
+    ERROR("ERROR", "fa-times-circle"),
+    SUCCESS("SUCCESS", "fa-check-circle"),
+    VIEW("VIEW", "fa-info-circle"),
+    CLOSED("CLOSED", "fa-times-circle") //TODO should be different from ERROR?
+}
+
 class LogEntry(val url: String, val method: String? = null, val request: String = "") {
-    var icon: Icon? = null
+    var state = EventState.INITIAL
     var menu: ActionMenu? = null
 
     init {
-        icon = Icon("fa-play-circle")
+        state = EventState.RUNNING
         menu = ActionMenu("fa-ellipsis-h")
     }
 
@@ -41,7 +48,7 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
 
     // alternative constructor for UI events (eg. from user interaction)
     constructor(description: String) : this(description, null, "") {
-        icon = Icon("fa-info-circle")
+        state = EventState.VIEW
     }
 
     private fun calculate() {
@@ -56,12 +63,12 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
         updatedAt = Date()
         calculate()
         fault = error
-        icon = Icon("fa-times-circle")
+        state = EventState.ERROR
     }
 
     fun setClose() {
         updatedAt = Date()
-        icon = Icon("fa-times-circle")
+        state = EventState.CLOSED
     }
 
     fun setSuccess(response: String) {
@@ -69,7 +76,7 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
         calculate()
         this.response = response //.replace("\r\n", "")
         responseLength = response.length
-        icon = Icon("fa-check-circle")
+        state = EventState.SUCCESS
         if (observer != null) {
             observer!!.update(this)
         } else {
@@ -150,7 +157,7 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
     }
 
     fun isClosedView(): Boolean {
-        return ImageRepository.TimesIcon == icon
+        return state == EventState.CLOSED
     }
 
     fun isError(): Boolean {
@@ -158,9 +165,10 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
     }
 
     fun match(search: String?): Boolean {
+        // TODO  dismantle train.wreck
         return search?.let {
-            url?.contains(it, true) ?: false ||
-                    response?.contains(it, true) ?: false ||
+            url.contains(it, true) ?: false ||
+                    response.contains(it, true) ?: false ||
                     method?.contains(it, true) ?: false
         } ?: true
     }

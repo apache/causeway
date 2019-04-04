@@ -9,16 +9,16 @@ A [Naked Objects for .NET](http://nakedobjects.net/home/index.shtml) application
 
 ## How will the UI look like?
 
-CAUTION: Screenshots are from a previous version (roViz, written in ActionScript)  
+CAUTION: Screenshots are partly from a previous version (roViz, written in ActionScript)  
 
 TIP: After entering url, userId, password in the Connect Dialog (Main -> Connect), the menu gets populated. Actions (here: SimpleObjects.listAll) can be selected and a Tab with a table is displayed:
 
-image::./images/SimpleObjects.png[Preview]
+![Preview](./images/SimpleObjects.png)
 
 TIP: Clicking on the StatusBar at the bottom will create another tab showing logged XmlHttpRequests:
 
-image::./images/LogEntries.png[Preview2]
+![Preview2](./images/LogEntries.png)
 
-TIP: Remote applications (here: http://semat.ofbizian.com/[SEMAT]) can be used as well, and even mixed with local apps. 
+TIP: Remote applications (here: [SEMAT](http://semat.ofbizian.com/)) can be used as well, and even mixed with local apps. 
 
-image::./images/SEMAT.png[Remote Application]
+![Remote Application](./images/SEMAT.png)

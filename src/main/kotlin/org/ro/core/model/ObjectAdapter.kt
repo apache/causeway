@@ -1,8 +1,7 @@
 package org.ro.core.model
 
 import org.ro.core.Utils
-import org.ro.view.ImageRepository
-import pl.treksoft.kvision.html.Image
+import pl.treksoft.kvision.html.Icon
 import pl.treksoft.kvision.utils.Object
 
 /**
@@ -13,14 +12,14 @@ import pl.treksoft.kvision.utils.Object
 class ObjectAdapter(var adaptee: dynamic,
                     private var label: String? = null,
                     private var typeSpec: String? = null,
-                    private var icon: Image? = null) : Visible {
+                    private var icon: Icon? = null) : Visible {
 
     init {
         if (typeSpec == null) {
             typeSpec = "String"
         }
         if (icon == null) {
-            icon = ImageRepository.ObjectIcon
+            icon = Icon("fa-box")
         }
         if (label == null) {
             label = "label not set"

@@ -6,7 +6,7 @@ class EventLogTab {
     val csList = mutableListOf<ColDef>()
 
     init {
-        csList.add(ColDef(LogEntry::icon, 2, " ", null))
+        csList.add(ColDef(LogEntry::state, 2, " ", null))
         csList.add(ColDef(LogEntry::urlTitle, 42, "Url", "url"))
         csList.add(ColDef(LogEntry::method, 5))
         csList.add(ColDef(LogEntry::createdAt, 8, "Created", null))
