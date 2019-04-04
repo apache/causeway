@@ -29,7 +29,7 @@ class RoMenuBar : Navbar() {
     }
 
     private fun buildMainEntry(): DropDown {
-        val mainMenu = buildMenuEntry("Main", iconName = "fas fa-crow")  // fa-eye wcro
+        val mainMenu = buildMenuEntry("Main", iconName = "fa-bars")  
 
         val link = Link(tr("Connect ..."), icon = "fa-server").onClick {
             LoginPrompt().open()
@@ -41,9 +41,9 @@ class RoMenuBar : Navbar() {
         }
         mainMenu.add(sample)
 
-        val log = Link(tr("EventLog Table"), icon = "fa-eye").onClick {
+        val log = Link(tr("Log Entries"), icon = "fa-history").onClick {
             val tableSpec = EventLogTab().csList
-            RoView.addTab(tr("EventLog Table"), EventLogTable(tableSpec), "fa-eye")
+            RoView.addTab(tr("Log Entries"), EventLogTable(tableSpec), "fa-history")
         }
         mainMenu.add(log)
 

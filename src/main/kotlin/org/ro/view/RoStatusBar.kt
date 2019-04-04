@@ -33,8 +33,9 @@ class RoStatusBar : Navbar() {
     }
 
     fun update(le: LogEntry?) {
-        urlLabel.content = le?.url
-  //      navbar().label  = le?.url 
+        urlLabel.content = le?.urlTitle
+        urlLabel.title = le?.url
+        enableTooltip()
     }
 
 }
