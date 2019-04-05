@@ -23,7 +23,6 @@ import org.ro.to.TObject
 class ListObserver : ILogEventObserver {
     var list = ObjectList()
 
-    //TODO rework: method too complex, uses JsonObj (which is not available anymore)
     // Handlers should set object into le after successful parsing
     override fun update(le: LogEntry) {
         val obj = le.obj

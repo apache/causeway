@@ -69,9 +69,9 @@ class RoDialog(
     }
 
     private fun close() {
-        this.toggle()
+        toggle()
         super.remove(this)
-        this.dispose()
+        dispose()
     }
 
 }
