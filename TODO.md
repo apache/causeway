@@ -3,7 +3,6 @@
 * PropertyDescriptionHandlerTest ->
 * 
 ## Implement Features
-* DropDown Menu for table rows (see: EventLogTable.factoryBlock->ActionMenu)
 * Link Button for Objects
 * Generic Tables (ResultList etc.)
 * List<Member> ^= TObject?

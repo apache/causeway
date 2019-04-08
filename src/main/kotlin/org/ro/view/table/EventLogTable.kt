@@ -3,15 +3,23 @@ package org.ro.view.table
 import org.ro.core.event.EventLog
 import org.ro.core.event.EventState
 import org.ro.core.event.LogEntry
+import org.ro.view.IconManager
+import org.ro.view.RoView
+import pl.treksoft.kvision.core.CssSize
+import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.data.DataContainer
 import pl.treksoft.kvision.data.DataContainer.Companion.dataContainer
 import pl.treksoft.kvision.data.SorterType
+import pl.treksoft.kvision.dropdown.ContextMenu
+import pl.treksoft.kvision.dropdown.Header.Companion.header
 import pl.treksoft.kvision.form.check.RadioGroup
 import pl.treksoft.kvision.form.check.RadioGroup.Companion.radioGroup
 import pl.treksoft.kvision.form.text.TextInput
 import pl.treksoft.kvision.form.text.TextInput.Companion.textInput
 import pl.treksoft.kvision.form.text.TextInputType
 import pl.treksoft.kvision.html.Icon.Companion.icon
+import pl.treksoft.kvision.html.Link.Companion.link
+import pl.treksoft.kvision.i18n.I18n
 import pl.treksoft.kvision.modal.Alert
 import pl.treksoft.kvision.panel.FlexAlignItems
 import pl.treksoft.kvision.panel.FlexWrap
@@ -43,6 +51,8 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
         }
 
     init {
+        paddingTop = CssSize(0, UNIT.mm)
+
         for (cd: ColDef in tableSpec) {
             val hc = HeaderCell(cd.name)
             table.addHeaderCell(hc)
@@ -53,7 +63,12 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
                 placeholder = "Search ..."
             }
 
-            types = radioGroup(listOf("all" to "All", "err" to "Errors", "scr" to "Screen"), "all", inline = true) {
+            types = radioGroup(listOf(
+                    "all" to "All",
+                    "err" to "Errors",
+                    "scr" to "Screen"),
+                    "all",
+                    inline = true) {
                 marginBottom = 0.px
             }
             // types can not be removed or created Empty - why?
@@ -65,12 +80,13 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
                     val p = cd.property
                     val v = p.get(logEntry)
                     when (v) {
-                        is String -> {val c = cell(v)
+                        is String -> {
+                            val c = cell(v)
                             title = "A tooltip: $v"
                             enableTooltip()
                         }
                         is Date -> cell(v.toStringF("HH:mm:ss.SSS"))
-                        is EventState -> cell { icon(v.iconName) } 
+                        is EventState -> cell { icon(v.iconName) }
                         is ActionMenu -> cell {
                             icon(v.iconName) {
                                 title = "View Details"
@@ -116,6 +132,27 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
                 dataContainer.update()
             }
         }
+
+        val contextMenu = ContextMenu {
+            header(I18n.tr("Actions affecting Tab"))  
+            val title = "Close"
+            val iconName = IconManager.find(title)
+            link(I18n.tr(title), icon = iconName) {
+                setEventListener {
+                    click = { e ->
+                        e.stopPropagation()
+                        removeTab()
+                        this@ContextMenu.hide()
+                    }
+                }
+            }
+        }
+        setContextMenu(contextMenu)
+
+    }
+    
+    fun removeTab() {
+        RoView.remove(this)
     }
 
 }

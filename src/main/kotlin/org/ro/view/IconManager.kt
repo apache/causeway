@@ -19,7 +19,8 @@ object IconManager {
             "Prototyping" to "fa-object-group",
             "Objects" to "fa-cubes",
             "Log" to "fa-history",
-            "Connect" to "fa-server")
+            "Connect" to "fa-server",
+            "Close" to "fa-times")
 
     fun find(query: String): String {
         val actionTitle = Utils.deCamel(query)
