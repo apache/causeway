@@ -4,6 +4,12 @@
 * 
 ## Implement Features
 * Link Button for Objects
+cell {
+                        add(button("Delete") {
+                            style = ButtonStyle.INFO
+                        })
+                    }
+
 * Generic Tables (ResultList etc.)
 * List<Member> ^= TObject?
 * direct Accessors ^= Methods  / indirect Accessors ^= Map.get(byName), sufficient for use in tables 

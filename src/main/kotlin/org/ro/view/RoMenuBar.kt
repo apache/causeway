@@ -2,8 +2,8 @@ package org.ro.view
 
 import org.ro.core.Menu
 import org.ro.core.MenuEntry
-import org.ro.view.table.EventLogTab
-import org.ro.view.table.EventLogTable
+import org.ro.view.table.el.EventLogTab
+import org.ro.view.table.el.EventLogTable
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.html.Link
 import pl.treksoft.kvision.i18n.I18n.tr

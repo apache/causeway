@@ -1,10 +1,12 @@
-package org.ro.view.table
+package org.ro.view.table.el
 
 import org.ro.core.event.EventLog
 import org.ro.core.event.EventState
 import org.ro.core.event.LogEntry
 import org.ro.view.IconManager
 import org.ro.view.RoView
+import org.ro.view.table.ActionMenu
+import org.ro.view.table.ColDef
 import pl.treksoft.kvision.core.CssSize
 import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.data.DataContainer
@@ -17,10 +19,11 @@ import pl.treksoft.kvision.form.check.RadioGroup.Companion.radioGroup
 import pl.treksoft.kvision.form.text.TextInput
 import pl.treksoft.kvision.form.text.TextInput.Companion.textInput
 import pl.treksoft.kvision.form.text.TextInputType
+import pl.treksoft.kvision.html.Button.Companion.button
+import pl.treksoft.kvision.html.ButtonStyle
 import pl.treksoft.kvision.html.Icon.Companion.icon
 import pl.treksoft.kvision.html.Link.Companion.link
 import pl.treksoft.kvision.i18n.I18n
-import pl.treksoft.kvision.modal.Alert
 import pl.treksoft.kvision.panel.FlexAlignItems
 import pl.treksoft.kvision.panel.FlexWrap
 import pl.treksoft.kvision.panel.HPanel.Companion.hPanel
@@ -86,15 +89,18 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
                             enableTooltip()
                         }
                         is Date -> cell(v.toStringF("HH:mm:ss.SSS"))
-                        is EventState -> cell { icon(v.iconName) }
+                        is EventState -> cell {
+                            button(I18n.tr(logEntry.urlTitle.toString()), icon = v.iconName, style = ButtonStyle.LINK)
+                        }
                         is ActionMenu -> cell {
                             icon(v.iconName) {
                                 title = "View Details"
                                 setEventListener {
                                     click = { e ->
                                         e.stopPropagation()
-                                        Alert.show("Details", logEntry.url + "\n" + logEntry.response) {
-                                        }
+                                        //TODO use RoDialog, cf. ErrorAlert
+                                        EventLogDetail(logEntry).open()
+                                        //Alert.show("Details", logEntry.url + "\n" + logEntry.response) {     }
                                     }
                                 }
                             }
@@ -134,7 +140,7 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
         }
 
         val contextMenu = ContextMenu {
-            header(I18n.tr("Actions affecting Tab"))  
+            header(I18n.tr("Actions affecting Tab"))
             val title = "Close"
             val iconName = IconManager.find(title)
             link(I18n.tr(title), icon = iconName) {
@@ -150,7 +156,7 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
         setContextMenu(contextMenu)
 
     }
-    
+
     fun removeTab() {
         RoView.remove(this)
     }
