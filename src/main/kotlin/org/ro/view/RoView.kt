@@ -11,6 +11,7 @@ object RoView : TabPanel() {
         marginLeft = auto
         marginRight = auto
         marginTop = auto //CssSize(0, UNIT.mm)
+        marginBottom = auto
         maxHeight = 100.perc
     }
 }

@@ -7,7 +7,7 @@ class DefaultHandler : AbstractHandler(), IResponseHandler {
         return true
     }
 
-    override fun doHandle(jsonStr: String) {
+    override fun doHandle() {
         val url = logEntry.url
         console.log("[DefaultHandler.doHandle: $url]")
     }

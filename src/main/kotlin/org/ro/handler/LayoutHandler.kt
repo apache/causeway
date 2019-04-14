@@ -16,7 +16,7 @@ class LayoutHandler : AbstractHandler(), IResponseHandler {
         return answer;
     }
 
-    override fun doHandle(jsonStr: String) {
+    override fun doHandle() {
         val layout = logEntry.obj as Layout
         logEntry.obj = layout
     }

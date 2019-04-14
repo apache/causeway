@@ -16,7 +16,7 @@ class HttpErrorHandler : AbstractHandler(), IResponseHandler {
         return answer
     }
 
-    override fun doHandle(jsonStr: String) {
+    override fun doHandle() {
         val e = logEntry.obj as HttpError
         ErrorAlert(e).open()
     }

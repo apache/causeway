@@ -85,13 +85,15 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
     }
 
     fun initListObserver(): ListObserver {
-        observer = ListObserver()
-        return observer as ListObserver
+        val lo = ListObserver()
+        observer = lo
+        return lo
     }
 
     override fun toString(): String {
-        var s = "$url/n"
-        s += "$method/n"
+        var s = "url: $url\n"
+        s += "obj: $obj\n"
+        s += "obsever: $observer\n"
         return s
     }
 

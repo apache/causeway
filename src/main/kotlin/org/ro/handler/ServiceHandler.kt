@@ -17,7 +17,7 @@ class ServiceHandler : AbstractHandler(), IResponseHandler {
         return answer
     }
 
-    override fun doHandle(jsonStr: String) {
+    override fun doHandle() {
         val service = logEntry.obj as Service
         Menu.add(service)
     }

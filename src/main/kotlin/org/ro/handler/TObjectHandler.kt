@@ -16,7 +16,7 @@ class TObjectHandler : AbstractHandler(), IResponseHandler {
         return answer
     }
 
-    override fun doHandle(jsonStr: String) {
+    override fun doHandle() {
         val tObject = logEntry.obj  as TObject
         logEntry.obj = tObject
     }

@@ -18,7 +18,7 @@ class ResultListHandler : AbstractHandler(), IResponseHandler {
         return answer
     }
 
-    override fun doHandle(jsonStr: String) {
+    override fun doHandle() {
         val resultList = logEntry.obj as ResultList
         logEntry.obj = resultList
         val lo: ListObserver = logEntry.initListObserver()

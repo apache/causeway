@@ -8,7 +8,7 @@ class MemberHandler : AbstractHandler(), IResponseHandler {
     override fun canHandle(jsonStr: String): Boolean {
         var answer = false
         try {
-            val obj =parse(jsonStr)
+            val obj = parse(jsonStr)
             logEntry.obj = obj
             answer = true
         } catch (ex: Exception) {
@@ -16,7 +16,8 @@ class MemberHandler : AbstractHandler(), IResponseHandler {
         return answer
     }
 
-    override fun doHandle(jsonStr: String) {
+    override fun doHandle() {
+        console.log("[MemberHandler.doHandle()] has no body")
     }
 
     fun parse(jsonStr: String): Member {

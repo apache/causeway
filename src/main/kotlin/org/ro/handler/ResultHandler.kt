@@ -19,7 +19,7 @@ class ResultHandler : AbstractHandler(), IResponseHandler {
         return answer
     }
 
-    override fun doHandle(jsonStr: String) {
+    override fun doHandle() {
         val services = logEntry.obj as Result
         val values = services.valueList()
         Menu.limit = values.size

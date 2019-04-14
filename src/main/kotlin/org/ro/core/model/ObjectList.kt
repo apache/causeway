@@ -64,8 +64,7 @@ class ObjectList : Visible {
 
     fun handleProperty(p: Property) {
         if (layout == null) {
-            //TODO should not happen ...
-            //           layout = Layout()
+            console.log("[ObjectList.handleProperty] Layout Not Set - should not happen")
         }
         val e: Extensions? = p.extensions
         layout!!.addPropertyLabel(p.id, e!!.friendlyName)

@@ -19,7 +19,7 @@ class ActionHandler : AbstractHandler(), IResponseHandler {
         return answer;
     }
 
-    override fun doHandle(jsonStr: String) {
+    override fun doHandle() {
         val action = logEntry.obj as Action
         for (l in action.links) {
             // l.rel should be neither: (self | up | describedBy )

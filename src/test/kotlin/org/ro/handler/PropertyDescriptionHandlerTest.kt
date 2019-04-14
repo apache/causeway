@@ -1,13 +1,13 @@
 package org.ro.handler
 
 import org.ro.core.event.EventLog
-import org.ro.core.event.ListObserver
 import org.ro.core.event.LogEntry
 import org.ro.core.model.ObjectList
+import org.ro.to.FR_OBJECT_LAYOUT
 import org.ro.to.FR_PROPERTY_DESCRIPTION
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 class PropertyDescriptionHandlerTest {
 
@@ -19,32 +19,37 @@ class PropertyDescriptionHandlerTest {
             val str = FR_PROPERTY_DESCRIPTION.str
             val url = FR_PROPERTY_DESCRIPTION.url
             // when
-            val xp = LogEntry(url, "GET")
-            xp.response = str
-            EventLog.add(url)
-            EventLog.end(url,str)
-            Dispatcher.handle(xp)
-            console.log("[PDHT.testService] $url")
+            val le = LogEntry(url, "GET")
+            val obs = le.initListObserver()
+            le.response = str
+            EventLog.start(url, method = "GET", obs = obs)
+            EventLog.end(url, str)
+            Dispatcher.handle(le)
             val act: LogEntry? = EventLog.find(url)
-            assertNotNull(act)
-            assertNotNull(act.observer)
+            assertNotNull(act)  //(1)
+            assertNotNull(act.observer) //(2)
 
-            val obs: ListObserver = act.observer as ListObserver
             val ol: ObjectList = obs.list
             // then
-            assertNotNull(ol)
-            assertTrue(xp == act)
+            assertNotNull(ol)  //(3)
+            assertEquals(le.toString(), act.toString())  //(4)
 
-            //val url:String = tObject.getLayoutLink() //"get URL from URLS.FR_PROPERTY_DESCRIPTION"
-            // tObject.getLayoutLink
-            // will only work, if it has been loaded ...
-            val lyt = ol.getLayout()!!
-            assertNotNull(lyt)
+            val layoutUrl = FR_OBJECT_LAYOUT.url  // real URL is not contained as 'up' in .str
+            EventLog.add(layoutUrl)
+            val layoutLE = EventLog.end(layoutUrl, FR_OBJECT_LAYOUT.str)
+            assertNotNull(layoutLE)  //(5)
+            Dispatcher.handle(layoutLE)
+            obs.update(layoutLE)
+            val lyt = ol.getLayout()
+            assertNotNull(lyt)  //(6)
 
             val property = PropertyHandler().parse(FR_PROPERTY_DESCRIPTION.str)
+            assertNotNull(property)  //(7)
+            
+            console.log("[PDHT.testService] ${lyt.propertyLabels}")
             val id: String = "property.id"
             val lbl: String? = lyt.getPropertyLabel(id)
-            assertNotNull(lbl)
+            assertNotNull(lbl)  //(8)
         }
     }
 

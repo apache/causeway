@@ -36,16 +36,7 @@ class TestUtil() {
     fun login() {
         Session.login("http://localhost:8080/restful/", "sven", "pass")
     }
-
-    fun invokeFixtureScript() {
-        val jsonStr = ACTIONS_RUN_FIXTURE_SCRIPT.str
-        val action = ActionHandler().parse(jsonStr)
-        val l = action.getInvokeLink()!!
-        val obs = null //TODO special Observer to be used?
-        console.log("[TestUtil.invokeFixtureScript]")
-        RoXmlHttpRequest().invoke(l, obs)
-    }
-
+    
     fun wait(milliseconds: Long)  {
         GlobalScope.launch {
             delay(milliseconds)

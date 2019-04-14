@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class Property(val id: String = "",
                     val memberType: String = "",
                     val links: List<Link> = emptyList(),
-                    val optional: Boolean? = null,
+                    @Optional val optional: Boolean? = null,
                     @Optional val title: String? = null,
                     @Optional val value: String? = null,
                     val extensions: Extensions? = null,

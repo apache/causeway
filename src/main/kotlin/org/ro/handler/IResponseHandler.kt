@@ -23,6 +23,6 @@ interface IResponseHandler {
 
     fun canHandle(jsonStr: String): Boolean
 
-    fun doHandle(jsonStr: String)
+    fun doHandle()
 }
 

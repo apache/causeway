@@ -16,9 +16,9 @@ class PropertyDescriptionHandler : AbstractHandler(), IResponseHandler {
         return answer
     }
 
-    override fun doHandle(jsonStr: String) {
-        val p = logEntry.obj as Property
-        logEntry.obj = p
+    override fun doHandle() {
+        console.log("[PropertyDescriptionHandler.doHandle()] has no body")
+        //val p = logEntry.obj as Property
         //TODO logEntry.object = p to be handled by Observer?
     }
 

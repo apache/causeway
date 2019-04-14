@@ -23,7 +23,7 @@ open class AbstractHandler : IResponseHandler {
             console.log("jsonStr == null : " + logEntry.url)
         } else {
             if (canHandle(jsonStr)) {
-                doHandle(jsonStr)
+                doHandle()
             } else {
                 successor!!.handle(logEntry)
             }
@@ -41,10 +41,9 @@ open class AbstractHandler : IResponseHandler {
 
     /**
      * Must be overridden in subclasses
-     * @param jsonObj
      * @return
      */
-    override fun doHandle(jsonStr: String) {
+    override fun doHandle() {
     }
     
 }

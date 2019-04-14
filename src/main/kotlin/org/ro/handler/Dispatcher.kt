@@ -41,7 +41,12 @@ object Dispatcher {
 
     fun handle(logEntry: LogEntry) {
         val cls = delegate::class.simpleName
-        console.log("[Dispatcher.handle] ${cls}")
+        console.log("[Dispatcher.handle] $cls")
+        val obs = logEntry.observer;
+        console.log("[Dispatcher.handle] $obs")
+        if (obs == null) {
+            console.log("[Dispatcher.handle] ${logEntry.response}")
+        }
         delegate.handle(logEntry)
     }
 }
