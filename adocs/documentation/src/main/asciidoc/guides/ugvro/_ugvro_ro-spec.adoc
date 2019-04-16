@@ -157,8 +157,7 @@ in the RO spec, the main point being to avoid the "N+1" problem of too many (slo
 this feature one can load a grid of data in a single call.  (That said, the xref:../ugvro/ugvro.adoc#_ugvro_simplified-representations[simplified representations]
 supported by Restful Objects viewer also support this use case, albeit in way that deviates from the RO spec).
 
-This link:https://www.youtube.com/watch?v=hSKnqqBQ7Zo[screencast] demonstrates the Restful Object viewer's support for `x-ro-follow-links` parameter, using the
-(non-ASF) http://github.com/isisaddons/isis-app-kitchensink[Isis addons' kitchensink] app as the example,
+This link:https://www.youtube.com/watch?v=hSKnqqBQ7Zo[screencast] demonstrates the Restful Object viewer's support for `x-ro-follow-links` parameter, using the (non-ASF) http://github.com/isisaddons/isis-app-kitchensink[Isis addons' kitchensink] app as the example,
 This app contains three entities, `Grandparent`, `Parent` and `Child` that define a hierarchy of 1:m relationships.
 
 

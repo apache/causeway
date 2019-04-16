@@ -183,6 +183,18 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
             }
 
             @Override
+            public ObjectAdapter getDefault(
+                    final ScalarModel scalarModel,
+                    final ObjectAdapter[] argsIfAvailable,
+                    final AuthenticationSession authenticationSession,
+                    final DeploymentCategory deploymentCategory) {
+                final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
+                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
+                ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                return property.getDefault(parentAdapter);
+            }
+
+            @Override
             public boolean hasChoices(final ScalarModel scalarModel) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
@@ -405,6 +417,19 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
             }
 
             @Override
+            public ObjectAdapter getDefault(
+                    final ScalarModel scalarModel,
+                    final ObjectAdapter[] argsIfAvailable,
+                    final AuthenticationSession authenticationSession,
+                    final DeploymentCategory deploymentCategory) {
+                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
+
+                final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
+                return actionParameter.getDefault(parentAdapter, argsIfAvailable);
+            }
+
+            @Override
             public boolean hasChoices(final ScalarModel scalarModel) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
@@ -518,7 +543,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                         scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
                         scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
-                final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentAdapter);
+                final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentAdapter, null);
                 scalarModel.setObject(defaultAdapter);
             }
 
@@ -599,6 +624,12 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
             return required;
         }
 
+        public abstract ObjectAdapter getDefault(
+                final ScalarModel scalarModel,
+                final ObjectAdapter[] argsIfAvailable,
+                final AuthenticationSession authenticationSession,
+                final DeploymentCategory deploymentCategory);
+
         public abstract boolean hasChoices(ScalarModel scalarModel);
         public abstract List<ObjectAdapter> getChoices(
                 final ScalarModel scalarModel,
@@ -633,6 +664,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         public abstract boolean isCollection(final ScalarModel scalarModel);
 
         public abstract String toStringOf(final ScalarModel scalarModel);
+
     }
 
     private final Kind kind;

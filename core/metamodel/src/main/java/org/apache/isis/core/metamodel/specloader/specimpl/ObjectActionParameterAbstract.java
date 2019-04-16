@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -373,10 +374,12 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     //region > Defaults
 
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter adapter) {
+    public ObjectAdapter getDefault(
+            final ObjectAdapter adapter,
+            final ObjectAdapter[] argumentsIfAvailable) {
         
         final ObjectAdapter target = targetForDefaultOrChoices(adapter);
-        final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, null);
+        final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, argumentsIfAvailable != null ? Arrays.asList(argumentsIfAvailable) : null);
         
         return findDefault(target, args);
     }

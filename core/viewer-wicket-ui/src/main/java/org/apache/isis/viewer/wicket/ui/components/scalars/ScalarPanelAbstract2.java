@@ -51,8 +51,14 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -105,6 +111,51 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     private static final String ID_FEEDBACK = "feedback";
     private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
     private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
+
+    /**
+     * @param actionModel
+     * @param paramNum
+     * @return - true if changed as a result of these pending arguments.
+     */
+    public boolean updateIfNecessary(
+            final ActionModel actionModel,
+            final int paramNum) {
+
+        final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
+
+        final ScalarModel model = getModel();
+        ObjectAdapter defaultIfAny = model.getKind()
+                .getDefault(scalarModel, pendingArguments, getAuthenticationSession(), getDeploymentCategory());
+
+        final ObjectActionParameter actionParameter = action.getParameters().get(paramNum);
+        final ActionParameterMemento apm = new ActionParameterMemento(actionParameter);
+        final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
+
+        final ObjectAdapter pendingArg = pendingArguments[paramNum];
+
+        if (defaultIfAny != null) {
+            scalarModel.setObject(defaultIfAny);
+            scalarModel.setPending(ObjectAdapterMemento.createOrNull(defaultIfAny));
+            actionArgumentModel.setObject(defaultIfAny);
+        } else {
+
+            if(pendingArg != null & scalarModel.hasChoices()) {
+                // make sure the object is one of the choices, else blank it out.
+                final List<ObjectAdapter> choices = scalarModel
+                            .getChoices(pendingArguments, getAuthenticationSession(), getDeploymentCategory());
+                if(!choices.contains(pendingArg)) {
+                    scalarModel.setObject(null);
+                    scalarModel.setPending(null);
+                    actionArgumentModel.setObject(null);
+                }
+            }
+        }
+
+        return scalarModel.getObject() != pendingArg;
+    }
+
+
 
     public static class InlinePromptConfig {
         private final boolean supported;

@@ -194,7 +194,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
     }
 
     private Object defaultFor(final ObjectActionParameter param) {
-        final ObjectAdapter defaultAdapter = param.getDefault(objectAdapter);
+        final ObjectAdapter defaultAdapter = param.getDefault(objectAdapter, null);
         if (defaultAdapter == null) {
             return null;
         }
