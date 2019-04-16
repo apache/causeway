@@ -41,6 +41,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
@@ -166,13 +167,26 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      * <p>
      * called from onUpdate callback
      */
-    public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
+    @Override
+    public boolean updateIfNecessary(
+            final ActionModel actionModel, final int paramNum) {
+
+        final boolean choicesUpdated = updateChoices(actionModel.getArgumentsAsArray());
+        final boolean currentUpdated =
+                super.updateIfNecessary(actionModel, paramNum);
+
+        return currentUpdated || choicesUpdated;
+    }
+
+    private boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
         if (select2 == null) {
             return false;
         }
         setProviderAndCurrAndPending(select2, argsIfAvailable);
+
         return true;
     }
+
 
 
 

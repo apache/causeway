@@ -41,7 +41,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
@@ -144,27 +143,30 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    public void onUpdate(AjaxRequestTarget target, ScalarPanelAbstract2 scalarPanel) {
+    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract2 currScalarPanel) {
 
         final ActionModel actionModel = getActionModel();
 
-        final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
-
         try {
             final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
-            final int numParams = action.getParameterCount();
-            for (int i = 0; i < numParams; i++) {
-                final ScalarPanelAbstract2 paramPanel = paramPanels.get(i);
-                if (paramPanel != null && paramPanel instanceof PanelWithChoices) {
-                    final PanelWithChoices panelWithChoices = (PanelWithChoices) paramPanel;
 
-                    // this could throw a ConcurrencyException as we may have to reload the
-                    // object adapter of the action in order to compute the choices
-                    // (and that object adapter might have changed)
-                    if (panelWithChoices.updateChoices(pendingArguments)) {
-                        paramPanel.repaint(target);
-                    }
+            final int numParams = action.getParameterCount();
+
+            // only updates subsequent parameter panels to this one.
+            boolean seenCurrent = false;
+            for (int paramNum = 0; paramNum < numParams; paramNum++) {
+                final ScalarPanelAbstract2 paramPanel = paramPanels.get(paramNum);
+                if(paramPanel == currScalarPanel) {
+                    seenCurrent = true;
+                    continue;
                 }
+                if(!seenCurrent) {
+                    continue;
+                }
+                if(paramPanel.updateIfNecessary(actionModel, paramNum)) {
+                    paramPanel.repaint(target);
+                }
+
             }
         } catch (ConcurrencyException ex) {
 
