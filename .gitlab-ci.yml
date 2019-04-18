@@ -10,10 +10,6 @@
 #
 # It requires the following gitlab secret variables
 #
-# - NEXUS_USERNAME
-# - NEXUS_PASSWORD
-# - NEXUS_REPO_URL
-#
 # - GCPAPPENGINEREPO_USERNAME
 # - GCPAPPENGINEREPO_PASSWORD
 # - GCPAPPENGINEREPO_URL
@@ -26,10 +22,7 @@
 # NB: if deploying to docker hub, then the image is named apacheisis/$APPNAME,
 #     where 'apacheisis' is an org that the user can write to
 #
-#     if deploying to repo.incode.cloud, then the image is docker-dev.incode.cloud/$DOCKER_REGISTRY_USERNAME/$APP_NAME,
-#     where 'docker-dev.incode.cloud' is the repository in Nexus
-#
-#     In both cases, use $DOCKER_REGISTRY_USERNAME/$DOCKER_REGISTRY_PASSWORD credentials to upload
+#     Use $DOCKER_REGISTRY_USERNAME/$DOCKER_REGISTRY_PASSWORD credentials to upload
 #
 
 image: maven:3.5.3-jdk-8
@@ -71,14 +64,6 @@ build-package-push:
           -Drevision=$REVISION \
           -Dskip.assemble-zip \
           $CORE_ADDITIONAL_OPTS
-    - >
-      mvn -s .m2/settings.xml \
-          --batch-mode \
-          clean deploy \
-          -Drevision=$REVISION \
-          -Dnexus-deploy \
-          -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL \
-          $CORE_ADDITIONAL_OPTS
     - cd ..
     - echo ""
     - echo ""
@@ -112,3 +97,24 @@ build-package-push:
           -Ddocker.registryUrl=$DOCKER_REGISTRY_URL
     - cd ../../..
 
+
+#
+# Previously this script also uploaded to a Sonatype Nexus.
+# Here's the stuff that did it.
+#
+# It requires the following gitlab secret variables
+#
+# - NEXUS_USERNAME
+# - NEXUS_PASSWORD
+# - NEXUS_REPO_URL
+#
+#    - cd core
+#    - >
+#      mvn -s .m2/settings.xml \
+#          --batch-mode \
+#          clean deploy \
+#          -Drevision=$REVISION \
+#          -Dnexus-deploy \
+#          -Dnexus-deploy.repositoryUrl=$NEXUS_REPO_URL \
+#          $CORE_ADDITIONAL_OPTS
+#    - cd ..
