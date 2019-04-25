@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotC
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionParameterValidationFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.actions.validate.method.ActionValidationFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.all.i18n.TranslationFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
@@ -270,6 +271,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // actions
         
         addFactory(new ActionValidationFacetViaMethodFactory());
+        addFactory(new ActionParameterValidationFacetViaMethodFactory());
         addFactory(new ActionChoicesFacetViaMethodFactory());
         addFactory(new ActionParameterChoicesFacetViaMethodFactory());
         addFactory(new ActionParameterAutoCompleteFacetViaMethodFactory());
