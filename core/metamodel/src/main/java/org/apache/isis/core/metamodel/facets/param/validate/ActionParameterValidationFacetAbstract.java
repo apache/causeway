@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.validate;
+package org.apache.isis.core.metamodel.facets.param.validate;
 
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;

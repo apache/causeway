@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.validate.method;
+package org.apache.isis.core.metamodel.facets.param.validate.method;
 
 import java.lang.reflect.Method;
 

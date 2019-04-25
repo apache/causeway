@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.validate.method;
+package org.apache.isis.core.metamodel.facets.param.validate.method;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -29,7 +29,7 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.actions.validate.ActionParameterValidationFacetAbstract;
+import org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacetAbstract;
 
 public class ActionParameterValidationFacetViaMethod extends ActionParameterValidationFacetAbstract implements ImperativeFacet {
 
