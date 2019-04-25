@@ -153,9 +153,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         final boolean visibilityAfter = visibilityConsent.isAllowed();
         setVisible(visibilityAfter);
 
-        if(!visibilityAfter) {
-            return HowUpdated.NOW_INVISIBLE;
-        }
 
         // check usability
         final Consent usabilityConsent = actionParameter.isUsable(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
@@ -164,9 +161,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         final boolean usabilityAfter = usabilityConsent.isAllowed();
         setEnabled(usabilityAfter);
 
-        if(!usabilityAfter) {
-            return HowUpdated.NOW_DISABLED;
-        }
 
 
         // check defaults
@@ -199,8 +193,14 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             }
         }
 
+        if(!visibilityAfter) {
+            return HowUpdated.NOW_INVISIBLE;
+        }
         if(visibilityBefore != visibilityAfter) {
             return HowUpdated.NOW_VISIBLE;
+        }
+        if(!usabilityAfter) {
+            return HowUpdated.NOW_DISABLED;
         }
         if(usabilityBefore != usabilityAfter) {
             return HowUpdated.NOW_ENABLED;
