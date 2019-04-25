@@ -92,7 +92,6 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             final Consent consent = apm.getActionParameter(getSpecificationLoader())
                     .isVisible(realTargetAdapter, null, InteractionInitiatedBy.USER);
             final boolean allowed = consent.isAllowed();
-            paramPanel.setVisibilityAllowed(allowed);
             paramPanel.setVisible(allowed);
         }
 
@@ -171,9 +170,25 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             // only updates subsequent parameter panels to this one.
             for (int paramNumToUpdate = paramNumberUpdated + 1; paramNumToUpdate < numParams; paramNumToUpdate++) {
                 final ScalarPanelAbstract2 paramPanel = paramPanels.get(paramNumToUpdate);
-                if(paramPanel.updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate)) {
+                final ScalarPanelAbstract2.HowUpdated howUpdated = paramPanel
+                        .updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate);
+
+                switch (howUpdated) {
+                case NOW_VISIBLE:
+                case NOW_INVISIBLE:
+                case NOW_VISIBLE_AND_CHOICES:
+                    // need to repaint the entire container
+                    target.add(this);
+                    break;
+                case NOW_DISABLED:
+                case DEFAULTS:
+                case CHOICES_ONLY:
                     paramPanel.repaint(target);
-                    target.add(ActionParametersForm.this);
+                    break;
+                case NONE:
+                    break;
+                default:
+                    throw new IllegalStateException("Unknown: " + howUpdated);
                 }
             }
         } catch (ConcurrencyException ex) {

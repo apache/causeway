@@ -168,15 +168,33 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      * called from onUpdate callback
      */
     @Override
-    public boolean updateIfNecessary(
+    public HowUpdated updateIfNecessary(
             final ActionModel actionModel, final int paramNumUpdated, final int paramNumToPossiblyUpdate) {
 
         final ObjectAdapter[] argumentsAsArray = actionModel.getArgumentsAsArray();
-        final boolean choicesUpdated = updateChoices(argumentsAsArray);
-        final boolean currentUpdated =
+
+        final HowUpdated howUpdated =
                 super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate);
 
-        return currentUpdated || choicesUpdated;
+        switch (howUpdated) {
+        case NOW_INVISIBLE:
+        case NOW_DISABLED:
+            // no need to recalculate the choices
+            return howUpdated;
+        case NOW_VISIBLE:
+            return updateChoices(argumentsAsArray) ? HowUpdated.NOW_VISIBLE_AND_CHOICES : HowUpdated.NOW_VISIBLE;
+        case NOW_VISIBLE_AND_CHOICES:
+            updateChoices(argumentsAsArray);
+            return HowUpdated.NOW_VISIBLE_AND_CHOICES;
+        case DEFAULTS:
+            return updateChoices(argumentsAsArray) ? HowUpdated.CHOICES_ONLY : HowUpdated.DEFAULTS;
+        case CHOICES_ONLY:
+        case NONE:
+            return howUpdated;
+        default:
+            throw new IllegalStateException("Unknown: " + howUpdated);
+        }
+
     }
 
     private boolean updateChoices(ObjectAdapter[] argsIfAvailable) {

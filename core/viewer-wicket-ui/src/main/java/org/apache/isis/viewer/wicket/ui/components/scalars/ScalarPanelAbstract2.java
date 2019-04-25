@@ -113,6 +113,16 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
     private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
 
+    public enum HowUpdated {
+        NOW_VISIBLE,
+        NOW_INVISIBLE,
+        NOW_DISABLED,
+        DEFAULTS,
+        NOW_VISIBLE_AND_CHOICES,
+        CHOICES_ONLY,
+        NONE
+    }
+
     /**
      *
      * @param actionModel - the action being invoked
@@ -121,7 +131,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
      *
      * @return - true if changed as a result of these pending arguments.
      */
-    public boolean updateIfNecessary(
+    public HowUpdated updateIfNecessary(
             final ActionModel actionModel,
             final int paramNumUpdated,
             final int paramNumToPossiblyUpdate) {
@@ -129,27 +139,31 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
         final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
 
+        // check visibility
+
+        // could almost certainly simplify this...
+        final ObjectActionParameter actionParameter = action.getParameters().get(paramNumToPossiblyUpdate);
+        final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
+        final ObjectAdapter realTargetAdapter = action.realTargetAdapter(targetAdapter);
+        final Consent visibilityConsent = actionParameter.isVisible(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
+
+        final boolean visibilityBefore = isVisible();
+        final boolean visibilityAfter = visibilityConsent.isAllowed();
+        setVisible(visibilityAfter);
+
+        if(!visibilityAfter) {
+            return HowUpdated.NOW_INVISIBLE;
+        }
+
+        // check usability
+        // (STILL TODO)
+
+
+        // check defaults
         final ScalarModel model = getModel();
         ObjectAdapter defaultIfAny = model.getKind()
                 .getDefault(scalarModel, pendingArguments, paramNumUpdated,
                         getAuthenticationSession(), getDeploymentCategory());
-
-        final ObjectActionParameter actionParameter = action.getParameters().get(paramNumToPossiblyUpdate);
-
-        final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
-        final ObjectAdapter realTargetAdapter = action.realTargetAdapter(targetAdapter);
-        Consent visibilityConsent = actionParameter.isVisible(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
-
-        final boolean visibilityBefore = isVisible();
-//        final boolean visibilityBefore = isVisibilityAllowed();
-        final boolean visibilityAfter = visibilityConsent.isAllowed();
-//        setVisibilityAllowed(visibilityAfter);
-        setVisible(visibilityAfter);
-
-        if(visibilityBefore != visibilityAfter) {
-            // no further processing, but indicate that our state has changed and so need repainting.
-            return true;
-        }
 
         final ActionParameterMemento apm = new ActionParameterMemento(actionParameter);
         final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
@@ -175,7 +189,13 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             }
         }
 
-        return scalarModel.getObject() != pendingArg;
+        if(visibilityBefore != visibilityAfter) {
+            return HowUpdated.NOW_VISIBLE;
+        }
+
+        return scalarModel.getObject() != pendingArg
+                ? HowUpdated.DEFAULTS
+                : HowUpdated.NONE;
     }
 
 
