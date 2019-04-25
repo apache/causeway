@@ -1,14 +1,14 @@
 package org.ro.to
 
 import com.github.snabbdom._set
-import org.ro.core.event.EventLog
+import org.ro.core.event.EventStore
 import org.ro.handler.ActionHandler
-import org.ro.handler.TestUtil
+import org.ro.handler.IntegrationTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class LinkTest {
+class LinkTest : IntegrationTest() {
 
     @Test
     // IntegrationTest, assumes a server is running, furthermore expects the fingerPrint (PD94*) to be valid
@@ -24,7 +24,7 @@ class LinkTest {
             }  """
         val href = """"href": "http://localhost:8080/restful/objects/domainapp.application.fixture.scenarios.DomainAppDemo/$fingerPrint""""
         //TODO construct link, invoke and check response
-        if (TestUtil().isSimpleAppAvailable()) {
+        if (isSimpleAppAvailable()) {
             val action = ActionHandler().parse(ACTIONS_RUN_FIXTURE_SCRIPT.str)
 
             val link = action.getInvokeLink()
@@ -35,7 +35,7 @@ class LinkTest {
             arguments._set("script", arg)
             console.log("[LinkTest.testInvokeAction] $link")
             link.invoke()
-            val le = EventLog.find(url)
+            val le = EventStore.find(url)
             assertNotNull(le)
             assertTrue(!le.isError())
          //   assertEquals(body, le.request)

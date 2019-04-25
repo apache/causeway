@@ -1,8 +1,10 @@
 package org.ro.to
 
-object SO_LIST_ALL {
-    val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/listAll"
-    val str = """
+import org.ro.urls.Response
+
+object SO_LIST_ALL : Response() {
+    override val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/listAll"
+    override val str = """
         {
         "id": "listAll",
         "memberType": "action",

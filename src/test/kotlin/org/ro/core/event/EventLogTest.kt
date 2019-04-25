@@ -1,5 +1,6 @@
 package org.ro.core.event
 
+import org.ro.to.Method
 import org.ro.to.RESTFUL
 import org.ro.urls.RESTFUL_SERVICES
 import kotlin.test.*
@@ -9,9 +10,10 @@ class EventLogTest {
     @Test
     fun testSecondEntry() {
         // given
-        val initialSize: Int = EventLog.log.size
+        val initialSize: Int = EventStore.log.size
         val myFirst = "1"
         val myLast = "n"
+        val method = Method.GET.operation
         //val myEveryThing: String = ".."
 
         val selfStr = RESTFUL_SERVICES.str
@@ -20,27 +22,27 @@ class EventLogTest {
         val upUrl: String = "http://localhost:8080/restful/"
 
         // when
-        EventLog.start(selfUrl, myFirst)
-        EventLog.start(upUrl, myFirst)
-        EventLog.end(selfUrl, selfStr)
-        EventLog.end(upUrl, upStr)
-        EventLog.start(selfUrl, myLast)
-        EventLog.start(upUrl, myLast)
+        EventStore.start(selfUrl, method, myFirst)
+        EventStore.start(upUrl, method, myFirst)
+        EventStore.end(selfUrl, selfStr)
+        EventStore.end(upUrl, upStr)
+        EventStore.start(selfUrl, method, myLast)
+        EventStore.start(upUrl, method, myLast)
         // then
-        val currentSize: Int = EventLog.log.size
-        assertEquals(4 + initialSize, currentSize) 
+        val currentSize: Int = EventStore.log.size
+        assertEquals(4 + initialSize, currentSize)
 
         // Entries with the same key can be written, but when updated or retrieved the first (oldest) entry should be used
         //when
-        val le2: LogEntry? = EventLog.find(selfUrl)
+        val le2: LogEntry? = EventStore.find(selfUrl)
         //then
-        assertNotNull(le2)                   
-        assertEquals(le2.method, myFirst, "")  
-        assertEquals(le2.response.length, selfStr.length)  
+        assertNotNull(le2)
+        assertEquals(le2.request, myFirst)
+        assertEquals(le2.response.length, selfStr.length)
         //when
-        val leU: LogEntry? = EventLog.find(upUrl)
+        val leU: LogEntry? = EventStore.find(upUrl)
         //then
-        assertEquals(leU!!.method, myFirst)  
+        assertEquals(leU!!.request, myFirst)
         assertEquals(leU.response.length, upStr.length)
     }
 
@@ -52,23 +54,23 @@ class EventLogTest {
         val i2 = "Test (2)"
 
         // construct list with urls
-        EventLog.add(h1)
-        EventLog.add(i1)
-        EventLog.add(h2)
-        EventLog.add(i2)
+        EventStore.add(h1)
+        EventStore.add(i1)
+        EventStore.add(h2)
+        EventStore.add(i2)
 
-        val le1 = EventLog.findView(h1)
+        val le1 = EventStore.findView(h1)
         assertEquals(null, le1)
 
-        val le2 = EventLog.findView(h2)
+        val le2 = EventStore.findView(h2)
         assertEquals(null, le2)
 
-        val le3 = EventLog.findView(i2)
+        val le3 = EventStore.findView(i2)
         assertNotNull(le3)
-        val le4 = EventLog.findView(i1)
+        val le4 = EventStore.findView(i1)
         assertNotNull(le4)
 
-        EventLog.close(i1)
+        EventStore.close(i1)
         console.log("[EventLogTest.testFindView] $i1")
 
         assertTrue(le4.isClosedView())
@@ -83,17 +85,17 @@ class EventLogTest {
         val olx = "http://localhost:8080/restful/objects/simple.SimpleObject/object-layout"
 
         // construct list with urls
-        EventLog.add(ol1)
-        EventLog.add(ol2)
-        EventLog.add(ol3)
+        EventStore.add(ol1)
+        EventStore.add(ol2)
+        EventStore.add(ol3)
 
-        val le1 = EventLog.find(ol1)
+        val le1 = EventStore.find(ol1)
         assertNotNull(le1)
 
-        val le2 = EventLog.findExact(ol9)
+        val le2 = EventStore.findExact(ol9)
         assertNull(le2)
 
-        val le3 = EventLog.findEquivalent(ol9)
+        val le3 = EventStore.findEquivalent(ol9)
         // FIXME 
         /*  assertNotNull(le3)
        assertEquals(ol1, le3.url)

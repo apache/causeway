@@ -13,33 +13,6 @@ class Utils {
         return answer
     }
 
-    //TODO unify with getSelfHref, eventually use Builder pattern / fluent Interface 
-    // (.fromString(response).linkNamed(SELF|UP|LAYOUT)
-    fun getUpHref(response: String): String? {
-        //FIXME
-        /*
-        var obj: Object = JSON.parse(response)
-        var links: Array<Link>? = null
-        var value: Object = obj.value
-        if (value is Array) {
-            links = value as Array
-        }
-        if (links == null) {
-            links = obj.links
-        }
-        for (l in links) {
-            if (l.rel == "up") {
-                return l.href
-            }
-        }     */
-        return null
-    }
-
-    fun quoteNulls(input: String): String {
-        val output = input.replace(": null", ": \"null\"")
-        return output
-    }
-
     companion object {
         fun deCamel(input: String): String {
             var output = ""

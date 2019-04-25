@@ -1,7 +1,7 @@
 package org.ro.urls
 
 import org.ro.core.Session
-import org.ro.core.event.EventLog
+import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.to.*
 import pl.treksoft.kvision.utils.Object
@@ -66,7 +66,7 @@ timer.start() */
 
     fun handleLinkComplete(passThroughData: Object) {
         val href: String = link!!.href
-        val logEntry: LogEntry = EventLog.find(href)!!
+        val logEntry: LogEntry = EventStore.find(href)!!
         val resp: String = logEntry.retrieveResponse()
         //TODO handle authentication problem: logEntry.fault="Security error accessing url"
         //  http://localhost:8080/crossdomain.xml

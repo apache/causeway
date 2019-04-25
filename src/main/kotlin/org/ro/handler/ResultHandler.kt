@@ -20,12 +20,14 @@ class ResultHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle() {
+        val obs = NavigationObserver()
+        logEntry.observer = obs
         val services = logEntry.obj as Result
         val values = services.valueList()
         Menu.limit = values.size
-        val observer = NavigationObserver(logEntry.url)
+        console.log("[ResultHandler.doHandle] limit = ${Menu.limit}")
         for (l in values) {
-            l.invoke(observer)
+            l.invoke(obs)
         }
     }
 

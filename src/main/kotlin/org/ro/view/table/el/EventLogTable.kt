@@ -1,6 +1,6 @@
 package org.ro.view.table.el
 
-import org.ro.core.event.EventLog
+import org.ro.core.event.EventStore
 import org.ro.core.event.EventState
 import org.ro.core.event.LogEntry
 import org.ro.view.IconManager
@@ -76,7 +76,7 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
             }
             // types can not be removed or created Empty - why?
         }
-        val model = EventLog.log
+        val model = EventStore.log
         val factoryBlock = { logEntry: LogEntry, index: Int, _: Any ->
             Row {
                 for (cd: ColDef in tableSpec) {
@@ -90,7 +90,7 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
                         }
                         is Date -> cell(v.toStringF("HH:mm:ss.SSS"))
                         is EventState -> cell {
-                            button(I18n.tr(logEntry.urlTitle.toString()), icon = v.iconName, style = ButtonStyle.LINK)
+                            button(I18n.tr(logEntry.title), icon = v.iconName, style = ButtonStyle.LINK)
                         }
                         is ActionMenu -> cell {
                             icon(v.iconName) {

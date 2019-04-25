@@ -1,18 +1,18 @@
 package org.ro.layout
 
+import org.ro.handler.IntegrationTest
 import org.ro.handler.LayoutHandler
-import org.ro.handler.TestUtil
 import org.ro.to.FR_OBJECT_LAYOUT
 import org.ro.to.SO_OBJECT_LAYOUT
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class LayoutTest {
+class LayoutTest : IntegrationTest() {
 
     @Test
     fun testParseSimpleObjectLayout() {
-        if (TestUtil().isSimpleAppAvailable()) {
+        if (isSimpleAppAvailable()) {
             //given
             val jsonStr = SO_OBJECT_LAYOUT.str
             //when
@@ -47,7 +47,7 @@ class LayoutTest {
 
     @Test
     fun testparseFixtureScriptObjectLayout() {
-        if (TestUtil().isSimpleAppAvailable()) {
+        if (isSimpleAppAvailable()) {
             // given
             val jsonStr = FR_OBJECT_LAYOUT.str
             val lo = LayoutHandler().parse(jsonStr)

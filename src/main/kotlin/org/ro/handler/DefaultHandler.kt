@@ -9,7 +9,12 @@ class DefaultHandler : AbstractHandler(), IResponseHandler {
 
     override fun doHandle() {
         val url = logEntry.url
-        console.log("[DefaultHandler.doHandle: $url]")
+        val response = logEntry.response
+        val obs = logEntry.observer;
+        console.log("[DefaultHandler.doHandle] no handler for\n" +
+                "url:$url \n" +
+                "observer:$obs \n" +
+                "response:$response")
     }
 
 }

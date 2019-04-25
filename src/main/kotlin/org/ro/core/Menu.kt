@@ -4,7 +4,7 @@ import org.ro.to.Member
 import org.ro.to.Service
 
 object Menu {
-    //TODO check if singleton.Menu and ObjectList can have a common superclass (linit, list<T>, isFull)
+    //TODO chekck if limit can be avoided by the use of observeableList
     var limit: Int = 0
     var list = mutableListOf<MenuEntry>()
 

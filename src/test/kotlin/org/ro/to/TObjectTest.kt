@@ -32,13 +32,13 @@ class TObjectTest {
         assertEquals(4, properties.size)
 
         val objectList = ObjectList()
-        objectList.initSize(1)
+       // objectList.initSize(1)
         to.addMembersAsProperties()
         val oa1 = ObjectAdapter(to)
         objectList.add(oa1)
 
         // this is kind of untyped again
-        val oa: ObjectAdapter = objectList.last()
+       // val oa: ObjectAdapter = objectList.last()
         /* FIXME dynamic
         assertNotNull(oa)
 

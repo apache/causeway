@@ -27,7 +27,7 @@ class ActionHandler : AbstractHandler(), IResponseHandler {
                 console.log("[ActionHandler.doHandle] ${l.method}")
                 when (l.method) {
                     Method.GET.name -> {
-                        l.invoke()
+                        l.invoke(logEntry.observer)
                     }
                     Method.POST.name -> {
                         ActionPrompt(action).open()

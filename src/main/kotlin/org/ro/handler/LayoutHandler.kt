@@ -10,15 +10,15 @@ class LayoutHandler : AbstractHandler(), IResponseHandler {
         try {
             val layout = parse(jsonStr)
             logEntry.obj = layout
-            answer = layout.row.size > 0
+            answer = true
         } catch (ex: Exception) {
         }
         return answer;
     }
 
     override fun doHandle() {
-        val layout = logEntry.obj as Layout
-        logEntry.obj = layout
+        val obs = logEntry.observer
+        obs!!.update(logEntry)
     }
 
     fun parse(jsonStr: String): Layout {

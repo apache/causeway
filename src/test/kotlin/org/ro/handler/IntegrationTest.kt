@@ -4,19 +4,23 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.ro.core.Session
-import org.ro.core.event.RoXmlHttpRequest
-import org.ro.to.ACTIONS_RUN_FIXTURE_SCRIPT
+import org.ro.core.event.EventStore
+import org.ro.core.event.IObserver
+import org.ro.core.event.LogEntry
+import org.ro.to.Method
+import org.ro.urls.Response
 import org.w3c.xhr.XMLHttpRequest
 
-class TestUtil() {
-
-    //Most Handler Tests are IntegrationTests
+// subclasses expect a running backend, here SimpleApp localhost:8080/restful*
+open class IntegrationTest {
     fun isSimpleAppAvailable(): Boolean {
-        val xhr = XMLHttpRequest();
         val url = "http://sven:pass@localhost:8080/restful/"
-        login()
+        val user = "sven"
+        val pw = "pass"
+        Session.login(url, user, pw)
         val credentials: String = Session.getCredentials()
-        xhr.open("GET", url, false, "sven", "pass");
+        val xhr = XMLHttpRequest();
+        xhr.open("GET", url, false, user, pw);
         xhr.setRequestHeader("Authorization", "Basic $credentials")
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
         xhr.setRequestHeader("Accept", "application/json")
@@ -33,15 +37,21 @@ class TestUtil() {
         return answer
     }
 
-    fun login() {
-        Session.login("http://localhost:8080/restful/", "sven", "pass")
+    fun mockResponse(response: Response, observer: IObserver?) : LogEntry {
+        val str = response.str
+        val url = response.url
+        val method = Method.GET.operation
+        EventStore.start(url, method, "", observer)
+        val le = EventStore.end(url, str)
+        ResponseHandler.handle(le!!)
+//        console.log("[IT.mockResponse] $le")
+        return le
     }
-    
-    fun wait(milliseconds: Long)  {
+
+    fun wait(milliseconds: Long) {
         GlobalScope.launch {
             delay(milliseconds)
             console.log("[TestUtil.wait] $milliseconds")
         }
     }
-    
 }

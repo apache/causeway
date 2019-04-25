@@ -1,8 +1,10 @@
 package org.ro.to
 
-object SO_LIST_ALL_INVOKE {
-    val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/listAll/invoke"
-    val str = """{
+import org.ro.urls.Response
+
+object SO_LIST_ALL_INVOKE : Response() {
+    override val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/listAll/invoke"
+    override val str = """{
         "links": [
             {
                 "rel": "self",

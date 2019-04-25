@@ -1,40 +1,32 @@
 package org.ro.core.model
 
-import org.ro.core.Utils
 import org.ro.layout.Layout
 import org.ro.to.Extensions
 import org.ro.to.Property
 import org.ro.to.TObject
 
 class ObjectList : Visible {
-    private var limit: Int = 0
+    override fun tag() : String { return " "}
+    
     var list = mutableListOf<ObjectAdapter>()
-    private var layout: Layout? = null
-
-    fun initSize(limit: Int) {
-        this.limit = limit
-    }
+    var layout: Layout? = null
+    var propertyLabels = mutableMapOf<String, String>()
 
     fun hasLayout(): Boolean {
         return layout != null
     }
 
-    //TODO can/should layout be encapsulated more?
-    fun setLayout(layout: Layout) {
-        this.layout = layout
-        initPropertyDescription()
-    }
-
-    fun getLayout(): Layout? {
-        return layout
-    }
-
-    fun last(): ObjectAdapter {
-        return list[length() - 1]
-    }
-
-    fun length(): Int {
-        return list.size
+    //FIXME to be called after layout is set
+    private fun initPropertyDescription() {
+        if (hasLayout()) {
+            if (arePropertyLabelsToBeSet()) {
+                val pls = layout!!.properties
+                for (pl in pls) {
+                    val l = pl.link
+                    l!!.invoke()
+                }
+            }
+        }
     }
 
     //TODO public for test only, reduce visibility 
@@ -46,44 +38,25 @@ class ObjectList : Visible {
         list.add(oa)
     }
 
-    fun isFull(): Boolean {
-        return length() >= limit
-    }
-
-    private fun initPropertyDescription() {
-        if (layout != null) {
-            if (layout!!.arePropertyLabelsToBeSet()) {
-                val pls = layout!!.properties!!
-                for (pl in pls) {
-                    val l = pl.link
-                    l!!.invoke()
-                }
-            }
-        }
-    }
-
     fun handleProperty(p: Property) {
-        if (layout == null) {
-            console.log("[ObjectList.handleProperty] Layout Not Set - should not happen")
+        val id = p.id
+        val e: Extensions = p.extensions!!
+        val friendlyName = e.friendlyName
+        propertyLabels.put(id, friendlyName)
+        console.log("[ObjectList.handleProperty] $id:$friendlyName")
+    }
+
+    fun getPropertyLabel(id: String): String? {
+        return propertyLabels.get(id)
+    }
+
+    fun arePropertyLabelsToBeSet(): Boolean {
+        val labelSize: Int = propertyLabels.size
+        var propsSize = 0
+        if (layout!!.properties.isNotEmpty()) {
+            propsSize = layout!!.properties.size
         }
-        val e: Extensions? = p.extensions
-        layout!!.addPropertyLabel(p.id, e!!.friendlyName)
+        return (labelSize < propsSize)
     }
-
-    override fun tag(): String {
-        var title = "FIXME"
-        //FIXME
-        /*
-        val obj = last()
-        if (obj.hasOwnProperty("domainType")) {
-            title = obj.domainType
-        } else if (obj.hasOwnProperty("name")) {
-            title = obj.name
-        } else {
-            title = "noClassnameNorName"
-        }  */
-        title = Utils.deCamel(title)
-        return "$title (${length()})"
-    }
-
+    
 }

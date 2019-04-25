@@ -2,7 +2,7 @@ package org.ro.core.event
 
 import com.lightningkite.kotlin.observable.list.observableListOf
 import org.ro.Application
-import org.ro.handler.Dispatcher
+import org.ro.handler.ResponseHandler
 import kotlin.js.Date
 
 /**
@@ -12,10 +12,10 @@ import kotlin.js.Date
  *
  * @See https://en.wikipedia.org/wiki/Proxy_pattern
  */
-object EventLog {
+object EventStore {
     var log = observableListOf<LogEntry>()
 
-    fun start(url: String, method: String, body: String = "", obs: ILogEventObserver? = null): LogEntry {
+    fun start(url: String, method: String, body: String = "", obs: IObserver? = null): LogEntry {
         val entry = LogEntry(url, method, body)
         entry.observer = obs
         log.add(entry)
@@ -155,7 +155,7 @@ object EventLog {
         val le = this.find(url)
         if ((le != null) && (le.hasResponse() || le.isView())) {
             le.retrieveResponse()
-            Dispatcher.handle(le)
+            ResponseHandler.handle(le)
             return true
         }
         return false

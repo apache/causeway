@@ -1,8 +1,10 @@
 package org.ro.to
 
-object FR_PROPERTY_DESCRIPTION {
-    val url = "http://localhost:8080/restful/domain-types/isisApplib.FixtureResult/properties/className"
-    val str = """{
+import org.ro.urls.Response
+
+object FR_PROPERTY_DESCRIPTION : Response() {
+    override val url = "http://localhost:8080/restful/domain-types/isisApplib.FixtureResult/properties/className"
+    override val str = """{
         "id": "className",
         "memberType": "property",
         "links": [

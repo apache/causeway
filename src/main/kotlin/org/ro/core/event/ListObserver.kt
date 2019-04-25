@@ -1,10 +1,11 @@
 package org.ro.core.event
 
-import org.ro.core.DisplayManager
+import org.ro.core.UiManager
 import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
 import org.ro.handler.TObjectHandler
 import org.ro.layout.Layout
+import org.ro.to.Property
 import org.ro.to.ResultList
 import org.ro.to.TObject
 
@@ -20,7 +21,7 @@ import org.ro.to.TObject
  * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler
  */
 
-class ListObserver : ILogEventObserver {
+class ListObserver : IObserver {
     var list = ObjectList()
 
     // Handlers should set object into le after successful parsing
@@ -29,46 +30,63 @@ class ListObserver : ILogEventObserver {
         val url = le.url
 
         when (obj) {
-            is ResultList -> list.initSize(obj.result!!.valueList().size)
+            is ResultList -> handleList(obj)
             is TObject -> handleObject(url, le)
-            is Layout -> list.setLayout(obj)
-            else -> console.log("[ListObserver.update] unexpected:\n $obj]")
+            is Layout -> list.layout = obj
+            is Property -> handleProperty(obj)
+            else -> log(le)
         }
-        
+
         //TODO are list & layout the only criteria?
-        if (list.hasLayout() && list.isFull()) {
+        if (list.hasLayout()) {
             handleView(url)
         }
     }
 
-    private fun handleObject(url: String, le: LogEntry) {
-        if (list.isFull()) {
-            console.log("[ListObserver.handleObject full, not adding: $url")
+    private fun log(le:LogEntry) {
+        console.log("[ListObserver.update] unexpected:\n ${le.toString()}")
+    }
+
+    private fun handleList(resultList: ResultList) {
+        console.log("[ListObserver.update] obj == ResultList")
+    }
+    
+    private fun handleProperty(p: Property) {
+        //TODO differentiate between Property and PropertyDescription
+        val ext = p.extensions!!
+        if (ext.friendlyName.isNotEmpty()) {
+            console.log("[ListObserver.handleProperty] -> description")
         } else {
-            //TODO eventually set/get LogEntry.tObject
-            val jsonStr = le.response
-            val tObj = TObjectHandler().parse(jsonStr)
-            loadLayout(tObj)
-            val oa = ObjectAdapter(tObj)
-            list.add(oa)
+            console.log("[ListObserver.handleProperty]")
         }
     }
 
+    private fun handleObject(url: String, le: LogEntry) {
+        // FIXME eventually this is called multiple times, which may be wrong
+        console.log("[ListObserver.handleObject] adding: $url")
+        //FIXME eventually set/get LogEntry.tObject
+        val jsonStr = le.response
+        val tObj = TObjectHandler().parse(jsonStr)
+        loadLayout(tObj)
+        val oa = ObjectAdapter(tObj)
+        list.add(oa)
+    }
+
     private fun handleView(url: String) {
-        val le2 = EventLog.find(url)
+        val le2 = EventStore.find(url)
         val b = (le2 != null) && (le2.isView())
         if (b) {
-            console.log("View already opened: $url")
+            console.log("[ListObserver.handleView] already opened: $url")
         } else {
             //TODO on runFixtureScript this is passed multiple times (but no view opened (which is correct))
-            DisplayManager.addView(list) //open
+            UiManager.addView(list) //open
         }
     }
 
     private fun loadLayout(tObject: TObject) {
         val link = tObject.getLayoutLink()
         val href = link!!.href
-        val le = EventLog.find(href)
+        val le = EventStore.find(href)
         if (le == null) {
             link.invoke(this)
         }

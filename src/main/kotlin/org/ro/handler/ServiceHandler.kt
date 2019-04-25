@@ -1,7 +1,6 @@
 package org.ro.handler
 
 import kotlinx.serialization.json.JSON
-import org.ro.core.Menu
 import org.ro.to.Service
 
 class ServiceHandler : AbstractHandler(), IResponseHandler {
@@ -9,7 +8,7 @@ class ServiceHandler : AbstractHandler(), IResponseHandler {
     override fun canHandle(jsonStr: String): Boolean {
         var answer = false
         try {
-            val obj =parse(jsonStr)
+            val obj = parse(jsonStr)
             logEntry.obj = obj
             answer = true
         } catch (ex: Exception) {
@@ -18,8 +17,8 @@ class ServiceHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle() {
-        val service = logEntry.obj as Service
-        Menu.add(service)
+        logEntry.observer!!.update(logEntry)
+        //TODO shorten to logEntry.update() ?
     }
 
     fun parse(jsonStr: String): Service {

@@ -2,7 +2,6 @@ package org.ro.layout
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 import org.ro.view.VBox
 
 /**
@@ -14,9 +13,7 @@ data class Layout(val cssClass: String? = null,
                   val row: List<RowLayout> = emptyList()) {
 
     @Optional
-    var propertyLabels = mutableMapOf<String, String>()
-    @Optional
-    var properties: List<PropertyLayout>? = null
+    var properties = listOf<PropertyLayout>()
 
     init {
         val row1 = row[1]
@@ -36,23 +33,6 @@ data class Layout(val cssClass: String? = null,
         properties = fieldSet0.property
     }
 
-    fun addPropertyLabel(id: String, friendlyName: String) {
-        propertyLabels.put(id, friendlyName)
-    }
-
-    fun getPropertyLabel(id: String): String? {
-        return propertyLabels.get(id)
-    }
-
-    fun arePropertyLabelsToBeSet(): Boolean {
-        val labelSize: Int = propertyLabels.size
-        var propsSize = 0
-        if (properties!!.isNotEmpty()) {
-            propsSize = properties!!.size
-        }
-        return (labelSize < propsSize)
-    }
-
     fun build(): VBox {
         val result = VBox("Layout")
         var b: VBox
@@ -65,39 +45,4 @@ data class Layout(val cssClass: String? = null,
         return result
     }
 
-    // recurse into attributes/fields/properties and 
-    fun findPropertyBy(
-            obj: JsonObject, name: String): JsonObject? {
-        //FIXME
-        /*
-        if (obj.hasOwnProperty(name)) {
-            return obj[name]
-        } else {
-            for (o in obj) {
-                if (isCollection(o) || isNamed(o)) {
-                    return findPropertyBy(o, name)
-                }
-            }
-        }  */
-        return null
-
-    }
-
-    /*
-    private fun isCollection(o: JsonObject): Boolean {
-        if ((o == null) || (o is String)) {
-            return false
-        } else {
-            return ((o is Object) || (o is Array))
-        }
-    }
-
-    private fun isNamed(o: JsonObject): Boolean {
-        if ((o == null) || (o is String)) {
-            return false
-        } else {
-            var TAB_GROUP: String = "tabGroup"
-            return ((o.hasOwnProperty("col")) || (o.hasOwnProperty(TAB_GROUP)))
-        }
-    }   */
 }

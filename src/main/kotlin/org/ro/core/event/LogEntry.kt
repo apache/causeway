@@ -4,7 +4,7 @@ import org.ro.view.table.ActionMenu
 import pl.treksoft.kvision.types.Date
 
 enum class EventState(val id: String, val iconName: String) {
-    INITIAL("INITIAL", "fa-power-off") ,
+    INITIAL("INITIAL", "fa-power-off"),
     RUNNING("RUNNING", "fa-play-circle"),
     ERROR("ERROR", "fa-times-circle"),
     SUCCESS("SUCCESS", "fa-check-circle"),
@@ -21,10 +21,10 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
         menu = ActionMenu("fa-ellipsis-h")
     }
 
-    var urlTitle: String? = null
+    var title: String = ""
 
     init {
-        urlTitle = stripHostPort(url)
+        title = stripHostPort(url)
     }
 
     var createdAt = Date()
@@ -44,7 +44,7 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
     var duration = 0
     var obj: Any? = null
     var cacheHits = 0
-    var observer: ILogEventObserver? = null
+    var observer: IObserver? = null
 
     // alternative constructor for UI events (eg. from user interaction)
     constructor(description: String) : this(description, null, "") {
@@ -53,7 +53,7 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
 
     private fun calculate() {
         duration = updatedAt!!.getMilliseconds() - start
-        val logStartTime: Int? = EventLog.getLogStartTime()
+        val logStartTime: Int? = EventStore.getLogStartTime()
         if (logStartTime != null) {
             offset = start - logStartTime
         }
@@ -77,23 +77,21 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
         this.response = response //.replace("\r\n", "")
         responseLength = response.length
         state = EventState.SUCCESS
-        if (observer != null) {
-            observer!!.update(this)
-        } else {
-            //           console.log("[$url hasObserver=false]")
-        }
-    }
-
-    fun initListObserver(): ListObserver {
-        val lo = ListObserver()
-        observer = lo
-        return lo
     }
 
     override fun toString(): String {
         var s = "url: $url\n"
-        s += "obj: $obj\n"
-        s += "obsever: $observer\n"
+        if (obj == null) {
+            s += "obj: null\n"
+        } else {
+            s += "obj: ${obj!!::class.simpleName}\n"
+        }
+        if (observer == null) {
+            s += "obsever: null\n"
+        } else {
+            s += "obsever: ${observer!!::class.simpleName}\n"
+        }
+        s += "response: $response\n"
         return s
     }
 
@@ -121,8 +119,9 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
 
     //end region response
 
-    private fun stripHostPort(url: String): String? {
+    private fun stripHostPort(url: String): String {
         var result = url
+        //TODO use value from Session
         result = result.replace("http://localhost:8080/restful/", "")
         result = removeHexCode(result)
         return result

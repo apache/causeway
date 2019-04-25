@@ -8,32 +8,28 @@ class PropertyHandler : AbstractHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
         var answer = false
-//        console.log("[PropertyHandler.canHandle] 1 ${logEntry.observer}")
         try {
             val p = parse(jsonStr)
             logEntry.obj = p
-            val link = p.descriptionLink();
-            answer = link != null
+            answer = true
         } catch (ex: Exception) {
         }
-//        console.log("[PropertyHandler.canHandle] 2 ${logEntry.observer}")
         return answer
     }
 
     override fun doHandle() {
         val p = logEntry.obj as Property
-        val link = p.descriptionLink()
-        var obs = logEntry.observer
-        console.log("[PropertyHandler.doHandle] $obs")
-        if (link != null) {
-            link.invoke(obs)
-            /* */
-            if (obs == null) {  // happened during PropertyHandlerTest, cascading calls
-                logEntry.initListObserver()
-                obs = logEntry.observer
-            } /**/
+        val descLink = p.descriptionLink()
+        val obs: ListObserver
+        if (logEntry.observer == null) {
+            obs = ListObserver()
+            console.log("[PropertyHandler.doHandle] empty observer set to ListObserver")
+        } else {
+            obs = logEntry.observer as ListObserver
         }
-        obs = obs as ListObserver
+        if (descLink != null) {
+            descLink.invoke(obs)
+        }
         obs.list.handleProperty(p)
     }
 

@@ -1,40 +1,94 @@
 .Overview Diagram
-[uml,file="uml-overview.png"]
+[plantuml,file="uml-overview.png"]
 --
-class ModelWrapper {
-  URL key
-  Object[] dataprovider
-  length()
-  limit
-}
-class xhr.XmlHttpRequest {
+@startuml
+
+class XHR {
     invoke()
 }
-class xhr.RequestLog {
+
+class EventStore<<(S,#FF7700) Singleton>> {
+    log:LogEntry[]
     start()
     end()
     fault()
+    find(href)
 }
 
-abstract class handler.AbstractHandler{
+class LogEntry {
+    url:Href
+    title:String 
+    startedAt:Date
+    updatedAt:Date
+    request:String 
+    response:String
+    object:TransferObject
+    observer:Observer
+    cacheHits:int
 }
+EventStore o-- LogEntry
+LogEntry o-- TransferObject
+LogEntry o-- Observer
 
-view.MenuBar -> xhr.XmlHttpRequest : invoke 
-xhr.XmlHttpRequest -> remote.RestfulObjects : invoke
-xhr.XmlHttpRequest <- remote.RestfulObjects : json 
-handler.AbstractHandler -> xhr.XmlHttpRequest : invoke
-handler.AbstractHandler <- xhr.XmlHttpRequest : json 
-xhr.XmlHttpRequest -> xhr.RequestLog
+class ResponseHandler<<Facade,ChainOfResponsibility>>{
+    handle(LogEntry)
+    canHandle(json)
+    doHandle()
+    parse(json)
+}
+ResponseHandler -> XHR : json <
+ResponseHandler .> TransferObject : converts JSON into TO
 
-class core.ViewRegistry{
-} 
-class core.ObjectRegistry{
-} 
-core.Dispatcher -> handler.AbstractHandler
+XHR -> EventStore
 
-interface remote.RestfulObjects
-remote.RestfulObjects <|-- remote.ApacheIsis
-remote.RestfulObjects <|-- remote.NakedObjects
-view.LogEntries -> xhr.RequestLog
 
---
+package remote <<Cloud>> {
+interface RestfulObjects
+    class ApacheIsis<<(A, #FF7700)Application>>
+    class NakedObjects<<(A, #FF7700)Application>>
+}
+RestfulObjects <|-- ApacheIsis
+RestfulObjects <|-- NakedObjects
+XHR -> RestfulObjects : invoke
+XHR <- RestfulObjects : json 
+
+
+interface TransferObject
+TransferObject <|-- to.Link
+TransferObject <|-- to.Extensions
+TransferObject <|-- to.layout.Layout
+interface to.Linked{
+    links:Link[]
+}
+TransferObject <|-- to.Linked
+to.Linked <|-- to.Result
+to.Linked <|-- to.ResultList
+to.Linked <|-- to.Extended  
+interface to.Extended{
+    extensions:Extensions
+}
+to.Linked o-- to.Link
+to.Extended o-- to.Extensions
+to.Extended <|-- to.Property 
+to.Extended <|-- to.TObject 
+to.Extended <|-- to.Member 
+
+interface Observer {
+    update(logEntry)
+}
+class ListObserver {
+    -list:ObjectList  
+}
+ListObserver *-- ObjectList
+Observer <|-- ListObserver
+
+class NavigationObserver
+Observer <|-- NavigationObserver
+
+class ObjectList {
+    list:ObjectAdapter
+    -limit:int
+    -layout:Layout
+}
+ObjectList *-- to.layout.Layout
+@enduml

@@ -21,11 +21,11 @@ class ResultListHandler : AbstractHandler(), IResponseHandler {
     override fun doHandle() {
         val resultList = logEntry.obj as ResultList
         logEntry.obj = resultList
-        val lo: ListObserver = logEntry.initListObserver()
-        lo.update(logEntry)
+        val obs: ListObserver = ListObserver()
+        obs.update(logEntry)
         val members = resultList.result!!.value
         for (l in members) {
-            l.invoke()
+            l.invoke(obs)
         }
     }
 

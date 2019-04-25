@@ -1,8 +1,10 @@
 package org.ro.to
 
-object ACTIONS_CREATE {
-    val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/create"
-    val str = """{
+import org.ro.urls.Response
+
+object ACTIONS_CREATE : Response() {
+    override val url = "http://localhost:8080/restful/services/simple.SimpleObjectMenu/actions/create"
+    override val str = """{
         "id": "create",
         "memberType": "action",
         "links": [

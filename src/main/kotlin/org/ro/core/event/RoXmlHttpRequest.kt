@@ -1,7 +1,7 @@
 package org.ro.core.event
 
 import org.ro.core.Session
-import org.ro.handler.Dispatcher
+import org.ro.handler.ResponseHandler
 import org.ro.to.Link
 import org.ro.to.Method
 import org.w3c.xhr.XMLHttpRequest
@@ -13,22 +13,22 @@ class RoXmlHttpRequest {
     private var url = ""
 
     protected fun errorHandler(responseText: String) {
-        EventLog.fault(url, responseText)
+        EventStore.fault(url, responseText)
     }
 
     protected fun resultHandler(responseText: String) {
         val jsonString: String = responseText
-        val logEntry: LogEntry? = EventLog.end(url, jsonString)
+        val logEntry: LogEntry? = EventStore.end(url, jsonString)
         if (logEntry != null) {
-            Dispatcher.handle(logEntry)
+            ResponseHandler.handle(logEntry)
         }
     }
 
-    fun invoke(link: Link, obs: ILogEventObserver?) {
+    fun invoke(link: Link, obs: IObserver?) {
         //@kotlinx.coroutines.InternalCoroutinesApi cancel()
         url = link.href
-        if (EventLog.isCached(url)) {
-            EventLog.update(url)
+        if (EventStore.isCached(url)) {
+            EventStore.update(url)
         }
         val method = link.method
         val credentials: String = Session.getCredentials()
@@ -49,7 +49,7 @@ class RoXmlHttpRequest {
         } else {
             xhr.send()
         }
-        EventLog.start(url, method, body, obs)
+        EventStore.start(url, method, body, obs)
     }
 
 }

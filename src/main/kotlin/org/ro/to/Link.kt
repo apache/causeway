@@ -2,7 +2,7 @@ package org.ro.to
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
-import org.ro.core.event.ILogEventObserver
+import org.ro.core.event.IObserver
 import org.ro.core.event.RoXmlHttpRequest
 
 @Serializable
@@ -15,7 +15,7 @@ data class Link(val rel: String = "",
                 @Optional val title: String = "") {
 
     //TODO delegate to a facade?
-    fun invoke(obs: ILogEventObserver? = null) {
+    fun invoke(obs: IObserver? = null) {
         RoXmlHttpRequest().invoke(this, obs)
     }
 

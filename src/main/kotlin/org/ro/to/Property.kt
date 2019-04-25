@@ -18,7 +18,7 @@ data class Property(val id: String = "",
 
     fun descriptionLink(): Link? {
         for (l in links) {
-            if (l.rel == "describedby")  // introduce enum LinkType?
+            if (l.rel == RelType.DESCRIBEDBY.type)  
                 return l
         }
         return null

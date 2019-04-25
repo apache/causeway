@@ -1,46 +1,70 @@
 package org.ro.handler
 
-import org.ro.core.event.EventLog
+import org.ro.core.event.EventStore
 import org.ro.core.event.ListObserver
 import org.ro.core.event.LogEntry
-import org.ro.to.*
+import org.ro.to.FR_OBJECT_LAYOUT
+import org.ro.to.FR_OBJECT_PROPERTY
+import org.ro.to.FR_PROPERTY_DESCRIPTION
+import org.ro.to.Property
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class PropertyHandlerTest {
+class PropertyHandlerTest : IntegrationTest() {
 
     @Test
-    fun testService() {
-        if (TestUtil().isSimpleAppAvailable()) {
+    fun testProperty() {
+        if (isSimpleAppAvailable()) {
             // given
-            val file = FR_OBJECT_PROPERTY
-            val str = file.str
-            val url = file.url
-            val method = Method.GET.operation
-            val layout = LayoutHandler().parse(FR_OBJECT_LAYOUT.str)
-            val layoutLe = LogEntry(FR_OBJECT_LAYOUT.url)
-            layoutLe.obj = layout
             val obs = ListObserver()
-            obs.update(layoutLe)
-
-            // when 
-        //    val le = EventLog.start(url, method, obs = obs)
-        //    EventLog.end(url, str)
-        //    Dispatcher.handle(le)
-        //    console.log("[PHT.testService] PH.handle: ${le.observer}")
-            val link = Link(url, method)
-            link.invoke(obs)
+            // when
+            val propLe = mockResponse(FR_OBJECT_PROPERTY, obs)
+            val layoutLe = mockResponse(FR_OBJECT_LAYOUT, obs)
             // then 
-            val actLe: LogEntry? = EventLog.find(url)
-            console.log("[PHT.testService] EL.find $actLe")
-            console.log("[PHT.testService] ${actLe!!.observer}")
+            val actLe: LogEntry? = EventStore.find(FR_OBJECT_PROPERTY.url)
             assertNotNull(actLe)  //1
             assertNotNull(actLe.obj)  //2
             val p = actLe.obj as Property
-            console.log("[PHT.testService] $p")  
             assertNotNull(p.id)    // 3
             assertNotNull(p.descriptionLink())  //4
+
+            val actObs = actLe.observer as ListObserver
+            assertEquals(obs, actObs)              //5
+            assertNotNull(actObs.list.layout)         //6
         }
     }
+
+    @Test
+    fun testPropertyDescription() {
+        if (isSimpleAppAvailable()) {
+            // given
+            val obs = ListObserver()
+            // when
+            val pdLe = mockResponse(FR_PROPERTY_DESCRIPTION, obs)
+            assertNotNull(pdLe)  //(1)
+            assertNotNull(pdLe.observer) //(2)
+
+            val layoutLe = mockResponse(FR_OBJECT_LAYOUT, obs)
+            assertNotNull(layoutLe)  //(3)
+            assertEquals(pdLe.observer, layoutLe.observer) //(4)
+
+            val ol = obs.list
+            val lyt = ol.layout
+            assertNotNull(lyt)  // 5
+
+            val property = pdLe.obj as Property
+            assertNotNull(property)  //(6)
+
+            console.log("[PHT.testPropertyDescription] ${pdLe.toString()}")
+            val props = ol.propertyLabels
+            assertNotNull(props) //7
+            console.log("[PHT.testPropertyDescription] $props")
+            
+            val lbl: String? = ol.getPropertyLabel(property.id)
+            assertNotNull(lbl)  //(8)
+        }
+    }
+
 
 }
