@@ -34,5 +34,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface ActionParameterDefaultsFacet extends Facet {
 
-    public abstract Object getDefault(ObjectAdapter target, List<ObjectAdapter> parameters);
+    public abstract Object getDefault(
+            ObjectAdapter target,
+            List<ObjectAdapter> parameters,
+            final Integer paramNumUpdated);
 }

@@ -56,7 +56,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -113,30 +112,36 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
 
     /**
-     * @param actionModel
-     * @param paramNum
+     *
+     * @param actionModel - the action being invoked
+     * @param paramNumUpdated - the # of the param that has just been updated by the user
+     * @param paramNumToPossiblyUpdate - the # of the param to be updated if necessary (will be &gt; paramNumUpdated)
+     *
      * @return - true if changed as a result of these pending arguments.
      */
     public boolean updateIfNecessary(
             final ActionModel actionModel,
-            final int paramNum) {
+            final int paramNumUpdated,
+            final int paramNumToPossiblyUpdate) {
 
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
         final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
 
         final ScalarModel model = getModel();
         ObjectAdapter defaultIfAny = model.getKind()
-                .getDefault(scalarModel, pendingArguments, getAuthenticationSession(), getDeploymentCategory());
+                .getDefault(scalarModel, pendingArguments, paramNumUpdated,
+                        getAuthenticationSession(), getDeploymentCategory());
 
-        final ObjectActionParameter actionParameter = action.getParameters().get(paramNum);
+        final ObjectActionParameter actionParameter = action.getParameters().get(paramNumToPossiblyUpdate);
         final ActionParameterMemento apm = new ActionParameterMemento(actionParameter);
         final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
 
-        final ObjectAdapter pendingArg = pendingArguments[paramNum];
+        final ObjectAdapter pendingArg = pendingArguments[paramNumToPossiblyUpdate];
 
         if (defaultIfAny != null) {
             scalarModel.setObject(defaultIfAny);
-            scalarModel.setPending(ObjectAdapterMemento.createOrNull(defaultIfAny));
+
+            scalarModel.setPendingAdapter(defaultIfAny);
             actionArgumentModel.setObject(defaultIfAny);
         } else {
 
