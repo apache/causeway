@@ -52,9 +52,11 @@ import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterA
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
+import org.apache.isis.core.metamodel.interactions.ActionArgUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
 import org.apache.isis.core.metamodel.interactions.ActionArgVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
@@ -491,6 +493,33 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
         final InteractionResult visibleResult = InteractionUtils.isVisibleResult(this, ic);
         return visibleResult.createConsent();
+    }
+
+    //endregion
+
+    //region > Usability
+
+    private ActionArgUsabilityContext createArgumentUsabilityContext(
+            final ObjectAdapter objectAdapter,
+            final ObjectAdapter[] proposedArguments,
+            final int position,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return new ActionArgUsabilityContext(
+                objectAdapter, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
+    }
+
+    @Override
+    public Consent isUsable(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] pendingArguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        final UsabilityContext<?> ic = createArgumentUsabilityContext(
+                targetAdapter, pendingArguments, getNumber(), interactionInitiatedBy
+        );
+
+        final InteractionResult usableResult = InteractionUtils.isUsableResult(this, ic);
+        return usableResult.createConsent();
     }
 
     //endregion

@@ -174,13 +174,15 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
                         .updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate);
 
                 switch (howUpdated) {
-                case NOW_VISIBLE:
                 case NOW_INVISIBLE:
+                case NOW_VISIBLE:
                 case NOW_VISIBLE_AND_CHOICES:
                     // need to repaint the entire container
                     target.add(this);
                     break;
                 case NOW_DISABLED:
+                case NOW_ENABLED:
+                case NOW_ENABLED_AND_CHOICES:
                 case DEFAULTS:
                 case CHOICES_ONLY:
                     paramPanel.repaint(target);

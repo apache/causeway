@@ -133,6 +133,18 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
+     * Whether this parameter is disabled given the entered previous arguments
+     * @param targetAdapter
+     * @param pendingArguments
+     * @param interactionInitiatedBy
+     * @return
+     */
+    Consent isUsable(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] pendingArguments,
+            final InteractionInitiatedBy interactionInitiatedBy);
+
+    /**
      * Whether proposed value for this parameter is valid.
      * 
      * @param adapter

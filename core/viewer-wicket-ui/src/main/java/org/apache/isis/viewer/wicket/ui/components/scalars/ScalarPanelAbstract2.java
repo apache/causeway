@@ -116,6 +116,8 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     public enum HowUpdated {
         NOW_VISIBLE,
         NOW_INVISIBLE,
+        NOW_ENABLED,
+        NOW_ENABLED_AND_CHOICES,
         NOW_DISABLED,
         DEFAULTS,
         NOW_VISIBLE_AND_CHOICES,
@@ -156,7 +158,15 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         }
 
         // check usability
-        // (STILL TODO)
+        final Consent usabilityConsent = actionParameter.isUsable(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
+
+        final boolean usabilityBefore = isEnabled();
+        final boolean usabilityAfter = usabilityConsent.isAllowed();
+        setEnabled(usabilityAfter);
+
+        if(!usabilityAfter) {
+            return HowUpdated.NOW_DISABLED;
+        }
 
 
         // check defaults
@@ -191,6 +201,9 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         if(visibilityBefore != visibilityAfter) {
             return HowUpdated.NOW_VISIBLE;
+        }
+        if(usabilityBefore != usabilityAfter) {
+            return HowUpdated.NOW_ENABLED;
         }
 
         return scalarModel.getObject() != pendingArg

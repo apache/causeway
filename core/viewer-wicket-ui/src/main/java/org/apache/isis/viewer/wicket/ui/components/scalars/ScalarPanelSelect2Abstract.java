@@ -182,10 +182,15 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
             // no need to recalculate the choices
             return howUpdated;
         case NOW_VISIBLE:
-            return updateChoices(argumentsAsArray) ? HowUpdated.NOW_VISIBLE_AND_CHOICES : HowUpdated.NOW_VISIBLE;
+            return updateChoices(argumentsAsArray) ? HowUpdated.NOW_VISIBLE_AND_CHOICES : howUpdated;
         case NOW_VISIBLE_AND_CHOICES:
             updateChoices(argumentsAsArray);
-            return HowUpdated.NOW_VISIBLE_AND_CHOICES;
+            return howUpdated;
+        case NOW_ENABLED:
+            return updateChoices(argumentsAsArray) ? HowUpdated.NOW_ENABLED_AND_CHOICES : howUpdated;
+        case NOW_ENABLED_AND_CHOICES:
+            updateChoices(argumentsAsArray);
+            return howUpdated;
         case DEFAULTS:
             return updateChoices(argumentsAsArray) ? HowUpdated.CHOICES_ONLY : HowUpdated.DEFAULTS;
         case CHOICES_ONLY:
