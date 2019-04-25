@@ -47,6 +47,8 @@ import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
@@ -133,6 +135,22 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                         getAuthenticationSession(), getDeploymentCategory());
 
         final ObjectActionParameter actionParameter = action.getParameters().get(paramNumToPossiblyUpdate);
+
+        final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
+        final ObjectAdapter realTargetAdapter = action.realTargetAdapter(targetAdapter);
+        Consent visibilityConsent = actionParameter.isVisible(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
+
+        final boolean visibilityBefore = isVisible();
+//        final boolean visibilityBefore = isVisibilityAllowed();
+        final boolean visibilityAfter = visibilityConsent.isAllowed();
+//        setVisibilityAllowed(visibilityAfter);
+        setVisible(visibilityAfter);
+
+        if(visibilityBefore != visibilityAfter) {
+            // no further processing, but indicate that our state has changed and so need repainting.
+            return true;
+        }
+
         final ActionParameterMemento apm = new ActionParameterMemento(actionParameter);
         final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
 

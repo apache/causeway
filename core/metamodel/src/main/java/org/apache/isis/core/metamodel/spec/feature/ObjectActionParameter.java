@@ -26,6 +26,7 @@ import com.google.common.base.Predicate;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
@@ -118,7 +119,19 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             final ObjectAdapter[] argumentsIfAvailable,
             final Integer paramNumUpdated);
 
-    
+
+    /**
+     * Whether this parameter is visible given the entered previous arguments
+     * @param targetAdapter
+     * @param pendingArguments
+     * @param interactionInitiatedBy
+     * @return
+     */
+    Consent isVisible(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] pendingArguments,
+            final InteractionInitiatedBy interactionInitiatedBy);
+
     /**
      * Whether proposed value for this parameter is valid.
      * 
@@ -131,9 +144,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
             final ObjectAdapter adapter,
             final Object proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy);
- 
 
-    
     public static class Filters {
         private Filters(){}
         

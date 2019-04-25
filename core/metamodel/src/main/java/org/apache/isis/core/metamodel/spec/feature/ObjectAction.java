@@ -200,6 +200,16 @@ public interface ObjectAction extends ObjectMember {
 
     //endregion
 
+    /**
+     * The actual target to invoke actions upon.
+     *
+     * <p>
+     *     For regular actions, returns same argument, but for mixin actions, will be an instance of the mixin.
+     * </p>
+     */
+    ObjectAdapter realTargetAdapter(ObjectAdapter targetAdapter);
+
+
     //region > Parameters (per instance)
 
     /**

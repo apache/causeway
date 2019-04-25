@@ -32,6 +32,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -83,7 +85,20 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             actionArgumentModel.setActionArgsHint(actionModel.getArgumentsAsArray());
             final ScalarPanelAbstract2 paramPanel = newParamPanel(container, actionArgumentModel);
             paramPanels.add(paramPanel);
+
+            final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
+            final ObjectAdapter realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
+                    .realTargetAdapter(targetAdapter);
+            final Consent consent = apm.getActionParameter(getSpecificationLoader())
+                    .isVisible(realTargetAdapter, null, InteractionInitiatedBy.USER);
+            final boolean allowed = consent.isAllowed();
+            paramPanel.setVisibilityAllowed(allowed);
+            paramPanel.setVisible(allowed);
         }
+
+        setOutputMarkupId(true);
+
+
     }
 
     private ScalarPanelAbstract2 newParamPanel(final WebMarkupContainer container, final ActionArgumentModel model) {
@@ -158,6 +173,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
                 final ScalarPanelAbstract2 paramPanel = paramPanels.get(paramNumToUpdate);
                 if(paramPanel.updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate)) {
                     paramPanel.repaint(target);
+                    target.add(ActionParametersForm.this);
                 }
             }
         } catch (ConcurrencyException ex) {

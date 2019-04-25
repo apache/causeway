@@ -198,7 +198,8 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      */
     @Override
     public void repaint(AjaxRequestTarget target) {
-        target.add(select2.component());
+        //target.add(select2.component());
+        target.add(this);
     }
 
     static class Select2Validator implements IValidator<Object> {

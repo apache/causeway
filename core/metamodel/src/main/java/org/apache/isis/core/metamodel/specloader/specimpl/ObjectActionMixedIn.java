@@ -125,6 +125,11 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     }
 
     @Override
+    public ObjectAdapter realTargetAdapter(final ObjectAdapter targetAdapter) {
+        return mixinAdapterFor(targetAdapter);
+    }
+
+    @Override
     protected synchronized List<ObjectActionParameter> determineParameters() {
         if (parameters != null) {
             // because possible race condition (caller isn't synchronized)

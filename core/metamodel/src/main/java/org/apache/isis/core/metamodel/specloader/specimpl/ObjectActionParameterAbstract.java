@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -52,8 +53,10 @@ import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
+import org.apache.isis.core.metamodel.interactions.ActionArgVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.Instance;
@@ -461,6 +464,33 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         for (final ObjectAdapter choiceAdapter : allInstancesAdapter) {
             adapters.add(choiceAdapter);
         }
+    }
+
+    //endregion
+
+    //region > Visibility
+
+    private ActionArgVisibilityContext createArgumentVisibilityContext(
+            final ObjectAdapter objectAdapter,
+            final ObjectAdapter[] proposedArguments,
+            final int position,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return new ActionArgVisibilityContext(
+                objectAdapter, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
+    }
+
+    @Override
+    public Consent isVisible(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] pendingArguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        final VisibilityContext<?> ic = createArgumentVisibilityContext(
+                targetAdapter, pendingArguments, getNumber(), interactionInitiatedBy
+        );
+
+        final InteractionResult visibleResult = InteractionUtils.isVisibleResult(this, ic);
+        return visibleResult.createConsent();
     }
 
     //endregion
