@@ -33,11 +33,24 @@ import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefau
 public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaultsFacetAbstract implements ImperativeFacet {
 
     private final Method method;
+    private final int paramNum;
     private final AdapterManager adapterManager;
 
-    public ActionParameterDefaultsFacetViaMethod(final Method method, final FacetHolder holder, final AdapterManager adapterManager) {
+    /**
+     *
+     * @param method
+     * @param paramNum - which parameter this facet relates to.
+     * @param holder
+     * @param adapterManager
+     */
+    public ActionParameterDefaultsFacetViaMethod(
+            final Method method,
+            final int paramNum,
+            final FacetHolder holder,
+            final AdapterManager adapterManager) {
         super(holder);
         this.method = method;
+        this.paramNum = paramNum;
         this.adapterManager = adapterManager;
     }
 
@@ -56,8 +69,35 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
     }
 
     @Override
-    public Object getDefault(final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable) {
-        return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable, getAdapterManager());
+    public Object getDefault(
+            final ObjectAdapter target,
+            final List<ObjectAdapter> argumentsIfAvailable,
+            final Integer paramNumUpdated) {
+
+        // this isn't a dependent defaults situation, so just evaluate the default.
+        if (argumentsIfAvailable == null || paramNumUpdated == null) {
+            return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable, getAdapterManager());
+        }
+
+        // this could be a dependent defaults situation, but has a previous parameter been updated
+        // that this parameter is dependent upon?
+        final int numParams = method.getParameterTypes().length;
+        if (paramNumUpdated < numParams) {
+            // in this case the parameter that was updated is previous
+            //
+            // eg, suppose the method is default2Foo(int, int), and the second param is updated... we want to re-evaluate
+            // so numParams == 2, and paramNumUpdated == 1, and (paramNumUpdated < numParams) is TRUE
+            //
+            // converesly, if method default2Foo(int), and the second param is updated... we don't want to re-evaluate
+            // so numParams == 1, and paramNumUpdated == 1, and (paramNumUpdated < numParams) is FALSE
+            //
+            return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable, getAdapterManager());
+        }
+
+        // otherwise, just return the arguments that are already known; we don't want to recompute the default
+        // because if we did then this would trample over any pending changes already made by the end-user.
+        final ObjectAdapter objectAdapter = argumentsIfAvailable.get(paramNum);
+        return objectAdapter != null ? objectAdapter.getObject() : null;
     }
 
 

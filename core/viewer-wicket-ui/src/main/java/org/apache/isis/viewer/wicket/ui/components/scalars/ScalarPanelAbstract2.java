@@ -19,9 +19,11 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
@@ -113,30 +115,49 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
 
     /**
-     * @param actionModel
-     * @param paramNum
+     *
+     * @param actionModel - the action being invoked
+     * @param paramNumUpdated - the # of the param that has just been updated by the user
+     * @param paramNumToPossiblyUpdate - the # of the param to be updated if necessary (will be &gt; paramNumUpdated)
+     *
      * @return - true if changed as a result of these pending arguments.
      */
     public boolean updateIfNecessary(
             final ActionModel actionModel,
-            final int paramNum) {
+            final int paramNumUpdated,
+            final int paramNumToPossiblyUpdate) {
 
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
         final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
 
         final ScalarModel model = getModel();
         ObjectAdapter defaultIfAny = model.getKind()
-                .getDefault(scalarModel, pendingArguments, getAuthenticationSession(), getDeploymentCategory());
+                .getDefault(scalarModel, pendingArguments, paramNumUpdated,
+                        getAuthenticationSession(), getDeploymentCategory());
 
-        final ObjectActionParameter actionParameter = action.getParameters().get(paramNum);
+        final ObjectActionParameter actionParameter = action.getParameters().get(paramNumToPossiblyUpdate);
         final ActionParameterMemento apm = new ActionParameterMemento(actionParameter);
         final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
 
-        final ObjectAdapter pendingArg = pendingArguments[paramNum];
+        final ObjectAdapter pendingArg = pendingArguments[paramNumToPossiblyUpdate];
 
         if (defaultIfAny != null) {
             scalarModel.setObject(defaultIfAny);
-            scalarModel.setPending(ObjectAdapterMemento.createOrNull(defaultIfAny));
+
+            // TODO: similar logic in scalarModel#setObject, should combine...
+            if(scalarModel.isCollection()) {
+                final Object pojo = defaultIfAny.getObject();
+                final Iterable iterable = (Iterable) pojo;
+                final ArrayList<ObjectAdapterMemento> listOfMementos =
+                        Lists.newArrayList(FluentIterable.from(iterable)
+                              .transform(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))
+                        .toList());
+                final ObjectAdapterMemento memento =
+                        ObjectAdapterMemento.createForList(listOfMementos, scalarModel.getTypeOfSpecification().getSpecId());
+                scalarModel.setPending(memento);
+            } else {
+                scalarModel.setPending(ObjectAdapterMemento.createOrNull(defaultIfAny));
+            }
             actionArgumentModel.setObject(defaultIfAny);
         } else {
 

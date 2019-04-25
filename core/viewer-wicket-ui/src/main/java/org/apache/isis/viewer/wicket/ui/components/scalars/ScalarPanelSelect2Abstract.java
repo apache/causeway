@@ -169,11 +169,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      */
     @Override
     public boolean updateIfNecessary(
-            final ActionModel actionModel, final int paramNum) {
+            final ActionModel actionModel, final int paramNumUpdated, final int paramNumToPossiblyUpdate) {
 
-        final boolean choicesUpdated = updateChoices(actionModel.getArgumentsAsArray());
+        final ObjectAdapter[] argumentsAsArray = actionModel.getArgumentsAsArray();
+        final boolean choicesUpdated = updateChoices(argumentsAsArray);
         final boolean currentUpdated =
-                super.updateIfNecessary(actionModel, paramNum);
+                super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate);
 
         return currentUpdated || choicesUpdated;
     }

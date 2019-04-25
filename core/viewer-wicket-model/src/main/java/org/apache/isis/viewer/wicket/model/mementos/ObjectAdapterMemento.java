@@ -89,7 +89,7 @@ public class ObjectAdapterMemento implements Serializable {
         return list != null ? createForList(Lists.newArrayList(list), objectSpecId) :  null;
     }
 
-    enum Sort {
+    public enum Sort {
         /**
          * represents a single object
          */

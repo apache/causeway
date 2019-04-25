@@ -143,30 +143,22 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract2 currScalarPanel) {
+    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanelUpdated) {
 
         final ActionModel actionModel = getActionModel();
 
+        final int paramNumberUpdated = scalarPanelUpdated.getModel().getParameterMemento().getNumber();
         try {
             final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
 
             final int numParams = action.getParameterCount();
 
             // only updates subsequent parameter panels to this one.
-            boolean seenCurrent = false;
-            for (int paramNum = 0; paramNum < numParams; paramNum++) {
-                final ScalarPanelAbstract2 paramPanel = paramPanels.get(paramNum);
-                if(paramPanel == currScalarPanel) {
-                    seenCurrent = true;
-                    continue;
-                }
-                if(!seenCurrent) {
-                    continue;
-                }
-                if(paramPanel.updateIfNecessary(actionModel, paramNum)) {
+            for (int paramNumToUpdate = paramNumberUpdated + 1; paramNumToUpdate < numParams; paramNumToUpdate++) {
+                final ScalarPanelAbstract2 paramPanel = paramPanels.get(paramNumToUpdate);
+                if(paramPanel.updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate)) {
                     paramPanel.repaint(target);
                 }
-
             }
         } catch (ConcurrencyException ex) {
 

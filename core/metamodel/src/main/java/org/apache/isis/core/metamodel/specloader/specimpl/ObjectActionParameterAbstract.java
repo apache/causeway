@@ -376,20 +376,22 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     @Override
     public ObjectAdapter getDefault(
             final ObjectAdapter adapter,
-            final ObjectAdapter[] argumentsIfAvailable) {
+            final ObjectAdapter[] argumentsIfAvailable,
+            final Integer paramNumUpdated) {
         
         final ObjectAdapter target = targetForDefaultOrChoices(adapter);
         final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, argumentsIfAvailable != null ? Arrays.asList(argumentsIfAvailable) : null);
         
-        return findDefault(target, args);
+        return findDefault(target, args, paramNumUpdated);
     }
 
     private ObjectAdapter findDefault(
-            final ObjectAdapter target, 
-            final List<ObjectAdapter> args) {
+            final ObjectAdapter target,
+            final List<ObjectAdapter> args,
+            final Integer paramNumUpdated) {
         final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null) {
-            final Object dflt = defaultsFacet.getDefault(target, args);
+            final Object dflt = defaultsFacet.getDefault(target, args, paramNumUpdated);
             if (dflt == null) {
                 // it's possible that even though there is a default facet, when
                 // invoked it is unable to return a default.

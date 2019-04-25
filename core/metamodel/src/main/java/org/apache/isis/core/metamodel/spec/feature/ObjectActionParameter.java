@@ -115,7 +115,8 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
     ObjectAdapter getDefault(
             ObjectAdapter adapter,
-            final ObjectAdapter[] argumentsIfAvailable);
+            final ObjectAdapter[] argumentsIfAvailable,
+            final Integer paramNumUpdated);
 
     
     /**

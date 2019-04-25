@@ -186,6 +186,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
             public ObjectAdapter getDefault(
                     final ScalarModel scalarModel,
                     final ObjectAdapter[] argsIfAvailable,
+                    final int paramNumUpdated,
                     final AuthenticationSession authenticationSession,
                     final DeploymentCategory deploymentCategory) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
@@ -420,13 +421,14 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
             public ObjectAdapter getDefault(
                     final ScalarModel scalarModel,
                     final ObjectAdapter[] argsIfAvailable,
+                    final int paramNumUpdated,
                     final AuthenticationSession authenticationSession,
                     final DeploymentCategory deploymentCategory) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
 
                 final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
-                return actionParameter.getDefault(parentAdapter, argsIfAvailable);
+                return actionParameter.getDefault(parentAdapter, argsIfAvailable, paramNumUpdated);
             }
 
             @Override
@@ -543,7 +545,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
                         scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
                         scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
-                final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentAdapter, null);
+                final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentAdapter, null, null);
                 scalarModel.setObject(defaultAdapter);
             }
 
@@ -627,6 +629,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         public abstract ObjectAdapter getDefault(
                 final ScalarModel scalarModel,
                 final ObjectAdapter[] argsIfAvailable,
+                final int paramNumUpdated,
                 final AuthenticationSession authenticationSession,
                 final DeploymentCategory deploymentCategory);
 
@@ -1002,7 +1005,10 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
 
             @Override
             public ArrayList<ObjectAdapterMemento> getMultiPending() {
-                final ObjectAdapterMemento pending = ScalarModel.this.getPending();
+                final ScalarModel scalarModel = ScalarModel.this;
+                final ObjectAdapterMemento objectAdapterMemento = scalarModel.getObjectAdapterMemento();
+                final ObjectAdapterMemento.Sort sort = objectAdapterMemento.getSort();
+                final ObjectAdapterMemento pending = scalarModel.getPending();
                 return pending != null ? pending.getList() : null;
             }
 
