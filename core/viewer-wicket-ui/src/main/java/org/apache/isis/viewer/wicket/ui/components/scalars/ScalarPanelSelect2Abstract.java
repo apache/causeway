@@ -168,15 +168,23 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      * called from onUpdate callback
      */
     @Override
-    public boolean updateIfNecessary(
+    public Repaint updateIfNecessary(
             final ActionModel actionModel, final int paramNumUpdated, final int paramNumToPossiblyUpdate) {
 
         final ObjectAdapter[] argumentsAsArray = actionModel.getArgumentsAsArray();
-        final boolean choicesUpdated = updateChoices(argumentsAsArray);
-        final boolean currentUpdated =
+
+        final Repaint repaint =
                 super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate);
 
-        return currentUpdated || choicesUpdated;
+        final boolean choicesUpdated = updateChoices(argumentsAsArray);
+
+        if (repaint == Repaint.NOTHING)
+            if (choicesUpdated)
+                return Repaint.PARAM_ONLY;
+            else
+                return Repaint.NOTHING;
+        else
+            return repaint;
     }
 
     private boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
@@ -198,7 +206,8 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      */
     @Override
     public void repaint(AjaxRequestTarget target) {
-        target.add(select2.component());
+        //target.add(select2.component());
+        target.add(this);
     }
 
     static class Select2Validator implements IValidator<Object> {

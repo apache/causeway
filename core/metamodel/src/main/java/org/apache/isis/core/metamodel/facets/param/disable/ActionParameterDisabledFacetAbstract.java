@@ -17,31 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.validate;
+package org.apache.isis.core.metamodel.facets.param.disable;
 
-import org.apache.isis.applib.events.ValidityEvent;
+import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.interactions.ActionArgUsabilityContext;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
-public abstract class ActionParameterValidationFacetAbstract extends FacetAbstract implements ActionParameterValidationFacet {
+public abstract class ActionParameterDisabledFacetAbstract extends FacetAbstract implements
+        ActionParameterDisabledFacet {
 
     public static Class<? extends Facet> type() {
-        return ActionParameterValidationFacet.class;
+        return ActionParameterDisabledFacet.class;
     }
 
-    public ActionParameterValidationFacetAbstract(final FacetHolder holder) {
+    public ActionParameterDisabledFacetAbstract(final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
     }
 
     @Override
-    public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
-        if (!(context instanceof ActionArgValidityContext)) {
+    public String disables(final UsabilityContext<? extends UsabilityEvent> context) {
+        if (!(context instanceof ActionArgUsabilityContext)) {
             return null;
         }
-        final ActionArgValidityContext actionArgValidityContext = (ActionArgValidityContext) context;
-        return invalidReason(actionArgValidityContext.getTarget(), actionArgValidityContext.getProposed());
+        final ActionArgUsabilityContext actionArgUsabilityContext = (ActionArgUsabilityContext) context;
+        return disabledReason(actionArgUsabilityContext.getTarget(), actionArgUsabilityContext.getArgs());
     }
 }

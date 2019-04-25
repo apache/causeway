@@ -684,6 +684,11 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
 
+    @Override
+    public ObjectAdapter realTargetAdapter(final ObjectAdapter targetAdapter) {
+        return targetAdapter;
+    }
+
     //endregion
 
     //region > toString

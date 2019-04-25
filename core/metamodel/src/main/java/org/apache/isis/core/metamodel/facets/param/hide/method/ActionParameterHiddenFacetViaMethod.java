@@ -17,35 +17,36 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.validate.method;
+package org.apache.isis.core.metamodel.facets.param.hide.method;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.applib.services.i18n.TranslatableString;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.actions.validate.ActionParameterValidationFacetAbstract;
+import org.apache.isis.core.metamodel.facets.param.hide.ActionParameterHiddenFacetAbstract;
 
-public class ActionParameterValidationFacetViaMethod extends ActionParameterValidationFacetAbstract implements ImperativeFacet {
+public class ActionParameterHiddenFacetViaMethod extends ActionParameterHiddenFacetAbstract implements ImperativeFacet {
 
     private final Method method;
-    private final TranslationService translationService;
-    private final String translationContext;
+    private final AdapterManager adapterManager;
 
-    public ActionParameterValidationFacetViaMethod(final Method method, final TranslationService translationService, final String translationContext, final FacetHolder holder) {
+    public ActionParameterHiddenFacetViaMethod(
+            final Method method,
+            final FacetHolder holder,
+            final AdapterManager adapterManager) {
         super(holder);
         this.method = method;
-        this.translationService = translationService;
-        this.translationContext = translationContext;
+        this.adapterManager = adapterManager;
     }
 
     /**
-     * Returns a singleton list of the {@link java.lang.reflect.Method} provided in the
+     * Returns a singleton list of the {@link Method} provided in the
      * constructor.
      */
     @Override
@@ -59,16 +60,17 @@ public class ActionParameterValidationFacetViaMethod extends ActionParameterVali
     }
 
     @Override
-    public String invalidReason(final ObjectAdapter owningAdapter, final ObjectAdapter proposedArgumentAdapter) {
-        final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, proposedArgumentAdapter);
-        if(returnValue instanceof String) {
-            return (String) returnValue;
+    public boolean isHidden(final ObjectAdapter owningAdapter, final ObjectAdapter[] argumentAdapters) {
+        final Object returnValue = ObjectAdapter.InvokeUtils.invokeAutofit(method, owningAdapter, argumentAdapters != null ? Arrays.asList(argumentAdapters) : null, getAdapterManager());
+        if(returnValue instanceof Boolean) {
+            return (Boolean) returnValue;
         }
-        if(returnValue instanceof TranslatableString) {
-            final TranslatableString ts = (TranslatableString) returnValue;
-            return ts.translate(translationService, translationContext);
-        }
-        return null;
+        // following precedent for validate, we let this through.
+        return false;
+    }
+
+    private AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 
     @Override
@@ -78,7 +80,7 @@ public class ActionParameterValidationFacetViaMethod extends ActionParameterVali
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
-        ImperativeFacet.Util.appendAttributesTo(this, attributeMap);
+        Util.appendAttributesTo(this, attributeMap);
     }
 
 }

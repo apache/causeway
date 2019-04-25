@@ -380,6 +380,7 @@ div.entityHeaderPanel .iconAndTitle{
 div.entityHeaderPanel .iconAndTitleLabel {
     float: left;
     margin-bottom: 10px;
+    margin-right: 10px;
 }
 
 div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {

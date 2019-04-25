@@ -47,6 +47,8 @@ import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
@@ -111,6 +113,12 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
     private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
 
+    public enum Repaint {
+        ENTIRE_FORM,
+        PARAM_ONLY,
+        NOTHING
+    }
+
     /**
      *
      * @param actionModel - the action being invoked
@@ -119,7 +127,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
      *
      * @return - true if changed as a result of these pending arguments.
      */
-    public boolean updateIfNecessary(
+    public Repaint updateIfNecessary(
             final ActionModel actionModel,
             final int paramNumUpdated,
             final int paramNumToPossiblyUpdate) {
@@ -127,12 +135,36 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
         final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
 
+
+        // could almost certainly simplify this... (used by visibility and usability checks)
+        final ObjectActionParameter actionParameter = action.getParameters().get(paramNumToPossiblyUpdate);
+        final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
+        final ObjectAdapter realTargetAdapter = action.realTargetAdapter(targetAdapter);
+
+        // check visibility
+        final Consent visibilityConsent = actionParameter.isVisible(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
+
+        final boolean visibilityBefore = isVisible();
+        final boolean visibilityAfter = visibilityConsent.isAllowed();
+        setVisible(visibilityAfter);
+
+
+        // check usability
+        final Consent usabilityConsent = actionParameter.isUsable(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
+
+        final boolean usabilityBefore = isEnabled();
+        final boolean usabilityAfter = usabilityConsent.isAllowed();
+        setEnabled(usabilityAfter);
+
+
+
+        // even if now invisible or unusable, we recalculate args and ensure compatible
+        // (else can hit complicated edge cases with stale data when next re-enable/make visible)
         final ScalarModel model = getModel();
         ObjectAdapter defaultIfAny = model.getKind()
                 .getDefault(scalarModel, pendingArguments, paramNumUpdated,
                         getAuthenticationSession(), getDeploymentCategory());
 
-        final ObjectActionParameter actionParameter = action.getParameters().get(paramNumToPossiblyUpdate);
         final ActionParameterMemento apm = new ActionParameterMemento(actionParameter);
         final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
 
@@ -157,7 +189,20 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             }
         }
 
-        return scalarModel.getObject() != pendingArg;
+        // repaint the entire form if visibility has changed
+        if (!visibilityBefore || !visibilityAfter) {
+            return Repaint.ENTIRE_FORM;
+        }
+
+        // repaint the param if usability has changed
+        if (!usabilityAfter || !usabilityBefore) {
+            return Repaint.PARAM_ONLY;
+        }
+
+        // also repaint the param if its pending arg has changed.
+        return scalarModel.getObject() != pendingArg
+                ? Repaint.PARAM_ONLY
+                : Repaint.NOTHING;
     }
 
 

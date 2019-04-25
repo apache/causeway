@@ -17,29 +17,23 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.validate;
+package org.apache.isis.core.metamodel.facets.param.disable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 
 /**
- * The mechanism by which a single parameter of the action can be validated
- * before the action itself is invoked.
- * 
+ * The mechanism by which a single parameter of the action can be disabled.
+ *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
- * <tt>validateNXxx</tt> support method for an action.
- * 
- * <p>
- * Note that the parameter may be validated independently first (eg a range check on a numeric parameter).
- * 
- * @see org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet
+ * <tt>disableNXxx</tt> support method for an action.
  */
-public interface ActionParameterValidationFacet extends Facet, ValidatingInteractionAdvisor {
+public interface ActionParameterDisabledFacet extends Facet, DisablingInteractionAdvisor {
 
     /**
-     * Reason why the validation has failed, or <tt>null</tt> if okay.
+     * Reason why the parameter is disabled, or <tt>null</tt> if okay.
      */
-    public String invalidReason(ObjectAdapter target, ObjectAdapter arguments);
+    public String disabledReason(ObjectAdapter target, ObjectAdapter[] arguments);
 }

@@ -992,10 +992,10 @@
                             <mml:attr name="defaultFacets">org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider</mml:attr>
                             <mml:attr name="derived">true</mml:attr>
                         </mml:facet>
-                        <mml:facet id="org.apache.isis.core.metamodel.facets.actions.validate.ActionParameterValidationFacet" fqcn="org.apache.isis.core.metamodel.facets.actions.validate.method.ActionParameterValidationFacetViaMethod">
+                        <mml:facet id="org.apache.isis.core.metamodel.facets.param.validate.ActionParameterValidationFacet" fqcn="org.apache.isis.core.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethod">
                             <mml:attr name="intent.validate0UpdateName">CHECK_IF_VALID</mml:attr>
                             <mml:attr name="methods">public org.apache.isis.applib.services.i18n.TranslatableString domainapp.modules.simple.dom.impl.SimpleObject.validate0UpdateName(java.lang.String)</mml:attr>
-                            <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.actions.validate.method.ActionParameterValidationFacetViaMethod</mml:attr>
+                            <mml:attr name="underlyingFacet">org.apache.isis.core.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethod</mml:attr>
                             <mml:attr name="validating">true</mml:attr>
                         </mml:facet>
                         <mml:facet id="org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet" fqcn="org.apache.isis.core.metamodel.facets.param.describedas.annotderived.DescribedAsFacetOnParameterDerivedFromType"/>
