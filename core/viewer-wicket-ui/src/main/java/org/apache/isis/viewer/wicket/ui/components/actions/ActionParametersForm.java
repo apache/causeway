@@ -170,27 +170,20 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             // only updates subsequent parameter panels to this one.
             for (int paramNumToUpdate = paramNumberUpdated + 1; paramNumToUpdate < numParams; paramNumToUpdate++) {
                 final ScalarPanelAbstract2 paramPanel = paramPanels.get(paramNumToUpdate);
-                final ScalarPanelAbstract2.HowUpdated howUpdated = paramPanel
+                final ScalarPanelAbstract2.Repaint repaint = paramPanel
                         .updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate);
 
-                switch (howUpdated) {
-                case NOW_INVISIBLE:
-                case NOW_VISIBLE:
-                case NOW_VISIBLE_AND_CHOICES:
-                    // need to repaint the entire container
+                switch (repaint) {
+                case ENTIRE_FORM:
                     target.add(this);
                     break;
-                case NOW_DISABLED:
-                case NOW_ENABLED:
-                case NOW_ENABLED_AND_CHOICES:
-                case DEFAULTS:
-                case CHOICES_ONLY:
+                case PARAM_ONLY:
                     paramPanel.repaint(target);
                     break;
-                case NONE:
+                case NOTHING:
                     break;
                 default:
-                    throw new IllegalStateException("Unknown: " + howUpdated);
+                    throw new IllegalStateException("Unknown: " + repaint);
                 }
             }
         } catch (ConcurrencyException ex) {

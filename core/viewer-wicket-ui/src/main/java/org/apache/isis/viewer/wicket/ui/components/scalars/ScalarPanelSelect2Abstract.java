@@ -168,38 +168,23 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      * called from onUpdate callback
      */
     @Override
-    public HowUpdated updateIfNecessary(
+    public Repaint updateIfNecessary(
             final ActionModel actionModel, final int paramNumUpdated, final int paramNumToPossiblyUpdate) {
 
         final ObjectAdapter[] argumentsAsArray = actionModel.getArgumentsAsArray();
 
-        final HowUpdated howUpdated =
+        final Repaint repaint =
                 super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate);
 
-        switch (howUpdated) {
-        case NOW_INVISIBLE:
-        case NOW_DISABLED:
-            // no need to recalculate the choices
-            return howUpdated;
-        case NOW_VISIBLE:
-            return updateChoices(argumentsAsArray) ? HowUpdated.NOW_VISIBLE_AND_CHOICES : howUpdated;
-        case NOW_VISIBLE_AND_CHOICES:
-            updateChoices(argumentsAsArray);
-            return howUpdated;
-        case NOW_ENABLED:
-            return updateChoices(argumentsAsArray) ? HowUpdated.NOW_ENABLED_AND_CHOICES : howUpdated;
-        case NOW_ENABLED_AND_CHOICES:
-            updateChoices(argumentsAsArray);
-            return howUpdated;
-        case DEFAULTS:
-            return updateChoices(argumentsAsArray) ? HowUpdated.CHOICES_ONLY : HowUpdated.DEFAULTS;
-        case CHOICES_ONLY:
-        case NONE:
-            return howUpdated;
-        default:
-            throw new IllegalStateException("Unknown: " + howUpdated);
-        }
+        final boolean choicesUpdated = updateChoices(argumentsAsArray);
 
+        if (repaint == Repaint.NOTHING)
+            if (choicesUpdated)
+                return Repaint.PARAM_ONLY;
+            else
+                return Repaint.NOTHING;
+        else
+            return repaint;
     }
 
     private boolean updateChoices(ObjectAdapter[] argsIfAvailable) {

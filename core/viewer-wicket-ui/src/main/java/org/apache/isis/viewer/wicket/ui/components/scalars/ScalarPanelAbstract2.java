@@ -113,16 +113,10 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
     private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
 
-    public enum HowUpdated {
-        NOW_VISIBLE,
-        NOW_INVISIBLE,
-        NOW_ENABLED,
-        NOW_ENABLED_AND_CHOICES,
-        NOW_DISABLED,
-        DEFAULTS,
-        NOW_VISIBLE_AND_CHOICES,
-        CHOICES_ONLY,
-        NONE
+    public enum Repaint {
+        ENTIRE_FORM,
+        PARAM_ONLY,
+        NOTHING
     }
 
     /**
@@ -133,7 +127,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
      *
      * @return - true if changed as a result of these pending arguments.
      */
-    public HowUpdated updateIfNecessary(
+    public Repaint updateIfNecessary(
             final ActionModel actionModel,
             final int paramNumUpdated,
             final int paramNumToPossiblyUpdate) {
@@ -141,12 +135,13 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
         final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
 
-        // check visibility
 
-        // could almost certainly simplify this...
+        // could almost certainly simplify this... (used by visibility and usability checks)
         final ObjectActionParameter actionParameter = action.getParameters().get(paramNumToPossiblyUpdate);
         final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
         final ObjectAdapter realTargetAdapter = action.realTargetAdapter(targetAdapter);
+
+        // check visibility
         final Consent visibilityConsent = actionParameter.isVisible(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
 
         final boolean visibilityBefore = isVisible();
@@ -163,7 +158,8 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
 
 
-        // check defaults
+        // even if now invisible or unusable, we recalculate args and ensure compatible
+        // (else can hit complicated edge cases with stale data when next re-enable/make visible)
         final ScalarModel model = getModel();
         ObjectAdapter defaultIfAny = model.getKind()
                 .getDefault(scalarModel, pendingArguments, paramNumUpdated,
@@ -193,22 +189,20 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             }
         }
 
-        if(!visibilityAfter) {
-            return HowUpdated.NOW_INVISIBLE;
-        }
-        if(visibilityBefore != visibilityAfter) {
-            return HowUpdated.NOW_VISIBLE;
-        }
-        if(!usabilityAfter) {
-            return HowUpdated.NOW_DISABLED;
-        }
-        if(usabilityBefore != usabilityAfter) {
-            return HowUpdated.NOW_ENABLED;
+        // repaint the entire form if visibility has changed
+        if (!visibilityBefore || !visibilityAfter) {
+            return Repaint.ENTIRE_FORM;
         }
 
+        // repaint the param if usability has changed
+        if (!usabilityAfter || !usabilityBefore) {
+            return Repaint.PARAM_ONLY;
+        }
+
+        // also repaint the param if its pending arg has changed.
         return scalarModel.getObject() != pendingArg
-                ? HowUpdated.DEFAULTS
-                : HowUpdated.NONE;
+                ? Repaint.PARAM_ONLY
+                : Repaint.NOTHING;
     }
 
 
