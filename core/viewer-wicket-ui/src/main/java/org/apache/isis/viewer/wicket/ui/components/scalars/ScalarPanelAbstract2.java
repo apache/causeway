@@ -19,11 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
@@ -58,7 +56,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
@@ -144,20 +141,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         if (defaultIfAny != null) {
             scalarModel.setObject(defaultIfAny);
 
-            // TODO: similar logic in scalarModel#setObject, should combine...
-            if(scalarModel.isCollection()) {
-                final Object pojo = defaultIfAny.getObject();
-                final Iterable iterable = (Iterable) pojo;
-                final ArrayList<ObjectAdapterMemento> listOfMementos =
-                        Lists.newArrayList(FluentIterable.from(iterable)
-                              .transform(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))
-                        .toList());
-                final ObjectAdapterMemento memento =
-                        ObjectAdapterMemento.createForList(listOfMementos, scalarModel.getTypeOfSpecification().getSpecId());
-                scalarModel.setPending(memento);
-            } else {
-                scalarModel.setPending(ObjectAdapterMemento.createOrNull(defaultIfAny));
-            }
+            scalarModel.setPendingAdapter(defaultIfAny);
             actionArgumentModel.setObject(defaultIfAny);
         } else {
 

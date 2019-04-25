@@ -89,6 +89,17 @@ public class ObjectAdapterMemento implements Serializable {
         return list != null ? createForList(Lists.newArrayList(list), objectSpecId) :  null;
     }
 
+    public static ObjectAdapterMemento createForIterable(
+            final Iterable iterable,
+            final ObjectSpecId specId,
+            final PersistenceSession persistenceSession) {
+        final ArrayList<ObjectAdapterMemento> listOfMementos =
+                Lists.newArrayList(FluentIterable.from(iterable)
+                        .transform(Functions.fromPojo(persistenceSession))
+                        .toList());
+        return createForList(listOfMementos, specId);
+    }
+
     public enum Sort {
         /**
          * represents a single object

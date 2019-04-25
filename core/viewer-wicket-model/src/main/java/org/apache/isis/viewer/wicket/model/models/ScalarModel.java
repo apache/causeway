@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.PromptStyle;
@@ -845,13 +844,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         }
 
         if(isCollection()) {
-            final Iterable iterable = (Iterable) pojo;
-            final ArrayList<ObjectAdapterMemento> listOfMementos =
-                    Lists.newArrayList(FluentIterable.from(iterable)
-                          .transform(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))
-                    .toList());
-            final ObjectAdapterMemento memento =
-                    ObjectAdapterMemento.createForList(listOfMementos, getTypeOfSpecification().getSpecId());
+            final ObjectAdapterMemento memento = createForIterable(pojo);
             super.setObjectMemento(memento, getPersistenceSession(), getSpecificationLoader()); // associated value
         } else {
             super.setObject(adapter); // associated value
@@ -869,6 +862,21 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         );
 
         setObject(adapter);
+    }
+
+    public void setPendingAdapter(final ObjectAdapter objectAdapter) {
+        if(isCollection()) {
+            final Object pojo = objectAdapter.getObject();
+            final ObjectAdapterMemento memento = createForIterable(pojo);
+            setPending(memento);
+        } else {
+            setPending(ObjectAdapterMemento.createOrNull(objectAdapter));
+        }
+    }
+
+    private ObjectAdapterMemento createForIterable(final Object pojo) {
+        final Iterable iterable = (Iterable) pojo;
+        return ObjectAdapterMemento.createForIterable(iterable, getTypeOfSpecification().getSpecId(), getPersistenceSession());
     }
 
     public boolean whetherHidden() {
