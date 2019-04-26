@@ -1050,3 +1050,9 @@ h4.iconAndTitle a:focus {
     padding-left: 0px;
     padding-right: 0px;
 }
+
+
+ul.sidebar-nav {
+    padding-bottom: 62px;
+    margin-bottom: 62px;
+}
