@@ -69,7 +69,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionFormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
-import org.apache.isis.viewer.wicket.ui.components.entity.assocgroup.AssociationGroup;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.BS3GridPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -233,18 +232,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                                 final BS3Grid bs3Grid = (BS3Grid) gridForMixin;
                                 final BS3GridPanel gridPanel = new BS3GridPanel(extraContentId, entityModelForMixin, bs3Grid);
                                 promptWithExtraContent.setExtraContentPanel(gridPanel, target);
-                            } else {
-
-                                // this isn't actually used because BS3Grid is the only type we support;
-                                // but this is a reasonable fallback
-                                // (just renders all associations in order, doesn't recognise fieldsets).
-                                final AssociationGroup associationGroup = new AssociationGroup(
-                                        extraContentId, entityModelForMixin, gridForMixin);
-                                promptWithExtraContent.setExtraContentPanel(associationGroup, target);
                             }
                         }
-
-
                     }
                 }
 
