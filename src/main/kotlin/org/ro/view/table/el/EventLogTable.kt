@@ -1,7 +1,7 @@
 package org.ro.view.table.el
 
-import org.ro.core.event.EventStore
 import org.ro.core.event.EventState
+import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.view.IconManager
 import org.ro.view.RoView
@@ -117,7 +117,6 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
         val sorterTypeBlock = {
             when (sort) {
                 SortBy.F -> SorterType.DESC
-                else -> SorterType.ASC
             }
         }
         dataContainer = dataContainer(

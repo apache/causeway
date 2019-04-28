@@ -1,7 +1,6 @@
 package org.ro.core.model
 
 import org.ro.core.Utils
-import pl.treksoft.kvision.html.Icon
 import pl.treksoft.kvision.utils.Object
 
 /**
@@ -10,20 +9,11 @@ import pl.treksoft.kvision.utils.Object
  */
 //FIXME dynamic 
 class ObjectAdapter(var adaptee: dynamic,
-                    private var label: String? = null,
-                    private var typeSpec: String? = null,
-                    private var icon: Icon? = null) : Visible {
+                    var label: String = "label not set",
+                    private var typeSpec: String = "String",
+                    private var iconName: String = "fa-box") : Visible {
 
     init {
-        if (typeSpec == null) {
-            typeSpec = "String"
-        }
-        if (icon == null) {
-            icon = Icon("fa-box")
-        }
-        if (label == null) {
-            label = "label not set"
-        }
         initPropertyAccessors()
     }
     

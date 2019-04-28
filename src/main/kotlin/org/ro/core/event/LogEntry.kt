@@ -47,7 +47,8 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
     var observer: IObserver? = null
 
     // alternative constructor for UI events (eg. from user interaction)
-    constructor(description: String) : this(description, null, "") {
+    constructor(title: String) : this("", null, "") {
+        this.title = title
         state = EventState.VIEW
     }
 

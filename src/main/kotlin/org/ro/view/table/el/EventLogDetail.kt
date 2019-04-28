@@ -12,7 +12,7 @@ class EventLogDetail(val logEntry: LogEntry) : Command {
         formItems.add(FormItem("Url", "Text", logEntry.url))
         val jsonStr = logEntry.response
         formItems.add(FormItem("Text", "TextArea", toString(jsonStr), 20))
-        val label = logEntry.title ?: "no label"
+        val label = logEntry.title 
         RoDialog(label = label, items = formItems, command = this).show()
     }
 

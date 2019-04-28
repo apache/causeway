@@ -23,8 +23,15 @@ object EventStore {
         return entry
     }
 
-    fun add(description: String) {
-        val entry = LogEntry(description)
+    fun add(url: String) {
+        val entry = LogEntry(url = url)
+        entry.createdAt = Date()
+        log.add(entry)
+        updateStatus(entry)
+    }
+
+    fun addView(title: String) {
+        val entry = LogEntry(title = title)
         entry.createdAt = Date()
         log.add(entry)
         updateStatus(entry)
@@ -71,29 +78,18 @@ object EventStore {
      * @return
      */
     fun find(url: String): LogEntry? {
-        if (isUrl(url)) {
-            if (isRedundant(url)) {
-                return findEquivalent(url)
-            } else {
-                return findExact(url)
-            }
+        val isRedundant = urlContains(url, "object-layout") || urlContains(url, "/properties/")
+        if (isRedundant) {
+            return findEquivalent(url)
         } else {
-            return findView(url)
+            return findExact(url)
         }
-    }
-
-    private fun isRedundant(url: String): Boolean {
-        return (urlContains(url, "object-layout") || urlContains(url, "/properties/"))
     }
 
     private fun urlContains(url: String, search: String): Boolean {
         val index = url.indexOf(search)
         val answer = index >= 0
         return answer
-    }
-
-    private fun isUrl(url: String): Boolean {
-        return url.startsWith("http")
     }
 
     internal fun findExact(url: String): LogEntry? {
@@ -105,9 +101,9 @@ object EventStore {
         return null
     }
 
-    internal fun findView(url: String): LogEntry? {
+    internal fun findView(title: String): LogEntry? {
         for (le in log) {
-            if ((le.url == url) && (le.isView())) {
+            if ((le.title == title) && (le.isView())) {
                 return le
             }
         }
@@ -137,7 +133,7 @@ object EventStore {
                 diffCnt++
                 val n = s.toIntOrNull()
                 // if the difference is a String, it is not allowed and counts double
-                if (n != null) {
+                if (n == null) {
                     diffCnt++
                 }
             }
@@ -159,6 +155,10 @@ object EventStore {
             return true
         }
         return false
+    }
+    
+    fun reset() {
+        log = observableListOf<LogEntry>()
     }
 
 }

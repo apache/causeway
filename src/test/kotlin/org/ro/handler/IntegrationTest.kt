@@ -30,10 +30,8 @@ open class IntegrationTest {
         } catch (e: Throwable) {
             return false
         }
-        console.log("[$url status: ${xhr.status}]")
-
+        //console.log("[$url status: ${xhr.status}]")
         val answer = xhr.status.equals(200)
-
         return answer
     }
 

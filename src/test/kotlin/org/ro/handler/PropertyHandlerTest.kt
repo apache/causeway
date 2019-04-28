@@ -39,30 +39,29 @@ class PropertyHandlerTest : IntegrationTest() {
     fun testPropertyDescription() {
         if (isSimpleAppAvailable()) {
             // given
+            EventStore.reset()
             val obs = ListObserver()
             // when
             val pdLe = mockResponse(FR_PROPERTY_DESCRIPTION, obs)
-            assertNotNull(pdLe)  //(1)
-            assertNotNull(pdLe.observer) //(2)
+            assertNotNull(pdLe.observer) //(1)
 
             val layoutLe = mockResponse(FR_OBJECT_LAYOUT, obs)
-            assertNotNull(layoutLe)  //(3)
-            assertEquals(pdLe.observer, layoutLe.observer) //(4)
+            assertEquals(pdLe.observer, layoutLe.observer) //(2)
 
             val ol = obs.list
             val lyt = ol.layout
-            assertNotNull(lyt)  // 5
+            assertNotNull(lyt)  //3
 
             val property = pdLe.obj as Property
-            assertNotNull(property)  //(6)
+            assertNotNull(property)  //4
 
             console.log("[PHT.testPropertyDescription] ${pdLe.toString()}")
             val props = ol.propertyLabels
-            assertNotNull(props) //7
+            assertNotNull(props) //5
             console.log("[PHT.testPropertyDescription] $props")
             
             val lbl: String? = ol.getPropertyLabel(property.id)
-            assertNotNull(lbl)  //(8)
+            assertNotNull(lbl)  //6
         }
     }
 

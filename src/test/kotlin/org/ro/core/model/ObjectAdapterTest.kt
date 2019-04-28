@@ -3,9 +3,12 @@ package org.ro.core.model
 
 import org.ro.handler.TObjectHandler
 import org.ro.to.FR_OBJECT_BAZ
-import pl.treksoft.kvision.html.Icon
+import org.ro.to.Link
+import org.ro.to.Member
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 
 class ObjectAdapterTest {
@@ -14,40 +17,34 @@ class ObjectAdapterTest {
     fun testObjectBAZ() {
         // given
         val jsonStr = FR_OBJECT_BAZ.str
-        val adaptee = TObjectHandler().parse(jsonStr) 
-        assertNotNull(adaptee)
+        val adaptee = TObjectHandler().parse(jsonStr)
+        assertNotNull(adaptee)    //1
 
-        val title = "test title"
-        val type = "Link"
-        val icon: Icon? = null
         // when
-        val oa = ObjectAdapter(adaptee, title, type, icon)
+        val oa = ObjectAdapter(adaptee)
 
         // then
         val expectedTitle = "domain-app-demo/persist-all/item-3:  Object: Baz"
-        /* FIXME dynamic
-        val actualTitle: String = oa.title
-        assertEquals(expectedTitle, actualTitle)
+        val actualTitle: String = oa.adaptee.title
+        assertEquals(expectedTitle, actualTitle)  //2
 
-        assertTrue(oa.hasOwnProperty("domainType"))
-        assertTrue(oa.hasOwnProperty("instanceId"))
+        assertTrue(oa.adaptee.hasOwnProperty("domainType"))    //3
+        assertTrue(oa.adaptee.hasOwnProperty("instanceId"))       //4
 
         //Expectations: 
         // 1: adaptee( TObject.kt) has members (memberList?) mapped onto (dynamic) ObjectAdapter properties
-        assertFalse(oa.hasOwnProperty("members"))   // only internal (Object) attributes are 'adapted'
-        assertTrue(oa.hasOwnProperty("memberList"))    // objectLists need to be public?
-        val memberList = oa.memberList
-        assertTrue(adaptee.getMembers() == memberList)
-
-        // 2: icon is instance of ObjectIconRenderer
-        val iconClass: Image = oa.getIcon()
-        assertNotNull(iconClass)
+        assertTrue(oa.adaptee.hasOwnProperty("members"))   //5 only internal (Object) attributes are 'adapted'
+        val members = oa.adaptee.members
+        val memberMap = members as LinkedHashMap<String, Member>
+        assertNotNull(memberMap)              //6
+        assertEquals(8, memberMap.size)    //7
 
         // 3: adaptee( TObject.kt) has links (linkList?) mapped onto (dynamic) ObjectAdapter properties
-        assertFalse(oa.hasOwnProperty("links"))   // only internal (Object) attributes are 'adapted'
-        assertTrue(oa.hasOwnProperty("linkList"))   // objectLists need to be public?
-        assertTrue(adaptee.linkList.size == oa.linkList.length)
-        */
+        assertTrue(oa.adaptee.hasOwnProperty("links"))   //8 only internal (Object) attributes are 'adapted'
+        val links = oa.adaptee.links
+        val linkList = links as ArrayList<Link>?
+        assertNotNull(linkList)          //9
+        assertEquals(4, linkList.size)  //10
     }
 
 }

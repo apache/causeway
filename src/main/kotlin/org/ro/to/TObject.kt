@@ -44,6 +44,7 @@ data class TObject(val links: List<Link> = emptyList(),
      */
     fun addMembersAsProperties() {
         val members: MutableList<Member> = getProperties()
+        console.log("[TObject.addMembersAsProperties] $members")
         for (m in members) {
             if (m.memberType == MemberType.PROPERTY.type) {
                 addAsProperty(this, m)

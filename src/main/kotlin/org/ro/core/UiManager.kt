@@ -19,10 +19,10 @@ object UiManager {
 
     fun addView(viewable: Visible) {
         val title: String = viewable.tag()
-        val le: LogEntry? = EventStore.find(title)
+        val le: LogEntry? = EventStore.findView(title)
         if (le == null) {
 //            getTabBar()!!.addView(viewable)
-            EventStore.add(title)
+            EventStore.addView(title)
         } else {
             le.cacheHits += 1
             EventStore.update(title)

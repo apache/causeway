@@ -37,9 +37,8 @@ class ListObserver : IObserver {
             else -> log(le)
         }
 
-        //TODO are list & layout the only criteria?
         if (list.hasLayout()) {
-            handleView(url)
+            handleView()
         }
     }
 
@@ -72,11 +71,12 @@ class ListObserver : IObserver {
         list.add(oa)
     }
 
-    private fun handleView(url: String) {
-        val le2 = EventStore.find(url)
-        val b = (le2 != null) && (le2.isView())
+    private fun handleView() {
+        val title: String = "ListObserver"
+        val le = EventStore.findView(title)
+        val b = le != null
         if (b) {
-            console.log("[ListObserver.handleView] already opened: $url")
+            console.log("[ListObserver.handleView] already opened: $title")
         } else {
             //TODO on runFixtureScript this is passed multiple times (but no view opened (which is correct))
             UiManager.addView(list) //open

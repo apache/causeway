@@ -33,12 +33,10 @@ class LinkTest : IntegrationTest() {
             val arguments = link.arguments
             val arg = Argument(href)
             arguments._set("script", arg)
-            console.log("[LinkTest.testInvokeAction] $link")
             link.invoke()
             val le = EventStore.find(url)
             assertNotNull(le)
             assertTrue(!le.isError())
-         //   assertEquals(body, le.request)
         }
     }
 }

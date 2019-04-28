@@ -1,14 +1,8 @@
 package org.ro.urls
 
 import org.ro.core.Session
-import org.ro.core.event.EventStore
-import org.ro.core.event.LogEntry
 import org.ro.to.*
-import pl.treksoft.kvision.utils.Object
-import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 /**
  * This is an integration test that requires SimpleApp running on http://localhost:8080
@@ -39,44 +33,13 @@ class UrlsTest {
         urls.put(RESTFUL_SERVICES.url, RESTFUL_SERVICES.str)
     }
 
-    @AfterTest
-    fun tearDown() {
-        /*
-        if (timer) {
-            timer.stop()
-        }
-        timer = null */
-    }
-
-
-    @Test
+ //   @Test
     fun testUrls() {
         for (entry in urls) {
             val href = entry.key
             val link = Link(method = Method.GET.operation, href = href)
-            /*
-            val observed = RoXmlHttpRequest().invoke(link)
-            assertEquals(entry.value, observed)   */
+            link.invoke()
         }
-        /*
-val asyncHandler: Function = Async.asyncHandler(this, handleLinkComplete, 500, null, handleTimeout)
-timer.addEventListener(TimerEvent.TIMER_COMPLETE, asyncHandler, false, 0, true)
-timer.start() */
     }
 
-    fun handleLinkComplete(passThroughData: Object) {
-        val href: String = link!!.href
-        val logEntry: LogEntry = EventStore.find(href)!!
-        val resp: String = logEntry.retrieveResponse()
-        //TODO handle authentication problem: logEntry.fault="Security error accessing url"
-        //  http://localhost:8080/crossdomain.xml
-        if (logEntry == null) {
-            val observed: Object = JSON.parse(resp)
-            //pass over String to Services
-            val expected: Object? = null
-            assertEquals(expected, observed)
-        } else {
-            console.log("[Fault: ${logEntry}]")
-        }
-    }
 }

@@ -22,10 +22,12 @@ class ResultHandler : AbstractHandler(), IResponseHandler {
     override fun doHandle() {
         val obs = NavigationObserver()
         logEntry.observer = obs
+//        obs.update(logEntry)   
+// TODO if commented in, ServiceHandlerTest breaks with a CCE
+
         val services = logEntry.obj as Result
         val values = services.valueList()
         Menu.limit = values.size
-        console.log("[ResultHandler.doHandle] limit = ${Menu.limit}")
         for (l in values) {
             l.invoke(obs)
         }
