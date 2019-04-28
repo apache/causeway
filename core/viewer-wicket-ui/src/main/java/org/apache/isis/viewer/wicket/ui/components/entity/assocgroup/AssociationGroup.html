@@ -7,9 +7,9 @@
   to you under the Apache License, Version 2.0 (the
   "License"); you may not use this file except in compliance
   with the License.  You may obtain a copy of the License at
-
+  
          http://www.apache.org/licenses/LICENSE-2.0
-
+         
   Unless required by applicable law or agreed to in writing,
   software distributed under the License is distributed on an
   "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -17,35 +17,18 @@
   specific language governing permissions and limitations
   under the License.
 -->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:wicket="http://wicket.apache.org"
-      xml:lang="en"
-      lang="en">
-<body>
-<wicket:panel>
-<!--
-    <li class="sidebar-brand">
-    </li>
--->
-    <div class="sidebar-panel">
-        <div class="row">
-            <div class="col col-md-12">
-                <div class="sidebar-header">
-                    <h4 wicket:id="header">Action Name</h4>
-                </div>
-                <div class="sidebar-content">
-                    <div class="action-prompt">
-                        <div wicket:id="actionPrompt">[action prompt]</div>
-                    </div>
-                    <div class="extra-content">
-                        <div wicket:id="extraContent"></div>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+            <div class="associationGroup" wicket:id="associationGroup">
+                <div class="panel panel-default">
+                    <div class="associations panel-body">
+                        <div wicket:id="associations">
+                            <div wicket:id="association" class="association">[association]</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-</wicket:panel>
-</body>
+        </wicket:panel>
+    </body>
 </html>

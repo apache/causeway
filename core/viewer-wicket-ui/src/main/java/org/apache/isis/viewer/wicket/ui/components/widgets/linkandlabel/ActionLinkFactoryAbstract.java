@@ -37,13 +37,17 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.metamodel.MetaModelService2;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.postprocessors.param.ActionParameterDefaultsFacetFromAssociatedCollection;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -54,6 +58,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.FormExecutor;
 import org.apache.isis.viewer.wicket.model.models.InlinePromptContext;
@@ -64,6 +69,8 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionFormExecutorStrategy;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionParametersPanel;
+import org.apache.isis.viewer.wicket.ui.components.entity.assocgroup.AssociationGroup;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs3.BS3GridPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
@@ -202,6 +209,44 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                 prompt.setPanel(actionParametersPanel, target);
                 actionParametersPanel.setActionPrompt(prompt);
                 prompt.showPrompt(target);
+
+                if(prompt instanceof ActionPromptWithExtraContent) {
+                    final ActionPromptWithExtraContent promptWithExtraContent =
+                            (ActionPromptWithExtraContent) prompt;
+
+                    final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+                    if(action instanceof ObjectActionMixedIn) {
+                        final ObjectActionMixedIn actionMixedIn = (ObjectActionMixedIn) action;
+                        final ObjectSpecification mixinType = actionMixedIn.getMixinType();
+
+                        if(mixinType.isViewModel()) {
+
+                            final ObjectAdapter targetAdapterForMixin = action.realTargetAdapter(actionModel.getTargetAdapter());
+                            final EntityModel entityModelForMixin = new EntityModel(targetAdapterForMixin);
+
+                            final GridFacet facet = mixinType.getFacet(GridFacet.class);
+                            final Grid gridForMixin = facet.getGrid(targetAdapterForMixin);
+
+                            final String extraContentId = promptWithExtraContent.getExtraContentId();
+
+                            if(gridForMixin instanceof BS3Grid) {
+                                final BS3Grid bs3Grid = (BS3Grid) gridForMixin;
+                                final BS3GridPanel gridPanel = new BS3GridPanel(extraContentId, entityModelForMixin, bs3Grid);
+                                promptWithExtraContent.setExtraContentPanel(gridPanel, target);
+                            } else {
+
+                                // this isn't actually used because BS3Grid is the only type we support;
+                                // but this is a reasonable fallback
+                                // (just renders all associations in order, doesn't recognise fieldsets).
+                                final AssociationGroup associationGroup = new AssociationGroup(
+                                        extraContentId, entityModelForMixin, gridForMixin);
+                                promptWithExtraContent.setExtraContentPanel(associationGroup, target);
+                            }
+                        }
+
+
+                    }
+                }
 
                 return prompt;
 

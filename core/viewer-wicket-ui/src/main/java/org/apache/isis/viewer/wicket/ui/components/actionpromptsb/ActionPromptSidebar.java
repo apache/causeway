@@ -22,11 +22,17 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptWithExtraContent;
 
-public class ActionPromptSidebar extends GenericPanel<Void> implements ActionPrompt /* implements ActionPrompt */ {
+public class ActionPromptSidebar
+        extends GenericPanel<Void>
+        implements ActionPromptWithExtraContent {
 
     private static final long serialVersionUID = 1L;
+
+    private static final String ID_HEADER = "header";
+    private static final String ID_ACTION_PROMPT = "actionPrompt";
+    private static final String ID_EXTRA_CONTENT = "extraContent";
 
     private CloseHandler closeHandlerIfAny;
 
@@ -39,6 +45,7 @@ public class ActionPromptSidebar extends GenericPanel<Void> implements ActionPro
         add(new Label(getTitleId(), "(no action)"));
 
         add(new WebMarkupContainer(getContentId()));
+        add(new WebMarkupContainer(getExtraContentId()));
     }
 
     public static ActionPromptSidebar newSidebar(String id) {
@@ -47,14 +54,18 @@ public class ActionPromptSidebar extends GenericPanel<Void> implements ActionPro
 
     @Override
     public String getTitleId() {
-        return "header";
+        return ID_HEADER;
     }
 
     @Override
     public String getContentId() {
-        return "content";
+        return ID_ACTION_PROMPT;
     }
 
+    @Override
+    public String getExtraContentId() {
+        return ID_EXTRA_CONTENT;
+    }
 
     @Override
     public void setTitle(final Component titleComponent, final AjaxRequestTarget target) {
@@ -69,6 +80,12 @@ public class ActionPromptSidebar extends GenericPanel<Void> implements ActionPro
     }
 
     @Override
+    public void setExtraContentPanel(final Component extraContentComponent, final AjaxRequestTarget target) {
+        extraContentComponent.setMarkupId(getExtraContentId());
+        addOrReplace(extraContentComponent);
+    }
+
+    @Override
     public void showPrompt(final AjaxRequestTarget target) {
         setVisible(true);
         show(target);
@@ -79,6 +96,10 @@ public class ActionPromptSidebar extends GenericPanel<Void> implements ActionPro
     public void closePrompt(final AjaxRequestTarget target) {
 
         setVisible(false);
+
+        addOrReplace(new WebMarkupContainer(getContentId()));
+        addOrReplace(new WebMarkupContainer(getExtraContentId()));
+
         if (target != null) {
             hide(target);
         }
