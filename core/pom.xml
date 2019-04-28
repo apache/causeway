@@ -174,7 +174,7 @@
         
         <picocontainer.version>2.15</picocontainer.version>
         
-        <javaee.version>7.0</javaee.version>
+        <javaee.version>8.0</javaee.version>
 
         <htmlparser.version>2.1</htmlparser.version>
 

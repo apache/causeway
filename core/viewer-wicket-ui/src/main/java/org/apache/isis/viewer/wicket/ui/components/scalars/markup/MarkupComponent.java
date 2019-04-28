@@ -19,25 +19,39 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
 
-import org.apache.isis.applib.value.Markup;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.parser.XmlTag.TagType;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.applib.value.LocalResourcePath;
+import org.apache.isis.applib.value.Markup;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+
 public class MarkupComponent extends WebComponent {
 
     private static final long serialVersionUID = 1L;
+    
+    private final LocalResourcePath observing;
 
-    public MarkupComponent(final String id, IModel<?> model){
+    public MarkupComponent(final String id, IModel<?> model, LocalResourcePath observing){
         super(id, model);
+        this.observing = observing;
     }
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag){
-        replaceComponentTagBody(markupStream, openTag, extractHtmlOrElse(getDefaultModelObject(), ""));
+        final CharSequence htmlContent = extractHtmlOrElse(getDefaultModelObject(), "" /*fallback*/);
+        replaceComponentTagBody(
+                markupStream, 
+                openTag, 
+                
+                observing!=null 
+                    ? MarkupComponent_observing.decorate(htmlContent, observing)
+                            : htmlContent
+                
+                );
     }
 
     @Override
@@ -72,4 +86,6 @@ public class MarkupComponent extends WebComponent {
         return modelObject.toString();
 
     }
+
+    
 }

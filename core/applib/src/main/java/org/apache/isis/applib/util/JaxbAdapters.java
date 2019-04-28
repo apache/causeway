@@ -18,11 +18,16 @@
  */
 package org.apache.isis.applib.util;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.Base64;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
+
+import org.apache.isis.applib.value.Markup;
+import org.apache.isis.commons.internal.base._Strings;
 
 /**
  * Provides JAXB XmlAdapters for Java built-in temporal types. 
@@ -39,6 +44,35 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  */
 public final class JaxbAdapters {
 
+    // -- MARKUP
+    
+    public static final class MarkupAdapter extends XmlAdapter<String, Markup>{
+        
+        private final static Base64.Encoder encoder = Base64.getEncoder(); 
+        private final static Base64.Decoder decoder = Base64.getDecoder();
+
+        @Override
+        public Markup unmarshal(String v) throws Exception {
+            if(v==null) {
+                return null;
+            }
+            final String html = _Strings.ofBytes(decoder.decode(v), StandardCharsets.UTF_8);
+            return new Markup(html);
+        }
+
+        @Override
+        public String marshal(Markup v) throws Exception {
+            if(v==null) {
+                return null;
+            }
+            final String html = v.asString();
+            return encoder.encodeToString(_Strings.toBytes(html, StandardCharsets.UTF_8));
+        }
+
+    }
+    
+    // -- TEMPORAL VALUE TYPES
+    
     public static final class DateAdapter extends XmlAdapter<String, java.util.Date>{
 
         public java.util.Date unmarshal(String v) throws Exception {

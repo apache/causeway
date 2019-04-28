@@ -17,19 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
+package org.apache.isis.core.metamodel.facets.objectvalue.observe;
 
-import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.applib.events.sse.EventStreamSource;
+import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
 
-public class StandaloneMarkupPanel extends PanelAbstract<ValueModel> {
+/**
+ * Corresponds to <tt>@Property(observe=...)</tt> annotation in the Isis programming model.
+ */
+public interface ObserveFacet extends SingleClassValueFacet {
 
-    private static final long serialVersionUID = 1L;
-    private static final String ID_STANDALONE_VALUE = "standaloneValue";
-
-    public StandaloneMarkupPanel(final String id, final ValueModel valueModel) {
-        super(id, valueModel);
-        add(new MarkupComponent(ID_STANDALONE_VALUE, getModel(), null /*observing*/));
-    }
+    Class<? extends EventStreamSource> getEventStreamType();
 
 }

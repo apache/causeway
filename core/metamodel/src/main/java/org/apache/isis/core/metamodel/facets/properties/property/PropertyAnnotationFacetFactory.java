@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.Pr
 import org.apache.isis.core.metamodel.facets.objectvalue.fileaccept.FileAcceptFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.observe.ObserveFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
@@ -64,6 +65,7 @@ import org.apache.isis.core.metamodel.facets.properties.property.modify.Property
 import org.apache.isis.core.metamodel.facets.properties.property.modify.PropertySetterFacetForDomainEventFromPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.mustsatisfy.MustSatisfySpecificationFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.notpersisted.NotPersistedFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.observe.ObserveFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.publishing.PublishedPropertyFacetForPropertyAnnotation;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPatternAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.properties.property.regex.RegExFacetForPropertyAnnotation;
@@ -75,9 +77,11 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForConflictingOptionality;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract 
+implements MetaModelValidatorRefiner {
 
-    private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = new MetaModelValidatorForConflictingOptionality();
+    private final MetaModelValidatorForConflictingOptionality conflictingOptionalityValidator = 
+            new MetaModelValidatorForConflictingOptionality();
 
 
     public PropertyAnnotationFacetFactory() {
@@ -98,6 +102,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         processOptional(processMethodContext);
         processRegEx(processMethodContext);
         processFileAccept(processMethodContext);
+        processObserve(processMethodContext);
     }
 
 
@@ -367,6 +372,17 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
         // else search for @Property(maxLength=...)
         final List<Property> properties = Annotations.getAnnotations(method, Property.class);
         FileAcceptFacet facet = FileAcceptFacetForPropertyAnnotation.create(properties, holder);
+
+        FacetUtil.addFacet(facet);
+    }
+    
+    void processObserve(final ProcessMethodContext processMethodContext) {
+        final Method method = processMethodContext.getMethod();
+        final FacetHolder holder = processMethodContext.getFacetHolder();
+
+        // else search for @Property(observe=...)
+        final List<Property> properties = Annotations.getAnnotations(method, Property.class);
+        ObserveFacet facet = ObserveFacetForPropertyAnnotation.create(properties, holder);
 
         FacetUtil.addFacet(facet);
     }

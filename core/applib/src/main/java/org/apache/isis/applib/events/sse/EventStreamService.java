@@ -16,20 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.events.sse;
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
+import java.util.Optional;
 
-import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+/**
+ * Server-sent events.
+ *  
+ * @see https://www.w3schools.com/html/html5_serversentevents.asp
+ * 
+ * @since 2.0.0-M3
+ *
+ */
+public interface EventStreamService {
 
-public class StandaloneMarkupPanel extends PanelAbstract<ValueModel> {
-
-    private static final long serialVersionUID = 1L;
-    private static final String ID_STANDALONE_VALUE = "standaloneValue";
-
-    public StandaloneMarkupPanel(final String id, final ValueModel valueModel) {
-        super(id, valueModel);
-        add(new MarkupComponent(ID_STANDALONE_VALUE, getModel(), null /*observing*/));
+    public static enum ExecutionBehavior {
+        SIMPLE,
+        REQUIRES_NEW_SESSION
     }
+    
+    Optional<EventStream> lookupByType(Class<?> sourceType);
+
+    void submit(EventStreamSource task, ExecutionBehavior executionBehavior);
 
 }

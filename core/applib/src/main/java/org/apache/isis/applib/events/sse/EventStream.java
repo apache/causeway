@@ -17,19 +17,31 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.scalars.markup;
+package org.apache.isis.applib.events.sse;
 
-import org.apache.isis.viewer.wicket.model.models.ValueModel;
-import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import java.util.UUID;
+import java.util.function.Predicate;
 
-public class StandaloneMarkupPanel extends PanelAbstract<ValueModel> {
+/**
+ * Server-sent events.
+ *  
+ * @see https://www.w3schools.com/html/html5_serversentevents.asp
+ * 
+ * @since 2.0.0-M3
+ *
+ */
+public interface EventStream {
 
-    private static final long serialVersionUID = 1L;
-    private static final String ID_STANDALONE_VALUE = "standaloneValue";
+    UUID getId();
+    Class<?> getSourceType();
 
-    public StandaloneMarkupPanel(final String id, final ValueModel valueModel) {
-        super(id, valueModel);
-        add(new MarkupComponent(ID_STANDALONE_VALUE, getModel(), null /*observing*/));
-    }
-
+    void listenWhile(Predicate<EventStreamSource> listener);
+    
+    void fire(EventStreamSource source);
+    
+    void close();
+    
+    void awaitClose() throws InterruptedException;
+    
+    
 }

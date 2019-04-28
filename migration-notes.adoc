@@ -6,6 +6,74 @@ Search also for: "TODO: v2: " in the .adoc documentation.
 
 == 2.0.0-M2 to 2.0.0-M3
 
+=== Server-Sent-Event (SSE) Support (ISIS-2102)
+
+Experimental feature to allow for submission of background-tasks, that themselfes may fire UI-events to update eg. a progress-bar.
+
+To make this work we introduce following components:
+
+- A SSE Servlet listening on '/sse' for client requests.
+- Client-Side Javascript that can subscribe 'EventStream's to the SSE Servlet
+- An EventStreamSource interface for any designated background task to implement.
+- An EventStreamService, that allows for such EventStreamSource objects to be submitted for execution on a thread-pool.
+- An EventStreamSource is associated with an EventStream on which it may fire update events.
+- These update events are propagated to the SSE Servlet, which informs its listenening clients with the update event's payload data.
+
+A first prototypical implementation of this mechanism also introduces a programming model extension, which for now only works for 'Markup' properties.
+
+==== The Subscribing ViewModel 
+
+[source,java]
+----
+@ViewModel
+class View {
+	@Property(observe = BackgroundTask.class) // <-- client-side subscription to events of this type
+	Markup markup; // <-- on ui-event, the markup component is client-side updated by the EventStreamSource.getPayload()
+}
+----
+
+==== The Background Task
+
+[source,java]
+----
+class BackgroundTask implements EventStreamSource {
+
+    int progress = 0;
+
+	@Override
+	public void run(EventStream eventStream) {
+	    // do something time consuming and eventually fire an update
+	    ...
+	    ++progress;
+	    eventStream.fire(this);
+	    ...
+	}
+
+	@Override
+	public Markup getPayload() {
+	    return new Markup("my current progress is " + progress);
+	}
+
+}
+----
+
+==== The Background Task Submitter
+
+[source,java]
+----
+@DomainService
+class Submitter {
+    @Inject EventStreamService eventStreamService;
+
+	@Action
+	public void startBackgroundTask() {
+	    
+		eventStreamService.submit(new BackgroundTask());
+				
+	}
+}
+----
+
 === ServicesInjector/ServiceRegistry
 
 ServicesInjector was removed. New interface ServiceInjector and ServiceRegistry redefined.
