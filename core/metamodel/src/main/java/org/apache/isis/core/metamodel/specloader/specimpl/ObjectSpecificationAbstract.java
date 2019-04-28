@@ -1197,7 +1197,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * then returns an empty list.
      */
     private List<ObjectAction> createMixedInActions() {
-        if (isService() || isValue()) {
+        if (isService() || isValue() || isMixin()) {
             return Collections.emptyList();
         }
         final Set<Class<?>> mixinTypes = AppManifest.Registry.instance().getMixinTypes();

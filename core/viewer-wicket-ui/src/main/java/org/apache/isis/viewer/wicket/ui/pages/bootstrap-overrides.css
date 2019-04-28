@@ -1056,3 +1056,7 @@ ul.sidebar-nav {
     padding-bottom: 62px;
     margin-bottom: 62px;
 }
+
+div.sidebar-panel div.extra-content {
+    margin-top: 30px;
+}
