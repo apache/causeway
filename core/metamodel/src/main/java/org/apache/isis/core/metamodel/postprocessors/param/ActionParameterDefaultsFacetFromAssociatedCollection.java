@@ -55,7 +55,10 @@ public class ActionParameterDefaultsFacetFromAssociatedCollection extends Action
     }
 
     @Override
-    public Object getDefault(final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable) {
+    public Object getDefault(
+            final ObjectAdapter target,
+            List<ObjectAdapter> argumentsIfAvailable,
+            final Integer paramNumUpdated) {
         return selectedPojos.get();
     }
 

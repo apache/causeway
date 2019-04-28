@@ -68,7 +68,6 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
     private static final String ID_PROPERTY = "property";
 
     private final FieldSet fieldSet;
-    private final boolean visible;
     private final List<ScalarPanelAbstract2> childScalarPanelAbstract2s;
     private final List<Component> childComponents;
 
@@ -79,9 +78,6 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         // the UI is only ever built once.
         childComponents = buildGui();
         childScalarPanelAbstract2s = FluentIterable.from(childComponents).filter(ScalarPanelAbstract2.class).toList();
-
-        final ImmutableList<ObjectAssociation> associations = getObjectAssociations();
-        this.visible = !associations.isEmpty();
     }
 
     @Override
@@ -135,7 +131,6 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
                     panelHeading, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
                     actionsPanelDropDown,
                     AdditionalLinksPanel.Style.DROPDOWN);
-
         }
 
         // either add the built content, or hide entire

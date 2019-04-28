@@ -31,17 +31,15 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 
-public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract implements PanelWithChoices {
+public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
 
 
     private static final long serialVersionUID = 1L;
-
 
     public ValueChoicesSelect2Panel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);

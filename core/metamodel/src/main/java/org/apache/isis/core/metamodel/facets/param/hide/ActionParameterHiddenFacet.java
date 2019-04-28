@@ -17,25 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.defaults;
-
-import java.util.List;
+package org.apache.isis.core.metamodel.facets.param.hide;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
- * Obtain defaults for each of the parameters of the action.
- *
+ * The mechanism by which a single parameter of the action can be hidden
+ * before the action itself is invoked.
+ * 
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
- * <tt>defaultsNXxx(...)</tt> support method for an action (where N is the
- * 0-based parameter number).
+ * <tt>hideNXxx</tt> support method for an action.
  */
-public interface ActionParameterDefaultsFacet extends Facet {
+public interface ActionParameterHiddenFacet extends Facet, HidingInteractionAdvisor {
 
-    public abstract Object getDefault(
-            ObjectAdapter target,
-            List<ObjectAdapter> parameters,
-            final Integer paramNumUpdated);
+    /**
+     * Whether the parameter is hidden.
+     */
+    public boolean isHidden(ManagedObject target, ObjectAdapter[] arguments);
 }

@@ -192,9 +192,14 @@ implements ScalarModelSubscriber2 {
 
     protected void closePromptIfAny(final AjaxRequestTarget target) {
 
-        final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(parentPanel);
-        if(promptProvider != null) {
-            promptProvider.closePrompt(target);
+        try {
+            final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(parentPanel);
+            if(promptProvider != null) {
+                promptProvider.closePrompt(target);
+            }
+        } catch (org.apache.wicket.WicketRuntimeException ex) {
+            // if "No Page found for component"
+            // do nothing
         }
     }
 
@@ -211,7 +216,12 @@ implements ScalarModelSubscriber2 {
     }
 
     private UiHintContainer getPageUiHintContainerIfAny() {
-        Page page = getPage();
+        final Page page;
+        try {
+            page = getPage();
+        } catch(org.apache.wicket.WicketRuntimeException ex) {
+            return null;
+        }
         if (page instanceof EntityPage) {
             EntityPage entityPage = (EntityPage) page;
             return entityPage.getUiHintContainerIfAny();

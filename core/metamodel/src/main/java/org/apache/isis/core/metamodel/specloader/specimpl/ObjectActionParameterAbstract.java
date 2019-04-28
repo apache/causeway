@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -36,6 +37,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -50,9 +52,13 @@ import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterA
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
+import org.apache.isis.core.metamodel.interactions.ActionArgUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionArgValidityContext;
+import org.apache.isis.core.metamodel.interactions.ActionArgVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -374,20 +380,24 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     // -- Defaults
 
     @Override
-    public ObjectAdapter getDefault(final ObjectAdapter adapter) {
+    public ObjectAdapter getDefault(
+            final ObjectAdapter adapter,
+            final ObjectAdapter[] argumentsIfAvailable,
+            final Integer paramNumUpdated) {
 
         final ObjectAdapter target = targetForDefaultOrChoices(adapter);
-        final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, null);
+        final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, argumentsIfAvailable != null ? Arrays.asList(argumentsIfAvailable) : null);
 
-        return findDefault(target, args);
+        return findDefault(target, args, paramNumUpdated);
     }
 
     private ObjectAdapter findDefault(
             final ObjectAdapter target,
-            final List<ObjectAdapter> args) {
+            final List<ObjectAdapter> args,
+            final Integer paramNumUpdated) {
         final ActionParameterDefaultsFacet defaultsFacet = getFacet(ActionParameterDefaultsFacet.class);
         if (defaultsFacet != null) {
-            final Object dflt = defaultsFacet.getDefault(target, args);
+            final Object dflt = defaultsFacet.getDefault(target, args, paramNumUpdated);
             if (dflt == null) {
                 // it's possible that even though there is a default facet, when
                 // invoked it is unable to return a default.
@@ -459,6 +469,60 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
+
+    //region > Visibility
+
+    private ActionArgVisibilityContext createArgumentVisibilityContext(
+            final ObjectAdapter objectAdapter,
+            final ObjectAdapter[] proposedArguments,
+            final int position,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return new ActionArgVisibilityContext(
+                objectAdapter, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
+    }
+
+    @Override
+    public Consent isVisible(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] pendingArguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        final VisibilityContext<?> ic = createArgumentVisibilityContext(
+                targetAdapter, pendingArguments, getNumber(), interactionInitiatedBy
+        );
+
+        final InteractionResult visibleResult = InteractionUtils.isVisibleResult(this, ic);
+        return visibleResult.createConsent();
+    }
+
+    //endregion
+
+    //region > Usability
+
+    private ActionArgUsabilityContext createArgumentUsabilityContext(
+            final ObjectAdapter objectAdapter,
+            final ObjectAdapter[] proposedArguments,
+            final int position,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return new ActionArgUsabilityContext(
+                objectAdapter, parentAction, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
+    }
+
+    @Override
+    public Consent isUsable(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] pendingArguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        final UsabilityContext<?> ic = createArgumentUsabilityContext(
+                targetAdapter, pendingArguments, getNumber(), interactionInitiatedBy
+        );
+
+        final InteractionResult usableResult = InteractionUtils.isUsableResult(this, ic);
+        return usableResult.createConsent();
+    }
+
+    //endregion
 
 
     // -- Validation

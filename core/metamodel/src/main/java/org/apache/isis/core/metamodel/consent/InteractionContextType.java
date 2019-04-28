@@ -88,6 +88,16 @@ public enum InteractionContextType {
      */
     ACTION_USABLE("Use action"),
     /**
+     * Whether this particular action parameter argument is visible
+     * (given other parameter arguments that may already have been entered).
+     */
+    ACTION_PARAMETER_VISIBLE("Parameter visible"),
+    /**
+     * Whether this particular action parameter argument is usable
+     * (given other parameter arguments that may already have been entered).
+     */
+    ACTION_PARAMETER_USABLE("Parameter usable"),
+    /**
      * Whether this particular proposed argument for an action invocation is
      * valid (or if it is in fact invalid).
      *

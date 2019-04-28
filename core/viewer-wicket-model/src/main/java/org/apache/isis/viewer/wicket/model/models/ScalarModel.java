@@ -182,6 +182,19 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
             }
 
             @Override
+            public ObjectAdapter getDefault(
+                    final ScalarModel scalarModel,
+                    final ObjectAdapter[] argsIfAvailable,
+                    final int paramNumUpdated,
+                    final AuthenticationSession authenticationSession) {
+                
+                final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
+                final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
+                ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
+                return property.getDefault(parentAdapter);
+            }
+
+            @Override
             public boolean hasChoices(final ScalarModel scalarModel) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty(scalarModel.getSpecificationLoader());
@@ -404,6 +417,20 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
             }
 
             @Override
+            public ObjectAdapter getDefault(
+                    final ScalarModel scalarModel,
+                    final ObjectAdapter[] argsIfAvailable,
+                    final int paramNumUpdated,
+                    final AuthenticationSession authenticationSession) {
+                
+                final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
+                final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
+
+                final ObjectAdapter parentAdapter = scalarModel.getParentEntityModel().load();
+                return actionParameter.getDefault(parentAdapter, argsIfAvailable, paramNumUpdated);
+            }
+
+            @Override
             public boolean hasChoices(final ScalarModel scalarModel) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter(scalarModel.getSpecificationLoader());
@@ -515,7 +542,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
                         scalarModel.getSpecificationLoader());
                 final ObjectAdapter parentAdapter =
                         scalarModel.getParentEntityModel().load(ConcurrencyChecking.NO_CHECK);
-                final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentAdapter);
+                final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentAdapter, null, null);
                 scalarModel.setObject(defaultAdapter);
             }
 
@@ -595,6 +622,12 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
             final boolean required = mandatoryFacet != null && !mandatoryFacet.isInvertedSemantics();
             return required;
         }
+
+        public abstract ObjectAdapter getDefault(
+                final ScalarModel scalarModel,
+                final ObjectAdapter[] argsIfAvailable,
+                final int paramNumUpdated,
+                final AuthenticationSession authenticationSession);
 
         public abstract boolean hasChoices(ScalarModel scalarModel);
         public abstract List<ObjectAdapter> getChoices(
@@ -836,6 +869,22 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
         setObject(adapter);
     }
 
+    public void setPendingAdapter(final ObjectAdapter objectAdapter) {
+        if(isCollection()) {
+            final Object pojo = objectAdapter.getPojo();
+            final ObjectAdapterMemento memento = createForIterable(pojo);
+            setPending(memento);
+        } else {
+            setPending(ObjectAdapterMemento.createOrNull(objectAdapter));
+        }
+    }
+
+    private ObjectAdapterMemento createForIterable(final Object pojo) {
+        final Iterable<?> iterable = (Iterable<?>) pojo;
+        return ObjectAdapterMemento.createForIterable(
+                iterable, getTypeOfSpecification().getSpecId(), getPersistenceSession());
+    }
+
     public boolean whetherHidden() {
         final Where where = getRenderingHint().asWhere();
         return kind.whetherHidden(this, where);
@@ -970,7 +1019,10 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
             @Override
             public ArrayList<ObjectAdapterMemento> getMultiPending() {
-                final ObjectAdapterMemento pending = ScalarModel.this.getPending();
+                final ScalarModel scalarModel = ScalarModel.this;
+                final ObjectAdapterMemento objectAdapterMemento = scalarModel.getObjectAdapterMemento();
+                final ObjectAdapterMemento.Sort sort = objectAdapterMemento.getSort();
+                final ObjectAdapterMemento pending = scalarModel.getPending();
                 return pending != null ? pending.getList() : null;
             }
 

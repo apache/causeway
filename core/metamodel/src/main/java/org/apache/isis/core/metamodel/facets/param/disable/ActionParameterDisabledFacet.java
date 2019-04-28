@@ -17,25 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.defaults;
-
-import java.util.List;
+package org.apache.isis.core.metamodel.facets.param.disable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
- * Obtain defaults for each of the parameters of the action.
+ * The mechanism by which a single parameter of the action can be disabled.
  *
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
- * <tt>defaultsNXxx(...)</tt> support method for an action (where N is the
- * 0-based parameter number).
+ * <tt>disableNXxx</tt> support method for an action.
  */
-public interface ActionParameterDefaultsFacet extends Facet {
+public interface ActionParameterDisabledFacet extends Facet, DisablingInteractionAdvisor {
 
-    public abstract Object getDefault(
-            ObjectAdapter target,
-            List<ObjectAdapter> parameters,
-            final Integer paramNumUpdated);
+    /**
+     * Reason why the parameter is disabled, or <tt>null</tt> if okay.
+     */
+    public String disabledReason(ManagedObject target, ObjectAdapter[] arguments);
 }

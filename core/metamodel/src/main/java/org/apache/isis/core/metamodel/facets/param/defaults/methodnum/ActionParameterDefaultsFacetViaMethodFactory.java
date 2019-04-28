@@ -93,7 +93,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, paramAsHolder, adapterProvider));
+            FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, i, paramAsHolder, adapterProvider));
         }
     }
 

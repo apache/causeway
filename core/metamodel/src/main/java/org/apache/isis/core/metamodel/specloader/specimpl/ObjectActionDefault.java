@@ -498,7 +498,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             for (int i = 0; i < parameterCount; i++) {
                 final ActionParameterDefaultsFacet paramFacet = parameters.get(i).getFacet(ActionParameterDefaultsFacet.class);
                 if (paramFacet != null && !paramFacet.isNoop()) {
-                    parameterDefaultPojos[i] = paramFacet.getDefault(target, null);
+                    parameterDefaultPojos[i] = paramFacet.getDefault(target, null, null);
                 } else {
                     parameterDefaultPojos[i] = null;
                 }
@@ -671,6 +671,11 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     // -- toString
+
+    @Override
+    public ObjectAdapter realTargetAdapter(final ObjectAdapter targetAdapter) {
+        return targetAdapter;
+    }
 
     @Override
     public String toString() {

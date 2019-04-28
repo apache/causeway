@@ -44,7 +44,6 @@ import org.apache.isis.viewer.wicket.model.models.EntityModelForReference;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abstract;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -61,7 +60,7 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
  * Panel for rendering scalars which of are of reference type (as opposed to
  * value types).
  */
-public class ReferencePanel extends ScalarPanelSelect2Abstract implements PanelWithChoices {
+public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
     private static final long serialVersionUID = 1L;
 

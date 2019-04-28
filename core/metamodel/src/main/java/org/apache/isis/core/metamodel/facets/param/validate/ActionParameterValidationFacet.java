@@ -17,25 +17,30 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.param.defaults;
-
-import java.util.List;
+package org.apache.isis.core.metamodel.facets.param.validate;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
- * Obtain defaults for each of the parameters of the action.
- *
+ * The mechanism by which a single parameter of the action can be validated
+ * before the action itself is invoked.
+ * 
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the
- * <tt>defaultsNXxx(...)</tt> support method for an action (where N is the
- * 0-based parameter number).
+ * <tt>validateNXxx</tt> support method for an action.
+ * 
+ * <p>
+ * Note that the parameter may be validated independently first (eg a range check on a numeric parameter).
+ * 
+ * @see org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet
  */
-public interface ActionParameterDefaultsFacet extends Facet {
+public interface ActionParameterValidationFacet extends Facet, ValidatingInteractionAdvisor {
 
-    public abstract Object getDefault(
-            ObjectAdapter target,
-            List<ObjectAdapter> parameters,
-            final Integer paramNumUpdated);
+    /**
+     * Reason why the validation has failed, or <tt>null</tt> if okay.
+     */
+    public String invalidReason(ManagedObject target, ObjectAdapter arguments);
 }

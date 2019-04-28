@@ -46,12 +46,19 @@ import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -105,6 +112,100 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     private static final String ID_FEEDBACK = "feedback";
     private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
     private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
+
+    public enum Repaint {
+        ENTIRE_FORM,
+        PARAM_ONLY,
+        NOTHING
+    }
+
+    /**
+     *
+     * @param actionModel - the action being invoked
+     * @param paramNumUpdated - the # of the param that has just been updated by the user
+     * @param paramNumToPossiblyUpdate - the # of the param to be updated if necessary (will be &gt; paramNumUpdated)
+     *
+     * @return - true if changed as a result of these pending arguments.
+     */
+    public Repaint updateIfNecessary(
+            final ActionModel actionModel,
+            final int paramNumUpdated,
+            final int paramNumToPossiblyUpdate) {
+
+        final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
+        final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
+
+
+        // could almost certainly simplify this... (used by visibility and usability checks)
+        final ObjectActionParameter actionParameter = action.getParameters().get(paramNumToPossiblyUpdate);
+        final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
+        final ObjectAdapter realTargetAdapter = action.realTargetAdapter(targetAdapter);
+
+        // check visibility
+        final Consent visibilityConsent = actionParameter.isVisible(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
+
+        final boolean visibilityBefore = isVisible();
+        final boolean visibilityAfter = visibilityConsent.isAllowed();
+        setVisible(visibilityAfter);
+
+
+        // check usability
+        final Consent usabilityConsent = actionParameter.isUsable(realTargetAdapter, pendingArguments, InteractionInitiatedBy.USER);
+
+        final boolean usabilityBefore = isEnabled();
+        final boolean usabilityAfter = usabilityConsent.isAllowed();
+        setEnabled(usabilityAfter);
+
+
+
+        // even if now invisible or unusable, we recalculate args and ensure compatible
+        // (else can hit complicated edge cases with stale data when next re-enable/make visible)
+        final ScalarModel model = getModel();
+        ObjectAdapter defaultIfAny = model.getKind()
+                .getDefault(scalarModel, pendingArguments, paramNumUpdated,
+                        getAuthenticationSession());
+
+        final ActionParameterMemento apm = new ActionParameterMemento(actionParameter);
+        final ActionArgumentModel actionArgumentModel = actionModel.getArgumentModel(apm);
+
+        final ObjectAdapter pendingArg = pendingArguments[paramNumToPossiblyUpdate];
+
+        if (defaultIfAny != null) {
+            scalarModel.setObject(defaultIfAny);
+
+            scalarModel.setPendingAdapter(defaultIfAny);
+            actionArgumentModel.setObject(defaultIfAny);
+        } else {
+
+            if(pendingArg != null & scalarModel.hasChoices()) {
+                // make sure the object is one of the choices, else blank it out.
+                final List<ObjectAdapter> choices = scalarModel
+                            .getChoices(pendingArguments, getAuthenticationSession());
+                if(!choices.contains(pendingArg)) {
+                    scalarModel.setObject(null);
+                    scalarModel.setPending(null);
+                    actionArgumentModel.setObject(null);
+                }
+            }
+        }
+
+        // repaint the entire form if visibility has changed
+        if (!visibilityBefore || !visibilityAfter) {
+            return Repaint.ENTIRE_FORM;
+        }
+
+        // repaint the param if usability has changed
+        if (!usabilityAfter || !usabilityBefore) {
+            return Repaint.PARAM_ONLY;
+        }
+
+        // also repaint the param if its pending arg has changed.
+        return scalarModel.getObject() != pendingArg
+                ? Repaint.PARAM_ONLY
+                : Repaint.NOTHING;
+    }
+
+
 
     public static class InlinePromptConfig {
         private final boolean supported;

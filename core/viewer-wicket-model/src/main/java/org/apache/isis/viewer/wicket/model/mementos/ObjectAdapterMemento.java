@@ -24,9 +24,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -81,7 +83,18 @@ public class ObjectAdapterMemento implements Serializable {
         return list != null ? createForList(_Lists.newArrayList(list), objectSpecId) :  null;
     }
 
-    enum Sort {
+    public static ObjectAdapterMemento createForIterable(
+            final Iterable<?> iterable,
+            final ObjectSpecId specId,
+            final PersistenceSession persistenceSession) {
+        final List<ObjectAdapterMemento> listOfMementos =
+                _NullSafe.stream(iterable)
+                .map(Functions.fromPojo(persistenceSession))
+                .collect(Collectors.toList());
+        return createForList(listOfMementos, specId);
+    }
+
+    public enum Sort {
         /**
          * represents a single object
          */

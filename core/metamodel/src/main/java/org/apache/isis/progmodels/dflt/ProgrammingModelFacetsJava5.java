@@ -93,9 +93,12 @@ import org.apache.isis.core.metamodel.facets.param.bigdecimal.javaxvaldigits.Big
 import org.apache.isis.core.metamodel.facets.param.choices.method.ActionChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.param.disable.method.ActionParameterDisabledFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.param.hide.method.ActionParameterHiddenFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.param.mandatory.dflt.MandatoryFacetOnParametersDefaultFactory;
 import org.apache.isis.core.metamodel.facets.param.parameter.ParameterAnnotationFacetFactory;
+import org.apache.isis.core.metamodel.facets.param.validate.method.ActionParameterValidationFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.properties.accessor.PropertyAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.method.PropertyAutoCompleteFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.properties.bigdecimal.javaxvaldigits.BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory;
@@ -219,7 +222,10 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         // actions
 
+        addFactory(new ActionParameterHiddenFacetViaMethodFactory());
+        addFactory(new ActionParameterDisabledFacetViaMethodFactory());
         addFactory(new ActionValidationFacetViaMethodFactory());
+        addFactory(new ActionParameterValidationFacetViaMethodFactory());
         addFactory(new ActionChoicesFacetViaMethodFactory());
         addFactory(new ActionParameterChoicesFacetViaMethodFactory());
         addFactory(new ActionParameterAutoCompleteFacetViaMethodFactory());

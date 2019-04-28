@@ -193,6 +193,16 @@ public interface ObjectAction extends ObjectMember {
     ObjectActionParameter getParameterByName(String paramName);
 
 
+    /**
+     * The actual target to invoke actions upon.
+     *
+     * <p>
+     *     For regular actions, returns same argument, but for mixin actions, will be an instance of the mixin.
+     * </p>
+     */
+    ObjectAdapter realTargetAdapter(ObjectAdapter targetAdapter);
+
+
 
     // -- Parameters (per instance)
 

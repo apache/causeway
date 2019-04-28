@@ -32,6 +32,8 @@ import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -41,7 +43,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionArgumentModel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.scalars.PanelWithChoices;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorStrategy;
@@ -84,7 +85,19 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             actionArgumentModel.setActionArgsHint(actionModel.getArgumentsAsArray());
             final ScalarPanelAbstract2 paramPanel = newParamPanel(container, actionArgumentModel);
             paramPanels.add(paramPanel);
+
+            final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
+            final ObjectAdapter realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
+                    .realTargetAdapter(targetAdapter);
+            final Consent consent = apm.getActionParameter(getSpecificationLoader())
+                    .isVisible(realTargetAdapter, null, InteractionInitiatedBy.USER);
+            final boolean allowed = consent.isAllowed();
+            paramPanel.setVisible(allowed);
         }
+
+        setOutputMarkupId(true);
+
+
     }
 
     private ScalarPanelAbstract2 newParamPanel(final WebMarkupContainer container, final ActionArgumentModel model) {
@@ -144,26 +157,33 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
     }
 
     @Override
-    public void onUpdate(AjaxRequestTarget target, ScalarPanelAbstract2 scalarPanel) {
+    public void onUpdate(final AjaxRequestTarget target, final ScalarPanelAbstract2 scalarPanelUpdated) {
 
         final ActionModel actionModel = getActionModel();
 
-        final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
-
+        final int paramNumberUpdated = scalarPanelUpdated.getModel().getParameterMemento().getNumber();
         try {
             final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
-            final int numParams = action.getParameterCount();
-            for (int i = 0; i < numParams; i++) {
-                final ScalarPanelAbstract2 paramPanel = paramPanels.get(i);
-                if (paramPanel != null && paramPanel instanceof PanelWithChoices) {
-                    final PanelWithChoices panelWithChoices = (PanelWithChoices) paramPanel;
 
-                    // this could throw a ConcurrencyException as we may have to reload the
-                    // object adapter of the action in order to compute the choices
-                    // (and that object adapter might have changed)
-                    if (panelWithChoices.updateChoices(pendingArguments)) {
-                        paramPanel.repaint(target);
-                    }
+            final int numParams = action.getParameterCount();
+
+            // only updates subsequent parameter panels to this one.
+            for (int paramNumToUpdate = paramNumberUpdated + 1; paramNumToUpdate < numParams; paramNumToUpdate++) {
+                final ScalarPanelAbstract2 paramPanel = paramPanels.get(paramNumToUpdate);
+                final ScalarPanelAbstract2.Repaint repaint = paramPanel
+                        .updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate);
+
+                switch (repaint) {
+                case ENTIRE_FORM:
+                    target.add(this);
+                    break;
+                case PARAM_ONLY:
+                    paramPanel.repaint(target);
+                    break;
+                case NOTHING:
+                    break;
+                default:
+                    throw new IllegalStateException("Unknown: " + repaint);
                 }
             }
         } catch (ConcurrencyException ex) {

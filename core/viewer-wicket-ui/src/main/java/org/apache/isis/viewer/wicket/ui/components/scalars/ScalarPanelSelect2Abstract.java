@@ -40,6 +40,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
@@ -163,13 +164,35 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      * <p>
      * called from onUpdate callback
      */
-    public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
+    @Override
+    public Repaint updateIfNecessary(
+            final ActionModel actionModel, final int paramNumUpdated, final int paramNumToPossiblyUpdate) {
+
+        final ObjectAdapter[] argumentsAsArray = actionModel.getArgumentsAsArray();
+
+        final Repaint repaint =
+                super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate);
+
+        final boolean choicesUpdated = updateChoices(argumentsAsArray);
+
+        if (repaint == Repaint.NOTHING)
+            if (choicesUpdated)
+                return Repaint.PARAM_ONLY;
+            else
+                return Repaint.NOTHING;
+        else
+            return repaint;
+    }
+
+    private boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
         if (select2 == null) {
             return false;
         }
         setProviderAndCurrAndPending(select2, argsIfAvailable);
+
         return true;
     }
+
 
 
 
@@ -180,7 +203,8 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      */
     @Override
     public void repaint(AjaxRequestTarget target) {
-        target.add(select2.component());
+        //target.add(select2.component());
+        target.add(this);
     }
 
     static class Select2Validator implements IValidator<Object> {
