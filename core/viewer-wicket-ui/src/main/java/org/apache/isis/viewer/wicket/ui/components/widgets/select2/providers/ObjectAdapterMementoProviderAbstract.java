@@ -85,7 +85,6 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
         if (choice == null) {
             return NULL_PLACEHOLDER;
         }
-        final ObjectAdapterMemento.Sort sort = choice.getSort();
         final ObjectSpecId objectSpecId = choice.getObjectSpecId();
         final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
 
