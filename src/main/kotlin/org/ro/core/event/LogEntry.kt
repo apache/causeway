@@ -1,5 +1,6 @@
 package org.ro.core.event
 
+import kotlinx.serialization.Serializable
 import org.ro.view.table.ActionMenu
 import pl.treksoft.kvision.types.Date
 
@@ -12,7 +13,12 @@ enum class EventState(val id: String, val iconName: String) {
     CLOSED("CLOSED", "fa-times-circle") //TODO should be different from ERROR?
 }
 
-class LogEntry(val url: String, val method: String? = null, val request: String = "") {
+@Serializable
+data class LogEntry(
+        val url: String,
+        val method: String? = null,
+        val request: String = "") {
+    
     var state = EventState.INITIAL
     var menu: ActionMenu? = null
 
@@ -141,13 +147,6 @@ class LogEntry(val url: String, val method: String? = null, val request: String 
             }
         }
         return output
-    }
-
-    fun printString(): String {
-        var result = "[url: $url \\n"
-        result += "arguments: $request \\n"
-        result += "response: $response ]"
-        return result
     }
 
     fun isView(): Boolean {

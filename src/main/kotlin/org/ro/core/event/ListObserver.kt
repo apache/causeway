@@ -3,7 +3,6 @@ package org.ro.core.event
 import org.ro.core.UiManager
 import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
-import org.ro.handler.TObjectHandler
 import org.ro.layout.Layout
 import org.ro.to.Property
 import org.ro.to.ResultList
@@ -27,11 +26,10 @@ class ListObserver : IObserver {
     // Handlers should set object into le after successful parsing
     override fun update(le: LogEntry) {
         val obj = le.obj
-        val url = le.url
 
         when (obj) {
             is ResultList -> handleList(obj)
-            is TObject -> handleObject(url, le)
+            is TObject -> handleObject(le)
             is Layout -> list.layout = obj
             is Property -> handleProperty(obj)
             else -> log(le)
@@ -60,19 +58,19 @@ class ListObserver : IObserver {
         }
     }
 
-    private fun handleObject(url: String, le: LogEntry) {
+    private fun handleObject(le: LogEntry) {
         // FIXME eventually this is called multiple times, which may be wrong
-        console.log("[ListObserver.handleObject] adding: $url")
-        //FIXME eventually set/get LogEntry.tObject
-        val jsonStr = le.response
-        val tObj = TObjectHandler().parse(jsonStr)
+        console.log("[ListObserver.handleObject] adding: ${le.url}")
+        val tObj = le.obj as TObject
         loadLayout(tObj)
         val oa = ObjectAdapter(tObj)
         list.add(oa)
+        console.log("[ListObserver.handleObject] objects in list: ${list.list.size}")
     }
 
     private fun handleView() {
         val title: String = "ListObserver"
+        console.log("[ListObserver.handleView] about to open: $title")
         val le = EventStore.findView(title)
         val b = le != null
         if (b) {

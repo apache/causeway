@@ -4,6 +4,11 @@ import org.ro.Application
 import org.ro.core.event.EventStore
 import org.ro.core.event.LogEntry
 import org.ro.core.model.Visible
+import org.ro.view.IconManager
+import org.ro.view.RoView
+import org.ro.view.table.el.EventLogTab
+import org.ro.view.table.el.EventLogTable
+import pl.treksoft.kvision.i18n.I18n
 
 /**
  * Single point of contact for view components:
@@ -21,12 +26,18 @@ object UiManager {
         val title: String = viewable.tag()
         val le: LogEntry? = EventStore.findView(title)
         if (le == null) {
-//            getTabBar()!!.addView(viewable)
+            createView()
             EventStore.addView(title)
         } else {
             le.cacheHits += 1
             EventStore.update(title)
         }
+    }
+    fun createView() {
+        val title = "Log Entries"
+        val icon = IconManager.find(title)
+        val tableSpec = EventLogTab().csList
+        RoView.addTab(I18n.tr(title), EventLogTable(tableSpec), icon)
     }
 
     fun removeView(title: String) {

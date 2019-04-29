@@ -30,8 +30,8 @@ apply plugin: 'kotlinx-serialization'
 repositories {
     jcenter()
     maven { url = 'https://dl.bintray.com/kotlin/kotlin-eap' }
-    maven { url = 'https://plugins.gradle.org/m2/' }
     maven { url = 'https://kotlin.bintray.com/kotlinx' }
+    maven { url = 'https://dl.bintray.com/kotlin/kotlin-js-wrappers' }
     maven { url = 'https://dl.bintray.com/gbaldeck/kotlin' }
     maven { url = 'https://dl.bintray.com/rjaros/kotlin' }
     mavenLocal()
@@ -42,6 +42,7 @@ dependencies {
     compile "pl.treksoft:kvision:${kvisionVersion}"
     compile "pl.treksoft:kvision-datacontainer:${kvisionVersion}"
     compile "pl.treksoft:kvision-bootstrap:${kvisionVersion}"
+    compile "pl.treksoft:kvision-tabulator:${kvisionVersion}"
     compile "pl.treksoft:kvision-select:${kvisionVersion}"
     compile "pl.treksoft:kvision-datetime:${kvisionVersion}"
     compile "pl.treksoft:kvision-spinner:${kvisionVersion}"

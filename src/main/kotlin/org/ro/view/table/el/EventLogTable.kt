@@ -62,19 +62,22 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
         }
 
         hPanel(FlexWrap.WRAP, alignItems = FlexAlignItems.CENTER, spacing = 20) {
-            search = textInput(TextInputType.SEARCH) {
-                placeholder = "Search ..."
-            }
-
+            marginTop = 4.px
+            marginLeft = 4.px
+            // types can not be removed or created Empty - why?
             types = radioGroup(listOf(
                     "all" to "All",
                     "err" to "Errors",
-                    "scr" to "Screen"),
+                    "ui" to "UI"),
                     "all",
                     inline = true) {
                 marginBottom = 0.px
             }
-            // types can not be removed or created Empty - why?
+ 
+            search = textInput(TextInputType.SEARCH) {
+                placeholder = "Search ..."
+            }
+
         }
         val model = EventStore.log
         val factoryBlock = { logEntry: LogEntry, index: Int, _: Any ->
