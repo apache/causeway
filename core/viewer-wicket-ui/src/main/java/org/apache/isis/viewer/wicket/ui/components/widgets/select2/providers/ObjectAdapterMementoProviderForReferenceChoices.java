@@ -38,16 +38,13 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers;
 
 import java.util.Collection;
 import java.util.List;
-
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Collections2;
-
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -83,7 +80,15 @@ extends ObjectAdapterMementoProviderAbstract implements ObjectAdapterMementoProv
                     return null;
                 }
                 final RootOid oid = RootOid.deString(input);
+
+                final ObjectSpecId objectSpecId = oid.getObjectSpecId();
+                final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
+                // TODO: this knowledge should live deeper down
+                if(spec.isEncodeable()) {
+                    return ObjectAdapterMemento.createForEncodeable(objectSpecId, oid.getIdentifier());
+                } else {
                 return ObjectAdapterMemento.createPersistent(oid);
+            }
         };
         return _NullSafe.stream(ids).map(function).collect(Collectors.toList());
     }

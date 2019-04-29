@@ -486,6 +486,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
                 if (parameterDefaultPojos[i] != null) {
                     final ObjectSpecification componentSpec = getSpecificationLoader().loadSpecification(parameterDefaultPojos[i].getClass());
                     final ObjectSpecification parameterSpec = parameters.get(i).getSpecification();
+                    // TODO: should implement this instead as a MetaModelValidator
                     if (!componentSpec.isOfType(parameterSpec)) {
                         throw new DomainModelException("Defaults type incompatible with parameter " + (i + 1) + " type; expected " + parameterSpec.getFullIdentifier() + ", but was " + componentSpec.getFullIdentifier());
                     }

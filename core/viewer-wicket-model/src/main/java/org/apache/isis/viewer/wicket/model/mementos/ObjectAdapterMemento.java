@@ -94,6 +94,12 @@ public class ObjectAdapterMemento implements Serializable {
         return createForList(listOfMementos, specId);
     }
 
+    public static ObjectAdapterMemento createForEncodeable(
+            final ObjectSpecId specId,
+            final String encodableValue) {
+        return new ObjectAdapterMemento(specId, encodableValue);
+    }
+
     public enum Sort {
         /**
          * represents a single object
@@ -428,6 +434,14 @@ public class ObjectAdapterMemento implements Serializable {
         objectSpecId = specification.getSpecId();
         init(adapter);
     }
+
+    private ObjectAdapterMemento(final ObjectSpecId specId, final String encodableValue) {
+        this.sort = Sort.SCALAR;
+        this.objectSpecId = specId;
+        this.encodableValue = encodableValue;
+        this.type = Type.ENCODEABLE;
+    }
+
 
     private void init(final ObjectAdapter adapter) {
 

@@ -118,8 +118,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      */
     private void setProviderAndCurrAndPending(final Select2 select2, ObjectAdapter[] argsIfAvailable) {
 
-        final ChoiceProvider<ObjectAdapterMemento> choiceProvider;
-        choiceProvider = buildChoiceProvider(argsIfAvailable);
+        final ChoiceProvider<ObjectAdapterMemento> choiceProvider = buildChoiceProvider(argsIfAvailable);
 
         select2.setProvider(choiceProvider);
         getModel().clearPending();

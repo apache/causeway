@@ -88,7 +88,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.postprocessor.PostProcessor;
-import org.apache.isis.core.plugins.environment.DeploymentType;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
@@ -123,7 +122,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     protected final ServicesInjector servicesInjector;
 
     private PostProcessor postProcessor;
-    private final DeploymentType deploymentType;
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
 
@@ -183,7 +181,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.facetProcessor = facetProcessor;
 
         this.specificationLoader = servicesInjector.getSpecificationLoader();
-        this.deploymentType = _Context.getEnvironment().getDeploymentType();
         this.postProcessor = postProcessor;
     }
 
@@ -420,6 +417,17 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 return true;
             }
         }
+
+        // this is a bit of a workaround; the metamodel doesn't have the interfaces for enums.
+        final Class<?> correspondingClass = getCorrespondingClass();
+        final Class<?> possibleSupertypeClass = specification.getCorrespondingClass();
+        if(correspondingClass != null && possibleSupertypeClass != null &&
+            Enum.class.isAssignableFrom(correspondingClass) && possibleSupertypeClass.isInterface()) {
+            if(possibleSupertypeClass.isAssignableFrom(correspondingClass)) {
+                return true;
+            }
+        }
+
         final ObjectSpecification superclassSpec = superclass();
         return superclassSpec != null && superclassSpec.isOfType(specification);
     }
