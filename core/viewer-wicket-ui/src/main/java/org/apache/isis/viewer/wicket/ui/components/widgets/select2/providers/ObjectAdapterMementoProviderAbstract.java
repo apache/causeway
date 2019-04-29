@@ -21,15 +21,18 @@ import java.util.List;
 import java.util.Locale;
 
 import com.google.common.collect.Lists;
-import org.wicketstuff.select2.ChoiceProvider;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
+import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -79,7 +82,20 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
 
     @Override
     public String getIdValue(final ObjectAdapterMemento choice) {
-        return choice != null? choice.asString(): NULL_PLACEHOLDER;
+        if (choice == null) {
+            return NULL_PLACEHOLDER;
+        }
+        final ObjectAdapterMemento.Sort sort = choice.getSort();
+        final ObjectSpecId objectSpecId = choice.getObjectSpecId();
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
+
+        // support enums that are implementing an interface; only know this late in the day
+        // TODO: this is a hack, really should push this deeper so that Encodeable OAMs also prefix themselves with their objectSpecId
+        if(spec != null && spec.isEncodeable()) {
+            return objectSpecId.asString() + ":" + choice.asString();
+        } else {
+            return choice.asString();
+        }
     }
 
     @Override
