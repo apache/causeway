@@ -44,6 +44,8 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -81,7 +83,15 @@ public class ObjectAdapterMementoProviderForReferenceChoices
                     return null;
                 }
                 final RootOid oid = RootOid.deString(input);
-                return ObjectAdapterMemento.createPersistent(oid);
+
+                final ObjectSpecId objectSpecId = oid.getObjectSpecId();
+                final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
+                // TODO: this knowledge should live deeper down
+                if(spec.isEncodeable()) {
+                    return ObjectAdapterMemento.createForEncodeable(objectSpecId, oid.getIdentifier());
+                } else {
+                    return ObjectAdapterMemento.createPersistent(oid);
+                }
             }
         };
         return Lists.newArrayList(Collections2.transform(ids, function));

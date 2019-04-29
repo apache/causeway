@@ -56,6 +56,7 @@ public class ObjectAdapterMemento implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final OidMarshaller OID_MARSHALLER = OidMarshaller.INSTANCE;
+
     /**
      * Factory method
      */
@@ -98,6 +99,12 @@ public class ObjectAdapterMemento implements Serializable {
                         .transform(Functions.fromPojo(persistenceSession))
                         .toList());
         return createForList(listOfMementos, specId);
+    }
+
+    public static ObjectAdapterMemento createForEncodeable(
+            final ObjectSpecId specId,
+            final String encodableValue) {
+        return new ObjectAdapterMemento(specId, encodableValue);
     }
 
     public enum Sort {
@@ -436,6 +443,14 @@ public class ObjectAdapterMemento implements Serializable {
         objectSpecId = specification.getSpecId();
         init(adapter);
     }
+
+    private ObjectAdapterMemento(final ObjectSpecId specId, final String encodableValue) {
+        this.sort = Sort.SCALAR;
+        this.objectSpecId = specId;
+        this.encodableValue = encodableValue;
+        this.type = Type.ENCODEABLE;
+    }
+
 
     private void init(final ObjectAdapter adapter) {
         
