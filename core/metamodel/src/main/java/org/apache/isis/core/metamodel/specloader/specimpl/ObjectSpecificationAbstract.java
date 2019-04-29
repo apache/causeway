@@ -460,6 +460,17 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 return true;
             }
         }
+
+        // this is a bit of a workaround; the metamodel doesn't have the interfaces for enums.
+        final Class<?> correspondingClass = getCorrespondingClass();
+        final Class<?> possibleSupertypeClass = specification.getCorrespondingClass();
+        if(correspondingClass != null && possibleSupertypeClass != null &&
+            Enum.class.isAssignableFrom(correspondingClass) && possibleSupertypeClass.isInterface()) {
+            if(possibleSupertypeClass.isAssignableFrom(correspondingClass)) {
+                return true;
+            }
+        }
+
         final ObjectSpecification superclassSpec = superclass();
         return superclassSpec != null && superclassSpec.isOfType(specification);
     }
