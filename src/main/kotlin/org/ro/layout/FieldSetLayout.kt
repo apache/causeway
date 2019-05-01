@@ -2,8 +2,9 @@ package org.ro.layout
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
-import org.ro.view.FormItem
-import org.ro.view.HBox
+import org.ro.view.uicomp.Form
+import org.ro.view.uicomp.FormItem
+import org.ro.view.uicomp.HBox
 
 @Serializable
 data class FieldSetLayout(val name: String? = null,
@@ -18,7 +19,7 @@ data class FieldSetLayout(val name: String? = null,
     fun build(): HBox {
         val result = HBox("FieldSetLayout")
         var fi: FormItem?
-        val form: org.ro.view.Form = org.ro.view.Form("new Form")
+        val form: Form = Form("new Form")
         for (p in property) {
             val label = p.named ?: "label not set"
             val type = "Text"// if mutiline use a different type of input p.multiLine

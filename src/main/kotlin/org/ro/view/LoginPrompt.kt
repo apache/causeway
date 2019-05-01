@@ -2,6 +2,7 @@ package org.ro.view
 
 import org.ro.core.Session
 import org.ro.to.Link
+import org.ro.view.uicomp.FormItem
 
 class LoginPrompt() : Command {
     //Default values

@@ -2,8 +2,8 @@ package org.ro.layout
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
-import org.ro.view.TabNavigator
-import org.ro.view.UIComponent
+import org.ro.view.uicomp.TabNavigator
+import org.ro.view.uicomp.UIComponent
 
 @Serializable
 data class TabGroupLayout(val cssClass: String? = "",        

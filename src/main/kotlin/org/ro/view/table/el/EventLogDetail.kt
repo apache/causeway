@@ -2,7 +2,7 @@ package org.ro.view.table.el
 
 import org.ro.core.event.LogEntry
 import org.ro.view.Command
-import org.ro.view.FormItem
+import org.ro.view.uicomp.FormItem
 import org.ro.view.RoDialog
 
 class EventLogDetail(val logEntry: LogEntry) : Command {

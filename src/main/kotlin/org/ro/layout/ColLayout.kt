@@ -3,8 +3,8 @@ package org.ro.layout
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 import org.ro.to.Link
-import org.ro.view.HBox
-import org.ro.view.UIComponent
+import org.ro.view.uicomp.HBox
+import org.ro.view.uicomp.UIComponent
 
 @Serializable
 data class ColLayout(@Optional val domainObject: DomainObjectLayout? = null,

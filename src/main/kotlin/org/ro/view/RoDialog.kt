@@ -1,5 +1,6 @@
 package org.ro.view
 
+import org.ro.view.uicomp.FormItem
 import pl.treksoft.kvision.core.StringPair
 import pl.treksoft.kvision.form.FormPanel
 import pl.treksoft.kvision.form.FormPanel.Companion.formPanel

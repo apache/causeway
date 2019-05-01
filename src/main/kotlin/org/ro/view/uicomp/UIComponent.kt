@@ -1,4 +1,4 @@
-package org.ro.view
+package org.ro.view.uicomp
 
 open class UIComponent(open val label: String = "not set") {
     var children = mutableListOf<UIComponent>()

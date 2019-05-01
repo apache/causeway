@@ -1,6 +1,7 @@
 package org.ro.view
 
 import org.ro.to.HttpError
+import org.ro.view.uicomp.FormItem
 
 class ErrorAlert(val error: HttpError) : Command {
 
