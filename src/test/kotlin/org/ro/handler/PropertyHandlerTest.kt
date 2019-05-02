@@ -24,8 +24,8 @@ class PropertyHandlerTest : IntegrationTest() {
             // then 
             val actLe: LogEntry? = EventStore.find(FR_OBJECT_PROPERTY.url)
             assertNotNull(actLe)  //1
-            assertNotNull(actLe.obj)  //2
-            val p = actLe.obj as Property
+            assertNotNull(actLe.getObj())  //2
+            val p = actLe.getObj() as Property
             assertNotNull(p.id)    // 3
             assertNotNull(p.descriptionLink())  //4
 
@@ -52,7 +52,7 @@ class PropertyHandlerTest : IntegrationTest() {
             val lyt = ol.layout
             assertNotNull(lyt)  //3
 
-            val property = pdLe.obj as Property
+            val property = pdLe.getObj() as Property
             assertNotNull(property)  //4
 
             console.log("[PHT.testPropertyDescription] ${pdLe.toString()}")

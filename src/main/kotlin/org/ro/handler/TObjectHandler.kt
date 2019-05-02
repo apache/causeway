@@ -9,7 +9,7 @@ class TObjectHandler : AbstractHandler(), IResponseHandler {
         var answer = false
         try {
             val obj = parse(jsonStr)
-            logEntry.obj = obj
+            logEntry.setObj(obj)
             answer = true
         } catch (ex: Exception) {
         }
@@ -17,8 +17,6 @@ class TObjectHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle() {
-        val tObject = logEntry.obj  as TObject
-        logEntry.obj = tObject
     }
 
     fun parse(jsonStr: String): TObject {

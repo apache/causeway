@@ -48,7 +48,7 @@ data class LogEntry(
     var responseLength: Int? = null
     var response = ""
     var duration = 0
-    var obj: Any? = null
+//    var obj: Any? = null
     var cacheHits = 0
     var observer: IObserver? = null
 
@@ -88,10 +88,10 @@ data class LogEntry(
 
     override fun toString(): String {
         var s = "url: $url\n"
-        if (obj == null) {
+        if (getObj() == null) {
             s += "obj: null\n"
         } else {
-            s += "obj: ${obj!!::class.simpleName}\n"
+            s += "obj: ${getObj()!!::class.simpleName}\n"
         }
         if (observer == null) {
             s += "obsever: null\n"
@@ -100,6 +100,13 @@ data class LogEntry(
         }
         s += "response: $response\n"
         return s
+    }
+
+    fun getObj() : Any? {
+        return EventStore.cache.get(url)
+    }
+    fun setObj(obj: Any?)  {
+         EventStore.cache.put(url, obj)
     }
 
     // region response

@@ -11,7 +11,7 @@ class ResultListHandler : AbstractHandler(), IResponseHandler {
         var answer = false
         try {
             val obj = parse(jsonStr)
-            logEntry.obj = obj
+            logEntry.setObj(obj)
             answer= true
         } catch (ex: Exception) {
         }
@@ -23,7 +23,7 @@ class ResultListHandler : AbstractHandler(), IResponseHandler {
         logEntry.observer = obs
         obs.update(logEntry)
 
-        val resultList = logEntry.obj as ResultList
+        val resultList = logEntry.getObj() as ResultList
         val members = resultList.result!!.value
         for (l in members) {
             l.invoke(obs)

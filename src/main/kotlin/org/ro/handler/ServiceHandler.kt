@@ -9,7 +9,7 @@ class ServiceHandler : AbstractHandler(), IResponseHandler {
         var answer = false
         try {
             val obj = parse(jsonStr)
-            logEntry.obj = obj
+            logEntry.setObj(obj)
             answer = true
         } catch (ex: Exception) {
         }

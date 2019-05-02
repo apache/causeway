@@ -2,6 +2,7 @@ package org.ro.view
 
 import org.ro.core.Menu
 import org.ro.core.MenuEntry
+import org.ro.core.event.EventStore
 import org.ro.view.table.el.EventLogTab
 import org.ro.view.table.el.EventLogTable
 import org.ro.view.table.el.EventLogTable2
@@ -44,11 +45,11 @@ class RoMenuBar : Navbar() {
         }
         mainMenu.add(log)
 
-        title = "Log Entries 2"
-        icon = IconManager.find(title)
-        val log2 = Link(tr(title), icon = icon).onClick {
-            val tableSpec = EventLogTab().csList
-            RoView.addTab(tr(title), EventLogTable2(), icon)
+        val title2 = "Tabulator"
+        icon = IconManager.find(title2)
+        val log2 = Link(tr(title2), icon = icon).onClick {
+            val model = EventStore.log //as List<LogEntry>
+            RoView.addTab(tr(title2), EventLogTable2(), icon)
         }
         mainMenu.add(log2)
 

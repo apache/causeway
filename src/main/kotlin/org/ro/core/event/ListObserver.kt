@@ -1,5 +1,6 @@
 package org.ro.core.event
 
+import kotlinx.serialization.Serializable
 import org.ro.core.UiManager
 import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
@@ -19,13 +20,13 @@ import org.ro.to.TObject
  * (3) FR_OBJECT_PROPERTY       PropertyHandler -> invoke()
  * (4) FR_PROPERTY_DESCRIPTION  PropertyDescriptionHandler
  */
-
+@Serializable
 class ListObserver : IObserver {
     var list = ObjectList()
 
     // Handlers should set object into le after successful parsing
     override fun update(le: LogEntry) {
-        val obj = le.obj
+        val obj = le.getObj()
 
         when (obj) {
             is ResultList -> handleList(obj)
@@ -61,7 +62,7 @@ class ListObserver : IObserver {
     private fun handleObject(le: LogEntry) {
         // FIXME eventually this is called multiple times, which may be wrong
         console.log("[ListObserver.handleObject] adding: ${le.url}")
-        val tObj = le.obj as TObject
+        val tObj = le.getObj() as TObject
         loadLayout(tObj)
         val oa = ObjectAdapter(tObj)
         list.add(oa)

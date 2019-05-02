@@ -12,7 +12,7 @@ class ResultHandler : AbstractHandler(), IResponseHandler {
         var answer = false
         try {
             val obj = parse(jsonStr)
-            logEntry.obj = obj
+            logEntry.setObj(obj)
             answer = true
         } catch (ex: Exception) {
         }
@@ -25,7 +25,7 @@ class ResultHandler : AbstractHandler(), IResponseHandler {
 //        obs.update(logEntry)   
 // TODO if commented in, ServiceHandlerTest breaks with a CCE
 
-        val services = logEntry.obj as Result
+        val services = logEntry.getObj() as Result
         val values = services.valueList()
         Menu.limit = values.size
         for (l in values) {

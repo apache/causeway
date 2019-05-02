@@ -9,7 +9,7 @@ class HttpErrorHandler : AbstractHandler(), IResponseHandler {
         var answer = false
         try {
             val obj = parse(jsonStr)
-            logEntry.obj = obj
+            logEntry.setObj(obj)
             answer = true
         } catch (ex: Exception) {
         }
@@ -17,7 +17,7 @@ class HttpErrorHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle() {
-        val e = logEntry.obj as HttpError
+        val e = logEntry.getObj() as HttpError
         ErrorAlert(e).open()
     }
 

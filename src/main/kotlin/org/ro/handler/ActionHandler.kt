@@ -10,9 +10,9 @@ class ActionHandler : AbstractHandler(), IResponseHandler {
     override fun canHandle(jsonStr: String): Boolean {
         var answer = false;
         try {
-            val action = parse(jsonStr)
-            logEntry.obj = action
-            val ext = action.extensions
+            val obj = parse(jsonStr)
+            logEntry.setObj(obj)
+            val ext = obj.extensions
             answer = ext.actionType.isNotEmpty()
         } catch (ex: Exception) {
         }
@@ -20,7 +20,7 @@ class ActionHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle() {
-        val action = logEntry.obj as Action
+        val action = logEntry.getObj() as Action
         for (l in action.links) {
             // l.rel should be neither: (self | up | describedBy )
             if (l.isInvokeAction()) {

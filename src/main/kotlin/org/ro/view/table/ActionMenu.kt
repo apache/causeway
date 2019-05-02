@@ -1,5 +1,8 @@
 package org.ro.view.table
 
-class ActionMenu(val iconName: String) {
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ActionMenu(val iconName: String) {
 
 }

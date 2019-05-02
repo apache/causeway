@@ -9,8 +9,8 @@ class PropertyHandler : AbstractHandler(), IResponseHandler {
     override fun canHandle(jsonStr: String): Boolean {
         var answer = false
         try {
-            val p = parse(jsonStr)
-            logEntry.obj = p
+            val obj = parse(jsonStr)
+            logEntry.setObj(obj)
             answer = true
         } catch (ex: Exception) {
         }
@@ -18,7 +18,7 @@ class PropertyHandler : AbstractHandler(), IResponseHandler {
     }
 
     override fun doHandle() {
-        val p = logEntry.obj as Property
+        val p = logEntry.getObj() as Property
         val descLink = p.descriptionLink()
         val obs: ListObserver
         if (logEntry.observer == null) {

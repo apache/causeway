@@ -8,8 +8,8 @@ class LayoutHandler : AbstractHandler(), IResponseHandler {
     override fun canHandle(jsonStr: String): Boolean {
         var answer = false
         try {
-            val layout = parse(jsonStr)
-            logEntry.obj = layout
+            val obj = parse(jsonStr)
+            logEntry.setObj(obj)
             answer = true
         } catch (ex: Exception) {
         }

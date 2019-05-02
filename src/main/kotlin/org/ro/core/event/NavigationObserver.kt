@@ -1,13 +1,15 @@
 package org.ro.core.event
 
+import kotlinx.serialization.Serializable
 import org.ro.core.Menu
 import org.ro.core.UiManager
 import org.ro.to.Service
 
+@Serializable
 class NavigationObserver() : IObserver {
 
     override fun update(logEntry: LogEntry) {
-        val service = logEntry.obj as Service
+        val service = logEntry.getObj() as Service
         Menu.add(service)
 
         if (Menu.isFull()) {

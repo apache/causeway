@@ -1,11 +1,13 @@
 package org.ro.core.event
 
+import kotlinx.serialization.Serializable
+
 /**
  * @see: https://en.wikipedia.org/wiki/Observer_pattern
  *
  * In the original pattern the relation Observable:Observer 1:n,
  * Here it is n:1 (LogEvent:Observer).
- * 
+ *
  * A more descriptive name would be: collector
  *
  * Observer:
@@ -14,6 +16,7 @@ package org.ro.core.event
  * @item creates views for object(s).
  */
 
+@Serializable
 interface IObserver {
     fun update(le: LogEntry)
 }
