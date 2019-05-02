@@ -86,6 +86,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             final ScalarPanelAbstract2 paramPanel = newParamPanel(container, actionArgumentModel);
             paramPanels.add(paramPanel);
 
+            // TODO: maybe this logic should move instead to ScalarModel.Kind#whether{Hidden/Disabled}
             final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
             final ObjectAdapter realTargetAdapter = actionModel.getActionMemento().getAction(getSpecificationLoader())
                     .realTargetAdapter(targetAdapter);
@@ -173,6 +174,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
                 final ScalarPanelAbstract2.Repaint repaint = paramPanel
                         .updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate, target);
 
+                final boolean multiPart = isMultiPart();
                 switch (repaint) {
                 case ENTIRE_FORM:
                     target.add(this);

@@ -301,15 +301,27 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
                 target.add(component);
             }
         }
+
+
         if(editability != null) {
-            component.setEnabled(editability == InputFieldEditability.EDITABLE);
 
-            final AttributeModifier title = new AttributeModifier("title", Model.of(disabledReason != null ? disabledReason : ""));
-            component.add(title);
+            // dynamic disablement doesn't yet work, this exception is thrown when form is submitted:
+            //
+            // Caused by: java.lang.IllegalStateException: ServletRequest does not contain multipart content.
+            // One possible solution is to explicitly call Form.setMultipart(true), Wicket tries its best to
+            // auto-detect multipart forms but there are certain situation where it cannot.
 
-            if (target != null) {
-                target.add(component);
-            }
+//            component.setEnabled(editability == InputFieldEditability.EDITABLE);
+//
+//            final AttributeModifier title = new AttributeModifier("title", Model.of(disabledReason != null ? disabledReason : ""));
+//            component.add(title);
+//
+//            if (target != null) {
+//                target.add(component);
+//            }
+
+            // as a workaround, use VISIBILITY instead.
+
         }
 
 
@@ -357,7 +369,7 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
         final MarkupContainer formComponent = (MarkupContainer) getComponentForRegular();
         formComponent.setOutputMarkupId(true); // enable ajax link
-    
+
         final AjaxLink<Void> ajaxLink = new AjaxLink<Void>(ID_SCALAR_IF_REGULAR_CLEAR){
             private static final long serialVersionUID = 1L;
     

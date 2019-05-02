@@ -343,6 +343,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         textField.setEnabled(false);
         inlinePromptLink.setEnabled(false);
         setTitleAttribute(disableReason);
+        target.add(textField);
+        target.add(inlinePromptLink);
     }
 
     @Override
@@ -350,6 +352,8 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         textField.setEnabled(true);
         inlinePromptLink.setEnabled(true);
         setTitleAttribute("");
+        target.add(textField);
+        target.add(inlinePromptLink);
     }
 
 

@@ -188,11 +188,30 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 // make sure the object is one of the choices, else blank it out.
                 final List<ObjectAdapter> choices = scalarModel
                             .getChoices(pendingArguments, getAuthenticationSession(), getDeploymentCategory());
-                if(!choices.contains(pendingArg)) {
-                    scalarModel.setObject(null);
-                    scalarModel.setPending(null);
-                    actionArgumentModel.setObject(null);
+
+                if(pendingArg.isValue()) {
+                    // we have to do this if the ObjectAdapters are value type (eg a string)
+                    //  because we can end up with a different ObjectAdapter for the same underlying value
+                    //  (values have no intrinsic identity)
+
+                    // it might not be necessary to have this special casing; we could probably use this code
+                    // even for reference types
+                    final Object pendingValue = pendingArg.getObject();
+                    final List<Object> choiceValues = ObjectAdapter.Util.unwrap(choices);
+                    if(!choiceValues.contains(pendingValue)) {
+                        scalarModel.setObject(null);
+                        scalarModel.setPending(null);
+                        actionArgumentModel.setObject(null);
+                    }
+                } else {
+                    if(!choices.contains(pendingArg)) {
+                        scalarModel.setObject(null);
+                        scalarModel.setPending(null);
+                        actionArgumentModel.setObject(null);
+                    }
+
                 }
+
             }
         }
 

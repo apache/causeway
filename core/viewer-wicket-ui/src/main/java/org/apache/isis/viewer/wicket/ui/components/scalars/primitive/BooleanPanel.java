@@ -213,11 +213,18 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
     protected void onInitializeWhenDisabled(final String disableReason) {
         super.onInitializeWhenDisabled(disableReason);
         checkBox.setEnabled(false);
+        final AttributeModifier title = new AttributeModifier("title",
+                                                Model.of(disableReason != null ? disableReason : ""));
+        checkBox.add(title);
     }
 
     @Override
     protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
         checkBox.setEnabled(false);
+        final AttributeModifier title = new AttributeModifier("title",
+                                                Model.of(disableReason != null ? disableReason : ""));
+        checkBox.add(title);
+        target.add(checkBox);
     }
 
     @Override
