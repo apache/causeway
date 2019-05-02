@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
@@ -109,7 +110,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
         // Edit: read/write
         select2.setEnabled(true);
 
-        // TODO: should the title AttributeModifier installed in onBeforeWhenDisabled be removed here?
+        setTitleAttribute("");
     }
 
     @Override
@@ -123,7 +124,24 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
         getComponentForRegular().add(new AttributeModifier("title", Model.of(titleAttribute)));
     }
 
-    
+    @Override
+    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+        super.onDisabled(disableReason, target);
+
+        setTitleAttribute(disableReason);
+        select2.setEnabled(false);
+    }
+
+    @Override
+    protected void onEnabled(final AjaxRequestTarget target) {
+        super.onEnabled(target);
+
+        setTitleAttribute("");
+        select2.setEnabled(true);
+    }
+
+
+
     // //////////////////////////////////////
 
 

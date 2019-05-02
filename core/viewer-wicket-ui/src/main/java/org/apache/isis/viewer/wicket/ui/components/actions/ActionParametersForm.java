@@ -171,7 +171,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
             for (int paramNumToUpdate = paramNumberUpdated + 1; paramNumToUpdate < numParams; paramNumToUpdate++) {
                 final ScalarPanelAbstract2 paramPanel = paramPanels.get(paramNumToUpdate);
                 final ScalarPanelAbstract2.Repaint repaint = paramPanel
-                        .updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate);
+                        .updateIfNecessary(actionModel, paramNumberUpdated, paramNumToUpdate, target);
 
                 switch (repaint) {
                 case ENTIRE_FORM:

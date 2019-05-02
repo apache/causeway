@@ -97,7 +97,15 @@ public class ActionPromptSidebar
 
         setVisible(false);
 
-        addOrReplace(new WebMarkupContainer(getContentId()));
+        // we no longer remove the panel, because hitting 'Esc' seems to cause the
+        // cancelButton callback to be fired twice, resulting in a stack trace:
+        //
+        // org.apache.wicket.core.request.handler.ComponentNotFoundException: Component
+        // 'theme:actionPromptSidebar:actionPrompt:parameters:inputForm:cancelButton' has been removed from page.)
+
+        // addOrReplace(new WebMarkupContainer(getContentId()));
+
+
         addOrReplace(new WebMarkupContainer(getExtraContentId()));
 
         if (target != null) {

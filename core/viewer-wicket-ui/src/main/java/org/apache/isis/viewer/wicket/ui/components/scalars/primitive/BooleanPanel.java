@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
@@ -214,6 +215,15 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
         checkBox.setEnabled(false);
     }
 
+    @Override
+    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+        checkBox.setEnabled(false);
+    }
+
+    @Override
+    protected void onEnabled(final AjaxRequestTarget target) {
+        checkBox.setEnabled(true);
+    }
 
     @Override
     public String getVariation() {

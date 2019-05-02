@@ -35,6 +35,11 @@ import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 public interface DisabledFacet extends WhenAndWhereValueFacet, DisablingInteractionAdvisor {
 
     /**
+     * "Special" phrase returned for facets which are always disabled.
+     */
+    String ALWAYS_DISABLED_REASON = "Always disabled";
+
+    /**
      * The reason why the (feature of the) target object is currently disabled,
      * or <tt>null</tt> if enabled.
      */

@@ -158,6 +158,18 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
 
     }
 
+    @Override
+    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+        setEnabled(false);
+    }
+
+    @Override
+    protected void onEnabled(final AjaxRequestTarget target) {
+        setEnabled(true);
+
+    }
+
+
     // //////////////////////////////////////
 
     /**
@@ -168,12 +180,15 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
      */
     @Override
     public Repaint updateIfNecessary(
-            final ActionModel actionModel, final int paramNumUpdated, final int paramNumToPossiblyUpdate) {
+            final ActionModel actionModel,
+            final int paramNumUpdated,
+            final int paramNumToPossiblyUpdate,
+            final AjaxRequestTarget target) {
 
         final ObjectAdapter[] argumentsAsArray = actionModel.getArgumentsAsArray();
 
         final Repaint repaint =
-                super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate);
+                super.updateIfNecessary(actionModel, paramNumUpdated, paramNumToPossiblyUpdate, target);
 
         final boolean choicesUpdated = updateChoices(argumentsAsArray);
 

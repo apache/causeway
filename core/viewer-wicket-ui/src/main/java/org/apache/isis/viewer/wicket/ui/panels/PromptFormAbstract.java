@@ -164,6 +164,7 @@ public abstract class PromptFormAbstract<T extends BookmarkableModel<ObjectAdapt
 
             @Override
             public void onSubmit(final AjaxRequestTarget target, Form<?> form) {
+                //form.setMultiPart(true);
                 closePromptIfAny(target);
 
                 onCancelSubmitted(target);
