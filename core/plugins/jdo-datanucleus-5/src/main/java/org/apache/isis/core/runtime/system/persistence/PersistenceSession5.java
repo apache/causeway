@@ -65,6 +65,8 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFa
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
@@ -839,21 +841,33 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     @Override
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
-        {
-            // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
-            // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet
-            // mapped.
+        
+        // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
+        // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet
+        // mapped.
 
-            // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
-            // DN would not be calling this callback if the pojo was not persistent.
+        // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
+        // DN would not be calling this callback if the pojo was not persistent.
 
-            final ObjectAdapter adapter = objectAdapterContext.fetchPersistent(pojo);
-            if (adapter == null) {
-                throw new RuntimeException(
-                        "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
-                                + pojo + "]");
-            }
+        final ObjectAdapter adapter = objectAdapterContext.fetchPersistent(pojo);
+        if (adapter == null) {
+            throw new RuntimeException(
+                    "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
+                            + pojo + "]");
         }
+        
+        final boolean wasAlreadyEnlisted = changedObjectsServiceInternal.isEnlisted(adapter);
+
+        // we call this come what may;
+        // additional properties may now have been changed, and the changeKind for publishing might also be modified
+        changedObjectsServiceInternal.enlistUpdating(adapter);
+
+        if(!wasAlreadyEnlisted) {
+            // prevent an infinite loop... don't call the 'updating()' callback on this object if we have already done so
+            CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
+            objectAdapterContext.postLifecycleEventIfRequired(adapter, UpdatingLifecycleEventFacet.class);
+        }
+        
     }
 
     /**
