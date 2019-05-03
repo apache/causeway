@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Apache Isis JDO ObjectStore DataNucleus 4 Implementation
-Bundle-SymbolicName: org.apache.isis.objectstore.jdo.datanucleus
-Bundle-Version: 1.0.0
-Bundle-Vendor: Apache Isis

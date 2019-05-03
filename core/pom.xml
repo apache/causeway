@@ -2525,7 +2525,6 @@ ${license.additional-notes}
         <module>plugins/eventbus-guava</module>
         <module>plugins/jaxrs-resteasy-3</module>
         <module>plugins/jaxrs-resteasy-4</module>
-        <module>plugins/jdo-datanucleus-4</module>
         <module>plugins/jdo-datanucleus-5</module>
         <module>plugins/security-shiro</module>
 
