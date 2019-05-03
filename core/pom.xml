@@ -2522,7 +2522,6 @@ ${license.additional-notes}
         <module>plugins/codegen-javassist</module>
         <module>plugins/discovery-reflections</module>
         <module>plugins/eventbus-axon</module>
-        <module>plugins/eventbus-guava</module>
         <module>plugins/jaxrs-resteasy-4</module>
         <module>plugins/jdo-datanucleus-5</module>
         <module>plugins/security-shiro</module>
