@@ -143,7 +143,7 @@
 
     	<dependency>
             <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-plugins-jaxrs-resteasy-3</artifactId>
+            <artifactId>isis-core-plugins-jaxrs-resteasy-4</artifactId>
         </dependency>
 
         <!-- TESTS -->
