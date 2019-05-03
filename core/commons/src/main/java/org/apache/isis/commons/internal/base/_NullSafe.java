@@ -29,6 +29,8 @@ import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import javax.annotation.Nullable;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -56,7 +58,7 @@ public final class _NullSafe {
      * @param array
      * @return non-null stream object
      */
-    public static <T> Stream<T> stream(final T[] array) {
+    public static <T> Stream<T> stream(@Nullable final T[] array) {
         return array!=null ? Stream.of(array) : Stream.empty();
     }
 
@@ -67,7 +69,7 @@ public final class _NullSafe {
      * @param nullable
      * @return non-null stream object
      */
-    public static <T> Stream<T> streamNullable(final T nullable) {
+    public static <T> Stream<T> streamNullable(@Nullable final T nullable) {
         return nullable != null ? Stream.of(nullable) : Stream.empty();
     }
 
@@ -77,7 +79,7 @@ public final class _NullSafe {
      * @param coll
      * @return non-null stream object
      */
-    public static <T> Stream<T> stream(final Collection<T> coll){
+    public static <T> Stream<T> stream(@Nullable final Collection<T> coll){
         return coll!=null ? coll.stream() : Stream.empty();
     }
 
@@ -87,7 +89,7 @@ public final class _NullSafe {
      * @param iterable
      * @return non-null stream object
      */
-    public static <T> Stream<T> stream(final Iterable<T> iterable){
+    public static <T> Stream<T> stream(@Nullable final Iterable<T> iterable){
         return iterable!=null ? stream(iterable.iterator()) : Stream.empty();
     }
 
@@ -97,12 +99,22 @@ public final class _NullSafe {
      * @param iterator
      * @return non-null stream object
      */
-    public static <T> Stream<T> stream(final Iterator<T> iterator){
+    public static <T> Stream<T> stream(@Nullable final Iterator<T> iterator){
         return iterator!=null
                 ? StreamSupport.stream(
                         Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED), 
                         false) //not parallel
                         : Stream.empty();
+    }
+    
+    /**
+     * If {@code stream} is {@code null} returns the empty stream,
+     * otherwise returns the stream argument.
+     * @param stream
+     * @return non-null stream object
+     */
+    public static <T> Stream<T> stream(@Nullable final Stream<T> stream) {
+        return stream!=null ? stream : Stream.empty();
     }
     
     /**
@@ -229,6 +241,8 @@ public final class _NullSafe {
         }
         return map.getOrDefault(key, defaultValue);
     }
+
+
 
 
 

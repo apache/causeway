@@ -58,7 +58,7 @@ public interface IsisContext {
      */
     // Implementation Note: Populated only by {@link IsisSessionFactoryBuilder}.
     public static IsisSessionFactory getSessionFactory() {
-        return _Context.getOrThrow(
+        return _Context.getElseThrow(
                 IsisSessionFactory.class,
                 ()->new IllegalStateException(
                         "internal error: should have been populated by IsisSessionFactoryBuilder") );

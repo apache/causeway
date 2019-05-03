@@ -33,9 +33,6 @@ final class _Strings_NaturalNames {
      * Returns a word spaced version of the specified name, so there are spaces
      * between the words, where each word starts with a capital letter. E.g.,
      * "NextAvailableDate" is returned as "Next Available Date".
-     * <p>
-     * TODO [ahuber] handleNestedClassNames=false was only used by FixtureScript,
-     * can we remove this parameter and always handleNestedClassNames?
      *
      * @param name
      * @param handleNestedClassNames whether to handle any nested class names, eg 'Foo$Bar'

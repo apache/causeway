@@ -24,6 +24,8 @@ import java.util.concurrent.atomic.LongAdder;
 
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
+import lombok.val;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -56,6 +58,7 @@ public class _Probe {
     private String label = "Probe";
     private String indentLiteral = "  ";
     private String emphasisFormat = "__PROBE__ %s";
+    private boolean silenced = false;
     
     private final LongAdder counter = new LongAdder();
     
@@ -108,6 +111,11 @@ public class _Probe {
         return this;
     }
     
+    public _Probe silence() {
+    	this.silenced = true;
+		return this;
+	}
+    
     // -- INDENTING
     
     public int currentIndent = 0;
@@ -117,7 +125,9 @@ public class _Probe {
     public void println(int indent, CharSequence chars) {
         if(counter.longValue()<maxCalls) {
             counter.increment();
-            print_line(indent, chars);
+            if(!silenced) {
+            	print_line(indent, chars);
+            }
             return;
         }
         
@@ -150,6 +160,17 @@ public class _Probe {
     public void println(String format, Object...args) {
         println(currentIndent, format, args);
     }
+    
+    public void warnNotImplementedYet(String format, Object... args) {
+    	val warnMsg = String.format(format, args);
+    	val restore_out = out;
+    	out=System.err;
+    	println("WARN NotImplementedYet %s", warnMsg);
+    	errOut("-------------------------------------");
+    	_Exceptions.dumpStackTrace(System.err, 1, 12);
+    	errOut("-------------------------------------");
+    	out=restore_out;
+	}
 
     // -- CONVENIENT DEBUG TOOLS (STATIC)
 
@@ -171,6 +192,10 @@ public class _Probe {
         final String message = "["+label+" "+counterValue+"] "+chars; 
         out.println(String.format(emphasisFormat, message));
     }
+
+	
+
+	
 
 
 }

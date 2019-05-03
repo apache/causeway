@@ -52,6 +52,8 @@ public interface _Lazy<T> extends Supplier<T> {
     /**
      * Evaluates this lazy value and memoizes it, when called the first time
      * after initialization or clear().
+     * <p>
+     * Postcondition when memoization throws an exception: isMemoized()->true and get()->null  
      */
     @Override
     public T get();

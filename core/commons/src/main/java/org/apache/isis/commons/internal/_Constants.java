@@ -21,6 +21,7 @@ package org.apache.isis.commons.internal;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.annotation.Annotation;
 
 /**
  * <h1>- internal use only -</h1>
@@ -58,6 +59,11 @@ public final class _Constants {
      * empty array of byte
      */
     public static final byte[] emptyBytes = new byte[0];
+
+    /**
+     * empty array of Annotation
+     */
+    public static final Annotation[] emptyAnnotations = new Annotation[0];
 
     /**
      * writer that does nothing

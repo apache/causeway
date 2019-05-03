@@ -33,6 +33,8 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -365,6 +367,29 @@ public final class _Strings {
         }
         return delimiterPattern.splitAsStream(input);
     }
+    
+
+    public static void splitThenAccept(
+    		@Nullable final String input, 
+    		final String separator, 
+    		final BiConsumer<String, String> onNonEmptySplit,
+    		final Consumer<String> onNonEmptyLhs,
+    		final Consumer<String> onNonEmptyRhs) {
+    	
+    	_Strings_FastSplit.splitThenAccept(input, separator, onNonEmptySplit, onNonEmptyLhs, onNonEmptyRhs);
+    }
+    
+    public static void splitThenAcceptEmptyAsNull(
+    		@Nullable final String input, 
+    		final String separator, 
+    		final BiConsumer<String, String> onSplit) {
+    	
+    	_Strings_FastSplit.splitThenAccept(input, separator, onSplit, 
+    			lhs->onSplit.accept(lhs, null), 
+    			rhs->onSplit.accept(null, rhs));
+    }
+    
+    
 
     // -- REPLACEMENT OPERATORS
 

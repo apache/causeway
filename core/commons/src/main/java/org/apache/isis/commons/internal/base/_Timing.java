@@ -19,6 +19,9 @@
 
 package org.apache.isis.commons.internal.base;
 
+import java.util.Locale;
+import java.util.function.Supplier;
+
 /**
  * <h1>- internal use only -</h1>
  * <p>
@@ -98,6 +101,31 @@ public final class _Timing {
             return stopped ? t1 - t0 : System.nanoTime() - t0 ;
         }
         
+    }
+
+    public static StopWatch run(Runnable runnable) {
+        final StopWatch watch = now();
+        runnable.run();
+        return watch.stop();
+    }
+    
+    public static void runVerbose(String label, Runnable runnable) {
+        final StopWatch watch = run(runnable);
+        info(String.format(Locale.US, "Running '%s' took %.2f ms", label, watch.getMillis()));
+    }
+    
+    public static <T> T callVerbose(String label, Supplier<T> callable) {
+        final StopWatch watch = now();
+        T result = callable.get();
+        watch.stop();
+        info(String.format(Locale.US, "Calling '%s' took %.2f ms", label, watch.getMillis()));
+        return result;
+    }
+
+    // -- HELPER
+    
+    private static void info(String msg) {
+        System.out.println(msg);
     }
 
 }

@@ -185,12 +185,12 @@ class ContextTest {
         final AClass singleton = new AClass();
 
         assertThrows(IllegalStateException.class, 
-                ()->{_Context.getOrThrow(type, IllegalStateException::new);},
+                ()->{_Context.getElseThrow(type, IllegalStateException::new);},
                 "expected to throw: no singleton on context that matches the given type");
         
         _Context.putSingleton(type, singleton);
         
-        final Object actual = _Context.getOrThrow(type, IllegalStateException::new);
+        final Object actual = _Context.getElseThrow(type, IllegalStateException::new);
         assertTrue(singleton==actual, "singleton on context is expected to be the same as the 'local' singleton");
     }
 
