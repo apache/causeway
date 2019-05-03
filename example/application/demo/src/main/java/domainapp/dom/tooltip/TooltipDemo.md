@@ -1,0 +1,42 @@
+<span class="version-reference">(since 2.0.0-M2)</span>
+
+The framework supports for different targets to be associated with tooltip effects, that trigger on `mouse-over`. These effects utilize `java-script` and are rendered without delay. Targets are
+
+ * Action Buttons
+ * Action Parameters
+ * Menu Actions _(mouse-over the `Tooltip Demo` menu entry)_
+ * Entity Properties and Collections
+ * Table Column Headers
+
+**Described As** (Targets: Action, Parameter, Property, Collection)
+
+
+```java
+@ActionLayout(describedAs="tooltip text goes here")
+@ParameterLayout(describedAs="tooltip text goes here")
+@PropertyLayout(describedAs="tooltip text goes here")
+```
+
+**Disabled Reason** (Targets: Action)
+
+
+```java
+@Action
+public void anAction(){
+    // do something
+}
+
+public String disableAnAction() {
+    return "tooltip text goes here";
+}
+```
+
+**Editing Disabled Reason** (Targets: Property)
+
+```java
+@Property(
+    editingDisabledReason="tooltip text goes here")
+```
+
+See the sources for this demo here: [sources](${SOURCES_DEMO}/domainapp/dom/tooltip)
+

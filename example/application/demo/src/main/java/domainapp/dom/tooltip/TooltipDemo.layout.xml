@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bs3:grid
+	xsi:schemaLocation="http://isis.apache.org/applib/layout/componenthttp://isis.apache.org/applib/layout/component/component.xsdhttp://isis.apache.org/applib/layout/linkshttp://isis.apache.org/applib/layout/links/links.xsdhttp://isis.apache.org/applib/layout/grid/bootstrap3http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
+	xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3"
+	xmlns:cpt="http://isis.apache.org/applib/layout/component"
+	xmlns:lnk="http://isis.apache.org/applib/layout/links"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<bs3:row>
+		<bs3:col span="12" unreferencedActions="true">
+			<cpt:domainObject />
+			<cpt:action id="clearHints" />
+			<cpt:action id="downloadLayoutXml" />
+			<cpt:action id="openRestApi" />
+			<cpt:action id="rebuildMetamodel" />
+			<cpt:action id="initDefaults" />
+
+		</bs3:col>
+	</bs3:row>
+	<bs3:row>
+		<bs3:col span="6">
+
+			<cpt:fieldSet name="Actions" id="a1">
+				<cpt:action id="noArgAction" />
+				<cpt:action id="noArgActionWithConfirm" />
+				<cpt:property id="text1"/>
+			</cpt:fieldSet>
+
+			<cpt:fieldSet name="Actions" id="a2">
+				<cpt:action id="biArgAction" />
+				<cpt:property id="text2"/>
+			</cpt:fieldSet>
+
+			<cpt:fieldSet name="Actions" id="a3">
+				<cpt:action id="disAbledAction" />
+				<cpt:action id="disAbledActionWithConfirmation" />
+				<cpt:property id="text3"/>
+			</cpt:fieldSet>
+			
+			<cpt:fieldSet name="Properties" id="a4">
+                <cpt:property id="text4"/>
+                <cpt:property id="stringProperty"/>
+				<cpt:property id="readonlyStringProperty"/>
+				<cpt:property id="editingDisabledStringProperty"/>
+			</cpt:fieldSet>
+			
+			<cpt:collection defaultView="table" id="collection"/>
+			
+		</bs3:col>
+		<bs3:col span="6" unreferencedCollections="true">
+			<cpt:fieldSet name="Description" id="description"
+				unreferencedProperties="true">
+				<cpt:property id="description" labelPosition="NONE" />
+			</cpt:fieldSet>
+		</bs3:col>
+	</bs3:row>
+</bs3:grid>

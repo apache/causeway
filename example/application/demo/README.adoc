@@ -1,0 +1,113 @@
+image:https://gitlab.com/apache-isis-committers/isis-2-demo/badges/master/build.svg[]
+
+WARNING: TODO ... doc version is from before moving the Demo-App into the Apache Isis project.
+
+= Demo App
+
+This app demonstrates some of the new features available with http://isis.apache.org/[Apache Isis] version 2 (also including some from earlier framework versions).
+
+Apache Isis version 2 is still work in progress and only made available as milestone release yet.
+
+The app is built against the latest https://github.com/apache/isis/tree/v2[snapshot] builds of Apache Isis v2 and is published as a Docker image on https://hub.docker.com/r/apacheisis/isis-2-demo/tags/[Docker hub].
+
+
+== Prereqs
+
+Install https://www.docker.com/community-edition[Docker] on your computer.
+
+== Pulling the Docker Image
+
+Pull the demo image using:
+
+[source]
+----
+docker pull apacheisis/isis-2-demo
+----
+
+This will pull down the latest demo image from https://hub.docker.com/r/apacheisis/isis-2-demo/tags/[Docker hub]
+
+== Running the Docker Image
+
+Run the demo image using:
+
+[source]
+----
+docker run --name demo --detach -p8080:8080 apacheisis/isis-2-demo
+----
+
+This will start a new Docker container named 'demo'.
+
+The demo-app can then be accessed at 
+
+. http://localhost:8080/wicket/[] (tomcat) 
+. http://localhost:8080/isis-2-demo/wicket/[] (payara, using a context-path)
+
+Login with `sven:pass`.
+
+To stop and remove the container named 'demo' use:
+
+[source]
+----
+docker stop demo && docker rm demo
+----
+
+== Customization
+
+To run the _Demo App_ in _prototyping_ mode, add an environment variable `PROTOTYPING=true`.
+The 'run' command above then becomes:
+
+[source]
+----
+docker run --name demo --detach -p8080:8080 -ePROTOTYPING=true apacheisis/isis-2-demo
+----
+
+To run the container with your console attached, replace the '--detach' argument with '-it'. (Use CTRL-C to stop and detach.)
+
+[source]
+----
+docker run --name demo -it -p8080:8080 apacheisis/isis-2-demo
+----
+
+=== Supported tags 
+. `tomcat` = `latest` 
+. `payara` ... the latest payara server-web release 
+
+To use a different tag than the default `latest`, append one of the supported tags to the image name like eg. `payara`:
+----
+docker pull apacheisis/isis-2-demo:payara
+docker run --name demo --detach -p8080:8080 apacheisis/isis-2-demo:payara
+----
+
+=== How we build the image
+
+This repo is mirrored to https://gitlab.com/apache-isis-committers/isis-2-demo[gitlab], where a https://gitlab.com/apache-isis-committers/isis-2-demo/blob/master/.gitlab-ci.yml[CI pipeline] builds the image and pushes to Docker hub.
+
+Building a new image of the app in this repo just requires configuring a gitlab remote and pushing to that remote.
+We just add the following to `.git/config`:
+
+[source]
+----
+[remote "gitlab"]
+    url = https://gitlab.com/apache-isis-committers/isis-2-demo.git
+    fetch = +refs/heads/*:refs/remotes/gitlab/*
+----
+
+== Roadmap
+
+We are in the process of reshaping http://isis.apache.org/[Apache Isis] for a version 2.0.
+The process is open to the community.
+With this repository we'd like to inspire discussion on design drafts.
+
+https://github.com/andi-huber/isis-2-roadmap/wiki[Apache Isis 2 Roadmap]
+
+== Contributing
+
+If you like to get involved (with this demo), please feel free to open new issues https://github.com/andi-huber/isis-2-roadmap/issues[here] or just join the discussion and provide feedback.
+
+If you are interested in contributing to Apache Isis, see the https://isis.apache.org/guides/dg/dg.html[Developers' Guide] for details. 
+
+
+== Credits
+
+This Demo App uses icons made by http://www.freepik.com[Freepik] and
+ https://www.flaticon.com/authors/smashicons[Smashicons] from https://www.flaticon.com/[www.flaticon.com] which are licensed by http://creativecommons.org/licenses/by/3.0/[CC 3.0 BY]. We use https://github.com/vsch/flexmark-java[flexmark] for markdown rendering.

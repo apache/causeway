@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.incode</groupId>
+		<artifactId>incode-build</artifactId>
+		<version>7</version>
+	</parent>
+
+	<groupId>org.apache.isis.example.application</groupId>
+	<artifactId>demo</artifactId>
+	<version>${revision}</version>
+
+	<name>Apache Isis 2 App - Demo</name>
+
+	<packaging>war</packaging>
+
+	<properties>
+		<!-- Application build version, to be injected via command line parameter -->
+		<revision>2.0.0-M3-SNAPSHOT</revision>
+        <!-- Apache Isis snapshot build version, to be injected via command line parameter-->
+        <isis.version>2.0.0-M3-SNAPSHOT</isis.version>
+
+		<compiler-plugin.source>1.8</compiler-plugin.source>
+		<compiler-plugin.target>1.8</compiler-plugin.target>
+		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
+
+		<!-- override incode-build -->
+		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
+		<jetty-maven-plugin.version>9.4.12.v20180830</jetty-maven-plugin.version>
+
+		<!-- override incode-build (see dn5-xxx.version in isis-core-plugins-jdo-datanucleus-5) -->
+		<datanucleus-maven-plugin.version>5.0.2</datanucleus-maven-plugin.version>
+		<datanucleus-api-jdo.version>5.2.0-m2</datanucleus-api-jdo.version>
+		<datanucleus-core.version>5.2.0-m2</datanucleus-core.version>
+		<datanucleus-jodatime.version>5.2.0-m1</datanucleus-jodatime.version>
+
+		<lombok.version>[1.18,)</lombok.version>
+		<hsqldb.version>[2.4,)</hsqldb.version>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
+		<failOnMissingWebXml>false</failOnMissingWebXml>
+
+		<docker-plugin.imageName>apacheisis/isis-2-demo</docker-plugin.imageName>
+		<docker-plugin.imageTag>${flavor}</docker-plugin.imageTag>
+
+		<docker-plugin.resource.include>${maven-war-plugin.warName}.war</docker-plugin.resource.include>
+
+		<docker-plugin.serverId>docker-hub</docker-plugin.serverId>
+		<docker-plugin.registryUrl>https://index.docker.io/v1/</docker-plugin.registryUrl>
+
+	</properties>
+
+	<build>
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>com.github.odavid.maven.plugins</groupId>
+				<artifactId>mixin-maven-plugin</artifactId>
+				<version>0.1-alpha-39</version>
+				<extensions>true</extensions>
+				<configuration>
+					<mixins>
+						<mixin>
+							<groupId>com.danhaywood.mavenmixin</groupId>
+							<artifactId>standard</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>com.danhaywood.mavenmixin</groupId>
+							<artifactId>datanucleusenhance</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>com.danhaywood.mavenmixin</groupId>
+							<artifactId>surefire</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>com.danhaywood.mavenmixin</groupId>
+							<artifactId>jettywar</artifactId>
+						</mixin>
+						<mixin>
+							<groupId>com.danhaywood.mavenmixin</groupId>
+							<artifactId>docker</artifactId>
+						</mixin>
+					</mixins>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>flatten-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<configuration>
+					<updatePomFile>true</updatePomFile>
+					<pomElements>
+						<dependencyManagement>resolve</dependencyManagement>
+						<dependencies>resolve</dependencies>
+					</pomElements>
+				</configuration>
+				<executions>
+					<execution>
+						<id>flatten</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>flatten</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>flatten.clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<configuration>
+					<dockerDirectory>src/main/resources/docker/${flavor}</dockerDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>isis</artifactId>
+				<version>${isis.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+
+		<!-- ISIS API -->
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-commons</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-applib</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<!-- ISIS CORE -->
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-viewer-wicket-impl</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-viewer-restfulobjects-server</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-security</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<!-- ISIS CORE PLUGINS -->
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-plugins-security-shiro</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-plugins-discovery-reflections</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-plugins-jaxrs-resteasy-4</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-plugins-eventbus-axon</artifactId>
+			<version>${isis.version}</version>
+		</dependency>
+
+		<!-- OTHER DEPENDENCIES -->
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>${hsqldb.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- provides a markdown parser -->
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-all</artifactId>
+			<version>0.34.32</version>
+		</dependency>
+
+	</dependencies>
+
+	<profiles>
+
+		<!-- for each docker image flavor we provide a profile that corresponds 
+			to its specific docker-file -->
+
+		<profile>
+			<id>flavor-tomcat</id>
+			<activation>
+				<property>
+					<name>flavor</name>
+					<value>tomcat</value>
+				</property>
+			</activation>
+			<dependencies>
+				<!-- add flavor specific here-->
+			</dependencies>
+		</profile>
+
+		<profile>
+			<id>flavor-payara</id>
+			<activation>
+				<property>
+					<name>flavor</name>
+					<value>payara</value>
+				</property>
+			</activation>
+			<dependencies>
+				<!-- add flavor specific here-->
+			</dependencies>
+		</profile>
+
+		<!-- eclipse specific -->
+
+		<profile>
+			<id>m2e</id>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<build>
+				<directory>target-ide</directory>
+				<plugins>
+					<!-- eclipse doesn't seem to support maven mixins config, so repeat 
+						here -->
+					<plugin>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<source>${compiler-plugin.source}</source>
+							<target>${compiler-plugin.target}</target>
+							<compilerArgument />
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<repositories>
+		<!-- disabled to enforce building against Apache Isis snapshot builds -->
+		<!-- <repository> -->
+		<!-- <id>apache-staging</id> -->
+		<!-- <url>https://repository.apache.org/content/groups/staging/</url> -->
+		<!-- <releases> -->
+		<!-- <enabled>true</enabled> -->
+		<!-- <checksumPolicy>fail</checksumPolicy> -->
+		<!-- <updatePolicy>always</updatePolicy> -->
+		<!-- </releases> -->
+		<!-- <snapshots> -->
+		<!-- <enabled>false</enabled> -->
+		<!-- </snapshots> -->
+		<!-- </repository> -->
+
+		<repository>
+			<id>pre-release-builds</id>
+			<url>https://repo.incode.cloud/repository/maven/</url>
+		</repository>
+
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>apache-staging</id>
+			<url>https://repository.apache.org/content/groups/staging/</url>
+			<releases>
+				<enabled>true</enabled>
+				<checksumPolicy>fail</checksumPolicy>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>
