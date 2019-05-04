@@ -94,27 +94,13 @@
         <jdo-api.version>3.1</jdo-api.version>
 
         <!-- Isis Datanucleus JDO Plugin dn5 -->
-	    <dn5-jdo-api.version>3.2.0-m10</dn5-jdo-api.version>
-        <dn5-core.version>5.2.0-m2</dn5-core.version>
-        <dn5-api-jdo.version>5.2.0-m2</dn5-api-jdo.version>
-        <dn5-jdo-query.version>5.0.8</dn5-jdo-query.version>
-        <dn5-rdbms.version>5.2.0-m2</dn5-rdbms.version>
-        <dn5-jodatime.version>5.2.0-m1</dn5-jodatime.version>
+	    <dn5-jdo-api.version>3.2.0-m12</dn5-jdo-api.version>
+        <dn5-core.version>5.2.1</dn5-core.version>
+        <dn5-api-jdo.version>5.2.1</dn5-api-jdo.version>
+        <dn5-jdo-query.version>5.0.9</dn5-jdo-query.version>
+        <dn5-rdbms.version>5.2.1</dn5-rdbms.version>
+        <dn5-jodatime.version>5.2.0-release</dn5-jodatime.version>
         <dn5-maven-plugin.version>5.0.2</dn5-maven-plugin.version>
-
-        <!-- Isis Datanucleus JDO Plugin dn4 -->
-
-        <dn4-jdo-api.version>3.1</dn4-jdo-api.version>
-        <dn4-core.version>4.1.7</dn4-core.version>
-        <dn4-api-jdo.version>4.1.1</dn4-api-jdo.version>
-        <dn4-jdo-query.version>4.0.5</dn4-jdo-query.version>
-        <dn4-rdbms.version>4.1.9</dn4-rdbms.version>
-        <dn4-jodatime.version>4.1.0-release</dn4-jodatime.version>
-        <dn4-maven-plugin.version>4.0.2</dn4-maven-plugin.version>
-        
-        <!-- Isis Resteasy Plugin 3 (for JEE 7 JAX-RS API 2.0) -->
-        
-        <resteasy3-jaxrs.version>3.1.4.Final</resteasy3-jaxrs.version> 
 		
         <!-- Isis Resteasy Plugin 4 (for JEE 8 JAX-RS API 2.1) -->
 		

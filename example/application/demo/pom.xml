@@ -44,9 +44,9 @@
 
 		<!-- override incode-build (see dn5-xxx.version in isis-core-plugins-jdo-datanucleus-5) -->
 		<datanucleus-maven-plugin.version>5.0.2</datanucleus-maven-plugin.version>
-		<datanucleus-api-jdo.version>5.2.0-m2</datanucleus-api-jdo.version>
-		<datanucleus-core.version>5.2.0-m2</datanucleus-core.version>
-		<datanucleus-jodatime.version>5.2.0-m1</datanucleus-jodatime.version>
+		<datanucleus-api-jdo.version>5.2.1</datanucleus-api-jdo.version>
+		<datanucleus-core.version>5.2.1</datanucleus-core.version>
+		<datanucleus-jodatime.version>5.2.1</datanucleus-jodatime.version>
 
 		<lombok.version>[1.18,)</lombok.version>
 		<hsqldb.version>[2.4,)</hsqldb.version>
