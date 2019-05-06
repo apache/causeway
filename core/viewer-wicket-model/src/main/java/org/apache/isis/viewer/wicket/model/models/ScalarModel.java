@@ -1013,10 +1013,7 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
 
             @Override
             public ArrayList<ObjectAdapterMemento> getMultiPending() {
-                final ScalarModel scalarModel = ScalarModel.this;
-                final ObjectAdapterMemento objectAdapterMemento = scalarModel.getObjectAdapterMemento();
-                final ObjectAdapterMemento.Sort sort = objectAdapterMemento.getSort();
-                final ObjectAdapterMemento pending = scalarModel.getPending();
+                final ObjectAdapterMemento pending = ScalarModel.this.getPending();
                 return pending != null ? pending.getList() : null;
             }
 
