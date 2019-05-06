@@ -23,11 +23,6 @@ import org.apache.isis.applib.fixturescripts.BuilderScriptAbstract;
 import org.apache.isis.applib.fixturescripts.PersonaWithBuilderScript;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.testdomain.jdo.Book;
-import org.apache.isis.testdomain.jdo.Inventory;
-import org.apache.isis.testdomain.jdo.Product;
-
-import lombok.val;
 
 public enum JdoTestDomainPersona 
 implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
@@ -40,7 +35,8 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
                 @Override
                 protected void execute(ExecutionContext ec) {
                     
-                    val repository = IsisContext.getServicesInjector()
+                    //don't use lombok's val here (https://github.com/rzwitserloot/lombok/issues/434)
+                    RepositoryService repository = IsisContext.getServicesInjector()
                             .lookupServiceElseFail(RepositoryService.class);
                     
                     repository.allInstances(Inventory.class)
@@ -73,10 +69,8 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
                 @Override
                 protected void execute(ExecutionContext ec) {
                     
-//                    val factory = IsisContext.getServicesInjector()
-//                            .lookupServiceElseFail(FactoryService.class);
-                    
-                    val repository = IsisContext.getServicesInjector()
+                    //don't use lombok's val here (https://github.com/rzwitserloot/lombok/issues/434)
+                    RepositoryService repository = IsisContext.getServicesInjector()
                             .lookupServiceElseFail(RepositoryService.class);
                     
                     Set<Product> products = new HashSet<>();

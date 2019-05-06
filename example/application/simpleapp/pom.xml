@@ -53,7 +53,7 @@
         <!-- override incode-build (see dn5-xxx.version in isis-core-plugins-jdo-datanucleus-5) -->
         <datanucleus-api-jdo.version>5.2.1</datanucleus-api-jdo.version>
         <datanucleus-core.version>5.2.1</datanucleus-core.version>
-        <datanucleus-jodatime.version>5.2.1</datanucleus-jodatime.version>
+        <datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
         <hsqldb.version>2.4.1</hsqldb.version>
 
         <!-- override incode-build -->

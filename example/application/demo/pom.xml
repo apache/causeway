@@ -46,10 +46,10 @@
 		<datanucleus-maven-plugin.version>5.0.2</datanucleus-maven-plugin.version>
 		<datanucleus-api-jdo.version>5.2.1</datanucleus-api-jdo.version>
 		<datanucleus-core.version>5.2.1</datanucleus-core.version>
-		<datanucleus-jodatime.version>5.2.1</datanucleus-jodatime.version>
+		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
 
 		<lombok.version>[1.18,)</lombok.version>
-		<hsqldb.version>[2.4,)</hsqldb.version>
+		<hsqldb.version>2.4.1</hsqldb.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -321,27 +321,6 @@
 		</profile>
 	</profiles>
 
-	<repositories>
-		<!-- disabled to enforce building against Apache Isis snapshot builds -->
-		<!-- <repository> -->
-		<!-- <id>apache-staging</id> -->
-		<!-- <url>https://repository.apache.org/content/groups/staging/</url> -->
-		<!-- <releases> -->
-		<!-- <enabled>true</enabled> -->
-		<!-- <checksumPolicy>fail</checksumPolicy> -->
-		<!-- <updatePolicy>always</updatePolicy> -->
-		<!-- </releases> -->
-		<!-- <snapshots> -->
-		<!-- <enabled>false</enabled> -->
-		<!-- </snapshots> -->
-		<!-- </repository> -->
-
-		<repository>
-			<id>pre-release-builds</id>
-			<url>https://repo.incode.cloud/repository/maven/</url>
-		</repository>
-
-	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>apache-staging</id>
