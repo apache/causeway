@@ -164,7 +164,7 @@
 
         <htmlparser.version>2.1</htmlparser.version>
 
-        <junit.version>5.3.1</junit.version>
+        <junit.version>5.4.1</junit.version>
         <junit-legacy.version>4.12</junit-legacy.version>
         <assertj.version>3.11.1</assertj.version>
 
