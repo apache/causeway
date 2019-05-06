@@ -53,7 +53,7 @@ public abstract class DisabledFacetAbstractImpl extends DisabledFacetAbstract {
     @Override
     public String disabledReason(final ObjectAdapter targetAdapter) {
         if (when() == When.ALWAYS) {
-            return disabledReasonElse("Always disabled");
+            return disabledReasonElse(ALWAYS_DISABLED_REASON);
         } else if (when() == When.NEVER) {
             return null;
         }

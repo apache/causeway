@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.primitive;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
@@ -212,8 +213,24 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
     protected void onInitializeWhenDisabled(final String disableReason) {
         super.onInitializeWhenDisabled(disableReason);
         checkBox.setEnabled(false);
+        final AttributeModifier title = new AttributeModifier("title",
+                                                Model.of(disableReason != null ? disableReason : ""));
+        checkBox.add(title);
     }
 
+    @Override
+    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+        checkBox.setEnabled(false);
+        final AttributeModifier title = new AttributeModifier("title",
+                                                Model.of(disableReason != null ? disableReason : ""));
+        checkBox.add(title);
+        target.add(checkBox);
+    }
+
+    @Override
+    protected void onEnabled(final AjaxRequestTarget target) {
+        checkBox.setEnabled(true);
+    }
 
     @Override
     public String getVariation() {

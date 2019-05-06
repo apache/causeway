@@ -24,6 +24,7 @@ import java.io.Serializable;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.basic.Label;
@@ -335,6 +336,24 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         AttributeModifier title = new AttributeModifier("title", Model.of(titleAttribute));
         textField.add(title);
         inlinePromptLink.add(title);
+    }
+
+    @Override
+    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+        textField.setEnabled(false);
+        inlinePromptLink.setEnabled(false);
+        setTitleAttribute(disableReason);
+        target.add(textField);
+        target.add(inlinePromptLink);
+    }
+
+    @Override
+    protected void onEnabled(final AjaxRequestTarget target) {
+        textField.setEnabled(true);
+        inlinePromptLink.setEnabled(true);
+        setTitleAttribute("");
+        target.add(textField);
+        target.add(inlinePromptLink);
     }
 
 

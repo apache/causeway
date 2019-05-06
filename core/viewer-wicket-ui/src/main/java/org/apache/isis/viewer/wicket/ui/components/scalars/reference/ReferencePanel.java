@@ -226,7 +226,24 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
         entityLink.add(new AttributeModifier("title", Model.of(disableReason)));
     }
 
-    
+    @Override
+    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+        super.onDisabled(disableReason, target);
+
+        entityLink.setEnabled(false);
+        entityLink.add(new AttributeModifier("title", Model.of(disableReason)));
+    }
+
+    @Override
+    protected void onEnabled(final AjaxRequestTarget target) {
+        super.onEnabled(target);
+
+        entityLink.setEnabled(true);
+        entityLink.add(new AttributeModifier("title", Model.of("")));
+    }
+
+
+
     // //////////////////////////////////////
     // syncWithInput
     // //////////////////////////////////////

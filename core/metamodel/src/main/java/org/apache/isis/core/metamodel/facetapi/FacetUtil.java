@@ -165,7 +165,7 @@ public final class FacetUtil {
     }
 
     public static void copyFacets(final FacetHolder source, final FacetHolder target) {
-        final Class<? extends Facet>[] facetTypes = source.getFacetTypes();
+        final ArrayList<Class<? extends Facet>> facetTypes = Lists.newArrayList(source.getFacetTypes());
         for (Class<? extends Facet> facetType : facetTypes) {
             final Facet facet = source.getFacet(facetType);
 
