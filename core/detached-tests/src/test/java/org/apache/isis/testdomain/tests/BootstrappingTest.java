@@ -16,15 +16,26 @@
  */
 package org.apache.isis.testdomain.tests;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.resources._Json;
+import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainIntegTest;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import lombok.val;
 
 class BootstrappingTest extends JdoTestDomainIntegTest {
 
@@ -47,6 +58,24 @@ class BootstrappingTest extends JdoTestDomainIntegTest {
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());
         assertEquals(1, inventory.getProducts().size());
+    }
+    
+    @Test
+    void builtInServicesShouldBeSetUp() throws IOException {
+        
+        val serviceRegistry = IsisContext.getServicesInjector();
+        val managedServices = serviceRegistry.streamServiceTypes()
+        .map(Class::getName)
+        .collect(Collectors.toCollection(TreeSet::new));
+        
+        val singletonJson = _Resources.loadAsString(this.getClass(), "builtin-singleton.json", StandardCharsets.UTF_8);
+        val singletonSet = new TreeSet<>(_Json.readJsonList(String.class, singletonJson));
+        
+        // same as managedServices.containsAll(singletonSet) but more verbose in case of failure        
+        assertEquals(singletonSet.toString(), _Sets.intersectSorted(managedServices, singletonSet).toString());
+        
+        //TODO also test for request-scoped service (requires a means to mock a request-context)
+        
     }
         
 }
