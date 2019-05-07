@@ -20,12 +20,14 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.wicketstuff.select2.ChoiceProvider;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -35,6 +37,8 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelSelect2Abs
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.Select2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.select2.providers.ObjectAdapterMementoProviderForValueChoices;
 import org.apache.isis.viewer.wicket.ui.util.Tooltips;
+
+import lombok.val;
 
 public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
 
@@ -107,7 +111,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
         // Edit: read/write
         select2.setEnabled(true);
 
-        // TODO: should the title AttributeModifier installed in onBeforeWhenDisabled be removed here?
+        clearTitleAttribute();
     }
 
     @Override
@@ -117,9 +121,36 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
         select2.setEnabled(false);
     }
 
-    private void setTitleAttribute(final String titleAttribute) {
-        Tooltips.addTooltip(getComponentForRegular(), titleAttribute);
+    private void clearTitleAttribute() {
+        val target = getComponentForRegular();
+        Tooltips.clearTooltip(target);
     }
+    
+    private void setTitleAttribute(final String titleAttribute) {
+        if(_Strings.isNullOrEmpty(titleAttribute)) {
+            clearTitleAttribute();
+            return;
+        }
+        val target = getComponentForRegular();
+        Tooltips.addTooltip(target, titleAttribute);    
+    }
+
+    @Override
+    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+        super.onDisabled(disableReason, target);
+
+        setTitleAttribute(disableReason);
+        select2.setEnabled(false);
+    }
+
+    @Override
+    protected void onEnabled(final AjaxRequestTarget target) {
+        super.onEnabled(target);
+
+        setTitleAttribute("");
+        select2.setEnabled(true);
+    }
+
 
 
     // //////////////////////////////////////

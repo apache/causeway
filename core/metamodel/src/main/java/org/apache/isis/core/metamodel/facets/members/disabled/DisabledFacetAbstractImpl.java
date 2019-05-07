@@ -60,7 +60,7 @@ public abstract class DisabledFacetAbstractImpl extends DisabledFacetAbstract {
 
     @Override
     public String disabledReason(final ManagedObject targetAdapter) {
-        return disabledReasonElse("Always disabled");
+            return disabledReasonElse(ALWAYS_DISABLED_REASON);
 
     }
 

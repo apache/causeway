@@ -50,6 +50,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -125,12 +126,15 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
      * @param paramNumUpdated - the # of the param that has just been updated by the user
      * @param paramNumToPossiblyUpdate - the # of the param to be updated if necessary (will be &gt; paramNumUpdated)
      *
+     * @param target - in case there's more to be repainted...
+     *
      * @return - true if changed as a result of these pending arguments.
      */
     public Repaint updateIfNecessary(
             final ActionModel actionModel,
             final int paramNumUpdated,
-            final int paramNumToPossiblyUpdate) {
+            final int paramNumToPossiblyUpdate,
+            final AjaxRequestTarget target) {
 
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
         final ObjectAdapter[] pendingArguments = actionModel.getArgumentsAsArray();
@@ -154,7 +158,11 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         final boolean usabilityBefore = isEnabled();
         final boolean usabilityAfter = usabilityConsent.isAllowed();
-        setEnabled(usabilityAfter);
+        if(usabilityAfter) {
+            onEnabled(target);
+        } else {
+            onDisabled(usabilityConsent.getReason(), target);
+        }
 
 
 
@@ -181,11 +189,30 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 // make sure the object is one of the choices, else blank it out.
                 final List<ObjectAdapter> choices = scalarModel
                             .getChoices(pendingArguments, getAuthenticationSession());
+
+                if(pendingArg.isValue()) {
+                    // we have to do this if the ObjectAdapters are value type (eg a string)
+                    //  because we can end up with a different ObjectAdapter for the same underlying value
+                    //  (values have no intrinsic identity)
+
+                    // it might not be necessary to have this special casing; we could probably use this code
+                    // even for reference types
+                    final Object pendingValue = pendingArg.getPojo();
+                    final List<Object> choiceValues = ObjectAdapter.Util.unwrapPojoList(choices);
+                    if(!choiceValues.contains(pendingValue)) {
+                        scalarModel.setObject(null);
+                        scalarModel.setPending(null);
+                        actionArgumentModel.setObject(null);
+                    }
+                } else {
                 if(!choices.contains(pendingArg)) {
                     scalarModel.setObject(null);
                     scalarModel.setPending(null);
                     actionArgumentModel.setObject(null);
                 }
+
+                }
+
             }
         }
 
@@ -293,7 +320,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         final String disableReasonIfAny = scalarModel.whetherDisabled();
         if (disableReasonIfAny != null) {
-            if(disableReasonIfAny.contains("Always disabled")) {
+            if(disableReasonIfAny.contains(DisabledFacet.ALWAYS_DISABLED_REASON)) {
                 onInitializeWhenViewMode();
             } else {
                 onInitializeWhenDisabled(disableReasonIfAny.toString());
@@ -470,6 +497,20 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
      */
     protected void onInitializeWhenEnabled() {
     }
+
+    /**
+     * Optional hook.
+     */
+    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+    }
+
+    /**
+     * Optional hook.
+     * @param target
+     */
+    protected void onEnabled(final AjaxRequestTarget target) {
+    }
+
 
 
     private void addCssFromMetaModel() {
@@ -719,6 +760,8 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     protected Component createInlinePromptComponent(
             final String id, final IModel<String> inlinePromptModel) {
         return new Label(id, inlinePromptModel) {
+            private static final long serialVersionUID = 1L;
+
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
                 tag.put("tabindex","-1");

@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import java.util.List;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -227,6 +228,23 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
         entityLink.setEnabled(false);
         Tooltips.addTooltip(entityLink, disableReason);
     }
+
+    @Override
+    protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+        super.onDisabled(disableReason, target);
+
+        entityLink.setEnabled(false);
+        entityLink.add(new AttributeModifier("title", Model.of(disableReason)));
+    }
+
+    @Override
+    protected void onEnabled(final AjaxRequestTarget target) {
+        super.onEnabled(target);
+
+        entityLink.setEnabled(true);
+        entityLink.add(new AttributeModifier("title", Model.of("")));
+    }
+
 
 
     // //////////////////////////////////////

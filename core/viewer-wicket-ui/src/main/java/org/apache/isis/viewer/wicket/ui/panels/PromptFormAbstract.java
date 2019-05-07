@@ -166,6 +166,7 @@ implements ScalarModelSubscriber2 {
 
             @Override
             public void onSubmit(final AjaxRequestTarget target) {
+                //form.setMultiPart(true);
                 closePromptIfAny(target);
 
                 onCancelSubmitted(target);
