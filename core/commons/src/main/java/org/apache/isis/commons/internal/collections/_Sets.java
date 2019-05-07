@@ -19,14 +19,13 @@
 
 package org.apache.isis.commons.internal.collections;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentHashMap.KeySetView;
@@ -37,6 +36,8 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>
@@ -223,6 +224,25 @@ public final class _Sets {
                 a.stream()
                 .filter(b::contains)
                 .collect(Collectors.toSet()) );
+    }
+    
+    /**
+     * Returns the intersection (set theory) of two given sets, retaining order.
+     * @param a
+     * @param b
+     * @return non null, unmodifiable
+     */
+    public static <T> SortedSet<T> intersectSorted(@Nullable SortedSet<T> a, @Nullable SortedSet<T> b) {
+        if(a==null && b==null) {
+            return Collections.emptySortedSet();
+        }
+        if(a==null || b==null) {
+            return Collections.emptySortedSet();
+        }
+        return Collections.unmodifiableSortedSet(
+                a.stream()
+                .filter(b::contains)
+                .collect(Collectors.toCollection(TreeSet::new)));
     }
 
     // --
