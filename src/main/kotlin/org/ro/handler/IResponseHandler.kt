@@ -1,5 +1,6 @@
 package org.ro.handler
 
+import org.ro.core.TransferObject
 import org.ro.core.event.LogEntry
 
 /**
@@ -19,9 +20,8 @@ import org.ro.core.event.LogEntry
 interface IResponseHandler {
 
     fun handle(logEntry: LogEntry)
-
     fun canHandle(jsonStr: String): Boolean
-
     fun doHandle()
+    fun parse(jsonStr: String): TransferObject?
 }
 

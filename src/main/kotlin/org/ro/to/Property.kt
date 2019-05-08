@@ -2,6 +2,7 @@ package org.ro.to
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
+import org.ro.core.TransferObject
 
 @Serializable  // is Property a Variant of Member?
 data class Property(val id: String = "",
@@ -14,7 +15,7 @@ data class Property(val id: String = "",
                     @Optional val format: String? = null,
                     @Optional val disabledReason: String? = null,
                     @Optional val parameters: List<Parameter> = emptyList(),
-                    @Optional val maxLength: Int = 0) {
+                    @Optional val maxLength: Int = 0) : TransferObject {
 
     fun descriptionLink(): Link? {
         for (l in links) {

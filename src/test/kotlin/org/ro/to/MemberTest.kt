@@ -9,7 +9,7 @@ class MemberTest() {
 
     @Test
     fun testParse() {
-        val m = MemberHandler().parse(FR_PROPERTY_DESCRIPTION.str)
+        val m = MemberHandler().parse(FR_PROPERTY_DESCRIPTION.str) as Member
         val extensions: Extensions? = m.extensions
         assertNotNull(extensions)
         assertEquals("Result class", extensions.friendlyName)

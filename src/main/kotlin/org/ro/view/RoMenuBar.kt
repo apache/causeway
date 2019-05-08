@@ -11,20 +11,20 @@ import pl.treksoft.kvision.core.UNIT
 import pl.treksoft.kvision.dropdown.DropDown
 import pl.treksoft.kvision.html.Link
 import pl.treksoft.kvision.i18n.I18n.tr
-import pl.treksoft.kvision.navbar.Nav.Companion.nav
+import pl.treksoft.kvision.navbar.Nav
 import pl.treksoft.kvision.navbar.Navbar
 import pl.treksoft.kvision.navbar.NavbarType
 
-class RoMenuBar : Navbar() {
+object RoMenuBar {
     val leftMargin = CssSize(-12, UNIT.px)
+    val navbar = Navbar(type = NavbarType.FIXEDTOP)
+    val nav = Nav()
 
     init {
-        navbar(type = NavbarType.FIXEDTOP) {
-            marginLeft = leftMargin
-            nav {
-                add(buildMainEntry())
-            }
-        }
+        navbar.marginLeft = leftMargin
+        navbar.add(nav)
+        val mainEntry = buildMainEntry()
+        nav.add(mainEntry)
     }
 
     private fun buildMainEntry(): DropDown {
@@ -48,8 +48,8 @@ class RoMenuBar : Navbar() {
         val title2 = "Tabulator"
         icon = IconManager.find(title2)
         val log2 = Link(tr(title2), icon = icon).onClick {
-            val model = EventStore.log //as List<LogEntry>
-            RoView.addTab(tr(title2), EventLogTable2(), icon)
+            val model = EventStore.log 
+            RoView.addTab(tr(title2), EventLogTable2(model), icon)
         }
         mainMenu.add(log2)
 
@@ -57,42 +57,18 @@ class RoMenuBar : Navbar() {
     }
 
     fun amendMenu() {
-        navbar(type = NavbarType.FIXEDTOP) {
-            marginLeft = leftMargin
-            nav {
-                add(buildMainEntry())
-                for (title: String in Menu.filterUniqueMenuTitles()) {
-                    val dd = buildMenuEntry(title)
-                    for (me: MenuEntry in Menu.filterEntriesByTitle(title)) {
-                        val menuLink = buildMenuAction(me.action.id)
-                        val execLink = me.action.getInvokeLink()!!
-                        menuLink.onClick {
-                            console.log("[RoMenuBar.amendMenu/Link.invoke] $execLink")
-                            execLink.invoke()
-                        }
-                        dd.add(menuLink)
-                    }
-                    add(dd)
+        for (title: String in Menu.filterUniqueMenuTitles()) {
+            val dd = buildMenuEntry(title)
+            for (me: MenuEntry in Menu.filterEntriesByTitle(title)) {
+                val menuLink = buildMenuAction(me.action.id)
+                val execLink = me.action.getInvokeLink()!!
+                menuLink.onClick {
+                    console.log("[RoMenuBar.amendMenu/Link.invoke] $execLink")
+                    execLink.invoke()
                 }
+                dd.add(menuLink)
             }
-        }
-    }
-
-    fun amendMenuNew() {
-        this.nav {
-            for (title: String in Menu.filterUniqueMenuTitles()) {
-                val dd = buildMenuEntry(title)
-                for (me: MenuEntry in Menu.filterEntriesByTitle(title)) {
-                    val menuLink = buildMenuAction(me.action.id)
-                    val execLink = me.action.getInvokeLink()!!
-                    menuLink.onClick {
-                        console.log("[RoMenuBar.amendMenu/Link.invoke] $execLink")
-                        execLink.invoke()
-                    }
-                    dd.add(menuLink)
-                }
-                add(dd)
-            }
+            nav.add(dd)
         }
     }
 

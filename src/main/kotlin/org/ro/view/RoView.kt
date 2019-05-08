@@ -6,6 +6,6 @@ import pl.treksoft.kvision.panel.TabPanel
 
 object RoView : TabPanel() {
     init {
-        marginTop = CssSize(-20, UNIT.px)
+        marginTop = CssSize(50, UNIT.px)
     }
 }

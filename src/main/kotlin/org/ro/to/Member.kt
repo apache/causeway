@@ -2,6 +2,7 @@ package org.ro.to
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
+import org.ro.core.TransferObject
 
 @Serializable
 data class Member(val id: String,
@@ -14,7 +15,7 @@ data class Member(val id: String,
                   @Optional val extensions: Extensions? = null,
                   @Optional val disabledReason: String = "",
                   @Optional val format: String = "",
-                  @Optional val optional: Boolean = false) {
+                  @Optional val optional: Boolean = false) : TransferObject {
 
     fun getInvokeLink(): Link? {
         for (l in links) {

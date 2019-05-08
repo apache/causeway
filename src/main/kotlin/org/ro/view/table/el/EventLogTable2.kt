@@ -20,26 +20,43 @@ import pl.treksoft.kvision.panel.HPanel.Companion.hPanel
 import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.tabulator.*
 import pl.treksoft.kvision.tabulator.Tabulator.Companion.tabulator
+import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.px
 import pl.treksoft.kvision.tabulator.js.Tabulator as JsTabulator
 
-class EventLogTable2 : VPanel() {
+class EventLogTable2(val model: List<LogEntry>) : VPanel() {
     private lateinit var search: TextInput
     private lateinit var searchTypes: RadioGroup
 
-    val columns = listOf(
-            ColumnDefinition("", field = "state", width = "40"),
-            ColumnDefinition("Title", "title"),
+    private val columns = listOf(
+            ColumnDefinition("", field = "state", width = "80"),
+            ColumnDefinition("Title", "title", width = "400"),
             ColumnDefinition("Method", "method", width = "80"),
-            ColumnDefinition("Created", "createdAt", formatter = Formatter.DATETIME, sorter = Sorter.DATETIME),
-            ColumnDefinition("Updated", "updatedAt", formatter = Formatter.DATETIME, sorter = Sorter.DATETIME),
-            ColumnDefinition("req.len", field = "requestLength", align = Align.RIGHT, width = "60"),
-            ColumnDefinition("offset", field = "offset", align = Align.RIGHT, width = "40"),
-            ColumnDefinition("duration", field = "duration", align = Align.RIGHT, width = "60"),
-            ColumnDefinition("resp.len", field = "responseLength", align = Align.RIGHT, width = "70"),
-            ColumnDefinition("cacheHits", field = "cacheHits", align = Align.RIGHT, width = "40"),
+            ColumnDefinition(
+                    title = "Created",
+                    field = "createdAt",
+                    sorter = Sorter.DATETIME,
+                    formatter = Formatter.DATETIME,
+                    formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
+                    width = "100"),
+            ColumnDefinition(
+                    title = "Updated",
+                    field = "updatedAt",
+                    sorter = Sorter.DATETIME,
+                    formatter = Formatter.DATETIME,
+                    formatterParams = obj { outputFormat = "HH:mm:ss.SSS" },
+                    width = "100"),
+            ColumnDefinition("req.len", field = "requestLength", align = Align.RIGHT),
+            ColumnDefinition("offset", field = "offset", align = Align.RIGHT),
+            ColumnDefinition("duration", field = "duration", align = Align.RIGHT),
+            ColumnDefinition("resp.len", field = "responseLength", align = Align.RIGHT),
+            ColumnDefinition("cacheHits", field = "cacheHits", align = Align.RIGHT),
             ColumnDefinition("",
-                    formatter = Formatter.BUTTONTICK,
+                    field = "iconName",
+                    formatter = Formatter.IMAGE,
+                    formatterFunction = { cell, _, _ ->
+                        cell.getValue()?.let { "<img src='" + cell.getValue() + "'/>" } ?: ""
+                    },
                     align = Align.CENTER,
                     width = "40",
                     headerSort = false,
@@ -52,17 +69,16 @@ class EventLogTable2 : VPanel() {
     init {
         hPanel(FlexWrap.NOWRAP, alignItems = FlexAlignItems.CENTER, spacing = 20) {
             padding = 10.px
-            search = textInput(TextInputType.SEARCH) {
-                placeholder = "Search ..."
-            }
             searchTypes = radioGroup(listOf("all" to "All",
                     "err" to "Errors",
                     "ui" to "UI"), "all", inline = true) {
                 marginBottom = 0.px
             }
+            search = textInput(TextInputType.SEARCH) {
+                placeholder = "Search ..."
+            }
         }
 
-        val model = EventStore.log
         val options = Options(
                 height = "calc(100vh - 250px)",
                 layout = Layout.FITCOLUMNS,
@@ -71,16 +87,15 @@ class EventLogTable2 : VPanel() {
         )
 
         val tabulator = tabulator(model, options) {
+            marginTop = 0.px
             marginBottom = 0.px
             setEventListener<Tabulator<LogEntry>> {
                 tabulatorRowClick = {
-                    //e ->
-                    //   EditPanel.edit((e.detail as JsTabulator.RowComponent).getIndex() as Int)
                 }
             }
-            //  setFilter { logEntry ->
-            //logEntry.match(search.value) && (searchTypes.value == "all")
-            // }
+            setFilter { logEntry ->
+                logEntry.match(search.value) && (searchTypes.value == "all" || logEntry.isView() ?: false)
+            }
         }
 
         search.setEventListener {

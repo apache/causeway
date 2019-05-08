@@ -2,6 +2,7 @@ package org.ro.to
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
+import org.ro.core.TransferObject
 import org.ro.core.event.IObserver
 import org.ro.core.event.RoXmlHttpRequest
 
@@ -12,7 +13,7 @@ data class Link(val rel: String = "",
                 val type: String = "",
                 @Optional val args: Map<String, Argument> = emptyMap(),
                 @Optional val arguments: Map<String, Argument> = emptyMap(),
-                @Optional val title: String = "") {
+                @Optional val title: String = "") : TransferObject {
 
     //TODO delegate to a facade?
     fun invoke(obs: IObserver? = null) {

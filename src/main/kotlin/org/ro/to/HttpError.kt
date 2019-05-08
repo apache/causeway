@@ -1,10 +1,11 @@
 package org.ro.to
 
 import kotlinx.serialization.Serializable
+import org.ro.core.TransferObject
 
 @Serializable
 data class HttpError(
         val httpStatusCode: Int,
         val message: String,
         val detail: HttpErrorDetail
-) 
+) : TransferObject

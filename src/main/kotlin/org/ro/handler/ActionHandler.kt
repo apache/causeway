@@ -1,23 +1,12 @@
 package org.ro.handler
 
 import kotlinx.serialization.json.JSON
+import org.ro.core.TransferObject
 import org.ro.to.Action
 import org.ro.to.Method
 import org.ro.view.ActionPrompt
 
 class ActionHandler : AbstractHandler(), IResponseHandler {
-
-    override fun canHandle(jsonStr: String): Boolean {
-        var answer = false;
-        try {
-            val obj = parse(jsonStr)
-            logEntry.setObj(obj)
-            val ext = obj.extensions
-            answer = ext.actionType.isNotEmpty()
-        } catch (ex: Exception) {
-        }
-        return answer;
-    }
 
     override fun doHandle() {
         val action = logEntry.getObj() as Action
@@ -41,7 +30,7 @@ class ActionHandler : AbstractHandler(), IResponseHandler {
         }
     }
 
-    fun parse(jsonStr: String): Action {
+    override fun parse(jsonStr: String): TransferObject? {
         return JSON.parse(Action.serializer(), jsonStr)
     }
 }

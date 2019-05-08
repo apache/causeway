@@ -2,6 +2,7 @@ package org.ro.layout
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
+import org.ro.core.TransferObject
 import org.ro.view.uicomp.VBox
 
 /**
@@ -10,7 +11,7 @@ import org.ro.view.uicomp.VBox
  */
 @Serializable
 data class Layout(val cssClass: String? = null,
-                  val row: List<RowLayout> = emptyList()) {
+                  val row: List<RowLayout> = emptyList()) : TransferObject {
 
     @Optional
     var properties = listOf<PropertyLayout>()

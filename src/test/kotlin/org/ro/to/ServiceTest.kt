@@ -1,7 +1,7 @@
 package org.ro.to
 
-import org.ro.handler.ServiceHandler
 import org.ro.handler.ResultHandler
+import org.ro.handler.ServiceHandler
 import org.ro.urls.RESTFUL_SERVICES
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -13,7 +13,7 @@ class ServiceTest {
     @Test
     fun testSimpleObjectMenu() {
         val jsonStr = SO_MENU.str
-        val service = ServiceHandler().parse(jsonStr)
+        val service = ServiceHandler().parse(jsonStr) as Service
         assertEquals("Simple Objects", service.title)
         val actions: kotlin.collections.List<Member> = service.getMemberList()
         assertEquals(3, actions.size)
@@ -41,7 +41,7 @@ class ServiceTest {
     @Test
     fun testParseServices() {
         val jsonStr = RESTFUL_SERVICES.str
-        val services = ResultHandler().parse(jsonStr)
+        val services = ResultHandler().parse(jsonStr) as Result
         val values = services.valueList()
         assertNotNull(values)
         assertEquals(8, values.size)

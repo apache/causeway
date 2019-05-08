@@ -12,8 +12,8 @@ class MenuTest {
     fun testUnique() {
         //given:
         val jsonStr = SO_MENU.str
-        val s1 = ServiceHandler().parse(jsonStr)
-        val s2 = ServiceHandler().parse(jsonStr)
+        val s1 = ServiceHandler().parse(jsonStr) as Service
+        val s2 = ServiceHandler().parse(jsonStr) as Service
         //when
         Menu.add(s1)
         Menu.add(s2)
@@ -26,7 +26,7 @@ class MenuTest {
     @Test
     fun testParse() {
         val jsonStr = SO_MENU.str
-        val service = ServiceHandler().parse(jsonStr)
+        val service = ServiceHandler().parse(jsonStr) as Service
         assertTrue(service.members.size > 0)
         assertTrue(service.getMemberList().size > 0)
         assertTrue(service.getActionList().size > 0)

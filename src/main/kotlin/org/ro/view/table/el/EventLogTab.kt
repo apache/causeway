@@ -3,6 +3,7 @@ package org.ro.view.table.el
 import org.ro.core.event.LogEntry
 import org.ro.view.table.ColDef
 
+@Deprecated("use ColumnDefinition with Tabulator")
 class EventLogTab {
     val csList = mutableListOf<ColDef>()
 

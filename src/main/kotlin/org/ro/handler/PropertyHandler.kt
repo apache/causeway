@@ -1,21 +1,11 @@
 package org.ro.handler
 
 import kotlinx.serialization.json.JSON
+import org.ro.core.TransferObject
 import org.ro.core.event.ListObserver
 import org.ro.to.Property
 
 class PropertyHandler : AbstractHandler(), IResponseHandler {
-
-    override fun canHandle(jsonStr: String): Boolean {
-        var answer = false
-        try {
-            val obj = parse(jsonStr)
-            logEntry.setObj(obj)
-            answer = true
-        } catch (ex: Exception) {
-        }
-        return answer
-    }
 
     override fun doHandle() {
         val p = logEntry.getObj() as Property
@@ -33,7 +23,7 @@ class PropertyHandler : AbstractHandler(), IResponseHandler {
         obs.list.handleProperty(p)
     }
 
-    fun parse(jsonStr: String): Property {
+    override fun parse(jsonStr: String): TransferObject? {
         return JSON.parse(Property.serializer(), jsonStr)
     }
 

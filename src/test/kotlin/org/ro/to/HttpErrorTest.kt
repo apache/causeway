@@ -11,7 +11,7 @@ class HttpErrorTest {
     @Test
     fun testParse() {
         val jsonStr = HTTP_ERROR.str
-        val error = HttpErrorHandler().parse(jsonStr)
+        val error = HttpErrorHandler().parse(jsonStr)  as HttpError
         val code = error.httpStatusCode
         assertEquals(400, code)
         assertNotNull(error.message)

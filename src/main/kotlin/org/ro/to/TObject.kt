@@ -1,7 +1,7 @@
 package org.ro.to
 
 import kotlinx.serialization.Serializable
-import pl.treksoft.kvision.utils.Object
+import org.ro.core.TransferObject
 
 @Serializable
 data class TObject(val links: List<Link> = emptyList(),
@@ -9,7 +9,8 @@ data class TObject(val links: List<Link> = emptyList(),
                    val title: String = "",
                    val domainType: String = "",
                    val instanceId: String? = null,
-                   val members: Map<String, Member> = emptyMap()) {
+                   val members: Map<String, Member> = emptyMap()
+) : TransferObject {
 
     fun getId(): String {
         return "$domainType/$instanceId"
@@ -53,15 +54,7 @@ data class TObject(val links: List<Link> = emptyList(),
     }
 
     fun addAsProperty(dynObj: TObject, member: Member) {
-        val attribute: Object? = null
-//        val value: Any? = member.value
         val value = "//TODO members of type property can be either null|String|Link"
-        if (value != null) {
-            //  val typeSpec: Any? = property.memberType
-            //FIXME attribute = typeSpec(value)
-        }
-        // if value={} (ie. of class Object), 
-        // it is represented as [object Object] 
         if (value == "[object Object]") {
             //FIXME var link = Link(value)
             //here the magic of recursive OA's take place

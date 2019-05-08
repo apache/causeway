@@ -11,7 +11,7 @@ class ActionTest {
     @Test
     fun testParseActionGETArgument() {
         val jsonStr = ACTIONS_FIND_BY_NAME.str
-        val action = ActionHandler().parse(jsonStr)
+        val action = ActionHandler().parse(jsonStr) as Action
         val linkList = action.links
         assertNotNull(linkList)
         assertEquals(4, linkList.size)
@@ -24,7 +24,7 @@ class ActionTest {
     @Test
     fun testParseActionPOSTArgumentFS() {
         val jsonStr = ACTIONS_RUN_FIXTURE_SCRIPT.str
-        val action = ActionHandler().parse(jsonStr)
+        val action = ActionHandler().parse(jsonStr) as Action
         val links = action.links
         assertNotNull(links)
         assertEquals(4, links.size)
@@ -54,7 +54,7 @@ class ActionTest {
     @Test
     fun testParseActionPOSTArgument() {
         val jsonStr = ACTIONS_CREATE.str
-        val action = ActionHandler().parse(jsonStr)
+        val action = ActionHandler().parse(jsonStr) as Action
         val links = action.links
         assertEquals(4, links.size)
     }
@@ -62,7 +62,7 @@ class ActionTest {
     @Test
     fun testParseActionPOSTDelete() {
         val jsonStr = ACTIONS_DELETE.str
-        val action = ActionHandler().parse(jsonStr)
+        val action = ActionHandler().parse(jsonStr) as Action
         val links = action.links
         assertNotNull(links)
         assertEquals(4, links.size)

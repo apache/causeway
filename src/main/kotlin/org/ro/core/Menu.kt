@@ -1,6 +1,5 @@
 package org.ro.core
 
-import org.ro.to.Member
 import org.ro.to.Service
 
 object Menu {
@@ -10,10 +9,6 @@ object Menu {
 
     fun isFull(): Boolean {
         return list.size >= limit
-    }
-
-    override fun toString(): String {
-        return JSON.stringify(this)
     }
 
     fun add(service: Service) {
@@ -32,7 +27,7 @@ object Menu {
         }
         return titles.distinct().toMutableList()
     }
-    
+
     fun filterEntriesByTitle(title: String): MutableList<MenuEntry> {
         val result = mutableListOf<MenuEntry>()
         for (me in list) {
@@ -43,13 +38,4 @@ object Menu {
         return result
     }
 
-    fun findAction(url: String): Member? {
-        for (me in list) {
-            if (me.itemId == url) {
-                return me.action
-            }
-        }
-        return null
-    }
-         
 }

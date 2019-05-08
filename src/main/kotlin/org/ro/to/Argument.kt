@@ -2,11 +2,12 @@ package org.ro.to
 
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
+import org.ro.core.TransferObject
 
 @Serializable
 data class Argument(@Optional var key: String = "",
                     var value: String? = null,
-                    @Optional val potFileName: String = "") {
+                    @Optional val potFileName: String = "") : TransferObject {
     init {
         if (value == null) {
             value = ""
@@ -20,13 +21,13 @@ data class Argument(@Optional var key: String = "",
         if (isHttp) {
             v = enbrace("href", v)
         }
-        return quote(key) + ": " + enbrace("value", v) 
+        return quote(key) + ": " + enbrace("value", v)
     }
 
-    private fun enbrace(k:String, v:String): String {
-        return  "{" + quote(k) + ": " + v + "}"
+    private fun enbrace(k: String, v: String): String {
+        return "{" + quote(k) + ": " + v + "}"
     }
-    
+
     private fun quote(s: String): String {
         return "\"" + s + "\""
     }

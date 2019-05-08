@@ -41,6 +41,7 @@ enum class SortBy {
     F
 }
 
+@Deprecated("use tables based on Tabulator")
 class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
 
     private val dataContainer: DataContainer<LogEntry, Row, Table>

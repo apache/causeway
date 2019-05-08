@@ -13,7 +13,7 @@ import pl.treksoft.kvision.utils.px
 object Application : ApplicationBase {
 
     private lateinit var root: Root
-    var menuBar = RoMenuBar()
+    var menuBar = RoMenuBar
     var view = RoView()
     var statusBar = RoStatusBar()
 
@@ -22,7 +22,7 @@ object Application : ApplicationBase {
         root = Root("showcase") {
             vPanel(spacing = 0) {
                 padding = 0.px
-                this.add(menuBar)
+                this.add(menuBar.navbar)
                 this.add(view) 
                 this.add(statusBar) 
             }

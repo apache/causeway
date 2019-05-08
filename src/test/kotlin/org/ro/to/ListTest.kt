@@ -8,7 +8,7 @@ class ListTest {
 
     @Test
     fun testListAllInvoke() {
-        val list = ResultListHandler().parse(SO_LIST_ALL_INVOKE.str)
+        val list = ResultListHandler().parse(SO_LIST_ALL_INVOKE.str) as ResultList
         val result = list.result!!
         val valueList = result.value
         assertEquals(10, valueList.size)

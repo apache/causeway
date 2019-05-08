@@ -1,6 +1,7 @@
 package org.ro.handler
 
 
+import org.ro.core.TransferObject
 import org.ro.core.event.LogEntry
 
 /**
@@ -29,14 +30,21 @@ open class AbstractHandler : IResponseHandler {
             }
         }
     }
-    
+
     /**
      * Default implementation - should be overridden in subclasses.
      * @param jsonObj
      * @return
      */
     override fun canHandle(jsonStr: String): Boolean {
-        return true
+        var answer = false
+        try {
+            val obj = parse(jsonStr)
+            logEntry.setObj(obj)
+            answer = true
+        } catch (ex: Exception) {
+        }
+        return answer;
     }
 
     /**
@@ -45,5 +53,9 @@ open class AbstractHandler : IResponseHandler {
      */
     override fun doHandle() {
     }
-    
+
+    override fun parse(jsonStr: String): TransferObject? {
+        return null
+    }
+
 }

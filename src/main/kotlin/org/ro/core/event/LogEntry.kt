@@ -1,8 +1,9 @@
 package org.ro.core.event
 
 import kotlinx.serialization.Serializable
+import org.ro.core.TransferObject
 import org.ro.view.table.ActionMenu
-import pl.treksoft.kvision.types.Date
+import kotlin.js.Date
 
 enum class EventState(val id: String, val iconName: String) {
     INITIAL("INITIAL", "fa-power-off"),
@@ -21,6 +22,7 @@ data class LogEntry(
     
     var state = EventState.INITIAL
     var menu: ActionMenu? = null
+    var iconName = "img/2-2-clapperboard-png-thumb.png"
 
     init {
         state = EventState.RUNNING
@@ -51,6 +53,7 @@ data class LogEntry(
 //    var obj: Any? = null
     var cacheHits = 0
     var observer: IObserver? = null
+    var obj: TransferObject? = null
 
     // alternative constructor for UI events (eg. from user interaction)
     constructor(title: String) : this("", null, "") {
@@ -102,11 +105,11 @@ data class LogEntry(
         return s
     }
 
-    fun getObj() : Any? {
-        return EventStore.cache.get(url)
+    fun getObj() : TransferObject? {
+        return obj
     }
-    fun setObj(obj: Any?)  {
-         EventStore.cache.put(url, obj)
+    fun setObj(obj: TransferObject?)  {
+         this.obj = obj
     }
 
     // region response

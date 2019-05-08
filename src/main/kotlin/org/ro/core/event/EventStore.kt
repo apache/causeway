@@ -14,7 +14,7 @@ import kotlin.js.Date
  */
 object EventStore {
     var log = observableListOf<LogEntry>()
-    var cache = mutableMapOf<String, Any?>()
+//    var cache = mutableMapOf<String, Any?>()
 
     fun start(url: String, method: String, body: String = "", obs: IObserver? = null): LogEntry {
         val entry = LogEntry(url, method, body)

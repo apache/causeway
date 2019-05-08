@@ -6,36 +6,30 @@ import org.ro.to.Property
 import org.ro.to.TObject
 
 class ObjectList : Visible {
-    override fun tag() : String { return " "}
-    
-    var list = mutableListOf<ObjectAdapter>()
+    override fun tag(): String {
+        return " "
+    }
+
+    var list = mutableListOf<TObject>()
     var layout: Layout? = null
     var propertyLabels = mutableMapOf<String, String>()
 
     fun hasLayout(): Boolean {
-        return layout != null
+        val it = layout != null
+        if (it) {
+            initPropertyDescription()
+        }
+        return it
     }
 
-    //FIXME to be called after layout is set
     private fun initPropertyDescription() {
-        if (hasLayout()) {
-            if (arePropertyLabelsToBeSet()) {
-                val pls = layout!!.properties
-                for (pl in pls) {
-                    val l = pl.link
-                    l!!.invoke()
-                }
+        if (arePropertyLabelsToBeSet()) {
+            val pls = layout!!.properties
+            for (pl in pls) {
+                val l = pl.link
+                l!!.invoke()
             }
         }
-    }
-
-    //TODO public for test only, reduce visibility 
-    fun add(oa: ObjectAdapter) {
-        if (oa.adaptee is TObject) {
-            val tObj = oa.adaptee.unsafeCast<TObject>()
-            tObj.addMembersAsProperties()
-        }
-        list.add(oa)
     }
 
     fun handleProperty(p: Property) {
@@ -50,7 +44,7 @@ class ObjectList : Visible {
         return propertyLabels.get(id)
     }
 
-    fun arePropertyLabelsToBeSet(): Boolean {
+    private fun arePropertyLabelsToBeSet(): Boolean {
         val labelSize: Int = propertyLabels.size
         var propsSize = 0
         if (layout!!.properties.isNotEmpty()) {
@@ -58,5 +52,5 @@ class ObjectList : Visible {
         }
         return (labelSize < propsSize)
     }
-    
+
 }

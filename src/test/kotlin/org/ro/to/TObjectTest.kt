@@ -1,20 +1,17 @@
 package org.ro.to
 
-
-import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
 import org.ro.handler.TObjectHandler
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-
 class TObjectTest {
 
     @Test
     fun testParse() {
         val jsonStr = SO_0.str
-        val to = TObjectHandler().parse(jsonStr)
+        val to = TObjectHandler().parse(jsonStr) as TObject
         assertNotNull(to)
         assertNotNull(to.getLayoutLink())
     }
@@ -23,7 +20,7 @@ class TObjectTest {
     fun testTObjectMembers() {
         //TODO authors@ro.org members should be modeled as elements of an Array [] 
         val jsonStr = SO_0.str
-        val to = TObjectHandler().parse(jsonStr)
+        val to = TObjectHandler().parse(jsonStr) as TObject
         assertEquals("Object: Foo", to.links[0].title)
 
         val members = to.members
@@ -32,13 +29,13 @@ class TObjectTest {
         assertEquals(4, properties.size)
 
         val objectList = ObjectList()
-       // objectList.initSize(1)
+        // objectList.initSize(1)
         to.addMembersAsProperties()
-        val oa1 = ObjectAdapter(to)
-        objectList.add(oa1)
+//        val oa1 = ObjectAdapter(to)
+        objectList.list.add(to)
 
         // this is kind of untyped again
-       // val oa: ObjectAdapter = objectList.last()
+        // val oa: ObjectAdapter = objectList.last()
         /* FIXME dynamic
         assertNotNull(oa)
 

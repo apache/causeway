@@ -16,7 +16,7 @@ class LayoutTest : IntegrationTest() {
             //given
             val jsonStr = SO_OBJECT_LAYOUT.str
             //when
-            val lo = LayoutHandler().parse(jsonStr)
+            val lo = LayoutHandler().parse(jsonStr) as Layout
             val properties = lo.properties
             // then
             assertNotNull(properties)
@@ -50,7 +50,7 @@ class LayoutTest : IntegrationTest() {
         if (isSimpleAppAvailable()) {
             // given
             val jsonStr = FR_OBJECT_LAYOUT.str
-            val lo = LayoutHandler().parse(jsonStr)
+            val lo = LayoutHandler().parse(jsonStr) as Layout
             // when
             val properties = lo.properties
             // then

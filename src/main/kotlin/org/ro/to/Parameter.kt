@@ -3,6 +3,7 @@ package org.ro.to
 import kotlinx.serialization.Optional
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.ro.core.TransferObject
 
 @Serializable
 class Parameter(val id: String,
@@ -10,9 +11,9 @@ class Parameter(val id: String,
                 val description: String,
                 val name: String,
                 @Optional val choices: List<Link> = emptyList(),
-                @Optional @SerialName("default") val defaultChoice: Link? = null) {
-
-
+                @Optional @SerialName("default") val defaultChoice: Link? = null
+) : TransferObject {
+    
     fun hasChoices(): Boolean {
         return choices.isNotEmpty()
     }
