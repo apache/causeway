@@ -25,6 +25,7 @@ import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 import org.junit.Rule;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
@@ -59,6 +60,8 @@ public class MemberOrderComparatorTest extends TestCase {
     @Override
     protected void setUp() {
 
+        _Context.clear();
+        
         comparator = new MemberOrderComparator(true);
         laxComparator = new MemberOrderComparator(false);
 

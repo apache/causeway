@@ -39,7 +39,7 @@ public class Jdk8OffsetDateTimeValueFacetUsingSemanticsProviderFactory extends V
         if (type != OffsetDateTime.class) {
             return;
         }
-        addFacets(new Jdk8OffsetDateTimeValueSemanticsProvider(holder, getContext()));
+        addFacets(new Jdk8OffsetDateTimeValueSemanticsProvider(holder));
     }
 
 }

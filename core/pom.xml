@@ -143,8 +143,8 @@
 
         <jetty.version>9.4.12.v20180830</jetty.version>
 
-        <wicket.version>8.2.0</wicket.version>
-        <wicketstuff.version>8.2.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
+        <wicket.version>8.4.0</wicket.version>
+        <wicketstuff.version>8.4.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
         <wicket-bootstrap.version>2.0.3</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
         <wicket-source.version>7.0.0</wicket-source.version>
 
@@ -168,6 +168,7 @@
         <junit-legacy.version>4.12</junit-legacy.version>
         <assertj.version>3.11.1</assertj.version>
 
+		<mockito.version>2.23.4</mockito.version>
         <!-- 2.8.1 depends on cglib-nodep 3.1 whereas axonframework depends on 2.2.2 -->
         <jmock.version>2.6.0</jmock.version>
         <easymock.version>2.5.2</easymock.version>
@@ -1268,6 +1269,34 @@ ${license.additional-notes}
                 <scope>test</scope>
             </dependency>
             
+            <!-- runtime-extensions -->
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-runtime-extensions</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-runtime-extensions</artifactId>
+                <version>${isis.version}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            
+            <!-- runtime-services -->
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-runtime-services</artifactId>
+                <version>${isis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-runtime-services</artifactId>
+                <version>${isis.version}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+            
             <!-- webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
@@ -1710,9 +1739,10 @@ ${license.additional-notes}
 
             <dependency>
                 <groupId>org.apache.wicket</groupId>
-                <artifactId>wicket-guice</artifactId>
+                <artifactId>wicket-spring</artifactId>
                 <version>${wicket.version}</version>
                 <exclusions>
+                	<!-- TODO[2112] exclusions might no longer be relevant-->
                     <exclusion>
                         <groupId>org.slf4j</groupId>
                         <artifactId>slf4j-api</artifactId>
@@ -1948,6 +1978,13 @@ ${license.additional-notes}
                 <version>${junit.version}</version>
             </dependency>
 
+			<!-- MOCKITO -->
+			<dependency>
+			  <groupId>org.mockito</groupId>
+			  <artifactId>mockito-core</artifactId>
+			  <version>${mockito.version}</version>
+			</dependency>
+
             <dependency>
                 <groupId>org.jmock</groupId>
                 <artifactId>jmock</artifactId>
@@ -2093,10 +2130,10 @@ ${license.additional-notes}
         </profile>
 
         <profile>
-            <id>jdk11</id>
+            <id>jdk11plus</id>
             <activation>
-            	<!-- disabled for now, because we have not found a way to enforce jdk8 
-            	profile when following condition evaluates true -->
+            	<!-- disabled for now, because I have not found a way to enforce jdk8 
+            	build when this condition evaluates true -->
 <!--                 <jdk>[11,)</jdk> -->
             </activation>
             <build>
@@ -2482,6 +2519,8 @@ ${license.additional-notes}
         <module>log4j</module>
         <module>metamodel</module>
         <module>runtime</module>
+        <module>runtime-services</module>
+        <module>runtime-extensions</module>
         <module>webserver</module>
 
         <module>security</module>

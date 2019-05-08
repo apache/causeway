@@ -31,9 +31,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -49,7 +49,7 @@ public class ServiceInstantiatorTestUsingCodegenPlugin {
 
     @JUnitRuleMockery2.Ignoring
     @Mock
-    private ServicesInjector mockServiceInjector;
+    private ServiceInjector mockServiceInjector;
 
     @Before
     public void setUp() throws Exception {

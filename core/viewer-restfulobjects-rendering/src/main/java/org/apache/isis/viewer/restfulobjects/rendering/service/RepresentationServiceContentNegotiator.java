@@ -1,4 +1,4 @@
-/**
+/*
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
  *  this work for additional information regarding copyright ownership.
@@ -16,15 +16,16 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service;
 
-import java.util.List;
 import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer.SelfLink;
@@ -36,10 +37,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class RepresentationServiceContentNegotiator implements RepresentationService {
 
 
@@ -64,20 +62,6 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
         assertContentNegotiationServiceHandled(responseBuilder);
         return buildResponse(responseBuilder);
     }
-
-    /**
-     * @deprecated - use {@link #objectRepresentation(Context, ObjectAdapter, Intent)}
-     */
-    @Deprecated
-    @Override
-    @Programmatic
-    public Response objectRepresentation(
-            final Context renderContext,
-            final ObjectAdapter objectAdapter,
-            final Intent unused) {
-        return objectRepresentation(renderContext, objectAdapter);
-    }
-
 
     @Override
     @Programmatic
@@ -190,7 +174,5 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
         return responseBuilder.build();
     }
 
-
-    @javax.inject.Inject
-    List<ContentNegotiationService> contentNegotiationServices;
+    @Inject @Any Instance<ContentNegotiationService> contentNegotiationServices;
 }

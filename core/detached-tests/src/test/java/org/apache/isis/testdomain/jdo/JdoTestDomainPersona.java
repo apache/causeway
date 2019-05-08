@@ -36,7 +36,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
                 protected void execute(ExecutionContext ec) {
                     
                     //don't use lombok's val here (https://github.com/rzwitserloot/lombok/issues/434)
-                    RepositoryService repository = IsisContext.getServicesInjector()
+                    RepositoryService repository = IsisContext.getServiceRegistry()
                             .lookupServiceElseFail(RepositoryService.class);
                     
                     repository.allInstances(Inventory.class)
@@ -70,7 +70,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
                 protected void execute(ExecutionContext ec) {
                     
                     //don't use lombok's val here (https://github.com/rzwitserloot/lombok/issues/434)
-                    RepositoryService repository = IsisContext.getServicesInjector()
+                    RepositoryService repository = IsisContext.getServiceRegistry()
                             .lookupServiceElseFail(RepositoryService.class);
                     
                     Set<Product> products = new HashSet<>();

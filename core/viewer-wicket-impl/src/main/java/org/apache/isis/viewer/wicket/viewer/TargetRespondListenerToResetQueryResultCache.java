@@ -1,4 +1,4 @@
-/**
+/*
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
  *  this work for additional information regarding copyright ownership.
@@ -16,24 +16,20 @@
  */
 package org.apache.isis.viewer.wicket.viewer;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 class TargetRespondListenerToResetQueryResultCache implements AjaxRequestTarget.ITargetRespondListener {
-
-    private static final Logger LOG = LoggerFactory.getLogger(TargetRespondListenerToResetQueryResultCache.class);
 
     @Override
     public void onTargetRespond(final AjaxRequestTarget target) {
 
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("RESPOND PHASE STARTED: resetting cache");
+        if(log.isDebugEnabled()) {
+            log.debug("RESPOND PHASE STARTED: resetting cache");
         }
 
         final QueryResultsCache queryResultsCache = lookupQueryResultsCache();
@@ -41,14 +37,7 @@ class TargetRespondListenerToResetQueryResultCache implements AjaxRequestTarget.
     }
 
     private QueryResultsCache lookupQueryResultsCache() {
-        return getServicesInjector().lookupService(QueryResultsCache.class).orElse(null);
+        return IsisContext.getServiceRegistry().lookupService(QueryResultsCache.class).orElse(null);
     }
-
-    private ServicesInjector getServicesInjector() {
-        return getSessionFactory().getServicesInjector();
-    }
-
-    private IsisSessionFactory getSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
+    
 }

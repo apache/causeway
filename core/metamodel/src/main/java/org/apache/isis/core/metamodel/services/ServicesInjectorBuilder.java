@@ -24,6 +24,11 @@ import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
 import static org.apache.isis.commons.internal.base._With.computeIfAbsent;
 
+/**
+ * @deprecated JUnit tests need to be migrated. 
+ *
+ */
+@Deprecated
 public class ServicesInjectorBuilder {
 
     private final List<Object> services = new ArrayList<>();

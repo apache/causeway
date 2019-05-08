@@ -100,7 +100,7 @@ public class OneToManyAssociationDefaultTest {
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();
         allowingSpecLoaderToReturnSpecs();
-        association = new OneToManyAssociationDefault(mockPeer, stubServicesInjector);
+        association = new OneToManyAssociationDefault(mockPeer);
     }
 
     private void allowingSpecLoaderToReturnSpecs() {
@@ -134,7 +134,7 @@ public class OneToManyAssociationDefaultTest {
             	oneOf(mockPeer).containsFacet(NotPersistedFacet.class);
                 will(returnValue(false));
 
-                oneOf(mockOwnerAdapter).representsPersistent();
+                oneOf(mockOwnerAdapter).isRepresentingPersistent();
                 will(returnValue(true));
 
                 oneOf(mockAssociatedAdapter).isTransient();

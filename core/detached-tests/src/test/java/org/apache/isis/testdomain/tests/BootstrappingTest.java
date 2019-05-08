@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.commons.internal.resources._Resources;
+import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainIntegTest;
@@ -63,10 +64,11 @@ class BootstrappingTest extends JdoTestDomainIntegTest {
     @Test
     void builtInServicesShouldBeSetUp() throws IOException {
         
-        val serviceRegistry = IsisContext.getServicesInjector();
-        val managedServices = serviceRegistry.streamServiceTypes()
-        .map(Class::getName)
-        .collect(Collectors.toCollection(TreeSet::new));
+        val serviceRegistry = IsisContext.getServiceRegistry();
+        val managedServices = serviceRegistry.streamRegisteredBeans()
+                .map(BeanAdapter::getBeanClass)
+                .map(Class::getName)
+                .collect(Collectors.toCollection(TreeSet::new));
         
         val singletonJson = _Resources.loadAsString(this.getClass(), "builtin-singleton.json", StandardCharsets.UTF_8);
         val singletonSet = new TreeSet<>(_Json.readJsonList(String.class, singletonJson));

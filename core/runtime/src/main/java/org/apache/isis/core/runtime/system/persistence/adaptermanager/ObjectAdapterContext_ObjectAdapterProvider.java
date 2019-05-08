@@ -18,15 +18,10 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -34,13 +29,15 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.factories.OidFactory;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -51,20 +48,19 @@ import org.apache.isis.core.runtime.system.persistence.adaptermanager.factories.
  */
 class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvider {
     
-    @SuppressWarnings("unused")
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_ObjectAdapterProvider.class);
     private final ObjectAdapterContext objectAdapterContext;
-//    private final PersistenceSession persistenceSession;
-    private final ServicesInjector servicesInjector;
+    private final RuntimeContext runtimeContext;
     private final SpecificationLoader specificationLoader; 
     private final OidFactory oidFactory; 
     
-    ObjectAdapterContext_ObjectAdapterProvider(ObjectAdapterContext objectAdapterContext,
-            PersistenceSession persistenceSession) {
+    ObjectAdapterContext_ObjectAdapterProvider(
+            ObjectAdapterContext objectAdapterContext,
+            PersistenceSession persistenceSession, 
+            RuntimeContext runtimeContext) {
+        
         this.objectAdapterContext = objectAdapterContext;
-//        this.persistenceSession = persistenceSession;
-        this.servicesInjector = persistenceSession.getServicesInjector();
-        this.specificationLoader = servicesInjector.getSpecificationLoader();
+        this.runtimeContext = runtimeContext;
+        this.specificationLoader = runtimeContext.getSpecificationLoader();
         
         this.oidFactory = OidFactory.builder(pojo->specificationLoader.loadSpecification(pojo.getClass()))
                 .add(new ObjectAdapterContext_OidProviders.GuardAgainstRootOid())
@@ -90,7 +86,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     
     
     @Override
-    public ObjectAdapter adapterFor(Object pojo, RootOid parentOid, OneToManyAssociation collection) {
+    public ObjectAdapter adapterForCollection(Object pojo, RootOid parentOid, OneToManyAssociation collection) {
 
         requires(parentOid, "parentOid");
         requires(collection, "collection");
@@ -150,7 +146,7 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
     
     private Map<String, ObjectAdapter> initServiceAdapters() {
         
-        return servicesInjector.streamServices()
+        return runtimeContext.getServiceRegistry().streamServices()
         .map(this::adapterFor) 
         .peek(serviceAdapter->{
             Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());

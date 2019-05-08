@@ -29,25 +29,22 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract implements ViewModelFacet {
 
     private final PostConstructMethodCache postConstructMethodCache;
     private final ViewModelFacet.RecreationMechanism recreationMechanism;
-    protected final ServicesInjector servicesInjector;
 
     public static Class<? extends Facet> type() {
         return ViewModelFacet.class;
     }
 
     public RecreatableObjectFacetAbstract(final FacetHolder holder, final RecreationMechanism recreationMechanism,
-            final PostConstructMethodCache postConstructMethodCache, final ServicesInjector servicesInjector) {
+            final PostConstructMethodCache postConstructMethodCache) {
         super(type(), holder);
         this.postConstructMethodCache = postConstructMethodCache;
         this.recreationMechanism = recreationMechanism;
-        this.servicesInjector = servicesInjector;
     }
 
     @Override
@@ -85,7 +82,7 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
             throw new IllegalStateException("This view model instantiates rather than initializes");
         }
         final Object viewModelPojo = doInstantiate(viewModelClass, mementoStr);
-        servicesInjector.injectInto(viewModelPojo);
+        getServiceInjector().injectServicesInto(viewModelPojo);
         invokePostConstructMethod(viewModelPojo);
         return viewModelPojo;
     }
@@ -104,6 +101,7 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
             throw new IllegalStateException("This view model instantiates rather than initializes");
         }
         doInitialize(viewModelPojo, mementoStr);
+        getServiceInjector().injectServicesInto(viewModelPojo);
         invokePostConstructMethod(viewModelPojo);
     }
 
@@ -127,4 +125,5 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
         super.appendAttributesTo(attributeMap);
         attributeMap.put("recreationMechanism", recreationMechanism);
     }
+    
 }

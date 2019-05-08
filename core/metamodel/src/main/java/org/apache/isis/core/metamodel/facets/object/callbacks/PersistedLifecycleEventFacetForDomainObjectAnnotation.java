@@ -23,7 +23,6 @@ import org.apache.isis.applib.events.lifecycle.ObjectPersistedEvent;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class PersistedLifecycleEventFacetForDomainObjectAnnotation extends SingleClassValueFacetAbstract implements LoadedLifecycleEventFacet {
 
@@ -33,9 +32,8 @@ public class PersistedLifecycleEventFacetForDomainObjectAnnotation extends Singl
 
     public PersistedLifecycleEventFacetForDomainObjectAnnotation(
             final FacetHolder holder,
-            final Class<? extends ObjectPersistedEvent<?>> value,
-                    final SpecificationLoader specificationLoader) {
-        super(type(), holder, value, specificationLoader);
+            final Class<? extends ObjectPersistedEvent<?>> value) {
+        super(type(), holder, value);
     }
 
     @Override

@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.properties.defaults.method;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -61,20 +59,7 @@ public class PropertyDefaultFacetViaMethodFactory extends MethodPrefixBasedFacet
         processMethodContext.removeMethod(method);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyDefaultFacetViaMethod(method, property, getSpecificationLoader(), adapterProvider));
+        FacetUtil.addFacet(new PropertyDefaultFacetViaMethod(method, property));
     }
-
-    // ///////////////////////////////////////////////////////
-    // Dependencies (injected)
-    // ///////////////////////////////////////////////////////
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
 
 }

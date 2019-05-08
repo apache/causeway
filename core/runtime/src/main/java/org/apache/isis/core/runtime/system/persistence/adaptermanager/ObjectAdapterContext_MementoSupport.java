@@ -18,16 +18,11 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
-import static org.apache.isis.commons.internal.functions._Predicates.not;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -51,6 +46,10 @@ import org.apache.isis.core.runtime.memento.StandaloneData;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
 
+import static org.apache.isis.commons.internal.functions._Predicates.not;
+
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * package private mixin for ObjectAdapterContext
  * <p>
@@ -58,9 +57,10 @@ import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdap
  * </p>
  * @since 2.0.0-M2
  */
+@Slf4j
 class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSupport {
     
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_MementoSupport.class);
+    
     private final ObjectAdapterContext objectAdapterContext;
     private final PersistenceSession persistenceSession;
     
@@ -92,8 +92,8 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
             updateObject(adapter, data);
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("recreated object {}", adapter.getOid());
+        if (log.isDebugEnabled()) {
+            log.debug("recreated object {}", adapter.getOid());
         }
         return adapter;
     }
@@ -132,8 +132,8 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
 
         updateFieldsAndResolveState(adapter, data);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("object updated {}", adapter.getOid());
+        if (log.isDebugEnabled()) {
+            log.debug("object updated {}", adapter.getOid());
         }
     }
     
@@ -182,7 +182,7 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
                     return false;
                 }
                 if (field.containsFacet(PropertyOrCollectionAccessorFacet.class) && !field.containsFacet(PropertySetterFacet.class)) {
-                    LOG.debug("ignoring not-settable field {}", field.getName());
+                    log.debug("ignoring not-settable field {}", field.getName());
                     return false;
                 }
             }
@@ -223,8 +223,8 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         incoming.stream()
         .filter(original::contains)
         .forEach(elementAdapter->{
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("  association {} changed, added {}", otma, elementAdapter.getOid());
+            if (log.isDebugEnabled()) {
+                log.debug("  association {} changed, added {}", otma, elementAdapter.getOid());
             }
             otma.addElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
         });
@@ -232,8 +232,8 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         original.stream()
         .filter(not(incoming::contains))
         .forEach(elementAdapter->{
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("  association {} changed, removed {}", otma, elementAdapter.getOid());
+            if (log.isDebugEnabled()) {
+                log.debug("  association {} changed, removed {}", otma, elementAdapter.getOid());
             }
             otma.removeElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
         });
@@ -246,8 +246,8 @@ class ObjectAdapterContext_MementoSupport implements MementoRecreateObjectSuppor
         } else {
             final ObjectAdapter ref = recreateReference(assocData);
             if (otoa.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK) != ref) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("  association {} changed to {}", otoa, ref.getOid());
+                if (log.isDebugEnabled()) {
+                    log.debug("  association {} changed to {}", otoa, ref.getOid());
                 }
                 otoa.initAssociation(objectAdapter, ref);
             }

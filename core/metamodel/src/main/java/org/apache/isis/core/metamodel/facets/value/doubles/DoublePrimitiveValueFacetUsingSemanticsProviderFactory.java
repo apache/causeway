@@ -36,7 +36,7 @@ public class DoublePrimitiveValueFacetUsingSemanticsProviderFactory extends Valu
         if (type != double.class) {
             return;
         }
-        addFacets(new DoublePrimitiveValueSemanticsProvider(holder, getContext()));
+        addFacets(new DoublePrimitiveValueSemanticsProvider(holder));
     }
 
 }

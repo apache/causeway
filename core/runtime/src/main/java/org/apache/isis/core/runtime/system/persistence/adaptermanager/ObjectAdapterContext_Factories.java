@@ -18,19 +18,21 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
+import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.ObjectAdapterFactories;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.system.session.IsisSession;
+
+import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -39,18 +41,12 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
  * </p>
  * @since 2.0.0-M2
  */
+//@Slf4j
+@RequiredArgsConstructor
 class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
 
-    private final AuthenticationSession authenticationSession;
-    private final SpecificationLoader specificationLoader;
-    private final PersistenceSession session;
-
-    ObjectAdapterContext_Factories(AuthenticationSession authenticationSession,
-            SpecificationLoader specificationLoader, PersistenceSession session) {
-        this.authenticationSession = authenticationSession;
-        this.specificationLoader = specificationLoader;
-        this.session = session;
-    }
+    private final RuntimeContext runtimeContext;
+    private final PersistenceSession persistenceSession;
 
     @Override
     public ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
@@ -85,7 +81,7 @@ class ObjectAdapterContext_Factories implements ObjectAdapterFactories {
             final Oid oid) {
         return PojoAdapter.of(
                 pojo, oid,
-                authenticationSession,
-                specificationLoader, session);
+                IsisSession.currentOrElseNull(),
+                persistenceSession);
     }
 }

@@ -46,7 +46,7 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
         _Config.put("isis.value.format.int", null);
         
         holder = new FacetHolderImpl();
-        setValue(value = new IntWrapperValueSemanticsProvider(holder, mockServicesInjector));
+        setValue(value = new IntWrapperValueSemanticsProvider(holder));
     }
 
     @Test

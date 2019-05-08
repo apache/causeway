@@ -67,7 +67,7 @@ public class MetaModelValidatorVisiting extends MetaModelValidatorAbstract {
         // all currently known specs
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
-        final Collection<ObjectSpecification> specsToValidate = specificationLoader.allSpecifications();
+        final Collection<ObjectSpecification> specsToValidate = getSpecificationLoader().currentSpecifications();
 
         // don't validate any specs already processed
         specsToValidate.removeAll(specsAlreadyValidated);

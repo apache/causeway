@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.homepage.annotation;
 
+import static org.apache.isis.commons.internal.functions._Predicates.not;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,8 +41,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
-
-import static org.apache.isis.commons.internal.functions._Predicates.not;
 
 public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner{
 

@@ -19,18 +19,15 @@
 
 package org.apache.isis.core.metamodel.facets.object.parseable.annotcfg;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class ParseableFacetFromConfiguration extends ParseableFacetAbstract {
 
     public ParseableFacetFromConfiguration(
             final String candidateParserName,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector,
-            final ObjectAdapterProvider adapterProvider) {
-        super(candidateParserName, null, holder, servicesInjector);
+            final FacetHolder holder) {
+        
+        super(candidateParserName, null, holder);
     }
 }

@@ -40,7 +40,7 @@ public class JavaSqlTimeValueFacetUsingSemanticsProviderFactory extends ValueFac
         if (type != java.sql.Time.class) {
             return;
         }
-        addFacets(new JavaSqlTimeValueSemanticsProvider(holder, getContext()));
+        addFacets(new JavaSqlTimeValueSemanticsProvider(holder));
     }
 
 }

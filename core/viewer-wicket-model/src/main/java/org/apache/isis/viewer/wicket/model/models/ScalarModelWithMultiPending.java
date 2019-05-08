@@ -25,8 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 /**
@@ -76,8 +74,6 @@ public interface ScalarModelWithMultiPending extends Serializable {
                     owner.setMultiPending(adapterMemento);
 
                     final ScalarModel ownerScalarModel = owner.getScalarModel();
-                    final PersistenceSession persistenceSession = ownerScalarModel.getPersistenceSession();
-                    final SpecificationLoader specificationLoader = ownerScalarModel.getSpecificationLoader();
 
                     if(adapterMemento == null) {
                         ownerScalarModel.setObject(null);
@@ -87,8 +83,7 @@ public interface ScalarModelWithMultiPending extends Serializable {
                             LOG.debug("setting to pending: {}", ownerPending.toString());
                             final ObjectSpecId objectSpecId = ownerScalarModel.getTypeOfSpecification().getSpecId();
                             ownerScalarModel.setObjectMemento(
-                                    ObjectAdapterMemento.createForList(adapterMemento, objectSpecId),
-                                    persistenceSession, specificationLoader);
+                                    ObjectAdapterMemento.ofMementoList(adapterMemento, objectSpecId));
                         }
                     }
                 }

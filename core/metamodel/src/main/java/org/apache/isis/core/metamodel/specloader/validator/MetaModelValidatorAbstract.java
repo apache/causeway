@@ -19,18 +19,21 @@
 
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.MetaModelContext;
 
-public abstract class MetaModelValidatorAbstract implements MetaModelValidator {
-
-    protected SpecificationLoader specificationLoader;
+public abstract class MetaModelValidatorAbstract implements MetaModelValidator, MetaModelContext.Delegating {
 
     @Override
-    public void init(final SpecificationLoader specificationLoader) {
-        this.specificationLoader = specificationLoader;
+    public void init() {
     }
 
     @Override
     public void shutdown() {
     }
+    
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return MetaModelContext.current();
+    }
+    
 }

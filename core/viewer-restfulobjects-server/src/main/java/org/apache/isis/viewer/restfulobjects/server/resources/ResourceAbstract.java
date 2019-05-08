@@ -32,48 +32,31 @@ import javax.ws.rs.ext.Providers;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.url.UrlDecoderUtil;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
-import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
+
+import lombok.val;
 
 public abstract class ResourceAbstract {
 
-    @Context
-    HttpHeaders httpHeaders;
-
-    @Context
-    UriInfo uriInfo;
-
-    @Context
-    Request request;
-
-    @Context
-    HttpServletRequest httpServletRequest;
-
-    @Context
-    HttpServletResponse httpServletResponse;
-
-    @Context
-    SecurityContext securityContext;
-
-    @Context
-    Providers providers;
-
+    @Context HttpHeaders httpHeaders;
+    @Context UriInfo uriInfo;
+    @Context Request request;
+    @Context HttpServletRequest httpServletRequest;
+    @Context HttpServletResponse httpServletResponse;
+    @Context SecurityContext securityContext;
+    @Context Providers providers;
+    
     private ResourceContext resourceContext;
 
     protected void init(
@@ -109,15 +92,18 @@ public abstract class ResourceAbstract {
             final Where where,
             final RepresentationService.Intent intent,
             final String urlUnencodedQueryString) {
-        if (!getIsisSessionFactory().inSession()) {
+        if (!IsisContext.getSessionFactory().isInSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
-        if (getAuthenticationSession() == null) {
+        if (IsisContext.getAuthenticationSession() == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
         }
 
         this.resourceContext = new ResourceContext(
-                representationType, httpHeaders, providers, uriInfo, request, where, intent, urlUnencodedQueryString, httpServletRequest, httpServletResponse,
+                representationType, 
+                httpHeaders, providers, uriInfo, request, 
+                where, intent, urlUnencodedQueryString, 
+                httpServletRequest, httpServletResponse,
                 securityContext,
                 InteractionInitiatedBy.USER);
     }
@@ -128,7 +114,8 @@ public abstract class ResourceAbstract {
 
 
     protected void setCommandExecutor(Command.Executor executor) {
-        getServicesInjector().lookupServiceElseFail(CommandContext.class).getCommand().internal().setExecutor(executor);
+    	resourceContext.getServiceRegistry()
+    	.lookupServiceElseFail(CommandContext.class).getCommand().internal().setExecutor(executor);
     }
 
     // //////////////////////////////////////////////////////////////
@@ -139,63 +126,31 @@ public abstract class ResourceAbstract {
         ObjectAdapter objectAdapter = getObjectAdapterElseNull(domainType, instanceId);
 
         if (objectAdapter == null) {
-            final String instanceIdUnencoded = org.apache.isis.viewer.restfulobjects.server.util.UrlDecoderUtils.urlDecode(instanceId);
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, "could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded);
+            final String instanceIdUnencoded = org.apache.isis.viewer.restfulobjects.rendering.UrlDecoderUtils.urlDecode(instanceId);
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
+            		"Could not determine adapter for OID: '%s:%s'", domainType, instanceIdUnencoded);
         }
         return objectAdapter;
     }
 
     protected ObjectAdapter getObjectAdapterElseNull(String domainType, final String instanceId) {
-        return OidUtils.getObjectAdapterElseNull(resourceContext, domainType, instanceId);
+        return resourceContext.getObjectAdapterElseNull(domainType, instanceId);
     }
 
     protected ObjectAdapter getServiceAdapter(final String serviceId) {
-        final ObjectAdapter serviceAdapter = getPersistenceSession().lookupService(serviceId);
-        if(serviceAdapter!=null) {
-            return serviceAdapter;
+    	
+    	val metaModelContext = MetaModelContext.current();
+    	
+        final ObjectAdapter serviceAdapter = metaModelContext.lookupServiceAdapterById(serviceId);
+        if(serviceAdapter==null) {
+        	throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, 
+            		"Could not locate service '%s'", serviceId);    
         }
-        throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.NOT_FOUND, "Could not locate service '%s'", serviceId);
-    }
-
-
-    // //////////////////////////////////////////////////////////////
-    // Dependencies (from singletons)
-    // //////////////////////////////////////////////////////////////
-
-    protected IsisConfiguration getConfiguration () {
-        return getIsisSessionFactory().getConfiguration();
-    }
-
-    protected ServicesInjector getServicesInjector () {
-        return getIsisSessionFactory().getServicesInjector();
-    }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
-    }
-
-    protected AuthenticationManager getAuthenticationManager() {
-        return getIsisSessionFactory().getAuthenticationManager();
+        return serviceAdapter;
     }
 
     protected SpecificationLoader getSpecificationLoader() {
-        return getIsisSessionFactory().getSpecificationLoader();
-    }
-
-    protected PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
-    }
-
-    protected IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
-
-    // //////////////////////////////////////////////////////////////
-    // Dependencies (injected via @Context)
-    // //////////////////////////////////////////////////////////////
-
-    protected HttpServletRequest getServletRequest() {
-        return getResourceContext().getHttpServletRequest();
+        return resourceContext.getSpecificationLoader();
     }
 
 }

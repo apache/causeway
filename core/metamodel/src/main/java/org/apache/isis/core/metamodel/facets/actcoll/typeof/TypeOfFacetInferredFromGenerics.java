@@ -20,12 +20,11 @@
 package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class TypeOfFacetInferredFromGenerics extends TypeOfFacetAbstract {
 
-    public TypeOfFacetInferredFromGenerics(final Class<?> type, final FacetHolder holder, final SpecificationLoader specificationLookup) {
-        super(type, holder, specificationLookup);
+    public TypeOfFacetInferredFromGenerics(final Class<?> type, final FacetHolder holder) {
+        super(type, holder);
     }
 
 }

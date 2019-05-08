@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class ParseableFacetAbstract extends FacetAbstract implements ParseableFacet {
 
@@ -38,20 +37,19 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
     public ParseableFacetAbstract(
             final String candidateParserName,
             final Class<?> candidateParserClass,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
+            final FacetHolder holder) {
+        
         super(ParseableFacet.class, holder, Derivation.NOT_DERIVED);
 
         this.parserClass = ParserUtil.parserOrNull(candidateParserClass, candidateParserName);
         this.parseableFacetUsingParser = isValid()?
-                createParser(holder, servicesInjector):null;
+                createParser(holder):null;
     }
 
     private ParseableFacetUsingParser createParser(
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
+            final FacetHolder holder) {
         final Parser<?> parser = (Parser<?>) ClassExtensions.newInstance(parserClass, FacetHolder.class, holder);
-        return new ParseableFacetUsingParser(parser, holder, servicesInjector);
+        return new ParseableFacetUsingParser(parser, holder);
     }
 
     /**

@@ -19,14 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.param.choices.enums;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends FacetFactoryAbstract {
 
@@ -48,23 +46,8 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
             return;
         }
 
-        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(
-                facetHolder,
-                getSpecificationLoader(),
-                getAuthenticationSessionProvider(),
-                adapterProvider));
+        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(facetHolder));
     }
 
-    // /////////////////////////////////////////////
-    // Injected
-    // /////////////////////////////////////////////
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
 
 }

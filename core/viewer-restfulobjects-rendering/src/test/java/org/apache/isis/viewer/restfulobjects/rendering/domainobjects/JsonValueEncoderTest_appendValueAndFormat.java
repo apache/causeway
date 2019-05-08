@@ -60,7 +60,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
 
     @Before
     public void setUp() {
-        JsonValueEncoder.testSetAdapterManager(mockAdapterManager);
+        JsonValueEncoder.testSetAdapterManager(mockAdapterManager::adapterFor);
 
         representation = JsonRepresentation.newMap();
     }

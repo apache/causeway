@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
@@ -36,10 +34,11 @@ import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
@@ -49,14 +48,17 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.Util.LowestCommonSuperclassFinder;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
+import lombok.val;
 
 /**
  * Model representing a collection of entities, either {@link Type#STANDALONE
@@ -67,8 +69,8 @@ import org.apache.isis.viewer.wicket.model.models.Util.LowestCommonSuperclassFin
  * So that the model is {@link Serializable}, the {@link ObjectAdapter}s within
  * the collection are stored as {@link ObjectAdapterMemento}s.
  */
-public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> implements LinksProvider,
-UiHintContainer {
+public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> 
+implements LinksProvider, UiHintContainer {
 
     private static final long serialVersionUID = 1L;
 
@@ -88,43 +90,40 @@ UiHintContainer {
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
 
-                final boolean bulkLoad = entityCollectionModel.getPersistenceSession().getConfiguration()
-                        .getBoolean(KEY_BULK_LOAD, false);
-                final Iterable<ObjectAdapter> values = bulkLoad
+                val isBulkLoad = IsisContext.getConfiguration().getBoolean(KEY_BULK_LOAD, false);
+                final Stream<ObjectAdapter> resolveResults = isBulkLoad
                         ? loadInBulk(entityCollectionModel)
                                 : loadOneByOne(entityCollectionModel);
-                        return _Lists.newArrayList(values);
+                return resolveResults.collect(Collectors.toList());
             }
 
-            private Iterable<ObjectAdapter> loadInBulk(final EntityCollectionModel model) {
+            private Stream<ObjectAdapter> loadInBulk(final EntityCollectionModel model) {
 
-                final PersistenceSession persistenceSession = model.getPersistenceSession();
+                val persistenceSession = IsisContext.getPersistenceSession().orElseThrow(()->_Exceptions.unrecoverable("no PersistenceSession available"));
 
                 final Stream<RootOid> rootOids = stream(model.mementoList)
-                        .map(ObjectAdapterMemento.Functions.toOid());
+                        .map(ObjectAdapterMemento::asBookmarkIfSupported)
+                        .filter(_NullSafe::isPresent)
+                        .map(Oid.Factory::ofBookmark);
                 
                 final Map<RootOid, ObjectAdapter> adaptersByOid = persistenceSession.adaptersFor(rootOids);
                 final Collection<ObjectAdapter> adapterList = adaptersByOid.values();
                 return stream(adapterList)
-                        .filter(_NullSafe::isPresent)
-                        .collect(Collectors.toList());
+                        .filter(_NullSafe::isPresent);
             }
 
-            private Iterable<ObjectAdapter> loadOneByOne(final EntityCollectionModel model) {
+            private Stream<ObjectAdapter> loadOneByOne(final EntityCollectionModel model) {
+                
                 return stream(model.mementoList)
-                        .map(ObjectAdapterMemento.Functions.fromMemento(
-                                ConcurrencyChecking.NO_CHECK,
-                                model.getPersistenceSession(),
-                                model.getSpecificationLoader()))
-                        .filter(_NullSafe::isPresent)
-                        .collect(Collectors.toList());
+                        .map(ObjectAdapterMemento::getObjectAdapter)
+                        .filter(_NullSafe::isPresent);
             }
 
             @Override
             void setObject(final EntityCollectionModel entityCollectionModel, final List<ObjectAdapter> list) {
 
                 entityCollectionModel.mementoList = _NullSafe.stream(list)
-                        .map(ObjectAdapterMemento.Functions.toMemento())
+                        .map(ObjectAdapterMemento::ofAdapter)
                         .filter(_NullSafe::isPresent)
                         .collect(Collectors.toList());
             }
@@ -158,9 +157,7 @@ UiHintContainer {
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
 
-                final ObjectAdapter adapter = entityCollectionModel.getParentObjectAdapterMemento().getObjectAdapter(
-                        ConcurrencyChecking.NO_CHECK, entityCollectionModel.getPersistenceSession(),
-                        entityCollectionModel.getSpecificationLoader());
+                final ObjectAdapter adapter = entityCollectionModel.getParentObjectAdapterMemento().getObjectAdapter();
 
                 final OneToManyAssociation collection = entityCollectionModel.collectionMemento.getCollection(
                         entityCollectionModel.getSpecificationLoader());
@@ -173,13 +170,14 @@ UiHintContainer {
                 if(sortedBy != null) {
                     @SuppressWarnings("unchecked")
                     final Comparator<Object> comparator = (Comparator<Object>) InstanceUtil.createInstance(sortedBy);
-                    entityCollectionModel.getIsisSessionFactory().getServicesInjector().injectServicesInto(comparator);
+                    IsisContext.getServiceInjector().injectServicesInto(comparator);
                     Collections.sort(objectList, comparator);
                 }
 
+                val pojoToAdapter = IsisContext.pojoToAdapter();
+
                 final List<ObjectAdapter> adapterList =
-                        _Lists.map(objectList,
-                                entityCollectionModel.getPersistenceSession()::adapterFor);
+                        _Lists.map(objectList, pojoToAdapter);
 
                 return adapterList;
             }
@@ -237,10 +235,7 @@ UiHintContainer {
      * Factory.
      */
     public static EntityCollectionModel createStandalone(
-            final ObjectAdapter collectionAsAdapter,
-            final IsisSessionFactory sessionFactory) {
-
-        final PersistenceSession persistenceSession = sessionFactory.getCurrentSession().getPersistenceSession();
+            final ObjectAdapter collectionAsAdapter) {
 
         // dynamically determine the spec of the elements
         // (ie so a List<Object> can be rendered according to the runtime type of its elements,
@@ -249,11 +244,13 @@ UiHintContainer {
 
         final List<ObjectAdapterMemento> mementoList = streamElementsOf(collectionAsAdapter) // pojos
                 .peek(lowestCommonSuperclassFinder::collect)
-                .map(ObjectAdapterMemento.Functions.fromPojo(persistenceSession))
+                .map(ObjectAdapterMemento::ofPojo)
                 .collect(Collectors.toList());
 
+        val specificationLoader = IsisContext.getSpecificationLoader();
+        
         final ObjectSpecification elementSpec = lowestCommonSuperclassFinder.getLowestCommonSuperclass()
-                .map(sessionFactory.getSpecificationLoader()::loadSpecification)
+                .map(specificationLoader::loadSpecification)
                 .orElse(collectionAsAdapter.getSpecification().getElementSpecification());
 
         final Class<?> elementType;
@@ -359,7 +356,7 @@ UiHintContainer {
         final OneToManyAssociation collection = collectionFor(entityModel.getObjectAdapterMemento(), getLayoutData());
         this.typeOf = forName(collection.getSpecification());
 
-        this.collectionMemento = new CollectionMemento(collection, entityModel.getIsisSessionFactory());
+        this.collectionMemento = new CollectionMemento(collection);
 
         this.pageSize = pageSize(collection.getFacet(PagedFacet.class), PAGE_SIZE_DEFAULT_FOR_PARENTED);
 
@@ -378,14 +375,14 @@ UiHintContainer {
         }
         final String collectionId = collectionLayoutData.getId();
         final ObjectSpecId objectSpecId = parentObjectAdapterMemento.getObjectSpecId();
-        final ObjectSpecification objectSpec = getIsisSessionFactory().getSpecificationLoader().lookupBySpecId(objectSpecId);
+        final ObjectSpecification objectSpec = IsisContext.getSpecificationLoader().lookupBySpecId(objectSpecId);
         final OneToManyAssociation otma = (OneToManyAssociation) objectSpec.getAssociation(collectionId);
         return otma;
     }
 
     private static Class<?> forName(final ObjectSpecification objectSpec) {
         final String fullName = objectSpec.getFullIdentifier();
-        return ClassUtil.forName(fullName);
+        return ClassUtil.forNameElseFail(fullName);
     }
 
 
@@ -453,7 +450,7 @@ UiHintContainer {
      */
     public void setObjectList(ObjectAdapter resultAdapter) {
         this.mementoList = streamElementsOf(resultAdapter)
-                .map(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))
+                .map(ObjectAdapterMemento::ofPojo)
                 .collect(Collectors.toList());
     }
 
@@ -488,7 +485,7 @@ UiHintContainer {
 
 
     public void toggleSelectionOn(ObjectAdapter selectedAdapter) {
-        ObjectAdapterMemento selectedAsMemento = ObjectAdapterMemento.createOrNull(selectedAdapter);
+        ObjectAdapterMemento selectedAsMemento = ObjectAdapterMemento.ofAdapter(selectedAdapter);
 
         // try to remove; if couldn't, then mustn't have been in there, in which case add.
         boolean removed = toggledMementosList.remove(selectedAsMemento);

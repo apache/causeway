@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigInteger> implements BigIntegerValueFacet {
@@ -50,12 +49,12 @@ public class BigIntegerValueSemanticsProvider extends ValueSemanticsProviderAndF
      * {@link EncoderDecoder}.
      */
     public BigIntegerValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public BigIntegerValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+    public BigIntegerValueSemanticsProvider(final FacetHolder holder) {
 
-        super(type(), holder, BigInteger.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
+        super(type(), holder, BigInteger.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
         format = determineNumberFormat("value.format.int");
     }
 

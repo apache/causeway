@@ -19,39 +19,34 @@
 
 package org.apache.isis.core.runtime.authorization.standard;
 
-import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Vetoed;
+import javax.inject.Inject;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.runtime.authorization.AuthorizationManagerAbstract;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 
-public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
+@Vetoed
+public class AuthorizationManagerStandard implements AuthorizationManager {
 
-    private Authorizor authorizor;
-
-    // /////////////////////////////////////////////////////////
-    // Constructor
-    // /////////////////////////////////////////////////////////
-
-    public AuthorizationManagerStandard() {
-        super();
-        // avoid null pointers
-        authorizor = Authorizor.nop();
-    }
 
     // /////////////////////////////////////////////////////////
     // init, shutddown
     // /////////////////////////////////////////////////////////
 
+    @PostConstruct
     @Override
     public void init() {
         authorizor.init();
     }
 
+    @PreDestroy
     @Override
     public void shutdown() {
         authorizor.shutdown();
@@ -72,11 +67,12 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
         if (authorizor.isUsableInAnyRole(identifier)) {
             return true;
         }
-        for (final String roleName : session.getRoles()) {
-            if (authorizor.isUsableInRole(roleName, identifier)) {
-                return true;
-            }
+        
+        if(session.streamRoles()
+                .anyMatch(roleName->authorizor.isUsableInRole(roleName, identifier)) ) {
+            return true;
         }
+        
         return false;
     }
 
@@ -97,46 +93,26 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
         if (authorizor.isVisibleInAnyRole(identifier)) {
             return true;
         }
-        for (final String roleName : session.getRoles()) {
-            if (authorizor.isVisibleInRole(roleName, identifier)) {
-                return true;
-            }
+        if(session.streamRoles()
+                .anyMatch(roleName->authorizor.isVisibleInRole(roleName, identifier)) ) {
+            return true;
         }
         return false;
     }
 
     private static boolean containsSudoSuperuserRole(final AuthenticationSession session) {
-        final List<String> roles = session.getRoles();
-        return roles != null && roles.contains(SudoService.ACCESS_ALL_ROLE);
+        return session.hasRole(SudoService.ACCESS_ALL_ROLE);
     }
 
     private boolean isPerspectiveMember(final Identifier identifier) {
         return (identifier.getClassName().equals(""));
     }
 
-
-    // //////////////////////////////////////////////////
-    // MetaModelRefiner impl
-    // //////////////////////////////////////////////////
-
-    @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite baseMetaModelValidator) {
-        // no-op
-    }
-
-    @Override
-    public void refineProgrammingModel(ProgrammingModel baseProgrammingModel) {
-        final AuthorizationFacetFactory facetFactory = new AuthorizationFacetFactory(this);
+    public static void refineProgrammingModel(@Observes ProgrammingModel baseProgrammingModel) {
+        final AuthorizationFacetFactory facetFactory = new AuthorizationFacetFactory();
         baseProgrammingModel.addFactory(facetFactory);
     }
 
-
-    // //////////////////////////////////////////////////
-    // Dependencies (injected)
-    // //////////////////////////////////////////////////
-
-    protected void setAuthorizor(final Authorizor authorisor) {
-        this.authorizor = authorisor;
-    }
+    @Inject protected Authorizor authorizor;
 
 }

@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -35,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -85,9 +83,7 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
             FacetUtil.addFacet(
                     new ActionParameterAutoCompleteFacetViaMethod(
-                            autoCompleteMethod, paramType, paramAsHolder,
-                            getSpecificationLoader(),
-                            getAuthenticationSessionProvider(), adapterProvider));
+                            autoCompleteMethod, paramType, paramAsHolder));
         }
     }
 
@@ -102,18 +98,5 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
         final String name = MethodPrefixConstants.AUTO_COMPLETE_PREFIX + paramNum + capitalizedName;
         return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, returnTypes, new Class[]{String.class});
     }
-
-    // ///////////////////////////////////////////////////////////////
-    // Dependencies
-    // ///////////////////////////////////////////////////////////////
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
 
 }

@@ -70,7 +70,7 @@ extends ObjectAdapterMementoProviderAbstract {
         final List<ObjectAdapter> autoCompleteAdapters =
                 autoCompleteFacet.execute(term,
                         InteractionInitiatedBy.USER);
-        return _Lists.map(autoCompleteAdapters, ObjectAdapterMemento.Functions.fromAdapter());
+        return _Lists.map(autoCompleteAdapters, ObjectAdapterMemento::ofAdapter);
     }
 
     @Override
@@ -80,7 +80,7 @@ extends ObjectAdapterMementoProviderAbstract {
                     return null;
                 }
                 final RootOid oid = RootOid.deString(input);
-                final ObjectAdapterMemento oam = ObjectAdapterMemento.createPersistent(oid);
+                final ObjectAdapterMemento oam = ObjectAdapterMemento.ofRootOid(oid);
                 return oam;
         };
         return _NullSafe.stream(ids).map(function).collect(Collectors.toList());

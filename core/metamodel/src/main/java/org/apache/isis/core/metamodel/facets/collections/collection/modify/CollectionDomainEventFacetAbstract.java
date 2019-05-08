@@ -36,8 +36,6 @@ import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class CollectionDomainEventFacetAbstract extends SingleClassValueFacetAbstract implements CollectionDomainEventFacet {
 
@@ -47,17 +45,16 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
 
     public CollectionDomainEventFacetAbstract(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
-                    final FacetHolder holder,
-                    final ServicesInjector servicesInjector,
-                    final SpecificationLoader specificationLoader) {
-        super(CollectionDomainEventFacet.class, holder, eventType, specificationLoader);
+                    final FacetHolder holder) {
+        
+        super(CollectionDomainEventFacet.class, holder, eventType);
         this.eventType = eventType;
 
-        this.translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
+        this.translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
 
-        domainEventHelper = new DomainEventHelper(servicesInjector);
+        domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
 
     private Class<? extends CollectionDomainEvent<?, ?>> eventType;

@@ -23,12 +23,14 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class ValueFacetUsingSemanticsProvider extends ValueFacetAbstract {
 
-    public ValueFacetUsingSemanticsProvider(final ValueSemanticsProvider<?> adapter, final Facet underlyingValueTypeFacet, final ServicesInjector context) {
-        super(adapter, AddFacetsIfInvalidStrategy.DO_ADD, underlyingValueTypeFacet.getFacetHolder(), context);
+    public ValueFacetUsingSemanticsProvider(
+            final ValueSemanticsProvider<?> adapter, 
+            final Facet underlyingValueTypeFacet) {
+        
+        super(adapter, AddFacetsIfInvalidStrategy.DO_ADD, underlyingValueTypeFacet.getFacetHolder());
 
         // add the adapter in as its own facet (eg StringFacet).
         // This facet is almost certainly superfluous; there is nothing in the

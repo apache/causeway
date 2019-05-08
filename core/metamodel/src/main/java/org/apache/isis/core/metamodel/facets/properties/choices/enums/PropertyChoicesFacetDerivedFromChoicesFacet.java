@@ -27,18 +27,16 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoicesFacetAbstract {
 
-    public PropertyChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder, final SpecificationLoader specificationLookup) {
-        super(holder, specificationLookup);
+    public PropertyChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder) {
+        super(holder);
     }
 
     @Override
     public Object[] getChoices(
             final ObjectAdapter adapter,
-            final SpecificationLoader specificationLoader,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final FacetHolder facetHolder = getFacetHolder();
@@ -49,10 +47,6 @@ public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoices
             return _Constants.emptyObjects;
         }
         return choicesFacet.getChoices(adapter, interactionInitiatedBy);
-    }
-
-    public ObjectSpecification getSpecification(final Class<?> type) {
-        return type == null ? null : getSpecificationLoader().loadSpecification(type);
     }
 
 }

@@ -22,7 +22,6 @@ package org.apache.isis.core.wrapper;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -37,7 +36,6 @@ import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -62,7 +60,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.runtime.services.command.CommandDtoServiceInternalDefault;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
@@ -149,20 +146,20 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         context.checking(new Expectations() {
             {
-                allowing(mockIsisSessionFactory).getServicesInjector();
-                will(returnValue(mockServicesInjector));
+//                allowing(mockIsisSessionFactory).getServicesInjector();
+//                will(returnValue(mockServicesInjector));
 
                 allowing(mockIsisSessionFactory).getSpecificationLoader();
                 will(returnValue(mockSpecificationLoader));
 
-                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-                will(returnValue(mockPersistenceSessionServiceInternal));
+//                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+//                will(returnValue(mockPersistenceSessionServiceInternal));
 
                 allowing(mockPersistenceSessionServiceInternal).adapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
 
-                allowing(mockServicesInjector).getAuthenticationSessionProvider();
-                will(returnValue(mockAuthenticationSessionProvider));
+//                allowing(mockServicesInjector).getAuthenticationSessionProvider();
+//                will(returnValue(mockAuthenticationSessionProvider));
 
                 allowing(mockEmployeeAdapter).getOid();
                 will(returnValue(Factory.persistentOf(ObjectSpecId.of("EMP"), "1")));
@@ -173,11 +170,11 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockStringSpec).getCorrespondingClass();
                 will(returnValue(String.class));
 
-                allowing(mockServicesInjector).lookupService(CommandContext.class);
-                will(returnValue(Optional.of(mockCommandContext)));
-
-                allowing(mockServicesInjector).lookupService(CommandDtoServiceInternal.class);
-                will(returnValue(Optional.of(mockCommandDtoServiceInternal)));
+//                allowing(mockServicesInjector).lookupService(CommandContext.class);
+//                will(returnValue(Optional.of(mockCommandContext)));
+//
+//                allowing(mockServicesInjector).lookupService(CommandDtoServiceInternal.class);
+//                will(returnValue(Optional.of(mockCommandDtoServiceInternal)));
 
                 allowing(mockCommandDtoServiceInternal).asCommandDto(with(any(List.class)), with(any(OneToOneAssociation.class)), with(any(ObjectAdapter.class)));
                 will(returnValue(new CommandDto()));
@@ -185,14 +182,14 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockCommandContext).getCommand();
                 will(returnValue(mockCommand));
 
-                allowing(mockServicesInjector).lookupServiceElseFail(CommandDtoServiceInternal.class);
-                will(returnValue(new CommandDtoServiceInternalDefault()));
-
-                allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
-                will(returnValue(mockAuthenticationSessionProvider));
-
-                allowing(mockServicesInjector).getSpecificationLoader();
-                will(returnValue(mockSpecificationLoader));
+//                allowing(mockServicesInjector).lookupServiceElseFail(CommandDtoServiceInternal.class);
+//                will(returnValue(new CommandDtoServiceInternalDefault()));
+//
+//                allowing(mockServicesInjector).lookupServiceElseFail(AuthenticationSessionProvider.class);
+//                will(returnValue(mockAuthenticationSessionProvider));
+//
+//                allowing(mockServicesInjector).getSpecificationLoader();
+//                will(returnValue(mockSpecificationLoader));
 
                 allowing(mockSpecificationLoader).loadSpecification(String.class);
                 will(returnValue(mockStringSpec));
@@ -245,13 +242,12 @@ public class WrapperFactoryDefaultTest_wrappedObject {
         final Method employeeClearNameMethod = methodOf(Employee.class, "clearName");
         employeeNameMember = new OneToOneAssociationDefault(
                 facetedMethodForProperty(
-                        employeeSetNameMethod, employeeGetNameMethod, employeeModifyNameMethod, employeeClearNameMethod, employeeHideNameMethod, employeeDisableNameMethod, employeeValidateNameMethod),
-                mockServicesInjector);
+                        employeeSetNameMethod, employeeGetNameMethod, employeeModifyNameMethod, employeeClearNameMethod, employeeHideNameMethod, employeeDisableNameMethod, employeeValidateNameMethod));
 
         context.checking(new Expectations() {
             {
-                allowing(mockServicesInjector).lookupServiceElseFail(WrapperFactory.class);
-                will(returnValue(wrapperFactory));
+//                allowing(mockServicesInjector).lookupServiceElseFail(WrapperFactory.class);
+//                will(returnValue(wrapperFactory));
 
                 allowing(mockEmployeeSpec).getMember(employeeGetNameMethod);
                 will(returnValue(employeeNameMember));
@@ -268,7 +264,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 allowing(mockEmployeeAdapter).getPojo();
                 will(returnValue(employeeDO));
 
-                allowing(mockEmployeeAdapter).representsPersistent();
+                allowing(mockEmployeeAdapter).isRepresentingPersistent();
                 will(returnValue(true));
             }
         });
@@ -419,10 +415,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private FacetedMethod facetedMethodForProperty(
             Method init, Method accessor, Method modify, Method clear, Method hide, Method disable, Method validate) {
         FacetedMethod facetedMethod = FacetedMethod.createForProperty(accessor.getDeclaringClass(), accessor);
-        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(mockOnType, accessor, facetedMethod,
-                mockSpecificationLoader,
-                mockAuthenticationSessionProvider, mockAdapterManager
-        ));
+        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(mockOnType, accessor, facetedMethod));
         FacetUtil.addFacet(new PropertyInitializationFacetViaSetterMethod(init, facetedMethod));
         FacetUtil.addFacet(new PropertySetterFacetViaModifyMethod(modify, facetedMethod));
         FacetUtil.addFacet(new PropertyClearFacetViaClearMethod(clear, facetedMethod));

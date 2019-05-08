@@ -21,13 +21,14 @@ package org.apache.isis.viewer.wicket.ui.components.about;
 
 import java.io.InputStream;
 
-import com.google.inject.name.Named;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-import org.apache.wicket.markup.html.basic.Label;
-
+import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.viewer.wicket.model.models.AboutModel;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.wicket.markup.html.basic.Label;
 
 /**
  * {@link PanelAbstract Panel} displaying welcome message (as used on
@@ -39,17 +40,8 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
 
     private static final String ID_MANIFEST_ATTRIBUTES = "manifestAttributes";
 
-    @com.google.inject.Inject
-    @Named("applicationName")
-    private String applicationName;
-
-    @com.google.inject.Inject
-    @Named("applicationVersion")
-    private String applicationVersion;
-
-    @com.google.inject.Inject
-    @Named("aboutMessage")
-    private String aboutMessage;
+    @Inject
+    private WebAppConfigBean webAppConfigBean;
 
     private static final String ID_APPLICATION_NAME = "applicationName";
     private static final String ID_APPLICATION_VERSION = "applicationVersion";
@@ -58,6 +50,7 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
 
     public static class LabelVisibleOnlyIfNonEmpty extends Label {
 
+        private static final long serialVersionUID = 1L;
         private final String label;
 
         public LabelVisibleOnlyIfNonEmpty(final String id, final String label) {
@@ -78,7 +71,7 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
      *     Is <code>transient</code> because
      * </p>
      */
-    @com.google.inject.Inject
+    @Inject
     @Named("metaInfManifest")
     private transient InputStream metaInfManifestIs;
 
@@ -87,9 +80,9 @@ public class AboutPanel extends PanelAbstract<AboutModel> {
     public AboutPanel(final String id) {
         super(id);
 
-        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, applicationName));
-        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, applicationVersion));
-        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, aboutMessage));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_NAME, webAppConfigBean.getApplicationName()));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_APPLICATION_VERSION, webAppConfigBean.getApplicationVersion()));
+        add(new LabelVisibleOnlyIfNonEmpty(ID_ABOUT_MESSAGE, webAppConfigBean.getAboutMessage()));
 
         if(jarManifestModel == null) {
             jarManifestModel = new JarManifestModel(metaInfManifestIs);

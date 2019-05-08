@@ -60,8 +60,6 @@ import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
 
-
-
     public ActionAnnotationFacetFactory() {
         super(FeatureType.ACTIONS_ONLY);
     }
@@ -112,10 +110,10 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                     .findFirst()
                     .map(domainEvent ->
                     (ActionDomainEventFacetAbstract) new ActionDomainEventFacetForActionAnnotation(
-                            defaultFromDomainObjectIfRequired(typeSpec, domainEvent), servicesInjector, getSpecificationLoader(), holder))
+                            defaultFromDomainObjectIfRequired(typeSpec, domainEvent), holder))
                     .orElse(
                             new ActionDomainEventFacetDefault(
-                                    defaultFromDomainObjectIfRequired(typeSpec, ActionDomainEvent.Default.class), servicesInjector, getSpecificationLoader(), holder)
+                                    defaultFromDomainObjectIfRequired(typeSpec, ActionDomainEvent.Default.class), holder)
                             );
 
             if(EventUtil.eventTypeIsPostable(
@@ -132,16 +130,12 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
             final ActionInvocationFacetForDomainEventAbstract actionInvocationFacet;
             if (actionDomainEventFacet instanceof ActionDomainEventFacetForActionAnnotation) {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionAnnotation(
-                        actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder,
-                        servicesInjector
-                        );
+                        actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder);
             } else
                 // default
             {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
-                        actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder,
-                        servicesInjector
-                        );
+                        actionDomainEventFacet.getEventType(), actionMethod, typeSpec, returnSpec, holder);
             }
             FacetUtil.addFacet(actionInvocationFacet);
 
@@ -216,7 +210,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
         }
 
         // check for @Action(command=...)
-        CommandFacet commandFacet = CommandFacetForActionAnnotation.create(actions, getConfiguration(), servicesInjector, holder);
+        CommandFacet commandFacet = CommandFacetForActionAnnotation.create(actions, getConfiguration(), getServiceInjector(), holder);
 
         FacetUtil.addFacet(commandFacet);
     }
@@ -259,20 +253,19 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract {
                 .map(Action::typeOf)
                 .filter(typeOf -> typeOf != null && typeOf != Object.class)
                 .findFirst()
-                .map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, getSpecificationLoader(), holder))
+                .map(typeOf -> new TypeOfFacetForActionAnnotation(typeOf, holder))
                 .orElse(null);
 
         // infer from return type
         if(typeOfFacet == null) {
             final Class<?> returnType = method.getReturnType();
-            typeOfFacet = TypeOfFacet.Util.inferFromArrayType(holder, returnType, getSpecificationLoader());
+            typeOfFacet = TypeOfFacet.Util.inferFromArrayType(holder, returnType);
         }
 
         // infer from generic return type
         if(typeOfFacet == null) {
             final Class<?> cls = processMethodContext.getCls();
-            typeOfFacet = TypeOfFacet.Util.inferFromGenericReturnType(cls, method, holder,
-                    getSpecificationLoader());
+            typeOfFacet = TypeOfFacet.Util.inferFromGenericReturnType(cls, method, holder);
         }
 
         FacetUtil.addFacet(typeOfFacet);

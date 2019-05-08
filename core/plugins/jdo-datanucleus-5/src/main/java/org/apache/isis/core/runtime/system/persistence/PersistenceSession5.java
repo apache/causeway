@@ -67,12 +67,14 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFac
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
+import org.apache.isis.core.metamodel.spec.ManagedObjectState;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
+import org.apache.isis.core.runtime.memento.Data;
+import org.apache.isis.core.runtime.persistence.FixturesInstalledState;
+import org.apache.isis.core.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
@@ -84,7 +86,6 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllIns
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext;
-import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -98,6 +99,8 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSe
 import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
+import lombok.val;
+
 /**
  * A wrapper around the JDO {@link PersistenceManager}, which also manages concurrency
  * and maintains an identity map of {@link ObjectAdapter adapter}s and {@link Oid
@@ -106,7 +109,7 @@ import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 public class PersistenceSession5 extends PersistenceSessionBase
 implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession5.class);
+    private static final Logger log = LoggerFactory.getLogger(PersistenceSession5.class);
     private ObjectAdapterContext objectAdapterContext;
 
     /**
@@ -114,12 +117,11 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      * persisted objects and persist changes to the object that are saved.
      */
     public PersistenceSession5(
-            final ServicesInjector servicesInjector,
             final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
-            final FixturesInstalledFlag fixturesInstalledFlag) {
+            final FixturesInstalledStateHolder stateHolder) {
 
-        super(servicesInjector, authenticationSession, jdoPersistenceManagerFactory, fixturesInstalledFlag);
+        super(authenticationSession, jdoPersistenceManagerFactory, stateHolder);
     }
 
     // -- open
@@ -134,8 +136,8 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         
         openedAtSystemNanos = System.nanoTime();
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("opening {}", this);
+        if (log.isDebugEnabled()) {
+            log.debug("opening {}", this);
         }
 
         persistenceManager = jdoPersistenceManagerFactory.getPersistenceManager();
@@ -151,7 +153,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
                 PersistenceQueryFindUsingApplibQueryDefault.class,
                 new PersistenceQueryFindUsingApplibQueryProcessor(this));
 
-        objectAdapterContext = ObjectAdapterContext.openContext(servicesInjector, authenticationSession, specificationLoader, this);
+        objectAdapterContext = ObjectAdapterContext.openContext(authenticationSession, specificationLoader, this);
 
         // tell the proxy of all request-scoped services to instantiate the underlying
         // services, store onto the thread-local and inject into them...
@@ -183,7 +185,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     private void postConstructOnRequestScopedServices() {
-        servicesInjector.streamServices()
+        serviceRegistry.streamServices()
         .forEach(service->{
             if(service instanceof RequestScopedService) {
                 ((RequestScopedService)service).__isis_postConstruct();
@@ -192,10 +194,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     private void startRequestOnRequestScopedServices() {
-        servicesInjector.streamServices()
+        serviceRegistry.streamServices()
         .forEach(service->{
             if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_startRequest(servicesInjector);
+                ((RequestScopedService)service).__isis_startRequest(serviceInjector);
             }
         });
     }
@@ -203,7 +205,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     private Command createCommand() {
         final Command command = commandService.create();
 
-        servicesInjector.injectServicesInto(command);
+        serviceInjector.injectServicesInto(command);
         return command;
     }
 
@@ -266,7 +268,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     private void endRequestOnRequestScopeServices() {
-        servicesInjector.streamServices()
+        serviceRegistry.streamServices()
         .forEach(service->{
             if(service instanceof RequestScopedService) {
                 ((RequestScopedService)service).__isis_endRequest();
@@ -275,7 +277,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     private void preDestroyOnRequestScopedServices() {
-        servicesInjector.streamServices()
+        serviceRegistry.streamServices()
         .forEach(service->{
             if(service instanceof RequestScopedService) {
                 ((RequestScopedService)service).__isis_preDestroy();
@@ -402,34 +404,42 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
     // -- fixture installation
 
+    @Override
+    public FixturesInstalledState getFixturesInstalledState() {
+        if (fixturesInstalledStateHolder.getFixturesInstalledState() == null) {
+            val initialStateFromConfig = initialStateFromConfig();
+            fixturesInstalledStateHolder.setFixturesInstalledState(initialStateFromConfig);
+        }
+        return fixturesInstalledStateHolder.getFixturesInstalledState();
+    }
+    
     /**
      * Determine if the object store has been initialized with its set of start
      * up objects.
      *
      * <p>
-     * This method is called only once after the init has been called. If this flag
-     * returns <code>false</code> the framework will run the fixtures to
-     * initialise the persistor.
+     * This method is called only once after the session is opened called. If it returns <code>false</code> then the
+     * framework will run the fixtures to initialise the object store.
      *
      * <p>
-     * Returns the cached value of {@link #isFixturesInstalled()
-     * whether fixtures are installed} from the
-     * {@link PersistenceSessionFactory}.
-     * <p>
-     * This caching is important because if we've determined, for a given run,
-     * that fixtures are not installed, then we don't want to change our mind by
-     * asking the object store again in another session.
+     * Implementation looks for the {@link #INSTALL_FIXTURES_KEY} in the injected {@link #configuration configuration}.
      *
-     * @see FixturesInstalledFlag
+     * <p>
+     * By default this is not expected to be there, but utilities can add in on
+     * the fly during bootstrapping if required.
      */
-    @Override
-    public boolean isFixturesInstalled() {
-        if (fixturesInstalledFlag.isFixturesInstalled() == null) {
-            fixturesInstalledFlag.setFixturesInstalled(objectStoreIsFixturesInstalled());
-        }
-        return fixturesInstalledFlag.isFixturesInstalled();
+    private FixturesInstalledState initialStateFromConfig() {
+        val installFixtures = configuration.getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
+        log.info("isFixturesInstalled: {} = {}", INSTALL_FIXTURES_KEY, installFixtures);
+        
+        val objectStoreIsFixturesInstalled = !installFixtures;
+        val initialStateFromConfig = objectStoreIsFixturesInstalled
+                ? FixturesInstalledState.Installed
+                        : FixturesInstalledState.not_Installed;
+        
+        return initialStateFromConfig;
     }
-
+    
 
     /**
      * Determine if the object store has been initialized with its set of start
@@ -469,7 +479,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         } catch (final RuntimeException e) {
 
             Class<ExceptionRecognizer> serviceClass = ExceptionRecognizer.class;
-            final List<ExceptionRecognizer> exceptionRecognizers = lookupServices(serviceClass);
+            final Iterable<ExceptionRecognizer> exceptionRecognizers = lookupServices(serviceClass);
             for (ExceptionRecognizer exceptionRecognizer : exceptionRecognizers) {
                 final ExceptionRecognizer.Recognition recognition =
                         exceptionRecognizer.recognize2(e);
@@ -559,7 +569,10 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     @Override
     public void refreshRoot(final Object domainObject) {
         
-        if(!isRepresentingPersistent(domainObject)) {
+        val state = stateOf(domainObject);
+        val isRepresentingPersistent = state.isAttached() || state.isDestroyed();  
+        
+        if(!isRepresentingPersistent) {
             debugLogNotPersistentIgnoring(domainObject);
             return; // only resolve object that is representing persistent
         }
@@ -599,7 +612,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void makePersistentInTransaction(final ObjectAdapter adapter) {
-        if (adapter.representsPersistent()) {
+        if (adapter.isRepresentingPersistent()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }
         final ObjectSpecification specification = adapter.getSpecification();
@@ -644,7 +657,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
 
     private static boolean alreadyPersistedOrNotPersistable(final ObjectAdapter adapter) {
-        return adapter.representsPersistent() || objectSpecNotPersistable(adapter);
+        return adapter.isRepresentingPersistent() || objectSpecNotPersistable(adapter);
     }
 
 
@@ -696,7 +709,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         ensureOpened();
 
         LOG.debug("create object - creating command for: {}", adapter);
-        if (adapter.representsPersistent()) {
+        if (adapter.isRepresentingPersistent()) {
             throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
         }
         return new DataNucleusCreateObjectCommand(adapter, persistenceManager);
@@ -706,7 +719,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         ensureOpened();
 
         LOG.debug("destroy object - creating command for: {}", adapter);
-        if (!adapter.representsPersistent()) {
+        if (!adapter.isRepresentingPersistent()) {
             throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
         return new DataNucleusDeleteObjectCommand(adapter, persistenceManager);
@@ -750,7 +763,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
         // need to do eagerly, because (if a viewModel then) a
         // viewModel's #viewModelMemento might need to use services
-        servicesInjector.injectInto(pojo);
+        serviceInjector.injectServicesInto(pojo);
 
         final Version datastoreVersion = getVersionIfAny(pc);
         final RootOid originalOid = objectAdapterContext.createPersistentOrViewModelOid(pojo);
@@ -784,7 +797,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      */
     @Override
     public void invokeIsisPersistingCallback(final Persistable pojo) {
-        if (isTransient(pojo)) {
+        if (stateOf(pojo).isDetached()) {
             final ManagedObject adapter = ManagedObject.of(
                     ()->getSpecificationLoader().loadSpecification(pojo.getClass()),
                     pojo);
@@ -887,41 +900,58 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     // -- 
+//TODO [2112] replaced by stateOf(pojo)   
+//    @Override
+//    public boolean isTransient(@Nullable Object pojo) {
+//        if (pojo!=null && pojo instanceof Persistable) {
+//            final Persistable p = (Persistable) pojo;
+//            final boolean isPersistent = p.dnIsPersistent();
+//            final boolean isDeleted = p.dnIsDeleted();
+//            if (!isPersistent && !isDeleted) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+//
+//    /**
+//     * May also deleted (that is, {@link #isDestroyed(Object)} could return true).
+//     * @param pojo
+//     * @return
+//     */
+//    @Override
+//    public boolean isRepresentingPersistent(@Nullable Object pojo) {
+//        if (pojo instanceof Persistable) {
+//            final Persistable p = (Persistable) pojo;
+//            return p.dnIsPersistent();
+//        }
+//        return false;
+//    }
+//
+//    @Override
+//    public boolean isDestroyed(@Nullable Object pojo) {
+//        if (pojo instanceof Persistable) {
+//            final Persistable p = (Persistable) pojo;
+//            return p.dnIsDeleted();
+//        }
+//        return false;
+//    }
     
     @Override
-    public boolean isTransient(@Nullable Object pojo) {
+    public ManagedObjectState stateOf(@Nullable Object pojo) {
         if (pojo!=null && pojo instanceof Persistable) {
-            final Persistable p = (Persistable) pojo;
-            final boolean isPersistent = p.dnIsPersistent();
-            final boolean isDeleted = p.dnIsDeleted();
-            if (!isPersistent && !isDeleted) {
-                return true;
+            val persistable = (Persistable) pojo;
+            val isDeleted = persistable.dnIsDeleted();
+            if(isDeleted) {
+                return ManagedObjectState.persistable_Destroyed;
             }
+            val isPersistent = persistable.dnIsPersistent();
+            if(isPersistent) {
+                return ManagedObjectState.persistable_Attached;
+            }
+            return ManagedObjectState.persistable_Detached;
         }
-        return false;
-    }
-
-    /**
-     * May also deleted (that is, {@link #isDestroyed(Object)} could return true).
-     * @param pojo
-     * @return
-     */
-    @Override
-    public boolean isRepresentingPersistent(@Nullable Object pojo) {
-        if (pojo instanceof Persistable) {
-            final Persistable p = (Persistable) pojo;
-            return p.dnIsPersistent();
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isDestroyed(@Nullable Object pojo) {
-        if (pojo instanceof Persistable) {
-            final Persistable p = (Persistable) pojo;
-            return p.dnIsDeleted();
-        }
-        return false;
+        return ManagedObjectState.not_Persistable;
     }
     
     @Override
@@ -936,8 +966,15 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     @Override
-    public MementoRecreateObjectSupport mementoSupport() {
-        return objectAdapterContext.mementoSupport();
+    public ObjectAdapter adapterFor(final RootOid rootOid) {
+        return objectAdapterContext.getObjectAdapterByIdProvider().adapterFor(rootOid);
+    }
+    
+    // -- MEMENTO SUPPORT
+    
+    @Override
+    public ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data) {
+        return objectAdapterContext.mementoSupport().recreateObject(spec, oid, data);
     }
 
     @Override
@@ -965,7 +1002,6 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             LOG.debug("refresh immediately; oid={}", oid.enString());
         }
     }
-
 
     
 }

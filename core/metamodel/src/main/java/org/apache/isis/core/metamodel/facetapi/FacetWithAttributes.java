@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facetapi;
 
 import java.util.Map;
 
+import org.apache.isis.applib.services.metamodel.MetaModelService;
+
 /**
  * For serialization of metamodel into XML, see {@link org.apache.isis.applib.services.metamodel.MetaModelService#exportMetaModel(MetaModelService.Config)}.
  */

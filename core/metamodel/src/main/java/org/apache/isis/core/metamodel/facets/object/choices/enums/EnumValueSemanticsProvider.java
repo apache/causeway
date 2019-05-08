@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemanticsProviderAndFacetAbstract<T> implements EnumFacet {
 
@@ -66,17 +65,16 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
      * Required because {@link Parser} and {@link EncoderDecoder}.
      */
     public EnumValueSemanticsProvider() {
-        this(null, null, null);
+        this(null, null);
     }
 
-    public EnumValueSemanticsProvider(final FacetHolder holder, final Class<T> adaptedClass, final ServicesInjector context) {
+    public EnumValueSemanticsProvider(final FacetHolder holder, final Class<T> adaptedClass) {
         super(
                 type(), holder,  adaptedClass,
                 maxLengthFor(adaptedClass),
                 maxLengthFor(adaptedClass), Immutability.IMMUTABLE,
                 EqualByContent.HONOURED,
-                defaultFor(adaptedClass),
-                context);
+                defaultFor(adaptedClass));
 
         titleMethod = MethodFinderUtils.findMethod(
                 getAdaptedClass(), MethodScope.OBJECT,
@@ -116,7 +114,7 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
 
     @Override
     protected String titleString(final Object object) {
-        final TranslationService translationService = getServicesInjector().lookupService(TranslationService.class).orElse(null);;
+        final TranslationService translationService = getTranslationService();
 
         if (titleMethod != null) {
             // sadness: same as in TranslationFactory

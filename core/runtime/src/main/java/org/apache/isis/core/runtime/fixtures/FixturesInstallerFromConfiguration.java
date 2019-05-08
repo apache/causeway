@@ -21,20 +21,18 @@ package org.apache.isis.core.runtime.fixtures;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstract {
 
     private static final Logger LOG = LoggerFactory.getLogger(FixturesInstallerFromConfiguration.class);
 
-    public FixturesInstallerFromConfiguration(final IsisSessionFactory isisSessionFactory) {
-        super(isisSessionFactory);
+    public FixturesInstallerFromConfiguration() {
+        super();
     }
 
     protected void addFixturesTo(final FixturesInstallerDelegate delegate) {

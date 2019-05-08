@@ -25,21 +25,17 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class SingleClassValueFacetAbstract extends FacetAbstract implements SingleClassValueFacet {
 
     private final Class<?> value;
-    private final SpecificationLoader specificationLoader;
 
     public SingleClassValueFacetAbstract(
             final Class<? extends Facet> facetType,
             final FacetHolder holder,
-            final Class<?> value,
-            final SpecificationLoader specificationLoader) {
+            final Class<?> value) {
         super(facetType, holder, Derivation.NOT_DERIVED);
         this.value = value;
-        this.specificationLoader = specificationLoader;
     }
 
     @Override
@@ -54,10 +50,6 @@ public abstract class SingleClassValueFacetAbstract extends FacetAbstract implem
     public ObjectSpecification valueSpec() {
         final Class<?> valueType = value();
         return valueType != null ? getSpecificationLoader().loadSpecification(valueType) : null;
-    }
-
-    private SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

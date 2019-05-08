@@ -21,12 +21,11 @@ package org.apache.isis.core.metamodel.facets.object.defaults.annotcfg;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class DefaultedFacetFromConfiguration extends DefaultedFacetAbstract {
 
-    public DefaultedFacetFromConfiguration(final String candidateProviderName, final FacetHolder holder, final ServicesInjector dependencyInjector) {
-        super(candidateProviderName, null, holder, dependencyInjector);
+    public DefaultedFacetFromConfiguration(final String candidateProviderName, final FacetHolder holder) {
+        super(candidateProviderName, null, holder);
 
     }
 }

@@ -24,10 +24,10 @@ import java.util.Map;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
 import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class CommandFacetAbstract extends MarkerFacetAbstract implements CommandFacet {
 
@@ -55,7 +55,7 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
             final Enablement enablement,
             final CommandDtoProcessor processor,
             final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
+            final ServiceInjector servicesInjector) {
         super(type(), holder);
         inject(processor, servicesInjector);
         this.persistence = persistence;
@@ -65,7 +65,7 @@ public abstract class CommandFacetAbstract extends MarkerFacetAbstract implement
     }
 
     private static void inject(
-            final CommandDtoProcessor processor, final ServicesInjector servicesInjector) {
+            final CommandDtoProcessor processor, final ServiceInjector servicesInjector) {
         if(processor == null || servicesInjector == null) {
             return;
         }

@@ -44,12 +44,12 @@ public final class ValidationFailures implements Iterable<String> {
         addAll(validationFailures.getMessages());
     }
 
-    public void assertNone() {
+    public MetaModelDeficiencies getDeficienciesIfAny() {
         if (!occurred()) {
-            return;
+            return null;
         }
         final SortedSet<String> sortedMessages = _Sets.newTreeSet(messages);
-        throw new MetaModelInvalidException(sortedMessages);
+        return MetaModelDeficiencies.of(sortedMessages);
     }
 
     public boolean occurred() {

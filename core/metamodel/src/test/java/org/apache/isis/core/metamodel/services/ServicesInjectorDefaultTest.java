@@ -19,40 +19,83 @@
 
 package org.apache.isis.core.metamodel.services;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+//import org.jmock.Expectations;
+//import org.jmock.auto.Mock;
+//import org.junit.After;
+//import org.junit.Assert;
+//import org.junit.Before;
+//import org.junit.Rule;
+//import org.junit.Test;
+
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.config.builder.IsisConfigurationBuilder;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
-public class ServicesInjectorDefaultTest {
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    @Mock
-    private RepositoryServiceExtended mockRepository;
-    @Mock
-    private Service1 mockService1;
-    @Mock
-    private Service2 mockService2;
-    @Mock
-    private SomeDomainObject mockDomainObject;
+//@EnableWeld
+//TODO[2112] migrate to spring
+class ServicesInjectorDefaultTest {
+
+    static class Mocks {
+        
+        @Produces
+        SomeDomainObject mockDomainObject() {
+            return Mockito.mock(SomeDomainObject.class);
+        }
+        
+        @Produces
+        RepositoryService mockRepositoryService() {
+            return Mockito.mock(RepositoryServiceExtended.class);
+        }
+        
+        @Produces
+        Mixin mockMixin() {
+            return Mockito.mock(Mixin.class);
+        }
+        
+        @Produces
+        Service1 mockService1() {
+            return Mockito.mock(Service1.class);
+        }
+        
+        @Produces
+        Service2 mockService2() {
+            return Mockito.mock(Service2.class);
+        }
+        
+    }
     
-    protected IsisConfigurationBuilder configurationBuilderForTesting;
+//    @WeldSetup
+//    public WeldInitiator weld = WeldInitiator.from(
+//            
+//            BeansForTesting.builder()
+//            .injector()
+//            .addAll(
+//                    Mocks.class,
+//                    Service1.class,
+//                    Service2.class
+//                    )
+//            .build()
+//            
+//            )
+//    .build();
 
-    private ServicesInjector injector;
+    @Inject private ServiceInjector injector;
+    @Inject private ServiceRegistry registry;
 
+    // -- SCENARIO
+    
     public static interface Service1 {
     }
 
@@ -71,40 +114,28 @@ public class ServicesInjectorDefaultTest {
         public void setService1(Service1 service);
         public void setService2(Service2 service);
     }
-
-    @Before
-    public void setUp() throws Exception {
-
-        injector = ServicesInjector.builderForTesting()
-                .addService(mockRepository)
-                .addService(mockService1)
-                .addService(mockService2)
-        		.build();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-    }
+    
+    // -- TESTS
 
     @Test
-    public void shouldInjectContainer() {
-
-        context.checking(new Expectations() {
-            {
-                oneOf(mockDomainObject).setContainer(mockRepository);
-                oneOf(mockDomainObject).setMixin(mockRepository);
-                oneOf(mockDomainObject).setService1(mockService1);
-                oneOf(mockDomainObject).setService2(mockService2);
-            }
-        });
+    public void shouldInjectContainer(SomeDomainObject mockDomainObject) {
 
         injector.injectServicesInto(mockDomainObject);
+        
+        verify(mockDomainObject, times(1)).setContainer(any(RepositoryService.class));
+        verify(mockDomainObject, times(1)).setMixin(any(Mixin.class));
+        verify(mockDomainObject, times(1)).setService1(any(Service1.class));
+        verify(mockDomainObject, times(1)).setService2(any(Service2.class));
+        
     }
     
     @Test
     public void shouldStreamRegisteredServices() {
-        List<Class<?>> registeredServices = injector.streamServiceTypes().collect(Collectors.toList());
-        Assert.assertTrue(registeredServices.size()>=3);
+        fail("[2033] test not migrated");
+        
+//        List<Class<?>> registeredServices = registry.streamServiceTypes()
+//                .collect(Collectors.toList());
+//        Assertions.assertTrue(registeredServices.size()>=3);
     }
 
 }

@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ActionInvocationFacetForDomainEventFromActionAnnotation
@@ -34,9 +33,8 @@ extends ActionInvocationFacetForDomainEventAbstract {
                     final Method method,
                     final ObjectSpecification onType,
                     final ObjectSpecification returnType,
-                    final FacetHolder holder,
-                    final ServicesInjector servicesInjector) {
-        super(eventType, method, onType, returnType, holder, servicesInjector
-                );
+                    final FacetHolder holder) {
+        
+        super(eventType, method, onType, returnType, holder);
     }
 }

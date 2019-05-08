@@ -45,6 +45,7 @@ import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -304,7 +305,7 @@ public abstract class FixtureScripts extends AbstractService {
         // if this method is called programmatically, the caller may have simply new'd up the fixture script
         // (rather than use container.newTransientInstance(...).  To allow this use case, we need to ensure that
         // domain services are injected into the fixture script.
-        serviceRegistry.injectServicesInto(fixtureScript);
+        serviceInjector.injectServicesInto(fixtureScript);
 
         return fixtureScript.withTracing(fixtureTracing.get()).run(parameters);
     }
@@ -365,7 +366,7 @@ public abstract class FixtureScripts extends AbstractService {
     @Programmatic
     public <T> T runBuilderScript(final BuilderScriptAbstract<T> fixtureScript) {
 
-        serviceRegistry.injectServicesInto(fixtureScript);
+        serviceInjector.injectServicesInto(fixtureScript);
 
         fixtureScript.run(null);
 
@@ -481,7 +482,10 @@ public abstract class FixtureScripts extends AbstractService {
 
     @javax.inject.Inject
     ServiceRegistry serviceRegistry;
-
+    
+    @javax.inject.Inject
+    ServiceInjector serviceInjector;
+    
     @javax.inject.Inject
     RepositoryService repositoryService;
 

@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * @deprecated
@@ -34,9 +33,8 @@ public class AutoCompleteFacetForAutoCompleteAnnotation extends AutoCompleteFace
     public AutoCompleteFacetForAutoCompleteAnnotation(
             final FacetHolder holder,
             final Class<?> repositoryClass,
-            final Method actionName,
-            final ServicesInjector servicesInjector) {
-        super(holder, repositoryClass, actionName, servicesInjector);
+            final Method actionName) {
+        super(holder, repositoryClass, actionName);
     }
 
 

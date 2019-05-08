@@ -27,12 +27,10 @@ import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -61,9 +59,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
             return NULL_DISPLAY_TEXT;
         }
 
-        final ObjectAdapter objectAdapter =
-                choice.getObjectAdapter(
-                        ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader());
+        final ObjectAdapter objectAdapter = choice.getObjectAdapter();
         final IConverter<Object> converter = findConverter(objectAdapter);
         return converter != null
                 ? converter.convertToString(objectAdapter.getPojo(), getLocale())
@@ -122,8 +118,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
             matches.addAll(choicesMementos);
         } else {
             for (ObjectAdapterMemento candidate : choicesMementos) {
-                ObjectAdapter objectAdapter = candidate.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                        getPersistenceSession(), getSpecificationLoader());
+                ObjectAdapter objectAdapter = candidate.getObjectAdapter();
                 String title = objectAdapter.titleString(objectAdapter);
                 if (title.toLowerCase().contains(term.toLowerCase())) {
                     matches.add(candidate);
@@ -146,11 +141,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
 
 
     protected SpecificationLoader getSpecificationLoader() {
-        return getIsisSessionFactory().getSpecificationLoader();
-    }
-
-    PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+        return IsisContext.getSpecificationLoader();
     }
 
     protected IsisSessionFactory getIsisSessionFactory() {
@@ -158,7 +149,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
     }
 
     public AuthenticationSession getAuthenticationSession() {
-        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
+        return IsisContext.getAuthenticationSession().orElse(null);
     }
 
 

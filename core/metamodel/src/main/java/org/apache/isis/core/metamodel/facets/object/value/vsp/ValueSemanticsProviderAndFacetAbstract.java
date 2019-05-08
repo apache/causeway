@@ -31,20 +31,15 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.config.ConfigurationConstants;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.LocaleUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbstract implements ValueSemanticsProvider<T>, EncoderDecoder<T>, Parser<T>, DefaultsProvider<T> {
 
@@ -78,9 +73,6 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
      */
     private ObjectSpecification specification;
 
-    private final IsisConfiguration configuration;
-    private final ServicesInjector context;
-
     public ValueSemanticsProviderAndFacetAbstract(
             final Class<? extends Facet> adapterFacetType,
             final FacetHolder holder,
@@ -89,8 +81,8 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
             final int maxLength,
             final Immutability immutability,
             final EqualByContent equalByContent,
-            final T defaultValue,
-            final ServicesInjector context) {
+            final T defaultValue) {
+        
         super(adapterFacetType, holder, Derivation.NOT_DERIVED);
         this.adaptedClass = adaptedClass;
         this.typicalLength = typicalLength;
@@ -98,9 +90,6 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
         this.immutable = (immutability == Immutability.IMMUTABLE);
         this.equalByContent = (equalByContent == EqualByContent.HONOURED);
         this.defaultValue = defaultValue;
-
-        this.configuration = _Config.getConfiguration();
-        this.context = context;
     }
 
     public ObjectSpecification getSpecification() {
@@ -317,39 +306,6 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
         } else {
             throw new UnknownTypeException("not an object, is this a collection?");
         }
-    }
-
-    // //////////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // //////////////////////////////////////////////////////////
-
-    protected IsisConfiguration getConfiguration() {
-        return configuration;
-    }
-
-    protected ServicesInjector getContext() {
-        return context;
-    }
-
-    /**
-     * From {@link #getContext() context.}
-     */
-    protected ObjectAdapterProvider getObjectAdapterProvider() {
-        return context.getPersistenceSessionServiceInternal();
-    }
-
-    /**
-     * From {@link #getContext() context.}
-     */
-    protected SpecificationLoader getSpecificationLoader() {
-        return context.getSpecificationLoader();
-    }
-
-    /**
-     * From {@link #getContext() context.}
-     */
-    protected ServicesInjector getServicesInjector() {
-        return context;
     }
 
     // //////////////////////////////////////////////////////////

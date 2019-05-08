@@ -21,11 +21,9 @@ package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class ValueFacetAnnotation extends ValueFacetAbstract {
 
@@ -36,7 +34,7 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
             return semanticsProviderName;
         }
         return ValueSemanticsProviderUtil
-                .semanticsProviderNameFromConfiguration(annotatedClass, _Config.getConfiguration());
+                .semanticsProviderNameFromConfiguration(annotatedClass);
     }
 
     private static Class<?> semanticsProviderClass(final Class<?> annotatedClass) {
@@ -46,22 +44,20 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
 
     public ValueFacetAnnotation(
             final Class<?> annotatedClass, 
-            final FacetHolder holder, 
-            final ServicesInjector injector) {
+            final FacetHolder holder) {
         
         this(semanticsProviderName(annotatedClass), 
-                semanticsProviderClass(annotatedClass), holder, injector);
+                semanticsProviderClass(annotatedClass), holder);
     }
 
     private ValueFacetAnnotation(
             final String candidateSemanticsProviderName, 
             final Class<?> candidateSemanticsProviderClass, 
-            final FacetHolder holder, 
-            final ServicesInjector injector) {
+            final FacetHolder holder) {
         
         super(ValueSemanticsProviderUtil
                 .valueSemanticsProviderOrNull(candidateSemanticsProviderClass, candidateSemanticsProviderName), 
-                AddFacetsIfInvalidStrategy.DO_ADD, holder, injector);
+                AddFacetsIfInvalidStrategy.DO_ADD, holder);
     }
 
     /**

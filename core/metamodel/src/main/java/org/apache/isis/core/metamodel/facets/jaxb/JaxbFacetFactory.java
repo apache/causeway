@@ -34,7 +34,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -100,7 +99,7 @@ implements MetaModelValidatorRefiner {
 
         final FacetHolder holder = processClassContext.getFacetHolder();
         final XmlJavaTypeAdapterFacetDefault facet = new XmlJavaTypeAdapterFacetDefault(holder,
-                annotation.value(), getSpecificationLoader());
+                annotation.value());
 
         FacetUtil.addFacet(facet);
     }
@@ -148,7 +147,7 @@ implements MetaModelValidatorRefiner {
 
         final FacetHolder holder = processMethodContext.getFacetHolder();
         final XmlJavaTypeAdapterFacetDefault facet = new XmlJavaTypeAdapterFacetDefault(holder,
-                annotation.value(), getSpecificationLoader());
+                annotation.value());
 
         FacetUtil.addFacet(facet);
     }
@@ -276,8 +275,7 @@ implements MetaModelValidatorRefiner {
                 final ValidationFailures validationFailures) {
 
             final ObjectSpecification propertyTypeSpec = property.getSpecification();
-            final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
-            if (!JdoMetamodelUtil.isPersistenceEnhanced(propertyType)) {
+            if (!propertyTypeSpec.isEntity()) {
                 return;
             }
 
@@ -286,7 +284,7 @@ implements MetaModelValidatorRefiner {
             if(xmlJavaTypeAdapterFacet != null) {
                 return;
             }
-
+            final Class<?> propertyType = propertyTypeSpec.getCorrespondingClass();
             validationFailures.add("JAXB view model '%s' property '%s' is of type '%s' but that type is not annotated with @XmlJavaTypeAdapter.  The type must be annotated with @XmlJavaTypeAdapter(org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter.class) or equivalent.",
                     objectSpec.getFullIdentifier(),
                     property.getId(),

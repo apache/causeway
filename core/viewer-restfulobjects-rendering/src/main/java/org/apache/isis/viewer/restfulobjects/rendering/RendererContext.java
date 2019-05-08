@@ -23,27 +23,17 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
-public interface RendererContext {
+public interface RendererContext extends RuntimeContext {
 
     String urlFor(final String url);
 
-    AuthenticationSession getAuthenticationSession();
-    IsisConfiguration getConfiguration();
-    PersistenceSession getPersistenceSession();
     List<MediaType> getAcceptableMediaTypes();
-    
-    SpecificationLoader getSpecificationLoader();
-    ServicesInjector getServicesInjector();
     
     InteractionInitiatedBy getInteractionInitiatedBy();
 
@@ -77,5 +67,15 @@ public interface RendererContext {
      * Applies only when rendering a domain object.
      */
     RepresentationService.Intent getIntent();
+
+    // -- TEMPORARY FOR REFACTORING
+    
+	default ObjectAdapter getObjectAdapterElseNull(String oidFromHref) {
+		return OidUtils.getObjectAdapterElseNull(this, oidFromHref);
+	}
+	
+	default ObjectAdapter getObjectAdapterElseNull(String domainType, String instanceIdEncoded) {
+		return OidUtils.getObjectAdapterElseNull(this, domainType, instanceIdEncoded);
+	}
 
 }

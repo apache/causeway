@@ -26,7 +26,6 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class DefaultedFacetAbstract extends FacetAbstract implements DefaultedFacet {
 
@@ -35,16 +34,17 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
     // to delegate to
     private final DefaultedFacetUsingDefaultsProvider defaultedFacetUsingDefaultsProvider;
 
-    private final ServicesInjector dependencyInjector;
-
-    public DefaultedFacetAbstract(final String candidateEncoderDecoderName, final Class<?> candidateEncoderDecoderClass, final FacetHolder holder, final ServicesInjector dependencyInjector) {
+    public DefaultedFacetAbstract(
+            final String candidateEncoderDecoderName, 
+            final Class<?> candidateEncoderDecoderClass, 
+            final FacetHolder holder) {
+        
         super(DefaultedFacet.class, holder, Derivation.NOT_DERIVED);
 
         this.defaultsProviderClass = DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass, candidateEncoderDecoderName);
-        this.dependencyInjector = dependencyInjector;
         if (isValid()) {
             final DefaultsProvider<?> defaultsProvider = (DefaultsProvider<?>) ClassExtensions.newInstance(defaultsProviderClass, FacetHolder.class, holder);
-            this.defaultedFacetUsingDefaultsProvider = new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder, getDependencyInjector());
+            this.defaultedFacetUsingDefaultsProvider = new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder);
         } else {
             this.defaultedFacetUsingDefaultsProvider = null;
         }
@@ -76,13 +76,6 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
         return defaultsProviderClass.getName();
     }
 
-    // //////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // //////////////////////////////////////////////////////
-
-    private ServicesInjector getDependencyInjector() {
-        return dependencyInjector;
-    }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);

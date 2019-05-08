@@ -22,6 +22,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+@Deprecated //TODO [2033] adds no value
 public final class SpecUtils {
 
     private SpecUtils(){}
@@ -29,13 +30,8 @@ public final class SpecUtils {
     public static ObjectSpecification getSpecificationFor(
             final ObjectSpecId objectSpecId,
             final SpecificationLoader specificationLoader) {
-        ObjectSpecification objectSpec = specificationLoader.lookupBySpecId(objectSpecId);
-        if(objectSpec != null) {
-            return objectSpec;
-        }
-
-        // attempt to load directly.
-        return specificationLoader.loadSpecification(objectSpecId.asString());
+        
+        return specificationLoader.lookupBySpecId(objectSpecId);
     }
 
 

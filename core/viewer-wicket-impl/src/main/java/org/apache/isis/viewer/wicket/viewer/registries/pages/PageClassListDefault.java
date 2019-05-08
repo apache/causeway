@@ -19,24 +19,23 @@
 
 package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
-import com.google.inject.Singleton;
-
-import org.apache.wicket.Page;
+import javax.inject.Singleton;
 
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
 import org.apache.isis.viewer.wicket.ui.pages.about.AboutPage;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage;
+import org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage;
 import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset.PasswordResetPage;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.register.RegisterPage;
-import org.apache.isis.viewer.wicket.ui.pages.accmngt.signup.RegistrationFormPage;
 import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCollectionPage;
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
+import org.apache.wicket.Page;
 
 /**
  * Default implementation of {@link PageClassList}, specifying the default pages

@@ -16,26 +16,43 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.runtime.system.context;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
+import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
+import org.apache.isis.core.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 /**
  * Provides static access to current context's singletons
@@ -47,22 +64,22 @@ public interface IsisContext {
      * Populated only if the meta-model was found to be invalid.
      * @return null, if there is none
      */
-    public static MetaModelInvalidException getMetaModelInvalidExceptionIfAny() {
-        return _Context.getIfAny(MetaModelInvalidException.class);
+    public static MetaModelDeficiencies getMetaModelDeficienciesIfAny() {
+        return _Context.getIfAny(MetaModelDeficiencies.class);
     }
 
-    /**
-     *
-     * @return Isis's session factory
-     * @throws IllegalStateException if IsisSessionFactory not initialized
-     */
-    // Implementation Note: Populated only by {@link IsisSessionFactoryBuilder}.
-    public static IsisSessionFactory getSessionFactory() {
-        return _Context.getElseThrow(
-                IsisSessionFactory.class,
-                ()->new IllegalStateException(
-                        "internal error: should have been populated by IsisSessionFactoryBuilder") );
-    }
+//    /**
+//     *
+//     * @return Isis's session factory
+//     * @throws IllegalStateException if IsisSessionFactory not initialized
+//     */
+//    // Implementation Note: Populated only by {@link IsisSessionFactoryBuilder}.
+//    public static IsisSessionFactory getSessionFactory() {
+//        return _Context.getOrThrow(
+//                IsisSessionFactory.class,
+//                ()->new IllegalStateException(
+//                        "internal error: should have been populated by IsisSessionFactoryBuilder") );
+//    }
 
     /**
      *
@@ -93,59 +110,6 @@ public interface IsisContext {
     public static IsisSystemEnvironment getEnvironment() {
         return _Context.getEnvironment();
     }
-
-//[2039]    
-//    /**
-//     * @deprecated use the {@link IsisSystemEnvironmentPlugin} SPI instead
-//     */
-//    @Deprecated
-//    public static class EnvironmentPrimer {
-//
-//        /**
-//         * For integration testing allows to prime the environment via provided parameters. Will not override
-//         * any IsisSystemEnvironment instance, that is already registered with the current context, because the 
-//         * IsisSystemEnvironment is expected to be an immutable singleton within an application's life-cycle.
-//         * @deprecated use the {@link IsisSystemEnvironmentPlugin} SPI instead
-//         */
-//        @Deprecated
-//        public static void primeEnvironment(DeploymentType deploymentType) {
-//            _Context.computeIfAbsent(IsisSystemEnvironment.class, __->IsisSystemEnvironment.of(deploymentType));
-//        }
-//        
-//        @Deprecated
-//        public static void primeEnvironment(IsisConfigurationBuilder configurationBuilder) {
-//            
-//            final String deploymentTypeLiteral = configurationBuilder.peekAtString("isis.deploymentType");
-//            if(_Strings.isNullOrEmpty(deploymentTypeLiteral)) {
-//                return; // do nothing
-//            }
-//            
-//            // at this point, the deploymentType seems explicitly set via config
-//            
-//            // throws if type can not be parsed
-//            final DeploymentType deploymentType = 
-//                    parseDeploymentType(deploymentTypeLiteral.toLowerCase());
-//            primeEnvironment(deploymentType);
-//        }
-//
-//        private static DeploymentType parseDeploymentType(String deploymentTypeLiteral) {
-//            
-//            switch(deploymentTypeLiteral) {
-//            case "server_prototype":
-//            case "prototyping":
-//                return DeploymentType.PROTOTYPING;
-//            case "server":
-//            case "production":
-//                return DeploymentType.PROTOTYPING;
-//            default:
-//                throw new IllegalArgumentException(
-//                        String.format("unknown deployment type '%s' in config property '%s'", 
-//                                deploymentTypeLiteral, "isis.deploymentType"));
-//            }
-//
-//        }
-//    }
-
     
     // -- LIFE-CYCLING
 
@@ -158,39 +122,123 @@ public interface IsisContext {
     }
 
     // -- CONVENIENT SHORTCUTS
-
+    
     /**
-     * @return framework's current PersistenceSession (if any)
-     * @throws IllegalStateException if IsisSessionFactory not initialized
+     * @return new instance of ManagedObjectContext
      */
-    public static Optional<PersistenceSession> getPersistenceSession() {
-        return Optional.ofNullable(getSessionFactory().getCurrentSession())
-                .map(IsisSession::getPersistenceSession);
+    public static RuntimeContext newManagedObjectContext() {
+        return new RuntimeContextBase() {}; 
     }
-
+    
     /**
      * @return framework's IsisConfiguration
-     * @throws IllegalStateException if IsisSessionFactory not initialized
+     * @throws NoSuchElementException - if IsisConfiguration not managed
      */
     public static IsisConfiguration getConfiguration() {
-        return getSessionFactory().getConfiguration();
+        return _Config.getConfiguration(); // currently not utilizing CDI, to support unit testing
+    }
+    
+    /**
+     * @return framework's ServicesInjector
+     * @throws NullPointerException - if AppManifest not resolvable
+     */
+    public static AppManifest getAppManifest() {
+        return Objects.requireNonNull(getConfiguration().getAppManifest()); 
     }
 
     /**
      * @return framework's SpecificationLoader
-     * @throws IllegalStateException if IsisSessionFactory not initialized
+     * @throws NoSuchElementException - if SpecificationLoader not managed
      */
     public static SpecificationLoader getSpecificationLoader() {
-        return getSessionFactory().getSpecificationLoader();
+        return _Spring.getSingletonElseFail(SpecificationLoader.class);
     }
 
     /**
      * @return framework's ServicesInjector
-     * @throws IllegalStateException if IsisSessionFactory not initialized
+     * @throws NoSuchElementException - if ServicesInjector not managed
      */
-    public static ServicesInjector getServicesInjector() {
-        return getSessionFactory().getServicesInjector();
+    public static ServiceInjector getServiceInjector() {
+        return _Spring.getSingletonElseFail(ServiceInjector.class);
     }
+    
+    /**
+     * @return framework's ServiceRegistry
+     * @throws NoSuchElementException - if ServiceRegistry not managed
+     */
+    public static ServiceRegistry getServiceRegistry() {
+        return _Spring.getSingletonElseFail(ServiceRegistry.class);
+    }
+    
+    /**
+     * @return framework's IsisSessionFactory 
+     * @throws NoSuchElementException - if IsisSessionFactory not resolvable
+     */
+    public static IsisSessionFactory getSessionFactory() {
+        return _Spring.getSingletonElseFail(IsisSessionFactory.class);
+    }
+    
+    /**
+     * @return framework's current IsisSession (if any)
+     * @throws IllegalStateException - if IsisSessionFactory not resolvable
+     */
+    public static Optional<IsisSession> getCurrentIsisSession() {
+        return IsisSession.current();
+    }
+
+    /**
+     * TODO [2033] its unclear whether there is only one or multiple
+     * @return framework's one of framework's current PersistenceSessions
+     */
+    public static Optional<PersistenceSession> getPersistenceSession() {
+    	return PersistenceSession.current(PersistenceSession.class)
+    	.getFirst();
+    }
+    
+    /**
+     * TODO [2033] its unclear whether there is only one or multiple
+     * @return framework's current IsisTransactionManager (if any)
+     * @throws IllegalStateException - if IsisSessionFactory not resolvable
+     */
+    public static Optional<IsisTransactionManager> getTransactionManager() {
+    	return getPersistenceSession()
+    			.map(PersistenceSession::getTransactionManager);
+    }
+    
+    /**
+     * @return framework's ServiceRegistry
+     * @throws NoSuchElementException - if ServiceRegistry not managed
+     */
+    public static ObjectAdapterProvider getObjectAdapterProvider() {
+        return _Spring.getSingletonElseFail(ObjectAdapterService.class);
+    }
+    
+    public static Function<Object, ObjectAdapter> pojoToAdapter() {
+        return getObjectAdapterProvider()::adapterFor;
+    }
+    
+    public static Function<RootOid, ObjectAdapter> rootOidToAdapter() {
+        return getObjectAdapterProvider()::adapterFor;
+    }
+    
+    /**
+     * @return framework's current AuthenticationSession (if any)
+     * @throws IllegalStateException - if IsisSessionFactory not resolvable
+     */
+    public static Optional<AuthenticationSession> getAuthenticationSession() {
+        return getCurrentIsisSession()
+                .map(IsisSession::getAuthenticationSession);
+    }
+
+    public static AuthenticationManager getAuthenticationManager() {
+        return _Spring.getSingletonElseFail(AuthenticationManager.class);
+    }
+
+    public static AuthorizationManager getAuthorizationManager() {
+        return _Spring.getSingletonElseFail(AuthorizationManager.class);
+    }
+    
+    // -- 
 
     public static StringBuilder dumpConfig() {
         
@@ -224,9 +272,6 @@ public interface IsisContext {
         
         return sb;
     }
-
-
-
 
 
 

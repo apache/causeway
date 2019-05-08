@@ -24,7 +24,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class LongPrimitiveValueSemanticsProvider extends LongValueSemanticsProviderAbstract implements PropertyDefaultFacet {
@@ -34,11 +33,11 @@ public class LongPrimitiveValueSemanticsProvider extends LongValueSemanticsProvi
      * {@link EncoderDecoder}.
      */
     public LongPrimitiveValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public LongPrimitiveValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, long.class, context);
+    public LongPrimitiveValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, long.class);
     }
 
     // //////////////////////////////////////////////////////////////////

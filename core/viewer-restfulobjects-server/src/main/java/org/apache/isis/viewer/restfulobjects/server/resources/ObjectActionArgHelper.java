@@ -18,6 +18,7 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.util.List;
 import java.util.Map;
+
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;

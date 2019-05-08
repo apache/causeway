@@ -19,29 +19,26 @@
 package org.apache.isis.viewer.wicket.viewer.services;
 
 import java.util.Locale;
+
+import javax.inject.Singleton;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.Session;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
+
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 
 
 /**
  * An implementation that provides the locale of the current session.
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class LocaleProviderWicket implements LocaleProvider {
 
     public static final Logger LOG = LoggerFactory.getLogger(LocaleProviderWicket.class);
 
-    @Programmatic
     @Override
     public Locale getLocale() {
         // Request Cycle can be null, e.g. during the start of an application

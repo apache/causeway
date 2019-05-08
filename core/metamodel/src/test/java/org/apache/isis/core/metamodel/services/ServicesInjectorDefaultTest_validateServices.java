@@ -19,69 +19,49 @@
 
 package org.apache.isis.core.metamodel.services;
 
-import java.util.List;
+import javax.inject.Inject;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 
-public class ServicesInjectorDefaultTest_validateServices {
+//@EnableWeld
+//TODO[2112] migrate to spring
+class ServicesInjectorDefaultTest_validateServices {
 
-    ServicesInjector servicesInjector;
+    // -- SCENARIO
 
+    @DomainService
     public static class DomainServiceWithSomeId {
         public String getId() { return "someId"; }
     }
 
+    @DomainService
     public static class DomainServiceWithDuplicateId {
         public String getId() { return "someId"; }
     }
 
-    public static class DomainServiceWithDifferentId {
-        public String getId() { return "otherId"; }
+    // --
+
+//    @WeldSetup
+//    public WeldInitiator weld = WeldInitiator.from(
+//
+//            BeansForTesting.builder()
+//            .injector()
+//            .add(DomainServiceWithSomeId.class)
+//            .add(DomainServiceWithDuplicateId.class)
+//            .build()
+//
+//            )
+//    .build();
+
+    @Inject private ServiceRegistry serviceRegistry;
+
+    @Test
+    public void validate_DomainServicesWithDuplicateIds() {
+        Assertions.assertThrows(IllegalStateException.class, serviceRegistry::validateServices);
     }
 
-    public static class ValidateServicesTestValidateServices extends ServicesInjectorDefaultTest_validateServices {
-
-        List<Object> serviceList;
-
-        @Before
-        public void setUp() throws Exception {
-            IsisSystemEnvironment.setUnitTesting(true);
-            serviceList = _Lists.newArrayList();
-        }
-
-        @Test(expected=IllegalStateException.class)
-        public void validate_DomainServicesWithDuplicateIds() {
-
-            // given
-            serviceList.add(new DomainServiceWithSomeId());
-            serviceList.add(new DomainServiceWithDuplicateId());
-
-            servicesInjector = ServicesInjector.builderForTesting()
-                    .addServices(serviceList)
-                    .build();
-
-            // when
-            servicesInjector.validateServices();
-        }
-
-        @Test
-        public void validate_DomainServicesWithDifferentIds() {
-
-            // given
-            serviceList.add(new DomainServiceWithSomeId());
-            serviceList.add(new DomainServiceWithDifferentId());
-
-            servicesInjector = ServicesInjector.builderForTesting()
-                    .addServices(serviceList)
-                    .build();
-
-            // when
-            servicesInjector.validateServices();
-        }
-
-    }
 }

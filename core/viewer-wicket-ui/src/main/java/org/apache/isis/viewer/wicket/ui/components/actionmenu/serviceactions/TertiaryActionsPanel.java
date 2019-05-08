@@ -20,8 +20,8 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
 import java.util.List;
 
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import javax.inject.Inject;
+
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -34,6 +34,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 
 /**
  * A panel responsible to render the application actions as menu in a navigation bar.
@@ -119,10 +121,7 @@ public class TertiaryActionsPanel extends Panel {
         response.render(CssHeaderItem.forReference(new CssResourceReference(TertiaryActionsPanel.class, "TertiaryActionsPanel.css")));
     }
 
-    /**
-     * {@link com.google.inject.Inject}ed when {@link #init() initialized}.
-     */
-    @com.google.inject.Inject
+    @Inject
     private PageClassRegistry pageClassRegistry;
 
 }

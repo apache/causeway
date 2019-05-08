@@ -28,6 +28,8 @@ import org.apache.isis.core.metamodel.util.pchain.ParentChain;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
+import lombok.val;
+
 /**
  *
  * @since 2.0.0
@@ -45,12 +47,12 @@ class WhereAmIModelDefault implements WhereAmIModel {
     public WhereAmIModelDefault(EntityModel startOfChain) {
         this.startOfChain = startOfChain;
 
-        overrideFromConfigIfNew(startOfChain.getPersistenceSession().getConfiguration());
+        overrideFromConfigIfNew(IsisContext.getConfiguration());
 
         final ObjectAdapter adapter = startOfChain.getObject();
         final Object startNode = adapter.getPojo();
 
-        ParentChain.of(IsisContext.getSessionFactory().getSpecificationLoader()::loadSpecification)
+        ParentChain.of(IsisContext.getSpecificationLoader()::loadSpecification)
         .streamParentChainOf(startNode, maxChainLength)
         .forEach(reversedChainOfParents::addFirst);
     }
@@ -80,9 +82,9 @@ class WhereAmIModelDefault implements WhereAmIModel {
     // -- HELPER
 
     private EntityModel toEntityModel(Object domainObject) {
-        return new EntityModel(
-                startOfChain.getPersistenceSession()
-                .adapterFor(domainObject)	);
+        val pojoToAdapter = IsisContext.pojoToAdapter();
+        val objectAdapter = pojoToAdapter.apply(domainObject);
+        return new EntityModel(objectAdapter);
     }
 
     private void overrideFromConfigIfNew(IsisConfiguration configuration) {

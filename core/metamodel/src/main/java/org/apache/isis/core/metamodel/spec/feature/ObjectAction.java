@@ -17,6 +17,8 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -55,8 +57,6 @@ import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetCo
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.MixedInMember;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public interface ObjectAction extends ObjectMember {
 

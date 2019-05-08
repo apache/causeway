@@ -50,7 +50,6 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
     @Before
     public void setUp() throws Exception {
         facetFactory = new ActionLayoutFacetFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     public static class Contributing extends ActionLayoutAnnotationFacetFactoryJunit4Test {
@@ -80,7 +79,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             expectNoMethodsRemoved();
 
-            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
+            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
@@ -115,7 +114,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             expectNoMethodsRemoved();
 
-            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
+            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
@@ -152,7 +151,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             expectNoMethodsRemoved();
 
-            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
+            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
@@ -192,7 +191,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             expectNoMethodsRemoved();
 
-            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
+            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
@@ -229,7 +228,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             expectNoMethodsRemoved();
 
-            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
+            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
@@ -268,7 +267,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             expectNoMethodsRemoved();
 
-            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
+            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
@@ -310,8 +309,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             expectNoMethodsRemoved();
 
-            facetedMethod = FacetedMethod.createForAction(
-            		CustomerService.class, "name", mockSpecificationLoader);
+            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
@@ -351,7 +349,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             expectNoMethodsRemoved();
 
-            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name", mockSpecificationLoader);
+            facetedMethod = FacetedMethod.createForAction(CustomerService.class, "name");
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(
@@ -390,7 +388,7 @@ public class ActionLayoutAnnotationFacetFactoryJunit4Test extends AbstractFacetF
 
             expectNoMethodsRemoved();
 
-            facetedMethod = FacetedMethod.createForAction(Customer.class, "name", mockSpecificationLoader);
+            facetedMethod = FacetedMethod.createForAction(Customer.class, "name");
 
             // when
             facetFactory.process(new FacetFactory.ProcessMethodContext(

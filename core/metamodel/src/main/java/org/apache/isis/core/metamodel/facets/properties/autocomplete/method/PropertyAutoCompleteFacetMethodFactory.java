@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.properties.autocomplete.method;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -61,22 +59,8 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
         processMethodContext.removeMethod(autoCompleteMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyAutoCompleteFacetMethod(autoCompleteMethod, returnType, property,
-                getSpecificationLoader(), getAuthenticationSessionProvider(), adapterProvider
-                ));
+        FacetUtil.addFacet(new PropertyAutoCompleteFacetMethod(autoCompleteMethod, returnType, property));
     }
 
-    // ///////////////////////////////////////////////////////
-    // Dependencies (injected)
-    // ///////////////////////////////////////////////////////
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
 
 }

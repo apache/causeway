@@ -24,16 +24,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-import com.google.inject.Singleton;
-
-import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.request.resource.ResourceReference;
+import javax.inject.Singleton;
 
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
+
+import com.google.common.collect.Maps;
 
 import images.Images;
 

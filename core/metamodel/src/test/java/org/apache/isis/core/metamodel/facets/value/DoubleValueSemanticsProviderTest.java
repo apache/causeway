@@ -43,7 +43,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         _Config.put("isis.value.format.double", null);
 
         holder = new FacetHolderImpl();
-        setValue(new DoubleWrapperValueSemanticsProvider(holder, mockServicesInjector));
+        setValue(new DoubleWrapperValueSemanticsProvider(holder));
 
         doubleObj = new Double(32.5d);
         allowMockAdapterToReturn(doubleObj);

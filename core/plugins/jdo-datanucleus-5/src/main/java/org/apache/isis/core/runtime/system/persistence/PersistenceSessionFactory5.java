@@ -37,10 +37,14 @@ import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
+import org.apache.isis.core.runtime.persistence.FixturesInstalledState;
+import org.apache.isis.core.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -52,18 +56,21 @@ import org.apache.isis.objectstore.jdo.service.RegisterEntities;
  * </p>
  */
 public class PersistenceSessionFactory5
-implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledFlag {
+implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledStateHolder {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionFactory5.class);
 
     public static final String JDO_OBJECTSTORE_CONFIG_PREFIX = "isis.persistor.datanucleus";  // specific to the JDO objectstore
     public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
-
-
+    
     private final _Lazy<DataNucleusApplicationComponents5> applicationComponents = 
             _Lazy.threadSafe(this::createDataNucleusApplicationComponents);
 
     private IsisConfiguration configuration;
+    
+    @Getter(onMethod=@__({@Override})) 
+    @Setter(onMethod=@__({@Override})) 
+    FixturesInstalledState fixturesInstalledState;
     
     @Programmatic
     @Override
@@ -185,13 +192,10 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     @Programmatic
     @Override
     public PersistenceSession5 createPersistenceSession(
-            final ServicesInjector servicesInjector,
             final AuthenticationSession authenticationSession) {
 
         Objects.requireNonNull(applicationComponents.get(),
                 () -> "PersistenceSession5 requires initialization. "+this.hashCode());
-        
-        final FixturesInstalledFlag fixturesInstalledFlag = this;
         
         //[ahuber] if stale force recreate
         guardAgainstStaleState();
@@ -200,24 +204,11 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
                 applicationComponents.get().getPersistenceManagerFactory();
 
         return new PersistenceSession5(
-                servicesInjector,
-                authenticationSession, persistenceManagerFactory,
-                fixturesInstalledFlag);
+                authenticationSession, 
+                persistenceManagerFactory,
+                this);
     }
 
-    private Boolean fixturesInstalled;
-
-    @Programmatic
-    @Override
-    public Boolean isFixturesInstalled() {
-        return fixturesInstalled;
-    }
-
-    @Programmatic
-    @Override
-    public void setFixturesInstalled(final Boolean fixturesInstalled) {
-        this.fixturesInstalled = fixturesInstalled;
-    }
     
     // [ahuber] JRebel support, not tested at all
     private void guardAgainstStaleState() {

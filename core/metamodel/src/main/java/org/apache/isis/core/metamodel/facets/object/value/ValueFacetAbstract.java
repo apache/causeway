@@ -25,8 +25,8 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.lang.ClassExtensions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetUsing
 import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.EncodableFacetUsingEncoderDecoder;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.title.parser.TitleFacetUsingParser;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract implements ValueFacet {
 
@@ -43,20 +42,20 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
         return ValueFacet.class;
     }
 
-    private static ValueSemanticsProvider<?> newValueSemanticsProviderOrNull(final Class<?> semanticsProviderClass, final FacetHolder holder, final ServicesInjector servicesInjector) {
+    private static ValueSemanticsProvider<?> newValueSemanticsProviderOrNull(
+            final Class<?> semanticsProviderClass, final FacetHolder holder) {
         if (semanticsProviderClass == null) {
             return null;
         }
 
-        return (ValueSemanticsProvider<?>) ClassExtensions.newInstance(semanticsProviderClass, new Class<?>[] { FacetHolder.class, ServicesInjector.class }, new Object[] { holder, servicesInjector });
+        return (ValueSemanticsProvider<?>) ClassExtensions.newInstance(semanticsProviderClass, 
+                new Class<?>[] { FacetHolder.class, ServiceInjector.class }, new Object[] { holder });
     }
 
     // to look after the facets (since MultiTyped)
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
     private final ValueSemanticsProvider<?> semanticsProvider;
-
-    private final ServicesInjector servicesInjector;
 
     public enum AddFacetsIfInvalidStrategy {
         DO_ADD(true), DONT_ADD(false);
@@ -71,15 +70,22 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
         }
     }
 
-    public ValueFacetAbstract(final Class<?> semanticsProviderClass, final AddFacetsIfInvalidStrategy addFacetsIfInvalid, final FacetHolder holder, final ServicesInjector servicesInjector) {
-        this(newValueSemanticsProviderOrNull(semanticsProviderClass, holder, servicesInjector), addFacetsIfInvalid, holder, servicesInjector);
+    public ValueFacetAbstract(
+            final Class<?> semanticsProviderClass, 
+            final AddFacetsIfInvalidStrategy addFacetsIfInvalid, 
+            final FacetHolder holder) {
+        
+        this(newValueSemanticsProviderOrNull(semanticsProviderClass, holder), addFacetsIfInvalid, holder);
     }
 
-    public ValueFacetAbstract(final ValueSemanticsProvider<?> semanticsProvider, final AddFacetsIfInvalidStrategy addFacetsIfInvalid, final FacetHolder holder, final ServicesInjector servicesInjector) {
+    public ValueFacetAbstract(
+            final ValueSemanticsProvider<?> semanticsProvider, 
+            final AddFacetsIfInvalidStrategy addFacetsIfInvalid, 
+            final FacetHolder holder) {
+        
         super(type(), holder);
 
         this.semanticsProvider = semanticsProvider;
-        this.servicesInjector = servicesInjector;
 
         // note: we can't use the runtimeContext to inject dependencies into the
         // semanticsProvider,
@@ -120,26 +126,26 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
             // install the EncodeableFacet if we've been given an EncoderDecoder
             final EncoderDecoder<?> encoderDecoder = semanticsProvider.getEncoderDecoder();
             if (encoderDecoder != null) {
-                facetHolder.addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder, getObjectAdapterProvider(), this.servicesInjector));
+                facetHolder.addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder));
             }
 
             // install the ParseableFacet and other facets if we've been given a
             // Parser
             final Parser<?> parser = semanticsProvider.getParser();
             if (parser != null) {
-                facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder, this.servicesInjector));
-                facetHolder.addFacet(new TitleFacetUsingParser(parser, holder, this.servicesInjector));
-                facetHolder.addFacet(new TypicalLengthFacetUsingParser(parser, holder, this.servicesInjector));
+                facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder));
+                facetHolder.addFacet(new TitleFacetUsingParser(parser, holder));
+                facetHolder.addFacet(new TypicalLengthFacetUsingParser(parser, holder));
                 final int maxLength = parser.maxLength();
                 if(maxLength >=0) {
-                    facetHolder.addFacet(new MaxLengthFacetUsingParser(parser, holder, this.servicesInjector));
+                    facetHolder.addFacet(new MaxLengthFacetUsingParser(parser, holder));
                 }
             }
 
             // install the DefaultedFacet if we've been given a DefaultsProvider
             final DefaultsProvider<?> defaultsProvider = semanticsProvider.getDefaultsProvider();
             if (defaultsProvider != null) {
-                facetHolder.addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder, this.servicesInjector));
+                facetHolder.addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder));
             }
         }
     }
@@ -166,14 +172,6 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
     @Override
     public boolean containsFacetTypeOf(final Class<? extends Facet> requiredFacetType) {
         return facetHolder.containsFacet(requiredFacetType);
-    }
-
-    // /////////////////////////////////////////
-    // Dependencies (from constructor)
-    // /////////////////////////////////////////
-
-    private ObjectAdapterProvider getObjectAdapterProvider() {
-        return servicesInjector.getPersistenceSessionServiceInternal();
     }
 
 }

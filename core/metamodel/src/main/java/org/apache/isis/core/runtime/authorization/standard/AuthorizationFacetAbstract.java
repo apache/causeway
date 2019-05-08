@@ -26,8 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 public abstract class AuthorizationFacetAbstract extends FacetAbstract implements AuthorizationFacet {
@@ -37,15 +35,11 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     }
 
     private final AuthorizationManager authorizationManager;
-    private final AuthenticationSessionProvider authenticationSessionProvider;
 
     public AuthorizationFacetAbstract(
-            final FacetHolder holder,
-            final AuthorizationManager authorizationManager,
-            final AuthenticationSessionProvider authenticationSessionProvider) {
+            final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.authorizationManager = authorizationManager;
-        this.authenticationSessionProvider = authenticationSessionProvider;
+        this.authorizationManager = getAuthorizationManager();
     }
 
     @Override
@@ -57,9 +51,6 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
         return authorizationManager.isUsable(getAuthenticationSession(), ic.getIdentifier()) ? null : "Not authorized to edit";
     }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return authenticationSessionProvider.getAuthenticationSession();
-    }
+    
 
 }

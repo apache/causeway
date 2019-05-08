@@ -72,8 +72,7 @@ public class DisableForSessionFacetViaMethodFactory extends MethodPrefixBasedFac
         processMethodContext.removeMethod(disableForSessionMethod);
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new DisableForSessionFacetViaMethod(disableForSessionMethod, facetedMethod,
-                authenticationSessionProvider));
+        FacetUtil.addFacet(new DisableForSessionFacetViaMethod(disableForSessionMethod, facetedMethod));
     }
 
 }

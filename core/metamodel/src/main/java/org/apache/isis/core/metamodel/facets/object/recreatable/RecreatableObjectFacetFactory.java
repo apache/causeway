@@ -29,8 +29,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -41,7 +39,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -65,7 +62,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
         if (ViewModel.class.isAssignableFrom(processClassContext.getCls())) {
             final PostConstructMethodCache postConstructMethodCache = this;
             FacetUtil.addFacet(new RecreatableObjectFacetForRecreatableObjectInterface(
-                    processClassContext.getFacetHolder(), postConstructMethodCache, servicesInjector));
+                    processClassContext.getFacetHolder(), postConstructMethodCache));
         }
 
         // ViewModel annotation
@@ -80,7 +77,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
         if (RecreatableDomainObject.class.isAssignableFrom(processClassContext.getCls())) {
             final PostConstructMethodCache postConstructMethodCache = this;
             FacetUtil.addFacet(new RecreatableObjectFacetForRecreatableDomainObjectInterface(
-                    processClassContext.getFacetHolder(), postConstructMethodCache, servicesInjector));
+                    processClassContext.getFacetHolder(), postConstructMethodCache));
         }
 
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectFacetFactory
@@ -88,13 +85,13 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
 
     private ViewModelFacet create(final org.apache.isis.applib.annotation.ViewModel annotation, final FacetHolder holder) {
         final PostConstructMethodCache postConstructMethodCache = this;
-        return annotation != null ? new RecreatableObjectFacetForViewModelAnnotation(holder, adapterProvider, servicesInjector, postConstructMethodCache) : null;
+        return annotation != null ? new RecreatableObjectFacetForViewModelAnnotation(holder, postConstructMethodCache) : null;
     }
 
     private ViewModelFacet create(final XmlRootElement annotation, final FacetHolder holder) {
         final PostConstructMethodCache postConstructMethodCache = this;
         return annotation != null
-                ? new RecreatableObjectFacetForXmlRootElementAnnotation(holder, servicesInjector, postConstructMethodCache)
+                ? new RecreatableObjectFacetForXmlRootElementAnnotation(holder, postConstructMethodCache)
                         : null;
     }
 
@@ -132,12 +129,5 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache {
     }
 
 
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
 
 }

@@ -20,44 +20,24 @@
 package org.apache.isis.core.metamodel.facets.object.validating.validateobject;
 
 import java.lang.reflect.Method;
-import java.util.Optional;
 
-import org.jmock.Expectations;
-
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethod;
 import org.apache.isis.core.metamodel.facets.object.validating.validateobject.method.ValidateObjectFacetMethodFactory;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    private ServicesInjector mockServicesInjector;
-    private TranslationService mockTranslationService;
-
-
     private ValidateObjectFacetMethodFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
-        mockServicesInjector = context.mock(ServicesInjector.class);
-        mockTranslationService = context.mock(TranslationService.class);
-
-        context.checking(new Expectations() {{
-            allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(Optional.of(mockTranslationService)));
-        }});
-
         facetFactory = new ValidateObjectFacetMethodFactory();
-
-        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     @Override

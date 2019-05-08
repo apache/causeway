@@ -16,7 +16,6 @@
  */
 package org.apache.isis.core.runtime.services.eventbus;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.junit.Before;
@@ -25,7 +24,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.config.internal._Config;
 
 import static org.hamcrest.Matchers.is;
@@ -41,10 +40,31 @@ public class EventBusServiceDefaultUsingAxonSimpleTest {
         eventBusService = new EventBusServiceDefault() {
         	{
         		serviceRegistry = new ServiceRegistry() {
-					@Override public <T> Optional<T> lookupService(Class<T> service) { return null; }
-					@Override public <T> T injectServicesInto(T domainObject) {	return null; }
-                    @Override public Stream<Object> streamServices() { return null; }
-                    @Override public <T> Stream<T> streamServices(Class<T> serviceClass) {return null;}
+
+                    @Override
+                    public boolean isDomainServiceType(Class<?> cls) {
+                        return false;
+                    }
+
+                    @Override
+                    public Stream<BeanAdapter> streamRegisteredBeans() {
+                        return null;
+                    }
+
+                    @Override
+                    public Stream<Object> streamServices() {
+                        return null;
+                    }
+
+                    @Override
+                    public boolean isRegisteredBean(Class<?> cls) {
+                        return false;
+                    }
+
+                    @Override
+                    public void validateServices() {
+                    }
+					
 				}; 
         	}
         };

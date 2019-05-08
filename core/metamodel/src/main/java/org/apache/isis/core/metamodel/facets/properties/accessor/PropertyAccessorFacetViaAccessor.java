@@ -26,15 +26,12 @@ import java.util.Map;
 
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class PropertyAccessorFacetViaAccessor
 extends PropertyOrCollectionAccessorFacetAbstract
@@ -46,11 +43,9 @@ implements ImperativeFacet {
     public PropertyAccessorFacetViaAccessor(
             final ObjectSpecification typeSpec,
             final Method method,
-            final FacetHolder holder,
-            final SpecificationLoader specificationLoader,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final ObjectAdapterProvider adapterProvider) {
-        super(typeSpec, holder, specificationLoader, authenticationSessionProvider, adapterProvider);
+            final FacetHolder holder) {
+        
+        super(typeSpec, holder);
         this.method = method;
     }
 

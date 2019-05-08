@@ -48,14 +48,12 @@ public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFac
     @Before
     public void setUp() throws Exception {
         facetFactory = new ActionLayoutFacetFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     @Test
     public void testActionLayoutAnnotationPickedUp() {
 
         class Customer {
-            @SuppressWarnings("unused")
             @ActionLayout(position = ActionLayout.Position.PANEL)
             public String foz() {
                 return null;

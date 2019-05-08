@@ -25,18 +25,18 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.Parameter;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSatisfySpecificationFacetAbstract {
 
     public static Facet create(
             final List<Parameter> parameters,
             final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
+            final ServiceInjector servicesInjector) {
 
         List<Specification> specifications = parameters.stream()
                 .map(Parameter::mustSatisfy)
@@ -54,7 +54,7 @@ public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSat
     private MustSatisfySpecificationFacetForParameterAnnotation(
             final List<Specification> specifications,
             final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
+            final ServiceInjector servicesInjector) {
         super(specifications, holder, servicesInjector);
     }
 

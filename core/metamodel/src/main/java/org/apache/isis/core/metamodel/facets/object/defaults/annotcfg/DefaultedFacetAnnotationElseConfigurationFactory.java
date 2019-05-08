@@ -46,16 +46,16 @@ public class DefaultedFacetAnnotationElseConfigurationFactory extends FacetFacto
 
         // create from annotation, if present
         if (annotation != null) {
-            final DefaultedFacetAbstract facet = new DefaultedFacetAnnotation(cls, getConfiguration(), holder, servicesInjector);
+            final DefaultedFacetAbstract facet = new DefaultedFacetAnnotation(cls, holder);
             if (facet.isValid()) {
                 return facet;
             }
         }
 
         // otherwise, try to create from configuration, if present
-        final String providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(cls, getConfiguration());
+        final String providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(cls);
         if (!_Strings.isNullOrEmpty(providerName)) {
-            final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder, servicesInjector);
+            final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder);
             if (facet.isValid()) {
                 return facet;
             }

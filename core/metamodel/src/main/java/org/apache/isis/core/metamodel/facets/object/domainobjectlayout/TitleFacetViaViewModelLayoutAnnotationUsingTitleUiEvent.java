@@ -22,11 +22,9 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 import java.util.List;
 import java.util.Map;
 
-
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
-import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Casts;
@@ -35,19 +33,18 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent extends TitleFacetAbstract {
 
-    //private static final Logger LOG = LoggerFactory.getLogger(TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent.class);
-
     public static Facet create(
             final List<ViewModelLayout> viewModelLayouts,
-            final ServicesInjector servicesInjector,
-            final IsisConfiguration configuration, final FacetHolder facetHolder) {
+            final MetamodelEventService metamodelEventService,
+            final IsisConfiguration configuration, 
+            final FacetHolder facetHolder) {
 
         return viewModelLayouts.stream()
                 .map(ViewModelLayout::titleUiEvent)
@@ -59,8 +56,6 @@ public class TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent extends Tit
                         configuration))
                 .findFirst()
                 .map(titleUiEventClass -> {
-                    final TranslationService translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);
-
                     final String translationContext;
                     if(facetHolder instanceof ObjectSpecification) {
                         final ObjectSpecification facetHolderAsSpec = (ObjectSpecification) facetHolder; // bit naughty...
@@ -69,10 +64,8 @@ public class TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent extends Tit
                         translationContext = null;
                     }
 
-                    final EventBusService eventBusService = servicesInjector.lookupServiceElseFail(EventBusService.class);
-
                     return new TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent(
-                            titleUiEventClass, translationService, translationContext, eventBusService, facetHolder);
+                            titleUiEventClass, translationContext, metamodelEventService, facetHolder);
                 })
                 .orElse(null);
     }
@@ -80,19 +73,18 @@ public class TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent extends Tit
     private final Class<? extends TitleUiEvent<?>> titleUiEventClass;
     private final TranslationService translationService;
     private final String translationContext;
-    private final EventBusService eventBusService;
+    private final MetamodelEventService metamodelEventService;
 
     public TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent(
             final Class<? extends TitleUiEvent<?>> titleUiEventClass,
-            final TranslationService translationService,
             final String translationContext,
-            final EventBusService eventBusService,
+            final MetamodelEventService metamodelEventService,
             final FacetHolder holder) {
         super(holder);
         this.titleUiEventClass = titleUiEventClass;
-        this.translationService = translationService;
+        this.translationService = super.getTranslationService();
         this.translationContext = translationContext;
-        this.eventBusService = eventBusService;
+        this.metamodelEventService = metamodelEventService;
     }
 
     @Override
@@ -104,7 +96,7 @@ public class TitleFacetViaViewModelLayoutAnnotationUsingTitleUiEvent extends Tit
 
         final TitleUiEvent<Object> titleUiEvent = newTitleUiEvent(owningAdapter);
 
-        eventBusService.post(titleUiEvent);
+        metamodelEventService.fireTitleUiEvent(titleUiEvent);
 
         final TranslatableString translatedTitle = titleUiEvent.getTranslatableTitle();
         if(translatedTitle != null) {

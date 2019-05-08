@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -81,6 +83,8 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     protected Component createComponentForCompact() {
         Fragment compactFragment = getCompactFragment(CompactType.SPAN);
         final Label label = new Label(ID_SCALAR_IF_COMPACT, newTextFieldValueModel()) {
+            private static final long serialVersionUID = 1L;
+            
             @Override
             public <C> IConverter<C> getConverter(Class<C> type) {
                 return (IConverter<C>) converter;
@@ -103,6 +107,8 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     @Override
     protected IModel<String> obtainInlinePromptModel() {
         return new Model<String>() {
+            private static final long serialVersionUID = 1L;
+
             @Override public String getObject() {
                 ObjectAdapter object = scalarModel.getObject();
                 final T value = object != null ? (T) object.getPojo() : null;
@@ -124,15 +130,14 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
 
 
 
-    @com.google.inject.Inject
-    WicketViewerSettings settings;
+    @Inject WicketViewerSettings settings;
     @Override
     protected WicketViewerSettings getSettings() {
         return settings;
     }
 
     private LocaleProvider getLocaleProvider() {
-        return IsisContext.getSessionFactory().getServicesInjector().lookupService(LocaleProvider.class).orElse(null);
+        return IsisContext.getServiceRegistry().lookupServiceElseFail(LocaleProvider.class);
     }
 
 

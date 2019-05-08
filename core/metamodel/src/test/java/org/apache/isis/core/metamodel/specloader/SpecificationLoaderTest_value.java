@@ -19,27 +19,28 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 
-public class SpecificationLoaderTest_value extends SpecificationLoaderTestAbstract {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class SpecificationLoaderTest_value extends SpecificationLoaderTestAbstract {
 
     @Override
     protected ObjectSpecification loadSpecification(final SpecificationLoader reflector) {
-        return reflector.loadSpecification(String.class, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+        return reflector.loadSpecification(String.class);
     }
 
     @Test
     public void testType() throws Exception {
-        Assert.assertTrue(specification.isNotCollection());
+        assertTrue(specification.isNotCollection());
     }
 
     @Test
     public void testName() throws Exception {
-        Assert.assertEquals(String.class.getName(), specification.getFullIdentifier());
+        assertEquals(String.class.getName(), specification.getFullIdentifier());
     }
 
 }

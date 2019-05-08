@@ -22,9 +22,9 @@ package org.apache.isis.core.metamodel.facets.object.mixin;
 import java.lang.reflect.Constructor;
 
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
 
@@ -34,15 +34,16 @@ public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
 
     private MixinFacetForMixinAnnotation(
             final Class<?> mixinType,
-            final String value, final Class<?> constructorType,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
-        super(mixinType, value, constructorType, holder, servicesInjector);
+            final String value, 
+            final Class<?> constructorType,
+            final FacetHolder holder) {
+        
+        super(mixinType, value, constructorType, holder);
     }
 
     public static MixinFacet create(
             final Class<?> candidateMixinType, final FacetHolder facetHolder,
-            final ServicesInjector servicesInjector) {
+            final ServiceInjector servicesInjector) {
         final Mixin mixin = candidateMixinType.getAnnotation(Mixin.class);
         if(mixin == null) {
             return null;
@@ -54,7 +55,7 @@ public class MixinFacetForMixinAnnotation extends MixinFacetAbstract {
                 continue;
             }
             final Class<?> constructorType = constructorTypes[0];
-            return new MixinFacetForMixinAnnotation(candidateMixinType, mixin.method(), constructorType, facetHolder, servicesInjector);
+            return new MixinFacetForMixinAnnotation(candidateMixinType, mixin.method(), constructorType, facetHolder);
         }
         return null;
     }

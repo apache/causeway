@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<LocalDate> implements JodaLocalDateValueFacet {
@@ -139,14 +138,14 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
      * {@link EncoderDecoder}.
      */
     public JodaLocalDateValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
     /**
      * Uses {@link #type()} as the facet type.
      */
-    public JodaLocalDateValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, LocalDate.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
+    public JodaLocalDateValueSemanticsProvider(final FacetHolder holder) {
+        super(type(), holder, LocalDate.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
         String configuredNameOrPattern = getConfiguration().getString(CFG_FORMAT_KEY, "medium").trim();
         updateTitleStringFormatter(configuredNameOrPattern);

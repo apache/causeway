@@ -21,21 +21,19 @@ package org.apache.isis.core.metamodel.facets.object.defaults.annotcfg;
 
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultsProviderUtil;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
 
-    private static String providerName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
+    private static String providerName(final Class<?> annotatedClass) {
         final Defaulted annotation = annotatedClass.getAnnotation(Defaulted.class);
         final String providerName = annotation.defaultsProviderName();
         if (!_Strings.isNullOrEmpty(providerName)) {
             return providerName;
         }
-        return DefaultsProviderUtil.defaultsProviderNameFromConfiguration(annotatedClass, configuration);
+        return DefaultsProviderUtil.defaultsProviderNameFromConfiguration(annotatedClass);
     }
 
     private static Class<?> providerClass(final Class<?> annotatedClass) {
@@ -43,12 +41,16 @@ public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
         return annotation.defaultsProviderClass();
     }
 
-    public DefaultedFacetAnnotation(final Class<?> annotatedClass, final IsisConfiguration configuration, final FacetHolder holder, final ServicesInjector dependencyInjector) {
-        this(providerName(annotatedClass, configuration), providerClass(annotatedClass), holder, dependencyInjector);
+    public DefaultedFacetAnnotation(final Class<?> annotatedClass, final FacetHolder holder) {
+        this(providerName(annotatedClass), providerClass(annotatedClass), holder);
     }
 
-    private DefaultedFacetAnnotation(final String candidateProviderName, final Class<?> candidateProviderClass, final FacetHolder holder, final ServicesInjector dependencyInjector) {
-        super(candidateProviderName, candidateProviderClass, holder, dependencyInjector);
+    private DefaultedFacetAnnotation(
+            final String candidateProviderName, 
+            final Class<?> candidateProviderClass, 
+            final FacetHolder holder) {
+        
+        super(candidateProviderName, candidateProviderClass, holder);
     }
 
 }

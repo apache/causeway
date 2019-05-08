@@ -20,9 +20,7 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.Objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -33,32 +31,33 @@ import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.memento.Data;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Encapsulate ObjectAdpater life-cycling.  
  *  
  * @since 2.0.0-M2
  */
+@Slf4j
 final public class ObjectAdapterContext {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext.class);
-
     public static ObjectAdapterContext openContext(
-            ServicesInjector servicesInjector, 
             AuthenticationSession authenticationSession, 
             SpecificationLoader specificationLoader, 
             PersistenceSession persistenceSession) {
         final ObjectAdapterContext objectAdapterContext = 
-                new ObjectAdapterContext(servicesInjector, authenticationSession, 
+                new ObjectAdapterContext(authenticationSession, 
                         specificationLoader, persistenceSession);
         objectAdapterContext.open();
         return objectAdapterContext;
@@ -72,42 +71,40 @@ final public class ObjectAdapterContext {
     private final ObjectAdapterContext_NewIdentifier newIdentifierMixin;
     private final ObjectAdapterContext_ObjectAdapterByIdProvider objectAdapterByIdProviderMixin;
     private final ObjectAdapterContext_DependencyInjection dependencyInjectionMixin;
+    private final ServiceInjector serviceInjector;
     final ObjectAdapterContext_ObjectCreation objectCreationMixin;
     private final ObjectAdapterContext_LifecycleEventSupport lifecycleEventMixin;
-    private final ServicesInjector servicesInjector;
 
     private ObjectAdapterContext(
-            ServicesInjector servicesInjector, 
             AuthenticationSession authenticationSession, 
             SpecificationLoader specificationLoader, 
             PersistenceSession persistenceSession) {
 
-        this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, persistenceSession);
+        val runtimeContext = IsisContext.newManagedObjectContext();
+        
+        this.objectAdapterProviderMixin = new ObjectAdapterContext_ObjectAdapterProvider(this, persistenceSession, runtimeContext);
         this.mementoSupportMixin = new ObjectAdapterContext_MementoSupport(this, persistenceSession);
-        this.serviceLookupMixin = new ObjectAdapterContext_ServiceLookup(this, servicesInjector);
-        this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(this, persistenceSession);
-        this.objectAdapterByIdProviderMixin = new ObjectAdapterContext_ObjectAdapterByIdProvider(this, persistenceSession, authenticationSession);
-        this.dependencyInjectionMixin = new ObjectAdapterContext_DependencyInjection(this, persistenceSession);
-        this.objectCreationMixin = new ObjectAdapterContext_ObjectCreation(this, persistenceSession);
-        this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(this, persistenceSession);
+        this.serviceLookupMixin = new ObjectAdapterContext_ServiceLookup(this, runtimeContext.getServiceRegistry());
+        this.newIdentifierMixin = new ObjectAdapterContext_NewIdentifier(persistenceSession, runtimeContext.getSpecificationLoader());
+        this.objectAdapterByIdProviderMixin = new ObjectAdapterContext_ObjectAdapterByIdProvider(this, persistenceSession, runtimeContext);
+        this.dependencyInjectionMixin = new ObjectAdapterContext_DependencyInjection(runtimeContext);
+        this.objectCreationMixin = new ObjectAdapterContext_ObjectCreation(this, persistenceSession, runtimeContext);
+        this.lifecycleEventMixin = new ObjectAdapterContext_LifecycleEventSupport(runtimeContext);
 
         this.persistenceSession = persistenceSession;
         this.specificationLoader = specificationLoader;
-        this.servicesInjector = servicesInjector;
+        this.serviceInjector = IsisContext.getServiceInjector();
 
-        this.objectAdapterFactories = new ObjectAdapterContext_Factories(
-                authenticationSession, 
-                specificationLoader, 
-                persistenceSession);
+        this.objectAdapterFactories = new ObjectAdapterContext_Factories(runtimeContext, persistenceSession);
     }
 
     // -- DEBUG
 
     void printContextInfo(String msg) {
-        if(LOG.isDebugEnabled()) {
+        if(log.isDebugEnabled()) {
             String id = Integer.toHexString(this.hashCode());
             String session = ""+persistenceSession;
-            LOG.debug(String.format("%s id=%s session='%s'", msg, id, session));
+            log.debug(String.format("%s id=%s session='%s'", msg, id, session));
         }
     }
 
@@ -179,6 +176,7 @@ final public class ObjectAdapterContext {
     }
 
     private final ObjectAdapterFactories objectAdapterFactories;
+    
 
     // package private
     ObjectAdapterFactories getFactories() {
@@ -208,7 +206,7 @@ final public class ObjectAdapterContext {
             return adapter; // guard against value objects
         }
         final Object pojo = adapter.getPojo();
-        servicesInjector.injectServicesInto(pojo);
+        serviceInjector.injectServicesInto(pojo);
         return adapter;
     }
     

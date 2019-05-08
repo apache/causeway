@@ -45,7 +45,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
         SomeReferencedObject other = new SomeReferencedObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
-        final CollectionDomainEvent<Object, Object> ev = new DomainEventHelper(null).newCollectionDomainEvent(
+        final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
         assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
@@ -59,7 +59,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
         SomeReferencedObject other = new SomeReferencedObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
-        final CollectionDomainEvent<Object, Object> ev = new DomainEventHelper(null).newCollectionDomainEvent(
+        final CollectionDomainEvent<Object, Object> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 CollectionDomainEvent.Default.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
         assertSame(ev.getSource(), sdo);
         assertThat(ev.getIdentifier(), is(identifier));
@@ -73,7 +73,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
         SomeReferencedObject other = new SomeReferencedObject();
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
-        final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = new DomainEventHelper(null).newCollectionDomainEvent(
+        final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = Utils.domainEventHelper().newCollectionDomainEvent(
                 SomeDomainObjectCollectionRemovedFromDomainEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));

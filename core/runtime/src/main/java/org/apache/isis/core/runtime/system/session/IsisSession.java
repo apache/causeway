@@ -19,81 +19,111 @@
 
 package org.apache.isis.core.runtime.system.session;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Optional;
 
-import org.apache.isis.core.commons.components.SessionScopedComponent;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.util.ToString;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.context.session.RuntimeContextBase;
+import org.apache.isis.core.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.security.authentication.MessageBroker;
+
+import lombok.Getter;
 
 /**
- * Analogous to (and in essence a wrapper for) a JDO <code>PersistenceManager</code>;
- * holds the current set of components for a specific execution context (such as on a thread).
+ * Holds the current set of components for a specific execution context (such as on a thread).
  *
  * <p>
  * The <code>IsisContext</code> class is responsible for locating the current execution context.
  *
  * @see IsisSessionFactory
  */
-public class IsisSession implements SessionScopedComponent {
+public class IsisSession extends RuntimeContextBase {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IsisSession.class);
-
-    // -- constructor, fields
-
-    private final AuthenticationSession authenticationSession;
-    private PersistenceSession persistenceSession; // only non-final so can be replaced in tests.
-
-    public IsisSession(
-            final AuthenticationSession authenticationSession,
-            final PersistenceSession persistenceSession) {
-
-        this.authenticationSession = authenticationSession;
-        this.persistenceSession = persistenceSession;
-    }
-
-
-    // -- open, close
+	private RuntimeEventService runtimeEventService;
+	
+	/**
+     * Set to System.nanoTime() when session opens.
+     */
+	@Getter private long openedAtSystemNanos = -1L;
+    
+	public IsisSession(
+			final RuntimeEventService runtimeEventService,
+			final AuthenticationSession authenticationSession) {
+		
+		super(IsisContext.getConfiguration(),
+				IsisContext.getServiceInjector(),
+				IsisContext.getServiceRegistry(),
+				IsisContext.getSpecificationLoader(),
+				authenticationSession,
+				IsisContext.getObjectAdapterProvider(),
+				IsisContext.getPersistenceSession().orElse(null)
+				);
+		
+		this.runtimeEventService = runtimeEventService;
+        
+	}
+	
+	// -- CURRENT
+	
+	public static IsisSession currentOrElseNull() {
+		return current().orElse(null);
+	}
+	
+	public static Optional<IsisSession> current() {
+		return _Context.threadLocalGet(IsisSession.class)
+				.getSingleton();
+	}
+	
+	public static boolean isInSession() {
+		return currentOrElseNull() != null;
+	}
+	
+	// -- SHORTCUTS
+	
+	public static Optional<AuthenticationSession> authenticationSession() {
+		return current()
+				.map(IsisSession::getAuthenticationSession);
+	}
+	
+	public static Optional<MessageBroker> messageBroker() {
+		return authenticationSession()
+				.map(AuthenticationSession::getMessageBroker);
+	}
+	
+	public static Optional<IsisTransactionManager> transactionManager() {
+		return current()
+				.map(IsisSession::getTransactionManager);
+	}
+	
+	// -- OPEN
+    
     void open() {
-        persistenceSession.open();
+    	openedAtSystemNanos = System.nanoTime();
+    	_Context.threadLocalPut(IsisSession.class, this);
+    	runtimeEventService.fireSessionOpened(this);
     }
 
+    // -- CLOSE
+    
     /**
      * Closes session.
      */
     void close() {
-        if(persistenceSession != null) {
-            persistenceSession.close();
-        }
+        runtimeEventService.fireSessionClosing(this);
+        _Context.threadLocalCleanup();
     }
 
-
-
-
-    // -- AuthenticationSession
-    /**
-     * Returns the {@link AuthenticationSession} representing this user for this
-     * {@link IsisSession}.
-     */
-    public AuthenticationSession getAuthenticationSession() {
-        return authenticationSession;
-    }
-
-
-    // -- Persistence Session
-    /**
-     * The {@link PersistenceSession} within this {@link IsisSession}.
-     */
-    public PersistenceSession getPersistenceSession() {
-        return persistenceSession;
-    }
-
-
-
-    // -- transaction
+    // -- FLUSH
+//    void flush() {
+//    	runtimeEventService.fireSessionFlushing(this);
+//    }
+    
+    // -- TRANSACTION
 
     /**
      * Convenience method that returns the {@link IsisTransaction} of the
@@ -103,6 +133,8 @@ public class IsisSession implements SessionScopedComponent {
         return getTransactionManager().getCurrentTransaction();
     }
 
+    
+    
 
 
     // -- toString
@@ -110,7 +142,7 @@ public class IsisSession implements SessionScopedComponent {
     public String toString() {
         final ToString asString = new ToString(this);
         asString.append("authenticationSession", getAuthenticationSession());
-        asString.append("persistenceSession", getPersistenceSession());
+        asString.append("persistenceSession", PersistenceSession.current(PersistenceSession.class));
         asString.append("transaction", getCurrentTransaction());
         return asString.toString();
     }
@@ -119,8 +151,10 @@ public class IsisSession implements SessionScopedComponent {
     // -- Dependencies (from constructor)
 
     private IsisTransactionManager getTransactionManager() {
-        return getPersistenceSession().getTransactionManager();
+        return IsisContext.getTransactionManager().get();
     }
+
+	
 
 
 }

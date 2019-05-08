@@ -36,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -55,17 +54,15 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
      */
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
-
-
     private final Identifier identifier;
 
     public ObjectActionContributee(
             final Object servicePojo,
             final ObjectActionDefault serviceAction,
             final int contributeeParam,
-            final ObjectSpecification contributeeType,
-            final ServicesInjector servicesInjector) {
-        super(serviceAction.getFacetedMethod(), servicesInjector);
+            final ObjectSpecification contributeeType) {
+        
+        super(serviceAction.getFacetedMethod());
 
         this.servicePojo = servicePojo;
         this.serviceAction = serviceAction;
@@ -299,7 +296,7 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     }
 
     public ObjectAdapter getServiceAdapter() {
-        return getPersistenceSessionService().adapterFor(servicePojo);
+        return getObjectAdapterProvider().adapterFor(servicePojo);
     }
 
     @Override

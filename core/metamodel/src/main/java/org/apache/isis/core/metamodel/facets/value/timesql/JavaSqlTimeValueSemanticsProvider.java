@@ -31,7 +31,6 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.time.TimeValueSemanticsProviderAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * Treats {@link java.sql.Time} as a time-only value type.
@@ -49,11 +48,11 @@ public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProvide
      * {@link EncoderDecoder}.
      */
     public JavaSqlTimeValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public JavaSqlTimeValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, java.sql.Time.class, context);
+    public JavaSqlTimeValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, java.sql.Time.class);
     }
 
     @Override

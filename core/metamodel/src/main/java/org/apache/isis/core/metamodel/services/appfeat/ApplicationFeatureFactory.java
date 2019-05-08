@@ -18,21 +18,18 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import org.apache.isis.applib.services.factory.FactoryService;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class ApplicationFeatureFactory {
 
     public ApplicationFeature newApplicationFeature() {
         return factoryService.instantiate(ApplicationFeature.class);
     }
 
-    @javax.inject.Inject
-    FactoryService factoryService;
+    @Inject FactoryService factoryService;
 
 }

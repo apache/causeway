@@ -39,8 +39,9 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forModify {
         LocalDate oldValue = new LocalDate(2013,4,1);
         LocalDate newValue = new LocalDate(2013,5,2);
         
-        final PropertyDomainEvent<Object, Object> ev =
-                new DomainEventHelper(null).newPropertyDomainEvent(PropertyDomainEvent.Default.class, identifier, sdo, oldValue, newValue);
+        Utils.domainEventHelper();
+		final PropertyDomainEvent<Object, Object> ev =
+        		DomainEventHelper.newPropertyDomainEvent(PropertyDomainEvent.Default.class, identifier, sdo, oldValue, newValue);
         assertThat(ev.getSource(), is((Object)sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is((Object)oldValue));
@@ -56,8 +57,9 @@ public class DomainEventHelperTest_newPropertyDomainEvent_forModify {
         LocalDate oldValue = new LocalDate(2013,4,1);
         LocalDate newValue = new LocalDate(2013,5,2);
         
-        final PropertyDomainEvent<SomeDomainObject, LocalDate> ev =
-                new DomainEventHelper(null).newPropertyDomainEvent(SomeDatePropertyChangedDomainEvent.class, identifier, sdo, oldValue, newValue);
+        Utils.domainEventHelper();
+		final PropertyDomainEvent<SomeDomainObject, LocalDate> ev =
+        		DomainEventHelper.newPropertyDomainEvent(SomeDatePropertyChangedDomainEvent.class, identifier, sdo, oldValue, newValue);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOldValue(), is(oldValue));

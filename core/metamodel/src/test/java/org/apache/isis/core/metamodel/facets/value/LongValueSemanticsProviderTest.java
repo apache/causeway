@@ -47,7 +47,7 @@ public class LongValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
         _Config.put("isis.value.format.long", null);
 
-        setValue(value = new LongWrapperValueSemanticsProvider(holder, mockServicesInjector));
+        setValue(value = new LongWrapperValueSemanticsProvider(holder));
     }
 
     @Test

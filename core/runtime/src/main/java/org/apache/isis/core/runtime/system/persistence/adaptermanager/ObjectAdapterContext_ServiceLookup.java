@@ -20,9 +20,7 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Timing;
 import org.apache.isis.commons.internal.base._Timing.StopWatch;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -30,7 +28,8 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -39,18 +38,18 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
  * </p> 
  * @since 2.0.0-M2
  */
-@SuppressWarnings("unused")
+//@Slf4j
 class ObjectAdapterContext_ServiceLookup {
     
-    
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_ServiceLookup.class);
     private final ObjectAdapterContext objectAdapterContext;
-    private final ServicesInjector servicesInjector;
+    private final ServiceRegistry serviceRegistry;
     
-    ObjectAdapterContext_ServiceLookup(ObjectAdapterContext objectAdapterContext,
-            ServicesInjector servicesInjector) {
+    ObjectAdapterContext_ServiceLookup(
+            ObjectAdapterContext objectAdapterContext,
+            ServiceRegistry serviceRegistry) {
+        
         this.objectAdapterContext = objectAdapterContext;
-        this.servicesInjector = servicesInjector;
+        this.serviceRegistry = serviceRegistry;
     }
 
     ObjectAdapter lookupServiceAdapterFor(RootOid rootOid) {
@@ -92,7 +91,7 @@ class ObjectAdapterContext_ServiceLookup {
         
         final ServicesByIdResource lookupResource = new ServicesByIdResource();
         
-        servicesInjector.streamServices()
+        serviceRegistry.streamServices()
         .map(objectAdapterContext.getObjectAdapterProvider()::adapterFor)
         .forEach(serviceAdapter->{
             Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());

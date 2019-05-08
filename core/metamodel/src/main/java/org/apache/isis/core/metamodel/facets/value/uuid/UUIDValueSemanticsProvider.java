@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<UUID> implements UUIDValueFacet {
@@ -45,11 +44,11 @@ public class UUIDValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
      * {@link EncoderDecoder}.
      */
     public UUIDValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public UUIDValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, UUID.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
+    public UUIDValueSemanticsProvider(final FacetHolder holder) {
+        super(type(), holder, UUID.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
     }
 
     // //////////////////////////////////////////////////////////////////

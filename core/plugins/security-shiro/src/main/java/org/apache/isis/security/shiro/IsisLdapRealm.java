@@ -18,12 +18,9 @@
  */
 package org.apache.isis.security.shiro;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,7 +35,7 @@ import javax.naming.ldap.LdapContext;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.config.Ini;
-import org.apache.shiro.realm.ldap.JndiLdapRealm;
+import org.apache.shiro.realm.ldap.DefaultLdapRealm;
 import org.apache.shiro.realm.ldap.LdapContextFactory;
 import org.apache.shiro.realm.ldap.LdapUtils;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -49,6 +46,8 @@ import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapper;
 import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromIni;
 import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromString;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 /**
  * Implementation of {@link org.apache.shiro.realm.ldap.JndiLdapRealm} that also
@@ -135,7 +134,7 @@ import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromS
  * <p/>
  * </p>
  */
-public class IsisLdapRealm extends JndiLdapRealm {
+public class IsisLdapRealm extends DefaultLdapRealm {
 
     private static final String UNIQUEMEMBER_SUBSTITUTION_TOKEN = "{0}";
     private final static SearchControls SUBTREE_SCOPE = new SearchControls();

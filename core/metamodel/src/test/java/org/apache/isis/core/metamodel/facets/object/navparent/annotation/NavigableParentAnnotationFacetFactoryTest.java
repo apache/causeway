@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.navparent.annotation;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -40,76 +41,73 @@ import org.apache.isis.core.security.authentication.AuthenticationSessionProvide
 
 public class NavigableParentAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
-    private NavigableParentAnnotationFacetFactory facetFactory;
+	private NavigableParentAnnotationFacetFactory facetFactory;
 
-    @Mock
-    private ObjectAdapter mockObjectAdapter;
-    @Mock
-    private AuthenticationSession mockAuthenticationSession;
+	@Mock
+	private ObjectAdapter mockObjectAdapter;
+	@Mock
+	private AuthenticationSession mockAuthenticationSession;
 
-    @Before
-    public void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 
-        // PRODUCTION
-        
-        context.allowing(mockSpecificationLoader);
+		// PRODUCTION
 
-        facetFactory = new NavigableParentAnnotationFacetFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
+		context.allowing(mockSpecificationLoader);
 
-        context.checking(new Expectations() {
-            {
-                allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-                will(returnValue(mockAuthenticationSessionProvider));
+		facetFactory = new NavigableParentAnnotationFacetFactory();
 
-                allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
-                will(returnValue(mockAuthenticationSession));
+		context.checking(new Expectations() {
+			{
+				allowing(mockServiceRegistry).lookupService(AuthenticationSessionProvider.class);
+				will(returnValue(Optional.of(mockAuthenticationSessionProvider)));
 
-                allowing(mockServicesInjector).getSpecificationLoader();
-                will(returnValue(mockSpecificationLoader));
+				allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
+				will(returnValue(mockAuthenticationSession));
 
-                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-                will(returnValue(mockPersistenceSessionServiceInternal));
-            }
-        });
+				//                allowing(mockServicesInjector).getSpecificationLoader();
+				//                will(returnValue(mockSpecificationLoader));
+				//
+				//                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+				//                will(returnValue(mockPersistenceSessionServiceInternal));
+			}
+		});
 
-        facetFactory.setServicesInjector(mockServicesInjector);
+	}
 
-    }
+	@After
+	@Override
+	public void tearDown() throws Exception {
+		facetFactory = null;
+		super.tearDown();
+	}
 
-    @After
-    @Override
-    public void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
+	@Test
+	public void testParentAnnotatedMethod() throws Exception {
+		testParentMethod(new DomainObjectA(), "root");
+	}
 
-    @Test
-    public void testParentAnnotatedMethod() throws Exception {
-    	testParentMethod(new DomainObjectA(), "root");
-    }
+	// -- HELPER
 
-    // -- HELPER
-    
-    private void testParentMethod(Object domainObject, String parentMethodName) throws Exception {
-    	
-    	final Class<?> domainClass = domainObject.getClass();
-    	
-        facetFactory.process(new ProcessClassContext(domainClass, mockMethodRemover, facetedMethod));
+	private void testParentMethod(Object domainObject, String parentMethodName) throws Exception {
 
-        final Facet facet = facetedMethod.getFacet(NavigableParentFacet.class);
-        Assert.assertNotNull(facet);
-        Assert.assertTrue(facet instanceof NavigableParentFacetMethod);
-        
-        final NavigableParentFacetMethod navigableParentFacetMethod = (NavigableParentFacetMethod) facet;
-        final Method parentMethod = domainClass.getMethod(parentMethodName);
-        
-        Assert.assertEquals(
-        		parentMethod.invoke(domainObject, Reflect.emptyObjects), 
-        		navigableParentFacetMethod.navigableParent(domainObject)	);
-        
-    }
-    
-    
-    
+		final Class<?> domainClass = domainObject.getClass();
+
+		facetFactory.process(new ProcessClassContext(domainClass, mockMethodRemover, facetedMethod));
+
+		final Facet facet = facetedMethod.getFacet(NavigableParentFacet.class);
+		Assert.assertNotNull(facet);
+		Assert.assertTrue(facet instanceof NavigableParentFacetMethod);
+
+		final NavigableParentFacetMethod navigableParentFacetMethod = (NavigableParentFacetMethod) facet;
+		final Method parentMethod = domainClass.getMethod(parentMethodName);
+
+		Assert.assertEquals(
+				parentMethod.invoke(domainObject, Reflect.emptyObjects), 
+				navigableParentFacetMethod.navigableParent(domainObject)	);
+
+	}
+
+
+
 }

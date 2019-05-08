@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -70,9 +69,9 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
             final ObjectActionDefault mixinAction,
             final ObjectSpecification mixedInType,
             final Class<?> mixinType,
-            final String mixinMethodName,
-            final ServicesInjector servicesInjector) {
-        super(mixinAction.getFacetedMethod(), mixinAction.getReturnType(), servicesInjector);
+            final String mixinMethodName) {
+        
+        super(mixinAction.getFacetedMethod(), mixinAction.getReturnType());
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
@@ -196,7 +195,7 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     }
 
     private PublishingServiceInternal getPublishingServiceInternal() {
-        return getServicesInjector().lookupServiceElseFail(PublishingServiceInternal.class);
+        return getServiceRegistry().lookupServiceElseFail(PublishingServiceInternal.class);
     }
 
 

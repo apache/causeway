@@ -19,16 +19,17 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.core.metamodel.MetaModelContext;
 
-import static org.apache.isis.commons.internal.base._With.requires;
 
-
-public abstract class FacetAbstract implements Facet {
+public abstract class FacetAbstract implements Facet, MetaModelContext.Delegating {
 
     public enum Derivation {
         DERIVED,
@@ -55,7 +56,7 @@ public abstract class FacetAbstract implements Facet {
             final FacetHolder holder,
             final Derivation derivation) {
         this.facetType = requires(facetType, "facetType"); 
-        setFacetHolder(requires(holder, "holder"));
+        setFacetHolder(holder);
         this.derived = (derivation == Derivation.DERIVED);
     }
 
@@ -146,7 +147,9 @@ public abstract class FacetAbstract implements Facet {
     @Override
     public void setFacetHolder(final FacetHolder facetHolder) {
         this.holder = facetHolder;
-        this.identifiedHolder = holder instanceof IdentifiedHolder ? (IdentifiedHolder) holder : null;
+        this.identifiedHolder = (holder!=null && holder instanceof IdentifiedHolder) 
+        		? (IdentifiedHolder) holder 
+        				: null;
     }
 
     protected String toStringValues() {
@@ -230,5 +233,13 @@ public abstract class FacetAbstract implements Facet {
      */
     public static interface Validating {
     }
+    
+    // -- dependencies
+    
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return MetaModelContext.current();
+    }
+   
 
 }

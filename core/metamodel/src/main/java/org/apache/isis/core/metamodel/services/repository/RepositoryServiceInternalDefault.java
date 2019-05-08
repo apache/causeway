@@ -74,7 +74,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
     @Override
     public boolean isPersistent(final Object domainObject) {
         final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
-        return adapter.representsPersistent();
+        return adapter.isRepresentingPersistent();
     }
 
     @Programmatic

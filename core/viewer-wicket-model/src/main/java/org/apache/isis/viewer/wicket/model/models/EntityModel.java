@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -40,14 +41,15 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
+
+import lombok.val;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.
@@ -56,7 +58,8 @@ import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
  * So that the model is {@link Serializable}, the {@link ObjectAdapter} is
  * stored as a {@link ObjectAdapterMemento}.
  */
-public class EntityModel extends BookmarkableModel<ObjectAdapter> implements ObjectAdapterModel, UiHintContainer {
+public class EntityModel extends BookmarkableModel<ObjectAdapter> 
+implements ObjectAdapterModel, UiHintContainer {
 
     private static final long serialVersionUID = 1L;
 
@@ -72,7 +75,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
 
         final PageParameters pageParameters = PageParametersUtils.newPageParameters();
 
-        final Boolean persistent = adapter != null && adapter.representsPersistent();
+        final Boolean persistent = adapter != null && adapter.isRepresentingPersistent();
 
         if (persistent) {
             final String oidStr = adapter.getOid().enStringNoVersion();
@@ -85,13 +88,12 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         return pageParameters;
     }
 
+    @Deprecated //TODO [2033] remove
     public void resetVersion() {
         if(getObjectAdapterMemento() == null) {
             return;
         }
-        final PersistenceSession persistenceSession = getPersistenceSession();
-        final SpecificationLoader specificationLoader = getSpecificationLoader();
-        getObjectAdapterMemento().resetVersion(persistenceSession, specificationLoader);
+        getObjectAdapterMemento().resetVersion();
     }
 
     public enum RenderingHint {
@@ -173,11 +175,11 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     }
 
     public EntityModel(final PageParameters pageParameters) {
-        this(ObjectAdapterMemento.createPersistent(rootOidFrom(pageParameters)));
+        this(ObjectAdapterMemento.ofRootOid(rootOidFrom(pageParameters)));
     }
 
     public EntityModel(final ObjectAdapter adapter) {
-        this(ObjectAdapterMemento.createOrNull(adapter));
+        this(ObjectAdapterMemento.ofAdapter(adapter));
         setObject(adapter);
     }
 
@@ -250,7 +252,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     public String getHint(final Component component, final String keyName) {
         final ComponentHintKey componentHintKey = ComponentHintKey.create(component, keyName);
         if(componentHintKey != null) {
-            return componentHintKey.get(getObjectAdapterMemento().asHintingBookmark());
+            return componentHintKey.get(getObjectAdapterMemento().asHintingBookmarkIfSupported());
         }
         return null;
     }
@@ -258,7 +260,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     @Override
     public void setHint(Component component, String keyName, String hintValue) {
         ComponentHintKey componentHintKey = ComponentHintKey.create(component, keyName);
-        componentHintKey.set(this.getObjectAdapterMemento().asHintingBookmark(), hintValue);
+        componentHintKey.set(this.getObjectAdapterMemento().asHintingBookmarkIfSupported(), hintValue);
     }
 
     @Override
@@ -322,21 +324,26 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     // loadObject, load, setObject
     // //////////////////////////////////////////////////////////
 
+    private final static _Probe probe = _Probe.unlimited().label("EntityModel");
+    
     /**
      * Not Wicket API, but used by <tt>EntityPage</tt> to do eager loading
      * when rendering after post-and-redirect.
      * @return
      */
+    @Deprecated //TODO [2033] remove ?
     public ObjectAdapter load(ConcurrencyChecking concurrencyChecking) {
-        if (adapterMemento == null) {
-            return null;
+        
+        if(concurrencyChecking==ConcurrencyChecking.CHECK && adapterMemento!=null) {
+            val spec = IsisContext.getSpecificationLoader().lookupBySpecId(adapterMemento.getObjectSpecId());
+            if(spec.isEntity()) {
+                val info = "adapterMemento '"+adapterMemento+"'";
+                probe.warnNotImplementedYet("[2033] ConcurrencyChecking no longer supported!? "+info);              
+            }
         }
-
-        final ObjectAdapter objectAdapter =
-                adapterMemento.getObjectAdapter(concurrencyChecking, getPersistenceSession(), getSpecificationLoader());
-        return objectAdapter;
+        
+        return load();
     }
-
 
     /**
      * Callback from {@link #getObject()}, defaults to loading the object
@@ -348,7 +355,10 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
      */
     @Override
     public ObjectAdapter load() {
-        final ObjectAdapter objectAdapter = load(ConcurrencyChecking.CHECK);
+        if (adapterMemento == null) {
+            return null;
+        }
+        final ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter();
         return objectAdapter;
     }
 
@@ -356,16 +366,13 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
     @Override
     public void setObject(final ObjectAdapter adapter) {
         super.setObject(adapter);
-        adapterMemento = ObjectAdapterMemento.createOrNull(adapter);
+        adapterMemento = ObjectAdapterMemento.ofAdapter(adapter);
     }
 
-    public void setObjectMemento(
-            final ObjectAdapterMemento memento,
-            final PersistenceSession persistenceSession,
-            final SpecificationLoader specificationLoader) {
+    public void setObjectMemento(final ObjectAdapterMemento memento) {
         super.setObject(
                 memento != null
-                ? memento.getObjectAdapter(ConcurrencyChecking.CHECK, persistenceSession, specificationLoader)
+                ? memento.getObjectAdapter()
                         : null);
         adapterMemento = memento;
     }
@@ -398,7 +405,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
      * {@link #getObject() entity}.
      */
     public void resetPropertyModels() {
-        adapterMemento.resetVersion(getPersistenceSession(), getSpecificationLoader());
+        adapterMemento.resetVersion();
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
             OneToOneAssociation otoa = pm.getProperty(getSpecificationLoader());
             final ScalarModel scalarModel = propertyScalarModels.get(pm);
@@ -532,7 +539,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
                 return pending;
             }
             final ObjectAdapter adapter = entityModel.getObject();
-            return ObjectAdapterMemento.createOrNull(adapter);
+            return ObjectAdapterMemento.ofAdapter(adapter);
         }
 
         @Override
@@ -549,8 +556,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> implements Obj
         private ObjectAdapter getPendingAdapter() {
             final ObjectAdapterMemento memento = getObject();
             return memento != null
-                    ? memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                            entityModel.getPersistenceSession(), entityModel.getSpecificationLoader())
+                    ? memento.getObjectAdapter()
                             : null;
         }
 

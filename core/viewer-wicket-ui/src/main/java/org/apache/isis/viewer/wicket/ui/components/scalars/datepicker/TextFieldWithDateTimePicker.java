@@ -36,8 +36,9 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.DateConverter;
 
-import de.agilecoders.wicket.core.util.Attributes;
 import static de.agilecoders.wicket.jquery.JQuery.$;
+
+import de.agilecoders.wicket.core.util.Attributes;
 
 /**
  * A text input field that is used as a date or date/time picker.
@@ -161,7 +162,7 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
     }
 
     IsisConfiguration getConfiguration() {
-        return getIsisSessionFactory().getConfiguration();
+        return IsisContext.getConfiguration();
     }
     
     IsisSessionFactory getIsisSessionFactory() {

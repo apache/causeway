@@ -22,15 +22,10 @@ package org.apache.isis.core.metamodel.facets;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
-public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInjectorAware {
+public abstract class FacetFactoryAbstract implements FacetFactory, MetaModelContext.Delegating {
 
     private final List<FeatureType> featureTypes;
 
@@ -55,29 +50,11 @@ public abstract class FacetFactoryAbstract implements FacetFactory, ServicesInje
     public void processParams(final ProcessParameterContext processParameterContext) {
     }
 
-    // -- dependencies (injected)
-
-    protected ServicesInjector servicesInjector;
-
+    // -- dependencies
+    
     @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
+    public MetaModelContext getMetaModelContext() {
+        return MetaModelContext.current();
     }
-
-
-    // -- dependencies (looked up from services injector)
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return servicesInjector.getSpecificationLoader();
-    }
-
-    protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return servicesInjector.getAuthenticationSessionProvider();
-    }
-
-    protected IsisConfiguration getConfiguration() {
-        return _Config.getConfiguration();
-    }
-
 
 }

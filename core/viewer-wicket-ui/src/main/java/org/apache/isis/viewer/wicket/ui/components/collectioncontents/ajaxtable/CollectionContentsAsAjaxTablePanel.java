@@ -38,6 +38,7 @@ import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.services.tablecol.TableColumnOrderService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.commons.collections.Bin;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -214,8 +215,7 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
 
         final ObjectSpecification parentSpecIfAny =
                 getModel().isParented()
-                ? getModel().getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                        getPersistenceSession(), getSpecificationLoader()).getSpecification()
+                ? getModel().getParentObjectAdapterMemento().getObjectAdapter().getSpecification()
                         : null;
 
         final Predicate<ObjectAssociation> predicate = ObjectAssociation.Predicates.PROPERTIES
@@ -245,9 +245,8 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
         }
         
         // optional SPI to reorder
-        final List<TableColumnOrderService> tableColumnOrderServices =
-                getServicesInjector().streamServices(TableColumnOrderService.class)
-                .collect(Collectors.toList());
+        final Bin<TableColumnOrderService> tableColumnOrderServices =
+                getServiceRegistry().select(TableColumnOrderService.class);
 
         for (final TableColumnOrderService tableColumnOrderService : tableColumnOrderServices) {
             final List<String> propertyReorderedIds = reordered(tableColumnOrderService, propertyIds);
@@ -274,8 +273,7 @@ extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider 
 
         final ObjectAdapterMemento parentObjectAdapterMemento = getModel().getParentObjectAdapterMemento();
         if(parentObjectAdapterMemento != null) {
-            final ObjectAdapter parentObjectAdapter = parentObjectAdapterMemento
-                    .getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(), getSpecificationLoader());
+            final ObjectAdapter parentObjectAdapter = parentObjectAdapterMemento.getObjectAdapter();
             final Object parent = parentObjectAdapter.getPojo();
             final String collectionId = getModel().getCollectionMemento().getId();
 

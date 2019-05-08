@@ -19,31 +19,12 @@
 
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import java.util.Set;
-
 public class MetaModelInvalidException extends IllegalStateException {
 
     private static final long serialVersionUID = 1L;
-    private final Set<String> validationErrors;
 
-    public MetaModelInvalidException(Set<String> validationErrors) {
-        super(concatenate(validationErrors));
-        this.validationErrors = validationErrors;
-    }
-
-    public Set<String> getValidationErrors() {
-        return validationErrors;
-    }
-
-    // //////////////////////////////////////
-
-    private static String concatenate(Set<String> messages) {
-        final StringBuilder buf = new StringBuilder();
-        int i=0;
-        for (String message : messages) {
-            buf.append(++i).append(": ").append(message).append("\n");
-        }
-        return buf.toString();
+    public MetaModelInvalidException(MetaModelDeficiencies metaModelDeficiencies) {
+        super(metaModelDeficiencies.getValidationErrorsAsString());
     }
 
 }

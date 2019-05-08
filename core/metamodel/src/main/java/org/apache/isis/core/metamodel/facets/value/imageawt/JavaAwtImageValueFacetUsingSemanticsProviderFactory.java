@@ -38,7 +38,7 @@ public class JavaAwtImageValueFacetUsingSemanticsProviderFactory extends ValueFa
         if (type != java.awt.Image.class) {
             return;
         }
-        addFacets(new JavaAwtImageValueSemanticsProvider(holder, getContext()));
+        addFacets(new JavaAwtImageValueSemanticsProvider(holder));
     }
 
 }

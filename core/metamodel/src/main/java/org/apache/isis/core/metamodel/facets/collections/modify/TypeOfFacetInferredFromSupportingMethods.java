@@ -21,12 +21,11 @@ package org.apache.isis.core.metamodel.facets.collections.modify;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class TypeOfFacetInferredFromSupportingMethods extends TypeOfFacetAbstract {
 
-    public TypeOfFacetInferredFromSupportingMethods(final Class<?> type, final FacetHolder holder, final SpecificationLoader specificationLookup) {
-        super(type, holder, specificationLookup);
+    public TypeOfFacetInferredFromSupportingMethods(final Class<?> type, final FacetHolder holder) {
+        super(type, holder);
     }
 
 }

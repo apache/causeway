@@ -26,8 +26,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.webapp.IsisSessionFilter;
+import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -46,7 +45,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         init(RepresentationType.USER, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final UserReprRenderer renderer = new UserReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
-        renderer.includesSelf().with(getAuthenticationSession());
+        renderer.includesSelf().with(getResourceContext().getAuthenticationSession());
 
         return Responses.ofOk(renderer, Caching.ONE_HOUR).build();
     }
@@ -79,16 +78,12 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
         final HomePageReprRenderer renderer = new HomePageReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf();
 
-        // we do the logout (removes this session from those valid)
-        // similar code in wicket viewer (AuthenticatedWebSessionForIsis#onInvalidate())
-        final AuthenticationSession authenticationSession = getResourceContext().getAuthenticationSession();
-        getAuthenticationManager().closeSession(authenticationSession);
-        getIsisSessionFactory().closeSession();
+        getResourceContext().logoutAuthenticationSession();
 
         // we also redirect to home page with special query string; this allows the session filter
         // to clear out any cookies/headers (eg if BASIC auth in use).
         try {
-            final URI location = new URI("?" + IsisSessionFilter.QUERY_STRING_FORCE_LOGOUT);
+            final URI location = new URI("?" + SystemConstants.ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT);
             return Response.temporaryRedirect(location).build();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);

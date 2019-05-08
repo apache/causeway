@@ -24,7 +24,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class FloatPrimitiveValueSemanticsProvider extends FloatValueSemanticsProviderAbstract implements PropertyDefaultFacet {
@@ -34,11 +33,11 @@ public class FloatPrimitiveValueSemanticsProvider extends FloatValueSemanticsPro
      * {@link EncoderDecoder}.
      */
     public FloatPrimitiveValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public FloatPrimitiveValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, float.class, context);
+    public FloatPrimitiveValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, float.class);
     }
 
     // //////////////////////////////////////////////////////////////////

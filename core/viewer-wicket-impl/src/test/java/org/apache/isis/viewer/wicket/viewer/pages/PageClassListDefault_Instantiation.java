@@ -50,8 +50,8 @@ public class PageClassListDefault_Instantiation {
     public void shouldCauseAllPagesToBeRegistered() {
         // necessary to provide an implementation that will register
         // all pages with the registry.
-        final PageClassListDefault pageClassList = new PageClassListDefault();
-        new PageClassRegistryDefault(pageClassList);
+        //[2112] final PageClassListDefault pageClassList = new PageClassListDefault();
+        new PageClassRegistryDefault();
     }
 
     @Test(expected = IllegalStateException.class)
@@ -63,7 +63,7 @@ public class PageClassListDefault_Instantiation {
                 mockPageClassList.registerPages(with(any(PageClassRegistrySpi.class)));
             }
         });
-        new PageClassRegistryDefault(mockPageClassList);
+        new PageClassRegistryDefault();
     }
 
 }

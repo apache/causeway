@@ -34,10 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements AutoCompleteFacet {
 
@@ -45,9 +42,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         return AutoCompleteFacet.class;
     }
 
-    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ObjectAdapterProvider adapterProvider;
-    private final ServicesInjector servicesInjector;
     private final Class<?> repositoryClass;
     private final Method repositoryMethod;
 
@@ -59,16 +54,13 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
     public AutoCompleteFacetAbstract(
             final FacetHolder holder,
             final Class<?> repositoryClass,
-            final Method repositoryMethod,
-            final ServicesInjector servicesInjector) {
+            final Method repositoryMethod) {
+        
         super(type(), holder, Derivation.NOT_DERIVED);
 
         this.repositoryClass = repositoryClass;
         this.repositoryMethod = repositoryMethod;
-
-        this.adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-        this.servicesInjector = servicesInjector;
-        this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
+        this.adapterProvider = getObjectAdapterProvider();
     }
 
     public Class<?> getRepositoryClass() {
@@ -108,11 +100,11 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
     }
 
     private Object getRepository() {
-        return servicesInjector.lookupService(repositoryClass).orElse(null);
+        return getServiceRegistry().lookupService(repositoryClass).orElse(null);
     }
 
     private PublishingServiceInternal getPublishingServiceInternal() {
-        return servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
+        return getServiceRegistry().lookupServiceElseFail(PublishingServiceInternal.class);
     }
 
 
@@ -122,10 +114,6 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
             minLength = MinLengthUtil.determineMinLength(repositoryMethod);
         }
         return minLength;
-    }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return authenticationSessionProvider.getAuthenticationSession();
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

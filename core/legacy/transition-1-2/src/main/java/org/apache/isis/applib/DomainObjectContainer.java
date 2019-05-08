@@ -21,7 +21,6 @@ package org.apache.isis.applib;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -35,6 +34,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
@@ -58,6 +58,7 @@ public class DomainObjectContainer {
 	@Inject private FactoryService factoryService;
 	@Inject private TitleService titleService;
 	@Inject private TransactionService transactionService;
+	@Inject private ServiceInjector serviceInjector;
 	@Inject private ServiceRegistry serviceRegistry;
 	@Inject private MessageService messageService;
 	@Inject private UserService userService;
@@ -195,7 +196,7 @@ public class DomainObjectContainer {
     		throw new IllegalArgumentException("parameter 'memento' is no longer supported");
     	}
     	T obj = factoryService.instantiate(ofType);
-    	serviceRegistry.injectServicesInto(obj);
+    	serviceInjector.injectServicesInto(obj);
     	return obj;
     }
 
@@ -257,7 +258,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public <T> T injectServicesInto(final T domainObject) {
-    	return serviceRegistry.injectServicesInto(domainObject);
+    	return serviceInjector.injectServicesInto(domainObject);
     }
 
     /**
@@ -275,8 +276,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public <T> Iterable<T> lookupServices(Class<T> service){
-    	return serviceRegistry.streamServices(service)
-    	        .collect(Collectors.toList());	
+    	return serviceRegistry.select(service);	
     }
 
     /**

@@ -22,8 +22,6 @@ package org.apache.isis.core.metamodel.facets.properties.property.modify;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
 public class PropertyDomainEventFacetDefault extends PropertyDomainEventFacetAbstract {
@@ -33,9 +31,10 @@ public class PropertyDomainEventFacetDefault extends PropertyDomainEventFacetAbs
      */
     public PropertyDomainEventFacetDefault(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-                    final PropertyOrCollectionAccessorFacet getterFacetIfAny,
-                    final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
-        super(eventType, getterFacetIfAny, holder, servicesInjector, specificationLoader);
+            final PropertyOrCollectionAccessorFacet getterFacetIfAny,
+            final FacetHolder holder) {
+        
+        super(eventType, getterFacetIfAny, holder);
     }
 
 }

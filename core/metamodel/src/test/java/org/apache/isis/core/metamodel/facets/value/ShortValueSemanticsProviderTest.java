@@ -48,7 +48,7 @@ public class ShortValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
         holder = new FacetHolderImpl();
 
-        setValue(value = new ShortWrapperValueSemanticsProvider(holder, mockServicesInjector));
+        setValue(value = new ShortWrapperValueSemanticsProvider(holder));
     }
 
     @Test

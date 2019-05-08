@@ -20,9 +20,8 @@
 package org.apache.isis.core.metamodel.facets.properties.property.regex;
 
 import java.util.List;
-import java.util.regex.Pattern;
-
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.commons.internal.base._Strings;

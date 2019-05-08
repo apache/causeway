@@ -24,9 +24,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -42,18 +42,16 @@ public class JodaLocalDateTimeValueSemanticsProviderTest {
     FacetHolder mockFacetHolder;
 
     @Mock
-    ServicesInjector mockServicesInjector;
+    ServiceInjector mockServicesInjector;
 
     JodaLocalDateTimeValueSemanticsProvider provider;
 
     @Before
     public void setUp() throws Exception {
-        _Config.clear();
-        _Config.acceptBuilder(config->{
-            config.put("isis.value.format.datetime", "iso_encoding");
-        });
         
-        provider = new JodaLocalDateTimeValueSemanticsProvider(mockFacetHolder, mockServicesInjector);
+        _Config.put("isis.value.format.datetime", "iso_encoding");
+        
+        provider = new JodaLocalDateTimeValueSemanticsProvider(mockFacetHolder);
 
     }
 

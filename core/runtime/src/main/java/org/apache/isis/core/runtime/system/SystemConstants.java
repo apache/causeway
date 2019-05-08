@@ -65,7 +65,15 @@ public final class SystemConstants {
     public final static String FIXTURE_KEY = ConfigurationConstants.ROOT + "fixtures";
 
 
+    /**
+     * Somewhat hacky, add this to the query
+     */
+    public static final String ISIS_SESSION_FILTER_QUERY_STRING_FORCE_LOGOUT = "__isis_force_logout";
+    
+    // -- SERVICE SUPPORT
 
+    public static final String SERVICE_IDENTIFIER = "1";
+    
     /**
      * Key by which requested user (eg via command line) is made available in
      * {@link IsisConfiguration} .
@@ -83,7 +91,6 @@ public final class SystemConstants {
      */
     @Deprecated
     public final static String PASSWORD_KEY = ConfigurationConstants.ROOT + "password";
-
 
     public static final String LOCALE_KEY = ConfigurationConstants.ROOT + "locale";
 

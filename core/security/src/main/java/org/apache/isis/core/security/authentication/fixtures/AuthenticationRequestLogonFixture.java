@@ -19,9 +19,10 @@
 
 package org.apache.isis.core.security.authentication.fixtures;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 
-import org.apache.isis.applib.fixtures.LogonFixture;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.security.authentication.AuthenticationRequestAbstract;
 import org.apache.isis.core.security.authentication.standard.AuthenticationManagerStandard;
 
@@ -33,13 +34,16 @@ import org.apache.isis.core.security.authentication.standard.AuthenticationManag
  */
 public class AuthenticationRequestLogonFixture extends AuthenticationRequestAbstract {
 
-    public AuthenticationRequestLogonFixture(final LogonFixture logonFixture) {
-        this(logonFixture.getUsername(), logonFixture.getRoles());
+    public static AuthenticationRequestLogonFixture of(final String name, final String ... roles) {
+        return new AuthenticationRequestLogonFixture(name, 
+                roles == null 
+                    ? Collections.emptyList()
+                        : _Lists.of(roles));
     }
 
-    public AuthenticationRequestLogonFixture(final String name, final List<String> roles) {
+    public AuthenticationRequestLogonFixture(final String name, final Collection<String> roles) {
         super(name);
-        setRoles(roles);
+        addRoles(roles);
     }
 
 }

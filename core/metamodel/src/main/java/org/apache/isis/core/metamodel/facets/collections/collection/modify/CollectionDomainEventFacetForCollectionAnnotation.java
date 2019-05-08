@@ -21,26 +21,25 @@ package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class CollectionDomainEventFacetForCollectionAnnotation extends CollectionDomainEventFacetAbstract {
 
     static CollectionDomainEventFacet create(
             final Collection collection,
-            final ServicesInjector servicesInjector,
+            final ServiceInjector servicesInjector,
             final SpecificationLoader specificationLoader,
             final FacetHolder holder) {
         Class<? extends CollectionDomainEvent<?, ?>> collectionInteractionEventType = collection.domainEvent();
         return new CollectionDomainEventFacetForCollectionAnnotation(
-                collectionInteractionEventType, servicesInjector, specificationLoader, holder);
+                collectionInteractionEventType, holder);
     }
 
     public CollectionDomainEventFacetForCollectionAnnotation(
-            final Class<? extends CollectionDomainEvent<?, ?>> eventType,
-                    final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
-        super(eventType, holder, servicesInjector, specificationLoader);
+            final Class<? extends CollectionDomainEvent<?, ?>> eventType, final FacetHolder holder) {
+        super(eventType, holder);
     }
 
 }

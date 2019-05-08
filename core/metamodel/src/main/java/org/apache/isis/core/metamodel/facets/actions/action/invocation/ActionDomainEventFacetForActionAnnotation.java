@@ -21,15 +21,12 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class ActionDomainEventFacetForActionAnnotation extends ActionDomainEventFacetAbstract {
 
     public ActionDomainEventFacetForActionAnnotation(
-            final Class<? extends ActionDomainEvent<?>> eventType,
-                    final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
-        super(eventType, holder, servicesInjector, specificationLoader);
+            final Class<? extends ActionDomainEvent<?>> eventType, final FacetHolder holder) {
+        super(eventType, holder);
     }
 
 }

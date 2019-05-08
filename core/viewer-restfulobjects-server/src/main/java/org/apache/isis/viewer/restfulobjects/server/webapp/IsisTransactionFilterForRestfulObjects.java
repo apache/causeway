@@ -25,9 +25,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.system.session.IsisRequestCycle;
 
 //@WebFilter(servletNames= {"RestfulObjectsRestEasyDispatcher"}) //[ahuber] to support 
 //Servlet 3.0 annotations @WebFilter, @WebListener or others 
@@ -39,41 +37,20 @@ public class IsisTransactionFilterForRestfulObjects implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        // no-op if no session available.
-        final IsisSessionFactory isisSessionFactory = isisSessionFactoryFrom(request);
-        if(!isisSessionFactory.inSession()) {
-            chain.doFilter(request, response);
-            return;
-        }
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
+    		throws IOException, ServletException {
 
-        final IsisTransactionManager isisTransactionManager = transactionManagerFrom(isisSessionFactory);
-        isisTransactionManager.startTransaction();
-        try {
-            chain.doFilter(request, response);
-        } finally {
-            final boolean inTransaction = isisSessionFactory.inTransaction();
-            if(inTransaction) {
-                // user/logout will have invalidated the current transaction and also persistence session.
-                try {
-                    isisTransactionManager.endTransaction();
-                } catch (Exception ex) {
-                    // ignore.  Any exceptions will have been mapped into a suitable response already.
-                }
-            }
-        }
+		try(final IsisRequestCycle cycle = IsisRequestCycle.next()) {
+			cycle.beforeServletFilter();
+			chain.doFilter(request, response);
+			cycle.afterServletFilter();
+		}
+		
     }
 
     @Override
     public void destroy() {
     }
-
-    protected IsisSessionFactory isisSessionFactoryFrom(final ServletRequest request) {
-        return IsisContext.getSessionFactory();
-    }
-
-    protected IsisTransactionManager transactionManagerFrom(final IsisSessionFactory isisSessionFactory) {
-        return isisSessionFactory.getCurrentSession().getPersistenceSession().getTransactionManager();
-    }
+    
 
 }

@@ -20,7 +20,10 @@ import java.lang.reflect.Method;
 
 public interface InjectorMethodEvaluator {
 
-    boolean isInjectorMethodFor(Method method, Class<? extends Object> serviceClass);
-
+    /**
+     * @param method
+     * @return null - if method is not a setter to act as an injection point 
+     */
+    Class<?> getTypeToBeInjected(Method method);
 
 }

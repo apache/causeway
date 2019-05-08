@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -693,16 +695,9 @@ public abstract class GridSystemServiceAbstract<G extends org.apache.isis.applib
 
     // //////////////////////////////////////
 
-    @javax.inject.Inject
-    protected SpecificationLoader specificationLoader;
-
-    @javax.inject.Inject
-    protected TranslationService translationService;
-
-    @javax.inject.Inject
-    protected JaxbService jaxbService;
-
-    @javax.inject.Inject
-    protected MessageService messageService;
+    @Inject protected SpecificationLoader specificationLoader;
+    @Inject protected TranslationService translationService;
+    @Inject protected JaxbService jaxbService;
+    @Inject protected MessageService messageService;
 
 }

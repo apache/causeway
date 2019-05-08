@@ -37,7 +37,7 @@ public class PercentageValueFacetUsingSemanticsProviderFactory extends ValueFace
         if (type != org.apache.isis.applib.value.Percentage.class) {
             return;
         }
-        addFacets(new PercentageValueSemanticsProvider(holder, getContext()));
+        addFacets(new PercentageValueSemanticsProvider(holder));
     }
 
 }

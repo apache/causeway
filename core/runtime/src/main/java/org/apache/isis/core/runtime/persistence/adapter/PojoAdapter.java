@@ -19,10 +19,9 @@
 
 package org.apache.isis.core.runtime.persistence.adapter;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -34,16 +33,20 @@ import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public final class PojoAdapter implements ObjectAdapter {
-
-    private final static Logger LOG = LoggerFactory.getLogger(PojoAdapter.class);
-
-    // -- Constructor, fields
 
     private final AuthenticationSession authenticationSession;
     private final SpecificationLoader specificationLoader;
@@ -51,6 +54,37 @@ public final class PojoAdapter implements ObjectAdapter {
 
     private final Object pojo;
     private final Oid oid;
+
+    // -- FACTORIES
+    
+    public static PojoAdapter of(
+            final Object pojo,
+            final Oid oid) {
+        
+        return of(pojo, oid, IsisSession.currentOrElseNull(), null);
+    }
+    
+    public static PojoAdapter ofValue(Serializable value) {
+        val oid = Oid.Factory.value();
+        return PojoAdapter.of(value, oid);
+    }
+    
+    public static ObjectAdapter ofTransient(Object pojo, ObjectSpecId specId) {
+        val identifier = UUID.randomUUID().toString();
+        return PojoAdapter.of(pojo, Oid.Factory.transientOf(specId, identifier));
+    }
+    
+    public static PojoAdapter of(
+            final Object pojo,
+            final Oid oid,
+            final IsisSession isisSession,
+            final PersistenceSession persistenceSession) {
+        
+        val authenticationSession = isisSession.getAuthenticationSession(); 
+        val specificationLoader = isisSession.getSpecificationLoader();
+        
+        return new PojoAdapter(pojo, oid, authenticationSession, specificationLoader, persistenceSession);
+    }
     
     public static PojoAdapter of(
             final Object pojo,
@@ -67,10 +101,12 @@ public final class PojoAdapter implements ObjectAdapter {
             final AuthenticationSession authenticationSession,
             final SpecificationLoader specificationLoader,
             final PersistenceSession persistenceSession) {
+        
+        Objects.requireNonNull(pojo);
 
-        this.persistenceSession = persistenceSession;
         this.specificationLoader = specificationLoader;
         this.authenticationSession = authenticationSession;
+        this.persistenceSession = persistenceSession;
         
         if (pojo instanceof ObjectAdapter) {
             throw new IsisException("ObjectAdapter can't be used to wrap an ObjectAdapter: " + pojo);
@@ -104,40 +140,47 @@ public final class PojoAdapter implements ObjectAdapter {
     }
 
     // -- getOid
+    
     @Override
     public Oid getOid() {
         return oid;
     }
 
-    // -- isTransient, representsPersistent, isDestroyed
+    // -- PREDICATES
     
     @Override
     public boolean isTransient() {
-        if(getSpecification().isService() || getSpecification().isViewModel()) {
+        val spec = getSpecification();
+        if(spec.isBean() || spec.isViewModel()) {
             // services and view models are treated as persistent objects
             return false;
         }
-        return persistenceSession.isTransient(pojo); 
+        val state = persistenceSession.stateOf(this);
+        return state.isDetached();
     }
 
     @Override
-    public boolean representsPersistent() {
-        if(getSpecification().isService() || getSpecification().isViewModel()) {
+    public boolean isRepresentingPersistent() {
+        val spec = getSpecification();
+        if(spec.isBean() || spec.isViewModel()) {
             // services and view models are treated as persistent objects
             return true;
         }
-        return persistenceSession.isRepresentingPersistent(pojo);
+        val state = persistenceSession.stateOf(this);
+        val isRepresentingPersistent = state.isAttached() || state.isDestroyed();
+        return isRepresentingPersistent;
     }
 
     @Override
     public boolean isDestroyed() {
-        if(getSpecification().isService() || getSpecification().isViewModel()) {
+        val spec = getSpecification();
+        if(spec.isBean() || spec.isViewModel() || spec.isValue()) {
             // services and view models are treated as persistent objects
             return false;
         }
-        return persistenceSession.isDestroyed(pojo);
+        val state = persistenceSession.stateOf(this);
+        return state.isDestroyed();
     }
-
 
     // -- getAggregateRoot
     @Override
@@ -145,10 +188,10 @@ public final class PojoAdapter implements ObjectAdapter {
         if(!isParentedCollection()) {
             return this;
         }
-        ParentedOid collectionOid = (ParentedOid) oid;
-        final Oid rootOid = collectionOid.getParentOid();
-        ObjectAdapter rootadapter = persistenceSession.adapterFor(rootOid);
-        return rootadapter;
+        val collectionOid = (ParentedOid) oid;
+        val rootOid = collectionOid.getParentOid();
+        val rootAdapter = persistenceSession.adapterFor(rootOid);
+        return rootAdapter;
     }
 
     // -- getVersion, setVersion, checkLock
@@ -179,11 +222,11 @@ public final class PojoAdapter implements ObjectAdapter {
                 thisVersion.different(otherVersion)) {
 
             if(ConcurrencyChecking.isCurrentlyEnabled()) {
-                LOG.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
+                log.info("concurrency conflict detected on {} ({})", thisOid, otherVersion);
                 final String currentUser = authenticationSession.getUserName();
                 throw new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);
             } else {
-                LOG.info("concurrency conflict detected but suppressed, on {} ({})", thisOid, otherVersion );
+                log.info("concurrency conflict detected but suppressed, on {} ({})", thisOid, otherVersion );
             }
         }
     }
@@ -251,5 +294,6 @@ public final class PojoAdapter implements ObjectAdapter {
         }
         return "S"; // standalone adapter (value)
     }
+
 
 }

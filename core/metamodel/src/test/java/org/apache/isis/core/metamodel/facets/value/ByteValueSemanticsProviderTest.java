@@ -47,7 +47,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
 
         _Config.put("isis.value.format.byte", null);
         
-        setValue(value = new ByteWrapperValueSemanticsProvider(holder, mockServicesInjector));
+        setValue(value = new ByteWrapperValueSemanticsProvider(holder));
     }
 
     @Test

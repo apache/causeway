@@ -43,7 +43,7 @@ public class ClobValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         allowMockAdapterToReturn(clob);
         holder = new FacetHolderImpl();
 
-        setValue(value = new ClobValueSemanticsProvider(holder, mockServicesInjector));
+        setValue(value = new ClobValueSemanticsProvider(holder));
     }
 
     @Test

@@ -36,7 +36,7 @@ public class IntWrapperValueFacetUsingSemanticsProviderFactory extends ValueFace
         if (type != Integer.class) {
             return;
         }
-        addFacets(new IntWrapperValueSemanticsProvider(holder, getContext()));
+        addFacets(new IntWrapperValueSemanticsProvider(holder));
     }
 
 }

@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobject.editing;
 
-import org.apache.isis.commons.internal.base._Strings;
 import java.util.Map;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;

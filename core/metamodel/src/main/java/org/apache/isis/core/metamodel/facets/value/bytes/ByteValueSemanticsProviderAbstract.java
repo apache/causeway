@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Byte> implements ByteValueFacet {
 
@@ -43,8 +42,8 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
 
     private final NumberFormat format;
 
-    public ByteValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Byte> adaptedClass, final ServicesInjector context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
+    public ByteValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Byte> adaptedClass) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
         format = determineNumberFormat("value.format.byte");
     }
 

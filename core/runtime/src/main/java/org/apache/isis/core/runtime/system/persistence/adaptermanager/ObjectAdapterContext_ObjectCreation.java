@@ -26,16 +26,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.command.Command;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
@@ -52,15 +53,18 @@ class ObjectAdapterContext_ObjectCreation {
     private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_ObjectCreation.class);
     private final ObjectAdapterContext objectAdapterContext;
     private final PersistenceSession persistenceSession;
-    private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
+    private ServiceInjector serviceInjector;
     
-    ObjectAdapterContext_ObjectCreation(ObjectAdapterContext objectAdapterContext,
-            PersistenceSession persistenceSession) {
+    ObjectAdapterContext_ObjectCreation(
+            ObjectAdapterContext objectAdapterContext,
+            PersistenceSession persistenceSession,
+            RuntimeContext runtimeContext) {
+        
         this.objectAdapterContext = objectAdapterContext;
         this.persistenceSession = persistenceSession;
-        this.servicesInjector = persistenceSession.getServicesInjector();
-        this.specificationLoader = servicesInjector.getSpecificationLoader();
+        this.serviceInjector = runtimeContext.getServiceInjector();
+        this.specificationLoader = runtimeContext.getSpecificationLoader();
     }
     
     public ObjectAdapter newInstance(ObjectSpecification objectSpec) {
@@ -120,7 +124,7 @@ class ObjectAdapterContext_ObjectCreation {
             .forEach(field->field.toDefault(adapter));
             
         final Object pojo = adapter.getPojo();
-        servicesInjector.injectServicesInto(pojo);
+        serviceInjector.injectServicesInto(pojo);
 
         CallbackFacet.Util.callCallback(adapter, CreatedCallbackFacet.class);
 

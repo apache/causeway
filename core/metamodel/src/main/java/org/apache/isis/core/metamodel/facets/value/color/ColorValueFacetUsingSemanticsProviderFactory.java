@@ -37,7 +37,7 @@ public class ColorValueFacetUsingSemanticsProviderFactory extends ValueFacetUsin
         if (type != Color.class) {
             return;
         }
-        addFacets(new ColorValueSemanticsProvider(holder, getContext()));
+        addFacets(new ColorValueSemanticsProvider(holder));
     }
 
 }

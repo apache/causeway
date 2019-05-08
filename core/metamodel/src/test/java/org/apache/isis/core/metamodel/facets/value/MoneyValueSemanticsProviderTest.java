@@ -45,7 +45,7 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     public void setUpObjects() throws Exception {
         Locale.setDefault(Locale.UK);
         holder = new FacetHolderImpl();
-        setValue(adapter = new MoneyValueSemanticsProvider(holder, mockServicesInjector));
+        setValue(adapter = new MoneyValueSemanticsProvider(holder));
     }
 
     private Money createMoney(final double amount, final String currency) {

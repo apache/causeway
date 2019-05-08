@@ -34,7 +34,8 @@ public class MandatoryAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
     private PropertyAnnotationFacetFactory facetFactory;
 
-    @Before
+    @Override
+	@Before
     public void setUp() throws Exception {
         super.setUp();
         facetFactory = new PropertyAnnotationFacetFactory();

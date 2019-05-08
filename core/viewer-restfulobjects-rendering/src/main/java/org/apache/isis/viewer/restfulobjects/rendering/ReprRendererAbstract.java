@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -34,6 +35,8 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
+
+import lombok.val;
 
 public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>, T> implements ReprRenderer<R, T> {
 
@@ -203,7 +206,8 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
     }
 
     protected Stream<ObjectAdapter> streamServiceAdapters() {
-        return rendererContext.getPersistenceSession().streamServices();
+    	val metaModelContext = MetaModelContext.current();
+        return metaModelContext.streamServiceAdapters();
     }
 
 }

@@ -26,6 +26,7 @@ import java.util.Set;
 
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -34,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public abstract class CollectionAddToFacetForDomainEventFromAbstract
 extends SingleValueFacetAbstract<Class<? extends CollectionDomainEvent<?,?>>>
@@ -48,21 +48,19 @@ implements CollectionAddToFacet {
 
     private final PropertyOrCollectionAccessorFacet getterFacet;
     private final CollectionAddToFacet collectionAddToFacet;
-    // TODO: seems to be unused, remove?
-    private final CollectionDomainEventFacetAbstract collectionDomainEventFacet;
 
     public CollectionAddToFacetForDomainEventFromAbstract(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
                     final PropertyOrCollectionAccessorFacet getterFacet,
                     final CollectionAddToFacet collectionAddToFacet,
                     final CollectionDomainEventFacetAbstract collectionDomainEventFacet,
-                    final ServicesInjector servicesInjector,
+                    final ServiceRegistry serviceRegistry,
                     final FacetHolder holder) {
+    	
         super(type(), eventType, holder);
         this.getterFacet = getterFacet;
         this.collectionAddToFacet = collectionAddToFacet;
-        this.collectionDomainEventFacet = collectionDomainEventFacet;
-        this.domainEventHelper = new DomainEventHelper(servicesInjector);
+        this.domainEventHelper = DomainEventHelper.ofServiceRegistry(serviceRegistry);
     }
 
     @Override

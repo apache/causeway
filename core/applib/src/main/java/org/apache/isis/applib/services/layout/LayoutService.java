@@ -17,8 +17,8 @@
 package org.apache.isis.applib.services.layout;
 
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.applib.services.menu.MenuBarsService;
 
 public interface LayoutService {
 
@@ -68,12 +68,17 @@ public interface LayoutService {
     /**
      * Obtains the serialized XML form of the layout (grid) for the specified domain class.
      */
-    @Programmatic
     String toXml(Class<?> domainClass, Style style);
 
     /**
      * Obtains a zip file of the serialized XML of the layouts (grids) of all domain entities and view models.
      */
-    @Programmatic
     byte[] toZip(final Style style);
+    
+    /**
+     * Obtains the serialized XML form of the menu bars layout ({@link MenuBarsService}).
+     * @param type - either the current menubars (could be loaded from a file) or the fallback (obtained from metamodel facets)
+     */
+    String toMenuBarsXml(final MenuBarsService.Type type);
+
 }

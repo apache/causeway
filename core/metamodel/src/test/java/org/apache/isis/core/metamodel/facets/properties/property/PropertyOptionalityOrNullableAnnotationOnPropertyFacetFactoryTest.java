@@ -36,7 +36,8 @@ public class PropertyOptionalityOrNullableAnnotationOnPropertyFacetFactoryTest e
 
     private PropertyAnnotationFacetFactory facetFactory;
 
-    public void setUp() throws Exception {
+    @Override
+	public void setUp() throws Exception {
         super.setUp();
         facetFactory = new PropertyAnnotationFacetFactory();
     }

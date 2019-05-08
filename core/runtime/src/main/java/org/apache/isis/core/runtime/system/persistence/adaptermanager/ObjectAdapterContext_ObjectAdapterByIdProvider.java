@@ -22,9 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -36,13 +33,15 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRecreationException;
+import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -51,25 +50,25 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
  * </p> 
  * @since 2.0.0-M2
  */
+@Slf4j
 class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByIdProvider {
     
-    
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_ObjectAdapterByIdProvider.class);
     private final ObjectAdapterContext objectAdapterContext;
     private final PersistenceSession persistenceSession;
-    private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
     private final AuthenticationSession authenticationSession;
     private final boolean concurrencyCheckingGloballyEnabled;
     
     
-    ObjectAdapterContext_ObjectAdapterByIdProvider(ObjectAdapterContext objectAdapterContext,
-            PersistenceSession persistenceSession, AuthenticationSession authenticationSession) {
+    ObjectAdapterContext_ObjectAdapterByIdProvider(
+            ObjectAdapterContext objectAdapterContext,
+            PersistenceSession persistenceSession, 
+            RuntimeContext runtimeContext) {
+        
         this.objectAdapterContext = objectAdapterContext;
         this.persistenceSession = persistenceSession;
-        this.servicesInjector = persistenceSession.getServicesInjector();
-        this.specificationLoader = servicesInjector.getSpecificationLoader();
-        this.authenticationSession = authenticationSession;
+        this.specificationLoader = runtimeContext.getSpecificationLoader();
+        this.authenticationSession = runtimeContext.getAuthenticationSession();
         
         this.concurrencyCheckingGloballyEnabled = 
                 !ConcurrencyChecking.isGloballyDisabled(persistenceSession.getConfiguration());
@@ -262,11 +261,11 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
                             thisVersion.different(otherVersion)) {
 
                         if(concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
-                            LOG.info("concurrency conflict detected on {} ({})", recreatedOid, otherVersion);
+                            log.info("concurrency conflict detected on {} ({})", recreatedOid, otherVersion);
                             final String currentUser = authenticationSession.getUserName();
                             throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
                         } else {
-                            LOG.info("concurrency conflict detected but suppressed, on {} ({})", recreatedOid, otherVersion);
+                            log.info("concurrency conflict detected but suppressed, on {} ({})", recreatedOid, otherVersion);
                         }
                     }
                 }
@@ -277,8 +276,8 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
                         originalVersion == null ||
                         recreatedVersion.different(originalVersion))
                         ) {
-                    if(LOG.isDebugEnabled()) {
-                        LOG.debug("updating version in oid, on {} ({}) to ({})", originalOid, originalVersion, recreatedVersion);
+                    if(log.isDebugEnabled()) {
+                        log.debug("updating version in oid, on {} ({}) to ({})", originalOid, originalVersion, recreatedVersion);
                     }
                     originalOid.setVersion(recreatedVersion);
                 }

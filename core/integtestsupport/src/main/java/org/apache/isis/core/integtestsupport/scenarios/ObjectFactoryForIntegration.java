@@ -21,7 +21,7 @@ package org.apache.isis.core.integtestsupport.scenarios;
 import java.lang.reflect.Constructor;
 import java.util.Map;
 
-import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.runtime.headless.IsisSystem;
 
@@ -52,7 +52,7 @@ public class ObjectFactoryForIntegration implements ObjectFactory {
             IsisSystem isisSystem = IsisSystem.getElseNull();
             if(isisSystem != null) {
                 instance = this.cacheInstance(type, instance);
-                isisSystem.getService(ServiceRegistry.class).injectServicesInto(instance);
+                isisSystem.getService(ServiceInjector.class).injectServicesInto(instance);
             } else {
                 // don't cache
             }

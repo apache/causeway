@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Character> implements CharValueFacet {
@@ -39,8 +38,8 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     private static final int MAX_LENGTH = 1;
     private static final int TYPICAL_LENGTH = MAX_LENGTH;
 
-    public CharValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Character> adaptedClass, final ServicesInjector context) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
+    public CharValueSemanticsProviderAbstract(final FacetHolder holder, final Class<Character> adaptedClass) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
     }
 
     // //////////////////////////////////////////////////////////////////

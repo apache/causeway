@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacetAbstract;
@@ -34,16 +33,13 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearF
 public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstract implements ImperativeFacet {
 
     private final Method method;
-    private final ObjectAdapterProvider adapterProvider;
 
     public CollectionClearFacetViaAccessor(
             final Method method,
-            final FacetHolder holder,
-            final ObjectAdapterProvider adapterProvider) {
+            final FacetHolder holder) {
         
         super(holder);
         this.method = method;
-        this.adapterProvider = adapterProvider;
     }
 
     /**
@@ -74,10 +70,6 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
     // /////////////////////////////////////////////////////////
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////////
-
-    protected ObjectAdapterProvider getObjectAdapterProvider() {
-        return adapterProvider;
-    }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);

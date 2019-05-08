@@ -23,10 +23,18 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.node.NullNode;
-
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -34,18 +42,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
-import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import com.fasterxml.jackson.databind.node.NullNode;
 
 /**
  * Similar to Isis' value encoding, but with additional support for JSON
@@ -731,7 +728,11 @@ public final class JsonValueEncoder {
 
 
 
-    public static ObjectAdapter asAdapter(final ObjectSpecification objectSpec, final JsonRepresentation argValueRepr, final String format) {
+    public static ObjectAdapter asAdapter(
+    		final ObjectSpecification objectSpec, 
+    		final JsonRepresentation argValueRepr, 
+    		final String format) {
+    	
         if(argValueRepr == null) {
             return null;
         }
@@ -827,29 +828,24 @@ public final class JsonValueEncoder {
         return objectAdapter != null? objectAdapter.getPojo(): NullNode.getInstance();
     }
 
-
-
+    // -- ObjectAdapter Provider
+    
     private static ObjectAdapter adapterFor(Object value) {
-        return getObjectAdapterProvider().adapterFor(value);
+        return pojoToAdapterFunction().apply(value);
     }
 
-    private static ObjectAdapterProvider testAdapterManager;
+    private static Function<Object, ObjectAdapter> testPojoToAdapterFunction;
 
     // for testing purposes only
-    static void testSetAdapterManager(ObjectAdapterProvider adapterManager) {
-        JsonValueEncoder.testAdapterManager = adapterManager;
+    static void testSetAdapterManager(Function<Object, ObjectAdapter> adapterManager) {
+        JsonValueEncoder.testPojoToAdapterFunction = adapterManager;
     }
 
-    public static ObjectAdapterProvider getObjectAdapterProvider() {
-        return testAdapterManager != null? testAdapterManager: getPersistenceSession();
+    private static Function<Object, ObjectAdapter> pojoToAdapterFunction() {
+        return testPojoToAdapterFunction != null
+        		? testPojoToAdapterFunction
+        				: IsisContext.newManagedObjectContext()::adapterOfPojo;
     }
-
-    private static PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
-    }
-
-    static IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
+    
 
 }

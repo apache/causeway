@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -33,24 +35,26 @@ import org.apache.isis.applib.events.domain.ActionDomainEvent;
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.applib.events.domain.PropertyDomainEvent;
 import org.apache.isis.applib.services.command.Command;
-import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import lombok.RequiredArgsConstructor;
+import lombok.val;
 
+@RequiredArgsConstructor(staticName = "ofEventService")
 public class DomainEventHelper {
 
-    private final ServicesInjector servicesInjector;
-
-
-    public DomainEventHelper(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
+    public static DomainEventHelper ofServiceRegistry(final ServiceRegistry serviceRegistry) {
+        val eventService = serviceRegistry.lookupServiceElseFail(MetamodelEventService.class);
+        return ofEventService(eventService);
     }
+    
+    private final MetamodelEventService metamodelEventService;
 
     // -- postEventForAction, newActionDomainEvent
     
@@ -110,7 +114,7 @@ public class DomainEventHelper {
                 event.setReturnValue(ObjectAdapter.Util.unwrapPojo(resultAdapter));
             }
 
-            getEventBusService().post(event);
+            metamodelEventService.fireActionDomainEvent(event);
             return event;
         } catch (Exception e) {
             throw new FatalException(e);
@@ -203,7 +207,7 @@ public class DomainEventHelper {
             // just in case the actual new value held by the object is different from that applied
             setEventNewValue(event, newValue);
 
-            this.getEventBusService().post(event);
+            metamodelEventService.firePropertyDomainEvent(event);
             return event;
         } catch (Exception e) {
             throw new FatalException(e);
@@ -293,7 +297,7 @@ public class DomainEventHelper {
 
             event.setEventPhase(phase);
 
-            getEventBusService().post(event);
+            metamodelEventService.fireCollectionDomainEvent(event);
             return event;
         } catch (Exception e) {
             throw new FatalException(e);
@@ -395,15 +399,6 @@ public class DomainEventHelper {
         }
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", java.lang.Object)");
     }
-
-    // -- eventBusService
-
-    private EventBusService getEventBusService() {
-        // previously this method used to cache, however it prevents integration tests
-        // from switching out the EventBusService with a mock.
-        return this.servicesInjector.lookupService(EventBusService.class).orElse(null);
-    }
-
 
 
 }

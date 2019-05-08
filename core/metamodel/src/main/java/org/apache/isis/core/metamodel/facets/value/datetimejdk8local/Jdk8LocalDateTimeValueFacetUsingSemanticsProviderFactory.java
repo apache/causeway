@@ -39,7 +39,7 @@ public class Jdk8LocalDateTimeValueFacetUsingSemanticsProviderFactory extends Va
         if (type != LocalDateTime.class) {
             return;
         }
-        addFacets(new Jdk8LocalDateTimeValueSemanticsProvider(holder, getContext()));
+        addFacets(new Jdk8LocalDateTimeValueSemanticsProvider(holder));
     }
 
 }

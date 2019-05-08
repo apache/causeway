@@ -68,7 +68,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.Co
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.editing.ImmutableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForDomainObjectAnnotation;
-import org.apache.isis.core.metamodel.facets.object.domainobject.objectspecid.ObjectSpecIdFacetForJdoPersistenceCapableAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.PublishedObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -77,8 +76,6 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -86,7 +83,8 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.metamodel.util.EventUtil;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
+
+import lombok.val;
 
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
@@ -206,7 +204,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 .filter(a -> a.repositoryMethod != null)
                 .findFirst()
                 .map(a -> new AutoCompleteFacetForDomainObjectAnnotation(
-                        facetHolder, a.autoCompleteRepository, a.repositoryMethod, servicesInjector))
+                        facetHolder, a.autoCompleteRepository, a.repositoryMethod))
                 .orElse(null);
     }
 
@@ -236,7 +234,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         // check from @DomainObject(bounded=...)
-        Facet facet = ChoicesFacetForDomainObjectAnnotation.create(domainObjects, facetHolder, getAuthenticationSessionProvider(), persistenceSessionServiceInternal);
+        Facet facet = ChoicesFacetForDomainObjectAnnotation.create(domainObjects, facetHolder);
 
         // then add
         FacetUtil.addFacet(facet);
@@ -263,13 +261,14 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         // check from @DomainObject(objectType=...)
         Facet facet = ObjectSpecIdFacetForDomainObjectAnnotation.create(domainObjects, facetHolder);
 
+//FIXME [2033] removed here (module 'metamodel'), should be re-implemented in 'jdo-common'         
         // else check for @PersistenceCapable(schema=...)
-        if(facet == null) {
-            final JdoPersistenceCapableFacet jdoPersistenceCapableFacet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
-            if(jdoPersistenceCapableFacet != null) {
-                facet = ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder);
-            }
-        }
+//        if(facet == null) {
+//            final JdoPersistenceCapableFacet jdoPersistenceCapableFacet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
+//            if(jdoPersistenceCapableFacet != null) {
+//                facet = ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder);
+//            }
+//        }
 
         // then add
         FacetUtil.addFacet(facet);
@@ -289,8 +288,6 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         final PostConstructMethodCache postConstructMethodCache = this;
         final ViewModelFacet recreatableObjectFacet = RecreatableObjectFacetForDomainObjectAnnotation.create(
                 domainObjects, 
-                persistenceSessionServiceInternal, 
-                servicesInjector,
                 facetHolder, 
                 postConstructMethodCache);
 
@@ -304,7 +301,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                     .filter(domainObject -> mixinTypeValidator.ensureMixinType(cls))
                     .collect(Collectors.toList());
 
-            final MixinFacet mixinFacet = MixinFacetForDomainObjectAnnotation.create(mixinDomainObjects, cls, facetHolder, servicesInjector);
+            final MixinFacet mixinFacet = MixinFacetForDomainObjectAnnotation.create(mixinDomainObjects, cls, facetHolder, getServiceInjector());
             FacetUtil.addFacet(mixinFacet);
         }
 
@@ -358,7 +355,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 )
         .findFirst()
         .map(lifecycleEvent -> new CreatedLifecycleEventFacetForDomainObjectAnnotation(
-                holder, lifecycleEvent, getSpecificationLoader()))
+                holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
@@ -376,7 +373,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 )
         .findFirst()
         .map(lifecycleEvent -> new LoadedLifecycleEventFacetForDomainObjectAnnotation(
-                holder, lifecycleEvent, getSpecificationLoader()))
+                holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
@@ -394,7 +391,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 )
         .findFirst()
         .map(lifecycleEvent -> new PersistingLifecycleEventFacetForDomainObjectAnnotation(
-                holder, lifecycleEvent, getSpecificationLoader()))
+                holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
@@ -412,7 +409,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 )
         .findFirst()
         .map(lifecycleEvent -> new PersistedLifecycleEventFacetForDomainObjectAnnotation(
-                holder, lifecycleEvent, getSpecificationLoader()))
+                holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
@@ -430,7 +427,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 )
         .findFirst()
         .map(lifecycleEvent -> new RemovingLifecycleEventFacetForDomainObjectAnnotation(
-                holder, lifecycleEvent, getSpecificationLoader()))
+                holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
@@ -448,7 +445,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 )
         .findFirst()
         .map(lifecycleEvent -> new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
-                holder, lifecycleEvent, getSpecificationLoader()))
+                holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
@@ -466,7 +463,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 )
         .findFirst()
         .map(lifecycleEvent -> new UpdatingLifecycleEventFacetForDomainObjectAnnotation(
-                holder, lifecycleEvent, getSpecificationLoader()))
+                holder, lifecycleEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
@@ -476,7 +473,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         .filter(domainEvent -> domainEvent != ActionDomainEvent.Default.class)
         .findFirst()
         .map(domainEvent -> new ActionDomainEventDefaultFacetForDomainObjectAnnotation(
-                        holder, domainEvent, getSpecificationLoader()))
+                        holder, domainEvent))
         .ifPresent(FacetUtil::addFacet);
 
     }
@@ -487,7 +484,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
         .findFirst()
         .map(domainEvent -> new PropertyDomainEventDefaultFacetForDomainObjectAnnotation(
-                        holder, domainEvent, getSpecificationLoader()))
+                        holder, domainEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
@@ -497,7 +494,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
         .filter(domainEvent -> domainEvent != CollectionDomainEvent.Default.class)
         .findFirst()
         .map(domainEvent -> new CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
-                        holder, domainEvent, getSpecificationLoader()))
+                        holder, domainEvent))
         .ifPresent(FacetUtil::addFacet);
     }
 
@@ -515,18 +512,18 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
             }
 
             private void validate(final ObjectSpecification thisSpec, final ValidationFailures validationFailures) {
-                if(!thisSpec.isPersistenceCapableOrViewModel()) {
+                if(!isEntityOrViewModel(thisSpec)) {
                     return;
                 }
 
                 final Map<ObjectSpecId, ObjectSpecification> specById = _Maps.newHashMap();
-                for (final ObjectSpecification otherSpec : getSpecificationLoader().allSpecifications()) {
+                for (final ObjectSpecification otherSpec : getSpecificationLoader().currentSpecifications()) {
 
                     if(thisSpec == otherSpec) {
                         continue;
                     }
 
-                    if(!otherSpec.isPersistenceCapableOrViewModel()) {
+                    if(!isEntityOrViewModel(otherSpec)) {
                         continue;
                     }
 
@@ -550,8 +547,8 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
                 if(autoCompleteFacet != null && !autoCompleteFacet.isNoop() && autoCompleteFacet instanceof AutoCompleteFacetAbstract) {
                     final AutoCompleteFacetAbstract facet = (AutoCompleteFacetForDomainObjectAnnotation) autoCompleteFacet;
                     final Class<?> repositoryClass = facet.getRepositoryClass();
-                    final boolean isService = getSpecificationLoader().isServiceClass(repositoryClass);
-                    if(!isService) {
+                    final boolean isRegistered = getServiceRegistry().isService(repositoryClass);
+                    if(!isRegistered) {
                         validationFailures.add(
                                 "@DomainObject annotation on %s specifies unknown repository '%s'",
                                 thisSpec.getFullIdentifier(), repositoryClass.getName());
@@ -568,22 +565,19 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
 
     // //////////////////////////////////////
 
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    // //////////////////////////////////////
-
     private final Map<Class<?>, Optional<Method>> postConstructMethods = _Maps.newHashMap();
 
     @Override
     public Method postConstructMethodFor(final Object pojo) {
         return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethods);
     }
-
-
-    PersistenceSessionServiceInternal persistenceSessionServiceInternal;
+    
+    // -- HELPER
+    
+    private boolean isEntityOrViewModel(ObjectSpecification spec) {
+        val type = spec.getManagedObjectSort();
+        return type.isEntity() || type.isViewModel();
+    }
+    
 
 }

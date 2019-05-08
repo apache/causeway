@@ -67,7 +67,7 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
 
         final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
 
-        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
+        final TranslationService translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
         final PropertyValidateFacetViaMethod facet = new PropertyValidateFacetViaMethod(method, translationService, translationContext, facetHolder);

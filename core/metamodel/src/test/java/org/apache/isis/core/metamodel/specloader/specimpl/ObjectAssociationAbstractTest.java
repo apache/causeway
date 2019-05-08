@@ -29,6 +29,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -39,8 +40,7 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -60,11 +60,11 @@ public class ObjectAssociationAbstractTest {
     @Mock
     private ObjectSpecification objectSpecification;
     @Mock
-    private ServicesInjector mockServicesInjector;
+    private ServiceInjector mockServicesInjector;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
     @Mock
-    private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
+    private ObjectAdapterService mockPersistenceSessionServiceInternal;
 
 
     public static class Customer {
@@ -80,14 +80,14 @@ public class ObjectAssociationAbstractTest {
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
 
         context.checking(new Expectations() {{
-            allowing(mockServicesInjector).getSpecificationLoader();
-            will(returnValue(mockSpecificationLoader));
-            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-            will(returnValue(mockPersistenceSessionServiceInternal));
+//            allowing(mockServicesInjector).getSpecificationLoader();
+//            will(returnValue(mockSpecificationLoader));
+//            allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+//            will(returnValue(mockPersistenceSessionServiceInternal));
         }});
 
         objectAssociation = new ObjectAssociationAbstract(
-                facetedMethod, FeatureType.PROPERTY, objectSpecification, mockServicesInjector) {
+                facetedMethod, FeatureType.PROPERTY, objectSpecification) {
 
             @Override
             public ObjectAdapter get(

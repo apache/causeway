@@ -158,7 +158,7 @@ public class ThemeChooser extends Panel {
     }
     
     private IsisConfiguration getConfiguration() {
-        return getIsisSessionFactory().getConfiguration();
+        return IsisContext.getConfiguration();
     }
 
     IsisSessionFactory getIsisSessionFactory() {

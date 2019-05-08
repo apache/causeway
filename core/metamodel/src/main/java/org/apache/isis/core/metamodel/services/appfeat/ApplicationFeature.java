@@ -23,6 +23,8 @@ import java.util.SortedSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import javax.enterprise.inject.Vetoed;
+
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
@@ -266,6 +268,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
     // -- Functions
 
+    @Vetoed
     public static class Functions {
         private Functions(){}
 
@@ -274,6 +277,7 @@ public class ApplicationFeature implements Comparable<ApplicationFeature> {
 
     }
 
+    @Vetoed
     public static class Predicates {
         private Predicates(){}
 

@@ -19,11 +19,6 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
-
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.session.SessionLoggingService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -48,7 +43,8 @@ import org.apache.wicket.request.cycle.RequestCycle;
  * also tracks thread usage (so that multiple concurrent requests are all
  * associated with the same session).
  */
-public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession implements BreadcrumbModelProvider, BookmarkedPagesModelProvider {
+public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession 
+implements BreadcrumbModelProvider, BookmarkedPagesModelProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,7 +66,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     @Override
     public synchronized boolean authenticate(final String username, final String password) {
         AuthenticationRequest authenticationRequest = new AuthenticationRequestPassword(username, password);
-        authenticationRequest.setRoles(Arrays.asList(USER_ROLE));
+        authenticationRequest.addRole(USER_ROLE);
         authenticationSession = getAuthenticationManager().authenticate(authenticationRequest);
         if (authenticationSession != null) {
             log(SessionLoggingService.Type.LOGIN, username, null);
@@ -129,8 +125,11 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         if (!isSignedIn()) {
             return null;
         }
-        final List<String> roles = authenticationSession.getRoles();
-        return new Roles(roles.toArray(new String[roles.size()]));
+        
+        final Roles roles = new Roles();
+        authenticationSession.streamRoles()
+        .forEach(roles::add);
+        return roles;
     }
 
     @Override
@@ -159,7 +158,7 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
     // /////////////////////////////////////////////////
 
     protected AuthenticationManager getAuthenticationManager() {
-        return getIsisSessionFactory().getAuthenticationManager();
+        return IsisContext.getAuthenticationManager();
     }
 
     // /////////////////////////////////////////////////
@@ -189,10 +188,10 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
 
     }
 
-    protected @NotNull SessionLoggingService getSessionLoggingService() {
+    protected SessionLoggingService getSessionLoggingService() {
         try {
-            final SessionLoggingService service = getIsisSessionFactory().getServicesInjector()
-                    .lookupService(SessionLoggingService.class)
+            final SessionLoggingService service = 
+                    IsisContext.getServiceRegistry().lookupService(SessionLoggingService.class)
                     .orElseGet(SessionLoggingService.Stderr::new);
             return service;
         } catch (Exception e) {

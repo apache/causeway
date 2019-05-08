@@ -63,16 +63,6 @@ public interface RepresentationService {
             Context resourceContext,
             ObjectAdapter objectAdapter);
 
-    /**
-     * @deprecated - use {@link #objectRepresentation(Context, ObjectAdapter)}.
-     */
-    @Deprecated
-    @Programmatic
-    Response objectRepresentation(
-            Context resourceContext,
-            ObjectAdapter objectAdapter,
-            Intent intent);
-
     @Programmatic
     Response propertyDetails(
             Context rendererContext,

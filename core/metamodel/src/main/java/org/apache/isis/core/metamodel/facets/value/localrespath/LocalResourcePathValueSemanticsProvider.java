@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class LocalResourcePathValueSemanticsProvider
 extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements LocalResourcePathValueFacet {
@@ -47,13 +46,13 @@ extends ValueSemanticsProviderAndFacetAbstract<LocalResourcePath> implements Loc
      * {@link EncoderDecoder}.
      */
     public LocalResourcePathValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public LocalResourcePathValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+    public LocalResourcePathValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, LocalResourcePath.class,
-                TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE,
-                context);
+                TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE
+                );
     }
 
     // //////////////////////////////////////////////////////////////////

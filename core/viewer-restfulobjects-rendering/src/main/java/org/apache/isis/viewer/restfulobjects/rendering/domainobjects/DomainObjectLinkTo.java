@@ -22,7 +22,6 @@ import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils;
 
 public class DomainObjectLinkTo implements ObjectAdapterLinkTo {
 

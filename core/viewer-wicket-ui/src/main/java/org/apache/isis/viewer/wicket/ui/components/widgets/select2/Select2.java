@@ -110,7 +110,7 @@ public class Select2 implements Serializable {
         } else {
             final Collection<ObjectAdapterMemento> modelObject = select2MultiChoice.getModelObject();
 
-            return ObjectAdapterMemento.createForList(modelObject, select2MultiChoice.getSpecId());
+            return ObjectAdapterMemento.ofMementoList(modelObject, select2MultiChoice.getSpecId());
         }
     }
 
@@ -121,7 +121,7 @@ public class Select2 implements Serializable {
             final IModel<Collection<ObjectAdapterMemento>> model = select2MultiChoice.getModel();
             final Collection<ObjectAdapterMemento> modelObject = model.getObject();
 
-            final ObjectAdapterMemento memento = ObjectAdapterMemento.createForList(modelObject, select2MultiChoice.getSpecId());
+            final ObjectAdapterMemento memento = ObjectAdapterMemento.ofMementoList(modelObject, select2MultiChoice.getSpecId());
             return new IModel<ObjectAdapterMemento>() {
                 @Override
                 public ObjectAdapterMemento getObject() {
@@ -152,7 +152,7 @@ public class Select2 implements Serializable {
             return select2Choice.getConvertedInput();
         } else {
             final Collection<ObjectAdapterMemento> convertedInput = select2MultiChoice.getConvertedInput();
-            return ObjectAdapterMemento.createForList(convertedInput, select2MultiChoice.getSpecId());
+            return ObjectAdapterMemento.ofMementoList(convertedInput, select2MultiChoice.getSpecId());
         }
     }
 

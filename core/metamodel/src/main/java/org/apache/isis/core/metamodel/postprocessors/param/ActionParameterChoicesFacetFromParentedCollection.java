@@ -23,15 +23,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class ActionParameterChoicesFacetFromParentedCollection extends ActionParameterChoicesFacetAbstract {
 
@@ -39,11 +36,8 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
 
     public ActionParameterChoicesFacetFromParentedCollection(
             final FacetHolder holder,
-            final OneToManyAssociation otma,
-            final SpecificationLoader specificationLoader,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final ObjectAdapterProvider adapterProvider) {
-        super(holder, specificationLoader, authenticationSessionProvider, adapterProvider);
+            final OneToManyAssociation otma) {
+        super(holder);
         this.otma = otma;
     }
 
@@ -52,6 +46,7 @@ public class ActionParameterChoicesFacetFromParentedCollection extends ActionPar
             final ObjectAdapter target,
             final List<ObjectAdapter> arguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         final ObjectAdapter parentAdapter = determineParentAdapter(target);
         final ObjectAdapter objectAdapter = otma.get(parentAdapter, interactionInitiatedBy);
         final List<ObjectAdapter> objectAdapters = CollectionFacet.Utils.toAdapterList(objectAdapter);

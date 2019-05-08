@@ -30,7 +30,6 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.Module;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -46,14 +45,14 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
 
     @Override
     public void validate(final ValidationFailures validationFailures) {
-        boolean check = specificationLoader.getConfiguration()
+        boolean check = getConfiguration()
                 .getBoolean(ISIS_REFLECTOR_CHECK_MODULE_EXTENT_KEY,
                         ISIS_REFLECTOR_CHECK_MODULE_EXTENT_DEFAULT);
         if(!check) {
             return;
         }
 
-        AppManifest2 appManifest = specificationLoader.getServicesInjector()
+        AppManifest2 appManifest = getServiceRegistry()
                 .lookupServiceElseFail(MetaModelService.class).getAppManifest2();
         if(appManifest == null) {
             return;
@@ -100,7 +99,7 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
             @Override
             public void summarize(final ValidationFailures validationFailures) {
 
-                AppManifest2 appManifest = specificationLoader.getServicesInjector()
+                AppManifest2 appManifest = getServiceRegistry()
                         .lookupServiceElseFail(MetaModelService.class).getAppManifest2();
                 if(appManifest == null) {
                     return;

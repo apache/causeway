@@ -47,7 +47,7 @@ public abstract class AuthenticatorAbstract implements Authenticator {
         if (!isValid(request)) {
             return null;
         }
-        return new SimpleSession(request.getName(), request.getRoles(), code);
+        return new SimpleSession(request.getName(), request.streamRoles(), code);
     }
 
 

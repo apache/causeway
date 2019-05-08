@@ -22,17 +22,23 @@ import java.util.Map;
 import javax.jdo.PersistenceManager;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.config.ConfigurationConstants;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.commons.collections.Bin;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterByIdProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ManagedObjectState;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.memento.Data;
+import org.apache.isis.core.runtime.persistence.FixturesInstalledState;
+import org.apache.isis.core.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
-import org.apache.isis.core.runtime.system.persistence.adaptermanager.ObjectAdapterContext.MementoRecreateObjectSupport;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 public interface PersistenceSession 
@@ -48,7 +54,7 @@ extends
     
     IsisConfiguration getConfiguration();
     IsisTransactionManager getTransactionManager();
-    ServicesInjector getServicesInjector();
+    ServiceInjector getServiceInjector();
     
     void open();
     void close();
@@ -80,12 +86,11 @@ extends
      */
     String identifierFor(Object pojo);
     
-    /**@since 2.0.0-M2*/
-    boolean isTransient(Object pojo);
-    /**@since 2.0.0-M2*/
-    boolean isRepresentingPersistent(Object pojo);
-    /**@since 2.0.0-M2*/
-    boolean isDestroyed(Object pojo);
+    /**
+     * @since 2.0.0-M3
+     */
+    ManagedObjectState stateOf(Object pojo);
+    
     /** whether pojo is recognized by the persistence layer, that is, it has an ObjectId
      * @since 2.0.0-M2*/
     boolean isRecognized(Object pojo);
@@ -149,10 +154,6 @@ extends
     // -------------------------------------------------------------------------------------------------
     // -- API NOT STABLE YET - SUBJECT TO REFACTORING
     // -------------------------------------------------------------------------------------------------
-    
-    // -- SERVICE SUPPORT
-
-    static final String SERVICE_IDENTIFIER = "1";
 
     // -- FIXTURE SUPPORT
 
@@ -162,13 +163,33 @@ extends
     static final String INSTALL_FIXTURES_KEY = "isis.persistor.datanucleus.install-fixtures";
     static final boolean INSTALL_FIXTURES_DEFAULT = false;
     
-    boolean isFixturesInstalled();
+    /**
+     * Determine if the object store has been initialized with its set of start
+     * up objects.
+     *
+     * <p>
+     * This method is called only once after the init has been called. If this flag
+     * returns <code>not_Installed</code> the framework will run the fixtures to
+     * initialise the persistor.
+     *
+     * <p>
+     * Returns whether fixtures are installed.
+     * <p>
+     * This caching is important because if we've determined, for a given run,
+     * that fixtures are not installed, then we don't want to change our mind by
+     * asking the object store again in another session.
+     *
+     * @see FixturesInstalledStateHolder
+     */
+    FixturesInstalledState getFixturesInstalledState();
     
     // -- MEMENTO SUPPORT
     
-    MementoRecreateObjectSupport mementoSupport();
+    ObjectAdapter adapterOfMemento(ObjectSpecification spec, Oid oid, Data data);
     
     // -- TODO remove ObjectAdapter references from API
+    
+    ObjectAdapter adapterFor(RootOid rootOid);
     
     <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query);
     <T> ObjectAdapter firstMatchingQuery(final Query<T> query);
@@ -182,5 +203,10 @@ extends
     
     long getLifecycleStartedAtSystemNanos();
     
+    // -- LOOKUP
+    
+    static <T extends PersistenceSession> Bin<T> current(Class<T> requiredType) {
+        return _Context.threadLocalSelect(PersistenceSession.class, requiredType);
+    }
 
 }

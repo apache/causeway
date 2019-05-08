@@ -69,11 +69,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
+
+import lombok.val;
 
 public class ActionModel extends BookmarkableModel<ObjectAdapter> implements FormExecutorContext {
 
@@ -99,7 +102,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
      * @return
      */
     public static ActionModel create(final EntityModel entityModel, final ObjectAction action) {
-        final ActionMemento homePageActionMemento = ObjectAdapterMemento.Functions.fromAction().apply(action);
+        final ActionMemento homePageActionMemento = new ActionMemento(action);
         return new ActionModel(entityModel, homePageActionMemento);
     }
 
@@ -282,7 +285,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         if(oid.isTransient()) {
             return null;
         } else {
-            return new EntityModel(ObjectAdapterMemento.createPersistent(oid));
+            return new EntityModel(ObjectAdapterMemento.ofRootOid(oid));
         }
     }
 
@@ -391,8 +394,9 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         }
 
         try {
-            final RootOid oid = RootOid.deStringEncoded(encoded);
-            return getPersistenceSession().adapterFor(oid);
+            val rootOid = RootOid.deStringEncoded(encoded);
+            val rootOidToAdapter = IsisContext.rootOidToAdapter();
+            return rootOidToAdapter.apply(rootOid);			
         } catch (final Exception e) {
             return null;
         }
@@ -463,14 +467,19 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
                         InteractionInitiatedBy.USER,
                         WHERE_FOR_ACTION_INVOCATION);
 
-        final Stream<RoutingService> routingServices = getServicesInjector().streamServices(RoutingService.class);
-        final Object result = resultAdapter != null ? resultAdapter.getPojo() : null;
+        final Stream<RoutingService> routingServices = getServiceRegistry()
+                .select(RoutingService.class)
+                .stream();
+        
+        final Object resultPojo = resultAdapter != null ? resultAdapter.getPojo() : null;
+        
+        val pojoToAdapter = IsisContext.pojoToAdapter();
         
         return routingServices
-            .filter(routingService->routingService.canRoute(result))
-            .map(routingService->routingService.route(result))
+            .filter(routingService->routingService.canRoute(resultPojo))
+            .map(routingService->routingService.route(resultPojo))
             .filter(_NullSafe::isPresent)
-            .map(routeTo->getPersistenceSession().adapterFor(routeTo))
+            .map(pojoToAdapter)
             .filter(_NullSafe::isPresent)
             .findFirst()
             .orElse(resultAdapter);
@@ -651,7 +660,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
 
     private static List<ActionParameterMemento> buildParameterMementos(final List<ObjectActionParameter> parameters) {
         final List<ActionParameterMemento> parameterMementoList =
-                _Lists.map(parameters, ObjectAdapterMemento.Functions.fromActionParameter());
+                _Lists.map(parameters, ActionParameterMemento::new);
         // we copy into a new array list otherwise we get lazy evaluation =
         // reference to a non-serializable object
         return _Lists.newArrayList(parameterMementoList);
@@ -719,13 +728,5 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> implements For
         this.inlinePromptContext = inlinePromptContext;
     }
 
-    //////////////////////////////////////////////////
-    // Dependencies (from context)
-    //////////////////////////////////////////////////
-
-
-    ServicesInjector getServicesInjector() {
-        return getIsisSessionFactory().getServicesInjector();
-    }
 
 }

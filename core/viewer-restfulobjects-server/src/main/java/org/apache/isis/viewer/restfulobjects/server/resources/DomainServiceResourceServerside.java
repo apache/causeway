@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.core.commons.url.UrlDecoderUtil;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -49,6 +50,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServiceLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
+
+import lombok.val;
 
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
@@ -73,7 +76,9 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     public Response services() {
         init(RepresentationType.LIST, Where.STANDALONE_TABLES, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final Stream<ObjectAdapter> serviceAdapters = getResourceContext().streamServiceAdapters()
+        val metaModelContext = MetaModelContext.current();
+        
+        final Stream<ObjectAdapter> serviceAdapters = metaModelContext.streamServiceAdapters()
                 .filter(NATURE_OF_MENU);
 
         final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());

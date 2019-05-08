@@ -23,15 +23,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 public class AuthorizationFacetFactory extends FacetFactoryAbstract {
 
-    private final AuthorizationManager authorizationManager;
-
-    public AuthorizationFacetFactory(final AuthorizationManager authorizationManager) {
+    public AuthorizationFacetFactory() {
         super(FeatureType.EVERYTHING_BUT_PARAMETERS);
-        this.authorizationManager = authorizationManager;
     }
 
     @Override
@@ -45,15 +41,7 @@ public class AuthorizationFacetFactory extends FacetFactoryAbstract {
     }
 
     private AuthorizationFacetImpl createFacet(final FacetHolder holder) {
-        return new AuthorizationFacetImpl(holder, getAuthorizationManager(), getAuthenticationSessionProvider());
-    }
-
-    // //////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // //////////////////////////////////////////////////////////////////
-
-    private AuthorizationManager getAuthorizationManager() {
-        return authorizationManager;
+        return new AuthorizationFacetImpl(holder);
     }
 
 }

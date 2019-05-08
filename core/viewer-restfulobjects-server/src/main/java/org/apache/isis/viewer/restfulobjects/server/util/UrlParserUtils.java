@@ -20,6 +20,7 @@ package org.apache.isis.viewer.restfulobjects.server.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public final class UrlParserUtils {

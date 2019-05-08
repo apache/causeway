@@ -16,14 +16,11 @@
  */
 package org.apache.isis.core.security.authentication;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 /**
  * This is implemented by an (internal) domain service
  */
 public interface AuthenticationSessionProvider {
 
-    @Programmatic
     AuthenticationSession getAuthenticationSession();
 
 }

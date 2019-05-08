@@ -79,7 +79,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel<ITab>  {
     }
 
     static TranslationService getTranslationService() {
-        return IsisContext.getSessionFactory().getServicesInjector().lookupService(TranslationService.class).orElse(null);
+        return IsisContext.getServiceRegistry().lookupServiceElseFail(TranslationService.class);
     }
 
     public TabGroupPanel(String id, final EntityModel entityModel, final BS3TabGroup bs3TabGroup) {
@@ -97,13 +97,13 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel<ITab>  {
 
     @Override
     public TabbedPanel<ITab> setSelectedTab(final int index) {
-        selectedTabHintKey.set(entityModel.getObjectAdapterMemento().asHintingBookmark(), ""+index);
+        selectedTabHintKey.set(entityModel.getObjectAdapterMemento().asHintingBookmarkIfSupported(), ""+index);
         return super.setSelectedTab(index);
     }
 
     private void setSelectedTabFromSessionIfAny(
             final AjaxBootstrapTabbedPanel<ITab> ajaxBootstrapTabbedPanel) {
-        final String selectedTabStr = selectedTabHintKey.get(entityModel.getObjectAdapterMemento().asHintingBookmark());
+        final String selectedTabStr = selectedTabHintKey.get(entityModel.getObjectAdapterMemento().asHintingBookmarkIfSupported());
         final Integer tabIndex = parse(selectedTabStr);
         if (tabIndex != null) {
             final int numTabs = ajaxBootstrapTabbedPanel.getTabs().size();

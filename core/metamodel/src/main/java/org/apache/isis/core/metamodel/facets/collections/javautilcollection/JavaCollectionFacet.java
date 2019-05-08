@@ -24,7 +24,6 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.commons.internal.base._Casts;
-import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -34,11 +33,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class JavaCollectionFacet extends CollectionFacetAbstract {
 
-    private final ObjectAdapterProvider adapterProvider;
-
-    public JavaCollectionFacet(final FacetHolder holder, final ObjectAdapterProvider adapterProvider) {
+    public JavaCollectionFacet(final FacetHolder holder) {
         super(holder);
-        this.adapterProvider = adapterProvider;
     }
     
     @Override
@@ -61,6 +57,9 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
 
     @Override
     public <T extends ManagedObject> Stream<T> stream(T collectionAdapter) {
+        
+        final ObjectAdapterProvider adapterProvider = getObjectAdapterProvider();
+        
         return pojoCollection(collectionAdapter)
                 .stream()
                 .map(adapterProvider::adapterFor) //FIXME[ISIS-1976] we always generate an OA here

@@ -19,57 +19,76 @@
 
 package org.apache.isis.core.metamodel.services.registry;
 
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
+import javax.inject.Singleton;
+
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.commons.internal.spring._Spring;
+import org.apache.isis.commons.ioc.BeanAdapter;
+import org.apache.isis.core.commons.collections.Bin;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
-public class ServiceRegistryDefault implements ServiceRegistry, ServicesInjectorAware {
+/**
+ * @since 2.0.0
+ */
+@Singleton
+public final class ServiceRegistryDefault implements ServiceRegistry {
 
+    private final Set<BeanAdapter> registeredBeans = _Sets.newHashSet();
+    private final Set<Object> serviceCache = _Sets.newHashSet();
 
-    @Programmatic
     @Override
-    public <T> T injectServicesInto(T domainObject) {
-        servicesInjector.injectServicesInto(unwrapped(domainObject));
-        return domainObject;
+    public boolean isDomainServiceType(Class<?> cls) {
+        if(cls.isAnnotationPresent(DomainService.class)) {
+            return true;
+        }
+        return false;
     }
 
-    @Programmatic
     @Override
-    public <T> Stream<T> streamServices(Class<T> serviceType) {
-        return servicesInjector.streamServices(serviceType);
+    public Stream<BeanAdapter> streamRegisteredBeans() {
+        if(registeredBeans.isEmpty()) {
+            _Spring.streamAllBeans(this::isDomainServiceType)
+            .filter(_NullSafe::isPresent)
+            .forEach(registeredBeans::add);
+        }
+        return registeredBeans.stream();
     }
 
-    @Programmatic
     @Override
+    @Deprecated //FIXME [2033] this is bad, we should not even need to do this; root problem are ObjectAdapters requiring pojos
     public Stream<Object> streamServices() {
-        return servicesInjector.streamServices();
+        if(serviceCache.isEmpty()) {
+            streamRegisteredBeans()
+            .filter(BeanAdapter::isDomainService)
+            .map(BeanAdapter::getInstance)
+            .filter(Bin::isCardinalityOne)
+            .map(Bin::getSingleton)
+            .map(Optional::get)
+            .forEach(serviceCache::add);
+        }
+        return serviceCache.stream();
     }
 
-    private Object unwrapped(Object domainObject) {
-        return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
-    }
-
-
-
-    @javax.inject.Inject
-    WrapperFactory wrapperFactory;
-
-    private ServicesInjector servicesInjector;
     @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        this.servicesInjector = servicesInjector;
+    public boolean isRegisteredBean(Class<?> cls) {
+        //FIXME [2033] this is poorly implemented, should not require service objects.
+        return streamServices()
+        .anyMatch(obj->obj.getClass().equals(cls));
     }
 
-    
+    @Override
+    public void validateServices() {
+        ServiceRegistryDefault_validate.validateUniqueDomainServiceId(
+                streamRegisteredBeans()
+                .filter(BeanAdapter::isDomainService)
+                );
+    }
+
 
 }

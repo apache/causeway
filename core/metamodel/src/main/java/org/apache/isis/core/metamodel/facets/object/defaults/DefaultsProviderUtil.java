@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.defaults;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -33,7 +34,10 @@ public final class DefaultsProviderUtil {
     public static final String DEFAULTS_PROVIDER_NAME_KEY_PREFIX = "isis.reflector.java.facets.defaulted.";
     public static final String DEFAULTS_PROVIDER_NAME_KEY_SUFFIX = ".providerName";
 
-    public static String defaultsProviderNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
+    public static String defaultsProviderNameFromConfiguration(final Class<?> type) {
+        
+        final IsisConfiguration configuration = _Config.getConfiguration();
+        
         final String key = DEFAULTS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + DEFAULTS_PROVIDER_NAME_KEY_SUFFIX;
         final String defaultsProviderName = configuration.getString(key);
         return !_Strings.isNullOrEmpty(defaultsProviderName) ? defaultsProviderName : null;

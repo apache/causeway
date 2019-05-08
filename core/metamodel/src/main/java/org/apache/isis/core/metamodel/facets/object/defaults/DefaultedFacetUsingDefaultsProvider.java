@@ -22,37 +22,26 @@ package org.apache.isis.core.metamodel.facets.object.defaults;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class DefaultedFacetUsingDefaultsProvider extends FacetAbstract implements DefaultedFacet {
 
     private final DefaultsProvider<?> defaultsProvider;
-    private final ServicesInjector dependencyInjector;
 
-    public DefaultedFacetUsingDefaultsProvider(final DefaultsProvider<?> parser, final FacetHolder holder, final ServicesInjector dependencyInjector) {
+    public DefaultedFacetUsingDefaultsProvider(final DefaultsProvider<?> parser, final FacetHolder holder) {
         super(DefaultedFacet.class, holder, Derivation.NOT_DERIVED);
         this.defaultsProvider = parser;
-        this.dependencyInjector = dependencyInjector;
     }
 
     @Override
     protected String toStringValues() {
-        getDependencyInjector().injectServicesInto(defaultsProvider);
+        getServiceInjector().injectServicesInto(defaultsProvider);
         return defaultsProvider.toString();
     }
 
     @Override
     public Object getDefault() {
-        getDependencyInjector().injectServicesInto(defaultsProvider);
+        getServiceInjector().injectServicesInto(defaultsProvider);
         return defaultsProvider.getDefaultValue();
-    }
-
-    // //////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // //////////////////////////////////////////////////////
-
-    public ServicesInjector getDependencyInjector() {
-        return dependencyInjector;
     }
 
 }

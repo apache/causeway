@@ -73,7 +73,7 @@ abstract class VisitorForClauseAbstract implements MetaModelValidatorVisiting.Vi
         }
 
         final String className = objectSpec.getCorrespondingClass().getName();
-        if (!getSpecificationLoader().loaded(classNameFromClause)) {
+        if (getSpecificationLoader().loadSpecification(classNameFromClause)==null) {
             validationFailures.add(
                     "%s: error in JDOQL query, class name for '%s' clause not recognized (JDOQL : %s)",
                     className, clause, query);

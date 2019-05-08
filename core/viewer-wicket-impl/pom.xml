@@ -68,6 +68,11 @@
 
         <dependency>
             <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-spring</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-auth-roles</artifactId>
         </dependency>
 
@@ -87,12 +92,6 @@
             <artifactId>commons-io</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice-parent</artifactId>
-            <version>${guice.version}</version>
-            <type>pom</type>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.isis.core</groupId>

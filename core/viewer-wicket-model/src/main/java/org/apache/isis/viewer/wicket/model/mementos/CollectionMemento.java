@@ -25,21 +25,24 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+
+import lombok.val;
 
 /**
- * {@link Serializable} representation of a {@link OneToManyAssociation} (a
- * parented collection of entities).
+ * {@link Serializable} representation of a {@link OneToManyAssociation} 
+ * (a parented collection of entities).
  */
 public class CollectionMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private static ObjectSpecification owningSpecFor(
-            final OneToManyAssociation association,
-            final IsisSessionFactory isisSessionFactory) {
-        final SpecificationLoader specificationLoader = isisSessionFactory.getSpecificationLoader();
-        return specificationLoader.loadSpecification(association.getIdentifier().toClassIdentityString());
+            final OneToManyAssociation association) {
+        
+        val specificationLoader = IsisContext.getSpecificationLoader();
+        return specificationLoader.loadSpecification(
+                ObjectSpecId.of(association.getIdentifier().toClassIdentityString()));
     }
 
     private final ObjectSpecId owningType;
@@ -49,8 +52,8 @@ public class CollectionMemento implements Serializable {
 
     private transient OneToManyAssociation collection;
 
-    public CollectionMemento(final OneToManyAssociation collection, final IsisSessionFactory isisSessionFactory) {
-        this(owningSpecFor(collection, isisSessionFactory).getSpecId(), collection.getIdentifier().toNameIdentityString(), collection);
+    public CollectionMemento(final OneToManyAssociation collection) {
+        this(owningSpecFor(collection).getSpecId(), collection.getIdentifier().toNameIdentityString(), collection);
     }
 
     private CollectionMemento(final ObjectSpecId owningType, final String id, final OneToManyAssociation collection) {

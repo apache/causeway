@@ -23,13 +23,12 @@ import org.apache.isis.applib.value.Image;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract<Image> {
 
-    public ImageValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, Image.class, context);
+    public ImageValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, Image.class);
     }
 
     @Override

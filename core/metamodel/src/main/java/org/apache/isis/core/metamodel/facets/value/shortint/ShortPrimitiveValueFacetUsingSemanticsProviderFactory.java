@@ -36,7 +36,7 @@ public class ShortPrimitiveValueFacetUsingSemanticsProviderFactory extends Value
         if (type != short.class) {
             return;
         }
-        addFacets(new ShortPrimitiveValueSemanticsProvider(holder, getContext()));
+        addFacets(new ShortPrimitiveValueSemanticsProvider(holder));
     }
 
 }

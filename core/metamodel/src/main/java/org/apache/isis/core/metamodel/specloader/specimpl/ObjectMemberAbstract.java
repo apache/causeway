@@ -28,8 +28,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -52,39 +52,31 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 
-public abstract class ObjectMemberAbstract implements ObjectMember {
+public abstract class ObjectMemberAbstract implements ObjectMember, MetaModelContext.Delegating {
 
-    public static ObjectSpecification getSpecification(
-            final SpecificationLoader specificationLookup, 
-            final Class<?> type) {
-        
-        return type == null ? null : specificationLookup.loadSpecification(type);
+    protected static ObjectSpecification specificationOf(final Class<?> type) {
+        return type == null 
+                ? null 
+                        : MetaModelContext.current().getSpecificationLoader().loadSpecification(type);
     }
 
     // -- fields
     private final String id;
     private final FacetedMethod facetedMethod;
     private final FeatureType featureType;
-    private final SpecificationLoader specificationLoader;
-    protected final ServicesInjector servicesInjector;
-    private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-
 
     protected ObjectMemberAbstract(
             final FacetedMethod facetedMethod,
-            final FeatureType featureType,
-            final ServicesInjector servicesInjector) {
+            final FeatureType featureType) {
+        
         final String id = facetedMethod.getIdentifier().getMemberName();
         if (id == null) {
             throw new IllegalArgumentException("Id must always be set");
@@ -92,11 +84,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.facetedMethod = facetedMethod;
         this.featureType = featureType;
         this.id = id;
-
-        this.servicesInjector = servicesInjector;
-
-        this.specificationLoader = servicesInjector.getSpecificationLoader();
-        this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
     // -- Identifiers
@@ -388,43 +375,15 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return String.format("id=%s,name='%s'", getId(), getName());
     }
 
-
-
     // -- Dependencies
 
-    public SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-
-    public ServicesInjector getServicesInjector() {
-        return servicesInjector;
-    }
-
-    protected ObjectAdapterProvider getObjectAdapterProvider() {
-        return getPersistenceSessionService();
-    }
-    
-    public PersistenceSessionServiceInternal getPersistenceSessionService() {
-        return persistenceSessionServiceInternal;
-    }
-
-    protected <T> T lookupService(final Class<T> serviceClass) {
-        return getServicesInjector().lookupService(serviceClass).orElse(null);
-    }
-
     protected CommandContext getCommandContext() {
-        CommandContext commandContext = lookupService(CommandContext.class);
-        if (commandContext == null) {
-            throw new IllegalStateException("The CommandContext service is not registered!");
-        }
-        return commandContext;
+        return getServiceRegistry().lookupServiceElseFail(CommandContext.class);
     }
 
     protected CommandDtoServiceInternal getCommandDtoService() {
-        return lookupService(CommandDtoServiceInternal.class);
+        return getServiceRegistry().lookupServiceElseFail(CommandDtoServiceInternal.class);
     }
-
-
 
     // -- command (setup)
 
@@ -499,6 +458,9 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         }
     }
 
-
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return MetaModelContext.current();
+    }
 
 }

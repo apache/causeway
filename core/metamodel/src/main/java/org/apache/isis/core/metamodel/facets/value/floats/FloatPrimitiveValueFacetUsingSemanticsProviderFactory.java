@@ -36,7 +36,7 @@ public class FloatPrimitiveValueFacetUsingSemanticsProviderFactory extends Value
         if (type != float.class) {
             return;
         }
-        addFacets(new FloatPrimitiveValueSemanticsProvider(holder, getContext()));
+        addFacets(new FloatPrimitiveValueSemanticsProvider(holder));
     }
 
 }

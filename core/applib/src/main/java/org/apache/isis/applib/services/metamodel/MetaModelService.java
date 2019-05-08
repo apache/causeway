@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -42,17 +42,14 @@ public interface MetaModelService {
     /**
      * Provides a reverse lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
-    @Programmatic
     Class<?> fromObjectType(final String objectType);
 
     /**
      * Provides a lookup of a domain class' object type, as defined by {@link DomainObject#objectType()} (or any other mechanism that corresponds to Isis' <code>ObjectSpecIdFacet</code>).
      */
-    @Programmatic
     String toObjectType(final Class<?> domainType);
 
 
-    @Programmatic
     void rebuild(final Class<?> domainType);
 
     /**
@@ -68,53 +65,11 @@ public interface MetaModelService {
      *
      * @see MetaModelService6
      */
-    @Programmatic
     DomainModel getDomainModel();
 
-    @Programmatic
-    Sort sortOf(Class<?> domainType, Mode mode);
+    ManagedObjectSort sortOf(Class<?> domainType, Mode mode);
 
-    @Programmatic
-    Sort sortOf(Bookmark bookmark, Mode mode);
-
-    enum Sort {
-        VIEW_MODEL,
-        JDO_ENTITY,
-        DOMAIN_SERVICE,
-        MIXIN,
-        VALUE,
-        COLLECTION,
-        UNKNOWN;
-
-        public boolean isDomainService() {
-            return this == DOMAIN_SERVICE;
-        }
-
-        public boolean isMixin() {
-            return this == MIXIN;
-        }
-
-        public boolean isViewModel() {
-            return this == VIEW_MODEL;
-        }
-
-        public boolean isValue() {
-            return this == VALUE;
-        }
-
-        public boolean isCollection() {
-            return this == COLLECTION;
-        }
-
-        public boolean isJdoEntity() {
-            return this == JDO_ENTITY;
-        }
-
-        public boolean isUnknown() {
-            return this == UNKNOWN;
-        }
-
-    }
+    ManagedObjectSort sortOf(Bookmark bookmark, Mode mode);
 
     enum Mode {
         /**
@@ -130,16 +85,13 @@ public interface MetaModelService {
     /**
      * @return as {@link #getAppManifest()}, downcasted (else null).
      */
-    @Programmatic
     AppManifest2 getAppManifest2();
 
     /**
      * @return the {@link AppManifest} used to bootstrap the application.
      */
-    @Programmatic
     AppManifest getAppManifest();
 
-    @Programmatic
     CommandDtoProcessor commandDtoProcessorFor(String memberIdentifier);
 
     public static class Config {
@@ -160,10 +112,6 @@ public interface MetaModelService {
             this.mask = mask;
             this.packagePrefixes = Collections.unmodifiableList(packagePrefixes);
         }
-        private Config(final int mask) {
-            this(mask, null);
-        }
-
 
         public Config withIgnoreNoop() {
             return newConfigWith(IGNORE_NOOP_FACETS);
@@ -220,7 +168,6 @@ public interface MetaModelService {
 
     }
 
-    @Programmatic
     MetamodelDto exportMetaModel(final Config config);
 
 }

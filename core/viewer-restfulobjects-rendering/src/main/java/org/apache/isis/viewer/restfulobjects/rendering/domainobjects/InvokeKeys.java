@@ -20,8 +20,6 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import java.util.EnumMap;
 
-import javax.ws.rs.HEAD;
-
 import org.apache.isis.applib.annotation.SemanticsOf;
 
 public final class InvokeKeys {

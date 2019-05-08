@@ -38,7 +38,7 @@ public abstract class ObserveFacetAbstract extends SingleClassValueFacetAbstract
             final Class<? extends EventStreamSource> eventStreamType,
             final FacetHolder holder) {
 
-        super(type(), holder, eventStreamType, null);
+        super(type(), holder, eventStreamType);
         this.eventStreamType = eventStreamType;
     }
 

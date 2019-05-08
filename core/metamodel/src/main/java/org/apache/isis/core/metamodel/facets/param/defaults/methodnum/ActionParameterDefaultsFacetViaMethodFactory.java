@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -36,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.
@@ -93,7 +91,7 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, i, paramAsHolder, adapterProvider));
+            FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(defaultMethod, i, paramAsHolder));
         }
     }
 
@@ -129,17 +127,5 @@ public class ActionParameterDefaultsFacetViaMethodFactory extends MethodPrefixBa
         return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DEFAULT_PREFIX + n + capitalizedName, returnType, paramTypes);
     }
 
-    // ///////////////////////////////////////////////////////////////
-    // Dependencies
-    // ///////////////////////////////////////////////////////////////
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
 
 }

@@ -25,12 +25,15 @@ import java.io.IOException;
 import java.util.Objects;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.url.UrlDecoderUtil;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.schema.common.v1.OidDto;
+
+import lombok.val;
 
 final class Oid_Root implements RootOid {
 
@@ -69,6 +72,14 @@ final class Oid_Root implements RootOid {
         this.state = state;
         this.version = version;
         this.hashCode = calculateHash();
+        
+        
+        val debug = this.toString(); 
+        if(debug.contains("/spring/")) {
+        	_Exceptions.throwUnexpectedCodeReach();
+        }
+        
+        
     }
 
     // -- Encodeable

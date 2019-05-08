@@ -39,7 +39,7 @@ public enum FixtureType {
      */
     DOMAIN_OBJECTS,
     /**
-     * A fixture that does not installs data into the object store.
+     * A fixture that does not install data into the object store.
      *
      * <p>
      * Fixtures of this type are always installed. Typical examples are:
@@ -50,5 +50,13 @@ public enum FixtureType {
      * ).
      * </ul>
      */
-    OTHER;
+    OTHER
+    
+    ;
+	
+	public boolean isAlwaysInstall() {
+		return this == OTHER;
+	}
+	
+	
 }

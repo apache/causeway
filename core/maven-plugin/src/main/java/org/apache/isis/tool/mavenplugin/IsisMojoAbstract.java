@@ -34,14 +34,14 @@ import org.apache.maven.project.MavenProject;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
+import org.apache.isis.core.runtime.system.session.IsisSessionProducerBean;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
+
+import lombok.val;
 
 public abstract class IsisMojoAbstract extends AbstractMojo {
 
@@ -69,18 +69,13 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         final AppManifest appManifest = InstanceUtil.createInstance(this.appManifest, AppManifest.class);
         IsisConfiguration.buildFromAppManifest(appManifest); // build and finalize config
         
-        final IsisComponentProvider isisComponentProvider = IsisComponentProvider.builder(appManifest)
-                .build();
-        final IsisSessionFactoryBuilder isisSessionFactoryBuilder = 
-                new IsisSessionFactoryBuilder(isisComponentProvider);
-        
         IsisSessionFactory isisSessionFactory = null;
         try {
-            isisSessionFactory = isisSessionFactoryBuilder.buildSessionFactory();
-            if(!isisSessionFactoryBuilder.isMetaModelValid()) {
-                MetaModelInvalidException metaModelInvalidException = IsisContext
-                        .getMetaModelInvalidExceptionIfAny();
-                Set<String> validationErrors = metaModelInvalidException.getValidationErrors();
+            isisSessionFactory = new IsisSessionProducerBean().produceIsisSessionFactory();
+            		
+            val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
+            if(metaModelDeficiencies!=null) {
+                Set<String> validationErrors = metaModelDeficiencies.getValidationErrors();
                 context.throwFailureException(validationErrors.size() + " meta-model problems found.", validationErrors);
                 return;
             }

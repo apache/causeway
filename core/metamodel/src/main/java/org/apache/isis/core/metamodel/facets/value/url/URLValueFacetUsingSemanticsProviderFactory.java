@@ -38,7 +38,7 @@ public class URLValueFacetUsingSemanticsProviderFactory extends ValueFacetUsingS
         if (type != java.net.URL.class) {
             return;
         }
-        addFacets(new URLValueSemanticsProvider(holder, getContext()));
+        addFacets(new URLValueSemanticsProvider(holder));
     }
 
 }

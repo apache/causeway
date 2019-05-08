@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -39,7 +41,6 @@ import org.apache.wicket.validation.ValidationError;
 
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
@@ -62,7 +63,8 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
  * This implementation is for panels that use a textfield/text area.
  * </p>
  */
-public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider {
+public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> 
+extends ScalarPanelAbstract2 implements TextFieldValueModel.ScalarModelProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -192,6 +194,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
             final IModel<String> inlinePromptModel) {
         final Fragment fragment = new Fragment(id, "textInlinePrompt", this) {
             private static final long serialVersionUID = 1L;
+
             @Override protected void onComponentTag(final ComponentTag tag) {
                 super.onComponentTag(tag);
                 tag.put("tabindex","-1");
@@ -218,7 +221,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
             @Override
             public void validate(final IValidatable<T> validatable) {
                 final T proposedValue = validatable.getValue();
-                final ObjectAdapter proposedAdapter = getPersistenceSession().adapterFor(proposedValue);
+                final ObjectAdapter proposedAdapter = pojoToAdapter().apply(proposedValue);
                 final String reasonIfAny = scalarModel.validate(proposedAdapter);
                 if (reasonIfAny != null) {
                     final ValidationError error = new ValidationError();
@@ -371,16 +374,11 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
         return facet != null ? facet.value() : null;
     }
 
-    @com.google.inject.Inject
+    @Inject
     WicketViewerSettings settings;
     @Override
     protected WicketViewerSettings getSettings() {
         return settings;
-    }
-
-    @Override
-    public ObjectAdapterProvider getObjectAdapterProvider() {
-        return getPersistenceSession();
     }
 
 }

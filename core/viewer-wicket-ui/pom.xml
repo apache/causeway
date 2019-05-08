@@ -93,7 +93,8 @@
         </dependency>
         <dependency>
             <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-guice</artifactId>
+            <artifactId>wicket-spring</artifactId>
+            <!-- TODO[2112] exclusions might no longer be relevant-->
             <exclusions>
             	<!-- already provided by JEE API -->
             	<exclusion>

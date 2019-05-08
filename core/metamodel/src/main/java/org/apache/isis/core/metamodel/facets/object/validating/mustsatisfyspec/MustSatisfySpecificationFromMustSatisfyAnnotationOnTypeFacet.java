@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -33,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.Specifi
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 /**
@@ -53,11 +53,11 @@ public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet extend
     public MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
             final List<Specification> specifications,
             final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
+            final ServiceInjector servicesInjector) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.specifications = specifications;
 
-        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
+        final TranslationService translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         final String translationContext = ((IdentifiedHolder) holder).getIdentifier().toClassAndNameIdentityString();
 

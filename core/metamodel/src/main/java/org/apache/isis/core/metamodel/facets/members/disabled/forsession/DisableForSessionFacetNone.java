@@ -21,14 +21,12 @@ package org.apache.isis.core.metamodel.facets.members.disabled.forsession;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class DisableForSessionFacetNone extends DisableForSessionFacetAbstract {
 
     public DisableForSessionFacetNone(
-            final FacetHolder holder,
-            final AuthenticationSessionProvider authenticationSessionProvider) {
-        super(holder, authenticationSessionProvider);
+            final FacetHolder holder) {
+        super(holder);
     }
 
     @Override

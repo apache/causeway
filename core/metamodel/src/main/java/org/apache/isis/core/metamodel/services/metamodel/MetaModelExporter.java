@@ -87,7 +87,7 @@ class MetaModelExporter {
         // phase 1: create a domainClassType for each ObjectSpecification
         // these are added into a map for lookups in phase 2
         final Map<ObjectSpecification, DomainClassDto> domainClassByObjectSpec = _Maps.newHashMap();
-        for (final ObjectSpecification specification : specificationLookup.allSpecifications()) {
+        for (final ObjectSpecification specification : specificationLookup.currentSpecifications()) {
             DomainClassDto domainClassType = asXsdType(specification, config);
             domainClassByObjectSpec.put(specification, domainClassType);
         }

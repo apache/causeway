@@ -19,13 +19,13 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl.dflt;
 
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
-import javax.ws.rs.HEAD;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,13 +48,11 @@ import org.apache.isis.core.metamodel.facets.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -74,8 +72,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
-
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements FacetHolder {
 
@@ -101,12 +97,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     public ObjectSpecificationDefault(
             final Class<?> correspondingClass,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
-            final ServicesInjector servicesInjector,
             final FacetProcessor facetProcessor,
             final NatureOfService natureOfServiceIfAny,
             final PostProcessor postProcessor) {
-        super(correspondingClass, determineShortName(correspondingClass),
-                servicesInjector, facetProcessor, postProcessor);
+        super(correspondingClass, determineShortName(correspondingClass), facetProcessor, postProcessor);
 
         this.isService = natureOfServiceIfAny != null;
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
@@ -117,10 +111,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     @Override
     protected void introspectTypeHierarchy() {
 
-        facetedMethodsBuilder.introspectClass();
+            facetedMethodsBuilder.introspectClass();
 
         // name
-        addNamedFacetAndPluralFacetIfRequired();
+            addNamedFacetAndPluralFacetIfRequired();
 
         // go no further if a value
         if(this.containsFacet(ValueFacet.class)) {
@@ -140,7 +134,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
 
         // superclass
-        final Class<?> superclass = getCorrespondingClass().getSuperclass();
+            final Class<?> superclass = getCorrespondingClass().getSuperclass();
         loadSpecOfSuperclass(superclass);
 
         // walk superinterfaces
@@ -164,10 +158,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             }
         }
 
-        updateAsSubclassTo(interfaceSpecList);
-        updateInterfaces(interfaceSpecList);
-
-    }
+            updateAsSubclassTo(interfaceSpecList);
+            updateInterfaces(interfaceSpecList);
+        }
 
     protected synchronized void introspectMembers() {
 
@@ -176,14 +169,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
                 LOG.debug("skipping full introspection for value type {}", getFullIdentifier());
             }
             return;
-        }
+    }
 
         // associations and actions
-        final List<ObjectAssociation> associations = createAssociations();
-        sortAndUpdateAssociations(associations);
+            final List<ObjectAssociation> associations = createAssociations();
+            sortAndUpdateAssociations(associations);
 
-        final List<ObjectAction> actions = createActions();
-        sortCacheAndUpdateActions(actions);
+            final List<ObjectAction> actions = createActions();
+            sortCacheAndUpdateActions(actions);
 
         postProcess();
     }
@@ -227,9 +220,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
         if (facetMethod.getFeatureType().isCollection()) {
-            return new OneToManyAssociationDefault(facetMethod, servicesInjector);
+            return new OneToManyAssociationDefault(facetMethod);
         } else if (facetMethod.getFeatureType().isProperty()) {
-            return new OneToOneAssociationDefault(facetMethod, servicesInjector);
+            return new OneToOneAssociationDefault(facetMethod);
         } else {
             return null;
         }
@@ -254,7 +247,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
-            return new ObjectActionDefault(facetedMethod, servicesInjector);
+            return new ObjectActionDefault(facetedMethod);
         } else {
             return null;
         }
@@ -268,15 +261,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return FixtureScript.class.isAssignableFrom(getCorrespondingClass());
     }
 
-    //endregion
-
-
-    // -- isXxx
-
-    @Override
-    public boolean isViewModel() {
-        return containsFacet(ViewModelFacet.class);
-    }
+    // -- PREDICATES
 
     @Override
     public boolean isViewModelCloneable(ManagedObject targetAdapter) {
@@ -289,21 +274,14 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     @Override
-    public boolean isMixin() {
-        return containsFacet(MixinFacet.class);
-    }
-
-    @Override
     public boolean isWizard() {
         return containsFacet(WizardFacet.class);
     }
 
     @Override
-    public boolean isService() {
+    public boolean isBean() {
         return isService;
     }
-
-
 
     // -- getObjectAction
 
@@ -434,7 +412,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     public String toString() {
         final ToString str = new ToString(this);
         str.append("class", getFullIdentifier());
-        str.append("type", (isParentedOrFreeCollection() ? "Collection" : "Object"));
+        str.append("type", getManagedObjectSort().name());
         str.append("superclass", superclass() == null ? "Object" : superclass().getFullIdentifier());
         return str.toString();
     }

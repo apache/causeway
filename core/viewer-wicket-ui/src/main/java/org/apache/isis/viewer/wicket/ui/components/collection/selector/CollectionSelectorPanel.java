@@ -151,7 +151,7 @@ public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel
                             final EntityCollectionModel entityCollectionModel = CollectionSelectorPanel.this.getModel();
                             final EntityModel entityModel = entityCollectionModel.getEntityModel();
                             return entityModel != null
-                                    ? entityModel.getObjectAdapterMemento().asHintingBookmark()
+                                    ? entityModel.getObjectAdapterMemento().asHintingBookmarkIfSupported()
                                             : null;
                         }
 

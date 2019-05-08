@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
 
@@ -45,10 +44,10 @@ public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
 
 
     @Override
-    public void init(final SpecificationLoader specificationLoader) {
-        super.init(specificationLoader);
+    public void init() {
+        super.init();
         for (final MetaModelValidator validator : validators) {
-            validator.init(specificationLoader);
+            validator.init();
         }
     }
 

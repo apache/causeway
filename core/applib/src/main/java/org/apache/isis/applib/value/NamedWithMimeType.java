@@ -19,9 +19,11 @@
 
 package org.apache.isis.applib.value;
 
+import java.io.Serializable;
+
 import javax.activation.MimeType;
 
-public interface NamedWithMimeType {
+public interface NamedWithMimeType extends Serializable {
 
     public String getName();
 

@@ -38,7 +38,8 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     private BigInteger bigInt;
     private FacetHolder holder;
 
-    @Before
+    @Override
+	@Before
     public void setUp() throws Exception {
         super.setUp();
         bigInt = new BigInteger("132199");
@@ -47,7 +48,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
         _Config.put("isis.value.format.int", null);
 
         holder = new FacetHolderImpl();
-        setValue(new BigIntegerValueSemanticsProvider(holder, mockServicesInjector));
+        setValue(new BigIntegerValueSemanticsProvider(holder));
     }
 
     @Test

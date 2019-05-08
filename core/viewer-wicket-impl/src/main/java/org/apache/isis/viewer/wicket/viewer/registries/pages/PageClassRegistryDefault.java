@@ -21,16 +21,17 @@ package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
 import java.util.Map;
 
-import com.google.common.collect.Maps;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
-import org.apache.wicket.Page;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistrySpi;
+import org.apache.wicket.Page;
+
+import com.google.common.collect.Maps;
 
 /**
  * Default implementation of {@link PageClassRegistry}; just delegates to an
@@ -43,16 +44,10 @@ public class PageClassRegistryDefault implements PageClassRegistry, PageClassReg
 
     private final Map<PageType, Class<? extends Page>> pagesByType = Maps.newHashMap();
 
-    /**
-     * {@link Inject}ed in {@link #PageClassRegistryDefault(PageClassList)
-     * constructor}.
-     */
-    @SuppressWarnings("unused")
-    private final PageClassList pageClassList;
+    @Inject PageClassList pageClassList;
 
-    @com.google.inject.Inject
-    public PageClassRegistryDefault(final PageClassList pageClassList) {
-        this.pageClassList = pageClassList;
+    @PostConstruct
+    public void init() {
         pageClassList.registerPages(this);
         ensureAllPageTypesRegistered();
     }

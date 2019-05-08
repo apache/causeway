@@ -37,7 +37,7 @@ public class BigIntegerValueFacetUsingSemanticsProviderFactory extends ValueFace
         if (type != BigInteger.class) {
             return;
         }
-        addFacets(new BigIntegerValueSemanticsProvider(holder, getContext()));
+        addFacets(new BigIntegerValueSemanticsProvider(holder));
     }
 
 }

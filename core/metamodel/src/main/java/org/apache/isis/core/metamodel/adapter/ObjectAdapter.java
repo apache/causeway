@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -60,7 +61,7 @@ public interface ObjectAdapter extends ManagedObject {
      *             if the specified version differs from the version held this
      *             adapter.
      */
-    void checkLock(Version version);
+    void checkLock(Version version); //XXX[2033] not referenced at all
 
     /**
      * The object's unique {@link Oid}.
@@ -74,16 +75,16 @@ public interface ObjectAdapter extends ManagedObject {
      * Note that standalone value objects ("foobar", or 5, or a date),
      * are not mapped and have a <tt>null</tt> oid.
      */
-    Oid getOid();
+    Oid getOid(); //XXX[2033] referenced by 'metamodel' only to create a bookmark (CommandUtil)
 
     /**
-     * Returns either itself (if this is a root) or the parented collections, the
+     * Returns either itself (if this is a root) or for parented collections, the
      * adapter corresponding to their {@link ParentedOid#getParentOid() root oid}.
      */
-    ObjectAdapter getAggregateRoot();
+    ObjectAdapter getAggregateRoot(); //XXX[2033] not referenced by 'metamodel'
 
-    Version getVersion();
-    void setVersion(Version version);
+    Version getVersion(); //XXX[2033] not referenced by 'metamodel'
+    void setVersion(Version version); //XXX[2033] not referenced by 'metamodel'
 
 
     /**
@@ -100,7 +101,14 @@ public interface ObjectAdapter extends ManagedObject {
     default public boolean isValue() {
         return getOid().isValue();
     }
-
+    
+    default public ObjectAdapter injectServices(ServiceInjector serviceInjector) {
+        if(isValue()) {
+            return this; // guard against value objects
+        }
+        serviceInjector.injectServicesInto(getPojo());
+        return this;
+    }
 
     public final class Util {
 
@@ -204,26 +212,6 @@ public interface ObjectAdapter extends ManagedObject {
             return visibleAdapters(objectAdapters, interactionInitiatedBy);
         }
 
-        /**
-         * as per {@link #visibleAdapters(ObjectAdapter, InteractionInitiatedBy)}.
-         *  @param objectAdapters - iterable over the respective adapters of a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
-         * @param interactionInitiatedBy
-         * @deprecated use stream variant instead
-         */
-        public static List<ObjectAdapter> visibleAdapters(
-                final Iterable<ObjectAdapter> objectAdapters,
-                final InteractionInitiatedBy interactionInitiatedBy) {
-            final List<ObjectAdapter> adapters = _Lists.newArrayList();
-            for (final ObjectAdapter adapter : objectAdapters) {
-                final boolean visible = isVisible(adapter,
-                        interactionInitiatedBy);
-                if(visible) {
-                    adapters.add(adapter);
-                }
-            }
-            return adapters;
-        }
-        
         public static List<ObjectAdapter> visibleAdapters(
                 final Stream<ObjectAdapter> objectAdapters,
                 final InteractionInitiatedBy interactionInitiatedBy) {
@@ -270,7 +258,7 @@ public interface ObjectAdapter extends ManagedObject {
     }
 
     boolean isTransient();
-    boolean representsPersistent();
+    boolean isRepresentingPersistent();
     boolean isDestroyed();
 
 

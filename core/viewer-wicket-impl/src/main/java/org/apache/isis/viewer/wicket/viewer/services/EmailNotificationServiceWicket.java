@@ -22,8 +22,9 @@ import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
-@com.google.inject.Singleton // necessary because is registered in and injected by guice
-public class EmailNotificationServiceWicket implements EmailNotificationService {
+//@Singleton @Alternative @Priority(Constants.WICKET_SERVICE_PRIORITY)
+@Deprecated //TODO  [2033] adds no value
+class EmailNotificationServiceWicket implements EmailNotificationService {
 
     private static final long serialVersionUID = 1L;
     
@@ -52,7 +53,7 @@ public class EmailNotificationServiceWicket implements EmailNotificationService 
     private final transient _Lazy<EmailNotificationService> delegate = _Lazy.of(this::loadDelegate);   
     
     private EmailNotificationService loadDelegate() {
-        return IsisContext.getServicesInjector().lookupServiceElseFail(EmailNotificationService.class);
+        return IsisContext.getServiceRegistry().lookupServiceElseFail(EmailNotificationService.class);
     }
 
 }

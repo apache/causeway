@@ -29,9 +29,8 @@ import org.apache.wicket.request.resource.CssResourceReference;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.SystemConstants;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
@@ -91,19 +90,18 @@ public final class PanelUtil {
 
     public static void addConfirmationDialogIfAreYouSureSemantics(
             final Component component,
-            final SemanticsOf semanticsOf,
-            final ServicesInjector servicesInjector) {
+            final SemanticsOf semanticsOf) {
 
         if (!semanticsOf.isAreYouSure()) {
             return;
         }
 
         final TranslationService translationService =
-                servicesInjector.lookupService(TranslationService.class).orElse(null);;
+                IsisContext.getServiceRegistry().lookupServiceElseFail(TranslationService.class);
 
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 
-        final String context = IsisSessionFactoryBuilder.class.getName();
+        final String context = SystemConstants.class.getName();
         final String areYouSure = translationService.translate(context, SystemConstants.MSG_ARE_YOU_SURE);
         final String confirm = translationService.translate(context, SystemConstants.MSG_CONFIRM);
         final String cancel = translationService.translate(context, SystemConstants.MSG_CANCEL);

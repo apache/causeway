@@ -28,7 +28,6 @@ import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class HideForSessionFacetViaMethod extends HideForSessionFacetAbstract implements ImperativeFacet {
 
@@ -36,8 +35,8 @@ public class HideForSessionFacetViaMethod extends HideForSessionFacetAbstract im
 
     public HideForSessionFacetViaMethod(
             final Method method,
-            final FacetHolder holder, final AuthenticationSessionProvider authenticationSessionProvider) {
-        super(holder, authenticationSessionProvider);
+            final FacetHolder holder) {
+        super(holder);
         this.method = method;
     }
 

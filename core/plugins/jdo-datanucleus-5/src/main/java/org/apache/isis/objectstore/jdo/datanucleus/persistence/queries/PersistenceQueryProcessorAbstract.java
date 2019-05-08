@@ -72,7 +72,7 @@ implements PersistenceQueryProcessor<T> {
     // -- HELPER
     
     protected static IsisJdoSupport_v3_2 isisJdoSupport() { 
-        return IsisContext.getServicesInjector().lookupServiceElseFail(IsisJdoSupport_v3_2.class);
+        return IsisContext.getServiceRegistry().lookupServiceElseFail(IsisJdoSupport_v3_2.class);
     }
 
 

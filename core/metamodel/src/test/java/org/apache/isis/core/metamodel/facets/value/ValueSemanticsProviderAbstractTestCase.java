@@ -19,16 +19,17 @@
 
 package org.apache.isis.core.metamodel.facets.value;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
 import java.util.Locale;
 
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -37,19 +38,18 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.encoder.Encodable
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.core.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.After;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 
 public abstract class ValueSemanticsProviderAbstractTestCase {
 
@@ -63,9 +63,11 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Mock
     protected FacetHolder mockFacetHolder;
     @Mock
-    protected ServicesInjector mockServicesInjector;
+    protected ServiceInjector mockServicesInjector;
     @Mock
-    protected PersistenceSessionServiceInternal mockSessionServiceInternal;
+    private ServiceRegistry mockServiceRegistry;
+    @Mock
+    protected ObjectAdapterService mockSessionServiceInternal;
     @Mock
     protected SpecificationLoader mockSpecificationLoader;
     @Mock
@@ -82,13 +84,13 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         context.checking(new Expectations() {
             {
 
-                allowing(mockServicesInjector).getAuthenticationSessionProvider();
-                will(returnValue(mockAuthenticationSessionProvider));
+//                allowing(mockServicesInjector).getAuthenticationSessionProvider();
+//                will(returnValue(mockAuthenticationSessionProvider));
+//
+//                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+//                will(returnValue(mockSessionServiceInternal));
 
-                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-                will(returnValue(mockSessionServiceInternal));
-
-                allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
+                allowing(mockServiceRegistry).lookupService(AuthenticationSessionProvider.class);
                 will(returnValue(mockAuthenticationSessionProvider));
 
                 allowing(mockServicesInjector).injectServicesInto(with(any(Object.class)));
@@ -117,10 +119,8 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         this.valueSemanticsProvider = value;
         this.encodeableFacet = new EncodableFacetUsingEncoderDecoder(
                 value, 
-                mockFacetHolder, 
-                mockSessionServiceInternal,
-                mockServicesInjector);
-        this.parseableFacet = new ParseableFacetUsingParser(value, mockFacetHolder, mockServicesInjector);
+                mockFacetHolder);
+        this.parseableFacet = new ParseableFacetUsingParser(value, mockFacetHolder);
     }
 
     protected ValueSemanticsProviderAndFacetAbstract<?> getValue() {

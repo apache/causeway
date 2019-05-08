@@ -28,6 +28,7 @@ import javax.annotation.PreDestroy;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Lists;
 
@@ -145,7 +146,7 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
     protected void injectServices() {
         if(serviceRegistry != null) {
             for (final ExceptionRecognizer ers : exceptionRecognizers) {
-                serviceRegistry.injectServicesInto(ers);
+                serviceInjector.injectServicesInto(ers);
             }
         }
     }
@@ -171,6 +172,10 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer {
 
     @javax.inject.Inject
     ServiceRegistry serviceRegistry;
+    
+    @javax.inject.Inject
+    ServiceInjector serviceInjector;
+    
     @javax.inject.Inject
     TranslationService translationService;
 

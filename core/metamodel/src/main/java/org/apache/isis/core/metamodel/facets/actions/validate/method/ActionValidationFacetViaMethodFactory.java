@@ -78,7 +78,7 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
         }
         processMethodContext.removeMethod(validateMethod);
 
-        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
+        final TranslationService translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
         final ActionValidationFacetViaMethod facet = new ActionValidationFacetViaMethod(validateMethod, translationService, translationContext, facetHolder);
@@ -109,7 +109,7 @@ public class ActionValidationFacetViaMethodFactory extends MethodPrefixBasedFace
 
         processParameterContext.removeMethod(validateMethod);
 
-        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
+        final TranslationService translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         final String translationContext = facetHolder.getIdentifier().toFullIdentityString();
         final Facet facet = new ActionParameterValidationFacetViaMethod(validateMethod, translationService, translationContext, facetHolder);

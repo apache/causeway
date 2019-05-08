@@ -36,7 +36,7 @@ public class LongWrapperValueFacetUsingSemanticsProviderFactory extends ValueFac
         if (type != Long.class) {
             return;
         }
-        addFacets(new LongWrapperValueSemanticsProvider(holder, getContext()));
+        addFacets(new LongWrapperValueSemanticsProvider(holder));
     }
 
 }

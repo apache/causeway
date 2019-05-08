@@ -26,33 +26,25 @@ import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBoundedAbstract {
 
     public static Facet create(
             final List<DomainObject> domainObjects,
-            final FacetHolder facetHolder,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
+            final FacetHolder facetHolder) {
 
         return domainObjects.stream()
                 .map(DomainObject::bounding)
                 .filter(bounding -> bounding != Bounding.NOT_SPECIFIED)
                 .findFirst()
                 .map(bounding -> bounding == Bounding.BOUNDED
-                ? new ChoicesFacetForDomainObjectAnnotation(
-                        facetHolder,
-                        authenticationSessionProvider, persistenceSessionServiceInternal)
-                        : null
-                        ).orElse(null);
+                ? new ChoicesFacetForDomainObjectAnnotation(facetHolder)
+                        : null).orElse(null);
     }
 
     private ChoicesFacetForDomainObjectAnnotation(
-            final FacetHolder holder,
-            final AuthenticationSessionProvider authenticationSessionProvider, final PersistenceSessionServiceInternal persistenceSessionServiceInternal) {
-        super(holder, authenticationSessionProvider, persistenceSessionServiceInternal);
+            final FacetHolder holder) {
+        super(holder);
     }
 
 }

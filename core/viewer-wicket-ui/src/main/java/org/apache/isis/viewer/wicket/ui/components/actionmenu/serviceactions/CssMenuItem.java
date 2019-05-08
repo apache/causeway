@@ -502,16 +502,11 @@ class CssMenuItem implements Serializable {
     // //////////////////////////////////////////////////////////////
 
     AuthenticationSession getAuthenticationSession() {
-        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
+        return IsisContext.getAuthenticationSession().orElse(null);
     }
 
     SpecificationLoader getSpecificationLoader() {
-        return getIsisSessionFactory().getSpecificationLoader();
-    }
-
-
-    PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+        return IsisContext.getSpecificationLoader();
     }
 
     IsisSessionFactory getIsisSessionFactory() {

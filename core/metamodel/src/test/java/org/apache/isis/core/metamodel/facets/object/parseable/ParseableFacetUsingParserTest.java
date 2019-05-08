@@ -19,26 +19,26 @@
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
 import java.util.IllegalFormatWidthException;
+import java.util.Optional;
 
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
+import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ParsingException;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
-
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-
-import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.applib.adapters.ParsingException;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
-import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 public class ParseableFacetUsingParserTest {
 
@@ -50,9 +50,12 @@ public class ParseableFacetUsingParserTest {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
-    private ServicesInjector mockServicesInjector;
+    private ServiceInjector mockServicesInjector;
     @Mock
-    private PersistenceSessionServiceInternal mockAdapterManager;
+    private ServiceRegistry mockServiceRegistry;
+    
+    @Mock
+    private ObjectAdapterService mockAdapterManager;
 
     private ParseableFacetUsingParser parseableFacetUsingParser;
 
@@ -69,14 +72,14 @@ public class ParseableFacetUsingParserTest {
 
                 allowing(mockServicesInjector).injectServicesInto(with(any(Object.class)));
 
-                allowing(mockServicesInjector).getAuthenticationSessionProvider();
-                will(returnValue(mockAuthenticationSessionProvider));
+//                allowing(mockServicesInjector).getAuthenticationSessionProvider();
+//                will(returnValue(mockAuthenticationSessionProvider));
+//
+//                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+//                will(returnValue(mockAdapterManager));
 
-                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-                will(returnValue(mockAdapterManager));
-
-                allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-                will(returnValue(mockAuthenticationSessionProvider));
+                allowing(mockServiceRegistry).lookupService(AuthenticationSessionProvider.class);
+                will(returnValue(Optional.of(mockAuthenticationSessionProvider)));
             }
         });
 
@@ -115,13 +118,13 @@ public class ParseableFacetUsingParserTest {
                 return null;
             }
         };
-        parseableFacetUsingParser = new ParseableFacetUsingParser(parser, mockFacetHolder, mockServicesInjector);
+        parseableFacetUsingParser = new ParseableFacetUsingParser(parser, mockFacetHolder);
     }
 
     @Ignore
     @Test
     public void testParseNormalEntry() throws Exception {
-        // TODO why is this so complicated to check!!!
+        // TODO why is this so complicated to check ?!
         /*
          * final AuthenticationSession session =
          * mockery.mock(AuthenticationSession.class);

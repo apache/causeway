@@ -27,7 +27,6 @@ import java.util.Map;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
@@ -36,10 +35,9 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacetAbstract;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
-public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAutoCompleteFacetAbstract implements ImperativeFacet {
+public class ActionParameterAutoCompleteFacetViaMethod 
+extends ActionParameterAutoCompleteFacetAbstract implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesType;
@@ -48,11 +46,9 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
     public ActionParameterAutoCompleteFacetViaMethod(
             final Method method,
             final Class<?> choicesType,
-            final FacetHolder holder,
-            final SpecificationLoader specificationLookup,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final ObjectAdapterProvider adapterManager) {
-        super(holder, specificationLookup, authenticationSessionProvider, adapterManager);
+            final FacetHolder holder) {
+        
+        super(holder);
         this.method = method;
         this.choicesType = choicesType;
         this.minLength = MinLengthUtil.determineMinLength(method);

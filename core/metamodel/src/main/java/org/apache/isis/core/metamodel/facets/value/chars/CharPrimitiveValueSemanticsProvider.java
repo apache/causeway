@@ -24,7 +24,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class CharPrimitiveValueSemanticsProvider extends CharValueSemanticsProviderAbstract implements PropertyDefaultFacet {
@@ -34,11 +33,11 @@ public class CharPrimitiveValueSemanticsProvider extends CharValueSemanticsProvi
      * {@link EncoderDecoder}.
      */
     public CharPrimitiveValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public CharPrimitiveValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, char.class, context);
+    public CharPrimitiveValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, char.class);
     }
 
     // //////////////////////////////////////////////////////////////////

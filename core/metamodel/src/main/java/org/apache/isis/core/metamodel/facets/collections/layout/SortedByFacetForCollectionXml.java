@@ -39,12 +39,14 @@ public class SortedByFacetForCollectionXml extends SortedByFacetAbstract {
         if (sortedBy == null) {
             return null;
         }
-        final Class<?> sortedByClass = ClassUtil.forName(sortedBy);
+        final Class<?> sortedByClass = ClassUtil.forNameElseFail(sortedBy);
         if(sortedByClass == Comparator.class) {
             return null;
         }
 
-        return sortedByClass != null ? new SortedByFacetForCollectionXml(uncheckedCast(sortedByClass), holder) : null;
+        return sortedByClass != null 
+        		? new SortedByFacetForCollectionXml(uncheckedCast(sortedByClass), holder) 
+        				: null;
     }
 
     private SortedByFacetForCollectionXml(Class<? extends Comparator<?>> sortedBy, FacetHolder holder) {

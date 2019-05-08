@@ -21,20 +21,24 @@ package org.apache.isis.core.security.authentication;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.util.ToString;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public abstract class AuthenticationSessionAbstract implements AuthenticationSession, Serializable {
 
@@ -43,22 +47,24 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
     // -- Constructor, fields
 
     private final String name;
-    private final List<String> roles = new ArrayList<String>();
+    private final Set<String> roles = _Sets.newHashSet();
     private final String validationCode;
 
     private final Map<String, Object> attributeByName = new HashMap<String, Object>();
 
     private final MessageBroker messageBroker;
 
-
-    @SuppressWarnings("unchecked")
     public AuthenticationSessionAbstract(final String name, final String code) {
-        this(name, Collections.EMPTY_LIST, code);
+        this(name, Stream.of(), code);
     }
 
-    public AuthenticationSessionAbstract(final String name, final List<String> roles, final String validationCode) {
+    public AuthenticationSessionAbstract(final String name, final Stream<String> roleStream, final String validationCode) {
         this.name = name;
-        this.roles.addAll(roles);
+        
+        stream(roleStream)
+        .filter(_Strings::isNotEmpty)
+        .forEach(this.roles::add);
+        
         this.validationCode = validationCode;
         this.messageBroker = new MessageBroker();
         // nothing to do
@@ -72,8 +78,6 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         // nothing to do
     }
 
-
-
     // -- encode
 
     @Override
@@ -82,8 +86,6 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         output.writeUTFs(roles.toArray(new String[] {}));
         output.writeUTF(validationCode);
     }
-
-
 
     // -- User Name
 
@@ -97,28 +99,24 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return Objects.equals(userName, getUserName());
     }
 
-
-
     // -- Roles
 
-    /**
-     * Can be overridden.
-     */
     @Override
-    public List<String> getRoles() {
-        return Collections.unmodifiableList(roles);
+    public Stream<String> streamRoles() {
+        return roles.stream();
     }
 
-
-
+    @Override
+    public boolean hasRole(String role) {
+        return roles.contains(role);
+    }
+    
     // -- Validation Code
 
     @Override
     public String getValidationCode() {
         return validationCode;
     }
-
-
 
     // -- Attributes
 
@@ -132,8 +130,6 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         attributeByName.put(attributeName, attribute);
     }
 
-
-
     // -- MessageBroker
 
     @Override
@@ -141,14 +137,12 @@ public abstract class AuthenticationSessionAbstract implements AuthenticationSes
         return messageBroker;
     }
 
-
-
     // -- createUserMemento
 
     @Override
     public UserMemento createUserMemento() {
         final List<RoleMemento> roles = _Lists.newArrayList();
-        for (final String roleName : getRoles()) {
+        for (final String roleName : this.roles) {
             roles.add(new RoleMemento(roleName));
         }
         return new UserMemento(getUserName(), roles);

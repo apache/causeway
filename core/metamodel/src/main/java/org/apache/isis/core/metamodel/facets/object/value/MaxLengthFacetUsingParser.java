@@ -24,42 +24,31 @@ import java.util.Map;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class MaxLengthFacetUsingParser extends MaxLengthFacetAbstract{
 
     private final Parser<?> parser;
-    private final ServicesInjector dependencyInjector;
 
-    public MaxLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final ServicesInjector dependencyInjector) {
+    public MaxLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder) {
         super(parser.maxLength(), holder);
         this.parser = parser;
-        this.dependencyInjector = dependencyInjector;
     }
 
     @Override
     protected String toStringValues() {
-        getDependencyInjector().injectServicesInto(parser);
+        getServiceInjector().injectServicesInto(parser);
         return parser.toString();
     }
 
     @Override
     public int value() {
-        getDependencyInjector().injectServicesInto(parser);
+        getServiceInjector().injectServicesInto(parser);
         return parser.maxLength();
     }
 
     @Override
     public String toString() {
         return "maxLength=" + value();
-    }
-
-
-    /**
-     * @return the dependencyInjector
-     */
-    public ServicesInjector getDependencyInjector() {
-        return dependencyInjector;
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

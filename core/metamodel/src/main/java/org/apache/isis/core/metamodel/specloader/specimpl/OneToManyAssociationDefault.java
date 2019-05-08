@@ -44,26 +44,23 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
+import lombok.val;
+
 public class OneToManyAssociationDefault extends ObjectAssociationAbstract implements OneToManyAssociation {
 
-    public OneToManyAssociationDefault(
-            final FacetedMethod facetedMethod,
-            final ServicesInjector servicesInjector) {
-        this(facetedMethod,
-                getSpecification(servicesInjector.getSpecificationLoader(), facetedMethod.getType()),
-                servicesInjector);
+    public OneToManyAssociationDefault(final FacetedMethod facetedMethod) {
+        this(facetedMethod, specificationOf(facetedMethod.getType()));
     }
 
     protected OneToManyAssociationDefault(
             final FacetedMethod facetedMethod,
-            final ObjectSpecification objectSpec,
-            final ServicesInjector servicesInjector) {
-        super(facetedMethod, FeatureType.COLLECTION, objectSpec, servicesInjector);
+            final ObjectSpecification objectSpec) {
+        
+        super(facetedMethod, FeatureType.COLLECTION, objectSpec);
     }
 
     @Override
@@ -167,7 +164,10 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
         if (collection == null) {
             return null;
         }
-        return getObjectAdapterProvider().adapterFor(collection, (RootOid)ownerAdapter.getOid(), this);
+        
+        val parentOid = (RootOid)ownerAdapter.getOid();
+        val newAdapter = getObjectAdapterProvider().adapterForCollection(collection, parentOid, this);
+        return newAdapter.injectServices(getServiceInjector());
     }
     
     @Override
@@ -190,7 +190,7 @@ public class OneToManyAssociationDefault extends ObjectAssociationAbstract imple
             throw new IllegalArgumentException("Can't use null to add an item to a collection");
         }
         if (readWrite()) {
-            if (ownerAdapter.representsPersistent() && referencedAdapter.isTransient()) {
+            if (ownerAdapter.isRepresentingPersistent() && referencedAdapter.isTransient()) {
                 throw new IsisException("can't set a reference to a transient object from a persistent one: "
                         + ownerAdapter.titleString(null)
                         + " (persistent) -> " + referencedAdapter.titleString() + " (transient)");

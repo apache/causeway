@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.annotation.Where;
@@ -51,6 +50,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -59,6 +59,8 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.mementos.SpecUtils;
+
+import lombok.val;
 
 /**
  * Represents a scalar of an entity, either a {@link Kind#PROPERTY property} or
@@ -741,8 +743,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
     private void getAndStore(final EntityModel parentEntityModel) {
         final ObjectAdapterMemento parentAdapterMemento = parentEntityModel.getObjectAdapterMemento();
         final OneToOneAssociation property = propertyMemento.getProperty(getSpecificationLoader());
-        final ObjectAdapter parentAdapter = parentAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK,
-                getPersistenceSession(), getSpecificationLoader());
+        final ObjectAdapter parentAdapter = parentAdapterMemento.getObjectAdapter();
 
         setObjectFromPropertyIfVisible(ScalarModel.this, property, parentAdapter);
     }
@@ -845,12 +846,8 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
         }
 
         if(isCollection()) {
-            final List<ObjectAdapterMemento> listOfMementos = _NullSafe.stream((Iterable<?>) pojo)
-                    .map(ObjectAdapterMemento.Functions.fromPojo(getPersistenceSession()))
-                    .collect(Collectors.toList());
-            final ObjectAdapterMemento memento =
-                    ObjectAdapterMemento.createForList(listOfMementos, getTypeOfSpecification().getSpecId());
-            super.setObjectMemento(memento, getPersistenceSession(), getSpecificationLoader()); // associated value
+            val memento = ObjectAdapterMemento.ofIterablePojos(pojo, getTypeOfSpecification().getSpecId());
+            super.setObjectMemento(memento); // associated value
         } else {
             super.setObject(adapter); // associated value
         }
@@ -871,18 +868,12 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
     public void setPendingAdapter(final ObjectAdapter objectAdapter) {
         if(isCollection()) {
-            final Object pojo = objectAdapter.getPojo();
-            final ObjectAdapterMemento memento = createForIterable(pojo);
+            val pojo = objectAdapter.getPojo();
+            val memento = ObjectAdapterMemento.ofIterablePojos(pojo, getTypeOfSpecification().getSpecId());
             setPending(memento);
         } else {
-            setPending(ObjectAdapterMemento.createOrNull(objectAdapter));
+            setPending(ObjectAdapterMemento.ofAdapter(objectAdapter));
         }
-    }
-
-    private ObjectAdapterMemento createForIterable(final Object pojo) {
-        final Iterable<?> iterable = (Iterable<?>) pojo;
-        return ObjectAdapterMemento.createForIterable(
-                iterable, getTypeOfSpecification().getSpecId(), getPersistenceSession());
     }
 
     public boolean whetherHidden() {
@@ -905,8 +896,9 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
      */
     @Override
     protected AuthenticationSession getAuthenticationSession() {
-        return getPersistenceSession().getServicesInjector()
-                .lookupServiceElseFail(AuthenticationSessionProvider.class).getAuthenticationSession();
+        return IsisContext.getServiceRegistry()
+                .lookupServiceElseFail(AuthenticationSessionProvider.class)
+                .getAuthenticationSession();
     }
 
     public boolean isRequired() {
@@ -1025,7 +1017,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
             @Override
             public void setMultiPending(final ArrayList<ObjectAdapterMemento> pending) {
-                final ObjectAdapterMemento adapterMemento = ObjectAdapterMemento.createForList(pending, getScalarModel().getTypeOfSpecification().getSpecId());
+                final ObjectAdapterMemento adapterMemento = ObjectAdapterMemento.ofMementoList(pending, getScalarModel().getTypeOfSpecification().getSpecId());
                 ScalarModel.this.setPending(adapterMemento);
             }
 
@@ -1119,8 +1111,9 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
             final Object viewModel = adapter.getPojo();
             final boolean cloneable = recreatableObjectFacet.isCloneable(viewModel);
             if(cloneable) {
-                final Object newViewModel = recreatableObjectFacet.clone(viewModel);
-                adapter = getPersistenceSession().adapterFor(newViewModel);
+                val newViewModelPojo = recreatableObjectFacet.clone(viewModel);
+                val pojoToAdapter = IsisContext.pojoToAdapter();
+                adapter = pojoToAdapter.apply(newViewModelPojo);
             }
         }
 

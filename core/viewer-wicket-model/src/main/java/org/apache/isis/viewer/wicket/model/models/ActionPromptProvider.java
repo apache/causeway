@@ -1,4 +1,4 @@
-/**
+/*
  *  Licensed to the Apache Software Foundation (ASF) under one or more
  *  contributor license agreements.  See the NOTICE file distributed with
  *  this work for additional information regarding copyright ownership.
@@ -16,12 +16,12 @@
  */
 package org.apache.isis.viewer.wicket.model.models;
 
+import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.metamodel.ManagedObjectSort;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-
-import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
 
 public interface ActionPromptProvider {
 
@@ -47,6 +47,6 @@ public interface ActionPromptProvider {
 
     public ActionPrompt getActionPrompt(
             final PromptStyle promptStyle,
-            final MetaModelService.Sort sort);
+            final ManagedObjectSort sort);
     void closePrompt(final AjaxRequestTarget target);
 }

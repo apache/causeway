@@ -34,11 +34,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class JavaArrayFacet extends CollectionFacetAbstract {
 
-    private final ObjectAdapterProvider adapterProvider;
-
-    public JavaArrayFacet(final FacetHolder holder, final ObjectAdapterProvider adapterProvider) {
+    public JavaArrayFacet(final FacetHolder holder) {
         super(holder);
-        this.adapterProvider = adapterProvider;
     }
 
     @Override
@@ -60,8 +57,11 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
         if(isEmpty(array)) {
             return Stream.of();
         }
+        
+        final ObjectAdapterProvider adapterProvider = getObjectAdapterProvider();
+        
         return Stream.of(array)
-                .map(getObjectAdapterProvider()::adapterFor) //FIXME[ISIS-1976] we always generate an OA here
+                .map(adapterProvider::adapterFor) //FIXME[ISIS-1976] we always generate an OA here
                 .map(x->(T)x);
     }
     
@@ -78,19 +78,6 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     private Object[] pojoArray(final ManagedObject arrayAdapter) {
         return (Object[]) arrayAdapter.getPojo();
     }
-
-    // /////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // /////////////////////////////////////////////////////
-
-    private ObjectAdapterProvider getObjectAdapterProvider() {
-        return adapterProvider;
-    }
-
-
-
-
-
 
 
 }

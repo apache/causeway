@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Color> implements ColorValueFacet {
@@ -46,11 +45,11 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetA
      * {@link EncoderDecoder}.
      */
     public ColorValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public ColorValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, Color.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
+    public ColorValueSemanticsProvider(final FacetHolder holder) {
+        super(type(), holder, Color.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
     }
 
     // //////////////////////////////////////////////////////////////////

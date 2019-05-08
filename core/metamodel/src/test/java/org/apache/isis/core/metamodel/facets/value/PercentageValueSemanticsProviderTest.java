@@ -45,7 +45,7 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
 
         holder = new FacetHolderImpl();
 
-        setValue(adapter = new PercentageValueSemanticsProvider(holder, mockServicesInjector));
+        setValue(adapter = new PercentageValueSemanticsProvider(holder));
     }
 
     @Test

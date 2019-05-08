@@ -21,11 +21,10 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.PathNode;
 import org.apache.isis.viewer.restfulobjects.rendering.util.FollowSpecUtil;
-
-import org.apache.isis.commons.internal.collections._Lists;
 
 public final class LinkFollowSpecs {
 

@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.property.modify;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Objects;
@@ -43,14 +45,10 @@ import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollect
 import org.apache.isis.core.metamodel.facets.properties.publish.PublishedPropertyFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.schema.ixn.v1.PropertyEditDto;
-
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 public abstract class PropertySetterOrClearFacetForDomainEventAbstract
 extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
@@ -61,27 +59,20 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
     private final PropertySetterFacet setterFacet;
     private final PropertyClearFacet clearFacet;
 
-    private final ServicesInjector servicesInjector;
-    private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-
-
     public PropertySetterOrClearFacetForDomainEventAbstract(
-            final Class<? extends Facet> facetType,
-            final Class<? extends PropertyDomainEvent<?, ?>> eventType,
+                    final Class<? extends Facet> facetType,
+                    final Class<? extends PropertyDomainEvent<?, ?>> eventType,
                     final PropertyOrCollectionAccessorFacet getterFacet,
                     final PropertySetterFacet setterFacet,
                     final PropertyClearFacet clearFacet,
                     final PropertyDomainEventFacetAbstract propertyDomainEventFacet,
-                    final ServicesInjector servicesInjector,
                     final FacetHolder holder) {
+        
         super(facetType, eventType, holder);
         this.getterFacet = getterFacet;
         this.setterFacet = setterFacet;
         this.clearFacet = clearFacet;
-        //this.propertyDomainEventFacet = propertyDomainEventFacet;
-        this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
-        this.servicesInjector = servicesInjector;
-        this.domainEventHelper = new DomainEventHelper(servicesInjector);
+        this.domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
 
     enum Style {
@@ -138,9 +129,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final ObjectAdapter targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ObjectAdapter mixedInAdapter = null;
         setOrClearProperty(Style.CLEAR,
-                owningProperty, targetAdapter, null, interactionInitiatedBy);
+                owningProperty, targetAdapter, /*mixedInAdapter*/ null, interactionInitiatedBy);
 
     }
 
@@ -163,7 +153,8 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final ObjectAdapter mixedInAdapter = null;
-        getPersistenceSessionServiceInternal().executeWithinTransaction(()->{
+        
+        getTransactionService().executeWithinTransaction(()->{
             doSetOrClearProperty(style, owningProperty, targetAdapter, mixedInAdapter, newValueAdapter, interactionInitiatedBy);
         });
 
@@ -312,31 +303,27 @@ extends SingleValueFacetAbstract<Class<? extends PropertyDomainEvent<?,?>>> {
     }
 
     private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
-        return servicesInjector.lookupServiceElseFail(InteractionDtoServiceInternal.class);
+        return getServiceRegistry().lookupServiceElseFail(InteractionDtoServiceInternal.class);
     }
 
     private CommandContext getCommandContext() {
-        return servicesInjector.lookupServiceElseFail(CommandContext.class);
+        return getServiceRegistry().lookupServiceElseFail(CommandContext.class);
     }
 
     private InteractionContext getInteractionContext() {
-        return servicesInjector.lookupServiceElseFail(InteractionContext.class);
+        return getServiceRegistry().lookupServiceElseFail(InteractionContext.class);
     }
 
     private CommandService getCommandService() {
-        return servicesInjector.lookupServiceElseFail(CommandService.class);
+        return getServiceRegistry().lookupServiceElseFail(CommandService.class);
     }
 
     private ClockService getClockService() {
-        return servicesInjector.lookupServiceElseFail(ClockService.class);
+        return getServiceRegistry().lookupServiceElseFail(ClockService.class);
     }
 
     private PublishingServiceInternal getPublishingServiceInternal() {
-        return servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
-    }
-
-    private PersistenceSessionServiceInternal getPersistenceSessionServiceInternal() {
-        return persistenceSessionServiceInternal;
+        return getServiceRegistry().lookupServiceElseFail(PublishingServiceInternal.class);
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

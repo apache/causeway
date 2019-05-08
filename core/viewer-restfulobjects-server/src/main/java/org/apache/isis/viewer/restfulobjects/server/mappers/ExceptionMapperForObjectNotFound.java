@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.server.mappers;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
-import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.metamodel.exceptions.persistence.ObjectNotFoundException;
 
 @Provider
 public class ExceptionMapperForObjectNotFound extends ExceptionMapperAbstract<ObjectNotFoundException> {

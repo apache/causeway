@@ -23,6 +23,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IFormSubmitter;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -101,23 +102,19 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor {
     // ///////////////////////////////////////////////////////////////////
 
     protected  PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+        return IsisContext.getPersistenceSession().orElse(null);
     }
 
     protected  AuthenticationSession getAuthenticationSession() {
-        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
+        return IsisContext.getAuthenticationSession().orElse(null);
     }
 
     public SpecificationLoader getSpecificationLoader() {
-        return getIsisSessionFactory().getSpecificationLoader();
+        return IsisContext.getSpecificationLoader();
     }
-
-    protected ServicesInjector getServicesInjector() {
-        return getIsisSessionFactory().getServicesInjector();
-    }
-
-    protected IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
+   
+    protected ServiceRegistry getServiceRegistry() {
+        return IsisContext.getServiceRegistry();
     }
 
 }

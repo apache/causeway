@@ -19,13 +19,17 @@
 
 package org.apache.isis.core.commons.lang;
 
+import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 public final class ClassUtil {
 
@@ -142,20 +146,21 @@ public final class ClassUtil {
         return false;
     }
 
-    public static Class<?> forName(final String fullName) {
-        final Class<?> primitiveCls = primitives.get(fullName);
-        if (primitiveCls != null) {
-            return primitiveCls;
+    public static Class<?> forNameElseFail(final String fullName) {
+    	requiresNotEmpty(fullName, "fullName");
+    	final Class<?> builtIn = ClassUtil.getBuiltIn(fullName);
+		if (builtIn != null) {
+			return builtIn;
         }
         try {
             return _Context.loadClass(fullName);
         } catch (final ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            throw _Exceptions.unrecoverable(e);
         }
     }
 
     public static Class<?> forNameElseNull(final String fullName) {
-        if (fullName == null) {
+        if (_Strings.isNullOrEmpty(fullName)) {
             return null;
         }
         try {

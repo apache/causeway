@@ -16,6 +16,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,8 +35,6 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.acceptheader.AcceptHeaderService;
 import org.apache.isis.commons.internal.base._NullSafe;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 @DomainService(
         nature = NatureOfService.DOMAIN,

@@ -20,12 +20,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.isis.commons.internal.collections._Lists;
-
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -50,7 +49,7 @@ class HintPageParameterSerializer implements Serializable {
             return;
         }
         final HintStore hintStore = getHintStore();
-        final Bookmark bookmark = objectAdapterMemento.asHintingBookmark();
+        final Bookmark bookmark = objectAdapterMemento.asHintingBookmarkIfSupported();
         Set<String> hintKeys = hintStore.findHintKeys(bookmark);
         for (String hintKey : hintKeys) {
             ComponentHintKey.create(hintKey).hintTo(bookmark, pageParameters, PREFIX);
@@ -66,7 +65,7 @@ class HintPageParameterSerializer implements Serializable {
         }
         Set<String> namedKeys = pageParameters.getNamedKeys();
         if (namedKeys.contains("no-hints")) {
-            getHintStore().removeAll(objectAdapterMemento.asHintingBookmark());
+            getHintStore().removeAll(objectAdapterMemento.asHintingBookmarkIfSupported());
             return;
         }
         List<ComponentHintKey> newComponentHintKeys = _Lists.newArrayList();
@@ -76,14 +75,14 @@ class HintPageParameterSerializer implements Serializable {
                 String key = namedKey.substring(5);
                 final ComponentHintKey componentHintKey = ComponentHintKey.create(key);
                 newComponentHintKeys.add(componentHintKey);
-                final Bookmark bookmark = objectAdapterMemento.asHintingBookmark();
+                final Bookmark bookmark = objectAdapterMemento.asHintingBookmarkIfSupported();
                 componentHintKey.set(bookmark, value);
             }
         }
     }
 
     private static HintStore getHintStore() {
-        return getIsisSessionFactory().getServicesInjector().lookupService(HintStore.class).orElse(null);
+        return IsisContext.getServiceRegistry().lookupServiceElseFail(HintStore.class);
     }
 
     private static IsisSessionFactory getIsisSessionFactory() {

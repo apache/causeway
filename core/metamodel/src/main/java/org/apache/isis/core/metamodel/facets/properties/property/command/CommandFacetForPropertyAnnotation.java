@@ -25,12 +25,12 @@ import org.apache.isis.applib.annotation.CommandPersistence;
 import org.apache.isis.applib.annotation.CommandReification;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.action.command.CommandFacetFromConfiguration;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
 
@@ -38,7 +38,7 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
             final List<Property> properties,
             final IsisConfiguration configuration,
             final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
+            final ServiceInjector servicesInjector) {
 
         final CommandPropertiesConfiguration setting = CommandPropertiesConfiguration.parse(configuration);
 
@@ -91,7 +91,7 @@ public class CommandFacetForPropertyAnnotation extends CommandFacetAbstract {
             final Enablement enablement,
             final FacetHolder holder,
             final CommandDtoProcessor processor,
-            final ServicesInjector servicesInjector) {
+            final ServiceInjector servicesInjector) {
         super(persistence, executeIn, enablement, processor, holder, servicesInjector);
     }
 

@@ -20,39 +20,48 @@
 package org.apache.isis.core.security.authentication.standard;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 public class SimpleSession extends AuthenticationSessionAbstract {
 
     private static final long serialVersionUID = 1L;
+    private static final String DEFAULT_VALIDATION_CODE = "";
 
     // ///////////////////////////////////////////////////////////////
     // Constructor, encode
     // ///////////////////////////////////////////////////////////////
 
     /**
-     * as per {@link #SimpleSession(String, List)}.
+     * Defaults {@link #getValidationCode()} to empty string (<tt>""</tt>).
      */
     public SimpleSession(final String name, final String[] roles) {
-        this(name, Arrays.asList(roles));
+        this(name, stream(roles), DEFAULT_VALIDATION_CODE);
     }
 
     /**
      * Defaults {@link #getValidationCode()} to empty string (<tt>""</tt>).
      */
-    public SimpleSession(final String name, final List<String> roles) {
-        this(name, roles, "");
+    public SimpleSession(final String name, final Iterable<String> roles) {
+        this(name, stream(roles), DEFAULT_VALIDATION_CODE);
+    }
+    
+    /**
+     * Defaults {@link #getValidationCode()} to empty string (<tt>""</tt>).
+     */
+    public SimpleSession(final String name, final Stream<String> roles) {
+        this(name, roles, DEFAULT_VALIDATION_CODE);
     }
 
     public SimpleSession(final String name, final String[] roles, final String code) {
-        this(name, Arrays.asList(roles), code);
+        this(name, stream(roles), code);
     }
 
-    public SimpleSession(final String name, final List<String> roles, final String code) {
+    public SimpleSession(final String name, final Stream<String> roles, final String code) {
         super(name, roles, code);
     }
 

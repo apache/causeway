@@ -20,42 +20,26 @@
 package org.apache.isis.core.metamodel.facets.object.disabled;
 
 import java.lang.reflect.Method;
-import java.util.Optional;
-
-import org.jmock.Expectations;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.Identifier.Type;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ObjectDisabledMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
-    private ServicesInjector mockServicesInjector;
-    private TranslationService mockTranslationService;
-
     private DisabledObjectFacetViaMethodFactory facetFactory;
 
-    public void setUp() throws Exception {
+    @Override
+	public void setUp() throws Exception {
         super.setUp();
-        mockServicesInjector = context.mock(ServicesInjector.class);
-        mockTranslationService = context.mock(TranslationService.class);
-
-        context.checking(new Expectations() {{
-            allowing(mockServicesInjector).lookupService(TranslationService.class);
-            will(returnValue(Optional.of(mockTranslationService)));
-        }});
-
         facetFactory = new DisabledObjectFacetViaMethodFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     @Override

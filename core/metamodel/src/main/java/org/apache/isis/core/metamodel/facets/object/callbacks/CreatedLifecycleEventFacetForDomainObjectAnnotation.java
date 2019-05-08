@@ -24,7 +24,6 @@ import org.apache.isis.applib.events.lifecycle.ObjectCreatedEvent;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class CreatedLifecycleEventFacetForDomainObjectAnnotation extends SingleClassValueFacetAbstract implements CreatedLifecycleEventFacet {
 
@@ -34,9 +33,8 @@ public class CreatedLifecycleEventFacetForDomainObjectAnnotation extends SingleC
 
     public CreatedLifecycleEventFacetForDomainObjectAnnotation(
             final FacetHolder holder,
-            final Class<? extends ObjectCreatedEvent<?>> value,
-                    final SpecificationLoader specificationLoader) {
-        super(type(), holder, value, specificationLoader);
+            final Class<? extends ObjectCreatedEvent<?>> value) {
+        super(type(), holder, value);
     }
 
     @Override

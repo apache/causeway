@@ -24,9 +24,9 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Nature;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
 
@@ -36,17 +36,18 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
 
     private MixinFacetForDomainObjectAnnotation(
             final Class<?> mixinType,
-            final String value, final Class<?> constructorType,
-            final FacetHolder holder,
-            final ServicesInjector servicesInjector) {
-        super(mixinType, value, constructorType, holder, servicesInjector);
+            final String value, 
+            final Class<?> constructorType,
+            final FacetHolder holder) {
+        
+        super(mixinType, value, constructorType, holder);
     }
 
     public static MixinFacet create(
             final List<DomainObject> domainObjects,
             final Class<?> candidateMixinType,
             final FacetHolder facetHolder,
-            final ServicesInjector servicesInjector) {
+            final ServiceInjector servicesInjector) {
         return domainObjects.stream()
                 .filter(domainObject -> domainObject.nature() == Nature.MIXIN)
                 .findFirst()
@@ -59,8 +60,8 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
                         }
                         final Class<?> constructorType = constructorTypes[0];
                         return new MixinFacetForDomainObjectAnnotation(
-                                candidateMixinType, domainObject.mixinMethod(), constructorType, facetHolder,
-                                servicesInjector);
+                                candidateMixinType, domainObject.mixinMethod(), constructorType, facetHolder
+                                );
                     }
                     // else
                     return null;

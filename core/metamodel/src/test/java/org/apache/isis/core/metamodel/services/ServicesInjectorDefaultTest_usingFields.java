@@ -19,87 +19,100 @@
 
 package org.apache.isis.core.metamodel.services;
 
-import java.util.Arrays;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.core.metamodel.services.repository.RepositoryServiceInternalDefault;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.any;
 import static org.junit.Assert.assertThat;
 
-public class ServicesInjectorDefaultTest_usingFields {
+import lombok.Getter;
 
-    @Rule
-    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
+//@EnableWeld
+//TODO[2112] migrate to spring
+class ServicesInjectorDefaultTest_usingFields {
 
-    private RepositoryService container;
+
+    static class Mocks {
+        
+        @Produces
+        RepositoryService mockRepositoryService() {
+            return Mockito.mock(RepositoryService.class);
+        }
+        
+    }
     
-    private SomeDomainService1 service1;
-    private SomeDomainService2 service2;
-    private SomeDomainService3 service3;
+//    @WeldSetup
+//    public WeldInitiator weld = WeldInitiator.from(
+//            
+//            BeansForTesting.builder()
+//            .injector()
+//            .addAll(
+//                    Mocks.class,
+//                    A.class,
+//                    B.class,
+//                    C.class
+//                    )
+//            .build()
+//            
+//            )
+//    .build();
+
+    @Inject private ServiceInjector injector;
+
+    // -- SCENARIO
     
-    private ServicesInjector injector;
+    @Inject private A service1;
+    @Inject private B service2;
+    
+    private D service4 = new D();
 
+    // managed
+    static class C { }
 
-    static class SomeDomainService3 { }
-
-    static class SomeDomainService1 {
-        @javax.inject.Inject
-        private RepositoryService container;
-        RepositoryService getContainer() {
-            return container;
-        }
-        @javax.inject.Inject
-        private SomeDomainService2Abstract someDomainService2;
-        SomeDomainService2Abstract getSomeDomainService2() {
-            return someDomainService2;
-        }
-    }
-    static abstract class SomeDomainService2Abstract {
-        @javax.inject.Inject
-        private SomeDomainService1 someDomainService1;
-        SomeDomainService1 getSomeDomainService1() {
-            return someDomainService1;
-        }
-    }
-    static class SomeDomainService2 extends SomeDomainService2Abstract {
-        @javax.inject.Inject
-        private SomeDomainService3 someDomainService3;
-        SomeDomainService3 getSomeDomainService3() {
-            return someDomainService3;
-        }
+    // managed
+    static class A {
+        @Inject @Getter private B_Abstract someB;
     }
 
-    @Before
-    public void setUp() throws Exception {
-        container = new RepositoryServiceInternalDefault();
-        service1 = new SomeDomainService1();
-        service3 = new SomeDomainService3();
-        service2 = new SomeDomainService2();
-        injector = ServicesInjector.builderForTesting()
-                .addServices(Arrays.asList(container, service1, service3, service2))
-                .build();
+    // managed
+    static abstract class B_Abstract {
+        @Inject @Getter private RepositoryService container;
     }
+
+    // managed
+    static class B extends B_Abstract {
+        @Inject @Getter private C someC;
+    }
+    
+    // not-managed
+    static class D { 
+        @Inject @Getter private A someA;    
+        @Inject @Getter private B someB;
+        @Inject @Getter private C someC;
+    }
+    
 
     @Test
     public void shouldInjectContainer() {
 
-        injector.injectServicesInto(service1);
-        injector.injectServicesInto(service2);
-        injector.injectServicesInto(service3);
+        // managed
+        assertThat(service1.getSomeB(), any(B_Abstract.class));
+        assertThat(service2.getSomeC(), any(C.class));
         
-        assertThat(service1.getSomeDomainService2(), is((SomeDomainService2Abstract)service2));
         
-        assertThat(service2.getSomeDomainService1(), is(service1));
+        // not-managed
+        injector.injectServicesInto(service4);
         
-        assertThat(service2.getSomeDomainService1(), is(service1));
-        assertThat(service2.getSomeDomainService3(), is(service3));
+        assertThat(service4.getSomeA(), any(A.class));
+        assertThat(service4.getSomeB(), any(B.class));
+        assertThat(service4.getSomeC(), any(C.class));
+                
     }
 
 }

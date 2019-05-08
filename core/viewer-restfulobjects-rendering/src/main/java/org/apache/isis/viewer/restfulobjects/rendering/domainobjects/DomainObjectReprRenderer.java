@@ -41,7 +41,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.DomainTypeReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils;
 
 public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectReprRenderer, ObjectAdapter> {
 
@@ -145,12 +144,12 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             return null;
         }
 
-        final boolean isService = objectAdapter.getSpecification().isService();
+        final boolean isService = objectAdapter.getSpecification().isBean();
 
         if (!(mode.isArgs())) {
 
             // self, extensions.oid
-            if (objectAdapter.representsPersistent()) {
+            if (objectAdapter.isRepresentingPersistent()) {
                 if (includesSelf) {
                     addLinkToSelf();
                 }
@@ -197,7 +196,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
             // extensions
             getExtensions().mapPut("isService", isService);
-            getExtensions().mapPut("isPersistent", objectAdapter.representsPersistent());
+            getExtensions().mapPut("isPersistent", objectAdapter.isRepresentingPersistent());
             if(isService) {
                 final ObjectSpecification objectSpec = objectAdapter.getSpecification();
                 final DomainServiceLayoutFacet layoutFacet =
@@ -260,15 +259,15 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private String getDomainType() {
-        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getDomainType(objectAdapter);
+        return org.apache.isis.viewer.restfulobjects.rendering.domainobjects.OidUtils.getDomainType(objectAdapter);
     }
 
     private String getInstanceId() {
-        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getInstanceId(objectAdapter);
+        return org.apache.isis.viewer.restfulobjects.rendering.domainobjects.OidUtils.getInstanceId(objectAdapter);
     }
 
     private String getOidStr() {
-        return org.apache.isis.viewer.restfulobjects.rendering.util.OidUtils.getOidStr(objectAdapter);
+        return org.apache.isis.viewer.restfulobjects.rendering.domainobjects.OidUtils.getOidStr(objectAdapter);
     }
 
     private DomainObjectReprRenderer withMembers(final ObjectAdapter objectAdapter) {
@@ -387,7 +386,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private void addPersistLinkIfTransientAndPersistable() {
-        if (objectAdapter.representsPersistent()) {
+        if (objectAdapter.isRepresentingPersistent()) {
             return;
         }
         final DomainObjectReprRenderer renderer =
@@ -420,10 +419,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if(mode.isEventSerialization()) {
             return;
         }
-        if (!objectAdapter.representsPersistent()) {
+        if (!objectAdapter.isRepresentingPersistent()) {
             return;
         }
-        final boolean isService = objectAdapter.getSpecification().isService();
+        final boolean isService = objectAdapter.getSpecification().isBean();
         if(isService) {
             return;
         }

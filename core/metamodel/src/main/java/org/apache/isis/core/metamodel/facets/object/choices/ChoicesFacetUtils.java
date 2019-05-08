@@ -19,9 +19,12 @@
 
 package org.apache.isis.core.metamodel.facets.object.choices;
 
+import javax.enterprise.inject.Vetoed;
+
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
+@Vetoed
 public class ChoicesFacetUtils {
 
     private ChoicesFacetUtils() {

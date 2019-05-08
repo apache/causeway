@@ -22,36 +22,30 @@ package org.apache.isis.core.runtime.fixtures;
 import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.fixtures.CompositeFixture;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
-import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
-import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.plugins.environment.DeploymentType;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.context.session.RuntimeEventService;
+import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-public class FixturesInstallerDelegate {
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-    private static final Logger LOG = LoggerFactory.getLogger(FixturesInstallerDelegate.class);
+@Slf4j
+public class FixturesInstallerDelegate {
 
     // -- Constructor, fields
 
-    private final IsisSessionFactory isisSessionFactory;
+    public FixturesInstallerDelegate() {
 
-    public FixturesInstallerDelegate(final IsisSessionFactory isisSessionFactory) {
-        this.isisSessionFactory = isisSessionFactory;
     }
 
     private final List<Object> fixtures = _Lists.newArrayList();
@@ -93,17 +87,17 @@ public class FixturesInstallerDelegate {
      * reused across multiple tests (REVIEW: does that make sense?)
      */
     public void installFixtures() {
-        final IsisConfiguration configuration = getConfiguration();
-        final boolean fireEvents = configuration.getBoolean("isis.fixtures.fireEvents", true);
-        final EventBusService eventBusService = getEventBusService();
+        val configuration = getConfiguration();
+        val fireEvents = configuration.getBoolean("isis.fixtures.fireEvents", true);
+        val eventService = getRuntimeEventService();
         try {
             if(fireEvents) {
-                eventBusService.post(new FixturesInstallingEvent(this));
+            	eventService.fireFixturesInstalling(new FixturesInstallingEvent(this));
             }
-            installFixtures(Collections.unmodifiableList(fixtures));
+            installFixtures(getFixtures());
         } finally {
             if(fireEvents) {
-                eventBusService.post(new FixturesInstalledEvent(this));
+            	eventService.fireFixturesInstalled(new FixturesInstalledEvent(this));
             }
         }
     }
@@ -119,44 +113,28 @@ public class FixturesInstallerDelegate {
     }
 
     private void installFixtureInTransaction(final Object fixture) {
-        getServicesInjector().injectServicesInto(fixture);
-
-        installFixtures(getFixtures(fixture));
+        getServiceInjector().injectServicesInto(fixture);
 
         // now, install the fixture itself
         try {
-            LOG.info("installing fixture: {}", fixture);
+            log.info("installing fixture: {}", fixture);
             getTransactionManager().startTransaction();
             installFixture(fixture);
-            saveLogonFixtureIfRequired(fixture);
             getTransactionManager().endTransaction();
-            LOG.info("fixture installed");
+            log.info("fixture installed");
         } catch (final RuntimeException e) {
-            LOG.error("installing fixture {} failed; aborting ", fixture.getClass().getName() , e);
+            log.error("installing fixture {} failed; aborting ", fixture.getClass().getName() , e);
             try {
                 getTransactionManager().abortTransaction();
             } catch (final Exception e2) {
-                LOG.error("failure during abort", e2);
+                log.error("failure during abort", e2);
             }
             throw e;
         }
     }
 
-    /**
-     * Obtain any child fixtures for this fixture.
-     *
-     * @param fixture
-     */
-    private List<Object> getFixtures(final Object fixture) {
-        if (fixture instanceof CompositeFixture) {
-            final CompositeFixture compositeFixture = (CompositeFixture) fixture;
-            return compositeFixture.getFixtures();
-        }
-        return Collections.emptyList();
-    }
-
     private void installFixture(final Object fixture) {
-        isisSessionFactory.getServicesInjector().injectServicesInto(fixture);
+        getServiceInjector().injectServicesInto(fixture);
 
         if (fixture instanceof InstallableFixture) {
             final InstallableFixture installableFixture = (InstallableFixture) fixture;
@@ -165,73 +143,33 @@ public class FixturesInstallerDelegate {
             }
         }
 
-        if (fixture instanceof LogonFixture) {
-            this.logonFixture = (LogonFixture) fixture;
-        }
     }
 
     private boolean shouldInstallFixture(final InstallableFixture installableFixture) {
         final FixtureType fixtureType = installableFixture.getType();
-        if (fixtureType == FixtureType.DOMAIN_OBJECTS) {
-            return !isisSessionFactory.getCurrentSession().getPersistenceSession().isFixturesInstalled();
-        }
 
-        // fixtureType is OTHER; always install.
+        if(fixtureType.isAlwaysInstall()) {
         return true;
     }
 
-
-
-    // -- logonFixture
-
-    /**
-     * The requested {@link LogonFixture}, if any.
-     *
-     * <p>
-     * Each fixture is inspected as it is {@link #installFixture(Object)}; if it
-     * implements {@link LogonFixture} then it is remembered so that it can be
-     * used later to automatically logon.
-     */
-    private LogonFixture logonFixture;
-
-
-    /**
-     * The {@link LogonFixture}, if any.
-     *
-     * <p>
-     * Used to automatically logon if in {@link DeploymentType#SERVER_PROTOTYPE} mode.
-     */
-    LogonFixture getLogonFixture() {
-        return logonFixture;
-    }
-
-    private void saveLogonFixtureIfRequired(final Object fixture) {
-        if (fixture instanceof LogonFixture) {
-            if (logonFixture != null) {
-                LOG.warn("Already specified logon fixture, using latest provided");
-            }
-            this.logonFixture = (LogonFixture) fixture;
-        }
+        //TODO [2033] what, why? only install if already installed?
+        return IsisSession.currentOrElseNull().getFixturesInstalledState().isInstalled();
     }
 
 
 
     // -- dependencies (derived)
 
-    private ServicesInjector getServicesInjector() {
-        return isisSessionFactory.getServicesInjector();
+    private ServiceInjector getServiceInjector() {
+        return IsisContext.getServiceInjector();
     }
 
-    private EventBusService getEventBusService() {
-        return getServicesInjector().lookupServiceElseFail(EventBusService.class);
-    }
-
-    private PersistenceSession getPersistenceSession() {
-        return isisSessionFactory.getCurrentSession().getPersistenceSession();
+    private RuntimeEventService getRuntimeEventService() {
+        return IsisContext.getServiceRegistry().lookupServiceElseFail(RuntimeEventService.class);
     }
 
     private IsisTransactionManager getTransactionManager() {
-        return getPersistenceSession().getTransactionManager();
+        return IsisSession.transactionManager().orElse(null);
     }
 
 

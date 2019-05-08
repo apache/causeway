@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.jaxb;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class XmlJavaTypeAdapterFacetAbstract
 extends SingleClassValueFacetAbstract implements XmlJavaTypeAdapterFacet {
@@ -32,9 +31,8 @@ extends SingleClassValueFacetAbstract implements XmlJavaTypeAdapterFacet {
 
     public XmlJavaTypeAdapterFacetAbstract(
             final FacetHolder holder,
-            final Class<?> value,
-            final SpecificationLoader specificationLoader) {
-        super(type(), holder, value, specificationLoader);
+            final Class<?> value) {
+        super(type(), holder, value);
     }
 
 }

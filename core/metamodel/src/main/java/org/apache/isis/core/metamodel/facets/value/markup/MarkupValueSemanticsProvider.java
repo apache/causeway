@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class MarkupValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Markup> implements MarkupValueFacet {
 
@@ -43,11 +42,11 @@ public class MarkupValueSemanticsProvider extends ValueSemanticsProviderAndFacet
      * {@link EncoderDecoder}.
      */
     public MarkupValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public MarkupValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, Markup.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
+    public MarkupValueSemanticsProvider(final FacetHolder holder) {
+        super(type(), holder, Markup.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
     }
 
     // //////////////////////////////////////////////////////////////////

@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -84,7 +85,7 @@ public class FactoryServiceInternalDefault implements FactoryService {
                 final Object mixin;
                 try {
                     mixin = constructor.newInstance(mixedIn);
-                    return _Casts.uncheckedCast(serviceRegistry.injectServicesInto(mixin));
+                    return _Casts.uncheckedCast(serviceInjector.injectServicesInto(mixin));
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     throw new NonRecoverableException(e);
                 }
@@ -101,6 +102,9 @@ public class FactoryServiceInternalDefault implements FactoryService {
     @javax.inject.Inject
     ServiceRegistry serviceRegistry;
 
+    @javax.inject.Inject
+    ServiceInjector serviceInjector;
+    
     @javax.inject.Inject
     PersistenceSessionServiceInternal persistenceSessionServiceInternal;
 

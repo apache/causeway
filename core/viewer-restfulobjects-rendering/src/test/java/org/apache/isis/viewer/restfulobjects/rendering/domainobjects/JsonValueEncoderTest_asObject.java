@@ -67,7 +67,7 @@ public class JsonValueEncoderTest_asObject {
         mockEncodableFacet = context.mock(EncodableFacet.class);
         mockAdapterManager = context.mock(ObjectAdapterProvider.class);
 
-        JsonValueEncoder.testSetAdapterManager(mockAdapterManager);
+        JsonValueEncoder.testSetAdapterManager(mockAdapterManager::adapterFor);
         encoded = new Object();
     }
 

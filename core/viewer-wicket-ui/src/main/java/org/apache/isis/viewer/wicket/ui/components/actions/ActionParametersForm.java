@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
@@ -152,9 +151,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
         final ObjectAction action = actionModel.getActionMemento().getAction(getSpecificationLoader());
         SemanticsOf semanticsOf = action.getSemantics();
 
-        final ServicesInjector servicesInjector = getPersistenceSession().getServicesInjector();
-
-        PanelUtil.addConfirmationDialogIfAreYouSureSemantics(button, semanticsOf, servicesInjector);
+        PanelUtil.addConfirmationDialogIfAreYouSureSemantics(button, semanticsOf);
     }
 
     @Override
@@ -199,7 +196,7 @@ class ActionParametersForm extends PromptFormAbstract<ActionModel> {
 
             setResponsePage(entityPage);
 
-            final MessageService messageService = getServicesInjector().lookupServiceElseFail(MessageService.class);
+            final MessageService messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
             messageService.warnUser(ex.getMessage());
             return;
         }

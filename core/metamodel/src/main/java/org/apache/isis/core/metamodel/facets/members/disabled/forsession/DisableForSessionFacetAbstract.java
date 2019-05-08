@@ -24,31 +24,21 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public abstract class DisableForSessionFacetAbstract extends FacetAbstract implements DisableForSessionFacet {
-
-    private final AuthenticationSessionProvider authenticationSessionProvider;
 
     public static Class<? extends Facet> type() {
         return DisableForSessionFacet.class;
     }
 
     public DisableForSessionFacetAbstract(
-            final FacetHolder holder,
-            final AuthenticationSessionProvider authenticationSessionProvider) {
+            final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.authenticationSessionProvider = authenticationSessionProvider;
     }
 
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
         return disabledReason(getAuthenticationSession());
-    }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return authenticationSessionProvider.getAuthenticationSession();
     }
 
 }

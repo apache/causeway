@@ -18,19 +18,8 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.mappers;
 
-import java.util.List;
-import java.util.Optional;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-
-import org.apache.isis.commons.internal.exceptions._Exceptions;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 @Provider
 public class ExceptionMapperForRuntimeException extends ExceptionMapperAbstract<RuntimeException> {
@@ -38,40 +27,28 @@ public class ExceptionMapperForRuntimeException extends ExceptionMapperAbstract<
     @Override
     public Response toResponse(final RuntimeException ex) {
 
-        final Throwable rootCause = _Exceptions.getRootCause(ex);
-        final List<Throwable> causalChain = _Exceptions.getCausalChain(ex);
-        for (Throwable throwable : causalChain) {
-            if(throwable == rootCause) {
-                
-                // since already rendered...
-                getCurrentTransaction()
-                    .ifPresent(IsisTransaction::clearAbortCause);
-            }
-        }
+//TODO [2033] removed    	
+//        final Throwable rootCause = _Exceptions.getRootCause(ex);
+//        final List<Throwable> causalChain = _Exceptions.getCausalChain(ex);
+//        for (Throwable throwable : causalChain) {
+//            if(throwable == rootCause) {
+//                
+//                // since already rendered...
+//                getCurrentTransaction()
+//                    .ifPresent(IsisTransaction::clearAbortCause);
+//            }
+//        }
 
         return buildResponse(ex);
     }
 
     // -- HELPER
+
+  //TODO [2033] removed
+//    private Optional<IsisTransaction> getCurrentTransaction() {
+//        return IsisContext.getTransactionManager()
+//                .map(IsisTransactionManager::getCurrentTransaction);
+//    }
     
-    private Optional<IsisTransaction> getCurrentTransaction() {
-        return getCurrentSession()
-                .map(IsisSession::getPersistenceSession)
-                .map(PersistenceSession::getTransactionManager)
-                .map(IsisTransactionManager::getCurrentTransaction);
-    }
-    
-    private Optional<IsisSession> getCurrentSession() {
-        return getIsisSessionFactory()
-                .map(IsisSessionFactory::getCurrentSession);
-    }
-    
-    private Optional<IsisSessionFactory> getIsisSessionFactory() {
-        try {
-            return Optional.ofNullable(IsisContext.getSessionFactory());    
-        } catch (Throwable e) {
-            return Optional.empty();
-        }
-    }
 
 }

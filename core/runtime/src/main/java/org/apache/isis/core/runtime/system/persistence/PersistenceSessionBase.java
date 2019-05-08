@@ -16,9 +16,7 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
@@ -31,19 +29,23 @@ import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.iactn.InteractionContext;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metrics.MetricsService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.util.ToString;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
-import org.apache.isis.core.runtime.services.changes.ChangedObjectsServiceInternal;
+import org.apache.isis.core.runtime.persistence.FixturesInstalledStateHolder;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.transaction.ChangedObjectsServiceInternal;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
+
+import lombok.Getter;
 
 abstract class PersistenceSessionBase implements PersistenceSession {
 
@@ -53,14 +55,16 @@ abstract class PersistenceSessionBase implements PersistenceSession {
 
     // -- FIELDS
 
-    protected final FixturesInstalledFlag fixturesInstalledFlag;
+    protected final FixturesInstalledStateHolder fixturesInstalledStateHolder;
 
     protected final PersistenceQueryFactory persistenceQueryFactory;
     protected final IsisConfiguration configuration;
     protected final SpecificationLoader specificationLoader;
     protected final AuthenticationSession authenticationSession;
 
-    protected final ServicesInjector servicesInjector;
+    @Getter 
+    protected final ServiceInjector serviceInjector;
+    protected final ServiceRegistry serviceRegistry;
 
     protected final CommandContext commandContext;
     protected final CommandService commandService;
@@ -103,22 +107,22 @@ abstract class PersistenceSessionBase implements PersistenceSession {
      * persisted objects and persist changes to the object that are saved.
      */
     protected PersistenceSessionBase(
-            final ServicesInjector servicesInjector,
             final AuthenticationSession authenticationSession,
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
-            final FixturesInstalledFlag fixturesInstalledFlag) {
+            final FixturesInstalledStateHolder fixturesInstalledStateHolder) {
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating {}", this);
         }
 
-        this.servicesInjector = servicesInjector;
+        this.serviceInjector = IsisContext.getServiceInjector();
+        this.serviceRegistry = IsisContext.getServiceRegistry();
         this.jdoPersistenceManagerFactory = jdoPersistenceManagerFactory;
-        this.fixturesInstalledFlag = fixturesInstalledFlag;
+        this.fixturesInstalledStateHolder = fixturesInstalledStateHolder;
 
         // injected
         this.configuration = _Config.getConfiguration();
-        this.specificationLoader = servicesInjector.getSpecificationLoader();
+        this.specificationLoader = IsisContext.getSpecificationLoader();
         this.authenticationSession = authenticationSession;
 
         this.commandContext = lookupService(CommandContext.class);
@@ -134,7 +138,7 @@ abstract class PersistenceSessionBase implements PersistenceSession {
         this.persistenceQueryFactory = new PersistenceQueryFactory(
                 obj->this.getObjectAdapterProvider().adapterFor(obj), 
                 this.specificationLoader);
-        this.transactionManager = new IsisTransactionManager(this, /*authenticationSession,*/ servicesInjector);
+        this.transactionManager = new IsisTransactionManager(this);
 
         this.state = State.NOT_INITIALIZED;
     }
@@ -146,14 +150,6 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     }
     protected AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
-    }
-
-    /**
-     * The configured {@link ServicesInjector}.
-     */
-    @Override
-    public ServicesInjector getServicesInjector() {
-        return servicesInjector;
     }
 
     /**
@@ -253,11 +249,11 @@ abstract class PersistenceSessionBase implements PersistenceSession {
     }
 
     private <T> T lookupServiceIfAny(final Class<T> serviceType) {
-        return servicesInjector.lookupService(serviceType).orElse(null);
+        return serviceRegistry.lookupService(serviceType).orElse(null);
     }
 
-    protected <T> List<T> lookupServices(final Class<T> serviceClass) {
-        return servicesInjector.streamServices(serviceClass).collect(Collectors.toList());
+    protected <T> Iterable<T> lookupServices(final Class<T> serviceClass) {
+        return serviceRegistry.select(serviceClass);
     }
 
     @Override

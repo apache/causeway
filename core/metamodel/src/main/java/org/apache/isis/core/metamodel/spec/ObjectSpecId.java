@@ -18,12 +18,12 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
-import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
-
 import java.io.Serializable;
-import java.util.Objects;
 
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+
+import lombok.NonNull;
+import lombok.Value;
 
 /**
  * Represents an {@link ObjectSpecification}, as determined by
@@ -32,44 +32,45 @@ import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFac
  * <p>
  * Has value semantics.
  */
+@Value(staticConstructor = "of")
 public final class ObjectSpecId implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final String specId;
+    @NonNull private final String specId;
 
-    public static ObjectSpecId of(String specId) {
-        requiresNotEmpty(specId, "specId");
-        return new ObjectSpecId(specId);
-    }
-
-    private ObjectSpecId(String specId) {
-        this.specId = specId;
-    }
+//    public static ObjectSpecId of(String specId) {
+//        requiresNotEmpty(specId, "specId");
+//        return new ObjectSpecId(specId);
+//    }
+//
+//    private ObjectSpecId(String specId) {
+//        this.specId = specId;
+//    }
 
     public String asString() {
         return specId;
     }
 
-    @Override
-    public int hashCode() {
-        return specId.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ObjectSpecId other = (ObjectSpecId) obj;
-        return Objects.equals(specId, other.specId);
-    }
+//    @Override
+//    public int hashCode() {
+//        return specId.hashCode();
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj) {
+//            return true;
+//        }
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        final ObjectSpecId other = (ObjectSpecId) obj;
+//        return Objects.equals(specId, other.specId);
+//    }
 
     @Override
     public String toString() {

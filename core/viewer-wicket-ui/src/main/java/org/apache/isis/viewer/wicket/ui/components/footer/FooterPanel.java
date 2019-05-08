@@ -18,7 +18,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.footer;
 
-import com.google.inject.name.Named;
+import javax.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -34,6 +34,7 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbPanel;
@@ -54,11 +55,6 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
     private static final String ID_ABOUT_LINK = "aboutLink";
     private static final String ID_ABOUT_MESSAGE = "aboutMessage";
     private static final String ID_THEME_PICKER = "themePicker";
-
-    @com.google.inject.Inject
-    @Named("applicationVersion")
-    private String applicationVersion;
-
 
     /**
      * Constructor.
@@ -170,6 +166,8 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
         final String creditId = credit.getId();
         if(url != null) {
             creditLink = new ExternalLink(creditId, url) {
+                private static final long serialVersionUID = 1L;
+
                 @Override
                 protected void onComponentTag(ComponentTag tag)
                 {
@@ -215,6 +213,8 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
         final BookmarkablePageLink<Void> aboutLink = new BookmarkablePageLink<>(ID_ABOUT_LINK, AboutPage.class);
         add(aboutLink);
 
+        String applicationVersion = webAppConfigBean.getApplicationVersion();
+        
         final Label aboutLabel =
                  applicationVersion != null && !applicationVersion.isEmpty()?
                     new Label(ID_ABOUT_MESSAGE,  applicationVersion) :
@@ -238,4 +238,7 @@ public class FooterPanel extends PanelAbstract<Model<String>> {
         final ThemeChooser themeChooser = new ThemeChooser(ID_THEME_PICKER);
         addOrReplace(themeChooser);
     }
+    
+    @Inject private WebAppConfigBean webAppConfigBean;
+    
 }

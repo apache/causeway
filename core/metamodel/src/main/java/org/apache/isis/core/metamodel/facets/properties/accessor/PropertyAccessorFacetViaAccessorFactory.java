@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.properties.accessor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
@@ -56,11 +54,7 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
         final FacetHolder property = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(
                 new PropertyAccessorFacetViaAccessor(
-                        typeSpec, accessorMethod, property,
-                        getSpecificationLoader(),
-                        getAuthenticationSessionProvider(),
-                        adapterProvider
-                        ));
+                        typeSpec, accessorMethod, property));
     }
 
     // ///////////////////////////////////////////////////////
@@ -111,13 +105,5 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
     public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         // does nothing
     }
-
-
-    @Override public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
 
 }

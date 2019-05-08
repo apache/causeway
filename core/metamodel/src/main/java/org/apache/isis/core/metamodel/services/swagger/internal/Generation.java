@@ -127,7 +127,7 @@ class Generation {
     void appendServicePathsAndDefinitions() {
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
-        for (final ObjectSpecification objectSpec : specificationLoader.allSpecifications()) {
+        for (final ObjectSpecification objectSpec : specificationLoader.currentSpecifications()) {
 
             final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
             if (domainServiceFacet == null) {
@@ -178,7 +178,7 @@ class Generation {
     void appendObjectPathsAndDefinitions() {
         // (previously we took a protective copy to avoid a concurrent modification exception,
         // but this is now done by SpecificationLoader itself)
-        for (final ObjectSpecification objectSpec : specificationLoader.allSpecifications()) {
+        for (final ObjectSpecification objectSpec : specificationLoader.currentSpecifications()) {
 
             final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
             if (domainServiceFacet != null) {

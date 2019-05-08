@@ -54,7 +54,7 @@ public class PolishMoneyValueSemanticsProviderTest extends ValueSemanticsProvide
         Locale.setDefault(new Locale("pl", "PL"));
         originalMoney = new Money(10.50, "pln");
         holder = new FacetHolderImpl();
-        setValue(adapter = new MoneyValueSemanticsProvider(holder, mockServicesInjector));
+        setValue(adapter = new MoneyValueSemanticsProvider(holder));
     }
 
     private Money createMoney(final double amount, final String currency) {

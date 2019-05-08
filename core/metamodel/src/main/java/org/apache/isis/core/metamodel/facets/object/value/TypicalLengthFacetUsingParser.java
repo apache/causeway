@@ -23,45 +23,31 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class TypicalLengthFacetUsingParser extends FacetAbstract implements TypicalLengthFacet {
 
     private final Parser<?> parser;
-    private final ServicesInjector dependencyInjector;
 
-    public TypicalLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder, final ServicesInjector dependencyInjector) {
+    public TypicalLengthFacetUsingParser(final Parser<?> parser, final FacetHolder holder) {
         super(TypicalLengthFacet.class, holder, Derivation.NOT_DERIVED);
         this.parser = parser;
-        this.dependencyInjector = dependencyInjector;
     }
 
     @Override
     protected String toStringValues() {
-        getDependencyInjector().injectServicesInto(parser);
+        getServiceInjector().injectServicesInto(parser);
         return parser.toString();
     }
 
     @Override
     public int value() {
-        getDependencyInjector().injectServicesInto(parser);
+        getServiceInjector().injectServicesInto(parser);
         return parser.typicalLength();
     }
 
     @Override
     public String toString() {
         return "typicalLength=" + value();
-    }
-
-    // //////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // //////////////////////////////////////////////////////
-
-    /**
-     * @return the dependencyInjector
-     */
-    public ServicesInjector getDependencyInjector() {
-        return dependencyInjector;
     }
 
 }

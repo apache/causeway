@@ -43,7 +43,7 @@ public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderA
     public void setUpObjects() throws Exception {
         character = Character.valueOf('r');
         holder = new FacetHolderImpl();
-        setValue(value = new CharWrapperValueSemanticsProvider(holder, mockServicesInjector));
+        setValue(value = new CharWrapperValueSemanticsProvider(holder));
     }
 
     @Test

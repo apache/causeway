@@ -41,7 +41,6 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
     private static final Logger LOG = LoggerFactory.getLogger(TitleFacetViaTitleAnnotation.class);
     private final List<TitleComponent> components;
-    private final ObjectAdapterProvider adapterProvider;
 
     public static class TitleComponent {
         public static final Function<Annotations.Evaluator<Title>, TitleComponent> FROM_EVALUATORS = 
@@ -96,10 +95,9 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
         }
     }
 
-    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, final ObjectAdapterProvider adapterProvider) {
+    public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder) {
         super(holder);
         this.components = components;
-        this.adapterProvider = adapterProvider;
     }
 
     @Override
@@ -125,7 +123,8 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     @Override
     public String title(ManagedObject contextAdapter, ManagedObject targetAdapter) {
         final StringBuilder stringBuilder = new StringBuilder();
-
+        final ObjectAdapterProvider adapterProvider = getObjectAdapterProvider();
+        
         try {
             for (final TitleComponent component : this.components) {
                 final Object titlePart = component.getTitleEvaluator().value(targetAdapter.getPojo());

@@ -35,7 +35,6 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
@@ -381,14 +380,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
      */
     public void repaint(AjaxRequestTarget target) {
         target.add(this);
-    }
-
-
-    // ///////////////////////////////////////////////////////////////////
-
-    @Override
-    public ObjectAdapterProvider getObjectAdapterProvider() {
-        return getPersistenceSession();
     }
 
 }

@@ -32,7 +32,6 @@ import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 @SuppressWarnings("rawtypes")
 public class TreeNodeValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<TreeNode>
@@ -52,12 +51,12 @@ implements TreeNodeValueFacet {
      * {@link EncoderDecoder}.
      */
     public TreeNodeValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public TreeNodeValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+    public TreeNodeValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, VALUE_TYPE, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE,
-                EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
+                EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
     }
 
     @Override
@@ -123,14 +122,14 @@ implements TreeNodeValueFacet {
     // -- HELPER
 
     private _Mementos.Memento newMemento(){
-        final UrlEncodingService codec = getServicesInjector().lookupServiceElseFail(UrlEncodingService.class);
-        final SerializingAdapter serializer = getServicesInjector().lookupServiceElseFail(SerializingAdapter.class);
+        final UrlEncodingService codec = getServiceRegistry().lookupServiceElseFail(UrlEncodingService.class);
+        final SerializingAdapter serializer = getServiceRegistry().lookupServiceElseFail(SerializingAdapter.class);
         return _Mementos.create(codec, serializer);
     }
 
     private _Mementos.Memento parseMemento(String input){
-        final UrlEncodingService codec = getServicesInjector().lookupServiceElseFail(UrlEncodingService.class);
-        final SerializingAdapter serializer = getServicesInjector().lookupServiceElseFail(SerializingAdapter.class);
+        final UrlEncodingService codec = getServiceRegistry().lookupServiceElseFail(UrlEncodingService.class);
+        final SerializingAdapter serializer = getServiceRegistry().lookupServiceElseFail(SerializingAdapter.class);
         return _Mementos.parse(codec, serializer, input);
     }
 

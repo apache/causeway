@@ -34,7 +34,6 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class BlobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Blob> implements BlobValueFacet {
@@ -52,11 +51,11 @@ public class BlobValueSemanticsProvider extends ValueSemanticsProviderAndFacetAb
      * {@link EncoderDecoder}.
      */
     public BlobValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public BlobValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, Blob.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
+    public BlobValueSemanticsProvider(final FacetHolder holder) {
+        super(type(), holder, Blob.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
     }
 
     @Override

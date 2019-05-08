@@ -18,16 +18,14 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -36,24 +34,11 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
  * </p> 
  * @since 2.0.0-M2
  */
-@SuppressWarnings("unused")
+@RequiredArgsConstructor
 class ObjectAdapterContext_NewIdentifier {
     
-    
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_NewIdentifier.class);
-    private final ObjectAdapterContext objectAdapterContext;
     private final PersistenceSession persistenceSession;
-    private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
-    
-    
-    ObjectAdapterContext_NewIdentifier(ObjectAdapterContext objectAdapterContext,
-            PersistenceSession persistenceSession) {
-        this.objectAdapterContext = objectAdapterContext;
-        this.persistenceSession = persistenceSession;
-        this.servicesInjector = persistenceSession.getServicesInjector();
-        this.specificationLoader = servicesInjector.getSpecificationLoader();
-    }
     
     /**
      * Return an equivalent {@link RootOid}, but being persistent.

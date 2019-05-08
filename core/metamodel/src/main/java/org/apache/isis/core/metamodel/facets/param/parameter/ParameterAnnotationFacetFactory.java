@@ -87,7 +87,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         final List<Parameter> parameters = Annotations.getAnnotations(method, paramNum, Parameter.class);
 
         FacetUtil.addFacet(
-                MustSatisfySpecificationFacetForParameterAnnotation.create(parameters, holder, servicesInjector));
+                MustSatisfySpecificationFacetForParameterAnnotation.create(parameters, holder, getServiceInjector()));
     }
 
     void processParamsRegEx(final ProcessParameterContext processParameterContext) {

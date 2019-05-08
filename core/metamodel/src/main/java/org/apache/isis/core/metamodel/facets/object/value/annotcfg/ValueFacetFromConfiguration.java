@@ -22,12 +22,17 @@ package org.apache.isis.core.metamodel.facets.object.value.annotcfg;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class ValueFacetFromConfiguration extends ValueFacetAbstract {
 
-    public ValueFacetFromConfiguration(final String candidateSemanticsProviderName, final FacetHolder holder, final ServicesInjector context) {
-        super(ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(null, candidateSemanticsProviderName), AddFacetsIfInvalidStrategy.DONT_ADD, holder, context);
+    public ValueFacetFromConfiguration(
+            final String candidateSemanticsProviderName, 
+            final FacetHolder holder) {
+        
+        super(
+                ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(null, candidateSemanticsProviderName), 
+                AddFacetsIfInvalidStrategy.DONT_ADD, 
+                holder);
     }
 
 }

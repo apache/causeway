@@ -21,6 +21,7 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 import java.util.Collection;
 import java.util.stream.Stream;
 
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -35,6 +36,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainServi
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ListReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
+
+import lombok.val;
 
 public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRenderer, Void> {
 
@@ -55,11 +58,13 @@ public class HomePageReprRenderer extends ReprRendererAbstract<HomePageReprRende
             addLinkToSelf();
         }
 
+        val metaModelContext = MetaModelContext.current();
+        
         addLinkToUser(getRendererContext().getAuthenticationSession());
         addLinkToMenuBars();
-        addLinkToServices(getRendererContext().getPersistenceSession().streamServices());
+        addLinkToServices(metaModelContext.streamServiceAdapters());
         addLinkToVersion();
-        addLinkToDomainTypes(((ResourceContext)getRendererContext()).getSpecificationLoader().allSpecifications());
+        addLinkToDomainTypes(((ResourceContext)getRendererContext()).getSpecificationLoader().currentSpecifications());
 
         // inks and extensions
         representation.mapPut("extensions", JsonRepresentation.newMap());

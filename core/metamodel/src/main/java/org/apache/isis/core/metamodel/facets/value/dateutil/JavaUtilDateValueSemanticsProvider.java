@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.DateAndTimeValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * An adapter that handles {@link java.util.Date} as both a date AND time
@@ -45,11 +44,11 @@ public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemantic
      * {@link EncoderDecoder}.
      */
     public JavaUtilDateValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public JavaUtilDateValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, context);
+    public JavaUtilDateValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED);
     }
 
     @Override

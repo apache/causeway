@@ -24,12 +24,11 @@ import java.awt.Image;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.image.ImageValueSemanticsProviderAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract<Image> {
 
-    public JavaAwtImageValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, Image.class, context);
+    public JavaAwtImageValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, Image.class);
     }
 
     @Override

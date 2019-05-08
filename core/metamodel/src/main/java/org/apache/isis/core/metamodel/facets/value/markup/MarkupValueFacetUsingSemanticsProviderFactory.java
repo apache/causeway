@@ -33,6 +33,6 @@ public class MarkupValueFacetUsingSemanticsProviderFactory extends ValueFacetUsi
         if (type != Markup.class) {
             return;
         }
-        addFacets(new MarkupValueSemanticsProvider(holder, getContext()));
+        addFacets(new MarkupValueSemanticsProvider(holder));
     }
 }

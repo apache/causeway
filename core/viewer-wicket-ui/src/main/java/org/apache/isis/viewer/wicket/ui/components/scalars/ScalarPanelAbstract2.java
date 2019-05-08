@@ -40,6 +40,7 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -870,9 +871,9 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 protected void onEvent(AjaxRequestTarget target) {
 
                     final ObjectSpecification specification = scalarModel.getObject().getSpecification();
-                    final MetaModelService metaModelService = getIsisSessionFactory().getServicesInjector()
+                    final MetaModelService metaModelService = getServiceRegistry()
                             .lookupServiceElseFail(MetaModelService.class);
-                    final MetaModelService.Sort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
+                    final ManagedObjectSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
 
                     final ActionPrompt prompt = ActionPromptProvider.Util
                             .getFrom(ScalarPanelAbstract2.this).getActionPrompt(promptStyle, sort);

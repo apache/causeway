@@ -36,7 +36,7 @@ public class IntPrimitiveValueFacetUsingSemanticsProviderFactory extends ValueFa
         if (type != int.class) {
             return;
         }
-        addFacets(new IntPrimitiveValueSemanticsProvider(holder, getContext()));
+        addFacets(new IntPrimitiveValueSemanticsProvider(holder));
     }
 
 }

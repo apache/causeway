@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * non-final only so it can be mocked if need be.
@@ -75,11 +74,11 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     public static FacetedMethod createForAction(
             final Class<?> declaringType,
             final String actionName,
-            final SpecificationLoader specificationLoader,
             final Class<?>... parameterTypes) {
+        
         try {
             final Method method = declaringType.getMethod(actionName, parameterTypes);
-            return FacetedMethod.createForAction(declaringType, method, specificationLoader);
+            return FacetedMethod.createForAction(declaringType, method);
         } catch (final SecurityException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
@@ -96,16 +95,14 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
 
     public static FacetedMethod createForAction(
             final Class<?> declaringType,
-            final Method method,
-            final SpecificationLoader specificationLoader) {
-        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(), getParameters(declaringType, method,
-                specificationLoader));
+            final Method method) {
+        return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(), 
+                getParameters(declaringType, method));
     }
 
     private static List<FacetedMethodParameter> getParameters(
             final Class<?> declaringType,
-            final Method actionMethod,
-            final SpecificationLoader specificationLoader) {
+            final Method actionMethod) {
 
         final Class<?>[] parameterTypes = actionMethod.getParameterTypes();
         final Type[] genericParameterTypes = actionMethod.getGenericParameterTypes();
@@ -133,12 +130,11 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
                 FacetUtil.addFacet(semanticsFacet);
 
                 TypeOfFacet typeOfFacet = TypeOfFacet.Util
-                        .inferFromGenericParamType(fmp, parameterType, genericParameterType,
-                                specificationLoader);
+                        .inferFromGenericParamType(fmp, parameterType, genericParameterType);
 
                 if(typeOfFacet == null ) {
                     if (_Arrays.isArrayType(parameterType)) {
-                        typeOfFacet = TypeOfFacet.Util.inferFromArrayType(fmp, parameterType, specificationLoader);
+                        typeOfFacet = TypeOfFacet.Util.inferFromArrayType(fmp, parameterType);
                     }
                 }
 

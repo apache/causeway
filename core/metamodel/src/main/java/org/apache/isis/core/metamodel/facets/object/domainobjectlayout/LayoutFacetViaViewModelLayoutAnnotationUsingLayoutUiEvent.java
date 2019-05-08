@@ -24,26 +24,25 @@ import java.util.Map;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.ViewModelLayout;
-import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.layout.LayoutFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class LayoutFacetViaViewModelLayoutAnnotationUsingLayoutUiEvent extends LayoutFacetAbstract implements
-        LayoutFacet {
-
-    //private static final Logger LOG = LoggerFactory.getLogger(LayoutFacetViaViewModelLayoutAnnotationUsingIconUiEvent.class);
+public class LayoutFacetViaViewModelLayoutAnnotationUsingLayoutUiEvent 
+extends LayoutFacetAbstract 
+implements LayoutFacet {
 
     public static Facet create(
             final List<ViewModelLayout> viewModelLayouts,
-            final ServicesInjector servicesInjector,
-            final IsisConfiguration configuration, final FacetHolder facetHolder) {
+            final MetamodelEventService metamodelEventService,
+            final IsisConfiguration configuration, 
+            final FacetHolder facetHolder) {
 
         return viewModelLayouts.stream()
                 .map(ViewModelLayout::layoutUiEvent)
@@ -56,24 +55,22 @@ public class LayoutFacetViaViewModelLayoutAnnotationUsingLayoutUiEvent extends L
                 .findFirst()
                 .map(layoutUiEvent -> {
 
-                    final EventBusService eventBusService = servicesInjector.lookupServiceElseFail(EventBusService.class);
-
                     return new LayoutFacetViaDomainObjectLayoutAnnotationUsingLayoutUiEvent(
-                            layoutUiEvent, eventBusService, facetHolder);
+                            layoutUiEvent, metamodelEventService, facetHolder);
                 })
                 .orElse(null);
     }
 
     private final Class<? extends LayoutUiEvent<?>> layoutUiEventClass;
-    private final EventBusService eventBusService;
+    private final MetamodelEventService metamodelEventService;
 
     public LayoutFacetViaViewModelLayoutAnnotationUsingLayoutUiEvent(
             final Class<? extends LayoutUiEvent<?>> layoutUiEventClass,
-            final EventBusService eventBusService,
+            		final MetamodelEventService metamodelEventService,
             final FacetHolder holder) {
         super(holder);
         this.layoutUiEventClass = layoutUiEventClass;
-        this.eventBusService = eventBusService;
+        this.metamodelEventService = metamodelEventService;
     }
 
     @Override
@@ -85,7 +82,7 @@ public class LayoutFacetViaViewModelLayoutAnnotationUsingLayoutUiEvent extends L
 
         final LayoutUiEvent<Object> layoutUiEvent = newLayoutUiEvent(owningAdapter);
 
-        eventBusService.post(layoutUiEvent);
+        metamodelEventService.fireLayoutUiEvent(layoutUiEvent);
 
         final String layout = layoutUiEvent.getLayout();
 

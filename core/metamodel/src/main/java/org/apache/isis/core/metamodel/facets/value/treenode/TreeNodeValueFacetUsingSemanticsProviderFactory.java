@@ -35,6 +35,6 @@ extends ValueFacetUsingSemanticsProviderFactory<TreeNode> {
         if (!TreeNode.class.isAssignableFrom(type)) {
             return;
         }
-        addFacets(new TreeNodeValueSemanticsProvider(holder, getContext()));
+        addFacets(new TreeNodeValueSemanticsProvider(holder));
     }
 }

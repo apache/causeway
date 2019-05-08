@@ -18,6 +18,9 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.config.internal._Config.getConfiguration;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -27,9 +30,8 @@ import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Singleton;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
@@ -55,14 +57,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.config.internal._Config.getConfiguration;
-
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        repositoryFor = ApplicationFeature.class,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 
     // -- caches
@@ -72,8 +67,6 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> propertyFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> collectionFeatures = _Maps.newTreeMap();
     private final SortedMap<ApplicationFeatureId, ApplicationFeature> actionFeatures = _Maps.newTreeMap();
-
-
 
     // -- init
 
@@ -113,7 +106,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     private Collection<ObjectSpecification> primeMetaModel() {
         serviceRegistry.streamServices()
             .forEach(service->specificationLoader.loadSpecification(service.getClass()));
-        return specificationLoader.allSpecifications();
+        return specificationLoader.currentSpecifications();
     }
 
     private void createApplicationFeaturesFor(final Collection<ObjectSpecification> specifications) {

@@ -21,15 +21,12 @@ package org.apache.isis.core.metamodel.facets.collections.collection.modify;
 
 import org.apache.isis.applib.events.domain.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class CollectionDomainEventFacetDefault extends CollectionDomainEventFacetAbstract {
 
     public CollectionDomainEventFacetDefault(
-            final Class<? extends CollectionDomainEvent<?, ?>> eventType,
-                    final ServicesInjector servicesInjector, final SpecificationLoader specificationLoader, final FacetHolder holder) {
-        super(eventType, holder, servicesInjector, specificationLoader);
+            final Class<? extends CollectionDomainEvent<?, ?>> eventType, final FacetHolder holder) {
+        super(eventType, holder);
     }
 
 }

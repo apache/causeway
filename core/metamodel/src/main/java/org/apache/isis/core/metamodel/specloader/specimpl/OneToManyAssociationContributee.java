@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -35,7 +36,6 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -55,12 +55,10 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
 
     private final Identifier identifier;
 
-    private static ObjectSpecification typeOfSpec(
-            final ObjectActionDefault objectAction,
-            final ServicesInjector objectMemberDependencies) {
+    private static ObjectSpecification typeOfSpec(final ObjectActionDefault objectAction) {
 
         final TypeOfFacet actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
-        final SpecificationLoader specificationLookup = objectMemberDependencies.getSpecificationLoader();
+        final SpecificationLoader specificationLookup = MetaModelContext.current().getSpecificationLoader();
         // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault which ensures that there is always
         // a TypeOfFacet for any contributee associations created from contributed actions.
         Class<? extends Object> cls = actionTypeOfFacet != null? actionTypeOfFacet.value(): Object.class;
@@ -70,11 +68,10 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
     public OneToManyAssociationContributee(
             final Object servicePojo,
             final ObjectActionDefault serviceAction,
-            final ObjectSpecification contributeeType,
-            final ServicesInjector servicesInjector) {
+            final ObjectSpecification contributeeType) {
+        
         super(serviceAction.getFacetedMethod(),
-                typeOfSpec(serviceAction, servicesInjector),
-                servicesInjector);
+                typeOfSpec(serviceAction));
         this.servicePojo = servicePojo;
         this.serviceAction = serviceAction;
 
@@ -83,7 +80,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
         //
         final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
-        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, servicesInjector.getSpecificationLoader()) {};
+        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this) {};
 
         FacetUtil.addFacet(notPersistedFacet);
         FacetUtil.addFacet(disabledFacet);
@@ -173,7 +170,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationDefault
     }
 
     private ObjectAdapter getServiceAdapter() {
-        return getPersistenceSessionService().adapterFor(servicePojo);
+        return getObjectAdapterProvider().adapterFor(servicePojo);
     }
 
     // -- ContributeeMember2 impl (getServiceContributedBy)

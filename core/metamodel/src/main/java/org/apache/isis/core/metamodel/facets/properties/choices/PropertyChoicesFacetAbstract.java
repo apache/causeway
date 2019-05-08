@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.properties.choices;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class PropertyChoicesFacetAbstract extends FacetAbstract implements PropertyChoicesFacet {
 
@@ -30,19 +29,8 @@ public abstract class PropertyChoicesFacetAbstract extends FacetAbstract impleme
         return PropertyChoicesFacet.class;
     }
 
-    private final SpecificationLoader specificationLookup;
-
-    public PropertyChoicesFacetAbstract(final FacetHolder holder, final SpecificationLoader specificationLookup) {
+    public PropertyChoicesFacetAbstract(final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.specificationLookup = specificationLookup;
-    }
-
-    // ////////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // ////////////////////////////////////////////////////////
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLookup;
     }
 
 }

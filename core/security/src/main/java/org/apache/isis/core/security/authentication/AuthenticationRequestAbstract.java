@@ -19,15 +19,16 @@
 
 package org.apache.isis.core.security.authentication;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Sets;
 
 public abstract class AuthenticationRequestAbstract implements AuthenticationRequest {
 
     private final String name;
-    private final List<String> roles = _Lists.newArrayList();
+    private final Set<String> roles = _Sets.newHashSet();
 
     public AuthenticationRequestAbstract(final String name) {
         this.name = name;
@@ -39,14 +40,16 @@ public abstract class AuthenticationRequestAbstract implements AuthenticationReq
     }
 
     @Override
-    public List<String> getRoles() {
-        return Collections.unmodifiableList(roles);
+    public Stream<String> streamRoles() {
+        return roles.stream();
     }
-
+    
     @Override
-    public void setRoles(final List<String> roles) {
-        this.roles.clear();
-        this.roles.addAll(roles);
+    public void addRole(String role) {
+        if(_Strings.isNullOrEmpty(role)) {
+            return; // ignore
+        }
+        this.roles.add(role);
     }
 
 }

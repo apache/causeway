@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.collections.javautilcollection;
 
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultTo
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class CollectionFacetFactory extends FacetFactoryAbstract {
 
@@ -58,12 +56,12 @@ public class CollectionFacetFactory extends FacetFactoryAbstract {
             final Class<?> collectionElementType = collectionElementType(cls);
             typeOfFacet =
                     collectionElementType != Object.class
-                    ? new TypeOfFacetInferredFromGenerics(collectionElementType, facetHolder, getSpecificationLoader())
-                            : new TypeOfFacetDefaultToObject(facetHolder, getSpecificationLoader());
+                    ? new TypeOfFacetInferredFromGenerics(collectionElementType, facetHolder)
+                            : new TypeOfFacetDefaultToObject(facetHolder);
                     facetHolder.addFacet(typeOfFacet);
         }
 
-        final CollectionFacet collectionFacet = new JavaCollectionFacet(facetHolder, adapterProvider);
+        final CollectionFacet collectionFacet = new JavaCollectionFacet(facetHolder);
 
         facetHolder.addFacet(collectionFacet);
     }
@@ -72,11 +70,11 @@ public class CollectionFacetFactory extends FacetFactoryAbstract {
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final CollectionFacet collectionFacet = new JavaArrayFacet(facetHolder, adapterProvider);
+        final CollectionFacet collectionFacet = new JavaArrayFacet(facetHolder);
         facetHolder.addFacet(collectionFacet);
 
         final TypeOfFacet typeOfFacet =
-                new TypeOfFacetInferredFromArray(cls.getComponentType(), facetHolder, getSpecificationLoader());
+                new TypeOfFacetInferredFromArray(cls.getComponentType(), facetHolder);
         facetHolder.addFacet(typeOfFacet);
     }
 
@@ -84,18 +82,5 @@ public class CollectionFacetFactory extends FacetFactoryAbstract {
     private Class<?> collectionElementType(final Class<?> cls) {
         return Object.class;
     }
-
-    // //////////////////////////////////////////////////////////////
-    // Dependencies (injected)
-    // //////////////////////////////////////////////////////////////
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
 
 }

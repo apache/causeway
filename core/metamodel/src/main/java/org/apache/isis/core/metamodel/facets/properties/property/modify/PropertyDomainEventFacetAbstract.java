@@ -39,9 +39,7 @@ import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationMixedIn;
 
 public abstract class PropertyDomainEventFacetAbstract
@@ -58,19 +56,18 @@ extends SingleClassValueFacetAbstract implements PropertyDomainEventFacet {
      */
     public PropertyDomainEventFacetAbstract(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
-                    final PropertyOrCollectionAccessorFacet getterFacetIfAny,
-                    final FacetHolder holder,
-                    final ServicesInjector servicesInjector,
-                    final SpecificationLoader specificationLoader) {
-        super(PropertyDomainEventFacet.class, holder, eventType, specificationLoader);
+            final PropertyOrCollectionAccessorFacet getterFacetIfAny,
+            final FacetHolder holder ) {
+        
+        super(PropertyDomainEventFacet.class, holder, eventType);
         this.eventType = eventType;
         this.getterFacetIfAny = getterFacetIfAny;
 
-        this.translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
+        this.translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
 
-        domainEventHelper = new DomainEventHelper(servicesInjector);
+        domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
 
     private Class<? extends PropertyDomainEvent<?, ?>> eventType;

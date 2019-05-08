@@ -36,7 +36,7 @@ public class FloatWrapperValueFacetUsingSemanticsProviderFactory extends ValueFa
         if (type != Float.class) {
             return;
         }
-        addFacets(new FloatWrapperValueSemanticsProvider(holder, getContext()));
+        addFacets(new FloatWrapperValueSemanticsProvider(holder));
     }
 
 }

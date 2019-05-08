@@ -22,14 +22,14 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
 import java.util.Objects;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.IsisConfiguration;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 
 public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> {
@@ -144,7 +144,7 @@ public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> 
 
 
     protected IsisConfiguration getConfiguration() {
-        return getIsisSessionFactory().getConfiguration();
+        return IsisContext.getConfiguration();
     }
 
 

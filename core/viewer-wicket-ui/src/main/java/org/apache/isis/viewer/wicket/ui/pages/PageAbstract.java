@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Stream;
 
-import com.google.inject.name.Named;
+import javax.inject.Inject;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -63,15 +63,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.PromptStyle;
+import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
+import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.config.property.ConfigPropertyEnum;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
@@ -151,20 +151,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     private final List<ComponentType> childComponentIds;
 
-    @com.google.inject.Inject
-    @Named("applicationName")
-    private String applicationName;
-
-    @com.google.inject.Inject(optional = true)
-    @Named("applicationCss")
-    private String applicationCss;
-    @com.google.inject.Inject(optional = true)
-    @Named("applicationJs")
-    private String applicationJs;
-
-    @com.google.inject.Inject
-    private PageClassRegistry pageClassRegistry;
-
+    @Inject private WebAppConfigBean webAppConfigBean;
+    @Inject private PageClassRegistry pageClassRegistry;
 
     /**
      * Top-level &lt;div&gt; to which all content is added.
@@ -191,6 +179,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
+            String applicationName = webAppConfigBean.getApplicationName();
             if(applicationName != null) {
                 themeDiv.add(new CssClassAppender(CssClassAppender.asCssStyle(applicationName)));
             }
@@ -220,8 +209,10 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             LOG.error("Failed to construct page, going back to sign in page", ex);
 
             // REVIEW: similar code in WebRequestCycleForIsis
-            final Stream<ExceptionRecognizer> exceptionRecognizers = getServicesInjector()
-                    .streamServices(ExceptionRecognizer.class);
+            final Stream<ExceptionRecognizer> exceptionRecognizers = getServiceRegistry()
+                    .select(ExceptionRecognizer.class)
+                    .stream();
+                    
             final String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
             final ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
 
@@ -275,7 +266,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
 
     protected void setTitle(final String title) {
-        addOrReplace(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
+        addOrReplace(new Label(ID_PAGE_TITLE, title != null
+                ? title
+                        : webAppConfigBean.getApplicationName()));
     }
 
     private Class<? extends Page> getSignInPage() {
@@ -301,9 +294,11 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         final JGrowlBehaviour jGrowlBehaviour = new JGrowlBehaviour();
         jGrowlBehaviour.renderFeedbackMessages(response);
 
+        String applicationCss = webAppConfigBean.getApplicationCss();
         if(applicationCss != null) {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         }
+        String applicationJs = webAppConfigBean.getApplicationJs();
         if(applicationJs != null) {
             response.render(JavaScriptReferenceHeaderItem.forUrl(applicationJs));
         }
@@ -471,7 +466,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     public ActionPrompt getActionPrompt(
             final PromptStyle promptStyle,
-            final MetaModelService.Sort sort) {
+            final ManagedObjectSort sort) {
 
         switch (promptStyle) {
         case AS_CONFIGURED:
@@ -480,7 +475,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         case INLINE_AS_IF_EDIT:
         default:
             final ConfigPropertyEnum<DialogMode> configProp =
-                    sort == MetaModelService.Sort.DOMAIN_SERVICE
+                    sort == ManagedObjectSort.BEAN
                             ? CONFIG_DIALOG_MODE_FOR_MENUS
                             : CONFIG_DIALOG_MODE;
             final DialogMode dialogMode = configProp.from(getConfiguration());
@@ -543,32 +538,22 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
 
-
-    // -- injected (application-scope)
-
-    // REVIEW: can't inject because not serializable.
-    protected IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
+    // -- DEPS
 
     protected IsisConfiguration getConfiguration() {
-        return getIsisSessionFactory().getConfiguration();
+        return IsisContext.getConfiguration();
     }
 
-    protected ServicesInjector getServicesInjector() {
-        return getIsisSessionFactory().getServicesInjector();
+    protected ServiceRegistry getServiceRegistry() {
+        return IsisContext.getServiceRegistry();
     }
 
-
-
-    // -- derived from injected components (session-scope)
-
-    protected PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    protected ServiceInjector getServiceInjector() {
+        return IsisContext.getServiceInjector();
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return getIsisSessionFactory().getCurrentSession().getAuthenticationSession();
+        return IsisContext.getAuthenticationSession().orElse(null);
     }
 
 

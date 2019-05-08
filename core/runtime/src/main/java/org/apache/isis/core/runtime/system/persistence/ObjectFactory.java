@@ -21,25 +21,26 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import java.lang.reflect.Modifier;
 
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 
 public class ObjectFactory {
 
     private final PersistenceSession persistenceSession;
-    private final ServicesInjector servicesInjector;
+    private final ServiceInjector serviceInjector;
 
     public ObjectFactory(
             final PersistenceSession persistenceSession,
-            final ServicesInjector servicesInjector) {
+            final ServiceInjector serviceInjector) {
+        
         this.persistenceSession = persistenceSession;
-        this.servicesInjector = servicesInjector;
+        this.serviceInjector = serviceInjector;
     }
 
     public <T> T instantiate(final Class<T> cls) throws ObjectInstantiationException {
 
-        if (servicesInjector == null) {
-            throw new IllegalStateException("ServicesInjector is not available (no open session)");
+        if (serviceInjector == null) {
+            throw new IllegalStateException("ServiceInjector is not available (no open session)");
         }
         if (Modifier.isAbstract(cls.getModifiers())) {
             throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
@@ -54,7 +55,7 @@ public class ObjectFactory {
             throw new ObjectInstantiationException(e);
         }
 
-        servicesInjector.injectServicesInto(newInstance);
+        serviceInjector.injectServicesInto(newInstance);
         return newInstance;
     }
 

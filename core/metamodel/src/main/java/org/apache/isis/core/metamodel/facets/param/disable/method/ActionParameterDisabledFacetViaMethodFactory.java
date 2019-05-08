@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.param.disable.ActionParameterDisabledFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
 /**
@@ -65,6 +64,8 @@ public class ActionParameterDisabledFacetViaMethodFactory extends MethodPrefixBa
         final String hideName = MethodPrefixConstants.DISABLE_PREFIX + param + capitalizedName;
 
         final int numParamTypes = paramTypes.size();
+        
+        final TranslationService translationService = getMetaModelContext().getTranslationService();
 
         for(int i=0; i< numParamTypes+1; i++) {
             final Method disableMethod = MethodFinderUtils.findMethod(
@@ -76,7 +77,6 @@ public class ActionParameterDisabledFacetViaMethodFactory extends MethodPrefixBa
             if (disableMethod != null) {
                 processParameterContext.removeMethod(disableMethod);
 
-                final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
                 // sadness: same as in TranslationFactory
                 final String translationContext = facetHolder.getIdentifier().toFullIdentityString();
 
@@ -92,12 +92,6 @@ public class ActionParameterDisabledFacetViaMethodFactory extends MethodPrefixBa
             }
         }
 
-    }
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterManager = servicesInjector.getPersistenceSessionServiceInternal();
     }
 
     PersistenceSessionServiceInternal adapterManager;

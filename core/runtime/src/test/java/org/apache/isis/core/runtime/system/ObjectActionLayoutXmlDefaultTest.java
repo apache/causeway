@@ -84,7 +84,7 @@ public class ObjectActionLayoutXmlDefaultTest {
             }
         });
 
-        action = new ObjectActionDefault(mockFacetedMethod, stubServicesInjector);
+        action = new ObjectActionDefault(mockFacetedMethod);
     }
 
 

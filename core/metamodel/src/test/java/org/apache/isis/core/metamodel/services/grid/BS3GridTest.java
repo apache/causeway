@@ -18,11 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.grid;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.util.Arrays;
 import java.util.Map;
 
 import javax.xml.bind.Marshaller;
@@ -41,11 +36,14 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
-import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridSystemServiceBS3;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class BS3GridTest {
 
@@ -55,11 +53,10 @@ public class BS3GridTest {
 
     @Before
     public void setUp() throws Exception {
-        jaxbService = new JaxbService.Simple();
+        jaxbService = new JaxbService.Simple() {};
         gridServiceDefault = new GridServiceDefault();
         gridSystemServiceBS3 = new GridSystemServiceBS3();
-        gridServiceDefault.gridSystemServices = Arrays.<GridSystemService<?>>asList(
-                gridSystemServiceBS3);
+        gridServiceDefault.gridSystemServicesForTest = _Lists.of(gridSystemServiceBS3);
     }
 
     @After

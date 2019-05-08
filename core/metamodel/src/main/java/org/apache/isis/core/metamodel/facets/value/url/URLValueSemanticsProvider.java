@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<java.net.URL> implements URLValueFacet {
 
@@ -45,13 +44,12 @@ public class URLValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbs
      * {@link EncoderDecoder}.
      */
     public URLValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public URLValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
+    public URLValueSemanticsProvider(final FacetHolder holder) {
         super(type(), holder, java.net.URL.class,
-                TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE,
-                context);
+                TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
     }
 
     // //////////////////////////////////////////////////////////////////

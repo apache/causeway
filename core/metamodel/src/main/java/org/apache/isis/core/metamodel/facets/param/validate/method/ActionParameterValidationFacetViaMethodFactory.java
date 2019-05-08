@@ -73,7 +73,7 @@ public class ActionParameterValidationFacetViaMethodFactory extends MethodPrefix
 
         processParameterContext.removeMethod(validateMethod);
 
-        final TranslationService translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
+        final TranslationService translationService = getMetaModelContext().getTranslationService();
         // sadness: same as in TranslationFactory
         final String translationContext = facetHolder.getIdentifier().toFullIdentityString();
         final Facet facet = new ActionParameterValidationFacetViaMethod(validateMethod, translationService, translationContext, facetHolder);

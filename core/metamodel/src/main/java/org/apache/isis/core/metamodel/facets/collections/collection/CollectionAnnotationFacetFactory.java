@@ -106,10 +106,10 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
                 .map(domainEvent ->
                 (CollectionDomainEventFacetAbstract)
                 new CollectionDomainEventFacetForCollectionAnnotation(
-                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent), servicesInjector, getSpecificationLoader(), holder))
+                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent), holder))
                 .orElse(
                         new CollectionDomainEventFacetDefault(
-                                defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class), servicesInjector, getSpecificationLoader(), holder)
+                                defaultFromDomainObjectIfRequired(typeSpec, CollectionDomainEvent.Default.class), holder)
                         );
         if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
             FacetUtil.addFacet(collectionDomainEventFacet);
@@ -138,12 +138,14 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
 
             if(collectionDomainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation) {
                 replacementFacet = new CollectionAddToFacetForDomainEventFromCollectionAnnotation(
-                        collectionDomainEventFacet.getEventType(), getterFacet, collectionAddToFacet, collectionDomainEventFacet, holder, servicesInjector);
+                        collectionDomainEventFacet.getEventType(), getterFacet, collectionAddToFacet, 
+                        collectionDomainEventFacet, holder, getServiceRegistry());
             } else
                 // default
             {
                 replacementFacet = new CollectionAddToFacetForDomainEventFromDefault(
-                        collectionDomainEventFacet.getEventType(), getterFacet, collectionAddToFacet, collectionDomainEventFacet, holder, servicesInjector);
+                        collectionDomainEventFacet.getEventType(), getterFacet, 
+                        collectionAddToFacet, collectionDomainEventFacet, holder, getServiceRegistry());
             }
             FacetUtil.addFacet(replacementFacet);
         }
@@ -155,11 +157,10 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
             final CollectionRemoveFromFacetForDomainEventFromAbstract replacementFacet;
 
             if(collectionDomainEventFacet instanceof CollectionDomainEventFacetForCollectionAnnotation) {
-                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, servicesInjector, holder);
-            } else
+                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromCollectionAnnotation(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, getServiceRegistry(), holder);
+            } else {
                 // default
-            {
-                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromDefault(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, servicesInjector, holder);
+                replacementFacet = new CollectionRemoveFromFacetForDomainEventFromDefault(collectionDomainEventFacet.getEventType(), getterFacet, collectionRemoveFromFacet, collectionDomainEventFacet, getServiceRegistry(), holder);
             }
             FacetUtil.addFacet(replacementFacet);
         }
@@ -227,14 +228,14 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         // check for @Collection(typeOf=...)
         final List<Collection> collections = Annotations.getAnnotations(method, Collection.class);
         TypeOfFacet facet = TypeOfFacetOnCollectionFromCollectionAnnotation
-                .create(collections, facetHolder, getSpecificationLoader());
+                .create(collections, facetHolder);
 
         // else infer from return type
         if(facet == null) {
             final Class<?> returnType = method.getReturnType();
             if (returnType.isArray()) {
                 final Class<?> componentType = returnType.getComponentType();
-                facet = new TypeOfFacetInferredFromArray(componentType, facetHolder, getSpecificationLoader());
+                facet = new TypeOfFacetInferredFromArray(componentType, facetHolder);
             }
         }
 
@@ -265,7 +266,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract {
         final Object actualTypeArgument = actualTypeArguments[0];
         if (actualTypeArgument instanceof Class) {
             final Class<?> actualType = (Class<?>) actualTypeArgument;
-            return new TypeOfFacetInferredFromGenerics(actualType, facetHolder, getSpecificationLoader());
+            return new TypeOfFacetInferredFromGenerics(actualType, facetHolder);
         }
 
         if (actualTypeArgument instanceof TypeVariable) {

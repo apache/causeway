@@ -37,13 +37,13 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.session.IsisSession;
 
 /**
  * Holds the state for the specified object in serializable form.
@@ -195,11 +195,11 @@ public class Memento implements Serializable {
             return null;
         }
         final ObjectSpecification spec =
-                getSpecificationLoader().loadSpecification(data.getClassName());
+                getSpecificationLoader().loadSpecification(ObjectSpecId.of(data.getClassName()));
         
         final Oid oid = getOid();
 
-        return getPersistenceSession().mementoSupport().recreateObject(spec, oid, data);
+        return IsisSession.currentOrElseNull().adapterOfMemento(spec, oid, data);
                 
     }
 
@@ -218,15 +218,7 @@ public class Memento implements Serializable {
     // ///////////////////////////////////////////////////////////////
 
     protected SpecificationLoader getSpecificationLoader() {
-        return getIsisSessionFactory().getSpecificationLoader();
-    }
-
-    protected PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
-    }
-
-    IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
+        return IsisContext.getSpecificationLoader();
     }
 
 }

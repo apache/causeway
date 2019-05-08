@@ -39,7 +39,7 @@ public class JavaSqlDateValueFacetUsingSemanticsProviderFactory extends ValueFac
         if (type != Date.class) {
             return;
         }
-        addFacets(new JavaSqlDateValueSemanticsProvider(holder, getContext()));
+        addFacets(new JavaSqlDateValueSemanticsProvider(holder));
     }
 
 }

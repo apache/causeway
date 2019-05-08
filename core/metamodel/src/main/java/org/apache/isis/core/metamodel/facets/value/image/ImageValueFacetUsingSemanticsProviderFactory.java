@@ -37,7 +37,7 @@ public class ImageValueFacetUsingSemanticsProviderFactory extends ValueFacetUsin
         if (type != org.apache.isis.applib.value.Image.class) {
             return;
         }
-        addFacets(new ImageValueSemanticsProvider(holder, getContext()));
+        addFacets(new ImageValueSemanticsProvider(holder));
     }
 
 }

@@ -134,9 +134,9 @@ implements MetaModelValidatorRefiner {
                 .filter(domainEvent -> domainEvent != PropertyDomainEvent.Default.class)
                 .findFirst()
                 .map(domainEvent -> (PropertyDomainEventFacetAbstract) new PropertyDomainEventFacetForPropertyAnnotation(
-                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent), getterFacet, servicesInjector, getSpecificationLoader(), holder))
+                        defaultFromDomainObjectIfRequired(typeSpec, domainEvent), getterFacet, holder))
                 .orElse(new PropertyDomainEventFacetDefault(
-                        defaultFromDomainObjectIfRequired(typeSpec, PropertyDomainEvent.Default.class), getterFacet, servicesInjector, getSpecificationLoader(),
+                        defaultFromDomainObjectIfRequired(typeSpec, PropertyDomainEvent.Default.class), getterFacet,
                         holder));
 
         if(EventUtil.eventTypeIsPostable(
@@ -161,12 +161,12 @@ implements MetaModelValidatorRefiner {
 
             if(propertyDomainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation) {
                 replacementFacet = new PropertySetterFacetForDomainEventFromPropertyAnnotation(
-                        propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
+                        propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder);
             } else
                 // default
             {
                 replacementFacet = new PropertySetterFacetForDomainEventFromDefault(
-                        propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder, servicesInjector);
+                        propertyDomainEventFacet.getEventType(), getterFacet, setterFacet, propertyDomainEventFacet, holder);
             }
             FacetUtil.addFacet(replacementFacet);
         }
@@ -178,12 +178,12 @@ implements MetaModelValidatorRefiner {
 
             if(propertyDomainEventFacet instanceof PropertyDomainEventFacetForPropertyAnnotation) {
                 replacementFacet = new PropertyClearFacetForDomainEventFromPropertyAnnotation(
-                        propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
+                        propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder);
             } else
                 // default
             {
                 replacementFacet = new PropertyClearFacetForDomainEventFromDefault(
-                        propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder, servicesInjector);
+                        propertyDomainEventFacet.getEventType(), getterFacet, clearFacet, propertyDomainEventFacet, holder);
             }
             FacetUtil.addFacet(replacementFacet);
         }
@@ -244,7 +244,7 @@ implements MetaModelValidatorRefiner {
         }
 
         // check for @Property(command=...)
-        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(properties, getConfiguration(), holder, servicesInjector);
+        final CommandFacet commandFacet = CommandFacetForPropertyAnnotation.create(properties, getConfiguration(), holder, getServiceInjector());
 
         FacetUtil.addFacet(commandFacet);
     }
@@ -305,7 +305,7 @@ implements MetaModelValidatorRefiner {
 
         // search for @Property(mustSatisfy=...)
         final List<Property> properties = Annotations.getAnnotations(method, Property.class);
-        Facet facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(properties, holder, servicesInjector);
+        Facet facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(properties, holder, getServiceInjector());
 
         FacetUtil.addFacet(facet);
     }

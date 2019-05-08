@@ -21,6 +21,8 @@ package org.apache.isis.core.security.authentication;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.encoding.Encodable;
@@ -39,9 +41,26 @@ public interface AuthenticationSession extends Encodable, Serializable {
 
     /**
      * The roles this user belongs to
+     * @deprecated use streamRoles()
      */
-    List<String> getRoles();
+    @Deprecated 
+    default List<String> getRoles() {
+        return streamRoles().collect(Collectors.toList());
+    }
 
+    /**
+     * The roles this user belongs to
+     * @since 2.0.0
+     */
+    Stream<String> streamRoles();
+    
+    /**
+     * Whether this user has specified {@code role}
+     * @param role 
+     * @since 2.0.0
+     */
+    boolean hasRole(String role);
+    
     /**
      * A unique code given to this session during authentication.
      *

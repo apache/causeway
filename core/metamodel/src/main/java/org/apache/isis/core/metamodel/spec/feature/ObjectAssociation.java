@@ -23,9 +23,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
@@ -128,25 +129,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     ObjectSpecification getOnType();
 
     // //////////////////////////////////////////////////////
-    // Functions
-    // //////////////////////////////////////////////////////
-
-    public static class Functions {
-        private Functions(){}
-
-        public static Function<ObjectAssociation, String> toName() {
-            return ObjectAssociation::getName;
-        }
-
-        public static Function<ObjectAssociation, String> toId() {
-            return ObjectAssociation::getId;
-        }
-    }
-
-    // //////////////////////////////////////////////////////
     // Predicates
     // //////////////////////////////////////////////////////
 
+    @Vetoed
     public static class Predicates {
 
         private Predicates(){}
@@ -193,6 +179,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     // Comparators
     // //////////////////////////////////////////////////////
 
+    @Vetoed
     public static class Comparators {
         /**
          * Use {@link ObjectMember.Comparators#byMemberOrderSequence()} instead.
@@ -218,6 +205,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     // Util
     // //////////////////////////////////////////////////////
 
+    @Vetoed
     public static class Util {
         private Util(){}
         

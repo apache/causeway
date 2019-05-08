@@ -19,13 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt.signup;
 
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+import javax.inject.Inject;
 
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.pages.PageNavigationService;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountManagementPageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * A page for self-registering a new user after confirmation of her email account.
@@ -34,8 +35,7 @@ public class RegistrationFormPage extends AccountManagementPageAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    @com.google.inject.Inject
-    private PageNavigationService pageNavigationService;
+    @Inject private PageNavigationService pageNavigationService;
 
     public RegistrationFormPage(final PageParameters parameters) {
         this(parameters, getAndClearExceptionModelIfAny());

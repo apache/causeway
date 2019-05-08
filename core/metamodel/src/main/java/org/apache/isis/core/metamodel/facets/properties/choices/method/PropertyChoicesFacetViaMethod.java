@@ -26,33 +26,26 @@ import java.util.Map;
 
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesClass;
 
-    private final ObjectAdapterProvider adapterProvider;
-
     public PropertyChoicesFacetViaMethod(
             final Method method, 
             final Class<?> choicesClass, 
-            final FacetHolder holder, 
-            final SpecificationLoader specificationLookup, 
-            final ObjectAdapterProvider adapterProvider) {
+            final FacetHolder holder) {
         
-        super(holder, specificationLookup);
+        super(holder);
         this.method = method;
         this.choicesClass = choicesClass;
-        this.adapterProvider = adapterProvider;
     }
 
     /**
@@ -72,8 +65,8 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
     @Override
     public Object[] getChoices(
             final ObjectAdapter owningAdapter,
-            final SpecificationLoader specificationLookup,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
         final Object options = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         if (options == null) {
             return null;
@@ -81,7 +74,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
         if (options.getClass().isArray()) {
             return ObjectExtensions.asArray(options);
         }
-        final ObjectSpecification specification = specificationLookup.loadSpecification(choicesClass);
+        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(choicesClass);
         return CollectionUtils.getCollectionAsObjectArray(options, specification, getObjectAdapterProvider());
     }
 
@@ -90,13 +83,6 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
         return "method=" + method + ",class=" + choicesClass;
     }
 
-    // ////////////////////////////////////////////
-    // Dependencies
-    // ////////////////////////////////////////////
-
-    protected ObjectAdapterProvider getObjectAdapterProvider() {
-        return adapterProvider;
-    }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);

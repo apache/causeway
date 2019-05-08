@@ -117,7 +117,7 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
 
         final Class<?> type = addType != null ? addType : removeType;
         if (type != null) {
-            FacetUtil.addFacet(new TypeOfFacetInferredFromSupportingMethods(type, collection, getSpecificationLoader()));
+            FacetUtil.addFacet(new TypeOfFacetInferredFromSupportingMethods(type, collection));
         }
         return type;
     }
@@ -152,7 +152,7 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         processMethodContext.removeMethod(validateAddToMethod);
 
         final IdentifiedHolder facetHolder = processMethodContext.getFacetHolder();
-        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
+        final TranslationService translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
 
@@ -185,7 +185,7 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         processMethodContext.removeMethod(validateRemoveFromMethod);
 
         final IdentifiedHolder facetHolder = processMethodContext.getFacetHolder();
-        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
+        final TranslationService translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
 

@@ -25,7 +25,6 @@ import java.util.Map;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.CssClassUiEvent;
-import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -33,19 +32,19 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
-public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent extends FacetAbstract implements
-CssClassFacet {
-
-    //private static final Logger LOG = LoggerFactory.getLogger(CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent.class);
+public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent 
+extends FacetAbstract 
+implements CssClassFacet {
 
     public static Facet create(
             final List<DomainObjectLayout> domainObjectLayouts,
-            final ServicesInjector servicesInjector,
-            final IsisConfiguration configuration, final FacetHolder facetHolder) {
+            final MetamodelEventService metamodelEventService,
+            final IsisConfiguration configuration, 
+            final FacetHolder facetHolder) {
 
         return domainObjectLayouts.stream()
                 .map(DomainObjectLayout::cssClassUiEvent)
@@ -57,24 +56,24 @@ CssClassFacet {
                         configuration))
                 .findFirst()
                 .map(cssClassUiEventClass -> {
-                    final EventBusService eventBusService = servicesInjector.lookupServiceElseFail(EventBusService.class);
                     return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
-                            cssClassUiEventClass, eventBusService, facetHolder);
+                            cssClassUiEventClass, metamodelEventService, facetHolder);
                 })
                 .orElse(null);
 
     }
 
     private final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass;
-    private final EventBusService eventBusService;
+    private final MetamodelEventService metamodelEventService;
 
     public CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
-            final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass,
-                    final EventBusService eventBusService,
-                    final FacetHolder holder) {
+    				final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass,
+    				final MetamodelEventService metamodelEventService,
+    				final FacetHolder holder) {
+    	
         super(CssClassFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
         this.cssClassUiEventClass = cssClassUiEventClass;
-        this.eventBusService = eventBusService;
+        this.metamodelEventService = metamodelEventService;
     }
 
     @Override
@@ -86,7 +85,7 @@ CssClassFacet {
 
         final CssClassUiEvent<Object> cssClassUiEvent = newCssClassUiEvent(owningAdapter);
 
-        eventBusService.post(cssClassUiEvent);
+        metamodelEventService.fireCssClassUiEvent(cssClassUiEvent);
 
         final String cssClass = cssClassUiEvent.getCssClass();
 

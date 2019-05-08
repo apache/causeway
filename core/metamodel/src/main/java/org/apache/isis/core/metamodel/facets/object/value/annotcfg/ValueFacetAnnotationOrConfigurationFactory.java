@@ -84,16 +84,16 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
         // create from annotation, if present
         final Value annotation = Annotations.getAnnotation(cls, Value.class);
         if (annotation != null) {
-            final ValueFacetAnnotation facet = new ValueFacetAnnotation(cls, holder, servicesInjector);
+            final ValueFacetAnnotation facet = new ValueFacetAnnotation(cls, holder);
             if (facet.isValid()) {
                 return facet;
             }
         }
 
         // otherwise, try to create from configuration, if present
-        final String semanticsProviderName = ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(cls, getConfiguration());
+        final String semanticsProviderName = ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(cls);
         if (!_Strings.isNullOrEmpty(semanticsProviderName)) {
-            final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder, servicesInjector);
+            final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder);
             if (facet.isValid()) {
                 return facet;
             }

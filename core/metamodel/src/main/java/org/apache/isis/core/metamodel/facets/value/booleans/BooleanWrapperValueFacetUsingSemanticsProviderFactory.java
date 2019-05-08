@@ -36,7 +36,7 @@ public class BooleanWrapperValueFacetUsingSemanticsProviderFactory extends Value
         if (type != Boolean.class) {
             return;
         }
-        addFacets(new BooleanWrapperValueSemanticsProvider(holder, getContext()));
+        addFacets(new BooleanWrapperValueSemanticsProvider(holder));
     }
 
 }

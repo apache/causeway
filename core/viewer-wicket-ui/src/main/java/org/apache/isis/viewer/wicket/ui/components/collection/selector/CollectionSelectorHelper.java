@@ -146,7 +146,7 @@ public class CollectionSelectorHelper implements Serializable {
     private Bookmark bookmarkHintIfAny() {
         final EntityModel entityModel = this.model.getEntityModel();
         return entityModel != null
-                ? entityModel.getObjectAdapterMemento().asHintingBookmark()
+                ? entityModel.getObjectAdapterMemento().asHintingBookmarkIfSupported()
                         : null;
     }
 

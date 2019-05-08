@@ -27,7 +27,6 @@ import java.util.Map;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
@@ -35,8 +34,6 @@ import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoicesFacetAbstract implements ImperativeFacet {
 
@@ -46,11 +43,8 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
     public ActionParameterChoicesFacetViaMethod(
             final Method method,
             final Class<?> choicesType,
-            final FacetHolder holder,
-            final SpecificationLoader specificationLookup,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final ObjectAdapterProvider adapterProvider) {
-        super(holder, specificationLookup, authenticationSessionProvider, adapterProvider);
+            final FacetHolder holder) {
+        super(holder);
         this.method = method;
         this.choicesType = choicesType;
     }

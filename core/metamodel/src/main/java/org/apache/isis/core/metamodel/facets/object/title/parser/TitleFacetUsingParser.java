@@ -23,23 +23,20 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 
 public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
 
     private final Parser parser;
-    private final ServicesInjector dependencyInjector;
 
-    public TitleFacetUsingParser(final Parser parser, final FacetHolder holder, final ServicesInjector dependencyInjector) {
+    public TitleFacetUsingParser(final Parser parser, final FacetHolder holder) {
         super(TitleFacet.class, holder, Derivation.NOT_DERIVED);
         this.parser = parser;
-        this.dependencyInjector = dependencyInjector;
     }
 
     @Override
     protected String toStringValues() {
-        getServicesInjector().injectServicesInto(parser);
+        getServiceInjector().injectServicesInto(parser);
         return parser.toString();
     }
 
@@ -52,7 +49,7 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
         if (object == null) {
             return null;
         }
-        getServicesInjector().injectServicesInto(parser);
+        getServiceInjector().injectServicesInto(parser);
         return parser.displayTitleOf(object);
     }
 
@@ -72,21 +69,11 @@ public class TitleFacetUsingParser extends FacetAbstract implements TitleFacet {
         if (object == null) {
             return null;
         }
-        getServicesInjector().injectServicesInto(parser);
+        getServiceInjector().injectServicesInto(parser);
         return parser.displayTitleOf(object, usingMask);
     }
 
 
-    // //////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // //////////////////////////////////////////////////////
-
-    /**
-     * @return the dependencyInjector
-     */
-    public ServicesInjector getServicesInjector() {
-        return dependencyInjector;
-    }
 
 
 }

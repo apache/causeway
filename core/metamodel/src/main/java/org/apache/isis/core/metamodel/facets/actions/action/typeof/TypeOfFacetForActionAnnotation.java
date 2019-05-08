@@ -21,15 +21,13 @@ package org.apache.isis.core.metamodel.facets.actions.action.typeof;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class TypeOfFacetForActionAnnotation extends TypeOfFacetAbstract {
 
     public TypeOfFacetForActionAnnotation(
             final Class<?> type,
-            final SpecificationLoader specificationLookup,
             final FacetHolder holder) {
-        super(type, holder, specificationLookup);
+        super(type, holder);
     }
 
 }

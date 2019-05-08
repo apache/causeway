@@ -28,10 +28,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.commons.internal.base._Strings;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.grid.Grid;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -83,7 +82,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RepresentationType representationType = RepresentationType.TYPE_LIST;
         init(representationType, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
+        final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().currentSpecifications();
 
         final TypeListReprRenderer renderer = new TypeListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(allSpecifications).includesSelf();

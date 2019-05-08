@@ -25,33 +25,32 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import javax.inject.Singleton;
 import javax.servlet.ServletContext;
+
 import com.google.common.base.Charsets;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.WebAppConstants;
-
 import com.google.common.io.CharSource;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.WebAppConstants;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 
 /**
  * An implementation that reads from /WEB-INF/...
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class TranslationsResolverWicket implements TranslationsResolver {
 
     public static Logger LOG = LoggerFactory.getLogger(TranslationsResolverWicket.class);

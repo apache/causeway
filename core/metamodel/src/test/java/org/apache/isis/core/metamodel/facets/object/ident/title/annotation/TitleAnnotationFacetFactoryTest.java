@@ -18,17 +18,13 @@
  */
 package org.apache.isis.core.metamodel.facets.object.ident.title.annotation;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import java.util.Optional;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -42,9 +38,13 @@ import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetV
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -63,25 +63,22 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
         context.allowing(mockSpecificationLoader);
 
         facetFactory = new TitleAnnotationFacetFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
 
         context.checking(new Expectations() {
             {
-                allowing(mockServicesInjector).lookupService(AuthenticationSessionProvider.class);
-                will(returnValue(mockAuthenticationSessionProvider));
+                allowing(mockServiceRegistry).lookupService(AuthenticationSessionProvider.class);
+                will(returnValue(Optional.of(mockAuthenticationSessionProvider)));
 
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(mockAuthenticationSession));
 
-                allowing(mockServicesInjector).getSpecificationLoader();
-                will(returnValue(mockSpecificationLoader));
-
-                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-                will(returnValue(mockPersistenceSessionServiceInternal));
+//                allowing(mockServicesInjector).getSpecificationLoader();
+//                will(returnValue(mockSpecificationLoader));
+//
+//                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
+//                will(returnValue(mockPersistenceSessionServiceInternal));
             }
         });
-
-        facetFactory.setServicesInjector(mockServicesInjector);
 
     }
 

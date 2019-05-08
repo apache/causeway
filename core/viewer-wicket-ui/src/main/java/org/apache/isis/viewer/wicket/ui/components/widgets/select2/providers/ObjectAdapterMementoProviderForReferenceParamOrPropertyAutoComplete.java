@@ -67,7 +67,7 @@ extends ObjectAdapterMementoProviderAbstract {
                     getScalarModel().getAutoComplete(term, getAuthenticationSession());
             autoCompleteChoices.addAll(autoCompleteAdapters);
         }
-        return _Lists.map(autoCompleteChoices, ObjectAdapterMemento.Functions.fromAdapter());
+        return _Lists.map(autoCompleteChoices, ObjectAdapterMemento::ofAdapter);
     }
 
     @Override
@@ -77,7 +77,7 @@ extends ObjectAdapterMementoProviderAbstract {
                     return null;
                 }
                 final RootOid oid = RootOid.deString(input);
-                return ObjectAdapterMemento.createPersistent(oid);
+                return ObjectAdapterMemento.ofRootOid(oid);
         };
         return _NullSafe.stream(ids).map(function).collect(Collectors.toList());
     }

@@ -20,11 +20,10 @@
 package org.apache.isis.core.metamodel.facets.properties.property.regex;
 
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.apache.isis.commons.internal.base._Strings;
-import java.util.Map;
-
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;

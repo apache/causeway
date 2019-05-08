@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
@@ -31,13 +34,11 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.events.domain.ActionDomainEvent;
+import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -49,19 +50,14 @@ import org.apache.isis.applib.services.iactn.InteractionContext;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.metamodel.MetaModelService.Mode;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
-import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.base._Strings;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.MethodInvocationPreprocessor;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
@@ -71,35 +67,22 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ixn.InteractionDtoServiceInternal;
-import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.schema.ixn.v1.ActionInvocationDto;
-
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
 extends ActionInvocationFacetAbstract
 implements ImperativeFacet {
 
-    @SuppressWarnings("unused")
-    private final static Logger LOG = LoggerFactory.getLogger(ActionInvocationFacetForDomainEventAbstract.class);
-
     private final Method method;
     private final ObjectSpecification onType;
     private final ObjectSpecification returnType;
 
-    private final PersistenceSessionServiceInternal persistenceSessionServiceInternal;
-    private final AuthenticationSessionProvider authenticationSessionProvider;
-
-    private final ServicesInjector servicesInjector;
-    private final IsisConfiguration configuration;
+    private final ServiceRegistry serviceRegistry;
+    
     private final Class<? extends ActionDomainEvent<?>> eventType;
     private final DomainEventHelper domainEventHelper;
 
@@ -108,18 +91,14 @@ implements ImperativeFacet {
                     final Method method,
                     final ObjectSpecification onType,
                     final ObjectSpecification returnType,
-                    final FacetHolder holder,
-                    final ServicesInjector servicesInjector) {
+                    final FacetHolder holder) {
         super(holder);
         this.eventType = eventType;
         this.method = method;
         this.onType = onType;
         this.returnType = returnType;
-        this.authenticationSessionProvider = servicesInjector.getAuthenticationSessionProvider();
-        this.persistenceSessionServiceInternal = servicesInjector.getPersistenceSessionServiceInternal();
-        this.servicesInjector = servicesInjector;
-        this.configuration = _Config.getConfiguration();
-        this.domainEventHelper = new DomainEventHelper(this.servicesInjector);
+        this.serviceRegistry = getServiceRegistry();
+        this.domainEventHelper = DomainEventHelper.ofServiceRegistry(serviceRegistry);
     }
 
     /**
@@ -155,10 +134,13 @@ implements ImperativeFacet {
             final ObjectAdapter[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final ObjectAdapter holder = 
-                getPersistenceSessionServiceInternal().executeWithinTransaction(()->
+        final ObjectAdapter executionResult = 
+        		getTransactionService().executeWithinTransaction(()->
                     doInvoke(owningAction, targetAdapter, mixedInAdapter, argumentAdapters, interactionInitiatedBy));
-        return holder;
+        
+        PersistableTypeGuard.instate(executionResult);
+        
+        return executionResult;
     }
 
     ObjectAdapter doInvoke(
@@ -417,9 +399,9 @@ implements ImperativeFacet {
         }
 
         final Class<?> domainType = resultAdapter.getSpecification().getCorrespondingClass();
-        final MetaModelService.Sort sort = getMetaModelService().sortOf(domainType, Mode.STRICT);
+        final ManagedObjectSort sort = getMetaModelService().sortOf(domainType, Mode.STRICT);
         switch (sort) {
-        case JDO_ENTITY:
+        case ENTITY:
             final Object domainObject = resultAdapter.getPojo();
             // ensure that any still-to-be-persisted adapters get persisted to DB.
             if(!getRepositoryService().isPersistent(domainObject)) {
@@ -438,19 +420,11 @@ implements ImperativeFacet {
     }
 
     private MetaModelService getMetaModelService() {
-        return servicesInjector.lookupServiceElseFail(MetaModelService.class);
-    }
-
-    private TransactionService getTransactionService() {
-        return servicesInjector.lookupServiceElseFail(TransactionService.class);
+        return serviceRegistry.lookupServiceElseFail(MetaModelService.class);
     }
 
     private BookmarkService getBookmarkService() {
-        return servicesInjector.lookupServiceElseFail(BookmarkService.class);
-    }
-
-    private RepositoryService getRepositoryService() {
-        return servicesInjector.lookupServiceElseFail(RepositoryService.class);
+        return serviceRegistry.lookupServiceElseFail(BookmarkService.class);
     }
 
     protected ObjectAdapter filteredIfRequired(
@@ -517,55 +491,35 @@ implements ImperativeFacet {
     // /////////////////////////////////////////////////////////
 
     private CommandContext getCommandContext() {
-        return servicesInjector.lookupServiceElseFail(CommandContext.class);
+        return serviceRegistry.lookupServiceElseFail(CommandContext.class);
     }
     private InteractionContext getInteractionContext() {
-        return servicesInjector.lookupServiceElseFail(InteractionContext.class);
+        return serviceRegistry.lookupServiceElseFail(InteractionContext.class);
     }
 
     private QueryResultsCache getQueryResultsCache() {
-        return servicesInjector.lookupServiceElseFail(QueryResultsCache.class);
+        return serviceRegistry.lookupServiceElseFail(QueryResultsCache.class);
     }
 
     private CommandService getCommandService() {
-        return servicesInjector.lookupServiceElseFail(CommandService.class);
+        return serviceRegistry.lookupServiceElseFail(CommandService.class);
     }
 
     private ClockService getClockService() {
-        return servicesInjector.lookupServiceElseFail(ClockService.class);
+        return serviceRegistry.lookupServiceElseFail(ClockService.class);
     }
 
     private PublishingServiceInternal getPublishingServiceInternal() {
-        return servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
+        return serviceRegistry.lookupServiceElseFail(PublishingServiceInternal.class);
     }
 
     private InteractionDtoServiceInternal getInteractionDtoServiceInternal() {
-        return servicesInjector.lookupServiceElseFail(InteractionDtoServiceInternal.class);
+        return serviceRegistry.lookupServiceElseFail(InteractionDtoServiceInternal.class);
     }
 
     // /////////////////////////////////////////////////////////
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////////
-
-    private ObjectAdapterProvider getObjectAdapterProvider() {
-        return persistenceSessionServiceInternal;
-    }
-    
-    private PersistenceSessionServiceInternal getPersistenceSessionServiceInternal() {
-        return persistenceSessionServiceInternal;
-    }
-
-    public IsisConfiguration getConfiguration() {
-        return configuration;
-    }
-
-    public AuthenticationSession getAuthenticationSession() {
-        return authenticationSessionProvider.getAuthenticationSession();
-    }
-
-    public TransactionState getTransactionState() {
-        return persistenceSessionServiceInternal.getTransactionState();
-    }
 
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

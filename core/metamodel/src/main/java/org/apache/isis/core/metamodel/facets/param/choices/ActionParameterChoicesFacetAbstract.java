@@ -19,14 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.param.choices;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract implements ActionParameterChoicesFacet {
 
@@ -34,39 +29,9 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
         return ActionParameterChoicesFacet.class;
     }
 
-    private final SpecificationLoader specificationLoader;
-    private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final ObjectAdapterProvider adapterProvider;
-
     public ActionParameterChoicesFacetAbstract(
-            final FacetHolder holder,
-            final SpecificationLoader specificationLoader,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final ObjectAdapterProvider adapterProvider) {
+            final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.specificationLoader = specificationLoader;
-        this.authenticationSessionProvider = authenticationSessionProvider;
-        this.adapterProvider = adapterProvider;
-    }
-
-    protected ObjectSpecification getSpecification(final Class<?> type) {
-        return type != null ? getSpecificationLoader().loadSpecification(type) : null;
-    }
-
-    // /////////////////////////////////////////////////////////
-    // Dependencies
-    // /////////////////////////////////////////////////////////
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-
-    protected ObjectAdapterProvider getObjectAdapterProvider() {
-        return adapterProvider;
-    }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return authenticationSessionProvider.getAuthenticationSession();
     }
 
 }

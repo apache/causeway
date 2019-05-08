@@ -32,8 +32,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.log4j.Logger;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
@@ -69,6 +67,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 //TODO deprecated non standard import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.PrettyPrinting;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.server.resources.serialization.SerializationStrategy;
+import org.apache.log4j.Logger;
 
 @Path("/objects")
 public class DomainObjectResourceServerside extends ResourceAbstract implements DomainObjectResource {
@@ -106,7 +105,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no class with domainType Id of '%s')", domainType);
         }
 
-        final ObjectAdapter objectAdapter = getResourceContext().getPersistenceSession().newTransientInstance(domainTypeSpec);
+        final ObjectAdapter objectAdapter = getResourceContext().newTransientInstance(domainTypeSpec);
 
         final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(getResourceContext(), objectAdapter);
 
@@ -123,9 +122,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         if (validity.isVetoed()) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
         }
-        getResourceContext().getPersistenceSession().makePersistentInTransaction(objectAdapter);
+        getResourceContext().makePersistentInTransaction(objectAdapter);
 
-        return newDomainResourceHelper(objectAdapter).objectRepresentation(RepresentationService.Intent.JUST_CREATED);
+        return newDomainResourceHelper(objectAdapter).objectRepresentation();
     }
 
 

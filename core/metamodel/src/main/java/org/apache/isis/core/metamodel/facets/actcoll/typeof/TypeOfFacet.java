@@ -30,7 +30,6 @@ import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Collections;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * The type of the collection or the action.
@@ -49,8 +48,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
         public static TypeOfFacet inferFromGenericReturnType(
                 final Class<?> cls,
                 final Method method,
-                final FacetHolder holder,
-                final SpecificationLoader specificationLoader) {
+                final FacetHolder holder) {
 
             final Class<?> methodReturnType = method.getReturnType();
             if (!_Collections.isCollectionType(methodReturnType)) {
@@ -72,7 +70,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
             final Object methodActualTypeArgument = methodActualTypeArguments[0];
             if (methodActualTypeArgument instanceof Class) {
                 final Class<?> actualType = (Class<?>) methodActualTypeArgument;
-                return new TypeOfFacetInferredFromGenerics(actualType, holder, specificationLoader);
+                return new TypeOfFacetInferredFromGenerics(actualType, holder);
             }
 
             if (methodActualTypeArgument instanceof TypeVariable) {
@@ -92,7 +90,7 @@ public interface TypeOfFacet extends SingleClassValueFacet {
                             if(actualType instanceof Class) {
                                 // just being safe
                                 final Class<?> actualCls = (Class<?>) actualType;
-                                return new TypeOfFacetInferredFromGenerics(actualCls, holder, specificationLoader);
+                                return new TypeOfFacetInferredFromGenerics(actualCls, holder);
                             }
                         }
                     }
@@ -105,11 +103,11 @@ public interface TypeOfFacet extends SingleClassValueFacet {
         @Programmatic
         public static TypeOfFacet inferFromArrayType(
                 final FacetHolder holder,
-                final Class<?> type,
-                final SpecificationLoader specificationLoader) {
+                final Class<?> type) {
+            
             final Class<?> elementType = _Arrays.inferComponentTypeIfAny(type);
             return elementType != null
-                    ? new TypeOfFacetInferredFromArray(elementType, holder, specificationLoader)
+                    ? new TypeOfFacetInferredFromArray(elementType, holder)
                             : null;
         }
 
@@ -117,12 +115,11 @@ public interface TypeOfFacet extends SingleClassValueFacet {
         public static TypeOfFacet inferFromGenericParamType(
                 final FacetHolder holder,
                 final Class<?> parameterType,
-                final Type genericParameterType,
-                final SpecificationLoader specificationLoader) {
+                final Type genericParameterType) {
 
             final Class<?> elementType = _Collections.inferElementTypeIfAny(parameterType, genericParameterType);
             return elementType != null
-                    ? new TypeOfFacetInferredFromGenerics(elementType, holder, specificationLoader)
+                    ? new TypeOfFacetInferredFromGenerics(elementType, holder)
                             : null;
         }
     }

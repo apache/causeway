@@ -19,14 +19,43 @@
 
 package org.apache.isis.core.security.authentication;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 public interface AuthenticationRequest {
 
-    String getName();
+    /**
+     * Account's name. 
+     * @return nullable
+     */
+    public @Nullable String getName();
 
-    List<String> getRoles();
-
-    void setRoles(List<String> roles);
+    /**
+     * Account's roles as Stream.
+     * @return non-null
+     * @since 2.0.0-M2
+     */
+    public Stream<String> streamRoles();
+    
+    /**
+     * Add a role to associate with the account. Null or empty roles are ignored.
+     * @param role
+     * @since 2.0.0-M2
+     */
+    public void addRole(@Nullable String role);
+    
+    /**
+     * Add a roles to associate with the account. Null or empty roles are ignored.
+     * @param roles
+     * @since 2.0.0-M2
+     */
+    public default void addRoles(@Nullable Collection<String> roles) {
+        stream(roles)
+        .forEach(this::addRole);
+    }
 
 }

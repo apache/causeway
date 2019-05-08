@@ -23,8 +23,6 @@ import java.util.List;
 
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.builder.IsisConfigurationBuilder;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.specloader.ReflectorConstants;

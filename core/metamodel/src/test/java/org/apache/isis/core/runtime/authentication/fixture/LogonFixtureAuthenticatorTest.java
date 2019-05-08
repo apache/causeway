@@ -26,7 +26,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.security.authentication.AuthenticationRequestAbstract;
 import org.apache.isis.core.security.authentication.fixtures.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.security.authentication.fixtures.LogonFixtureAuthenticator;
@@ -54,7 +53,7 @@ public class LogonFixtureAuthenticatorTest {
     @Before
     public void setUp() {
 
-        logonFixtureRequest = new AuthenticationRequestLogonFixture(new LogonFixture("joebloggs"));
+        logonFixtureRequest = AuthenticationRequestLogonFixture.of("joebloggs");
         someOtherRequest = new SomeOtherAuthenticationRequest();
         authenticator = new LogonFixtureAuthenticator();
     }

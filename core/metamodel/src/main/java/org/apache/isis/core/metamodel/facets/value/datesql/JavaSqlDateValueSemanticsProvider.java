@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.value.date.DateValueSemanticsProviderAbstract;
 import org.apache.isis.core.metamodel.facets.value.dateutil.JavaUtilDateValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.value.timesql.JavaSqlTimeValueSemanticsProvider;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 /**
  * An adapter that handles {@link java.sql.Date} with only date component.
@@ -46,11 +45,11 @@ public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProvide
      * {@link EncoderDecoder}.
      */
     public JavaSqlDateValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public JavaSqlDateValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE, context);
+    public JavaSqlDateValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, Date.class, Immutability.NOT_IMMUTABLE, EqualByContent.NOT_HONOURED, DEFAULT_VALUE);
     }
 
     @Override

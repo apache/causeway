@@ -26,7 +26,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Password> implements
@@ -43,12 +42,11 @@ PasswordValueFacet {
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public PasswordValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public PasswordValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, Password.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE,
-                context);
+    public PasswordValueSemanticsProvider(final FacetHolder holder) {
+        super(type(), holder, Password.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
     }
 
     // //////////////////////////////////////////////////////////////////

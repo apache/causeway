@@ -22,6 +22,8 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt.password_reset;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
@@ -35,6 +37,7 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
+import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.EmailVerificationUrlService;
@@ -47,6 +50,14 @@ import org.apache.isis.viewer.wicket.ui.pages.accmngt.EmailAvailableValidator;
  */
 public class PasswordResetEmailPanel extends Panel {
 
+    private static final long serialVersionUID = 1L;
+    
+    @Inject private transient EmailNotificationService emailNotificationService;
+    @Inject private transient EmailService emailService;
+    @Inject private transient EmailVerificationUrlService emailVerificationUrlService;
+    @Inject private transient PageNavigationService pageNavigationService;
+    @Inject private transient WebAppConfigBean webAppConfigBean;
+    
     /**
      * Constructor
      *
@@ -70,6 +81,8 @@ public class PasswordResetEmailPanel extends Panel {
         formGroup.add(emailField);
 
         Button signUpButton = new Button("passwordResetSubmit") {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public void onSubmit() {
                 super.onSubmit();
@@ -78,16 +91,21 @@ public class PasswordResetEmailPanel extends Panel {
 
                 String confirmationUrl = emailVerificationUrlService.createVerificationUrl(PageType.PASSWORD_RESET, email);
 
-                /**
-                 * We have to init() the services here because the Isis runtime is not available to us
-                 * (guice will have instantiated a new instance of the service).
-                 *
-                 * We do it this way just so that the programming model for the EmailService is similar to regular Isis-managed services.
-                 */
-                emailNotificationService.init();
-                emailService.init();
+//TODO [2033] remove ...                
+//                /**
+//                 * We have to init() the services here because the Isis runtime is not available to us
+//                 * (guice will have instantiated a new instance of the service).
+//                 *
+//                 * We do it this way just so that the programming model for the EmailService is similar to regular Isis-managed services.
+//                 */
+//                emailNotificationService.init();
+//                emailService.init();
 
-                final PasswordResetEvent passwordResetEvent = new PasswordResetEvent(email, confirmationUrl, applicationName);
+                final PasswordResetEvent passwordResetEvent = new PasswordResetEvent(
+                        email, 
+                        confirmationUrl, 
+                        webAppConfigBean.getApplicationName());
+
                 boolean emailSent = emailNotificationService.send(passwordResetEvent);
                 if (emailSent) {
                     Map<String, String> map = new HashMap<>();
@@ -105,20 +123,6 @@ public class PasswordResetEmailPanel extends Panel {
         form.add(signUpButton);
     }
 
-    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
-    private EmailNotificationService emailNotificationService;
 
-    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
-    private EmailService emailService;
-
-    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
-    private EmailVerificationUrlService emailVerificationUrlService;
-
-    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
-    private PageNavigationService pageNavigationService;
-
-    @javax.inject.Inject // strangely, this isn't a @com.google.inject.Inject
-    @com.google.inject.name.Named("applicationName")
-    private String applicationName;
 
 }

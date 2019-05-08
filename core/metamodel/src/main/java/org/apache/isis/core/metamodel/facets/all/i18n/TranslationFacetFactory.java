@@ -20,6 +20,7 @@ package org.apache.isis.core.metamodel.facets.all.i18n;
 
 
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -29,7 +30,6 @@ import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class TranslationFacetFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
 
@@ -121,7 +121,7 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
     // //////////////////////////////////////
 
     /**
-     * Looks up from {@link ServicesInjector}.
+     * Looks up from {@link ServiceInjector}.
      *
      * <p>
      *     There is guaranteed to be an instance because <code>TranslationServicePo</code> (in runtime) is annotated
@@ -130,7 +130,7 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
      */
     TranslationService lookupTranslationService() {
         if(translationService == null) {
-            translationService = servicesInjector.lookupServiceElseFail(TranslationService.class);
+            translationService = getTranslationService();
         }
         return translationService;
     }

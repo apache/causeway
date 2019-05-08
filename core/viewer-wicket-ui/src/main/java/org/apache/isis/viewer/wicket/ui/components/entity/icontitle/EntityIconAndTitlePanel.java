@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.icontitle;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -32,7 +34,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -169,6 +171,8 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
         final Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ENTITY);
 
         final BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>(ID_ENTITY_LINK, pageClass, pageParameters) {
+            private static final long serialVersionUID = 1L;
+
             @Override
             public boolean isVisible() {
                 final ObjectAdapter targetAdapter = entityModel.getObject();
@@ -220,8 +224,9 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     public ObjectAdapter getContextAdapterIfAny() {
         ObjectAdapterModel model = getModel();
         ObjectAdapterMemento contextAdapterMementoIfAny = model.getContextAdapterIfAny();
-        return contextAdapterMementoIfAny != null? contextAdapterMementoIfAny.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                isisSessionFactory.getCurrentSession().getPersistenceSession(), isisSessionFactory.getSpecificationLoader()): null;
+        return contextAdapterMementoIfAny != null
+        		? contextAdapterMementoIfAny.getObjectAdapter()
+        				: null;
     }
 
     static String abbreviated(final String str, final int maxLength) {
@@ -248,17 +253,13 @@ public class EntityIconAndTitlePanel extends PanelAbstract<ObjectAdapterModel> {
     // Dependency Injection
     // ///////////////////////////////////////////////
 
-    @com.google.inject.Inject
-    private transient IsisSessionFactory isisSessionFactory;
 
-    @com.google.inject.Inject
-    private ImageResourceCache imageCache;
+    @Inject private ImageResourceCache imageCache;
     protected ImageResourceCache getImageCache() {
         return imageCache;
     }
 
-    @com.google.inject.Inject
-    private WicketViewerSettings settings;
+    @Inject private WicketViewerSettings settings;
     @Override
     protected WicketViewerSettings getSettings() {
         return settings;

@@ -39,7 +39,7 @@ public class JodaDateTimeValueFacetUsingSemanticsProviderFactory extends ValueFa
         if (type != DateTime.class) {
             return;
         }
-        addFacets(new JodaDateTimeValueSemanticsProvider(holder, getContext()));
+        addFacets(new JodaDateTimeValueSemanticsProvider(holder));
     }
 
 }

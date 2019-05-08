@@ -40,10 +40,8 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class ActionDomainEventFacetAbstract
 extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
@@ -60,17 +58,15 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
 
     public ActionDomainEventFacetAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
-                    final FacetHolder holder,
-                    final ServicesInjector servicesInjector,
-                    final SpecificationLoader specificationLoader) {
-        super(type(), holder, eventType, specificationLoader);
+                    final FacetHolder holder) {
+        super(type(), holder, eventType);
         this.eventType = eventType;
 
-        this.translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);
+        this.translationService = getTranslationService();
         // sadness: same as in TranslationFactory
         this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
 
-        domainEventHelper = new DomainEventHelper(servicesInjector);
+        domainEventHelper = DomainEventHelper.ofServiceRegistry(getServiceRegistry());
     }
 
     @Override
@@ -78,7 +74,7 @@ extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
         return eventType;
     }
 
-    protected Class eventType() {
+    protected Class<?> eventType() {
         return eventType;
     }
 

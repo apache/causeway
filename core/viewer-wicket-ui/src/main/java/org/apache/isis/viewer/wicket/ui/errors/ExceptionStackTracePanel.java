@@ -19,16 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.errors;
 
-import org.apache.isis.applib.services.error.Ticket;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.PageType;
-import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
-import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
-import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
-import org.apache.isis.viewer.wicket.ui.util.Components;
-import org.apache.isis.viewer.wicket.ui.util.Links;
+import javax.inject.Inject;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -43,6 +35,17 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+
+import org.apache.isis.applib.services.error.Ticket;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.models.PageType;
+import org.apache.isis.viewer.wicket.ui.components.scalars.markup.MarkupComponent;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
+import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
+import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;
+import org.apache.isis.viewer.wicket.ui.util.Components;
+import org.apache.isis.viewer.wicket.ui.util.Links;
 
 public class ExceptionStackTracePanel extends Panel {
 
@@ -137,7 +140,7 @@ public class ExceptionStackTracePanel extends Panel {
 
     }
 
-    @com.google.inject.Inject
+    @Inject
     PageClassRegistry pageClassRegistry;
 
 }

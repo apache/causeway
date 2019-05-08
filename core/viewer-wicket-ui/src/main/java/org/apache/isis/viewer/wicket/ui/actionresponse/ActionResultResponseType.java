@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
@@ -42,11 +43,13 @@ import org.apache.isis.viewer.wicket.ui.pages.standalonecollection.StandaloneCol
 import org.apache.isis.viewer.wicket.ui.pages.value.ValuePage;
 import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
+import lombok.val;
+
 public enum ActionResultResponseType {
     OBJECT {
         @Override
         public ActionResultResponse interpretResult(final ActionModel model, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
-            final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter, model.getIsisSessionFactory());
+            final ObjectAdapter actualAdapter = determineActualAdapter(resultAdapter); // intercepts collections
             return toEntityPage(model, actualAdapter, null);
         }
 
@@ -59,7 +62,7 @@ public enum ActionResultResponseType {
     COLLECTION {
         @Override
         public ActionResultResponse interpretResult(final ActionModel actionModel, final AjaxRequestTarget target, final ObjectAdapter resultAdapter) {
-            final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter, actionModel.getIsisSessionFactory());
+            final EntityCollectionModel collectionModel = EntityCollectionModel.createStandalone(resultAdapter);
             // take a copy of the actionModel, because the original can get mutated (specifically: its arguments cleared)
             final ActionModel actionModelCopy = actionModel.copy();
             collectionModel.setActionHint(actionModelCopy);
@@ -128,25 +131,27 @@ public enum ActionResultResponseType {
     }
 
     private static ObjectAdapter determineActualAdapter(
-            final ObjectAdapter resultAdapter,
-            final IsisSessionFactory isisSessionFactory) {
+            final ObjectAdapter resultAdapter) {
+
         if (resultAdapter.getSpecification().isNotCollection()) {
             return resultAdapter;
         } else {
             // will only be a single element
             final List<Object> pojoList = asList(resultAdapter);
             final Object pojo = pojoList.get(0);
-            return adapterFor(pojo, isisSessionFactory);
+            
+            val pojoToAdapter = IsisContext.pojoToAdapter();
+            val actualAdapter = pojoToAdapter.apply(pojo);
+            
+            return actualAdapter;
         }
     }
 
-    private static ObjectAdapter adapterFor(
-            final Object pojo,
-            final IsisSessionFactory isisSessionFactory) {
-        return isisSessionFactory.getCurrentSession().getPersistenceSession().adapterFor(pojo);
-    }
-
-    private static ActionResultResponse toEntityPage(final ActionModel model, final ObjectAdapter actualAdapter, final ConcurrencyException exIfAny) {
+    private static ActionResultResponse toEntityPage(
+    		final ActionModel model, 
+    		final ObjectAdapter actualAdapter, 
+    		final ConcurrencyException exIfAny) {
+    	
         // this will not preserve the URL (because pageParameters are not copied over)
         // but trying to preserve them seems to cause the 302 redirect to be swallowed somehow
         final EntityPage entityPage =

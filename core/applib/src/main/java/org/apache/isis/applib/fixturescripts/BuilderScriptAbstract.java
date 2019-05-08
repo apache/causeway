@@ -50,7 +50,7 @@ extends FixtureScript implements WithPrereqs<T>, FixtureScriptWithExecutionStrat
             final FixtureScript parentFixtureScript,
             final ExecutionContext executionContext) {
 
-        parentFixtureScript.serviceRegistry.injectServicesInto(this);
+        parentFixtureScript.serviceInjector.injectServicesInto(this);
 
         execPrereqs(executionContext);
 

@@ -21,7 +21,12 @@ package org.apache.isis.viewer.restfulobjects.applib.util;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
 import javax.ws.rs.core.Response;
+
+import org.apache.isis.viewer.legacy.RestEasyLegacy;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -38,9 +43,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-
-import org.apache.isis.viewer.legacy.RestEasyLegacy;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public final class JsonMapper {
 

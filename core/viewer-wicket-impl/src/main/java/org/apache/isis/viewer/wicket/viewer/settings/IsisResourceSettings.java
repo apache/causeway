@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.viewer.settings;
 
 import java.util.List;
 
-import org.apache.isis.viewer.wicket.viewer.integration.wicket.LocalizerForIsis;
 import org.apache.wicket.Application;
 import org.apache.wicket.Localizer;
 import org.apache.wicket.resource.loader.ClassStringResourceLoader;
@@ -33,10 +32,15 @@ import org.apache.wicket.resource.loader.ValidatorStringResourceLoader;
 import org.apache.wicket.settings.ResourceSettings;
 import org.apache.wicket.util.lang.Generics;
 
+import lombok.Getter;
+
 public class IsisResourceSettings extends ResourceSettings {
 
     /** Chain of string resource loaders to use */
     private final List<IStringResourceLoader> stringResourceLoaders = Generics.newArrayList(4);
+
+	@Getter(onMethod=@__({@Override}), lazy=true)
+	private final Localizer localizer = new Localizer();
 
     /**
      * Configures Wicket's default ResourceLoaders.
@@ -102,13 +106,9 @@ public class IsisResourceSettings extends ResourceSettings {
      * @see org.apache.wicket.settings.ResourceSettings#getStringResourceLoaders()
      */
     @Override
-    public List<IStringResourceLoader> getStringResourceLoaders()
-    {
+    public List<IStringResourceLoader> getStringResourceLoaders() {
         return stringResourceLoaders;
     }
 
-    @Override
-    public Localizer getLocalizer() {
-        return new LocalizerForIsis();
-    }
+
 }

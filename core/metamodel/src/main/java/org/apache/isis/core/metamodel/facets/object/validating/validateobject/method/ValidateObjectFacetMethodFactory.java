@@ -52,7 +52,7 @@ public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFact
                 new Class<?>[]{String.class, TranslatableString.class},
                 NO_PARAMETERS_TYPES);
         if (method != null) {
-            final TranslationService translationService = servicesInjector.lookupService(TranslationService.class).orElse(null);;
+            final TranslationService translationService = getTranslationService();
             // sadness: same as in TranslationFactory
             final String translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassIdentityString();
             FacetUtil.addFacet(new ValidateObjectFacetMethod(method, translationService, translationContext, facetHolder));

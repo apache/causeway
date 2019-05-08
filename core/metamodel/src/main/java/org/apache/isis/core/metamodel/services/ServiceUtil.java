@@ -18,8 +18,13 @@
  */
 package org.apache.isis.core.metamodel.services;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.enterprise.inject.spi.Bean;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.commons.internal.base._Strings;
@@ -32,6 +37,66 @@ public final class ServiceUtil {
     private ServiceUtil() {
     }
 
+    //FIXME [2033] I found no standardized way yet to do this, maybe create a list during bean-scan?
+    public static String idOfBean(final Bean<?> serviceBean) {
+    	
+    	// serviceBean might also be a producer method
+    	// eg. org.jboss.weld.bean.ProducerMethod
+
+    	final Class<?> serviceClass = serviceBean.getBeanClass();
+    	
+    	final Set<Class<?>> implementedTypes = serviceBean.getTypes().stream()
+    			.filter(type->!type.getTypeName().equals(Object.class.getTypeName()))
+    			.filter(type->!type.getTypeName().equals(Serializable.class.getTypeName()))
+    			.filter(type->type instanceof Class)
+    			.map(type->(Class<?>) type)
+    			.collect(Collectors.toSet());
+    	
+    	
+    	for(Class<?> implementing : implementedTypes) {
+    		if(implementing.isAssignableFrom(serviceClass)) {
+    			
+    			//TODO [2033] explicitIdOfType() no longer supported ...
+//    			
+//    	        return explicitIdOfType(serviceClass, serviceClass::newInstance)
+//              .orElseGet(()->normalize(serviceClass));
+    			
+    			return normalize(serviceClass);
+    		}
+    	}
+    	
+    	if(implementedTypes.size()==1) {
+    		// we have a producer method
+    		return normalize(implementedTypes.iterator().next());	
+    	}
+    	
+    	// try to get a name from injection points
+    	final Set<Class<?>> requiredTypes = serviceBean.getInjectionPoints().stream()
+    	.map(ip->ip.getType())
+    	.filter(type->!type.getTypeName().equals(Object.class.getTypeName()))
+		.filter(type->!type.getTypeName().equals(Serializable.class.getTypeName()))
+		.filter(type->type instanceof Class)
+		.map(type->(Class<?>) type)
+		.collect(Collectors.toSet());
+    	
+    	if(requiredTypes.size()==1) {
+    		// we found a unique required type as defined by injection points for this bean
+    		return normalize(requiredTypes.iterator().next());	
+    	}
+    	
+    	return serviceBean.toString();
+    	
+//    	throw _Exceptions.unrecoverable(
+//    			String.format("Could not extract a service id from the given bean '%s', "
+//    					+ "implementedTypes='%s' requiredTypes='%s' from types %s.", 
+//    					serviceBean, 
+//    					implementedTypes,
+//    					requiredTypes,
+//    					serviceBean.getTypes()));
+    	
+
+    }
+    
     public static String idOfPojo(final Object serviceObject) {
         final Class<?> serviceClass = serviceObject.getClass();
         return explicitIdOfType(serviceClass, ()->serviceObject)
@@ -93,5 +158,6 @@ public final class ServiceUtil {
     private static String normalize(Class<?> serviceClass) {
         return serviceClass.getName();
     }
+
 
 }

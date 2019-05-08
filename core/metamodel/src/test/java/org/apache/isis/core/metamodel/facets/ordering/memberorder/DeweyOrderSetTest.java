@@ -25,10 +25,13 @@ import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
@@ -88,6 +91,9 @@ public class DeweyOrderSetTest extends TestCase {
 
     @Override
     protected void setUp() {
+        
+        _Context.clear();
+        
         mockTranslationService = context.mock(TranslationService.class);
         context.checking(new Expectations() {{
             allowing(mockTranslationService).translate(with(any(String.class)), with(any(String.class)));

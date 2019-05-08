@@ -24,8 +24,6 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.builder.IsisConfigurationBuilder;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -51,7 +49,6 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         super.setUp();
 
         facetFactory = new ValueFacetAnnotationOrConfigurationFactory();
-        facetFactory.setServicesInjector(stubServicesInjector);
     }
 
     @Override

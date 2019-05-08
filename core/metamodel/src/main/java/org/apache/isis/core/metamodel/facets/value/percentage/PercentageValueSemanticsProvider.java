@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
 import org.apache.isis.core.metamodel.facets.value.floats.FloatingPointValueFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Percentage> implements FloatingPointValueFacet {
 
@@ -54,11 +53,11 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndF
      * {@link EncoderDecoder}.
      */
     public PercentageValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public PercentageValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, Percentage.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
+    public PercentageValueSemanticsProvider(final FacetHolder holder) {
+        super(type(), holder, Percentage.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
 
         final String formatRequired = getConfiguration().getString(ConfigurationConstants.ROOT + "value.format.percentage");
         if (formatRequired == null) {

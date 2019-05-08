@@ -22,13 +22,13 @@ package org.apache.isis.core.runtime.system.transaction;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.WithTransactionScope;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -36,13 +36,11 @@ import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.publishing.PublishingServiceInternal;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.services.auditing.AuditingServiceInternal;
-import org.apache.isis.core.runtime.services.persistsession.PersistenceSessionServiceInternalDefault;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
  * Used by the {@link IsisTransactionManager} to captures a set of changes to be
@@ -169,30 +167,28 @@ public class IsisTransaction implements TransactionScopedComponent, Transaction 
     private final PublishingServiceInternal publishingServiceInternal;
     private final AuditingServiceInternal auditingServiceInternal;
 
-    private final List<WithTransactionScope> withTransactionScopes;
+    private final Iterable<WithTransactionScope> withTransactionScopes;
 
     private IsisException abortCause;
 
     public IsisTransaction(
             final UUID interactionId,
-            final int sequence,
-            /*final AuthenticationSession authenticationSession,*/
-            final ServicesInjector servicesInjector) {
+            final int sequence) {
 
         this.interactionId = interactionId;
         this.sequence = sequence;
         //        this.authenticationSession = authenticationSession;
 
-        final PersistenceSessionServiceInternalDefault persistenceSessionService = servicesInjector
+        ServiceRegistry serviceRegistry = IsisContext.getServiceRegistry();
+        final PersistenceSessionServiceInternalDefault persistenceSessionService = serviceRegistry
                 .lookupServiceElseFail(PersistenceSessionServiceInternalDefault.class);
         this.transactionManager = persistenceSessionService.getTransactionManager();
 
         //        this.messageBroker = authenticationSession.getMessageBroker();
-        this.publishingServiceInternal = servicesInjector.lookupServiceElseFail(PublishingServiceInternal.class);
-        this.auditingServiceInternal = servicesInjector.lookupServiceElseFail(AuditingServiceInternal.class);
+        this.publishingServiceInternal = serviceRegistry.lookupServiceElseFail(PublishingServiceInternal.class);
+        this.auditingServiceInternal = serviceRegistry.lookupServiceElseFail(AuditingServiceInternal.class);
 
-        withTransactionScopes = servicesInjector.streamServices(WithTransactionScope.class)
-                .collect(Collectors.toList());
+        this.withTransactionScopes = serviceRegistry.select(WithTransactionScope.class);
 
         this.state = State.IN_PROGRESS;
 

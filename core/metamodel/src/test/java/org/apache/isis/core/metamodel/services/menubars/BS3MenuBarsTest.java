@@ -35,7 +35,7 @@ public class BS3MenuBarsTest {
 
     @Before
     public void setUp() throws Exception {
-        jaxbService = new JaxbService.Simple();
+        jaxbService = new JaxbService.Simple() {};
     }
 
     @After

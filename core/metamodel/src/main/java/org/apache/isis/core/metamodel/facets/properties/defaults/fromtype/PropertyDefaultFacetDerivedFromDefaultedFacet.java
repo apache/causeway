@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.properties.defaults.fromtype;
 import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;
@@ -31,14 +30,12 @@ import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefault
 public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract implements PropertyDefaultFacet {
 
     private final DefaultedFacet typeFacet;
-    private final ObjectAdapterProvider adapterProvider;
 
     public PropertyDefaultFacetDerivedFromDefaultedFacet(
-            final DefaultedFacet typeFacet, final FacetHolder holder, final ObjectAdapterProvider adapterProvider) {
+            final DefaultedFacet typeFacet, final FacetHolder holder) {
         
         super(PropertyDefaultFacet.class, holder, Derivation.NOT_DERIVED);
         this.typeFacet = typeFacet;
-        this.adapterProvider = adapterProvider;
     }
 
     @Override
@@ -51,14 +48,6 @@ public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract
             return null;
         }
         return getObjectAdapterProvider().adapterFor(typeFacetDefault);
-    }
-
-    // /////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // /////////////////////////////////////////////////////
-
-    public ObjectAdapterProvider getObjectAdapterProvider() {
-        return adapterProvider;
     }
 
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {

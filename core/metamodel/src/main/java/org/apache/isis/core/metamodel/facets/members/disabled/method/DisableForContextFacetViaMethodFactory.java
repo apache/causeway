@@ -92,7 +92,7 @@ public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFac
         processMethodContext.removeMethod(disableMethod);
 
         final FacetHolder facetHolder = processMethodContext.getFacetHolder();
-        final TranslationService translationService = this.servicesInjector.lookupService(TranslationService.class).orElse(null);;
+        final TranslationService translationService = getTranslationService();
         // sadness: same logic as in I18nFacetFactory
         final String translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassAndNameIdentityString();
         FacetUtil.addFacet(new DisableForContextFacetViaMethod(disableMethod, translationService, translationContext, facetHolder));

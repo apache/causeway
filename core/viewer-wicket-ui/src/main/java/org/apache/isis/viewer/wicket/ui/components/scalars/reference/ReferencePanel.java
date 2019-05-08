@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -35,7 +37,6 @@ import org.wicketstuff.select2.Settings;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -68,17 +69,8 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     private static final String ID_AUTO_COMPLETE = "autoComplete";
     private static final String ID_ENTITY_ICON_TITLE = "entityIconAndTitle";
 
-
-    /**
-     * Determines the behaviour of dependent choices for the dependent; either to autoselect the first available choice, or to select none.
-     */
-    //TODO [ahuber] not used, remove?
-    //private static final String KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION = "isis.viewer.wicket.disableDependentChoiceAutoSelection";
-
     private EntityLinkSelect2Panel entityLink;
-
     private EntityLinkSimplePanel entitySimpleLink;
-
 
     public ReferencePanel(final String id, final ScalarModel scalarModel) {
         super(id, scalarModel);
@@ -179,9 +171,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
                 if(oam == null) {
                     return null;
                 }
-                ObjectAdapter objectAdapter = oam
-                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(),
-                                getSpecificationLoader());
+                ObjectAdapter objectAdapter = oam.getObjectAdapter();
                 return objectAdapter != null ? objectAdapter.titleString(null) : null;
             }
 
@@ -369,7 +359,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
         if(getModel().hasChoices()) {
             choices.addAll(getModel().getChoices(argsIfAvailable, getAuthenticationSession()));
         }
-        return _Lists.map(choices, ObjectAdapterMemento.Functions.fromAdapter());
+        return _Lists.map(choices, ObjectAdapterMemento::ofAdapter);
     }
 
     // called by setProviderAndCurrAndPending
@@ -419,8 +409,9 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
                 select2.getModel().setObject(convertedInput);
             }
 
-            final ObjectAdapter adapter = convertedInput!=null?convertedInput.getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                    getPersistenceSession(), getSpecificationLoader()):null;
+            final ObjectAdapter adapter = convertedInput!=null
+            		? convertedInput.getObjectAdapter()
+            				:null;
             getModel().setObject(adapter);
         }
 
@@ -477,8 +468,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
     // //////////////////////////////////////
 
-    @com.google.inject.Inject
-    WicketViewerSettings wicketViewerSettings;
+    @Inject WicketViewerSettings wicketViewerSettings;
 
 }
 

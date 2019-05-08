@@ -112,11 +112,31 @@
 			<scope>compile</scope>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-runtime-services</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		
 		<!-- TESTING -->
 		
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtime</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime-services</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-runtime-extensions</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

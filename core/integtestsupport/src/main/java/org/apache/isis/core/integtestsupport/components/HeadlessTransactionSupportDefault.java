@@ -23,14 +23,13 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 @DomainService(nature=NatureOfService.DOMAIN)
 public class HeadlessTransactionSupportDefault implements HeadlessTransactionSupport {
@@ -156,8 +155,7 @@ public class HeadlessTransactionSupportDefault implements HeadlessTransactionSup
     // -- getService
 
     private <C> C getService(Class<C> serviceClass) {
-        final ServicesInjector servicesInjector = isisSessionFactory().getServicesInjector();
-        return servicesInjector.lookupServiceElseFail(serviceClass);
+        return getServiceRegistry().lookupServiceElseFail(serviceClass);
     }
 
     // -- Dependencies
@@ -167,12 +165,12 @@ public class HeadlessTransactionSupportDefault implements HeadlessTransactionSup
     }
 
     private PersistenceSession getPersistenceSession() {
-        return isisSessionFactory().getCurrentSession().getPersistenceSession();
+        return IsisContext.getPersistenceSession().orElse(null);
     }
 
-    private IsisSessionFactory isisSessionFactory() {
-        return IsisContext.getSessionFactory();
+    private ServiceRegistry getServiceRegistry() {
+        return IsisContext.getServiceRegistry();
     }
-
+    
 
 }

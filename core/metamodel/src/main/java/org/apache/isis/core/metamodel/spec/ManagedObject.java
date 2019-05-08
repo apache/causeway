@@ -25,8 +25,13 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+
 /**
- * Represents an instance of some element of the meta-model managed by the framework.
+ * Represents an instance of some element of the meta-model managed by the framework, 
+ * that is IoC-container provided beans, persistence-stack provided entities or view-models.  
  *
  */
 public interface ManagedObject {
@@ -41,6 +46,14 @@ public interface ManagedObject {
      * represents with the framework.
      */
     Object getPojo();
+    
+    // -- SIMPLE
+    
+    @Value @RequiredArgsConstructor(staticName="of") 
+    public final static class SimpleManagedObject implements ManagedObject {
+        @Getter private final ObjectSpecification specification;
+        @Getter private final Object pojo;
+    }
     
     // -- TITLE
     

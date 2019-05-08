@@ -23,17 +23,15 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class RecreatableObjectFacetForXmlRootElementAnnotation extends RecreatableObjectFacetAbstract {
 
 
     public RecreatableObjectFacetForXmlRootElementAnnotation(
             final FacetHolder holder,
-            final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
-        super(holder, RecreationMechanism.INSTANTIATES,
-                postConstructMethodCache, servicesInjector);
+        
+        super(holder, RecreationMechanism.INSTANTIATES, postConstructMethodCache);
     }
 
     @Override
@@ -73,11 +71,11 @@ public class RecreatableObjectFacetForXmlRootElementAnnotation extends Recreatab
 
 
     private JaxbService getJaxbService() {
-        return servicesInjector.lookupServiceElseFail(JaxbService.class);
+        return getServiceRegistry().lookupServiceElseFail(JaxbService.class);
     }
 
     private UrlEncodingService getUrlEncodingService() {
-        return servicesInjector.lookupServiceElseFail(UrlEncodingService.class);
+        return getServiceRegistry().lookupServiceElseFail(UrlEncodingService.class);
     }
 
 }

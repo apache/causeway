@@ -24,7 +24,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class BytePrimitiveValueSemanticsProvider extends ByteValueSemanticsProviderAbstract implements PropertyDefaultFacet {
@@ -34,11 +33,11 @@ public class BytePrimitiveValueSemanticsProvider extends ByteValueSemanticsProvi
      * {@link EncoderDecoder}.
      */
     public BytePrimitiveValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public BytePrimitiveValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, byte.class, context);
+    public BytePrimitiveValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, byte.class);
     }
 
     // //////////////////////////////////////////////////////////////////

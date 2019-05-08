@@ -25,27 +25,24 @@ import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class TypeOfFacetOnCollectionFromCollectionAnnotation extends TypeOfFacetAbstract {
 
     public static TypeOfFacetOnCollectionFromCollectionAnnotation create(
             final List<Collection> collections,
-            final FacetedMethod facetHolder,
-            final SpecificationLoader specificationLoader) {
-
+            final FacetedMethod facetHolder) {
 
         return collections.stream()
                 .map(Collection::typeOf)
                 .filter(typeOf -> typeOf != Object.class)
                 .findFirst()
                 .map(typeOf ->
-                new TypeOfFacetOnCollectionFromCollectionAnnotation(typeOf, facetHolder, specificationLoader))
+                new TypeOfFacetOnCollectionFromCollectionAnnotation(typeOf, facetHolder))
                 .orElse(null);
     }
 
-    private TypeOfFacetOnCollectionFromCollectionAnnotation(final Class<?> type, final FacetHolder holder, final SpecificationLoader specificationLookup) {
-        super(type, holder, specificationLookup);
+    private TypeOfFacetOnCollectionFromCollectionAnnotation(final Class<?> type, final FacetHolder holder) {
+        super(type, holder);
     }
 
 }

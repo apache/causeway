@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -108,11 +107,6 @@ public class JdoQueryAnnotationFacetFactory extends FacetFactoryAbstract impleme
     static String variables(final String query) {
         final Matcher matcher = variablesPattern.matcher(query);
         return matcher.matches() ? matcher.group(1) :  null;
-    }
-
-    @Override
-    protected SpecificationLoader getSpecificationLoader() {
-        return super.getSpecificationLoader();
     }
 
 }

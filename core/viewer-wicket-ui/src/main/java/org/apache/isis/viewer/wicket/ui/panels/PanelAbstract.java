@@ -19,12 +19,18 @@
 
 package org.apache.isis.viewer.wicket.ui.panels;
 
+import java.util.function.Function;
+
+import javax.inject.Inject;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -147,43 +153,39 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel {
      * @return The found domain service
      */
     protected <S> S lookupService(final Class<S> serviceClass) {
-        return getPersistenceSession().getServicesInjector().lookupService(serviceClass).orElse(null);
+        return IsisContext.getServiceRegistry().lookupService(serviceClass).orElse(null);
     }
 
 
     protected void addConfirmationDialogIfAreYouSureSemantics(final Component component, final SemanticsOf semanticsOf) {
-
-        final ServicesInjector servicesInjector = getPersistenceSession().getServicesInjector();
-
-        PanelUtil.addConfirmationDialogIfAreYouSureSemantics(component, semanticsOf, servicesInjector);
+        PanelUtil.addConfirmationDialogIfAreYouSureSemantics(component, semanticsOf);
     }
 
     // ///////////////////////////////////////////////////////////////////
     // Dependencies (from IsisContext)
     // ///////////////////////////////////////////////////////////////////
-
-    public PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+    
+    public Function<Object, ObjectAdapter> pojoToAdapter() {
+        return IsisContext.pojoToAdapter();
     }
+    
     protected IsisConfiguration getConfiguration() {
-        return getIsisSessionFactory().getConfiguration();
+        return IsisContext.getConfiguration();
     }
 
     public SpecificationLoader getSpecificationLoader() {
-        return getIsisSessionFactory().getSpecificationLoader();
+        return IsisContext.getSpecificationLoader();
     }
 
-    protected ServicesInjector getServicesInjector() {
-        return getIsisSessionFactory().getServicesInjector();
+    protected ServiceRegistry getServiceRegistry() {
+        return IsisContext.getServiceRegistry();
     }
 
     protected IsisSessionFactory getIsisSessionFactory() {
         return IsisContext.getSessionFactory();
     }
 
-
-    @com.google.inject.Inject
-    WicketViewerSettings settings;
+    @Inject WicketViewerSettings settings;
     protected WicketViewerSettings getSettings() {
         return settings;
     }

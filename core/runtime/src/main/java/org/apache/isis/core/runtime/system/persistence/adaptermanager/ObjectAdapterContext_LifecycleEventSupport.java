@@ -18,17 +18,12 @@
  */
 package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.events.lifecycle.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LifecycleEventFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -37,25 +32,13 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
  * </p> 
  * @since 2.0.0-M2
  */
-@SuppressWarnings("unused")
 class ObjectAdapterContext_LifecycleEventSupport {
     
-    
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_LifecycleEventSupport.class);
-    private final ObjectAdapterContext objectAdapterContext;
-    private final PersistenceSession persistenceSession;
-    private final ServicesInjector servicesInjector;
-    private final SpecificationLoader specificationLoader;
     private final EventBusService eventBusService; 
     
-    
-    ObjectAdapterContext_LifecycleEventSupport(ObjectAdapterContext objectAdapterContext,
-            PersistenceSession persistenceSession) {
-        this.objectAdapterContext = objectAdapterContext;
-        this.persistenceSession = persistenceSession;
-        this.servicesInjector = persistenceSession.getServicesInjector();
-        this.specificationLoader = servicesInjector.getSpecificationLoader();
-        this.eventBusService = servicesInjector.lookupServiceElseFail(EventBusService.class);
+    ObjectAdapterContext_LifecycleEventSupport(RuntimeContext runtimeContext) {
+        this.eventBusService = runtimeContext.getServiceRegistry()
+                .lookupServiceElseFail(EventBusService.class);
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })

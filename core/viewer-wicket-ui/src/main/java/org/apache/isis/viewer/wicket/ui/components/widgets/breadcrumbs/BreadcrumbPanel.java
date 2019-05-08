@@ -76,8 +76,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
             }
 
             private String titleFor(final EntityModel model) {
-                return model.getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK,
-                        model.getPersistenceSession(), model.getSpecificationLoader()).titleString(null);
+                return model.getObjectAdapterMemento().getObjectAdapter().titleString(null);
             }
 
 

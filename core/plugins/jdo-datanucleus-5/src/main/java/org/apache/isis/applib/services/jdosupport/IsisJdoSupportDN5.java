@@ -19,8 +19,6 @@
 
 package org.apache.isis.applib.services.jdosupport;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -41,14 +39,17 @@ import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 
 /**
@@ -220,11 +221,11 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
     IsisSessionFactory isisSessionFactory;
 
     protected PersistenceSession getPersistenceSession() {
-        return isisSessionFactory.getCurrentSession().getPersistenceSession();
+        return IsisContext.getPersistenceSession().orElse(null);
     }
 
-    protected ServicesInjector getServicesInjector() {
-        return isisSessionFactory.getServicesInjector();
+    protected ServiceInjector getServiceInjector() {
+        return IsisContext.getServiceInjector();
     }
 
     @Programmatic

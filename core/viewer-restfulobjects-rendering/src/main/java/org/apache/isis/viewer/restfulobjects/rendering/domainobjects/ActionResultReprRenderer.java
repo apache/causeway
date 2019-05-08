@@ -19,8 +19,6 @@ package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import com.fasterxml.jackson.databind.node.NullNode;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -34,6 +32,8 @@ import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
+
+import com.fasterxml.jackson.databind.node.NullNode;
 
 public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultReprRenderer, ObjectAndActionInvocation> {
 

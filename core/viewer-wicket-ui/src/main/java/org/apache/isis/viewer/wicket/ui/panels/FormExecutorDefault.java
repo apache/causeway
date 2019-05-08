@@ -18,6 +18,7 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
@@ -40,22 +41,20 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
-import org.apache.isis.applib.services.guice.GuiceBeanProvider;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.facets.actions.redirect.RedirectFacet;
 import org.apache.isis.core.metamodel.facets.properties.renderunchanged.UnchangingFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.session.IsisRequestCycle;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.MessageBroker;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -69,6 +68,8 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobOrClobPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
+
+import lombok.val;
 
 public final class FormExecutorDefault<M extends BookmarkableModel<ObjectAdapter> & ParentEntityModelProvider>
 implements FormExecutor {
@@ -85,11 +86,6 @@ implements FormExecutor {
         this.model = formExecutorStrategy.getModel();
         this.settings = getSettings();
         this.formExecutorStrategy = formExecutorStrategy;
-    }
-
-    protected WicketViewerSettings getSettings() {
-        final GuiceBeanProvider guiceBeanProvider = getServicesInjector().lookupServiceElseFail(GuiceBeanProvider.class);
-        return guiceBeanProvider.lookup(WicketViewerSettings.class);
     }
 
     /**
@@ -128,7 +124,7 @@ implements FormExecutor {
                 return false;
             }
 
-            final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class).orElse(null);
+            val commandContext = currentCommandContext().orElse(null);
             if (commandContext != null) {
                 command = commandContext.getCommand();
                 command.internal().setExecutor(Command.Executor.USER);
@@ -151,8 +147,7 @@ implements FormExecutor {
             //
             final ObjectAdapter resultAdapter = obtainResultAdapter();
             // flush any queued changes; any concurrency or violation exceptions will actually be thrown here
-            getPersistenceSession().getTransactionManager().flushTransaction();
-            getPersistenceSession().getPersistenceManager().flush();
+            IsisRequestCycle.onResultAdapterObtained();
 
 
             // update target, since version updated (concurrency checks)
@@ -210,8 +205,7 @@ implements FormExecutor {
 
             forwardOnConcurrencyException(targetAdapter, ex);
 
-            final MessageService messageService = getServicesInjector().lookupServiceElseFail(MessageService.class);
-            messageService.warnUser(ex.getMessage());
+            getMessageService().warnUser(ex.getMessage());
 
             return false;
 
@@ -287,8 +281,8 @@ implements FormExecutor {
             final ObjectAdapter targetAdapter,
             final ObjectAdapter resultAdapter) {
 
-        final ObjectAdapterMemento targetOam = ObjectAdapterMemento.createOrNull(targetAdapter);
-        final ObjectAdapterMemento resultOam = ObjectAdapterMemento.createOrNull(resultAdapter);
+        final ObjectAdapterMemento targetOam = ObjectAdapterMemento.ofAdapter(targetAdapter);
+        final ObjectAdapterMemento resultOam = ObjectAdapterMemento.ofAdapter(resultAdapter);
 
         return differs(targetOam, resultOam);
     }
@@ -297,8 +291,8 @@ implements FormExecutor {
             final ObjectAdapterMemento targetOam,
             final ObjectAdapterMemento resultOam) {
 
-        final Bookmark resultBookmark = resultOam != null ? resultOam.asHintingBookmark() : null;
-        final Bookmark targetBookmark = targetOam != null ? targetOam.asHintingBookmark() : null;
+        final Bookmark resultBookmark = resultOam != null ? resultOam.asHintingBookmarkIfSupported() : null;
+        final Bookmark targetBookmark = targetOam != null ? targetOam.asHintingBookmarkIfSupported() : null;
 
         return differs(targetBookmark, resultBookmark);
     }
@@ -324,15 +318,15 @@ implements FormExecutor {
         // this is a bit of a hack... currently the blob/clob panel doesn't correctly redraw itself.
         // we therefore force a re-forward (unless is declared as unchanging).
         final Object hasBlobsOrClobs = page.visitChildren(IsisBlobOrClobPanelAbstract.class,
-                new IVisitor<IsisBlobOrClobPanelAbstract, Object>() {
+                new IVisitor<IsisBlobOrClobPanelAbstract<?>, Object>() {
             @Override
-            public void component(final IsisBlobOrClobPanelAbstract object, final IVisit<Object> visit) {
+            public void component(final IsisBlobOrClobPanelAbstract<?> object, final IVisit<Object> visit) {
                 if (!isUnchanging(object)) {
                     visit.stop(true);
                 }
             }
 
-            private boolean isUnchanging(final IsisBlobOrClobPanelAbstract object) {
+            private boolean isUnchanging(final IsisBlobOrClobPanelAbstract<?> object) {
                 final ScalarModel scalarModel = (ScalarModel) object.getModel();
                 final UnchangingFacet unchangingFacet = scalarModel.getFacet(UnchangingFacet.class);
                 return unchangingFacet != null && unchangingFacet.value();
@@ -371,7 +365,8 @@ implements FormExecutor {
         // force any changes in state etc to happen now prior to the redirect;
         // in the case of an object being returned, this should cause our page mementos
         // (eg EntityModel) to hold the correct state.  I hope.
-        getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager().flushTransaction();
+        val txManager = IsisContext.getTransactionManager().get();
+        txManager.flushTransaction();
 
         // "redirect-after-post"
         final RequestCycle requestCycle = RequestCycle.get();
@@ -475,15 +470,17 @@ implements FormExecutor {
 
         // see if the exception is recognized as being a non-serious error
         // (nb: similar code in WebRequestCycleForIsis, as a fallback)
-        final Stream<ExceptionRecognizer> exceptionRecognizers = getServicesInjector()
-                .streamServices(ExceptionRecognizer.class);
+        final Stream<ExceptionRecognizer> exceptionRecognizers = getServiceRegistry()
+                .select(ExceptionRecognizer.class)
+                .stream();
         String recognizedErrorIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
         if (recognizedErrorIfAny != null) {
 
             // recognized
             raiseWarning(target, feedbackForm, recognizedErrorIfAny);
 
-            getTransactionManager().getCurrentTransaction().clearAbortCause();
+            val txManager = IsisContext.getTransactionManager().get();
+            txManager.getCurrentTransaction().clearAbortCause();
 
             // there's no need to abort the transaction, it will have already been done
             // (in IsisTransactionManager#executeWithinTransaction(...)).
@@ -500,7 +497,7 @@ implements FormExecutor {
             targetIfAny.add(feedbackFormIfAny);
             feedbackFormIfAny.error(error);
         } else {
-            final MessageService messageService = getServicesInjector().lookupServiceElseFail(MessageService.class);
+            final MessageService messageService = getServiceRegistry().lookupServiceElseFail(MessageService.class);
             messageService.warnUser(error);
         }
     }
@@ -512,23 +509,15 @@ implements FormExecutor {
 
 
     protected IsisSession getCurrentSession() {
-        return getIsisSessionFactory().getCurrentSession();
+        return IsisSession.currentOrElseNull();
     }
 
-    protected PersistenceSession getPersistenceSession() {
-        return getCurrentSession().getPersistenceSession();
-    }
-
-    protected ServicesInjector getServicesInjector() {
-        return getIsisSessionFactory().getServicesInjector();
+    protected ServiceRegistry getServiceRegistry() {
+        return IsisContext.getServiceRegistry();
     }
 
     protected SpecificationLoader getSpecificationLoader() {
-        return getIsisSessionFactory().getSpecificationLoader();
-    }
-
-    private IsisTransactionManager getTransactionManager() {
-        return getPersistenceSession().getTransactionManager();
+        return IsisContext.getSpecificationLoader();
     }
 
     protected IsisSessionFactory getIsisSessionFactory() {
@@ -539,6 +528,19 @@ implements FormExecutor {
         return getCurrentSession().getAuthenticationSession();
     }
 
+    private MessageService getMessageService() {
+    	return getServiceRegistry().lookupServiceElseFail(MessageService.class);
+    }
+    
+    protected WicketViewerSettings getSettings() {
+    	return getServiceRegistry().lookupServiceElseFail(WicketViewerSettings.class);
+    }
+
+    // request-scoped
+    private Optional<CommandContext> currentCommandContext() {
+    	return getServiceRegistry().lookupService(CommandContext.class);
+    }
+    
 
     ///////////////////////////////////////////////////////////////////////////////
 

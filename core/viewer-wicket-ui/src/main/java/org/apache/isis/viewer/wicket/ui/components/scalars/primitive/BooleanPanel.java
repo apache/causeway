@@ -32,6 +32,7 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
@@ -42,6 +43,7 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxX;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.form.checkboxx.CheckBoxXConfig;
 import de.agilecoders.wicket.jquery.Key;
+import lombok.val;
 
 /**
  * Panel for rendering scalars of type {@link Boolean} or <tt>boolean</tt>.
@@ -140,8 +142,8 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
 
             @Override
             public void setObject(final Boolean object) {
-                final ObjectAdapter adapter = getPersistenceSession().adapterFor(object);
-                getModel().setObject(adapter);
+                val objectAdapter = PojoAdapter.ofValue(object);
+                getModel().setObject(objectAdapter);
             }
         }) {
 
@@ -179,7 +181,7 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
         final ObjectSpecification objectSpecification = getModel().getTypeOfSpecification();
         if(objectSpecification.getFullIdentifier().equals("boolean")) {
             if(getModel().getObject() == null) {
-                getModel().setObject(getPersistenceSession().adapterFor(false));
+                getModel().setObject(PojoAdapter.ofValue(false));
             }
         }
 

@@ -23,6 +23,7 @@ import org.apache.wicket.model.Model;
 
 public class CreditName extends Label {
 
+    private static final long serialVersionUID = 1L;
     private String name;
 
     public CreditName(final String id, final String name) {

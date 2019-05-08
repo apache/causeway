@@ -22,28 +22,24 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 import java.util.List;
 import java.util.Map;
 
-
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.events.ui.IconUiEvent;
-import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends IconFacetAbstract {
 
-    //private static final Logger LOG = LoggerFactory.getLogger(IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent.class);
-
     public static Facet create(
             final List<DomainObjectLayout> domainObjectLayouts,
-            final ServicesInjector servicesInjector,
+            final MetamodelEventService metamodelEventService,
             final IsisConfiguration configuration,
             final FacetHolder facetHolder) {
 
@@ -57,25 +53,22 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
                         configuration))
                 .findFirst()
                 .map(iconUiEvent -> {
-
-                    final EventBusService eventBusService = servicesInjector.lookupServiceElseFail(EventBusService.class);
-
                     return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
-                            iconUiEvent, eventBusService, facetHolder);
+                            iconUiEvent, metamodelEventService, facetHolder);
                 })
                 .orElse(null);
     }
 
     private final Class<? extends IconUiEvent<?>> iconUiEventClass;
-    private final EventBusService eventBusService;
+    private final MetamodelEventService metamodelEventService;
 
     public IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
             final Class<? extends IconUiEvent<?>> iconUiEventClass,
-                    final EventBusService eventBusService,
+                    final MetamodelEventService metamodelEventService,
                     final FacetHolder holder) {
         super(holder);
         this.iconUiEventClass = iconUiEventClass;
-        this.eventBusService = eventBusService;
+        this.metamodelEventService = metamodelEventService;
     }
 
     @Override
@@ -87,7 +80,7 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
 
         final IconUiEvent<Object> iconUiEvent = newIconUiEvent(owningAdapter);
 
-        eventBusService.post(iconUiEvent);
+        metamodelEventService.fireIconUiEvent(iconUiEvent);
 
         final String iconName = iconUiEvent.getIconName();
 

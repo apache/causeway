@@ -38,7 +38,7 @@ extends ValueFacetUsingSemanticsProviderFactory<LocalResourcePath> {
         if (type != LocalResourcePath.class) {
             return;
         }
-        addFacets(new LocalResourcePathValueSemanticsProvider(holder, getContext()));
+        addFacets(new LocalResourcePathValueSemanticsProvider(holder));
     }
 
 }

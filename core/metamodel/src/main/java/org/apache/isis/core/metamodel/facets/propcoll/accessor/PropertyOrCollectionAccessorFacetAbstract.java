@@ -21,23 +21,16 @@ package org.apache.isis.core.metamodel.facets.propcoll.accessor;
 
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public abstract class PropertyOrCollectionAccessorFacetAbstract
 extends FacetAbstract
 implements PropertyOrCollectionAccessorFacet {
 
     private final ObjectSpecification onType;
-    private final ObjectAdapterProvider adapterProvider;
-    private final SpecificationLoader specificationLoader;
-    private final AuthenticationSessionProvider authenticationSessionProvider;
 
     public static Class<? extends Facet> type() {
         return PropertyOrCollectionAccessorFacet.class;
@@ -45,15 +38,9 @@ implements PropertyOrCollectionAccessorFacet {
 
     public PropertyOrCollectionAccessorFacetAbstract(
             final ObjectSpecification onType,
-            final FacetHolder holder,
-            final SpecificationLoader specificationLoader,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final ObjectAdapterProvider adapterProvider) {
+            final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.onType = onType;
-        this.adapterProvider = adapterProvider;
-        this.specificationLoader = specificationLoader;
-        this.authenticationSessionProvider = authenticationSessionProvider;
     }
 
     @Override
@@ -61,24 +48,8 @@ implements PropertyOrCollectionAccessorFacet {
         return onType;
     }
 
-    protected ObjectSpecification getSpecification(final Class<?> type) {
-        return type != null ? getSpecificationLoader().loadSpecification(type) : null;
-    }
-
     // //////////////////////////////////////
-
-    protected ObjectAdapterProvider getObjectAdapterProvider() {
-        return adapterProvider;
-    }
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-
-    public AuthenticationSession getAuthenticationSession() {
-        return authenticationSessionProvider.getAuthenticationSession();
-    }
-
+    
     @Override public void appendAttributesTo(final Map<String, Object> attributeMap) {
         super.appendAttributesTo(attributeMap);
         attributeMap.put("onType", onType);

@@ -22,12 +22,12 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
-
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 
 public enum SerializationStrategy {
     XML {

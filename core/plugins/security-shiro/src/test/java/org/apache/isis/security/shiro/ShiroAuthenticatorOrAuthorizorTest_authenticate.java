@@ -36,6 +36,8 @@ import org.apache.isis.core.security.authentication.AuthenticationRequestPasswor
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.security.shiro.authentication.ShiroAuthenticator;
+import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -47,7 +49,8 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
-    private ShiroAuthenticatorOrAuthorizor authOrAuth;
+    private ShiroAuthenticator authenticator;
+    private ShiroAuthorizor authorizor;
 
     @Before
     public void setUp() throws Exception {
@@ -57,8 +60,11 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         _Config.clear();
         _Config.put("isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated", false);
     	
-   		authOrAuth = new ShiroAuthenticatorOrAuthorizor();
-    	authOrAuth.init();
+        authenticator = new ShiroAuthenticator();
+        authorizor = new ShiroAuthorizor();
+        
+        authenticator.init();
+        authorizor.init();
     }
 
     @After
@@ -73,8 +79,8 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
     @Test
     public void cannotAuthenticateIfShiroEnvironmentNotInitialized() throws Exception {
 
-        assertThat(authOrAuth.canAuthenticate(AuthenticationRequestPassword.class), is(false));
-        assertThat(authOrAuth.authenticate(new AuthenticationRequestPassword("dummy", "dummy"), "unused"), is(nullValue()));
+        assertThat(authenticator.canAuthenticate(AuthenticationRequestPassword.class), is(false));
+        assertThat(authenticator.authenticate(new AuthenticationRequestPassword("dummy", "dummy"), "unused"), is(nullValue()));
     }
 
     @Test
@@ -85,26 +91,26 @@ public class ShiroAuthenticatorOrAuthorizorTest_authenticate {
         SecurityUtils.setSecurityManager(securityManager);
 
         
-        assertThat(authOrAuth.canAuthenticate(AuthenticationRequestPassword.class), is(true));
+        assertThat(authenticator.canAuthenticate(AuthenticationRequestPassword.class), is(true));
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        AuthenticationSession isisAuthSession = authOrAuth.authenticate(ar, null);
+        AuthenticationSession isisAuthSession = authenticator.authenticate(ar, null);
 
         assertThat(isisAuthSession, is(not(nullValue())));
         assertThat(isisAuthSession.getUserName(), is("lonestarr"));
         assertThat(isisAuthSession.getValidationCode(), is(nullValue()));
 
         Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
-        assertThat(authOrAuth.isVisibleInAnyRole(changeAddressIdentifier), is(true));
+        assertThat(authorizor.isVisibleInAnyRole(changeAddressIdentifier), is(true));
 
         Identifier changeEmailIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeEmail", String.class);
-        assertThat(authOrAuth.isVisibleInAnyRole(changeEmailIdentifier), is(true));
+        assertThat(authorizor.isVisibleInAnyRole(changeEmailIdentifier), is(true));
 
         Identifier submitOrderIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Order", "submit");
-        assertThat(authOrAuth.isVisibleInAnyRole(submitOrderIdentifier), is(true));
+        assertThat(authorizor.isVisibleInAnyRole(submitOrderIdentifier), is(true));
 
         Identifier cancelOrderIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Order", "cancel");
-        assertThat(authOrAuth.isVisibleInAnyRole(cancelOrderIdentifier), is(false));
+        assertThat(authorizor.isVisibleInAnyRole(cancelOrderIdentifier), is(false));
     }
 
 

@@ -39,6 +39,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
@@ -609,7 +610,7 @@ implements InstallableFixture {
             if(localNameOverride != null) {
                 childFixtureScript.setLocalName(localNameOverride);
             }
-            callingFixtureScript.serviceRegistry.injectServicesInto(childFixtureScript);
+            callingFixtureScript.serviceInjector.injectServicesInto(childFixtureScript);
 
             final T childOrPreviouslyExecuted = executeChildIfNotAlready(childFixtureScript);
 
@@ -1030,6 +1031,9 @@ implements InstallableFixture {
 
     @javax.inject.Inject
     protected ServiceRegistry serviceRegistry;
+    
+    @javax.inject.Inject
+    protected ServiceInjector serviceInjector;
 
     @javax.inject.Inject
     protected RepositoryService repositoryService;

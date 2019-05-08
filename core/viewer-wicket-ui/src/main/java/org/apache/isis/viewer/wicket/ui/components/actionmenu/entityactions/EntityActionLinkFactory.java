@@ -48,7 +48,7 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
 
         final ObjectAdapter objectAdapter = this.targetEntityModel.load(ConcurrencyChecking.NO_CHECK);
 
-        final Boolean persistent = objectAdapter.representsPersistent();
+        final boolean persistent = objectAdapter.isRepresentingPersistent();
         if (!persistent) {
             throw new IllegalArgumentException(String.format(
                     "Object '%s' is not persistent.", objectAdapter.titleString(null)));

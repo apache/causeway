@@ -19,11 +19,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -43,12 +39,10 @@ import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactoryBuilder;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
@@ -58,6 +52,7 @@ import org.apache.isis.viewer.wicket.ui.util.Tooltips;
 import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipConfig;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
+import lombok.val;
 
 public final class ServiceActionUtil {
 
@@ -95,9 +90,7 @@ public final class ServiceActionUtil {
 
                 //XXX ISIS-1626, confirmation dialog for no-parameter menu actions
                 if (menuItem.requiresImmediateConfirmation()) {
-                    addConfirmationDialog(
-                            subMenuItemLink,
-                            menuItem.getPersistenceSession().getServicesInjector());
+                    addConfirmationDialog(subMenuItemLink);
                 }
 
             }
@@ -210,12 +203,7 @@ public final class ServiceActionUtil {
 
         // we no longer use ServiceActionsModel#getObject() because the model only holds the services for the
         // menuBar in question, whereas the "Other" menu may reference a service which is defined for some other menubar
-        final Stream<ObjectAdapter> serviceAdapters = 
-                IsisContext.getSessionFactory().getCurrentSession().getPersistenceSession().streamServices();
-
-        final Map<String, ObjectAdapter> serviceAdapterBySpecId = 
-                serviceAdapters
-                .collect(Collectors.toMap(a->a.getSpecification().getSpecId().asString(), a->a, (o,n)->n, HashMap::new));
+        val metaModelContext = MetaModelContext.current();
 
         final List<CssMenuItem> menuItems = _Lists.newArrayList();
         for (final BS3Menu menu : menuBar.getMenus()) {
@@ -227,9 +215,9 @@ public final class ServiceActionUtil {
                 boolean firstSection = true;
 
                 for (final ServiceActionLayoutData actionLayoutData : menuSection.getServiceActions()) {
-                    final String objectTypeLiteral = actionLayoutData.getObjectType();
+                    val serviceSpecId = actionLayoutData.getObjectType();
                     
-                    final ObjectAdapter serviceAdapter = serviceAdapterBySpecId.get(objectTypeLiteral);
+                    val serviceAdapter = metaModelContext.lookupServiceAdapterById(serviceSpecId);
                     if(serviceAdapter == null) {
                         // service not recognized, presumably the menu layout is out of sync with actual configured modules
                         continue;
@@ -266,15 +254,14 @@ public final class ServiceActionUtil {
 
 
     private static void addConfirmationDialog(
-            final Component component,
-            final ServicesInjector servicesInjector) {
+            final Component component) {
 
-        final TranslationService translationService =
-                servicesInjector.lookupService(TranslationService.class).orElse(null);;
+        val translationService =
+                IsisContext.getServiceRegistry().lookupServiceElseFail(TranslationService.class);
 
         ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 
-        final String context = IsisSessionFactoryBuilder.class.getName();
+        final String context = SystemConstants.class.getName();
         final String areYouSure = translationService.translate(context, SystemConstants.MSG_ARE_YOU_SURE);
         final String confirm = translationService.translate(context, SystemConstants.MSG_CONFIRM);
         final String cancel = translationService.translate(context, SystemConstants.MSG_CANCEL);

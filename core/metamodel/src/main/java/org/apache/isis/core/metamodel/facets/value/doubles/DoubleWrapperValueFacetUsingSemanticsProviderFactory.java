@@ -36,7 +36,7 @@ public class DoubleWrapperValueFacetUsingSemanticsProviderFactory extends ValueF
         if (type != Double.class) {
             return;
         }
-        addFacets(new DoubleWrapperValueSemanticsProvider(holder, getContext()));
+        addFacets(new DoubleWrapperValueSemanticsProvider(holder));
     }
 
 }

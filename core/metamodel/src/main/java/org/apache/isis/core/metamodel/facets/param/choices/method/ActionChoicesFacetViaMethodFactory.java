@@ -24,7 +24,6 @@ import java.util.Collection;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -33,7 +32,6 @@ import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -83,8 +81,7 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
 
         final Class<?> returnType = actionMethod.getReturnType();
         final FacetHolder action = processMethodContext.getFacetHolder();
-        final ActionChoicesFacetViaMethod facet = new ActionChoicesFacetViaMethod(choicesMethod, returnType, action,
-                getSpecificationLoader(), getAuthenticationSessionProvider(), adapterProvider);
+        final ActionChoicesFacetViaMethod facet = new ActionChoicesFacetViaMethod(choicesMethod, returnType, action);
         FacetUtil.addFacet(facet);
     }
 
@@ -101,17 +98,5 @@ public class ActionChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFa
         return choicesMethod;
     }
 
-    // ///////////////////////////////////////////////////////////////
-    // Dependencies
-    // ///////////////////////////////////////////////////////////////
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
 
 }

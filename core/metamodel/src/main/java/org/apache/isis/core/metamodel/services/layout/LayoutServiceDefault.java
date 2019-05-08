@@ -25,33 +25,25 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.xml.bind.Marshaller;
 
 import org.apache.isis.applib.FatalException;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.layout.LayoutService2;
+import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
-public class LayoutServiceDefault implements LayoutService2 {
-
-    //private static final Logger LOG = LoggerFactory.getLogger(LayoutServiceDefault.class);
+@Singleton
+public class LayoutServiceDefault implements LayoutService {
 
     @Override
     public String toXml(final Class<?> domainClass, final Style style) {
@@ -91,14 +83,12 @@ public class LayoutServiceDefault implements LayoutService2 {
 
 
     @Override
-    @Programmatic
     public byte[] toZip(final Style style) {
-        final Collection<ObjectSpecification> allSpecs = specificationLoader.allSpecifications();
+        final Collection<ObjectSpecification> allSpecs = specificationLoader.currentSpecifications();
         final List<ObjectSpecification> domainObjectSpecs = _Lists
-                .filter(allSpecs,(final ObjectSpecification input) ->
-                        !input.isAbstract() &&
-                                (input.containsDoOpFacet(JdoPersistenceCapableFacet.class) ||
-                                        input.containsDoOpFacet(ViewModelFacet.class))
+                .filter(allSpecs, spec ->
+                        !spec.isAbstract() &&
+                                (spec.isEntity() || spec.isViewModel())
                     );
         final byte[] bytes;
         try {
@@ -133,8 +123,6 @@ public class LayoutServiceDefault implements LayoutService2 {
         return fqn.replace(".", File.separator)+".layout.xml";
     }
 
-
-    @Programmatic
     @Override
     public String toMenuBarsXml(final MenuBarsService.Type type) {
         final MenuBars menuBars = menuBarsService.menuBars(type);
@@ -145,17 +133,9 @@ public class LayoutServiceDefault implements LayoutService2 {
                         ));
     }
 
-
-    @javax.inject.Inject
-    SpecificationLoader specificationLoader;
-
-    @javax.inject.Inject
-    JaxbService jaxbService;
-
-    @javax.inject.Inject
-    GridService gridService;
-
-    @javax.inject.Inject
-    MenuBarsService menuBarsService;
+    @Inject SpecificationLoader specificationLoader;
+    @Inject JaxbService jaxbService;
+    @Inject GridService gridService;
+    @Inject MenuBarsService menuBarsService;
 
 }

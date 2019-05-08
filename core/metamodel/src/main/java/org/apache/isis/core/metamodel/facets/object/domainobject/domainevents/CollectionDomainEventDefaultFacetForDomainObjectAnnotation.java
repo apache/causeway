@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionDomainEventFacet;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * This does <i>NOT</i> implement {@link ActionDomainEventFacet}, rather it is to record the default type to use
@@ -44,9 +43,8 @@ public class CollectionDomainEventDefaultFacetForDomainObjectAnnotation
 
     public CollectionDomainEventDefaultFacetForDomainObjectAnnotation(
             final FacetHolder holder,
-            final Class<? extends CollectionDomainEvent<?,?>> value,
-            final SpecificationLoader specificationLoader) {
-        super(type(), holder, value, specificationLoader);
+            final Class<? extends CollectionDomainEvent<?,?>> value) {
+        super(type(), holder, value);
         this.eventType = value;
     }
 

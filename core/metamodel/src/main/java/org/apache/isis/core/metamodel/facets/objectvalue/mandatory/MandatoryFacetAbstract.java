@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.objectvalue.mandatory;
 
-import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import java.util.Map;
 
+import org.apache.isis.applib.services.wrapper.events.ValidityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

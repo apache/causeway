@@ -21,14 +21,13 @@ package org.apache.isis.applib.value;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-public final class Blob implements NamedWithMimeType, Serializable {
+public final class Blob implements NamedWithMimeType {
 
     /**
      * Computed for state:

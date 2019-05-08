@@ -26,9 +26,9 @@ import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.actionprompt.ActionPromptPage;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
+import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault_Instantiation;
 import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassRegistryDefault;
 
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
@@ -43,7 +43,7 @@ public class PageClassListDefault_RegistrationAndCaching {
         // necessary to provide an implementation that will register
         // all pages with the registry.
         final PageClassListDefault pageClassList = new PageClassListDefault();
-        registryImpl = new PageClassRegistryDefault(pageClassList);
+        registryImpl = PageClassListDefault_Instantiation.newPageClassRegistryDefault(pageClassList);
     }
 
     @Test

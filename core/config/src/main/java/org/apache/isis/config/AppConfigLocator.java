@@ -67,7 +67,7 @@ public final class AppConfigLocator {
     }
     
     private static AppConfig lookupAppConfig_UsingCDI() {
-        return _CDI.getManagedBean(AppConfig.class).orElse(null);
+        return _CDI.getSingletonElseFail(AppConfig.class);
     }
     
     private static AppConfig lookupAppConfig_UsingServiceLoader() {

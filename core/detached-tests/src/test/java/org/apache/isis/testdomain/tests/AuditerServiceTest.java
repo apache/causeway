@@ -57,7 +57,7 @@ class AuditerServiceTest extends JdoTestDomainIntegTest {
     @Test
     void auditerServiceShouldBeAwareOfInventoryChanges() {
         
-        val auditerServiceAny = IsisContext.getServicesInjector()
+        val auditerServiceAny = IsisContext.getServiceRegistry()
                 .lookupServiceElseFail(AuditerService.class);
         
         // priority based service lookup (could be a test on its own)
@@ -66,7 +66,7 @@ class AuditerServiceTest extends JdoTestDomainIntegTest {
 
         // given
         val auditerService = (AuditerServiceStub) auditerServiceAny; 
-        val repository = IsisContext.getServicesInjector()
+        val repository = IsisContext.getServiceRegistry()
                 .lookupServiceElseFail(RepositoryService.class);
         val txMan = IsisContext.getPersistenceSession().get().getTransactionManager();
         val book = repository.allInstances(Book.class).listIterator().next();

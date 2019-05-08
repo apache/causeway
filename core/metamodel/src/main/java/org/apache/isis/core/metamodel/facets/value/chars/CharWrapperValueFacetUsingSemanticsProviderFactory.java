@@ -36,7 +36,7 @@ public class CharWrapperValueFacetUsingSemanticsProviderFactory extends ValueFac
         if (type != Character.class) {
             return;
         }
-        addFacets(new CharWrapperValueSemanticsProvider(holder, getContext()));
+        addFacets(new CharWrapperValueSemanticsProvider(holder));
     }
 
 }

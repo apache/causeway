@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.collections.clear;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -31,7 +30,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -67,22 +65,8 @@ public class CollectionClearFacetFactory extends MethodPrefixBasedFacetFactoryAb
         if (clearMethodIfAny != null) {
             return new CollectionClearFacetViaClearMethod(clearMethodIfAny, collection);
         } else {
-            return new CollectionClearFacetViaAccessor(accessorMethod, collection, adapterProvider);
+            return new CollectionClearFacetViaAccessor(accessorMethod, collection);
         }
     }
-
-    // ///////////////////////////////////////////////////////
-    // Dependencies (injected)
-    // ///////////////////////////////////////////////////////
-
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
-
 
 }

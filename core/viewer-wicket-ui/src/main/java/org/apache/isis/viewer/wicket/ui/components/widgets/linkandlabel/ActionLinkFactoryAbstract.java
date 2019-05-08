@@ -34,9 +34,11 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
+import org.apache.isis.applib.metamodel.ManagedObjectSort;
+import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
@@ -46,8 +48,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettingsAccessor;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -73,6 +73,8 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.FormExecutorDefault;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+
+import lombok.val;
 
 public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
@@ -104,11 +106,6 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
                 if(toggledMementosProviderIfAny != null) {
 
-                    final PersistenceSession persistenceSession = getIsisSessionFactory()
-                            .getCurrentSession().getPersistenceSession();
-                    final SpecificationLoader specificationLoader =
-                            getIsisSessionFactory().getSpecificationLoader();
-
                     final List<ObjectAdapterMemento> selectedMementos =
                             toggledMementosProviderIfAny.getToggles();
 
@@ -117,9 +114,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                                     if(input == null) {
                                         return null;
                                     }
-                                    final ObjectAdapter objectAdapter = input.getObjectAdapter(
-                                            ConcurrencyChecking.NO_CHECK,
-                                            persistenceSession, specificationLoader);
+                                    final ObjectAdapter objectAdapter = input.getObjectAdapter();
                                     return objectAdapter != null ? objectAdapter.getPojo() : null;
                             })
                             .filter(_NullSafe::isPresent)
@@ -174,9 +169,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(actionLink.getPage());
             final ObjectSpecification specification = actionModel.getTargetAdapter().getSpecification();
 
-            final MetaModelService metaModelService = getIsisSessionFactory().getServicesInjector()
+            final MetaModelService metaModelService = getServiceRegistry()
                     .lookupServiceElseFail(MetaModelService.class);
-            final MetaModelService.Sort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
+            final ManagedObjectSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
             final ActionPrompt prompt = promptProvider.getActionPrompt(promptStyle, sort);
 
 
@@ -279,7 +274,8 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                                     }
                                     );
 
-                    getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager().flushTransaction();
+                    val txManager = IsisContext.getTransactionManager().get();
+                    txManager.flushTransaction();
 
                     // "redirect-after-post"
                     final RequestCycle requestCycle = RequestCycle.get();
@@ -338,12 +334,12 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         return ((WicketViewerSettingsAccessor)Application.get()).getSettings();
     }
 
-    protected IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
+    protected ServiceRegistry getServiceRegistry() {
+        return IsisContext.getServiceRegistry();
     }
 
     private SpecificationLoader getSpecificationLoader() {
-        return getIsisSessionFactory().getSpecificationLoader();
+        return IsisContext.getSpecificationLoader();
     }
 
 

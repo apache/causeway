@@ -60,12 +60,13 @@ public class IsisMojoValidate extends IsisMojoAbstract {
 
         @Override
         public void process(
-                final Context context, final SpecificationLoader specificationLoader)
+                final Context context, 
+                final SpecificationLoader specificationLoader)
                         throws MojoFailureException {
 
             final ValidationFailures validationFailures = specificationLoader.validate();
 
-            final Collection<ObjectSpecification> objectSpecifications = specificationLoader.allSpecifications();
+            final Collection<ObjectSpecification> objectSpecifications = specificationLoader.currentSpecifications();
             for (ObjectSpecification objectSpecification : objectSpecifications) {
                 context.getLog().debug("loaded: " + objectSpecification.getFullIdentifier());
             }

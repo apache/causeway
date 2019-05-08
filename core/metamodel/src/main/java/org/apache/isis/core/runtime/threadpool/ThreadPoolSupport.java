@@ -172,7 +172,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
         }
 
         default:
-            throw _Exceptions.unmatchedCase(ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED);
+            throw _Exceptions.unmatchedCase(executionMode);
         }
 
     }

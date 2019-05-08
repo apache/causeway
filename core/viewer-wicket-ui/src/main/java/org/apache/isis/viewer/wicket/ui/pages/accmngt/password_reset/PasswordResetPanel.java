@@ -41,11 +41,14 @@ import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.INotificationMessage;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationMessage;
+import lombok.val;
 
 /**
  * A panel with a form for creation of new users
  */
 public class PasswordResetPanel extends Panel {
+
+	private static final long serialVersionUID = -2072394926411738664L;
 
     /**
      * Constructor
@@ -70,6 +73,8 @@ public class PasswordResetPanel extends Panel {
         form.add(new EqualPasswordInputValidator(passwordField, confirmPasswordField));
 
         Button signUpButton = new Button("passwordResetSubmit") {
+			private static final long serialVersionUID = -6355836432811022200L;
+
             @Override
             public void onSubmit() {
                 super.onSubmit();
@@ -78,13 +83,13 @@ public class PasswordResetPanel extends Panel {
 
                 final AccountConfirmationMap accountConfirmationMap = getApplication().getMetaData(AccountConfirmationMap.KEY);
 
+                val userRegistrationService = 
+                		IsisContext.getServiceRegistry().lookupServiceElseFail(UserRegistrationService.class);
+                
                 Boolean passwordUpdated = getIsisSessionFactory().doInSession(new Callable<Boolean>() {
                     @Override
                     public Boolean call() throws Exception {
                         String email = accountConfirmationMap.get(uuid);
-
-                        UserRegistrationService userRegistrationService = getIsisSessionFactory().getServicesInjector()
-                                .lookupServiceElseFail(UserRegistrationService.class);
                         return userRegistrationService.updatePasswordByEmail(email, password);
                     }
                 });

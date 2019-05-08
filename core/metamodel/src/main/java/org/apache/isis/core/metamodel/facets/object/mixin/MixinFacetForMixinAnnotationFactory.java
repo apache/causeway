@@ -50,7 +50,7 @@ public class MixinFacetForMixinAnnotationFactory extends FacetFactoryAbstract im
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
         final MixinFacet mixinFacet = MixinFacetForMixinAnnotation.create(candidateMixinType, facetHolder,
-                servicesInjector);
+                getServiceInjector());
         facetHolder.addFacet(mixinFacet);
     }
 

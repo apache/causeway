@@ -19,10 +19,6 @@
 
 package org.apache.isis.core.security.authentication.singleuser;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.isis.core.security.authentication.AuthenticationRequestAbstract;
 
 /**
@@ -31,17 +27,11 @@ import org.apache.isis.core.security.authentication.AuthenticationRequestAbstrac
 public class AuthenticationRequestSingleUser extends AuthenticationRequestAbstract {
 
     private static final String SINGLE_USER_NAME = "self";
-    private static final String SINGLE_USER_ROlE_NAME = "default_role";
-    private final List<String> roles;
+    private static final String SINGLE_USER_ROLE_NAME = "default_role";
 
     public AuthenticationRequestSingleUser() {
         super(SINGLE_USER_NAME);
-        roles = Collections.unmodifiableList(Arrays.asList(SINGLE_USER_ROlE_NAME));
-    }
-
-    @Override
-    public List<String> getRoles() {
-        return roles;
+        addRole(SINGLE_USER_ROLE_NAME);
     }
 
 }

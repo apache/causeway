@@ -20,14 +20,13 @@
 package org.apache.isis.applib.value;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.Writer;
 import java.util.Objects;
 
 import javax.activation.MimeType;
 import javax.activation.MimeTypeParseException;
 
-public final class Clob implements NamedWithMimeType, Serializable {
+public final class Clob implements NamedWithMimeType {
 
     private static final long serialVersionUID = 8694189924062378527L;
 

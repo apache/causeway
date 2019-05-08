@@ -27,6 +27,7 @@ import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -36,7 +37,6 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -61,7 +61,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         }
     }
 
-    protected ServicesInjector stubServicesInjector;
+    protected ServiceInjector stubServiceInjector;
     protected TranslationService mockTranslationService;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     protected AuthenticationSession mockAuthenticationSession;
@@ -113,7 +113,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
 
-        stubServicesInjector = ServicesInjector.builderForTesting()
+        ServicesInjector.builderForTesting()
                 .addServices(_Lists.of(
                 mockAuthenticationSessionProvider,
                 mockSpecificationLoader,

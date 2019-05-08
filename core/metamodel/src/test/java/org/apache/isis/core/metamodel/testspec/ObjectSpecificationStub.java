@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -102,11 +103,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     @Override
     public boolean isAbstract() {
-        return false;
-    }
-
-    @Override
-    public boolean isService() {
         return false;
     }
 
@@ -236,16 +232,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public boolean isValueOrIsParented() {
-        return false;
-    }
-
-    @Override
-    public boolean isValue() {
-        return false;
-    }
-
-    @Override
     public boolean isParented() {
         return false;
     }
@@ -281,18 +267,8 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public boolean isParentedOrFreeCollection() {
-        return false;
-    }
-
-    @Override
     public boolean isHidden() {
         return false;
-    }
-
-    @Override
-    public boolean isNotCollection() {
-        return !isParentedOrFreeCollection();
     }
 
     @Override
@@ -337,32 +313,12 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     // /////////////////////////////////////////////////////////
 
     @Override
-    public boolean isViewModel() {
-        return false;
-    }
-
-    @Override
     public boolean isViewModelCloneable(final ManagedObject targetAdapter) {
         return false;
     }
 
     @Override
     public boolean isWizard() {
-        return false;
-    }
-
-    @Override
-    public boolean isMixin() {
-        return false;
-    }
-
-    @Override
-    public boolean isPersistenceCapable() {
-        return false;
-    }
-
-    @Override
-    public boolean isPersistenceCapableOrViewModel() {
         return false;
     }
 
@@ -375,5 +331,10 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     public ObjectSpecification getElementSpecification() {
         return elementSpecification;
     }
+
+	@Override
+	public ManagedObjectSort getManagedObjectSort() {
+		return ManagedObjectSort.UNKNOWN; // [2033] not implemented yet
+	}
 
 }

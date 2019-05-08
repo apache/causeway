@@ -37,6 +37,8 @@ import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+import org.apache.isis.security.shiro.authentication.ShiroAuthenticator;
+import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -48,20 +50,25 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
 
     @Mock
     private IsisConfiguration mockConfiguration;
-
-    private ShiroAuthenticatorOrAuthorizor authOrAuth;
+    
+    private ShiroAuthenticator authenticator;
+    private ShiroAuthorizor authorizor;
 
     @Before
     public void setUp() throws Exception {
-    	
-        // PRODUCTION
         
+        // PRODUCTION
+
         _Config.clear();
         _Config.put("isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated", false);
-    	
-        authOrAuth = new ShiroAuthenticatorOrAuthorizor();
-        authOrAuth.init();
+        
+        authenticator = new ShiroAuthenticator();
+        authorizor = new ShiroAuthorizor();
+        
+        authenticator.init();
+        authorizor.init();
     }
+    
 
     @After
     public void tearDown() throws Exception {
@@ -80,11 +87,11 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         SecurityUtils.setSecurityManager(securityManager);
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("darkhelmet", "ludicrousspeed");
-        authOrAuth.authenticate(ar, null);
+        authenticator.authenticate(ar, null);
 
         // when, then
         Identifier changeAddressIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "changeAddress", String.class, String.class);
-        assertThat(authOrAuth.isVisibleInAnyRole(changeAddressIdentifier), is(true));
+        assertThat(authorizor.isVisibleInAnyRole(changeAddressIdentifier), is(true));
 
     }
 
@@ -97,11 +104,11 @@ public class ShiroAuthenticatorOrAuthorizorTest_isVisibleInAnyRole {
         SecurityUtils.setSecurityManager(securityManager);
 
         AuthenticationRequest ar = new AuthenticationRequestPassword("lonestarr", "vespa");
-        authOrAuth.authenticate(ar, null);
+        authenticator.authenticate(ar, null);
         
         // when, then
         Identifier removeCustomerIdentifier = Identifier.actionIdentifier("com.mycompany.myapp.Customer", "remove");
-        assertThat(authOrAuth.isVisibleInAnyRole(removeCustomerIdentifier), is(true));
+        assertThat(authorizor.isVisibleInAnyRole(removeCustomerIdentifier), is(true));
     }
 
 

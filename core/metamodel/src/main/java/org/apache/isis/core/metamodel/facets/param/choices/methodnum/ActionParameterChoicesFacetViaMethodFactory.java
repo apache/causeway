@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -38,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
@@ -94,9 +92,7 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder,
-                    getSpecificationLoader(), getAuthenticationSessionProvider(), adapterProvider
-                    ));
+            FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(choicesMethod, arrayOfParamType, paramAsHolder));
         }
     }
 
@@ -143,17 +139,6 @@ public class ActionParameterChoicesFacetViaMethodFactory extends MethodPrefixBas
         return MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, name, returnType, paramTypes);
     }
 
-    // ///////////////////////////////////////////////////////////////
-    // Dependencies
-    // ///////////////////////////////////////////////////////////////
 
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
 
 }

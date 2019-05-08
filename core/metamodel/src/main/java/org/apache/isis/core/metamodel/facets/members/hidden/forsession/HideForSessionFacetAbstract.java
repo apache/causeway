@@ -24,8 +24,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 /**
  * Hide a property, collection or action based on the current session.
@@ -36,17 +34,13 @@ import org.apache.isis.core.security.authentication.AuthenticationSessionProvide
  */
 public abstract class HideForSessionFacetAbstract extends FacetAbstract implements HideForSessionFacet {
 
-    private final AuthenticationSessionProvider authenticationSessionProvider;
-
     public static Class<? extends Facet> type() {
         return HideForSessionFacet.class;
     }
 
     public HideForSessionFacetAbstract(
-            final FacetHolder holder,
-            final AuthenticationSessionProvider authenticationSessionProvider) {
+            final FacetHolder holder) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.authenticationSessionProvider = authenticationSessionProvider;
     }
 
     @Override
@@ -54,7 +48,4 @@ public abstract class HideForSessionFacetAbstract extends FacetAbstract implemen
         return hiddenReason(getAuthenticationSession());
     }
 
-    protected AuthenticationSession getAuthenticationSession() {
-        return authenticationSessionProvider.getAuthenticationSession();
-    }
 }

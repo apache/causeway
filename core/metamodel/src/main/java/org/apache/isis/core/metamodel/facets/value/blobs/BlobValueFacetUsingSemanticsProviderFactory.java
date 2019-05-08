@@ -35,7 +35,7 @@ public class BlobValueFacetUsingSemanticsProviderFactory extends ValueFacetUsing
         if (type != Blob.class) {
             return;
         }
-        addFacets(new BlobValueSemanticsProvider(holder, getContext()));
+        addFacets(new BlobValueSemanticsProvider(holder));
     }
 
 }

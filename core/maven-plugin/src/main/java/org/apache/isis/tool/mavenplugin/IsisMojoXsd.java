@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Charsets;
-import org.apache.isis.commons.internal.base._Strings;
 import com.google.common.io.Files;
 
 import org.apache.maven.plugin.MojoFailureException;
@@ -35,7 +34,9 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @Mojo(
@@ -81,7 +82,8 @@ public class IsisMojoXsd extends IsisMojoAbstract {
             final ContextForMojo context, final IsisSessionFactory isisSessionFactory)
                     throws MojoFailureException, IOException {
 
-        final JaxbService jaxbService = isisSessionFactory.getServicesInjector().lookupServiceElseFail(JaxbService.class);
+        final JaxbService jaxbService = 
+                IsisContext.getServiceRegistry().lookupServiceElseFail(JaxbService.class);
 
         final MavenProject mavenProject = context.getMavenProject();
         final File outputDir = determineOutputDir(mavenProject);

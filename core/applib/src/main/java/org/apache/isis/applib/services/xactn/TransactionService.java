@@ -20,6 +20,7 @@
 package org.apache.isis.applib.services.xactn;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Supplier;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.command.Command;
@@ -118,6 +119,8 @@ public interface TransactionService {
      */
     void nextTransaction(Policy policy, Command command);
 
+    void executeWithinTransaction(Runnable task);
+    <T> T executeWithinTransaction(Supplier<T> task);
 
     public enum Policy {
         UNLESS_MARKED_FOR_ABORT,

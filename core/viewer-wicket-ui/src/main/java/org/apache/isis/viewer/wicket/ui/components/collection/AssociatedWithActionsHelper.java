@@ -69,10 +69,7 @@ public class AssociatedWithActionsHelper implements Serializable {
 
     private ObjectSpecification getObjectSpecification(final IsisSessionFactory isisSessionFactory) {
         final ObjectAdapterMemento parentOam = collectionModel.getParentObjectAdapterMemento();
-        final ObjectAdapter parentAdapter = parentOam.getObjectAdapter(
-                ConcurrencyChecking.NO_CHECK,
-                isisSessionFactory.getCurrentSession().getPersistenceSession(),
-                isisSessionFactory.getSpecificationLoader());
+        final ObjectAdapter parentAdapter = parentOam.getObjectAdapter();
         return parentAdapter.getSpecification();
     }
 

@@ -20,18 +20,15 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ListExtensions;
@@ -53,6 +50,10 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import lombok.val;
 
 public class FacetedMethodsBuilder {
 
@@ -234,12 +235,15 @@ public class FacetedMethodsBuilder {
         final Set<Method> associationCandidateMethods = getFacetProcessor().findAssociationCandidateAccessors(methods, new HashSet<Method>());
 
         // Ensure all return types are known
-        final List<Class<?>> typesToLoad = _Lists.newArrayList();
+        final Set<Class<?>> typesToLoad = _Sets.newHashSet();
         for (final Method method : associationCandidateMethods) {
             specificationTraverser.traverseTypes(method, typesToLoad);
         }
-        getSpecificationLoader().loadSpecifications(typesToLoad, introspectedClass,
-                IntrospectionState.TYPE_INTROSPECTED);
+        typesToLoad.remove(introspectedClass);
+        
+        val specLoader = getSpecificationLoader();
+        val upTo = IntrospectionState.TYPE_INTROSPECTED;
+        typesToLoad.forEach(typeToLoad->specLoader.loadSpecification(typeToLoad, upTo));
 
         // now create FacetedMethods for collections and for properties
         final List<FacetedMethod> associationFacetedMethods = _Lists.newArrayList();
@@ -406,7 +410,7 @@ public class FacetedMethodsBuilder {
             return null;
         }
 
-        final FacetedMethod action = FacetedMethod.createForAction(introspectedClass, actionMethod, getSpecificationLoader());
+        final FacetedMethod action = FacetedMethod.createForAction(introspectedClass, actionMethod);
 
         // process facets on the action & parameters
         getFacetProcessor().process(introspectedClass, actionMethod, methodRemover, action, FeatureType.ACTION);
@@ -438,11 +442,16 @@ public class FacetedMethodsBuilder {
             return false;
         }
 
-        final List<Class<?>> typesToLoad = new ArrayList<Class<?>>();
+        final Set<Class<?>> typesToLoad = _Sets.newHashSet();
         specificationTraverser.traverseTypes(actionMethod, typesToLoad);
+        
+        val specLoader = getSpecificationLoader();
+        val upTo = IntrospectionState.TYPE_INTROSPECTED;
+        
+        val anyLoadedAsNull = typesToLoad.stream()
+        .map(typeToLoad->specLoader.loadSpecification(typeToLoad, upTo))
+        .anyMatch(spec->spec==null);
 
-        final boolean anyLoadedAsNull = getSpecificationLoader()
-                .loadSpecifications(typesToLoad, null, IntrospectionState.TYPE_INTROSPECTED);
         if (anyLoadedAsNull) {
             return false;
         }

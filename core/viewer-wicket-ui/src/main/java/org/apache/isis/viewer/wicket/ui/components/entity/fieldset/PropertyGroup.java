@@ -37,7 +37,6 @@ import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
@@ -58,6 +57,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
 
 public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDynamicallyVisibleContent {
 
+    private static final long serialVersionUID = 1L;
     private static final String ID_MEMBER_GROUP = "memberGroup";
     private static final String ID_MEMBER_GROUP_NAME = "memberGroupName";
 
@@ -147,7 +147,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         final List<PropertyLayoutData> properties = this.fieldSet.getProperties();
         // changed to NO_CHECK because more complex BS3 layouts trip concurrency exception
         // (haven't investigated as to why).
-        final ObjectAdapter adapter = getModel().load(ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter adapter = getModel().load();
         return getObjectAssociations(properties, adapter);
     }
 
@@ -200,7 +200,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
             final WebMarkupContainer container,
             final List<LinkAndLabel> entityActions) {
 
-        final PropertyMemento pm = new PropertyMemento(otoa, entityModel.getIsisSessionFactory());
+        final PropertyMemento pm = new PropertyMemento(otoa);
 
         final ScalarModel scalarModel =
                 entityModel.getPropertyModel(pm, EntityModel.Mode.VIEW, EntityModel.RenderingHint.REGULAR);
@@ -208,7 +208,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
         final Component component = getComponentFactoryRegistry()
                 .addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 
-        final ObjectAdapter adapter = entityModel.load(ConcurrencyChecking.NO_CHECK);
+        final ObjectAdapter adapter = entityModel.load();
         final List<ObjectAction> associatedActions =
                 ObjectAction.Util.findForAssociation(adapter, otoa);
 

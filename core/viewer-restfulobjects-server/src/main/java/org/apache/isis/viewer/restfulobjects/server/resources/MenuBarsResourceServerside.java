@@ -27,7 +27,7 @@ import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.links.Link;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulHttpMethod;
@@ -54,7 +54,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
         final Response.ResponseBuilder builder;
 
         final MenuBarsService menuBarsService =
-                getResourceContext().getServicesInjector().lookupServiceElseFail(MenuBarsService.class);
+                getResourceContext().getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
 
         final MenuBars menuBars = menuBarsService.menuBars();
         addLinksForServiceActions(menuBars);
@@ -73,7 +73,7 @@ public class MenuBarsResourceServerside extends ResourceAbstract implements Menu
                 final String objectType = actionLayoutData.getObjectType();
                 final String relativeUrl = String.format(
                         "objects/%s/%s/actions/%s",
-                        objectType, PersistenceSession.SERVICE_IDENTIFIER, actionLayoutData.getId());
+                        objectType, SystemConstants.SERVICE_IDENTIFIER, actionLayoutData.getId());
                 Link link = new Link(
                         Rel.ACTION.getName(),
                         RestfulHttpMethod.GET.getJavaxRsMethod(),

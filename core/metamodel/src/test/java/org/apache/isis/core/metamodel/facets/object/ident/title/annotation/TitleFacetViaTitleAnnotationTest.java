@@ -92,7 +92,7 @@ public class TitleFacetViaTitleAnnotationTest {
         TitleAnnotationFacetFactory.sort(evaluatorList);
 
         final List<TitleComponent> components = _Lists.map(evaluatorList, TitleComponent.FROM_EVALUATORS);
-        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterManager);
+        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder);
         final NormalDomainObject normalPojo = new NormalDomainObject();
         final Sequence sequence = context.sequence("in-title-element-order");
         context.checking(new Expectations() {
@@ -122,7 +122,7 @@ public class TitleFacetViaTitleAnnotationTest {
                 .getEvaluators(DomainObjectWithProblemInItsAnnotatedTitleMethod.class, Title.class);
 
         final List<TitleComponent> components = _Lists.map(evaluators, TitleComponent.FROM_EVALUATORS);
-        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterManager);
+        final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder);
         final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo = new DomainObjectWithProblemInItsAnnotatedTitleMethod();
         context.checking(new Expectations() {
             {

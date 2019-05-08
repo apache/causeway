@@ -159,7 +159,7 @@ public class ObjectMemberAbstractTest {
 
     @Test
     public void testAvailableForUser() throws Exception {
-        testMember.addFacet(new DisableForSessionFacetAbstract(testMember, mockAuthenticationSessionProvider) {
+        testMember.addFacet(new DisableForSessionFacetAbstract(testMember) {
             @Override
             public String disabledReason(final AuthenticationSession session) {
                 return null;
@@ -206,7 +206,7 @@ public class ObjectMemberAbstractTest {
 
     @Test
     public void testVisibleForSession() {
-        testMember.addFacet(new HideForSessionFacetAbstract(testMember, mockAuthenticationSessionProvider) {
+        testMember.addFacet(new HideForSessionFacetAbstract(testMember) {
             @Override
             public String hiddenReason(final AuthenticationSession session) {
                 return "Hidden";
@@ -217,7 +217,7 @@ public class ObjectMemberAbstractTest {
 
     @Test
     public void testVisibleForSessionFails() {
-        testMember.addFacet(new HideForSessionFacetAbstract(testMember, mockAuthenticationSessionProvider) {
+        testMember.addFacet(new HideForSessionFacetAbstract(testMember) {
             @Override
             public String hiddenReason(final AuthenticationSession session) {
                 return "hidden";
@@ -254,7 +254,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     }
 
     protected ObjectMemberAbstractImpl(final String id, final ServicesInjector servicesInjector) {
-        super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY, servicesInjector);
+        super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY);
     }
 
     /**

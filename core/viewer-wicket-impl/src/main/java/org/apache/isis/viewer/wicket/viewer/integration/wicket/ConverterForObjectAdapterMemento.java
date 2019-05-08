@@ -35,6 +35,8 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
+import lombok.val;
+
 /**
  * Implementation of a Wicket {@link IConverter} for
  * {@link ObjectAdapterMemento}s, converting to-and-from their {@link Oid}'s
@@ -53,10 +55,9 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         if (_Strings.isNullOrEmpty(value)) {
             return null;
         }
-        final RootOid oid = RootOid.deStringEncoded(value);
+        val rootOid = RootOid.deStringEncoded(value);
         
-        final ObjectAdapter adapter = getPersistenceSession().adapterFor(oid);
-        return ObjectAdapterMemento.createOrNull(adapter);
+        return ObjectAdapterMemento.ofRootOid(rootOid);
     }
 
     /**
@@ -68,30 +69,12 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         if (memento == null) {
             return null;
         }
-        final Oid oid = memento.getObjectAdapter(ConcurrencyChecking.NO_CHECK, getPersistenceSession(),
-                getSpecificationLoader()).getOid();
-        if (oid == null) {
-            // values don't have an Oid...
-            // REVIEW: is this right?
+        final Oid oid = memento.getObjectAdapter().getOid();
+        if (oid == null || oid.isValue()) {
+            // values
             return memento.toString();
         }
         return oid.enString();
-    }
-
-    // //////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // //////////////////////////////////////////////////////////
-
-    SpecificationLoader getSpecificationLoader() {
-        return getIsisSessionFactory().getSpecificationLoader();
-    }
-
-    PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
-    }
-
-    IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
     }
 
 }

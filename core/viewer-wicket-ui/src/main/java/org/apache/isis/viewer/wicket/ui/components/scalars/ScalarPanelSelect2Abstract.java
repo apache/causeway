@@ -33,12 +33,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -245,14 +240,12 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
                 final ObjectAdapterMemento oam = (ObjectAdapterMemento) proposedValueObjAsList.get(0);
                 final ObjectSpecId objectSpecId = oam.getObjectSpecId();
                 proposedValue = ObjectAdapterMemento
-                        .createForList(proposedValueObjAsList, objectSpecId);
+                        .ofMementoList(proposedValueObjAsList, objectSpecId);
             } else {
                 proposedValue = (ObjectAdapterMemento) proposedValueObj;
             }
 
-            final ObjectAdapter proposedAdapter = proposedValue.getObjectAdapter(
-                    ConcurrencyChecking.NO_CHECK,
-                    getPersistenceSession(), getSpecificationLoader());
+            final ObjectAdapter proposedAdapter = proposedValue.getObjectAdapter();
 
             final String reasonIfAny = scalarModel.validate(proposedAdapter);
             if (reasonIfAny != null) {
@@ -260,18 +253,6 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
                 error.setMessage(reasonIfAny);
                 validatable.error(error);
             }
-        }
-
-        PersistenceSession getPersistenceSession() {
-            return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
-        }
-
-        SpecificationLoader getSpecificationLoader() {
-            return getIsisSessionFactory().getSpecificationLoader();
-        }
-
-        IsisSessionFactory getIsisSessionFactory() {
-            return IsisContext.getSessionFactory();
         }
 
     }

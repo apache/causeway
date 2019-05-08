@@ -41,6 +41,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.UsernameAvailableValidator;
 
+import lombok.val;
+
 /**
  * A panel with a form for self-registration of a user
  */
@@ -126,11 +128,11 @@ public abstract class RegisterPanel extends GenericPanel<UserDetails> {
             getIsisSessionFactory().doInSession(new Runnable() {
                 @Override
                 public void run() {
-                    final UserRegistrationService userRegistrationService = getIsisSessionFactory()
-                            .getServicesInjector().lookupServiceElseFail(UserRegistrationService.class);
+                    val userRegistrationService = IsisContext.getServiceRegistry()
+                    		.lookupServiceElseFail(UserRegistrationService.class);
 
-                    getIsisSessionFactory().getCurrentSession().getPersistenceSession().getTransactionManager()
-                    .executeWithinTransaction(() -> {
+                    val txManager = IsisContext.getTransactionManager().get();
+                    txManager.executeWithinTransaction(() -> {
                             userRegistrationService.registerUser(userDetails);
                             removeAccountConfirmation();
                     });

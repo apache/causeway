@@ -24,6 +24,7 @@ import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
@@ -35,7 +36,10 @@ public final class ValueSemanticsProviderUtil {
     public static final String SEMANTICS_PROVIDER_NAME_KEY_PREFIX = "isis.core.progmodel.value.";
     public static final String SEMANTICS_PROVIDER_NAME_KEY_SUFFIX = ".semanticsProviderName";
 
-    public static String semanticsProviderNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
+    public static String semanticsProviderNameFromConfiguration(final Class<?> type) {
+        
+        final IsisConfiguration configuration = _Config.getConfiguration();
+        
         final String key = SEMANTICS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
         final String semanticsProviderName = configuration.getString(key);
         return !_Strings.isNullOrEmpty(semanticsProviderName) ? semanticsProviderName : null;

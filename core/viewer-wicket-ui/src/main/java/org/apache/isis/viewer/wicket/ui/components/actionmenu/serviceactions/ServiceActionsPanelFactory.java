@@ -27,6 +27,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.layout.menubars.MenuBars;
 import org.apache.isis.applib.services.menu.MenuBarsService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
@@ -64,7 +65,7 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
         final ServiceActionsModel serviceActionsModel = (ServiceActionsModel) model;
 
         final MenuBarsService menuBarsService =
-                getIsisSessionFactory().getServicesInjector().lookupServiceElseFail(MenuBarsService.class);
+        		getServiceRegistry().lookupServiceElseFail(MenuBarsService.class);
 
         final MenuBars menuBars = menuBarsService.menuBars();
 
@@ -73,7 +74,7 @@ public class ServiceActionsPanelFactory extends ComponentFactoryAbstract {
         return new ServiceActionsPanel(id, menuItems);
     }
 
-    IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
+    ServiceRegistry getServiceRegistry() {
+        return IsisContext.getServiceRegistry();
     }
 }

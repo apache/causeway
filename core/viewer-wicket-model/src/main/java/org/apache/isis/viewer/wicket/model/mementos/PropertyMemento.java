@@ -25,28 +25,29 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+
+import lombok.val;
 
 public class PropertyMemento implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private static ObjectSpecification owningSpecFor(
-            final OneToOneAssociation property,
-            final IsisSessionFactory isisSessionFactory) {
-        final SpecificationLoader specificationLoader = isisSessionFactory.getSpecificationLoader();
-        return specificationLoader.loadSpecification(property.getIdentifier().toClassIdentityString());
+            final OneToOneAssociation property) {
+        val specificationLoader = IsisContext.getSpecificationLoader();
+        return specificationLoader.loadSpecification(
+                ObjectSpecId.of(property.getIdentifier().toClassIdentityString()));
     }
 
     private final ObjectSpecId owningSpecId;
     private final String identifier;
     private final ObjectSpecId specId;
 
-    public PropertyMemento(
-            final OneToOneAssociation property, final IsisSessionFactory isisSessionFactory) {
+    public PropertyMemento(final OneToOneAssociation property) {
         this(
-                owningSpecFor(property, isisSessionFactory).getSpecId(),
+                owningSpecFor(property).getSpecId(),
                 property.getIdentifier().toNameIdentityString(),
                 property.getSpecification().getSpecId()
                 );

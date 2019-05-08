@@ -28,16 +28,12 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @Path("/swagger")
 public class SwaggerSpecResource {
 
-    @Context
-    HttpHeaders httpHeaders;
+    @Context HttpHeaders httpHeaders;
 
     @Path("/private")
     @GET
@@ -71,7 +67,7 @@ public class SwaggerSpecResource {
 
     private String swagger(final SwaggerService.Visibility visibility) {
         final SwaggerService.Format format = deriveFrom(httpHeaders);
-        String spec = getIsisSessionFactory().doInSession(new MyCallable(visibility, format));
+        String spec = IsisContext.getSessionFactory().doInSession(new MyCallable(visibility, format));
         return spec;
     }
 
@@ -96,6 +92,8 @@ public class SwaggerSpecResource {
 
     class MyCallable implements Callable<String> {
 
+    	SwaggerService swaggerService;
+    	
         private final SwaggerService.Visibility visibility;
         private final SwaggerService.Format format;
 
@@ -108,25 +106,10 @@ public class SwaggerSpecResource {
 
         @Override
         public String call() throws Exception {
-            getServicesInjector().injectServicesInto(this);
+        	swaggerService = IsisContext.getServiceRegistry().lookupServiceElseFail(SwaggerService.class);
             return swaggerService.generateSwaggerSpec(visibility, format);
         }
-
-        @javax.inject.Inject
-        SwaggerService swaggerService;
-
-        ServicesInjector getServicesInjector() {
-            return getPersistenceSession().getServicesInjector();
-        }
-
-        PersistenceSession getPersistenceSession() {
-            return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
-        }
+        
     }
-
-    IsisSessionFactory getIsisSessionFactory() {
-        return IsisContext.getSessionFactory();
-    }
-
 
 }

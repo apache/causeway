@@ -40,7 +40,7 @@ public class JavaUtilDateValueFacetUsingSemanticsProviderFactory extends ValueFa
         if (type != Date.class) {
             return;
         }
-        addFacets(new JavaUtilDateValueSemanticsProvider(holder, getContext()));
+        addFacets(new JavaUtilDateValueSemanticsProvider(holder));
     }
 
 }

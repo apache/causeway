@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -38,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -70,7 +68,7 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
         sort(evaluators);
         final List<TitleFacetViaTitleAnnotation.TitleComponent> titleComponents = 
                 _Lists.map(evaluators, TitleFacetViaTitleAnnotation.TitleComponent.FROM_EVALUATORS);
-        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder, adapterProvider));
+        FacetUtil.addFacet(new TitleFacetViaTitleAnnotation(titleComponents, facetHolder));
     }
 
     public static void sort(final List<Annotations.Evaluator<Title>> evaluators) {
@@ -189,13 +187,5 @@ public class TitleAnnotationFacetFactory extends FacetFactoryAbstract implements
         }));
     }
 
-
-    @Override
-    public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
 
 }

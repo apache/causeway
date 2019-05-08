@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.bookmarkedpages;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -78,7 +80,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
 
     private static final JavaScriptResourceReference SLIDE_PANEL_JS = new JavaScriptResourceReference(BookmarkedPagesPanel.class, "slide-panel.js");
 
-    @com.google.inject.Inject
+    @Inject
     private PageClassRegistry pageClassRegistry;
 
     public BookmarkedPagesPanel(final String id, final BookmarkedPagesModel bookmarkedPagesModel) {
@@ -231,7 +233,7 @@ public class BookmarkedPagesPanel extends PanelAbstract<BookmarkedPagesModel> {
     // Dependency Injection
     // ///////////////////////////////////////////////
 
-    @com.google.inject.Inject
+    @Inject
     private ImageResourceCache imageCache;
 
 }

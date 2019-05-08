@@ -86,9 +86,7 @@ public abstract class ScalarPanelTextFieldNumeric<T extends Serializable> extend
     }
 
     private LocaleProvider getLocaleProvider() {
-        return IsisContext.getSessionFactory().getServicesInjector()
-                .lookupService(LocaleProvider.class)
-                .orElse(null);
+        return IsisContext.getServiceRegistry().lookupServiceElseFail(LocaleProvider.class);
     }
 
 }

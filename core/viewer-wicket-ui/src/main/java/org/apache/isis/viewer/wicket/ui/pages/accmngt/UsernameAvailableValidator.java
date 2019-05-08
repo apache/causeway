@@ -21,16 +21,20 @@ package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+
+import lombok.val;
 
 /**
  * Validates that an username is or is not already in use by someone else
  */
 public class UsernameAvailableValidator implements IValidator<String> {
 
+	private static final long serialVersionUID = 1L;
     public static final UsernameAvailableValidator INSTANCE = new UsernameAvailableValidator();
 
     private UsernameAvailableValidator() {
@@ -38,23 +42,23 @@ public class UsernameAvailableValidator implements IValidator<String> {
 
     @Override
     public void validate(final IValidatable<String> validatable) {
-        getIsisSessionFactory().doInSession(new Runnable() {
-            @Override
-            public void run() {
-                UserRegistrationService userRegistrationService = getServicesInjector().lookupServiceElseFail(UserRegistrationService.class);
 
+    	val userRegistrationService = getServiceRegistry().lookupServiceElseFail(UserRegistrationService.class);
+    	
+        getIsisSessionFactory().doInSession(() -> {
+            
                 final String username = validatable.getValue();
                 boolean usernameExists = userRegistrationService.usernameExists(username);
                 if (usernameExists) {
                     validatable.error(new ValidationError().addKey("usernameIsNotAvailable"));
                 }
-            }
+            
         });
 
     }
 
-    ServicesInjector getServicesInjector() {
-        return getIsisSessionFactory().getServicesInjector();
+    ServiceRegistry getServiceRegistry() {
+        return IsisContext.getServiceRegistry();
     }
 
     IsisSessionFactory getIsisSessionFactory() {

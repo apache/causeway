@@ -25,7 +25,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderAndFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<String> implements StringValueFacet {
 
@@ -41,11 +40,11 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacet
      * {@link EncoderDecoder}.
      */
     public StringValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public StringValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(type(), holder, String.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, context);
+    public StringValueSemanticsProvider(final FacetHolder holder) {
+        super(type(), holder, String.class, TYPICAL_LENGTH, -1, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE);
     }
 
     // //////////////////////////////////////////////////////////////////

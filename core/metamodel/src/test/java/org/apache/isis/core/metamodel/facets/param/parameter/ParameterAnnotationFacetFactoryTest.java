@@ -77,10 +77,10 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
     @Before
     public void setUp() throws Exception {
         facetFactory = new ParameterAnnotationFacetFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
-    @After
+    @Override
+	@After
     public void tearDown() throws Exception {
         facetFactory = null;
     }
@@ -148,7 +148,7 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
             actionMethod = findMethod(Customer.class, "someAction", new Class[]{String.class} );
 
             // expecting
-            context.ignoring(mockServicesInjector);
+            context.ignoring(mockServiceInjector);
 
 
             // when

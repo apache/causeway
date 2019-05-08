@@ -24,7 +24,6 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemanticsProviderAbstract implements PropertyDefaultFacet {
@@ -36,11 +35,11 @@ public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemantic
      * {@link EncoderDecoder}.
      */
     public BooleanPrimitiveValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public BooleanPrimitiveValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, boolean.class, DEFAULT_VALUE, context);
+    public BooleanPrimitiveValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, boolean.class, DEFAULT_VALUE);
     }
 
     // //////////////////////////////////////////////////////////////////

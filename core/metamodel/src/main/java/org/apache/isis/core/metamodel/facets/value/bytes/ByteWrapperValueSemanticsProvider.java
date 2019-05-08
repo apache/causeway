@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.value.bytes;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class ByteWrapperValueSemanticsProvider extends ByteValueSemanticsProviderAbstract {
@@ -32,11 +31,11 @@ public class ByteWrapperValueSemanticsProvider extends ByteValueSemanticsProvide
      * {@link EncoderDecoder}.
      */
     public ByteWrapperValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public ByteWrapperValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, Byte.class, context);
+    public ByteWrapperValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, Byte.class);
     }
 
 }

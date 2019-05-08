@@ -69,7 +69,7 @@ public class JsonValueEncoderTest_asAdapter {
         mockObjectAdapter = context.mock(ObjectAdapter.class);
         mockAdapterManager = context.mock(ObjectAdapterProvider.class);
 
-        JsonValueEncoder.testSetAdapterManager(mockAdapterManager);
+        JsonValueEncoder.testSetAdapterManager(mockAdapterManager::adapterFor);
 
         representation = new JsonRepresentation(TextNode.valueOf("aString"));
     }

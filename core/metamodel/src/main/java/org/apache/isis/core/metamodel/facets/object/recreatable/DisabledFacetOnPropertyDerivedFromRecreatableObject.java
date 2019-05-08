@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -43,8 +42,6 @@ public class DisabledFacetOnPropertyDerivedFromRecreatableObject extends Disable
         if (!cloneable) {
             return "Non-cloneable view models are read-only";
         }
-
-        final Facet underlyingFacet = getUnderlyingFacet();
         return null;
     }
 

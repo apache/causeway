@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets.members.cssclass;
 
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

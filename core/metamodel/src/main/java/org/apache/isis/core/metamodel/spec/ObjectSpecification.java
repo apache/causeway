@@ -21,11 +21,15 @@ package org.apache.isis.core.metamodel.spec;
 
 import static org.apache.isis.commons.internal.functions._Predicates.instanceOf;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Modifier;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.metamodel.ManagedObjectSort;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -220,6 +224,12 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * @since 2.0.0-M2
      */
     ObjectSpecification getElementSpecification();
+    
+    /**
+     * 
+     * @since 2.0.0-M3
+     */
+    ManagedObjectSort getManagedObjectSort();
 
     // //////////////////////////////////////////////////////////////
     // TitleContext
@@ -271,7 +281,9 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      *
      * @see #isParentedOrFreeCollection().
      */
-    boolean isNotCollection();
+    default boolean isNotCollection() {
+        return !isParentedOrFreeCollection();
+    }
 
     /**
      * Determines if objects of this type are a parented (internal) or free-standing (external) collection.
@@ -282,7 +294,9 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      *
      * @see #isNotCollection()
      */
-    boolean isParentedOrFreeCollection();
+    default boolean isParentedOrFreeCollection() {
+        return getManagedObjectSort().isCollection();
+    }
 
     /**
      * Determines if objects of this type are values.
@@ -290,7 +304,9 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * <p>
      * In effect, means has got {@link ValueFacet}.
      */
-    boolean isValue();
+    default boolean isValue() {
+        return getManagedObjectSort().isValue();
+    }
 
     /**
      * Determines if objects of this type are parented (a parented collection, or an aggregated entity).
@@ -306,7 +322,9 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * @see #isValue()
      * @see #isParented()
      */
-    boolean isValueOrIsParented();
+    default boolean isValueOrIsParented() {
+        return isValue() || isParented();
+    }
 
     /**
      * Determines if objects of this type can be set up from a text entry
@@ -335,36 +353,64 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      */
     boolean isHidden();
 
-
-
-    // //////////////////////////////////////////////////////////////
-    // Service
-    // //////////////////////////////////////////////////////////////
-
     /**
-     * Whether or not this specification represents a domain service (as opposed
-     * to a domain entity or a value etc).
-     *
-     * <p>
-     * <b>WARNING</b>: this only returns <tt>true</tt> once the metamodel has been
-     * fully built, and a <tt>PersistenceSession</tt> has been opened.  This should
-     * probably be improved upon; for now, beware...
+     * Whether this specification represents a bean, that is a managed object
+     * with scoped life-cycle, available for dependency injection. 
      */
-    boolean isService();
+    default boolean isBean() {
+        return getManagedObjectSort().isBean();
+    }
+    
+    @Deprecated //TODO[2112] improper naming, what exactly is a service?
+    default boolean isService() {
+        return isBean();
+    }
 
-
-
-    // //////////////////////////////////////////////////////////////
-    // view models and wizards
-    // //////////////////////////////////////////////////////////////
-
-    boolean isViewModel();
-    boolean isMixin();
+    default boolean isViewModel() {
+        return getManagedObjectSort().isViewModel();
+    }
+    
+    default boolean isMixin() {
+        return getManagedObjectSort().isMixin();
+    }
+    
     boolean isViewModelCloneable(ManagedObject targetAdapter);
     boolean isWizard();
 
-    boolean isPersistenceCapable();
-    boolean isPersistenceCapableOrViewModel();
+    default boolean isEntityOrViewModel() {
+        return isViewModel() || isEntity();
+    }
+    
+    default boolean isEntity() {
+        return getManagedObjectSort().isEntity();
+    }
+
+    /**
+     * 
+     * @since 2.0.0-M3
+     */
+	default Object instantiatePojo() {
+        final Class<?> correspondingClass = getCorrespondingClass();
+        if (correspondingClass.isArray()) {
+            return Array.newInstance(correspondingClass.getComponentType(), 0);
+        }
+
+        final Class<?> cls = correspondingClass;
+        if (Modifier.isAbstract(cls.getModifiers())) {
+            throw new IsisException("Cannot create an instance of an abstract class: " + cls);
+        }
+
+        final Object newInstance;
+        try {
+            newInstance = cls.newInstance();
+        } catch (final IllegalAccessException | InstantiationException e) {
+            throw new IsisException("Failed to create instance of type " + getFullIdentifier(), e);
+        }
+        
+        return newInstance; 
+	}
+
+    
     
 
 }

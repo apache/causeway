@@ -36,7 +36,7 @@ public class ClobValueFacetUsingSemanticsProviderFactory extends ValueFacetUsing
         if (type != Clob.class) {
             return;
         }
-        addFacets(new ClobValueSemanticsProvider(holder, getContext()));
+        addFacets(new ClobValueSemanticsProvider(holder));
     }
 
 }

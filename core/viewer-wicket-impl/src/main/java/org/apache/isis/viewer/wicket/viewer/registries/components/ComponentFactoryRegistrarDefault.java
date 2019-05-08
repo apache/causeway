@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.viewer.registries.components;
 
 import java.util.ServiceLoader;
 
+import javax.inject.Singleton;
+
 import org.apache.isis.commons.internal.context._Plugin;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -85,8 +87,6 @@ import org.apache.isis.viewer.wicket.ui.components.value.StandaloneValuePanelFac
 import org.apache.isis.viewer.wicket.ui.components.voidreturn.VoidReturnPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.welcome.WelcomePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.widgets.entitysimplelink.EntityLinkSimplePanelFactory;
-
-import com.google.inject.Singleton;
 
 /**
  * Default implementation of {@link ComponentFactoryRegistrar} that registers a

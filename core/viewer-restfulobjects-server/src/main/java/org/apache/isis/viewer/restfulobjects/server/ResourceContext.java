@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,16 +35,10 @@ import javax.ws.rs.ext.Providers;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Sets;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.security.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
@@ -56,28 +49,24 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
-public class ResourceContext implements RendererContext {
+import lombok.Getter;
 
-    private final HttpHeaders httpHeaders;
-    private final UriInfo uriInfo;
-    private final Request request;
+public class ResourceContext extends RuntimeContextBase implements RendererContext {
+
+    @Getter private final HttpHeaders httpHeaders;
+    @Getter private final UriInfo uriInfo;
+    @Getter private final Request request;
     //not used ... private final Providers providers;
-    private final HttpServletRequest httpServletRequest;
-    private final HttpServletResponse httpServletResponse;
-    private final SecurityContext securityContext;
+    @Getter private final HttpServletRequest httpServletRequest;
+    @Getter private final HttpServletResponse httpServletResponse;
+    @Getter private final SecurityContext securityContext;
 
-    private final IsisConfiguration configuration;
-    private final ServicesInjector servicesInjector;
-    private final SpecificationLoader specificationLoader;
-    private final AuthenticationSession authenticationSession;
-    private final PersistenceSession persistenceSession;
-
-    private List<List<String>> followLinks;
-    private boolean validateOnly;
+    @Getter private List<List<String>> followLinks;
+    @Getter private boolean validateOnly;
 
     private final Where where;
     private final RepresentationService.Intent intent;
-    private final InteractionInitiatedBy interactionInitiatedBy;
+    @Getter private final InteractionInitiatedBy interactionInitiatedBy;
     private final String urlUnencodedQueryString;
 
     private JsonRepresentation readQueryStringAsMap;
@@ -97,6 +86,8 @@ public class ResourceContext implements RendererContext {
             final HttpServletResponse httpServletResponse,
             final SecurityContext securityContext,
             final InteractionInitiatedBy interactionInitiatedBy) {
+        
+        super();
 
         this.httpHeaders = httpHeaders;
         //not used ... this.providers = providers;
@@ -107,18 +98,7 @@ public class ResourceContext implements RendererContext {
         this.urlUnencodedQueryString = urlUnencodedQueryStringIfAny;
         this.httpServletRequest = httpServletRequest;
         this.httpServletResponse = httpServletResponse;
-
         this.securityContext = securityContext;
-
-        final IsisSessionFactory isisSessionFactory = IsisContext.getSessionFactory(); 
-
-        this.servicesInjector = isisSessionFactory.getServicesInjector();
-        this.configuration = isisSessionFactory.getConfiguration();
-
-        this.authenticationSession = isisSessionFactory.getCurrentSession().getAuthenticationSession();
-        this.specificationLoader = isisSessionFactory.getSpecificationLoader();
-        this.persistenceSession = isisSessionFactory.getCurrentSession().getPersistenceSession();
-
         this.interactionInitiatedBy = interactionInitiatedBy;
 
         init(representationType);
@@ -142,14 +122,6 @@ public class ResourceContext implements RendererContext {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST,
                     "x-ro-domain-model of '%s' is not supported", domainModel);
         }
-    }
-
-
-
-
-
-    public HttpHeaders getHttpHeaders() {
-        return httpHeaders;
     }
 
     /**
@@ -219,74 +191,6 @@ public class ResourceContext implements RendererContext {
     public <Q> Q getArg(final RequestParameter<Q> requestParameter) {
         final JsonRepresentation queryStringJsonRepr = getQueryStringAsJsonRepr();
         return requestParameter.valueOf(queryStringJsonRepr);
-    }
-
-    public UriInfo getUriInfo() {
-        return uriInfo;
-    }
-
-    public Request getRequest() {
-        return request;
-    }
-
-    public HttpServletRequest getHttpServletRequest() {
-        return httpServletRequest;
-    }
-
-    @Override
-    public List<MediaType> getAcceptableMediaTypes() {
-        return httpHeaders.getAcceptableMediaTypes();
-    }
-
-    public HttpServletResponse getServletResponse() {
-        return httpServletResponse;
-    }
-
-    public SecurityContext getSecurityContext() {
-        return securityContext;
-    }
-
-    @Override
-    public InteractionInitiatedBy getInteractionInitiatedBy() {
-        return interactionInitiatedBy;
-    }
-
-    @Override
-    public List<List<String>> getFollowLinks() {
-        return followLinks;
-    }
-    @Override
-    public boolean isValidateOnly() {
-        return validateOnly;
-    }
-
-    @Override
-    public AuthenticationSession getAuthenticationSession() {
-        return authenticationSession;
-    }
-
-    @Override
-    public ServicesInjector getServicesInjector() {
-        return servicesInjector;
-    }
-
-    @Override
-    public PersistenceSession getPersistenceSession() {
-        return persistenceSession;
-    }
-
-    public Stream<ObjectAdapter> streamServiceAdapters() {
-        return persistenceSession.streamServices();
-    }
-
-    @Override
-    public SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
-    }
-
-    @Override
-    public IsisConfiguration getConfiguration() {
-        return configuration;
     }
 
     @Override
@@ -365,11 +269,14 @@ public class ResourceContext implements RendererContext {
         return getConfiguration().getBoolean("isis.viewer.restfulobjects.suppressMemberDisabledReason", SUPPRESS_MEMBER_DISABLED_REASON_DEFAULT);
     }
 
-
-
     @Override
     public String urlFor(final String url) {
         return getUriInfo().getBaseUri().toString() + url;
+    }
+
+    @Override
+    public List<MediaType> getAcceptableMediaTypes() {
+        return httpHeaders.getAcceptableMediaTypes();
     }
 
 }

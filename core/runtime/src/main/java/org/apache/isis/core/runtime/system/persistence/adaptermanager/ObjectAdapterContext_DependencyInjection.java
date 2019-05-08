@@ -21,14 +21,11 @@ package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 import java.lang.reflect.Array;
 import java.lang.reflect.Modifier;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -37,24 +34,11 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
  * </p> 
  * @since 2.0.0-M2
  */
-@SuppressWarnings("unused")
+//@Slf4j
+@RequiredArgsConstructor
 class ObjectAdapterContext_DependencyInjection {
     
-    
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectAdapterContext_DependencyInjection.class);
-    private final ObjectAdapterContext objectAdapterContext;
-    private final PersistenceSession persistenceSession;
-    private final ServicesInjector servicesInjector;
-    private final SpecificationLoader specificationLoader;
-    
-    
-    ObjectAdapterContext_DependencyInjection(ObjectAdapterContext objectAdapterContext,
-            PersistenceSession persistenceSession) {
-        this.objectAdapterContext = objectAdapterContext;
-        this.persistenceSession = persistenceSession;
-        this.servicesInjector = persistenceSession.getServicesInjector();
-        this.specificationLoader = servicesInjector.getSpecificationLoader();
-    }
+    private final RuntimeContext runtimeContext;
     
     Object instantiateAndInjectServices(final ObjectSpecification objectSpec) {
 
@@ -75,7 +59,7 @@ class ObjectAdapterContext_DependencyInjection {
             throw new IsisException("Failed to create instance of type " + objectSpec.getFullIdentifier(), e);
         }
 
-        servicesInjector.injectServicesInto(newInstance);
+        runtimeContext.getServiceInjector().injectServicesInto(newInstance);
         return newInstance;
 
     }

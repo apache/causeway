@@ -36,7 +36,8 @@ public class ParameterOptionalityOrNullableAnnotationOnParameterFacetFactoryTest
 
     private ParameterAnnotationFacetFactory facetFactory;
 
-    public void setUp() throws Exception {
+    @Override
+	public void setUp() throws Exception {
         super.setUp();
         facetFactory = new ParameterAnnotationFacetFactory();
     }

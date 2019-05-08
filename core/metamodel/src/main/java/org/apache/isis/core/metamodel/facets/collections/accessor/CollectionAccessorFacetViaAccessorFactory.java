@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -32,7 +31,6 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.collparam.semantics.CollectionSemanticsFacetDefault;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class CollectionAccessorFacetViaAccessorFactory
@@ -59,10 +57,7 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
         final FacetHolder holder = processMethodContext.getFacetHolder();
         FacetUtil.addFacet(
                 new CollectionAccessorFacetViaAccessor(
-                        typeSpec, accessorMethod, holder,
-                        getSpecificationLoader(),
-                        getAuthenticationSessionProvider(), adapterProvider
-                        ));
+                        typeSpec, accessorMethod, holder));
 
         FacetUtil.addFacet(CollectionSemanticsFacetDefault.forCollection(accessorMethod, holder));
     }
@@ -110,14 +105,5 @@ extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
     public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         // does nothing
     }
-
-
-
-    @Override public void setServicesInjector(final ServicesInjector servicesInjector) {
-        super.setServicesInjector(servicesInjector);
-        adapterProvider = servicesInjector.getPersistenceSessionServiceInternal();
-    }
-
-    ObjectAdapterProvider adapterProvider;
 
 }

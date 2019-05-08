@@ -16,6 +16,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.tree;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -25,8 +27,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.resource.spi.IllegalStateException;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -50,12 +50,13 @@ import org.apache.isis.commons.internal.functions._Functions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
+
+import lombok.val;
 
 class IsisToWicketTreeAdapter {
 
@@ -241,7 +242,7 @@ class IsisToWicketTreeAdapter {
                 return wrappedTreeAdapter;
             }
             try {
-                final FactoryService factoryService = IsisContext.getServicesInjector()
+                final FactoryService factoryService = IsisContext.getServiceRegistry()
                         .lookupServiceElseFail(FactoryService.class);
                 return wrappedTreeAdapter = factoryService.instantiate(treeAdapterClass);
             } catch (Exception e) {
@@ -276,17 +277,15 @@ class IsisToWicketTreeAdapter {
         }
 
         private TreeModel wrap(Object pojo, TreePath treePath) {
-            Objects.requireNonNull(pojo);
-            return new TreeModel(persistenceSession().adapterFor(pojo), treePath);
+            requires(pojo, "pojo");
+            val pojoToAdapter = IsisContext.pojoToAdapter();
+            val objectAdapter = pojoToAdapter.apply(pojo);
+            return new TreeModel(objectAdapter, treePath);
         }
 
         private Object unwrap(TreeModel model) {
             Objects.requireNonNull(model);
             return model.getObject().getPojo();
-        }
-
-        private PersistenceSession persistenceSession() {
-            return IsisContext.getPersistenceSession().orElse(null);
         }
 
         private Function<Object, TreeModel> newPojoToTreeModelMapper(TreeModel parent) {
@@ -385,13 +384,17 @@ class IsisToWicketTreeAdapter {
         @Override
         protected TreeModel load() {
 
-            final PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
-                    .orElseThrow(()->new RuntimeException(new IllegalStateException(
-                            String.format("Tree creation: missing a PersistenceSession to recreate TreeModel "
-                                    + "from Oid: '%s'", id)))
-                            );
+        	val rootOid = id;
+            val rootOidToAdapter = IsisContext.rootOidToAdapter();
 
-            final ObjectAdapter objAdapter = persistenceSession.adapterFor(id);
+//TODO [2033] remove            
+//            final PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
+//                    .orElseThrow(()->new RuntimeException(new IllegalStateException(
+//                            String.format("Tree creation: missing a PersistenceSession to recreate TreeModel "
+//                                    + "from Oid: '%s'", id)))
+//                            );
+
+            val objAdapter = rootOidToAdapter.apply(rootOid);
             if(objAdapter==null) {
                 throw new NoSuchElementException(
                         String.format("Tree creation: could not recreate TreeModel from Oid: '%s'", id));

@@ -36,7 +36,7 @@ public class BytePrimitiveValueFacetUsingSemanticsProviderFactory extends ValueF
         if (type != byte.class) {
             return;
         }
-        addFacets(new BytePrimitiveValueSemanticsProvider(holder, getContext()));
+        addFacets(new BytePrimitiveValueSemanticsProvider(holder));
     }
 
 }

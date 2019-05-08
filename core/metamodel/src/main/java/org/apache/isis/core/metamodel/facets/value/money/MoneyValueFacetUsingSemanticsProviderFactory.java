@@ -37,7 +37,7 @@ public class MoneyValueFacetUsingSemanticsProviderFactory extends ValueFacetUsin
         if (type != org.apache.isis.applib.value.Money.class) {
             return;
         }
-        addFacets(new MoneyValueSemanticsProvider(holder, getContext()));
+        addFacets(new MoneyValueSemanticsProvider(holder));
     }
 
 }

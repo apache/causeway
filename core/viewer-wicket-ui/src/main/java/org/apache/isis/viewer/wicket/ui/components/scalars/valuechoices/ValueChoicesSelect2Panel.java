@@ -18,6 +18,8 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.valuechoices;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -76,7 +78,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
         final List<ObjectAdapter> choices =
                 scalarModel.getChoices(argumentsIfAvailable, getAuthenticationSession());
 
-        return _Lists.map(choices, ObjectAdapterMemento.Functions.fromAdapter());
+        return _Lists.map(choices, ObjectAdapterMemento::ofAdapter);
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -179,7 +181,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
         return scalarModel;
     }
 
-    @com.google.inject.Inject
+    @Inject
     WicketViewerSettings wicketViewerSettings;
 
     @Override

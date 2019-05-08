@@ -23,12 +23,12 @@ import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 import java.util.List;
 
+import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetOnStandaloneList;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
@@ -54,10 +54,9 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     // -- constructor
 
     public ObjectSpecificationOnStandaloneList(
-            final ServicesInjector servicesInjector,
             final FacetProcessor facetProcessor,
             final PostProcessor postProcessor) {
-        super(FreeStandingList.class, NAME, servicesInjector, facetProcessor, postProcessor);
+        super(FreeStandingList.class, NAME, facetProcessor, postProcessor);
         this.specId = ObjectSpecId.of(getCorrespondingClass().getName());
 
         FacetUtil.addFacet(
@@ -73,7 +72,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         loadSpecOfSuperclass(Object.class);
 
         addFacet(new CollectionFacetOnStandaloneList(this));
-        addFacet(new TypeOfFacetDefaultToObject(this, getSpecificationLoader()) {
+        addFacet(new TypeOfFacetDefaultToObject(this) {
         });
 
         // ObjectList specific
@@ -84,26 +83,17 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         // don't install anything for NotPersistableFacet
     }
 
+    @Override
     protected void introspectMembers() {
         // no-op.
     }
 
-
-    // -- isXxx
-
     @Override
-    public boolean isService() {
-        return false;
+    public ManagedObjectSort getManagedObjectSort() {
+        return ManagedObjectSort.COLLECTION;
     }
-    @Override
-    public boolean isViewModel() {
-        return false;
-    }
-
-    @Override
-    public boolean isMixin() {
-        return false;
-    }
+    
+    // -- PREDICTATES
 
     @Override
     public boolean isViewModelCloneable(ManagedObject targetAdapter) {

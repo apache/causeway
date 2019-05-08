@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -76,9 +75,9 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             final Class<?> mixinType,
             final String mixinMethodName,
             final ObjectActionDefault mixinAction,
-            final ObjectSpecification mixedInType,
-            final ServicesInjector objectMemberDependencies) {
-        super(mixinAction.getFacetedMethod(), objectMemberDependencies);
+            final ObjectSpecification mixedInType) {
+        
+        super(mixinAction.getFacetedMethod());
 
         this.mixinType = mixinType;
         this.mixinAction = mixinAction;
@@ -147,8 +146,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
                     (ObjectActionParameterAbstract) mixinActionParameters.get(paramNum);
 
             final TypedHolder paramPeer = paramPeers.get(paramNum);
-            final ObjectSpecification specification = ObjectMemberAbstract
-                    .getSpecification(getSpecificationLoader(), paramPeer.getType());
+            final ObjectSpecification specification = getSpecificationLoader().loadSpecification(paramPeer.getType()); 
 
             final ObjectActionParameterMixedIn mixedInParameter =
                     mixinParameter.getPeer().getFeatureType() == FeatureType.ACTION_PARAMETER_SCALAR

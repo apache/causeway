@@ -28,7 +28,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.JsonValueEncoder;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
-import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
 
 /**
  * Utility class that encapsulates the logic for parsing some content (JSON, or a simple string that is JSON)
@@ -128,7 +127,7 @@ public class JsonParserHelper {
             throw new IllegalArgumentException(reason);
         }
 
-        final ObjectAdapter objectAdapter = OidUtils.getObjectAdapterElseNull(rendererContext, oidFromHref);
+        final ObjectAdapter objectAdapter = rendererContext.getObjectAdapterElseNull(oidFromHref);
         if (objectAdapter == null) {
             final String reason = "'href' does not reference a known entity";
             argRepr.mapPut("invalidReason", reason);

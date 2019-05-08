@@ -20,7 +20,7 @@
 package org.apache.isis.core.security.authentication.health;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.security.authentication.AuthenticationSessionAbstract;
@@ -34,7 +34,7 @@ public class HealthAuthSession extends AuthenticationSessionAbstract {
     private static final String CODE = "";
 
     public HealthAuthSession() {
-        super(USER_NAME, Arrays.asList(ROLE), CODE);
+        super(USER_NAME, Stream.of(ROLE), CODE);
     }
 
     public HealthAuthSession(final DataInputExtended input) throws IOException {

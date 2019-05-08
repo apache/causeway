@@ -16,8 +16,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import com.fasterxml.jackson.databind.node.NullNode;
-
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -30,6 +28,8 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
+
+import com.fasterxml.jackson.databind.node.NullNode;
 
 public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> extends ReprRendererAbstract<R, ObjectAndMember<T>> {
 
@@ -252,7 +252,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     }
 
     private void addDetailsLinkIfPersistent() {
-        if (!objectAdapter.representsPersistent()) {
+        if (!objectAdapter.isRepresentingPersistent()) {
             return;
         }
         final JsonRepresentation link = linkTo.memberBuilder(Rel.DETAILS, objectMemberType, objectMember).build();

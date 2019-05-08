@@ -18,8 +18,9 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
-import com.google.inject.name.Named;
+import javax.inject.Inject;
 
+import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
@@ -28,19 +29,11 @@ import org.apache.wicket.model.Model;
  */
 public class BrandName extends Label {
 
+    private static final long serialVersionUID = 1L;
+
     private final Placement placement;
 
-    @com.google.inject.Inject
-    @Named("applicationName")
-    private String applicationName;
-
-    @com.google.inject.Inject(optional = true)
-    @Named("brandLogoHeader")
-    private String logoHeaderUrl;
-
-    @com.google.inject.Inject(optional = true)
-    @Named("brandLogoSignin")
-    private String logoSigninUrl;
+    @Inject private WebAppConfigBean webAppConfigBean;
 
     /**
      * Constructor.
@@ -51,12 +44,19 @@ public class BrandName extends Label {
     public BrandName(final String id, final Placement placement) {
         super(id);
         this.placement = placement;
+        
+        String applicationName = webAppConfigBean.getApplicationName();
+        
         setDefaultModel(Model.of(applicationName));
     }
 
     @Override
     protected void onConfigure() {
         super.onConfigure();
+        
+        String logoHeaderUrl = webAppConfigBean.getBrandLogoHeader();
+        String logoSigninUrl = webAppConfigBean.getBrandLogoSignin();
+        
         setVisible(placement.urlFor(logoHeaderUrl, logoSigninUrl) == null);
     }
 }

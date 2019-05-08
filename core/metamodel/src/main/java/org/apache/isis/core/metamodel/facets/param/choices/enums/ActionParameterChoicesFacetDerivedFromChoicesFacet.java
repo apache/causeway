@@ -23,24 +23,17 @@ import java.util.List;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
 public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetDerivedFromChoicesFacet(
-            final FacetHolder holder,
-            final SpecificationLoader specificationLookup,
-            final AuthenticationSessionProvider authenticationSessionProvider,
-            final ObjectAdapterProvider adapterProvider) {
-        super(holder, specificationLookup, authenticationSessionProvider, adapterProvider);
+    public ActionParameterChoicesFacetDerivedFromChoicesFacet(final FacetHolder holder) {
+        super(holder);
     }
 
     @Override

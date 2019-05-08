@@ -17,6 +17,7 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import javax.ws.rs.core.MediaType;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

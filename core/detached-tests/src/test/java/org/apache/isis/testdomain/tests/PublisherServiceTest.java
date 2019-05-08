@@ -60,10 +60,11 @@ class PublisherServiceTest extends JdoTestDomainIntegTest {
     void publisherServiceShouldBeAwareOfInventoryChanges() {
         
         
-        val serviceRegistry = IsisContext.getServicesInjector();
+        val serviceRegistry = IsisContext.getServiceRegistry();
         
         Map<Class<? extends PublisherService>, PublisherService> map =
-                serviceRegistry.streamServices(PublisherService.class)
+                serviceRegistry.select(PublisherService.class)
+                .stream()
                 .collect(Collectors.toMap(ps->ps.getClass(), ps->ps));
         
         // TODO any instance type lookup (should be a test on its own)
@@ -74,7 +75,7 @@ class PublisherServiceTest extends JdoTestDomainIntegTest {
         
         // given
 //        val publisherService = (PublisherServiceStub) publisherServiceAny; 
-        val repository = IsisContext.getServicesInjector()
+        val repository = IsisContext.getServiceRegistry()
                 .lookupServiceElseFail(RepositoryService.class);
         val txMan = IsisContext.getPersistenceSession().get().getTransactionManager();
         val book = repository.allInstances(Book.class).listIterator().next();

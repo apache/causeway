@@ -20,14 +20,12 @@
 package org.apache.isis.core.metamodel.facets.jaxb;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class XmlJavaTypeAdapterFacetDefault extends XmlJavaTypeAdapterFacetAbstract {
 
     public XmlJavaTypeAdapterFacetDefault(
             final FacetHolder holder,
-            final Class<?> value,
-            final SpecificationLoader specificationLoader) {
-        super(holder, value, specificationLoader);
+            final Class<?> value) {
+        super(holder, value);
     }
 }

@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.value.longs;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class LongWrapperValueSemanticsProvider extends LongValueSemanticsProviderAbstract {
@@ -32,11 +31,11 @@ public class LongWrapperValueSemanticsProvider extends LongValueSemanticsProvide
      * {@link EncoderDecoder}.
      */
     public LongWrapperValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public LongWrapperValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, Long.class, context);
+    public LongWrapperValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, Long.class);
     }
 
 }

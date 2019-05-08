@@ -57,7 +57,6 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
@@ -91,9 +90,8 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     // -- constructors
 
     public ObjectActionDefault(
-            final FacetedMethod facetedMethod,
-            final ServicesInjector servicesInjector) {
-        super(facetedMethod, FeatureType.ACTION, servicesInjector);
+            final FacetedMethod facetedMethod) {
+        super(facetedMethod, FeatureType.ACTION);
     }
 
 
@@ -192,7 +190,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
             final FacetedMethodParameter paramPeer = paramPeers.get(paramNum);
 
             final ObjectSpecification specification = ObjectMemberAbstract
-                    .getSpecification(getSpecificationLoader(), paramPeer.getType());
+                    .specificationOf(paramPeer.getType());
 
             // previously we threw an exception here if the specification represented a collection.  No longer!
             final ObjectActionParameter parameter =
@@ -515,7 +513,7 @@ public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectA
     }
 
     private ObjectAdapter adapterFor(final Object pojo) {
-        return pojo == null ? null : getPersistenceSessionService().adapterFor(pojo);
+        return pojo == null ? null : getObjectAdapterProvider().adapterFor(pojo);
     }
 
     private static ThreadLocal<List<ObjectAdapter>> commandTargetAdaptersHolder = new ThreadLocal<>();

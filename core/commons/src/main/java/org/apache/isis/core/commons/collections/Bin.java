@@ -55,7 +55,7 @@ public interface Bin<T> extends Iterable<T> {
 		return Bin_Singleton.of(element);
 	}
 	
-	public static <T> Bin<T> ofCollection(@Nullable Collection<T> collection){
+	public static <T> Bin<T> ofCollection(@Nullable Collection<T> collection) {
 		
 		if(_NullSafe.size(collection)==0) {
 			return empty();
@@ -81,6 +81,29 @@ public interface Bin<T> extends Iterable<T> {
 		
 		return Bin_Multiple.of(nonNullElements);
 	}
+	
+	public static <T> Bin<T> ofStream(@Nullable Stream<T> stream) {
+        
+        if(stream==null) {
+            return empty();
+        }
+        
+        val nonNullElements = stream
+                .filter(_NullSafe::isPresent)
+                .collect(Collectors.toCollection(()->new ArrayList<>()));        
+        
+        val size = nonNullElements.size();
+        
+        if(size==0) {
+            return empty();
+        }
+        
+        if(size==1) {
+            return ofSingleton(((List<T>)nonNullElements).get(0));
+        }
+        
+        return Bin_Multiple.of(nonNullElements);
+    }
 	
 	public static <T> Bin<T> ofInstance(@Nullable Instance<T> instance) {
 		if(instance==null || instance.isUnsatisfied()) {

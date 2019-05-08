@@ -68,10 +68,10 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     public void setUp() throws Exception {
         _Config.clear();
         facetFactory = new DomainObjectAnnotationFacetFactory();
-        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
-    @After
+    @Override
+	@After
     public void tearDown() throws Exception {
         facetFactory = null;
     }
@@ -419,17 +419,18 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         class CustomerWithDomainObjectButNoAutoCompleteRepository {
         }
 
-        @Before
+        @Override
+		@Before
         public void setUp() throws Exception {
             super.setUp();
             
             context.checking(new Expectations() {
                 {
-                    allowing(mockServicesInjector).isRegisteredService(CustomerRepository.class);
-                    will(returnValue(true));
-
-                    allowing(mockServicesInjector).isRegisteredService(CustomerRepositoryWithDefaultMethodName.class);
-                    will(returnValue(true));
+//                    allowing(mockServicesInjector).isRegisteredService(CustomerRepository.class);
+//                    will(returnValue(true));
+//
+//                    allowing(mockServicesInjector).isRegisteredService(CustomerRepositoryWithDefaultMethodName.class);
+//                    will(returnValue(true));
                     
                     // anything else
                     
@@ -516,7 +517,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         class CustomerWithDomainObjectButNoBounded {
         }
 
-        @Before
+        @Override
+		@Before
         public void setUp() throws Exception {
             super.setUp();
             ignoringConfiguration();
@@ -705,7 +707,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         class CustomerWithDomainObjectButNoObjectType {
         }
 
-        @Before
+        @Override
+		@Before
         public void setUp() throws Exception {
             super.setUp();
             ignoringConfiguration();
@@ -778,7 +781,8 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         class CustomerWithDomainObjectButNoNature {
         }
 
-        @Before
+        @Override
+		@Before
         public void setUp() throws Exception {
             super.setUp();
             ignoringConfiguration();

@@ -21,34 +21,28 @@ package org.apache.isis.core.metamodel.services.metamodel;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.AppManifest2;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
+import org.apache.isis.commons.internal.cdi._CDI;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.JdoMetamodelUtil;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureType;
-import org.apache.isis.core.metamodel.services.appmanifest.AppManifestProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -60,31 +54,23 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-    )
+@Singleton
 public class MetaModelServiceDefault implements MetaModelService {
-
-    @SuppressWarnings("unused")
-    private final static Logger LOG = LoggerFactory.getLogger(MetaModelServiceDefault.class);
 
     private MetaModelExporter metaModelExporter;
 
     @PostConstruct
-    @Programmatic
     public void init() {
-        metaModelExporter = new MetaModelExporter(specificationLookup);
+        metaModelExporter = new MetaModelExporter(specificationLoader);
     }
 
     @Override
-    @Programmatic
     public Class<?> fromObjectType(final String objectType) {
         if(objectType == null) {
             return null;
         }
         final ObjectSpecId objectSpecId = ObjectSpecId.of(objectType);
-        final ObjectSpecification objectSpecification = specificationLookup.lookupBySpecId(objectSpecId);
+        final ObjectSpecification objectSpecification = specificationLoader.lookupBySpecId(objectSpecId);
         return objectSpecification != null? objectSpecification.getCorrespondingClass(): null;
     }
 
@@ -93,7 +79,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         if(domainType == null) {
             return null;
         }
-        final ObjectSpecification objectSpecification = specificationLookup.loadSpecification(domainType);
+        final ObjectSpecification objectSpecification = specificationLoader.loadSpecification(domainType);
         final ObjectSpecIdFacet objectSpecIdFacet = objectSpecification.getFacet(ObjectSpecIdFacet.class);
         final ObjectSpecId objectSpecId = objectSpecIdFacet.value();
         return objectSpecId.asString();
@@ -101,9 +87,11 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @Override
     public void rebuild(final Class<?> domainType) {
-        specificationLookup.invalidateCache(domainType);
+        
+        GridService gridService = _CDI.getSingletonElseFail(GridService.class);
         gridService.remove(domainType);
-        specificationLookup.loadSpecification(domainType);
+        
+        specificationLoader.reloadSpecification(domainType);
     }
 
     // //////////////////////////////////////
@@ -111,10 +99,9 @@ public class MetaModelServiceDefault implements MetaModelService {
 
 
     @Override
-    @Programmatic
     public DomainModel getDomainModel() {
 
-        final Collection<ObjectSpecification> specifications = specificationLookup.allSpecifications();
+        final Collection<ObjectSpecification> specifications = specificationLoader.currentSpecifications();
 
         final List<DomainMember> rows = _Lists.newArrayList();
         for (final ObjectSpecification spec : specifications) {
@@ -185,33 +172,32 @@ public class MetaModelServiceDefault implements MetaModelService {
     // //////////////////////////////////////
 
     @Override
-    public Sort sortOf(
+    public ManagedObjectSort sortOf(
             final Class<?> domainType, final Mode mode) {
         if(domainType == null) {
             return null;
         }
-        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainType);
-        if(objectSpec.isService()) {
-            return Sort.DOMAIN_SERVICE;
+        final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainType);
+        if(objectSpec.isBean()) {
+            return ManagedObjectSort.BEAN;
         }
         if(objectSpec.isViewModel()) {
-            return Sort.VIEW_MODEL;
+            return ManagedObjectSort.VIEW_MODEL;
         }
         if(objectSpec.isValue()) {
-            return Sort.VALUE;
+            return ManagedObjectSort.VALUE;
         }
         if(objectSpec.isMixin()) {
-            return Sort.VALUE;
+            return ManagedObjectSort.MIXIN;
         }
         if(objectSpec.isParentedOrFreeCollection()) {
-            return Sort.COLLECTION;
+            return ManagedObjectSort.COLLECTION;
         }
-        final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
-        if(JdoMetamodelUtil.isPersistenceEnhanced(correspondingClass)) {
-            return Sort.JDO_ENTITY;
+        if(objectSpec.isEntity()) {
+            return ManagedObjectSort.ENTITY;
         }
         if(mode == Mode.RELAXED) {
-            return Sort.UNKNOWN;
+            return ManagedObjectSort.UNKNOWN;
         }
         throw new IllegalArgumentException(String.format(
                 "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'",
@@ -221,7 +207,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     }
 
     @Override
-    public Sort sortOf(final Bookmark bookmark, final Mode mode) {
+    public ManagedObjectSort sortOf(final Bookmark bookmark, final Mode mode) {
         if(bookmark == null) {
             return null;
         }
@@ -232,7 +218,7 @@ public class MetaModelServiceDefault implements MetaModelService {
             try {
                 domainType = this.fromObjectType(bookmark.getObjectType());
             } catch (Exception e) {
-                return Sort.UNKNOWN;
+                return ManagedObjectSort.UNKNOWN;
             }
             break;
 
@@ -255,7 +241,7 @@ public class MetaModelServiceDefault implements MetaModelService {
             return null;
         }
 
-        final ObjectSpecification spec = specificationLookup.lookupBySpecId(objectSpecId);
+        final ObjectSpecification spec = specificationLoader.lookupBySpecId(objectSpecId);
         if(spec == null) {
             return null;
         }
@@ -278,22 +264,16 @@ public class MetaModelServiceDefault implements MetaModelService {
 
     @Override
     public AppManifest getAppManifest() {
-        return appManifestProvider.getAppManifest();
+        return _Config.getConfiguration().getAppManifest();
     }
-
-    @javax.inject.Inject
-    SpecificationLoader specificationLookup;
-
-    @javax.inject.Inject
-    GridService gridService;
-
-    @javax.inject.Inject
-    AppManifestProvider appManifestProvider;
 
     @Override
     public MetamodelDto exportMetaModel(final Config config) {
         return metaModelExporter.exportMetaModel(config);
     }
+    
+    @Inject SpecificationLoader specificationLoader;
+    //@Inject GridService gridService; // to break circular dependency
 
 
 }

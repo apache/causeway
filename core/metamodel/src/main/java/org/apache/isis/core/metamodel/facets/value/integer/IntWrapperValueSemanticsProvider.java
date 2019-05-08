@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.value.integer;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 
 public class IntWrapperValueSemanticsProvider extends IntValueSemanticsProviderAbstract {
@@ -32,11 +31,11 @@ public class IntWrapperValueSemanticsProvider extends IntValueSemanticsProviderA
      * {@link EncoderDecoder}.
      */
     public IntWrapperValueSemanticsProvider() {
-        this(null, null);
+        this(null);
     }
 
-    public IntWrapperValueSemanticsProvider(final FacetHolder holder, final ServicesInjector context) {
-        super(holder, Integer.class, context);
+    public IntWrapperValueSemanticsProvider(final FacetHolder holder) {
+        super(holder, Integer.class);
     }
 
 }

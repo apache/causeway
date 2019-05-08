@@ -104,6 +104,11 @@ public interface IsisConfigurationBuilder {
         return IsisConfigurationBuilderDefault.empty();
     }
 
+    static IsisConfigurationBuilder getDefaultForUnitTesting() {
+        System.setProperty("UNITTESTING", ""+true);
+        return getDefault();
+    }
+
     
 
 }

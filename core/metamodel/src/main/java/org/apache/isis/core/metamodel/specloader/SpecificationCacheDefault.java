@@ -38,7 +38,8 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * This allows {@link #allSpecifications()} to return a list of specs.
  * Later on, {@link #init()} called which populates #classNameBySpecId.
  *
- * Attempting to call {@link #getByObjectType(ObjectSpecId)} before {@link #init() initialisation} will result in an
+ * Attempting to call {@link #getByObjectType(ObjectSpecId)} before 
+ * {@link #init() initialisation} will result in an
  * {@link IllegalStateException}.
  *
  */
