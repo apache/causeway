@@ -16,15 +16,13 @@
  * under the License. */
 package org.apache.isis.core.metamodel.facets.object.grid;
 
-import org.apache.isis.applib.services.grid.GridService2;
+import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 public class GridFacetFactory extends FacetFactoryAbstract {
-
-    //private static final Logger LOG = LoggerFactory.getLogger(GridFacetFactory.class);
 
     public GridFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -34,7 +32,7 @@ public class GridFacetFactory extends FacetFactoryAbstract {
     public void process(final ProcessClassContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final GridService2 gridService = getServiceRegistry().lookupServiceElseFail(GridService2.class);
+        final GridService gridService = getServiceRegistry().lookupServiceElseFail(GridService.class);
 
         FacetUtil.addFacet(GridFacetDefault.create(facetHolder, gridService));
     }

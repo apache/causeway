@@ -24,7 +24,9 @@ import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.applib.ModuleAbstract;
 import org.apache.isis.config.AppConfig;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandard;
 import org.apache.isis.core.security.authentication.bypass.AuthenticatorBypass;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
@@ -40,6 +42,13 @@ public class JdoTestDomainModule extends ModuleAbstract {
     public AppConfig getManifest() {
         return new SpringAppManifest();
     }
+    
+    @Bean @Produces @Singleton
+    public IsisConfiguration getConfig() {
+        return _Config.getConfiguration();
+    }
+    
+    
     
     /**
     * The standard authentication manager, configured with the 'bypass' authenticator 

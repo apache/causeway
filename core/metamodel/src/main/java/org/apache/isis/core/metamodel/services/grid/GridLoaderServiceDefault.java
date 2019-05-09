@@ -31,12 +31,9 @@ import javax.inject.Singleton;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.grid.Grid;
-import org.apache.isis.applib.services.grid.GridLoaderService2;
+import org.apache.isis.applib.services.grid.GridLoaderService;
 import org.apache.isis.applib.services.grid.GridSystemService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.message.MessageService;
@@ -47,10 +44,10 @@ import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.resources._Resources;
 
-@Singleton
-public class GridLoaderServiceDefault implements GridLoaderService2 {
+import lombok.extern.slf4j.Slf4j;
 
-    private static final Logger LOG = LoggerFactory.getLogger(GridLoaderServiceDefault.class);
+@Singleton @Slf4j
+public class GridLoaderServiceDefault implements GridLoaderService {
 
 
     static class DomainClassAndLayout {
@@ -219,7 +216,7 @@ public class GridLoaderServiceDefault implements GridLoaderService2 {
             if(supportsReloading()) {
                 messageService.warnUser(message);
             }
-            LOG.warn(message);
+            log.warn(message);
 
             return null;
         }
@@ -234,13 +231,13 @@ public class GridLoaderServiceDefault implements GridLoaderService2 {
     private String loadXml(final DomainClassAndLayout dcal) {
         final String resourceName = resourceNameFor(dcal);
         if(resourceName == null) {
-            LOG.debug("Failed to locate layout file for '{}'", dcal.toString());
+            log.debug("Failed to locate layout file for '{}'", dcal.toString());
             return null;
         }
         try {
             return resourceContentOf(dcal, resourceName);
         } catch (IOException ex) {
-            LOG.debug(
+            log.debug(
                     "Failed to locate file {} (relative to {}.class)",
                     resourceName, dcal.domainClass.getName(), ex);
             return null;

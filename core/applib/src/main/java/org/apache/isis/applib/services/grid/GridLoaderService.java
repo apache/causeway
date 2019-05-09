@@ -44,5 +44,12 @@ public interface GridLoaderService {
      */
     @Programmatic
     Grid load(final Class<?> domainClass);
+    
+    /**
+     * Returns a new instance of a {@link Grid} for the specified domain class, eg from a
+     * <code>layout.xml</code> file, else <code>null</code>.
+     */
+    @Programmatic
+    Grid load(final Class<?> domainClass, String layout);
 
 }

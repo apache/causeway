@@ -18,22 +18,18 @@
  */
 package org.apache.isis.core.runtime.system.context.session;
 
-import org.apache.isis.core.runtime.system.session.IsisSession;
-
 import lombok.Getter;
 import lombok.Value;
 
 @Value(staticConstructor="of")
-public class SessionLifecycleEvent {
+public class AppLifecycleEvent {
 
 	public static enum EventType {
-		
-		sessionOpened,
-		sessionClosing,
-		//sessionFlushing,
+		appPreMetamodel,
+		appPostMetamodel,
+		appPreDestroy,
 	}
 	
-	@Getter IsisSession session;
-	@Getter EventType eventType;
+	@Getter AppLifecycleEvent.EventType eventType;
 	
 }

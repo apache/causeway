@@ -111,7 +111,7 @@ public class _Spring {
             val id = name; // just reuse the bean's name
             
             val scope = beanFactory.getBeanDefinition(name).getScope();
-            val lifecycleContext = LifecycleContext.valueOf(scope);
+            val lifecycleContext = LifecycleContext.parse(scope);
             
             val resolvableType = ResolvableType.forClass(type);
             val bean = context.getBeanProvider(resolvableType);

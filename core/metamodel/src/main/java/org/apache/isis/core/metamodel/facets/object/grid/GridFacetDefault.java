@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.grid;
 
 import org.apache.isis.applib.layout.grid.Grid;
-import org.apache.isis.applib.services.grid.GridService2;
+import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -40,17 +40,17 @@ implements GridFacet {
 
     public static GridFacet create(
             final FacetHolder facetHolder,
-            final GridService2 gridService) {
+            final GridService gridService) {
         return new GridFacetDefault(facetHolder, gridService);
     }
 
-    private final GridService2 gridService;
+    private final GridService gridService;
 
     private Grid grid;
 
     private GridFacetDefault(
             final FacetHolder facetHolder,
-            final GridService2 gridService) {
+            final GridService gridService) {
         super(GridFacetDefault.type(), facetHolder, Derivation.NOT_DERIVED);
         this.gridService = gridService;
     }

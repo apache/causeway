@@ -18,6 +18,7 @@ package org.apache.isis.applib.services.jaxb;
 
 import java.util.Map;
 
+import javax.inject.Singleton;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -25,8 +26,6 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.apache.isis.applib.NonRecoverableException;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.domain.DomainObjectList;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
@@ -34,10 +33,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntitiesAdapter;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class JaxbServiceDefault extends JaxbService.Simple {
 
     @Override

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import org.apache.isis.applib.services.grid.GridService2;
+import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationService.Mode;
 import org.apache.isis.applib.services.message.MessageService;
@@ -62,8 +62,8 @@ abstract class SpecificationLoaderTestAbstract {
         }
         
         @Produces
-        GridService2 mockGridService() {
-            return Mockito.mock(GridService2.class);
+        GridService mockGridService() {
+            return Mockito.mock(GridService.class);
         }
         
         @Produces
@@ -107,7 +107,7 @@ abstract class SpecificationLoaderTestAbstract {
     
     
     @Inject protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    @Inject protected GridService2 mockGridService;
+    @Inject protected GridService mockGridService;
     @Inject protected ObjectAdapterService mockPersistenceSessionServiceInternal;
     @Inject protected MessageService mockMessageService;
     @Inject protected SpecificationLoader specificationLoader;
