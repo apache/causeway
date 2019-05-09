@@ -7,46 +7,52 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.NotificationOptions;
 import javax.enterprise.util.TypeLiteral;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 public class RuntimeEventSupport_Spring {
     
     @Bean
-    public Event<AppLifecycleEvent> appLifecycleEvents() {
-        return new SimpleEvent<AppLifecycleEvent>();
+    public Event<AppLifecycleEvent> appLifecycleEvents(ApplicationEventPublisher publisher) {
+        return new SimpleEvent<AppLifecycleEvent>(publisher);
     }
     
     @Bean
-    public Event<SessionLifecycleEvent> sessionLifecycleEvents() {
-        return new SimpleEvent<SessionLifecycleEvent>();
+    public Event<SessionLifecycleEvent> sessionLifecycleEvents(ApplicationEventPublisher publisher) {
+        return new SimpleEvent<SessionLifecycleEvent>(publisher);
     }
     
     @Bean
-    public Event<FixturesInstallingEvent> fixturesInstallingEvents() {
-        return new SimpleEvent<FixturesInstallingEvent>();
+    public Event<FixturesInstallingEvent> fixturesInstallingEvents(ApplicationEventPublisher publisher) {
+        return new SimpleEvent<FixturesInstallingEvent>(publisher);
     }
     
     @Bean
-    public Event<FixturesInstalledEvent> fixturesInstalledEvents() {
-        return new SimpleEvent<FixturesInstalledEvent>();
+    public Event<FixturesInstalledEvent> fixturesInstalledEvents(ApplicationEventPublisher publisher) {
+        return new SimpleEvent<FixturesInstalledEvent>(publisher);
     }
     
     // -- HELPER
     
+    @RequiredArgsConstructor
     static class SimpleEvent<T> implements Event<T> {
 
-        _Probe probe = _Probe.unlimited().label("SimpleEvent");
+        private final ApplicationEventPublisher publisher;
         
+        _Probe probe = _Probe.unlimited().label("SimpleEvent");
+
         @Override
         public void fire(T event) {
-            probe.warnNotImplementedYet("fire("+event+")");
+            probe.println("fire(%s)", event.getClass());
+            publisher.publishEvent(event);
         }
 
         @Override

@@ -25,6 +25,8 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 
+import org.springframework.context.event.EventListener;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -108,6 +110,7 @@ public class AuthorizationManagerStandard implements AuthorizationManager {
         return (identifier.getClassName().equals(""));
     }
 
+    @EventListener
     public static void refineProgrammingModel(@Observes ProgrammingModel baseProgrammingModel) {
         final AuthorizationFacetFactory facetFactory = new AuthorizationFacetFactory();
         baseProgrammingModel.addFactory(facetFactory);

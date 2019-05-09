@@ -31,7 +31,6 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.context.session.RuntimeEventService;
@@ -44,6 +43,7 @@ import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
 
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -51,12 +51,10 @@ class IsisSessionFactoryBuilder {
 
     // -- constructors, accessors
 
-    private final SpecificationLoaderFactory specificationLoaderFactory;
     private final IsisLocaleInitializer localeInitializer;
     private final IsisTimeZoneInitializer timeZoneInitializer;
 
     public IsisSessionFactoryBuilder() {
-        this.specificationLoaderFactory = new SpecificationLoaderFactory();
         this.localeInitializer = new IsisLocaleInitializer();
         this.timeZoneInitializer = new IsisTimeZoneInitializer();
     }
@@ -83,17 +81,16 @@ class IsisSessionFactoryBuilder {
         }
 
         IsisSessionFactoryDefault isisSessionFactory;
-        try {
+        {
 
             final ServiceRegistry serviceRegistry = IsisContext.getServiceRegistry();
             final AuthenticationManager authenticationManager = IsisContext.getAuthenticationManager();
             final AuthorizationManager authorizationManager = IsisContext.getAuthorizationManager();
             final RuntimeEventService runtimeEventService = serviceRegistry.lookupServiceElseFail(RuntimeEventService.class);
 
-            final SpecificationLoader specificationLoader =
-                    specificationLoaderFactory.createSpecificationLoader();
-            
             serviceRegistry.validateServices();
+            
+            val specificationLoader = IsisContext.getSpecificationLoader();
 
             // instantiate the IsisSessionFactory
             isisSessionFactory = new IsisSessionFactoryDefault();
@@ -163,10 +160,7 @@ class IsisSessionFactoryBuilder {
 //                    );
 
 
-        } catch (final IsisSystemException ex) {
-            log.error("failed to initialise", ex);
-            throw new RuntimeException(ex);
-        }
+        } 
 
         return isisSessionFactory;
     }

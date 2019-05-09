@@ -29,7 +29,9 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.IsisSystemException;
 
 /**
  * @deprecated TODO [2033] convert ...
@@ -48,22 +50,30 @@ public class IsisSessionProducerBean {
 
     @Inject ServiceRegistry serviceRegistry; // depends on
     
-	@Bean @Produces @Singleton //XXX note: the resulting singleton is not life-cycle managed by CDI, neither are InjectionPoints resolved by CDI
+	@Bean @Produces @Singleton //XXX note: the resulting singleton is not life-cycle managed by CDI/Spring, neither are InjectionPoints resolved by CDI/Spring
 	public IsisSessionFactory produceIsisSessionFactory() {
 		return _Context.computeIfAbsent(IsisSessionFactory.class, this::newIsisSessionFactory);
 	}
 
-	@Bean @Produces @Singleton //XXX note: the resulting singleton is not life-cycle managed by CDI, neither are InjectionPoints resolved by CDI
-	public SpecificationLoader produceSpecificationLoader() {
-		return produceIsisSessionFactory().getSpecificationLoader();
+	@Bean @Produces @Singleton //XXX note: the resulting singleton is not life-cycle managed by CDI/Spring, neither are InjectionPoints resolved by CDI/Spring
+	public SpecificationLoader produceSpecificationLoader() throws IsisSystemException {
+	    return _Context.computeIfAbsent(SpecificationLoader.class, this::newSpecificationLoader);
 	}
 	
 	// -- HELPER
 	
-	private final _Lazy<IsisSessionFactory> isisSessionFactorySingleton = 
-			_Lazy.threadSafe(this::newIsisSessionFactory);
+//	private final _Lazy<IsisSessionFactory> isisSessionFactorySingleton = 
+//			_Lazy.threadSafe(this::newIsisSessionFactory);
 	
 	private final static _Probe probe = _Probe.maxCallsThenExitWithStacktrace(10).label("IsisSessionProducerBean");
+
+	private SpecificationLoader newSpecificationLoader() {
+	    try {
+            return new SpecificationLoaderFactory().createSpecificationLoader();
+        } catch (IsisSystemException e) {
+            throw _Exceptions.unrecoverable(e);
+        }
+	}
 	
 	private IsisSessionFactory newIsisSessionFactory() {
 

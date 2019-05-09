@@ -177,28 +177,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
 		log.info("init() - done");
 
-		//FIXME [2033] remove debug code ...
-		//{
-		//        	streamServiceClasses()
-		//        	.forEach(service->probe.println("using service %s", service));
-		//        	
-		//        	
-		//        	val metaModelService = _CDI.getSingleton(MetaModelService.class);
-		//        	val jaxbService = _CDI.getSingleton(JaxbService.class);
-		//        	
-		//        	val metamodelDto =
-		//        			metaModelService.exportMetaModel(
-		//        					new MetaModelService.Config()
-		//        							.withIgnoreNoop()
-		//        							.withIgnoreAbstractClasses()
-		//        							.withIgnoreBuiltInValueTypes()
-		//        							.withIgnoreInterfaces()
-		//        							.withPackagePrefix("domainapp")
-		//        			);
-		//			
-		//			final String xml = jaxbService.toXml(metamodelDto);
-		//			//probe.println(xml);
-		//        }
 	}
 
 	@Override
