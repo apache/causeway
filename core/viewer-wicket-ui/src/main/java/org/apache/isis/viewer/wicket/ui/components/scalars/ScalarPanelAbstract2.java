@@ -733,6 +733,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         final WebMarkupContainer inlinePromptLink = new WebMarkupContainer(ID_SCALAR_VALUE_INLINE_PROMPT_LINK);
         inlinePromptLink.setOutputMarkupId(true);
+        inlinePromptLink.setOutputMarkupPlaceholderTag(true);
 
         configureInlinePromptLink(inlinePromptLink);
 
