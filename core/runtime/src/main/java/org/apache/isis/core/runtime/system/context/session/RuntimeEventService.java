@@ -22,7 +22,6 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.events.ui.CssClassUiEvent;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -76,13 +75,6 @@ public class RuntimeEventService {
 
 	public void fireFixturesInstalled(FixturesInstalledEvent fixturesInstalledEvent) {
 		fixturesInstalledEvents.fire(fixturesInstalledEvent);
-	}
-	
-	// -- METAMODEL EVENTS
-	
-	public void fireCssClassUiEvent(CssClassUiEvent<Object> cssClassUiEvent) {
-		// TODO Auto-generated method stub
-		
 	}
 		
 
