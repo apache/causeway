@@ -13,7 +13,7 @@ class TObjectTest {
         val jsonStr = SO_0.str
         val to = TObjectHandler().parse(jsonStr) as TObject
         assertNotNull(to)
-        assertNotNull(to.getLayoutLink())
+        assertNotNull(to.links)
     }
 
     @Test  // http://localhost:8080/restful/objects/simple.SimpleObject/0

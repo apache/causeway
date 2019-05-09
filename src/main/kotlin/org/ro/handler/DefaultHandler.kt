@@ -1,7 +1,7 @@
 package org.ro.handler
 
 
-class DefaultHandler : AbstractHandler(), IResponseHandler {
+class DefaultHandler : BaseHandler(), IResponseHandler {
 
     override fun canHandle(jsonStr: String): Boolean {
         return true

@@ -1,5 +1,6 @@
 package org.ro.handler
 
+import org.ro.core.event.EventStore
 import org.ro.core.event.ListObserver
 import org.ro.to.SO_0
 import org.ro.to.SO_LIST_ALL
@@ -13,6 +14,7 @@ class TObjectHandlerTest : IntegrationTest() {
     fun testService() {
         if (isSimpleAppAvailable()) {
             // given
+            EventStore.reset()
             val obs = ListObserver()
             // when
             val le0 = mockResponse(SO_LIST_ALL, obs)
@@ -20,7 +22,7 @@ class TObjectHandlerTest : IntegrationTest() {
             // then
             val ol = obs.list
             assertNotNull(ol)
-            assertEquals(0, ol.list.size)
+            assertEquals(1, ol.list.size)
 
             // WHEN 
             //      SimpleApp is available at http://localhost:8080/restful 

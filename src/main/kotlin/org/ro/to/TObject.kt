@@ -16,21 +16,7 @@ data class TObject(val links: List<Link> = emptyList(),
         return "$domainType/$instanceId"
     }
 
-    fun getLayoutLink(): Link? {
-        var href: String?
-        for (l in links) {
-            href = l.href
-            //TODO can be "object-layout" >= 1.16
-            if (href.isNotEmpty()) {
-                if (href.endsWith("layout")) {
-                    return l
-                }
-            }
-        }
-        return null
-    }
-
-    fun getProperties(): MutableList<Member> {
+   fun getProperties(): MutableList<Member> {
         val result = mutableListOf<Member>()
         for (m in members) {
             if (m.value.memberType == MemberType.PROPERTY.type) {

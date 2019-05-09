@@ -4,13 +4,13 @@ import kotlinx.serialization.json.JSON
 import org.ro.core.TransferObject
 import org.ro.layout.Layout
 
-class LayoutHandler : AbstractHandler(), IResponseHandler {
+class LayoutHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
-        val obs = logEntry.observer
-        obs!!.update(logEntry)
+        update()
     }
 
+    //@UseExperimental(kotlinx.serialization.UnstableDefault::class)
     override fun parse(jsonStr: String): TransferObject? {
         return JSON.parse(Layout.serializer(), jsonStr)
     }

@@ -6,15 +6,16 @@ import org.ro.core.event.NavigationObserver
 import org.ro.to.Result
 
 /** handles services result */
-class ResultHandler : AbstractHandler(), IResponseHandler {
+class ResultHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
-        val obs = NavigationObserver()
-        logEntry.observer = obs
-        obs.update(logEntry)
+        logEntry.observer = NavigationObserver()
+        update()
     }
 
+    //@UseExperimental(kotlinx.serialization.UnstableDefault::class)
     override fun parse(jsonStr: String): TransferObject? {
         return JSON.parse(Result.serializer(), jsonStr)
     }
+    
 }

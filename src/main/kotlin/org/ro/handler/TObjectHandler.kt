@@ -4,12 +4,13 @@ import kotlinx.serialization.json.JSON
 import org.ro.core.TransferObject
 import org.ro.to.TObject
 
-class TObjectHandler : AbstractHandler(), IResponseHandler {
+class TObjectHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
-        logEntry.observer!!.update(logEntry)
+        update()
     }
 
+    //@UseExperimental(kotlinx.serialization.UnstableDefault::class)
     override fun parse(jsonStr: String): TransferObject? {
         return JSON.nonstrict.parse(TObject.serializer(), jsonStr)
     }

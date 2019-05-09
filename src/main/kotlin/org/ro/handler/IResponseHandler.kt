@@ -14,7 +14,7 @@ import org.ro.core.event.LogEntry
  * @item creating/finding Observers (eg. ListObserver, ObjectObserver), and
  * @item setting Objects and Observers into LogEntry.
  *
- * @see org.ro.handler.AbstractHandler for more details
+ * @see org.ro.handler.BaseHandler for more details
  */
 
 interface IResponseHandler {

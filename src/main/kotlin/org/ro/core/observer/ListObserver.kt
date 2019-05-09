@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 import org.ro.core.UiManager
 import org.ro.core.model.ObjectList
 import org.ro.core.observer.BaseObserver
+import org.ro.core.observer.getLayoutLink
 import org.ro.layout.Layout
 import org.ro.to.Link
 import org.ro.to.Property
@@ -89,4 +90,4 @@ class ListObserver : BaseObserver() {
         }
     }
 
-}
+} 

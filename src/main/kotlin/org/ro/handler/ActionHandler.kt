@@ -6,9 +6,10 @@ import org.ro.to.Action
 import org.ro.to.Method
 import org.ro.view.ActionPrompt
 
-class ActionHandler : AbstractHandler(), IResponseHandler {
+class ActionHandler : BaseHandler(), IResponseHandler {
 
     override fun doHandle() {
+        // TODO move to observer
         val action = logEntry.getObj() as Action
         for (l in action.links) {
             // l.rel should be neither: (self | up | describedBy )
@@ -30,6 +31,7 @@ class ActionHandler : AbstractHandler(), IResponseHandler {
         }
     }
 
+    //@UseExperimental(kotlinx.serialization.UnstableDefault::class)
     override fun parse(jsonStr: String): TransferObject? {
         return JSON.parse(Action.serializer(), jsonStr)
     }

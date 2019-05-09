@@ -9,7 +9,7 @@ import org.ro.core.event.LogEntry
  *  Constructor should not be called.
  */
 
-open class AbstractHandler : IResponseHandler {
+abstract class BaseHandler : IResponseHandler {
     var successor: IResponseHandler? = null
     protected var logEntry = LogEntry("")
 
@@ -48,14 +48,23 @@ open class AbstractHandler : IResponseHandler {
     }
 
     /**
-     * Must be overridden in subclasses
+     * May be overridden in subclasses
      * @return
      */
     override fun doHandle() {
+        update()
     }
 
+    /**
+     * Must be overridden in subclasses
+     * @return
+     */
     override fun parse(jsonStr: String): TransferObject? {
-        return null
+        throw Exception("Subclass Responsibility")
+    }
+    
+    protected fun update() {
+        logEntry.observer!!.update(logEntry)
     }
 
 }
