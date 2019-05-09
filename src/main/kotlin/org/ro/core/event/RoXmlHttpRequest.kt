@@ -38,9 +38,9 @@ class RoXmlHttpRequest {
         xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8")
         xhr.setRequestHeader("Accept", "application/json")
 
-        xhr.onload = { event -> resultHandler(xhr.responseText) }
-        xhr.onerror = { event -> errorHandler(xhr.responseText) }
-        xhr.ontimeout = { event -> errorHandler(xhr.responseText) }
+        xhr.onload = { _ -> resultHandler(xhr.responseText) }
+        xhr.onerror = { _ -> errorHandler(xhr.responseText) }
+        xhr.ontimeout = { _ -> errorHandler(xhr.responseText) }
 
         var body = ""
         if (method == Method.POST.operation) {

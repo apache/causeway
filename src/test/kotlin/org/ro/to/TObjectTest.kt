@@ -1,5 +1,6 @@
 package org.ro.to
 
+import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
 import org.ro.handler.TObjectHandler
 import kotlin.test.Test
@@ -31,8 +32,8 @@ class TObjectTest {
         val objectList = ObjectList()
         // objectList.initSize(1)
         to.addMembersAsProperties()
-//        val oa1 = ObjectAdapter(to)
-        objectList.list.add(to)
+        val oa1 = ObjectAdapter(to)
+        objectList.list.add(oa1)
 
         // this is kind of untyped again
         // val oa: ObjectAdapter = objectList.last()

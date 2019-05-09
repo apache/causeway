@@ -17,11 +17,4 @@ data class Property(val id: String = "",
                     @Optional val parameters: List<Parameter> = emptyList(),
                     @Optional val maxLength: Int = 0) : TransferObject {
 
-    fun descriptionLink(): Link? {
-        for (l in links) {
-            if (l.rel == RelType.DESCRIBEDBY.type)  
-                return l
-        }
-        return null
-    }
 }

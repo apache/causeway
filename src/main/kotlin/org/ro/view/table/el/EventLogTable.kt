@@ -63,7 +63,7 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
         }
 
         hPanel(FlexWrap.WRAP, alignItems = FlexAlignItems.CENTER, spacing = 20) {
-//            height = "calc(100vh - 250px)",
+            //            height = "calc(100vh - 250px)",
             marginTop = 4.px
             marginLeft = 4.px
             // types can not be removed or created Empty - why?
@@ -75,21 +75,20 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
                     inline = true) {
                 marginBottom = 0.px
             }
- 
+
             search = textInput(TextInputType.SEARCH) {
                 placeholder = "Search ..."
             }
 
         }
         val model = EventStore.log
-        val factoryBlock = { logEntry: LogEntry, index: Int, _: Any ->
+        val factoryBlock = { logEntry: LogEntry, _: Int, _: Any ->
             Row {
                 for (cd: ColDef in tableSpec) {
                     val p = cd.property
                     val v = p.get(logEntry)
                     when (v) {
                         is String -> {
-                            val c = cell(v)
                             title = "A tooltip: $v"
                             enableTooltip()
                         }
@@ -124,11 +123,10 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
                 SortBy.F -> SorterType.DESC
             }
         }
-        dataContainer = dataContainer( 
+        dataContainer = dataContainer(
                 model, factoryBlock, table, filter = filterBlock, sorter = {
             when (sort) {
                 SortBy.F -> it.offset
-                else -> it.cacheHits
             }
         }, sorterType = sorterTypeBlock
         )

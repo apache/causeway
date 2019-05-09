@@ -15,16 +15,9 @@ data class Link(val rel: String = "",
                 @Optional val arguments: Map<String, Argument> = emptyMap(),
                 @Optional val title: String = "") : TransferObject {
 
-    //TODO delegate to a facade?
+    //TODO move to observer
     fun invoke(obs: IObserver? = null) {
         RoXmlHttpRequest().invoke(this, obs)
-    }
-
-    fun isInvokeAction(): Boolean {
-        var answer = false
-        if (rel.contains("invokeaction")) answer = true
-        if (rel.contains("invoke;action")) answer = true
-        return answer;
     }
 
     private fun argMap(): Map<String, Argument>? {

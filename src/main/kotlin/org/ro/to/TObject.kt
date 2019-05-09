@@ -12,11 +12,7 @@ data class TObject(val links: List<Link> = emptyList(),
                    val members: Map<String, Member> = emptyMap()
 ) : TransferObject {
 
-    fun getId(): String {
-        return "$domainType/$instanceId"
-    }
-
-   fun getProperties(): MutableList<Member> {
+    fun getProperties(): MutableList<Member> {
         val result = mutableListOf<Member>()
         for (m in members) {
             if (m.value.memberType == MemberType.PROPERTY.type) {

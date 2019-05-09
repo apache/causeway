@@ -29,7 +29,6 @@ fun main(args: Array<String>) {
     }
 }
 
-
 fun start(state: dynamic): ApplicationBase? {
     if (document.getElementById("showcase") == null) return null
     @Suppress("UnsafeCastFromDynamic")

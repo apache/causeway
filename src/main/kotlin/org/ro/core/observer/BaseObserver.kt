@@ -6,8 +6,8 @@ import org.ro.to.Link
 import org.ro.to.TObject
 
 abstract class BaseObserver : IObserver {
-    protected fun log(le: LogEntry) {
-        console.log("[ListObserver.update] unexpected:\n ${le.toString()}")
+    protected fun log(logEntry: LogEntry) {
+        console.log("[ListObserver.update] unexpected:\n $logEntry}")
     }
 }
 

@@ -2,6 +2,7 @@ package org.ro.view.table.fr
 
 import com.github.snabbdom._get
 import org.ro.core.event.LogEntry
+import org.ro.core.model.ObjectAdapter
 import org.ro.to.TObject
 import org.ro.view.IconManager
 import org.ro.view.RoView
@@ -24,20 +25,20 @@ import pl.treksoft.kvision.tabulator.Tabulator
 import pl.treksoft.kvision.tabulator.Tabulator.Companion.tabulator
 import pl.treksoft.kvision.utils.px
 
-fun TObject.match(search: String?): Boolean {
+fun ObjectAdapter.match(search: String?): Boolean {
     return search?.let {
-        domainType.contains(it, true) ?: false 
+        resultClass.contains(it, true) ?: false 
     } ?: true      
 }
 
-class FixtureResultTable (val model: List<TObject>) : VPanel() {
+class FixtureResultTable (val model: List<ObjectAdapter>) : VPanel() {
     private lateinit var search: TextInput
     private lateinit var searchTypes: RadioGroup
 
     private val columns = listOf(
             ColumnDefinition("", field = "icon", width = "40"),
-            ColumnDefinition("Result Class", "resultClass", width = "400"),
-            ColumnDefinition("Fixture Script", "fixtureScript", width = "30"),
+            ColumnDefinition("Result Class", "resultClass"),
+            ColumnDefinition("Fixture Script", "fixtureScript"),
             ColumnDefinition("Result Key", field = "resultKey"),
             ColumnDefinition("Result", field = "result")
     )
@@ -100,9 +101,9 @@ class FixtureResultTable (val model: List<TObject>) : VPanel() {
     }
 
     private fun showDetails(cell: pl.treksoft.kvision.tabulator.js.Tabulator.CellComponent) {
-        val row = cell.getRow()
-        val data = row.getData()
-        val url: String = data._get("url")
+//        val row = cell.getRow()
+//        val data = row.getData()
+//        val url: String = data._get("url")
 //        val logEntry = EventStore.find(url)!!
 //        EventLogDetail(logEntry).open()
     }

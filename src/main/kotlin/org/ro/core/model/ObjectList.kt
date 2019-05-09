@@ -3,21 +3,20 @@ package org.ro.core.model
 import org.ro.layout.Layout
 import org.ro.to.Extensions
 import org.ro.to.Property
-import org.ro.to.TObject
 
 class ObjectList : Visible {
     override fun tag(): String {
         return " "
     }
 
-    var list = mutableListOf<TObject>()
+    var list = mutableListOf<ObjectAdapter>()
     var layout: Layout? = null
     var propertyLabels = mutableMapOf<String, String>()
 
     fun hasLayout(): Boolean {
         val it = layout != null
         if (it) {
-            initPropertyDescription()
+//            initPropertyDescription()
         }
         return it
     }
@@ -32,7 +31,7 @@ class ObjectList : Visible {
         }
     }
 
-    fun handleProperty(p: Property) {
+    fun addProperty(p: Property) {
         val id = p.id
         val e: Extensions = p.extensions!!
         val friendlyName = e.friendlyName

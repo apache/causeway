@@ -3,10 +3,7 @@ package org.ro.handler
 import org.ro.core.event.EventStore
 import org.ro.core.event.ListObserver
 import org.ro.core.event.LogEntry
-import org.ro.to.FR_OBJECT_LAYOUT
-import org.ro.to.FR_OBJECT_PROPERTY
-import org.ro.to.FR_PROPERTY_DESCRIPTION
-import org.ro.to.Property
+import org.ro.to.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -17,17 +14,22 @@ class PropertyHandlerTest : IntegrationTest() {
     fun testProperty() {
         if (isSimpleAppAvailable()) {
             // given
+            EventStore.reset()
             val obs = ListObserver()
             // when
-            val propLe = mockResponse(FR_OBJECT_PROPERTY, obs)
-            val layoutLe = mockResponse(FR_OBJECT_LAYOUT, obs)
+            mockResponse(FR_OBJECT_PROPERTY, obs)
+            mockResponse(FR_OBJECT_LAYOUT, obs)
             // then 
             val actLe: LogEntry? = EventStore.find(FR_OBJECT_PROPERTY.url)
             assertNotNull(actLe)  //1
             assertNotNull(actLe.getObj())  //2
             val p = actLe.getObj() as Property
             assertNotNull(p.id)    // 3
-            assertNotNull(p.descriptionLink())  //4
+            val links = p.links 
+            val descLink =  links.find {
+                it.rel == RelType.DESCRIBEDBY.type
+            }
+            assertNotNull(descLink)  //4
 
             val actObs = actLe.observer as ListObserver
             assertEquals(obs, actObs)              //5

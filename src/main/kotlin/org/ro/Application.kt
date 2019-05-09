@@ -9,7 +9,6 @@ import pl.treksoft.kvision.panel.VPanel.Companion.vPanel
 import pl.treksoft.kvision.require
 import pl.treksoft.kvision.utils.px
 
-
 object Application : ApplicationBase {
 
     private lateinit var root: Root

@@ -3,6 +3,7 @@ package org.ro.handler
 import kotlinx.serialization.json.JSON
 import org.ro.core.TransferObject
 import org.ro.to.Action
+import org.ro.to.Link
 import org.ro.to.Method
 import org.ro.view.ActionPrompt
 
@@ -36,3 +37,11 @@ class ActionHandler : BaseHandler(), IResponseHandler {
         return JSON.parse(Action.serializer(), jsonStr)
     }
 }
+
+fun Link.isInvokeAction(): Boolean {
+    var answer = false
+    if (rel.contains("invokeaction")) answer = true
+    if (rel.contains("invoke;action")) answer = true
+    return answer;
+}
+

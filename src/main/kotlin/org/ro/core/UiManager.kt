@@ -33,6 +33,7 @@ object UiManager {
             EventStore.update(title)
         }
     }
+    
     fun createView() {
         val title = "Log Entries"
         val icon = IconManager.find(title)

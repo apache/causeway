@@ -17,8 +17,8 @@ class TObjectHandlerTest : IntegrationTest() {
             EventStore.reset()
             val obs = ListObserver()
             // when
-            val le0 = mockResponse(SO_LIST_ALL, obs)
-            val le1 = mockResponse(SO_0, obs)
+            mockResponse(SO_LIST_ALL, obs)
+            mockResponse(SO_0, obs)
             // then
             val ol = obs.list
             assertNotNull(ol)

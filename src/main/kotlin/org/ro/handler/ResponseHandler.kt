@@ -1,6 +1,5 @@
 package org.ro.handler
 
-import org.ro.core.Session.url
 import org.ro.core.event.LogEntry
 
 /**
