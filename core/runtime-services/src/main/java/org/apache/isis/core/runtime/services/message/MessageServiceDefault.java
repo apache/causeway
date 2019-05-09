@@ -18,19 +18,17 @@
  */
 package org.apache.isis.core.runtime.services.message;
 
+import javax.annotation.Priority;
+import javax.inject.Singleton;
+
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.MessageBroker;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + (Integer.MAX_VALUE - 1)  // ie before the Noop impl in metamodel
-        )
+@Singleton @Priority(0)
 public class MessageServiceDefault implements MessageService {
 
     @Override

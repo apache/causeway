@@ -20,8 +20,12 @@
 package org.apache.isis.core.runtime.system.session;
 
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.context.annotation.Bean;
+
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.debug._Probe;
@@ -42,12 +46,14 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 @Singleton
 public class IsisSessionProducerBean {
 
-	@Produces @Singleton //XXX note: the resulting singleton is not life-cycle managed by CDI, neither are InjectionPoints resolved by CDI
+    @Inject ServiceRegistry serviceRegistry; // depends on
+    
+	@Bean @Produces @Singleton //XXX note: the resulting singleton is not life-cycle managed by CDI, neither are InjectionPoints resolved by CDI
 	public IsisSessionFactory produceIsisSessionFactory() {
 		return _Context.computeIfAbsent(IsisSessionFactory.class, this::newIsisSessionFactory);
 	}
 
-	@Produces @Singleton //XXX note: the resulting singleton is not life-cycle managed by CDI, neither are InjectionPoints resolved by CDI
+	@Bean @Produces @Singleton //XXX note: the resulting singleton is not life-cycle managed by CDI, neither are InjectionPoints resolved by CDI
 	public SpecificationLoader produceSpecificationLoader() {
 		return produceIsisSessionFactory().getSpecificationLoader();
 	}

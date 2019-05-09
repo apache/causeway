@@ -32,6 +32,7 @@ import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.testdomain.jdo.JdoTestApplication;
 import org.apache.isis.testdomain.jdo.JdoTestDomainIntegTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,8 +40,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import lombok.val;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest//(classes = {AsyncExecutionServiceDefault.class})
-class ServiceProvisioningTest extends JdoTestDomainIntegTest {
+@SpringBootTest(classes = {JdoTestApplication.class})
+class SpringServiceProvisioningTest extends JdoTestDomainIntegTest {
 
     @BeforeEach
     void setUp() {

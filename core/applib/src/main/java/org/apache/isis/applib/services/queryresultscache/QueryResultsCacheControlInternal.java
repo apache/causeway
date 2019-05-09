@@ -17,10 +17,9 @@
 package org.apache.isis.applib.services.queryresultscache;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Singleton;
 
 import org.apache.isis.applib.AbstractSubscriber;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
@@ -29,10 +28,7 @@ import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 /**
  * In separate class because {@link QueryResultsCache} itself is request-scoped
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class QueryResultsCacheControlInternal extends AbstractSubscriber implements QueryResultCacheControl {
 
     @PostConstruct

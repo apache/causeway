@@ -29,7 +29,7 @@ public final class IsisBeanTypeRegistry implements AutoCloseable {
     private final Set<Class<?>> inbox = new HashSet<>();
 
     //TODO replace this getters: don't expose the sets for modification!?
-    @Getter private final Set<Class<?>> cdiManaged = new HashSet<>();
+    @Getter private final Set<Class<?>> iocManaged = new HashSet<>();
     @Getter private final Set<Class<?>> entityTypes = new HashSet<>();
     @Getter private final Set<Class<?>> mixinTypes = new HashSet<>();
     @Getter private final Set<Class<? extends FixtureScript>> fixtureScriptTypes = new HashSet<>();
@@ -59,7 +59,7 @@ public final class IsisBeanTypeRegistry implements AutoCloseable {
 	public Stream<Class<?>> streamAllTypes() {
 
 		return _Lists.of(
-				cdiManaged,
+				iocManaged,
 				entityTypes,
 				mixinTypes,
 				fixtureScriptTypes,
@@ -102,16 +102,16 @@ public final class IsisBeanTypeRegistry implements AutoCloseable {
     }
     
     public Stream<Class<?>> streamCdiManaged() {
-    	return cdiManaged.stream();
+    	return iocManaged.stream();
     }
     
     // -- FILTER
 
     //FIXME[2033] don't categorize this early, instead push candidate classes onto a queue for 
     // later processing when the SpecLoader initializes.
-    public boolean isManagedType(TypeMetaData typeMetaData) {
+    public boolean isIoCManagedType(TypeMetaData typeMetaData) {
         boolean toInbox = false;
-        boolean toCdi = false;
+        boolean toIoC = false;
         
         if(typeMetaData.hasDomainServiceAnnotation()) {
             //domainServiceTypes.add(typeMetaData.getUnderlyingClass());
@@ -130,12 +130,12 @@ public final class IsisBeanTypeRegistry implements AutoCloseable {
         
         if(typeMetaData.hasSingletonAnnotation() || 
         		typeMetaData.hasRequestScopedAnnotation()) {
-        	toCdi = true;
+        	toIoC = true;
         }
         
-        if(toCdi) {
-        	cdiManaged.add(typeMetaData.getUnderlyingClass());
-            probe.println("addTo CDI: " + typeMetaData.getUnderlyingClass().getName());
+        if(toIoC) {
+        	iocManaged.add(typeMetaData.getUnderlyingClass());
+            probe.println("addTo IoC: " + typeMetaData.getUnderlyingClass().getName());
         }
         
         if(toInbox) {
@@ -143,7 +143,7 @@ public final class IsisBeanTypeRegistry implements AutoCloseable {
             probe.println("addTo inbox: " + typeMetaData.getUnderlyingClass().getName());
         }
         
-        return false;
+        return toIoC;
     }
     
     // -- HELPER

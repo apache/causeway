@@ -18,25 +18,27 @@
  */
 package org.apache.isis.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.cdi._CDI;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.context._Plugin;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.config.builder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 
-public final class AppConfigLocator {
+import lombok.extern.slf4j.Slf4j;
 
-    private static final Logger LOG = LoggerFactory.getLogger(AppConfigLocator.class);
+@Slf4j @Deprecated
+public final class AppConfigLocator {
 
     private AppConfigLocator() { }
 
     public static AppConfig getAppConfig() {
+        
+        _Exceptions.throwUnexpectedCodeReach(); //[2112] Spring should take over
+        
         return _Context.computeIfAbsent(AppConfig.class, ()->lookupAppConfig());
     }
 
@@ -54,19 +56,19 @@ public final class AppConfigLocator {
 
         appConfig = lookupAppConfig_UsingSpring();
         if(appConfig!=null) {
-            LOG.info(String.format("Located AppConfig '%s' via Spring.", appConfig.getClass().getName()));
+            log.info(String.format("Located AppConfig '%s' via Spring.", appConfig.getClass().getName()));
             return appConfig;
         }
 
         appConfig = lookupAppConfig_UsingServiceLoader();
         if(appConfig!=null) {
-            LOG.info(String.format("Located AppConfig '%s' via ServiceLoader.", appConfig.getClass().getName()));
+            log.info(String.format("Located AppConfig '%s' via ServiceLoader.", appConfig.getClass().getName()));
             return appConfig;
         }
 
         appConfig = lookupAppConfig_UsingConfigProperties();
         if(appConfig!=null) {
-            LOG.info(String.format("Located AppConfig '%s' using config properties.", appConfig.getClass().getName()));
+            log.info(String.format("Located AppConfig '%s' using config properties.", appConfig.getClass().getName()));
             return appConfig;    
         }
 
