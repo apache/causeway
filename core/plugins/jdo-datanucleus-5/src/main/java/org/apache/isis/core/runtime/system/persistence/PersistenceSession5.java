@@ -38,8 +38,6 @@ import javax.jdo.listener.InstanceLifecycleListener;
 import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.datanucleus.identity.DatastoreIdImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.command.Command;
@@ -100,16 +98,17 @@ import static java.util.Objects.requireNonNull;
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
 
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * A wrapper around the JDO {@link PersistenceManager}, which also manages concurrency
  * and maintains an identity map of {@link ObjectAdapter adapter}s and {@link Oid
  * identities} for each and every POJO that is being used by the framework.
  */
+@Slf4j
 public class PersistenceSession5 extends PersistenceSessionBase
 implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 
-    private static final Logger log = LoggerFactory.getLogger(PersistenceSession5.class);
     private ObjectAdapterContext objectAdapterContext;
 
     /**

@@ -20,6 +20,7 @@ package org.apache.isis.core.runtime.system.context.session;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -56,7 +57,6 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     @Getter protected final SpecificationLoader specificationLoader;
     @Getter protected final AuthenticationSession authenticationSession;
     @Getter protected final ObjectAdapterProvider objectAdapterProvider;
-    @Getter protected final PersistenceSession persistenceSession;
     
     // -- NO ARG CONSTRUCTOR
     
@@ -67,7 +67,6 @@ public abstract class RuntimeContextBase implements RuntimeContext {
         specificationLoader = IsisContext.getSpecificationLoader();
         authenticationSession = IsisContext.getAuthenticationSession().orElse(null);
         objectAdapterProvider = IsisContext.getObjectAdapterProvider();
-        persistenceSession = IsisContext.getPersistenceSession().orElse(null);
     }
     
     // -- OBJECT ADAPTER SUPPORT
@@ -132,8 +131,11 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     
     // -- PERSISTENCE SUPPORT FOR MANAGED OBJECTS
     
+    private final _Lazy<PersistenceSession> persistenceSession = 
+            _Lazy.of(IsisContext.getPersistenceSession()::get);
+    
     private PersistenceSession ps() {
-    	return persistenceSession;
+    	return persistenceSession.get();
     }
     
     // --

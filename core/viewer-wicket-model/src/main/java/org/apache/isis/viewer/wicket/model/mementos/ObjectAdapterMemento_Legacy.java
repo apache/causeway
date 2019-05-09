@@ -236,8 +236,7 @@ final class ObjectAdapterMemento_Legacy implements ObjectAdapterMemento {
 
 				val rootOid = Oid.unmarshaller().unmarshal(persistentOidStr, RootOid.class);
 				try {
-					val isisSession = IsisSession.currentOrElseNull();
-					val persistenceSession = isisSession.getPersistenceSession();
+					val persistenceSession = IsisContext.getPersistenceSession().orElse(null);
 					final ObjectAdapter adapter = persistenceSession.adapterFor(rootOid, concurrencyChecking);
 					return adapter;
 

@@ -128,10 +128,9 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
                 );
         
         serviceInitializer.validate();
-
-        openSession(new InitialisationSession());
-
-        try {
+        
+        doInSession(()->{
+            
             //
             // postConstructInSession
             //
@@ -189,10 +188,73 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             for (String message : messages) {
                 translationService.translate(context, message);
             }
+           },
+           new InitialisationSession());
 
-        } finally {
-            closeSession();
-        }
+//        openSession(new InitialisationSession());
+//
+//        try {
+//            //
+//            // postConstructInSession
+//            //
+//
+//            IsisTransactionManager transactionManager = getOrCreateTransactionManager();
+//            transactionManager.executeWithinTransaction(serviceInitializer::postConstruct);
+//
+//            //
+//            // installFixturesIfRequired
+//            //
+//            final FixturesInstallerFromConfiguration fixtureInstaller =
+//                    new FixturesInstallerFromConfiguration();
+//            fixtureInstaller.installFixtures(); //TODO [2033] if too early, pass over 'this' ... new FixturesInstallerFromConfiguration(this) 
+//
+//            //
+//            // translateServicesAndEnumConstants
+//            //
+//
+//            val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
+//            
+//            final Stream<Object> domainServices = serviceRegistry.streamRegisteredBeans()
+//                    .filter(BeanAdapter::isDomainService)
+//                    .map(BeanAdapter::getInstance)
+//                    .filter(Bin::isCardinalityOne)
+//                    .map(Bin::getSingleton)
+//                    .map(Optional::get)
+//                    ;
+//            
+//            domainServices.forEach(domainService->{
+//                final String unused = titleService.titleOf(domainService);
+//                _Blackhole.consume(unused);
+//            });
+//
+//
+//            // (previously we took a protective copy to avoid a concurrent modification exception,
+//            // but this is now done by SpecificationLoader itself)
+//            for (final ObjectSpecification objSpec : IsisContext.getSpecificationLoader().currentSpecifications()) {
+//                final Class<?> correspondingClass = objSpec.getCorrespondingClass();
+//                if(correspondingClass.isEnum()) {
+//                    final Object[] enumConstants = correspondingClass.getEnumConstants();
+//                    for (Object enumConstant : enumConstants) {
+//                        final String unused = titleService.titleOf(enumConstant);
+//                        _Blackhole.consume(unused);
+//                    }
+//                }
+//            }
+//
+//            // as used by the Wicket UI
+//            final TranslationService translationService = 
+//                    serviceRegistry.lookupServiceElseFail(TranslationService.class);
+//
+//            final String context = IsisSessionFactoryBuilder.class.getName();
+//            final MessageRegistry messageRegistry = new MessageRegistry();
+//            final List<String> messages = messageRegistry.listMessages();
+//            for (String message : messages) {
+//                translationService.translate(context, message);
+//            }
+//
+//        } finally {
+//            closeSession();
+//        }
     }
 
     @PreDestroy

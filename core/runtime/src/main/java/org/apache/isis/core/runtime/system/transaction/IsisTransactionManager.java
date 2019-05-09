@@ -22,9 +22,6 @@ package org.apache.isis.core.runtime.system.transaction;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -37,9 +34,10 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 
-public class IsisTransactionManager implements SessionScopedComponent {
+import lombok.extern.slf4j.Slf4j;
 
-    private static final Logger LOG = LoggerFactory.getLogger(IsisTransactionManager.class);
+@Slf4j
+public class IsisTransactionManager implements SessionScopedComponent {
 
     private int transactionLevel;
 
@@ -83,7 +81,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
             try {
                 abortTransaction();
             } catch (final Exception e2) {
-                LOG.error("failure during abort", e2);
+                log.error("failure during abort", e2);
             }
         }
         session = null;
@@ -143,7 +141,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 try {
                     abortTransaction();
                 } catch (final Exception e) {
-                    LOG.error("Abort failure after exception", e);
+                    log.error("Abort failure after exception", e);
                     throw new IsisTransactionManagerException("Abort failure: " + e.getMessage(), ex);
                 }
             } else {
@@ -243,8 +241,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
         transactionLevel++;
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("startTransaction: level {}->{}{}", (transactionLevel - 1), (transactionLevel), (noneInProgress ? " (no transaction in progress or was previously completed; transaction created)" : ""));
+        if (log.isDebugEnabled()) {
+            log.debug("startTransaction: level {}->{}{}", (transactionLevel - 1), (transactionLevel), (noneInProgress ? " (no transaction in progress or was previously completed; transaction created)" : ""));
         }
     }
 
@@ -253,8 +251,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
     // -- flushTransaction
     public boolean flushTransaction() {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("flushTransaction");
+        if (log.isDebugEnabled()) {
+            log.debug("flushTransaction");
         }
 
         if (getCurrentTransaction() != null) {
@@ -285,22 +283,22 @@ public class IsisTransactionManager implements SessionScopedComponent {
         if (transaction == null) {
             // allow this method to be called >1 with no adverse affects
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("endTransaction: level {} (no transaction exists)", transactionLevel);
+            if (log.isDebugEnabled()) {
+                log.debug("endTransaction: level {} (no transaction exists)", transactionLevel);
             }
 
             return;
         } else if (transaction.getState().isComplete()) {
             // allow this method to be called >1 with no adverse affects
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("endTransaction: level {} (previous transaction completed)", transactionLevel);
+            if (log.isDebugEnabled()) {
+                log.debug("endTransaction: level {} (previous transaction completed)", transactionLevel);
             }
 
             return;
         } else {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("endTransaction: level {}->{}", transactionLevel, transactionLevel - 1);
+            if (log.isDebugEnabled()) {
+                log.debug("endTransaction: level {}->{}", transactionLevel, transactionLevel - 1);
             }
         }
 
@@ -311,7 +309,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
             final IsisTransaction.State state = getCurrentTransaction().getState();
             int transactionLevel = this.transactionLevel;
             if(transactionLevel == 0 && !state.isComplete()) {
-                LOG.error("endTransaction: inconsistency detected between transactionLevel {} and transactionState '{}'", transactionLevel, state);
+                log.error("endTransaction: inconsistency detected between transactionLevel {} and transactionState '{}'", transactionLevel, state);
             }
         }
     }
@@ -324,8 +322,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
         RuntimeException abortCause = this.getCurrentTransaction().getAbortCause();
         if(transaction.getState().mustAbort()) {
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("endTransaction: aborting instead [EARLY TERMINATION], abort cause '{}' has been set", abortCause.getMessage());
+            if (log.isDebugEnabled()) {
+                log.debug("endTransaction: aborting instead [EARLY TERMINATION], abort cause '{}' has been set", abortCause.getMessage());
             }
             try {
                 abortTransaction();
@@ -380,8 +378,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
             if(abortCause == null) {
 
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("endTransaction: committing");
+                if (log.isDebugEnabled()) {
+                    log.debug("endTransaction: committing");
                 }
 
                 try {
@@ -427,8 +425,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
             //
             if(abortCause != null) {
 
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("endTransaction: aborting instead, abort cause has been set");
+                if (log.isDebugEnabled()) {
+                    log.debug("endTransaction: aborting instead, abort cause has been set");
                 }
                 try {
                     abortTransaction();
@@ -447,7 +445,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
         } else {
             // transactionLevel < 0
-            LOG.error("endTransaction: transactionLevel={}", transactionLevel);
+            log.error("endTransaction: transactionLevel={}", transactionLevel);
             transactionLevel = 0;
             IllegalStateException ex = new IllegalStateException(" no transaction running to end (transactionLevel < 0)");
             getCurrentTransaction().setAbortCause(new IsisException(ex));

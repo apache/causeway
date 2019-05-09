@@ -69,7 +69,7 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
     // //////////////////////////////////////////////////////////
 
     PersistenceSession getPersistenceSession() {
-        return getIsisSessionFactory().getCurrentSession().getPersistenceSession();
+        return IsisContext.getPersistenceSession().orElse(null);
     }
 
     IsisSessionFactory getIsisSessionFactory() {

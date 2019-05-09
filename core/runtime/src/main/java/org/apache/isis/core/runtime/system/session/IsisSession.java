@@ -60,9 +60,7 @@ public class IsisSession extends RuntimeContextBase {
 				IsisContext.getServiceRegistry(),
 				IsisContext.getSpecificationLoader(),
 				authenticationSession,
-				IsisContext.getObjectAdapterProvider(),
-				IsisContext.getPersistenceSession().orElse(null)
-				);
+				IsisContext.getObjectAdapterProvider());
 		
 		this.runtimeEventService = runtimeEventService;
         
