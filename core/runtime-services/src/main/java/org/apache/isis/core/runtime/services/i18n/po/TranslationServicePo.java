@@ -20,27 +20,21 @@ package org.apache.isis.core.runtime.services.i18n.po;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Singleton;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.commons.collections.Bin;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static org.apache.isis.config.internal._Config.getConfiguration;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class TranslationServicePo implements TranslationService {
-
-    public static Logger LOG = LoggerFactory.getLogger(TranslationServicePo.class);
 
     public static final String KEY_PO_MODE = "isis.services.translation.po.mode";
 
@@ -172,20 +166,22 @@ public class TranslationServicePo implements TranslationService {
 
     // //////////////////////////////////////
 
-    @javax.inject.Inject
-    private TranslationsResolver translationsResolver;
+    
+    private _Lazy<Bin<TranslationsResolver>> translationsResolvers = _Lazy.threadSafe(()->
+        IsisContext.getServiceRegistry().select(TranslationsResolver.class) );
 
     @Programmatic
-    TranslationsResolver getTranslationsResolver() {
-        return translationsResolver;
+    Bin<TranslationsResolver> getTranslationsResolver() {
+        return translationsResolvers.get();
     }
 
-    @javax.inject.Inject
-    private LocaleProvider localeProvider;
+    private _Lazy<Bin<LocaleProvider>> localeProviders = _Lazy.threadSafe(()->
+        IsisContext.getServiceRegistry().select(LocaleProvider.class) );
 
     @Programmatic
-    LocaleProvider getLocaleProvider() {
-        return localeProvider;
+    Bin<LocaleProvider> getLocaleProvider() {
+        return localeProviders.get();
     }
+
 
 }

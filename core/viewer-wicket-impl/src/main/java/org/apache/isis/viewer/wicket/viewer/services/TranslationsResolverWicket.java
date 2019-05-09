@@ -37,23 +37,20 @@ import com.google.common.io.CharSource;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.WebAppConstants;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 /**
  * An implementation that reads from /WEB-INF/...
  */
-@Singleton
+@Singleton @Slf4j
 public class TranslationsResolverWicket implements TranslationsResolver {
-
-    public static Logger LOG = LoggerFactory.getLogger(TranslationsResolverWicket.class);
 
     @Override
     @Programmatic
@@ -63,7 +60,7 @@ public class TranslationsResolverWicket implements TranslationsResolver {
         final String configLocation = servletContext.getInitParameter(WebAppConstants.CONFIG_DIR_PARAM);
         try {
             if(configLocation != null) {
-                LOG.info( "Reading translations relative to config override location: {}", configLocation );
+                log.info( "Reading translations relative to config override location: {}", configLocation );
                 return Files.readLines(newFile(configLocation, file), Charsets.UTF_8);
             } else {
                 final URL url = servletContext.getResource("/WEB-INF/" + file);

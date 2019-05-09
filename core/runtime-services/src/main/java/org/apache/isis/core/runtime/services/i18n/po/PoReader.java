@@ -23,9 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -34,12 +32,15 @@ import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.core.commons.collections.Bin;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 class PoReader extends PoAbstract {
 
     public static final String DASH = "-";
     public static final String UNDERSCORE = "_";
-    public static Logger LOG = LoggerFactory.getLogger(PoReader.class);
 
     private final Map<Locale, Map<ContextAndMsgId, String>> translationByKeyByLocale = _Maps.newHashMap();
     private final Map<Locale, Boolean> usesFallbackByLocale = _Maps.newHashMap();
@@ -59,18 +60,21 @@ class PoReader extends PoAbstract {
      * </p>
      */
     private final String basename = "translations";
-    private final TranslationsResolver translationsResolver;
-    private final LocaleProvider localeProvider;
+    private final Bin<TranslationsResolver> translationsResolver;
+    private final Bin<LocaleProvider> localeProvider;
 
     private List<String> fallback;
 
     public PoReader(final TranslationServicePo translationServicePo) {
         super(translationServicePo, TranslationService.Mode.READ);
         translationsResolver = translationServicePo.getTranslationsResolver();
-        if(translationsResolver == null) {
-            LOG.warn("No translationsResolver available");
+        if(translationsResolver.isEmpty()) {
+            log.warn("No TranslationsResolver available");
         }
         localeProvider = translationServicePo.getLocaleProvider();
+        if(localeProvider.isEmpty()) {
+            log.warn("No LocaleProvider available");
+        }
     }
 
     // -- init, shutdown
@@ -81,7 +85,7 @@ class PoReader extends PoAbstract {
     void init() {
         fallback = readUrl(basename + ".po");
         if(fallback == null) {
-            LOG.info("No fallback translations found; i18n is in effect disabled for this application");
+            log.info("No fallback translations found; i18n is in effect disabled for this application");
             fallback = Collections.emptyList();
         }
     }
@@ -127,7 +131,9 @@ class PoReader extends PoAbstract {
 
         final Locale targetLocale;
         try {
-            targetLocale = localeProvider.getLocale();
+            targetLocale = localeProvider.getFirst()
+                    .map(LocaleProvider::getLocale)
+                    .orElse(null);
             if(targetLocale == null) {
                 // eg if request from RO viewer and the (default) LocaleProviderWicket is being used.
                 return msgId;
@@ -241,14 +247,17 @@ class PoReader extends PoAbstract {
     }
 
     private List<String> readUrl(final String candidate) {
-        return translationsResolver.readLines(candidate);
+        return translationsResolver.stream()
+        .map(resolver->resolver.readLines(candidate))
+        .flatMap(List::stream)
+        .collect(Collectors.toList());
     }
 
 
     // to avoid flooding the logs
     private void logInfoIfNotPreviously(final String infoMessage) {
         if(!loggedInfoMessages.contains(infoMessage)) {
-            LOG.info(infoMessage);
+            log.info(infoMessage);
             loggedInfoMessages.add(infoMessage);
         }
     }
