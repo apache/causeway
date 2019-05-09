@@ -54,7 +54,6 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.cdi._CDI;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
@@ -93,7 +92,7 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
     private final static _Probe probe = _Probe.unlimited().label("WebRequestCycleForIsis");
 
     private _Lazy<RequestContextService> requestContextService = _Lazy.of(()->
-    _CDI.getSingletonElseFail(RequestContextService.class));
+        IsisContext.getServiceRegistry().lookupServiceElseFail(RequestContextService.class));
 
     public final static MetaDataKey<RequestContextHandle> REQUEST_CONTEXT_HANDLE_KEY 
     = new MetaDataKey<RequestContextHandle>() {

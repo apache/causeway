@@ -31,8 +31,8 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.cdi._CDI;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -60,43 +60,43 @@ public final class MetaModelContexts {
 
         @Getter(lazy=true) 
         private final IsisConfiguration configuration = 
-        _Config.getConfiguration();
+                _Config.getConfiguration();
 
         @Getter(lazy=true) 
         private final ObjectAdapterProvider objectAdapterProvider =
-        _CDI.getSingletonElseFail(ObjectAdapterProvider.class);
+                _Spring.getSingletonElseFail(ObjectAdapterProvider.class);
 
         @Getter(lazy=true) 
         private final ServiceInjector serviceInjector =
-        _CDI.getSingletonElseFail(ServiceInjector.class);
+                _Spring.getSingletonElseFail(ServiceInjector.class);
 
         @Getter(lazy=true) 
         private final ServiceRegistry serviceRegistry =
-        _CDI.getSingletonElseFail(ServiceRegistry.class);
+                _Spring.getSingletonElseFail(ServiceRegistry.class);
 
         @Getter(lazy=true) 
         private final SpecificationLoader specificationLoader = 
-        _CDI.getSingletonElseFail(SpecificationLoader.class);
+                _Spring.getSingletonElseFail(SpecificationLoader.class);
 
         @Getter(lazy=true) 
         private final AuthenticationSessionProvider authenticationSessionProvider =
-        _CDI.getSingletonElseFail(AuthenticationSessionProvider.class);
+                _Spring.getSingletonElseFail(AuthenticationSessionProvider.class);
 
         @Getter(lazy=true) 
         private final TranslationService translationService =
-        _CDI.getSingletonElseFail(TranslationService.class);
+                _Spring.getSingletonElseFail(TranslationService.class);
 
         @Getter(lazy=true) 
         private final AuthorizationManager authorizationManager =
-        _CDI.getSingletonElseFail(AuthorizationManager.class); 
+                _Spring.getSingletonElseFail(AuthorizationManager.class); 
 
         @Getter(lazy=true) 
         private final AuthenticationManager authenticationManager =
-        _CDI.getSingletonElseFail(AuthenticationManager.class);
+                _Spring.getSingletonElseFail(AuthenticationManager.class);
 
         @Getter(lazy=true) 
         private final TitleService titleService =
-        _CDI.getSingletonElseFail(TitleService.class);
+                _Spring.getSingletonElseFail(TitleService.class);
 
 //        @Getter(lazy=true) 
 //        private final ObjectAdapterService objectAdapterService =
@@ -104,11 +104,11 @@ public final class MetaModelContexts {
 
         @Getter(lazy=true) 
         private final RepositoryService repositoryService =
-        _CDI.getSingletonElseFail(RepositoryService.class);
+                _Spring.getSingletonElseFail(RepositoryService.class);
         
         @Getter(lazy=true) 
         private final TransactionService transactionService =
-        _CDI.getSingletonElseFail(TransactionService.class);
+                _Spring.getSingletonElseFail(TransactionService.class);
         
 
         @Override

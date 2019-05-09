@@ -18,6 +18,7 @@
  */
 package org.apache.isis.commons.internal.spring;
 
+import java.lang.annotation.Annotation;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -29,11 +30,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.ResolvableType;
 
+import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.commons.ioc.LifecycleContext;
 import org.apache.isis.core.commons.collections.Bin;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
@@ -58,8 +63,32 @@ public class _Spring {
     }
     
     public static <T> Bin<T> select(final Class<T> requiredType) {
+        requires(requiredType, "requiredType");
+        
         val allMatchingBeans = context().getBeanProvider(requiredType).orderedStream();
         return Bin.ofStream(allMatchingBeans);
+    }
+    
+    public static <T> Bin<T> select(final Class<T> requiredType, @Nullable Annotation[] qualifiers) {
+        
+        requires(requiredType, "requiredType");
+        
+        val allMatchingBeans = context().getBeanProvider(requiredType)
+                .orderedStream();
+        
+        if(_NullSafe.isEmpty(qualifiers)) {
+            return Bin.ofStream(allMatchingBeans);
+        }
+
+        val qualifiersRequired = _Sets.of(qualifiers);
+        
+        final Predicate<T> hasAllQualifiers = t -> {
+            val qualifiersPresent = _Sets.of(t.getClass().getAnnotations());
+            return qualifiersPresent.containsAll(qualifiersRequired);
+        };
+        
+        return Bin.ofStream(allMatchingBeans
+                .filter(hasAllQualifiers));
     }
     
     /**

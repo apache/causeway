@@ -36,7 +36,7 @@ import org.apache.isis.applib.services.grid.GridService;
 import org.apache.isis.applib.services.metamodel.DomainMember;
 import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-import org.apache.isis.commons.internal.cdi._CDI;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
@@ -88,7 +88,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Override
     public void rebuild(final Class<?> domainType) {
         
-        GridService gridService = _CDI.getSingletonElseFail(GridService.class);
+        GridService gridService = serviceRegistry.lookupServiceElseFail(GridService.class); 
         gridService.remove(domainType);
         
         specificationLoader.reloadSpecification(domainType);
@@ -272,6 +272,7 @@ public class MetaModelServiceDefault implements MetaModelService {
         return metaModelExporter.exportMetaModel(config);
     }
     
+    @Inject ServiceRegistry serviceRegistry;
     @Inject SpecificationLoader specificationLoader;
     //@Inject GridService gridService; // to break circular dependency
 
