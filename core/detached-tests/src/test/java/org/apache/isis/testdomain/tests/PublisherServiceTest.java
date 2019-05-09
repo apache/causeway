@@ -40,7 +40,7 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import lombok.val;
 
 /**
- * Depends on {@link BootstrappingTest} to succeed.
+ * Depends on {@link JdoBootstrappingTest} to succeed.
  */
 class PublisherServiceTest extends JdoTestDomainIntegTest {
 

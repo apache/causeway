@@ -23,42 +23,28 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainIntegTest;
-import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 
-class BootstrappingTest extends JdoTestDomainIntegTest {
+@ExtendWith(SpringExtension.class)
+@SpringBootTest//(classes = {AsyncExecutionServiceDefault.class})
+class ServiceProvisioningTest extends JdoTestDomainIntegTest {
 
-    private Inventory inventory;
-    
     @BeforeEach
     void setUp() {
-        
-        // cleanup
-        fixtureScripts.runBuilderScript(
-                JdoTestDomainPersona.PurgeAll.builder());
-        
-        // given
-        inventory = fixtureScripts.runBuilderScript(
-                JdoTestDomainPersona.InventoryWith1Book.builder());
-    }
-    
-    @Test
-    void sampleInventoryShouldBeSetUp() {
-        assertNotNull(inventory);
-        assertNotNull(inventory.getProducts());
-        assertEquals(1, inventory.getProducts().size());
+     
     }
     
     @Test

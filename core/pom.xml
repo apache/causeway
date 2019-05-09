@@ -143,6 +143,9 @@
 
         <jetty.version>9.4.12.v20180830</jetty.version>
 
+		<spring-context.version>5.1.5.RELEASE</spring-context.version>
+		<spring-boot.version>2.1.4.RELEASE</spring-boot.version>
+		
         <wicket.version>8.4.0</wicket.version>
         <wicketstuff.version>8.4.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
         <wicket-bootstrap.version>2.0.3</wicket-bootstrap.version> <!-- de.agilecoders.wicket:wicket-bootstrap-core -->
@@ -1956,6 +1959,13 @@ ${license.additional-notes}
                 <version>${jetty.version}</version>
             </dependency>
             
+            <!-- Spring -->
+            <dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring-context.version}</version>
+			</dependency>
+            
 
             <!-- TESTING LIBRARIES (not scope=test because used by isis-core-integtest) -->
             
@@ -1977,6 +1987,13 @@ ${license.additional-notes}
                 <artifactId>junit-vintage-engine</artifactId>
                 <version>${junit.version}</version>
             </dependency>
+            
+            <!-- SPRING TEST -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-test</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
 
 			<!-- MOCKITO -->
 			<dependency>
