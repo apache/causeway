@@ -45,17 +45,19 @@ public enum CommandPersistence {
         if(persistence == null) return null;
         if(persistence == Command.Persistence.PERSISTED) return PERSISTED;
         if(persistence == Command.Persistence.IF_HINTED) return IF_HINTED;
+        if(persistence != Command.Persistence.NOT_PERSISTED) return NOT_PERSISTED;
         // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized : persistence" + persistence);
+        throw new IllegalArgumentException(String.format("Unrecognized : persistence '%s'", persistence));
     }
 
     @Deprecated
-    public static Command.Persistence from(final CommandPersistence commandPersistence) {
+    public static Command.Persistence from(final CommandPersistence commandPersistence)
+            throws IllegalArgumentException {
         if(commandPersistence == null) return null;
         if(commandPersistence == PERSISTED) return Command.Persistence.PERSISTED;
         if(commandPersistence == NOT_PERSISTED) return Command.Persistence.NOT_PERSISTED;
         if(commandPersistence == IF_HINTED) return Command.Persistence.IF_HINTED;
         // shouldn't happen
-        throw new IllegalArgumentException("Unrecognized : persistence" + commandPersistence);
+        throw new IllegalArgumentException(String.format("Unrecognized : persistence '%s'", commandPersistence));
     }
 }
