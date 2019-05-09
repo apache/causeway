@@ -16,11 +16,10 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service;
 
+import java.util.List;
 import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
@@ -174,5 +173,5 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
         return responseBuilder.build();
     }
 
-    @Inject @Any Instance<ContentNegotiationService> contentNegotiationServices;
+    @Inject List<ContentNegotiationService> contentNegotiationServices;
 }

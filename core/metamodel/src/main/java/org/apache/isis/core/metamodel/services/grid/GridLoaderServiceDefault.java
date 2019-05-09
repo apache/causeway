@@ -24,8 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.xml.bind.JAXBContext;
@@ -276,6 +274,6 @@ public class GridLoaderServiceDefault implements GridLoaderService {
 
     @Inject MessageService messageService;
     @Inject JaxbService jaxbService;
-    @Inject @Any Instance<GridSystemService<?>> gridSystemServices;
+    @Inject List<GridSystemService<?>> gridSystemServices;
 
 }

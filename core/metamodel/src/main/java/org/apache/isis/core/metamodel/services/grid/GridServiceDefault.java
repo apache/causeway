@@ -19,8 +19,6 @@ package org.apache.isis.core.metamodel.services.grid;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -204,7 +202,7 @@ public class GridServiceDefault implements GridService {
     ////////////////////////////////////////////////////////
 
     @Inject GridLoaderService gridLoaderService;
-    @Inject @Any private Instance<GridSystemService<?>> gridSystemServices;
+    @Inject private List<GridSystemService<?>> gridSystemServices;
     
     
 

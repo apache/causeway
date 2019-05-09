@@ -20,8 +20,6 @@ package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
 import java.util.List;
 
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -157,6 +155,6 @@ public class ContentNegotiationServiceXRoDomainType extends ContentNegotiationSe
         return domainObject;
     }
 
-    @Inject @Any Instance<ContentMappingService> contentMappingServices;
+    @Inject List<ContentMappingService> contentMappingServices;
 
 }

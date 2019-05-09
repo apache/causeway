@@ -19,7 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.login;
 
-import javax.enterprise.inject.Instance;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.apache.wicket.Component;
@@ -50,8 +51,8 @@ public class IsisSignInPanel extends SignInPanel {
     @Inject transient IsisSessionFactory isisSessionFactory;
     @Inject transient ServiceInjector servicesInjector;
     @Inject transient private PageClassRegistry pageClassRegistry;
-    @Inject transient Instance<UserRegistrationService> anyUserRegistrationService;
-    @Inject transient Instance<EmailNotificationService> anyEmailNotificationService;
+    @Inject transient List<UserRegistrationService> anyUserRegistrationService;
+    @Inject transient List<EmailNotificationService> anyEmailNotificationService;
     
     private final boolean signUpLink;
     private final boolean passwordResetLink;
