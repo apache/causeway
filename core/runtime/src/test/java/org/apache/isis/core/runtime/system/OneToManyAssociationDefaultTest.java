@@ -19,6 +19,10 @@
 
 package org.apache.isis.core.runtime.system;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -27,14 +31,14 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -43,10 +47,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDe
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 public class OneToManyAssociationDefaultTest {
 
@@ -83,19 +83,18 @@ public class OneToManyAssociationDefaultTest {
     @Mock
     private CollectionAddToFacet mockCollectionAddToFacet;
 
-    private ServicesInjector stubServicesInjector;
-
     private OneToManyAssociation association;
 
     @Before
     public void setUp() {
-        stubServicesInjector = ServicesInjector.builderForTesting()
-                .addServices(_Lists.of(
-                mockAuthenticationSessionProvider,
-                mockSpecificationLoader,
-                mockMessageService,
-                mockPersistenceSessionServiceInternal))
-                .build();
+        
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(_Config.getConfiguration())
+                .specificationLoader(mockSpecificationLoader)
+                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .singleton(mockMessageService)
+                .build());
 
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();

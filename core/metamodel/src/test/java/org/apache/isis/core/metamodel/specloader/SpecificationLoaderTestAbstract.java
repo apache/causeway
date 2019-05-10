@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.when;
+
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +35,8 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationService.Mode;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._Timing;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -40,21 +45,18 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract.DeprecatedPolicy;
+import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
 import org.apache.isis.core.metamodel.services.persistsession.ObjectAdapterService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.when;
 
 import lombok.val;
 
 //TODO[2112] migrate to spring @EnableWeld
 abstract class SpecificationLoaderTestAbstract {
 
-    static class Factories {
+    static class Producers {
         
         @Produces
         AuthenticationSessionProvider mockAuthenticationSessionProvider() {
@@ -91,26 +93,13 @@ abstract class SpecificationLoaderTestAbstract {
         }
         
     }
-
-//    @WeldSetup
-//    public WeldInitiator weld = WeldInitiator.from(
-//            
-//            BeansForTesting.builder()
-//            .injector()
-//            .addAll(
-//                    Factories.class
-//                    )
-//            .build()
-//            
-//            )
-//    .build();
     
+    protected SpecificationLoader specificationLoader;
+    protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    protected GridService mockGridService;
+    protected ObjectAdapterService mockPersistenceSessionServiceInternal;
+    protected MessageService mockMessageService;
     
-    @Inject protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    @Inject protected GridService mockGridService;
-    @Inject protected ObjectAdapterService mockPersistenceSessionServiceInternal;
-    @Inject protected MessageService mockMessageService;
-    @Inject protected SpecificationLoader specificationLoader;
     
     
     // is loaded by subclasses
@@ -121,6 +110,23 @@ abstract class SpecificationLoaderTestAbstract {
     public void setUp() throws Exception {
         
         // PRODUCTION
+        
+        val producers = new Producers();
+        
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(_Config.getConfiguration())
+                .specificationLoader(specificationLoader = producers.getSpecificationLoader())
+//                .serviceInjector(mockServiceInjector)
+//                .serviceRegistry(mockServiceRegistry)
+                .translationService(producers.mockTranslationService())
+                .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
+                .authenticationSessionProvider(mockAuthenticationSessionProvider = producers.mockAuthenticationSessionProvider())
+                .singleton(mockMessageService = producers.mockMessageService())
+                .singleton(mockGridService = producers.mockGridService())
+                .singleton(new MetamodelEventService())
+                .build());
+        
+
         
 //        BeanTypeRegistry.instance().setDomainServiceTypes(_Sets.newHashSet());
 //        BeanTypeRegistry.instance().setFixtureScriptTypes(_Sets.newHashSet());

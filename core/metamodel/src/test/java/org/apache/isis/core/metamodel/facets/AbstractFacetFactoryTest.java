@@ -28,12 +28,14 @@ import org.junit.Rule;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.metamodel.MetaModelContext;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -61,7 +63,9 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         }
     }
 
-    protected ServiceInjector stubServiceInjector;
+    protected ObjectAdapterProvider mockObjectAdapterProvider;
+    protected ServiceRegistry mockServiceRegistry;
+    protected ServiceInjector mockServiceInjector;
     protected TranslationService mockTranslationService;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     protected AuthenticationSession mockAuthenticationSession;
@@ -112,15 +116,20 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         mockPersistenceSessionServiceInternal = context.mock(PersistenceSessionServiceInternal.class);
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
+        
+        mockServiceRegistry = context.mock(ServiceRegistry.class);
+        mockServiceInjector = context.mock(ServiceInjector.class);
+        mockObjectAdapterProvider = context.mock(ObjectAdapterProvider.class);
 
-        ServicesInjector.builderForTesting()
-                .addServices(_Lists.of(
-                mockAuthenticationSessionProvider,
-                mockSpecificationLoader,
-                mockPersistenceSessionServiceInternal,
-                mockTranslationService
-                ))
-                .build();
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(_Config.getConfiguration())
+                .specificationLoader(mockSpecificationLoader)
+                .serviceInjector(mockServiceInjector)
+                .serviceRegistry(mockServiceRegistry)
+                .translationService(mockTranslationService)
+                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .build());
 
         context.checking(new Expectations() {{
 

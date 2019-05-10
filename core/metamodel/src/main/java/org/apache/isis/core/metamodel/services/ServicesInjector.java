@@ -16,49 +16,42 @@
  */
 package org.apache.isis.core.metamodel.services;
 
-import java.util.List;
-
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
-
 /**
  * @deprecated JUnit tests need to be migrated. 
  *
  */
 @Deprecated
-public class ServicesInjector implements ApplicationScopedComponent {
+public class ServicesInjector /*implements ApplicationScopedComponent*/ {
     private static final String KEY_SET_PREFIX = "isis.services.injector.setPrefix";
     private static final String KEY_INJECT_PREFIX = "isis.services.injector.injectPrefix";
 
 
-    // -- BUILDER
-    
-    public static ServicesInjectorBuilder builder() {
-        final IsisConfiguration config = _Config.getConfiguration();
-        return new ServicesInjectorBuilder()
-                .addService(config)
-                .autowireSetters(config.getBoolean(KEY_SET_PREFIX, true))
-                .autowireInject(config.getBoolean(KEY_INJECT_PREFIX, true));
-    }
-    
-    public static ServicesInjectorBuilder builderForTesting() {
-        return builder()
-                .autowireSetters(true)
-                .autowireInject(false);
-    }
-    
-    // -- CONSTRUCTOR (NOT EXPOSED)
-
-    ServicesInjector(
-            final List<Object> services,
-            final InjectorMethodEvaluator injectorMethodEvaluator,
-            final boolean autowireSetters,
-            final boolean autowireInject
-            ) {
-        
-    }
+//    // -- BUILDER
+//    
+//    public static ServicesInjectorBuilder builder() {
+//        final IsisConfiguration config = _Config.getConfiguration();
+//        return new ServicesInjectorBuilder()
+//                .addService(config)
+//                .autowireSetters(config.getBoolean(KEY_SET_PREFIX, true))
+//                .autowireInject(config.getBoolean(KEY_INJECT_PREFIX, true));
+//    }
+//    
+//    public static ServicesInjectorBuilder builderForTesting() {
+//        return builder()
+//                .autowireSetters(true)
+//                .autowireInject(false);
+//    }
+//    
+//    // -- CONSTRUCTOR (NOT EXPOSED)
+//
+//    ServicesInjector(
+//            final List<Object> services,
+//            final InjectorMethodEvaluator injectorMethodEvaluator,
+//            final boolean autowireSetters,
+//            final boolean autowireInject
+//            ) {
+//        
+//    }
 
     
 }

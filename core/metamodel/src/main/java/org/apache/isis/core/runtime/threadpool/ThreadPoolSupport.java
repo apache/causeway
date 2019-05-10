@@ -276,7 +276,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
                 try {
                     result = future.get();
                 } catch (InterruptedException | ExecutionException e) {
-                    throw new RuntimeException(e);
+                    throw _Exceptions.unrecoverable(e);
                 }
                 returnValues.add(result);
             }

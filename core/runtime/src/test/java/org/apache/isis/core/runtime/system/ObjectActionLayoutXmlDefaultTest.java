@@ -19,6 +19,11 @@
 
 package org.apache.isis.core.runtime.system;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -26,23 +31,17 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 public class ObjectActionLayoutXmlDefaultTest {
 
@@ -60,22 +59,17 @@ public class ObjectActionLayoutXmlDefaultTest {
     @Mock
     private SpecificationLoader mockSpecificationLoader;
     @Mock
-    private MessageService mockMessageService;
-    @Mock
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
-
-    private ServicesInjector stubServicesInjector;
 
     @Before
     public void setUp() throws Exception {
 
-        stubServicesInjector = ServicesInjector.builderForTesting()
-                .addServices(_Lists.of(
-                        mockAuthenticationSessionProvider,
-                        mockSpecificationLoader,
-                        mockPersistenceSessionServiceInternal,
-                        mockMessageService))
-                .build();
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(_Config.getConfiguration())
+                .specificationLoader(mockSpecificationLoader)
+                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .build());
 
         context.checking(new Expectations() {
             {

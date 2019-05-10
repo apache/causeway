@@ -16,6 +16,9 @@
  */
 package org.apache.isis.core.runtime.services;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -34,13 +37,10 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 public class ServiceInjectorTestUsingCodegenPlugin {
 
@@ -57,14 +57,11 @@ public class ServiceInjectorTestUsingCodegenPlugin {
 
         serviceInstantiator = new ServiceInstantiator();
         
-        final List<Object> services = _Lists.of(
-                serviceInstantiator.createInstance(SingletonCalculator.class),
-                serviceInstantiator.createInstance(AccumulatingCalculator.class)
-                );
-        
-        ServicesInjector.builderForTesting()
-                .addServices(services)
-                .build();
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(_Config.getConfiguration())
+                .singleton(serviceInstantiator.createInstance(SingletonCalculator.class))
+                .singleton(serviceInstantiator.createInstance(AccumulatingCalculator.class))
+                .build());
         
         serviceRegistry = IsisContext.getServiceRegistry();
         serviceInjector = IsisContext.getServiceInjector();

@@ -91,6 +91,7 @@ public interface MetaModelContext {
     }
     
     static void preset(MetaModelContext metaModelContext) {
+        _Context.clear();
         _Context.putSingleton(MetaModelContext.class, metaModelContext);
     }
     

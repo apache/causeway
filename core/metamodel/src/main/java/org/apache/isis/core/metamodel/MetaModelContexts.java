@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,7 +32,9 @@ import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.applib.services.xactn.TransactionService;
 import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.cdi._CDI;
+import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.config.IsisConfiguration;
@@ -48,6 +51,7 @@ import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Singular;
 import lombok.val;
 
 /**
@@ -291,9 +295,11 @@ public final class MetaModelContexts {
 
 		private ObjectAdapterProvider objectAdapterProvider;
 
-		private ServiceInjector serviceInjector;
+		@Builder.Default
+		private ServiceInjector serviceInjector = new ServiceInjectorForTesting();
 
-		private ServiceRegistry serviceRegistry;
+		@Builder.Default
+		private ServiceRegistry serviceRegistry = new ServiceRegistryForTesting();
 
 		private SpecificationLoader specificationLoader;
 
@@ -316,6 +322,9 @@ public final class MetaModelContexts {
 		private TransactionState transactionState;
 
 		private Map<String, ObjectAdapter> serviceAdaptersById;
+		
+		@Singular
+		private List<Object> singletons;
 
 		@Override
 		public ObjectSpecification getSpecification(Class<?> type) {
@@ -337,6 +346,28 @@ public final class MetaModelContexts {
 			}
 			return serviceAdaptersById.get(serviceId);
 		}
+		
+        public Stream<Object> streamSingletons() {
+            
+            val fields = _Lists.of(
+                    configuration,
+                    objectAdapterProvider,
+                    serviceInjector,
+                    serviceRegistry,
+                    specificationLoader,
+                    authenticationSessionProvider,
+                    translationService,
+                    authenticationSession,
+                    authorizationManager,
+                    authenticationManager,
+                    titleService,
+                    repositoryService,
+                    transactionService,
+                    transactionState);
+            
+            return Stream.concat(fields.stream(), getSingletons().stream())
+                    .filter(_NullSafe::isPresent);
+        }
     	
     }
 

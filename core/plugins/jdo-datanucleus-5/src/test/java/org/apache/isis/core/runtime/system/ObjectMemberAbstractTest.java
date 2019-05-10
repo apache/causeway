@@ -19,6 +19,15 @@
 
 package org.apache.isis.core.runtime.system;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import org.datanucleus.enhancement.Persistable;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -27,7 +36,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -46,7 +56,6 @@ import org.apache.isis.core.metamodel.interactions.PropertyUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -60,15 +69,6 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class ObjectMemberAbstractTest {
 
@@ -89,8 +89,6 @@ public class ObjectMemberAbstractTest {
     @Mock
     private SpecificationLoader mockSpecificationLoader;
 
-    ServicesInjector stubServicesInjector;
-
     @Mock
     private ObjectSpecification mockSpecForCustomer;
 
@@ -101,21 +99,17 @@ public class ObjectMemberAbstractTest {
     public void setUp() throws Exception {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
-        stubServicesInjector = ServicesInjector.builderForTesting()
-                .addServices(_Lists.<Object>of(
-                        mockSpecificationLoader, 
-                        mockPersistenceSessionServiceInternal))
-                .build(); 
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(_Config.getConfiguration())
+                .specificationLoader(mockSpecificationLoader)
+                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .build());
 
         context.checking(new Expectations() {{
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));
         }});
-//        persistentAdapter = PojoAdapterBuilder.create()
-//                .with(mockSpecificationLoader)
-//                .withOid("CUS|1")
-//                .withPojo(mockPersistable)
-//                .build();
 
         persistentAdapter = PojoAdapter.of(
                 mockPersistable,
@@ -131,7 +125,7 @@ public class ObjectMemberAbstractTest {
                 .withPojo(mockPersistable)
                 .build();
 
-        testMember = new ObjectMemberAbstractImpl("id", stubServicesInjector);
+        testMember = new ObjectMemberAbstractImpl("id");
 
         context.checking(new Expectations() {{
             allowing(mockSpecificationLoader).lookupBySpecId(ObjectSpecId.of("CUS"));
@@ -253,7 +247,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
         }
     }
 
-    protected ObjectMemberAbstractImpl(final String id, final ServicesInjector servicesInjector) {
+    protected ObjectMemberAbstractImpl(final String id) {
         super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY);
     }
 

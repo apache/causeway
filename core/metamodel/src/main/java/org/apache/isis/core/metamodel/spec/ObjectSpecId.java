@@ -18,12 +18,18 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import static org.apache.isis.commons.internal.base._With.requiresNotEmpty;
+
 import java.io.Serializable;
 
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 /**
  * Represents an {@link ObjectSpecification}, as determined by
@@ -32,26 +38,25 @@ import lombok.Value;
  * <p>
  * Has value semantics.
  */
-@Value(staticConstructor = "of")
+@FieldDefaults(makeFinal=true, level=AccessLevel.PRIVATE) 
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter @EqualsAndHashCode
 public final class ObjectSpecId implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @NonNull private final String specId;
 
-//    public static ObjectSpecId of(String specId) {
-//        requiresNotEmpty(specId, "specId");
-//        return new ObjectSpecId(specId);
-//    }
-//
-//    private ObjectSpecId(String specId) {
-//        this.specId = specId;
-//    }
+    public static ObjectSpecId of(String specId) {
+        requiresNotEmpty(specId, "specId");
+        return new ObjectSpecId(specId);
+    }
 
     public String asString() {
         return specId;
     }
 
+//replaced by lombok ...    
 //    @Override
 //    public int hashCode() {
 //        return specId.hashCode();

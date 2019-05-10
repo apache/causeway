@@ -56,6 +56,10 @@ import lombok.val;
  */
 public class _Spring {
 
+    public static boolean isContextAvailable() {
+        return _Context.getIfAny(ApplicationContext.class)!=null;
+    }
+    
     public static void init(ApplicationContext context) {
         _Context.putSingleton(ApplicationContext.class, context);
     }

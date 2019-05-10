@@ -38,15 +38,12 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-@Singleton
+@Singleton @Slf4j
 public class ServiceInjectorDefault implements ServiceInjector {
-    
-    private static final Logger LOG = LoggerFactory.getLogger(ServiceInjectorDefault.class);
     
     private static final String KEY_SET_PREFIX = "isis.services.injector.setPrefix";
     private static final String KEY_INJECT_PREFIX = "isis.services.injector.injectPrefix";
@@ -57,7 +54,7 @@ public class ServiceInjectorDefault implements ServiceInjector {
     
     private final Map<Class<?>, Method[]> methodsByClassCache = _Maps.newHashMap();
     private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newHashMap();
-
+    
     @Override
     public <T> T injectServicesInto(T domainObject) {
         injectServices(domainObject);
@@ -201,16 +198,16 @@ public class ServiceInjectorDefault implements ServiceInjector {
         } catch (final IllegalAccessException e) {
             throw new MetaModelException(String.format("Cannot access the %s field in %s", field.getName(), target.getClass().getName()));
         }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("injected {} into {}", parameter, new ToString(target));
+        if (log.isDebugEnabled()) {
+            log.debug("injected {} into {}", parameter, new ToString(target));
         }
     }
 
     private static void invokeInjectorMethod(final Method method, final Object target, final Object parameter) {
         final Object[] parameters = new Object[] { parameter };
         invokeMethod(method, target, parameters);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("injected {} into {}", parameter, new ToString(target));
+        if (log.isDebugEnabled()) {
+            log.debug("injected {} into {}", parameter, new ToString(target));
         }
     }
 
@@ -226,6 +223,26 @@ public class ServiceInjectorDefault implements ServiceInjector {
 
     private static final Predicate<Field> isAnnotatedForInjection() {
         return field->field.getAnnotation(javax.inject.Inject.class) != null;
+    }
+    
+    // -- TESTING
+    
+    /**
+     * JUnit Test support. 
+     */
+    public static ServiceInjectorDefault getInstanceAndInit(
+            IsisConfiguration configuration,
+            ServiceRegistry serviceRegistry,
+            InjectorMethodEvaluator injectorMethodEvaluator) {
+        val instance = new ServiceInjectorDefault();
+        
+        instance.configuration = configuration;
+        instance.serviceRegistry = serviceRegistry;
+        instance.injectorMethodEvaluator = injectorMethodEvaluator;
+        
+        instance.init();
+        
+        return instance;
     }
 
 
