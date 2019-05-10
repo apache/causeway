@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
+import java.util.Random;
+
 public class RandomCodeGenerator10Chars implements RandomCodeGenerator {
 
     private static final int NUMBER_CHARACTERS = 10;
@@ -27,8 +29,9 @@ public class RandomCodeGenerator10Chars implements RandomCodeGenerator {
     @Override
     public String generateRandomCode() {
         final StringBuilder buf = new StringBuilder(NUMBER_CHARACTERS);
+	Random rand = new Random();
         for (int i = 0; i < NUMBER_CHARACTERS; i++) {
-            final int pos = (int) ((Math.random() * CHARACTERS.length()));
+            final int pos = (int) ((rand.nextDouble() * CHARACTERS.length()));
             buf.append(CHARACTERS.charAt(pos));
         }
         return buf.toString();
