@@ -16,19 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
 package org.apache.isis.core.security.authentication.standard;
+
+import java.util.Random;
 
 public class RandomCodeGenerator10Chars implements RandomCodeGenerator {
 
     private static final int NUMBER_CHARACTERS = 10;
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
+    private final Random random = new Random(); 
+    
     @Override
     public String generateRandomCode() {
         final StringBuilder buf = new StringBuilder(NUMBER_CHARACTERS);
         for (int i = 0; i < NUMBER_CHARACTERS; i++) {
-            final int pos = (int) ((Math.random() * CHARACTERS.length()));
+            final int pos = random.nextInt(CHARACTERS.length()); 
             buf.append(CHARACTERS.charAt(pos));
         }
         return buf.toString();
