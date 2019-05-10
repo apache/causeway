@@ -45,12 +45,11 @@ import java.util.stream.IntStream;
 
 import javax.annotation.Nullable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * ThreadPoolSupport is application-scoped, meaning ThreadPoolSupport is closed on
@@ -60,11 +59,11 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
  * when application shuts down.
  *
  */
+@Slf4j
 public final class ThreadPoolSupport implements AutoCloseable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ThreadPoolSupport.class);
-
-    public static ThreadPoolExecutionMode HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = ThreadPoolExecutionMode.PARALLEL;
+    public static ThreadPoolExecutionMode HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = 
+            ThreadPoolExecutionMode.PARALLEL;
     
     private final static int KEEP_ALIVE_TIME_SECS = 5;
     private final static int QUEUE_CAPACITY = Integer.MAX_VALUE;
@@ -255,7 +254,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
             return returnValues;
         } finally {
             final long t1 = System.nanoTime();
-            LOG.info("join'ing {} tasks: waited {} milliseconds ", futures.size(), 0.000_001 * (t1-t0));
+            log.info("join'ing {} tasks: waited {} milliseconds ", futures.size(), 0.000_001 * (t1-t0));
         }
     }
 
@@ -284,7 +283,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
             return returnValues;
         } finally {
             final long t1 = System.nanoTime();
-            LOG.info("join'ing {} tasks: waited {} milliseconds ", futures.size(), 0.000_001 * (t1-t0));
+            log.info("join'ing {} tasks: waited {} milliseconds ", futures.size(), 0.000_001 * (t1-t0));
         }
     }
 
@@ -337,8 +336,8 @@ public final class ThreadPoolSupport implements AutoCloseable {
 
         return () -> {
             final long startedAt = System.currentTimeMillis();
-            if(LOG.isDebugEnabled()) {
-                LOG.debug("START: workQueue.size: {}, waited for: {}ms, {}",
+            if(log.isDebugEnabled()) {
+                log.debug("START: workQueue.size: {}, waited for: {}ms, {}",
                         queueSize,
                         startedAt - queuedAt,
                         callable.toString());
@@ -347,8 +346,8 @@ public final class ThreadPoolSupport implements AutoCloseable {
                 return callable.call();
             } finally {
                 final long completedAt = System.currentTimeMillis();
-                if(LOG.isDebugEnabled()) {
-                    LOG.debug("END: completed in: {}ms, {}",
+                if(log.isDebugEnabled()) {
+                    log.debug("END: completed in: {}ms, {}",
                             completedAt - startedAt,
                             callable.toString());
                 }

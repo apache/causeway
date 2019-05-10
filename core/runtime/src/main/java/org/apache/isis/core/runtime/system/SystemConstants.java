@@ -93,7 +93,7 @@ public final class SystemConstants {
     public final static String PASSWORD_KEY = ConfigurationConstants.ROOT + "password";
 
     public static final String LOCALE_KEY = ConfigurationConstants.ROOT + "locale";
-
+    
     private SystemConstants() {
     }
 

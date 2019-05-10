@@ -22,10 +22,9 @@ package org.apache.isis.core.metamodel.services.factory;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.inject.Singleton;
+
 import org.apache.isis.applib.NonRecoverableException;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -36,14 +35,10 @@ import org.apache.isis.core.metamodel.services.persistsession.PersistenceSession
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class FactoryServiceInternalDefault implements FactoryService {
 
 
-    @Programmatic
     @Override
     @SuppressWarnings("unchecked")
     public <T> T instantiate(final Class<T> domainClass) {
@@ -60,14 +55,12 @@ public class FactoryServiceInternalDefault implements FactoryService {
     }
 
 
-    @Programmatic
     @Override
     public <T> T m(final Class<T> mixinClass, final Object mixedIn) {
         return mixin(mixinClass, mixedIn);
     }
 
 
-    @Programmatic
     @Override
     public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(mixinClass);

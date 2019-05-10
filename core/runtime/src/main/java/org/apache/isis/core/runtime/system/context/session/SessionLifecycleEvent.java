@@ -21,9 +21,10 @@ package org.apache.isis.core.runtime.system.context.session;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 
 import lombok.Getter;
+import lombok.ToString;
 import lombok.Value;
 
-@Value(staticConstructor="of")
+@Value(staticConstructor="of") @ToString(of = "eventType")
 public class SessionLifecycleEvent {
 
 	public static enum EventType {

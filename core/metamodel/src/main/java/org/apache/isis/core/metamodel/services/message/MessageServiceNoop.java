@@ -21,12 +21,11 @@ package org.apache.isis.core.metamodel.services.message;
 import javax.annotation.Priority;
 import javax.inject.Singleton;
 
-import org.springframework.core.Ordered;
-
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.commons.ioc.PriorityConstants;
 
-@Singleton @Priority(Ordered.LOWEST_PRECEDENCE)
+@Singleton @Priority(PriorityConstants.PRIORITY_LOWEST)
 public class MessageServiceNoop implements MessageService {
 
     @Override

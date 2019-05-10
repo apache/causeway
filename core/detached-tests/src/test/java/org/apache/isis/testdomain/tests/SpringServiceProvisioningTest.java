@@ -16,6 +16,8 @@
  */
 package org.apache.isis.testdomain.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.TreeSet;
@@ -34,8 +36,6 @@ import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.jdo.JdoTestApplication;
 import org.apache.isis.testdomain.jdo.JdoTestDomainIntegTest;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 

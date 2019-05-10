@@ -1,5 +1,6 @@
 package org.apache.isis.core.runtime.system.persistence;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
@@ -9,6 +10,7 @@ import org.springframework.context.event.EventListener;
 
 import org.apache.isis.commons.internal.base._With;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.metamodel.IsisJdoRuntimePlugin;
 import org.apache.isis.core.runtime.system.context.session.AppLifecycleEvent;
@@ -21,12 +23,21 @@ import lombok.val;
 @Singleton
 public class JdoPersistenceLifecycleService {
 
+    private final _Probe probe = _Probe.unlimited().label("JdoPersistenceLifecycleService");
+    
 	private PersistenceSessionFactory persistenceSessionFactory;
+	
+	@PostConstruct
+	public void postConstr() {
+	    probe.println("!!! init");
+	}
 
-	@EventListener
+	@EventListener(AppLifecycleEvent.class)
 	public void onAppLifecycleEvent(@Observes AppLifecycleEvent event) {
 
 		val eventType = event.getEventType(); 
+		
+		probe.println("received app lifecycle event %s", eventType);
 
 		switch (eventType) {
 		case appPreMetamodel:
@@ -45,10 +56,12 @@ public class JdoPersistenceLifecycleService {
 
 	}
 
-	@EventListener
+	@EventListener(SessionLifecycleEvent.class)
 	public void onSessionLifecycleEvent(@Observes SessionLifecycleEvent event) {
-
-		val eventType = event.getEventType(); 
+	    
+		val eventType = event.getEventType();
+		
+		probe.println("received session event %s", eventType);
 
 		switch (eventType) {
 		case sessionOpened:

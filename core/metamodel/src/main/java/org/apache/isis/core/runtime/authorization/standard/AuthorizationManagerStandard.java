@@ -110,7 +110,7 @@ public class AuthorizationManagerStandard implements AuthorizationManager {
         return (identifier.getClassName().equals(""));
     }
 
-    @EventListener
+    @EventListener(ProgrammingModel.class)
     public static void refineProgrammingModel(@Observes ProgrammingModel baseProgrammingModel) {
         final AuthorizationFacetFactory facetFactory = new AuthorizationFacetFactory();
         baseProgrammingModel.addFactory(facetFactory);

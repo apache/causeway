@@ -22,7 +22,7 @@ import org.apache.isis.applib.services.userreg.events.PasswordResetEvent;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
-//@Singleton @Alternative @Priority(Constants.WICKET_SERVICE_PRIORITY)
+//@Singleton @Alternative @Priority(PriorityConstants.PRIORITY_LOWEST)
 @Deprecated //TODO  [2033] adds no value
 class EmailNotificationServiceWicket implements EmailNotificationService {
 

@@ -27,18 +27,14 @@ import java.util.concurrent.Future;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
-import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 import org.apache.isis.schema.utils.ChangesDtoUtils;
 import org.apache.isis.schema.utils.CommandDtoUtils;
 import org.apache.isis.schema.utils.InteractionDtoUtils;
@@ -80,95 +76,75 @@ class IsisSessionFactoryBuilder {
             FixtureClock.initialize();
         }
 
-        IsisSessionFactoryDefault isisSessionFactory;
-        {
+        val serviceRegistry = IsisContext.getServiceRegistry();
+        val authenticationManager = IsisContext.getAuthenticationManager();
+        val authorizationManager = IsisContext.getAuthorizationManager();
+        val runtimeEventService = serviceRegistry.lookupServiceElseFail(RuntimeEventService.class);
 
-            final ServiceRegistry serviceRegistry = IsisContext.getServiceRegistry();
-            final AuthenticationManager authenticationManager = IsisContext.getAuthenticationManager();
-            final AuthorizationManager authorizationManager = IsisContext.getAuthorizationManager();
-            final RuntimeEventService runtimeEventService = serviceRegistry.lookupServiceElseFail(RuntimeEventService.class);
+        serviceRegistry.validateServices();
 
-            serviceRegistry.validateServices();
-            
-            val specificationLoader = IsisContext.getSpecificationLoader();
+        val specificationLoader = IsisContext.getSpecificationLoader();
 
-            // instantiate the IsisSessionFactory
-            isisSessionFactory = new IsisSessionFactoryDefault();
-            isisSessionFactory.initDependencies(specificationLoader);
+        // instantiate the IsisSessionFactory
+        val isisSessionFactory = new IsisSessionFactoryDefault();
+        isisSessionFactory.initDependencies(specificationLoader);
 
-            // ... and make IsisSessionFactory available via the IsisContext static for those places where we cannot
-            // yet inject.
+        // ... and make IsisSessionFactory available via the IsisContext static for those
+        // places where we cannot yet inject.
 
-            _Context.putSingleton(IsisSessionFactory.class, isisSessionFactory);
-            
-            runtimeEventService.fireAppPreMetamodel();
+        _Context.putSingleton(IsisSessionFactory.class, isisSessionFactory);
 
-            // execute tasks using a thread-pool
-            final List<Future<Object>> futures = ThreadPoolSupport.getInstance().invokeAll(Arrays.asList(
-                    callableOf("SpecificationLoader.init()", ()->{
-                        // time to initialize...
-                        specificationLoader.init();
+        runtimeEventService.fireAppPreMetamodel();
 
-                        // we need to do this before checking if the metamodel is valid.
-                        //
-                        // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
-                        // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
-                        // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
-                        // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
-                        // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
-                        // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
-                        // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
-                        //
-                        // also, required so that can still call isisSessionFactory#doInSession
-                        //
-                        // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
-                        // (including the metamodel invalid page)
-                        // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
-                        // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
+        val tasks = Arrays.asList(
+                callableOf("SpecificationLoader.init()", ()->{
+                    // time to initialize...
+                    specificationLoader.init();
 
-                        authenticationManager.init();
-                        authorizationManager.init();
-                    }),
-                    //callableOf("PersistenceSessionFactory.init()", persistenceSessionFactory::init),
-                    callableOf("ChangesDtoUtils.init()", ChangesDtoUtils::init),
-                    callableOf("InteractionDtoUtils.init()", InteractionDtoUtils::init),
-                    callableOf("CommandDtoUtils.init()", CommandDtoUtils::init)
-                )); 
+                    // we need to do this before checking if the metamodel is valid.
+                    //
+                    // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
+                    // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
+                    // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
+                    // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
+                    // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
+                    // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
+                    // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
+                    //
+                    // also, required so that can still call isisSessionFactory#doInSession
+                    //
+                    // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
+                    // (including the metamodel invalid page)
+                    // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
+                    // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
 
+                    authenticationManager.init();
+                    authorizationManager.init();
+                }),
+                //callableOf("PersistenceSessionFactory.init()", persistenceSessionFactory::init),
+                callableOf("ChangesDtoUtils.init()", ChangesDtoUtils::init),
+                callableOf("InteractionDtoUtils.init()", InteractionDtoUtils::init),
+                callableOf("CommandDtoUtils.init()", CommandDtoUtils::init)
+                );
 
-            // wait on this thread for tasks to complete
-            ThreadPoolSupport.getInstance().joinGatherFailures(futures);
+        // execute tasks using a thread-pool
+        final List<Future<Object>> futures = ThreadPoolSupport.getInstance().invokeAll(tasks); 
+        // wait on this thread for tasks to complete
+        ThreadPoolSupport.getInstance().joinGatherFailures(futures);
 
-            runtimeEventService.fireAppPostMetamodel();
-            
-            isisSessionFactory.constructServices();
+        runtimeEventService.fireAppPostMetamodel();
 
-//FIXME [2033] skipping mm validation for now ...            
-//            isisSessionFactory.doInSession(
-//                    () -> {
-                        
-//                      val mmDeficiencies = specificationLoader.validateThenGetDeficienciesIfAny(); 
-//                      if(mmDeficiencies!=null) {
-//                            // no need to use a higher level, such as error(...); the calling code will expose any metamodel
-//                            // validation errors in their own particular way.
-//                            if(log.isDebugEnabled()) {
-//                                log.debug("Meta model invalid", mmDeficiencies.getValidationErrorsAsString());
-//                            }
-//                            _Context.putSingleton(MetaModelDeficiencies.class, mmDeficiencies);
-//                        }
-//                    }
-//                    );
-
-
-        } 
+        isisSessionFactory.init();
+        
+        //runtimeEventService.fireAppPostConstruct();
 
         return isisSessionFactory;
     }
 
-//    private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {
-//        return ListExtensions.filtered(Arrays.asList(possibleRefiners), MetaModelRefiner.class);
-//    }
-    
+    //    private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {
+    //        return ListExtensions.filtered(Arrays.asList(possibleRefiners), MetaModelRefiner.class);
+    //    }
+
     private static Callable<Object> callableOf(String label, Runnable action) {
         return new Callable<Object>() {
             @Override public Object call() throws Exception {

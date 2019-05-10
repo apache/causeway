@@ -16,33 +16,25 @@
  */
 package org.apache.isis.core.runtime.services.command;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
+import javax.inject.Singleton;
+
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandDefault;
 import org.apache.isis.applib.services.command.spi.CommandService;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class CommandServiceDefault implements CommandService {
 
-    @Programmatic
     @Override
     public Command create() {
         return new CommandDefault();
     }
 
-    @Programmatic
     @Override
     public void complete(final Command command) {
         // nothing to do
     }
 
-
-    @Programmatic
     @Override
     public boolean persistIfPossible(final Command command) {
         return false;

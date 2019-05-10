@@ -14,27 +14,38 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.plugins.ioc;
+package org.apache.isis.commons.ioc;
 
 import javax.annotation.Priority;
-import javax.enterprise.inject.Alternative;
-import javax.inject.Singleton;
-
-import org.apache.isis.commons.ioc.PriorityConstants;
 
 /**
- * Acts as a no-op implementation, that is used as lowest priority default, whenever
- * service-provisioning can not find any alternative with higher priority.  
- * 
- * @since 2.0.0-M3
- *
+ * To use with the {@link Priority} annotation.
  */
-@Singleton @Alternative @Priority(PriorityConstants.PRIORITY_BELOW_DEFAULT)
-public class ConversationContextServiceDefault implements ConversationContextService {
+public class PriorityConstants {
 
-	@Override
-	public ConversationContextHandle startTransientConversation() {
-		return null; // don't return a handle
-	}
+    /**
+     * To use with the {@link Priority} annotation.
+     */
+    public static final int PRIORITY_HIGHEST = Integer.MIN_VALUE;
 
+    /**
+     * To use with the {@link Priority} annotation.
+     */
+    public static final int PRIORITY_ABOVE_DEFAULT = -100;
+    
+    /**
+     * To use with the {@link Priority} annotation.
+     */
+    public static final int PRIORITY_DEFAULT = 0;
+    
+    /**
+     * To use with the {@link Priority} annotation.
+     */
+    public static final int PRIORITY_BELOW_DEFAULT = 100;
+    
+    /**
+     * To use with the {@link Priority} annotation.
+     */
+    public static final int PRIORITY_LOWEST = Integer.MAX_VALUE;
+    
 }

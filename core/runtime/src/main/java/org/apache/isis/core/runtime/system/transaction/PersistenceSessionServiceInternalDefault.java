@@ -18,13 +18,18 @@
  */
 package org.apache.isis.core.runtime.system.transaction;
 
+import static java.util.Objects.requireNonNull;
+import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
+
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 
+import javax.annotation.Priority;
+import javax.inject.Singleton;
+
 import org.apache.isis.applib.NonRecoverableException;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -32,6 +37,7 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.commons.ioc.PriorityConstants;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
@@ -45,14 +51,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
-import static java.util.Objects.requireNonNull;
-import static org.apache.isis.commons.internal.base._With.acceptIfPresent;
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + (Integer.MAX_VALUE - 1)  // ie before the Noop impl in metamodel
-        )
+@Singleton @Priority(PriorityConstants.PRIORITY_BELOW_DEFAULT)
 public class PersistenceSessionServiceInternalDefault implements PersistenceSessionServiceInternal {
 
     @Override

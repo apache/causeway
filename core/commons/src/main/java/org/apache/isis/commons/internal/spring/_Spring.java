@@ -25,8 +25,10 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+import javax.enterprise.event.Event;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.ResolvableType;
 
@@ -144,5 +146,8 @@ public class _Spring {
                         
     }
 
+    public static <T> Event<T> event(ApplicationEventPublisher publisher) {
+        return new EventSpring<T>(publisher);
+    }
     
 }

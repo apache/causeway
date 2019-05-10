@@ -22,22 +22,21 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import javax.annotation.Priority;
+import javax.inject.Singleton;
+
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.xactn.Transaction;
 import org.apache.isis.applib.services.xactn.TransactionState;
+import org.apache.isis.commons.ioc.PriorityConstants;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton @Priority(PriorityConstants.PRIORITY_LOWEST)
 public class PersistenceSessionServiceInternalNoop implements PersistenceSessionServiceInternal {
 
     @Override

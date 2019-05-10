@@ -80,32 +80,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     private ServiceInitializer serviceInitializer;
 	private RuntimeEventService runtimeEventService;
 
-//    private final static _Probe probe = _Probe.maxCallsThenExitWithStacktrace(1).label("IsisSessionFactoryDefault");  
-//    
-//    @PostConstruct
-//    public void init() {
-//    	
-//    	probe.println("INIT " + hashCode());
-//        
-//        // guard against this class not being a singleton
-//        if(_Context.getIfAny(IsisSessionFactoryDefault.class)!=null) {
-//            _Exceptions.unexpectedCodeReach();
-//            return;
-//        }
-//        
-//        requires(configuration, "configuration");
-//        //requires(persistenceSessionFactory, "persistenceSessionFactory");
-//        
-//        
-//        final IsisSessionFactoryBuilder builder = new IsisSessionFactoryBuilder();
-//        
-//        // as a side-effect, if the metamodel turns out to be invalid, then
-//        // this will push the MetaModelInvalidException into IsisContext.
-//        builder.buildSessionFactory(()->this);
-//        
-//        requires(persistenceSessionFactory, "persistenceSessionFactory");
-//    }
-
     // called by builder
     void initDependencies(SpecificationLoader specificationLoader) {
     	this.configuration = IsisContext.getConfiguration();
@@ -118,7 +92,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     }
 
     // called by builder
-    void constructServices() {
+    void init() {
 
         // do postConstruct.  We store the initializer to do preDestroy on shutdown
         serviceInitializer = new ServiceInitializer(configuration, 
@@ -135,7 +109,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             // postConstructInSession
             //
 
-            IsisTransactionManager transactionManager = getOrCreateTransactionManager();
+            IsisTransactionManager transactionManager = getTransactionManagerElseFail();
             transactionManager.executeWithinTransaction(serviceInitializer::postConstruct);
 
             //
@@ -188,73 +162,21 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             for (String message : messages) {
                 translationService.translate(context, message);
             }
+            
+          //FIXME [2033] skipping mm validation for now ...            
+//                    val mmDeficiencies = specificationLoader.validateThenGetDeficienciesIfAny(); 
+//                    if(mmDeficiencies!=null) {
+//                          // no need to use a higher level, such as error(...); the calling code will expose any metamodel
+//                          // validation errors in their own particular way.
+//                          if(log.isDebugEnabled()) {
+//                              log.debug("Meta model invalid", mmDeficiencies.getValidationErrorsAsString());
+//                          }
+//                          _Context.putSingleton(MetaModelDeficiencies.class, mmDeficiencies);
+//                      }
+            
            },
            new InitialisationSession());
 
-//        openSession(new InitialisationSession());
-//
-//        try {
-//            //
-//            // postConstructInSession
-//            //
-//
-//            IsisTransactionManager transactionManager = getOrCreateTransactionManager();
-//            transactionManager.executeWithinTransaction(serviceInitializer::postConstruct);
-//
-//            //
-//            // installFixturesIfRequired
-//            //
-//            final FixturesInstallerFromConfiguration fixtureInstaller =
-//                    new FixturesInstallerFromConfiguration();
-//            fixtureInstaller.installFixtures(); //TODO [2033] if too early, pass over 'this' ... new FixturesInstallerFromConfiguration(this) 
-//
-//            //
-//            // translateServicesAndEnumConstants
-//            //
-//
-//            val titleService = serviceRegistry.lookupServiceElseFail(TitleService.class);
-//            
-//            final Stream<Object> domainServices = serviceRegistry.streamRegisteredBeans()
-//                    .filter(BeanAdapter::isDomainService)
-//                    .map(BeanAdapter::getInstance)
-//                    .filter(Bin::isCardinalityOne)
-//                    .map(Bin::getSingleton)
-//                    .map(Optional::get)
-//                    ;
-//            
-//            domainServices.forEach(domainService->{
-//                final String unused = titleService.titleOf(domainService);
-//                _Blackhole.consume(unused);
-//            });
-//
-//
-//            // (previously we took a protective copy to avoid a concurrent modification exception,
-//            // but this is now done by SpecificationLoader itself)
-//            for (final ObjectSpecification objSpec : IsisContext.getSpecificationLoader().currentSpecifications()) {
-//                final Class<?> correspondingClass = objSpec.getCorrespondingClass();
-//                if(correspondingClass.isEnum()) {
-//                    final Object[] enumConstants = correspondingClass.getEnumConstants();
-//                    for (Object enumConstant : enumConstants) {
-//                        final String unused = titleService.titleOf(enumConstant);
-//                        _Blackhole.consume(unused);
-//                    }
-//                }
-//            }
-//
-//            // as used by the Wicket UI
-//            final TranslationService translationService = 
-//                    serviceRegistry.lookupServiceElseFail(TranslationService.class);
-//
-//            final String context = IsisSessionFactoryBuilder.class.getName();
-//            final MessageRegistry messageRegistry = new MessageRegistry();
-//            final List<String> messages = messageRegistry.listMessages();
-//            for (String message : messages) {
-//                translationService.translate(context, message);
-//            }
-//
-//        } finally {
-//            closeSession();
-//        }
     }
 
     @PreDestroy
@@ -271,7 +193,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         // call @PreDestroy (in a session)
         openSession(new InitialisationSession());
-        IsisTransactionManager transactionManager = getOrCreateTransactionManager();
+        IsisTransactionManager transactionManager = getTransactionManagerElseFail();
         try {
             transactionManager.startTransaction();
             try {
@@ -318,7 +240,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         existingSessionIfAny.close();
     }
 
-    private IsisTransactionManager getOrCreateTransactionManager() {
+    private IsisTransactionManager getTransactionManagerElseFail() {
     	return IsisContext.getTransactionManager()
     			.orElseThrow(()->new IllegalStateException("there is no TransactionManager currently accessible"));
     }

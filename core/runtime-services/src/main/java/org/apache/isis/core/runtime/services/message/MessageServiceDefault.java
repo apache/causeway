@@ -25,10 +25,11 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.commons.ioc.PriorityConstants;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.MessageBroker;
 
-@Singleton @Priority(0)
+@Singleton @Priority(PriorityConstants.PRIORITY_BELOW_DEFAULT)
 public class MessageServiceDefault implements MessageService {
 
     @Override
