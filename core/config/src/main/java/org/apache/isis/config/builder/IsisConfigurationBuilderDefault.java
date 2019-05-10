@@ -120,7 +120,8 @@ final class IsisConfigurationBuilderDefault implements IsisConfigurationBuilder 
 
     private void addTopLevelDefaultConfigurationResource() {
         addConfigurationResource(ConfigurationConstants.DEFAULT_CONFIG_FILE, 
-                NotFoundPolicy.FAIL_FAST, ContainsPolicy.IGNORE);
+                NotFoundPolicy.CONTINUE, 
+                ContainsPolicy.IGNORE);
     }
 
     private void addDefaultConfigurationResources() {

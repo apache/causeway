@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -35,13 +36,12 @@ import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.jdo.JdoTestApplication;
-import org.apache.isis.testdomain.jdo.JdoTestDomainIntegTest;
 
 import lombok.val;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {JdoTestApplication.class})
-class SpringServiceProvisioningTest extends JdoTestDomainIntegTest {
+class SpringServiceProvisioningTest /*extends JdoTestDomainIntegTest*/ {
 
     @BeforeEach
     void setUp() {
@@ -61,10 +61,16 @@ class SpringServiceProvisioningTest extends JdoTestDomainIntegTest {
         val singletonSet = new TreeSet<>(_Json.readJsonList(String.class, singletonJson));
         
         // same as managedServices.containsAll(singletonSet) but more verbose in case of failure        
-        assertEquals(singletonSet.toString(), _Sets.intersectSorted(managedServices, singletonSet).toString());
+        assertEquals(setToString(singletonSet), setToString(_Sets.intersectSorted(managedServices, singletonSet)));
         
         //TODO also test for request-scoped service (requires a means to mock a request-context)
         
+    }
+    
+    private static String setToString(Set<?> set){
+        return set.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining("\n"));
     }
         
 }
