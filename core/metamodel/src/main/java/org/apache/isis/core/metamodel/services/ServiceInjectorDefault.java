@@ -139,7 +139,9 @@ public class ServiceInjectorDefault implements ServiceInjector {
         if(!beans.isEmpty()) {
             final Collection<Object> collectionOfServices = beans.stream()
                     .filter(isOfType(elementType))
-                    .collect(_Collections.toUnmodifiableOfType(collectionTypeToBeInjected));
+                    // javac does require an explicit type argument here, 
+                    // while eclipse compiler does not ...
+                    .collect(_Collections.<Object>toUnmodifiableOfType(collectionTypeToBeInjected));
 
             invokeInjectorField(field, targetPojo, collectionOfServices);
         }
