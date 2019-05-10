@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.Stack;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.sudo.SudoService;
@@ -35,13 +35,9 @@ import org.apache.isis.applib.services.user.UserService;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class UserServiceDefault implements UserService {
 
-    @Programmatic
     @Override
     public UserMemento getUser() {
 
@@ -121,7 +117,6 @@ public class UserServiceDefault implements UserService {
     /**
      * Not API; for use by the implementation of sudo/runAs (see {@link SudoService} etc.
      */
-    @Programmatic
     public UserAndRoleOverrides currentOverridesIfAny() {
         final Stack<UserAndRoleOverrides> userAndRoleOverrides = overrides.get();
         return !userAndRoleOverrides.empty()

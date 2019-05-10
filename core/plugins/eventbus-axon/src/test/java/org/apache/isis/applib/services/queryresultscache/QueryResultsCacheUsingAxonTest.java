@@ -21,12 +21,12 @@ import static org.junit.Assert.assertThat;
 
 import java.util.concurrent.Callable;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.core.plugins.eventbus.EventBusPluginForAxon;
-import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
-import org.junit.Before;
-import org.junit.Test;
 
 public class QueryResultsCacheUsingAxonTest {
 
@@ -37,18 +37,7 @@ public class QueryResultsCacheUsingAxonTest {
     @Before
     public void setUp() throws Exception {
         queryResultsCache = new QueryResultsCacheInternal();
-        control = new QueryResultsCacheControlInternal() {
-        	{
-        		eventBusService = new EventBusServiceDefault() {
-        			{
-        				allowLateRegistration = true;
-        				eventBusImplementation = eventBusImplementationAxon 
-        						= new EventBusPluginForAxon();
-        			}
-				};
-        	}
-        };
-        control.postConstruct();
+        control = new QueryResultsCacheControlInternal();
         queryResultsCache.control = control;
     }
 

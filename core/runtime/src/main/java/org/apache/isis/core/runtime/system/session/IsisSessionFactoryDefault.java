@@ -84,10 +84,10 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     @Inject private ServiceRegistry serviceRegistry;
     @Inject private AuthenticationManager authenticationManager;
     @Inject private RuntimeEventService runtimeEventService;
+    @Inject private SpecificationLoader specificationLoader;
     
     private IsisLocaleInitializer localeInitializer;
     private IsisTimeZoneInitializer timeZoneInitializer;
-    private SpecificationLoader specificationLoader;
     private ServiceInitializer serviceInitializer;
 
     @PostConstruct
@@ -119,12 +119,9 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         serviceRegistry.validateServices();
 
-        this.specificationLoader = new SpecificationLoaderFactory().createSpecificationLoader();
-
         // ... and make IsisSessionFactory available via the IsisContext static for those
         // places where we cannot yet inject.
 
-        _Context.putSingleton(SpecificationLoader.class, specificationLoader);
         _Context.putSingleton(IsisSessionFactory.class, this);
 
         runtimeEventService.fireAppPreMetamodel();
@@ -167,7 +164,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
         runtimeEventService.fireAppPostMetamodel();
 
-        initServicesAndRunFixtures();
+        //initServicesAndRunFixtures();
     }
 
     @Override

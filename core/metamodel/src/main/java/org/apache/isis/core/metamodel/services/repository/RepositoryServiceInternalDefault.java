@@ -19,18 +19,18 @@
 
 package org.apache.isis.core.metamodel.services.repository;
 
+import static org.apache.isis.config.internal._Config.getConfiguration;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Singleton;
 
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RepositoryException;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.services.factory.FactoryService;
@@ -42,17 +42,12 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 
-import static org.apache.isis.config.internal._Config.getConfiguration;
-
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class RepositoryServiceInternalDefault implements RepositoryService {
 
     private boolean autoFlush;
 
-    @Programmatic
+
     @PostConstruct
     public void init() {
         final boolean disableAutoFlush = getConfiguration().getBoolean(KEY_DISABLE_AUTOFLUSH, false);
@@ -62,7 +57,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     // //////////////////////////////////////
 
-    @Programmatic
+
     @Override
     public <T> T instantiate(final Class<T> domainClass) {
         return factoryService.instantiate(domainClass);
@@ -70,21 +65,21 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     // //////////////////////////////////////
 
-    @Programmatic
+
     @Override
     public boolean isPersistent(final Object domainObject) {
         final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
         return adapter.isRepresentingPersistent();
     }
 
-    @Programmatic
+
     @Override
     public boolean isDeleted(final Object domainObject) {
         final ObjectAdapter adapter = getObjectAdapterProvider().adapterFor(unwrapped(domainObject));
         return adapter.isDestroyed();
     }
 
-    @Programmatic
+
     @Override
     public <T> T persist(final T object) {
         if (isPersistent(object)) {
@@ -107,7 +102,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
         return object;
     }
 
-    @Programmatic
+
     @Override
     public <T> T persistAndFlush(final T object) {
         persist(object);
@@ -116,7 +111,6 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
     }
 
     @Override
-    @Programmatic
     public void remove(final Object domainObject) {
         removeIfNotAlready(domainObject);
     }
@@ -137,7 +131,6 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
     }
 
     @Override
-    @Programmatic
     public void removeAndFlush(final Object domainObject) {
         remove(domainObject);
         transactionService.flushTransaction();
@@ -149,7 +142,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     // -- allInstances, allMatches, uniqueMatch, firstMatch
 
-    @Programmatic
+
     @Override
     public <T> List<T> allInstances(final Class<T> type, long... range) {
         return allMatches(new QueryFindAllInstances<T>(type, range));
@@ -157,7 +150,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     // //////////////////////////////////////
 
-    @Programmatic
+
     @Override
     public <T> List<T> allMatches(Class<T> ofType, final Predicate<? super T> predicate, long... range) {
         return _NullSafe.stream(allInstances(ofType, range))
@@ -165,7 +158,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    @Programmatic
+
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
         if(autoFlush) {
@@ -182,7 +175,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
 
     // //////////////////////////////////////
 
-    @Programmatic
+
     @Override
     public <T> T uniqueMatch(final Class<T> type, final Predicate<T> predicate) {
         final List<T> instances = allMatches(type, predicate, 0, 2); // No need to fetch more than 2.
@@ -193,7 +186,7 @@ public class RepositoryServiceInternalDefault implements RepositoryService {
     }
 
 
-    @Programmatic
+
     @Override
     public <T> T uniqueMatch(final Query<T> query) {
         final List<T> instances = allMatches(query); // No need to fetch more than 2.

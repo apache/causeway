@@ -16,8 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.runtime.services;
+package org.apache.isis.core.wrapper;
 
-public final class RuntimeServicesModule {
+public final class IsisWrapperModule {
 
 }

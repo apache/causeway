@@ -36,7 +36,8 @@ import static org.apache.isis.config.internal._Config.getConfiguration;
 /**
  * Holds common runtime logic for EventBusService implementations.
  */
-public abstract class EventBusServiceDefault extends EventBusService {
+@Deprecated
+public abstract class EventBusServiceDefault extends EventBusServiceAbstract {
 
     public static final String KEY_ALLOW_LATE_REGISTRATION = "isis.services.eventbus.allowLateRegistration";
     public static final String KEY_EVENT_BUS_IMPLEMENTATION = "isis.services.eventbus.implementation";

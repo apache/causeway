@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract.Depreca
 import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
@@ -42,8 +41,7 @@ final class SpecificationLoaderFactory {
     
     // -- CREATE SPECIFICATION LOADER
 
-    public SpecificationLoader createSpecificationLoader() 
-            throws IsisSystemException {
+    public SpecificationLoader createSpecificationLoader() {
 
         val metaModelRefiners = MetaModelRefiner.getAll();
         val configuration = getConfiguration();

@@ -18,19 +18,15 @@ package org.apache.isis.core.runtime.services.authsess;
 
 import java.util.List;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
+import javax.inject.Singleton;
+
 import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.security.authentication.standard.SimpleSession;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class AuthenticationSessionProviderDefault implements AuthenticationSessionProvider {
 
     /**
@@ -40,7 +36,6 @@ public class AuthenticationSessionProviderDefault implements AuthenticationSessi
      * In particular, we check if there are overrides, and if so return a {@link SimpleSession} to represent those
      * overrides.
      */
-    @Programmatic
     @Override
     public AuthenticationSession getAuthenticationSession() {
 

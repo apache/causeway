@@ -16,27 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.services.publish;
+package org.apache.isis.core.runtime.services;
 
-import org.apache.isis.applib.services.iactn.Interaction;
+public final class IsisRuntimeServicesModule {
 
-/**
- * Replaces {@link PublishingService}.
- *
- * <p>
- *     Note that re-publishing is not part of this SPI.
- * </p>
- */
-public interface PublisherService {
-
-    /**
-     * Most implementations are expected to use {@link Interaction.Execution#getDto()} to create a serializable
-     * XML representation of the execution.  The easiest way to do this is using {@link org.apache.isis.schema.utils.InteractionDtoUtils#newInteractionDto(Interaction.Execution)}.  There is
-     * some flexibility here, though.
-     */
-    void publish(final Interaction.Execution<?, ?> execution);
-
-    void publish(final PublishedObjects publishedObjects);
 }
-
-

@@ -19,7 +19,6 @@
 
 package org.apache.isis.applib.services.user;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.security.UserMemento;
 
 public interface UserService {
@@ -27,7 +26,6 @@ public interface UserService {
     /**
      * Get the details about the current user.
      */
-    @Programmatic UserMemento getUser();
-
+    UserMemento getUser();
 
 }

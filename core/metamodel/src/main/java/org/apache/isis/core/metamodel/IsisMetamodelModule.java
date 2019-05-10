@@ -1,5 +1,5 @@
 package org.apache.isis.core.metamodel;
 
-public final class MetamodelModule {
+public final class IsisMetamodelModule {
 
 }

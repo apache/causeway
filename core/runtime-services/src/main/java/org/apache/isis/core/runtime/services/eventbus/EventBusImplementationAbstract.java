@@ -26,6 +26,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
+@Deprecated
 public abstract class EventBusImplementationAbstract implements EventBusPlugin {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventBusImplementationAbstract.class);

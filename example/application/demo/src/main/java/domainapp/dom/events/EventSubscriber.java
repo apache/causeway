@@ -21,7 +21,6 @@ package domainapp.dom.events;
 import static domainapp.utils.DemoUtils.emphasize;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -47,13 +46,7 @@ public class EventSubscriber {
 	@PostConstruct
 	public void init() {
 		log.info(emphasize("init"));
-		eventBusService.register(this);
 		eventBusService.post(new EventSubscriberEvent());
-	}
-
-	@PreDestroy
-	public void destroy() {
-		eventBusService.unregister(this);       
 	}
 
 	@Programmatic

@@ -20,7 +20,6 @@
 package org.apache.isis.core.runtime.system.session;
 
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
@@ -43,15 +42,14 @@ import org.apache.isis.core.runtime.system.IsisSystemException;
 @Singleton
 public class SpecificationLoaderProducerBean {
 
-    @Inject IsisSessionFactory isisSessionFactory; // depends on
-    
     // let Spring manage destruction , init is handled by isisSessionFactory internally
 	@Bean(destroyMethod = "shutdown") 
 	@Produces @Singleton 
 	//XXX note: the resulting singleton is not life-cycle managed by CDI/Spring, 
 	//neither are InjectionPoints resolved by CDI/Spring
 	public SpecificationLoader produceSpecificationLoader() throws IsisSystemException {
-	    return _Context.getElseFail(SpecificationLoader.class);
+	    return _Context.computeIfAbsent(SpecificationLoader.class, 
+	            ()-> new SpecificationLoaderFactory().createSpecificationLoader());
 	}
 	
 }
