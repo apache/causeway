@@ -19,40 +19,53 @@
 
 package org.apache.isis.core.runtime.system.session;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.stream.Stream;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
+import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.collections.Bin;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
+import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.MessageRegistry;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.context.session.RuntimeEventService;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
+import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
+import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
+import org.apache.isis.schema.utils.ChangesDtoUtils;
+import org.apache.isis.schema.utils.CommandDtoUtils;
+import org.apache.isis.schema.utils.InteractionDtoUtils;
 
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Is the factory of {@link IsisSession}s, also holding a reference to the current session using
@@ -63,36 +76,102 @@ import lombok.val;
  *     <code>PersistenceManagerFactory</code>.
  * </p>
  *
- * <p>
- *     The class is only instantiated once; it is also registered with {@link ServiceInjector}, meaning that
- *     it can be {@link Inject}'d into other domain services.
- * </p>
  */
-@Vetoed // has a producer 
+@Singleton @Slf4j
 public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
-    private IsisConfiguration configuration;
-    private ServiceInjector serviceInjector;
-    private ServiceRegistry serviceRegistry;
+    @Inject private IsisConfiguration configuration;
+    @Inject private ServiceRegistry serviceRegistry;
+    @Inject private AuthenticationManager authenticationManager;
+    @Inject private RuntimeEventService runtimeEventService;
+    
+    private IsisLocaleInitializer localeInitializer;
+    private IsisTimeZoneInitializer timeZoneInitializer;
     private SpecificationLoader specificationLoader;
-    private AuthenticationManager authenticationManager;
-    private AuthorizationManager authorizationManager;
     private ServiceInitializer serviceInitializer;
-	private RuntimeEventService runtimeEventService;
 
-    // called by builder
-    void initDependencies(SpecificationLoader specificationLoader) {
-    	this.configuration = IsisContext.getConfiguration();
-        this.serviceInjector = IsisContext.getServiceInjector();
-        this.serviceRegistry = IsisContext.getServiceRegistry();
-        this.authorizationManager = IsisContext.getAuthorizationManager();
-        this.authenticationManager = IsisContext.getAuthenticationManager();
-        this.specificationLoader = specificationLoader;
-        this.runtimeEventService = serviceRegistry.lookupServiceElseFail(RuntimeEventService.class);
+    @PostConstruct
+    public void init() throws IsisSystemException {
+        this.localeInitializer = new IsisLocaleInitializer();
+        this.timeZoneInitializer = new IsisTimeZoneInitializer();
+        
+        log.info("initialising Isis System");
+        log.info("working directory: {}", new File(".").getAbsolutePath());
+
+        final IsisConfiguration configuration = _Config.getConfiguration();
+        log.info("resource stream source: {}", configuration.getResourceStreamSource());
+
+        localeInitializer.initLocale(configuration);
+        timeZoneInitializer.initTimeZone(configuration);
+
+        // a bit of a workaround, but required if anything in the metamodel (for example, a
+        // ValueSemanticsProvider for a date value type) needs to use the Clock singleton
+        // we do this after loading the services to allow a service to prime a different clock
+        // implementation (eg to use an NTP time service).
+        if (_Context.isPrototyping() && !Clock.isInitialized()) {
+            FixtureClock.initialize();
+        }
+
+        val serviceRegistry = IsisContext.getServiceRegistry();
+        val authenticationManager = IsisContext.getAuthenticationManager();
+        val authorizationManager = IsisContext.getAuthorizationManager();
+        val runtimeEventService = serviceRegistry.lookupServiceElseFail(RuntimeEventService.class);
+
+        serviceRegistry.validateServices();
+
+        this.specificationLoader = new SpecificationLoaderFactory().createSpecificationLoader();
+
+        // ... and make IsisSessionFactory available via the IsisContext static for those
+        // places where we cannot yet inject.
+
+        _Context.putSingleton(SpecificationLoader.class, specificationLoader);
+        _Context.putSingleton(IsisSessionFactory.class, this);
+
+        runtimeEventService.fireAppPreMetamodel();
+
+        val tasks = Arrays.asList(
+                callableOf("SpecificationLoader.init()", ()->{
+                    // time to initialize...
+                    specificationLoader.init();
+
+                    // we need to do this before checking if the metamodel is valid.
+                    //
+                    // eg ActionChoicesForCollectionParameterFacetFactory metamodel validator requires a runtime...
+                    // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.getServiceAdapter(ObjectActionContributee.java:287)
+                    // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionContributee.determineParameters(ObjectActionContributee.java:138)
+                    // at o.a.i.core.metamodel.specloader.specimpl.ObjectActionDefault.getParameters(ObjectActionDefault.java:182)
+                    // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.validate(ActionChoicesForCollectionParameterFacetFactory.java:85)
+                    // at o.a.i.core.metamodel.facets.actions.action.ActionChoicesForCollectionParameterFacetFactory$1.visit(ActionChoicesForCollectionParameterFacetFactory.java:76)
+                    // at o.a.i.core.metamodel.specloader.validator.MetaModelValidatorVisiting.validate(MetaModelValidatorVisiting.java:47)
+                    //
+                    // also, required so that can still call isisSessionFactory#doInSession
+                    //
+                    // eg todoapp has a custom UserSettingsThemeProvider that is called when rendering any page
+                    // (including the metamodel invalid page)
+                    // at o.a.i.core.runtime.system.session.IsisSessionFactory.doInSession(IsisSessionFactory.java:327)
+                    // at todoapp.webapp.UserSettingsThemeProvider.getActiveTheme(UserSettingsThemeProvider.java:36)
+
+                    authenticationManager.init();
+                    authorizationManager.init();
+                }),
+                //callableOf("PersistenceSessionFactory.init()", persistenceSessionFactory::init),
+                callableOf("ChangesDtoUtils.init()", ChangesDtoUtils::init),
+                callableOf("InteractionDtoUtils.init()", InteractionDtoUtils::init),
+                callableOf("CommandDtoUtils.init()", CommandDtoUtils::init)
+                );
+
+        // execute tasks using a thread-pool
+        final List<Future<Object>> futures = ThreadPoolSupport.getInstance().invokeAll(tasks); 
+        // wait on this thread for tasks to complete
+        ThreadPoolSupport.getInstance().joinGatherFailures(futures);
+
+        runtimeEventService.fireAppPostMetamodel();
+
+        initServicesAndRunFixtures();
     }
 
-    // called by builder
-    void init() {
+    @Override
+    public void initServicesAndRunFixtures() {
 
         // do postConstruct.  We store the initializer to do preDestroy on shutdown
         serviceInitializer = new ServiceInitializer(configuration, 
@@ -156,7 +235,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             final TranslationService translationService = 
                     serviceRegistry.lookupServiceElseFail(TranslationService.class);
 
-            final String context = IsisSessionFactoryBuilder.class.getName();
+            final String context = IsisSessionFactory.class.getName();
             final MessageRegistry messageRegistry = new MessageRegistry();
             final List<String> messages = messageRegistry.listMessages();
             for (String message : messages) {
@@ -180,42 +259,10 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     }
 
     @PreDestroy
+    @Override
     public void destroyServicesAndShutdown() {
         destroyServices();
         shutdown();
-    }
-
-    private void destroyServices() {
-        // may not be set if the metamodel validation failed during initialization
-        if (serviceInitializer == null) {
-            return;
-        }
-
-        // call @PreDestroy (in a session)
-        openSession(new InitialisationSession());
-        IsisTransactionManager transactionManager = getTransactionManagerElseFail();
-        try {
-            transactionManager.startTransaction();
-            try {
-
-                serviceInitializer.preDestroy();
-
-            } catch (RuntimeException ex) {
-                transactionManager.getCurrentTransaction().setAbortCause(
-                        new IsisTransactionManagerException(ex));
-            } finally {
-                // will commit or abort
-                transactionManager.endTransaction();
-            }
-        } finally {
-            closeSession();
-        }
-    }
-
-    private void shutdown() {
-    	runtimeEventService.fireAppPreDestroy();
-        authenticationManager.shutdown();
-        specificationLoader.shutdown();
     }
 
     // -- 
@@ -238,11 +285,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             return;
         }
         existingSessionIfAny.close();
-    }
-
-    private IsisTransactionManager getTransactionManagerElseFail() {
-    	return IsisContext.getTransactionManager()
-    			.orElseThrow(()->new IllegalStateException("there is no TransactionManager currently accessible"));
     }
 
     @Override
@@ -272,10 +314,9 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             }
 
             return callable.call();
-        } catch (Exception x) {
-            throw new RuntimeException(
-                    String.format("An error occurred while executing code in %s session", noSession ? "a temporary" : "a"),
-                    x);
+        } catch (Exception cause) {
+            val msg = String.format("An error occurred while executing code in %s session", noSession ? "a temporary" : "a"); 
+            throw new RuntimeException(msg, cause);
         } finally {
             if (noSession) {
                 sessionFactory.closeSession();
@@ -295,7 +336,58 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         return authenticationManager;
     }
 
+    // -- HELPER
     
+    private IsisTransactionManager getTransactionManagerElseFail() {
+        return IsisContext.getTransactionManager()
+                .orElseThrow(()->new IllegalStateException("there is no TransactionManager currently accessible"));
+    }
+    
+    private void destroyServices() {
+        // may not be set if the metamodel validation failed during initialization
+        if (serviceInitializer == null) {
+            return;
+        }
+
+        // call @PreDestroy (in a session)
+        openSession(new InitialisationSession());
+        IsisTransactionManager transactionManager = getTransactionManagerElseFail();
+        try {
+            transactionManager.startTransaction();
+            try {
+
+                serviceInitializer.preDestroy();
+
+            } catch (RuntimeException ex) {
+                transactionManager.getCurrentTransaction().setAbortCause(
+                        new IsisTransactionManagerException(ex));
+            } finally {
+                // will commit or abort
+                transactionManager.endTransaction();
+            }
+        } finally {
+            closeSession();
+        }
+    }
+
+    private void shutdown() {
+        runtimeEventService.fireAppPreDestroy();
+        authenticationManager.shutdown();
+        specificationLoader.shutdown();
+    }
+
+    
+    private static Callable<Object> callableOf(String label, Runnable action) {
+        return new Callable<Object>() {
+            @Override public Object call() throws Exception {
+                action.run();
+                return null;
+            }
+            public String toString() {
+                return label;
+            }
+        };
+    }
 
 
 }

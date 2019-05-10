@@ -31,7 +31,6 @@ import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.runtime.headless.auth.AuthenticationRequestNameOnly;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.runtime.system.session.IsisSessionProducerBean;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
@@ -127,7 +126,9 @@ public final class IsisSystem {
             // as a side-effect bootstrap CDI, if the environment we are running on does not already have its own 
             _Blackhole.consume(AppConfigLocator.getAppConfig());
 
-            isisSessionFactory = new IsisSessionProducerBean().produceIsisSessionFactory();
+            isisSessionFactory = IsisContext.getSessionFactory();
+            
+            isisSessionFactory.initServicesAndRunFixtures();
             
             // REVIEW: does no harm, but is this required?
             closeSession();

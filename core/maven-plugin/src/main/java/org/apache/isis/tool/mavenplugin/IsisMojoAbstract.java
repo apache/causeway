@@ -38,7 +38,6 @@ import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
-import org.apache.isis.core.runtime.system.session.IsisSessionProducerBean;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
 
 import lombok.val;
@@ -69,10 +68,11 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         final AppManifest appManifest = InstanceUtil.createInstance(this.appManifest, AppManifest.class);
         IsisConfiguration.buildFromAppManifest(appManifest); // build and finalize config
         
-        IsisSessionFactory isisSessionFactory = null;
+        val isisSessionFactory = IsisContext.getSessionFactory();
         try {
-            isisSessionFactory = new IsisSessionProducerBean().produceIsisSessionFactory();
             		
+            isisSessionFactory.initServicesAndRunFixtures();
+            
             val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
             if(metaModelDeficiencies!=null) {
                 Set<String> validationErrors = metaModelDeficiencies.getValidationErrors();

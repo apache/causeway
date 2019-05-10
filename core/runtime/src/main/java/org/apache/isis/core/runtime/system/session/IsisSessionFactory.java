@@ -24,11 +24,11 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
 /**
  * Is the factory of {@link IsisSession}s, also holding a reference to the current session using
@@ -46,6 +46,7 @@ import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
  */
 public interface IsisSessionFactory {
 
+    public void initServicesAndRunFixtures();
     public void destroyServicesAndShutdown();
 
     public IsisSession openSession(final AuthenticationSession authenticationSession);
