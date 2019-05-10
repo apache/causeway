@@ -18,13 +18,12 @@ package org.apache.isis.applib.services.clock;
 
 import java.sql.Timestamp;
 
+import javax.inject.Singleton;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 
 /**
@@ -32,37 +31,26 @@ import org.apache.isis.applib.clock.Clock;
  * testing scenarios, to &quot;mock the clock&quot;.  Use of this service also opens up the use of centralized
  * co-ordinated time management through a centralized time service.
  *
- * <p>
- * This service has only one implementation and so is automatically registered. and available for use; no further
- * configuration is required.
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class ClockService {
 
-    @Programmatic
     public LocalDate now() {
         return Clock.getTimeAsLocalDate();
     }
 
-    @Programmatic
     public LocalDateTime nowAsLocalDateTime() {
         return Clock.getTimeAsLocalDateTime();
     }
 
-    @Programmatic
     public DateTime nowAsDateTime() {
         return Clock.getTimeAsDateTime();
     }
 
-    @Programmatic
     public Timestamp nowAsJavaSqlTimestamp() {
         return Clock.getTimeAsJavaSqlTimestamp();
     }
 
-    @Programmatic
     public long nowAsMillis() {
         return Clock.getTime();
     }

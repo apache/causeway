@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.services.bookmarks;
+package org.apache.isis.core.runtime.services.bookmarks;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

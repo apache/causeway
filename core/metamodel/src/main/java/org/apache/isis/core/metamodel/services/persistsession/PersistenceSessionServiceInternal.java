@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.Supplier;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
@@ -41,10 +40,8 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
-    @Programmatic
     ObjectAdapter createTransientInstance(ObjectSpecification spec);
 
-    @Programmatic
     ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
 
     // -- retrieve
@@ -55,7 +52,6 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
-    @Programmatic
     void resolve(Object parent);
 
     /**
@@ -65,21 +61,16 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      * Called by <tt>BookmarkServicesDefault</tt>.
      * @return
      */
-    @Programmatic
     Object lookup(Bookmark bookmark, final BookmarkService.FieldResetPolicy fieldResetPolicy);
 
-    @Programmatic
     Bookmark bookmarkFor(Object domainObject);
 
-    @Programmatic
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 
     // -- beginTran, flush, commit, currentTransaction
 
-    @Programmatic
     void beginTran();
 
-    @Programmatic
     void beginTran(final Command commandIfAny);
 
     /**
@@ -88,7 +79,6 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
-    @Programmatic
     boolean flush();
 
     /**
@@ -97,19 +87,14 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
-    @Programmatic
     void commit();
 
-    @Programmatic
     void abortTransaction();
 
-    @Programmatic
     Transaction currentTransaction();
 
-    @Programmatic
     CountDownLatch currentTransactionLatch();
 
-    @Programmatic
     TransactionState getTransactionState();
 
     // -- makePersistent, remove
@@ -121,7 +106,6 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      * Called by <tt>DomainObjectContainerDefault</tt> and also by
      * <tt>DomainObjectInvocationHandler#handleSaveMethod()</tt>.
      */
-    @Programmatic
     void makePersistent(ObjectAdapter adapter);
 
     /**
@@ -131,7 +115,6 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
-    @Programmatic
     void remove(ObjectAdapter adapter);
 
     // -- allMatchingQuery, firstMatchingQuery
@@ -142,7 +125,6 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      * Called by <tt>DomainObjectContainerDefault</tt> and also by the choices
      * facets.
      */
-    @Programmatic
     <T> List<ObjectAdapter> allMatchingQuery(Query<T> query);
 
     /**
@@ -151,13 +133,10 @@ public interface PersistenceSessionServiceInternal extends ObjectAdapterProvider
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
-    @Programmatic
     <T> ObjectAdapter firstMatchingQuery(Query<T> query);
 
-    @Programmatic
     void executeWithinTransaction(Runnable task);
     
-    @Programmatic
     <T> T executeWithinTransaction(Supplier<T> task);
 
 }

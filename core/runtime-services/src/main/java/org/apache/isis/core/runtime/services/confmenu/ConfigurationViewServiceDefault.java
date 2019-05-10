@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.config.services.view;
+package org.apache.isis.core.runtime.services.confmenu;
 
 import java.util.HashMap;
 import java.util.Map;

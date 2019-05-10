@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.services.factory;
+package org.apache.isis.core.runtime.services.factory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -34,10 +34,10 @@ import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
-@Singleton
+@Singleton 
 public class FactoryServiceInternalDefault implements FactoryService {
-
 
     @Override
     @SuppressWarnings("unchecked")
@@ -89,6 +89,9 @@ public class FactoryServiceInternalDefault implements FactoryService {
                 "Failed to locate constructor in %s to instantiate using %s", mixinClass.getName(), mixedIn));
     }
 
+    @javax.inject.Inject
+    IsisSessionFactory isisSessionFactory; // dependsOn
+    
     @javax.inject.Inject
     SpecificationLoader specificationLoader;
 
