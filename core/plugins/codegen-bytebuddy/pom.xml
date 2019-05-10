@@ -29,8 +29,8 @@
     </description>
 
 	<properties>
-		<bytebuddy.version>1.9.2</bytebuddy.version>
-		<objenesis.version>2.4</objenesis.version>
+		<bytebuddy.version>1.9.3</bytebuddy.version>
+		<objenesis.version>2.6</objenesis.version>
 
 		<jar-plugin.automaticModuleName>org.apache.isis.plugins.codegen-bytebuddy</jar-plugin.automaticModuleName>
 		<git-plugin.propertiesDir>org/apache/isis/plugins/codegen-bytebuddy</git-plugin.propertiesDir>

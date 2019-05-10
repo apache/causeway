@@ -143,7 +143,7 @@
 
         <jetty.version>9.4.12.v20180830</jetty.version>
 
-		<spring-context.version>5.1.5.RELEASE</spring-context.version>
+		<spring-context.version>5.1.6.RELEASE</spring-context.version>
 		<spring-boot.version>2.1.4.RELEASE</spring-boot.version>
 		
         <wicket.version>8.4.0</wicket.version>
