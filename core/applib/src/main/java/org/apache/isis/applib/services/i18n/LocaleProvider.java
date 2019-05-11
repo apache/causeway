@@ -20,10 +20,7 @@ package org.apache.isis.applib.services.i18n;
 
 import java.util.Locale;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 public interface LocaleProvider {
 
-    @Programmatic
     Locale getLocale();
 }

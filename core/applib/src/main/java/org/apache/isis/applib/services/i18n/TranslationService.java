@@ -21,8 +21,6 @@ package org.apache.isis.applib.services.i18n;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
 public interface TranslationService {
 
     /**
@@ -36,7 +34,6 @@ public interface TranslationService {
      * @param text
      * @return
      */
-    @Programmatic
     public String translate(final String context, final String text);
 
     /**
@@ -53,7 +50,6 @@ public interface TranslationService {
      * @param num - whether to return the translation of the singular (if =1) or of the plural (if != 1)
      * @return
      */
-    @Programmatic
     public String translate(final String context, final String singularText, final String pluralText, int num);
 
 
@@ -108,6 +104,5 @@ public interface TranslationService {
      *     such that all pathways are exercised..
      * </p>
      */
-    @Programmatic
     Mode getMode();
 }

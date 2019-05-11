@@ -18,11 +18,12 @@
  */
 package org.apache.isis.core.runtime.services.i18n.po;
 
+import static org.apache.isis.config.internal._Config.getConfiguration;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
@@ -30,8 +31,6 @@ import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.commons.collections.Bin;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-
-import static org.apache.isis.config.internal._Config.getConfiguration;
 
 @Singleton
 public class TranslationServicePo implements TranslationService {
@@ -50,7 +49,6 @@ public class TranslationServicePo implements TranslationService {
 
     // -- init, shutdown
 
-    @Programmatic
     @PostConstruct
     public void init() {
 
@@ -87,16 +85,12 @@ public class TranslationServicePo implements TranslationService {
         return _Context.isPrototyping();
     }
 
-    @Programmatic
     @PreDestroy
     public void shutdown() {
         po.shutdown();
     }
 
-
-
     @Override
-    @Programmatic
     public String translate(final String context, final String text) {
         return po.translate(context, text);
     }
@@ -114,7 +108,6 @@ public class TranslationServicePo implements TranslationService {
     /**
      * Not API
      */
-    @Programmatic
     public String toPot() {
         if (!getMode().isWrite()) {
             return null;
@@ -128,7 +121,6 @@ public class TranslationServicePo implements TranslationService {
     /**
      * Not API
      */
-    @Programmatic
     void clearCache() {
         if (!getMode().isRead()) {
             return;
@@ -142,7 +134,6 @@ public class TranslationServicePo implements TranslationService {
     /**
      * Not API
      */
-    @Programmatic
     public void toggleMode() {
         if(getMode().isRead()) {
             previousPoReader = (PoReader) po;
@@ -164,13 +155,11 @@ public class TranslationServicePo implements TranslationService {
         }
     }
 
-    // //////////////////////////////////////
-
+    // -- DEPENDENCIES
     
     private _Lazy<Bin<TranslationsResolver>> translationsResolvers = _Lazy.threadSafe(()->
         IsisContext.getServiceRegistry().select(TranslationsResolver.class) );
 
-    @Programmatic
     Bin<TranslationsResolver> getTranslationsResolver() {
         return translationsResolvers.get();
     }
@@ -178,7 +167,6 @@ public class TranslationServicePo implements TranslationService {
     private _Lazy<Bin<LocaleProvider>> localeProviders = _Lazy.threadSafe(()->
         IsisContext.getServiceRegistry().select(LocaleProvider.class) );
 
-    @Programmatic
     Bin<LocaleProvider> getLocaleProvider() {
         return localeProviders.get();
     }

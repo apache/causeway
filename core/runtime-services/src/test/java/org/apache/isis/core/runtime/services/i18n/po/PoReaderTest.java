@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.collections.Bin;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -53,21 +54,24 @@ public class PoReaderTest {
         
         context.checking(new Expectations() {{
             allowing(mockTranslationServicePo).getLocaleProvider();
-            will(returnValue(mockLocaleProvider));
+            will(returnValue(Bin.ofSingleton(mockLocaleProvider)));
 
             allowing(mockTranslationServicePo).getTranslationsResolver();
-            will(returnValue(mockTranslationsResolver));
+            will(returnValue(Bin.ofSingleton(mockTranslationsResolver)));
 
             allowing(mockLocaleProvider).getLocale();
             will(returnValue(Locale.UK));
         }});
         
+    }
+    
+    @Test
+    public void properMockeryOfNonPublicMethods() {
         //[ahuber] with update of byte-buddy 1.8.0 -> 1.9.2, Apache Isis runs on JDK 11+, 
         // we explicitly test proper mockery of non-public methods here ...  
         Assert.assertNotNull(mockTranslationServicePo.getLocaleProvider());
         Assert.assertNotNull(mockTranslationServicePo.getTranslationsResolver());
         Assert.assertNotNull(mockLocaleProvider.getLocale());
-        
     }
 
     public static class Translate extends PoReaderTest {
