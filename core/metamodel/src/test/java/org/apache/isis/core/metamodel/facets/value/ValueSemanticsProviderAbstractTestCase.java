@@ -31,6 +31,7 @@ import java.util.Locale;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -63,10 +64,6 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
     @Mock
     protected FacetHolder mockFacetHolder;
     @Mock
-    protected ServiceInjector mockServicesInjector;
-    @Mock
-    private ServiceRegistry mockServiceRegistry;
-    @Mock
     protected ObjectAdapterService mockSessionServiceInternal;
     @Mock
     protected SpecificationLoader mockSpecificationLoader;
@@ -81,19 +78,18 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         _Config.clear();
         Locale.setDefault(Locale.UK);
         
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(_Config.getConfiguration())
+                .specificationLoader(mockSpecificationLoader)
+//                .translationService(mockTranslationService)
+//                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .build());
+        
         context.checking(new Expectations() {
             {
-
-//                allowing(mockServicesInjector).getAuthenticationSessionProvider();
-//                will(returnValue(mockAuthenticationSessionProvider));
-//
 //                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
 //                will(returnValue(mockSessionServiceInternal));
-
-                allowing(mockServiceRegistry).lookupService(AuthenticationSessionProvider.class);
-                will(returnValue(mockAuthenticationSessionProvider));
-
-                allowing(mockServicesInjector).injectServicesInto(with(any(Object.class)));
 
                 never(mockAuthenticationSessionProvider);
                 never(mockSessionServiceInternal);

@@ -12,12 +12,15 @@ import org.apache.isis.applib.events.ui.IconUiEvent;
 import org.apache.isis.applib.events.ui.LayoutUiEvent;
 import org.apache.isis.applib.events.ui.TitleUiEvent;
 
+import lombok.Builder;
+
 /**
  * 
  * @since 2.0.0-M3
  *
  */
-@Singleton
+@Singleton 
+@Builder //for JUnit Test support
 public class MetamodelEventService {
 
 	@Inject Event<CssClassUiEvent<Object>> cssClassUiEvents;

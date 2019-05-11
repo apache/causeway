@@ -21,13 +21,12 @@ package org.apache.isis.core.metamodel;
 import static java.util.Objects.requireNonNull;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.core.metamodel.MetaModelContexts.MetaModelContextBean;
 import org.apache.isis.core.metamodel.services.ServiceInjectorDefault;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 
 import lombok.val;
 
-class ServiceInjectorForTesting implements ServiceInjector {
+class ServiceInjector_forTesting implements ServiceInjector {
     
     private ServiceInjector delegate;
 
@@ -38,11 +37,11 @@ class ServiceInjectorForTesting implements ServiceInjector {
             
             // lookup the MetaModelContextBean's list of singletons
             val mmc = MetaModelContext.current();
-            if(!(mmc instanceof MetaModelContextBean)) {
+            if(!(mmc instanceof MetaModelContext_forTesting)) {
                 return null;
             }
             
-            val mmcb = (MetaModelContextBean) mmc;
+            val mmcb = (MetaModelContext_forTesting) mmc;
             
             val configuration = requireNonNull(mmcb.getConfiguration());
             val serviceRegistry = requireNonNull(mmcb.getServiceRegistry());

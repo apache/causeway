@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.metamodel;
 
+import java.lang.annotation.Annotation;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -31,23 +32,26 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.commons.collections.Bin;
-import org.apache.isis.core.metamodel.MetaModelContexts.MetaModelContextBean;
 import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 
 import lombok.Builder;
 import lombok.Value;
 import lombok.val;
 
-class ServiceRegistryForTesting implements ServiceRegistry {
+class ServiceRegistry_forTesting implements ServiceRegistry {
     
     private final Set<BeanAdapter> registeredBeans = _Sets.newHashSet();
     private final ServiceRegistry delegate = new ServiceRegistryDefault(); 
     
     @Override
-    public <T> Bin<T> select(Class<T> type) {
+    public <T> Bin<T> select(Class<T> type, Annotation[] qualifiers) {
         
         if(_Spring.isContextAvailable()) {
-            return ServiceRegistry.super.select(type);
+            return ServiceRegistry.super.select(type, qualifiers);
+        }
+        
+        if(qualifiers!=null && qualifiers.length>0) {
+            throw _Exceptions.notImplemented();
         }
 
         Optional<T> match = streamSingletons()
@@ -104,8 +108,8 @@ class ServiceRegistryForTesting implements ServiceRegistry {
     private Stream<Object> streamSingletons() {
         // lookup the MetaModelContextBean's list of singletons
         val mmc = MetaModelContext.current();
-        if(mmc instanceof MetaModelContextBean) {
-            val mmcb = (MetaModelContextBean) mmc;
+        if(mmc instanceof MetaModelContext_forTesting) {
+            val mmcb = (MetaModelContext_forTesting) mmc;
             return mmcb.streamSingletons();
         }
         return Stream.empty();

@@ -27,8 +27,6 @@ import org.junit.Rule;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.inject.ServiceInjector;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -64,8 +62,6 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     }
 
     protected ObjectAdapterProvider mockObjectAdapterProvider;
-    protected ServiceRegistry mockServiceRegistry;
-    protected ServiceInjector mockServiceInjector;
     protected TranslationService mockTranslationService;
     protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
     protected AuthenticationSession mockAuthenticationSession;
@@ -117,15 +113,11 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
 
         mockSpecificationLoader = context.mock(SpecificationLoader.class);
         
-        mockServiceRegistry = context.mock(ServiceRegistry.class);
-        mockServiceInjector = context.mock(ServiceInjector.class);
         mockObjectAdapterProvider = context.mock(ObjectAdapterProvider.class);
 
         MetaModelContext.preset(MetaModelContext.builder()
                 .configuration(_Config.getConfiguration())
                 .specificationLoader(mockSpecificationLoader)
-                .serviceInjector(mockServiceInjector)
-                .serviceRegistry(mockServiceRegistry)
                 .translationService(mockTranslationService)
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)
