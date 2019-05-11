@@ -55,7 +55,7 @@ public class JsonValueEncoderTest_appendValueAndFormat {
     private EncodableFacet mockEncodableFacet;
     @Mock
     private ObjectAdapter mockObjectAdapter;
-
+    @Mock
     private ObjectAdapterProvider mockAdapterManager;
 
     @Before

@@ -34,7 +34,9 @@ import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.url.UrlDecoderUtil;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -74,6 +76,16 @@ public class ResourceContextTest_getArg {
 
         // PRODUCTION;
 
+        MetaModelContext.preset(MetaModelContext.builder()
+                .configuration(_Config.getConfiguration())
+                .specificationLoader(mockSpecificationLoader)
+//                .serviceInjector(mockServiceInjector)
+//                .serviceRegistry(mockServiceRegistry)
+//                .translationService(mockTranslationService)
+//                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+//                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .build());
+        
         _Context.put(IsisSessionFactory.class, mockIsisSessionFactory, false);
         
         context.checking(new Expectations() {

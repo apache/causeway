@@ -23,6 +23,7 @@ import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._Tuples.Tuple2;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -61,12 +62,13 @@ public abstract class RuntimeContextBase implements RuntimeContext {
     // -- NO ARG CONSTRUCTOR
     
     protected RuntimeContextBase() {
-    	configuration = IsisContext.getConfiguration();
-        serviceInjector = IsisContext.getServiceInjector();
-        serviceRegistry = IsisContext.getServiceRegistry();
-        specificationLoader = IsisContext.getSpecificationLoader();
-        authenticationSession = IsisContext.getAuthenticationSession().orElse(null);
-        objectAdapterProvider = IsisContext.getObjectAdapterProvider();
+        val mmc = MetaModelContext.current();
+    	configuration = mmc.getConfiguration();
+        serviceInjector = mmc.getServiceInjector();
+        serviceRegistry = mmc.getServiceRegistry();
+        specificationLoader = mmc.getSpecificationLoader();
+        authenticationSession = mmc.getAuthenticationSession();
+        objectAdapterProvider = mmc.getObjectAdapterProvider();
     }
     
     // -- OBJECT ADAPTER SUPPORT

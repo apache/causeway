@@ -23,6 +23,7 @@ import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.config.AppConfigLocator;
@@ -40,7 +41,7 @@ class HelloWorldAppConfigTest {
     void tearDown() throws Exception {
     }
 
-    @Test
+    @Test @Disabled("TODO[2112] AppConfigLocator is deprecated")
     void test() {
 
         // when
