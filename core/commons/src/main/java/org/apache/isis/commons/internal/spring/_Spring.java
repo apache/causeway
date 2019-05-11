@@ -18,14 +18,21 @@
  */
 package org.apache.isis.commons.internal.spring;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._With.requires;
+
 import java.lang.annotation.Annotation;
+import java.util.Collections;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 import javax.enterprise.event.Event;
+import javax.inject.Qualifier;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,14 +40,13 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.ResolvableType;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.cdi._CDI;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.commons.ioc.LifecycleContext;
 import org.apache.isis.core.commons.collections.Bin;
-
-import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
@@ -75,18 +81,18 @@ public class _Spring {
         return Bin.ofStream(allMatchingBeans);
     }
     
-    public static <T> Bin<T> select(final Class<T> requiredType, @Nullable Annotation[] qualifiers) {
+    public static <T> Bin<T> select(
+            final Class<T> requiredType, 
+            @Nullable Set<Annotation> qualifiersRequired) {
         
         requires(requiredType, "requiredType");
         
         val allMatchingBeans = context().getBeanProvider(requiredType)
                 .orderedStream();
         
-        if(_NullSafe.isEmpty(qualifiers)) {
+        if(_NullSafe.isEmpty(qualifiersRequired)) {
             return Bin.ofStream(allMatchingBeans);
         }
-
-        val qualifiersRequired = _Sets.of(qualifiers);
         
         final Predicate<T> hasAllQualifiers = t -> {
             val qualifiersPresent = _Sets.of(t.getClass().getAnnotations());
@@ -152,6 +158,34 @@ public class _Spring {
 
     public static <T> Event<T> event(ApplicationEventPublisher publisher) {
         return new EventSpring<T>(publisher);
+    }
+    
+    // -- QUALIFIER PROCESSING
+
+    /**
+     * Filters the input array into a collection, such that only annotations are retained, 
+     * that are valid qualifiers for CDI.
+     * @param annotations
+     * @return non-null
+     */
+    public static Set<Annotation> filterQualifiers(@Nullable final Annotation[] annotations) {
+        if(_NullSafe.isEmpty(annotations)) {
+            return Collections.emptySet();
+        }
+        return stream(annotations)
+        .filter(_CDI::isQualifier)
+        .collect(Collectors.toSet());
+    }
+    
+    /**
+     * @param annotation
+     * @return whether or not the annotation is a valid qualifier for CDI
+     */
+    public static boolean isQualifier(Annotation annotation) {
+        if(annotation==null) {
+            return false;
+        }
+        return annotation.annotationType().getAnnotationsByType(Qualifier.class).length>0;
     }
     
 }

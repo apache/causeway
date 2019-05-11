@@ -52,7 +52,6 @@ import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 import lombok.val;
 
-//TODO[2112] migrate to spring @EnableWeld
 abstract class SpecificationLoaderTestAbstract {
 
     static class Producers {

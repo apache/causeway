@@ -19,17 +19,25 @@
 
 package org.apache.isis.core.metamodel.services;
 
+import java.util.NoSuchElementException;
+
 import javax.inject.Inject;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 
-//@EnableWeld
-//TODO[2112] migrate to spring
-class ServicesInjectorDefaultTest_validateServices_happy {
-    
+@SpringBootTest(classes = {
+        ServiceInjectorDefault.class,
+        ServiceRegistryDefault.class,
+        ServiceInjectorDefaultTest.Producers.class,
+})
+class ServiceInjectorDefaultTest_validateServices {
+
     // -- SCENARIO
 
     @DomainService
@@ -38,28 +46,17 @@ class ServicesInjectorDefaultTest_validateServices_happy {
     }
 
     @DomainService
-    public static class DomainServiceWithDifferentId {
-        public String getId() { return "otherId"; }
+    public static class DomainServiceWithDuplicateId {
+        public String getId() { return "someId"; }
     }
 
-//    @WeldSetup
-//    public WeldInitiator weld = WeldInitiator.from(
-//
-//            BeansForTesting.builder()
-//            .injector()
-//            .add(DomainServiceWithSomeId.class)
-//            .add(DomainServiceWithDifferentId.class)
-//            .build()
-//
-//            )
-//    .build();
+    // -- TESTS
 
     @Inject private ServiceRegistry serviceRegistry;
 
     @Test
-    public void validate_DomainServicesWithoutDuplicateIds() {
-        serviceRegistry.validateServices();
+    public void validate_DomainServicesWithDuplicateIds() {
+        Assertions.assertThrows(NoSuchElementException.class, serviceRegistry::validateServices);
     }
-    
-    
+
 }

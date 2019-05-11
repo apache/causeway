@@ -63,7 +63,7 @@ public interface ServiceRegistry {
 
         //CDI variant, just keep comment as a reference
         //return _CDI.select(type, _CDI.filterQualifiers(qualifiers)); 
-        return _Spring.select(type, qualifiers);
+        return _Spring.select(type, _Spring.filterQualifiers(qualifiers));
     }
 
     default public <T> Bin<T> select(final Class<T> type){

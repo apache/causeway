@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 @Singleton
 public final class InjectorMethodEvaluatorDefault implements InjectorMethodEvaluator {
 
+//TODO[2112] cleanup comment
 //    private final Map<Method, Map<Class<?>, Boolean>> isInjectorMethod = _Maps.newConcurrentHashMap();
 //
 //    private boolean isInjectorMethodFor(
