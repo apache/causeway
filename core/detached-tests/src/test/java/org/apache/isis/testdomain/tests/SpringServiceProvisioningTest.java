@@ -41,7 +41,7 @@ import lombok.val;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {JdoTestApplication.class})
-class SpringServiceProvisioningTest /*extends JdoTestDomainIntegTest*/ {
+class SpringServiceProvisioningTest {
 
     @BeforeEach
     void setUp() {
