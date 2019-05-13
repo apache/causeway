@@ -160,7 +160,7 @@ public class FacetedMethodsBuilder {
         this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
 
         this.explicitAnnotationsForActions = _Config.getConfiguration()
-                .getBoolean(ConfigurationConstants.Keys.EXPLICIT_ANNOTATIONS_FOR_ACTIONS);
+                .getBoolean(ConfigurationConstants.Keys.Reflector.explicitAnnotationsForActions);
                 
     }
 

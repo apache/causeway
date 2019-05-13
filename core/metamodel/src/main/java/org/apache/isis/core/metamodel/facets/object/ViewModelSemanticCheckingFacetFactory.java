@@ -25,6 +25,7 @@ import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.applib.annotation.ViewModelLayout;
+import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -46,8 +47,10 @@ public class ViewModelSemanticCheckingFacetFactory extends FacetFactoryAbstract 
     public void process(final ProcessClassContext processClassContext) {
 
         // disable by default
-        final boolean enable = getConfiguration().getBoolean(
-                "isis.reflector.facets.ViewModelSemanticCheckingFacetFactory.enable", false);
+        final boolean enable = getConfiguration()
+                .getBoolean(
+                        ConfigurationConstants.Keys.Reflector.viewModelSemanticCheckingFacetFactoryEnable,
+                        false);
         if(!enable) {
             return;
         }

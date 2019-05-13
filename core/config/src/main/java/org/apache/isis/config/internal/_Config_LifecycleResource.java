@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.isis.commons.internal.base._Lazy;
-import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.config.IsisConfiguration;
 
 import static org.apache.isis.commons.internal.base._With.requires;
@@ -77,8 +76,7 @@ class _Config_LifecycleResource {
                 _Config_Parsers::parseFont,
                 _Config_Parsers::parseList);
         
-        log.info("=== BUILT/DONE ===");
-        _Exceptions.dumpStackTrace(System.err, 0, 40);
+        log.info("=== Config Finalized ===");
         
         return config;
         

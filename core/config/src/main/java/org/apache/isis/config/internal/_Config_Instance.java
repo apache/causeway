@@ -47,52 +47,52 @@ final class _Config_Instance implements IsisConfiguration {
 
     @Override
     public boolean getBoolean(String name) {
-        return computeIfAbsent(booleanParser.apply(name), ()->false);
+        return computeIfAbsent(booleanParser.apply(getString(name)), ()->false);
     }
 
     @Override
     public boolean getBoolean(String name, boolean defaultValue) {
-        return computeIfAbsent(booleanParser.apply(name), ()->defaultValue);
+        return computeIfAbsent(booleanParser.apply(getString(name)), ()->defaultValue);
     }
 
     @Override
     public Color getColor(String name) {
-        return colorParser.apply(name);
+        return colorParser.apply(getString(name));
     }
 
     @Override
     public Color getColor(String name, Color defaultValue) {
-        return computeIfAbsent(colorParser.apply(name), ()->defaultValue);
+        return computeIfAbsent(colorParser.apply(getString(name)), ()->defaultValue);
     }
 
     @Override
     public Font getFont(String name) {
-        return fontParser.apply(name);
+        return fontParser.apply(getString(name));
     }
 
     @Override
     public Font getFont(String name, Font defaultValue) {
-        return computeIfAbsent(fontParser.apply(name), ()->defaultValue);
+        return computeIfAbsent(fontParser.apply(getString(name)), ()->defaultValue);
     }
 
     @Override
     public String[] getList(String name) {
-        return computeIfAbsent(listParser.apply(name), ()->_Constants.emptyStringArray);
+        return computeIfAbsent(listParser.apply(getString(name)), ()->_Constants.emptyStringArray);
     }
 
     @Override
     public String[] getList(String name, String defaultListAsCommaSeparatedArray) {
-        return computeIfAbsent(listParser.apply(name), ()->listParser.apply(defaultListAsCommaSeparatedArray));
+        return computeIfAbsent(listParser.apply(getString(name)), ()->listParser.apply(defaultListAsCommaSeparatedArray));
     }
 
     @Override
     public int getInteger(String name) {
-        return computeIfAbsent(integerParser.apply(name), ()->0);
+        return computeIfAbsent(integerParser.apply(getString(name)), ()->0);
     }
 
     @Override
     public int getInteger(String name, int defaultValue) {
-        return computeIfAbsent(integerParser.apply(name), ()->defaultValue);
+        return computeIfAbsent(integerParser.apply(getString(name)), ()->defaultValue);
     }
 
     @Override

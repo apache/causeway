@@ -40,8 +40,17 @@ public final class ConfigurationConstants {
     public static final String WEB_CONFIG_FILE = "web.properties";
 
     public static final class Keys {
-        public static final String EXPLICIT_ANNOTATIONS_FOR_ACTIONS = 
-                ROOT + "reflector.explicitAnnotations.action";
+        
+        public static final class Reflector {
+        
+            public static final String explicitAnnotationsForActions = 
+                    ROOT + "reflector.explicitAnnotations.action";
+            
+            public static final String viewModelSemanticCheckingFacetFactoryEnable = 
+                    ROOT + "reflector.facets.ViewModelSemanticCheckingFacetFactory.enable";
+            
+        }
+    
     }
     
     public static final List<String> PROTECTED_KEYS =
