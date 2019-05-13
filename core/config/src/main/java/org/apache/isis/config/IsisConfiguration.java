@@ -28,7 +28,8 @@ import java.util.Map;
  * system.
  */
 public interface IsisConfiguration {
-    
+
+//TODO[2112] remove comment    
 //    /**
 //     * How to handle the case when the configuration already contains the key being added.
 //     */
@@ -46,36 +47,7 @@ public interface IsisConfiguration {
 //         */
 //        EXCEPTION
 //    }
-    
-    // -- BUILDERS
-    
-//    /**
-//     * 
-//     * @param topModule
-//     * @param additionalPropertyResources
-//     * @return
-//     * @since 2.0.0-M2
-//     */
-//    static IsisConfiguration buildFromModuleTree(Module topModule, PropertyResource ... additionalPropertyResources) {
-//        clear();
-//        acceptBuilder(builder->{
-//            stream(additionalPropertyResources)
-//            .forEach(builder::addPropertyResource);
-//            builder.addTopModule(topModule);
-//        });
-//        return getConfiguration();
-//    }
-    
-//    /**
-//     * @since 2.0.0-M2
-//     */
-//    static IsisConfiguration buildFromAppManifest(AppManifest appManifest) {
-//        clear();
-//        acceptBuilder(builder->{
-//            builder.addAppManifest(appManifest);
-//        });
-//        return getConfiguration();
-//    }
+
     
     // -- VERSION
     
@@ -85,11 +57,11 @@ public interface IsisConfiguration {
     
     // --
     
-//    /**
-//     * @since 2.0.0-M2
-//     */
-//    public AppManifest getAppManifest();
-    
+    /**
+     * Creates a copy of this instance, that is a new IsisConfiguration populated 
+     * with a copy of the underlying key/value pairs.
+     *
+     */
     IsisConfiguration copy();
 
     /**
@@ -222,35 +194,11 @@ public interface IsisConfiguration {
 
     boolean isEmpty();
 
-//    /**
-//     * Iterates over the property names of this configuration.
-//     */
-//    Iterator<String> iterator();
-//
-//    Iterable<String> asIterable();
-//
-//    int size();
-//
-//    /**
-//     * The {@link ResourceStreamSource} that was used to build this
-//     * configuration.
-//     */
-//    ResourceStreamSource getResourceStreamSource();
 
-//    /**
-//     * A mutable copy of the current set of properties (name/values) held in this configuration.
-//     */
-//    Map<String, String> asMap();
-    
+    /**
+     * A mutable copy of the current set of properties (name/values) held in this configuration.
+     */
     Map<String, String> copyToMap();
-
-    // -- SHORTCUTS
-    
-    default boolean explicitAnnotationsForActions() {
-        return getBoolean("isis.reflector.explicitAnnotations.action");
-    }
-
-    
     
 
 }

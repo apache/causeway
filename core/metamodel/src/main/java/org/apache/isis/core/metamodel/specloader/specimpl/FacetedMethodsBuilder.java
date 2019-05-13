@@ -29,6 +29,7 @@ import java.util.Set;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Sets;
+import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ListExtensions;
@@ -50,25 +51,21 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class FacetedMethodsBuilder {
-
-    private static final Logger LOG = LoggerFactory.getLogger(FacetedMethodsBuilder.class);
 
     private static final String GET_PREFIX = "get";
     private static final String IS_PREFIX = "is";
 
     private static final class FacetedMethodsMethodRemover implements MethodRemover {
 
-        private final Class<?> introspectedClass;
         private final List<Method> methods;
 
         private FacetedMethodsMethodRemover(final Class<?> introspectedClass, final List<Method> methods) {
-            this.introspectedClass = introspectedClass;
             this.methods = methods;
         }
 
@@ -149,8 +146,8 @@ public class FacetedMethodsBuilder {
     public FacetedMethodsBuilder(
             final ObjectSpecificationAbstract spec,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("creating JavaIntrospector for {}", spec.getFullIdentifier());
+        if (log.isDebugEnabled()) {
+            log.debug("creating JavaIntrospector for {}", spec.getFullIdentifier());
         }
 
         this.spec = spec;
@@ -162,7 +159,9 @@ public class FacetedMethodsBuilder {
         this.facetProcessor = facetedMethodsBuilderContext.facetProcessor;
         this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
 
-        this.explicitAnnotationsForActions = _Config.getConfiguration().explicitAnnotationsForActions();
+        this.explicitAnnotationsForActions = _Config.getConfiguration()
+                .getBoolean(ConfigurationConstants.Keys.EXPLICIT_ANNOTATIONS_FOR_ACTIONS);
+                
     }
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -179,14 +178,14 @@ public class FacetedMethodsBuilder {
 
 
     public void introspectObjectSpecId() {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("introspecting {}: objectSpecId", getClassName());
+        if (log.isInfoEnabled()) {
+            log.info("introspecting {}: objectSpecId", getClassName());
         }
         getFacetProcessor().processObjectSpecId(introspectedClass, spec);
     }
     public void introspectClass() {
-        if (LOG.isInfoEnabled()) {
-            LOG.info("introspecting {}: class-level details", getClassName());
+        if (log.isInfoEnabled()) {
+            log.info("introspecting {}: class-level details", getClassName());
         }
 
         // process facets at object level
@@ -229,8 +228,8 @@ public class FacetedMethodsBuilder {
     }
 
     private List<FacetedMethod> createAssociationFacetedMethods() {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("introspecting {}: properties and collections", getClassName());
+        if (log.isDebugEnabled()) {
+            log.debug("introspecting {}: properties and collections", getClassName());
         }
         final Set<Method> associationCandidateMethods = getFacetProcessor().findAssociationCandidateAccessors(methods, new HashSet<Method>());
 
@@ -278,8 +277,8 @@ public class FacetedMethodsBuilder {
             final List<Method> accessorMethods,
             final List<FacetedMethod> facetMethodsToAppendto) {
         for (final Method accessorMethod : accessorMethods) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("  identified accessor method representing collection: {}", accessorMethod);
+            if (log.isDebugEnabled()) {
+                log.debug("  identified accessor method representing collection: {}", accessorMethod);
             }
 
             // create property and add facets
@@ -308,7 +307,7 @@ public class FacetedMethodsBuilder {
             final List<FacetedMethod> facetedMethodsToAppendto) throws MetaModelException {
 
         for (final Method accessorMethod : accessorMethods) {
-            LOG.debug("  identified accessor method representing property: {}", accessorMethod);
+            log.debug("  identified accessor method representing property: {}", accessorMethod);
 
             final Class<?> returnType = accessorMethod.getReturnType();
 
@@ -357,8 +356,8 @@ public class FacetedMethodsBuilder {
      */
     private List<FacetedMethod> findActionFacetedMethods(
             final MethodScope methodScope) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("introspecting {}: actions", getClassName());
+        if (log.isDebugEnabled()) {
+            log.debug("introspecting {}: actions", getClassName());
         }
         final List<FacetedMethod> actionFacetedMethods1 = findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.SKIP);
         final List<FacetedMethod> actionFacetedMethods2 = findActionFacetedMethods(methodScope, RecognisedHelpersStrategy.DONT_SKIP);
@@ -369,8 +368,8 @@ public class FacetedMethodsBuilder {
             final MethodScope methodScope,
             final RecognisedHelpersStrategy recognisedHelpersStrategy) {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("  looking for action methods");
+        if (log.isDebugEnabled()) {
+            log.debug("  looking for action methods");
         }
 
         final List<FacetedMethod> actionFacetedMethods = _Lists.newArrayList();
@@ -466,7 +465,7 @@ public class FacetedMethodsBuilder {
                 return false;
             }
             if (recognisedHelpersStrategy.skip()) {
-                LOG.debug("  skipping possible helper method {0}", actionMethod);
+                log.debug("  skipping possible helper method {0}", actionMethod);
                 return false;
             }
         }
@@ -476,7 +475,7 @@ public class FacetedMethodsBuilder {
                 return false;
             }
         }
-        LOG.debug("  identified action {0}", actionMethod);
+        log.debug("  identified action {0}", actionMethod);
         return true;
     }
 
