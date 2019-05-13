@@ -63,8 +63,9 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
             return Bin.ofSingleton(match.get());
         }
         
-        // lookup the _Context
-        val singleton = _Context.getIfAny(type);
+        // lookup the _Context 
+        // XXX lombok bug, cannot use val here (https://github.com/rzwitserloot/lombok/issues/1588)
+        T singleton = _Context.getIfAny(type);
         if(singleton!=null) {
             return Bin.ofSingleton(singleton);
         }
