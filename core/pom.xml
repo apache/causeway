@@ -2154,6 +2154,40 @@ ${license.additional-notes}
                 </plugins>
             </build>
         </profile>
+        
+        
+		<profile>
+            <id>jdk11</id>
+            <activation>
+                <jdk>[11,)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- Compile -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <showDeprecation>true</showDeprecation>
+                            <showWarnings>true</showWarnings>
+                            <source>8</source>
+                            <target>8</target>
+                        </configuration>
+                    </plugin>
+    
+                    <plugin>
+                        <groupId>org.jvnet.jaxb2.maven2</groupId>
+                        <artifactId>maven-jaxb2-plugin</artifactId>
+                        <version>0.14.0</version>
+                        <configuration>
+                            <removeOldOutput>true</removeOldOutput>
+                            <episode>true</episode>
+                            </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        
 
         <profile>
             <id>jdk11plus</id>
