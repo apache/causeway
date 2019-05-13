@@ -65,7 +65,6 @@ public class ObjectActionLayoutXmlDefaultTest {
     public void setUp() throws Exception {
 
         MetaModelContext.preset(MetaModelContext.builder()
-                .configuration(_Config.getConfiguration())
                 .specificationLoader(mockSpecificationLoader)
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)

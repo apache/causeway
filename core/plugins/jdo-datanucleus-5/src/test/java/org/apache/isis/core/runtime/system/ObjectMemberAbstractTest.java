@@ -100,7 +100,6 @@ public class ObjectMemberAbstractTest {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         MetaModelContext.preset(MetaModelContext.builder()
-                .configuration(_Config.getConfiguration())
                 .specificationLoader(mockSpecificationLoader)
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal)
                 .authenticationSessionProvider(mockAuthenticationSessionProvider)

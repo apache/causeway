@@ -33,7 +33,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -108,7 +107,6 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
         // PRODUCTION
         
     	MetaModelContext.preset(MetaModelContext.builder()
-    			.configuration(_Config.getConfiguration())
     			.specificationLoader(mockSpecificationLoader)
         		.serviceInjector(mockServiceInjector)
         		.serviceRegistry(mockServiceRegistry)

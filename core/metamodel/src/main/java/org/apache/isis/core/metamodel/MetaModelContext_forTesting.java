@@ -32,6 +32,7 @@ import org.apache.isis.applib.services.xactn.TransactionState;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.services.events.MetamodelEventService;
@@ -50,8 +51,6 @@ import lombok.val;
 @Builder @Getter
 final class MetaModelContext_forTesting implements MetaModelContext {
 	
-	private IsisConfiguration configuration;
-
 	private ObjectAdapterProvider objectAdapterProvider;
 
 	@Builder.Default
@@ -94,6 +93,11 @@ final class MetaModelContext_forTesting implements MetaModelContext {
 	public ObjectSpecification getSpecification(Class<?> type) {
 		return specificationLoader.loadSpecification(type);
 	}
+	
+	@Override
+	public IsisConfiguration getConfiguration() {
+	    return _Config.getConfiguration();
+	}
 
 	@Override
 	public Stream<ObjectAdapter> streamServiceAdapters() {
@@ -115,7 +119,7 @@ final class MetaModelContext_forTesting implements MetaModelContext {
     public Stream<Object> streamSingletons() {
         
         val fields = _Lists.of(
-                configuration,
+                getConfiguration(),
                 objectAdapterProvider,
                 serviceInjector,
                 serviceRegistry,

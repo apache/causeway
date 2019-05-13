@@ -58,7 +58,6 @@ public class ServiceInjectorTestUsingCodegenPlugin {
         serviceInstantiator = new ServiceInstantiator();
         
         MetaModelContext.preset(MetaModelContext.builder()
-                .configuration(_Config.getConfiguration())
                 .singleton(serviceInstantiator.createInstance(SingletonCalculator.class))
                 .singleton(serviceInstantiator.createInstance(AccumulatingCalculator.class))
                 .build());

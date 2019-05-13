@@ -112,7 +112,6 @@ abstract class SpecificationLoaderTestAbstract {
         val producers = new Producers();
         
         MetaModelContext.preset(MetaModelContext.builder()
-                .configuration(_Config.getConfiguration())
                 .specificationLoader(specificationLoader = producers.getSpecificationLoader())
 //                .serviceInjector(mockServiceInjector)
 //                .serviceRegistry(mockServiceRegistry)

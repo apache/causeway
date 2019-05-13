@@ -63,8 +63,6 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         
         // PRODUCTION
         
-        super.setUpFacetedMethodAndParameter();
-        
         facetFactory = new ActionAnnotationFacetFactory();
 
         context.checking(new Expectations() {{

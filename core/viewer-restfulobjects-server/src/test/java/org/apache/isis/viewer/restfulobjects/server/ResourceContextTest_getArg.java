@@ -77,7 +77,6 @@ public class ResourceContextTest_getArg {
         // PRODUCTION;
 
         MetaModelContext.preset(MetaModelContext.builder()
-                .configuration(_Config.getConfiguration())
                 .specificationLoader(mockSpecificationLoader)
 //                .serviceInjector(mockServiceInjector)
 //                .serviceRegistry(mockServiceRegistry)

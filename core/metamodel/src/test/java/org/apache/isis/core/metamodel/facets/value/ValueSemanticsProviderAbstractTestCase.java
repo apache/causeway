@@ -79,7 +79,6 @@ public abstract class ValueSemanticsProviderAbstractTestCase {
         Locale.setDefault(Locale.UK);
         
         MetaModelContext.preset(MetaModelContext.builder()
-                .configuration(_Config.getConfiguration())
                 .specificationLoader(mockSpecificationLoader)
 //                .translationService(mockTranslationService)
 //                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
