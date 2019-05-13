@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.apache.isis.applib.RecreatableDomainObject;
 import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -60,6 +61,7 @@ public class ViewModelSemanticCheckingFacetFactoryTest {
     @Before
     public void setUp() throws Exception {
 
+        _Context.clear();
         _Config.clear();
         _Config.put("isis.reflector.facets.ViewModelSemanticCheckingFacetFactory.enable", true);
         
