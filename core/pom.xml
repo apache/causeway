@@ -112,6 +112,8 @@
 
         <slf4j.version>1.7.21</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
+        
+        <lombok.version>[1.18.,)</lombok.version>
 
         <joda-time.version>2.9.4</joda-time.version>
         
@@ -1500,6 +1502,13 @@ ${license.additional-notes}
                 <artifactId>joda-time</artifactId>
                 <version>${joda-time.version}</version>
             </dependency>
+
+			<!-- lombok -->
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+			</dependency>
 
             <!-- Google Guava (collections and commons) -->
             <dependency>

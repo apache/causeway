@@ -47,6 +47,7 @@ import org.apache.isis.core.commons.collections.Bin;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.MessageRegistry;
@@ -239,16 +240,16 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
                 translationService.translate(context, message);
             }
             
-          //FIXME [2033] skipping mm validation for now ...            
-//                    val mmDeficiencies = specificationLoader.validateThenGetDeficienciesIfAny(); 
-//                    if(mmDeficiencies!=null) {
-//                          // no need to use a higher level, such as error(...); the calling code will expose any metamodel
-//                          // validation errors in their own particular way.
-//                          if(log.isDebugEnabled()) {
-//                              log.debug("Meta model invalid", mmDeficiencies.getValidationErrorsAsString());
-//                          }
-//                          _Context.putSingleton(MetaModelDeficiencies.class, mmDeficiencies);
-//                      }
+            // meta-model validation ...            
+            val mmDeficiencies = specificationLoader.validate().getDeficienciesIfAny(); 
+            if(mmDeficiencies!=null) {
+                // no need to use a higher level, such as error(...); the calling code will expose any metamodel
+                // validation errors in their own particular way.
+                if(log.isDebugEnabled()) {
+                    log.debug("Meta model invalid", mmDeficiencies.getValidationErrorsAsString());
+                }
+                _Context.putSingleton(MetaModelDeficiencies.class, mmDeficiencies);
+            }
             
            },
            new InitialisationSession());

@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolExecutionMode;
@@ -190,22 +189,17 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
 	private ValidationFailures validationFailures;
 
-	private MetaModelDeficiencies validateThenGetDeficienciesIfAny() {
-		final IntrospectionMode mode = CONFIG_PROPERTY_MODE.from(getConfiguration());
-		if(!mode.isFullIntrospect(_Context.getEnvironment().getDeploymentType())) {
-			log.info("Meta model validation skipped (full introspection of metamodel not configured)");
-			return null;
-		}
-
-		ValidationFailures validationFailures = validate();
-		return validationFailures.getDeficienciesIfAny();
-	}
-
 	@Override
 	public ValidationFailures validate() {
 		if(validationFailures == null) {
 			validationFailures = new ValidationFailures();
-			metaModelValidator.validate(validationFailures);
+			
+			if(IntrospectionMode.isFullIntrospect()) {
+			    metaModelValidator.validate(validationFailures);
+	        } else {
+	            log.info("Meta model validation skipped (full introspection of metamodel not configured)");
+	        }
+			
 		}
 		return validationFailures;
 	}

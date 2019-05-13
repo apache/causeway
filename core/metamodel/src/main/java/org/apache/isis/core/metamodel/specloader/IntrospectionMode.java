@@ -18,35 +18,58 @@
  */
 package org.apache.isis.core.metamodel.specloader;
 
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.plugins.environment.DeploymentType;
 
+import lombok.val;
+
 public enum IntrospectionMode {
+    
     /**
-     * Lazy (don't introspect members for most classes unless required), irrespective of the deployment mode.
+     * Lazy (don't introspect members for most classes unless required), 
+     * irrespective of the deployment mode.
      */
-    LAZY{
+    LAZY {
         @Override
-        public boolean isFullIntrospect(final DeploymentType deploymentType) {
+        protected boolean isFullIntrospect(final DeploymentType deploymentType) {
             return false;
         }
     },
+    
     /**
      * If production deployment mode, then full, otherwise lazy.
      */
     LAZY_UNLESS_PRODUCTION {
-        @Override public boolean isFullIntrospect(final DeploymentType deploymentType) {
+        @Override
+        protected boolean isFullIntrospect(final DeploymentType deploymentType) {
             return deploymentType.isProduction();
         }
     },
+    
     /**
      * Full introspection, irrespective of deployment mode.
      */
     FULL {
         @Override
-        public boolean isFullIntrospect(final DeploymentType deploymentType) {
+        protected boolean isFullIntrospect(final DeploymentType deploymentType) {
             return true;
         }
     };
 
-    public abstract boolean isFullIntrospect(final DeploymentType deploymentType);
+    /**
+     * @return whether current introspection mode is 'full', dependent on current
+     * deployment mode and configuration
+     */
+    public static boolean isFullIntrospect() {
+        
+        val config = MetaModelContext.current().getConfiguration();
+        val introspectionMode = SpecificationLoader.CONFIG_PROPERTY_MODE.from(config);
+        val deploymentMode = _Context.getEnvironment().getDeploymentType();
+        
+        return introspectionMode.isFullIntrospect(deploymentMode);
+    }
+    
+    protected abstract boolean isFullIntrospect(final DeploymentType deploymentType);
+    
 }
