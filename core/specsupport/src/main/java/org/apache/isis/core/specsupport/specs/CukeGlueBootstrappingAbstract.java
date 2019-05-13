@@ -16,8 +16,11 @@ O *  Licensed to the Apache Software Foundation (ASF) under one or more
  */
 package org.apache.isis.core.specsupport.specs;
 
-import org.apache.isis.applib.Module;
+import com.fasterxml.jackson.databind.Module;
+
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
+import org.apache.isis.core.runtime.headless.logging.LogConfig;
 
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -38,8 +41,8 @@ import cucumber.api.java.Before;
 @Deprecated
 public abstract class CukeGlueBootstrappingAbstract extends HeadlessWithBootstrappingAbstract {
 
-    protected CukeGlueBootstrappingAbstract(final Module module) {
-        super(module);
+    protected CukeGlueBootstrappingAbstract(LogConfig logConfig, IsisConfiguration isisConfiguration) {
+        super(logConfig, isisConfiguration);
     }
 
     @Before(order=100)

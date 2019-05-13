@@ -44,7 +44,7 @@ public class ServiceInitializer {
     public ServiceInitializer(
             final IsisConfiguration configuration,
             final List<Object> services) {
-        this.props = configuration.asMap();
+        this.props = configuration.copyToMap();
         this.services = services;
     }
 

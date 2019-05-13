@@ -23,20 +23,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 
 public final class ConfigurationConstants {
     
     public static final String ROOT = "isis.";
-    
-    /**
-     * Key used to lookup {@link AppManifest} (if any) from the {@link IsisConfiguration}.
-     * @deprecated AppManifest lookup changed with 2.0.0-M2
-     */
-    public static final String APP_MANIFEST_KEY = ConfigurationConstants.ROOT + "appManifest";
-
 
     public static final String LIST_SEPARATOR = ",";
     public static final String DELIMITER = ".";

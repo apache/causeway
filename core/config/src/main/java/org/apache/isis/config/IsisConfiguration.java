@@ -21,83 +21,61 @@ package org.apache.isis.config;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.Iterator;
 import java.util.Map;
-
-import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.Module;
-import org.apache.isis.applib.PropertyResource;
-import org.apache.isis.config.builder.IsisConfigurationBuilder;
-import org.apache.isis.config.resource.ResourceStreamSource;
-
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.config.internal._Config.acceptBuilder;
-import static org.apache.isis.config.internal._Config.clear;
-import static org.apache.isis.config.internal._Config.getConfiguration;
 
 /**
  * Immutable set of properties representing the configuration of the running
  * system.
- *
- * <p>
- * The {@link IsisConfiguration} is one part of a mutable/immutable pair pattern
- * (cf {@link String} and {@link StringBuilder}). What this means is, as
- * components are loaded they can discover their own configuration resources.
- * These are added to {@link IsisConfigurationBuilder}.
- *
- * <p>
- * Thus the {@link IsisConfiguration} held by different components may vary, but
- * with each being a possible superset of the previous.
  */
 public interface IsisConfiguration {
     
-    /**
-     * How to handle the case when the configuration already contains the key being added.
-     */
-    public enum ContainsPolicy {
-        /**
-         * If the configuration already contains the key, then ignore the new value.
-         */
-        IGNORE,
-        /**
-         * If the configuration already contains the key, then overwrite with the new.
-         */
-        OVERWRITE,
-        /**
-         * If the configuration already contains the key, then throw an exception.
-         */
-        EXCEPTION
-    }
+//    /**
+//     * How to handle the case when the configuration already contains the key being added.
+//     */
+//    public enum ContainsPolicy {
+//        /**
+//         * If the configuration already contains the key, then ignore the new value.
+//         */
+//        IGNORE,
+//        /**
+//         * If the configuration already contains the key, then overwrite with the new.
+//         */
+//        OVERWRITE,
+//        /**
+//         * If the configuration already contains the key, then throw an exception.
+//         */
+//        EXCEPTION
+//    }
     
     // -- BUILDERS
     
-    /**
-     * 
-     * @param topModule
-     * @param additionalPropertyResources
-     * @return
-     * @since 2.0.0-M2
-     */
-    static IsisConfiguration buildFromModuleTree(Module topModule, PropertyResource ... additionalPropertyResources) {
-        clear();
-        acceptBuilder(builder->{
-            stream(additionalPropertyResources)
-            .forEach(builder::addPropertyResource);
-            builder.addTopModule(topModule);
-        });
-        return getConfiguration();
-    }
+//    /**
+//     * 
+//     * @param topModule
+//     * @param additionalPropertyResources
+//     * @return
+//     * @since 2.0.0-M2
+//     */
+//    static IsisConfiguration buildFromModuleTree(Module topModule, PropertyResource ... additionalPropertyResources) {
+//        clear();
+//        acceptBuilder(builder->{
+//            stream(additionalPropertyResources)
+//            .forEach(builder::addPropertyResource);
+//            builder.addTopModule(topModule);
+//        });
+//        return getConfiguration();
+//    }
     
-    /**
-     * @since 2.0.0-M2
-     */
-    static IsisConfiguration buildFromAppManifest(AppManifest appManifest) {
-        clear();
-        acceptBuilder(builder->{
-            builder.addAppManifest(appManifest);
-        });
-        return getConfiguration();
-    }
+//    /**
+//     * @since 2.0.0-M2
+//     */
+//    static IsisConfiguration buildFromAppManifest(AppManifest appManifest) {
+//        clear();
+//        acceptBuilder(builder->{
+//            builder.addAppManifest(appManifest);
+//        });
+//        return getConfiguration();
+//    }
     
     // -- VERSION
     
@@ -107,10 +85,10 @@ public interface IsisConfiguration {
     
     // --
     
-    /**
-     * @since 2.0.0-M2
-     */
-    public AppManifest getAppManifest();
+//    /**
+//     * @since 2.0.0-M2
+//     */
+//    public AppManifest getAppManifest();
 
     /**
      * Creates a new IsisConfiguration containing the properties starting with
@@ -242,25 +220,27 @@ public interface IsisConfiguration {
 
     boolean isEmpty();
 
-    /**
-     * Iterates over the property names of this configuration.
-     */
-    Iterator<String> iterator();
+//    /**
+//     * Iterates over the property names of this configuration.
+//     */
+//    Iterator<String> iterator();
+//
+//    Iterable<String> asIterable();
+//
+//    int size();
+//
+//    /**
+//     * The {@link ResourceStreamSource} that was used to build this
+//     * configuration.
+//     */
+//    ResourceStreamSource getResourceStreamSource();
 
-    Iterable<String> asIterable();
-
-    int size();
-
-    /**
-     * The {@link ResourceStreamSource} that was used to build this
-     * configuration.
-     */
-    ResourceStreamSource getResourceStreamSource();
-
-    /**
-     * A mutable copy of the current set of properties (name/values) held in this configuration.
-     */
-    Map<String, String> asMap();
+//    /**
+//     * A mutable copy of the current set of properties (name/values) held in this configuration.
+//     */
+//    Map<String, String> asMap();
+    
+    Map<String, String> copyToMap();
 
     // -- SHORTCUTS
     

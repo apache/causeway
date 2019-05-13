@@ -97,7 +97,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
                 JDO_OBJECTSTORE_CONFIG_PREFIX);
 
         final IsisConfiguration dataNucleusConfig = configuration.createSubset(DATANUCLEUS_CONFIG_PREFIX);
-        final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
+        final Map<String, String> datanucleusProps = dataNucleusConfig.copyToMap();
         addDataNucleusPropertiesIfRequired(datanucleusProps);
 
         return new DataNucleusApplicationComponents5(jdoObjectstoreConfig,

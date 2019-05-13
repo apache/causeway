@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.builder.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
@@ -47,11 +46,12 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
             boolean ignoreDep = configuration.getBoolean(KEY_IGNORE_DEPRECATED, false);
             return ignoreDep ? IGNORE : HONOUR;
         }
-        
-        public static DeprecatedPolicy parse(final IsisConfigurationBuilder configuration) {
-            boolean ignoreDep = configuration.peekAtBoolean(KEY_IGNORE_DEPRECATED, false);
-            return ignoreDep ? IGNORE : HONOUR;
-        }
+
+//[2112]        
+//        public static DeprecatedPolicy parse(final IsisConfigurationBuilder configuration) {
+//            boolean ignoreDep = configuration.peekAtBoolean(KEY_IGNORE_DEPRECATED, false);
+//            return ignoreDep ? IGNORE : HONOUR;
+//        }
         
     }
 

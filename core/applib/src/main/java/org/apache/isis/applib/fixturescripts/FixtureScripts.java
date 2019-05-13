@@ -41,7 +41,6 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
-import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryService;
 import org.apache.isis.applib.services.factory.FactoryService;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecification;
@@ -243,7 +242,7 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     private <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> cls, final String packagePrefix) {
-        return classDiscoveryService.findSubTypesOfClasses(cls, packagePrefix);
+        throw _Exceptions.notImplemented(); //TODO[2112] Use BeanTypeRegistry
     }
 
     private FixtureScript newFixtureScript(final Class<? extends FixtureScript> fixtureScriptCls) {
@@ -491,9 +490,6 @@ public abstract class FixtureScripts extends AbstractService {
 
     @javax.inject.Inject
     TransactionService transactionService;
-
-    @javax.inject.Inject
-    ClassDiscoveryService classDiscoveryService;
 
     @javax.inject.Inject
     ExecutionParametersService executionParametersService;

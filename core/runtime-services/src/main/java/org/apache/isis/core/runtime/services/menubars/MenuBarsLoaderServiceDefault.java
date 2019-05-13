@@ -18,29 +18,24 @@
  */
 package org.apache.isis.core.runtime.services.menubars;
 
-import static org.apache.isis.commons.internal.resources._Resources.loadAsString;
-
 import java.nio.charset.StandardCharsets;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBars;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.isis.config.beans.WebAppConfigBean;
 
-@Singleton
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
+@Singleton @Slf4j
 public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
     
-    private final static Logger log = LoggerFactory.getLogger(MenuBarsLoaderServiceDefault.class);
-    private final static String menubarsLayoutResourceName = "menubars.layout.xml";
-
     @Override
     public boolean supportsReloading() {
         return _Context.isPrototyping();
@@ -48,11 +43,17 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
 
     @Override
     public BS3MenuBars menuBars() {
-        final AppManifest appManifest = IsisContext.getAppManifest();
+        
+        val menubarsLayoutResource = webAppConfigBean.getMenubarsLayoutXml();
+        if(menubarsLayoutResource==null) {
+            warnNotFound();
+            return null;
+        }
+        
         try {
             
             final String xml = 
-                    loadAsString(appManifest.getClass(), menubarsLayoutResourceName, StandardCharsets.UTF_8); 
+                    _Strings.read(menubarsLayoutResource.getInputStream(), StandardCharsets.UTF_8); 
 
             // if the menubarsLayout resource is not found, print a warning only once and only when PROTOTYPING
             if(_Strings.isEmpty(xml)) {
@@ -77,23 +78,25 @@ public class MenuBarsLoaderServiceDefault implements MenuBarsLoaderService {
         if(warnedOnce) {
             return;
         }
-        final AppManifest appManifest = IsisContext.getAppManifest();
-        log.warn( 
-                String.format("Failed to locate resource '%s' at class-path relative to '%s'", 
-                menubarsLayoutResourceName, appManifest.getClass().getName()));
         
+        log.warn( 
+                String.format("Configured '%s' failes to provide a readable resource for "
+                        + "the Menubars-Layout.", 
+                        WebAppConfigBean.class.getName()));
         warnedOnce = true; 
     }
     
     private void severeCannotLoad(Exception cause) {
-        final AppManifest appManifest = IsisContext.getAppManifest();
+        
         log.error(
-                String.format("Failed to load resource '%s' from class-path relative to '%s'", 
-                menubarsLayoutResourceName, appManifest.getClass().getName()), 
+                String.format("Configured '%s' failes to provide a readable resource for "
+                        + "the Menubars-Layout.", 
+                        WebAppConfigBean.class.getName()), 
                 cause);
     }
 
     @Inject JaxbService jaxbService;
+    @Inject WebAppConfigBean webAppConfigBean;
 
 }
 

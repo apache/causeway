@@ -18,18 +18,9 @@
  */
 package org.apache.isis.core.metamodel.specloader.validator;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.AppManifest2;
-import org.apache.isis.applib.Module;
-import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -49,12 +40,6 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
                 .getBoolean(ISIS_REFLECTOR_CHECK_MODULE_EXTENT_KEY,
                         ISIS_REFLECTOR_CHECK_MODULE_EXTENT_DEFAULT);
         if(!check) {
-            return;
-        }
-
-        AppManifest2 appManifest = getServiceRegistry()
-                .lookupServiceElseFail(MetaModelService.class).getAppManifest2();
-        if(appManifest == null) {
             return;
         }
 
@@ -98,50 +83,39 @@ public class MetaModelValidatorToCheckModuleExtent extends MetaModelValidatorCom
 
             @Override
             public void summarize(final ValidationFailures validationFailures) {
-
-                AppManifest2 appManifest = getServiceRegistry()
-                        .lookupServiceElseFail(MetaModelService.class).getAppManifest2();
-                if(appManifest == null) {
-                    return;
-                }
-                Module topLevelModule = appManifest.getModule();
-                if(topLevelModule == null) {
-                    // shouldn't happen
-                    return;
-                }
-
-                final Set<String> modulePackageNames = modulePackageNamesFrom(appManifest);
-
-                final Set<String> domainObjectPackageNames = domainObjectClassNamesByPackage.keySet();
-                for (final String pkg : domainObjectPackageNames) {
-                    List<String> domainObjectClassNames = domainObjectClassNamesByPackage.get(pkg);
-                    boolean withinSomeModule = isWithinSomeModule(modulePackageNames, pkg);
-                    if(!withinSomeModule) {
-                        String csv = stream(domainObjectClassNames)
-                                .collect(Collectors.joining(","));
-                        validationFailures.add(
-                                "Domain objects discovered in package '%s' are not in the set of modules obtained from "
-                                        + "the AppManifest's top-level module '%s'.  Classes are: %s",
-                                        pkg, topLevelModule.getClass().getName(), csv);
-                    }
-                }
+//FIXME[2112]
+//                final Set<String> modulePackageNames = modulePackageNamesFrom(appManifest);
+//
+//                final Set<String> domainObjectPackageNames = domainObjectClassNamesByPackage.keySet();
+//                for (final String pkg : domainObjectPackageNames) {
+//                    List<String> domainObjectClassNames = domainObjectClassNamesByPackage.get(pkg);
+//                    boolean withinSomeModule = isWithinSomeModule(modulePackageNames, pkg);
+//                    if(!withinSomeModule) {
+//                        String csv = stream(domainObjectClassNames)
+//                                .collect(Collectors.joining(","));
+//                        validationFailures.add(
+//                                "Domain objects discovered in package '%s' are not in the set of modules obtained from "
+//                                        + "the AppManifest's top-level module '%s'.  Classes are: %s",
+//                                        pkg, topLevelModule.getClass().getName(), csv);
+//                    }
+//                }
             }
-
-            private Set<String> modulePackageNamesFrom(final AppManifest appManifest) {
-                final List<Class<?>> modules = appManifest.getModules();
-                return modules.stream()
-                        .map(aClass->aClass.getPackage().getName())
-                        .collect(Collectors.toCollection(HashSet::new));
-            }
-
-            private boolean isWithinSomeModule(final Set<String> modulePackageNames, final String pkg) {
-                for (final String modulePackageName : modulePackageNames) {
-                    if(pkg.startsWith(modulePackageName)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
+//FIXME[2112]
+//            private Set<String> modulePackageNamesFrom(final AppManifest appManifest) {
+//                final List<Class<?>> modules = appManifest.getModules();
+//                return modules.stream()
+//                        .map(aClass->aClass.getPackage().getName())
+//                        .collect(Collectors.toCollection(HashSet::new));
+//            }
+//
+//            private boolean isWithinSomeModule(final Set<String> modulePackageNames, final String pkg) {
+//                for (final String modulePackageName : modulePackageNames) {
+//                    if(pkg.startsWith(modulePackageName)) {
+//                        return true;
+//                    }
+//                }
+//                return false;
+//            }
         };
 
         add(new MetaModelValidatorVisiting(visitor));

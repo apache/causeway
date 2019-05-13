@@ -20,6 +20,8 @@ package org.apache.isis.objectstore.jdo.service;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.val;
+
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,11 +36,9 @@ import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 public class RegisterEntities {
-
-    @SuppressWarnings("unused")
-    private final static Logger LOG = LoggerFactory.getLogger(RegisterEntities.class);
 
     private final _Lazy<Set<String>> entityTypes = _Lazy.threadSafe(this::findEntityTypes);
 
@@ -50,13 +50,15 @@ public class RegisterEntities {
 
     private Set<String> findEntityTypes() {
         
-        Set<String> entityTypes = new LinkedHashSet<>();
-
-        Set<Class<?>> persistenceCapableTypes = AppManifest.Registry.instance().getPersistenceCapableTypes();
-
-        if(persistenceCapableTypes == null) {
-            throw new IllegalStateException("AppManifest is required");
+        val serviceRegistry = IsisContext.getServiceRegistry();
+        if(serviceRegistry == null) {
+            throw new IllegalStateException("ServiceRegistry is required");
         }
+        
+        Set<String> entityTypes = new LinkedHashSet<>();
+        
+        Set<Class<?>> persistenceCapableTypes = 
+                AppManifest.Registry.instance().getPersistenceCapableTypes();
 
         final List<String> classNamesNotEnhanced = _Lists.newArrayList();
         for (Class<?> persistenceCapableType : persistenceCapableTypes) {

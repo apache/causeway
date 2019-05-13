@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.integtestsupport;
 
+import com.fasterxml.jackson.databind.Module;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,9 +29,8 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.slf4j.event.Level;
 
-import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.Module;
 import org.apache.isis.applib.services.xactn.TransactionService;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
 import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
 import org.apache.isis.core.runtime.headless.IsisSystem;
@@ -40,7 +41,9 @@ import org.apache.isis.core.runtime.headless.logging.LogConfig;
  */
 public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrappingAbstract {
 
-    //private static final Logger LOG = LoggerFactory.getLogger(IntegrationTestAbstract3.class);
+    protected IntegrationTestAbstract3(IsisConfiguration config) {
+        super(new LogConfig(Level.INFO), config);
+    }
 
     @Rule
     public ExpectedException expectedExceptions = ExpectedException.none();
@@ -76,30 +79,30 @@ public abstract class IntegrationTestAbstract3 extends HeadlessWithBootstrapping
         }
     }
 
-    protected IntegrationTestAbstract3(final Module module) {
-        this(new LogConfig(Level.INFO), module, AppManifest.Util.MemDb.HSQLDB);
-    }
-
-    protected IntegrationTestAbstract3(final Module module, final AppManifest.Util.MemDb memDb) {
-        this(new LogConfig(Level.INFO), module, memDb);
-    }
-
-    protected IntegrationTestAbstract3(
-            final LogConfig logConfig,
-            final Module module) {
-        this(logConfig, module, AppManifest.Util.MemDb.HSQLDB);
-    }
-
-    protected IntegrationTestAbstract3(
-            final LogConfig logConfig,
-            final Module module,
-            final AppManifest.Util.MemDb memDb) {
-        super(logConfig,
-                ModuleBuilder.create(module)
-                .withHeadlessTransactionSupport()
-                .withIntegrationTestConfigFallback(memDb)
-                .build() );
-    }
+//    protected IntegrationTestAbstract3(final Module module) {
+//        this(new LogConfig(Level.INFO), module, AppManifest.Util.MemDb.HSQLDB);
+//    }
+//
+//    protected IntegrationTestAbstract3(final Module module, final AppManifest.Util.MemDb memDb) {
+//        this(new LogConfig(Level.INFO), module, memDb);
+//    }
+//
+//    protected IntegrationTestAbstract3(
+//            final LogConfig logConfig,
+//            final Module module) {
+//        this(logConfig, module, AppManifest.Util.MemDb.HSQLDB);
+//    }
+//
+//    protected IntegrationTestAbstract3(
+//            final LogConfig logConfig,
+//            final Module module,
+//            final AppManifest.Util.MemDb memDb) {
+//        super(logConfig,
+//                ModuleBuilder.create(module)
+//                .withHeadlessTransactionSupport()
+//                .withIntegrationTestConfigFallback(memDb)
+//                .build() );
+//    }
 
     @Override
     @Before

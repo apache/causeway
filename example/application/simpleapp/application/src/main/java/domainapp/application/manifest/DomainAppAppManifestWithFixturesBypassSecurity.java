@@ -23,8 +23,9 @@ package domainapp.application.manifest;
  */
 public class DomainAppAppManifestWithFixturesBypassSecurity extends DomainAppAppManifestWithFixtures {
 
-    @Override protected String overrideAuthMechanism() {
-        return "bypass";
-    }
+  //FIXME[2112] needs migration
+//    @Override protected String overrideAuthMechanism() {
+//        return "bypass";
+//    }
 
 }

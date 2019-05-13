@@ -16,22 +16,19 @@ O *  Licensed to the Apache Software Foundation (ASF) under one or more
  */
 package domainapp.application.bdd.specglue;
 
-import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.Module;
-import org.apache.isis.core.integtestsupport.ModuleBuilder;
-import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
+public class BootstrappingGlueAbstract /*extends HeadlessWithBootstrappingAbstract*/ {
 
-public class BootstrappingGlueAbstract extends HeadlessWithBootstrappingAbstract {
-
-    public BootstrappingGlueAbstract(final Module module) {
-        this(module, AppManifest.Util.MemDb.HSQLDB);
-    }
-
-    public BootstrappingGlueAbstract(final Module module, final AppManifest.Util.MemDb memDb) {
-        super(ModuleBuilder.create(module)
-                .withHeadlessTransactionSupport()
-                .withIntegrationTestConfigFallback(memDb)
-                .build());
-    }
+  //FIXME[2112] needs migration
+    
+//    public BootstrappingGlueAbstract(final Module module) {
+//        this(module, AppManifest.Util.MemDb.HSQLDB);
+//    }
+//
+//    public BootstrappingGlueAbstract(final Module module, final AppManifest.Util.MemDb memDb) {
+//        super(ModuleBuilder.create(module)
+//                .withHeadlessTransactionSupport()
+//                .withIntegrationTestConfigFallback(memDb)
+//                .build());
+//    }
 
 }

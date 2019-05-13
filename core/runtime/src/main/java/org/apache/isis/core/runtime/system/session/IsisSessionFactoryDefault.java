@@ -100,7 +100,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         log.info("working directory: {}", new File(".").getAbsolutePath());
 
         final IsisConfiguration configuration = _Config.getConfiguration();
-        log.info("resource stream source: {}", configuration.getResourceStreamSource());
+        //log.info("resource stream source: {}", configuration.getResourceStreamSource());
 
         localeInitializer.initLocale(configuration);
         timeZoneInitializer.initTimeZone(configuration);

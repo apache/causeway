@@ -63,7 +63,7 @@ public class ServiceInitializerTest {
         props = _Maps.newHashMap();
         context.checking(new Expectations() {
             {
-                allowing(configuration).asMap();
+                allowing(configuration).copyToMap();
                 will(returnValue(props));
             }
         });

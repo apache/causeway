@@ -18,32 +18,32 @@
  */
 package domainapp.application;
 
-import org.apache.isis.applib.AppManifestAbstract2;
-import org.apache.isis.config.AppConfig;
-import org.apache.isis.config.IsisConfiguration;
-
-import domainapp.dom.HelloWorldModule;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * Bootstrap the application.
  */
-@javax.ejb.Singleton // only if you want AppConfig to be managed by CDI (if available), otherwise not required
-public class HelloWorldAppManifest extends AppManifestAbstract2 implements AppConfig {
+@Configuration
+@PropertySource("isis-non-changing.properties")
+public class HelloWorldAppManifest  {
 
-    public static final Builder BUILDER = Builder
-            .forModule(new HelloWorldModule())
-            .withConfigurationPropertiesFile(
-                    HelloWorldAppManifest.class, "isis-non-changing.properties")
-            .withAuthMechanism("shiro");
-
-    public HelloWorldAppManifest() {
-        super(BUILDER);
-    }
-
-    // Implementing AppConfig, to tell the framework how to bootstrap the configuration.
-    @Override
-    public IsisConfiguration isisConfiguration () {
-        return IsisConfiguration.buildFromAppManifest(this);
-    }
+    //TODO[2112] add missing producers
+    
+//    public static final Builder BUILDER = Builder
+//            .forModule(new HelloWorldModule())
+//            .withConfigurationPropertiesFile(
+//                    HelloWorldAppManifest.class, "isis-non-changing.properties")
+//            .withAuthMechanism("shiro");
+//
+//    public HelloWorldAppManifest() {
+//        super(BUILDER);
+//    }
+//
+//    // Implementing AppConfig, to tell the framework how to bootstrap the configuration.
+//    @Override
+//    public IsisConfiguration isisConfiguration () {
+//        return IsisConfiguration.buildFromAppManifest(this);
+//    }
 
 }

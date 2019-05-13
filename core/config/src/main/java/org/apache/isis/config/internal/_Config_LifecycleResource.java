@@ -19,23 +19,24 @@
 package org.apache.isis.config.internal;
 
 import java.util.Optional;
-
-import org.slf4j.LoggerFactory;
+import java.util.Properties;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.builder.IsisConfigurationBuilder;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 class _Config_LifecycleResource {
     
-    private final IsisConfigurationBuilder builder; 
+    private final Properties mutableProperties; 
     private final _Lazy<IsisConfiguration> configuration;
     
-    _Config_LifecycleResource(final IsisConfigurationBuilder builder) {
-        requires(builder, "builder");
-        this.builder = builder;
+    _Config_LifecycleResource(final Properties mutableProperties) {
+        requires(mutableProperties, "mutableProperties");
+        this.mutableProperties = mutableProperties;
         this.configuration = _Lazy.threadSafe(this::build);
     }
     
@@ -43,9 +44,14 @@ class _Config_LifecycleResource {
         return configuration.get();
     }
     
-    Optional<IsisConfigurationBuilder> getBuilder() {
+    /**
+     * Returns an empty Optional, if getConfiguration() was called earlier. This 
+     * is to ensure, immutability once config was 'finalized'. 
+     * @return
+     */
+    Optional<Properties> getMutableProperties() {
         if(!configuration.isMemoized()) {
-            return Optional.of(builder);    
+            return Optional.of(mutableProperties);    
         }
         return Optional.empty();
     }
@@ -61,10 +67,9 @@ class _Config_LifecycleResource {
             this.configurationBuildStacktrace = e;
         }
         
-        // Logging in the context of IsisConfiguration
-        LoggerFactory.getLogger(IsisConfiguration.class).info("=== BUILT/DONE ===");
+        log.info("=== BUILT/DONE ===");
         
-        return builder.build();
+        return _Config_Instance.ofProperties(mutableProperties);
         
     }
     

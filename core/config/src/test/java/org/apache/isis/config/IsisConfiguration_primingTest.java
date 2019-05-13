@@ -16,44 +16,51 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.webserver;
+package org.apache.isis.config;
 
-import java.util.Map;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class HelloWorldAppConfigTest {
+import lombok.val;
 
+class IsisConfiguration_primingTest {
+    
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
+        _Config.clear();
     }
-
-    @AfterEach
-    void tearDown() throws Exception {
-    }
-
-    @Test @Disabled("TODO[2112] AppConfigLocator is deprecated")
-    void test() {
-
-        // when
-        IsisConfiguration isisConfiguration = _Config.getConfiguration();
-
-        // then
-        Assertions.assertNotNull(isisConfiguration);
+    
+    @Test
+    void shouldReturnEmptyValue() {
         
-        Map<String, String> config = isisConfiguration.copyToMap();
-        Assertions.assertNotNull(config);
-        assertThat(config).hasSize(1);
-        assertThat(config.get("isis.appManifest")).isEqualTo(DummyAppManifest.class.getName());
+        val config = _Config.getConfiguration();
+        assertEquals(null, config.getString("test"));
+    }
+    
+    @Test
+    void shouldNotAllowChangeAfterFinalizedConfig() {
+        
+        @SuppressWarnings("unused")
+        val config = _Config.getConfiguration();
+        
+        assertThrows(IllegalStateException.class, ()->{
+            _Config.put("test", "Hello World!");    
+        });
+    }
+    
+    @Test
+    void shouldReturnPrimedValue() {
+        
+        _Config.put("test", "Hello World!");
+        
+        val config = _Config.getConfiguration();
+        
+        assertEquals("Hello World!", config.getString("test"));
     }
 
 }

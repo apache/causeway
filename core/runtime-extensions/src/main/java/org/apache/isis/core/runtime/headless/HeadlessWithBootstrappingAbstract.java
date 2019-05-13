@@ -21,21 +21,18 @@ package org.apache.isis.core.runtime.headless;
 import java.io.PrintStream;
 
 import org.joda.time.LocalDate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
 
-import org.apache.isis.applib.Module;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.xactn.TransactionService;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.runtime.headless.logging.LeveledLogger;
 import org.apache.isis.core.runtime.headless.logging.LogConfig;
 import org.apache.isis.core.runtime.headless.logging.LogStream;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Provides headless access to the system, first bootstrapping the system if required.
@@ -46,13 +43,12 @@ import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
  *     to bootstrap the system with a given module for headless access.
  * </p>
  */
+@Slf4j
 public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract {
-
-    private static final Logger LOG = LoggerFactory.getLogger(HeadlessWithBootstrappingAbstract.class);
 
     private final LogConfig logConfig;
     protected static PrintStream logPrintStream(Level level) {
-        return LogStream.logPrintStream(LOG, level);
+        return LogStream.logPrintStream(log, level);
     }
 
     private final LeveledLogger logger;
@@ -64,19 +60,12 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
 
     private final IsisSystemBootstrapper isisSystemBootstrapper;
 
-    protected HeadlessWithBootstrappingAbstract(
-            final Module module) {
-        this(new LogConfig(Level.INFO), module);
-    }
-
-    protected HeadlessWithBootstrappingAbstract(
-            final LogConfig logConfig,
-            final Module module) {
+    protected HeadlessWithBootstrappingAbstract(final LogConfig logConfig, IsisConfiguration config) {
 
         IsisSystemEnvironment.setUnitTesting(true);
          
         this.logConfig = logConfig;
-        this.logger = new LeveledLogger(LOG, logConfig.getTestLoggingLevel());
+        this.logger = new LeveledLogger(log, logConfig.getTestLoggingLevel());
 
         final boolean firstTime = !setupLogging.get();
         if(firstTime) {
@@ -86,21 +75,17 @@ public abstract class HeadlessWithBootstrappingAbstract extends HeadlessAbstract
         }
 
         final String integTestModuleFqcn = System.getProperty("isis.integTest.module");
-        LOG.info("isis.integTest.module = {}", integTestModuleFqcn);
+        log.info("isis.integTest.module = {}", integTestModuleFqcn);
         String moduleFqcn = integTestModuleFqcn;
 
         if(moduleFqcn == null) {
             final String headlessModuleFqcn = System.getProperty("isis.headless.module");
-            LOG.info("isis.headless.module = {}", headlessModuleFqcn);
+            log.info("isis.headless.module = {}", headlessModuleFqcn);
             moduleFqcn = headlessModuleFqcn;
         }
 
-        final Module moduleToUse =
-                !_Strings.isNullOrEmpty(moduleFqcn)
-                ? InstanceUtil.createInstance(moduleFqcn, Module.class)
-                        : module;
         this.isisSystemBootstrapper =
-                IsisSystemBootstrapper.of(logConfig, IsisConfiguration.buildFromModuleTree(moduleToUse));
+                IsisSystemBootstrapper.of(logConfig, config);
     }
 
 

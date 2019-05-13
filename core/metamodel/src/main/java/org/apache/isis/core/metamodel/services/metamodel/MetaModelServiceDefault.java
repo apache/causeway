@@ -27,8 +27,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
@@ -38,7 +36,6 @@ import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
@@ -254,17 +251,6 @@ public class MetaModelServiceDefault implements MetaModelService {
             return null;
         }
         return commandFacet.getProcessor();
-    }
-
-    @Override
-    public AppManifest2 getAppManifest2() {
-        AppManifest appManifest = getAppManifest();
-        return appManifest instanceof AppManifest2 ? (AppManifest2) appManifest : null;
-    }
-
-    @Override
-    public AppManifest getAppManifest() {
-        return _Config.getConfiguration().getAppManifest();
     }
 
     @Override

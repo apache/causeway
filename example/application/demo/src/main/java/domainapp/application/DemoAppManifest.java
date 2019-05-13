@@ -18,23 +18,16 @@
  */
 package domainapp.application;
 
-import org.apache.isis.applib.AppManifestAbstract;
-
-import domainapp.dom.DemoModule;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * Bootstrap the application.
  */
-public class DemoAppManifest extends AppManifestAbstract {
+@Configuration
+@PropertySource("isis.properties")
+public class DemoAppManifest {
 
-    public static final Builder BUILDER = Builder
-            .forModules(DemoModule.class)
-            .withConfigurationPropertiesFile(DemoAppManifest.class, "isis.properties")
-            .withAuthMechanism("shiro")
-            ;
-
-    public DemoAppManifest() {
-        super(BUILDER);
-    }
+    //TODO[2112] add missing producers
 
 }

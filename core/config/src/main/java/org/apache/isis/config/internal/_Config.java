@@ -18,12 +18,14 @@
  */
 package org.apache.isis.config.internal;
 
+import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.builder.IsisConfigurationBuilder;
+
+import lombok.val;
 
 /**
  * @since 2.0.0-M2
@@ -46,12 +48,12 @@ public class _Config {
     
     // -- BUILDER ACCESS
     
-    public static void acceptBuilder(Consumer<IsisConfigurationBuilder> builderConsumer) {
-        builderConsumer.accept(getConfigurationBuilder());
+    public static void acceptBuilder(Consumer<Properties> builderConsumer) {
+        builderConsumer.accept(properties());
     }
     
-    public static <T> T applyBuilder(Function<IsisConfigurationBuilder, T> builderMapper) {
-        return builderMapper.apply(getConfigurationBuilder());
+    public static <T> T applyBuilder(Function<Properties, T> builderMapper) {
+        return builderMapper.apply(properties());
     }
     
     /**
@@ -64,52 +66,77 @@ public class _Config {
         _Context.remove(_Config_LifecycleResource.class);
     }
     
-    // -- CONFIG SHORTCUTS
+    // -- CONFIG SHORTCUTS ...
     
     
-    
-    // -- BUILDER SHORTCUTS
+    // -- PROPERTY ACCESS SHORTCUTS
     
     public static void put(String key, String value) {
-        getConfigurationBuilder().put(key, value);
+        properties().put(key, value);
     }
     
     public static void put(String key, boolean value) {
-        getConfigurationBuilder().put(key, ""+value);
+        properties().put(key, ""+value);
     }
     
     public static String peekAtString(String key) {
-        return getConfigurationBuilder().peekAtString(key);
+        return properties().getProperty(key);
     }
     
     public static String peekAtString(String key, String defaultValue) {
-        return getConfigurationBuilder().peekAtString(key, defaultValue);
+        return properties().getProperty(key, defaultValue);
     }
     
-    public static boolean peekAtBoolean(String key) {
-        return getConfigurationBuilder().peekAtBoolean(key);
+    public static Boolean peekAtBoolean(String key) {
+        return toBoolean(properties().get(key));
     }
     
     public static boolean peekAtBoolean(String key, boolean defaultValue) {
-        return getConfigurationBuilder().peekAtBoolean(key, defaultValue);
+        val booleanValue = toBoolean(properties().get(key));
+        return booleanValue!=null
+                ? booleanValue
+                        : defaultValue;
     }
     
+    // -- CONVERSION
     
-    // -- HELPER -- BUILDER
+    public static Boolean toBoolean(Object object) {
+        if(object==null) {
+            return null;
+        }
+        val literal = ("" + object).toLowerCase();
+        switch (literal) {
+        case "false":
+        case "0":
+        case "no":
+            return Boolean.FALSE;
+            
+        case "true":
+        case "1":
+        case "yes":
+            return Boolean.TRUE;
+            
+        default:
+            break;
+        }
+        return null;
+    }
     
-    private static IsisConfigurationBuilder getConfigurationBuilder() {
+    // -- HELPER - PROPERTIES
+    
+    private static Properties properties() {
         _Config_LifecycleResource lifecycle = getLifecycleResource();
-        IsisConfigurationBuilder builder = lifecycle.getBuilder()
+        val properties = lifecycle.getMutableProperties()
                 .orElseThrow(lifecycle::configurationAlreadyInUse);
-        return builder;
+        return properties;
     }
     
-    private static IsisConfigurationBuilder createBuilder() {
-        final IsisConfigurationBuilder builder = IsisConfigurationBuilder.getDefault(); 
-        return builder;
+    private static Properties defaultProperties() {
+        val properties = new Properties(); 
+        return properties;
     }
-
-    // -- HELPER -- LIFECYCLE
+    
+    // -- HELPER - LIFECYCLE
     
     private static _Config_LifecycleResource getLifecycleResource() {
         final _Config_LifecycleResource lifecycle = 
@@ -118,7 +145,7 @@ public class _Config {
     }
 
     private static _Config_LifecycleResource createLifecycleResource() {
-        return new _Config_LifecycleResource(createBuilder());
+        return new _Config_LifecycleResource(defaultProperties());
     }
     
     

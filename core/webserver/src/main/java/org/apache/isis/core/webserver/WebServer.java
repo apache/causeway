@@ -24,8 +24,6 @@ import java.util.Arrays;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.context._Context;
@@ -36,10 +34,10 @@ import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import joptsimple.ValueConversionException;
 import joptsimple.ValueConverter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class WebServer {
-
-    private static final Logger LOG = LoggerFactory.getLogger(WebServer.class);
 
     public static void main(final String[] args) {
         new WebServer().run(args);
@@ -107,7 +105,7 @@ public class WebServer {
 
         final int port = optionSet.valueOf(portOptSpec);
         // create and start
-        LOG.info("Running Jetty on port '{}' to serve the web application", port);
+        log.info("Running Jetty on port '{}' to serve the web application", port);
 
         final Server jettyServer = new Server(port);
         final WebAppContext context = new WebAppContext("src/main/webapp", "");
@@ -120,7 +118,7 @@ public class WebServer {
         long start = System.currentTimeMillis();
         try {
             jettyServer.start();
-            LOG.info("Started the application in {}ms", System.currentTimeMillis() - start);
+            log.info("Started the application in {}ms", System.currentTimeMillis() - start);
 
         } catch (final Exception ex) {
             try {

@@ -28,10 +28,11 @@ import domainapp.modules.simple.fixture.SimpleObject_persona;
  * Run the app but setting up any fixtures.
  */
 public class DomainAppAppManifestWithFixtures extends DomainAppAppManifest {
-
-    @Override
-    protected void overrideFixtures(final List<Class<? extends FixtureScript>> fixtureScripts) {
-        fixtureScripts.add(SimpleObject_persona.PersistAll.class);
-    }
+    
+  //FIXME[2112] needs migration
+//    @Override
+//    protected void overrideFixtures(final List<Class<? extends FixtureScript>> fixtureScripts) {
+//        fixtureScripts.add(SimpleObject_persona.PersistAll.class);
+//    }
 
 }

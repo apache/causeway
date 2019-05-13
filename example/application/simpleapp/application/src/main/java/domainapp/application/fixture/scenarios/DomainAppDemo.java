@@ -20,11 +20,8 @@ package domainapp.application.fixture.scenarios;
 
 import javax.inject.Inject;
 
-import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
-
-import domainapp.modules.simple.fixture.SimpleObject_persona;
 
 public class DomainAppDemo extends FixtureScript {
 
@@ -34,10 +31,11 @@ public class DomainAppDemo extends FixtureScript {
 
     @Override
     protected void execute(final ExecutionContext ec) {
-        AppManifest2 appManifest2 = metaModelService.getAppManifest2();
-        ec.executeChild(this, appManifest2.getTeardownFixture());
-        ec.executeChild(this, appManifest2.getRefDataSetupFixture());
-        ec.executeChild(this, new SimpleObject_persona.PersistAll());
+        //FIXME[2112] needs migration
+//        AppManifest2 appManifest2 = metaModelService.getAppManifest2();
+//        ec.executeChild(this, appManifest2.getTeardownFixture());
+//        ec.executeChild(this, appManifest2.getRefDataSetupFixture());
+//        ec.executeChild(this, new SimpleObject_persona.PersistAll());
     }
 
     @Inject

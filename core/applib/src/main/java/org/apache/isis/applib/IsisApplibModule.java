@@ -21,7 +21,7 @@ package org.apache.isis.applib;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "module")
-public class IsisApplibModule extends ModuleAbstract {
+public class IsisApplibModule {
 
     // -- UI EVENT CLASSES
 

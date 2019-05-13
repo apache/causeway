@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.integtestsupport;
 
+import com.fasterxml.jackson.databind.Module;
+
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.slf4j.event.Level;
 
-import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.Module;
+import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
 import org.apache.isis.core.runtime.headless.HeadlessWithBootstrappingAbstract;
 import org.apache.isis.core.runtime.headless.IsisSystem;
@@ -70,29 +70,8 @@ public abstract class IntegrationTestJupiter extends HeadlessWithBootstrappingAb
 
     }
 
-    protected IntegrationTestJupiter(final Module module) {
-        this(new LogConfig(Level.INFO), module, AppManifest.Util.MemDb.HSQLDB);
-    }
-
-    protected IntegrationTestJupiter(final Module module, final AppManifest.Util.MemDb memDb) {
-        this(new LogConfig(Level.INFO), module, memDb);
-    }
-
-    protected IntegrationTestJupiter(
-            final LogConfig logConfig,
-            final Module module) {
-        this(logConfig, module, AppManifest.Util.MemDb.HSQLDB);
-    }
-
-    protected IntegrationTestJupiter(
-            final LogConfig logConfig,
-            final Module module,
-            final AppManifest.Util.MemDb memDb) {
-        super(logConfig,
-                ModuleBuilder.create(module)
-                .withHeadlessTransactionSupport()
-                .withIntegrationTestConfigFallback(memDb)
-                .build() );
+    protected IntegrationTestJupiter(final LogConfig logConfig, IsisConfiguration isisConfiguration) {
+        super(logConfig, isisConfiguration);
     }
 
     @Override

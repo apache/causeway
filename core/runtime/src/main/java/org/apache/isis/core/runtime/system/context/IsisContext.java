@@ -20,14 +20,12 @@ package org.apache.isis.core.runtime.system.context;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Strings;
@@ -135,17 +133,9 @@ public interface IsisContext {
      * @throws NoSuchElementException - if IsisConfiguration not managed
      */
     public static IsisConfiguration getConfiguration() {
-        return _Config.getConfiguration(); // currently not utilizing CDI, to support unit testing
+        return _Config.getConfiguration(); //TODO[2112] currently not utilizing CDI, to support unit testing
     }
     
-    /**
-     * @return framework's ServicesInjector
-     * @throws NullPointerException - if AppManifest not resolvable
-     */
-    public static AppManifest getAppManifest() {
-        return Objects.requireNonNull(getConfiguration().getAppManifest()); 
-    }
-
     /**
      * @return framework's SpecificationLoader
      * @throws NoSuchElementException - if SpecificationLoader not managed
@@ -253,7 +243,7 @@ public interface IsisContext {
         }
 
         final Map<String, String> map = 
-                ConfigurationConstants.maskIfProtected(configuration.asMap(), TreeMap::new);
+                ConfigurationConstants.maskIfProtected(configuration.copyToMap(), TreeMap::new);
 
         String head = String.format("ISIS %s (%s) ", 
                 IsisConfiguration.getVersion(), getEnvironment().getDeploymentType().name());

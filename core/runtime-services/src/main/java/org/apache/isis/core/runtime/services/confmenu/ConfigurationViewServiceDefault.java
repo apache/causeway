@@ -55,7 +55,7 @@ public class ConfigurationViewServiceDefault implements ConfigurationViewService
         
         final Map<String, ConfigurationProperty> map = new HashMap<>();
 
-        _Config.getConfiguration().asMap().forEach((k, v)->add(k, v, map));
+        _Config.getConfiguration().copyToMap().forEach((k, v)->add(k, v, map));
 
         // for convenience add some additional info to the top ...
         add("[ Isis Version ]", IsisConfiguration.getVersion(), map);

@@ -438,7 +438,7 @@ public class DomainObjectContainer {
     @Deprecated
     @Programmatic
     public List<String> getPropertyNames() {
-        return new ArrayList<>(IsisContext.getConfiguration().asMap().keySet());
+        return new ArrayList<>(IsisContext.getConfiguration().copyToMap().keySet());
     }
 
     /**

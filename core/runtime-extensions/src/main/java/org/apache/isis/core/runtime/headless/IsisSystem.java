@@ -22,12 +22,10 @@ package org.apache.isis.core.runtime.headless;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.FixtureClock;
-import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.config.AppConfigLocator;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.runtime.headless.auth.AuthenticationRequestNameOnly;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
@@ -71,23 +69,18 @@ public final class IsisSystem {
 
     public static IsisSystem ofConfiguration(IsisConfiguration isisConfiguration) {
 
-        AppManifest appManifest = isisConfiguration.getAppManifest();
         AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
 
-        return new IsisSystem(appManifest, authenticationRequest);
+        return new IsisSystem(authenticationRequest);
     }
 
     // -- constructor, fields
 
-    protected final AppManifest appManifest;
     protected final AuthenticationRequest authenticationRequestIfAny;
     protected AuthenticationSession authenticationSession;
 
 
-    private IsisSystem(
-            final AppManifest appManifest,
-            final AuthenticationRequest authenticationRequestIfAny) {
-        this.appManifest = appManifest;
+    private IsisSystem(final AuthenticationRequest authenticationRequestIfAny) {
         this.authenticationRequestIfAny = authenticationRequestIfAny;
     }
 
@@ -124,7 +117,7 @@ public final class IsisSystem {
 
             // finalize the config (build and regard immutable)
             // as a side-effect bootstrap CDI, if the environment we are running on does not already have its own 
-            _Blackhole.consume(AppConfigLocator.getAppConfig());
+            _Config.getConfiguration();
 
             isisSessionFactory = IsisContext.getSessionFactory();
             

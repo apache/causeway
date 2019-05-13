@@ -31,12 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.config.AppConfigLocator;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.NotFoundPolicy;
-import org.apache.isis.config.IsisConfiguration.ContainsPolicy;
-import org.apache.isis.config.builder.IsisConfigurationBuilder;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.webapp.modules.WebModule;
 import org.apache.isis.core.webapp.modules.WebModuleContext;
 
@@ -81,11 +76,8 @@ public class IsisWebAppContextListener implements ServletContextListener {
         
         putContextPathIfPresent(servletContext.getContextPath());
         
-        @SuppressWarnings("unused") // finalize the config (build and regard immutable)
-        IsisConfiguration isisConfiguration = AppConfigLocator.getAppConfig().isisConfiguration();
-        
-        //[2039] environment priming no longer suppoerted
-        //_Config.acceptBuilder(IsisContext.EnvironmentPrimer::primeEnvironment);
+        // finalize the config (build and regard immutable)
+        _Config.getConfiguration();
 
         final WebModuleContext webModuleContext = new WebModuleContext(servletContext);
         
@@ -104,13 +96,13 @@ public class IsisWebAppContextListener implements ServletContextListener {
         
         LOG.info("=== DONE === ServletContext initialized.");
     }
-
-    void addConfigurationResourcesForDeploymentType(
-            final IsisConfigurationBuilder isisConfigurationBuilder) {
-        final String resourceName = 
-                IsisContext.getEnvironment().getDeploymentType().name().toLowerCase() + ".properties";
-        isisConfigurationBuilder.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE, ContainsPolicy.IGNORE);
-    }
+//
+//    void addConfigurationResourcesForDeploymentType(
+//            final IsisConfigurationBuilder isisConfigurationBuilder) {
+//        final String resourceName = 
+//                IsisContext.getEnvironment().getDeploymentType().name().toLowerCase() + ".properties";
+//        isisConfigurationBuilder.addConfigurationResource(resourceName, NotFoundPolicy.CONTINUE, ContainsPolicy.IGNORE);
+//    }
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {

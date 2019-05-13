@@ -71,8 +71,8 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     protected ServiceRegistry mockServiceRegistry;
     @Mock
     protected TranslationService mockTranslationService;
-
-    @Mock    protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock   
+    protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
 
     protected IdentifiedHolder facetHolder;
 

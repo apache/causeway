@@ -93,64 +93,64 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
  */
 public interface AppManifest {
 
-    /**
-     * A list of classes, each of which representing the root of one of the modules containing services and possibly
-     * entities, which together makes up the running application.
-     *
-     * <p>
-     *     The package of each such class is used as the basis for searching for domain services and registered
-     *     entities.  As such it replaces and overrides both the
-     *     <tt>isis.services.ServicesInstallerFromAnnotation.packagePrefix</tt> key (usually found in the
-     *     <tt>isis.properties</tt> file) and the
-     *     <tt>isis.persistor.datanucleus.RegisterEntities.packagePrefix</tt> key (usually found in the
-     *     <tt>persistor_datanucleus.properties</tt> file).  The value of the <tt>isis.services-installer</tt>
-     *     configuration property is also ignored.
-     * </p>
-     */
-    public List<Class<?>> getModules();
-
-    /**
-     * If non-null, overrides the value of <tt>isis.services</tt> configuration property to specify a list of
-     * additional classes to be instantiated as domain services (over and above the {@link DomainService}-annotated
-     * services defined via {@link #getModules()}.
-     *
-     * <p>
-     *     Normally we recommend services are defined exclusively through {@link #getModules()}, and that this method
-     *     should therefore return an empty list.  However, this method exists to support those use cases where either the
-     *     service required does not have a {@link DomainService} annotation, or where it does have the annotation
-     *     but its containing module cannot (for whatever reason) be listed under {@link #getModules()}.
-     * </p>
-     */
-    public List<Class<?>> getAdditionalServices();
-
-    /**
-     * If non-null, overrides the value of <tt>isis.authentication</tt> configuration property to specify the
-     * authentication mechanism.
-     *
-     * <p>
-     *     Ignored for integration tests (which always uses the 'bypass' mechanism).
-     * </p>
-     */
-    public String getAuthenticationMechanism();
-
-    /**
-     * If non-null, overrides the value of <tt>isis.authorization</tt> configuration property.
-     *
-     * <p>
-     *     Ignored for integration tests (which always uses the 'bypass' mechanism).
-     * </p>
-     */
-    public String getAuthorizationMechanism();
-
-    /**
-     * If non-null, overrides the value of <tt>isis.fixtures</tt> configuration property.
-     */
-    public List<Class<? extends FixtureScript>> getFixtures();
-
-    /**
-     * Overrides for any other configuration properties.
-     */
-    public Map<String,String> getConfigurationProperties();
+//    /**
+//     * A list of classes, each of which representing the root of one of the modules containing services and possibly
+//     * entities, which together makes up the running application.
+//     *
+//     * <p>
+//     *     The package of each such class is used as the basis for searching for domain services and registered
+//     *     entities.  As such it replaces and overrides both the
+//     *     <tt>isis.services.ServicesInstallerFromAnnotation.packagePrefix</tt> key (usually found in the
+//     *     <tt>isis.properties</tt> file) and the
+//     *     <tt>isis.persistor.datanucleus.RegisterEntities.packagePrefix</tt> key (usually found in the
+//     *     <tt>persistor_datanucleus.properties</tt> file).  The value of the <tt>isis.services-installer</tt>
+//     *     configuration property is also ignored.
+//     * </p>
+//     */
+//    public List<Class<?>> getModules();
+//
+//    /**
+//     * If non-null, overrides the value of <tt>isis.services</tt> configuration property to specify a list of
+//     * additional classes to be instantiated as domain services (over and above the {@link DomainService}-annotated
+//     * services defined via {@link #getModules()}.
+//     *
+//     * <p>
+//     *     Normally we recommend services are defined exclusively through {@link #getModules()}, and that this method
+//     *     should therefore return an empty list.  However, this method exists to support those use cases where either the
+//     *     service required does not have a {@link DomainService} annotation, or where it does have the annotation
+//     *     but its containing module cannot (for whatever reason) be listed under {@link #getModules()}.
+//     * </p>
+//     */
+//    public List<Class<?>> getAdditionalServices();
+//
+//    /**
+//     * If non-null, overrides the value of <tt>isis.authentication</tt> configuration property to specify the
+//     * authentication mechanism.
+//     *
+//     * <p>
+//     *     Ignored for integration tests (which always uses the 'bypass' mechanism).
+//     * </p>
+//     */
+//    public String getAuthenticationMechanism();
+//
+//    /**
+//     * If non-null, overrides the value of <tt>isis.authorization</tt> configuration property.
+//     *
+//     * <p>
+//     *     Ignored for integration tests (which always uses the 'bypass' mechanism).
+//     * </p>
+//     */
+//    public String getAuthorizationMechanism();
+//
+//    /**
+//     * If non-null, overrides the value of <tt>isis.fixtures</tt> configuration property.
+//     */
+//    public List<Class<? extends FixtureScript>> getFixtures();
+//
+//    /**
+//     * Overrides for any other configuration properties.
+//     */
+//    public Map<String,String> getConfigurationProperties();
 
     /**
      * Holds the set of domain services, persistent entities and fixture scripts.services
@@ -260,36 +260,36 @@ public interface AppManifest {
 
     }
     
-    // -- NOOP
-    
-    static final AppManifest NOOP = new AppManifest() {
-        @Override public List<Class<?>> getModules() {
-            return null;
-        }
-        @Override public List<Class<?>> getAdditionalServices() {
-            return null;
-        }
-
-        @Override public String getAuthenticationMechanism() {
-            return null;
-        }
-
-        @Override public String getAuthorizationMechanism() {
-            return null;
-        }
-
-        @Override public List<Class<? extends FixtureScript>> getFixtures() {
-            return null;
-        }
-
-        @Override public Map<String, String> getConfigurationProperties() {
-            return null;
-        }
-    };
-    
-    public static AppManifest noop() {
-        return NOOP;
-    }
+//    // -- NOOP
+//    
+//    static final AppManifest NOOP = new AppManifest() {
+//        @Override public List<Class<?>> getModules() {
+//            return null;
+//        }
+//        @Override public List<Class<?>> getAdditionalServices() {
+//            return null;
+//        }
+//
+//        @Override public String getAuthenticationMechanism() {
+//            return null;
+//        }
+//
+//        @Override public String getAuthorizationMechanism() {
+//            return null;
+//        }
+//
+//        @Override public List<Class<? extends FixtureScript>> getFixtures() {
+//            return null;
+//        }
+//
+//        @Override public Map<String, String> getConfigurationProperties() {
+//            return null;
+//        }
+//    };
+//    
+//    public static AppManifest noop() {
+//        return NOOP;
+//    }
     
     // -- UTIL
 

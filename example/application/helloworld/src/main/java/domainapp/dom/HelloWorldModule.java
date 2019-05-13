@@ -18,8 +18,11 @@
  */
 package domainapp.dom;
 
-import org.apache.isis.applib.ModuleAbstract;
+import org.springframework.context.annotation.Configuration;
 
-public class HelloWorldModule extends ModuleAbstract {
+@Configuration
+public class HelloWorldModule {
+    
+  //TODO[2112] add missing producers
 
 }

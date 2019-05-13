@@ -16,12 +16,17 @@
  */
 package org.apache.isis.testdomain.jdo;
 
-import org.apache.isis.core.integtestsupport.IntegrationTestJupiter;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolExecutionMode;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 
-public abstract class JdoTestDomainIntegTest extends IntegrationTestJupiter {
+public abstract class JdoTestDomainIntegTest /*extends IntegrationTestJupiter*/ {
 
-    protected JdoTestDomainIntegTest() {
-        super(new JdoTestDomainModule());
+    protected FixtureScripts fixtureScripts;
+    
+    protected void setup() {
+        ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = 
+                ThreadPoolExecutionMode.SEQUENTIAL_WITHIN_CALLING_THREAD;
     }
 
 }

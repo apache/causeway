@@ -21,8 +21,6 @@ package org.apache.isis.applib.services.metamodel;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.AppManifest;
-import org.apache.isis.applib.AppManifest2;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -81,16 +79,6 @@ public interface MetaModelService {
          */
         RELAXED
     }
-
-    /**
-     * @return as {@link #getAppManifest()}, downcasted (else null).
-     */
-    AppManifest2 getAppManifest2();
-
-    /**
-     * @return the {@link AppManifest} used to bootstrap the application.
-     */
-    AppManifest getAppManifest();
 
     CommandDtoProcessor commandDtoProcessorFor(String memberIdentifier);
 

@@ -18,23 +18,20 @@
  */
 package domainapp.application.manifest;
 
-import org.apache.isis.applib.AppManifestAbstract2;
-
-import domainapp.application.DomainAppApplicationModule;
-
 /**
  * Bootstrap the application.
  */
-public class DomainAppAppManifest extends AppManifestAbstract2 {
+public class DomainAppAppManifest {
 
-    public static final Builder BUILDER = Builder
-            .forModule(new DomainAppApplicationModule())
-            .withConfigurationPropertiesFile(
-                    DomainAppAppManifest.class, "isis-non-changing.properties")
-            .withAuthMechanism("shiro");
-
-    public DomainAppAppManifest() {
-        super(BUILDER);
-    }
+  //FIXME[2112] needs migration
+//    public static final Builder BUILDER = Builder
+//            .forModule(new DomainAppApplicationModule())
+//            .withConfigurationPropertiesFile(
+//                    DomainAppAppManifest.class, "isis-non-changing.properties")
+//            .withAuthMechanism("shiro");
+//
+//    public DomainAppAppManifest() {
+//        super(BUILDER);
+//    }
 
 }

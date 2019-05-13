@@ -22,16 +22,17 @@ package org.apache.isis.core.metamodel.facets.actions.action;
 import java.lang.reflect.Method;
 import java.util.UUID;
 
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.After;
+import org.junit.Before;
+
 import org.apache.isis.applib.services.HasUniqueId;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.ActionDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Before;
 
 public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -62,7 +63,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         
         // PRODUCTION
         
-        _Config.clear();
+        super.setUpFacetedMethodAndParameter();
         
         facetFactory = new ActionAnnotationFacetFactory();
 

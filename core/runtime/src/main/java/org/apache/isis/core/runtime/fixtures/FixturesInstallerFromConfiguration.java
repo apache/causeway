@@ -22,14 +22,14 @@ package org.apache.isis.core.runtime.fixtures;
 import java.util.List;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstract {
-
-    private static final Logger LOG = LoggerFactory.getLogger(FixturesInstallerFromConfiguration.class);
 
     public FixturesInstallerFromConfiguration() {
         super();
@@ -37,20 +37,23 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
 
     protected void addFixturesTo(final FixturesInstallerDelegate delegate) {
         
-        final List<Class<? extends FixtureScript>> fixtureClasses = 
-                configuration.getAppManifest().getFixtures();
+        //FIXME[2112]
+        _Exceptions.throwNotImplemented();
+        
+        final List<Class<? extends FixtureScript>> fixtureClasses = null;
+                //configuration.getAppManifest().getFixtures();
 
         try {
             boolean fixtureLoaded = false;
             for (final Class<? extends FixtureScript> fixtureClass : fixtureClasses) {
                 
-                LOG.info("  adding fixture {}", fixtureClass.getName());
+                log.info("  adding fixture {}", fixtureClass.getName());
                 final Object fixture = InstanceUtil.createInstance(fixtureClass);
                 fixtureLoaded = true;
                 delegate.addFixture(fixture);
             }
             if (!fixtureLoaded) {
-                LOG.debug("No fixtures loaded from configuration");
+                log.debug("No fixtures loaded from configuration");
             }
         } catch (final IllegalArgumentException | SecurityException e) {
             throw new IsisException(e);

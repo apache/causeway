@@ -20,12 +20,11 @@ package domainapp.application.integtests;
 
 import org.apache.isis.core.integtestsupport.IntegrationTestAbstract3;
 
-import domainapp.application.DomainAppApplicationModule;
+public abstract class DomainAppIntegTestAbstract /*extends IntegrationTestAbstract3*/ {
 
-public abstract class DomainAppIntegTestAbstract extends IntegrationTestAbstract3 {
-
-    public DomainAppIntegTestAbstract() {
-        super(new DomainAppApplicationModule());
-    }
+  //FIXME[2112] needs migration
+//    public DomainAppIntegTestAbstract() {
+//        super(new DomainAppApplicationModule());
+//    }
 
 }

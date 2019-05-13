@@ -31,9 +31,7 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
-import org.apache.isis.applib.AppManifest;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -65,8 +63,8 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
 
         final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
 
-        final AppManifest appManifest = InstanceUtil.createInstance(this.appManifest, AppManifest.class);
-        IsisConfiguration.buildFromAppManifest(appManifest); // build and finalize config
+        // build and finalize config
+        _Config.getConfiguration();
         
         val isisSessionFactory = IsisContext.getSessionFactory();
         try {
