@@ -89,16 +89,29 @@ public interface IsisConfiguration {
 //     * @since 2.0.0-M2
 //     */
 //    public AppManifest getAppManifest();
+    
+    IsisConfiguration copy();
 
     /**
      * Creates a new IsisConfiguration containing the properties starting with
      * the specified prefix. The names of the new properties will have the
-     * prefixed stripped. This is similar to the {@link #getProperties(String)}
+     * prefixed stripped. This is similar to the {@link #subset(String)}
      * method, except the property names have their prefixes removed.
      *
-     * @see #getProperties(String)
+     * @see #subset(String)
      */
-    IsisConfiguration createSubset(String prefix);
+    IsisConfiguration subsetWithNamesStripped(String prefix);
+    
+    /**
+     * Creates a new IsisConfiguration containing the properties starting with
+     * the specified prefix. The names of the properties in the copy are the
+     * same as in the original, ie the prefix is not removed. This is similar to
+     * the {@link #subsetWithNamesStripped(String)} method except the names of the
+     * properties are not altered when copied.
+     *
+     * @see #subsetWithNamesStripped(String)
+     */
+    IsisConfiguration subset(String withPrefix);
 
     /**
      * Gets the boolean value for the specified name where no value or 'on' will
@@ -198,17 +211,6 @@ public interface IsisConfiguration {
     int getInteger(String name, int defaultValue);
 
     /**
-     * Creates a new IsisConfiguration containing the properties starting with
-     * the specified prefix. The names of the properties in the copy are the
-     * same as in the original, ie the prefix is not removed. This is similar to
-     * the {@link #createSubset(String)} method except the names of the
-     * properties are not altered when copied.
-     *
-     * @see #createSubset(String)
-     */
-    IsisConfiguration getProperties(String withPrefix);
-
-    /**
      * Returns the configuration property with the specified name. If there is
      * no matching property then null is returned.
      */
@@ -247,6 +249,8 @@ public interface IsisConfiguration {
     default boolean explicitAnnotationsForActions() {
         return getBoolean("isis.reflector.explicitAnnotations.action");
     }
+
+    
     
 
 }

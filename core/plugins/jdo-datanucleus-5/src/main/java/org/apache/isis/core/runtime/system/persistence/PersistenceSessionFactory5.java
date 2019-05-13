@@ -93,10 +93,10 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         final RegisterEntities registerEntities = new RegisterEntities();
         final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
         
-        final IsisConfiguration jdoObjectstoreConfig = configuration.createSubset(
+        final IsisConfiguration jdoObjectstoreConfig = configuration.subsetWithNamesStripped(
                 JDO_OBJECTSTORE_CONFIG_PREFIX);
 
-        final IsisConfiguration dataNucleusConfig = configuration.createSubset(DATANUCLEUS_CONFIG_PREFIX);
+        final IsisConfiguration dataNucleusConfig = configuration.subsetWithNamesStripped(DATANUCLEUS_CONFIG_PREFIX);
         final Map<String, String> datanucleusProps = dataNucleusConfig.copyToMap();
         addDataNucleusPropertiesIfRequired(datanucleusProps);
 

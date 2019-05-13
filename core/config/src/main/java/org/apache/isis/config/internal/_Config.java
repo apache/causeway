@@ -18,10 +18,11 @@
  */
 package org.apache.isis.config.internal;
 
-import java.util.Properties;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
 
@@ -48,11 +49,11 @@ public class _Config {
     
     // -- BUILDER ACCESS
     
-    public static void acceptBuilder(Consumer<Properties> builderConsumer) {
+    public static void acceptBuilder(Consumer<Map<String, String>> builderConsumer) {
         builderConsumer.accept(properties());
     }
     
-    public static <T> T applyBuilder(Function<Properties, T> builderMapper) {
+    public static <T> T applyBuilder(Function<Map<String, String>, T> builderMapper) {
         return builderMapper.apply(properties());
     }
     
@@ -66,10 +67,8 @@ public class _Config {
         _Context.remove(_Config_LifecycleResource.class);
     }
     
-    // -- CONFIG SHORTCUTS ...
     
-    
-    // -- PROPERTY ACCESS SHORTCUTS
+    // -- PROPERTY ACCESS BEFORE FINALIZING CONFIG
     
     public static void put(String key, String value) {
         properties().put(key, value);
@@ -79,60 +78,41 @@ public class _Config {
         properties().put(key, ""+value);
     }
     
+    // -- PROPERTY PEEKING
+    
     public static String peekAtString(String key) {
-        return properties().getProperty(key);
+        return properties().get(key);
     }
     
     public static String peekAtString(String key, String defaultValue) {
-        return properties().getProperty(key, defaultValue);
+        val stringValue = properties().get(key);
+        return stringValue!=null
+                ? stringValue
+                        : defaultValue;
     }
     
     public static Boolean peekAtBoolean(String key) {
-        return toBoolean(properties().get(key));
+        return _Config_Parsers.parseBoolean(properties().get(key));
     }
     
     public static boolean peekAtBoolean(String key, boolean defaultValue) {
-        val booleanValue = toBoolean(properties().get(key));
+        val booleanValue = _Config_Parsers.parseBoolean(properties().get(key));
         return booleanValue!=null
                 ? booleanValue
                         : defaultValue;
     }
     
-    // -- CONVERSION
-    
-    public static Boolean toBoolean(Object object) {
-        if(object==null) {
-            return null;
-        }
-        val literal = ("" + object).toLowerCase();
-        switch (literal) {
-        case "false":
-        case "0":
-        case "no":
-            return Boolean.FALSE;
-            
-        case "true":
-        case "1":
-        case "yes":
-            return Boolean.TRUE;
-            
-        default:
-            break;
-        }
-        return null;
-    }
-    
     // -- HELPER - PROPERTIES
     
-    private static Properties properties() {
+    private static Map<String, String> properties() {
         _Config_LifecycleResource lifecycle = getLifecycleResource();
         val properties = lifecycle.getMutableProperties()
                 .orElseThrow(lifecycle::configurationAlreadyInUse);
         return properties;
     }
     
-    private static Properties defaultProperties() {
-        val properties = new Properties(); 
+    private static Map<String, String> defaultProperties() {
+        val properties = _Maps.<String, String>newHashMap(); 
         return properties;
     }
     

@@ -18,23 +18,24 @@
  */
 package org.apache.isis.config.internal;
 
+import java.util.Map;
 import java.util.Optional;
-import java.util.Properties;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.config.IsisConfiguration;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 class _Config_LifecycleResource {
     
-    private final Properties mutableProperties; 
+    private final Map<String, String> mutableProperties; 
     private final _Lazy<IsisConfiguration> configuration;
     
-    _Config_LifecycleResource(final Properties mutableProperties) {
+    _Config_LifecycleResource(final Map<String, String> mutableProperties) {
         requires(mutableProperties, "mutableProperties");
         this.mutableProperties = mutableProperties;
         this.configuration = _Lazy.threadSafe(this::build);
@@ -49,7 +50,7 @@ class _Config_LifecycleResource {
      * is to ensure, immutability once config was 'finalized'. 
      * @return
      */
-    Optional<Properties> getMutableProperties() {
+    Optional<Map<String, String>> getMutableProperties() {
         if(!configuration.isMemoized()) {
             return Optional.of(mutableProperties);    
         }
@@ -67,9 +68,17 @@ class _Config_LifecycleResource {
             this.configurationBuildStacktrace = e;
         }
         
+        val config =  _Config_Instance.ofProperties(
+                _Config_trim.trim(mutableProperties), 
+                _Config_Parsers::parseBoolean,
+                _Config_Parsers::parseInteger,
+                _Config_Parsers::parseColor,
+                _Config_Parsers::parseFont,
+                _Config_Parsers::parseList);
+        
         log.info("=== BUILT/DONE ===");
         
-        return _Config_Instance.ofProperties(mutableProperties);
+        return config;
         
     }
     

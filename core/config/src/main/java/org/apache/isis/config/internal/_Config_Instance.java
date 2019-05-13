@@ -21,117 +21,171 @@ package org.apache.isis.config.internal;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Map;
-import java.util.Properties;
+import java.util.function.Function;
 
+import javax.annotation.Nullable;
+
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.config.IsisConfiguration;
 
+import static org.apache.isis.commons.internal.base._With.computeIfAbsent;
+
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 
 @RequiredArgsConstructor(staticName = "ofProperties")
 final class _Config_Instance implements IsisConfiguration {
     
-    private final Properties properties;
-
-    @Override
-    public IsisConfiguration createSubset(String prefix) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    private final Map<String, String> properties;
+    private final Function<String, Boolean> booleanParser;
+    private final Function<String, Integer> integerParser;
+    private final Function<String, Color> colorParser;
+    private final Function<String, Font> fontParser;
+    private final Function<String, String[]> listParser;
 
     @Override
     public boolean getBoolean(String name) {
-        // TODO Auto-generated method stub
-        return false;
+        return computeIfAbsent(booleanParser.apply(name), ()->false);
     }
 
     @Override
     public boolean getBoolean(String name, boolean defaultValue) {
-        // TODO Auto-generated method stub
-        return false;
+        return computeIfAbsent(booleanParser.apply(name), ()->defaultValue);
     }
 
     @Override
     public Color getColor(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        return colorParser.apply(name);
     }
 
     @Override
     public Color getColor(String name, Color defaultValue) {
-        // TODO Auto-generated method stub
-        return null;
+        return computeIfAbsent(colorParser.apply(name), ()->defaultValue);
     }
 
     @Override
     public Font getFont(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        return fontParser.apply(name);
     }
 
     @Override
     public Font getFont(String name, Font defaultValue) {
-        // TODO Auto-generated method stub
-        return null;
+        return computeIfAbsent(fontParser.apply(name), ()->defaultValue);
     }
 
     @Override
     public String[] getList(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        return computeIfAbsent(listParser.apply(name), ()->_Constants.emptyStringArray);
     }
 
     @Override
     public String[] getList(String name, String defaultListAsCommaSeparatedArray) {
-        // TODO Auto-generated method stub
-        return null;
+        return computeIfAbsent(listParser.apply(name), ()->listParser.apply(defaultListAsCommaSeparatedArray));
     }
 
     @Override
     public int getInteger(String name) {
-        // TODO Auto-generated method stub
-        return 0;
+        return computeIfAbsent(integerParser.apply(name), ()->0);
     }
 
     @Override
     public int getInteger(String name, int defaultValue) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public IsisConfiguration getProperties(String withPrefix) {
-        // TODO Auto-generated method stub
-        return null;
+        return computeIfAbsent(integerParser.apply(name), ()->defaultValue);
     }
 
     @Override
     public String getString(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        return properties.get(name);
     }
 
     @Override
     public String getString(String name, String defaultValue) {
-        // TODO Auto-generated method stub
-        return null;
+        return properties.getOrDefault(name, defaultValue);
     }
 
     @Override
     public boolean hasProperty(String name) {
-        // TODO Auto-generated method stub
-        return false;
+        return properties.containsKey(name);
     }
 
     @Override
     public boolean isEmpty() {
-        // TODO Auto-generated method stub
-        return false;
+        return properties.isEmpty();
     }
+    
+    // -- CONVERSION
 
     @Override
     public Map<String, String> copyToMap() {
-        // TODO Auto-generated method stub
-        return null;
+        Map<String, String> copy = _Maps.newHashMap();
+        properties.forEach(copy::put);
+        return copy;
+    }
+    
+    @Override
+    public IsisConfiguration copy() {
+        val copy = _Maps.<String, String>newHashMap();
+        properties.forEach(copy::put);
+        return new _Config_Instance(copy, 
+                booleanParser, 
+                integerParser, 
+                colorParser, 
+                fontParser, 
+                listParser);
+    }
+    
+    @Override
+    public IsisConfiguration subset(@Nullable String withPrefix) {
+        if(_Strings.isNullOrEmpty(withPrefix)) {
+            return copy();
+        }
+        
+        val prefixWithTerminalDot = _Strings.suffix(withPrefix, ".");
+        val filteredByPrefix = _Maps.<String, String>newHashMap();
+                
+        properties.forEach((k, v)->{
+            if(k.startsWith(prefixWithTerminalDot)) {
+                filteredByPrefix.put(k, v);
+            }
+        });
+        
+        return new _Config_Instance(filteredByPrefix, 
+                booleanParser, 
+                integerParser, 
+                colorParser, 
+                fontParser, 
+                listParser);
+    }
+    
+    @Override
+    public IsisConfiguration subsetWithNamesStripped(String withPrefix) {
+        if(_Strings.isNullOrEmpty(withPrefix)) {
+            return copy();
+        }
+        
+        val prefixWithTerminalDot = _Strings.suffix(withPrefix, ".");
+        val prefixLen = prefixWithTerminalDot.length();
+        val filteredByPrefix = _Maps.<String, String>newHashMap(); 
+                
+        properties.forEach((k, v)->{
+            if(k.startsWith(prefixWithTerminalDot)) {
+                
+                val strippedKey = k.substring(prefixLen);
+                
+                if(strippedKey.length()>0) {
+                    filteredByPrefix.put(strippedKey, v);
+                }
+            }
+        });
+        
+        return new _Config_Instance(filteredByPrefix, 
+                booleanParser, 
+                integerParser, 
+                colorParser, 
+                fontParser, 
+                listParser);
     }
 
 
