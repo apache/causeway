@@ -21,18 +21,11 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import java.util.Locale;
 
-import org.apache.isis.commons.internal.base._Strings;
-
 import org.apache.wicket.util.convert.IConverter;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 import lombok.val;

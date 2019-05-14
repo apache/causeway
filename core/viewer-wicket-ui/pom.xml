@@ -101,6 +101,10 @@
             		<groupId>javax.inject</groupId>
             		<artifactId>javax.inject</artifactId>
             	</exclusion>
+            	<exclusion>
+            		<groupId>org.ow2.asm</groupId>
+            		<artifactId>asm</artifactId>
+            	</exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -166,6 +170,16 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+        	<groupId>org.jmock</groupId>
+        	<artifactId>jmock-junit4</artifactId>
+        	<exclusions>
+        		<exclusion>
+        			<groupId>org.ow2.asm</groupId>
+        			<artifactId>asm</artifactId>
+        		</exclusion>
+        	</exclusions>
+        </dependency>
     </dependencies>
 
     <profiles>

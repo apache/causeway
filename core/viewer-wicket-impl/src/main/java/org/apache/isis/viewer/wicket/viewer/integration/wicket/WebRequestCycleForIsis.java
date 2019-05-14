@@ -207,7 +207,8 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
         @Override
         public void onDetach(RequestCycle requestCycle) {
             // detach the current @RequestScope, if any
-            val handle = requestCycle.getMetaData(REQUEST_CONTEXT_HANDLE_KEY);
+            //XXX lombok issue, cannot use val when super is referenced in same method 
+            RequestContextHandle handle = requestCycle.getMetaData(REQUEST_CONTEXT_HANDLE_KEY);
             requestCycle.setMetaData(REQUEST_CONTEXT_HANDLE_KEY, null);
             RequestContextService.closeHandle(handle);
             IRequestCycleListener.super.onDetach(requestCycle);

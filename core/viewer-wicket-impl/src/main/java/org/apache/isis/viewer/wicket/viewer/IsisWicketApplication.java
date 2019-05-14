@@ -72,6 +72,7 @@ import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
@@ -107,7 +108,6 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
-import lombok.val;
 import net.ftlines.wicketsource.WicketSource;
 
 /**
@@ -288,7 +288,8 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             @SuppressWarnings("unused")
             SharedResources sharedResources = getSharedResources();
 
-            val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
+            //XXX lombok issue, cannot use val when super is referenced in same method
+            MetaModelDeficiencies metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
             if(metaModelDeficiencies != null) {
                 log(metaModelDeficiencies.getValidationErrors());
             }

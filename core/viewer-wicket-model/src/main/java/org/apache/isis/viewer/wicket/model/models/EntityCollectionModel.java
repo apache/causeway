@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -49,6 +50,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -90,7 +92,8 @@ implements LinksProvider, UiHintContainer {
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
 
-                val isBulkLoad = IsisContext.getConfiguration().getBoolean(KEY_BULK_LOAD, false);
+                //XXX lombok issue, cannot use val here 
+                boolean isBulkLoad = IsisContext.getConfiguration().getBoolean(KEY_BULK_LOAD, false);
                 final Stream<ObjectAdapter> resolveResults = isBulkLoad
                         ? loadInBulk(entityCollectionModel)
                                 : loadOneByOne(entityCollectionModel);
@@ -99,7 +102,9 @@ implements LinksProvider, UiHintContainer {
 
             private Stream<ObjectAdapter> loadInBulk(final EntityCollectionModel model) {
 
-                val persistenceSession = IsisContext.getPersistenceSession().orElseThrow(()->_Exceptions.unrecoverable("no PersistenceSession available"));
+                //XXX lombok issue, cannot use val here 
+                PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
+                        .orElseThrow(()->_Exceptions.unrecoverable("no PersistenceSession available"));
 
                 final Stream<RootOid> rootOids = stream(model.mementoList)
                         .map(ObjectAdapterMemento::asBookmarkIfSupported)
@@ -174,7 +179,8 @@ implements LinksProvider, UiHintContainer {
                     Collections.sort(objectList, comparator);
                 }
 
-                val pojoToAdapter = IsisContext.pojoToAdapter();
+                //XXX lombok issue, cannot use val here 
+                Function<Object, ObjectAdapter> pojoToAdapter = IsisContext.pojoToAdapter();
 
                 final List<ObjectAdapter> adapterList =
                         _Lists.map(objectList, pojoToAdapter);
