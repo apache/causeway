@@ -174,7 +174,8 @@
         <assertj.version>3.11.1</assertj.version>
 
 		<mockito.version>2.23.4</mockito.version>
-        <!-- 2.8.1 depends on cglib-nodep 3.1 whereas axonframework depends on 2.2.2 -->
+		<bytebuddy.version>1.9.12</bytebuddy.version>
+
         <jmock.version>2.11.0</jmock.version>
         <easymock.version>2.5.2</easymock.version>
         <cucumber.version>1.2.4</cucumber.version>
@@ -2010,6 +2011,13 @@ ${license.additional-notes}
 					</exclusion>
 				</exclusions>
 			</dependency>
+			
+			<!-- BYTEBUDDDY -->
+			<dependency>
+				<groupId>net.bytebuddy</groupId>
+				<artifactId>byte-buddy</artifactId>
+				<version>${bytebuddy.version}</version>
+			</dependency>
 
 			<!-- MOCKITO -->
 			<dependency>
@@ -2613,7 +2621,6 @@ ${license.additional-notes}
         <module>plugins/codegen-bytebuddy</module>
         <module>plugins/codegen-javassist</module>
         <module>plugins/discovery-reflections</module>
-        <module>plugins/eventbus-axon</module>
         <module>plugins/jaxrs-resteasy-4</module>
         <module>plugins/jdo-datanucleus-5</module>
         <module>plugins/security-shiro</module>

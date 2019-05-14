@@ -35,8 +35,8 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -71,7 +71,14 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
             
         // PRODUCTION
         
-        _Context.put(IsisSessionFactory.class, mockIsisSessionFactory, false);
+        MetaModelContext.preset(MetaModelContext.builder()
+                .specificationLoader(mockSpecificationLoader)
+//                .translationService(mockTranslationService)
+//                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+//                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .authenticationSession(mockAuthenticationSession)
+                .singleton(mockIsisSessionFactory)
+                .build());
 
         context.checking(new Expectations() {
             {
@@ -90,8 +97,8 @@ public abstract class ResourceContext_ensureCompatibleAcceptHeader_ContractTest 
                 will(returnValue(mockIsisSession));
                 allowing(mockIsisSession).getAuthenticationSession();
                 will(returnValue(mockAuthenticationSession));
-                allowing(mockIsisSessionFactory).getSpecificationLoader();
-                will(returnValue(mockSpecificationLoader));
+//                allowing(mockIsisSessionFactory).getSpecificationLoader();
+//                will(returnValue(mockSpecificationLoader));
 //                allowing(mockIsisSession).getPersistenceSession();
 //                will(returnValue(mockPersistenceSession));
             }

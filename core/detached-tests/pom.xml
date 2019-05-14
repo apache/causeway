@@ -83,11 +83,6 @@
             <artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-plugins-eventbus-axon</artifactId>
-            <scope>runtime</scope>
-        </dependency>
 		<dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
@@ -137,6 +132,12 @@
 		<dependency>
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock-junit4</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>net.bytebuddy</groupId>
+					<artifactId>byte-buddy</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		
 		<!-- JDO API (non transient, provided by plugin) -->

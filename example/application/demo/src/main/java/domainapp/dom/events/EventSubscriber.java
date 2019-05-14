@@ -18,16 +18,18 @@
  */
 package domainapp.dom.events;
 
-import static domainapp.utils.DemoUtils.emphasize;
-
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+
+import org.springframework.context.event.EventListener;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+
+import static domainapp.utils.DemoUtils.emphasize;
 
 import domainapp.dom.events.EventLogMenu.EventTestProgrammaticEvent;
 import lombok.extern.java.Log;
@@ -50,8 +52,7 @@ public class EventSubscriber {
 	}
 
 	@Programmatic
-	//@com.google.common.eventbus.Subscribe
-	@org.axonframework.eventhandling.EventHandler
+	@EventListener
 	public void on(AbstractDomainEvent<?> ev) {
 		if(ev.getEventPhase() != null && !ev.getEventPhase().isExecuted()) {
 			return;

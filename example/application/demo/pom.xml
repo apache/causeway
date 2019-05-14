@@ -234,12 +234,6 @@
 			<version>${isis.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-eventbus-axon</artifactId>
-			<version>${isis.version}</version>
-		</dependency>
-
 		<!-- OTHER DEPENDENCIES -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>

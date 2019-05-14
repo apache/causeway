@@ -17,6 +17,7 @@
 package org.apache.isis.testdomain.tests;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.testdomain.jdo.Inventory;
@@ -42,7 +43,7 @@ class JdoBootstrappingTest extends JdoTestDomainIntegTest {
                 JdoTestDomainPersona.InventoryWith1Book.builder());
     }
     
-    @Test
+    @Test @Disabled //TODO[2112] activate tests
     void sampleInventoryShouldBeSetUp() {
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());

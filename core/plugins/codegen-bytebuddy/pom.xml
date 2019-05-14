@@ -29,7 +29,6 @@
     </description>
 
 	<properties>
-		<bytebuddy.version>1.9.3</bytebuddy.version>
 		<objenesis.version>2.6</objenesis.version>
 
 		<jar-plugin.automaticModuleName>org.apache.isis.plugins.codegen-bytebuddy</jar-plugin.automaticModuleName>
@@ -57,10 +56,10 @@
 
 	<dependencies>
 		<!-- compile dependencies -->
+
 		<dependency>
 			<groupId>net.bytebuddy</groupId>
 			<artifactId>byte-buddy</artifactId>
-			<version>${bytebuddy.version}</version>
 		</dependency>
 
 		<dependency>
@@ -75,6 +74,16 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock-junit4</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>net.bytebuddy</groupId>
+					<artifactId>byte-buddy</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 
 	<profiles>

@@ -91,8 +91,23 @@
 		</dependency>
 
 		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+		</dependency>
+
+		<dependency>
 		  <groupId>org.mockito</groupId>
 		  <artifactId>mockito-core</artifactId>
+		  <exclusions>
+		  	<exclusion>
+		  		<groupId>net.bytebuddy</groupId>
+		  		<artifactId>byte-buddy</artifactId>
+		  	</exclusion>
+		  	<exclusion>
+		  		<groupId>net.bytebuddy</groupId>
+		  		<artifactId>byte-buddy-agent</artifactId>
+		  	</exclusion>
+		  </exclusions>
 		</dependency>
 
 		<dependency>
@@ -124,6 +139,10 @@
 				<exclusion>
 					<groupId>org.ow2.asm</groupId>
 					<artifactId>asm</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.bytebuddy</groupId>
+					<artifactId>byte-buddy</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>

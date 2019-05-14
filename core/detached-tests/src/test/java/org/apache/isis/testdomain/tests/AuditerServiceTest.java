@@ -22,6 +22,7 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -40,6 +41,7 @@ import lombok.val;
 /**
  * Depends on {@link JdoBootstrappingTest} to succeed.
  */
+@Disabled //TODO[2112] activate tests
 class AuditerServiceTest extends JdoTestDomainIntegTest {
 
     @BeforeEach

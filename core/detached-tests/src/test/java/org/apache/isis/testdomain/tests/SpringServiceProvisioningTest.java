@@ -25,6 +25,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +42,7 @@ import lombok.val;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {JdoTestApplication.class})
+@Disabled //TODO[2112] activate tests
 class SpringServiceProvisioningTest {
 
     @BeforeEach
