@@ -19,12 +19,19 @@
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
 import java.util.IllegalFormatWidthException;
-import java.util.Optional;
+
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
@@ -33,12 +40,6 @@ import org.apache.isis.core.metamodel.services.persistsession.ObjectAdapterServi
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.jmock.Expectations;
-import org.jmock.auto.Mock;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
 
 public class ParseableFacetUsingParserTest {
 
@@ -61,6 +62,12 @@ public class ParseableFacetUsingParserTest {
 
     @Before
     public void setUp() throws Exception {
+        
+        MetaModelContext.preset(MetaModelContext.builder()
+                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .objectAdapterProvider(mockAdapterManager)
+                .build());
+        
 
         context.checking(new Expectations() {
             {
@@ -70,16 +77,6 @@ public class ParseableFacetUsingParserTest {
                 allowing(mockFacetHolder).containsFacet(ValueFacet.class);
                 will(returnValue(Boolean.FALSE));
 
-                allowing(mockServicesInjector).injectServicesInto(with(any(Object.class)));
-
-//                allowing(mockServicesInjector).getAuthenticationSessionProvider();
-//                will(returnValue(mockAuthenticationSessionProvider));
-//
-//                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
-//                will(returnValue(mockAdapterManager));
-
-                allowing(mockServiceRegistry).lookupService(AuthenticationSessionProvider.class);
-                will(returnValue(Optional.of(mockAuthenticationSessionProvider)));
             }
         });
 
