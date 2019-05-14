@@ -24,6 +24,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import lombok.val;
+
 import java.util.Collections;
 import java.util.Optional;
 
@@ -38,6 +40,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
@@ -56,50 +59,55 @@ public class MustSatisfySpecificationValidatingInteractionTest {
     private IdentifiedHolder identifiedHolder;
 
     @Mock
-    private ServiceInjector mockServicesInjector;
-    
-    @Mock
-    private ServiceRegistry mockServiceRegistry;
-
-    @Mock
     private TranslationService mockTranslationService;
 
     @Mock
     private PropertyModifyContext mockContext;
 
     private ObjectAdapter mockProposedObjectAdapter;
-    private Object mockProposedObject;
+    private ProposedObject mockProposedObject;
 
     private SpecificationAlwaysSatisfied specificationAlwaysSatisfied;
     private SpecificationNeverSatisfied specificationNeverSatisfied;
 
+    public static class ProposedObject {}
+    
     public static class Customer {}
 
     @Before
     public void setUp() throws Exception {
+        
+        MetaModelContext mmc;
+        
+        MetaModelContext.preset(mmc = MetaModelContext.builder()
+                .singleton(mockTranslationService)
+                .build());
+        
+        val serviceInjector = mmc.getServiceInjector();
+        
         identifiedHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "lastName"));
         context.checking(new Expectations() {{
-            allowing(mockServiceRegistry).lookupService(TranslationService.class);
-            will(returnValue(Optional.of(mockTranslationService)));
+//            allowing(mockServiceRegistry).lookupService(TranslationService.class);
+//            will(returnValue(Optional.of(mockTranslationService)));
         }});
 
         specificationAlwaysSatisfied = new SpecificationAlwaysSatisfied();
         specificationNeverSatisfied = new SpecificationNeverSatisfied();
-
+        
         facetForSpecificationAlwaysSatisfied = 
         		new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
         				Collections.singletonList(specificationAlwaysSatisfied), 
         				identifiedHolder, 
-        				mockServicesInjector);
+        				serviceInjector);
         
         facetForSpecificationNeverSatisfied = 
         		new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
         				Collections.singletonList(specificationNeverSatisfied), 
         				identifiedHolder, 
-        				mockServicesInjector);
+        				serviceInjector);
 
         mockProposedObjectAdapter = context.mock(ObjectAdapter.class, "proposed");
-        mockProposedObject = context.mock(Object.class, "proposedObject");
+        mockProposedObject = context.mock(ProposedObject.class, "proposedObject");
 
         context.checking(new Expectations() {
             {
