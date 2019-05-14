@@ -194,15 +194,15 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     // //////////////////////////////////////
 
     protected void onInitializeWhenViewMode() {
-        updateRegularFormComponents(InputFieldVisibility.NOT_VISIBLE, null, null, null);
+        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, null, null);
     }
 
     protected void onInitializeWhenDisabled(final String disableReason) {
-        updateRegularFormComponents(InputFieldVisibility.NOT_VISIBLE, null, null, null);
+        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, null, null);
     }
 
     protected void onInitializeWhenEnabled() {
-        updateRegularFormComponents(InputFieldVisibility.VISIBLE, null, null, null);
+        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE, null, null);
     }
 
     private FileUploadField createFileUploadField(String componentId) {
@@ -238,12 +238,12 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
     @Override
     protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
-        updateRegularFormComponents(null, InputFieldEditability.NOT_EDITABLE, disableReason, target);
+        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, disableReason, target);
     }
 
     @Override
     protected void onEnabled(final AjaxRequestTarget target) {
-        updateRegularFormComponents(null, InputFieldEditability.EDITABLE, null, target);
+        updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE, null, target);
     }
 
     protected abstract T getBlobOrClobFrom(final List<FileUpload> fileUploads);
@@ -268,12 +268,15 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         sync(formComponent, visibility, editability, disabledReason, target);
 
         final Component component = formComponent.get(ID_SCALAR_VALUE);
-        sync(component, visibility, editability, disabledReason, target);
+        final InputFieldVisibility editingWidgetVisibility = editability == InputFieldEditability.EDITABLE ?
+                InputFieldVisibility.VISIBLE :
+                InputFieldVisibility.NOT_VISIBLE;
+        sync(component, editingWidgetVisibility, null, disabledReason, target);
 
         addAcceptFilterTo(component);
         fileNameLabel = updateFileNameLabel(ID_FILE_NAME, formComponent);
 
-        updateClearLink(visibility, editability, target);
+        updateClearLink(editingWidgetVisibility, null, target);
 
         // the visibility of download link is intentionally 'backwards';
         // if in edit mode then do NOT show
@@ -305,12 +308,12 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
         if(editability != null) {
 
-            // dynamic disablement doesn't yet work, this exception is thrown when form is submitted:
-            //
-            // Caused by: java.lang.IllegalStateException: ServletRequest does not contain multipart content.
-            // One possible solution is to explicitly call Form.setMultipart(true), Wicket tries its best to
-            // auto-detect multipart forms but there are certain situation where it cannot.
-
+//            // dynamic disablement doesn't yet work, this exception is thrown when form is submitted:
+//            //
+//            // Caused by: java.lang.IllegalStateException: ServletRequest does not contain multipart content.
+//            // One possible solution is to explicitly call Form.setMultipart(true), Wicket tries its best to
+//            // auto-detect multipart forms but there are certain situation where it cannot.
+//
 //            component.setEnabled(editability == InputFieldEditability.EDITABLE);
 //
 //            final AttributeModifier title = new AttributeModifier("title", Model.of(disabledReason != null ? disabledReason : ""));
@@ -319,8 +322,6 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 //            if (target != null) {
 //                target.add(component);
 //            }
-
-            // as a workaround, use VISIBILITY instead.
 
         }
 
@@ -386,13 +387,13 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
         formComponent.addOrReplace(ajaxLink);
     
         final T blobOrClob = getBlobOrClobFromModel();
-        final Component component = formComponent.get(ID_SCALAR_IF_REGULAR_CLEAR);
-        component.setVisible(blobOrClob != null && visibility == InputFieldVisibility.VISIBLE);
-        component.setEnabled(blobOrClob != null && editability == InputFieldEditability.EDITABLE);
+        final Component clearButton = formComponent.get(ID_SCALAR_IF_REGULAR_CLEAR);
+        clearButton.setVisible(blobOrClob != null && visibility == InputFieldVisibility.VISIBLE);
+        clearButton.setEnabled(blobOrClob != null);
 
         if(target != null) {
             target.add(formComponent);
-            target.add(component);
+            target.add(clearButton);
             target.add(ajaxLink);
         }
     }
