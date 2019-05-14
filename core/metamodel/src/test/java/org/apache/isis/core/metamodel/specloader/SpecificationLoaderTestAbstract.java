@@ -19,12 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.when;
-
-import javax.enterprise.inject.Produces;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +29,6 @@ import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.i18n.TranslationService.Mode;
 import org.apache.isis.applib.services.message.MessageService;
 import org.apache.isis.commons.internal.base._Timing;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -50,40 +43,44 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.when;
+
 import lombok.val;
 
 abstract class SpecificationLoaderTestAbstract {
 
     static class Producers {
         
-        @Produces
+        //@Produces
         AuthenticationSessionProvider mockAuthenticationSessionProvider() {
             return Mockito.mock(AuthenticationSessionProvider.class);
         }
         
-        @Produces
+        //@Produces
         GridService mockGridService() {
             return Mockito.mock(GridService.class);
         }
         
-        @Produces
+        //@Produces
         ObjectAdapterService mockPersistenceSessionServiceInternal() {
             return Mockito.mock(ObjectAdapterService.class);
         }
         
-        @Produces
+        //@Produces
         MessageService mockMessageService() {
             return Mockito.mock(MessageService.class);
         }
         
-        @Produces
+        //@Produces
         TranslationService mockTranslationService() {
             val mock = Mockito.mock(TranslationService.class);
             when(mock.getMode()).thenReturn(Mode.DISABLED);
             return mock;
         }
         
-        @Produces
+        //@Produces
         SpecificationLoader getSpecificationLoader() {
             return new SpecificationLoaderDefault(
                     new ProgrammingModelFacetsJava5(DeprecatedPolicy.HONOUR),
@@ -113,8 +110,6 @@ abstract class SpecificationLoaderTestAbstract {
         
         MetaModelContext.preset(MetaModelContext.builder()
                 .specificationLoader(specificationLoader = producers.getSpecificationLoader())
-//                .serviceInjector(mockServiceInjector)
-//                .serviceRegistry(mockServiceRegistry)
                 .translationService(producers.mockTranslationService())
                 .objectAdapterProvider(mockPersistenceSessionServiceInternal = producers.mockPersistenceSessionServiceInternal())
                 .authenticationSessionProvider(mockAuthenticationSessionProvider = producers.mockAuthenticationSessionProvider())

@@ -36,10 +36,10 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.wrapper.DisabledException;
-import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.events.PropertyModifyEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.services.wrapper.events.PropertyVisibilityEvent;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -121,6 +121,13 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     public void setUp() throws Exception {
 
         // PRODUCTION
+        
+        MetaModelContext.preset(MetaModelContext.builder()
+                .specificationLoader(mockSpecificationLoader)
+                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .singleton(wrapperFactory = createWrapperFactory())
+                .build());
 
         employeeDO = new Employee();
         employeeDO.setName("Smith");
@@ -128,33 +135,15 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         getPasswordMethod = Employee.class.getMethod("getPassword");
         setPasswordMethod = Employee.class.getMethod("setPassword", String.class);
 
-        wrapperFactory = createWrapperFactory();
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
         wrapperFactory.persistenceSessionServiceInternal = mockPersistenceSessionServiceInternal;
         wrapperFactory.isisSessionFactory = mockIsisSessionFactory;
 
         context.checking(new Expectations() {
             {
-//                allowing(mockIsisSessionFactory).getServiceInjector();
-//                will(returnValue(mockServicesInjector));
 
-                allowing(mockIsisSessionFactory).getSpecificationLoader();
-                will(returnValue(mockSpecificationLoader));
-
-//                allowing(mockServiceRegistry).getPersistenceSessionServiceInternal();
-//                will(returnValue(mockPersistenceSessionServiceInternal));
-//
-//                allowing(mockPersistenceSessionServiceInternal).adapterFor(employeeDO);
-//                will(returnValue(mockEmployeeAdapter));
-//
-//                allowing(mockServicesInjector).getAuthenticationSessionProvider();
-//                will(returnValue(mockAuthenticationSessionProvider));
-//
-//                allowing(mockServicesInjector).getSpecificationLoader();
-//                will(returnValue(mockSpecificationLoader));
-
-//                allowing(mockAdapterManager).lookupAdapterFor(employeeDO);
-//                will(returnValue(mockEmployeeAdapter));
+                allowing(mockPersistenceSessionServiceInternal).adapterFor(employeeDO);
+                will(returnValue(mockEmployeeAdapter));
 
                 allowing(mockAdapterManager).adapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
@@ -195,8 +184,6 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
                 allowing(mockPasswordMember).isOneToManyAssociation();
                 will(returnValue(false));
 
-//                allowing(mockServicesInjector).lookupServiceElseFail(WrapperFactory.class);
-//                will(returnValue(wrapperFactory));
             }
         });
 

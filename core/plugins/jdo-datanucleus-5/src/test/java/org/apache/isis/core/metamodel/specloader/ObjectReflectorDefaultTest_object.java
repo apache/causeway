@@ -20,8 +20,7 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import org.datanucleus.enhancement.Persistable;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -33,7 +32,12 @@ import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAbstract {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAbstract {
 
     public abstract static class TestDomainObject implements Persistable {
     }
@@ -44,34 +48,34 @@ public class ObjectReflectorDefaultTest_object extends SpecificationLoaderTestAb
     }
 
     @Test
-    public void testType() throws Exception {
-        Assert.assertTrue(specification.isNotCollection());
+    void testType() throws Exception {
+        assertTrue(specification.isNotCollection());
     }
 
     @Test
-    public void testName() throws Exception {
-        Assert.assertEquals(TestDomainObject.class.getName(), specification.getFullIdentifier());
+    void testName() throws Exception {
+        assertEquals(TestDomainObject.class.getName(), specification.getFullIdentifier());
     }
 
     @Test
-    public void testStandardFacets() throws Exception {
-        Assert.assertNotNull(specification.getFacet(NamedFacet.class));
-        Assert.assertNotNull(specification.getFacet(DescribedAsFacet.class));
-        Assert.assertNotNull(specification.getFacet(TitleFacet.class));
-        Assert.assertNotNull(specification.getFacet(PluralFacet.class));
-        Assert.assertNotNull(specification.getFacet(ObjectValidPropertiesFacet.class));
+    void testStandardFacets() throws Exception {
+        assertNotNull(specification.getFacet(NamedFacet.class));
+        assertNotNull(specification.getFacet(DescribedAsFacet.class));
+        assertNotNull(specification.getFacet(TitleFacet.class));
+        assertNotNull(specification.getFacet(PluralFacet.class));
+        assertNotNull(specification.getFacet(ObjectValidPropertiesFacet.class));
     }
 
     @Test
-    public void testNoCollectionFacet() throws Exception {
+    void testNoCollectionFacet() throws Exception {
         final Facet facet = specification.getFacet(CollectionFacet.class);
-        Assert.assertNull(facet);
+        assertNull(facet);
     }
 
     @Test
-    public void testNoTypeOfFacet() throws Exception {
+    void testNoTypeOfFacet() throws Exception {
         final TypeOfFacet facet = specification.getFacet(TypeOfFacet.class);
-        Assert.assertNull(facet);
+        assertNull(facet);
     }
 
 }

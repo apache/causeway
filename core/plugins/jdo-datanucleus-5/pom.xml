@@ -114,6 +114,12 @@
 		
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-runtime-extensions</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-runtime-services</artifactId>
 			<scope>compile</scope>
 		</dependency>

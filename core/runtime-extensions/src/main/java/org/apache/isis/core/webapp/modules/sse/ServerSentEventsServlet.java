@@ -91,7 +91,8 @@ public class ServerSentEventsServlet extends HttpServlet {
 
         final AsyncContext asyncContext = request.startAsync();
 
-        threadPool.submit(()->fork(asyncContext, eventStream));
+        //XXX javac explicitly requires curly-braces here (to tell it we want a Runnable)
+        threadPool.submit(()->{fork(asyncContext, eventStream);});
 
     }
     

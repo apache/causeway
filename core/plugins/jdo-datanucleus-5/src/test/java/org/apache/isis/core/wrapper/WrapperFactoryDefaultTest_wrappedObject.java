@@ -37,6 +37,7 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.Oid.Factory;
@@ -50,7 +51,6 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.command.CommandDtoServiceInternal;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -90,8 +90,6 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private PersistenceSessionServiceInternal mockPersistenceSessionServiceInternal;
     @Mock
     private MessageService mockMessageService;
-    @Mock
-    private ServicesInjector mockServicesInjector;
     @Mock
     private CommandContext mockCommandContext;
     @Mock
@@ -136,7 +134,14 @@ public class WrapperFactoryDefaultTest_wrappedObject {
 
         // PRODUCTION
         
-        _Config.clear();
+        MetaModelContext.preset(MetaModelContext.builder()
+                .specificationLoader(mockSpecificationLoader)
+                .objectAdapterProvider(mockPersistenceSessionServiceInternal)
+                .authenticationSessionProvider(mockAuthenticationSessionProvider)
+                .singleton(wrapperFactory = createWrapperFactory())
+                .singleton(mockCommandContext)
+                .singleton(mockCommandDtoServiceInternal)
+                .build());
         
         employeeRepository = new EmployeeRepositoryImpl();
 
@@ -148,9 +153,6 @@ public class WrapperFactoryDefaultTest_wrappedObject {
             {
 //                allowing(mockIsisSessionFactory).getServicesInjector();
 //                will(returnValue(mockServicesInjector));
-
-                allowing(mockIsisSessionFactory).getSpecificationLoader();
-                will(returnValue(mockSpecificationLoader));
 
 //                allowing(mockServicesInjector).getPersistenceSessionServiceInternal();
 //                will(returnValue(mockPersistenceSessionServiceInternal));
@@ -228,7 +230,6 @@ public class WrapperFactoryDefaultTest_wrappedObject {
         });
 
 
-        wrapperFactory = createWrapperFactory();
         wrapperFactory.persistenceSessionServiceInternal = mockPersistenceSessionServiceInternal;
         wrapperFactory.isisSessionFactory = mockIsisSessionFactory;
         wrapperFactory.authenticationSessionProvider = mockAuthenticationSessionProvider;
@@ -301,6 +302,8 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Test
     public void shouldBeAbleToReadVisibleProperty() {
 
+        _Config.clear();
+        
         allowingEmployeeHasSmithAdapter();
 
         _Config.put("isis.reflector.facet.filterVisibility", true);
@@ -340,6 +343,8 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Test
     public void shouldBeAbleToModifyEnabledPropertyUsingSetter() {
 
+        _Config.clear();
+        
         allowingJonesStringValueAdapter();
         
         _Config.put("isis.reflector.facet.filterVisibility", true);

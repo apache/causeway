@@ -26,6 +26,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import javax.persistence.metamodel.Metamodel;
+
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Strings;
@@ -34,6 +36,7 @@ import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -133,7 +136,8 @@ public interface IsisContext {
      * @throws NoSuchElementException - if IsisConfiguration not managed
      */
     public static IsisConfiguration getConfiguration() {
-        return _Config.getConfiguration(); //TODO[2112] currently not utilizing CDI, to support unit testing
+        return MetaModelContext.current().getConfiguration();
+        //return _Config.getConfiguration(); 
     }
     
     /**
@@ -141,7 +145,8 @@ public interface IsisContext {
      * @throws NoSuchElementException - if SpecificationLoader not managed
      */
     public static SpecificationLoader getSpecificationLoader() {
-        return _Spring.getSingletonElseFail(SpecificationLoader.class);
+        return MetaModelContext.current().getSpecificationLoader();
+        //return _Spring.getSingletonElseFail(SpecificationLoader.class);
     }
 
     /**
@@ -149,7 +154,8 @@ public interface IsisContext {
      * @throws NoSuchElementException - if ServicesInjector not managed
      */
     public static ServiceInjector getServiceInjector() {
-        return _Spring.getSingletonElseFail(ServiceInjector.class);
+        return MetaModelContext.current().getServiceInjector();
+        //return _Spring.getSingletonElseFail(ServiceInjector.class);
     }
     
     /**
@@ -157,7 +163,8 @@ public interface IsisContext {
      * @throws NoSuchElementException - if ServiceRegistry not managed
      */
     public static ServiceRegistry getServiceRegistry() {
-        return _Spring.getSingletonElseFail(ServiceRegistry.class);
+        return MetaModelContext.current().getServiceRegistry();
+        //return _Spring.getSingletonElseFail(ServiceRegistry.class);
     }
     
     /**
