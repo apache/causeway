@@ -39,7 +39,9 @@ import javax.enterprise.inject.spi.CDIProvider;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Qualifier;
 
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+import org.apache.isis.commons.internal.functions._Functions.CheckedRunnable;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.commons.ioc.LifecycleContext;
 import org.apache.isis.core.commons.collections.Bin;
@@ -85,12 +87,11 @@ public final class _CDI {
             throw _Exceptions.unrecoverable("Could not resolve an instance of CDI.");
         }
         
-        //TODO[2112] we no longer embed WELD, remove ...
         // proper CDI lifecycle support utilizing the fact that WELD provides a WeldContainer that 
         // implements AutoCloseable, which we can put on the _Context, such that when _Context.clear()
         // is called, gets properly closed
-        //final CheckedRunnable onClose = () -> ((AutoCloseable)CDI.current()).close();
-        //_Context.putSingleton(_CDI_Lifecycle.class, _CDI_Lifecycle.of(onClose));
+        final CheckedRunnable onClose = () -> ((AutoCloseable)CDI.current()).close();
+        _Context.putSingleton(_CDI_Lifecycle.class, _CDI_Lifecycle.of(onClose));
         
     }
     

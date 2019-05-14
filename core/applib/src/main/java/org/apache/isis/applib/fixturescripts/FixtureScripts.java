@@ -56,7 +56,8 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
  * Rather than sub-classing, instead implement
- * {@link org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider}.  The framework will
+ * {@link org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider}.  
+ * The framework will
  * automatically provide a default implementation configured using that provider service.
  */
 public abstract class FixtureScripts extends AbstractService {
@@ -242,7 +243,7 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     private <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> cls, final String packagePrefix) {
-        throw _Exceptions.notImplemented(); //TODO[2112] Use BeanTypeRegistry
+        throw _Exceptions.notImplemented(); //TODO[2112] Use IsisBeanTypeRegistry or ServiceRegistry
     }
 
     private FixtureScript newFixtureScript(final Class<? extends FixtureScript> fixtureScriptCls) {

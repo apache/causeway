@@ -26,7 +26,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -37,6 +39,7 @@ import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@ActiveProfiles("test")
 @SpringBootTest(classes = {
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
@@ -49,12 +52,12 @@ class ServiceInjectorDefaultTest_validateServices {
 
     // -- SCENARIO
 
-    @DomainService @Component("someId")
+    @DomainService @Component("someId") @Profile("test")
     public static class DomainServiceWithSomeId {
 
     }
 
-    @DomainService @Component("someId")
+    @DomainService @Component("someId") @Profile("test")
     public static class DomainServiceWithDuplicateId {
 
     }

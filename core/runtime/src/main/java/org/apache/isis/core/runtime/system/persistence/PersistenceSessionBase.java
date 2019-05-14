@@ -21,9 +21,6 @@ import java.util.Map;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.clock.ClockService;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
@@ -46,12 +43,10 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 abstract class PersistenceSessionBase implements PersistenceSession {
-
-    // -- CONSTANTS
-
-    protected static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
     // -- FIELDS
 
@@ -111,8 +106,8 @@ abstract class PersistenceSessionBase implements PersistenceSession {
             final PersistenceManagerFactory jdoPersistenceManagerFactory,
             final FixturesInstalledStateHolder fixturesInstalledStateHolder) {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("creating {}", this);
+        if (log.isDebugEnabled()) {
+            log.debug("creating {}", this);
         }
 
         this.serviceInjector = IsisContext.getServiceInjector();

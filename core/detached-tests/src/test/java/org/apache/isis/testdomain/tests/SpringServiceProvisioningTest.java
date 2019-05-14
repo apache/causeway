@@ -16,8 +16,6 @@
  */
 package org.apache.isis.testdomain.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
@@ -25,7 +23,6 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,13 +33,15 @@ import org.apache.isis.commons.internal.resources._Json;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.testdomain.jdo.JdoTestApplication;
+import org.apache.isis.runtime.spring.IsisBoot;
+import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {JdoTestApplication.class})
-@Disabled //TODO[2112] activate tests
+@SpringBootTest(classes = {JdoTestDomainModule.class, IsisBoot.class})
 class SpringServiceProvisioningTest {
 
     @BeforeEach

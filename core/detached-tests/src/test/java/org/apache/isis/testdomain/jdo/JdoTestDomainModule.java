@@ -22,7 +22,6 @@ import javax.inject.Singleton;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.io.ClassPathResource;
 
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.WebAppConfigBean;
@@ -36,7 +35,7 @@ import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 @Configuration
-@PropertySource("isis-non-changing.properties")
+@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties")
 public class JdoTestDomainModule {
     
     @Bean @Produces @Singleton

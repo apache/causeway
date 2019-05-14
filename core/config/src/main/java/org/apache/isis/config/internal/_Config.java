@@ -19,8 +19,6 @@
 package org.apache.isis.config.internal;
 
 import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
@@ -38,24 +36,8 @@ public class _Config {
     public static IsisConfiguration getConfiguration() {
         return getLifecycleResource().getConfiguration();
     }
-    
-    public static void acceptConfig(Consumer<IsisConfiguration> configConsumer) {
-        configConsumer.accept(getConfiguration());
-    }
-    
-    public static <T> T applyConfig(Function<IsisConfiguration, T> configMapper) {
-        return configMapper.apply(getConfiguration());
-    }
-    
-    // -- BUILDER ACCESS
-    
-    public static void acceptBuilder(Consumer<Map<String, String>> builderConsumer) {
-        builderConsumer.accept(properties());
-    }
-    
-    public static <T> T applyBuilder(Function<Map<String, String>, T> builderMapper) {
-        return builderMapper.apply(properties());
-    }
+   
+    // -- CLEAR
     
     /**
      * Most likely used for testing.
@@ -67,8 +49,11 @@ public class _Config {
         _Context.remove(_Config_LifecycleResource.class);
     }
     
-    
     // -- PROPERTY ACCESS BEFORE FINALIZING CONFIG
+    
+    public static void putAll(Map<String, String> map) {
+        properties().putAll(map);
+    }
     
     public static void put(String key, String value) {
         properties().put(key, value);
@@ -127,6 +112,8 @@ public class _Config {
     private static _Config_LifecycleResource createLifecycleResource() {
         return new _Config_LifecycleResource(defaultProperties());
     }
+
+
     
     
 }

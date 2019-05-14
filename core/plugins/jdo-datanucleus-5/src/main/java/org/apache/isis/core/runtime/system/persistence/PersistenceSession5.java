@@ -235,7 +235,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             }
         } catch(final Throwable ex) {
             // ignore
-            LOG.error("close: failed to end transaction; continuing to avoid memory leakage");
+            log.error("close: failed to end transaction; continuing to avoid memory leakage");
         }
 
         // tell the proxy of all request-scoped services to invoke @PreDestroy
@@ -249,7 +249,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
             persistenceManager.close();
         } catch(final Throwable ex) {
             // ignore
-            LOG.error(
+            log.error(
                     "close: failed to close JDO persistenceManager; continuing to avoid memory leakage");
         }
 
@@ -331,14 +331,14 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
      *             if the criteria is not support by this persistor
      */
     private <T> ObjectAdapter findInstancesInTransaction(final Query<T> query, final QueryCardinality cardinality) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("findInstances using (applib) Query: {}", query);
+        if (log.isDebugEnabled()) {
+            log.debug("findInstances using (applib) Query: {}", query);
         }
 
         // TODO: unify PersistenceQuery and PersistenceQueryProcessor
         final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("maps to (core runtime) PersistenceQuery: {}", persistenceQuery);
+        if (log.isDebugEnabled()) {
+            log.debug("maps to (core runtime) PersistenceQuery: {}", persistenceQuery);
         }
 
         final PersistenceQueryProcessor<? extends PersistenceQuery> processor = lookupProcessorFor(persistenceQuery);
@@ -423,34 +423,34 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         return initialStateFromConfig;
     }
     
-
-    /**
-     * Determine if the object store has been initialized with its set of start
-     * up objects.
-     *
-     * <p>
-     * This method is called only once after the session is opened called. If it returns <code>false</code> then the
-     * framework will run the fixtures to initialise the object store.
-     *
-     * <p>
-     * Implementation looks for the {@link #INSTALL_FIXTURES_KEY} in the injected {@link #configuration configuration}.
-     *
-     * <p>
-     * By default this is not expected to be there, but utilities can add in on
-     * the fly during bootstrapping if required.
-     */
-    private boolean objectStoreIsFixturesInstalled() {
-        final boolean installFixtures = configuration.getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
-        LOG.info("isFixturesInstalled: {} = {}", INSTALL_FIXTURES_KEY, installFixtures);
-        return !installFixtures;
-    }
+//TODO[2112] remove when no longer needed
+//    /**
+//     * Determine if the object store has been initialized with its set of start
+//     * up objects.
+//     *
+//     * <p>
+//     * This method is called only once after the session is opened called. If it returns <code>false</code> then the
+//     * framework will run the fixtures to initialise the object store.
+//     *
+//     * <p>
+//     * Implementation looks for the {@link #INSTALL_FIXTURES_KEY} in the injected {@link #configuration configuration}.
+//     *
+//     * <p>
+//     * By default this is not expected to be there, but utilities can add in on
+//     * the fly during bootstrapping if required.
+//     */
+//    private boolean objectStoreIsFixturesInstalled() {
+//        final boolean installFixtures = configuration.getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
+//        log.info("isFixturesInstalled: {} = {}", INSTALL_FIXTURES_KEY, installFixtures);
+//        return !installFixtures;
+//    }
 
     // -- FETCHING
 
     @Override
     public Object fetchPersistentPojo(final RootOid rootOid) {
         Objects.requireNonNull(rootOid);
-        LOG.debug("getObject; oid={}", rootOid);
+        log.debug("getObject; oid={}", rootOid);
         
         Object result;
         try {
@@ -614,7 +614,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if (alreadyPersistedOrNotPersistable(adapter)) {
             return;
         }
-        LOG.debug("persist {}", adapter);
+        log.debug("persist {}", adapter);
 
         // previously we called the PersistingCallback here.
         // this is now done in the JDO framework synchronizer.
@@ -660,7 +660,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
         if (spec.isParented()) {
             return;
         }
-        LOG.debug("destroyObject {}", adapter);
+        log.debug("destroyObject {}", adapter);
         transactionManager.executeWithinTransaction(()->{
                 final DestroyObjectCommand command = newDestroyObjectCommand(adapter);
                 transactionManager.addCommand(command);
@@ -691,7 +691,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     private CreateObjectCommand newCreateObjectCommand(final ObjectAdapter adapter) {
         ensureOpened();
 
-        LOG.debug("create object - creating command for: {}", adapter);
+        log.debug("create object - creating command for: {}", adapter);
         if (adapter.isRepresentingPersistent()) {
             throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
         }
@@ -701,7 +701,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     private DestroyObjectCommand newDestroyObjectCommand(final ObjectAdapter adapter) {
         ensureOpened();
 
-        LOG.debug("destroy object - creating command for: {}", adapter);
+        log.debug("destroy object - creating command for: {}", adapter);
         if (!adapter.isRepresentingPersistent()) {
             throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
@@ -973,16 +973,16 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     // -- HELPER
     
     private void debugLogNotPersistentIgnoring(Object domainObject) {
-        if (LOG.isDebugEnabled() && domainObject!=null) {
+        if (log.isDebugEnabled() && domainObject!=null) {
             final Oid oid = oidFor(domainObject);
-            LOG.debug("; oid={} not persistent - ignoring", oid.enString());
+            log.debug("; oid={} not persistent - ignoring", oid.enString());
         }     
     }
 
     private void debugLogRefreshImmediately(Object domainObject) {
-        if (LOG.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             final Oid oid = oidFor(domainObject);
-            LOG.debug("refresh immediately; oid={}", oid.enString());
+            log.debug("refresh immediately; oid={}", oid.enString());
         }
     }
 

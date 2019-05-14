@@ -25,7 +25,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -35,6 +37,7 @@ import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ActiveProfiles("test")
 @SpringBootTest(classes = {
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
@@ -46,12 +49,12 @@ class ServiceInjectorDefaultTest_validateServices_happy {
     
     // -- SCENARIO
 
-    @DomainService @Component("someId")
+    @DomainService @Component("someId") @Profile("test")
     public static class DomainServiceWithSomeId {
      
     }
 
-    @DomainService @Component("otherId")
+    @DomainService @Component("otherId") @Profile("test")
     public static class DomainServiceWithDifferentId {
      
     }

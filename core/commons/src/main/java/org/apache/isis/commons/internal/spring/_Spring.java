@@ -18,11 +18,10 @@
  */
 package org.apache.isis.commons.internal.spring;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.lang.annotation.Annotation;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
@@ -38,15 +37,22 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.ResolvableType;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MapPropertySource;
+import org.springframework.core.env.PropertySource;
 
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.cdi._CDI;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.commons.ioc.LifecycleContext;
 import org.apache.isis.core.commons.collections.Bin;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
@@ -186,6 +192,36 @@ public class _Spring {
             return false;
         }
         return annotation.annotationType().getAnnotationsByType(Qualifier.class).length>0;
+    }
+
+    /**
+     * Returns a key/value pair copy of Spring's environment
+     * @param configurableEnvironment
+     */
+    public static Map<String, String> copySpringEnvironmentToMap(
+            ConfigurableEnvironment configurableEnvironment) {
+        
+        val map = _Maps.<String, String> newHashMap();
+        
+        for(Iterator<PropertySource<?>> it = configurableEnvironment.getPropertySources().iterator(); it.hasNext(); ) {
+            val propertySource = it.next();
+            if (propertySource instanceof MapPropertySource) {
+                
+                val mapPropertySource = (MapPropertySource) propertySource;
+                
+                mapPropertySource.getSource().forEach((k, v) -> {
+                    if(v==null) {
+                        return;
+                    }
+                    map.put(k, v.toString());
+                    //TODO[2112] when we override existing keys, at least output a warning
+                });
+                
+            }
+            //TODO[2112] there might be others, at least output a warning
+        }
+        
+        return map;
     }
     
 }
