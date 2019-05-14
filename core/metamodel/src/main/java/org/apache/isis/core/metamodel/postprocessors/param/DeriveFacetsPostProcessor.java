@@ -173,7 +173,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
             derivePropertyTypicalLengthFromType(property);
             derivePropertyOrCollectionDescribedAsFromType(property);
             derivePropertyDisabledFromViewModel(property);
-            derivePropertyOrCollectionImmutableFromSpec(property);
+            //derivePropertyOrCollectionImmutableFromSpec(property);
             derivePropertyDisabledFromImmutable(property);
             tweakPropertyMixinDomainEvent(objectSpecification, property);
         }
@@ -184,7 +184,7 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
 
             derivePropertyOrCollectionDescribedAsFromType(collection);
             deriveCollectionDisabledFromViewModel(collection);
-            derivePropertyOrCollectionImmutableFromSpec(collection);
+            //derivePropertyOrCollectionImmutableFromSpec(collection);
             deriveCollectionDisabledFromImmutable(collection);
 
             // ... see if any of its actions has a collection parameter of the same type
