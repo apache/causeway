@@ -65,10 +65,6 @@ public class EventBusServiceDefaultTest {
                     public boolean isRegisteredBean(Class<?> cls) {
                         return false;
                     }
-
-                    @Override
-                    public void validateServices() {
-                    }
 					
 				}; 
         	}

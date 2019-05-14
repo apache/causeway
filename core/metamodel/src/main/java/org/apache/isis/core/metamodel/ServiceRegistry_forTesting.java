@@ -80,13 +80,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
 
     @Override
     public Stream<BeanAdapter> streamRegisteredBeans() {
-        if(registeredBeans.isEmpty()) {
-            streamSingletons()
-            .map(this::toBeanAdapter)
-            .filter(_NullSafe::isPresent)
-            .forEach(registeredBeans::add);
-        }
-        return registeredBeans.stream();
+        return registeredBeans().stream();
     }
 
     @Override
@@ -99,12 +93,17 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         throw _Exceptions.notImplemented();
     }
 
-    @Override
-    public void validateServices() {
-        throw _Exceptions.notImplemented();
-    }
-    
     // -- HELPER
+    
+    private Set<BeanAdapter> registeredBeans() {
+        if(registeredBeans.isEmpty()) {
+            streamSingletons()
+            .map(this::toBeanAdapter)
+            .filter(_NullSafe::isPresent)
+            .forEach(registeredBeans::add);
+        }
+        return registeredBeans;
+    }
     
     private Stream<Object> streamSingletons() {
         // lookup the MetaModelContextBean's list of singletons

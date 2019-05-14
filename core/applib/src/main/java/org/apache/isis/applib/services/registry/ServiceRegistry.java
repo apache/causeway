@@ -143,13 +143,6 @@ public interface ServiceRegistry {
         return isRegisteredBean(cls);
     }
 
-    /**
-     * Verify domain service Ids are unique.
-     * @throws IllegalStateException - if validation fails
-     */
-    void validateServices();
-
-
     // -- PRIORITY ANNOTATION HANDLING
 
     static class InstanceByPriorityComparator implements Comparator<Object> {

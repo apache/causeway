@@ -118,12 +118,10 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         val authorizationManager = IsisContext.getAuthorizationManager();
         val runtimeEventService = serviceRegistry.lookupServiceElseFail(RuntimeEventService.class);
 
-        serviceRegistry.validateServices();
-
         // ... and make IsisSessionFactory available via the IsisContext static for those
         // places where we cannot yet inject.
 
-        _Context.putSingleton(IsisSessionFactory.class, this);
+        _Context.putSingleton(IsisSessionFactory.class, this); //TODO[2112] should no longer be required, since Spring manages this instance
 
         runtimeEventService.fireAppPreMetamodel();
 
@@ -174,7 +172,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         // do postConstruct.  We store the initializer to do preDestroy on shutdown
         serviceInitializer = new ServiceInitializer(configuration, 
                 Collections.emptyList()
-//TODO [2033] remove initializer, CDI takes over 
+//TODO [2033] remove initializer? ... Spring/CDI takes over 
 //                serviceRegistry.streamServices().collect(Collectors.toList())
                 );
         

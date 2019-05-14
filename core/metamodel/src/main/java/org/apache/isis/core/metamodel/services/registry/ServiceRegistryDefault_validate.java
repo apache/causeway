@@ -34,6 +34,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 /**
  * @since 2.0.0-M3
  */
+@Deprecated //TODO[2112] no longer needed
 final class ServiceRegistryDefault_validate  {
     
     static void validateUniqueDomainServiceId(final Stream<BeanAdapter> domainServiceAdapters) {

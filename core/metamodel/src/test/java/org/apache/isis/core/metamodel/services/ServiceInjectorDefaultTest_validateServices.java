@@ -19,44 +19,64 @@
 
 package org.apache.isis.core.metamodel.services;
 
-import java.util.NoSuchElementException;
-
 import javax.inject.Inject;
 
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(classes = {
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,
         ServiceInjectorDefaultTest.Producers.class,
+        ServiceInjectorDefaultTest_validateServices.DomainServiceWithSomeId.class,
+        ServiceInjectorDefaultTest_validateServices.DomainServiceWithDuplicateId.class
 })
+@Disabled("Spring takes care of ambiguity and should not boot up this test.")
 class ServiceInjectorDefaultTest_validateServices {
 
     // -- SCENARIO
 
-    @DomainService
+    @DomainService @Component("someId")
     public static class DomainServiceWithSomeId {
-        public String getId() { return "someId"; }
+
     }
 
-    @DomainService
+    @DomainService @Component("someId")
     public static class DomainServiceWithDuplicateId {
-        public String getId() { return "someId"; }
+
     }
 
     // -- TESTS
-
+    
     @Inject private ServiceRegistry serviceRegistry;
+    @Inject private ApplicationContext applicationContext;
+    
+    @BeforeEach
+    void setup() {
+        _Context.clear();
+        _Spring.init(applicationContext);    
+    }
 
-    @Test
+    @Test 
     public void validate_DomainServicesWithDuplicateIds() {
-        Assertions.assertThrows(NoSuchElementException.class, serviceRegistry::validateServices);
+        
+        // ensure we actually test a ServiceRegistryDefault 
+        assertEquals(ServiceRegistryDefault.class, serviceRegistry.getClass());
+        
+        fail("Spring Boot should not provision the given scenario."); 
     }
 
 }

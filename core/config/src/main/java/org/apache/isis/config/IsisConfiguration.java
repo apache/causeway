@@ -23,6 +23,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.Map;
 
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.config.internal._Config;
+
 /**
  * Immutable set of properties representing the configuration of the running
  * system.
@@ -199,6 +202,13 @@ public interface IsisConfiguration {
      * A mutable copy of the current set of properties (name/values) held in this configuration.
      */
     Map<String, String> copyToMap();
+
+    // -- DEPRECATIONS
+    
+    @Deprecated //TODO[2112] remove once external projects are migrated to new Spring Boot integration
+    public static IsisConfiguration buildFromAppManifest(AppManifest appManifest) {
+        return _Config.getConfiguration();
+    }
     
 
 }

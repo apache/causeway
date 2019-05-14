@@ -82,13 +82,4 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
         .anyMatch(obj->obj.getClass().equals(cls));
     }
 
-    @Override
-    public void validateServices() {
-        ServiceRegistryDefault_validate.validateUniqueDomainServiceId(
-                streamRegisteredBeans()
-                .filter(BeanAdapter::isDomainService)
-                );
-    }
-
-
 }
