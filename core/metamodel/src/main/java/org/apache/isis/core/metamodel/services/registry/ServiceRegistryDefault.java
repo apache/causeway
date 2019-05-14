@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.services.registry;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -31,7 +30,6 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.commons.ioc.BeanAdapter;
-import org.apache.isis.core.commons.collections.Bin;
 
 /**
  * @since 2.0.0
@@ -40,7 +38,6 @@ import org.apache.isis.core.commons.collections.Bin;
 public final class ServiceRegistryDefault implements ServiceRegistry {
 
     private final Set<BeanAdapter> registeredBeans = _Sets.newHashSet();
-    private final Set<Object> serviceCache = _Sets.newHashSet();
 
     @Override
     public boolean isDomainServiceType(Class<?> cls) {
@@ -60,26 +57,11 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
         return registeredBeans.stream();
     }
 
-    @Override
-    @Deprecated //FIXME [2033] this is bad, we should not even need to do this; root problem are ObjectAdapters requiring pojos
-    public Stream<Object> streamServices() {
-        if(serviceCache.isEmpty()) {
-            streamRegisteredBeans()
-            .filter(BeanAdapter::isDomainService)
-            .map(BeanAdapter::getInstance)
-            .filter(Bin::isCardinalityOne)
-            .map(Bin::getSingleton)
-            .map(Optional::get)
-            .forEach(serviceCache::add);
-        }
-        return serviceCache.stream();
-    }
-
+    
     @Override
     public boolean isRegisteredBean(Class<?> cls) {
-        //FIXME [2033] this is poorly implemented, should not require service objects.
-        return streamServices()
-        .anyMatch(obj->obj.getClass().equals(cls));
+        return streamRegisteredBeans()
+        .anyMatch(bean->bean.getBeanClass().equals(cls));
     }
 
 }

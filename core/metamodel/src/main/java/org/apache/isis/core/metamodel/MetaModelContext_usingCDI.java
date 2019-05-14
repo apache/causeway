@@ -139,8 +139,8 @@ class MetaModelContext_usingCDI implements MetaModelContext {
         	
         	val objectAdapterProvider = getObjectAdapterProvider();
         	
-            return getServiceRegistry().streamServices()
-            .map(objectAdapterProvider::adapterFor) 
+        	return getServiceRegistry().streamRegisteredBeans()
+            .map(objectAdapterProvider::adapterForBean) 
             .peek(serviceAdapter->{
                 val oid = serviceAdapter.getOid();
                 if(oid.isTransient()) {

@@ -18,13 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-
 import java.util.List;
 
 import org.hamcrest.Matchers;
@@ -57,6 +50,13 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public class ApplicationFeatureRepositoryDefaultTest {
 
@@ -173,8 +173,8 @@ public class ApplicationFeatureRepositoryDefaultTest {
                 allowing(mockActThatIsHidden).getSemantics();
                 will(returnValue(SemanticsOf.SAFE));
 
-                allowing(mockServiceRegistry).streamServices();
-                will(returnValue(_Lists.newArrayList().stream()));
+//                allowing(mockServiceRegistry).streamServices();
+//                will(returnValue(_Lists.newArrayList().stream()));
             }});
 
             // then
@@ -265,7 +265,7 @@ public class ApplicationFeatureRepositoryDefaultTest {
             super.setUp();
 
             context.checking(new Expectations() {{
-                allowing(mockServiceRegistry).streamServices();
+                allowing(mockServiceRegistry).streamRegisteredBeans();
                 will(returnValue(_Lists.newArrayList().stream()));
 
                 allowing(mockSpecificationLoader).currentSpecifications();

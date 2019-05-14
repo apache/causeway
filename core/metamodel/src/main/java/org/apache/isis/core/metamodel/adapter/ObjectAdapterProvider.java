@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ManagedObject;
@@ -51,6 +52,8 @@ public interface ObjectAdapterProvider {
      * @return standalone (value) or root adapter
      */
     @Nullable ObjectAdapter adapterFor(@Nullable Object domainObject);
+    
+    @Nullable ObjectAdapter adapterForBean(@Nullable BeanAdapter bean);
     
     /**
      * @return collection adapter.
@@ -112,7 +115,11 @@ public interface ObjectAdapterProvider {
         default ObjectAdapter adapterFor(Object domainObject) {
             return getObjectAdapterProvider().adapterFor(domainObject);
         }
-
+        
+        default ObjectAdapter adapterForBean(BeanAdapter bean) {
+            return getObjectAdapterProvider().adapterForBean(bean);
+        }
+        
         default ObjectAdapter adapterForCollection(
                 final Object pojo,
                 final RootOid parentOid,

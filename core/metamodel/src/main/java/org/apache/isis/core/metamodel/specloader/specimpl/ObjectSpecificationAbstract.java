@@ -39,6 +39,7 @@ import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -769,8 +770,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
-    private Stream<Object> streamServicePojos() {
-        return context.getServiceRegistry().streamServices();
+    private Stream<BeanAdapter> streamServiceBeans() {
+        return context.getServiceRegistry().streamRegisteredBeans();
     }
 
     // -- contributee associations (properties and collections)
@@ -780,20 +781,22 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return Collections.emptyList();
         }
         final List<ObjectAssociation> contributeeAssociations = _Lists.newArrayList();
-        streamServicePojos()
-            .forEach(servicePojo->addContributeeAssociationsIfAny(servicePojo, contributeeAssociations));
+        streamServiceBeans()
+            .forEach(serviceBean->addContributeeAssociationsIfAny(serviceBean, contributeeAssociations));
         return contributeeAssociations;
     }
 
     private void addContributeeAssociationsIfAny(
-            final Object servicePojo, final List<ObjectAssociation> contributeeAssociationsToAppendTo) {
-        final Class<?> serviceClass = servicePojo.getClass();
+            final BeanAdapter serviceBean, 
+            final List<ObjectAssociation> contributeeAssociationsToAppendTo) {
+        
+        final Class<?> serviceClass = serviceBean.getBeanClass();
         final ObjectSpecification specification = specificationLoader.loadSpecification(serviceClass,
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         if (specification == this) {
             return;
         }
-        final List<ObjectAssociation> contributeeAssociations = createContributeeAssociations(servicePojo);
+        final List<ObjectAssociation> contributeeAssociations = createContributeeAssociations(serviceBean);
         contributeeAssociationsToAppendTo.addAll(contributeeAssociations);
     }
 
@@ -820,8 +823,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return true;
     }
     
-    private List<ObjectAssociation> createContributeeAssociations(final Object servicePojo) {
-        final Class<?> serviceClass = servicePojo.getClass();
+    private List<ObjectAssociation> createContributeeAssociations(final BeanAdapter serviceBean) {
+        final Class<?> serviceClass = serviceBean.getBeanClass();
         final ObjectSpecification specification = specificationLoader.loadSpecification(serviceClass,
                 IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
         final Stream<ObjectAction> serviceActions = specification
@@ -830,13 +833,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return serviceActions
             .filter(this::canAdd)
             .map(serviceAction->(ObjectActionDefault) serviceAction)
-            .map(createContributeeAssociationFunctor(servicePojo, this))
+            .map(createContributeeAssociationFunctor(serviceBean, this))
             .collect(Collectors.toList());
   
     }
 
     private Function<ObjectActionDefault, ObjectAssociation> createContributeeAssociationFunctor(
-            final Object servicePojo,
+            final BeanAdapter serviceBean,
             final ObjectSpecification contributeeType) {
         
         return new Function<ObjectActionDefault, ObjectAssociation>(){
@@ -852,9 +855,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                     final ObjectActionDefault input,
                     final ObjectSpecification returnType) {
                 if (returnType.isNotCollection()) {
-                    return new OneToOneAssociationContributee(servicePojo, input, contributeeType);
+                    return new OneToOneAssociationContributee(serviceBean, input, contributeeType);
                 } else {
-                    return new OneToManyAssociationContributee(servicePojo, input, contributeeType);
+                    return new OneToManyAssociationContributee(serviceBean, input, contributeeType);
                 }
             }
         };
@@ -967,8 +970,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return Collections.emptyList();
         }
         final List<ObjectAction> contributeeActions = _Lists.newArrayList();
-        streamServicePojos()
-            .forEach(servicePojo->addContributeeActionsIfAny(servicePojo, contributeeActions));
+        streamServiceBeans()
+            .forEach(serviceBean->addContributeeActionsIfAny(serviceBean, contributeeActions));
         return contributeeActions;
     }
 

@@ -184,21 +184,13 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     private void postConstructOnRequestScopedServices() {
-        serviceRegistry.streamServices()
-        .forEach(service->{
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_postConstruct();
-            }
-        });
+        serviceRegistry.select(RequestScopedService.class)
+        .forEach(RequestScopedService::__isis_postConstruct);
     }
 
     private void startRequestOnRequestScopedServices() {
-        serviceRegistry.streamServices()
-        .forEach(service->{
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_startRequest(serviceInjector);
-            }
-        });
+        serviceRegistry.select(RequestScopedService.class)
+        .forEach(service->service.__isis_startRequest(serviceInjector));
     }
 
     private Command createCommand() {
@@ -267,21 +259,13 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     private void endRequestOnRequestScopeServices() {
-        serviceRegistry.streamServices()
-        .forEach(service->{
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_endRequest();
-            }
-        });
+        serviceRegistry.select(RequestScopedService.class)
+        .forEach(RequestScopedService::__isis_endRequest);
     }
 
     private void preDestroyOnRequestScopedServices() {
-        serviceRegistry.streamServices()
-        .forEach(service->{
-            if(service instanceof RequestScopedService) {
-                ((RequestScopedService)service).__isis_preDestroy();
-            }
-        });
+        serviceRegistry.select(RequestScopedService.class)
+        .forEach(RequestScopedService::__isis_preDestroy);
     }
 
     private void completeCommandFromInteractionAndClearDomainEvents() {

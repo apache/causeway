@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -40,7 +41,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public class OneToOneAssociationContributee extends OneToOneAssociationDefault implements ContributeeMember {
 
-    private final Object servicePojo;
+    private final BeanAdapter serviceBean;
     private final ObjectAction serviceAction;
 
     /**
@@ -52,13 +53,13 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
     private final Identifier identifier;
 
     public OneToOneAssociationContributee(
-            final Object servicePojo,
+            final BeanAdapter serviceBean,
             final ObjectActionDefault serviceAction,
             final ObjectSpecification contributeeType) {
         
         super(serviceAction.getFacetedMethod(), serviceAction.getReturnType());
 
-        this.servicePojo = servicePojo;
+        this.serviceBean = serviceBean;
 
         this.serviceAction = serviceAction;
 
@@ -151,7 +152,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationDefault i
     }
 
     private ObjectAdapter getServiceAdapter() {
-        return getObjectAdapterProvider().adapterFor(servicePojo);
+        return getObjectAdapterProvider().adapterForBean(serviceBean);
     }
 
     // -- Contributee impl - getServiceContributedBy()

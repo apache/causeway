@@ -84,13 +84,9 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     }
 
     @Override
-    public Stream<Object> streamServices() {
-        throw _Exceptions.notImplemented();
-    }
-
-    @Override
     public boolean isRegisteredBean(Class<?> cls) {
-        throw _Exceptions.notImplemented();
+        return streamRegisteredBeans()
+                .anyMatch(bean->bean.getBeanClass().equals(cls));
     }
 
     // -- HELPER

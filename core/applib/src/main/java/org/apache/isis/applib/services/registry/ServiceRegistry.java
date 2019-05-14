@@ -52,11 +52,13 @@ public interface ServiceRegistry {
     boolean isDomainServiceType(Class<?> cls);
 
     /**
-     * Obtains a child Instance for the given required type and additional required qualifiers. 
+     * Obtains a Bin container containing any matching instances for the given required type 
+     * and additional required qualifiers. 
      * @param type
      * @param qualifiers
-     * @return an optional, empty if passed two instances of the same qualifier type, or an 
-     * instance of an annotation that is not a qualifier type
+     * @return non-null
+     * 
+     * @since 2.0.0
      */
     default public <T> Bin<T> select(
             final Class<T> type, Annotation[] qualifiers){
@@ -66,12 +68,20 @@ public interface ServiceRegistry {
         return _Spring.select(type, _Spring.filterQualifiers(qualifiers));
     }
 
+    /**
+     * Obtains a Bin container containing any matching instances for the given required type. 
+     * @param type
+     * @return non-null
+     * 
+     * @since 2.0.0
+     */
     default public <T> Bin<T> select(final Class<T> type){
         return select(type, _Constants.emptyAnnotations);
     }
 
     /**
-     * Returns all bean adapters implementing the requested type.
+     * Streams all bean adapters implementing the requested type.
+     * @since 2.0.0
      */
     default Stream<BeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType) {
         return streamRegisteredBeans()
@@ -115,15 +125,6 @@ public interface ServiceRegistry {
                 .orElseThrow(()->
                 new NoSuchElementException("Could not locate service of type '" + serviceClass + "'"));
     }
-
-    /**
-     * 
-     * @deprecated use streamRegisteredBeans() instead, then on call-site
-     * don't keep service instances, instead keep BeanAdpaters 
-     */
-    @Deprecated //TODO [2033] as long as services are wrapped into ObjectAdapters that require a 
-    // pojo, this is still required
-    Stream<Object> streamServices();
 
     /**
      * @param cls

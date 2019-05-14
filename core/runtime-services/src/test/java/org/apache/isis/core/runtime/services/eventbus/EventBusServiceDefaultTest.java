@@ -16,15 +16,12 @@
  */
 package org.apache.isis.core.runtime.services.eventbus;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 
@@ -44,29 +41,7 @@ public class EventBusServiceDefaultTest {
         
         eventBusService = new EventBusServiceDefault() {
         	{
-        		serviceRegistry = new ServiceRegistry() {
-
-                    @Override
-                    public boolean isDomainServiceType(Class<?> cls) {
-                        return false;
-                    }
-
-                    @Override
-                    public Stream<BeanAdapter> streamRegisteredBeans() {
-                        return null;
-                    }
-
-                    @Override
-                    public Stream<Object> streamServices() {
-                        return null;
-                    }
-
-                    @Override
-                    public boolean isRegisteredBean(Class<?> cls) {
-                        return false;
-                    }
-					
-				}; 
+        		serviceRegistry = Mockito.mock(ServiceRegistry.class);
         	}
         };
     }

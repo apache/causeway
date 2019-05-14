@@ -18,9 +18,6 @@
  */
 package org.apache.isis.core.metamodel.services.appfeat;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.config.internal._Config.getConfiguration;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +29,6 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
@@ -41,6 +37,7 @@ import org.apache.isis.applib.services.appfeat.ApplicationMemberType;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -57,6 +54,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.config.internal._Config.getConfiguration;
+
 @Singleton
 public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRepository {
 
@@ -72,7 +72,6 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
     private static final String KEY = "isis.services.applicationFeatures.init";
 
-    @Programmatic
     @PostConstruct
     public void init() {
         if(isEagerInitialize()) {
@@ -104,8 +103,8 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
     }
 
     private Collection<ObjectSpecification> primeMetaModel() {
-        serviceRegistry.streamServices()
-            .forEach(service->specificationLoader.loadSpecification(service.getClass()));
+        serviceRegistry.streamRegisteredBeans()
+            .forEach(bean->specificationLoader.loadSpecification(bean.getBeanClass()));
         return specificationLoader.currentSpecifications();
     }
 
@@ -342,15 +341,15 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
      * </p>
      */
     private boolean isSuperClassOfService(final ObjectSpecification spec) {
-        final List<Object> registeredServices = serviceRegistry.streamServices()
+        final List<BeanAdapter> registeredServices = serviceRegistry.streamRegisteredBeans()
                 .collect(Collectors.toList());
 
         final Class<?> specClass = spec.getCorrespondingClass();
 
         // is this class a supertype or the actual type of one of the services?
         boolean serviceCls = false;
-        for (final Object registeredService : registeredServices) {
-            final Class<?> serviceClass = registeredService.getClass();
+        for (final BeanAdapter bean : registeredServices) {
+            final Class<?> serviceClass = bean.getBeanClass();
             if (specClass.isAssignableFrom(serviceClass)) {
                 serviceCls = true;
             }
@@ -384,7 +383,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
 
     // -- packageFeatures, classFeatures, memberFeatures
-    @Programmatic
+    
     public ApplicationFeature findFeature(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         switch (featureId.getType()) {
@@ -398,19 +397,19 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         throw new IllegalArgumentException("Feature has unknown feature type " + featureId.getType());
     }
 
-    @Programmatic
+    
     public ApplicationFeature findPackage(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return packageFeatures.get(featureId);
     }
 
-    @Programmatic
+    
     public ApplicationFeature findClass(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return classFeatures.get(featureId);
     }
 
-    @Programmatic
+    
     public ApplicationFeature findMember(final ApplicationFeatureId featureId) {
         initializeIfRequired();
         return memberFeatures.get(featureId);
@@ -419,7 +418,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
 
     // -- allFeatures, allPackages, allClasses, allMembers
-    @Programmatic
+    
     public Collection<ApplicationFeature> allFeatures(final ApplicationFeatureType featureType) {
         initializeIfRequired();
         if (featureType == null) {
@@ -436,37 +435,37 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
         throw new IllegalArgumentException("Unknown feature type " + featureType);
     }
 
-    @Programmatic
+    
     public Collection<ApplicationFeature> allPackages() {
         initializeIfRequired();
         return packageFeatures.values();
     }
 
-    @Programmatic
+    
     public Collection<ApplicationFeature> allClasses() {
         initializeIfRequired();
         return classFeatures.values();
     }
 
-    @Programmatic
+    
     public Collection<ApplicationFeature> allMembers() {
         initializeIfRequired();
         return memberFeatures.values();
     }
 
-    @Programmatic
+    
     public Collection<ApplicationFeature> allProperties() {
         initializeIfRequired();
         return propertyFeatures.values();
     }
 
-    @Programmatic
+    
     public Collection<ApplicationFeature> allCollections() {
         initializeIfRequired();
         return collectionFeatures.values();
     }
 
-    @Programmatic
+    
     public Collection<ApplicationFeature> allActions() {
         initializeIfRequired();
         return actionFeatures.values();
@@ -474,7 +473,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
 
 
     // -- packageNames, packageNamesContainingClasses, classNamesContainedIn, memberNamesOf
-    @Override @Programmatic
+    @Override 
     public Set<String> packageNames() {
         initializeIfRequired();
         return stream(allFeatures(ApplicationFeatureType.PACKAGE))
@@ -482,7 +481,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 .collect(Collectors.toSet());
     }
 
-    @Override @Programmatic
+    @Override 
     public Set<String> packageNamesContainingClasses(final ApplicationMemberType memberType) {
         initializeIfRequired();
         final Collection<ApplicationFeature> packages = allFeatures(ApplicationFeatureType.PACKAGE);
@@ -493,7 +492,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 .collect(Collectors.toSet());
     }
 
-    @Override @Programmatic
+    @Override 
     public Set<String> classNamesContainedIn(final String packageFqn, final ApplicationMemberType memberType) {
         initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
@@ -508,7 +507,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 .collect(Collectors.toSet());
     }
 
-    @Override @Programmatic
+    @Override 
     public Set<String> classNamesRecursivelyContainedIn(final String packageFqn) {
         initializeIfRequired();
         final ApplicationFeatureId packageId = ApplicationFeatureId.newPackage(packageFqn);
@@ -523,7 +522,7 @@ public class ApplicationFeatureRepositoryDefault implements ApplicationFeatureRe
                 .collect(Collectors.toSet());
     }
 
-    @Override @Programmatic
+    @Override 
     public Set<String> memberNamesOf(
             final String packageFqn,
             final String className,

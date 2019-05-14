@@ -27,6 +27,7 @@ import javax.inject.Singleton;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -75,6 +76,11 @@ public class ObjectAdapterServiceDefault implements ObjectAdapterService {
 		return null;
 		//throw _Exceptions.unmatchedCase("UNKNOWN ManagedObject type: " + pojo.getClass());
 	}
+	
+    @Override
+    public ObjectAdapter adapterForBean(BeanAdapter bean) {
+        return ps().adapterForBean(bean);
+    }
 
 	@Override
 	public ObjectAdapter adapterForCollection(

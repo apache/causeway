@@ -29,7 +29,7 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 
 /**
  * package private mixin for ObjectAdapterContext
@@ -89,18 +89,21 @@ class ObjectAdapterContext_ServiceLookup {
         
         StopWatch watch = _Timing.now();
         
-        final ServicesByIdResource lookupResource = new ServicesByIdResource();
+        val servicesByIdResource = new ServicesByIdResource();
+        val adapterProvider = objectAdapterContext.getObjectAdapterProvider();
         
-        serviceRegistry.streamServices()
-        .map(objectAdapterContext.getObjectAdapterProvider()::adapterFor)
+        serviceRegistry.streamRegisteredBeans()
+        .map(adapterProvider::adapterForBean)
         .forEach(serviceAdapter->{
             Assert.assertFalse("expected to not be 'transient'", serviceAdapter.getOid().isTransient());
-            lookupResource.servicesById.put((RootOid)serviceAdapter.getOid() , serviceAdapter.getPojo());
+            servicesByIdResource.servicesById.put(
+                    (RootOid)serviceAdapter.getOid(),
+                    serviceAdapter.getPojo());
         });
         
         objectAdapterContext.printContextInfo("took (µs) "+watch.stop().getMicros());
         
-        return lookupResource;
+        return servicesByIdResource;
     }
     
 
