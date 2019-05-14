@@ -45,7 +45,7 @@ public enum CommandPersistence {
         if(persistence == null) return null;
         if(persistence == Command.Persistence.PERSISTED) return PERSISTED;
         if(persistence == Command.Persistence.IF_HINTED) return IF_HINTED;
-        if(persistence != Command.Persistence.NOT_PERSISTED) return NOT_PERSISTED;
+        if(persistence == Command.Persistence.NOT_PERSISTED) return NOT_PERSISTED;
         // shouldn't happen
         throw new IllegalArgumentException(String.format("Unrecognized : persistence '%s'", persistence));
     }
