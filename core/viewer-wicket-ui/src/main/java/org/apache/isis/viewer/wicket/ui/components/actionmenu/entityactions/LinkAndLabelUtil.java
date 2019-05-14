@@ -25,11 +25,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -40,26 +36,19 @@ public final class LinkAndLabelUtil {
 
     private LinkAndLabelUtil(){}
 
-    public static List<LinkAndLabel> asActionLinksForAssociation(
-            final ScalarModel scalarModelForAssociation,
-            final DeploymentCategory deploymentCategory) {
+    public static List<LinkAndLabel> asActionLinks(
+            final ScalarModel scalarModel,
+            final List<ObjectAction> associatedActions) {
 
-        if (scalarModelForAssociation.getKind() != ScalarModel.Kind.PROPERTY) {
-            return Collections.emptyList();
+        final EntityModel parentEntityModel = scalarModel.getParentEntityModel();
+        return asActionLinksForAdditionalLinksPanel(parentEntityModel, associatedActions, scalarModel);
+    }
+
+    public static LinkAndLabel asActionLink(final ScalarModel scalarModel, final ObjectAction inlineActionIfAny) {
+        if(inlineActionIfAny == null) {
+            return null;
         }
-
-        final EntityModel parentEntityModel = scalarModelForAssociation.getParentEntityModel();
-
-        final ObjectAdapter parentAdapter = parentEntityModel.load(AdapterManager.ConcurrencyChecking.NO_CHECK);
-
-        final OneToOneAssociation oneToOneAssociation =
-                scalarModelForAssociation.getPropertyMemento().getProperty(scalarModelForAssociation.getSpecificationLoader());
-
-        final List<ObjectAction> associatedActions =
-                ObjectAction.Util.findForAssociation(parentAdapter, oneToOneAssociation, deploymentCategory);
-
-        return asActionLinksForAdditionalLinksPanel(parentEntityModel, associatedActions,
-                scalarModelForAssociation);
+        return asActionLinks(scalarModel, Collections.singletonList(inlineActionIfAny)).get(0);
     }
 
     /**
@@ -75,18 +64,18 @@ public final class LinkAndLabelUtil {
     public static List<LinkAndLabel> asActionLinksForAdditionalLinksPanel(
             final EntityModel parentEntityModel,
             final List<ObjectAction> objectActions,
-            final ScalarModel scalarModelForAssociationIfAny) {
+            final ScalarModel scalarModelIfAny) {
 
-        return asActionLinksForAdditionalLinksPanel(parentEntityModel, objectActions, scalarModelForAssociationIfAny, null);
+        return asActionLinksForAdditionalLinksPanel(parentEntityModel, objectActions, scalarModelIfAny, null);
     }
 
     public static List<LinkAndLabel> asActionLinksForAdditionalLinksPanel(
             final EntityModel parentEntityModel,
             final List<ObjectAction> objectActions,
-            final ScalarModel scalarModelForAssociationIfAny,
+            final ScalarModel scalarModelIfAny,
             final ToggledMementosProvider toggledMementosProviderIfAny) {
 
-        final ActionLinkFactory linkFactory = new EntityActionLinkFactory(parentEntityModel, scalarModelForAssociationIfAny);
+        final ActionLinkFactory linkFactory = new EntityActionLinkFactory(parentEntityModel, scalarModelIfAny);
 
         return FluentIterable.from(objectActions)
                 .transform(new Function<ObjectAction, LinkAndLabel>() {

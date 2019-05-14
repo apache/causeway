@@ -32,7 +32,6 @@ import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract2;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -100,8 +99,8 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
     @Override
     protected InlinePromptConfig getInlinePromptConfig() {
         return InlinePromptConfig.supportedAndHide(
-                scalarModel.getMode() == EntityModel.Mode.EDIT || scalarModel.hasActionWithInlineAsIfEdit() ||
-                scalarModel.getKind() == ScalarModel.Kind.PARAMETER
+                // TODO: not sure why this is needed when the other subtypes have no similar guard...
+                scalarModel.mustBeEditable(getDeploymentCategory())
                         ? this.checkBox
                         : null
         );

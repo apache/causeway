@@ -1154,20 +1154,91 @@ public class ScalarModel extends EntityModel implements LinksProvider,FormExecut
         this.inlinePromptContext = inlinePromptContext;
     }
 
+    private transient AssociatedActions associatedActions;
 
-    private boolean actionWithInlineAsIfEdit;
+    public static class AssociatedActions {
+        private final ObjectAction firstAssociatedWithInlineAsIfEdit;
+        private final List<ObjectAction> remainingAssociated;
+
+        AssociatedActions(final List<ObjectAction> allAssociated) {
+            final List<ObjectAction> temp = Lists.newArrayList(allAssociated);
+            this.firstAssociatedWithInlineAsIfEdit = firstAssociatedActionWithInlineAsIfEdit(allAssociated);
+            if(this.firstAssociatedWithInlineAsIfEdit != null) {
+                temp.remove(firstAssociatedWithInlineAsIfEdit);
+            }
+            remainingAssociated = Collections.unmodifiableList(temp);
+        }
+
+        public List<ObjectAction> getRemainingAssociated() {
+            return remainingAssociated;
+        }
+        public ObjectAction getFirstAssociatedWithInlineAsIfEdit() {
+            return firstAssociatedWithInlineAsIfEdit;
+        }
+        public boolean hasAssociatedActionWithInlineAsIfEdit() {
+            return firstAssociatedWithInlineAsIfEdit != null;
+        }
+
+        private static ObjectAction firstAssociatedActionWithInlineAsIfEdit(final List<ObjectAction> objectActions) {
+            for (ObjectAction objectAction : objectActions) {
+                final PromptStyle promptStyle = ObjectAction.Util.promptStyleFor(objectAction);
+                if(promptStyle.isInlineAsIfEdit()) {
+                    return objectAction;
+                }
+            }
+            return null;
+        }
+    }
+
+    public AssociatedActions associatedActionsIfProperty(final DeploymentCategory deploymentCategory) {
+        if (associatedActions == null) {
+            associatedActions = new AssociatedActions(calcAssociatedActionsIfProperty(deploymentCategory));
+        }
+        return associatedActions;
+    }
+
+    private List<ObjectAction> calcAssociatedActionsIfProperty(final DeploymentCategory deploymentCategory) {
+
+        if (getKind() != Kind.PROPERTY) {
+            return Collections.emptyList();
+        }
+
+        final EntityModel parentEntityModel1 = this.getParentEntityModel();
+        final ObjectAdapter parentAdapter = parentEntityModel1.load(ConcurrencyChecking.NO_CHECK);
+
+        final OneToOneAssociation oneToOneAssociation =
+                this.getPropertyMemento().getProperty(this.getSpecificationLoader());
+
+        return ObjectAction.Util.findForAssociation(parentAdapter, oneToOneAssociation, deploymentCategory);
+    }
+
 
     /**
-     * Whether there is an action configured for {@link PromptStyle#INLINE_AS_IF_EDIT} for this property.
+     * Whether this model should be surfaced in the UI using a widget rendered such that it is either already in
+     * edit mode (eg for a parameter), or can be switched into edit mode, eg for an editable property or an
+     * associated action of a property with 'inline_as_if_edit'
+     *
+     * @param deploymentCategory - used to determine the actions to discover (can vary, eg if prototyping).
+     * @return <tt>true</tt> if the widget for this model must be editable.
      */
-    public boolean hasActionWithInlineAsIfEdit() {
-        return actionWithInlineAsIfEdit;
+    public boolean mustBeEditable(final DeploymentCategory deploymentCategory) {
+        return getMode() == Mode.EDIT ||
+                associatedActionsIfProperty(deploymentCategory).hasAssociatedActionWithInlineAsIfEdit() ||
+                getKind() == Kind.PARAMETER;
     }
 
-    public void setHasActionWithInlineAsIfEdit(final boolean inlineAsIfEditHint) {
-        this.actionWithInlineAsIfEdit = inlineAsIfEditHint;
+    /**
+     * Similar to {@link #mustBeEditable(DeploymentCategory)}, though not called from the same locations.
+     *
+     * My suspicion is that it amounts to more or less the same set of conditions.
+     *
+     * @param deploymentCategory
+     * @return
+     */
+    public boolean isInlinePrompt(final DeploymentCategory deploymentCategory) {
+        return (getPromptStyle().isInline() && canEnterEditMode()) ||
+                associatedActionsIfProperty(deploymentCategory).hasAssociatedActionWithInlineAsIfEdit();
     }
-
 
     // //////////////////////////////////////
 
