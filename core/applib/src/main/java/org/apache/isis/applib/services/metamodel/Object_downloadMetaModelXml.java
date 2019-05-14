@@ -31,7 +31,6 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.layout.LayoutService;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.schema.metamodel.v1.DomainClassDto;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
