@@ -12,7 +12,6 @@
   "org.apache.isis.core.metamodel.services.layout.LayoutServiceDefault",
   "org.apache.isis.core.metamodel.services.message.MessageServiceNoop",
   "org.apache.isis.core.metamodel.services.metamodel.MetaModelServiceDefault",
-  "org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternalNoop",
   "org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault",
   "org.apache.isis.core.metamodel.services.repository.RepositoryServiceInternalDefault",
   "org.apache.isis.core.metamodel.services.swagger.SwaggerServiceDefault",
