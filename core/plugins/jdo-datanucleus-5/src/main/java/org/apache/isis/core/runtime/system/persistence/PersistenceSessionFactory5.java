@@ -27,8 +27,6 @@ import javax.jdo.PersistenceManagerFactory;
 
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Lazy;
@@ -45,6 +43,8 @@ import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -55,10 +55,9 @@ import lombok.Setter;
  * must be annotated using {@link Programmatic}.
  * </p>
  */
+@Slf4j
 public class PersistenceSessionFactory5
 implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledStateHolder {
-
-    private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionFactory5.class);
 
     public static final String JDO_OBJECTSTORE_CONFIG_PREFIX = "isis.persistor.datanucleus";  // specific to the JDO objectstore
     public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
@@ -72,7 +71,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     @Setter(onMethod=@__({@Override})) 
     FixturesInstalledState fixturesInstalledState;
     
-    @Programmatic
+    
     @Override
     public void init() {
         this.configuration = _Config.getConfiguration();
@@ -82,7 +81,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         createDataNucleusApplicationComponents();
     }
 
-    @Programmatic
+    
     @Override
     public boolean isInitialized() {
         return this.configuration != null;
@@ -90,31 +89,30 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
 
     private DataNucleusApplicationComponents5 createDataNucleusApplicationComponents() {
 
-        final RegisterEntities registerEntities = new RegisterEntities();
-        final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
+        val jdoObjectstoreConfig = configuration.subsetWithNamesStripped(JDO_OBJECTSTORE_CONFIG_PREFIX);
+        val dataNucleusConfig = configuration.subsetWithNamesStripped(DATANUCLEUS_CONFIG_PREFIX);
+        val datanucleusProps = dataNucleusConfig.copyToMap();
         
-        final IsisConfiguration jdoObjectstoreConfig = configuration.subsetWithNamesStripped(
-                JDO_OBJECTSTORE_CONFIG_PREFIX);
-
-        final IsisConfiguration dataNucleusConfig = configuration.subsetWithNamesStripped(DATANUCLEUS_CONFIG_PREFIX);
-        final Map<String, String> datanucleusProps = dataNucleusConfig.copyToMap();
         addDataNucleusPropertiesIfRequired(datanucleusProps);
+        
+        val classesToBePersisted = new RegisterEntities().getEntityTypes();
 
-        return new DataNucleusApplicationComponents5(jdoObjectstoreConfig,
-                        datanucleusProps, classesToBePersisted);
+        return new DataNucleusApplicationComponents5(
+                jdoObjectstoreConfig,
+                datanucleusProps, 
+                classesToBePersisted);
     }
 
     @Override
-    @Programmatic
+    
     public void catalogNamedQueries(final SpecificationLoader specificationLoader) {
-        final RegisterEntities registerEntities = new RegisterEntities();
-        final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
+        val classesToBePersisted = new RegisterEntities().getEntityTypes();
         DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, specificationLoader);
     }
 
-    private boolean shouldCreate(final DataNucleusApplicationComponents5 applicationComponents) {
-        return applicationComponents == null || applicationComponents.isStale();
-    }
+//    private boolean shouldCreate(final DataNucleusApplicationComponents5 applicationComponents) {
+//        return applicationComponents == null || applicationComponents.isStale();
+//    }
 
     private static void addDataNucleusPropertiesIfRequired(
             final Map<String, String> props) {
@@ -138,24 +136,24 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
             String transactionType = props.get("javax.jdo.option.TransactionType");
             // extended logging
             if(transactionType == null) {
-                LOG.info("found config properties to use non-JTA JNDI datasource ({})", connectionFactoryName);
+                log.info("found config properties to use non-JTA JNDI datasource ({})", connectionFactoryName);
                 if(connectionFactory2Name != null) {
-                    LOG.warn("found config properties to use non-JTA JNDI datasource ({}); second '-nontx' JNDI datasource also configured but will not be used ({})", connectionFactoryName, connectionFactory2Name);
+                    log.warn("found config properties to use non-JTA JNDI datasource ({}); second '-nontx' JNDI datasource also configured but will not be used ({})", connectionFactoryName, connectionFactory2Name);
                 }
             } else {
-                LOG.info("found config properties to use JTA JNDI datasource ({})", connectionFactoryName);
+                log.info("found config properties to use JTA JNDI datasource ({})", connectionFactoryName);
             }
             if(connectionFactory2Name == null) {
                 // JDO/DN itself will (probably) throw an exception
-                LOG.error("found config properties to use JTA JNDI datasource ({}) but config properties for second '-nontx' JNDI datasource were *not* found", connectionFactoryName);
+                log.error("found config properties to use JTA JNDI datasource ({}) but config properties for second '-nontx' JNDI datasource were *not* found", connectionFactoryName);
             } else {
-                LOG.info("... and config properties for second '-nontx' JNDI datasource also found; {}", connectionFactory2Name);
+                log.info("... and config properties for second '-nontx' JNDI datasource also found; {}", connectionFactory2Name);
             }
             // nothing further to do
             return;
         } else {
             // use JDBC connection properties; put if not present
-            LOG.info("did *not* find config properties to use JNDI datasource; will use JDBC");
+            log.info("did *not* find config properties to use JNDI datasource; will use JDBC");
 
             putIfNotPresent(props, "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
             putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
@@ -173,7 +171,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         }
     }
 
-    @Programmatic
+    
     @Override
     public final void shutdown() {
         if(!isInitialized()) {
@@ -189,7 +187,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     /**
      * Called by {@link org.apache.isis.core.runtime.system.session.IsisSessionFactory#openSession(AuthenticationSession)}.
      */
-    @Programmatic
+    
     @Override
     public PersistenceSession5 createPersistenceSession(
             final AuthenticationSession authenticationSession) {

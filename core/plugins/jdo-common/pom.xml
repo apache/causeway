@@ -20,16 +20,16 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
+	<artifactId>isis-core-plugins-jdo-common</artifactId>
 
-	<name>Apache Isis Plugin for JDO (Datanucleus 5)</name>
+	<name>Apache Isis Plugin for JDO (Common)</name>
 	<description>
-        JDO plugin using datanucleus.
+        Common base for JDO plugins.
     </description>
 
 	<properties>
-		<jar-plugin.automaticModuleName>org.apache.isis.plugins.jdo-datanucleus-5</jar-plugin.automaticModuleName>
-		<git-plugin.propertiesDir>org/apache/isis/plugins/jdo-datanucleus-5</git-plugin.propertiesDir>
+		<jar-plugin.automaticModuleName>org.apache.isis.plugins.jdo-common</jar-plugin.automaticModuleName>
+		<git-plugin.propertiesDir>org/apache/isis/plugins/jdo-common</git-plugin.propertiesDir>
 	</properties>
 
 	<build>
@@ -68,42 +68,15 @@
 	</build>
 
 	<dependencies>
-
-		<!-- JDO API (providing compile dependency) -->
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>javax.jdo</artifactId>
-			<version>${dn5-jdo-api.version}</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<!-- DataNucleus -->
-
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-core</artifactId>
-			<version>${dn5-core.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-api-jdo</artifactId>
-			<version>${dn5-api-jdo.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-jdo-query</artifactId>
-			<version>${dn5-jdo-query.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-rdbms</artifactId>
-			<version>${dn5-rdbms.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-jodatime</artifactId>
-			<version>${dn5-jodatime.version}</version>
-		</dependency>
+	
+		<!-- JDO API (non transient, provided by concrete JDO plugins) -->
+        <dependency>
+            <groupId>javax.jdo</groupId>
+            <artifactId>jdo-api</artifactId>
+            <version>${jdo-api.version}</version>
+            <!-- provided by plugins -->
+            <scope>provided</scope>
+        </dependency>
 
 		<!-- Core Runtime -->
 		<dependency>
@@ -112,37 +85,11 @@
 			<scope>compile</scope>
 		</dependency>
 		
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime-extensions</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-jdo-common</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		
 		<!-- TESTING -->
 		
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-runtime</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime-services</artifactId>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime-extensions</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
@@ -159,7 +106,7 @@
             <artifactId>isis-core-unittestsupport</artifactId>
             <scope>test</scope>
         </dependency>
-
+        
 	</dependencies>
 
 	<profiles>
