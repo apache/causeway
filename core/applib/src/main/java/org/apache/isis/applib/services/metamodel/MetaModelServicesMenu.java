@@ -60,8 +60,8 @@ public class MetaModelServicesMenu {
 
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<MetaModelServicesMenu> { private static final long serialVersionUID = 1L; }
 
-    private final MimeType mimeTypeTextCsv;
-    private final MimeType mimeTypeTextXml;
+    final MimeType mimeTypeTextCsv;
+    final MimeType mimeTypeTextXml;
 
     public MetaModelServicesMenu() {
         try {

@@ -263,8 +263,7 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
 
             componentForRegular.addOrReplace(component);
 
-            boolean inlinePrompt = (scalarModel.getPromptStyle().isInline() && scalarModel.canEnterEditMode()) ||
-                    scalarModel.hasActionWithInlineAsIfEdit();
+            boolean inlinePrompt = scalarModel.isInlinePrompt();
             if(inlinePrompt) {
                 // bit of a hack... allows us to suppress the title using CSS
                 component.add(new CssClassAppender("inlinePrompt"));

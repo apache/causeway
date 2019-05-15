@@ -57,7 +57,6 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.Co
 import org.apache.isis.core.metamodel.facets.object.domainobject.domainevents.PropertyDomainEventDefaultFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.CopyImmutableFacetOntoMembersFactory;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacet;
 import org.apache.isis.core.metamodel.facets.object.projection.ProjectionFacetFromProjectingProperty;
 import org.apache.isis.core.metamodel.facets.object.projection.ident.IconFacetDerivedFromProjectionFacet;
@@ -159,7 +158,6 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
             derivePropertyTypicalLengthFromType(property);
             derivePropertyOrCollectionDescribedAsFromType(property);
             derivePropertyDisabledFromViewModel(property);
-            derivePropertyOrCollectionImmutableFromSpec(property);
             derivePropertyDisabledFromImmutable(property);
             tweakPropertyMixinDomainEvent(objectSpecification, property);
         });
@@ -170,7 +168,6 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
 
             derivePropertyOrCollectionDescribedAsFromType(collection);
             deriveCollectionDisabledFromViewModel(collection);
-            derivePropertyOrCollectionImmutableFromSpec(collection);
             deriveCollectionDisabledFromImmutable(collection);
 
             // ... see if any of its actions has a collection parameter of the same type
@@ -545,23 +542,6 @@ public class DeriveFacetsPostProcessor implements ObjectSpecificationPostProcess
                     new DisabledFacetOnPropertyDerivedFromImmutable(facetedMethodFor(property)));
         }
     }
-
-    /**
-     * Replaces {@link CopyImmutableFacetOntoMembersFactory}
-     *
-     * TODO: this looks to be redundant, see {@link #derivePropertyDisabledFromImmutable(OneToOneAssociation)} and {@link #deriveCollectionDisabledFromImmutable(OneToManyAssociation)}.  What differs is the implementation of the disabling facet (DisabledFacetOn... vs ImmutableFacetFor...).
-     */
-    private void derivePropertyOrCollectionImmutableFromSpec(final ObjectAssociation objectAssociation) {
-        if(objectAssociation.containsDoOpFacet(DisabledFacet.class)) {
-            return;
-        }
-        final ObjectSpecification owningSpec = objectAssociation.getOnType();
-        final ImmutableFacet specFacet = owningSpec.getFacet(ImmutableFacet.class);
-        if(existsAndIsDoOp(specFacet)) {
-            specFacet.copyOnto(facetedMethodFor(objectAssociation));
-        }
-    }
-
 
     /**
      * Replaces {@link DisabledFacetOnCollectionDerivedFromViewModelFacetFactory}

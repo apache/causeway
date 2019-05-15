@@ -27,6 +27,7 @@
                     <action id="clearHints"/>
                     <action id="downloadLayoutXml" hidden="EVERYWHERE"/>
                     <action id="rebuildMetamodel" hidden="EVERYWHERE"/>
+                    <action id="downloadMetaModelXml" hidden="EVERYWHERE"/>
                     <action id="openRestApi" hidden="EVERYWHERE"/>
                 </bs3:col>
             </bs3:row>

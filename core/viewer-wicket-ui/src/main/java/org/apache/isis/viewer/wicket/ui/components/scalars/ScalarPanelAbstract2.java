@@ -34,7 +34,6 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
-import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -51,7 +50,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -320,11 +318,12 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         final ScalarModel scalarModel = getModel();
 
         final String disableReasonIfAny = scalarModel.whetherDisabled();
+        final boolean mustBeEditable = scalarModel.mustBeEditable();
         if (disableReasonIfAny != null) {
-            if(disableReasonIfAny.contains(DisabledFacet.ALWAYS_DISABLED_REASON)) {
+            if(mustBeEditable) {
                 onInitializeWhenViewMode();
             } else {
-                onInitializeWhenDisabled(disableReasonIfAny.toString());
+                onInitializeWhenDisabled(disableReasonIfAny);
             }
         } else {
             if (scalarModel.isViewMode()) {
@@ -384,8 +383,15 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         scalarTypeContainer.addOrReplace(scalarIfCompact, scalarIfRegular);
 
-        List<LinkAndLabel> linkAndLabels =
-                LinkAndLabelUtil.asActionLinksForAssociation(this.scalarModel);
+        // find associated actions for this scalar property (only properties will have any.)
+        final ScalarModel.AssociatedActions associatedActionsIfProperty =
+                scalarModel.associatedActionsIfProperty();
+        final ObjectAction inlineActionIfAny =
+                associatedActionsIfProperty.getFirstAssociatedWithInlineAsIfEdit();
+        final List<ObjectAction> remainingAssociated = associatedActionsIfProperty.getRemainingAssociated();
+
+        // convert those actions into UI layer widgets
+        final List<LinkAndLabel> linkAndLabels  = LinkAndLabelUtil.asActionLinks(this.scalarModel, remainingAssociated);
 
         final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
         if(inlinePromptConfig.isSupported()) {
@@ -406,9 +412,6 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             // are using inline prompts
             Component componentToHideIfAny = inlinePromptLink;
 
-            // check if one of the associated actions is configured to use an inline form "as if edit"
-            final LinkAndLabel linkAndLabelAsIfEdit = inlineAsIfEditIfAny(linkAndLabels);
-
             if (this.scalarModel.getPromptStyle().isInline() && scalarModel.canEnterEditMode()) {
                 // we configure the prompt link if _this_ property is configured for inline edits...
                 configureInlinePromptLinkCallback(inlinePromptLink);
@@ -417,11 +420,9 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
             } else {
 
                 // not editable property, but maybe one of the actions is.
-                if(linkAndLabelAsIfEdit != null) {
+                if(inlineActionIfAny != null) {
 
-                    scalarModel.setHasActionWithInlineAsIfEdit(true);
-
-                    // safe to do this, the inlineAsEditIfAny(...) method checks for us
+                    final LinkAndLabel linkAndLabelAsIfEdit = LinkAndLabelUtil.asActionLink(this.scalarModel, inlineActionIfAny);
                     final ActionLink actionLinkInlineAsIfEdit = (ActionLink) linkAndLabelAsIfEdit.getLink();
 
                     if(actionLinkInlineAsIfEdit.isVisible() && actionLinkInlineAsIfEdit.isEnabled()) {
@@ -431,17 +432,13 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 }
             }
 
-            if(linkAndLabelAsIfEdit != null) {
-                // irrespective of whether the property is itself editable, if the action is annotated as
-                // INLINE_AS_IF_EDIT then we never render it as an action
-                linkAndLabels = _Lists.newArrayList(linkAndLabels);
-                linkAndLabels.remove(linkAndLabelAsIfEdit);
-            }
 
             if(componentToHideIfAny != null) {
                 componentToHideIfAny.setVisibilityAllowed(false);
             }
         }
+
+        // prevent from tabbing into non-editable widgets.
         if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY &&
                 scalarModel.getMode() == EntityModel.Mode.VIEW     &&
                 (scalarModel.getPromptStyle().isDialog() || !scalarModel.canEnterEditMode())) {
@@ -463,51 +460,52 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
     }
 
     /**
-     * @return the first {@link ActionLink} (if any) configured with a
-     * {@link LinkAndLabel#getPromptStyle() prompt style} of {@link PromptStyle#INLINE_AS_IF_EDIT}.
-     */
-    private static LinkAndLabel inlineAsIfEditIfAny(final List<LinkAndLabel> linkAndLabels) {
-        for (LinkAndLabel linkAndLabel : linkAndLabels) {
-            AbstractLink link = linkAndLabel.getLink();
-            if(link instanceof ActionLink) {
-
-                PromptStyle promptStyle = linkAndLabel.getPromptStyle();
-
-                if(promptStyle.isInlineAsIfEdit()) {
-                    return linkAndLabel;
-                }
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Optional hook.
+     * The widget starts off in read-only, but should be possible to activate into edit mode.
+     *
+     * <p>
+     *     TODO: perhaps rename to 'notEditable'
+     * </p>
      */
     protected void onInitializeWhenViewMode() {
     }
 
     /**
-     * Optional hook.
+     * The widget starts off read-only, and CANNOT be activated into edit mode.
+     *
+     * <p>
+     *     TODO: perhaps rename to 'readOnly'
+     * </p>
      */
     protected void onInitializeWhenDisabled(final String disableReason) {
     }
 
     /**
-     * Optional hook.
+     * The widget starts off immediately editable.
+     *
+     * <p>
+     *     TODO: perhaps rename to 'editable'.
+     * </p>
      */
     protected void onInitializeWhenEnabled() {
     }
 
     /**
-     * Optional hook.
+     * The widget is no longer editable.
+     *
+     * <p>
+     *     TODO: perhaps rename to 'onNotEditable', because the semantics here aren't the same as 'onInitializeWhenDisabled'
+     *       (the latter is never editable).
+     * </p>
      */
     protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
     }
 
     /**
-     * Optional hook.
-     * @param target
+     * The widget should be made editable.
+     *
+     * <p>
+     *     TODO: perhaps rename to 'onEditable'?
+     * </p>
      */
     protected void onEnabled(final AjaxRequestTarget target) {
     }
@@ -736,6 +734,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
 
         final WebMarkupContainer inlinePromptLink = new WebMarkupContainer(ID_SCALAR_VALUE_INLINE_PROMPT_LINK);
         inlinePromptLink.setOutputMarkupId(true);
+        inlinePromptLink.setOutputMarkupPlaceholderTag(true);
 
         configureInlinePromptLink(inlinePromptLink);
 
@@ -870,7 +869,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                 @Override
                 protected void onEvent(AjaxRequestTarget target) {
 
-                    final ObjectSpecification specification = scalarModel.getObject().getSpecification();
+                    final ObjectSpecification specification = scalarModel.getTypeOfSpecification();
                     final MetaModelService metaModelService = getServiceRegistry()
                             .lookupServiceElseFail(MetaModelService.class);
                     final ManagedObjectSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
