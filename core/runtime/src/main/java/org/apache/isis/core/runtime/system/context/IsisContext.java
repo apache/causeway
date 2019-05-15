@@ -18,24 +18,17 @@
  */
 package org.apache.isis.core.runtime.system.context;
 
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import javax.persistence.metamodel.Metamodel;
-
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.spring._Spring;
-import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -44,7 +37,6 @@ import org.apache.isis.core.metamodel.services.persistsession.ObjectAdapterServi
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelDeficiencies;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
-import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.runtime.system.context.session.RuntimeContext;
 import org.apache.isis.core.runtime.system.context.session.RuntimeContextBase;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -69,19 +61,6 @@ public interface IsisContext {
         return _Context.getIfAny(MetaModelDeficiencies.class);
     }
 
-//    /**
-//     *
-//     * @return Isis's session factory
-//     * @throws IllegalStateException if IsisSessionFactory not initialized
-//     */
-//    // Implementation Note: Populated only by {@link IsisSessionFactoryBuilder}.
-//    public static IsisSessionFactory getSessionFactory() {
-//        return _Context.getOrThrow(
-//                IsisSessionFactory.class,
-//                ()->new IllegalStateException(
-//                        "internal error: should have been populated by IsisSessionFactoryBuilder") );
-//    }
-
     /**
      *
      * @return Isis's default class loader
@@ -103,13 +82,6 @@ public interface IsisContext {
      */
     public static <T> CompletableFuture<T> compute(Supplier<T> computation){
         return CompletableFuture.supplyAsync(computation);
-    }
-
-    /**
-     * @return pre-bootstrapping configuration
-     */
-    public static IsisSystemEnvironment getEnvironment() {
-        return _Context.getEnvironment();
     }
     
     // -- LIFE-CYCLING
@@ -234,43 +206,6 @@ public interface IsisContext {
     public static AuthorizationManager getAuthorizationManager() {
         return _Spring.getSingletonElseFail(AuthorizationManager.class);
     }
-    
-    // -- 
-
-    public static StringBuilder dumpConfig() {
-        
-        final StringBuilder sb = new StringBuilder();
-
-        final IsisConfiguration configuration;
-        try {
-            configuration = getConfiguration();
-        } catch (Exception e) {
-            // ignore
-            return sb;
-        }
-
-        final Map<String, String> map = 
-                ConfigurationConstants.maskIfProtected(configuration.copyToMap(), TreeMap::new);
-
-        String head = String.format("ISIS %s (%s) ", 
-                IsisConfiguration.getVersion(), getEnvironment().getDeploymentType().name());
-        final int fillCount = 46-head.length();
-        final int fillLeft = fillCount/2;
-        final int fillRight = fillCount-fillLeft;
-        head = _Strings.padStart("", fillLeft, ' ') + head + _Strings.padEnd("", fillRight, ' ');
-        
-        sb.append("================================================\n");
-        sb.append("="+head+"=\n");
-        sb.append("================================================\n");
-        map.forEach((k,v)->{
-            sb.append(k+" -> "+v).append("\n");
-        });
-        sb.append("================================================\n");
-        
-        return sb;
-    }
-
-
-
+ 
 
 }

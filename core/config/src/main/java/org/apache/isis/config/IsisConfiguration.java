@@ -22,9 +22,15 @@ package org.apache.isis.config;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
+
+import lombok.val;
 
 /**
  * Immutable set of properties representing the configuration of the running
@@ -202,6 +208,41 @@ public interface IsisConfiguration {
      * A mutable copy of the current set of properties (name/values) held in this configuration.
      */
     Map<String, String> copyToMap();
+    
+    /**
+     * pre-bootstrapping configuration
+     */
+    default public IsisSystemEnvironment getEnvironment() {
+        return _Context.getEnvironment();
+    }
+    
+    // -- TO STRING
+    
+    default public String toStringFormatted() {
+        
+        val sb = new StringBuilder();
+        val configuration = this.subset("isis");
+
+        final Map<String, String> map = 
+                ConfigurationConstants.maskIfProtected(configuration.copyToMap(), TreeMap::new);
+
+        String head = String.format("APACHE ISIS %s (%s) ", 
+                IsisConfiguration.getVersion(), getEnvironment().getDeploymentType().name());
+        final int fillCount = 46-head.length();
+        final int fillLeft = fillCount/2;
+        final int fillRight = fillCount-fillLeft;
+        head = _Strings.padStart("", fillLeft, ' ') + head + _Strings.padEnd("", fillRight, ' ');
+        
+        sb.append("================================================\n");
+        sb.append("="+head+"=\n");
+        sb.append("================================================\n");
+        map.forEach((k,v)->{
+            sb.append(k+" -> "+v).append("\n");
+        });
+        sb.append("================================================\n");
+        
+        return sb.toString();
+    }
 
     // -- DEPRECATIONS
     

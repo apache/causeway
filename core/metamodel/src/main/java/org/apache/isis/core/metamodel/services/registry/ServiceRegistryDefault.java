@@ -37,7 +37,7 @@ import org.apache.isis.commons.ioc.BeanAdapter;
 @Singleton
 public final class ServiceRegistryDefault implements ServiceRegistry {
 
-    private final Set<BeanAdapter> registeredBeans = _Sets.newHashSet();
+    private Set<BeanAdapter> registeredBeans = _Sets.newHashSet();
 
     @Override
     public boolean isDomainServiceType(Class<?> cls) {
@@ -49,7 +49,8 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public Stream<BeanAdapter> streamRegisteredBeans() {
-        if(registeredBeans.isEmpty()) {
+        if(registeredBeans==null) {
+            registeredBeans = _Sets.newHashSet();
             _Spring.streamAllBeans(this::isDomainServiceType)
             .filter(_NullSafe::isPresent)
             .forEach(registeredBeans::add);

@@ -96,7 +96,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         this.localeInitializer = new IsisLocaleInitializer();
         this.timeZoneInitializer = new IsisTimeZoneInitializer();
         
-        log.info("initialising Isis System");
+        log.info("Initialising Isis System");
         log.info("working directory: {}", new File(".").getAbsolutePath());
 
         final IsisConfiguration configuration = _Config.getConfiguration();

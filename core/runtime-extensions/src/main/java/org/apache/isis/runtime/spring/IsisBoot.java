@@ -40,9 +40,16 @@ public class IsisBoot implements ApplicationContextAware {
     
 	@Override
 	public void setApplicationContext(ApplicationContext springContext) throws BeansException {
+	    
 	    _Context.putSingleton(ApplicationContext.class, springContext);
 	    _Config.putAll(_Spring.copySpringEnvironmentToMap(configurableEnvironment));
+
 	    log.info("Spring's context was passed over to Isis");
+	    
+	    //if(log.isDebugEnabled()) {
+	        log.info("\n" + _Config.getConfiguration().toStringFormatted());
+	    //}
+	    
 	}
 
 	
