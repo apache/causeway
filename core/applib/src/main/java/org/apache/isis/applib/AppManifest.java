@@ -19,19 +19,21 @@
 
 package org.apache.isis.applib;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.commons.internal.context._Context;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
+ * TODO[2112] keep or remove?
+ *  
  * Programmatic specification of the constituent parts of an application, most specifically the modules that contain
  * domain services and possibly entities.
  *
@@ -152,148 +154,27 @@ public interface AppManifest {
 //     */
 //    public Map<String,String> getConfigurationProperties();
 
-    /**
-     * Holds the set of domain services, persistent entities and fixture scripts.services
-     */
-    public final static class Registry {
-
-        public final static List<String> FRAMEWORK_PROVIDED_SERVICE_PACKAGES = Collections.unmodifiableList(Arrays.asList(
-                "org.apache.isis.applib",
-                "org.apache.isis.core.wrapper" ,
-                "org.apache.isis.core.metamodel.services" ,
-                "org.apache.isis.core.runtime.services" ,
-                "org.apache.isis.schema.services" ,
-                "org.apache.isis.objectstore.jdo.applib.service" ,
-                "org.apache.isis.viewer.restfulobjects.rendering.service" ,
-                "org.apache.isis.objectstore.jdo.datanucleus.service.support" ,
-                "org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" ,
-                "org.apache.isis.viewer.wicket.viewer.services", 
-                "org.apache.isis.core.integtestsupport.components"));
-
-        private static Registry instance = new Registry();
-        public static Registry instance() {
-            return instance;
-        }
-
-        // -- persistenceCapableTypes
-        private Set<Class<?>> persistenceCapableTypes;
-        /**
-         * @return <tt>null</tt> if no appManifest is defined
-         */
-        public Set<Class<?>> getPersistenceCapableTypes() {
-            return persistenceCapableTypes;
-        }
-        public void setPersistenceCapableTypes(final Set<Class<?>> persistenceCapableTypes) {
-            this.persistenceCapableTypes = persistenceCapableTypes;
-        }
-
-
-        // -- mixinTypes
-        private Set<Class<?>> mixinTypes;
-
-        /**
-         * Along with {@link #getDomainServiceTypes()}, these are introspected eagerly.
-         *
-         * @return <tt>null</tt> if no appManifest is defined
-         */
-        public Set<Class<?>> getMixinTypes() {
-            return mixinTypes;
-        }
-        public void setMixinTypes(final Set<Class<?>> mixinTypes) {
-            this.mixinTypes = mixinTypes;
-        }
-
-
-        // -- fixtureScriptTypes
-        private Set<Class<? extends FixtureScript>> fixtureScriptTypes;
-
-        /**
-         * @return <tt>null</tt> if no appManifest is defined
-         */
-        public Set<Class<? extends FixtureScript>> getFixtureScriptTypes() {
-            return fixtureScriptTypes;
-        }
-        public void setFixtureScriptTypes(final Set<Class<? extends FixtureScript>> fixtureScriptTypes) {
-            this.fixtureScriptTypes = fixtureScriptTypes;
-        }
-
-
-
-        // -- domainServiceTypes
-        private Set<Class<?>> domainServiceTypes;
-        /**
-         * @return <tt>null</tt> if no appManifest is defined
-         */
-        public Set<Class<?>> getDomainServiceTypes() {
-            return domainServiceTypes;
-        }
-        public void setDomainServiceTypes(final Set<Class<?>> domainServiceTypes) {
-            this.domainServiceTypes = domainServiceTypes;
-        }
-
-
-        private Set<Class<?>> domainObjectTypes;
-        private Set<Class<?>> viewModelTypes;
-        private Set<Class<?>> xmlElementTypes;
-
-        public Set<Class<?>> getDomainObjectTypes() {
-            return domainObjectTypes;
-        }
-        public void setDomainObjectTypes(final Set<Class<?>> domainObjectTypes) {
-            this.domainObjectTypes = domainObjectTypes;
-        }
-
-        public Set<Class<?>> getViewModelTypes() {
-            return viewModelTypes;
-        }
-        public void setViewModelTypes(final Set<Class<?>> viewModelTypes) {
-            this.viewModelTypes = viewModelTypes;
-        }
-
-        public Set<Class<?>> getXmlElementTypes() {
-            return xmlElementTypes;
-        }
-        public void setXmlElementTypes(final Set<Class<?>> xmlElementTypes) {
-            this.xmlElementTypes = xmlElementTypes;
-        }
-        //endregion
-
-    }
-    
-//    // -- NOOP
-//    
-//    static final AppManifest NOOP = new AppManifest() {
-//        @Override public List<Class<?>> getModules() {
-//            return null;
-//        }
-//        @Override public List<Class<?>> getAdditionalServices() {
-//            return null;
+//    /**
+//     * Holds the set of domain services, persistent entities and fixture scripts.services
+//     */
+//    public final static class Registry {
+//
+//        public static Registry current() {
+//            return _Context.computeIfAbsent(Registry.class, Registry::new);
 //        }
 //
-//        @Override public String getAuthenticationMechanism() {
-//            return null;
-//        }
-//
-//        @Override public String getAuthorizationMechanism() {
-//            return null;
-//        }
-//
-//        @Override public List<Class<? extends FixtureScript>> getFixtures() {
-//            return null;
-//        }
-//
-//        @Override public Map<String, String> getConfigurationProperties() {
-//            return null;
-//        }
-//    };
-//    
-//    public static AppManifest noop() {
-//        return NOOP;
+//        @Getter @Setter private Set<Class<?>> persistenceCapableTypes;
+//        @Getter @Setter private Set<Class<?>> mixinTypes;
+//        @Getter @Setter private Set<Class<? extends FixtureScript>> fixtureScriptTypes;
+//        @Getter @Setter private Set<Class<?>> domainServiceTypes;
+//        @Getter @Setter private Set<Class<?>> domainObjectTypes;
+//        @Getter @Setter private Set<Class<?>> viewModelTypes;
+//        @Getter @Setter private Set<Class<?>> xmlElementTypes;
 //    }
     
-    // -- UTIL
+    // -- CONFIG
 
-    public static class Util {
+    public static class Presets {
 
         public static final String ISIS_PERSISTOR                   = "isis.persistor.";
         public static final String ISIS_PERSISTOR_DATANUCLEUS       = ISIS_PERSISTOR + "datanucleus.";
@@ -315,10 +196,6 @@ public interface AppManifest {
             map.put(ISIS_PERSISTOR_DATANUCLEUS_IMPL + "javax.jdo.option.ConnectionPassword", "");
 
             return map;
-        }
-        @Deprecated
-        public static Map<String,String> withJavaxJdoRunInMemoryProperties(final Map<String, String> map) {
-            return withHsqlDbInMemoryProperties(map);
         }
 
         public static Map<String,String> withDataNucleusProperties(final Map<String, String> map) {

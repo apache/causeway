@@ -23,6 +23,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,7 +42,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import lombok.val;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {JdoTestDomainModule.class, IsisBoot.class})
+@SpringBootTest(classes = {
+            JdoTestDomainModule.class, 
+            IsisBoot.class
+        })
 class SpringServiceProvisioningTest {
 
     @BeforeEach

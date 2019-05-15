@@ -18,15 +18,15 @@
  */
 package org.apache.isis.security.shiro.authorization;
 
+import javax.inject.Singleton;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.subject.Subject;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManagerInstaller;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authorization.manager.AuthorizationManagerInstaller;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 import org.apache.isis.security.shiro.ShiroSecurityContext;
 
@@ -39,6 +39,7 @@ import org.apache.isis.security.shiro.ShiroSecurityContext;
  * However, although there are two objects, they are set up to share the same {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
  */
+@Singleton
 public class ShiroAuthorizor implements Authorizor {
 
     //private static final Logger LOG = LoggerFactory.getLogger(ShiroAuthorizor.class);

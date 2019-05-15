@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 
 /**
- * @deprecated TODO [2033] convert ...
+ * @deprecated TODO [2033] convert SpecificationLoaderDefault to Singleton
  * Currently `SpecificationLoader` is not life-cycle 
  * managed by CDI/Spring, instead we provide a 'Producer Method' for it.
  * 

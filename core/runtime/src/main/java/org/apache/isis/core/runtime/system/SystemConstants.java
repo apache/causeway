@@ -21,10 +21,6 @@ package org.apache.isis.core.runtime.system;
 
 import org.apache.isis.config.ConfigurationConstants;
 import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManagerInstaller;
-import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
-import org.apache.isis.core.security.authorization.manager.AuthorizationManagerInstaller;
 
 public final class SystemConstants {
     
@@ -33,29 +29,14 @@ public final class SystemConstants {
     public static final String MSG_CANCEL = "Cancel";
 
     /**
-     * Key used to lookup {@link AuthenticationManager authentication manager}
-     * in {@link IsisConfiguration}, and root for any
-     * {@link AuthenticationManagerInstaller authentication manager}-specific
-     * configuration keys.
-     */
-    public static final String AUTHENTICATION_INSTALLER_KEY = ConfigurationConstants.ROOT + AuthenticationManagerInstaller.TYPE;
-    /**
      * Default for {@link #AUTHENTICATION_INSTALLER_KEY}.
      */
     public static final String AUTHENTICATION_DEFAULT = "shiro";
 
     /**
-     * Key used to lookup {@link AuthorizationManager authorization manager} in
-     * {@link IsisConfiguration}, and root for any
-     * {@link AuthorizationManagerInstaller authorization manager}-specific
-     * configuration keys.
-     */
-    public static final String AUTHORIZATION_INSTALLER_KEY = ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE;
-    /**
      * Default for {@link #AUTHORIZATION_DEFAULT}.
      */
     public static final String AUTHORIZATION_DEFAULT = "shiro";
-
 
 
     /**

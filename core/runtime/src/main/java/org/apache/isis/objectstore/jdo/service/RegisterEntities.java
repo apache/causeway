@@ -18,10 +18,6 @@
  */
 package org.apache.isis.objectstore.jdo.service;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-
-import lombok.val;
-
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,14 +25,15 @@ import java.util.stream.Collectors;
 
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.AppManifest;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+
+import lombok.val;
 
 public class RegisterEntities {
 
@@ -58,7 +55,7 @@ public class RegisterEntities {
         Set<String> entityTypes = new LinkedHashSet<>();
         
         Set<Class<?>> persistenceCapableTypes = 
-                AppManifest.Registry.instance().getPersistenceCapableTypes();
+                IsisBeanTypeRegistry.current().getEntityTypes();
 
         final List<String> classNamesNotEnhanced = _Lists.newArrayList();
         for (Class<?> persistenceCapableType : persistenceCapableTypes) {
