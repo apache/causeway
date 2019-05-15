@@ -306,6 +306,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected void onInitializeWhenViewMode() {
         super.onInitializeWhenViewMode();
 
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
+
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
 
@@ -315,6 +319,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     @Override
     protected void onInitializeWhenDisabled(final String disableReason) {
         super.onInitializeWhenDisabled(disableReason);
+
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
 
         textField.setEnabled(false);
         addReplaceDisabledTagWithReadonlyTagBehaviourIfRequired(textField);
@@ -327,6 +335,11 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     @Override
     protected void onInitializeWhenEnabled() {
         super.onInitializeWhenEnabled();
+
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
+
         textField.setEnabled(true);
         inlinePromptLink.setEnabled(true);
         setTitleAttribute("");
@@ -340,6 +353,10 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     @Override
     protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
+
         textField.setEnabled(false);
         inlinePromptLink.setEnabled(false);
         setTitleAttribute(disableReason);
@@ -349,6 +366,11 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
 
     @Override
     protected void onEnabled(final AjaxRequestTarget target) {
+
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
+
         textField.setEnabled(true);
         inlinePromptLink.setEnabled(true);
         setTitleAttribute("");

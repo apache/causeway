@@ -194,14 +194,26 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
     // //////////////////////////////////////
 
     protected void onInitializeWhenViewMode() {
+        super.onInitializeWhenViewMode();
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
         updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, null, null);
     }
 
     protected void onInitializeWhenDisabled(final String disableReason) {
+        super.onInitializeWhenDisabled(disableReason);
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
         updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, null, null);
     }
 
     protected void onInitializeWhenEnabled() {
+        super.onInitializeWhenEnabled();
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
         updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE, null, null);
     }
 
@@ -238,11 +250,19 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
 
     @Override
     protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+        super.onDisabled(disableReason, target);
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
         updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.NOT_EDITABLE, disableReason, target);
     }
 
     @Override
     protected void onEnabled(final AjaxRequestTarget target) {
+        super.onEnabled(target);
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
         updateRegularFormComponents(InputFieldVisibility.VISIBLE, InputFieldEditability.EDITABLE, null, target);
     }
 

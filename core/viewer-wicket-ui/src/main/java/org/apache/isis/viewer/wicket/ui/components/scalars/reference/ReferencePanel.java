@@ -205,6 +205,10 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     @Override
     protected void onInitializeWhenEnabled() {
         super.onInitializeWhenEnabled();
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
+
         entityLink.setEnabled(true);
         syncWithInput();
     }
@@ -212,6 +216,10 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     @Override
     protected void onInitializeWhenViewMode() {
         super.onInitializeWhenViewMode();
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
+
         entityLink.setEnabled(false);
         syncWithInput();
     }
@@ -219,6 +227,10 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     @Override
     protected void onInitializeWhenDisabled(final String disableReason) {
         super.onInitializeWhenDisabled(disableReason);
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
+
         syncWithInput();
         final EntityModel entityLinkModel = (EntityModel) entityLink.getModel();
         entityLinkModel.toViewMode();
@@ -229,6 +241,9 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     @Override
     protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
         super.onDisabled(disableReason, target);
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
 
         entityLink.setEnabled(false);
         entityLink.add(new AttributeModifier("title", Model.of(disableReason)));
@@ -237,6 +252,9 @@ public class ReferencePanel extends ScalarPanelSelect2Abstract {
     @Override
     protected void onEnabled(final AjaxRequestTarget target) {
         super.onEnabled(target);
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
 
         entityLink.setEnabled(true);
         entityLink.add(new AttributeModifier("title", Model.of("")));

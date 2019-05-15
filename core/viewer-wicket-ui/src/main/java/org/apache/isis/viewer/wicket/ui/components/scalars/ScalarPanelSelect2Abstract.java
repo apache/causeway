@@ -106,12 +106,18 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
     }
 
     protected void addStandardSemantics() {
+        if(select2 == null) {
+            return;
+        }
         select2.setRequired(getModel().isRequired());
         select2.add(new Select2Validator(this.scalarModel));
     }
 
     @Override
     protected Component getScalarValueComponent() {
+        if(select2 == null) {
+            return null;
+        }
         return select2.component();
     }
 

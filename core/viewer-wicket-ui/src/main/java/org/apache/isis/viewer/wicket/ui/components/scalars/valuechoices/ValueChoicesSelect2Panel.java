@@ -101,12 +101,22 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
 
     @Override
     protected void onInitializeWhenViewMode() {
+        super.onInitializeWhenViewMode();
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
+
         // View: Read only
         select2.setEnabled(false);
     }
 
     @Override
     protected void onInitializeWhenEnabled() {
+        super.onInitializeWhenEnabled();
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
+
         // Edit: read/write
         select2.setEnabled(true);
 
@@ -116,6 +126,10 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     @Override
     protected void onInitializeWhenDisabled(final String disableReason) {
         super.onInitializeWhenDisabled(disableReason);
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
+
         setTitleAttribute(disableReason);
         select2.setEnabled(false);
     }
@@ -127,6 +141,9 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     @Override
     protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
         super.onDisabled(disableReason, target);
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
 
         setTitleAttribute(disableReason);
         select2.setEnabled(false);
@@ -135,6 +152,9 @@ public class ValueChoicesSelect2Panel extends ScalarPanelSelect2Abstract {
     @Override
     protected void onEnabled(final AjaxRequestTarget target) {
         super.onEnabled(target);
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
 
         setTitleAttribute("");
         select2.setEnabled(true);

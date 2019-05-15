@@ -374,79 +374,95 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
         scalarTypeContainer.add(new CssClassAppender(Model.of(getScalarPanelType())));
         addOrReplace(scalarTypeContainer);
 
-        this.scalarIfCompact = createComponentForCompact();
-        this.scalarIfRegular = createComponentForRegular();
-        scalarIfRegular.setOutputMarkupId(true);
+        final Rendering rendering = getRendering();
 
-        scalarTypeContainer.addOrReplace(scalarIfCompact, scalarIfRegular);
 
-        // find associated actions for this scalar property (only properties will have any.)
-        final ScalarModel.AssociatedActions associatedActionsIfProperty =
-                scalarModel.associatedActionsIfProperty(getDeploymentCategory());
-        final ObjectAction inlineActionIfAny =
-                associatedActionsIfProperty.getFirstAssociatedWithInlineAsIfEdit();
-        final List<ObjectAction> remainingAssociated = associatedActionsIfProperty.getRemainingAssociated();
-
-        // convert those actions into UI layer widgets
-        final List<LinkAndLabel> linkAndLabels  = LinkAndLabelUtil.asActionLinks(this.scalarModel, remainingAssociated);
-
-        final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
-        if(inlinePromptConfig.isSupported()) {
-
+        if (rendering == Rendering.COMPACT) {
+            this.scalarIfCompact = createComponentForCompact();
+            this.scalarIfRegular = new WebMarkupContainer(ID_SCALAR_IF_REGULAR);
             this.scalarIfRegularInlinePromptForm = createInlinePromptForm();
             scalarTypeContainer.addOrReplace(scalarIfRegularInlinePromptForm);
-            inlinePromptLink = createInlinePromptLink();
-            scalarIfRegular.add(inlinePromptLink);
+        } else {
+            this.scalarIfCompact = new WebMarkupContainer(ID_SCALAR_IF_COMPACT);
+            this.scalarIfRegular = createComponentForRegular();
+        }
+        scalarTypeContainer.addOrReplace(scalarIfCompact, scalarIfRegular);
 
-            // even if this particular scalarModel (property) is not configured for inline edits,
-            // it's possible that one of the associated actions is.  Thus we set the prompt context
-            scalarModel.setInlinePromptContext(
-                    new InlinePromptContext(
-                            getComponentForRegular(),
-                            scalarIfRegularInlinePromptForm, scalarTypeContainer));
+        if (rendering == Rendering.COMPACT) {
+            // nothing else to do
+        } else {
+            scalarIfRegular.setOutputMarkupId(true);
 
-            // start off assuming that neither the property nor any of the associated actions
-            // are using inline prompts
-            Component componentToHideIfAny = inlinePromptLink;
+            // find associated actions for this scalar property (only properties will have any.)
+            final ScalarModel.AssociatedActions associatedActionsIfProperty =
+                    scalarModel.associatedActionsIfProperty(getDeploymentCategory());
+            final ObjectAction inlineActionIfAny =
+                    associatedActionsIfProperty.getFirstAssociatedWithInlineAsIfEdit();
+            final List<ObjectAction> remainingAssociated = associatedActionsIfProperty.getRemainingAssociated();
 
-            if (this.scalarModel.getPromptStyle().isInline() && scalarModel.canEnterEditMode()) {
-                // we configure the prompt link if _this_ property is configured for inline edits...
-                configureInlinePromptLinkCallback(inlinePromptLink);
-                componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
+            // convert those actions into UI layer widgets
+            final List<LinkAndLabel> linkAndLabels  = LinkAndLabelUtil.asActionLinks(this.scalarModel, remainingAssociated);
 
-            } else {
+            final InlinePromptConfig inlinePromptConfig = getInlinePromptConfig();
+            if(inlinePromptConfig.isSupported()) {
 
-                // not editable property, but maybe one of the actions is.
-                if(inlineActionIfAny != null) {
+                this.scalarIfRegularInlinePromptForm = createInlinePromptForm();
+                scalarTypeContainer.addOrReplace(scalarIfRegularInlinePromptForm);
+                inlinePromptLink = createInlinePromptLink();
+                scalarIfRegular.add(inlinePromptLink);
 
-                    final LinkAndLabel linkAndLabelAsIfEdit = LinkAndLabelUtil.asActionLink(this.scalarModel, inlineActionIfAny);
-                    final ActionLink actionLinkInlineAsIfEdit = (ActionLink) linkAndLabelAsIfEdit.getLink();
+                // even if this particular scalarModel (property) is not configured for inline edits,
+                // it's possible that one of the associated actions is.  Thus we set the prompt context
+                scalarModel.setInlinePromptContext(
+                        new InlinePromptContext(
+                                getComponentForRegular(),
+                                scalarIfRegularInlinePromptForm, scalarTypeContainer));
 
-                    if(actionLinkInlineAsIfEdit.isVisible() && actionLinkInlineAsIfEdit.isEnabled()) {
-                        configureInlinePromptLinkCallback(inlinePromptLink, actionLinkInlineAsIfEdit);
-                        componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
+                // start off assuming that neither the property nor any of the associated actions
+                // are using inline prompts
+                Component componentToHideIfAny = inlinePromptLink;
+
+                if (this.scalarModel.getPromptStyle().isInline() && scalarModel.canEnterEditMode()) {
+                    // we configure the prompt link if _this_ property is configured for inline edits...
+                    configureInlinePromptLinkCallback(inlinePromptLink);
+                    componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
+
+                } else {
+
+                    // not editable property, but maybe one of the actions is.
+                    if(inlineActionIfAny != null) {
+
+                        final LinkAndLabel linkAndLabelAsIfEdit = LinkAndLabelUtil
+                                .asActionLink(this.scalarModel, inlineActionIfAny);
+                        final ActionLink actionLinkInlineAsIfEdit = (ActionLink) linkAndLabelAsIfEdit.getLink();
+
+                        if(actionLinkInlineAsIfEdit.isVisible() && actionLinkInlineAsIfEdit.isEnabled()) {
+                            configureInlinePromptLinkCallback(inlinePromptLink, actionLinkInlineAsIfEdit);
+                            componentToHideIfAny = inlinePromptConfig.getComponentToHideIfAny();
+                        }
                     }
+                }
+
+
+                if(componentToHideIfAny != null) {
+                    componentToHideIfAny.setVisibilityAllowed(false);
                 }
             }
 
-
-            if(componentToHideIfAny != null) {
-                componentToHideIfAny.setVisibilityAllowed(false);
+            // prevent from tabbing into non-editable widgets.
+            if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY &&
+                    scalarModel.getMode() == EntityModel.Mode.VIEW     &&
+                    (scalarModel.getPromptStyle().isDialog() || !scalarModel.canEnterEditMode())) {
+                getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));
             }
+
+            addPositioningCssTo(scalarIfRegular, linkAndLabels);
+            addActionLinksBelowAndRight(scalarIfRegular, linkAndLabels);
+
+            addEditPropertyTo(scalarIfRegular);
+            addFeedbackOnlyTo(scalarIfRegular, getScalarValueComponent());
+
         }
-
-        // prevent from tabbing into non-editable widgets.
-        if(scalarModel.getKind() == ScalarModel.Kind.PROPERTY &&
-           scalarModel.getMode() == EntityModel.Mode.VIEW     &&
-                (scalarModel.getPromptStyle().isDialog() || !scalarModel.canEnterEditMode())) {
-            getScalarValueComponent().add(new AttributeAppender("tabindex", "-1"));
-        }
-
-        addPositioningCssTo(scalarIfRegular, linkAndLabels);
-        addActionLinksBelowAndRight(scalarIfRegular, linkAndLabels);
-
-        addEditPropertyTo(scalarIfRegular);
-        addFeedbackOnlyTo(scalarIfRegular, getScalarValueComponent());
 
         getRendering().buildGui(this);
         addCssFromMetaModel();

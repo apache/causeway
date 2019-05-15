@@ -205,12 +205,18 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
     @Override
     protected void onInitializeWhenViewMode() {
         super.onInitializeWhenViewMode();
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
         checkBox.setEnabled(false);
     }
 
     @Override
     protected void onInitializeWhenDisabled(final String disableReason) {
         super.onInitializeWhenDisabled(disableReason);
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
         checkBox.setEnabled(false);
         final AttributeModifier title = new AttributeModifier("title",
                                                 Model.of(disableReason != null ? disableReason : ""));
@@ -219,6 +225,11 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
 
     @Override
     protected void onDisabled(final String disableReason, final AjaxRequestTarget target) {
+        super.onDisabled(disableReason, target);
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
+
         checkBox.setEnabled(false);
         final AttributeModifier title = new AttributeModifier("title",
                                                 Model.of(disableReason != null ? disableReason : ""));
@@ -228,6 +239,10 @@ public class BooleanPanel extends ScalarPanelAbstract2 {
 
     @Override
     protected void onEnabled(final AjaxRequestTarget target) {
+        super.onEnabled(target);
+        if(getRendering() == Rendering.COMPACT) {
+            return;
+        }
         checkBox.setEnabled(true);
     }
 
