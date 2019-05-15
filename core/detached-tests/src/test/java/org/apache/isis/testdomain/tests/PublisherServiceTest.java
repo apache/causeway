@@ -16,10 +16,10 @@
  */
 package org.apache.isis.testdomain.tests;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -28,21 +28,25 @@ import org.junit.jupiter.api.Test;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.iactn.Interaction.Execution;
 import org.apache.isis.applib.services.publish.PublishedObjects;
 import org.apache.isis.applib.services.publish.PublisherService;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.jdo.Book;
-import org.apache.isis.testdomain.jdo.JdoTestDomainIntegTest;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import lombok.val;
 
 /**
  * Depends on {@link JdoBootstrappingTest} to succeed.
  */
-class PublisherServiceTest extends JdoTestDomainIntegTest {
+class PublisherServiceTest  {
+    
+    @Inject FixtureScripts fixtureScripts;
 
     @BeforeEach
     void setUp() {

@@ -20,10 +20,12 @@
 package org.apache.isis.core.runtime.system.session;
 
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.IsisSystemException;
@@ -41,6 +43,8 @@ import org.apache.isis.core.runtime.system.IsisSystemException;
  */
 @Singleton
 public class SpecificationLoaderProducerBean {
+    
+    @Inject ServiceRegistry serviceRegistry; //depends on 
 
     // let Spring manage destruction , init is handled by isisSessionFactory internally
 	@Bean(destroyMethod = "shutdown") 

@@ -16,10 +16,10 @@
  */
 package org.apache.isis.testdomain.tests;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.sql.Timestamp;
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -28,13 +28,15 @@ import org.junit.jupiter.api.Test;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.audit.AuditerService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.testdomain.jdo.Book;
-import org.apache.isis.testdomain.jdo.JdoTestDomainIntegTest;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import lombok.val;
 
@@ -42,7 +44,9 @@ import lombok.val;
  * Depends on {@link JdoBootstrappingTest} to succeed.
  */
 @Disabled //TODO[2112] activate tests
-class AuditerServiceTest extends JdoTestDomainIntegTest {
+class AuditerServiceTest {
+    
+    @Inject FixtureScripts fixtureScripts;
 
     @BeforeEach
     void setUp() {

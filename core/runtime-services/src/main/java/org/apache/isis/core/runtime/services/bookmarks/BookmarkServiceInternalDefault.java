@@ -22,14 +22,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
@@ -39,24 +36,16 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.tree.TreeState;
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Lists;
-import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.memento._Mementos.SerializingAdapter;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 
 /**
- * This service enables a serializable &quot;bookmark&quot; to be created for an entity.
+ * This service enables a serializable 'bookmark' to be created for an entity.
  *
- * <p>
- * This implementation has no UI and there are no other implementations of the service API, and so it annotated
- * with {@link org.apache.isis.applib.annotation.DomainService}.  Because this class is implemented in core, this means
- * that it is automatically registered and available for use; no further configuration is required.
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class BookmarkServiceInternalDefault implements BookmarkService, SerializingAdapter {
 
 
@@ -91,8 +80,8 @@ public class BookmarkServiceInternalDefault implements BookmarkService, Serializ
         if(bookmark == null) {
             return null;
         }
-        final String objectType = bookmark.getObjectType();
-//FIXME[2112] why would we ever store Service Beans as Bookmarks?        
+      //FIXME[2112] why would we ever store Service Beans as Bookmarks?        
+//        final String objectType = bookmark.getObjectType();
 //        final Object service = lookupService(objectType);
 //        if(service != null) {
 //            return service;

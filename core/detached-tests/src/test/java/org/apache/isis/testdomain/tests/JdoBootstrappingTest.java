@@ -16,19 +16,39 @@
  */
 package org.apache.isis.testdomain.tests;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import javax.inject.Inject;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.testdomain.jdo.Inventory;
-import org.apache.isis.testdomain.jdo.JdoTestDomainIntegTest;
+import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
 import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class JdoBootstrappingTest extends JdoTestDomainIntegTest {
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(
+        classes = {
+                IsisBoot.class,
+                FixtureScriptsDefault.class,
+                JdoTestDomainModule.class, 
+                },
+        properties = {
+                //"isis.reflector.introspector.parallelize=false",
+                //"logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+                }
+        )
+class JdoBootstrappingTest {
 
+    @Inject FixtureScripts fixtureScripts;
     private Inventory inventory;
     
     @BeforeEach
@@ -43,7 +63,7 @@ class JdoBootstrappingTest extends JdoTestDomainIntegTest {
                 JdoTestDomainPersona.InventoryWith1Book.builder());
     }
     
-    @Test @Disabled //TODO[2112] activate tests
+    @Test
     void sampleInventoryShouldBeSetUp() {
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());

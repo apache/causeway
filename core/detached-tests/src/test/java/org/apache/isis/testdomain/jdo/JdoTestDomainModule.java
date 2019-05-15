@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.config.internal._Config;
@@ -78,6 +79,11 @@ public class JdoTestDomainModule {
        return WebAppConfigBean.builder()
                //.menubarsLayoutXml(new ClassPathResource(path, clazz))
                .build();
+   }
+   
+   //@Bean @Produces @Singleton // as used in simple-app
+   public FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider() {
+       return null;
    }
     
 }

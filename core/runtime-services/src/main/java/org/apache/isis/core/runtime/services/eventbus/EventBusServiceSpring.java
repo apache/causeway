@@ -16,26 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.fixturescripts;
+package org.apache.isis.core.runtime.services.eventbus;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.springframework.context.ApplicationEventPublisher;
 
-/**
- * Acts as a factory by the {@link org.apache.isis.applib.fixturescripts.FixtureScripts} when
- * instantiating the {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext}.
- *
- * <p>
- *     Factoring this out as a service potentially allows for extensions to parsing; and also acts as an
- *     insurance policy to allow this part of the testing framework to be patched if the chosen parsing algorithms
- *     need refinement in the future).
- * </p>
- */
+import org.apache.isis.applib.services.eventbus.EventBusService;
+
 @Singleton
-public class ExecutionParametersService {
+public class EventBusServiceSpring implements EventBusService {
 
-    public ExecutionParameters newExecutionParameters(final String parameters) {
-        return new ExecutionParameters(parameters);
+    @Inject private ApplicationEventPublisher applicationEventPublisher;
+    
+    @Override
+    public void post(Object event) {
+        applicationEventPublisher.publishEvent(event);
     }
 
 }

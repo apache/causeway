@@ -39,6 +39,8 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstalledEvent;
 import org.apache.isis.applib.fixturescripts.events.FixturesInstallingEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.commons.collections.Bin;
 
 /**
  * Default instance of {@link FixtureScripts}, instantiated automatically by the framework if no custom user-defined instance was
@@ -89,9 +91,14 @@ public class FixtureScriptsDefault extends FixtureScripts {
     @PostConstruct
     public void init() {
         if(fixtureScriptsSpecificationProvider == null) {
+            fixtureScriptsSpecificationProvider = 
+                    serviceRegistry.select(FixtureScriptsSpecificationProvider.class);
+        }
+        if(fixtureScriptsSpecificationProvider.isEmpty()) {
             return;
         }
-        setSpecification(fixtureScriptsSpecificationProvider.getSpecification());
+        setSpecification(fixtureScriptsSpecificationProvider
+                .getFirst().get().getSpecification());
     }
 
 
@@ -225,17 +232,19 @@ public class FixtureScriptsDefault extends FixtureScripts {
         return getSpecification().getRecreateScriptClass() == null;
     }
 
-
-
-    // -- helpers
+    // -- HELPER
+    
     private boolean hideIfPolicyNot(final FixtureScriptsSpecification.DropDownPolicy requiredPolicy) {
-        return fixtureScriptsSpecificationProvider == null || getSpecification().getRunScriptDropDownPolicy() != requiredPolicy;
+        return fixtureScriptsSpecificationProvider.isEmpty() || getSpecification().getRunScriptDropDownPolicy() != requiredPolicy;
     }
 
-
-    // -- injected services
+    private Bin<FixtureScriptsSpecificationProvider> fixtureScriptsSpecificationProvider;
+    
+    // -- DEPS
+    
     @javax.inject.Inject
-    FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider;
+    ServiceRegistry serviceRegistry;
+    
     @javax.inject.Inject
     EventBusService eventBusService;
 
