@@ -77,8 +77,8 @@ public enum ActionResultResponseHandlingStrategy {
                 StreamAfterAjaxResponseBehavior streamingBehavior = new StreamAfterAjaxResponseBehavior(scheduledHandler);
                 final Page page = target.getPage();
                 page.add(streamingBehavior);
-                CharSequence callbackUrl = streamingBehavior.getCallbackUrl();
-                target.appendJavaScript("setTimeout(\"window.location.href='" + callbackUrl + "'\", 10);");
+                String callbackUrl = streamingBehavior.getCallbackUrl().toString();
+                target.appendJavaScript("setTimeout(\"window.location.href='" + callbackUrl + "'\", 250);");
             }
 
         }
