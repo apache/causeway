@@ -178,14 +178,14 @@ public class FacetedMethodsBuilder {
 
 
     public void introspectObjectSpecId() {
-        if (log.isInfoEnabled()) {
-            log.info("introspecting {}: objectSpecId", getClassName());
+        if (log.isDebugEnabled()) {
+            log.debug("introspecting {}: objectSpecId", getClassName());
         }
         getFacetProcessor().processObjectSpecId(introspectedClass, spec);
     }
     public void introspectClass() {
-        if (log.isInfoEnabled()) {
-            log.info("introspecting {}: class-level details", getClassName());
+        if (log.isDebugEnabled()) {
+            log.debug("introspecting {}: class-level details", getClassName());
         }
 
         // process facets at object level
