@@ -22,22 +22,15 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Singleton;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
-public class AuditerServiceLogging implements AuditerService {
+import lombok.extern.slf4j.Slf4j;
 
-    private static final Logger LOG = LoggerFactory.getLogger(AuditerServiceLogging.class);
+@Singleton
+@Slf4j
+public class AuditerServiceLogging implements AuditerService {
 
     @PostConstruct
     public void init() {
@@ -45,10 +38,9 @@ public class AuditerServiceLogging implements AuditerService {
 
     @Override
     public boolean isEnabled() {
-        return LOG.isDebugEnabled();
+        return log.isDebugEnabled();
     }
 
-    @Programmatic
     @Override
     public void audit(
             final UUID interactionId, int sequence,
@@ -60,7 +52,7 @@ public class AuditerServiceLogging implements AuditerService {
         String auditMessage =
                 interactionId + "," + sequence + ": " +
                         target.toString() + " by " + user + ", " + propertyName + ": " + preValue + " -> " + postValue;
-        LOG.debug(auditMessage);
+        log.debug(auditMessage);
     }
 
 }

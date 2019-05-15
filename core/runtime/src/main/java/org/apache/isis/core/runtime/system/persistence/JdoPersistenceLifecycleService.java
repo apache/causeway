@@ -1,8 +1,6 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
@@ -33,7 +31,7 @@ public class JdoPersistenceLifecycleService {
 	}
 
 	@EventListener(AppLifecycleEvent.class)
-	public void onAppLifecycleEvent(@Observes AppLifecycleEvent event) {
+	public void onAppLifecycleEvent(AppLifecycleEvent event) {
 
 		val eventType = event.getEventType(); 
 		
@@ -57,7 +55,7 @@ public class JdoPersistenceLifecycleService {
 	}
 
 	@EventListener(SessionLifecycleEvent.class)
-	public void onSessionLifecycleEvent(@Observes SessionLifecycleEvent event) {
+	public void onSessionLifecycleEvent(SessionLifecycleEvent event) {
 	    
 		val eventType = event.getEventType();
 		
@@ -80,7 +78,7 @@ public class JdoPersistenceLifecycleService {
 
 	}
 	
-	@Bean @Produces @Singleton //XXX note: the resulting singleton is not life-cycle managed by Spring/CDI, nor are InjectionPoints resolved by Spring/CDI
+	@Bean @Singleton //XXX note: the resulting singleton is not life-cycle managed by Spring/CDI, nor are InjectionPoints resolved by Spring/CDI
 	public PersistenceSessionFactory producePersistenceSessionFactory() {
 		return persistenceSessionFactory;
 	}
@@ -91,10 +89,11 @@ public class JdoPersistenceLifecycleService {
 		val authenticationSession = isisSession.getAuthenticationSession();
 		val persistenceSession =
 				persistenceSessionFactory.createPersistenceSession(authenticationSession);
-		persistenceSession.open();
 
-		//TODO [2033] only to support IsisSessionFactoryDefault
-		_Context.threadLocalPut(PersistenceSession.class, persistenceSession); 
+	      //TODO [2033] only to support IsisSessionFactoryDefault
+        _Context.threadLocalPut(PersistenceSession.class, persistenceSession);
+		
+		persistenceSession.open();
 	}
 
 	private void closeSession() {

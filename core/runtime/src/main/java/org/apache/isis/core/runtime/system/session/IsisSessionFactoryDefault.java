@@ -369,7 +369,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     private void shutdown() {
         runtimeEventService.fireAppPreDestroy();
         authenticationManager.shutdown();
-        specificationLoader.shutdown();
+        //specificationLoader.shutdown(); //[2112] lifecycle is managed by IoC
     }
 
     

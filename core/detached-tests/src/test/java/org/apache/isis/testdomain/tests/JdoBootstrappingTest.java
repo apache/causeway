@@ -26,6 +26,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.core.integtestsupport.components.HeadlessTransactionSupportDefault;
+import org.apache.isis.core.runtime.headless.HeadlessTransactionSupport;
+import org.apache.isis.core.runtime.system.internal.InitialisationSession;
+import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.runtime.spring.IsisBoot;
 import org.apache.isis.testdomain.jdo.Inventory;
 import org.apache.isis.testdomain.jdo.JdoTestDomainModule;
@@ -34,12 +38,15 @@ import org.apache.isis.testdomain.jdo.JdoTestDomainPersona;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import lombok.val;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
         classes = {
+                HeadlessTransactionSupportDefault.class,
                 IsisBoot.class,
                 FixtureScriptsDefault.class,
-                JdoTestDomainModule.class, 
+                JdoTestDomainModule.class,
                 },
         properties = {
                 //"isis.reflector.introspector.parallelize=false",
@@ -48,26 +55,42 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         )
 class JdoBootstrappingTest {
 
+    @Inject IsisSessionFactory isisSessionFactory;
+    @Inject HeadlessTransactionSupport transactions;
     @Inject FixtureScripts fixtureScripts;
     private Inventory inventory;
     
     @BeforeEach
     void setUp() {
         
+        isisSessionFactory.openSession(new InitialisationSession());
+        
+        transactions.beginTransaction();
+        
         // cleanup
         fixtureScripts.runBuilderScript(
                 JdoTestDomainPersona.PurgeAll.builder());
-        
+
         // given
         inventory = fixtureScripts.runBuilderScript(
                 JdoTestDomainPersona.InventoryWith1Book.builder());
+        
+        transactions.endTransaction();
+        
+        isisSessionFactory.closeSession();
+
     }
     
     @Test
     void sampleInventoryShouldBeSetUp() {
+
         assertNotNull(inventory);
         assertNotNull(inventory.getProducts());
         assertEquals(1, inventory.getProducts().size());
+        
+        val product = inventory.getProducts().iterator().next();
+        assertEquals("Sample Book", product.getName());
+        
     }
 
         

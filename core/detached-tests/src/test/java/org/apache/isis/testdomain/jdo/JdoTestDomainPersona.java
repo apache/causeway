@@ -35,7 +35,7 @@ implements PersonaWithBuilderScript<BuilderScriptAbstract<Inventory>>  {
                 @Override
                 protected void execute(ExecutionContext ec) {
                     
-                    //don't use lombok's val here (https://github.com/rzwitserloot/lombok/issues/434)
+                    //XXX lombok issue, cannot use val here (https://github.com/rzwitserloot/lombok/issues/434)
                     RepositoryService repository = IsisContext.getServiceRegistry()
                             .lookupServiceElseFail(RepositoryService.class);
                     

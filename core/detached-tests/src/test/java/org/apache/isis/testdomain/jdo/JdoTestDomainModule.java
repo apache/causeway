@@ -81,6 +81,7 @@ public class JdoTestDomainModule {
                .build();
    }
    
+   
    //@Bean @Produces @Singleton // as used in simple-app
    public FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider() {
        return null;

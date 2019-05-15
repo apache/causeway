@@ -38,6 +38,7 @@ import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
+import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -56,7 +57,7 @@ class MetaModelContext_usingSpring implements MetaModelContext {
 
         @Getter(lazy=true) 
         private final ObjectAdapterProvider objectAdapterProvider =
-                _Spring.getSingletonElseFail(ObjectAdapterProvider.class);
+                _Spring.getSingletonElseFail(PersistenceSessionServiceInternal.class);
 
         @Getter(lazy=true) 
         private final ServiceInjector serviceInjector =

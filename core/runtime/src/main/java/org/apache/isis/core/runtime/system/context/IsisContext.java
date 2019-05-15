@@ -157,7 +157,7 @@ public interface IsisContext {
 
     /**
      * TODO [2033] its unclear whether there is only one or multiple
-     * @return framework's one of framework's current PersistenceSessions
+     * @return framework's currently resolvable PersistenceSessions
      */
     public static Optional<PersistenceSession> getPersistenceSession() {
     	return PersistenceSession.current(PersistenceSession.class)

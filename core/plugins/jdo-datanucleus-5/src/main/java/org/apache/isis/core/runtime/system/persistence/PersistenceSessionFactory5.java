@@ -153,12 +153,18 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
             return;
         } else {
             // use JDBC connection properties; put if not present
-            log.info("did *not* find config properties to use JNDI datasource; will use JDBC");
 
             putIfNotPresent(props, "javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
             putIfNotPresent(props, "javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
             putIfNotPresent(props, "javax.jdo.option.ConnectionUserName", "sa");
             putIfNotPresent(props, "javax.jdo.option.ConnectionPassword", "");
+            
+            if(log.isInfoEnabled()) {
+                log.info("using JDBC connection '{}'", 
+                        props.get("javax.jdo.option.ConnectionURL"));
+            }
+            
+            
         }
     }
 

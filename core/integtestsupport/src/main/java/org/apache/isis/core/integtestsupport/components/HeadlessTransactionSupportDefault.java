@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.integtestsupport.components;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
+import javax.inject.Singleton;
+
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -31,7 +31,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-@DomainService(nature=NatureOfService.DOMAIN)
+@Singleton
 public class HeadlessTransactionSupportDefault implements HeadlessTransactionSupport {
 
     @Override

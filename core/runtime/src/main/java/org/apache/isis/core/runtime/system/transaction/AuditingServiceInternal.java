@@ -23,9 +23,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
+import javax.inject.Singleton;
+
 import org.apache.isis.applib.services.audit.AuditerService;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.clock.ClockService;
@@ -40,10 +39,7 @@ import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 /**
  * Wrapper around {@link org.apache.isis.applib.services.audit.AuditerService}.
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class AuditingServiceInternal {
 
     Boolean whetherCanAudit;
@@ -64,7 +60,6 @@ public class AuditingServiceInternal {
         return false;
     }
 
-    @Programmatic
     public void audit() {
         if(!canAudit()) {
             return;

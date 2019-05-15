@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
+import javax.inject.Singleton;
 import javax.jdo.Extent;
 import javax.jdo.JDOQLTypedQuery;
 import javax.jdo.PersistenceManager;
@@ -36,9 +37,6 @@ import javax.jdo.datastore.JDOConnection;
 import javax.jdo.query.BooleanExpression;
 
 import org.apache.isis.applib.FatalException;
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -55,18 +53,11 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 /**
  * This service provides a number of utility methods to supplement/support the capabilities of the JDO Objectstore.
  *
- * <p>
- * This implementation has no UI and there are no other implementations of the service API, and so it is annotated
- * with {@link org.apache.isis.applib.annotation.DomainService}.  Because it is implemented in the core, this means
- * that it is automatically registered and available for use; no further configuration is required.
  */
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
-    @Programmatic
+    
     @Override
     public <T> T refresh(final T domainObject) {
         final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
@@ -74,7 +65,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         return domainObject;
     }
 
-    @Programmatic
+    
     @Override
     public void ensureLoaded(final Collection<?> domainObjects) {
         getPersistenceSession().getPersistenceManager().retrieveAll(domainObjects);
@@ -82,7 +73,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     // //////////////////////////////////////
 
-    @Programmatic
+    
     @Override
     public List<Map<String, Object>> executeSql(final String sql) {
         final JDOConnection dataStoreConnection = getJdoPersistenceManager().getDataStoreConnection();
@@ -98,7 +89,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         }
     }
 
-    @Programmatic
+    
     @Override
     public Integer executeUpdate(final String sql) {
         final JDOConnection dataStoreConnection = getJdoPersistenceManager().getDataStoreConnection();
@@ -149,7 +140,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     // //////////////////////////////////////
 
-    @Programmatic
+    
     @Override
     public void deleteAll(final Class<?>... pcClasses) {
         for (final Class<?> pcClass : pcClasses) {
@@ -170,7 +161,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
 
     // //////////////////////////////////////
 
-    @Programmatic
+    
     @Override
     public <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression filter) {
         JDOQLTypedQuery<T> query = newTypesafeQuery(cls);
@@ -180,7 +171,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         return executeListAndClose(query);
     }
 
-    @Programmatic
+    
     @Override
     public <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression filter) {
         JDOQLTypedQuery<T> query = newTypesafeQuery(cls);
@@ -190,7 +181,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         return executeUniqueAndClose(query);
     }
 
-    @Programmatic
+    
     @Override
     public <T> JDOQLTypedQuery<T> newTypesafeQuery(Class<T> cls) {
         return getJdoPersistenceManager().newJDOQLTypedQuery(cls);
@@ -228,7 +219,7 @@ public class IsisJdoSupportDN5 implements IsisJdoSupport_v3_2 {
         return IsisContext.getServiceInjector();
     }
 
-    @Programmatic
+    
     @Override
     public PersistenceManager getJdoPersistenceManager() {
         return getPersistenceSession().getPersistenceManager();
