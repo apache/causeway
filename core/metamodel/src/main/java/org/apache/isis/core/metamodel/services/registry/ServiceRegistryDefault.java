@@ -19,15 +19,17 @@
 
 package org.apache.isis.core.metamodel.services.registry;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
-import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.commons.ioc.BeanAdapter;
 
@@ -37,7 +39,7 @@ import org.apache.isis.commons.ioc.BeanAdapter;
 @Singleton
 public final class ServiceRegistryDefault implements ServiceRegistry {
 
-    private Set<BeanAdapter> registeredBeans = _Sets.newHashSet();
+    private final _Lazy<Set<BeanAdapter>> registeredBeans = _Lazy.threadSafe(this::enumerateBeans);
 
     @Override
     public boolean isDomainServiceType(Class<?> cls) {
@@ -49,20 +51,16 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
 
     @Override
     public Stream<BeanAdapter> streamRegisteredBeans() {
-        if(registeredBeans==null) {
-            registeredBeans = _Sets.newHashSet();
-            _Spring.streamAllBeans(this::isDomainServiceType)
-            .filter(_NullSafe::isPresent)
-            .forEach(registeredBeans::add);
-        }
-        return registeredBeans.stream();
+        return registeredBeans.get().stream();
     }
 
     
-    @Override
-    public boolean isRegisteredBean(Class<?> cls) {
-        return streamRegisteredBeans()
-        .anyMatch(bean->bean.getBeanClass().equals(cls));
+    // -- HELPER
+    
+    Set<BeanAdapter> enumerateBeans() {
+        return _Spring.streamAllBeans(this::isDomainServiceType)
+        .filter(_NullSafe::isPresent)
+        .collect(Collectors.toCollection(HashSet::new));
     }
 
 }

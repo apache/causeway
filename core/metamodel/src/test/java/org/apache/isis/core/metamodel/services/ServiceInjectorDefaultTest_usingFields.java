@@ -32,6 +32,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.repository.RepositoryService;
@@ -41,6 +42,7 @@ import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 
 import lombok.Getter;
 
+@ActiveProfiles("test")
 @SpringBootTest(classes = {
         ServiceInjectorDefault.class,
         ServiceRegistryDefault.class,

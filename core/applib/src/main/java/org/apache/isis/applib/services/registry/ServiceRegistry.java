@@ -127,21 +127,22 @@ public interface ServiceRegistry {
     }
 
     /**
-     * @param cls
-     * @return whether the exact type is registered as service
+     * @param requiredType
+     * @return whether the requiredType can be resolved to a container managed bean
      */
-    @Deprecated //TODO [2033] marked deprecated, because this should not be required by the 
-    // framework at all, its also hard to implement correctly
-    boolean isRegisteredBean(Class<?> cls);
+    public default boolean isResolvableBean(Class<?> requiredType) {
+        return streamRegisteredBeans()
+                .anyMatch(bean->bean.getBeanClass().isAssignableFrom(requiredType));
+    }
 
     /**
-     * synonym for isRegisteredBean
+     * Yet a synonym for {@link isResolvableBean}
      * @param cls
-     * @return
+     * @deprecated marked deprecated, because the intended use if this method is unclear
      */
-    @Deprecated //TODO [2033] marked deprecated, because this should not be required by the
+    @Deprecated //TODO [2112] marked deprecated, because the intended use if this method is unclear
     default boolean isService(Class<?> cls) {
-        return isRegisteredBean(cls);
+        return isResolvableBean(cls);
     }
 
     // -- PRIORITY ANNOTATION HANDLING
@@ -181,6 +182,8 @@ public interface ServiceRegistry {
         }
 
     }
+
+    
 
 
 }

@@ -24,12 +24,14 @@ import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBContext;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.jaxb.JaxbServiceDefault;
 import org.apache.isis.core.metamodel.services.user.UserServiceDefault;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 //TODO we are using real word classes from the framework, we could instead isolate these tests
 // if we provide some custom classes for hierarchy traversal here (could be nested); 
@@ -43,10 +45,10 @@ class ReflectTest {
         
         String typeListLiteral = _Reflect.streamTypeHierarchy(type, false)
         .map(t->t.getName())
-        .collect(Collectors.joining(", "));
+        .collect(Collectors.joining(",\n"));
         
-        Assertions.assertEquals(""
-                + "org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi, "
+        assertEquals(""
+                + "org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi,\n"
                 + "java.lang.Object", 
                 typeListLiteral);
         
@@ -59,11 +61,11 @@ class ReflectTest {
         
         String typeListLiteral = _Reflect.streamTypeHierarchy(type, true)
         .map(t->t.getName())
-        .collect(Collectors.joining(", "));
+        .collect(Collectors.joining(",\n"));
         
-        Assertions.assertEquals(
-                "org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi, "
-                + "org.apache.isis.applib.services.sudo.SudoService$Spi, "
+        assertEquals(
+                "org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi,\n"
+                + "org.apache.isis.applib.services.sudo.SudoService$Spi,\n"
                 + "java.lang.Object", 
                 typeListLiteral);
         
@@ -76,13 +78,15 @@ class ReflectTest {
         
         String typeListLiteral = _Reflect.streamAllMethods(type, true)
         .map(m->m.toString())
-        .collect(Collectors.joining(", "));
+        .sorted()
+        .collect(Collectors.joining(",\n"));
         
-        Assertions.assertEquals(
-                "public void org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi.runAs(java.lang.String,java.util.List), "
-                + "public void org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi.releaseRunAs(), "
-                + "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.runAs(java.lang.String,java.util.List), "
-                + "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.releaseRunAs()", 
+        assertEquals(""
+                + "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.releaseRunAs(),\n"
+                + "public abstract void org.apache.isis.applib.services.sudo.SudoService$Spi.runAs(java.lang.String,java.util.List),\n"
+                + "public void org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi.releaseRunAs(),\n"
+                + "public void org.apache.isis.core.metamodel.services.user.UserServiceDefault$SudoServiceSpi.runAs(java.lang.String,java.util.List)"
+                ,
                 typeListLiteral);
         
     }
@@ -95,7 +99,7 @@ class ReflectTest {
         
         Programmatic annot = _Reflect.getAnnotation(method, Programmatic.class, true, true);
         
-        Assertions.assertNotNull(annot);
+        assertNotNull(annot);
     }
     
     @Test
@@ -105,12 +109,12 @@ class ReflectTest {
         
         String typeListLiteral = _Reflect.streamTypeHierarchy(type, true)
         .map(t->t.getName())
-        .collect(Collectors.joining(", "));
+        .collect(Collectors.joining(",\n"));
         
-        Assertions.assertEquals(
-                "org.apache.isis.applib.services.jaxb.JaxbServiceDefault, "
-                + "org.apache.isis.applib.services.jaxb.JaxbService$Simple, "
-                + "org.apache.isis.applib.services.jaxb.JaxbService, "
+        assertEquals(
+                "org.apache.isis.applib.services.jaxb.JaxbServiceDefault,\n"
+                + "org.apache.isis.applib.services.jaxb.JaxbService$Simple,\n"
+                + "org.apache.isis.applib.services.jaxb.JaxbService,\n"
                 + "java.lang.Object", 
                 typeListLiteral);
         
@@ -125,7 +129,7 @@ class ReflectTest {
         
         Programmatic annot = _Reflect.getAnnotation(method, Programmatic.class, true, true);
         
-        Assertions.assertNotNull(annot);
+        assertNotNull(annot);
         
     }
     

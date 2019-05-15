@@ -35,7 +35,8 @@ import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 @Configuration
-@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties")
+//@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties")
+@PropertySource("file:src/test/java/org/apache/isis/testdomain/jdo/isis-non-changing.properties")
 public class JdoTestDomainModule {
     
     @Bean @Produces @Singleton

@@ -83,12 +83,6 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         return registeredBeans().stream();
     }
 
-    @Override
-    public boolean isRegisteredBean(Class<?> cls) {
-        return streamRegisteredBeans()
-                .anyMatch(bean->bean.getBeanClass().equals(cls));
-    }
-
     // -- HELPER
     
     private Set<BeanAdapter> registeredBeans() {

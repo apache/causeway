@@ -61,7 +61,25 @@
 					<groupId>org.ow2.asm</groupId>
 					<artifactId>asm</artifactId>
 				</exclusion>
+				<exclusion>
+					<!-- when spring-boot release lags behind spring-core release 
+						explicitly spring-test added below-->
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-test</artifactId>
+				</exclusion>
+				<exclusion>
+					<!-- when spring-boot release lags behind spring-core release 
+						explicitly spring-test added below-->
+					<groupId>org.springframework</groupId>
+					<artifactId>spring-core</artifactId>
+				</exclusion>
 			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring-context.version}</version>
 		</dependency>
 
 		<!-- JUPITER -->

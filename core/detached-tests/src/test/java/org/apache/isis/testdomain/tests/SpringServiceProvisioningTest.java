@@ -46,8 +46,9 @@ import lombok.val;
             JdoTestDomainModule.class, 
             IsisBoot.class},
         properties = {
-                "isis.reflector.introspector.parallelize=false",
-                "logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"}
+                //"isis.reflector.introspector.parallelize=false",
+                //"logging.level.org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract=TRACE"
+                }
         )
 class SpringServiceProvisioningTest {
 
@@ -65,7 +66,7 @@ class SpringServiceProvisioningTest {
                 .map(Class::getName)
                 .collect(Collectors.toCollection(TreeSet::new));
         
-        val singletonJson = _Resources.loadAsString(this.getClass(), "builtin-singleton.json", StandardCharsets.UTF_8);
+        val singletonJson = _Resources.loadAsString(this.getClass(), "builtin-IsisBoot.json", StandardCharsets.UTF_8);
         val singletonSet = new TreeSet<>(_Json.readJsonList(String.class, singletonJson));
         
         // same as managedServices.containsAll(singletonSet) but more verbose in case of failure        
