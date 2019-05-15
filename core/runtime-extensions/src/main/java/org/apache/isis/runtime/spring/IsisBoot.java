@@ -17,8 +17,11 @@ import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.metamodel.IsisMetamodelModule;
 import org.apache.isis.core.runtime.IsisRuntimeModule;
 import org.apache.isis.core.runtime.services.IsisRuntimeServicesModule;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolExecutionMode;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 import org.apache.isis.core.wrapper.IsisWrapperModule;
 
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration 
@@ -41,14 +44,21 @@ public class IsisBoot implements ApplicationContextAware {
 	@Override
 	public void setApplicationContext(ApplicationContext springContext) throws BeansException {
 	    
+	    // disables concurrent Spec-Loading
+	    ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = 
+                ThreadPoolExecutionMode.SEQUENTIAL_WITHIN_CALLING_THREAD;
+	    
 	    _Context.putSingleton(ApplicationContext.class, springContext);
 	    _Config.putAll(_Spring.copySpringEnvironmentToMap(configurableEnvironment));
 
 	    log.info("Spring's context was passed over to Isis");
 	    
-	    //if(log.isDebugEnabled()) {
+	    val config = _Config.getConfiguration();
+	    
+	    // dump config to log
+	    if(log.isInfoEnabled() && !config.getEnvironment().isUnitTesting()) {
 	        log.info("\n" + _Config.getConfiguration().toStringFormatted());
-	    //}
+	    }    
 	    
 	}
 

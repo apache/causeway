@@ -29,9 +29,6 @@ import java.util.stream.Stream;
 
 import javax.enterprise.inject.Vetoed;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.metamodel.ManagedObjectSort;
@@ -99,11 +96,10 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
-
-    private final static Logger LOG = LoggerFactory.getLogger(ObjectSpecificationAbstract.class);
-
 
     private static class SubclassList {
         private final List<ObjectSpecification> classes = _Lists.newArrayList();
@@ -241,7 +237,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      */
     public void introspectUpTo(final IntrospectionState upTo) {
 
-        LOG.debug("introspectingUpTo: {}, {}", getFullIdentifier(), upTo);
+        log.debug("introspectingUpTo: {}, {}", getFullIdentifier(), upTo);
 
         switch (introspectionState) {
         case NOT_INTROSPECTED:
@@ -288,8 +284,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         superclassSpec = getSpecificationLoader().loadSpecification(superclass);
         if (superclassSpec != null) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("  Superclass {}", superclass.getName());
+            if (log.isDebugEnabled()) {
+                log.debug("  Superclass {}", superclass.getName());
             }
             updateAsSubclassTo(superclassSpec);
         }
@@ -993,7 +989,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             final Object servicePojo,
             final List<ObjectAction> contributeeActionsToAppendTo) {
 
-        LOG.debug("{} : addContributeeActionsIfAny(...); servicePojo class is: {}", this.getFullIdentifier(), servicePojo.getClass().getName());
+        log.debug("{} : addContributeeActionsIfAny(...); servicePojo class is: {}", this.getFullIdentifier(), servicePojo.getClass().getName());
 
         final Class<?> serviceType = servicePojo.getClass();
         final ObjectSpecification specification = getSpecificationLoader().loadSpecification(serviceType,

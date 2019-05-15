@@ -2,8 +2,6 @@ package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,6 +13,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.concurrent._Tasks;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.ioc.BeanAdapter;
@@ -397,39 +396,32 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 	}
 
 	private void introspect(final Collection<ObjectSpecification> specs, final IntrospectionState upTo) {
-		final List<Callable<Object>> callables = _Lists.newArrayList();
+	    
+	    val tasks = _Tasks.create();
+		
 		for (final ObjectSpecification specification : specs) {
-			Callable<Object> callable = new Callable<Object>() {
-				@Override
-				public Object call() {
-
-					final ObjectSpecificationAbstract specSpi = (ObjectSpecificationAbstract) specification;
-					specSpi.introspectUpTo(upTo);
-
-					return null;
-				}
-				public String toString() {
-					return String.format(
-							"%s: #introspectUpTo( %s )",
-							specification.getFullIdentifier(), upTo);
-				}
-			};
-			callables.add(callable);
+		    
+		    val specSpi = (ObjectSpecificationAbstract) specification;
+		    
+		    tasks.addRunnable(
+		            ()->specSpi.introspectUpTo(upTo), 
+		            ()->String.format(
+		                    "%s: #introspectUpTo( %s )",
+		                    specification.getFullIdentifier(), upTo));
 		}
 
-		invokeAndWait(callables);
+		invokeAndWait(tasks);
 	}
 
-	private void invokeAndWait(final List<Callable<Object>> callables) {
-		final ThreadPoolSupport threadPoolSupport = ThreadPoolSupport.getInstance();
-		final boolean parallelize = CONFIG_PROPERTY_PARALLELIZE.from(getConfiguration());
-
-		final ThreadPoolExecutionMode executionModeFromConfig = parallelize
+	private void invokeAndWait(final _Tasks tasks) {
+		
+		val isParallelize = CONFIG_PROPERTY_PARALLELIZE.from(getConfiguration());
+		val executionModeFromConfig = isParallelize
 				? ThreadPoolExecutionMode.PARALLEL
 						: ThreadPoolExecutionMode.SEQUENTIAL;
 
-		final List<Future<Object>> futures = 
-				threadPoolSupport.invokeAll(executionModeFromConfig, callables);
+		val threadPoolSupport = ThreadPoolSupport.getInstance();
+		val futures = threadPoolSupport.invokeAll(executionModeFromConfig, tasks.getCallables());
 		threadPoolSupport.joinGatherFailures(futures);
 	}
 

@@ -19,12 +19,6 @@
 
 package org.apache.isis.core.runtime.threadpool;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
-import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +42,12 @@ import javax.annotation.Nullable;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
+import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -134,9 +134,9 @@ public final class ThreadPoolSupport implements AutoCloseable {
      * @param callables - nullable
      * @return non-null
      */
-    public List<Future<Object>> invokeAll(
+    public <T> List<Future<T>> invokeAll(
             final ThreadPoolExecutionMode proposedExecutionMode,
-            @Nullable final List<Callable<Object>> callables) {
+            @Nullable final List<? extends Callable<T>> callables) {
 
         if(isEmpty(callables)) {
             return emptyList();
@@ -153,12 +153,12 @@ public final class ThreadPoolSupport implements AutoCloseable {
 
         case SEQUENTIAL:
         {
-            final Future<List<Object>> commonFuture = 
+            final Future<List<T>> commonFuture = 
                     uncheckedCast(invokeAll(concurrentExecutor, 
                             singletonList(toSingleTask(callables))).get(0));
 
             return IntStream.range(0, callables.size())
-                    .mapToObj(index->new FutureWithIndexIntoFutureOfList<Object>(commonFuture, index))
+                    .mapToObj(index->new FutureWithIndexIntoFutureOfList<T>(commonFuture, index))
                     .collect(toList());
         }
 
@@ -182,65 +182,16 @@ public final class ThreadPoolSupport implements AutoCloseable {
      * @param callables nullable
      * @return non-null
      */
-    public List<Future<Object>> invokeAll(@Nullable final List<Callable<Object>> callables) {
+    public <T> List<Future<T>> invokeAll(@Nullable final List<? extends Callable<T>> callables) {
         return invokeAll(HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED, callables);
     }
-
-//TODO [ahuber] I'm proposing removal, in order to not bloat this class and since wrapping vargs 
-// on the callers side with Arrays.asList(...) is trivial
-//    /**
-//     * Executes specified {@code callables} on the default executor.
-//     * See {@link ThreadPoolExecutor#invokeAll }
-//     * @param executionMode
-//     * @param callables nullable
-//     * @return non-null
-//     */
-//    @SafeVarargs
-//    public final List<Future<Object>> invokeAll(
-//            final ThreadPoolExecutionMode executionMode, 
-//            final Callable<Object>... callables) {
-//        
-//        requires(executionMode, "executionMode");
-//        requires(callables, "callables");
-//        return invokeAll(executionMode, Arrays.asList(callables));
-//    }
-
-//    /**
-//     * Wraps specified {@code callables} into a single task, which is then executed on the default executor.    
-//     * The single task itself executes specified {@code callables} in sequence, one by one.
-//     * @param callables nullable
-//     * @return non-null
-//     */
-//    public List<Future<Object>> invokeAllSequential(@Nullable final List<Callable<Object>> callables) {
-//        if(_NullSafe.isEmpty(callables)) {
-//            return emptyList();
-//        }
-//        final Future<List<Object>> commonFuture = 
-//                uncheckedCast(invokeAll(singletonList(toSingleTask(callables))).get(0));
-//
-//        return IntStream.range(0, callables.size())
-//        .mapToObj(index->new FutureWithIndexIntoFutureOfList<Object>(commonFuture, index))
-//        .collect(toList());
-//    }
-//
-//    /**
-//     * Wraps specified {@code callables} into a single task, which is then executed on the default executor.    
-//     * The single task itself executes specified {@code callables} in sequence, one by one.
-//     * @param callables nullable
-//     * @return non-null
-//     */
-//    @SafeVarargs
-//    public final List<Future<Object>> invokeAllSequential(final Callable<Object>... callables) {
-//        return invokeAllSequential(Arrays.asList(callables));
-//    }
-
 
     /**
      * Waits if necessary for the computation to complete. Suppresses checked exceptions.
      * @param futures
      * @return list of computation results.
      */
-    public List<Object> join(@Nullable final List<Future<Object>> futures) {
+    public List<?> join(@Nullable final List<? extends Future<?>> futures) {
         if (futures == null) {
             return null;
         }
@@ -248,7 +199,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
         final long t0 = System.nanoTime();
         try{
             final List<Object> returnValues = _Lists.newArrayList();
-            for (Future<Object> future : futures) {
+            for (Future<?> future : futures) {
                 returnValues.add(join(future));
             }
             return returnValues;
@@ -263,16 +214,16 @@ public final class ThreadPoolSupport implements AutoCloseable {
      * @param futures
      * @return list of computation results.
      */
-    public List<Object> joinGatherFailures(final List<Future<Object>> futures) {
+    public <T> List<T> joinGatherFailures(final List<? extends Future<T>> futures) {
         if (futures == null) {
             return null;
         }
 
         final long t0 = System.nanoTime();
         try{
-            final List<Object> returnValues = _Lists.newArrayList();
-            for (Future<Object> future : futures) {
-                final Object result;
+            final List<T> returnValues = _Lists.newArrayList();
+            for (Future<T> future : futures) {
+                final T result;
                 try {
                     result = future.get();
                 } catch (InterruptedException | ExecutionException e) {
@@ -293,7 +244,7 @@ public final class ThreadPoolSupport implements AutoCloseable {
      * @param future
      * @return the computation result
      */
-    public Object join(final Future<Object> future) {
+    public <T> T join(final Future<T> future) {
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException e) {
@@ -309,7 +260,10 @@ public final class ThreadPoolSupport implements AutoCloseable {
 
     // -- HELPERS
     
-    private List<Future<Object>> invokeAll(ThreadPoolExecutor executor, @Nullable final List<Callable<Object>> callables) {
+    private <T> List<Future<T>> invokeAll(
+            ThreadPoolExecutor executor, 
+            @Nullable final List<? extends Callable<T>> callables) {
+        
         if(isEmpty(callables)) {
             return Collections.emptyList();
         }
@@ -320,17 +274,18 @@ public final class ThreadPoolSupport implements AutoCloseable {
         }
     }
 
-    private static List<Callable<Object>> timed(
+    private static <T> List<Callable<T>> timed(
             final ThreadPoolExecutor executor,
-            final List<Callable<Object>> callables) {
+            final List<? extends Callable<T>> callables) {
+        
         final long queuedAt = System.currentTimeMillis();
         return callables.stream()
                 .map(callable -> timed(callable, executor.getQueue().size(), queuedAt))
                 .collect(Collectors.toList());
     }
 
-    private static Callable<Object> timed(
-            final Callable<Object> callable,
+    private static <T> Callable<T> timed(
+            final Callable<T> callable,
             final int queueSize,
             final long queuedAt) {
 
@@ -355,10 +310,10 @@ public final class ThreadPoolSupport implements AutoCloseable {
         };
     }
 
-    private Callable<Object> toSingleTask(final List<Callable<Object>> callables) {
+    private <T> Callable<List<T>> toSingleTask(final List<? extends Callable<T>> callables) {
         return () -> {
-            final List<Object> resultList = _Lists.newArrayList();
-            for(Callable<Object> callable : callables) {
+            final List<T> resultList = _Lists.newArrayList();
+            for(Callable<T> callable : callables) {
                 resultList.add(callable.call()); // any exceptions thrown are propagated
             }
             return resultList;
