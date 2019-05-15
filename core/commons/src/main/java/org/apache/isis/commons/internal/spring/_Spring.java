@@ -38,6 +38,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
 
@@ -55,6 +56,7 @@ import static org.apache.isis.commons.internal.base._NullSafe.stream;
 import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <h1>- internal use only -</h1>
@@ -66,6 +68,7 @@ import lombok.val;
  *
  * @since 2.0.0
  */
+@Slf4j
 public class _Spring {
 
     public static boolean isContextAvailable() {
@@ -196,6 +199,7 @@ public class _Spring {
 
     /**
      * Returns a key/value pair copy of Spring's environment
+     * @see {@linkplain <a href="https://jira.spring.io/browse/SPR-10241">https://jira.spring.io/browse/SPR-10241</a>}
      * @param configurableEnvironment
      */
     public static Map<String, String> copySpringEnvironmentToMap(
@@ -209,19 +213,46 @@ public class _Spring {
                 
                 val mapPropertySource = (MapPropertySource) propertySource;
                 
-                mapPropertySource.getSource().forEach((k, v) -> {
-                    if(v==null) {
-                        return;
-                    }
-                    map.put(k, v.toString());
-                    //TODO[2112] when we override existing keys, at least output a warning
-                });
+                mapPropertySource.getSource().forEach((key, value) ->
+                    putIfNewValuePresent_warnIfKeyAlreadyExists(key, value, map));
                 
+            } else if(propertySource instanceof EnumerablePropertySource) {
+                
+                val enumPropertySource = (EnumerablePropertySource<?>) propertySource;
+                
+                for (String key : enumPropertySource.getPropertyNames()) {
+                    val value = enumPropertySource.getProperty(key);
+                    
+                    putIfNewValuePresent_warnIfKeyAlreadyExists(key, value, map);
+                }
+                
+            } else {
+            
+                log.warn("Ignoring PropertySource type '{}', "
+                        + "because we don't know how to iterate over its key/value pairs.",
+                        propertySource);
             }
-            //TODO[2112] there might be others, at least output a warning
+
         }
         
         return map;
+    }
+    
+    // -- HELPER
+    
+    private static void putIfNewValuePresent_warnIfKeyAlreadyExists (
+            String key,
+            Object newValue,
+            Map<String, String> dest) {
+        
+        if(newValue==null) {
+            return;
+        }
+        val oldValue = dest.put(key, newValue.toString());
+        if(oldValue!=null) {
+            log.warn("overriding exising config key {} with value {} -> {}", key, oldValue, newValue);    
+        }
+        
     }
     
 }
