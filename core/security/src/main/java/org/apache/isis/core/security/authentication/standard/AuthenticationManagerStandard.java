@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
@@ -59,7 +58,6 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
      * @param deploymentCategory
      */
     @Override
-    @Programmatic
     public final void init() {
         defaultRandomCodeGeneratorIfNecessary();
         addDefaultAuthenticators();
@@ -84,7 +82,6 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     }
 
     @Override
-    @Programmatic
     public void shutdown() {
         for (final Authenticator authenticator : authenticators) {
             authenticator.shutdown();
@@ -95,7 +92,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     // Session Management (including authenticate)
     // //////////////////////////////////////////////////////////
 
-    @Programmatic
+    
     @Override
     public synchronized final AuthenticationSession authenticate(final AuthenticationRequest request) {
         if (request == null) {
@@ -126,14 +123,14 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return code;
     }
 
-    @Programmatic
+    
     @Override
     public final boolean isSessionValid(final AuthenticationSession session) {
         final String userName = userByValidationCode.get(session.getValidationCode());
         return session.hasUserNameOf(userName);
     }
 
-    @Programmatic
+    
     @Override
     public void closeSession(final AuthenticationSession session) {
         List<Authenticator> authenticators = getAuthenticators();
@@ -147,23 +144,23 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     // Authenticators
     // //////////////////////////////////////////////////////////
 
-    @Programmatic
+    
     public final void addAuthenticator(final Authenticator authenticator) {
         authenticators.add(authenticator);
     }
 
-    @Programmatic
+    
     public void addAuthenticatorToStart(final Authenticator authenticator) {
         authenticators.add(0, authenticator);
     }
 
-    @Programmatic
+    
     public List<Authenticator> getAuthenticators() {
         return Collections.unmodifiableList(authenticators);
     }
 
 
-    @Programmatic
+    
     @Override
     public boolean register(final RegistrationDetails registrationDetails) {
         for (final Registrar registrar : getRegistrars()) {
@@ -174,7 +171,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return false;
     }
 
-    @Programmatic
+    
     @Override
     public boolean supportsRegistration(final Class<? extends RegistrationDetails> registrationDetailsClass) {
         for (final Registrar registrar : getRegistrars()) {
@@ -185,7 +182,7 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return false;
     }
 
-    @Programmatic
+    
     public List<Registrar> getRegistrars() {
         return asAuthenticators(getAuthenticators());
     }
@@ -206,7 +203,6 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
      * For injection; will {@link #defaultRandomCodeGeneratorIfNecessary()
      * default} otherwise.
      */
-    @Programmatic
     public void setRandomCodeGenerator(final RandomCodeGenerator randomCodeGenerator) {
         assert randomCodeGenerator != null;
         this.randomCodeGenerator = randomCodeGenerator;

@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.metamodel.services;
 
-import static org.hamcrest.Matchers.any;
-import static org.junit.Assert.assertThat;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -29,16 +26,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ActiveProfiles;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.repository.RepositoryService;
-import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
+
+import static org.hamcrest.Matchers.any;
+import static org.junit.Assert.assertThat;
 
 import lombok.Getter;
 
@@ -48,7 +45,11 @@ import lombok.Getter;
         ServiceRegistryDefault.class,
         ServiceInjectorDefaultTest.Producers.class,
         ServiceInjectorDefaultTest_usingFields.Producers.class,
-})
+    },
+    properties = {
+            "isis.services.injector.setPrefix=true"
+    }
+)
 class ServiceInjectorDefaultTest_usingFields {
     
     @Configuration
@@ -108,12 +109,10 @@ class ServiceInjectorDefaultTest_usingFields {
     // -- TESTS
     
     @Inject private ServiceInjector injector;
-    @Inject private ApplicationContext applicationContext;
     
     @BeforeEach
     void setup() {
-        _Context.clear();
-        _Spring.init(applicationContext);    
+    
     }
     
     @Inject private A serviceA;

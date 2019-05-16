@@ -30,6 +30,7 @@ import org.springframework.core.io.support.PropertySourceFactory;
 
 import org.apache.isis.applib.AppManifest;
 
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 
 /**
@@ -40,50 +41,25 @@ import lombok.val;
  */
 public final class Presets  {
 
-    private static enum Providers implements Consumer<Map<String, String>> {
+    @RequiredArgsConstructor
+    private static enum Providers {
     
-        H2InMemory {
+        H2InMemory(AppManifest.Presets::withH2InMemoryProperties),
+        HsqlDbInMemory(AppManifest.Presets::withHsqlDbInMemoryProperties),
+        DataNucleus(AppManifest.Presets::withDataNucleusProperties),
+        IsisIntegTest(AppManifest.Presets::withIsisIntegTestProperties),
+		NoTranslations(map->map.put("isis.services.translation.po.mode", "disable")),
     
-            @Override
-            public void accept(Map<String, String> map) {
-                AppManifest.Presets.withH2InMemoryProperties(map);
-            }
-            
-        },
+        ;
         
-        HsqlDbInMemory {
-    
-            @Override
-            public void accept(Map<String, String> map) {
-                AppManifest.Presets.withHsqlDbInMemoryProperties(map);
-            }
-            
-        },
-        
-        DataNucleus {
-    
-            @Override
-            public void accept(Map<String, String> map) {
-                AppManifest.Presets.withDataNucleusProperties(map);
-            }
-            
-        },
-        
-        IsisIntegTest {
-    
-            @Override
-            public void accept(Map<String, String> map) {
-                AppManifest.Presets.withIsisIntegTestProperties(map);
-            }
-            
-        },
-    
+        private final Consumer<Map<String, String>> populator;
     }
     
     public static final String H2InMemory = "H2InMemory";
     public static final String HsqlDbInMemory = "HsqlDbInMemory";
     public static final String DataNucleus = "DataNucleus";
     public static final String IsisIntegTest = "IsisIntegTest";
+    public static final String NoTranslations = "NoTranslations";
     
     
     public static class Factory implements PropertySourceFactory {
@@ -94,7 +70,7 @@ public final class Presets  {
                 EncodedResource resource) throws IOException {
             
             val map = new HashMap<String, String>(); 
-            Providers.valueOf(name).accept(map);
+            Providers.valueOf(name).populator.accept(map);
             
             val widenedMap = new HashMap<String, Object>();
             widenedMap.putAll(map);

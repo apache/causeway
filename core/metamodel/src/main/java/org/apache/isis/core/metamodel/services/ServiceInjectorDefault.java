@@ -23,11 +23,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import org.springframework.beans.factory.InjectionPoint;
+import org.springframework.core.MethodParameter;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
@@ -56,14 +60,14 @@ public class ServiceInjectorDefault implements ServiceInjector {
     private final Map<Class<?>, Field[]> fieldsByClassCache = _Maps.newHashMap();
     
     @Override
-    public <T> T injectServicesInto(T domainObject) {
-        injectServices(domainObject);
+    public <T> T injectServicesInto(T domainObject, Consumer<InjectionPoint> onNotResolvable) {
+        injectServices(domainObject, onNotResolvable);
         return domainObject;
     }
     
     @PostConstruct
     public void init() {
-        autowireSetters = configuration.getBoolean(KEY_SET_PREFIX, true);
+        autowireSetters = configuration.getBoolean(KEY_SET_PREFIX, false);
         autowireInject = configuration.getBoolean(KEY_INJECT_PREFIX, true);
     }
     
@@ -72,34 +76,34 @@ public class ServiceInjectorDefault implements ServiceInjector {
     boolean autowireSetters;
     boolean autowireInject;    
 
-    private void injectServices(final Object targetPojo) {
+    private void injectServices(final Object targetPojo, Consumer<InjectionPoint> onNotResolvable) {
 
         final Class<?> cls = targetPojo.getClass();
 
-        injectToFields(targetPojo, cls);
+        injectToFields(targetPojo, cls, onNotResolvable);
 
         if(autowireSetters) {
-            injectViaPrefixedMethods(targetPojo, cls, "set");
+            injectViaPrefixedMethods(targetPojo, cls, "set", onNotResolvable);
         }
         if(autowireInject) {
-            injectViaPrefixedMethods(targetPojo, cls, "inject");
+            injectViaPrefixedMethods(targetPojo, cls, "inject", onNotResolvable);
         }
     }
 
-    private void injectToFields(final Object targetPojo, final Class<?> cls) {
+    private void injectToFields(final Object targetPojo, final Class<?> cls, Consumer<InjectionPoint> onNotResolvable) {
 
         _NullSafe.stream(fieldsByClassCache.computeIfAbsent(cls, __->cls.getDeclaredFields()))
         .filter(isAnnotatedForInjection())
-        .forEach(field->injectToField(targetPojo, field));
+        .forEach(field->injectToField(targetPojo, field, onNotResolvable));
 
         // recurse up the object's class hierarchy
         final Class<?> superclass = cls.getSuperclass();
         if(superclass != null) {
-            injectToFields(targetPojo, superclass);
+            injectToFields(targetPojo, superclass, onNotResolvable);
         }
     }
 
-    private void injectToField(final Object targetPojo, final Field field) {
+    private void injectToField(final Object targetPojo, final Field field, Consumer<InjectionPoint> onNotResolvable) {
 
         final Class<?> typeToBeInjected = field.getType();
         // don't think that type can ever be null,
@@ -111,7 +115,7 @@ public class ServiceInjectorDefault implements ServiceInjector {
         // inject matching services into a field of type Collection<T> if a generic type T is present
         final Class<?> elementType = _Collections.inferElementTypeIfAny(field);
         if(elementType!=null) {
-            injectToField_nonScalar(targetPojo, field, elementType);
+            injectToField_nonScalar(targetPojo, field, elementType, onNotResolvable);
             return;
         }
         
@@ -119,6 +123,8 @@ public class ServiceInjectorDefault implements ServiceInjector {
         if(beans.isCardinalityOne()) {
             val bean = beans.getSingleton().get();
             invokeInjectorField(field, targetPojo, bean);    
+        } else {
+            onNotResolvable.accept(new InjectionPoint(field));
         }
 
     }
@@ -127,7 +133,8 @@ public class ServiceInjectorDefault implements ServiceInjector {
     private void injectToField_nonScalar(
             final Object targetPojo, 
             final Field field, 
-            final Class<?> elementType) {
+            final Class<?> elementType, 
+            final Consumer<InjectionPoint> onNotResolvable) {
         
         final Class<? extends Collection<Object>> collectionTypeToBeInjected =
                 (Class<? extends Collection<Object>>) field.getType();
@@ -141,6 +148,8 @@ public class ServiceInjectorDefault implements ServiceInjector {
                     .collect(_Collections.<Object>toUnmodifiableOfType(collectionTypeToBeInjected));
 
             invokeInjectorField(field, targetPojo, collectionOfServices);
+        } else {
+            onNotResolvable.accept(new InjectionPoint(field));
         }
         
     }
@@ -148,16 +157,18 @@ public class ServiceInjectorDefault implements ServiceInjector {
     private void injectViaPrefixedMethods(
             final Object targetPojo,
             final Class<?> cls,
-            final String prefix) {
+            final String prefix, 
+            final Consumer<InjectionPoint> onNotResolvable) {
 
         _NullSafe.stream(methodsByClassCache.computeIfAbsent(cls, __->cls.getMethods()))
         .filter(nameStartsWith(prefix))
-        .forEach(prefixedMethod->injectIntoSetter(targetPojo, prefixedMethod));
+        .forEach(prefixedMethod->injectIntoSetter(targetPojo, prefixedMethod, onNotResolvable));
     }
 
     private void injectIntoSetter(
             final Object targetPojo,
-            final Method setter) {
+            final Method setter, 
+            final Consumer<InjectionPoint> onNotResolvable) {
         
         final Class<?> typeToBeInjected = injectorMethodEvaluator.getTypeToBeInjected(setter);
         if(typeToBeInjected == null) {
@@ -168,7 +179,9 @@ public class ServiceInjectorDefault implements ServiceInjector {
         if(instance.isCardinalityOne()) {
             val bean = instance.getSingleton().get();
             invokeInjectorMethod(setter, targetPojo, bean);    
-        } 
+        } else {
+            onNotResolvable.accept(new InjectionPoint(new MethodParameter(setter, 0)));
+        }
         
     }
 

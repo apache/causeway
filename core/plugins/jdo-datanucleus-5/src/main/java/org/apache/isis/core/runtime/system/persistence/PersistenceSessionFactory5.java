@@ -21,19 +21,16 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.jdo.PersistenceManagerFactory;
 
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledStateHolder;
@@ -50,10 +47,6 @@ import lombok.extern.slf4j.Slf4j;
  *
  * Factory for {@link PersistenceSession}.
  *
- * <p>
- * Implementing class is added to {@link ServicesInjector} as an (internal) domain service; all public methods
- * must be annotated using {@link Programmatic}.
- * </p>
  */
 @Slf4j
 public class PersistenceSessionFactory5

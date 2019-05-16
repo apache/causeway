@@ -24,9 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider;
-import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandard;
 import org.apache.isis.core.security.authentication.bypass.AuthenticatorBypass;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
@@ -39,11 +37,6 @@ import org.apache.isis.core.security.authorization.standard.Authorizor;
 //@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties")
 @PropertySource("file:src/test/java/org/apache/isis/testdomain/jdo/isis-non-changing.properties")
 public class JdoTestDomainModule {
-    
-    @Bean @Produces @Singleton
-    public IsisConfiguration getConfig() {
-        return _Config.getConfiguration();
-    }
     
     /**
     * The standard authentication manager, configured with the 'bypass' authenticator 
@@ -72,8 +65,7 @@ public class JdoTestDomainModule {
    public Authorizor autorizor() {
        return new AuthorizorBypass();
    }
-   
-   
+
    @Bean @Produces @Singleton
    public WebAppConfigBean webAppConfigBean() {
        return WebAppConfigBean.builder()

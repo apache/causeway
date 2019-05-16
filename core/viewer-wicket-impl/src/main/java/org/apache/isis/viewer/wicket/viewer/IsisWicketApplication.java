@@ -63,8 +63,6 @@ import org.apache.wicket.settings.DebugSettings;
 import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.apache.wicket.util.time.Duration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.isis.commons.internal.context._Context;
@@ -108,6 +106,8 @@ import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.webjars.WicketWebjars;
 import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
 import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 import net.ftlines.wicketsource.WicketSource;
 
 /**
@@ -133,13 +133,12 @@ import net.ftlines.wicketsource.WicketSource;
  * Alternatively, {@link ComponentFactory}s can be specified by overriding {@link #newIsisWicketModule()}.
  * This mechanism allows a number of other aspects to be customized.
  */
+@Slf4j
 public class IsisWicketApplication
 extends AuthenticatedWebApplication
 implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketViewerSettingsAccessor {
 
     private static final long serialVersionUID = 1L;
-
-    private static final Logger LOG = LoggerFactory.getLogger(IsisWicketApplication.class);
 
     private static final String STRIP_WICKET_TAGS_KEY = "isis.viewer.wicket.stripWicketTags";
     private static final boolean STRIP_WICKET_TAGS_DEFAULT = true;
@@ -170,11 +169,12 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     }
 
     @Inject private ComponentFactoryRegistry componentFactoryRegistry;
+    @Inject private PageClassRegistry pageClassRegistry;
+    @Inject private WicketViewerSettings settings;
+    
 //    @Inject private ImageResourceCache imageCache;
 //    @Inject private WicketViewerSettings wicketViewerSettings;
-    @Inject private PageClassRegistry pageClassRegistry;
-//    @Inject private IsisSessionFactory isisSessionFactory;
-    @Inject private WicketViewerSettings settings;
+//  @Inject private IsisSessionFactory isisSessionFactory;
 
     private final IsisWicketApplication_Experimental experimental;
 
@@ -227,7 +227,8 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     @Override
     protected void init() {
         
-        final IsisConfiguration configuration = IsisContext.getConfiguration();
+        val configuration = IsisContext.getConfiguration();
+        val serviceInjector = IsisContext.getServiceInjector();
         
         List<Future<Object>> futures = null;
         try {
@@ -245,21 +246,9 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
             
             // Initialize Spring Dependency Injection
-            getComponentInstantiationListeners().add(
-                    new SpringComponentInjector(this));
+            getComponentInstantiationListeners().add(new SpringComponentInjector(this));
             
-
-//            // FIXME [2033] remove comments ...
-//            // create IsisSessionFactory
-//            //
-//            final Injector injector = Guice.createInjector(
-//                    newIsisModule(), 
-//                    newIsisWicketModule());
-            //
-//            initWicketComponentInjection(injector);
-            //
-//            injector.injectMembers(this); // populates this.isisSessionFactory
-//            Ensure.ensure("IsisSessionFactory should have been injected.", this.isisSessionFactory != null);
+            serviceInjector.injectServicesInto(this);
             
             if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
                 WebRequestCycleForIsis webRequestCycleForIsis = (WebRequestCycleForIsis) requestCycleListenerForIsis;
@@ -296,8 +285,8 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
             if(_Context.isPrototyping()) {
                 DebugDiskDataStore.register(this);
-                LOG.debug("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
-                LOG.debug("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
+                log.debug("DebugDiskDataStore registered; access via ~/wicket/internal/debug/diskDataStore");
+                log.debug("DebugDiskDataStore: eg, http://localhost:8080/wicket/wicket/internal/debug/diskDataStore");
 
                 if(!getDebugSettings().isDevelopmentUtilitiesEnabled()) {
                     boolean enableDevUtils = configuration
@@ -318,14 +307,14 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
                 }
             }
 
-            LOG.debug("storeSettings.inmemoryCacheSize        : {}", getStoreSettings().getInmemoryCacheSize());
-            LOG.debug("storeSettings.asynchronousQueueCapacity: {}", getStoreSettings().getAsynchronousQueueCapacity());
-            LOG.debug("storeSettings.maxSizePerSession        : {}", getStoreSettings().getMaxSizePerSession());
-            LOG.debug("storeSettings.fileStoreFolder          : {}", getStoreSettings().getFileStoreFolder());
+            log.debug("storeSettings.inmemoryCacheSize        : {}", getStoreSettings().getInmemoryCacheSize());
+            log.debug("storeSettings.asynchronousQueueCapacity: {}", getStoreSettings().getAsynchronousQueueCapacity());
+            log.debug("storeSettings.maxSizePerSession        : {}", getStoreSettings().getMaxSizePerSession());
+            log.debug("storeSettings.fileStoreFolder          : {}", getStoreSettings().getFileStoreFolder());
 
         } catch(RuntimeException ex) {
             // because Wicket's handling in its WicketFilter (that calls this method) does not log the exception.
-            LOG.error("Failed to initialize", ex);
+            log.error("Failed to initialize", ex);
             throw ex;
         } finally {
             ThreadPoolSupport.getInstance().join(futures);
@@ -468,13 +457,13 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     }
 
     // //////////////////////////////////////
-
-    /**
-     * Override if required
-     */
-    protected IsisWicketModule newIsisWicketModule() {
-        return new IsisWicketModule(getServletContext());
-    }
+//TODO[2112] cleanup
+//    /**
+//     * Override if required
+//     */
+//    protected IsisWicketModule newIsisWicketModule() {
+//        return new IsisWicketModule(getServletContext());
+//    }
 
     // //////////////////////////////////////
 
@@ -581,7 +570,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
 
     private static void log(String msg) {
         System.err.println(msg);
-        LOG.error(msg);
+        log.error(msg);
     }
 
     // //////////////////////////////////////
@@ -634,7 +623,7 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             IsisContext.clear();
         } catch(final RuntimeException ex) {
             // symmetry with #init()
-            LOG.error("Failed to destroy", ex);
+            log.error("Failed to destroy", ex);
             throw ex;
         }
     }

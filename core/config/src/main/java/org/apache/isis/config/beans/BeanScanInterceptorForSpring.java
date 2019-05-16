@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.runtime.spring;
+package org.apache.isis.config.beans;
 
 import java.io.IOException;
 

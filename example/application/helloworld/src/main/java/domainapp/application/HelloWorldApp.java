@@ -23,15 +23,16 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Import;
 
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession5;
 import org.apache.isis.runtime.spring.IsisBoot;
 
+/**
+ * Bootstrap the application.
+ */
 @SpringBootApplication
 @Import({
-    PersistenceSession5.class,            
     IsisBoot.class,
     FixtureScriptsDefault.class,
-    HelloWorldAppManifest.class
+    HelloWorldAppManifest.class,
 })
 public class HelloWorldApp extends SpringBootServletInitializer {
 

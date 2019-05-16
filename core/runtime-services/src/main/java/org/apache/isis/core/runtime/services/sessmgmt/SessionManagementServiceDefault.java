@@ -19,21 +19,16 @@
 
 package org.apache.isis.core.runtime.services.sessmgmt;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
+import javax.inject.Singleton;
+
 import org.apache.isis.applib.services.sessmgmt.SessionManagementService;
 import org.apache.isis.core.metamodel.services.persistsession.PersistenceSessionServiceInternal;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN,
-        menuOrder = "" + Integer.MAX_VALUE
-        )
+@Singleton
 public class SessionManagementServiceDefault implements SessionManagementService {
 
-    @Programmatic
     @Override
     public void nextSession() {
 

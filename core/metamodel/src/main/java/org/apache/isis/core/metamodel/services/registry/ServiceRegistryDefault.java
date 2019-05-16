@@ -24,23 +24,34 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.commons.ioc.BeanAdapter;
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolExecutionMode;
+import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @since 2.0.0
  */
-@Singleton
-public final class ServiceRegistryDefault implements ServiceRegistry {
-
-    private final _Lazy<Set<BeanAdapter>> registeredBeans = _Lazy.threadSafe(this::enumerateBeans);
+@Singleton @Slf4j
+public final class ServiceRegistryDefault implements ServiceRegistry, ApplicationContextAware {
 
     @Override
     public boolean isDomainServiceType(Class<?> cls) {
@@ -54,18 +65,49 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
     public Stream<BeanAdapter> streamRegisteredBeans() {
         return registeredBeans.get().stream();
     }
+    
+    @Override
+    public void setApplicationContext(ApplicationContext springContext) throws BeansException {
+        
+        // disables concurrent Spec-Loading
+        ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = 
+                ThreadPoolExecutionMode.SEQUENTIAL_WITHIN_CALLING_THREAD;
+        
+        _Context.clear(); // ensures a well defined precondition
+
+        _Context.putSingleton(ApplicationContext.class, springContext);
+        _Config.putAll(_Spring.copySpringEnvironmentToMap(configurableEnvironment));
+
+        log.info("Spring's context was passed over to Isis");
+        
+        isisConfiguration = _Config.getConfiguration(); // finalize config
+        
+        // dump config to log
+        if(log.isInfoEnabled() && !isisConfiguration.getEnvironment().isUnitTesting()) {
+            log.info("\n" + _Config.getConfiguration().toStringFormatted());
+        }    
+        
+    }
+    
+    @Bean @Singleton
+    public IsisConfiguration getConfiguration() {
+        return isisConfiguration;
+    }
 
     // -- DEPS
     
-    // ensure we have Spring's context
-    @Inject SpringContextProvider springContextProvider;
+    @Autowired private ConfigurableEnvironment configurableEnvironment;
+    private IsisConfiguration isisConfiguration;
     
     // -- HELPER
+    
+    private final _Lazy<Set<BeanAdapter>> registeredBeans = _Lazy.threadSafe(this::enumerateBeans);
     
     Set<BeanAdapter> enumerateBeans() {
         return _Spring.streamAllBeans(this::isDomainServiceType)
         .filter(_NullSafe::isPresent)
         .collect(Collectors.toCollection(HashSet::new));
     }
+
 
 }

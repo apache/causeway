@@ -19,36 +19,40 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import javax.servlet.ServletContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
+
+import org.apache.isis.config.beans.BeanScanInterceptorForSpring;
 
 /**
- * To override
- *
- * <pre>
- * final Module isisDefaults = new IsisWicketModule();
- *
- * final Module myAppOverrides = new AbstractModule() {
- *     @Override
- *     protected void configure() {
- *         bind(ComponentFactoryRegistrar.class).to(ComponentFactoryRegistrarForMyApp.class);
- *         bind(PageClassList.class).to(PageClassListForMyApp.class);
- *         ...
- *      }
- *  };
- * final Module overridden = Modules.override(isisDefaults).with(myAppOverrides);
- * </pre>
+ * 
+ * @since 2.0.0
  */
+@Configuration
+@ComponentScan(
+        basePackageClasses= {
+                IsisWicketModule.class,
+           },
+        includeFilters= {
+                @Filter(type = FilterType.CUSTOM, classes= {BeanScanInterceptorForSpring.class})
+        })
 public class IsisWicketModule {
 
-    private ServletContext servletContext;
-
-    public IsisWicketModule(
-            final ServletContext servletContext) {
-        this.servletContext = servletContext;
-    }
-
-    protected void configure() {
-        //bind(ComponentFactoryRegistry.class).to(ComponentFactoryRegistryDefault.class);
+   
+    
+    
+//TODO[2112] clean up
+//    
+//    private ServletContext servletContext;
+//    public IsisWicketModule(
+//            final ServletContext servletContext) {
+//        this.servletContext = servletContext;
+//    }
+//
+//    protected void configure() {
+//        //bind(ComponentFactoryRegistry.class).to(ComponentFactoryRegistryDefault.class);
 //        bind(PageClassRegistry.class).to(PageClassRegistryDefault.class);
 //        bind(EmailVerificationUrlService.class).to(EmailVerificationUrlServiceDefault.class);
 //        bind(PageNavigationService.class).to(PageNavigationServiceDefault.class);
@@ -107,7 +111,7 @@ public class IsisWicketModule {
 //                    }
 //                    return fallback;
 //                });
-    }
+//    }
     
     // -- HELPER
     

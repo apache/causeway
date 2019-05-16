@@ -30,10 +30,9 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
  */
 public interface AuthenticationManager extends ApplicationScopedComponent {
 
-    @Programmatic
+    
     void init();
-
-    @Programmatic
+    
     void shutdown();
 
     /**
@@ -41,22 +40,19 @@ public interface AuthenticationManager extends ApplicationScopedComponent {
      * {@link AuthenticationRequest request} is valid; otherwise returns
      * <tt>null</tt>.
      */
-    @Programmatic
+    
     AuthenticationSession authenticate(AuthenticationRequest request);
-
-    @Programmatic
+    
     boolean supportsRegistration(Class<? extends RegistrationDetails> registrationDetailsClass);
-
-    @Programmatic
+    
     boolean register(RegistrationDetails registrationDetails);
 
     /**
      * Whether the provided {@link AuthenticationSession} is still valid.
      */
-    @Programmatic
+    
     boolean isSessionValid(AuthenticationSession authenticationSession);
-
-    @Programmatic
+    
     void closeSession(AuthenticationSession authenticationSession);
 
 }
