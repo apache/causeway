@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -47,6 +48,7 @@ public class MetaModelValidatorServiceDefault implements MetaModelValidatorServi
     
     @Inject private IsisConfiguration configuration;
     @Inject private ProgrammingModelService programmingModelService;
+    @Inject private ServiceRegistry serviceRegistry; 
     
     private _Lazy<MetaModelValidator> metaModelValidator = 
             _Lazy.threadSafe(this::createMetaModelValidator);
@@ -61,7 +63,7 @@ public class MetaModelValidatorServiceDefault implements MetaModelValidatorServi
         val mmValidatorComposite = MetaModelValidatorComposite.asComposite(mmValidator);
         
         val programmingModel = programmingModelService.get();
-        val metaModelRefiners = MetaModelRefiner.getAll();
+        val metaModelRefiners = MetaModelRefiner.getAll(serviceRegistry);
         
         for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
             metaModelRefiner.refineProgrammingModel(programmingModel);

@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.isis.core.metamodel.MetaModelContext;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
@@ -41,10 +41,7 @@ public interface MetaModelRefiner extends MetaModelValidatorRefiner {
 
     // -- LOOKUP ALL REFINERS
     
-	static List<MetaModelRefiner> getAll() {
-		
-		val context = MetaModelContext.current();
-		val serviceRegistry = context.getServiceRegistry();
+	static List<MetaModelRefiner> getAll(ServiceRegistry serviceRegistry) {
 		
 		val refiners = serviceRegistry.select(MetaModelRefiner.class)
 				.stream()

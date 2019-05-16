@@ -18,15 +18,72 @@
  */
 package domainapp.application;
 
+import javax.inject.Singleton;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
+
+import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.config.internal._Config;
+import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandard;
+import org.apache.isis.core.security.authentication.bypass.AuthenticatorBypass;
+import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
+import org.apache.isis.core.security.authentication.standard.AuthenticationManagerStandard;
+import org.apache.isis.core.security.authorization.bypass.AuthorizorBypass;
+import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
+import org.apache.isis.core.security.authorization.standard.Authorizor;
 
 /**
  * Bootstrap the application.
  */
 @Configuration
-@PropertySource("isis-non-changing.properties")
-public class HelloWorldAppManifest  {
+@PropertySource("classpath:/domainapp/application/isis-non-changing.properties")
+public class HelloWorldAppManifest {
+    
+    @Bean @Singleton
+    public IsisConfiguration getConfig() {
+        return _Config.getConfiguration();
+    }
+    
+    /**
+    * The standard authentication manager, configured with the 'bypass' authenticator 
+    * (allows all requests through).
+    * <p>
+    * integration tests ignore appManifest for authentication and authorization.
+    */
+   @Bean @Singleton
+   public AuthenticationManager authenticationManagerWithBypass() {
+       final AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard();
+       authenticationManager.addAuthenticator(new AuthenticatorBypass());
+       return authenticationManager;
+   }
+   
+   @Bean @Singleton
+   public AuthorizationManager authorizationManagerWithBypass() {
+       final AuthorizationManagerStandard authorizationManager = new AuthorizationManagerStandard() {
+           {
+               authorizor = new AuthorizorBypass();
+           }  
+       };
+       return authorizationManager;
+   }
+   
+   @Bean @Singleton
+   public Authorizor autorizor() {
+       return new AuthorizorBypass();
+   }
+   
+   
+   @Bean @Singleton
+   public WebAppConfigBean webAppConfigBean() {
+       return WebAppConfigBean.builder()
+               .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
+               .build();
+   }
+    
 
     //TODO[2112] add missing producers
     

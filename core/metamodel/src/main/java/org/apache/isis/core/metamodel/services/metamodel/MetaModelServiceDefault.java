@@ -85,9 +85,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     @Override
     public void rebuild(final Class<?> domainType) {
         
-        GridService gridService = serviceRegistry.lookupServiceElseFail(GridService.class); 
         gridService.remove(domainType);
-        
         specificationLoader.reloadSpecification(domainType);
     }
 
@@ -259,8 +257,20 @@ public class MetaModelServiceDefault implements MetaModelService {
     }
     
     @Inject ServiceRegistry serviceRegistry;
+    
+    //-------------
+    //TODO[2112] workaround circular dependency issues when bootstrapping ...
     @Inject SpecificationLoader specificationLoader;
-    //@Inject GridService gridService; // to break circular dependency
-
+    @Inject GridService gridService;
+    //
+//    private _Lazy<SpecificationLoader> specificationLoader = _Lazy.threadSafe(()->
+//        serviceRegistry.lookupServiceElseFail(SpecificationLoader.class));
+//    //
+//    private _Lazy<GridService> gridService = _Lazy.threadSafe(()->
+//        serviceRegistry.lookupServiceElseFail(GridService.class));
+//    //
+//    private _Lazy<MetaModelExporter> metaModelExporter = _Lazy.threadSafe(()->
+//        new MetaModelExporter(specificationLoader.get()));
+    //-------------
 
 }

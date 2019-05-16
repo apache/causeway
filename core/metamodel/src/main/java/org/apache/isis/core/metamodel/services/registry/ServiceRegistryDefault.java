@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.DomainService;
@@ -54,6 +55,10 @@ public final class ServiceRegistryDefault implements ServiceRegistry {
         return registeredBeans.get().stream();
     }
 
+    // -- DEPS
+    
+    // ensure we have Spring's context
+    @Inject SpringContextProvider springContextProvider;
     
     // -- HELPER
     
