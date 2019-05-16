@@ -23,9 +23,11 @@ import javax.inject.Singleton;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
 
 import org.apache.isis.config.IsisConfiguration;
+import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandard;
@@ -40,7 +42,10 @@ import org.apache.isis.core.security.authorization.standard.Authorizor;
  * Bootstrap the application.
  */
 @Configuration
-@PropertySource("classpath:/domainapp/application/isis-non-changing.properties")
+@PropertySources({
+    @PropertySource("classpath:/domainapp/application/isis-non-changing.properties"),
+    @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" })
+})
 public class HelloWorldAppManifest {
     
     @Bean @Singleton

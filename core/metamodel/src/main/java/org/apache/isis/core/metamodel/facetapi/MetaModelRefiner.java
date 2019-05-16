@@ -19,14 +19,10 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.core.commons.collections.Bin;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-
-import lombok.val;
 
 
 /**
@@ -41,13 +37,8 @@ public interface MetaModelRefiner extends MetaModelValidatorRefiner {
 
     // -- LOOKUP ALL REFINERS
     
-	static List<MetaModelRefiner> getAll(ServiceRegistry serviceRegistry) {
-		
-		val refiners = serviceRegistry.select(MetaModelRefiner.class)
-				.stream()
-				.collect(Collectors.toList());
-		
-		return refiners;
+	static Bin<MetaModelRefiner> getAll(ServiceRegistry serviceRegistry) {
+		return serviceRegistry.select(MetaModelRefiner.class);
 	}
 
 }
