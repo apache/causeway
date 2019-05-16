@@ -18,12 +18,12 @@
  */
 package domainapp.modules.simple.dom.impl;
 
+import java.util.Comparator;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import com.google.common.collect.ComparisonChain;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.Auditing;
@@ -35,11 +35,12 @@ import org.apache.isis.applib.services.repository.RepositoryService;
 import org.apache.isis.applib.services.title.TitleService;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
-import domainapp.modules.simple.dom.types.Name;
-import domainapp.modules.simple.dom.types.Notes;
 import static org.apache.isis.applib.annotation.CommandReification.ENABLED;
 import static org.apache.isis.applib.annotation.SemanticsOf.IDEMPOTENT;
 import static org.apache.isis.applib.annotation.SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE;
+
+import domainapp.modules.simple.dom.types.Name;
+import domainapp.modules.simple.dom.types.Notes;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "simple")
 @javax.jdo.annotations.DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
@@ -85,11 +86,12 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return getName();
     }
 
+    private final static Comparator<SimpleObject> comparator = 
+            Comparator.comparing(SimpleObject::getName);
+    
     @Override
     public int compareTo(final SimpleObject other) {
-        return ComparisonChain.start()
-                .compare(this.getName(), other.getName())
-                .result();
+        return comparator.compare(this, other);
     }
 
 

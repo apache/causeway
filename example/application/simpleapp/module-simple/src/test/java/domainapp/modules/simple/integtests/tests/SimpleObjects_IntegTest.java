@@ -32,8 +32,6 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.jupiter.api.Test;
 
-import com.google.common.base.Throwables;
-
 import domainapp.modules.simple.dom.impl.SimpleObject;
 import domainapp.modules.simple.dom.impl.SimpleObjects;
 import domainapp.modules.simple.fixture.SimpleObject_persona;

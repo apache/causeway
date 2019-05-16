@@ -45,7 +45,7 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-commons</artifactId>
 		</dependency>
-
+		
 		<!-- framework default core-codegen-plugin for tests -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>

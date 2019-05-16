@@ -25,11 +25,11 @@ import java.util.TreeSet;
 
 import javax.jdo.annotations.PersistenceCapable;
 
-import org.apache.isis.commons.internal._Constants;
-import org.apache.isis.core.plugins.classdiscovery.ClassDiscovery;
-import org.apache.isis.core.plugins.classdiscovery.ClassDiscoveryPlugin;
-import org.apache.isis.core.unittestsupport.utils.IndentPrinter;
 import org.junit.Test;
+
+import org.apache.isis.commons.internal._Constants;
+import org.apache.isis.core.plugins.beantyperegistry.BeanTypeRegistryPlugin;
+import org.apache.isis.core.unittestsupport.utils.IndentPrinter;
 
 /**
  * Provides some basic infrastructure to iterate over all entity types and
@@ -37,12 +37,12 @@ import org.junit.Test;
  */
 public abstract class AbstractApplyToAllContractTest {
 
-    protected final ClassDiscovery discovery;
+    protected final BeanTypeRegistryPlugin beanTypes;
     protected IndentPrinter out;
 
     protected AbstractApplyToAllContractTest(
             final String packagePrefix) {
-        discovery = ClassDiscoveryPlugin.get().discover(packagePrefix);
+        beanTypes = BeanTypeRegistryPlugin.get();
         out = new IndentPrinter(_Constants.nopWriter);
     }
 
@@ -87,7 +87,7 @@ public abstract class AbstractApplyToAllContractTest {
      * Can be overridden if need be.
      */
     protected Set<Class<?>> findTypes() {
-        return discovery.getTypesAnnotatedWith(PersistenceCapable.class);
+        return beanTypes.getEntityTypes();
     }
 
     protected abstract void applyContractTest(Class<?> entityType);

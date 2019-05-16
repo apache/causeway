@@ -93,10 +93,6 @@
             <exclusions>
             	<!-- whatever unittestsupport is dependent on, it should not be transitive  -->
             	<exclusion>
-            		<groupId>org.reflections</groupId>
-            		<artifactId>reflections</artifactId>
-            	</exclusion>
-            	<exclusion>
 	            	<groupId>com.google.guava</groupId>
 					<artifactId>guava</artifactId>
             	</exclusion>

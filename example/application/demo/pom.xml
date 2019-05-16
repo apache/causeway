@@ -218,12 +218,6 @@
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-plugins-discovery-reflections</artifactId>
-			<version>${isis.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
 			<version>${isis.version}</version>
 		</dependency>
