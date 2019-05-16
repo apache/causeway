@@ -44,10 +44,12 @@ public class IsisBoot implements ApplicationContextAware {
 	@Override
 	public void setApplicationContext(ApplicationContext springContext) throws BeansException {
 	    
-	    // disables concurrent Spec-Loading
-	    ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = 
+        // disables concurrent Spec-Loading
+        ThreadPoolSupport.HIGHEST_CONCURRENCY_EXECUTION_MODE_ALLOWED = 
                 ThreadPoolExecutionMode.SEQUENTIAL_WITHIN_CALLING_THREAD;
-	    
+        
+        _Context.clear(); // ensures a well defined precondition
+
 	    _Context.putSingleton(ApplicationContext.class, springContext);
 	    _Config.putAll(_Spring.copySpringEnvironmentToMap(configurableEnvironment));
 

@@ -146,7 +146,7 @@
         <jetty.version>9.4.12.v20180830</jetty.version>
 
 		<spring-context.version>5.1.7.RELEASE</spring-context.version>
-		<spring-boot.version>2.1.4.RELEASE</spring-boot.version>
+		<spring-boot.version>2.1.5.RELEASE</spring-boot.version>
 		
         <wicket.version>8.4.0</wicket.version>
         <wicketstuff.version>8.4.0</wicketstuff.version> <!-- org.wicketstuff:wicketstuff-select2 -->
@@ -169,7 +169,7 @@
 
         <htmlparser.version>2.1</htmlparser.version>
 
-        <junit.version>5.4.1</junit.version>
+        <junit.version>5.4.2</junit.version>
         <junit-legacy.version>4.12</junit-legacy.version>
         <assertj.version>3.11.1</assertj.version>
 
@@ -1385,12 +1385,6 @@ ${license.additional-notes}
                 <version>${isis.version}</version>
             </dependency>
             
-			<dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis-core-plugins-codegen-javassist</artifactId>
-                <version>${isis.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-plugins-discovery-reflections</artifactId>
@@ -2609,7 +2603,6 @@ ${license.additional-notes}
         <module>mavendeps/testing</module>
         
         <module>plugins/codegen-bytebuddy</module>
-        <module>plugins/codegen-javassist</module>
         <module>plugins/discovery-reflections</module>
         <module>plugins/jaxrs-resteasy-4</module>
         <module>plugins/jdo-common</module>
