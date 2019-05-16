@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
-import javax.enterprise.inject.Vetoed;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -24,7 +26,7 @@ import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelService;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -37,6 +39,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbs
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.standalonelist.ObjectSpecificationOnStandaloneList;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorService;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolExecutionMode;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
@@ -63,37 +66,52 @@ import lombok.extern.slf4j.Slf4j;
  * </ul>
  * </p>
  */
-@Vetoed // has a producer
+@Singleton
 @Slf4j
 public class SpecificationLoaderDefault implements SpecificationLoader {
 
 	private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
-	private final ProgrammingModel programmingModel;
-	private final FacetProcessor facetProcessor;
+	private ProgrammingModel programmingModel;
+	private FacetProcessor facetProcessor;
 
 
-	private final MetaModelValidator metaModelValidator;
+	private MetaModelValidator metaModelValidator;
 	private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
-	private final PostProcessor postProcessor;
+	private PostProcessor postProcessor;
 
+	@PostConstruct
+	public void preInit() {
+        this.programmingModel = programmingModelService.get();
+        this.metaModelValidator = metaModelValidatorService.get();
 
-	public SpecificationLoaderDefault(
+        this.facetProcessor = new FacetProcessor(programmingModel);
+        this.postProcessor = new PostProcessor(programmingModel);
+	}
+	
+	/** JUnit Test Support */
+	public static SpecificationLoaderDefault getInstance (
 			final ProgrammingModel programmingModel,
 			final MetaModelValidator metaModelValidator) {
 
-		this.programmingModel = programmingModel;
-		this.metaModelValidator = metaModelValidator;
+	    val instance = new SpecificationLoaderDefault(); 
+	    
+	    instance.programmingModel = programmingModel;
+	    instance.metaModelValidator = metaModelValidator;
 
-		this.facetProcessor = new FacetProcessor(programmingModel);
-		this.postProcessor = new PostProcessor(programmingModel);
+	    instance.facetProcessor = new FacetProcessor(programmingModel);
+	    instance.postProcessor = new PostProcessor(programmingModel);
+	    
+	    return instance;
 	}
+	
+	
 
 	// -- LIVE CYCLE
 
 	/**
 	 * Initializes and wires up, and primes the cache based on any service
-	 * classes (provided by the {@link ServicesInjector}).
+	 * classes (provided by the {@link IsisBeanTypeRegistry}).
 	 */
 	@Override
 	public void init() {
@@ -483,6 +501,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 	private void recache(final ObjectSpecification newSpec) {
 		cache.recache(newSpec);
 	}
+	
+	// -- DEPS
+	
+	private @Inject ProgrammingModelService programmingModelService;
+	private @Inject MetaModelValidatorService metaModelValidatorService; 
 	
 	// -- DEPRECATED
 

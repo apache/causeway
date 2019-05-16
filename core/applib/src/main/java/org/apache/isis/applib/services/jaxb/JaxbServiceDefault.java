@@ -64,7 +64,7 @@ public class JaxbServiceDefault extends JaxbService.Simple {
             DomainObjectList list = (DomainObjectList) domainObject;
             try {
                 final String elementObjectType = list.getElementObjectType();
-                final Class<?> elementType = metaModelService5.fromObjectType(elementObjectType);
+                final Class<?> elementType = metaModelService.fromObjectType(elementObjectType);
                 if (elementType.getAnnotation(XmlJavaTypeAdapter.class) == null) {
                     return JAXBContext.newInstance(domainClass, elementType);
                 } else {
@@ -102,6 +102,6 @@ public class JaxbServiceDefault extends JaxbService.Simple {
     ServiceInjector serviceInjector;
 
     @javax.inject.Inject
-    MetaModelService metaModelService5;
+    MetaModelService metaModelService;
 }
 

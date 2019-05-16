@@ -82,7 +82,7 @@ abstract class SpecificationLoaderTestAbstract {
         
         //@Produces
         SpecificationLoader getSpecificationLoader() {
-            return new SpecificationLoaderDefault(
+            return SpecificationLoaderDefault.getInstance(
                     new ProgrammingModelFacetsJava5(DeprecatedPolicy.HONOUR),
                     new MetaModelValidatorDefault());
         }
