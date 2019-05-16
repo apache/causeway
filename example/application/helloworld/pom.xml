@@ -22,40 +22,24 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.incode</groupId>
-        <artifactId>incode-build</artifactId>
-        <version>7</version>
+    	<groupId>org.apache.isis.examples</groupId>
+    	<artifactId>isis-examples</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>helloworld</artifactId>
-    <version>${revision}</version>
 
     <name>Apache Isis App - HelloWorld</name>
 
     <packaging>war</packaging>
 
     <properties>
-        <revision>2.0.0-M3-SNAPSHOT</revision>
-        <isis.version>${revision}</isis.version>
-
+    
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>
         <compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
-
-        <!-- override incode-build -->
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-        <jetty-maven-plugin.version>9.4.12.v20180830</jetty-maven-plugin.version>
-
-        <!-- override incode-build (see dn5-xxx.version in isis-core-plugins-jdo-datanucleus-5) -->
-        <datanucleus-api-jdo.version>5.2.1</datanucleus-api-jdo.version>
-        <datanucleus-core.version>5.2.1</datanucleus-core.version>
-        <datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
-        <hsqldb.version>2.4.1</hsqldb.version>
-
-        <!-- override incode-build -->
-        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
-        <maven-surefire-report-plugin.version>2.22.1</maven-surefire-report-plugin.version>
 
         <failOnMissingWebXml>false</failOnMissingWebXml>
 
@@ -65,105 +49,35 @@
         <maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
     </properties>
 
-    <build>
-        <resources>
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-            </resource>
-            <resource>
-                <filtering>false</filtering>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>com.github.odavid.maven.plugins</groupId>
-                <artifactId>mixin-maven-plugin</artifactId>
-                <version>0.1-alpha-39</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <mixins>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>standard</artifactId>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>datanucleusenhance</artifactId>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>surefire</artifactId>
-                        </mixin>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>jettywar</artifactId>
-                        </mixin>
-                    </mixins>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <configuration>
-                    <updatePomFile>true</updatePomFile>
-                    <pomElements>
-                        <dependencyManagement>resolve</dependencyManagement>
-                        <dependencies>resolve</dependencies>
-                    </pomElements>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>flatten</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>flatten</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>flatten.clean</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis</artifactId>
-                <version>${isis.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
+
+		<!-- SPRING -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${spring-boot.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.validation</groupId>
+					<artifactId>validation-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<version>${spring-boot.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
         <!-- ISIS API -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-applib</artifactId>
         </dependency>
-
-
+        
         <!-- ISIS CORE PLUGINS -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>

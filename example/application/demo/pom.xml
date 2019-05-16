@@ -14,46 +14,27 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.incode</groupId>
-		<artifactId>incode-build</artifactId>
-		<version>7</version>
-	</parent>
+    <parent>
+    	<groupId>org.apache.isis.examples</groupId>
+    	<artifactId>isis-examples</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
 	<groupId>org.apache.isis.example.application</groupId>
 	<artifactId>demo</artifactId>
-	<version>${revision}</version>
 
-	<name>Apache Isis 2 App - Demo</name>
+	<name>Apache Isis App - Demo</name>
 
 	<packaging>war</packaging>
 
 	<properties>
-		<!-- Application build version, to be injected via command line parameter -->
-		<revision>2.0.0-M3-SNAPSHOT</revision>
-        <!-- Apache Isis snapshot build version, to be injected via command line parameter-->
-        <isis.version>2.0.0-M3-SNAPSHOT</isis.version>
 
 		<compiler-plugin.source>1.8</compiler-plugin.source>
 		<compiler-plugin.target>1.8</compiler-plugin.target>
 		<compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
 
-		<!-- override incode-build -->
-		<maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-		<jetty-maven-plugin.version>9.4.12.v20180830</jetty-maven-plugin.version>
-
-		<!-- override incode-build (see dn5-xxx.version in isis-core-plugins-jdo-datanucleus-5) -->
-		<datanucleus-maven-plugin.version>5.0.2</datanucleus-maven-plugin.version>
-		<datanucleus-api-jdo.version>5.2.1</datanucleus-api-jdo.version>
-		<datanucleus-core.version>5.2.1</datanucleus-core.version>
-		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
-
-		<lombok.version>[1.18,)</lombok.version>
-		<hsqldb.version>2.4.1</hsqldb.version>
-
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
+		
 		<maven-war-plugin.warName>${project.artifactId}</maven-war-plugin.warName>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 
@@ -67,186 +48,96 @@
 
 	</properties>
 
-	<build>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<groupId>com.github.odavid.maven.plugins</groupId>
-				<artifactId>mixin-maven-plugin</artifactId>
-				<version>0.1-alpha-39</version>
-				<extensions>true</extensions>
-				<configuration>
-					<mixins>
-						<mixin>
-							<groupId>com.danhaywood.mavenmixin</groupId>
-							<artifactId>standard</artifactId>
-						</mixin>
-						<mixin>
-							<groupId>com.danhaywood.mavenmixin</groupId>
-							<artifactId>datanucleusenhance</artifactId>
-						</mixin>
-						<mixin>
-							<groupId>com.danhaywood.mavenmixin</groupId>
-							<artifactId>surefire</artifactId>
-						</mixin>
-						<mixin>
-							<groupId>com.danhaywood.mavenmixin</groupId>
-							<artifactId>jettywar</artifactId>
-						</mixin>
-						<mixin>
-							<groupId>com.danhaywood.mavenmixin</groupId>
-							<artifactId>docker</artifactId>
-						</mixin>
-					</mixins>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>flatten-maven-plugin</artifactId>
-				<version>1.0.0</version>
-				<configuration>
-					<updatePomFile>true</updatePomFile>
-					<pomElements>
-						<dependencyManagement>resolve</dependencyManagement>
-						<dependencies>resolve</dependencies>
-					</pomElements>
-				</configuration>
-				<executions>
-					<execution>
-						<id>flatten</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>flatten</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>flatten.clean</id>
-						<phase>clean</phase>
-						<goals>
-							<goal>clean</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>com.spotify</groupId>
-				<artifactId>docker-maven-plugin</artifactId>
-				<configuration>
-					<dockerDirectory>src/main/resources/docker/${flavor}</dockerDirectory>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.apache.isis.core</groupId>
-				<artifactId>isis</artifactId>
-				<version>${isis.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<dependencies>
 
 		<!-- ISIS API -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-commons</artifactId>
-			<version>${isis.version}</version>
-		</dependency>
+			</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-applib</artifactId>
-			<version>${isis.version}</version>
-		</dependency>
+			</dependency>
 
 		<!-- ISIS CORE -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-viewer-wicket-impl</artifactId>
-			<version>${isis.version}</version>
-		</dependency>
+			</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-			<version>${isis.version}</version>
-		</dependency>
+			</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-security</artifactId>
-			<version>${isis.version}</version>
-		</dependency>
+			</dependency>
 
 		<!-- ISIS CORE PLUGINS -->
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-plugins-security-shiro</artifactId>
-			<version>${isis.version}</version>
-		</dependency>
+			</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
-			<version>${isis.version}</version>
-		</dependency>
+			</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
-			<version>${isis.version}</version>
-		</dependency>
+			</dependency>
 		
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-plugins-jaxrs-resteasy-4</artifactId>
-			<version>${isis.version}</version>
-		</dependency>
+			</dependency>
 
 		<!-- OTHER DEPENDENCIES -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
-			<version>${hsqldb.version}</version>
-		</dependency>
+			</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<!-- provides a markdown parser -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.vladsch.flexmark</groupId> -->
+<!-- 			<artifactId>flexmark-all</artifactId> -->
+<!-- 			<version>0.34.32</version> -->
+<!-- 		</dependency> -->
+		
+		<!-- provides a ASCII-DOC parser -->
 		<dependency>
-			<groupId>com.vladsch.flexmark</groupId>
-			<artifactId>flexmark-all</artifactId>
-			<version>0.34.32</version>
+			<groupId>org.asciidoctor</groupId>
+			<artifactId>asciidoctorj</artifactId>
+			<version>2.0.0</version>
+			<exclusions>
+				<!-- convergence issues -->
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jnr-constants</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jnr-posix</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jnr-enxio</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 	</dependencies>
@@ -309,19 +200,19 @@
 		</profile>
 	</profiles>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>apache-staging</id>
-			<url>https://repository.apache.org/content/groups/staging/</url>
-			<releases>
-				<enabled>true</enabled>
-				<checksumPolicy>fail</checksumPolicy>
-				<updatePolicy>always</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
+<!-- 	<pluginRepositories> -->
+<!-- 		<pluginRepository> -->
+<!-- 			<id>apache-staging</id> -->
+<!-- 			<url>https://repository.apache.org/content/groups/staging/</url> -->
+<!-- 			<releases> -->
+<!-- 				<enabled>true</enabled> -->
+<!-- 				<checksumPolicy>fail</checksumPolicy> -->
+<!-- 				<updatePolicy>always</updatePolicy> -->
+<!-- 			</releases> -->
+<!-- 			<snapshots> -->
+<!-- 				<enabled>false</enabled> -->
+<!-- 			</snapshots> -->
+<!-- 		</pluginRepository> -->
+<!-- 	</pluginRepositories> -->
 
 </project>

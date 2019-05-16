@@ -22,107 +22,30 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.incode</groupId>
-        <artifactId>incode-build</artifactId>
-        <version>7</version>
+    	<groupId>org.apache.isis.examples</groupId>
+    	<artifactId>isis-examples</artifactId>
+        <version>${revision}</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>simpleapp</artifactId>
-    <version>${revision}</version>
 
     <name>Apache Isis App - SimpleApp Parent</name>
 
     <packaging>pom</packaging>
 
     <properties>
-        <revision>2.0.0-M3-SNAPSHOT</revision>
-        <isis.version>${revision}</isis.version>
-
-        <!-- bumping to 1.18.4 causes a conflict with DataNucleus' annotation processor. -->
-        <lombok.version>1.18.2</lombok.version>
 
         <compiler-plugin.source>1.8</compiler-plugin.source>
         <compiler-plugin.target>1.8</compiler-plugin.target>
         <compiler-plugin.compilerArgument>-parameters</compiler-plugin.compilerArgument>
 
-        <!-- override incode-build -->
-        <maven-compiler-plugin.version>3.8.0</maven-compiler-plugin.version>
-        <jetty-maven-plugin.version>9.4.12.v20180830</jetty-maven-plugin.version>
-
-        <!-- override incode-build (see dn5-xxx.version in isis-core-plugins-jdo-datanucleus-5) -->
-        <datanucleus-api-jdo.version>5.2.1</datanucleus-api-jdo.version>
-        <datanucleus-core.version>5.2.1</datanucleus-core.version>
-        <datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
-        <hsqldb.version>2.4.1</hsqldb.version>
-
-        <!-- override incode-build -->
-        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
-        <maven-surefire-report-plugin.version>2.22.1</maven-surefire-report-plugin.version>
-
-        <failOnMissingWebXml>false</failOnMissingWebXml>
-
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
     </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>com.github.odavid.maven.plugins</groupId>
-                <artifactId>mixin-maven-plugin</artifactId>
-                <version>0.1-alpha-39</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <mixins>
-                        <mixin>
-                            <groupId>com.danhaywood.mavenmixin</groupId>
-                            <artifactId>standard</artifactId>
-                        </mixin>
-                    </mixins>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <configuration>
-                    <updatePomFile>true</updatePomFile>
-                    <pomElements>
-                        <dependencyManagement>resolve</dependencyManagement>
-                        <dependencies>resolve</dependencies>
-                    </pomElements>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>flatten</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>flatten</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>flatten.clean</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencyManagement>
         <dependencies>
-
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>isis</artifactId>
-                <version>${isis.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
 
             <!-- this project's own modules -->
             <dependency>
@@ -145,21 +68,6 @@
                 <groupId>org.apache.isis.example.application</groupId>
                 <artifactId>simpleapp-webapp</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-
-            <!-- lombok -->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.approvaltests</groupId>
-                <artifactId>approvaltests</artifactId>
-                <version>2.0.0</version>
-                <scope>test</scope>
             </dependency>
 
         </dependencies>

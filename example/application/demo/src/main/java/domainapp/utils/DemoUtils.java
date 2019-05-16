@@ -19,58 +19,75 @@
 
 package domainapp.utils;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
-import com.vladsch.flexmark.ext.tables.TablesExtension;
-import com.vladsch.flexmark.html.HtmlRenderer;
-import com.vladsch.flexmark.parser.Parser;
-import com.vladsch.flexmark.util.options.MutableDataSet;
+import org.asciidoctor.Asciidoctor;
 
 public class DemoUtils {
 
-	public static String emphasize(String string) {
-		return new StringBuilder()
-				.append("\n====================================================\n")
-				.append(string)
-				.append("\n====================================================\n")
-				.toString();
-	}
+    public static String emphasize(String string) {
+        return new StringBuilder()
+                .append("\n====================================================\n")
+                .append(string)
+                .append("\n====================================================\n")
+                .toString();
+    }
 
-	public static String markdownToHtml(String markdown) {
-		if(markdownSupport==null) {
-			markdownSupport = new MarkdownSupport();
-		}
-		return markdownSupport.toHtml(markdown);
-	}
+    public static String asciidocToHtml(String adoc) {
+        if(adoc==null) {
+            asciidoctor = Asciidoctor.Factory.create();
+            options = defaultOptions();
+        }
+        return asciidoctor.convert(adoc, options);
+    }
+
+    // -- HELPER
+
+    private static Asciidoctor asciidoctor;
+    private static Map<String, Object> options;
+    
+    private static Map<String, Object> defaultOptions() {
+        return new HashMap<>();
+    }
 	
-	// -- HELPER
-	
-	private static MarkdownSupport markdownSupport;
-	
-	private static class MarkdownSupport {
-		private Parser parser;
-		private HtmlRenderer renderer;
-		
-		public MarkdownSupport() {
-			MutableDataSet options = new MutableDataSet();
-
-			// uncomment to set optional extensions
-			options.set(Parser.EXTENSIONS, Arrays.asList(
-					TablesExtension.create(), 
-					StrikethroughExtension.create()));
-
-			// uncomment to convert soft-breaks to hard breaks
-			//options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
-
-			parser = Parser.builder(options).build();
-			renderer = HtmlRenderer.builder(options).build();
-		}
-		
-		public String toHtml(String markdown) {
-			return renderer.render(parser.parse(markdown));
-		}
-	}
+/////////////////////////////////////////////////////////////////////	
+// MARKDOWN SUPPORT REMOVED
+//
+//   public static String markdownToHtml(String markdown) {
+//        if(markdownSupport==null) {
+//            markdownSupport = new MarkdownSupport();
+//        }
+//        return markdownSupport.toHtml(markdown);
+//    }
+//	
+//	// -- HELPER
+//	
+//	private static MarkdownSupport markdownSupport;
+//	
+//	private static class MarkdownSupport {
+//		private Parser parser;
+//		private HtmlRenderer renderer;
+//		
+//		public MarkdownSupport() {
+//			MutableDataSet options = new MutableDataSet();
+//
+//			// uncomment to set optional extensions
+//			options.set(Parser.EXTENSIONS, Arrays.asList(
+//					TablesExtension.create(), 
+//					StrikethroughExtension.create()));
+//
+//			// uncomment to convert soft-breaks to hard breaks
+//			//options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
+//
+//			parser = Parser.builder(options).build();
+//			renderer = HtmlRenderer.builder(options).build();
+//		}
+//		
+//		public String toHtml(String markdown) {
+//			return renderer.render(parser.parse(markdown));
+//		}
+//	}
 	
 
 }

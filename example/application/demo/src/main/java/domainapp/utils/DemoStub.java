@@ -66,15 +66,15 @@ public abstract class DemoStub {
 	}
 
 	protected String descriptionAsHtml() {
-		val markdownResourceName = getClass().getSimpleName()+".md";
-		val markdownResource = this.getClass().getResourceAsStream(markdownResourceName);
-		if(markdownResource==null) {
-			return String.format("Markdown resource '%s' not found.", markdownResourceName);
+		val adocResourceName = getClass().getSimpleName()+".adoc";
+		val adocResource = this.getClass().getResourceAsStream(adocResourceName);
+		if(adocResource==null) {
+			return String.format("Markdown resource '%s' not found.", adocResourceName);
 		}
 		try {
-			return DemoUtils.markdownToHtml(read(markdownResource));
+			return DemoUtils.asciidocToHtml(read(adocResource));
 		} catch (IOException e) {
-			return String.format("Failed to read from markdown resource '%s': ", e.getMessage());
+			return String.format("Failed to read from adoc resource '%s': ", e.getMessage());
 		}
 	}
 
