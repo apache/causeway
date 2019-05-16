@@ -1077,7 +1077,7 @@
                                 <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
                             </resourceBundles>
                             <properties>
-                                <projectTimespan>2010~2015</projectTimespan>
+                                <projectTimespan>2010~2019</projectTimespan>
                                 <postDepListText>
 The above (auto-generated) list aggregates the dependencies (either directly
 or transitively) of all the modules that make up ${project.name}. You can use 
