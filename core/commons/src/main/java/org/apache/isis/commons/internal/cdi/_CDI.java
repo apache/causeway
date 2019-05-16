@@ -45,7 +45,6 @@ import org.apache.isis.commons.internal.functions._Functions.CheckedRunnable;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.commons.ioc.LifecycleContext;
 import org.apache.isis.core.commons.collections.Bin;
-import org.apache.isis.core.plugins.ioc.IocPlugin;
 
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -79,7 +78,7 @@ public final class _CDI {
         requires(onDiscover, "onDiscover");
         
         // plug in the provider
-        final CDIProvider standaloneCDIProvider = IocPlugin.get().getCDIProvider(onDiscover.get());
+        final CDIProvider standaloneCDIProvider = CdiPlugin.get().getCDIProvider(onDiscover.get());
         CDI.setCDIProvider(standaloneCDIProvider);
 
         // verify

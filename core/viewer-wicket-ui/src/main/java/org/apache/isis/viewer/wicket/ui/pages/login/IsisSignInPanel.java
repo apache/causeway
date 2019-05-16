@@ -19,8 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.login;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import org.apache.wicket.Component;
@@ -30,8 +28,10 @@ import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
 import org.apache.isis.applib.services.inject.ServiceInjector;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.UserRegistrationService;
+import org.apache.isis.core.commons.collections.Bin;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
@@ -49,10 +49,11 @@ public class IsisSignInPanel extends SignInPanel {
     private static final long serialVersionUID = 1L;
     
     @Inject transient IsisSessionFactory isisSessionFactory;
-    @Inject transient ServiceInjector servicesInjector;
+    @Inject transient ServiceInjector serviceInjector;
+    @Inject transient ServiceRegistry serviceRegistry;
     @Inject transient private PageClassRegistry pageClassRegistry;
-    @Inject transient List<UserRegistrationService> anyUserRegistrationService;
-    @Inject transient List<EmailNotificationService> anyEmailNotificationService;
+    transient Bin<UserRegistrationService> anyUserRegistrationService;
+    transient Bin<EmailNotificationService> anyEmailNotificationService;
     
     private final boolean signUpLink;
     private final boolean passwordResetLink;
@@ -84,6 +85,11 @@ public class IsisSignInPanel extends SignInPanel {
     @Override
     protected void onInitialize() {
         super.onInitialize();
+        
+        {//inject fields
+            anyUserRegistrationService = serviceRegistry.select(UserRegistrationService.class);
+            anyEmailNotificationService = serviceRegistry.select(EmailNotificationService.class);
+        }
 
         addOrReplace(new NotificationPanel("feedback"));
 

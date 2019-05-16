@@ -91,7 +91,7 @@ final class WebModule_RestEasy implements WebModule  {
             
             filter.setInitParameter(
                     "authenticationSessionStrategy", 
-                    "org.apache.isis.viewer.restfulobjects.server.authentication.AuthenticationSessionStrategyBasicAuth");
+                    "org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyBasicAuth");
             filter.setInitParameter(
                     "whenNoSession", // what to do if no session was found ...
                     "auto"); // ... 401 and a basic authentication challenge if request originates from web browser

@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.plugins.ioc;
+package org.apache.isis.commons.internal.cdi;
 
 import java.util.stream.Stream;
 
@@ -23,11 +23,11 @@ import javax.enterprise.inject.spi.CDIProvider;
 import org.apache.isis.commons.internal.context._Plugin;
 
 /**
- * 
+ * No longer used since 2.0.0-M3.
+ *  
  * @since 2.0.0-M2
- *
  */
-public interface IocPlugin {
+interface CdiPlugin {
 
     // -- INTERFACE
 
@@ -35,14 +35,14 @@ public interface IocPlugin {
 
     // -- LOOKUP
 
-    public static IocPlugin get() {
+    public static CdiPlugin get() {
         
-        return _Plugin.getOrElse(IocPlugin.class,
+        return _Plugin.getOrElse(CdiPlugin.class,
                 ambiguousPlugins->{
-                    return _Plugin.pickAnyAndWarn(IocPlugin.class, ambiguousPlugins);
+                    return _Plugin.pickAnyAndWarn(CdiPlugin.class, ambiguousPlugins);
                 },
                 ()->{
-                    throw _Plugin.absenceNonRecoverable(IocPlugin.class);
+                    throw _Plugin.absenceNonRecoverable(CdiPlugin.class);
                 });
     }
     

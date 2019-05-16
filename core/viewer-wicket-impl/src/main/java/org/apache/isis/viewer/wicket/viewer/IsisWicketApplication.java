@@ -228,7 +228,8 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
     protected void init() {
         
         val configuration = IsisContext.getConfiguration();
-        val serviceInjector = IsisContext.getServiceInjector();
+        val serviceRegistry = IsisContext.getServiceRegistry();
+        //val serviceInjector = IsisContext.getServiceInjector();
         
         List<Future<Object>> futures = null;
         try {
@@ -248,7 +249,15 @@ implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, WicketVi
             // Initialize Spring Dependency Injection
             getComponentInstantiationListeners().add(new SpringComponentInjector(this));
             
-            serviceInjector.injectServicesInto(this);
+            //XXX don't rely on ServiceInjector, since it can run in different configurable modes
+            //serviceInjector.injectServicesInto(this);
+            
+            { // resolve injection points 'manually' 
+                componentFactoryRegistry = serviceRegistry.lookupServiceElseFail(ComponentFactoryRegistry.class);
+                pageClassRegistry = serviceRegistry.lookupServiceElseFail(PageClassRegistry.class);
+                settings = serviceRegistry.lookupServiceElseFail(WicketViewerSettings.class);
+            }
+            
             
             if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
                 WebRequestCycleForIsis webRequestCycleForIsis = (WebRequestCycleForIsis) requestCycleListenerForIsis;

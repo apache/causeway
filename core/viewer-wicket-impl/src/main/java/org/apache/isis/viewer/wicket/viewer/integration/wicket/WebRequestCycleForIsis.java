@@ -61,6 +61,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.plugins.ioc.RequestContextHandle;
 import org.apache.isis.core.plugins.ioc.RequestContextService;
+import org.apache.isis.core.plugins.ioc.RequestContextServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisRequestCycle;
 import org.apache.isis.core.runtime.system.session.IsisSession;
@@ -91,8 +92,8 @@ public class WebRequestCycleForIsis implements IRequestCycleListener {
 
     private final static _Probe probe = _Probe.unlimited().label("WebRequestCycleForIsis");
 
-    private _Lazy<RequestContextService> requestContextService = _Lazy.of(()->
-        IsisContext.getServiceRegistry().lookupServiceElseFail(RequestContextService.class));
+    private _Lazy<RequestContextService> requestContextService = _Lazy.of(()->new RequestContextServiceDefault());
+        //IsisContext.getServiceRegistry().lookupServiceElseFail(RequestContextService.class));
 
     public final static MetaDataKey<RequestContextHandle> REQUEST_CONTEXT_HANDLE_KEY 
     = new MetaDataKey<RequestContextHandle>() {

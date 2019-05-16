@@ -16,20 +16,16 @@
  */
 package org.apache.isis.core.plugins.ioc;
 
-import javax.annotation.Priority;
-import javax.enterprise.inject.Alternative;
-import javax.inject.Singleton;
-
-import org.apache.isis.commons.ioc.PriorityConstants;
-
 /**
  * Acts as a no-op implementation, that is used as lowest priority default, whenever
  * service-provisioning can not find any alternative with higher priority.  
+ * <p>
+ * Introduced for CDI, no longer used since Spring.
  * 
  * @since 2.0.0-M3
  *
  */
-@Singleton @Alternative @Priority(PriorityConstants.PRIORITY_BELOW_DEFAULT)
+//@Singleton @Alternative @Priority(PriorityConstants.PRIORITY_BELOW_DEFAULT)
 public class RequestContextServiceDefault implements RequestContextService {
 
     @Override
