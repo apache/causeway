@@ -1,0 +1,36 @@
+(since 2.0.0-M1)
+
+This is a lazy tree. Tree nodes are either domain-objects or
+domain-views, which are generated on the fly by a specified
+link:${SOURCES_ISIS}/org/apache/isis/applib/tree/TreeAdapter.java[TreeAdapter].
+
+[source,java]
+----
+public interface TreeAdapter<T> {
+
+    public Optional<T> parentOf(T value);
+    
+    public int childCountOf(T value);
+    
+    public Stream<T> childrenOf(T value);
+    
+}
+----
+
+We create a tree by starting with it's root node and providing a
+`FileSystemTreeAdapter` that implements `TreeAdapter`.
+
+[source,java]
+----
+public TreeNode<FileNode> createTree() {
+    val root = FileNodeFactory.defaultRoot();
+    val tree = TreeNode.lazy(root, FileSystemTreeAdapter.class);
+    tree.expand(TreePath.of(0)); // expand the root node
+    return tree;
+}
+----
+
+See the tree demo link:${SOURCES_DEMO}/domainapp/dom/tree[sources].
+
+Also see link:${ISSUES_DEMO}?utf8=✓&q=is%3Aissue+is%3Aopen+tree[open
+issues] with trees.

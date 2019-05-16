@@ -1,0 +1,40 @@
+(since 2.0.0-M1)
+
+Hit the 'Trigger An Error' button an see what happens!
+
+The framework does provide a default error handling implementation.
+However, by implementing a custom `ErrorReportingService` you may
+provide a more user-friendly experience:
+
+[source,java]
+----
+@DomainService(nature = NatureOfService.DOMAIN)
+public class DemoErrorReportingService implements ErrorReportingService {
+    
+    @Override
+    public Ticket reportError(ErrorDetails errorDetails) {
+
+        String reference = "#0";
+        String userMessage = errorDetails.getMainMessage();
+        String details = "Apologies!";
+        
+        val mailTo = MailTo.builder()
+        .receiver("support@hello.world")
+        .subject("[Simple-Module] Unexpected Error ("+reference+")")
+        .body(MailTo.mailBodyOf(errorDetails))
+        .build();
+        
+        StackTracePolicy policy = StackTracePolicy.SHOW;
+        val ticket = new EmailTicket(mailTo, reference, userMessage, details, 
+               policy,
+               "http://www.randomkittengenerator.com/cats/rotator.php");
+        
+        return ticket;
+    }
+    
+    
+}
+----
+
+See the ErrorReportingService implemented for this demo here:
+link:${SOURCES_DEMO}/domainapp/dom/error/service[sources].
