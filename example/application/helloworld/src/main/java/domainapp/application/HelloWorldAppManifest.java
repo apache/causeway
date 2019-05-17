@@ -87,24 +87,5 @@ public class HelloWorldAppManifest {
                .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
                .build();
    }
-    
-
-    //TODO[2112] add missing producers
-    
-//    public static final Builder BUILDER = Builder
-//            .forModule(new HelloWorldModule())
-//            .withConfigurationPropertiesFile(
-//                    HelloWorldAppManifest.class, "isis-non-changing.properties")
-//            .withAuthMechanism("shiro");
-//
-//    public HelloWorldAppManifest() {
-//        super(BUILDER);
-//    }
-//
-//    // Implementing AppConfig, to tell the framework how to bootstrap the configuration.
-//    @Override
-//    public IsisConfiguration isisConfiguration () {
-//        return IsisConfiguration.buildFromAppManifest(this);
-//    }
 
 }

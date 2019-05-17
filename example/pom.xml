@@ -54,6 +54,15 @@
 		<mavenmixin-staticanalysis.version>0.0.2</mavenmixin-staticanalysis.version>
 		<mavenmixin-cucumberreporting.version>0.0.2</mavenmixin-cucumberreporting.version>
 		<mavenmixin-jettyconsole.version>0.0.2</mavenmixin-jettyconsole.version>
+		
+		<!-- MIXIN OVERRIDES -->
+		
+		<jetty-maven-plugin.version>9.4.12.v20180830</jetty-maven-plugin.version>
+		<datanucleus-maven-plugin.version>5.2.1</datanucleus-maven-plugin.version>
+		<datanucleus-api-jdo.version>5.2.1</datanucleus-api-jdo.version>
+		<datanucleus-core.version>5.2.1</datanucleus-core.version>
+		<datanucleus-jodatime.version>5.2.0-release</datanucleus-jodatime.version>
+		
 
 	</properties>
 
@@ -148,6 +157,12 @@
 			</plugin>
 			
 			<plugin>
+				<!-- This is a duplicate of core's pom.xml entry,
+					while valid, we don't let child modules inherit from this.
+					If for any reason this plugin causes any issues, we could
+					migrate to using a shared SupplementalModelArtifact.
+					see https://maven.apache.org/plugins/maven-remote-resources-plugin/supplemental-models.html
+					-->
                 <artifactId>maven-remote-resources-plugin</artifactId>
                 <inherited>false</inherited>
                 <executions>
