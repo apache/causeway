@@ -25,11 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.applib.util.ToString;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
-import org.apache.isis.config.IsisConfiguration;
-import org.apache.isis.config.internal._Config;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
@@ -38,13 +40,20 @@ import org.apache.isis.core.security.authentication.manager.RegistrationDetails;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.val;
+
 public class AuthenticationManagerStandard implements AuthenticationManager {
 
     private final Map<String, String> userByValidationCode = _Maps.newHashMap();
-
     private final List<Authenticator> authenticators = _Lists.newArrayList();
-
     private RandomCodeGenerator randomCodeGenerator;
+    
+    private @Inject ServiceRegistry serviceRegistry;
+    
+    @PostConstruct
+    public void preInit() {
+        serviceRegistry.select(Authenticator.class).forEach(authenticators::add);
+    }
     
 
     // //////////////////////////////////////////////////////////
@@ -145,14 +154,14 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     // //////////////////////////////////////////////////////////
 
     
-    public final void addAuthenticator(final Authenticator authenticator) {
-        authenticators.add(authenticator);
-    }
-
-    
-    public void addAuthenticatorToStart(final Authenticator authenticator) {
-        authenticators.add(0, authenticator);
-    }
+//    public final void addAuthenticator(final Authenticator authenticator) {
+//        authenticators.add(authenticator);
+//    }
+//
+//    
+//    public void addAuthenticatorToStart(final Authenticator authenticator) {
+//        authenticators.add(0, authenticator);
+//    }
 
     
     public List<Authenticator> getAuthenticators() {
@@ -222,12 +231,16 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
         return toString.toString(this);
     }
 
-    // //////////////////////////////////////////////////////////
-    // Injected (constructor)
-    // //////////////////////////////////////////////////////////
 
-    protected IsisConfiguration getConfiguration() {
-        return _Config.getConfiguration();
+    /**
+     * JUnit Test Support
+     * @param mockAuthenticator
+     * @return
+     */
+    public static AuthenticationManagerStandard getInstance(Authenticator authenticator) {
+        val manager = new AuthenticationManagerStandard();
+        manager.authenticators.add(authenticator);
+        return manager;
     }
 
 }

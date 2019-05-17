@@ -93,6 +93,11 @@
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-plugins-jaxrs-resteasy-4</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-security-shiro</artifactId>
+        </dependency>
 
         <!-- OTHER DEPENDENCIES -->
 <!--

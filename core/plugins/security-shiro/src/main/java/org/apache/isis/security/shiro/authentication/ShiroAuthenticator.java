@@ -23,9 +23,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import javax.inject.Singleton;
-import javax.enterprise.context.ApplicationScoped;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -42,8 +39,6 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.core.security.authentication.AuthenticationRequest;
@@ -56,6 +51,8 @@ import org.apache.isis.security.shiro.ShiroSecurityContext;
 
 import static org.apache.isis.config.internal._Config.getConfiguration;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * If Shiro is configured for both {@link AuthenticationManagerInstaller authentication} and
  * {@link AuthorizationManagerInstaller authorization} (as recommended), then this class is
@@ -66,10 +63,8 @@ import static org.apache.isis.config.internal._Config.getConfiguration;
  * {@link SecurityManager Shiro SecurityManager}
  * (bound to a thread-local).
  */
-@Singleton
+@Slf4j
 public class ShiroAuthenticator implements Authenticator {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ShiroAuthenticator.class);
 
     private static final String ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_KEY = "isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated";
     private static final boolean ISIS_AUTHENTICATION_SHIRO_AUTO_LOGOUT_DEFAULT = false;
@@ -132,23 +127,23 @@ public class ShiroAuthenticator implements Authenticator {
         try {
             currentSubject.login(token);
         } catch ( UnknownAccountException uae ) {
-            LOG.info("Unknown account: {}", request.getName());
+            log.info("Unknown account: {}", request.getName());
             return null;
         } catch ( IncorrectCredentialsException ice ) {
-            LOG.info("Incorrect credentials for user: {}", request.getName());
+            log.info("Incorrect credentials for user: {}", request.getName());
             return null;
         } catch ( CredentialsException ice ) {
             // it seems that this is the exception that is actually thrown for invalid user/password.
-            LOG.info("Unable to authenticate", ice);
+            log.info("Unable to authenticate", ice);
             return null;
         } catch ( LockedAccountException lae ) {
-            LOG.info("Locked account for user: {}", request.getName());
+            log.info("Locked account for user: {}", request.getName());
             return null;
         } catch ( ExcessiveAttemptsException eae ) {
-            LOG.info("Excessive attempts for user: {}", request.getName());
+            log.info("Excessive attempts for user: {}", request.getName());
             return null;
         } catch ( AuthenticationException ae ) {
-            LOG.error("Unable to authenticate", ae);
+            log.error("Unable to authenticate", ae);
             return null;
         }
 

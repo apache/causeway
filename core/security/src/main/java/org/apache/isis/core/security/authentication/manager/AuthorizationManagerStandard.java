@@ -21,8 +21,8 @@ package org.apache.isis.core.security.authentication.manager;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.sudo.SudoService;
@@ -30,7 +30,7 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
 
-@Vetoed
+@Singleton
 public class AuthorizationManagerStandard implements AuthorizationManager {
 
 

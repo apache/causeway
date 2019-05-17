@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.security;
+package org.apache.isis.security.shiro;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
@@ -25,15 +25,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import org.apache.isis.core.security.authentication.bypass.AuthenticatorBypass;
 import org.apache.isis.core.security.authentication.manager.AuthorizationManagerStandard;
 import org.apache.isis.core.security.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.security.authentication.standard.Authenticator;
-import org.apache.isis.core.security.authorization.bypass.AuthorizorBypass;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.security.shiro.authentication.ShiroAuthenticator;
+import org.apache.isis.security.shiro.authorization.ShiroAuthorizor;
 
 /**
- * Auth/bypass for eg. Integration Testing
+ * Configuration Bean to support Isis Security using Shiro.
  *  
  * @since 2.0.0
  */
@@ -42,16 +42,17 @@ import org.apache.isis.core.security.authorization.standard.Authorizor;
         AuthorizationManagerStandard.class,
         AuthenticationManagerStandard.class
 })
-public class IsisSecurityBoot {
-
+public class IsisSecurityBootUsingShiro {
+    
     @Bean @Produces @Singleton
     public Authenticator authenticator() {
-        return new AuthenticatorBypass();
+        return new ShiroAuthenticator();
     }
 
     @Bean @Produces @Singleton
     public Authorizor autorizor() {
-        return new AuthorizorBypass();
+        return new ShiroAuthorizor();
     }
+
 
 }

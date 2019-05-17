@@ -29,13 +29,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.core.security.authentication.bypass.AuthenticatorBypass;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authentication.manager.AuthorizationManagerStandard;
-import org.apache.isis.core.security.authentication.standard.AuthenticationManagerStandard;
-import org.apache.isis.core.security.authorization.bypass.AuthorizorBypass;
-import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.security.shiro.IsisSecurityBootUsingShiro;
 import org.apache.isis.viewer.wicket.viewer.IsisWebWicketBoot;
 
 /**
@@ -49,39 +43,10 @@ import org.apache.isis.viewer.wicket.viewer.IsisWebWicketBoot;
 })
 @Import({
     IsisWebWicketBoot.class,
-    //XXX IsisSecurityBoot_Shiro.class
+    IsisSecurityBootUsingShiro.class
 })
 public class HelloWorldAppManifest {
     
-    /**
-    * The standard authentication manager, configured with the 'bypass' authenticator 
-    * (allows all requests through).
-    * <p>
-    * integration tests ignore appManifest for authentication and authorization.
-    */
-   @Bean @Singleton
-   public AuthenticationManager authenticationManagerWithBypass() {
-       final AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard();
-       authenticationManager.addAuthenticator(new AuthenticatorBypass());
-       return authenticationManager;
-   }
-   
-   @Bean @Singleton
-   public AuthorizationManager authorizationManagerWithBypass() {
-       final AuthorizationManagerStandard authorizationManager = new AuthorizationManagerStandard() {
-           {
-               authorizor = new AuthorizorBypass();
-           }  
-       };
-       return authorizationManager;
-   }
-   
-   @Bean @Singleton
-   public Authorizor autorizor() {
-       return new AuthorizorBypass();
-   }
-   
-   
    @Bean @Singleton
    public WebAppConfigBean webAppConfigBean() {
        return WebAppConfigBean.builder()
