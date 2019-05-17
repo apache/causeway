@@ -64,7 +64,7 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         _Blackhole.consume(plugin);
 
         final ConfigurableApplicationContext springContext = 
-                IsisMavenPlugin_SpringContextLauncher.getContext();
+                IsisMavenPlugin_SpringContextLauncher.getContext(mavenProject, getLog());
         
         Objects.requireNonNull(springContext, "Failed to bring up Spring's context.");
         

@@ -21,7 +21,6 @@ package org.apache.isis.tool.mavenplugin.spring;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -30,7 +29,6 @@ import org.apache.isis.core.security.IsisSecurityBoot;
 import org.apache.isis.runtime.spring.IsisBoot;
 
 /**
- * FIXME[2112] needs to scan the entire class-path, not just "org.apache.isis"  
  * @since 2.0.0
  *
  */
@@ -38,7 +36,6 @@ import org.apache.isis.runtime.spring.IsisBoot;
 @Import({
     IsisBoot.class, 
     IsisSecurityBoot.class})
-@ComponentScan(basePackages = "org.apache.isis")
 public class IsisMavenPlugin_SpringContextConfig {
 
     @Bean @Singleton
