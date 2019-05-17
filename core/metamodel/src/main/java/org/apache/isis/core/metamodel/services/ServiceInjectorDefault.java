@@ -120,12 +120,14 @@ public class ServiceInjectorDefault implements ServiceInjector {
         }
         
         val beans = serviceRegistry.select(typeToBeInjected, field.getAnnotations());
-        if(beans.isCardinalityOne()) {
-            val bean = beans.getSingleton().get();
-            invokeInjectorField(field, targetPojo, bean);    
-        } else {
+        
+        if(beans.isEmpty()) {
             onNotResolvable.accept(new InjectionPoint(field));
+            return;
         }
+        
+        val bean = beans.getFirst().get();
+        invokeInjectorField(field, targetPojo, bean);
 
     }
     

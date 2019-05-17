@@ -35,7 +35,7 @@ public class DemoUtils {
     }
 
     public static String asciidocToHtml(String adoc) {
-        if(adoc==null) {
+        if(asciidoctor==null) {
             asciidoctor = Asciidoctor.Factory.create();
             options = defaultOptions();
         }

@@ -32,8 +32,8 @@ import org.apache.isis.runtime.spring.IsisBoot;
 @Import({
     IsisBoot.class,
     FixtureScriptsDefault.class,
-    HelloWorldAppManifest.class,
+    DemoAppManifest.class,
 })
-public class HelloWorldApp extends SpringBootServletInitializer {
+public class DemoApp extends SpringBootServletInitializer {
 
 }
