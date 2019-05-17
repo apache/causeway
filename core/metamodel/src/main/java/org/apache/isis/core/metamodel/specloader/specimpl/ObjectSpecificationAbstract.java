@@ -31,12 +31,12 @@ import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.ioc.BeanAdapter;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
@@ -1141,10 +1141,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return new ObjectValidityContext(targetAdapter, getIdentifier(), interactionInitiatedBy);
     }
 
-    protected ManagedObjectSort managedObjectSort; 
+    protected BeanSort managedObjectSort; 
     
     @Override
-    public ManagedObjectSort getManagedObjectSort() {
+    public BeanSort getManagedObjectSort() {
     	if(managedObjectSort==null) {
     		managedObjectSort = sortOf(this);
     	}
@@ -1227,40 +1227,40 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return specificationLoader;
     }
 
-    protected ManagedObjectSort sortOf(ObjectSpecification spec) {
+    protected BeanSort sortOf(ObjectSpecification spec) {
 //TODO [2033] this is the way we want it to work in the future; by now we do prime the #managedObjectSort in case its a service in the default service implementataion        
 //        if(containsFacet(BeanFacet.class)) {
 //            return ManagedObjectSort.DOMAIN_SERVICE;
 //        }
         if(isBean()) {
-            return ManagedObjectSort.BEAN;
+            return BeanSort.BEAN;
         }
 //
 
         if(containsFacet(ValueFacet.class)) {
-            return ManagedObjectSort.VALUE;
+            return BeanSort.VALUE;
         }
         if(containsFacet(ViewModelFacet.class)) {
-            return ManagedObjectSort.VIEW_MODEL;
+            return BeanSort.VIEW_MODEL;
         }
         if(containsFacet(MixinFacet.class)) {
-            return ManagedObjectSort.MIXIN;
+            return BeanSort.MIXIN;
         }
         if(containsFacet(CollectionFacet.class)) {
-            return ManagedObjectSort.COLLECTION;
+            return BeanSort.COLLECTION;
         }
-        if(containsFacet(EntityFacet.class)) {
-            return ManagedObjectSort.ENTITY;
+        if(containsFacet(EntityFacet.class)) { // not yet used
+            return BeanSort.ENTITY;
         }
         if(containsFacet(JdoPersistenceCapableFacet.class)) {
-            return ManagedObjectSort.ENTITY;
+            return BeanSort.ENTITY;
         }
         val correspondingClass = getCorrespondingClass();
         if(JdoMetamodelUtil.isPersistenceEnhanced(correspondingClass)) {
-            return ManagedObjectSort.ENTITY;
+            return BeanSort.ENTITY;
         }
 
-        return ManagedObjectSort.UNKNOWN;
+        return BeanSort.UNKNOWN;
     }
 
 }

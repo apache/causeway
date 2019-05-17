@@ -31,8 +31,9 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.commons.ioc.BeanAdapter;
+import org.apache.isis.commons.ioc.BeanSort;
+import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.core.commons.collections.Bin;
-import org.apache.isis.core.metamodel.services.registry.ServiceRegistryDefault;
 
 import lombok.Builder;
 import lombok.Value;
@@ -41,7 +42,6 @@ import lombok.val;
 class ServiceRegistry_forTesting implements ServiceRegistry {
     
     private final Set<BeanAdapter> registeredBeans = _Sets.newHashSet();
-    private final ServiceRegistry delegate = new ServiceRegistryDefault(); 
     
     @Override
     public <T> Bin<T> select(Class<T> type, Annotation[] qualifiers) {
@@ -74,11 +74,6 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     }
 
     @Override
-    public boolean isDomainServiceType(Class<?> cls) {
-        return delegate.isDomainServiceType(cls);
-    }
-
-    @Override
     public Stream<BeanAdapter> streamRegisteredBeans() {
         return registeredBeans().stream();
     }
@@ -87,8 +82,11 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     
     private Set<BeanAdapter> registeredBeans() {
         if(registeredBeans.isEmpty()) {
+            
+            val beanSortClassifier = IsisBeanTypeRegistry.current();
+            
             streamSingletons()
-            .map(this::toBeanAdapter)
+            .map(s->toBeanAdapter(s, beanSortClassifier))
             .filter(_NullSafe::isPresent)
             .forEach(registeredBeans::add);
         }
@@ -111,7 +109,7 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         String id;
         Bin<?> instance;
         public Class<?> beanClass;
-        boolean domainService;
+        BeanSort managedObjectSort;
         
         @Override
         public boolean isCandidateFor(Class<?> requiredType) {
@@ -120,13 +118,13 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
         
     }
     
-    private BeanAdapter toBeanAdapter(Object singleton) {
+    private BeanAdapter toBeanAdapter(Object singleton, IsisBeanTypeRegistry beanSortClassifier) {
         
         return PojoBeanAdapter.builder()
                 .id(singleton.getClass().getName())
                 .instance(Bin.ofSingleton(singleton))
                 .beanClass(singleton.getClass())
-                .domainService(isDomainServiceType(singleton.getClass()))
+                .managedObjectSort(beanSortClassifier.classify(singleton.getClass()))
                 .build();
         
         

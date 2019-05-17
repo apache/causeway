@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 
 import org.apache.isis.applib.IsisApplibModule;
-import org.apache.isis.config.beans.BeanScanInterceptorForSpring;
+import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.core.metamodel.IsisMetamodelModule;
 import org.apache.isis.core.runtime.IsisRuntimeModule;
 import org.apache.isis.core.runtime.services.IsisRuntimeServicesModule;
@@ -42,7 +42,7 @@ import org.apache.isis.core.wrapper.IsisWrapperModule;
 				IsisRuntimeServicesModule.class,
 				IsisWrapperModule.class},
 		includeFilters= {
-				@Filter(type = FilterType.CUSTOM, classes= {BeanScanInterceptorForSpring.class})
+				@Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
 		})
 public class IsisBoot implements ApplicationContextAware {
 

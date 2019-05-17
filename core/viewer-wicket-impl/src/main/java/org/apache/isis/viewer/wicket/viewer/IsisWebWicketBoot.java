@@ -24,7 +24,7 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 
-import org.apache.isis.config.beans.BeanScanInterceptorForSpring;
+import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 
 /**
  * 
@@ -36,7 +36,7 @@ import org.apache.isis.config.beans.BeanScanInterceptorForSpring;
                 IsisWebWicketBoot.class,
            },
         includeFilters= {
-                @Filter(type = FilterType.CUSTOM, classes= {BeanScanInterceptorForSpring.class})
+                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
         })
 public class IsisWebWicketBoot {
 

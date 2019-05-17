@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -333,8 +333,8 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
 	@Override
-	public ManagedObjectSort getManagedObjectSort() {
-		return ManagedObjectSort.UNKNOWN; // [2033] not implemented yet
+	public BeanSort getManagedObjectSort() {
+		return BeanSort.UNKNOWN; // [2033] not implemented yet
 	}
 
 }

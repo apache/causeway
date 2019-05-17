@@ -63,11 +63,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.config.property.ConfigPropertyEnum;
@@ -466,7 +466,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
 
     public ActionPrompt getActionPrompt(
             final PromptStyle promptStyle,
-            final ManagedObjectSort sort) {
+            final BeanSort sort) {
 
         switch (promptStyle) {
         case AS_CONFIGURED:
@@ -475,7 +475,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         case INLINE_AS_IF_EDIT:
         default:
             final ConfigPropertyEnum<DialogMode> configProp =
-                    sort == ManagedObjectSort.BEAN
+                    sort == BeanSort.BEAN
                             ? CONFIG_DIALOG_MODE_FOR_MENUS
                             : CONFIG_DIALOG_MODE;
             final DialogMode dialogMode = configProp.from(getConfiguration());

@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.metamodel.ManagedObjectSort;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -229,7 +229,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * 
      * @since 2.0.0-M3
      */
-    ManagedObjectSort getManagedObjectSort();
+    BeanSort getManagedObjectSort();
 
     // //////////////////////////////////////////////////////////////
     // TitleContext

@@ -16,9 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.metamodel;
+package org.apache.isis.commons.ioc;
 
-public enum ManagedObjectSort {
+public enum BeanSort {
     
     /**
      * Stateful object, with a state that can be marshaled and unmarshaled.  

@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
+import javax.enterprise.inject.Vetoed;
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
@@ -105,7 +106,7 @@ import lombok.extern.slf4j.Slf4j;
  * and maintains an identity map of {@link ObjectAdapter adapter}s and {@link Oid
  * identities} for each and every POJO that is being used by the framework.
  */
-@Slf4j
+@Vetoed @Slf4j
 public class PersistenceSession5 extends PersistenceSessionBase
 implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
 

@@ -23,8 +23,8 @@ import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
 import java.util.List;
 
-import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.commons.internal.base._Lazy;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
@@ -89,8 +89,8 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     }
 
     @Override
-    public ManagedObjectSort getManagedObjectSort() {
-        return ManagedObjectSort.COLLECTION;
+    public BeanSort getManagedObjectSort() {
+        return BeanSort.COLLECTION;
     }
     
     // -- PREDICTATES

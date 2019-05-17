@@ -34,11 +34,11 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.isis.applib.annotation.PromptStyle;
 import org.apache.isis.applib.layout.grid.Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
-import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
@@ -171,7 +171,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
             final MetaModelService metaModelService = getServiceRegistry()
                     .lookupServiceElseFail(MetaModelService.class);
-            final ManagedObjectSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
+            final BeanSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
             final ActionPrompt prompt = promptProvider.getActionPrompt(promptStyle, sort);
 
 

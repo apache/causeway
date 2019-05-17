@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
+import javax.enterprise.inject.Vetoed;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +56,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
  * the {@link IsisTransactionManager} to ensure that the underlying persistence
  * mechanism (for example, the <tt>ObjectStore</tt>) is also committed.
  */
+@Vetoed
 public class IsisTransaction implements TransactionScopedComponent, Transaction {
 
     public static class Placeholder {

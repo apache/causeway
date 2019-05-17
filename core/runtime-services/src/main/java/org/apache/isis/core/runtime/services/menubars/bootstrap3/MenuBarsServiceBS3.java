@@ -40,11 +40,13 @@ import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.menu.MenuBarsLoaderService;
 import org.apache.isis.applib.services.menu.MenuBarsService;
 import org.apache.isis.applib.services.message.MessageService;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.collections._Sets;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -178,13 +180,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         
         final List<ManagedObject> visibleServiceAdapters = metaModelContext.streamServiceAdapters()
         .filter(objectAdapter -> {
-            if (objectAdapter == null) {
-                return false;
-            }
-            if (objectAdapter.getSpecification() == null) {
-                return false;
-            }
-            final ObjectSpecification spec = objectAdapter.getSpecification();
+            val spec = objectAdapter.getSpecification();
             if (spec.isHidden()) {
                 // however, this isn't the same as HiddenObjectFacet, so doesn't filter out
                 // services that have an imperative hidden() method.
@@ -219,13 +215,17 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             final BS3MenuBar menuBar,
             final DomainServiceLayout.MenuBar menuBarPos) {
 
-        List<ServiceAndAction> serviceActions = _Lists.newArrayList();
+        val serviceActions = _Lists.<ServiceAndAction>newArrayList();
 
         // cf ServiceActionsModel & ServiceActionUtil#buildMenu in Wicket viewer
-        for (final ManagedObject serviceAdapter : _Lists.filter(serviceAdapters, with(menuBarPos))) {
-            collateServiceActions(serviceAdapter, ActionType.USER, serviceActions);
-            collateServiceActions(serviceAdapter, ActionType.PROTOTYPE, serviceActions);
-        }
+        _NullSafe.stream(serviceAdapters)
+        .filter(with(menuBarPos))
+        .forEach(serviceAdapter->{
+
+            streamServiceActions(serviceAdapter, ActionType.USER).forEach(serviceActions::add);
+            streamServiceActions(serviceAdapter, ActionType.PROTOTYPE).forEach(serviceActions::add);
+            
+        });
 
         final Set<String> serviceNamesInOrder = serviceNamesInOrder(serviceAdapters, serviceActions);
         final Map<String, List<ServiceAndAction>> serviceActionsByName = groupByServiceName(serviceActions);
@@ -327,10 +327,9 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     }
 
 
-    private void collateServiceActions(
+    private Stream<ServiceAndAction> streamServiceActions(
             final ManagedObject serviceAdapter,
-            final ActionType actionType,
-            final List<ServiceAndAction> serviceActions) {
+            final ActionType actionType) {
         final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
 
         // skip if annotated to not be included in repository menu using @DomainService
@@ -340,22 +339,22 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
             if (natureOfService == NatureOfService.VIEW_REST_ONLY ||
                     natureOfService == NatureOfService.VIEW_CONTRIBUTIONS_ONLY ||
                     natureOfService == NatureOfService.DOMAIN) {
-                return;
+                return Stream.empty();
             }
         }
 
         final Stream<ObjectAction> objectActions = serviceSpec.streamObjectActions(actionType, Contributed.INCLUDED);
         
-        objectActions
+        return objectActions
         // skip if annotated to not be included in repository menu using legacy mechanism
         .filter(objectAction->objectAction.getFacet(NotInServiceMenuFacet.class) == null)
-        .forEach(objectAction->{
+        .map(objectAction->{
             final MemberOrderFacet memberOrderFacet = objectAction.getFacet(MemberOrderFacet.class);
             String serviceName = memberOrderFacet != null? memberOrderFacet.name(): null;
             if(_Strings.isNullOrEmpty(serviceName)){
                 serviceName = serviceSpec.getFacet(NamedFacet.class).value();
             }
-            serviceActions.add(new ServiceAndAction(serviceName, serviceAdapter, objectAction));
+            return new ServiceAndAction(serviceName, serviceAdapter, objectAction);
         });
        
     }

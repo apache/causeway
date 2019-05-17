@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.springframework.beans.BeansException;
@@ -33,18 +34,20 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.commons.ioc.BeanAdapter;
+import org.apache.isis.commons.ioc.BeanSortClassifier;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
+import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolExecutionMode;
 import org.apache.isis.core.runtime.threadpool.ThreadPoolSupport;
 
+import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -52,14 +55,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Singleton @Slf4j
 public final class ServiceRegistryDefault implements ServiceRegistry, ApplicationContextAware {
-
-    @Override
-    public boolean isDomainServiceType(Class<?> cls) {
-        if(cls.isAnnotationPresent(DomainService.class)) {
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public Stream<BeanAdapter> streamRegisteredBeans() {
@@ -104,7 +99,10 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
     private final _Lazy<Set<BeanAdapter>> registeredBeans = _Lazy.threadSafe(this::enumerateBeans);
     
     Set<BeanAdapter> enumerateBeans() {
-        return _Spring.streamAllBeans(this::isDomainServiceType)
+        
+        val beanSortClassifier = IsisBeanTypeRegistry.current();
+        
+        return _Spring.streamAllBeans(beanSortClassifier)
         .filter(_NullSafe::isPresent)
         .collect(Collectors.toCollection(HashSet::new));
     }

@@ -1,16 +1,30 @@
 package org.apache.isis.config.registry;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Vetoed;
+import javax.inject.Singleton;
+
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.ioc.BeanSort;
+import org.apache.isis.commons.ioc.BeanSortClassifier;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
+import org.apache.isis.core.commons.components.TransactionScopedComponent;
+
+import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.reflection._Reflect.getAnnotation;
 
 import lombok.Getter;
 import lombok.val;
@@ -19,179 +33,176 @@ import lombok.val;
  * Holds the set of domain services, persistent entities and fixture scripts.services etc.
  * @since 2.0.0-M3
  */
-public final class IsisBeanTypeRegistry implements AutoCloseable {
+public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoCloseable {
 
-	private final static _Probe probe = _Probe.unlimited().label(IsisBeanTypeRegistry.class.getSimpleName());
-	
+    private final static _Probe probe = _Probe.unlimited().label(IsisBeanTypeRegistry.class.getSimpleName());
+
     public static IsisBeanTypeRegistry current() {
         return _Context.computeIfAbsent(IsisBeanTypeRegistry.class, IsisBeanTypeRegistry::new);
     }
-    
-    private final Set<Class<?>> inbox = new HashSet<>();
+
+    private final Map<Class<?>, BeanSort> inbox = new HashMap<>();
 
     //TODO replace this getters: don't expose the sets for modification!?
-    @Getter private final Set<Class<?>> iocManaged = new HashSet<>();
+    @Getter private final Set<Class<?>> beanTypes = new HashSet<>();
     @Getter private final Set<Class<?>> entityTypes = new HashSet<>();
     @Getter private final Set<Class<?>> mixinTypes = new HashSet<>();
-    @Getter private final Set<Class<? extends FixtureScript>> fixtureScriptTypes = new HashSet<>();
-    @Getter private final Set<Class<?>> domainServiceTypes = new HashSet<>();
-    @Getter private final Set<Class<?>> domainObjectTypes = new HashSet<>();
-    @Getter private final Set<Class<?>> viewModelTypes = new HashSet<>();
-    @Getter private final Set<Class<?>> xmlElementTypes = new HashSet<>();
-
+//    @Getter private final Set<Class<? extends FixtureScript>> fixtureScriptTypes = new HashSet<>();
+//    @Getter private final Set<Class<?>> viewModelTypes = new HashSet<>();
+//    @Getter private final Set<Class<?>> xmlElementTypes = new HashSet<>();
+    
+    //@Getter private final Set<Class<?>> iocManaged = new HashSet<>();
+    //@Getter private final Set<Class<?>> domainObjectTypes = new HashSet<>();
+//
     private final List<Set<? extends Class<? extends Object>>> allTypeSets = _Lists.of(
+            beanTypes,
             entityTypes,
-            mixinTypes,
-            fixtureScriptTypes,
-            domainServiceTypes,
-            domainObjectTypes,
-            viewModelTypes,
-            xmlElementTypes);
-    
-    
+            mixinTypes
+            );
+
     @Override
     public void close() {
         inbox.clear();
         allTypeSets.forEach(Set::clear);
     }
 
-	// -- STREAM ALL
+    // -- STREAM ALL
 
-	public Stream<Class<?>> streamAllTypes() {
+    //	public Stream<Class<?>> streamAllTypes() {
+    //
+    //		return _Lists.of(
+    //				iocManaged,
+    //				entityTypes,
+    //				mixinTypes,
+    //				fixtureScriptTypes,
+    //				domainServiceTypes,
+    //				domainObjectTypes,
+    //				viewModelTypes,
+    //				xmlElementTypes)
+    //				.stream()
+    //				.distinct()
+    //				.flatMap(Collection::stream)
+    //				;
+    //	}
 
-		return _Lists.of(
-				iocManaged,
-				entityTypes,
-				mixinTypes,
-				fixtureScriptTypes,
-				domainServiceTypes,
-				domainObjectTypes,
-				viewModelTypes,
-				xmlElementTypes)
-				.stream()
-				.distinct()
-				.flatMap(Collection::stream)
-				;
-	}
+    // -- INBOX
 
-	// -- INBOX
-	
-	public void addToInbox(Class<?> type) {
-	    synchronized (inbox) {
-            inbox.add(type);
-        }
-	}
-	
-	/**
-	 * Implemented as a one-shot, that clears the inbox afterwards.
-	 * @return
-	 */
-    public Stream<Class<?>> streamAndClearInbox() {
-        
-        final List<Class<?>> defensiveCopy;
-        
+    public void addToInbox(BeanSort sort, Class<?> type) {
         synchronized (inbox) {
-            defensiveCopy = new ArrayList<>(inbox);
+            inbox.put(type, sort);
+        }
+    }
+
+    /**
+     * Implemented as a one-shot, that clears the inbox afterwards.
+     * @return
+     */
+    public Stream<Map.Entry<Class<?>, BeanSort>> streamAndClearInbox() {
+
+        final Map<Class<?>, BeanSort> defensiveCopy;
+
+        synchronized (inbox) {
+            defensiveCopy = new HashMap<>(inbox);
             inbox.clear();
         }
-        
-        defensiveCopy.forEach(cls->{
-        	probe.println("stream inbox: " + cls.getName());
+
+        defensiveCopy.forEach((k, v)->{
+            probe.println("stream inbox: %s [%s]", k.getName(), v.name());
         });
-        
-        return defensiveCopy.stream();
+
+        return defensiveCopy.entrySet().stream();
     }
-    
-    public Stream<Class<?>> streamCdiManaged() {
-    	return iocManaged.stream();
-    }
-    
+
     // -- FILTER
 
     // don't categorize this early, instead push candidate classes onto a queue for 
     // later processing when the SpecLoader initializes.
     public boolean isIoCManagedType(TypeMetaData typeMetaData) {
-        boolean toInbox = false;
-        boolean toIoC = false;
-        
-        val what = new StringBuilder();
-        
-        if(typeMetaData.hasDomainServiceAnnotation()) {
-            //domainServiceTypes.add(typeMetaData.getUnderlyingClass());
-            toInbox = true;
-            toIoC = true;
-            what.append("+@DomainService");
-        }
-        
-        if(typeMetaData.hasDomainObjectAnnotation()) {
-            //domainObjectTypes.add(typeMetaData.getUnderlyingClass());
-            toInbox = true;
-            what.append("+@DomainObject");
-        }
-        
-        if(typeMetaData.hasViewModelAnnotation()) {
-            //domainObjectTypes.add(typeMetaData.getUnderlyingClass());
-            toInbox = true;
-            what.append("+@ViewModel");
-        }
-        
-        if(typeMetaData.hasSingletonAnnotation()) {
-        	toIoC = true;
-        	what.append("+@Singleton");
-        }
-        
-        if(typeMetaData.hasRequestScopedAnnotation()) {
-            toIoC = true;
-            what.append("+@RequestScoped");
-        }
-        
-        if(toIoC) {
-        	iocManaged.add(typeMetaData.getUnderlyingClass());
-        }
-        if(toInbox) {
-            addToInbox(typeMetaData.getUnderlyingClass());
-        }
-        
-        if(toIoC || toInbox) {
-            val where = new StringBuilder();
-            if(toIoC) where.append("+Spring");
-            if(toIoC) where.append("+Model");
-            probe.println("%s %s [%s]", 
-                    where, 
-                    _Probe.compact(typeMetaData.getUnderlyingClass()),
-                    what
-                    );
-        }
-        
-        return toIoC;
-    }
-    
-    // -- HELPER
-    
-    @Deprecated // not typesafe
-    public final static List<String> FRAMEWORK_PROVIDED_SERVICE_PACKAGES = _Lists.of(
-            "org.apache.isis.applib",
-            "org.apache.isis.core.wrapper" ,
-            "org.apache.isis.core.metamodel.services" ,
-            "org.apache.isis.core.runtime.services" ,
-            "org.apache.isis.schema.services" ,
-            "org.apache.isis.objectstore.jdo.applib.service" ,
-            "org.apache.isis.viewer.restfulobjects.rendering.service" ,
-            "org.apache.isis.objectstore.jdo.datanucleus.service.support" ,
-            "org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" ,
-            "org.apache.isis.viewer.wicket.viewer.services", 
-            "org.apache.isis.core.integtestsupport.components");
 
-    @Deprecated // not typesafe
-    public final static List<String> FRAMEWORK_PROVIDED_TYPES_FOR_SCANNING = _Lists.of(
-            "org.apache.isis.config.AppConfig",
-            "org.apache.isis.applib.IsisApplibModule",
-            "org.apache.isis.core.wrapper.WrapperFactoryDefault",
-            "org.apache.isis.core.metamodel.MetamodelModule",
-            "org.apache.isis.core.runtime.RuntimeModule",
-            "org.apache.isis.core.runtime.services.RuntimeServicesModule",
-//            "org.apache.isis.jdo.JdoModule",
-            "org.apache.isis.viewer.restfulobjects.rendering.RendererContext"
-            );
+        val type = typeMetaData.getUnderlyingClass();
+        val beanSort = classify(type);
+
+        val isToBeProvisioned = beanSort.isBean();
+        val isToBeInspected = !beanSort.isUnknown();
+
+        if(isToBeInspected) {
+            addToInbox(beanSort, type);
+        }
+
+        if(isToBeInspected || isToBeProvisioned) {
+            probe.println("%s %s [%s]",
+                    isToBeProvisioned ? "provision" : "skip",
+                    _Probe.compact(type),
+                    beanSort.name());
+        }
+
+        return isToBeProvisioned;
+
+    }
+
+    @Override
+    public BeanSort classify(Class<?> type) {
+
+        requires(type, "type");
+        
+        if(getAnnotation(type, Vetoed.class)!=null) {
+            return BeanSort.UNKNOWN; // exclude from provisioning
+        }
+
+        val aDomainService = getAnnotation(type, DomainService.class);
+        if(aDomainService!=null) {
+            return BeanSort.BEAN;
+        }
+
+        val aDomainObject = getAnnotation(type, DomainObject.class);
+        if(aDomainObject!=null) {
+            switch (aDomainObject.nature()) {
+            case EXTERNAL_ENTITY:
+            case INMEMORY_ENTITY:
+            case JDO_ENTITY:
+                return BeanSort.ENTITY;
+            case MIXIN:
+                return BeanSort.MIXIN;
+            case VIEW_MODEL:
+                return BeanSort.VIEW_MODEL;
+
+            case NOT_SPECIFIED:
+            default:
+                // continue
+                break; 
+            } 
+        }
+
+        if(getAnnotation(type, ViewModel.class)!=null) {
+            return BeanSort.VIEW_MODEL;
+        }
+
+        if(org.apache.isis.applib.ViewModel.class.isAssignableFrom(type)) {
+            return BeanSort.VIEW_MODEL;
+        }
+
+        if(ApplicationScopedComponent.class.isAssignableFrom(type)) {
+            return BeanSort.BEAN;
+        }
+
+        if(SessionScopedComponent.class.isAssignableFrom(type)) {
+            return BeanSort.BEAN;
+        }
+
+        if(TransactionScopedComponent.class.isAssignableFrom(type)) {
+            return BeanSort.BEAN;
+        }
+
+        if(getAnnotation(type, RequestScoped.class)!=null) {
+            return BeanSort.BEAN;
+        }
+
+        if(getAnnotation(type, Singleton.class)!=null) {
+            return BeanSort.BEAN;
+        }
+
+        return BeanSort.UNKNOWN;
+    }
+
 
 }

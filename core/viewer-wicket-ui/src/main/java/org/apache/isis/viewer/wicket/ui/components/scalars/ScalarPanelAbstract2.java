@@ -39,10 +39,10 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.PromptStyle;
-import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -872,7 +872,7 @@ public abstract class ScalarPanelAbstract2 extends PanelAbstract<ScalarModel> im
                     final ObjectSpecification specification = scalarModel.getTypeOfSpecification();
                     final MetaModelService metaModelService = getServiceRegistry()
                             .lookupServiceElseFail(MetaModelService.class);
-                    final ManagedObjectSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
+                    final BeanSort sort = metaModelService.sortOf(specification.getCorrespondingClass(), MetaModelService.Mode.RELAXED);
 
                     final ActionPrompt prompt = ActionPromptProvider.Util
                             .getFrom(ScalarPanelAbstract2.this).getActionPrompt(promptStyle, sort);

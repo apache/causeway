@@ -22,6 +22,8 @@ package org.apache.isis.core.runtime.system.transaction;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import javax.enterprise.inject.Vetoed;
+
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.iactn.Interaction;
@@ -36,7 +38,7 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+@Vetoed @Slf4j
 public class IsisTransactionManager implements SessionScopedComponent {
 
     private int transactionLevel;

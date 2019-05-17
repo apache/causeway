@@ -22,6 +22,7 @@ package org.apache.isis.core.runtime.system.persistence;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.enterprise.inject.Vetoed;
 import javax.jdo.PersistenceManagerFactory;
 
 import org.datanucleus.PropertyNames;
@@ -48,7 +49,7 @@ import lombok.extern.slf4j.Slf4j;
  * Factory for {@link PersistenceSession}.
  *
  */
-@Slf4j
+@Vetoed @Slf4j
 public class PersistenceSessionFactory5
 implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstalledStateHolder {
 

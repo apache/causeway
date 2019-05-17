@@ -45,13 +45,6 @@ public interface ServiceRegistry {
 
 
     /**
-     * Whether or not the given type is annotated @DomainService.
-     * @param cls
-     * @return
-     */
-    boolean isDomainServiceType(Class<?> cls);
-
-    /**
      * Obtains a Bin container containing any matching instances for the given required type 
      * and additional required qualifiers. 
      * @param type

@@ -22,6 +22,7 @@ import javax.enterprise.inject.spi.Bean;
 
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.commons.ioc.LifecycleContext;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.core.commons.collections.Bin;
 
 import lombok.Value;
@@ -33,7 +34,7 @@ final class BeanAdapterCDI implements BeanAdapter {
     private final String id;
     private final LifecycleContext lifecycleContext;
     private final Bean<?> bean;
-    private final boolean domainService;
+    private final BeanSort managedObjectSort;
     
     public Bin<?> getInstance() {
         val type = bean.getBeanClass();

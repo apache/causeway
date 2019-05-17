@@ -123,25 +123,26 @@ class MetaModelContext_usingSpring implements MetaModelContext {
         
         @Override
         public Stream<ObjectAdapter> streamServiceAdapters() {
-            return serviceAdapters.get().values().stream();
+            return objectAdaptersForBeansOfKnownSort.get().values().stream();
         }
         
         @Override
         public ObjectAdapter lookupServiceAdapterById(final String serviceId) {
-            return serviceAdapters.get().get(serviceId);
+            return objectAdaptersForBeansOfKnownSort.get().get(serviceId);
         }
         
         
         // -- HELPER
         
-        private final _Lazy<Map<String, ObjectAdapter>> serviceAdapters = 
-                _Lazy.threadSafe(this::initServiceAdapters);
+        private final _Lazy<Map<String, ObjectAdapter>> objectAdaptersForBeansOfKnownSort = 
+                _Lazy.threadSafe(this::collectBeansOfKnownSort);
         
-        private Map<String, ObjectAdapter> initServiceAdapters() {
+        private Map<String, ObjectAdapter> collectBeansOfKnownSort() {
             
             val objectAdapterProvider = getObjectAdapterProvider();
             
             return getServiceRegistry().streamRegisteredBeans()
+            .filter(registeredBean->!registeredBean.getManagedObjectSort().isUnknown())        
             .map(objectAdapterProvider::adapterForBean) 
             .peek(serviceAdapter->{
                 val oid = serviceAdapter.getOid();

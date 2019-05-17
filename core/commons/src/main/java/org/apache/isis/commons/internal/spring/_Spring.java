@@ -50,6 +50,7 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.commons.ioc.LifecycleContext;
+import org.apache.isis.commons.ioc.BeanSortClassifier;
 import org.apache.isis.core.commons.collections.Bin;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -114,21 +115,19 @@ public class _Spring {
     
     /**
      * 
-     * @param filterDomainService - usually ServiceRegistry::isDomainServiceType
-     * @param beanNameProvider - usually ServiceUtil::idOfBean
+     * @param classifier
+     * @return
      */
-    public static Stream<BeanAdapter> streamAllBeans(
-            Predicate<Class<?>> filterDomainService) {
+    public static Stream<BeanAdapter> streamAllBeans(BeanSortClassifier classifier) {
         
         val context = context();
         val beanFactory = ((ConfigurableApplicationContext)context).getBeanFactory();
         
         return Stream.of(context.getBeanDefinitionNames())
         .map(name->{
-        
             
             val type = context.getType(name);
-            val isDomainService = filterDomainService.test(type);
+            val managedObjectSort = classifier.classify(type);
             val id = name; // just reuse the bean's name
             
             val scope = beanFactory.getBeanDefinition(name).getScope();
@@ -137,7 +136,7 @@ public class _Spring {
             val resolvableType = ResolvableType.forClass(type);
             val bean = context.getBeanProvider(resolvableType);
             
-            val beanAdapter = BeanAdapterSpring.of(id, lifecycleContext, type, bean, isDomainService);
+            val beanAdapter = BeanAdapterSpring.of(id, lifecycleContext, type, bean, managedObjectSort);
             
             return beanAdapter;
         });

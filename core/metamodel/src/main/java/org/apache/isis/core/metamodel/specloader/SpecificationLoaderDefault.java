@@ -3,26 +3,18 @@ package org.apache.isis.core.metamodel.specloader;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.services.registry.ServiceRegistry;
-import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.concurrent._Tasks;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.debug._Probe;
-import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
-import org.apache.isis.core.metamodel.MetaModelContext;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
@@ -134,39 +126,45 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 		// need to completely load services and mixins (synchronously)
 		log.info("Loading all specs (up to state of {})", IntrospectionState.NOT_INTROSPECTED);
 
-		val typeRegistry = IsisBeanTypeRegistry.current(); 
+		val typeRegistry = IsisBeanTypeRegistry.current();
+		
+		val specificationsFromRegistry = _Lists.<ObjectSpecification>newArrayList();
+		val domainServiceSpecs = _Lists.<ObjectSpecification>newArrayList();
+		val mixinSpecs = _Lists.<ObjectSpecification>newArrayList();
+		
+		CommonDtoUtils.VALUE_TYPES.forEach(type->{
+            val spec = internalLoadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
+            specificationsFromRegistry.add(spec);
+        });
+		
+		typeRegistry.streamAndClearInbox().forEach(entry->{
+		    
+		    val type = entry.getKey();
+		    val sort = entry.getValue(); 
+		    
+		    val spec = internalLoadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
+		    specificationsFromRegistry.add(spec);
 
-		final List<ObjectSpecification> specificationsFromRegistry = _Lists.newArrayList();
+		    switch (sort) {
+            case BEAN:
+                typeRegistry.getBeanTypes().add(type);
+                domainServiceSpecs.add(spec);
+                return;
+            case MIXIN:
+                typeRegistry.getMixinTypes().add(type);
+                mixinSpecs.add(spec);
+                return;
+            case ENTITY:
+                typeRegistry.getEntityTypes().add(type);
+                mixinSpecs.add(spec);
+                return;
 
-		// we use allServiceClasses() - obtained from servicesInjector - rather than reading from the
-		// AppManifest.Registry.instance().getDomainServiceTypes(), because the former also has the fallback
-		// services set up in IsisSessionFactoryBuilder beforehand.
-		final List<ObjectSpecification> domainServiceSpecs =
-				loadSpecificationsForBeans(
-						streamBeans(), NatureOfService.DOMAIN,
-						specificationsFromRegistry, IntrospectionState.NOT_INTROSPECTED
-						);
-		final List<ObjectSpecification> mixinSpecs =
-				loadSpecificationsFor(
-						typeRegistry.getMixinTypes().stream(), null,
-						specificationsFromRegistry, IntrospectionState.NOT_INTROSPECTED
-						);
-		loadSpecificationsFor(
-				CommonDtoUtils.VALUE_TYPES.stream(), null,
-				specificationsFromRegistry, IntrospectionState.NOT_INTROSPECTED
-				);
-		loadSpecificationsFor(
-				typeRegistry.getDomainObjectTypes().stream(), null,
-				specificationsFromRegistry, IntrospectionState.NOT_INTROSPECTED
-				);
-		loadSpecificationsFor(
-				typeRegistry.getViewModelTypes().stream(), null,
-				specificationsFromRegistry, IntrospectionState.NOT_INTROSPECTED
-				);
-		loadSpecificationsFor(
-				typeRegistry.getXmlElementTypes().stream(), null,
-				specificationsFromRegistry, IntrospectionState.NOT_INTROSPECTED
-				);
+            default:
+                return;
+            }
+		    
+		});
+		
 
 		cache.init();
 
@@ -238,7 +236,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 		
 		requires(upTo, "upTo");
 		
-		val spec = internalLoadSpecification(type, null, upTo);
+		val spec = internalLoadSpecification(type, upTo);
 		if(spec == null) {
 			return null;
 		}
@@ -261,7 +259,6 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 
 	private ObjectSpecification internalLoadSpecification(
 			final Class<?> type,
-			final NatureOfService natureFallback,
 			final IntrospectionState upTo) {
 
 		final Class<?> substitutedType = classSubstitutor.getClass(type);
@@ -283,7 +280,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 				return spec;
 			}
 
-			final ObjectSpecification specification = createSpecification(substitutedType, natureFallback);
+			final ObjectSpecification specification = createSpecification(substitutedType);
 
 			// put into the cache prior to introspecting, to prevent
 			// infinite loops
@@ -335,17 +332,15 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 		return cache.allSpecifications();
 	}
 
-	private Stream<BeanAdapter> streamBeans() {
-		final ServiceRegistry registry = MetaModelContext.current().getServiceRegistry();
-		return registry.streamRegisteredBeans();
-	}
+//	private Stream<BeanAdapter> streamBeans() {
+//		final ServiceRegistry registry = MetaModelContext.current().getServiceRegistry();
+//		return registry.streamRegisteredBeans();
+//	}
 	
 	/**
 	 * Creates the appropriate type of {@link ObjectSpecification}.
 	 */
-	private ObjectSpecification createSpecification(
-			final Class<?> cls,
-			final NatureOfService fallback) {
+	private ObjectSpecification createSpecification(final Class<?> cls) {
 
 		// ... and create the specs
 		final ObjectSpecificationAbstract objectSpec;
@@ -354,29 +349,22 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 			objectSpec = new ObjectSpecificationOnStandaloneList(facetProcessor, postProcessor);
 
 		} else {
-
+		    
 			final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
 					new FacetedMethodsBuilderContext(
 							this, facetProcessor);
-
-			final NatureOfService natureOfServiceIfAny = natureOfServiceFrom(cls, fallback);
+			
+			val beanSort = IsisBeanTypeRegistry.current().classify(cls);
 
 			objectSpec = new ObjectSpecificationDefault(cls,
 					facetedMethodsBuilderContext,
-					facetProcessor, natureOfServiceIfAny, postProcessor);
+					facetProcessor, beanSort, postProcessor);
 		}
 
 		return objectSpec;
 	}
-
-	private NatureOfService natureOfServiceFrom(
-			final Class<?> type,
-			final NatureOfService fallback) {
-		final DomainService domainServiceIfAny = type.getAnnotation(DomainService.class);
-		return domainServiceIfAny != null ? domainServiceIfAny.nature() : fallback;
-	}
 	
-	private final static _Probe probe = _Probe.unlimited().label("SpecificationLoader");
+	//private final static _Probe probe = _Probe.unlimited().label("SpecificationLoader");
 
 	private void logBefore(
 			final List<ObjectSpecification> specificationsFromRegistry,
@@ -443,33 +431,30 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 		threadPoolSupport.joinGatherFailures(futures);
 	}
 
-	private List<ObjectSpecification> loadSpecificationsFor(
-			final Stream<Class<?>> domainTypes,
-			final NatureOfService natureOfServiceFallback,
-			final List<ObjectSpecification> appendTo,
-			final IntrospectionState upTo) {
-
-		return domainTypes
-				.map(domainType->internalLoadSpecification(domainType, natureOfServiceFallback, upTo))
-				.filter(_NullSafe::isPresent)
-				.peek(appendTo::add)
-				.collect(Collectors.toList());
-	}
-
-	private List<ObjectSpecification> loadSpecificationsForBeans (
-			final Stream<BeanAdapter> beans,
-			final NatureOfService natureOfServiceFallback,
-			final List<ObjectSpecification> appendTo,
-			final IntrospectionState upTo) {
-
-		return beans
-				.filter(BeanAdapter::isDomainService)
-				.map(BeanAdapter::getBeanClass)    
-				.map(domainType->internalLoadSpecification(domainType, natureOfServiceFallback, upTo))
-				.filter(_NullSafe::isPresent)
-				.peek(appendTo::add)
-				.collect(Collectors.toList());
-	}
+//	private List<ObjectSpecification> loadSpecificationsFor(
+//			final Stream<Class<?>> domainTypes,
+//			final List<ObjectSpecification> appendTo,
+//			final IntrospectionState upTo) {
+//
+//		return domainTypes
+//				.map(domainType->internalLoadSpecification(domainType, upTo))
+//				.filter(_NullSafe::isPresent)
+//				.peek(appendTo::add)
+//				.collect(Collectors.toList());
+//	}
+//
+//	private List<ObjectSpecification> loadSpecificationsForBeans (
+//			final Stream<BeanAdapter> beans,
+//			final List<ObjectSpecification> appendTo,
+//			final IntrospectionState upTo) {
+//
+//		return beans
+//				.map(BeanAdapter::getBeanClass)    
+//				.map(type->internalLoadSpecification(type, upTo))
+//				.filter(_NullSafe::isPresent)
+//				.peek(appendTo::add)
+//				.collect(Collectors.toList());
+//	}
 	
 	private void invalidateCache(final Class<?> cls) {
 

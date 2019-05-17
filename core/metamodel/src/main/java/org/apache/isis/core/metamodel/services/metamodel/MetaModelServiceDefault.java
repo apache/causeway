@@ -27,7 +27,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.applib.services.grid.GridService;
@@ -36,6 +35,7 @@ import org.apache.isis.applib.services.metamodel.DomainModel;
 import org.apache.isis.applib.services.metamodel.MetaModelService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.appfeat.ApplicationFeatureId;
@@ -167,32 +167,32 @@ public class MetaModelServiceDefault implements MetaModelService {
     // //////////////////////////////////////
 
     @Override
-    public ManagedObjectSort sortOf(
+    public BeanSort sortOf(
             final Class<?> domainType, final Mode mode) {
         if(domainType == null) {
             return null;
         }
         final ObjectSpecification objectSpec = specificationLoader.loadSpecification(domainType);
         if(objectSpec.isBean()) {
-            return ManagedObjectSort.BEAN;
+            return BeanSort.BEAN;
         }
         if(objectSpec.isViewModel()) {
-            return ManagedObjectSort.VIEW_MODEL;
+            return BeanSort.VIEW_MODEL;
         }
         if(objectSpec.isValue()) {
-            return ManagedObjectSort.VALUE;
+            return BeanSort.VALUE;
         }
         if(objectSpec.isMixin()) {
-            return ManagedObjectSort.MIXIN;
+            return BeanSort.MIXIN;
         }
         if(objectSpec.isParentedOrFreeCollection()) {
-            return ManagedObjectSort.COLLECTION;
+            return BeanSort.COLLECTION;
         }
         if(objectSpec.isEntity()) {
-            return ManagedObjectSort.ENTITY;
+            return BeanSort.ENTITY;
         }
         if(mode == Mode.RELAXED) {
-            return ManagedObjectSort.UNKNOWN;
+            return BeanSort.UNKNOWN;
         }
         throw new IllegalArgumentException(String.format(
                 "Unable to determine what sort of domain object this is: '%s'. Originating domainType: '%s'",
@@ -202,7 +202,7 @@ public class MetaModelServiceDefault implements MetaModelService {
     }
 
     @Override
-    public ManagedObjectSort sortOf(final Bookmark bookmark, final Mode mode) {
+    public BeanSort sortOf(final Bookmark bookmark, final Mode mode) {
         if(bookmark == null) {
             return null;
         }
@@ -213,7 +213,7 @@ public class MetaModelServiceDefault implements MetaModelService {
             try {
                 domainType = this.fromObjectType(bookmark.getObjectType());
             } catch (Exception e) {
-                return ManagedObjectSort.UNKNOWN;
+                return BeanSort.UNKNOWN;
             }
             break;
 

@@ -18,15 +18,9 @@
  */
 package org.apache.isis.commons.ioc;
 
-import org.apache.isis.core.commons.collections.Bin;
+@FunctionalInterface
+public interface BeanSortClassifier {
 
-public interface BeanAdapter {
-
-    String getId();
-    Bin<?> getInstance();
-    Class<?> getBeanClass();
-    BeanSort getManagedObjectSort();
-
-    boolean isCandidateFor(Class<?> requiredType);
+    BeanSort classify(Class<?> type);
     
 }

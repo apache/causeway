@@ -116,14 +116,7 @@ abstract class SpecificationLoaderTestAbstract {
                 .singleton(mockMessageService = producers.mockMessageService())
                 .singleton(mockGridService = producers.mockGridService())
                 .build());
-        
-//        BeanTypeRegistry.instance().setDomainServiceTypes(_Sets.newHashSet());
-//        BeanTypeRegistry.instance().setFixtureScriptTypes(_Sets.newHashSet());
-//        BeanTypeRegistry.instance().setDomainObjectTypes(_Sets.newHashSet());
-//        BeanTypeRegistry.instance().setMixinTypes(_Sets.newHashSet());
-//        BeanTypeRegistry.instance().setViewModelTypes(_Sets.newHashSet());
-//        BeanTypeRegistry.instance().setPersistenceCapableTypes(_Sets.newHashSet());
-//        BeanTypeRegistry.instance().setXmlElementTypes(_Sets.newHashSet());
+
 
         _Timing.runVerbose("specificationLoader.init()", specificationLoader::init);
         

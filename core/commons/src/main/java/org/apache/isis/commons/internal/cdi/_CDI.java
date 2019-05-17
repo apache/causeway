@@ -25,7 +25,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -44,6 +43,7 @@ import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.functions._Functions.CheckedRunnable;
 import org.apache.isis.commons.ioc.BeanAdapter;
 import org.apache.isis.commons.ioc.LifecycleContext;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.core.commons.collections.Bin;
 
 import static org.apache.isis.commons.internal.base._NullSafe.isEmpty;
@@ -195,11 +195,11 @@ public final class _CDI {
     
     /**
      * 
-     * @param filterDomainService - usually ServiceRegistry::isDomainServiceType
+     * @param classifier
      * @param beanNameProvider - usually ServiceUtil::idOfBean
      */
     public static Stream<BeanAdapter> streamAllBeans(
-            Predicate<Class<?>> filterDomainService, 
+            Function<Class<?>, BeanSort> classifier, 
             Function<Bean<?>, String> beanNameProvider) {
         
         return streamAllCDIBeans()
@@ -211,10 +211,10 @@ public final class _CDI {
             // getBeanClass() does not work for produced beans as intended here! 
             // (we do get the producer's class instead)
             val type = bean.getBeanClass(); 
-            val isDomainService = filterDomainService.test(type);
+            val sort = classifier.apply(type);
 
             val id = beanNameProvider.apply(bean);
-            val beanAdapter = BeanAdapterCDI.of(id, lifecycleContext, bean, isDomainService);
+            val beanAdapter = BeanAdapterCDI.of(id, lifecycleContext, bean, sort);
             return beanAdapter;
         });
         

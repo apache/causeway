@@ -22,10 +22,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.DomainObject;
-import org.apache.isis.applib.metamodel.ManagedObjectSort;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.CommandDtoProcessor;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.schema.metamodel.v1.MetamodelDto;
 
 /**
@@ -65,9 +65,9 @@ public interface MetaModelService {
      */
     DomainModel getDomainModel();
 
-    ManagedObjectSort sortOf(Class<?> domainType, Mode mode);
+    BeanSort sortOf(Class<?> domainType, Mode mode);
 
-    ManagedObjectSort sortOf(Bookmark bookmark, Mode mode);
+    BeanSort sortOf(Bookmark bookmark, Mode mode);
 
     enum Mode {
         /**

@@ -23,6 +23,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.enterprise.inject.Vetoed;
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 
@@ -48,6 +49,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryFac
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+@Vetoed
 public class DataNucleusApplicationComponents5 implements ApplicationScopedComponent {
 
     public static final String CLASS_METADATA_LOADED_LISTENER_KEY = "classMetadataLoadedListener";

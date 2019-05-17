@@ -227,7 +227,10 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
         
         @Override
         public String toString() {
-            return "ObjectAdapterForBean[spec="+spec+"]";
+            return String.format("ObjectAdapterForBean[specId=%s, featureType=%s, moSort=%s]", 
+                    spec.getSpecId(), 
+                    spec.getFeatureType(),
+                    spec.getManagedObjectSort().name());
         }
         
     }

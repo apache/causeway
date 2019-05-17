@@ -19,16 +19,11 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl.dflt;
 
-import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
-
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -36,6 +31,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.collections._Maps;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -73,9 +69,12 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbs
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 
-public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements FacetHolder {
+import static org.apache.isis.commons.internal.base._With.mapIfPresentElse;
 
-    private final static Logger LOG = LoggerFactory.getLogger(ObjectSpecificationDefault.class);
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements FacetHolder {
 
     private static final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
@@ -92,17 +91,18 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private Map<Method, ObjectMember> membersByMethod = null;
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
-    private final boolean isService;
+    private final boolean isBean;
 
     public ObjectSpecificationDefault(
             final Class<?> correspondingClass,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
             final FacetProcessor facetProcessor,
-            final NatureOfService natureOfServiceIfAny,
+            final BeanSort beanSort,
             final PostProcessor postProcessor) {
         super(correspondingClass, determineShortName(correspondingClass), facetProcessor, postProcessor);
 
-        this.isService = natureOfServiceIfAny != null;
+        this.isBean = beanSort.isBean();
+        
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
 
         facetProcessor.processObjectSpecId(correspondingClass, this);
@@ -118,8 +118,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
         // go no further if a value
         if(this.containsFacet(ValueFacet.class)) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("skipping type hierarchy introspection for value type {}", getFullIdentifier());
+            if (log.isDebugEnabled()) {
+                log.debug("skipping type hierarchy introspection for value type {}", getFullIdentifier());
             }
             return;
         }
@@ -127,8 +127,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         final DomainServiceFacet facet = getFacet(DomainServiceFacet.class);
         final boolean serviceWithNatureOfDomain = facet != null && facet.getNatureOfService() == NatureOfService.DOMAIN;
         if (serviceWithNatureOfDomain) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("skipping type hierarchy introspection for domain service with natureOfService = DOMAIN {}", getFullIdentifier());
+            if (log.isDebugEnabled()) {
+                log.debug("skipping type hierarchy introspection for domain service with natureOfService = DOMAIN {}", getFullIdentifier());
             }
             return;
         }
@@ -165,8 +165,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     protected synchronized void introspectMembers() {
 
         if(this.containsFacet(ValueFacet.class)) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("skipping full introspection for value type {}", getFullIdentifier());
+            if (log.isDebugEnabled()) {
+                log.debug("skipping full introspection for value type {}", getFullIdentifier());
             }
             return;
     }
@@ -280,7 +280,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     @Override
     public boolean isBean() {
-        return isService;
+        return isBean;
     }
 
     // -- getObjectAction
