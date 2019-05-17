@@ -38,7 +38,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSession;
 
 import static org.apache.isis.commons.internal.base._With.requires;
 
@@ -574,8 +573,8 @@ final class ObjectAdapterMemento_Legacy implements ObjectAdapterMemento {
 	@Override
 	public ObjectAdapter getObjectAdapter() {
 		// we use de-serialization for the remaining cases
-		val isisSession = IsisSession.currentOrElseNull();
-		return type.recreateAdapter(this, ConcurrencyChecking.NO_CHECK, isisSession.getSpecificationLoader());
+		val specLoader = IsisContext.getSpecificationLoader();
+		return type.recreateAdapter(this, ConcurrencyChecking.NO_CHECK, specLoader);
 	}
 
 	@Override

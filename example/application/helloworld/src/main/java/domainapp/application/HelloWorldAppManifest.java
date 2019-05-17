@@ -21,16 +21,22 @@ package domainapp.application;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 import org.springframework.core.io.ClassPathResource;
 
 import org.apache.isis.config.Presets;
+import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.security.shiro.IsisSecurityBootUsingShiro;
 import org.apache.isis.viewer.wicket.viewer.IsisWebWicketBoot;
+
+import domainapp.dom.HelloWorldModule;
 
 /**
  * Makes the integral parts of the 'hello world' web application.
@@ -45,6 +51,13 @@ import org.apache.isis.viewer.wicket.viewer.IsisWebWicketBoot;
     IsisWebWicketBoot.class,
     IsisSecurityBootUsingShiro.class
 })
+@ComponentScan(
+        basePackageClasses= {
+                HelloWorldModule.class
+        },
+        includeFilters= {
+                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
+        })
 public class HelloWorldAppManifest {
     
    @Bean @Singleton

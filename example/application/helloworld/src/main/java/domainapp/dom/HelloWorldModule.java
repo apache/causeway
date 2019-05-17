@@ -18,11 +18,6 @@
  */
 package domainapp.dom;
 
-import org.springframework.context.annotation.Configuration;
-
-@Configuration
-public class HelloWorldModule {
+public final class HelloWorldModule {
     
-  //TODO[2112] add missing producers
-
 }

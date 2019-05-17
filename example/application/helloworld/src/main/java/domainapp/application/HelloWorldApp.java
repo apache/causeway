@@ -20,9 +20,18 @@ package domainapp.application;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan.Filter;
 
+import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
+import org.apache.isis.core.metamodel.IsisMetamodelModule;
+import org.apache.isis.core.runtime.IsisRuntimeModule;
+import org.apache.isis.core.runtime.services.IsisRuntimeServicesModule;
+import org.apache.isis.core.wrapper.IsisWrapperModule;
 import org.apache.isis.runtime.spring.IsisBoot;
 
 /**
