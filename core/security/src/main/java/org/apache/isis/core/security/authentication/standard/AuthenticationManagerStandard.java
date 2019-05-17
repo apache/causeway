@@ -154,14 +154,14 @@ public class AuthenticationManagerStandard implements AuthenticationManager {
     // //////////////////////////////////////////////////////////
 
     
-//    public final void addAuthenticator(final Authenticator authenticator) {
-//        authenticators.add(authenticator);
-//    }
-//
-//    
-//    public void addAuthenticatorToStart(final Authenticator authenticator) {
-//        authenticators.add(0, authenticator);
-//    }
+    public final void addAuthenticator(final Authenticator authenticator) {
+        authenticators.add(authenticator);
+    }
+
+    
+    public void addAuthenticatorToStart(final Authenticator authenticator) {
+        authenticators.add(0, authenticator);
+    }
 
     
     public List<Authenticator> getAuthenticators() {

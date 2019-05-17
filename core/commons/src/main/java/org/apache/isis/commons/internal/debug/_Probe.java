@@ -20,8 +20,13 @@
 package org.apache.isis.commons.internal.debug;
 
 import java.io.PrintStream;
+import java.util.Map;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.stream.Collectors;
 
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.base._With;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.val;
@@ -182,6 +187,29 @@ public class _Probe {
         System.err.println(String.format(format, args));
     }
 
+    
+    private final static Map<String, String> abbreviations = 
+            _Maps.unmodifiableEntries(
+                _Maps.entry("org.apache.isis", "~"),
+                _Maps.entry("core", "c"),
+                _Maps.entry("applib", "alib"),
+                _Maps.entry("metamodel", "mm"),
+                _Maps.entry("runtime", "rt"),
+                _Maps.entry("viewer", "vw")
+            );
+    public static String compact(Class<?> cls) {
+        String[] name = {cls.getName()};
+        // pre-process for isis
+        abbreviations.forEach((k, v)->{
+            if(name[0].startsWith(k)) {
+                name[0] = v + name[0].substring(k.length());
+            }
+        });
+        return _Strings.splitThenStream(name[0], ".")
+        .map(part->_With.mapIfPresentElse(abbreviations.get(part), value->value, part))
+        .collect(Collectors.joining("."));
+    }
+
     // -- HELPER
     
     private void print_line(int indent, CharSequence chars) {
@@ -192,10 +220,6 @@ public class _Probe {
         final String message = "["+label+" "+counterValue+"] "+chars; 
         out.println(String.format(emphasisFormat, message));
     }
-
-	
-
-	
 
 
 }

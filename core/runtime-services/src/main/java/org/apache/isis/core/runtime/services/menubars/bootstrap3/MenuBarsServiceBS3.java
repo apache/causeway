@@ -31,7 +31,6 @@ import javax.inject.Singleton;
 
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.ServiceActionLayoutData;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3Menu;
 import org.apache.isis.applib.layout.menubars.bootstrap3.BS3MenuBar;
@@ -58,15 +57,12 @@ import org.apache.isis.core.metamodel.spec.ManagedObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
-@Singleton
+@Singleton @Slf4j
 public class MenuBarsServiceBS3 implements MenuBarsService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(MenuBarsServiceBS3.class);
 
     public static final String MB3_TNS = "http://isis.apache.org/applib/layout/menubars/bootstrap3";
     public static final String MB3_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/menubars/bootstrap3/menubars.xsd";
@@ -80,13 +76,11 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
     BS3MenuBars menuBars;
 
     @Override
-    @Programmatic
     public BS3MenuBars menuBars() {
         return menuBars(Type.DEFAULT);
     }
 
     @Override
-    @Programmatic
     public BS3MenuBars menuBars(final Type type) {
 
         final BS3MenuBars fallbackMenuBars = deriveMenuBarsFromMetaModelFacets();
@@ -172,7 +166,7 @@ public class MenuBarsServiceBS3 implements MenuBarsService {
         if(_Context.isPrototyping()) {
             messageService.warnUser("Menubars metadata errors; check the error log");
         }
-        LOG.error("Menubar layout metadata errors:\n\n{}\n\n", jaxbService.toXml(menuBars));
+        log.error("Menubar layout metadata errors:\n\n{}\n\n", jaxbService.toXml(menuBars));
 
         return null;
     }

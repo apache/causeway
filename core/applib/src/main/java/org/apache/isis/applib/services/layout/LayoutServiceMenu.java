@@ -122,7 +122,7 @@ public class LayoutServiceMenu {
 
 
     @javax.inject.Inject
-    LayoutService2 layoutService;
+    LayoutService layoutService;
 
 
 

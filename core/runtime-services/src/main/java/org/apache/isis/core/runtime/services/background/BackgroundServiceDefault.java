@@ -17,14 +17,9 @@
 package org.apache.isis.core.runtime.services.background;
 
 import java.lang.reflect.InvocationHandler;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -33,6 +28,7 @@ import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.factory.FactoryService;
+import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
@@ -41,9 +37,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ProxyEnhanced;
 import org.apache.isis.core.plugins.codegen.ProxyFactory;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
+
+import lombok.val;
 
 /**
  * For command-reification depends on an implementation of
@@ -56,53 +53,33 @@ import static org.apache.isis.commons.internal.base._Casts.uncheckedCast;
         )
 public class BackgroundServiceDefault implements BackgroundService {
 
-    static final Logger LOG = LoggerFactory.getLogger(BackgroundServiceDefault.class);
-
-    // only used if there is no BackgroundCommandService
-    private static class BuiltinExecutor {
-        /*
-         * For the fixed thread-pool let there be 1-4 concurrent threads,
-         * limited by the number of available (logical) processor cores.
-         *
-         * Note: Future improvements might make these values configurable,
-         * but for now lets try to be reasonably nice here.
-         *
-         */
-        private final int minThreadCount = 1;
-        private final int maxThreadCount = 4;
-
-        private final int threadCount =
-                Math.max(minThreadCount,
-                        Math.min(maxThreadCount,
-                                Runtime.getRuntime().availableProcessors()));
-
-        public final ExecutorService backgroundExecutorService =
-                Executors.newFixedThreadPool(threadCount);
-
-        public void shutdown() {
-            backgroundExecutorService.shutdownNow();
-        }
-    }
-
-    private BuiltinExecutor builtinExecutor; // only used if there is no BackgroundCommandService
-
-    private boolean usesBuiltinExecutor() {
-        return backgroundCommandService==null;
-    }
+    private InvocationHandlerFactory invocationHandlerFactory;  
 
     @Programmatic
     @PostConstruct
     public void init() {
-        if(usesBuiltinExecutor()) {
-            builtinExecutor = new BuiltinExecutor();
-        }
+        val backgroundCommandService = 
+                serviceRegistry.select(BackgroundCommandService.class)
+                .getFirst()
+                .orElse(null);
+        
+        this.invocationHandlerFactory = (backgroundCommandService!=null)
+                ? InvocationHandlerFactoryUsingBackgroundCommandService.builder()
+                        .backgroundCommandService(backgroundCommandService)
+                        .specificationLoader(specificationLoader)
+                        .commandDtoServiceInternal(commandDtoServiceInternal)
+                        .commandContext(commandContext)
+                        .objectAdapterProvider(objectAdapterProvider)
+                        .build()
+                    : new InvocationHandlerFactoryFallback();
+        
     }
 
     @Programmatic
     @PreDestroy
     public void shutdown() {
-        if(builtinExecutor!=null) {
-            builtinExecutor.shutdown();
+        if(invocationHandlerFactory!=null) {
+            invocationHandlerFactory.close();
         }
     }
 
@@ -116,14 +93,14 @@ public class BackgroundServiceDefault implements BackgroundService {
     @Override
     public <T> T execute(final T domainObject) {
         final Class<T> cls = uncheckedCast(domainObject.getClass());
-        final InvocationHandler methodHandler = newMethodHandler(domainObject, null);
+        val methodHandler = invocationHandlerFactory.newMethodHandler(domainObject, null);
         return newProxy(cls, null, methodHandler);
     }
 
     @Override
     public <T> T executeMixin(Class<T> mixinClass, Object mixedIn) {
         final T mixin = factoryService.mixin(mixinClass, mixedIn);
-        final InvocationHandler methodHandler = newMethodHandler(mixin, mixedIn);
+        val methodHandler = invocationHandlerFactory.newMethodHandler(mixin, mixedIn);
         return newProxy(mixinClass, mixedIn, methodHandler);
     }
 
@@ -153,33 +130,10 @@ public class BackgroundServiceDefault implements BackgroundService {
                         ;
     }
 
-    /**
-     *
-     * @param target - the object that is proxied, either a domain object or a mixin around a domain object
-     * @param mixedInIfAny - if target is a mixin, then this is the domain object that is mixed-in to.
-     */
-    private <T> InvocationHandler newMethodHandler(final T target, final Object mixedInIfAny) {
-
-        if(usesBuiltinExecutor()) {
-            return new ForkingInvocationHandler<T>(target, mixedInIfAny, builtinExecutor.backgroundExecutorService);
-        }
-
-        return new CommandInvocationHandler<T>(
-                backgroundCommandService,
-                target,
-                mixedInIfAny,
-                specificationLoader,
-                commandDtoServiceInternal,
-                commandContext,
-                this::getObjectAdapterProvider);
-
-    }
-
-
     // //////////////////////////////////////
 
     @javax.inject.Inject
-    private BackgroundCommandService backgroundCommandService;
+    private ServiceRegistry serviceRegistry;
 
     @javax.inject.Inject
     private CommandDtoServiceInternal commandDtoServiceInternal;
@@ -193,8 +147,8 @@ public class BackgroundServiceDefault implements BackgroundService {
     @javax.inject.Inject
     private SpecificationLoader specificationLoader;
 
-    protected ObjectAdapterProvider getObjectAdapterProvider() {
-        return IsisContext.getObjectAdapterProvider();
-    }
+    @javax.inject.Inject
+    private ObjectAdapterProvider objectAdapterProvider;
+   
 
 }

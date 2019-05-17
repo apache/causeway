@@ -225,6 +225,11 @@ class ObjectAdapterContext_ObjectAdapterProvider implements ObjectAdapterProvide
             return false;
         }
         
+        @Override
+        public String toString() {
+            return "ObjectAdapterForBean[spec="+spec+"]";
+        }
+        
     }
     
    

@@ -16,8 +16,6 @@
  */
 package org.apache.isis.core.runtime.services.background;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -27,14 +25,18 @@ import java.util.concurrent.ExecutorService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
+
+import static org.apache.isis.commons.internal.base._With.requires;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Package private invocation handler that executes actions in the background using a ExecutorService
  * @since 2.0.0
  */
+@Slf4j
 class ForkingInvocationHandler<T> implements InvocationHandler {
 
     private final T target;
@@ -68,8 +70,7 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
             domainObject = mixedInIfAny;
         }
 
-        final Optional<IsisSession> currentSession = Optional.ofNullable(IsisContext.getSessionFactory())
-                .map(IsisSessionFactory::getCurrentSession);
+        final Optional<IsisSession> currentSession = IsisSession.current();
 
         final AuthenticationSession authSession = currentSession
                 .map(IsisSession::getAuthenticationSession)
@@ -90,8 +91,8 @@ class ForkingInvocationHandler<T> implements InvocationHandler {
                         authSession	);
 
             } catch (Exception e) {
-                // log in caller's context
-                BackgroundServiceDefault.LOG.error(
+
+                log.error(
                         String.format("Background execution of action '%s' on object '%s' failed.",
                                 proxyMethod.getName(),
                                 domainObject.getClass().getName()),

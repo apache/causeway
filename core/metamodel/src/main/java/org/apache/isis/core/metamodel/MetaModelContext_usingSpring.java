@@ -134,7 +134,8 @@ class MetaModelContext_usingSpring implements MetaModelContext {
         
         // -- HELPER
         
-        private final _Lazy<Map<String, ObjectAdapter>> serviceAdapters = _Lazy.of(this::initServiceAdapters);
+        private final _Lazy<Map<String, ObjectAdapter>> serviceAdapters = 
+                _Lazy.threadSafe(this::initServiceAdapters);
         
         private Map<String, ObjectAdapter> initServiceAdapters() {
             

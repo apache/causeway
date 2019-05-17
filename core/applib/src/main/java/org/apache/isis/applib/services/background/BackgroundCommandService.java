@@ -36,13 +36,21 @@ import org.apache.isis.schema.cmd.v1.CommandDto;
  * a service.
  *
  */
-public interface BackgroundCommandService {
+public interface BackgroundCommandService extends AutoCloseable {
 
-    public void schedule(
+    void schedule(
             final CommandDto dto,
             final Command parentCommand,
             final String targetClassName,
             final String targetActionName,
             final String targetArgs);
+    
+    /**
+     * @since 2.0.0
+     */
+    // refined from AutoCloseable to not throw catched exceptions
+    default void close() { 
+        
+    }
 
 }

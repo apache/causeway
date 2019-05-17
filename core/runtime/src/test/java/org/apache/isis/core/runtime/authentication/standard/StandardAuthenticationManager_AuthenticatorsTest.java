@@ -61,12 +61,12 @@ public class StandardAuthenticationManager_AuthenticatorsTest {
         authenticationManager.authenticate(new AuthenticationRequestPassword("foo", "bar"));
     }
 
-//    @Test
-//    public void shouldBeAbleToAddAuthenticators() throws Exception {
-//        authenticationManager.addAuthenticator(mockAuthenticator);
-//        assertThat(authenticationManager.getAuthenticators().size(), is(1));
-//        assertThat(authenticationManager.getAuthenticators().get(0), is(sameInstance(mockAuthenticator)));
-//    }
+    @Test
+    public void shouldBeAbleToAddAuthenticators() throws Exception {
+        authenticationManager.addAuthenticator(mockAuthenticator);
+        assertThat(authenticationManager.getAuthenticators().size(), is(1));
+        assertThat(authenticationManager.getAuthenticators().get(0), is(sameInstance(mockAuthenticator)));
+    }
 
     @Test(expected = UnsupportedOperationException.class)
     public void shouldNotBeAbleToModifyReturnedAuthenticators() throws Exception {

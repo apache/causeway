@@ -13,6 +13,7 @@ import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.debug._Probe;
 
 import lombok.Getter;
+import lombok.val;
 
 /**
  * Holds the set of domain services, persistent entities and fixture scripts.services etc.
@@ -107,40 +108,59 @@ public final class IsisBeanTypeRegistry implements AutoCloseable {
     
     // -- FILTER
 
-    //FIXME[2033] don't categorize this early, instead push candidate classes onto a queue for 
+    // don't categorize this early, instead push candidate classes onto a queue for 
     // later processing when the SpecLoader initializes.
     public boolean isIoCManagedType(TypeMetaData typeMetaData) {
         boolean toInbox = false;
         boolean toIoC = false;
         
+        val what = new StringBuilder();
+        
         if(typeMetaData.hasDomainServiceAnnotation()) {
             //domainServiceTypes.add(typeMetaData.getUnderlyingClass());
             toInbox = true;
+            toIoC = true;
+            what.append("+@DomainService");
         }
         
         if(typeMetaData.hasDomainObjectAnnotation()) {
             //domainObjectTypes.add(typeMetaData.getUnderlyingClass());
             toInbox = true;
+            what.append("+@DomainObject");
         }
         
         if(typeMetaData.hasViewModelAnnotation()) {
             //domainObjectTypes.add(typeMetaData.getUnderlyingClass());
             toInbox = true;
+            what.append("+@ViewModel");
         }
         
-        if(typeMetaData.hasSingletonAnnotation() || 
-        		typeMetaData.hasRequestScopedAnnotation()) {
+        if(typeMetaData.hasSingletonAnnotation()) {
         	toIoC = true;
+        	what.append("+@Singleton");
+        }
+        
+        if(typeMetaData.hasRequestScopedAnnotation()) {
+            toIoC = true;
+            what.append("+@RequestScoped");
         }
         
         if(toIoC) {
         	iocManaged.add(typeMetaData.getUnderlyingClass());
-            probe.println("addTo IoC: " + typeMetaData.getUnderlyingClass().getName());
         }
-        
         if(toInbox) {
             addToInbox(typeMetaData.getUnderlyingClass());
-            probe.println("addTo inbox: " + typeMetaData.getUnderlyingClass().getName());
+        }
+        
+        if(toIoC || toInbox) {
+            val where = new StringBuilder();
+            if(toIoC) where.append("+Spring");
+            if(toIoC) where.append("+Model");
+            probe.println("%s %s [%s]", 
+                    where, 
+                    _Probe.compact(typeMetaData.getUnderlyingClass()),
+                    what
+                    );
         }
         
         return toIoC;

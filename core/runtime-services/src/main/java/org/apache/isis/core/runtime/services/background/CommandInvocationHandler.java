@@ -16,13 +16,10 @@
  */
 package org.apache.isis.core.runtime.services.background;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.isis.applib.services.background.BackgroundCommandService;
@@ -41,6 +38,8 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionMixedIn;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.schema.cmd.v1.CommandDto;
 
+import static org.apache.isis.commons.internal.base._With.requires;
+
 class CommandInvocationHandler<T> implements InvocationHandler {
 
     private final BackgroundCommandService backgroundCommandService;
@@ -49,7 +48,7 @@ class CommandInvocationHandler<T> implements InvocationHandler {
     private final SpecificationLoader specificationLoader;
     private final CommandDtoServiceInternal commandDtoServiceInternal;
     private final CommandContext commandContext;
-    private final Supplier<ObjectAdapterProvider> adapterProviderSupplier;
+    private final ObjectAdapterProvider adapterProvider;
 
     CommandInvocationHandler(
             BackgroundCommandService backgroundCommandService,
@@ -58,14 +57,14 @@ class CommandInvocationHandler<T> implements InvocationHandler {
             SpecificationLoader specificationLoader,
             CommandDtoServiceInternal commandDtoServiceInternal,
             CommandContext commandContext,
-            Supplier<ObjectAdapterProvider> adapterProviderSupplier) {
+            ObjectAdapterProvider adapterProvider) {
         this.backgroundCommandService = requires(backgroundCommandService, "backgroundCommandService");
         this.target = requires(target, "target");
         this.mixedInIfAny = mixedInIfAny;
         this.specificationLoader = requires(specificationLoader, "specificationLoader");
         this.commandDtoServiceInternal = requires(commandDtoServiceInternal, "commandDtoServiceInternal");
         this.commandContext = requires(commandContext, "commandContext");
-        this.adapterProviderSupplier = requires(adapterProviderSupplier, "adapterProviderSupplier");
+        this.adapterProvider = requires(adapterProvider, "adapterProvider");
     }
 
     @Override
@@ -126,7 +125,7 @@ class CommandInvocationHandler<T> implements InvocationHandler {
     // -- HELPER
 
     private ObjectAdapterProvider getObjectAdapterProvider() {
-        return adapterProviderSupplier.get();
+        return adapterProvider;
     }
 
     private ObjectAction findMixedInAction(final ObjectAction action, final Object domainObject) {
