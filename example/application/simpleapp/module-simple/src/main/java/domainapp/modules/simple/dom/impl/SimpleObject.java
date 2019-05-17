@@ -41,6 +41,7 @@ import static org.apache.isis.applib.annotation.SemanticsOf.NON_IDEMPOTENT_ARE_Y
 
 import domainapp.modules.simple.dom.types.Name;
 import domainapp.modules.simple.dom.types.Notes;
+import lombok.val;
 
 @javax.jdo.annotations.PersistenceCapable(identityType=IdentityType.DATASTORE, schema = "simple")
 @javax.jdo.annotations.DatastoreIdentity(strategy=IdGeneratorStrategy.IDENTITY, column="id")
@@ -48,7 +49,7 @@ import domainapp.modules.simple.dom.types.Notes;
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
 @DomainObject(auditing = Auditing.ENABLED)
 @DomainObjectLayout()  // causes UI events to be triggered
-@lombok.RequiredArgsConstructor
+//@lombok.RequiredArgsConstructor XXX lombok+JDOQ issue
 @XmlJavaTypeAdapter(PersistentEntityAdapter.class)
 public class SimpleObject implements Comparable<SimpleObject> {
 
@@ -56,7 +57,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return "Object: " + getName();
     }
 
-    @lombok.Getter @lombok.Setter @lombok.NonNull
+    @lombok.Getter @lombok.Setter //@lombok.NonNull XXX lombok+JDOQ issue
     @Name private String name;
 
     @lombok.Getter @lombok.Setter
@@ -106,5 +107,13 @@ public class SimpleObject implements Comparable<SimpleObject> {
     @javax.inject.Inject
     @javax.jdo.annotations.NotPersistent
     MessageService messageService;
+
+    // FACTORY
+    
+    public static SimpleObject ofName(String name) {
+        val simpleObject = new SimpleObject();
+        simpleObject.setName(name);
+        return simpleObject;
+    }
 
 }

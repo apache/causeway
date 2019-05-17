@@ -47,7 +47,7 @@ public class SimpleObjects {
     public SimpleObject create(
             @Name final String name
     ) {
-        return repositoryService.persist(new SimpleObject(name));
+        return repositoryService.persist(SimpleObject.ofName(name));
     }
 
     @Action(semantics = SemanticsOf.SAFE)
