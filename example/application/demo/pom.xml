@@ -163,18 +163,58 @@
 					<groupId>com.github.jnr</groupId>
 					<artifactId>jnr-enxio</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jnr-ffi</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jffi</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.ow2.asm</groupId>
+					<artifactId>asm-util</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.github.jnr</groupId>
 			<artifactId>jnr-posix</artifactId>
 			<version>3.0.49</version>
+			<exclusions>
+				<!-- convergence issues -->
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jnr-constants</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jnr-ffi</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.github.jnr</groupId>
 			<artifactId>jnr-enxio</artifactId>
 			<version>0.20</version>
+			<exclusions>
+				<!-- convergence issues -->
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jnr-constants</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.jnr</groupId>
+					<artifactId>jnr-ffi</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>com.github.jnr</groupId>
+			<artifactId>jnr-constants</artifactId>
+			<version>0.9.11</version>
+		</dependency>
+		<!-- END OF ASCII-DOC -->
 
 	</dependencies>
 
