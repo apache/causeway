@@ -33,12 +33,12 @@ import org.apache.isis.config.beans.BeanScanInterceptorForSpring;
 @Configuration
 @ComponentScan(
         basePackageClasses= {
-                IsisWicketModule.class,
+                IsisWebWicketBoot.class,
            },
         includeFilters= {
                 @Filter(type = FilterType.CUSTOM, classes= {BeanScanInterceptorForSpring.class})
         })
-public class IsisWicketModule {
+public class IsisWebWicketBoot {
 
    
     

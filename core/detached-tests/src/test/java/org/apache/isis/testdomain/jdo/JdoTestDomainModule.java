@@ -21,62 +21,23 @@ import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 
-import org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider;
 import org.apache.isis.config.beans.WebAppConfigBean;
-import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandard;
-import org.apache.isis.core.security.authentication.bypass.AuthenticatorBypass;
-import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
-import org.apache.isis.core.security.authentication.standard.AuthenticationManagerStandard;
-import org.apache.isis.core.security.authorization.bypass.AuthorizorBypass;
-import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
-import org.apache.isis.core.security.authorization.standard.Authorizor;
+import org.apache.isis.core.security.IsisSecurityBoot;
 
 @Configuration
-//@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties")
+//@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties") XXX bug on jdk-11
 @PropertySource("file:src/test/java/org/apache/isis/testdomain/jdo/isis-non-changing.properties")
+@Import({IsisSecurityBoot.class})
 public class JdoTestDomainModule {
     
-    /**
-    * The standard authentication manager, configured with the 'bypass' authenticator 
-    * (allows all requests through).
-    * <p>
-    * integration tests ignore appManifest for authentication and authorization.
-    */
-   @Bean @Produces @Singleton
-   public AuthenticationManager authenticationManagerWithBypass() {
-       final AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard();
-       authenticationManager.addAuthenticator(new AuthenticatorBypass());
-       return authenticationManager;
-   }
-   
-   @Bean @Produces @Singleton
-   public AuthorizationManager authorizationManagerWithBypass() {
-       final AuthorizationManagerStandard authorizationManager = new AuthorizationManagerStandard() {
-           {
-               authorizor = new AuthorizorBypass();
-           }  
-       };
-       return authorizationManager;
-   }
-   
-   @Bean @Produces @Singleton
-   public Authorizor autorizor() {
-       return new AuthorizorBypass();
-   }
-
    @Bean @Produces @Singleton
    public WebAppConfigBean webAppConfigBean() {
        return WebAppConfigBean.builder()
                //.menubarsLayoutXml(new ClassPathResource(path, clazz))
                .build();
-   }
-   
-   
-   //@Bean @Produces @Singleton // as used in simple-app
-   public FixtureScriptsSpecificationProvider fixtureScriptsSpecificationProvider() {
-       return null;
    }
     
 }

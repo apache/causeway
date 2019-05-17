@@ -17,19 +17,15 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.authorization.standard;
+package org.apache.isis.core.security.authentication.manager;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 
-import org.springframework.context.event.EventListener;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.sudo.SudoService;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
@@ -110,11 +106,12 @@ public class AuthorizationManagerStandard implements AuthorizationManager {
         return (identifier.getClassName().equals(""));
     }
 
-    @EventListener(ProgrammingModel.class)
-    public static void refineProgrammingModel(@Observes ProgrammingModel baseProgrammingModel) {
-        final AuthorizationFacetFactory facetFactory = new AuthorizationFacetFactory();
-        baseProgrammingModel.addFactory(facetFactory);
-    }
+//[2112]    
+//    @EventListener(ProgrammingModel.class)
+//    public static void refineProgrammingModel(@Observes ProgrammingModel baseProgrammingModel) {
+//        final AuthorizationFacetFactory facetFactory = new AuthorizationFacetFactory();
+//        baseProgrammingModel.addFactory(facetFactory);
+//    }
 
     @Inject protected Authorizor authorizor;
 

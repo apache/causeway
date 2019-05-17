@@ -35,7 +35,6 @@ import org.apache.maven.project.MavenProject;
 
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 @Mojo(
         name = "swagger",
@@ -76,7 +75,7 @@ public class IsisMojoSwagger extends IsisMojoAbstract {
 
     @Override
     protected void doExecute(
-            final ContextForMojo context, final IsisSessionFactory isisSessionFactory)
+            final ContextForMojo context)
                     throws MojoFailureException, IOException {
 
         final SwaggerService swaggerService = 

@@ -16,17 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.tool.mavenplugin.util;
+package org.apache.isis.tool.mavenplugin.spring;
 
-import java.util.function.Function;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import org.codehaus.plexus.util.xml.Xpp3Dom;
+/**
+ * 
+ * @since 2.0.0
+ *
+ */
+public class IsisMavenPlugin_SpringContextLauncher {
 
-public final class Xpp3Doms {
-
-    private Xpp3Doms(){}
-
-    public static Function<Xpp3Dom, String> GET_VALUE = Xpp3Dom::getValue;
-
-
+    public static ConfigurableApplicationContext getContext() {
+        return new AnnotationConfigApplicationContext(IsisMavenPlugin_SpringContextConfig.class);
+    }
+    
 }

@@ -19,6 +19,7 @@
 package org.apache.isis.tool.mavenplugin;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.log4j.Level;
@@ -30,15 +31,13 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+import org.springframework.context.ConfigurableApplicationContext;
 
-import org.apache.isis.config.internal._Config;
+import org.apache.isis.commons.internal.base._Blackhole;
 import org.apache.isis.core.plugins.environment.IsisSystemEnvironment;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
+import org.apache.isis.tool.mavenplugin.spring.IsisMavenPlugin_SpringContextLauncher;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
-
-import lombok.val;
 
 public abstract class IsisMojoAbstract extends AbstractMojo {
 
@@ -59,55 +58,34 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         new IsisLoggingConfigurer(Level.INFO).configureLogging(".", new String[]{});
         IsisSystemEnvironment.setUnitTesting(true);
         
-        final ContextForMojo context = new ContextForMojo(mavenProject, getLog());
+        final ContextForMojo mjContext = new ContextForMojo(mavenProject, getLog());
 
         final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
+        _Blackhole.consume(plugin);
 
-        // build and finalize config
-        _Config.getConfiguration();
+        final ConfigurableApplicationContext springContext = 
+                IsisMavenPlugin_SpringContextLauncher.getContext();
         
-        val isisSessionFactory = IsisContext.getSessionFactory();
+        Objects.requireNonNull(springContext, "Failed to bring up Spring's context.");
+        
         try {
-            		
-            isisSessionFactory.initServicesAndRunFixtures();
             
-            val metaModelDeficiencies = IsisContext.getMetaModelDeficienciesIfAny();
-            if(metaModelDeficiencies!=null) {
-                Set<String> validationErrors = metaModelDeficiencies.getValidationErrors();
-                context.throwFailureException(validationErrors.size() + " meta-model problems found.", validationErrors);
-                return;
-            }
-            final IsisSessionFactory isisSessionFactoryFinal = isisSessionFactory;
-            isisSessionFactory.doInSession(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        doExecute(context, isisSessionFactoryFinal);
-                    } catch (IOException e) {
-                        ;
-                        // ignore
-                    } catch (MojoFailureException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            });
-
-        } catch(RuntimeException e) {
-            if(e.getCause() instanceof MojoFailureException) {
-                throw (MojoFailureException)e.getCause();
-            }
-            throw e;
+            doExecute(mjContext);
+            
+        } catch (IOException e) {
+            // ignore
         } finally {
-            if(isisSessionFactory != null) {
-                isisSessionFactory.destroyServicesAndShutdown();
+            
+            if(springContext!=null) {
+                springContext.close();
             }
+            
         }
 
     }
 
     protected abstract void doExecute(
-            final ContextForMojo context,
-            final IsisSessionFactory isisSessionFactory)
+            final ContextForMojo mojoContext)
                     throws MojoFailureException, IOException;
 
     // -- Context

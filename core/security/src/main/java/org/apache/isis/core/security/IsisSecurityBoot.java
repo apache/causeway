@@ -16,19 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.application;
+package org.apache.isis.core.security;
 
+import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.PropertySources;
-import org.springframework.core.io.ClassPathResource;
 
-import org.apache.isis.config.Presets;
-import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.core.security.authentication.bypass.AuthenticatorBypass;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authentication.manager.AuthorizationManagerStandard;
@@ -36,37 +30,23 @@ import org.apache.isis.core.security.authentication.standard.AuthenticationManag
 import org.apache.isis.core.security.authorization.bypass.AuthorizorBypass;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 import org.apache.isis.core.security.authorization.standard.Authorizor;
-import org.apache.isis.viewer.wicket.viewer.IsisWebWicketBoot;
 
-/**
- * Makes the integral parts of the 'hello world' web application.
- */
-@Configuration
-@PropertySources({
-    @PropertySource("classpath:/domainapp/application/isis-non-changing.properties"),
-    @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
-    @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
-})
-@Import({
-    IsisWebWicketBoot.class,
-    //XXX IsisSecurityBoot_Shiro.class
-})
-public class HelloWorldAppManifest {
-    
+public class IsisSecurityBoot {
+
     /**
     * The standard authentication manager, configured with the 'bypass' authenticator 
     * (allows all requests through).
     * <p>
     * integration tests ignore appManifest for authentication and authorization.
     */
-   @Bean @Singleton
+   @Bean @Produces @Singleton
    public AuthenticationManager authenticationManagerWithBypass() {
        final AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard();
        authenticationManager.addAuthenticator(new AuthenticatorBypass());
        return authenticationManager;
    }
    
-   @Bean @Singleton
+   @Bean @Produces @Singleton
    public AuthorizationManager authorizationManagerWithBypass() {
        final AuthorizationManagerStandard authorizationManager = new AuthorizationManagerStandard() {
            {
@@ -76,17 +56,9 @@ public class HelloWorldAppManifest {
        return authorizationManager;
    }
    
-   @Bean @Singleton
+   @Bean @Produces @Singleton
    public Authorizor autorizor() {
        return new AuthorizorBypass();
    }
-   
-   
-   @Bean @Singleton
-   public WebAppConfigBean webAppConfigBean() {
-       return WebAppConfigBean.builder()
-               .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
-               .build();
-   }
-
+    
 }
