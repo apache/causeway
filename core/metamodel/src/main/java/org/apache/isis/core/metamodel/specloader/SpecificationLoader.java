@@ -29,8 +29,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionState;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-import lombok.val;
-
 /**
  * Builds the meta-model.
  * TODO [2033] add missing java-doc
@@ -64,7 +62,17 @@ public interface SpecificationLoader {
      */
 	List<ObjectSpecification> currentSpecifications();
 
-	ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId);
+	/**
+	 * Lookup a specification that has bean loaded before.
+	 * @param objectSpecId
+	 */
+	ObjectSpecification lookupBySpecIdElseLoad(ObjectSpecId objectSpecId);
+	
+//	default ObjectSpecification lookupBySpecIdElseLoad(ObjectSpecId objectSpecId) {
+//	    return lookupBySpecIdO(objectSpecId).orElseThrow(
+//	            ()->_Exceptions.unrecoverable(
+//	                    "Failed to lookup ObjectSpecification by its id '" + objectSpecId + "'"));
+//	}
 	
 	ValidationFailures validate();
 
@@ -82,30 +90,20 @@ public interface SpecificationLoader {
 	 */
 	ObjectSpecification loadSpecification(@Nullable Class<?> domainType, IntrospectionState upTo);
 	
-	/**
-	 * Return the specification for the specified ObjectSpecId.
-	 *
-	 * <p>
-	 * It is possible for this method to return <tt>null</tt>, for example if
-	 * the configured {@link org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor}
-	 * has filtered out the class.
-	 * 
-	 * @return {@code null} if {@code objectSpecId==null} 
-	 */
-	default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId, IntrospectionState upTo) {
-		if(objectSpecId==null) {
-			return null;
-		}
-		
-		val className = objectSpecId.asString();
-		
-		if(_Strings.isNullOrEmpty(className)) {
-			return null;
-		}
-		
-		final Class<?> type = ClassUtil.forNameElseFail(className);
-		return loadSpecification(type, upTo);
-	}
+//	default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId, IntrospectionState upTo) {
+//		if(objectSpecId==null) {
+//			return null;
+//		}
+//		
+//		val className = objectSpecId.asString();
+//		
+//		if(_Strings.isNullOrEmpty(className)) {
+//			return null;
+//		}
+//		
+//		final Class<?> type = ClassUtil.forNameElseFail(className);
+//		return loadSpecification(type, upTo);
+//	}
 	
 	// -- SHORTCUTS
 	
@@ -113,9 +111,9 @@ public interface SpecificationLoader {
         return loadSpecification(domainType, IntrospectionState.TYPE_INTROSPECTED);
     }
  
-	default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId) {
-		return loadSpecification(objectSpecId, IntrospectionState.TYPE_INTROSPECTED);
-    }
+//	default ObjectSpecification loadSpecification(@Nullable ObjectSpecId objectSpecId) {
+//		return loadSpecification(objectSpecId.asString(), IntrospectionState.TYPE_INTROSPECTED);
+//    }
 
 	default ObjectSpecification loadSpecification(
 	        @Nullable String className, 
@@ -133,6 +131,8 @@ public interface SpecificationLoader {
 	default ObjectSpecification loadSpecification(@Nullable String className) {
         return loadSpecification(className, null);
     }
+
+    
 	
 
 }

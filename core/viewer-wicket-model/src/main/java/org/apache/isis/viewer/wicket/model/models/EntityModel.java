@@ -41,10 +41,10 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.util.ComponentHintKey;
@@ -290,7 +290,7 @@ implements ObjectAdapterModel, UiHintContainer {
 
     private BookmarkPolicyFacet getBookmarkPolicyFacetIfAny() {
         final ObjectSpecId specId = getObjectAdapterMemento().getObjectSpecId();
-        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(specId);
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(specId);
         return objectSpec.getFacet(BookmarkPolicyFacet.class);
     }
 
@@ -317,7 +317,7 @@ implements ObjectAdapterModel, UiHintContainer {
     }
 
     private ObjectSpecification getSpecificationFor(ObjectSpecId objectSpecId) {
-        return getSpecificationLoader().lookupBySpecId(objectSpecId);
+        return getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
     }
 
     // //////////////////////////////////////////////////////////
@@ -335,7 +335,7 @@ implements ObjectAdapterModel, UiHintContainer {
     public ObjectAdapter load(ConcurrencyChecking concurrencyChecking) {
         
         if(concurrencyChecking==ConcurrencyChecking.CHECK && adapterMemento!=null) {
-            val spec = IsisContext.getSpecificationLoader().lookupBySpecId(adapterMemento.getObjectSpecId());
+            val spec = IsisContext.getSpecificationLoader().lookupBySpecIdElseLoad(adapterMemento.getObjectSpecId());
             if(spec.isEntity()) {
                 val info = "adapterMemento '"+adapterMemento+"'";
                 probe.warnNotImplementedYet("[2033] ConcurrencyChecking no longer supported!? "+info);              

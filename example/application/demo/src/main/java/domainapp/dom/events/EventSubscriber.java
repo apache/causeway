@@ -22,20 +22,22 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static domainapp.utils.DemoUtils.emphasize;
 
 import domainapp.dom.events.EventLogMenu.EventTestProgrammaticEvent;
+import lombok.val;
 import lombok.extern.java.Log;
 
 @DomainService(nature=NatureOfService.DOMAIN)
-@Log
+@Log @Component
 public class EventSubscriber {
 
 	@Inject private EventBusService eventBusService;
@@ -51,18 +53,26 @@ public class EventSubscriber {
 		eventBusService.post(new EventSubscriberEvent());
 	}
 
-	@Programmatic
-	@EventListener
-	public void on(AbstractDomainEvent<?> ev) {
+	@EventListener(EventTestProgrammaticEvent.class)
+	public void on(EventTestProgrammaticEvent ev) {
+	    
+	    //val session = IsisSession.currentOrElseNull();
+	    val ps = IsisContext.getPersistenceSession().orElse(null);
+	    
+	    log.info(emphasize("event received session=" + ps));
+	    
+	    
 		if(ev.getEventPhase() != null && !ev.getEventPhase().isExecuted()) {
 			return;
 		}
 		
-		if(ev instanceof EventTestProgrammaticEvent) {
-			log.info(emphasize("DomainEvent: "+ev.getClass().getName()));
-			// store in event log
-			eventLog.add(EventLogEntry.of(ev));	
-		}
+		log.info(emphasize("DomainEvent: "+ev.getClass().getName()));
+		
+		// store in event log
+		eventLog.add(EventLogEntry.of(ev));
+		
+		ps.flush();
+		
 	}
 
 }

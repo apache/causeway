@@ -77,6 +77,12 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
     public Stream<BeanAdapter> streamRegisteredBeans() {
         return registeredBeans().stream();
     }
+    
+    @Override
+    public Optional<BeanAdapter> lookupRegisteredBeanById(String id) {
+        throw _Exceptions.notImplemented();
+    }
+    
 
     // -- HELPER
     
@@ -124,10 +130,12 @@ class ServiceRegistry_forTesting implements ServiceRegistry {
                 .id(singleton.getClass().getName())
                 .instance(Bin.ofSingleton(singleton))
                 .beanClass(singleton.getClass())
-                .managedObjectSort(beanSortClassifier.classify(singleton.getClass()))
+                .managedObjectSort(beanSortClassifier.quickClassify(singleton.getClass()))
                 .build();
         
         
     }
+
+
 
 }

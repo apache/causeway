@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.model.models;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 
 /**
  * Represents a standalone value.

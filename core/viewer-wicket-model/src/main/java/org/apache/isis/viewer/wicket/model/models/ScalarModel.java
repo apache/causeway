@@ -50,15 +50,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.AuthenticationSessionProvider;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
-import org.apache.isis.viewer.wicket.model.mementos.SpecUtils;
 
 import lombok.val;
 
@@ -94,7 +93,7 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
             @Override
             public ObjectSpecification getScalarTypeSpec(final ScalarModel scalarModel) {
                 ObjectSpecId type = scalarModel.getPropertyMemento().getType();
-                return SpecUtils.getSpecificationFor(type, scalarModel.getSpecificationLoader());
+                return scalarModel.getSpecificationLoader().lookupBySpecIdElseLoad(type);
             }
 
             @Override
@@ -1011,13 +1010,15 @@ public class ScalarModel extends EntityModel implements LinksProvider, FormExecu
 
             @Override
             public ArrayList<ObjectAdapterMemento> getMultiPending() {
-                final ObjectAdapterMemento pending = ScalarModel.this.getPending();
-                return pending != null ? pending.getList() : null;
+                val pendingMemento = ScalarModel.this.getPending();
+                return ObjectAdapterMemento.unwrapList(pendingMemento)
+                        .orElse(null);
             }
 
             @Override
             public void setMultiPending(final ArrayList<ObjectAdapterMemento> pending) {
-                final ObjectAdapterMemento adapterMemento = ObjectAdapterMemento.ofMementoList(pending, getScalarModel().getTypeOfSpecification().getSpecId());
+                val specId = getScalarModel().getTypeOfSpecification().getSpecId();
+                val adapterMemento = ObjectAdapterMemento.wrapMementoList(pending, specId);
                 ScalarModel.this.setPending(adapterMemento);
             }
 

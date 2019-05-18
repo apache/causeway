@@ -18,14 +18,12 @@
  */
 package org.apache.isis.core.metamodel.services.message;
 
-import javax.annotation.Priority;
-import javax.inject.Singleton;
+import javax.enterprise.inject.Vetoed;
 
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.message.MessageService;
-import org.apache.isis.commons.ioc.PriorityConstants;
 
-@Singleton @Priority(PriorityConstants.PRIORITY_LOWEST)
+@Vetoed //@Singleton @Order(Ordered.LOWEST_PRECEDENCE) //FIXME[2112] tell Spring to use correct order 
 public class MessageServiceNoop implements MessageService {
 
     @Override

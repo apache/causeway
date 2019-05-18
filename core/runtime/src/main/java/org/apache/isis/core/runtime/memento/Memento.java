@@ -23,9 +23,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.apache.isis.commons.internal.base._Casts;
 import org.apache.isis.commons.internal.collections._Arrays;
 import org.apache.isis.commons.internal.collections._Lists;
@@ -43,7 +40,8 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.session.IsisSession;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Holds the state for the specified object in serializable form.
@@ -53,9 +51,9 @@ import org.apache.isis.core.runtime.system.session.IsisSession;
  * easily. Also for a persistent objects only the reference's {@link Oid}s are
  * held, avoiding the need for serializing the whole object graph.
  */
+@Slf4j
 public class Memento implements Serializable {
 
-    private final static Logger LOG = LoggerFactory.getLogger(Memento.class);
     private final static long serialVersionUID = 1L;
 
     private final List<Oid> transientObjects = _Lists.newArrayList();
@@ -70,7 +68,7 @@ public class Memento implements Serializable {
 
     public Memento(final ObjectAdapter adapter) {
         data = adapter == null ? null : createData(adapter);
-        LOG.debug("created memento for {}", this);
+        log.debug("created memento for {}", this);
     }
 
 
@@ -112,7 +110,7 @@ public class Memento implements Serializable {
                 }
                 if (association.containsFacet(PropertyOrCollectionAccessorFacet.class) && 
                         !association.containsFacet(PropertySetterFacet.class)) {
-                    LOG.debug("ignoring not-settable field {}", association.getName());
+                    log.debug("ignoring not-settable field {}", association.getName());
                     return false;
                 }
             }
@@ -195,11 +193,13 @@ public class Memento implements Serializable {
             return null;
         }
         final ObjectSpecification spec =
-                getSpecificationLoader().loadSpecification(ObjectSpecId.of(data.getClassName()));
+                getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(data.getClassName()));
         
         final Oid oid = getOid();
 
-        return IsisSession.currentOrElseNull().adapterOfMemento(spec, oid, data);
+        return IsisContext.getPersistenceSession().get().
+                adapterOfMemento(spec, oid, data);
+        //return IsisSession.currentOrElseNull().adapterOfMemento(spec, oid, data);
                 
     }
 

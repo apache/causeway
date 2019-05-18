@@ -127,7 +127,7 @@ public class _Spring {
         .map(name->{
             
             val type = context.getType(name);
-            val managedObjectSort = classifier.classify(type);
+            val managedObjectSort = classifier.quickClassify(type);
             val id = name; // just reuse the bean's name
             
             val scope = beanFactory.getBeanDefinition(name).getScope();

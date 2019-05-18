@@ -18,9 +18,12 @@
  */
 package org.apache.isis.commons.ioc;
 
-@FunctionalInterface
 public interface BeanSortClassifier {
 
-    BeanSort classify(Class<?> type);
+    BeanSort quickClassify(Class<?> type);
+
+    default boolean isManagedBean(Class<?> type) {
+        return quickClassify(type) == BeanSort.BEAN;
+    }
     
 }

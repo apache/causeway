@@ -122,7 +122,7 @@ public class StandaloneData extends Data {
             return IsisContext.pojoToAdapter().apply(objectAsSerializable);
         } else {
             final ObjectSpecification spec = 
-            		getSpecificationLoader().loadSpecification(ObjectSpecId.of(getClassName()));
+            		getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(getClassName()));
             final EncodableFacet encodeableFacet = spec.getFacet(EncodableFacet.class);
             return encodeableFacet.fromEncodedString(objectAsEncodedString);
         }

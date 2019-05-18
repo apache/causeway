@@ -212,7 +212,7 @@ class ObjectAdapterContext_ObjectAdapterByIdProvider implements ObjectAdapterByI
     
     private Object recreatePojoTransientOrViewModel(final RootOid rootOid) {
         final ObjectSpecification spec =
-                specificationLoader.lookupBySpecId(rootOid.getObjectSpecId());
+                specificationLoader.lookupBySpecIdElseLoad(rootOid.getObjectSpecId());
         final Object pojo;
         if(rootOid.isViewModel()) {
             final String memento = rootOid.getIdentifier();

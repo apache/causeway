@@ -41,8 +41,8 @@ public class CollectionMemento implements Serializable {
             final OneToManyAssociation association) {
         
         val specificationLoader = IsisContext.getSpecificationLoader();
-        return specificationLoader.loadSpecification(
-                ObjectSpecId.of(association.getIdentifier().toClassIdentityString()));
+        val specId = ObjectSpecId.of(association.getIdentifier().toClassIdentityString());
+        return specificationLoader.lookupBySpecIdElseLoad(specId);
     }
 
     private final ObjectSpecId owningType;
@@ -105,7 +105,7 @@ public class CollectionMemento implements Serializable {
             ObjectSpecId owningType,
             String id,
             final SpecificationLoader specificationLoader) {
-        return (OneToManyAssociation) SpecUtils.getSpecificationFor(owningType, specificationLoader).getAssociation(id);
+        return (OneToManyAssociation) specificationLoader.lookupBySpecIdElseLoad(owningType).getAssociation(id);
     }
 
 }

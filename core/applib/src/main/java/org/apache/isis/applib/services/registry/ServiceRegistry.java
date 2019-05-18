@@ -29,6 +29,7 @@ import javax.annotation.Priority;
 
 import org.apache.isis.commons.internal._Constants;
 import org.apache.isis.commons.internal.base._Reduction;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.commons.ioc.BeanAdapter;
@@ -51,7 +52,6 @@ public interface ServiceRegistry {
      * @param qualifiers
      * @return non-null
      * 
-     * @since 2.0.0
      */
     default public <T> Bin<T> select(
             final Class<T> type, Annotation[] qualifiers){
@@ -66,7 +66,6 @@ public interface ServiceRegistry {
      * @param type
      * @return non-null
      * 
-     * @since 2.0.0
      */
     default public <T> Bin<T> select(final Class<T> type){
         return select(type, _Constants.emptyAnnotations);
@@ -74,7 +73,6 @@ public interface ServiceRegistry {
 
     /**
      * Streams all bean adapters implementing the requested type.
-     * @since 2.0.0
      */
     default Stream<BeanAdapter> streamRegisteredBeansOfType(Class<?> requiredType) {
         return streamRegisteredBeans()
@@ -85,6 +83,20 @@ public interface ServiceRegistry {
      * Returns all bean adapters that have been registered.
      */
     public Stream<BeanAdapter> streamRegisteredBeans();
+    
+    /**
+     * Returns a registered bean of given {@code name}.
+     *   
+     * @param id - corresponds to the ObjectSpecificationId of the bean's type
+     */
+    public Optional<BeanAdapter> lookupRegisteredBeanById(String id);
+    
+    
+    public default BeanAdapter lookupRegisteredBeanByNameElseFail(String id) {
+        return lookupRegisteredBeanById(id).orElseThrow(
+                ()->_Exceptions.unrecoverable(
+                        "Failed to lookup BeanAdapter by id '" + id + "'")); 
+    }
 
     /**
      * Returns a domain service implementing the requested type.
@@ -175,6 +187,8 @@ public interface ServiceRegistry {
         }
 
     }
+
+
 
     
 

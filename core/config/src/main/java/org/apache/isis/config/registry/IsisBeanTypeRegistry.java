@@ -1,5 +1,6 @@
 package org.apache.isis.config.registry;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -120,7 +121,7 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
     public boolean isIoCManagedType(TypeMetaData typeMetaData) {
 
         val type = typeMetaData.getUnderlyingClass();
-        val beanSort = classify(type);
+        val beanSort = quickClassify(type);
 
         val isToBeProvisioned = beanSort.isBean();
         val isToBeInspected = !beanSort.isUnknown();
@@ -139,14 +140,19 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
         return isToBeProvisioned;
 
     }
-
+    
+    // the SpecLoader does a better job at this
     @Override
-    public BeanSort classify(Class<?> type) {
+    public BeanSort quickClassify(Class<?> type) {
 
         requires(type, "type");
         
         if(getAnnotation(type, Vetoed.class)!=null) {
             return BeanSort.UNKNOWN; // exclude from provisioning
+        }
+        
+        if(Collection.class.isAssignableFrom(type)) {
+            return BeanSort.COLLECTION;
         }
 
         val aDomainService = getAnnotation(type, DomainService.class);
@@ -167,6 +173,14 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
                 return BeanSort.VIEW_MODEL;
 
             case NOT_SPECIFIED:
+                if(getAnnotation(type, ViewModel.class)!=null) {
+                    return BeanSort.VIEW_MODEL;
+                }
+                if(org.apache.isis.applib.ViewModel.class.isAssignableFrom(type)) {
+                    return BeanSort.VIEW_MODEL;
+                }
+                return BeanSort.ENTITY;
+                
             default:
                 // continue
                 break; 

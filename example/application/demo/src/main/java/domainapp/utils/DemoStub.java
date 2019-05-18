@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.value.Markup;
 
 import lombok.val;
@@ -40,6 +41,7 @@ public abstract class DemoStub {
 
 	public abstract void initDefaults();
 	
+	@PropertyLayout(cssClass = "adoc")
 	public Markup getDescription() {
 		return new Markup(descriptionAsHtml());
 	}

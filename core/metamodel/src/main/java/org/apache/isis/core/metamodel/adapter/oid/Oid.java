@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import java.net.URI;
-
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.encoding.Encodable;

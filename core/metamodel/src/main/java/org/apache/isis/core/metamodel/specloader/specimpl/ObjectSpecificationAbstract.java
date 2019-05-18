@@ -1144,7 +1144,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     protected BeanSort managedObjectSort; 
     
     @Override
-    public BeanSort getManagedObjectSort() {
+    public BeanSort getBeanSort() {
     	if(managedObjectSort==null) {
     		managedObjectSort = sortOf(this);
     	}

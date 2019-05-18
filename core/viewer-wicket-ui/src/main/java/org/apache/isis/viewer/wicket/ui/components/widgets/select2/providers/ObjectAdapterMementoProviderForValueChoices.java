@@ -42,9 +42,8 @@ import java.util.List;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import org.apache.isis.commons.internal.collections._Lists;
-
+import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 
 public class ObjectAdapterMementoProviderForValueChoices

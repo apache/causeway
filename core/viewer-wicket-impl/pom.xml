@@ -91,6 +91,13 @@
             <groupId>net.ftlines.wicket-source</groupId>
             <artifactId>wicket-source</artifactId>
         </dependency>
+        
+        <!-- Spring -->
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
 
         <!-- as required by wicket -->
         <dependency>

@@ -98,7 +98,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         init(RepresentationType.DOMAIN_TYPE, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
 
         final DomainTypeReprRenderer renderer = new DomainTypeReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.with(objectSpec).includesSelf();
@@ -118,7 +118,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         init(RepresentationType.LAYOUT, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
         final SerializationStrategy serializationStrategy = SerializationStrategy.determineFrom(getResourceContext().getAcceptableMediaTypes());
 
-        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
         final Response.ResponseBuilder builder;
         if(gridFacet == null) {
@@ -142,7 +142,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RepresentationType representationType = RepresentationType.PROPERTY_DESCRIPTION;
         init(representationType, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
+        final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -167,7 +167,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RepresentationType representationType = RepresentationType.COLLECTION_DESCRIPTION;
         init(representationType, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
+        final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -192,7 +192,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RepresentationType representationType = RepresentationType.ACTION_DESCRIPTION;
         init(representationType, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
+        final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -217,7 +217,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
         final RepresentationType representationType = RepresentationType.ACTION_PARAMETER_DESCRIPTION;
         init(representationType, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
-        final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
+        final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_FOUND);
         }
@@ -253,8 +253,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         final String supertype = domainTypeFor(superTypeStr, argsUrlEncoded, "supertype");
 
-        final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
-        final ObjectSpecification supertypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(supertype));
+        final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
+        final ObjectSpecification supertypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(supertype));
 
         final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
 
@@ -284,8 +284,8 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
 
         final String subtype = domainTypeFor(subTypeStr, argsUrlEncoded, "subtype");
 
-        final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
-        final ObjectSpecification subtypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(subtype));
+        final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
+        final ObjectSpecification subtypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(subtype));
 
         final TypeActionResultReprRenderer renderer = new TypeActionResultReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
 

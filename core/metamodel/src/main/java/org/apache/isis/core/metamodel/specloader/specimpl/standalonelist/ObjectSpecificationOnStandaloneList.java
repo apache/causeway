@@ -89,7 +89,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     }
 
     @Override
-    public BeanSort getManagedObjectSort() {
+    public BeanSort getBeanSort() {
         return BeanSort.COLLECTION;
     }
     

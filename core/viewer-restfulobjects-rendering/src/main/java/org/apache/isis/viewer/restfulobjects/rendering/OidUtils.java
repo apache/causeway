@@ -76,7 +76,7 @@ final class OidUtils {
         final MetaModelContext context = MetaModelContext.current();
         
         final ObjectSpecId specId = rootOid.getObjectSpecId();
-        final ObjectSpecification spec = context.getSpecificationLoader().lookupBySpecId(specId);
+        final ObjectSpecification spec = context.getSpecificationLoader().lookupBySpecIdElseLoad(specId);
         if(spec == null) {
             // eg "NONEXISTENT:123"
             return null;

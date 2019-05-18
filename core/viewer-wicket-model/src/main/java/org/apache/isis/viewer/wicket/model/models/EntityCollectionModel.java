@@ -49,13 +49,13 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.Util.LowestCommonSuperclassFinder;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
@@ -381,7 +381,7 @@ implements LinksProvider, UiHintContainer {
         }
         final String collectionId = collectionLayoutData.getId();
         final ObjectSpecId objectSpecId = parentObjectAdapterMemento.getObjectSpecId();
-        final ObjectSpecification objectSpec = IsisContext.getSpecificationLoader().lookupBySpecId(objectSpecId);
+        final ObjectSpecification objectSpec = IsisContext.getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
         final OneToManyAssociation otma = (OneToManyAssociation) objectSpec.getAssociation(collectionId);
         return otma;
     }

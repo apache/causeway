@@ -100,7 +100,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Body is not a map; got %s", objectRepr);
         }
 
-        final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
+        final ObjectSpecification domainTypeSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         if (domainTypeSpec == null) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not determine type of domain object to persist (no class with domainType Id of '%s')", domainType);
         }
@@ -304,7 +304,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                 ? SerializationStrategy.XML
                         : SerializationStrategy.JSON;
 
-        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(ObjectSpecId.of(domainType));
         final GridFacet gridFacet = objectSpec.getFacet(GridFacet.class);
         final Response.ResponseBuilder builder;
         if(gridFacet == null) {

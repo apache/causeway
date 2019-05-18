@@ -21,12 +21,19 @@ package org.apache.isis.commons.ioc;
 public enum BeanSort {
     
     /**
-     * Stateful object, with a state that can be marshaled and unmarshaled.  
+     * Stateful object, with a state that can be marshaled and unmarshaled.
+     * <p> 
+     * Includes classes annotated with {@code @DomainObject}, when *not* associated 
+     * with a persistence layer. <p>  see also {@link #ENTITY}
      */
     VIEW_MODEL,
     
     /**
-     * Persistable object, associated with a persistence layer/context. 
+     * Persistable object, associated with a persistence layer/context.
+     * <p>
+     * Includes classes annotated with {@code @DomainObject}, when associated 
+     * with a persistence layer. <p>  see also {@link #VIEW_MODEL}
+     *  
      */
     ENTITY,
     

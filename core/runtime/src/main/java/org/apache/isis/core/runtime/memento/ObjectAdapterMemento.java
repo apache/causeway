@@ -17,31 +17,37 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.model.mementos;
+package org.apache.isis.core.runtime.memento;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.runtime.system.session.IsisSession;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento_Legacy.Sort;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento_Legacy.Type;
 
-import lombok.val;
-
-//FIXME [2033] move this (including its implementation) to 'runtime'
+/**
+ * @since 2.0.0
+ */
 public interface ObjectAdapterMemento extends Serializable {
+    
+    UUID getStoreKey();
+    BeanSort getBeanSort();
+    RootOid getRootOid();
 
     String asString();
     
     /**
+     * TODO[2112] outdated
      * Returns a bookmark only if {@link Type#PERSISTENT} and 
      * {@link #getSort() sort} is {@link Sort#SCALAR scalar}.
      * Returns {@code null} otherwise. 
@@ -49,6 +55,7 @@ public interface ObjectAdapterMemento extends Serializable {
     Bookmark asBookmarkIfSupported();
     
     /**
+     * TODO[2112] outdated 
      * Returns a bookmark only if {@link Type#PERSISTENT} and 
      * {@link #getSort() sort} is {@link Sort#SCALAR scalar}.
      * Returns {@code null} otherwise. 
@@ -56,7 +63,6 @@ public interface ObjectAdapterMemento extends Serializable {
     Bookmark asHintingBookmarkIfSupported();
     
     ObjectSpecId getObjectSpecId();
-    ArrayList<ObjectAdapterMemento> getList();
     
     ObjectAdapter getObjectAdapter(); 
     
@@ -75,26 +81,48 @@ public interface ObjectAdapterMemento extends Serializable {
     // -- FACTORIES
 
     static ObjectAdapterMemento ofRootOid(RootOid rootOid) {
-        return ObjectAdapterMemento_Legacy.ofRootOid(rootOid);
+        if(rootOid==null) {
+            return null;
+        }
+        return support().mementoForRootOid(rootOid);
     }
 
     static ObjectAdapterMemento ofAdapter(ObjectAdapter adapter) {
-        return ObjectAdapterMemento_Legacy.ofAdapter(adapter);
+        if(adapter==null) {
+            return null;
+        }
+        return support().mementoForAdapter(adapter);
     }
     
     static ObjectAdapterMemento ofPojo(Object pojo) {
-        val isisSession = IsisSession.currentOrElseNull();
-        val adapterProvider = isisSession.getObjectAdapterProvider();
-        val objectAdapter = adapterProvider.adapterFor(pojo);
-        return ofAdapter(objectAdapter);
+        if(pojo==null) {
+            return null;
+        }
+        return support().mementoForPojo(pojo);
     }
 
-    static ObjectAdapterMemento ofMementoList(
-            Collection<ObjectAdapterMemento> modelObject, 
+    static ObjectAdapterMemento wrapMementoList(
+            Collection<ObjectAdapterMemento> container, 
             ObjectSpecId specId) {
         
-        return ObjectAdapterMemento_Legacy.ofMementoList(modelObject, specId);
+        // ArrayList is serializable
+        if(container instanceof ArrayList) {
+            return ObjectAdapterMementoCollection.of((ArrayList<ObjectAdapterMemento>)container, specId);
+        }
+        return ObjectAdapterMementoCollection.of(_Lists.newArrayList(container), specId);
     }
+    
+    // ArrayList is serializable
+    static Optional<ArrayList<ObjectAdapterMemento>> unwrapList(ObjectAdapterMemento memento) {
+        if(memento==null) {
+            return Optional.empty();
+        }
+        if(!(memento instanceof ObjectAdapterMementoCollection)) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(((ObjectAdapterMementoCollection)memento).unwrapList());
+    }
+    
     
     static ObjectAdapterMemento ofIterablePojos(
             final Object iterablePojos,
@@ -104,11 +132,22 @@ public interface ObjectAdapterMemento extends Serializable {
                 .map(ObjectAdapterMemento::ofPojo)
                 .collect(Collectors.toList());
         final ObjectAdapterMemento memento =
-                ObjectAdapterMemento.ofMementoList(listOfMementos, specId);
+                ObjectAdapterMemento.wrapMementoList(listOfMementos, specId);
         return memento;
     }
     
     
-    // -- 
+    // -- SPI
+    
+    final static ObjectAdapterMementoSupport support = 
+            new ObjectAdapterMementoSupport_usingLKG();
+    
+    //TODO[2112] performance optimization: inject ObjectAdapterMementoSupport at call-site?
+    static ObjectAdapterMementoSupport support() {
+        return support;
+        //return ObjectAdapterMementoSupport.current();
+    }
+    
+    
 
 }

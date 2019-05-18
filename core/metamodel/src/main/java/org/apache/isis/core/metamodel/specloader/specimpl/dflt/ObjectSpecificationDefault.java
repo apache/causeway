@@ -91,17 +91,17 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     private Map<Method, ObjectMember> membersByMethod = null;
 
     private final FacetedMethodsBuilder facetedMethodsBuilder;
-    private final boolean isBean;
+    private final boolean isManagedBean;
 
     public ObjectSpecificationDefault(
             final Class<?> correspondingClass,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
             final FacetProcessor facetProcessor,
-            final BeanSort beanSort,
+            final boolean isManagedBean,
             final PostProcessor postProcessor) {
         super(correspondingClass, determineShortName(correspondingClass), facetProcessor, postProcessor);
 
-        this.isBean = beanSort.isBean();
+        this.isManagedBean = isManagedBean;
         
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
 
@@ -280,7 +280,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     @Override
     public boolean isBean() {
-        return isBean;
+        return isManagedBean;
     }
 
     // -- getObjectAction
@@ -412,7 +412,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     public String toString() {
         final ToString str = new ToString(this);
         str.append("class", getFullIdentifier());
-        str.append("type", getManagedObjectSort().name());
+        str.append("type", getBeanSort().name());
         str.append("superclass", superclass() == null ? "Object" : superclass().getFullIdentifier());
         return str.toString();
     }

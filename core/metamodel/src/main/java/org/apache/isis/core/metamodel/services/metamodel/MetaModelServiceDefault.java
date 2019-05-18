@@ -67,7 +67,7 @@ public class MetaModelServiceDefault implements MetaModelService {
             return null;
         }
         final ObjectSpecId objectSpecId = ObjectSpecId.of(objectType);
-        final ObjectSpecification objectSpecification = specificationLoader.lookupBySpecId(objectSpecId);
+        final ObjectSpecification objectSpecification = specificationLoader.lookupBySpecIdElseLoad(objectSpecId);
         return objectSpecification != null? objectSpecification.getCorrespondingClass(): null;
     }
 
@@ -236,7 +236,7 @@ public class MetaModelServiceDefault implements MetaModelService {
             return null;
         }
 
-        final ObjectSpecification spec = specificationLoader.lookupBySpecId(objectSpecId);
+        final ObjectSpecification spec = specificationLoader.lookupBySpecIdElseLoad(objectSpecId);
         if(spec == null) {
             return null;
         }

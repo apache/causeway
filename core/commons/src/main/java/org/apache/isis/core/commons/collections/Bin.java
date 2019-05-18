@@ -15,6 +15,8 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 import javax.enterprise.inject.Instance;
 
+import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+
 import org.apache.isis.commons.internal.base._NullSafe;
 
 import lombok.val;
@@ -79,6 +81,8 @@ public interface Bin<T> extends Iterable<T> {
 			return ofSingleton(((List<T>)nonNullElements).get(0));
 		}
 		
+		nonNullElements.sort(AnnotationAwareOrderComparator.INSTANCE);
+		
 		return Bin_Multiple.of(nonNullElements);
 	}
 	
@@ -102,6 +106,8 @@ public interface Bin<T> extends Iterable<T> {
             return ofSingleton(((List<T>)nonNullElements).get(0));
         }
         
+        nonNullElements.sort(AnnotationAwareOrderComparator.INSTANCE);
+        
         return Bin_Multiple.of(nonNullElements);
     }
 	
@@ -114,6 +120,8 @@ public interface Bin<T> extends Iterable<T> {
 		}
 		val nonNullElements = instance.stream()
 				.collect(Collectors.toCollection(()->new ArrayList<>()));
+		
+		nonNullElements.sort(AnnotationAwareOrderComparator.INSTANCE);
 		
 		return Bin_Multiple.of(nonNullElements);
 		

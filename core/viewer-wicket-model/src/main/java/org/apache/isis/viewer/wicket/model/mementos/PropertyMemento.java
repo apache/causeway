@@ -37,7 +37,7 @@ public class PropertyMemento implements Serializable {
     private static ObjectSpecification owningSpecFor(
             final OneToOneAssociation property) {
         val specificationLoader = IsisContext.getSpecificationLoader();
-        return specificationLoader.loadSpecification(
+        return specificationLoader.lookupBySpecIdElseLoad(
                 ObjectSpecId.of(property.getIdentifier().toClassIdentityString()));
     }
 
@@ -82,7 +82,7 @@ public class PropertyMemento implements Serializable {
             ObjectSpecId owningType,
             String identifier,
             final SpecificationLoader specificationLoader) {
-        return (OneToOneAssociation) SpecUtils.getSpecificationFor(owningType, specificationLoader).getAssociation(identifier);
+        return (OneToOneAssociation) specificationLoader.lookupBySpecIdElseLoad(owningType).getAssociation(identifier);
     }
 
     /**

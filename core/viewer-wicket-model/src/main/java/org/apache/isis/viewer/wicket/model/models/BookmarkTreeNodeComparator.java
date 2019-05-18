@@ -64,7 +64,8 @@ final class BookmarkTreeNodeComparator implements Comparator<BookmarkTreeNode> {
 
     private String classNameOf(RootOid oid) {
         ObjectSpecId objectSpecId = oid.getObjectSpecId();
-        return specificationLoader.lookupBySpecId(objectSpecId).getIdentifier().getClassName();
+        return specificationLoader.lookupBySpecIdElseLoad(objectSpecId)
+                .getIdentifier().getClassName();
     }
 
 }

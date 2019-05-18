@@ -575,7 +575,7 @@ implements MetaModelValidatorRefiner, PostConstructMethodCache, ObjectSpecIdFace
     // -- HELPER
     
     private boolean isEntityOrViewModel(ObjectSpecification spec) {
-        val type = spec.getManagedObjectSort();
+        val type = spec.getBeanSort();
         return type.isEntity() || type.isViewModel();
     }
     

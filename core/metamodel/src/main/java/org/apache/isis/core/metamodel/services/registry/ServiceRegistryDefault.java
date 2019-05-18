@@ -19,12 +19,10 @@
 
 package org.apache.isis.core.metamodel.services.registry;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.springframework.beans.BeansException;
@@ -34,13 +32,17 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.ConfigurableEnvironment;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.services.registry.ServiceRegistry;
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
+import org.apache.isis.commons.internal.collections._Maps;
 import org.apache.isis.commons.internal.context._Context;
+import org.apache.isis.commons.internal.reflection._Reflect;
 import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.commons.ioc.BeanAdapter;
-import org.apache.isis.commons.ioc.BeanSortClassifier;
 import org.apache.isis.config.IsisConfiguration;
 import org.apache.isis.config.internal._Config;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
@@ -56,11 +58,6 @@ import lombok.extern.slf4j.Slf4j;
 @Singleton @Slf4j
 public final class ServiceRegistryDefault implements ServiceRegistry, ApplicationContextAware {
 
-    @Override
-    public Stream<BeanAdapter> streamRegisteredBeans() {
-        return registeredBeans.get().stream();
-    }
-    
     @Override
     public void setApplicationContext(ApplicationContext springContext) throws BeansException {
         
@@ -89,6 +86,16 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
         return isisConfiguration;
     }
 
+    @Override
+    public Optional<BeanAdapter> lookupRegisteredBeanById(String id) {
+        return Optional.ofNullable(registeredBeansById.get().get(id));
+    }
+    
+    @Override
+    public Stream<BeanAdapter> streamRegisteredBeans() {
+        return registeredBeansById.get().values().stream();
+    }
+    
     // -- DEPS
     
     @Autowired private ConfigurableEnvironment configurableEnvironment;
@@ -96,15 +103,48 @@ public final class ServiceRegistryDefault implements ServiceRegistry, Applicatio
     
     // -- HELPER
     
-    private final _Lazy<Set<BeanAdapter>> registeredBeans = _Lazy.threadSafe(this::enumerateBeans);
+    private final _Lazy<Map<String, BeanAdapter>> registeredBeansById = 
+            _Lazy.threadSafe(this::enumerateBeans);
     
-    Set<BeanAdapter> enumerateBeans() {
+    private Map<String, BeanAdapter> enumerateBeans() {
         
         val beanSortClassifier = IsisBeanTypeRegistry.current();
+        val map = _Maps.<String, BeanAdapter>newHashMap();
         
-        return _Spring.streamAllBeans(beanSortClassifier)
+        _Spring.streamAllBeans(beanSortClassifier)
         .filter(_NullSafe::isPresent)
-        .collect(Collectors.toCollection(HashSet::new));
+        .forEach(bean->{
+            val id = extractObjectType(bean.getBeanClass()).orElse(bean.getId());
+            map.put(id, bean);
+        });
+        
+        return map;
+    }
+
+    //TODO[2112] this would be the responsibility of the specloader, but 
+    // for now we use as very simple approach
+    private Optional<String> extractObjectType(Class<?> type) {
+        
+        val aDomainService = _Reflect.getAnnotation(type, DomainService.class);
+        if(aDomainService!=null) {
+            val objectType = aDomainService.objectType();
+            if(_Strings.isNotEmpty(objectType)) {
+                return Optional.of(objectType); 
+            }
+            return Optional.empty(); // stop processing
+        }
+        
+        val aDomainObject = _Reflect.getAnnotation(type, DomainObject.class);
+        if(aDomainObject!=null) {
+            val objectType = aDomainObject.objectType();
+            if(_Strings.isNotEmpty(objectType)) {
+                return Optional.of(objectType); 
+            }
+            return Optional.empty(); // stop processing
+        }
+        
+        return Optional.empty();
+        
     }
 
 

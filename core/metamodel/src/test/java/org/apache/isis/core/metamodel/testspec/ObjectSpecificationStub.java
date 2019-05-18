@@ -333,7 +333,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
 	@Override
-	public BeanSort getManagedObjectSort() {
+	public BeanSort getBeanSort() {
 		return BeanSort.UNKNOWN; // [2033] not implemented yet
 	}
 

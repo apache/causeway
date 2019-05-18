@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 
 /**
  * For widgets that use a <tt>org.wicketstuff.select2.Select2Choice</tt>;

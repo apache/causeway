@@ -121,7 +121,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * {@link ClassSubstitutor class name substituted} if necessary to allow for runtime bytecode enhancement.
      *
      * <p>
-     * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLoader#lookupBySpecId(ObjectSpecId)}.
+     * The {@link ObjectSpecification} can be retrieved using {@link SpecificationLoader#lookupBySpecIdO(ObjectSpecId)}.
      */
     ObjectSpecId getSpecId();
 
@@ -229,7 +229,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * 
      * @since 2.0.0-M3
      */
-    BeanSort getManagedObjectSort();
+    BeanSort getBeanSort();
 
     // //////////////////////////////////////////////////////////////
     // TitleContext
@@ -295,7 +295,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * @see #isNotCollection()
      */
     default boolean isParentedOrFreeCollection() {
-        return getManagedObjectSort().isCollection();
+        return getBeanSort().isCollection();
     }
 
     /**
@@ -305,7 +305,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * In effect, means has got {@link ValueFacet}.
      */
     default boolean isValue() {
-        return getManagedObjectSort().isValue();
+        return getBeanSort().isValue();
     }
 
     /**
@@ -358,7 +358,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
      * with scoped life-cycle, available for dependency injection. 
      */
     default boolean isBean() {
-        return getManagedObjectSort().isBean();
+        return getBeanSort().isBean();
     }
     
     @Deprecated //TODO[2112] improper naming, what exactly is a service?
@@ -367,11 +367,11 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
     }
 
     default boolean isViewModel() {
-        return getManagedObjectSort().isViewModel();
+        return getBeanSort().isViewModel();
     }
     
     default boolean isMixin() {
-        return getManagedObjectSort().isMixin();
+        return getBeanSort().isMixin();
     }
     
     boolean isViewModelCloneable(ManagedObject targetAdapter);
@@ -382,7 +382,7 @@ ObjectAssociationContainer, Hierarchical,  DefaultProvider {
     }
     
     default boolean isEntity() {
-        return getManagedObjectSort().isEntity();
+        return getBeanSort().isEntity();
     }
 
     /**

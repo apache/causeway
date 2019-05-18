@@ -95,7 +95,7 @@ public class ActionMemento implements Serializable {
             ActionType actionType,
             String nameParmsId,
             final SpecificationLoader specificationLoader) {
-        final ObjectSpecification objectSpec = SpecUtils.getSpecificationFor(owningType, specificationLoader);
+        final ObjectSpecification objectSpec = specificationLoader.lookupBySpecIdElseLoad(owningType);
         return objectSpec.getObjectAction(actionType, nameParmsId);
     }
 

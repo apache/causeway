@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 /**
@@ -154,6 +155,7 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
                     final String parsedMessage = messageParser.apply(rootCauseMessage);
                     return parsedMessage;
                 })
+                .filter(_NullSafe::isPresent)
                 .findFirst()
                 .orElse(null);
 

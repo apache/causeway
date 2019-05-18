@@ -21,11 +21,12 @@ import java.util.ArrayList;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
+
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * For widgets that use a <tt>org.wicketstuff.select2.Select2MultiChoice</tt>;
@@ -38,10 +39,9 @@ public interface ScalarModelWithMultiPending extends Serializable {
     public void setMultiPending(ArrayList<ObjectAdapterMemento> pending);
 
     public ScalarModel getScalarModel();
-
+    
+    @Slf4j
     static class Util {
-
-        private static final Logger LOG = LoggerFactory.getLogger(ScalarModelWithMultiPending.Util.class);
 
         public static IModel<ArrayList<ObjectAdapterMemento>> createModel(final ScalarModel model) {
             return createModel(model.asScalarModelWithMultiPending());
@@ -56,21 +56,20 @@ public interface ScalarModelWithMultiPending extends Serializable {
                 public ArrayList<ObjectAdapterMemento> getObject() {
                     final ArrayList<ObjectAdapterMemento> pending = owner.getMultiPending();
                     if (pending != null) {
-                        LOG.debug("pending not null: {}", pending.toString());
+                        log.debug("pending not null: {}", pending.toString());
                         return pending;
                     }
-                    LOG.debug("pending is null");
+                    log.debug("pending is null");
 
-                    final ScalarModel scalarModel = owner.getScalarModel();
-                    final ObjectAdapterMemento objectAdapterMemento = scalarModel.getObjectAdapterMemento();
-                    final ArrayList<ObjectAdapterMemento> mementos =
-                            objectAdapterMemento != null ? objectAdapterMemento.getList() : null;
-                            return mementos;
+                    val scalarModel = owner.getScalarModel();
+                    val objectAdapterMemento = scalarModel.getObjectAdapterMemento();
+                    return ObjectAdapterMemento.unwrapList(objectAdapterMemento)
+                                    .orElse(null);
                 }
 
                 @Override
                 public void setObject(final ArrayList<ObjectAdapterMemento> adapterMemento) {
-                    LOG.debug("setting to: {}", (adapterMemento != null ? adapterMemento.toString() : null));
+                    log.debug("setting to: {}", (adapterMemento != null ? adapterMemento.toString() : null));
                     owner.setMultiPending(adapterMemento);
 
                     final ScalarModel ownerScalarModel = owner.getScalarModel();
@@ -80,10 +79,10 @@ public interface ScalarModelWithMultiPending extends Serializable {
                     } else {
                         final ArrayList<ObjectAdapterMemento> ownerPending = owner.getMultiPending();
                         if (ownerPending != null) {
-                            LOG.debug("setting to pending: {}", ownerPending.toString());
+                            log.debug("setting to pending: {}", ownerPending.toString());
                             final ObjectSpecId objectSpecId = ownerScalarModel.getTypeOfSpecification().getSpecId();
                             ownerScalarModel.setObjectMemento(
-                                    ObjectAdapterMemento.ofMementoList(adapterMemento, objectSpecId));
+                                    ObjectAdapterMemento.wrapMementoList(adapterMemento, objectSpecId));
                         }
                     }
                 }

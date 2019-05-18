@@ -127,7 +127,7 @@ public class ObjectMemberAbstractTest {
         testMember = new ObjectMemberAbstractImpl("id");
 
         context.checking(new Expectations() {{
-            allowing(mockSpecificationLoader).lookupBySpecId(ObjectSpecId.of("CUS"));
+            allowing(mockSpecificationLoader).lookupBySpecIdElseLoad(ObjectSpecId.of("CUS"));
             will(returnValue(mockSpecForCustomer));
             allowing(mockSpecificationLoader).loadSpecification(with(any(Class.class)));
             will(returnValue(mockSpecForCustomer));

@@ -18,7 +18,7 @@
  */
 package domainapp.dom.jee;
 
-import javax.ejb.Singleton;
+import javax.inject.Singleton;
 
 @Singleton
 public class JeeDemoService {

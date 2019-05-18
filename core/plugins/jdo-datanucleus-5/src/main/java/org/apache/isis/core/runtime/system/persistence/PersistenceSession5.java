@@ -543,7 +543,7 @@ implements IsisLifecycleListener.PersistenceSessionLifecycleManagement {
     }
 
     private Class<?> clsOf(final RootOid oid) {
-        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecIdElseLoad(oid.getObjectSpecId());
         return objectSpec.getCorrespondingClass();
     }
 

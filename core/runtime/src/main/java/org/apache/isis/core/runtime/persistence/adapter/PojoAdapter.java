@@ -155,6 +155,11 @@ public final class PojoAdapter implements ObjectAdapter {
             // services and view models are treated as persistent objects
             return false;
         }
+        
+        if(persistenceSession==null) {
+            return false;
+        }
+        
         val state = persistenceSession.stateOf(this);
         return state.isDetached();
     }
@@ -166,6 +171,9 @@ public final class PojoAdapter implements ObjectAdapter {
             // services and view models are treated as persistent objects
             return true;
         }
+        if(persistenceSession==null) {
+            return false;
+        }
         val state = persistenceSession.stateOf(this);
         val isRepresentingPersistent = state.isAttached() || state.isDestroyed();
         return isRepresentingPersistent;
@@ -176,6 +184,9 @@ public final class PojoAdapter implements ObjectAdapter {
         val spec = getSpecification();
         if(spec.isBean() || spec.isViewModel() || spec.isValue()) {
             // services and view models are treated as persistent objects
+            return false;
+        }
+        if(persistenceSession==null) {
             return false;
         }
         val state = persistenceSession.stateOf(this);

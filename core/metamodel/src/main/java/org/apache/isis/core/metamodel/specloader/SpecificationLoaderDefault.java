@@ -308,16 +308,17 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 	}
 
 	@Override
-	public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
+	public ObjectSpecification lookupBySpecIdElseLoad(ObjectSpecId objectSpecId) {
 		if(!cache.isInitialized()) {
 			throw new IllegalStateException("Internal cache not yet initialized");
 		}
-		final ObjectSpecification objectSpecification = cache.getByObjectType(objectSpecId);
-		if(objectSpecification == null) {
-			// fallback
-			return loadSpecification(objectSpecId, IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
+		val spec = cache.getByObjectType(objectSpecId);
+		if(spec!=null) {
+		    return spec;
 		}
-		return objectSpecification;
+		
+		// fallback
+		return loadSpecification(objectSpecId.asString(), IntrospectionState.TYPE_AND_MEMBERS_INTROSPECTED);
 	}
 
 
@@ -354,11 +355,11 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 					new FacetedMethodsBuilderContext(
 							this, facetProcessor);
 			
-			val beanSort = IsisBeanTypeRegistry.current().classify(cls);
+			val isManagedBean = IsisBeanTypeRegistry.current().isManagedBean(cls);
 
 			objectSpec = new ObjectSpecificationDefault(cls,
 					facetedMethodsBuilderContext,
-					facetProcessor, beanSort, postProcessor);
+					facetProcessor, isManagedBean, postProcessor);
 		}
 
 		return objectSpec;

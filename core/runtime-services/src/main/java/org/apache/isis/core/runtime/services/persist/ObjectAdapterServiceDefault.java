@@ -58,7 +58,7 @@ public class ObjectAdapterServiceDefault implements ObjectAdapterService {
 		}
 
 		val spec = specificationLoader.loadSpecification(pojo.getClass());
-		switch (spec.getManagedObjectSort()) {
+		switch (spec.getBeanSort()) {
 		case VALUE:
 			return PojoAdapter.ofValue((Serializable) pojo);
 		case VIEW_MODEL:

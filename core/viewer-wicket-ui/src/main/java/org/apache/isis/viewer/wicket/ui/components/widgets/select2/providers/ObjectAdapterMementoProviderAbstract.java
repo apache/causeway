@@ -30,11 +30,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
 
@@ -80,7 +80,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvide
             return NULL_PLACEHOLDER;
         }
         final ObjectSpecId objectSpecId = choice.getObjectSpecId();
-        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
 
         // support enums that are implementing an interface; only know this late in the day
         // TODO: this is a hack, really should push this deeper so that Encodeable OAMs also prefix themselves with their objectSpecId

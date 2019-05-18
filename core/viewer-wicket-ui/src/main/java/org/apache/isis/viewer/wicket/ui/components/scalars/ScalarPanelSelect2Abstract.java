@@ -34,7 +34,7 @@ import org.wicketstuff.select2.ChoiceProvider;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.FormGroup;
@@ -240,7 +240,7 @@ public abstract class ScalarPanelSelect2Abstract extends ScalarPanelAbstract2 {
                 final ObjectAdapterMemento oam = (ObjectAdapterMemento) proposedValueObjAsList.get(0);
                 final ObjectSpecId objectSpecId = oam.getObjectSpecId();
                 proposedValue = ObjectAdapterMemento
-                        .ofMementoList(proposedValueObjAsList, objectSpecId);
+                        .wrapMementoList(proposedValueObjAsList, objectSpecId);
             } else {
                 proposedValue = (ObjectAdapterMemento) proposedValueObj;
             }

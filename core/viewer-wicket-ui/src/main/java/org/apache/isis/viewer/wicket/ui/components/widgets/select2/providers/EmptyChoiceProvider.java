@@ -21,7 +21,7 @@ import java.util.Collection;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.core.runtime.memento.ObjectAdapterMemento;
 
 public class EmptyChoiceProvider extends ChoiceProvider<ObjectAdapterMemento> {
     private static final long serialVersionUID = 1L;

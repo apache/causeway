@@ -16,23 +16,36 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.model.mementos;
+package org.apache.isis.core.runtime.memento;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 
-@Deprecated //TODO [2033] adds no value
-public final class SpecUtils {
+/**
+ * TODO[2112] possibly not final 
+ * 
+ * @since 2.0.0
+ * 
+ *
+ */
+public interface ObjectAdapterMementoSupport {
 
-    private SpecUtils(){}
+    ObjectAdapterMemento mementoForRootOid(RootOid rootOid);
 
-    public static ObjectSpecification getSpecificationFor(
-            final ObjectSpecId objectSpecId,
-            final SpecificationLoader specificationLoader) {
-        
-        return specificationLoader.lookupBySpecId(objectSpecId);
+    ObjectAdapterMemento mementoForAdapter(ObjectAdapter adapter);
+
+    ObjectAdapterMemento mementoForPojo(Object pojo);
+
+    ObjectAdapter reconstructObjectAdapter(ObjectAdapterMemento memento);
+    
+    // -- SPI
+    
+    static ObjectAdapterMementoSupport current() {
+        return IsisContext.getServiceRegistry().lookupServiceElseFail(ObjectAdapterMementoSupport.class);
     }
 
+    
 
+    
 }

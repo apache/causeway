@@ -19,10 +19,11 @@
 
 package domainapp.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.asciidoctor.Asciidoctor;
+import org.asciidoctor.AttributesBuilder;
+import org.asciidoctor.Options;
+import org.asciidoctor.OptionsBuilder;
+import org.asciidoctor.SafeMode;
 
 public class DemoUtils {
 
@@ -45,10 +46,16 @@ public class DemoUtils {
     // -- HELPER
 
     private static Asciidoctor asciidoctor;
-    private static Map<String, Object> options;
+    private static Options options;
     
-    private static Map<String, Object> defaultOptions() {
-        return new HashMap<>();
+    private static Options defaultOptions() {
+        return OptionsBuilder.options()
+                .safe(SafeMode.UNSAFE)
+                .toFile(false)
+                .attributes(AttributesBuilder.attributes()
+                        .sourceHighlighter("coderay")
+                        .get())
+                .get();
     }
 	
 /////////////////////////////////////////////////////////////////////	

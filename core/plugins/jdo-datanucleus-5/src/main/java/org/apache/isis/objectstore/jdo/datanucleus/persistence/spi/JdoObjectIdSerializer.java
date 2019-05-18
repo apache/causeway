@@ -118,7 +118,7 @@ public final class JdoObjectIdSerializer {
         final String idStr = oid.getIdentifier();
         final int separatorIdx = idStr.indexOf(SEPARATOR);
 
-        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecIdElseLoad(oid.getObjectSpecId());
         final JdoPersistenceCapableFacet jdoPcFacet = spec.getFacet(JdoPersistenceCapableFacet.class);
 
 
@@ -197,7 +197,7 @@ public final class JdoObjectIdSerializer {
 
     private static Class<?> objectTypeClassFor(final RootOid oid) {
         final ObjectSpecId objectSpecId = oid.getObjectSpecId();
-        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecIdElseLoad(objectSpecId);
         final Class<?> correspondingClass = spec.getCorrespondingClass();
         return correspondingClass;
     }
