@@ -131,6 +131,16 @@ public final class _Resources {
             return "/" + contextPath + path;
         }
     }
+    
+    public static String prependContextPathIfRequired(String url) {
+        if(url==null) {
+            return null; 
+        }
+        if(isLocalResource(url)) {
+            return prependContextPathIfPresent(url);
+        }
+        return url;
+    }
 
     // -- RESTFUL PATH RESOURCE
 
@@ -217,6 +227,8 @@ public final class _Resources {
         }
         return name;
     }
+
+
     
 
 }

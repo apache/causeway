@@ -18,14 +18,11 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.navbar;
 
-import org.apache.isis.commons.internal.resources._Resources;
-
 public enum Placement {
     HEADER,
     SIGNIN;
 
     String urlFor(final String logoHeaderUrl, final String logoSigninUrl) {
-        return _Resources.prependContextPathIfPresent(
-                this == Placement.HEADER ? logoHeaderUrl : logoSigninUrl );
+        return this == Placement.HEADER ? logoHeaderUrl : logoSigninUrl;
     }
 }

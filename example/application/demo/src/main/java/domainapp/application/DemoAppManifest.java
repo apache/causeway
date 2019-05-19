@@ -64,6 +64,11 @@ public class DemoAppManifest {
    public WebAppConfigBean webAppConfigBean() {
        return WebAppConfigBean.builder()
                .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
+               .brandLogoHeader("/images/gift_48.png")
+               .applicationCss("css/application.css")
+               .applicationJs("scripts/application.js")
+               .applicationName("Isis Demo App")
+               .faviconUrl("/images/favicon.png")
                .build();
    }
 
