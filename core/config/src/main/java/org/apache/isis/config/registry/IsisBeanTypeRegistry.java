@@ -1,5 +1,6 @@
 package org.apache.isis.config.registry;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.commons.internal.debug._Probe;
+import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.commons.ioc.BeanSortClassifier;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -25,15 +27,19 @@ import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
 
 import static org.apache.isis.commons.internal.base._With.requires;
+import static org.apache.isis.commons.internal.reflection._Reflect.containsAnnotation;
 import static org.apache.isis.commons.internal.reflection._Reflect.getAnnotation;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.val;
 
 /**
  * Holds the set of domain services, persistent entities and fixture scripts.services etc.
  * @since 2.0.0-M3
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoCloseable {
 
     private final static _Probe probe = _Probe.unlimited().label(IsisBeanTypeRegistry.class.getSimpleName());
@@ -42,6 +48,9 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
         return _Context.computeIfAbsent(IsisBeanTypeRegistry.class, IsisBeanTypeRegistry::new);
     }
 
+    /**
+     * inbox for introspection, as used by the spec loader
+     */
     private final Map<Class<?>, BeanSort> inbox = new HashMap<>();
 
     //TODO replace this getters: don't expose the sets for modification!?
@@ -63,6 +72,13 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
 
     @Override
     public void close() {
+        
+        if(!_Spring.isContextAvailable()) {
+            // this instance needs to survive a _Context.clear() call when Spring's context 
+            // gets passed over to Isis
+            return;
+        }
+        
         inbox.clear();
         allTypeSets.forEach(Set::clear);
     }
@@ -122,6 +138,13 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
 
         val type = typeMetaData.getUnderlyingClass();
         val beanSort = quickClassify(type);
+        
+        if(beanSort.isEntity()) {
+            // event though passed to the inbox for introspection we populate this 
+            // for the persistence layer not having to wait on the spec -loader for 
+            // processing of the inbox
+            entityTypes.add(type); 
+        }
 
         val isToBeProvisioned = beanSort.isBean();
         val isToBeInspected = !beanSort.isUnknown();
@@ -132,7 +155,7 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
 
         if(isToBeInspected || isToBeProvisioned) {
             probe.println("%s %s [%s]",
-                    isToBeProvisioned ? "provision" : "skip",
+                    isToBeProvisioned ? "provision" : beanSort.isEntity() ? "entity" : "skip",
                     _Probe.compact(type),
                     beanSort.name());
         }
@@ -159,6 +182,11 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
         if(aDomainService!=null) {
             return BeanSort.BEAN;
         }
+        
+        //this takes precedence over whatever @DomainObject has to say
+        if(containsAnnotation(type, "javax.jdo.annotations.PersistenceCapable")) {
+            return BeanSort.ENTITY;
+        }
 
         val aDomainObject = getAnnotation(type, DomainObject.class);
         if(aDomainObject!=null) {
@@ -166,7 +194,7 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
             case EXTERNAL_ENTITY:
             case INMEMORY_ENTITY:
             case JDO_ENTITY:
-                return BeanSort.ENTITY;
+                return BeanSort.VIEW_MODEL; //because object is not associated with a persistence context unless discovered above
             case MIXIN:
                 return BeanSort.MIXIN;
             case VIEW_MODEL:
@@ -179,7 +207,7 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
                 if(org.apache.isis.applib.ViewModel.class.isAssignableFrom(type)) {
                     return BeanSort.VIEW_MODEL;
                 }
-                return BeanSort.ENTITY;
+                // fall through
                 
             default:
                 // continue
@@ -214,9 +242,28 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
         if(getAnnotation(type, Singleton.class)!=null) {
             return BeanSort.BEAN;
         }
+        
+        if(Serializable.class.isAssignableFrom(type)) {
+            return BeanSort.VALUE;
+        }
 
         return BeanSort.UNKNOWN;
     }
+
+//    public IsisBeanTypeRegistry copy() {
+//        
+//        val copy = new IsisBeanTypeRegistry();
+//        
+//        val it1 = this.allTypeSets.iterator();
+//        val it2 = copy.allTypeSets.iterator();
+//        
+//        it1.forEachRemaining(src->{
+//            val dst = it2.next();
+//            dst.addAll((Collection) src);    
+//        });
+//        
+//        return copy;
+//    }
 
 
 }

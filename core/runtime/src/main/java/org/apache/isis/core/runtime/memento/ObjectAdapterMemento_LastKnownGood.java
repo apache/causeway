@@ -30,6 +30,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.hint.HintStore;
 import org.apache.isis.commons.internal.base._NullSafe;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterProvider;
 import org.apache.isis.core.metamodel.adapter.concurrency.ConcurrencyChecking;
@@ -41,7 +42,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+
+import lombok.val;
 
 /**
  * 
@@ -417,7 +421,20 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
 
     private ObjectAdapterMemento_LastKnownGood(final RootOid rootOid) {
 
-        assert !rootOid.isTransient();
+        // -- // TODO[2112] do we ever need to create ENCODEABLE here?
+        val specId = rootOid.getObjectSpecId(); 
+        val specificationLoader = IsisContext.getSpecificationLoader();
+        val spec = specificationLoader.lookupBySpecIdElseLoad(specId);
+        if(spec!=null && spec.isEncodeable()) {
+            this.sort = Sort.SCALAR;
+            this.objectSpecId = specId;
+            this.encodableValue = rootOid.getIdentifier();
+            this.type = Type.ENCODEABLE;
+            return;
+        } 
+        // -- //
+
+        Assert.assertFalse("expected not to be transient", !rootOid.isTransient());
 
         this.sort = Sort.SCALAR;
 
@@ -593,17 +610,17 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         private Functions() {
         }
 
-//        public static Function<ObjectAction, ActionMemento> fromAction() {
-//            return ActionMemento::new;
-//        }
-//
-//        public static Function<ObjectActionParameter, ActionParameterMemento> fromActionParameter() {
-//            return ActionParameterMemento::new;
-//        }
+        //        public static Function<ObjectAction, ActionMemento> fromAction() {
+        //            return ActionMemento::new;
+        //        }
+        //
+        //        public static Function<ObjectActionParameter, ActionParameterMemento> fromActionParameter() {
+        //            return ActionParameterMemento::new;
+        //        }
 
         public static Function<Object, ObjectAdapterMemento_LastKnownGood> fromPojo(final ObjectAdapterProvider adapterProvider) {
             return pojo->ObjectAdapterMemento_LastKnownGood.createOrNull( adapterProvider.adapterFor(pojo) );
-                }
+        }
 
         public static Function<ObjectAdapter, ObjectAdapterMemento_LastKnownGood> fromAdapter() {
             return ObjectAdapterMemento_LastKnownGood::createOrNull;

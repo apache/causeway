@@ -23,7 +23,6 @@ import javax.annotation.PreDestroy;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.background.BackgroundCommandService;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -55,7 +54,7 @@ public class BackgroundServiceDefault implements BackgroundService {
 
     private InvocationHandlerFactory invocationHandlerFactory;  
 
-    @Programmatic
+    
     @PostConstruct
     public void init() {
         val backgroundCommandService = 
@@ -75,7 +74,7 @@ public class BackgroundServiceDefault implements BackgroundService {
         
     }
 
-    @Programmatic
+    
     @PreDestroy
     public void shutdown() {
         if(invocationHandlerFactory!=null) {
@@ -89,7 +88,7 @@ public class BackgroundServiceDefault implements BackgroundService {
 
     // //////////////////////////////////////
 
-    @Programmatic
+    
     @Override
     public <T> T execute(final T domainObject) {
         final Class<T> cls = uncheckedCast(domainObject.getClass());

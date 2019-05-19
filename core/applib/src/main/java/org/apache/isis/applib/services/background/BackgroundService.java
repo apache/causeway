@@ -41,7 +41,7 @@ public interface BackgroundService {
      * signature of the action to be invoked in the background.
      *
      * <p>
-     *     To obtain a proxy for a mixin, use {@link BackgroundService2#executeMixin(Class, Object)}.
+     *     To obtain a proxy for a mixin, use {@link #executeMixin(Class, Object)}.
      * </p>
      */
     @Programmatic

@@ -25,8 +25,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 
+import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.exceptions._Exceptions;
 import org.apache.isis.commons.internal.resources._Resources;
 import org.apache.isis.core.commons.exceptions.IsisException;
+
+import lombok.val;
 
 public final class ClassExtensions {
 
@@ -54,7 +58,12 @@ public final class ClassExtensions {
                     constructor = extendee.getConstructor();
                     return constructor.newInstance();
                 } catch (final NoSuchMethodException e) {
-                    throw new IsisException(e);
+                    val msg = String.format("Failed to call contructor for type %s trying, "
+                            + "args '%s' then trying no args.",
+                            extendee.getName(),
+                            _Lists.of(constructorParamTypes).toString());
+                    
+                    throw _Exceptions.unrecoverable(msg, e);
                 }
             }
         } catch (final SecurityException | IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException ex) {

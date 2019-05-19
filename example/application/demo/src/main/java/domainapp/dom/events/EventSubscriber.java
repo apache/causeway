@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
+import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
@@ -40,6 +41,7 @@ import lombok.extern.java.Log;
 @Log @Component
 public class EventSubscriber {
 
+    @Inject private BackgroundService backgroundService;
 	@Inject private EventBusService eventBusService;
 	@Inject private EventLog eventLog;
 
@@ -56,10 +58,6 @@ public class EventSubscriber {
 	@EventListener(EventTestProgrammaticEvent.class)
 	public void on(EventTestProgrammaticEvent ev) {
 	    
-	    //val session = IsisSession.currentOrElseNull();
-	    val ps = IsisContext.getPersistenceSession().orElse(null);
-	    
-	    log.info(emphasize("event received session=" + ps));
 	    
 	    
 		if(ev.getEventPhase() != null && !ev.getEventPhase().isExecuted()) {
@@ -68,11 +66,21 @@ public class EventSubscriber {
 		
 		log.info(emphasize("DomainEvent: "+ev.getClass().getName()));
 		
+		
+		//backgroundService.execute(this).storeEvent(EventLogEntry.of(ev));
+		
 		// store in event log
 		eventLog.add(EventLogEntry.of(ev));
+
+//	    val ps = IsisContext.getPersistenceSession().orElse(null);
+//		ps.flush();
 		
-		ps.flush();
-		
+	}
+	
+	public void storeEvent(EventLogEntry evlEntry) {
+	    
+	    eventLog.add(evlEntry);
+	    
 	}
 
 }

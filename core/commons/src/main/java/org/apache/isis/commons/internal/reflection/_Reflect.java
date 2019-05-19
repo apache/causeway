@@ -19,9 +19,6 @@
 
 package org.apache.isis.commons.internal.reflection;
 
-import static org.apache.isis.commons.internal.base._NullSafe.stream;
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -37,7 +34,11 @@ import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
 
 import org.apache.isis.commons.internal.base._NullSafe;
+import org.apache.isis.commons.internal.base._Strings;
 import org.apache.isis.commons.internal.collections._Arrays;
+
+import static org.apache.isis.commons.internal.base._NullSafe.stream;
+import static org.apache.isis.commons.internal.base._With.requires;
 
 /**
  * <h1>- internal use only -</h1>
@@ -323,6 +324,24 @@ public final class _Reflect {
         .findFirst()
         .orElse(null);
         
+    }
+
+    /**
+     * Whether given {@code cls} is annotated with any {@link Annotation} of given {@code annotationName}. 
+     * @param cls
+     * @param annotationName - fully qualified class name of the {@link Annotation} to match against
+     * @return false - if any of the arguments is null 
+     */
+    public static boolean containsAnnotation(@Nullable final Class<?> cls, @Nullable String annotationName) {
+        if(cls==null || _Strings.isEmpty(annotationName)) {
+            return false;
+        }
+        for(Annotation annot : cls.getAnnotations()) {
+            if(annot.annotationType().getName().equals(annotationName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

@@ -19,7 +19,6 @@
 package org.apache.isis.objectstore.jdo.service;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,15 +26,19 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import org.apache.isis.commons.internal.base._Lazy;
 import org.apache.isis.commons.internal.collections._Lists;
+import org.apache.isis.commons.internal.context._Context;
 import org.apache.isis.config.registry.IsisBeanTypeRegistry;
 import org.apache.isis.core.metamodel.JdoMetamodelUtil;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static org.apache.isis.commons.internal.base._NullSafe.stream;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.val;
 
-public class RegisterEntities {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class JdoEntityTypeRegistry {
 
     private final _Lazy<Set<String>> entityTypes = _Lazy.threadSafe(this::findEntityTypes);
 
@@ -43,6 +46,10 @@ public class RegisterEntities {
         return entityTypes.get();
     }
 
+    public static JdoEntityTypeRegistry current() {
+        return _Context.computeIfAbsent(JdoEntityTypeRegistry.class, JdoEntityTypeRegistry::new);
+    }
+    
     // -- HELPER
 
     private Set<String> findEntityTypes() {
@@ -52,12 +59,12 @@ public class RegisterEntities {
             throw new IllegalStateException("ServiceRegistry is required");
         }
         
-        Set<String> entityTypes = new LinkedHashSet<>();
+        val entityTypes = new LinkedHashSet<String>();
         
         Set<Class<?>> persistenceCapableTypes = 
                 IsisBeanTypeRegistry.current().getEntityTypes();
 
-        final List<String> classNamesNotEnhanced = _Lists.newArrayList();
+        val classNamesNotEnhanced = _Lists.<String>newArrayList();
         for (Class<?> persistenceCapableType : persistenceCapableTypes) {
             if(ignore(persistenceCapableType)) {
                 continue;

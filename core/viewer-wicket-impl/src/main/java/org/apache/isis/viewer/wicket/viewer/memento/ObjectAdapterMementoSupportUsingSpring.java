@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.enterprise.inject.Vetoed;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -47,11 +48,11 @@ import static org.apache.isis.commons.internal.base._With.requires;
 import lombok.val;
 
 /**
- * 
+ * @deprecated FIXME[2112] yet an experiment, not working
  * @since 2.0.0
- *
+ * 
  */
-@Singleton
+@Vetoed// @Singleton
 public class ObjectAdapterMementoSupportUsingSpring implements ObjectAdapterMementoSupport {
 
 //    @Getter(lazy=true) private final BeanSortClassifier beanSortClassifier = IsisBeanTypeRegistry.current();

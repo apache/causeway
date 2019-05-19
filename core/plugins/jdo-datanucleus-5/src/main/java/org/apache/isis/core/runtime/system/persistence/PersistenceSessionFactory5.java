@@ -37,7 +37,7 @@ import org.apache.isis.core.runtime.persistence.FixturesInstalledState;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledStateHolder;
 import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
-import org.apache.isis.objectstore.jdo.service.RegisterEntities;
+import org.apache.isis.objectstore.jdo.service.JdoEntityTypeRegistry;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -89,7 +89,7 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
         
         addDataNucleusPropertiesIfRequired(datanucleusProps);
         
-        val classesToBePersisted = new RegisterEntities().getEntityTypes();
+        val classesToBePersisted = JdoEntityTypeRegistry.current().getEntityTypes();
 
         return new DataNucleusApplicationComponents5(
                 jdoObjectstoreConfig,
@@ -98,9 +98,8 @@ implements PersistenceSessionFactory, ApplicationScopedComponent, FixturesInstal
     }
 
     @Override
-    
     public void catalogNamedQueries(final SpecificationLoader specificationLoader) {
-        val classesToBePersisted = new RegisterEntities().getEntityTypes();
+        val classesToBePersisted = JdoEntityTypeRegistry.current().getEntityTypes();
         DataNucleusApplicationComponents5.catalogNamedQueries(classesToBePersisted, specificationLoader);
     }
 

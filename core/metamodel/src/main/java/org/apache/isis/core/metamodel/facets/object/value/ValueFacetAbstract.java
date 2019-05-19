@@ -25,7 +25,6 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.applib.services.inject.ServiceInjector;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -49,7 +48,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
         }
 
         return (ValueSemanticsProvider<?>) ClassExtensions.newInstance(semanticsProviderClass, 
-                new Class<?>[] { FacetHolder.class, ServiceInjector.class }, new Object[] { holder });
+                new Class<?>[] { FacetHolder.class/*, ServiceInjector.class*/ }, new Object[] { holder });
     }
 
     // to look after the facets (since MultiTyped)

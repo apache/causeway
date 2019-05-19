@@ -44,7 +44,7 @@ import domainapp.dom.DemoModule;
 @Configuration
 @PropertySources({
     @PropertySource("classpath:/domainapp/application/isis-non-changing.properties"),
-    @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
+    @PropertySource(name=Presets.HsqlDbInMemory, factory = Presets.Factory.class, value = { "" }),
     @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
 })
 @Import({

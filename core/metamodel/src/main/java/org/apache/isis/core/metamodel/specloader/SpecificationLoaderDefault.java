@@ -133,8 +133,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 		val mixinSpecs = _Lists.<ObjectSpecification>newArrayList();
 		
 		CommonDtoUtils.VALUE_TYPES.forEach(type->{
-            val spec = internalLoadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
-            specificationsFromRegistry.add(spec);
+            val spec = internalLoadSpecificationOrNull(type, IntrospectionState.NOT_INTROSPECTED);
+            if(spec!=null) specificationsFromRegistry.add(spec);
         });
 		
 		typeRegistry.streamAndClearInbox().forEach(entry->{
@@ -142,8 +142,8 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 		    val type = entry.getKey();
 		    val sort = entry.getValue(); 
 		    
-		    val spec = internalLoadSpecification(type, IntrospectionState.NOT_INTROSPECTED);
-		    specificationsFromRegistry.add(spec);
+		    val spec = internalLoadSpecificationOrNull(type, IntrospectionState.NOT_INTROSPECTED);
+		    if(spec!=null) specificationsFromRegistry.add(spec);
 
 		    switch (sort) {
             case BEAN:
@@ -236,7 +236,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 		
 		requires(upTo, "upTo");
 		
-		val spec = internalLoadSpecification(type, upTo);
+		val spec = internalLoadSpecificationOrNull(type, upTo);
 		if(spec == null) {
 			return null;
 		}
@@ -257,7 +257,7 @@ public class SpecificationLoaderDefault implements SpecificationLoader {
 		return spec;
 	}
 
-	private ObjectSpecification internalLoadSpecification(
+	private ObjectSpecification internalLoadSpecificationOrNull(
 			final Class<?> type,
 			final IntrospectionState upTo) {
 
