@@ -34,7 +34,7 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 @DomainObjectLayout(named="Event Demo")
 public class EventLogMenu {
 
-	@Inject private EventLog eventLog;
+	@Inject private EventLogRepository eventLog;
 	@Inject private EventBusService eventBusService;
 	
 	@Action

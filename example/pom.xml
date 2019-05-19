@@ -297,6 +297,7 @@ ${license.additional-notes}
 		<module>application/helloworld</module>
 		<module>application/simpleapp</module>
 		<module>application/demo</module>
+		<module>misc/smoketest</module>
 	</modules>
 
 </project>

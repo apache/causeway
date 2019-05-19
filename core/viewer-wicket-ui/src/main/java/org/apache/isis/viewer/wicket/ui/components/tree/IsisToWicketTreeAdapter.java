@@ -16,8 +16,6 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.tree;
 
-import static org.apache.isis.commons.internal.base._With.requires;
-
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -55,6 +53,8 @@ import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.model.models.ValueModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanel;
+
+import static org.apache.isis.commons.internal.base._With.requires;
 
 import lombok.val;
 
@@ -386,13 +386,6 @@ class IsisToWicketTreeAdapter {
 
         	val rootOid = id;
             val rootOidToAdapter = IsisContext.rootOidToAdapter();
-
-//TODO [2033] remove            
-//            final PersistenceSession persistenceSession = IsisContext.getPersistenceSession()
-//                    .orElseThrow(()->new RuntimeException(new IllegalStateException(
-//                            String.format("Tree creation: missing a PersistenceSession to recreate TreeModel "
-//                                    + "from Oid: '%s'", id)))
-//                            );
 
             val objAdapter = rootOidToAdapter.apply(rootOid);
             if(objAdapter==null) {

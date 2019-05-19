@@ -18,7 +18,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.ViewModel;
 import org.apache.isis.commons.internal.collections._Lists;
 import org.apache.isis.commons.internal.context._Context;
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.spring._Spring;
 import org.apache.isis.commons.ioc.BeanSort;
 import org.apache.isis.commons.ioc.BeanSortClassifier;
@@ -34,15 +33,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Holds the set of domain services, persistent entities and fixture scripts.services etc.
  * @since 2.0.0-M3
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE) @Slf4j
 public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoCloseable {
-
-    private final static _Probe probe = _Probe.unlimited().label(IsisBeanTypeRegistry.class.getSimpleName());
 
     public static IsisBeanTypeRegistry current() {
         return _Context.computeIfAbsent(IsisBeanTypeRegistry.class, IsisBeanTypeRegistry::new);
@@ -123,9 +121,11 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
             inbox.clear();
         }
 
-        defensiveCopy.forEach((k, v)->{
-            probe.println("stream inbox: %s [%s]", k.getName(), v.name());
-        });
+        if(log.isDebugEnabled()) {
+            defensiveCopy.forEach((k, v)->{
+                log.debug("to be specloaded: {} [{}]", k.getName(), v.name());
+            });
+        }
 
         return defensiveCopy.entrySet().stream();
     }
@@ -153,11 +153,13 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
             addToInbox(beanSort, type);
         }
 
-        if(isToBeInspected || isToBeProvisioned) {
-            probe.println("%s %s [%s]",
-                    isToBeProvisioned ? "provision" : beanSort.isEntity() ? "entity" : "skip",
-                    _Probe.compact(type),
-                    beanSort.name());
+        if(log.isDebugEnabled()) {
+            if(isToBeInspected || isToBeProvisioned) {
+                log.debug("{} {} [{}]",
+                        isToBeProvisioned ? "provision" : beanSort.isEntity() ? "entity" : "skip",
+                        type,
+                        beanSort.name());
+            }
         }
 
         return isToBeProvisioned;
@@ -250,6 +252,7 @@ public final class IsisBeanTypeRegistry implements BeanSortClassifier, AutoClose
         return BeanSort.UNKNOWN;
     }
 
+// if we ever want to ever implement an alternative solution to the autoclose hack above ...
 //    public IsisBeanTypeRegistry copy() {
 //        
 //        val copy = new IsisBeanTypeRegistry();

@@ -29,12 +29,10 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.events.domain.AbstractDomainEvent;
 import org.apache.isis.applib.services.background.BackgroundService;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static domainapp.utils.DemoUtils.emphasize;
 
 import domainapp.dom.events.EventLogMenu.EventTestProgrammaticEvent;
-import lombok.val;
 import lombok.extern.java.Log;
 
 @DomainService(nature=NatureOfService.DOMAIN)
@@ -43,7 +41,7 @@ public class EventSubscriber {
 
     @Inject private BackgroundService backgroundService;
 	@Inject private EventBusService eventBusService;
-	@Inject private EventLog eventLog;
+	@Inject private EventLogRepository eventLog;
 
 	public static class EventSubscriberEvent extends AbstractDomainEvent<Object> {
 		private static final long serialVersionUID = 1L;
@@ -67,10 +65,10 @@ public class EventSubscriber {
 		log.info(emphasize("DomainEvent: "+ev.getClass().getName()));
 		
 		
-		//backgroundService.execute(this).storeEvent(EventLogEntry.of(ev));
+		backgroundService.execute(this).storeEvent(EventLogEntry.of(ev));
 		
 		// store in event log
-		eventLog.add(EventLogEntry.of(ev));
+		//eventLog.add(EventLogEntry.of(ev));
 
 //	    val ps = IsisContext.getPersistenceSession().orElse(null);
 //		ps.flush();

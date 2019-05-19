@@ -47,6 +47,8 @@ import org.apache.isis.core.security.authentication.AuthenticationSession;
 import org.apache.isis.core.security.authentication.manager.AuthenticationManager;
 import org.apache.isis.core.security.authorization.manager.AuthorizationManager;
 
+import lombok.val;
+
 /**
  * Provides static access to current context's singletons
  * {@link MetaModelInvalidException} and {@link IsisSessionFactory}.
@@ -187,7 +189,12 @@ public interface IsisContext {
     }
     
     public static Function<RootOid, ObjectAdapter> rootOidToAdapter() {
-        return getObjectAdapterProvider()::adapterFor;
+        return rootOid -> {
+            val ps = IsisContext.getPersistenceSession()
+                    .orElseThrow(()->new RuntimeException(new IllegalStateException(
+                            "There is no PersistenceSession on the current context.")));
+            return ps.getObjectAdapterByIdProvider().adapterFor(rootOid);
+        }; 
     }
     
     /**

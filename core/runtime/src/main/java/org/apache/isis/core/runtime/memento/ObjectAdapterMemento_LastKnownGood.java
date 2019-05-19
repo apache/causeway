@@ -434,7 +434,7 @@ public class ObjectAdapterMemento_LastKnownGood implements Serializable {
         } 
         // -- //
 
-        Assert.assertFalse("expected not to be transient", !rootOid.isTransient());
+        Assert.assertFalse("expected not to be transient", rootOid.isTransient());
 
         this.sort = Sort.SCALAR;
 

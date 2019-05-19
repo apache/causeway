@@ -27,24 +27,27 @@ import javax.enterprise.util.TypeLiteral;
 
 import org.springframework.context.ApplicationEventPublisher;
 
-import org.apache.isis.commons.internal.debug._Probe;
 import org.apache.isis.commons.internal.exceptions._Exceptions;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
+@Slf4j
 class EventSpring<T> implements Event<T> {
 
     private final ApplicationEventPublisher publisher;
     
-    private final _Probe probe = _Probe.unlimited().label("EventSpring");
-
     @Override
     public void fire(T event) {
-        probe.println("%s fire(%s ... %s)",
+        
+        if(log.isDebugEnabled()) {
+            log.debug("{} fire({} ... {})",
                 Thread.currentThread().getName(),
                 event.getClass().getSimpleName(), 
                 event.toString());
+        }
+        
         publisher.publishEvent(event);
     }
 
