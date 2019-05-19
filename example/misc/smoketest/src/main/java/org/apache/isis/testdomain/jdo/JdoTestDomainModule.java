@@ -32,11 +32,9 @@ import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.core.security.IsisSecurityBoot;
 
 @Configuration
-@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties") //XXX bug on jdk-11
-//@PropertySource("file:src/test/java/org/apache/isis/testdomain/jdo/isis-non-changing.properties")
+@PropertySource("classpath:/org/apache/isis/testdomain/jdo/isis-non-changing.properties")
 @Import({IsisSecurityBoot.class})
 @ComponentScan(
-        
         basePackageClasses= {
                 JdoTestDomainModule.class
         },

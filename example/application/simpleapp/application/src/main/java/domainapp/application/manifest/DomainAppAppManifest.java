@@ -18,20 +18,52 @@
  */
 package domainapp.application.manifest;
 
-/**
- * Bootstrap the application.
- */
-public class DomainAppAppManifest {
+import javax.inject.Singleton;
 
-  //FIXME[2112] needs migration
-//    public static final Builder BUILDER = Builder
-//            .forModule(new DomainAppApplicationModule())
-//            .withConfigurationPropertiesFile(
-//                    DomainAppAppManifest.class, "isis-non-changing.properties")
-//            .withAuthMechanism("shiro");
-//
-//    public DomainAppAppManifest() {
-//        super(BUILDER);
-//    }
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
+import org.springframework.core.io.ClassPathResource;
+
+import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.config.Presets;
+import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
+import org.apache.isis.config.beans.WebAppConfigBean;
+import org.apache.isis.runtime.spring.IsisBoot;
+
+import domainapp.application.DomainAppApplicationModule;
+import domainapp.modules.simple.SimpleModule;
+
+@Configuration
+@PropertySources({
+    @PropertySource("classpath:/domainapp/application/manifest/isis-non-changing.properties"),
+    @PropertySource(name=Presets.H2InMemory, factory = Presets.Factory.class, value = { "" }),
+    @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
+})
+@Import({
+    IsisBoot.class,
+    FixtureScriptsDefault.class,
+})
+@ComponentScan(
+        basePackageClasses= {
+                DomainAppApplicationModule.class,
+                SimpleModule.class
+        },
+        includeFilters= {
+                @Filter(type = FilterType.CUSTOM, classes= {IsisBeanScanInterceptorForSpring.class})
+        })
+public class DomainAppAppManifest {
+    
+   @Bean @Singleton
+   public WebAppConfigBean webAppConfigBean() {
+       return WebAppConfigBean.builder()
+               .menubarsLayoutXml(new ClassPathResource("menubars.layout.xml", this.getClass()))
+               .build();
+   }
 
 }

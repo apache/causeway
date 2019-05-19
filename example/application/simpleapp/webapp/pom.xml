@@ -53,8 +53,8 @@
     </properties>
 
     <dependencies>
-
-        <!-- this app -->
+    
+    	<!-- this app -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>simpleapp-application</artifactId>

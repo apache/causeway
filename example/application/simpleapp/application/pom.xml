@@ -34,11 +34,53 @@
     <packaging>jar</packaging>
 
     <dependencies>
-
-        <dependency>
+    
+    	<dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>simpleapp-module-simple</artifactId>
         </dependency>
+        
+		<!-- ISIS CORE PLUGINS -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-codegen-bytebuddy</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-jdo-datanucleus-5</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-jaxrs-resteasy-4</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-plugins-security-shiro</artifactId>
+        </dependency>
+        
+       	<!-- SPRING -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${spring-boot.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.validation</groupId>
+					<artifactId>validation-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<version>${spring-boot.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
         <!-- TESTS -->
         <dependency>
