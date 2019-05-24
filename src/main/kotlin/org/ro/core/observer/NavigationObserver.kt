@@ -34,7 +34,7 @@ class NavigationObserver : BaseObserver() {
     
     private fun handleResult(obj: TransferObject) {
         val result = obj as Result
-        val values = result.valueList()
+        val values = result.value
         Menu.limit = values.size
         for (l in values) {
             l.invoke(this)

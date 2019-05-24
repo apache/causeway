@@ -54,24 +54,27 @@ XHR <- RestfulObjects : json
 
 
 interface TransferObject
-TransferObject <|-- to.Link
-TransferObject <|-- to.Extensions
-TransferObject <|-- to.layout.Layout
+TransferObject <|.. to.Link
+TransferObject <|.. to.Extensions
+TransferObject <|.. to.layout.Layout
 interface to.Linked{
     links:Link[]
 }
-TransferObject <|-- to.Linked
-to.Linked <|-- to.Result
-to.Linked <|-- to.ResultList
-to.Linked <|-- to.Extended  
+TransferObject <|.. to.Linked
+to.Linked <|.. to.Result
+to.Linked <|.. to.ResultList
+to.Linked <|.. to.Extended 
+
 interface to.Extended{
     extensions:Extensions
 }
 to.Linked o-- to.Link
 to.Extended o-- to.Extensions
-to.Extended <|-- to.Property 
-to.Extended <|-- to.TObject 
-to.Extended <|-- to.Member 
+to.Extended <|.. to.Property 
+to.Extended <|.. to.TObject 
+to.Extended <|.. to.Service 
+to.Extended <|.. to.Member 
+to.Service o-- to.Member
 
 interface Observer {
     update(logEntry)
@@ -80,10 +83,10 @@ class ListObserver {
     -list:ObjectList  
 }
 ListObserver *-- ObjectList
-Observer <|-- ListObserver
+Observer <|.. ListObserver
 
 class NavigationObserver
-Observer <|-- NavigationObserver
+Observer <|.. NavigationObserver
 
 class ObjectList {
     list:ObjectAdapter

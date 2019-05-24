@@ -19,7 +19,6 @@ import pl.treksoft.kvision.panel.FlexWrap
 import pl.treksoft.kvision.panel.HPanel.Companion.hPanel
 import pl.treksoft.kvision.panel.VPanel
 import pl.treksoft.kvision.tabulator.*
-import pl.treksoft.kvision.tabulator.Tabulator.Companion.tabulator
 import pl.treksoft.kvision.utils.obj
 import pl.treksoft.kvision.utils.px
 import pl.treksoft.kvision.tabulator.js.Tabulator as JsTabulator
@@ -29,7 +28,7 @@ class EventLogTable2(val model: List<LogEntry>) : VPanel() {
     private lateinit var searchTypes: RadioGroup
 
     private val columns = listOf(
-            ColumnDefinition("", field = "state", width = "80"),
+            ColumnDefinition<LogEntry>("", field = "state", width = "80"),
             ColumnDefinition("Title", "title", width = "400"),
             ColumnDefinition("Method", "method", width = "80"),
             ColumnDefinition(
@@ -79,24 +78,24 @@ class EventLogTable2(val model: List<LogEntry>) : VPanel() {
             }
         }
 
-        val options = Options(
+        val options = TabulatorOptions(
                 height = "calc(100vh - 250px)",
                 layout = Layout.FITCOLUMNS,
                 columns = columns,
                 persistenceMode = false
         )
 
-        val tabulator = tabulator(model, options) {
-            marginTop = 0.px
-            marginBottom = 0.px
-            setEventListener<Tabulator<LogEntry>> {
-                tabulatorRowClick = {
-                }
-            }
-            setFilter { logEntry ->
-                logEntry.match(search.value) && (searchTypes.value == "all" || logEntry.isView() ?: false)
+        val tabulator = Tabulator<LogEntry>(model, options = options)
+        marginTop = 0.px
+        marginBottom = 0.px
+        setEventListener<Tabulator<LogEntry>> {
+            tabulatorRowClick = {
             }
         }
+        tabulator.setFilter { logEntry ->
+            logEntry.match(search.value) && (searchTypes.value == "all" || logEntry.isView())
+        }
+
 
         search.setEventListener {
             input = {

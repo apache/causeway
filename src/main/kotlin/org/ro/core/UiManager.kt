@@ -38,7 +38,7 @@ object UiManager {
         val title = "Log Entries"
         val icon = IconManager.find(title)
         val tableSpec = EventLogTab().csList
-        RoView.addTab(I18n.tr(title), EventLogTable(tableSpec), icon)
+        RoView.addTab(I18n.tr(title), EventLogTable(tableSpec), icon/*, closable = true*/)
     }
 
     fun removeView(title: String) {

@@ -13,6 +13,7 @@ import org.w3c.xhr.XMLHttpRequest
 
 // subclasses expect a running backend, here SimpleApp localhost:8080/restful*
 open class IntegrationTest {
+    
     fun isSimpleAppAvailable(): Boolean {
         val url = "http://sven:pass@localhost:8080/restful/"
         val user = "sven"
@@ -26,11 +27,10 @@ open class IntegrationTest {
         xhr.setRequestHeader("Accept", "application/json")
 
         try {
-            xhr.send(); // there will be a 'pause' here until the response to come.
+            xhr.send(); // there will be a 'pause' here until the response comes.
         } catch (e: Throwable) {
             return false
         }
-        //console.log("[$url status: ${xhr.status}]")
         val answer = xhr.status.equals(200)
         return answer
     }
@@ -42,7 +42,6 @@ open class IntegrationTest {
         EventStore.start(url, method, "", observer)
         val le = EventStore.end(url, str)
         ResponseHandler.handle(le!!)
-//        console.log("[IT.mockResponse] $le")
         return le
     }
 
@@ -52,4 +51,5 @@ open class IntegrationTest {
             console.log("[TestUtil.wait] $milliseconds")
         }
     }
+    
 }

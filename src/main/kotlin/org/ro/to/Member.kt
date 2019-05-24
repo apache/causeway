@@ -8,14 +8,13 @@ import org.ro.core.TransferObject
 data class Member(val id: String,
                   val memberType: String,
                   @Optional val links: List<Link> = emptyList(),
-        //TODO is a custom serializer required?
-/* value can be one of <null | String.class | Link.class> */
-        // = "" satisfies 2 more tests than = null !!!
-//                  @Optional val value: String = "", 
+                  //FIXME
+                  @Optional val value: Value? = null,
+                  @Optional val format: String = "",
                   @Optional val extensions: Extensions? = null,
                   @Optional val disabledReason: String = "",
-                  @Optional val format: String = "",
-                  @Optional val optional: Boolean = false) : TransferObject {
+                  @Optional val optional: Boolean = false
+) : TransferObject {
 
     fun getInvokeLink(): Link? {
         for (l in links) {

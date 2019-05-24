@@ -18,7 +18,6 @@ data class TabLayout(val cssClass: String? = null,
         result.tabFocusEnabled = true
 
         var b: VBox
-        //FIXME tab has (General, Metadata, Other) but rowlist is not initialized
         for (rl in row) {
             b = rl.build()
             result.addChild(b)

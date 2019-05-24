@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class ServiceTest {
+class ServiceTest : ToTest() {
 
     @Test
     fun testSimpleObjectMenu() {
@@ -42,7 +42,7 @@ class ServiceTest {
     fun testParseServices() {
         val jsonStr = RESTFUL_SERVICES.str
         val services = ResultHandler().parse(jsonStr) as Result
-        val values = services.valueList()
+        val values = services.value
         assertNotNull(values)
         assertEquals(8, values.size)
     }

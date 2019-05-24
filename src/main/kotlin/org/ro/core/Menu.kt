@@ -1,5 +1,7 @@
 package org.ro.core
 
+import org.ro.to.Member
+import org.ro.to.MemberType
 import org.ro.to.Service
 
 object Menu {
@@ -36,6 +38,17 @@ object Menu {
             }
         }
         return result
+    }
+
+    fun Service.getActionList(): List<Member> {
+        val list = mutableListOf<Member>()
+        for (m in members) {
+            val v = m.value
+            if (v.memberType.equals(MemberType.ACTION.type)) {
+                list.add(v)
+            }
+        }
+        return list
     }
 
 }

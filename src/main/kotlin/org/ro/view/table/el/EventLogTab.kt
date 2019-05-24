@@ -9,7 +9,7 @@ class EventLogTab {
 
     init {
         csList.add(ColDef(LogEntry::state, 2, " ", null))
-        csList.add(ColDef(LogEntry::method, 5))
+        csList.add(ColDef(LogEntry::m, 5))
         csList.add(ColDef(LogEntry::createdAt, 8, "Created", null))
         csList.add(ColDef(LogEntry::updatedAt, 8, "Updated", null))
         csList.add(ColDef(LogEntry::requestLength, 3, "req.len", "request"))

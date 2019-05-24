@@ -17,8 +17,8 @@ class TObjectTest {
         assertNotNull(to.links)
     }
 
-    @Test  // http://localhost:8080/restful/objects/simple.SimpleObject/0
-    fun testTObjectMembers() {
+    @Test
+    fun testMembers() {
         //TODO authors@ro.org members should be modeled as elements of an Array [] 
         val jsonStr = SO_0.str
         val to = TObjectHandler().parse(jsonStr) as TObject
@@ -35,15 +35,12 @@ class TObjectTest {
         val oa1 = ObjectAdapter(to)
         objectList.list.add(oa1)
 
-        // this is kind of untyped again
-        // val oa: ObjectAdapter = objectList.last()
-        /* FIXME dynamic
-        assertNotNull(oa)
-
-        assertTrue(oa.datanucleusIdLong == 0)
-        assertTrue(oa.datanucleusVersionTimestamp == 1514897074953)
-        assertTrue(oa.notes == "null") */
+        val oa: ObjectAdapter = objectList.last()!!
+        console.log("[TOT.testMembers] $oa")
+        //FIXME dynamic
+//        assertEquals("0", oa.get("datanucleusIdLong"))
+//        assertEquals("1514897074953", oa.get("datanucleusVersionTimestamp"))
+//        assertEquals("null", oa.get("notes"))
     }
-
-
+    
 }

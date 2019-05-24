@@ -12,7 +12,7 @@ class PropertyHandler : BaseHandler(), IResponseHandler {
 
     //@UseExperimental(kotlinx.serialization.UnstableDefault::class)
     override fun parse(jsonStr: String): TransferObject? {
-        return JSON.parse(Property.serializer(), jsonStr)
+        return JSON.nonstrict.parse(Property.serializer(), jsonStr)
     }
 
 }

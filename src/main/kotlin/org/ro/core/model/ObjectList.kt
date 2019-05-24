@@ -21,7 +21,7 @@ class ObjectList : Visible {
         return it
     }
 
-    private fun initPropertyDescription() {
+    fun initPropertyDescription() {
         if (arePropertyLabelsToBeSet()) {
             val pls = layout!!.properties
             for (pl in pls) {
@@ -50,6 +50,10 @@ class ObjectList : Visible {
             propsSize = layout!!.properties.size
         }
         return (labelSize < propsSize)
+    }
+
+    fun last(): ObjectAdapter? {
+       return list.lastOrNull()
     }
 
 }

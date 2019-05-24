@@ -115,7 +115,7 @@ class EventLogTable(private val tableSpec: List<ColDef>) : SimplePanel() {
             }
         }
         val filterBlock = { logEntry: LogEntry ->
-            logEntry.match(search.value) && (types.value == "all" || logEntry.isView() ?: false)
+            logEntry.match(search.value) && (types.value == "all" || logEntry.isView())
         }
         //    val sorterBlock = 
         val sorterTypeBlock = {

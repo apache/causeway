@@ -96,7 +96,6 @@ class EventStoreTest {
         assertEquals(null, le2)     //2
 
         val le3 = EventStore.findEquivalent(ol9)
-        // FIXME 
         assertNotNull(le3)  //3
         assertEquals(ol1, le3.url)  //4
 

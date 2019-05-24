@@ -4,10 +4,8 @@ import kotlinx.serialization.Serializable
 import org.ro.core.model.ObjectAdapter
 import org.ro.core.model.ObjectList
 import org.ro.core.observer.BaseObserver
-import org.ro.core.observer.getLayoutLink
 import org.ro.layout.Layout
 import org.ro.to.*
-import org.ro.view.IconManager
 import org.ro.view.RoView
 import org.ro.view.table.fr.FixtureResultTable
 
@@ -57,12 +55,12 @@ class ListObserver : BaseObserver() {
         if (isRendered) {
             console.log("[ListObserver.handleView] already opened: $title")
         } else {
+//            list.initPropertyDescription() leads to stackoveflow in PHT.testProperty
             console.log("[ListObserver.handleView] about to open: $title")
             val model = list.list
             console.log("[ListObserver.handleView] number of objects: ${model.size}")
             val panel = FixtureResultTable(model)
-            val icon = IconManager.find(title)
-            RoView.addTab(title, panel, icon = icon)
+            RoView.addTab(title, panel)
             // UiManager.addView(list) 
             isRendered = true
         }
@@ -82,7 +80,7 @@ class ListObserver : BaseObserver() {
     }
 
     private fun handleObject(obj: TObject) {
-        console.log("[ListObserver.handleObject] adding TObject:\n ${obj}")
+ //       console.log("[ListObserver.handleObject] adding TObject:\n ${obj}")
         list.list.add(ObjectAdapter(obj))
         if (!list.hasLayout()) {
             val link = obj.getLayoutLink()!!

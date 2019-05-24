@@ -18,7 +18,6 @@ data class TabGroupLayout(val cssClass: String? = "",
         result.tabFocusEnabled = true
 
         var b: UIComponent
-        //FIXME tab has (General, Metadata, Other) but rowlist is not initialized
         for (tl in tab) {
             b = tl.build()
             result.addChild(b)

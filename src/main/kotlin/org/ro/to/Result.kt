@@ -7,9 +7,5 @@ import org.ro.core.TransferObject
 @Serializable
 data class Result(val value: List<Link> = emptyList(),
                   val links: List<Link> = emptyList(),
-                  @Optional val extensions: Extensions? = null) : TransferObject {
-
-    fun valueList(): List<Link> {
-        return value
-    }
-}
+                  @Optional val extensions: Extensions? = null
+) : TransferObject

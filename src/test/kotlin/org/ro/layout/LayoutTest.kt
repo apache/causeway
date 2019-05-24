@@ -19,29 +19,26 @@ class LayoutTest : IntegrationTest() {
             val lo = LayoutHandler().parse(jsonStr) as Layout
             val properties = lo.properties
             // then
-            assertNotNull(properties)
-            assertEquals(2, properties.size)
-            assertEquals("name", properties[0].id)
-            assertEquals("notes", properties[1].id)
+            assertEquals(2, properties.size)    //1
+            assertEquals("name", properties[0].id)  //2
+            assertEquals("notes", properties[1].id)  //3
 
             // BUILD UI TEST
             // layout.rows[1].cols[1].col.tabGroup[0]
             //ensure tabgroup is TabNavigator
-            //FIXME
-            // then (5)
-            assertEquals(2, lo.row.size)
+            assertEquals(2, lo.row.size) //4
 
             val view = lo.build()
-            assertNotNull(view) // (6)
+            assertNotNull(view) // 5
 
             val kids = view.children
-            assertEquals(2, kids.size) // (7) row[0] is not to be rendered though
+            assertEquals(2, kids.size) // 6 row[0] is not to be rendered though
 
             val row1 = kids[1]
-            assertEquals(2, row1.children.size)  // (8)
+            assertEquals(2, row1.children.size)  // 7
 
             val h2 = row1.children[1]
-            assertEquals(1, h2.children.size)
+            assertEquals(1, h2.children.size)   // 8
         }
     }
 

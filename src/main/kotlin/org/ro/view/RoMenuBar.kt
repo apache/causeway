@@ -30,30 +30,32 @@ object RoMenuBar {
     private fun buildMainEntry(): DropDown {
         val mainMenu = buildMenuEntry("", iconName = "fa-bars")
 
-        var title = "Connect ..."
-        var icon = IconManager.find(title)
-        val link = Link(tr(title), icon = icon).onClick {
+        val link = createLink("Connect ...").onClick {
             LoginPrompt().open()
         }
         mainMenu.add(link)
 
-        title = "Log Entries"
-        icon = IconManager.find(title)
-        val log = Link(tr(title), icon = icon).onClick {
+        val title = "Log Entries"
+        val log = createLink(title).onClick {
             val tableSpec = EventLogTab().csList
-            RoView.addTab(tr(title), EventLogTable(tableSpec), icon)
+            RoView.addTab(tr(title), EventLogTable(tableSpec))
         }
         mainMenu.add(log)
 
         val title2 = "Tabulator"
-        icon = IconManager.find(title2)
-        val log2 = Link(tr(title2), icon = icon).onClick {
+        val log2 = createLink(title2).onClick {
             val model = EventStore.log 
-            RoView.addTab(tr(title2), EventLogTable2(model), icon)
+            RoView.addTab(tr(title2), EventLogTable2(model))
         }
         mainMenu.add(log2)
 
         return mainMenu
+    }
+    
+    private fun createLink(title: String):Link {
+        val icon = IconManager.find(title)
+        val link = Link(tr(title), icon = icon)
+        return link
     }
 
     fun amendMenu() {

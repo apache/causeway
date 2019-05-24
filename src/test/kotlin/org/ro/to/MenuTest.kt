@@ -6,7 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class MenuTest {
+class MenuTest : ToTest() {
 
     @Test
     fun testUnique() {
@@ -28,11 +28,13 @@ class MenuTest {
         val jsonStr = SO_MENU.str
         val service = ServiceHandler().parse(jsonStr) as Service
         assertTrue(service.members.size > 0)
-        assertTrue(service.getMemberList().size > 0)
-        assertTrue(service.getActionList().size > 0)
+        val actionCount =  service.getMemberList().size
+        assertTrue( actionCount > 0)
         Menu.add(service)
         assertNotNull(Menu.list)
-        assertTrue(Menu.list.size > 0)
+        val menuEntryCount = Menu.list.size
+        assertTrue( menuEntryCount> 0)
+//        assertEquals(actionCount, menuEntryCount)
     }
 
 }

@@ -17,46 +17,41 @@ enum class EventState(val id: String, val iconName: String) {
 @Serializable
 data class LogEntry(
         val url: String,
-        val method: String? = null,
+        val method: String? = "",
         val request: String = "") {
-    
+    var m : String?    //TODO Deprecated
     var state = EventState.INITIAL
-    var menu: ActionMenu? = null
-    var iconName = "img/2-2-clapperboard-png-thumb.png"
+    var menu: ActionMenu? = null  //TODO Deprecated, use iconName
+    var title: String = ""
 
     init {
         state = EventState.RUNNING
         menu = ActionMenu("fa-ellipsis-h")
-    }
-
-    var title: String = ""
-
-    init {
         title = stripHostPort(url)
+        m = method
     }
 
     var createdAt = Date()
     var start: Int = createdAt.getMilliseconds()
     var updatedAt: Date? = null
     private var lastAccessedAt: Date? = null
-    var offset = 0
+
     private var fault: String? = null
-    var requestLength = 0
+    val requestLength: Int
+        get() = request.length
 
-    init {
-        requestLength = request.length
-    }
-
-    var responseLength: Int? = null
     var response = ""
+    val responseLength: Int
+        get() = response.length
+
+    var offset = 0
     var duration = 0
-//    var obj: Any? = null
     var cacheHits = 0
     var observer: IObserver? = null
     var obj: TransferObject? = null
 
     // alternative constructor for UI events (eg. from user interaction)
-    constructor(title: String) : this("", null, "") {
+    constructor(title: String) : this("", "", "") {
         this.title = title
         state = EventState.VIEW
     }
@@ -84,32 +79,33 @@ data class LogEntry(
     fun setSuccess(response: String) {
         updatedAt = Date()
         calculate()
-        this.response = response //.replace("\r\n", "")
-        responseLength = response.length
+        this.response = response //TODO pretty print json 
         state = EventState.SUCCESS
     }
 
     override fun toString(): String {
-        var s = "url: $url\n"
+        var s = "\n"
+        s += "url:= $url\n"
         if (getObj() == null) {
-            s += "obj: null\n"
+            s += "obj:= null\n"
         } else {
-            s += "obj: ${getObj()!!::class.simpleName}\n"
+            s += "obj:= ${getObj()!!::class.simpleName}\n"
         }
         if (observer == null) {
-            s += "obsever: null\n"
+            s += "observer:= null\n"
         } else {
-            s += "obsever: ${observer!!::class.simpleName}\n"
+            s += "observer:= ${observer!!::class.simpleName}\n"
         }
-        s += "response: $response\n"
+        s += "response:= $response\n"
         return s
     }
 
-    fun getObj() : TransferObject? {
+    fun getObj(): TransferObject? {
         return obj
     }
-    fun setObj(obj: TransferObject?)  {
-         this.obj = obj
+
+    fun setObj(obj: TransferObject?) {
+        this.obj = obj
     }
 
     // region response

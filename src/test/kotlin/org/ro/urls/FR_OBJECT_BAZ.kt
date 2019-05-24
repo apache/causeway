@@ -69,7 +69,7 @@ object FR_OBJECT_BAZ {
                         "type": "application/jsonprofile=\"urn:org.restfulobjects:repr-types/object-property\""
                     }
                 ],
-                "value": "domain-app-demo/persist-all/item-3",
+                "value": "",
                 "extensions": {
                     "x-isis-format": "string"
                 },
