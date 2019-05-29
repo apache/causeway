@@ -9,43 +9,45 @@ import kotlin.test.assertNotNull
 class MemberTest() {
 
     @Test
+    fun testParseLong() {
+        val jsonStr = getJsonWith(1234567890)
+        val actual = parse(jsonStr)
+        console.log("[${this::class}.testParseLong] ${actual}")
+        console.log("[${this::class}.testParseLong] ${actual.value!!}")
+        console.log("[${this::class}.testParseLong] ${actual.value!!.content!!::class}")
+        //FIXME using Longs eg. 123456789012 results in a NumberFormatException - is this due to Kotlin/KotlinJS differences?
+        assertEquals(1234567890, actual.value!!.content as Number)
+    }
+
+    @Test
+    fun testParseInt() {
+        val jsonStr = getJsonWith(0)
+        val actual = parse(jsonStr)
+        assertEquals(0, actual.value!!.content as Int)
+    }
+
+    @Test
     fun testParseString() {
-        val jsonStr = """{
-        "id": "className",
-        "memberType": "property",
-        "value": "Object: Foo"
-    }"""
-        val actual = JSON.parse(Member.serializer(), jsonStr)  as Member
+        val jsonStr = getJsonWith("\"Object: Foo\"")
+        val actual = parse(jsonStr)
         assertEquals("className", actual.id)
-        console.log("[MT.testParseString] value ${actual.value}")
-        assertEquals("Object: Foo", (actual.value!!.value.toString()))
+        assertEquals("Object: Foo", (actual.value!!.content.toString()))
     }
 
     @Test
     fun testParseLink() {
-        val jsonStr = """{
-        "id": "className",
-        "memberType": "property",
-        "value": {"rel": "R", "href": "H", "method": "GET", "type": "TY", "title": "TI"}
-    }"""
-        //
-        val m = JSON.nonstrict.parse(Member.serializer(), jsonStr)  as Member
-        assertEquals("className", m.id )
-                console.log("[MT.testParseLink] value ${m.value}")
-        val actual = m.value!!.value as Link
-        console.log("[MT.testParseLink] actual $actual")
+        val jsonStr = getJsonWith("""{"rel": "R", "href": "H", "method": "GET", "type": "TY", "title": "TI"}""")
+        val m = parse(jsonStr)
+        assertEquals("className", m.id)
+        val actual = m.value!!.content as Link
         val expected = Link()
         assertEquals(expected::class, actual::class)
     }
 
     @Test
     fun testParseNull() {
-        val jsonStr = """{
-        "id": "className",
-        "memberType": "property",
-        "value": null
-    }"""
-        val actual = JSON.parse(Member.serializer(), jsonStr)  as Member
+        val jsonStr = getJsonWith("null")
+        val actual = parse(jsonStr)
         assertEquals("className", actual.id)
         assertEquals(null, actual.value)
     }
@@ -58,4 +60,16 @@ class MemberTest() {
         assertEquals("Result class", extensions.friendlyName)
     }
 
+    private fun parse(jsonStr: String): Member {
+        return JSON.parse(Member.serializer(), jsonStr)
+    }
+
+    private fun getJsonWith(value: Any): String {
+        return """{
+        "id": "className",
+        "memberType": "property",
+        "value": $value
+    }"""
+
+    }
 }

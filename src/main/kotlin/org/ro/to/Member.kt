@@ -8,7 +8,7 @@ import org.ro.core.TransferObject
 data class Member(val id: String,
                   val memberType: String,
                   @Optional val links: List<Link> = emptyList(),
-                  //FIXME
+        //FIXME
                   @Optional val value: Value? = null,
                   @Optional val format: String = "",
                   @Optional val extensions: Extensions? = null,
