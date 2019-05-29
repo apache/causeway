@@ -83,7 +83,8 @@ public class TextFieldWithDateTimePicker<T> extends TextField<T> implements ICon
 
         boolean patternContainsTimeComponent = pattern.contains("HH");
         if (patternContainsTimeComponent) {
-            config.sideBySide(true);
+            // no longer do this, since for sidebar actions takes up too much real estate.
+            //config.sideBySide(true);
         }
 
         config.calendarWeeks(true);
