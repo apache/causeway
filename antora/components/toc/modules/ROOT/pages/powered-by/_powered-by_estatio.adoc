@@ -1,0 +1,40 @@
+[[_powered-by_estatio]]
+= Estatio
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+
+
+Estatio is an estate management application developed for and deployed at link:http://www.eurocommercialproperties.com/[Eurocommercial].
+
+Eurocommercial Properties is a Dutch-listed company that owns and operates over 50 shopping centres across Italy, France and Sweden, with income from property of approx. EUR150m per year.
+Previously the company had used one of the leading software packages for its invoicing; however this had proven on the one hand lacking in key features/functionality for some locales, while overlapping/duplicating the features/capabilities of the general ledger system.
+It had also been found to be extremely difficult to upgrade to new versions of the product (eg multiple regressions).
+
+The decision was made to develop a bespoke application focused just on invoicing, providing the flexibility to support any of the requirements that might arise in the company's operating coutries.
+It would interface but not overlap in functionality with the existing general ledger.
+It would also be able to expand its scope over time to support more of the company's operations (eg to support purchase and disposal of shopping centres).
+
+The application developed, and deployed initially in Italy, is called Estatio:
+
+image::{_imagesdir}powered-by/estatio/estatio-1.png[width="900px",link="{_imagesdir}powered-by/estatio/estatio-1.png"]
+
+The development team for the original implementation consisted of just two developers (both of whom are Apache Isis committers); the first version of the application was developed over 2 years and 2 man-years effort.
+Since the initial release - as the scope of the application has grown - the team has expanded to take on a further part-time developer and also some interns.
+
+
+== Supporting Open Source
+
+Much of Apache Isis' recent development has been driven out by the requirements of this application, so you can see for yourself how many of the features in Isis are used in real life.  Much of the (non-ASF) link:http://platform.incode.org[Incode Platform^] also originate from the requirements of Estatio.
+
+Estatio itself is also open source, licensed under Apache Software License and available on link:https://github.com/estatio/estatio[github].
+
+The Apache Isis committers are extremely grateful for Eurocommercial's investment in the framework in order to make Estatio a reality.
+Our heart-felt thanks.
+
+And to learn a little more about the Estatio domain model itself, take a look at both the source code (of course) and also at https://github.com/estatio/estatio/blob/master/adocs/documentation/src/main/asciidoc/auditability.adoc[this documentation], developed to allow Eurocommercial's accountants to understand and audit the application.
+
+
+_Case study provided by Jeroen van der Wal, link:http://incode.org[Incode]_
+

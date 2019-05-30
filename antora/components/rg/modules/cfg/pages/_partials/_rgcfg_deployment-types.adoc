@@ -1,0 +1,101 @@
+[[_rgcfg_deployment-types]]
+= Deployment Types
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+TODO: v2: This is out of date.  Instead we set system property or environment vars, as per `IsisSystemEnvironment`.  This is also pluggable.
+
+Apache Isis distinguishes between the application being run in development mode vs running in production mode.  The framework calls this the "deployment type" (corresponding internally to the `DeploymentType` class).
+
+(For mostly historical reasons) development mode is actually called `SERVER_PROTOTYPE`, while production mode is called just `SERVER`.
+
+When running in development/prototyping mode, certain capabilities are enabled; most notably any actions restricted to prototyping mode (using xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`]) will be available.
+
+
+
+== Using the Wicket Viewer
+
+Most of the you're likely to run Apache Isis using the xref:../ugvw/ugvw.adoc#[Wicket viewer].  In this case Apache Isis' "deployment type" concept maps to Wicket's "configuration" concept:
+
+.Apache Isis' deployment type corresponds to Apache Wicket's configuration
+[cols="1,1,2", options="header"]
+|===
+| Apache Isis +
+(Deployment Type)
+| Apache Wicket +
+(Configuration)
+| Notes
+
+| `SERVER_PROTOTYPE`
+| `development`
+| running in development/prototyping mode
+
+| `SERVER`
+| `deployment`
+| running in production mode
+
+|===
+
+
+Wicket's mechanism for specifying the "configuration" is to use a context parameter in `web.xml`; Apache Isis automatically infers its own deployment type from this.  In other words:
+
+* to specify SERVER (production) mode, use: +
++
+[source,xml]
+.`web.xml`
+----
+<context-param>
+    <param-name>configuration</param-name>
+    <param-value>deployment</param-value>
+</context-param>
+----
+
+* to specify `SERVER_PROTOTYPING` (development) mode, use: +
++
+[source,xml]
+.`web.xml`
+----
+<context-param>
+    <param-name>configuration</param-name>
+    <param-value>development</param-value>
+</context-param>
+----
+
+
+== Restful Objects viewer only
+
+Most Apache Isis applications will consist of at least the xref:../ugvw/ugvw.adoc#[Wicket viewer] and optionally the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].  When both viewers are deployed in the same app, then the bootstrapping is performed by Wicket, and so the deployment type is configured as described in the previous section.
+
+In some cases though you may be using Apache Isis to provide a REST API only, that is, you won't have deployed the Wicket viewer.  In these cases your app will be bootstrapped using  Apache Isis' xref:../ugbtb/ugbtb.adoc#__ugbtb_web-xml_servlet-context-listeners[ `IsisWebAppBootstrapper`].
+
+In this case the deployment type is specified through an Apache Isis-specific context parameter, called `isis.deploymentType`:
+
+* to specify `SERVER` (production) mode, use: +
++
+[source,xml]
+.`web.xml`
+----
+<context-param>
+    <param-name>isis.deploymentType</param-name>
+    <param-value>server</param-value>
+</context-param>
+----
+
+* to specify `SERVER_PROTOTYPE` (development) mode, use: +
++
+[source,xml]
+.`web.xml`
+----
+<context-param>
+    <param-name>isis.deploymentType</param-name>
+    <param-value>server-prototype</param-value>
+</context-param>
+----
+
+
+
+== Overriding the deployment type
+
+TODO: v2: see env var or system properties, as per `IsisSystemEnvironment`.
+

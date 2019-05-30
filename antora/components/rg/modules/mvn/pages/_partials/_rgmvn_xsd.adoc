@@ -1,0 +1,333 @@
+[[_rgmvn_xsd]]
+= `xsd` goal
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `xsd` goal of the `isis-maven-plugin` uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] to
+generate XSD schemas from any JAXB-annotated xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model/DTOs].
+
+This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen]
+tool, because it uses the framework's support (via
+xref:../rgant/rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`]) to translate any references to domain
+objects into ``OidDto``s (as defined by the Apache Isis xref:../rgcms/rgcms.adoc#_rgcms_schema-common[common schema]).
+
+The `xsd` goal defines the following properties:
+
+* `appManifest` - fully qualified class name for the app manifest used to bootstrap the application (see discussion above)
+
+* `jaxbClasses` - a list of xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB-annotated view model] classes;
+
+* `output` - (optional) subdirectory under the `target` directory to generate the XSDs +
++
+Defaults to `generated-resources/isis-xsd`
+
+* `separate` - (optional) whether to create separate directories for each JAXB-class. +
++
+Defaults to `false`.  Most DTO classes will reference one another or the xref:../rgcms/rgcms.adoc#_rgcms_schema-common[common schema].  Normally it's fine to merge all these XSDs together.  This property, if set, results in each a separate directory for each generation of its XSD or XSDs.
+
+* `commonSchemas` - (optional) whether to also generate the isis common schema(s). +
++
+Defaults to `false`; if set then the call to xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] will set `IsisSchemas.INCLUDE` flag.
+
+As a convenience to any (Java) consumers, the XSDs generated from the view models can then in turn be generated
+into DTOs.  The original view models and these DTOs are similar but not identical: while the view models can only be used
+within the Apache Isis application (they may reference underlying domain entities) whereas the DTO classes generated from the
+XSDs can be used standalone, eg by a Java subscriber running on an ESB such as Apache Camel.
+
+The rest of this section explains how to configure a new `xsd` submodule that uses the `isis-maven-plugin` along with
+other standard plugins in order to generate both XSDs and DTOs.  The `pom.xml` described below uses Maven profiles
+to separate out these two responsibilities.
+
+
+[[__rgmvn_xsd_xsd-submodule]]
+== `xsd` submodule
+
+We recommend creating a new submodule that will perform the following build steps:
+
+* run the `xsd` goal (in the `generate-resources` phase) to generate the XSDs from the specified view model/DTOs
+
+* use the link:http://maven.apache.org/plugins/maven-assembly-plugin/[maven-assembly-plugin] to bundle the
+ generated XSD files into a zip file.
+
+* use the `xjc-gen` to generate corresponding DTO classes from the XSDs. +
++
+These are _not_ the same as the original view models; they are provided as a convenience for subscribers to marshall XML documents into Java classes, but running as a standalone process (not part of the Isis app)
+
+
+These two main responsibilities can then be placed into separate Maven profiles, for better modularity.  The diagram
+below shows the overall design:
+
+image::{_imagesdir}maven-plugin/xsd-goal.png[width="800px",link="{_imagesdir}maven-plugin/xsd-goal.png"]
+
+For example, here is the `pom.xml` file for the (non-ASF)
+http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] example app's `todoapp-xsd` submodule.
+
+First, the usual boilerplate:
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.mycompany</groupId>
+        <artifactId>todoapp</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>todoapp-xsd</artifactId>
+    <name>Isis Addons ToDoApp XSD</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>todoapp-app</artifactId>    <!--1-->
+        </dependency>
+    </dependencies>
+
+	<profiles>
+		<profile>
+			<id>isis-xsd</id>                       <!--2-->
+			...
+		</profile>
+        <profile>
+            <id>xjc</id>                            <!--3-->
+            ...
+        </profile>
+	</profiles>
+</project>
+----
+<1> depends on the rest of the application's modules
+<2> XSD generation, to run the `xsd` goal and then assemble into a zip file; within a profile for modularity; see section xref:rgmvn.adoc#__rgmvn_xsd_xsd-submodule_xsd-profile[below]
+<3> XJC generation, to run the `xjc` to generate Java DTO classes from XSDs; within a profile for modularity; see section xref:rgmvn.adoc#__rgmvn_xsd_xsd-submodule_xjc-profile[below]
+
+The xref:rgmvn.adoc#__rgmvn_xsd_xsd-submodule_xsd-profile[sections] xref:rgmvn.adoc#__rgmvn_xsd_xsd-submodule_xjc-profile[below] flesh out the gaps.
+
+
+
+
+[[__rgmvn_xsd_xsd-submodule_xsd-profile]]
+=== XSD profile
+
+The `isis-xsd` profile runs the `xsd` goal of the `isis-maven-plugin`; these are then zipped up by the assembly plugin:
+
+[source,xml]
+----
+<profile>
+    <id>isis-xsd</id>
+    <activation>
+        <property>
+            <name>!skip.isis-xsd</name>                                                             <!--1-->
+        </property>
+    </activation>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.isis.tool</groupId>
+                <artifactId>isis-maven-plugin</artifactId>
+                <version>${isis.version}</version>
+                <configuration>
+                    <appManifest>todoapp.dom.ToDoAppDomManifest</appManifest>                       <!--2-->
+                    <jaxbClasses>                                                                   <!--3-->
+                        <jaxbClass>todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto</jaxbClass>
+                        <jaxbClass>todoapp.app.viewmodels.todoitem.v1_1.ToDoItemDto</jaxbClass>
+                    </jaxbClasses>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>todoapp-dom</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <dependency>                                                                    <!--4-->
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                        <version>16.0.1</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>                                             <!--5-->
+                        <goals>
+                            <goal>xsd</goal>                                                        <!--6-->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>                                      <!--7-->
+                <version>2.5.3</version>
+                <configuration>
+                    <descriptor>src/assembly/dep.xml</descriptor>                                   <!--8-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>create-archive</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+----
+<1> enabled _unless_ `skip.isis-xsd` property specified
+<2> specify the app manifest to bootstrap the Isis runtime within the maven plugin
+<3> enumerate all JAXB-annotated view models
+<4> workaround to avoid conflict with plexus-default
+<5> by default is bound to `generate-resources`, but bind instead to `generate-sources` if also running the `xjc` profile: the XSD are an input to `xjc`, but it is bound by default to `generate-sources` and the `generate-sources` phase runs before the `generate-resources`.
+<6> run the `xsd` goal
+<7> define the assembly plugin
+<8> assembles the XSD schemas into a zip file, as defined by the `dep.xml` file (see below).
+
+ The `dep.xml` file, referenced by the `assembly` plugin, is defined as:
+
+[source,xml]
+----
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2
+                              http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+    <id>xsd</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}/generated-resources/isis-xsd</directory>      <!--1-->
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>
+----
+<1> the location that the `xsd` goal writes to.
+
+
+[[__rgmvn_xsd_xsd-submodule_xjc-profile]]
+=== XJC profile
+
+The `xjc` profile reads the XSD generated by the `xsd` goal, and from it generates Java DTOs.  Note that this isn't
+round-tripping: the original view model is only for use within the Isis app, whereas the DTO generated from the XSDs
+is for use in a standalone context, eg in a Java subscriber on an event bus.
+
+The `xjc` profile is defined as:
+
+[source,xml]
+----
+<profile>
+    <id>xjc</id>
+    <activation>
+        <property>
+            <name>!skip.xjc</name>                                                              <!--1-->
+        </property>
+    </activation>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <version>0.12.3</version>
+                <executions>
+                    <execution>
+                        <id>xjc-generate</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <removeOldOutput>true</removeOldOutput>
+                    <schemaDirectory>                                                           <!--2-->
+                        target/generated-resources/isis-xsd/viewmodels.app.todoapp/todoitem
+                    </schemaDirectory>
+                    <schemaIncludes>                                                            <!--3-->
+                        <schemaInclude>v1_0/todoitem.xsd</schemaInclude>
+                        <schemaInclude>v1_1/todoitem.xsd</schemaInclude>
+                    </schemaIncludes>
+                    <catalog>src/main/resources/catalog.xml</catalog>                           <!--4-->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>                              <!--5-->
+                <version>1.9.1</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>target/generated-sources/xjc</source>                   <!--6-->
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+----
+<1> enabled _unless_ `skip.xjc` property specified
+<2> specifies the directory that the XSD schemas were generated to by the `isis-maven-plugin`
+<3> specify each of the XSDs to be processed
+<4> catalog file indicates the location of the referenced xref:../rgcms/rgcms.adoc#_rgcms_schema-common[common schema] XSDs.
+<5> the `build-helper-maven-plugin` adds the Java source generated by the `xjc` plugin so that it can be compiled and
+packaged as any other code
+<6> the location that the `xjc` plugin generates its source code.
+
+
+The referenced `catalog.xml` file instructs the `xjc` plugin how to resolve referenced schema locations.  Only a
+reference for the Apache Isis xref:../rgcms/rgcms.adoc#_rgcms_schema-common[common schema] is likely to be needed:
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE catalog
+            PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
+            "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <public publicId="http://isis.apache.org/schema/common"
+            uri="http://isis.apache.org/schema/common/common.xsd"/>                             <!--1-->
+</catalog>
+----
+<1> resolve the common schema from the Apache Isis website
+
+
+== To run
+
+The plugin is activated by default, so is run simply using:
+
+[source,bash]
+----
+mvn package
+----
+
+This will generate the XSDs, the DTOs from the XSDs, and package up the XSDs into a ZIP file and the generated DTO
+class files into a regular JAR package.
+
+
+If for any reason you want to disable the generation of the DTOs, use:
+
+[source,bash]
+----
+mvn package -Dskip.xjc
+----
+
+If you want to disable the generation of both the XSDs and the DTOs, use:
+
+[source,bash]
+----
+mvn package -Dskip.xjc -Dskip.isis-xsd
+----
+
+

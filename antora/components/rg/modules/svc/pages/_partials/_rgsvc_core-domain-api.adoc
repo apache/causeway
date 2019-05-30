@@ -1,0 +1,115 @@
+[[_rgsvc_core-domain-api]]
+= Core/Domain API
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The core/domain APIs provide general-purpose services to the domain objects, for example obtaining the current time or user, or instantiating domain objects.
+
+
+The table below summarizes the core/domain APIs defined by Apache Isis.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
+
+
+.Core/Domain Layer API
+[cols="2,4a,1,1", options="header"]
+|===
+
+|API
+|Description
+|Implementation
+|Notes
+
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_ClockService[`o.a.i.applib.` +
+`services.clock` +
+`ClockService`]
+|Access the current time (and for testing, allow the time to be changed)
+|`ClockService` +
+``o.a.i.core`` +
+``isis-core-applib``
+|API is also a concrete class.
+
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_ConfigurationService[`o.a.i.applib.` +
+`services.config` +
+`ConfigurationService`]
+|Access configuration properties (eg from `isis.properties` file)
+|`ConfigurationService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|The ``ConfigurationServiceMenu`` exposes the ``allConfigurationProperties`` action in the user interface. +
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`o.a.i.applib.` +
+`services.eventbus` +
+`EventBusService`]
+|Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain events:
+
+* xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`Action#domainEvent()`]
+* xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`Property#domainEvent()`]
+* xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`Collection#domainEvent()`]
+|`EventBusServiceJdo` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`o.a.i.applib.` +
+`services.factory` +
+`FactoryService`]
+|Methods to instantiate and initialize domain objects
+|`FactoryService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|
+
+
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`o.a.i.applib.` +
+`services.scratchpad` +
+`Scratchpad`]
+|Request-scoped service for interchanging information between and aggregating over multiple method calls; in particular for use by "bulk" actions (invoking of an action for all elements of a collection)
+|`Scratchpad` +
+``o.a.i.core`` +
+``isis-core-applib``
+|API is also a concrete class
+
+
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_UserService[`o.a.i.applib.` +
+`services.xactn` +
+`UserService`]
+|Methods to access the currently-logged on user.
+|`UserService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|
+
+
+
+|===
+
+Key:
+
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
+* `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
+* `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
+
+
+
+
+
+include::_rgsvc_core-domain-api_ClockService.adoc[leveloffset=+1]
+include::_rgsvc_core-domain-api_ConfigurationService.adoc[leveloffset=+1]
+include::_rgsvc_core-domain-api_EventBusService.adoc[leveloffset=+1]
+include::_rgsvc_core-domain-api_FactoryService.adoc[leveloffset=+1]
+include::_rgsvc_core-domain-api_Scratchpad.adoc[leveloffset=+1]
+include::_rgsvc_core-domain-api_UserService.adoc[leveloffset=+1]

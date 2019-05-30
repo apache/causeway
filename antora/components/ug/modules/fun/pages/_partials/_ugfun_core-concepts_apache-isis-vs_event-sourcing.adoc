@@ -1,0 +1,28 @@
+[[_ugfun_core-concepts_apache-isis-vs_event-sourcing]]
+= vs Event Sourcing
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The xref:_ugfun_core-concepts_apache-isis-vs_cqrs#[CQRS architecture] (discussed above) is often combined with _Event Sourcing_ pattern, though they are separate ideas.
+
+With event sourcing, each business operation emits a domain event (or possibly events) that allow other objects in the system to act accordingly.
+For example, if a customer places an order then this might emit the `OrderPlacedEvent`.
+Most significantly, the subscribers to these events can include the datastore itself; the state of the system is in effect a transaction log of every event that has occurred since "the beginning of time": it is sometimes called an event store.
+With CQRS, this event datastore corresponds to the command/write datastore (the query/read datastore is of course derived from the command datastore).
+
+Although it might seem counter-intuitive to be able store persistent state in this way (as a souped up "transaction log"), the reality is that with modern compute capabilities make it quite feasible to replay many 10s/100s of thousands of events in a second.
+And the architecture supports some interesting use cases; for example it becomes quite trivial to rewind the system back to some previous point in time.
+
+When combined with CQRS we see a command that triggers a business operation, and an event that results from it.
+So, a `PlaceOrderCommand` command can result in an `OrderPlacedEvent` event.  A subscriber to this event might then generate a further command to act upon some other system (eg to dispatch the system).
+Note that the event might be dispatched and consumed in-process or alternatively this might occur out-of-process.
+If the latter, then the subscriber will operate within a separate transaction, meaning the usual eventual consistency concerns and also compensating actions if a rollback is required.
+CQRS/event sourcing advocates point out -- correctly -- that this is just how things are in the "real world" too.
+
+In Apache Isis every business action (and indeed, property and collection) emits domain events through the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`], and can optionally also be published through the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+The former are dispatched and consumed in-process and within the same transaction, and for this reason the xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscribers] can also veto the events.
+The latter are intended for out-of-process consumption; the (obsolete) http://github.com/isisaddons-legacy/isis-module-publishing[Isis addons' publishing] and the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq modules provide implementations for dispatching either through a RDBMS database table, or directly through to an link:http://camel.apache.org[ActiveMQ] message queue (eg wired up to link:http://camel.apache.org[Apache Camel] event bus).
+
+

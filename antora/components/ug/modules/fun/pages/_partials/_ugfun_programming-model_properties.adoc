@@ -1,0 +1,368 @@
+[[_ugfun_programming-model_properties]]
+= Property
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+A property is an instance variable of a domain object, of a scalar type, that holds some state about either a xref:../ugfun/ugfun.adoc#__ugfun_programming-model_class-definition_entities[domain entity] or a xref:../ugfun/ugfun.adoc#__ugfun_programming-model_class-definition_view-models[view model].
+
+For example, a ``Customer``'s `firstName` would be a property, as would their `accountCreationDate` that they created their account.
+All properties have at least a "getter" method, and most properties have also a "setter" method (meaning that they are mutable).
+Properties that do _not_ have a setter method are derived properties, and so are not persisted.
+
+Formally speaking, a property is simply a regular JavaBean getter, returning a scalar value recognized by the framework.
+Most properties (those that are editable/modifiable) will also have a setter and (if persisted) a backing instance field.
+And most properties will also have a number of annotations:
+
+* Apache Isis defines its own set own `@Property` annotation for capturing domain semantics.
+It also provides a `@PropertyLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:../ugvw/ugvw.adoc#_ugvw_layout[`.layout.xml`] file
+
+* the properties of domain entities are often annotated with the JDO/DataNucleus `@javax.jdo.annotations.Column` annotation.
+For property references, there may be other annotations to indicate whether the reference is bidirectional.
+It's also possible (using annotations) to define a link table to hold foreign key columns.
+
+* for the properties of view models, then JAXB annotations such as `@javax.xml.bind.annotation.XmlElement` will be present
+
+Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB and infers some domain semantics from them (for example, the maximum allowable length of a string property).
+
+Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
+The xref:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] and xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes use this approach.
+
+
+[[__ugfun_programming-model_properties_value-vs-reference-types]]
+== Value vs Reference Types
+
+Properties can be either a value type (strings, int, date and so on) or be a reference to another object (for example, an `Order` referencing the `Customer` that placed it).
+
+For example, to map a string value type:
+
+[source,java]
+----
+@lombok.Getter @lombok.Setter       // <1>
+private String notes;
+----
+<1> using link:https://projectlombok.org/[Project Lombok] annotations to reduce boilerplate
+
+You could also add the `@Property` annotation if you wished:
+
+[source,java]
+----
+@Property
+@lombok.Getter @lombok.Setter
+private String notes;
+----
+
+Although in this case it is not required (none of its attributes have been set).
+
+Or to map a reference type:
+
+[source,java]
+----
+@lombok.Getter @lombok.Setter
+private Customer customer;
+----
+
+It's ok for a xref:../ugfun/ugfun.adoc#__ugfun_programming-model_class-definition_entities[domain entity] to reference another domain entity, and for a xref:../ugfun/ugfun.adoc#__ugfun_programming-model_class-definition_view-models[view model] to reference both view model and domain entities.
+However, it isn't valid for a domain entity to hold a persisted reference to view model (DataNucleus will not know how to persist that view model).
+
+[NOTE]
+====
+For further details on mapping associations, see the JDO/DataNucleus documentation for link:http://www.datanucleus.org/products/accessplatform_4_1/jdo/orm/one_to_many.html[one-to-many] associations, link:http://www.datanucleus.org/products/accessplatform_4_1/jdo/orm/many_to_one.html[many-to-one] associations, link:http://www.datanucleus.org/products/accessplatform_4_1/jdo/orm/many_to_many.html[many-to-many] associations, and so on.
+====
+
+For domain entities, the annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.
+The table in the xref:../ugfun/ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[Properties vs Parameters] section provides a handy reference of each.
+
+
+[[__ugfun_programming-model_properties_optional-properties]]
+== Optional Properties
+
+(For domain entities) JDO/DataNucleus' default is that a property is assumed to be mandatory if it is a primitive type (eg `int`, `boolean`), but optional if a reference type (eg `String`, `BigDecimal` etc).
+To override optionality in JDO/DataNucleus the `@Column(allowsNull="...")` annotations is used.
+
+Apache Isis on the other hand assumes that all properties (and action parameters, for that matter) are mandatory, not optional.
+These defaults can also be overridden using Apache Isis' own annotations, specifically `@Property(optionality=...)`, or (because it's much less verbose) using `@javax.annotation.Nullable`.
+
+These different defaults can lead to incompatibilities between the two frameworks.
+To counteract that, Apache Isis also recognizes and honours JDO's `@Column(allowsNull=...)`.
+
+For example, you can write:
+
+[source,java]
+----
+@javax.jdo.annotations.Column(allowsNull="true")
+@lombok.Getter @lombok.Setter
+private LocalDate date;
+----
+
+rather than the more verbose:
+
+[source,java]
+----
+@javax.jdo.annotations.Column(allowsNull="true")
+@Property(optionality=Optionality.OPTIONAL)
+@lombok.Getter @lombok.Setter
+private LocalDate date;
+----
+
+The framework will search for any incompatibilities in optionality (whether specified explicitly or defaulted implicitly) between Isis' defaults and DataNucleus, and refuse to boot if any are found (fail fast).
+
+[[__ugfun_programming-model_properties_editable-properties]]
+== Editable Properties
+
+Apache Isis provides the capability to allow individual properties to be modified.
+This is specified using the `@Property(editing=...)` attribute.
+
+For example:
+
+[source,java]
+----
+@Property(editing = Editing.ENABLED)
+@lombok.Getter @lombok.Setter
+private String notes;
+----
+
+If this is omitted then whether editing is enabled or disabled is defined globally, in the `isis.properties` configuration file; see xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[reference configuration guide] for further details.
+
+
+[[__ugfun_programming-model_properties_ignoring-properties]]
+== Ignoring Properties
+
+By default Apache Isis will automatically render all properties in the xref:../ugvw/ugvw.adoc#[Wicket UI] or in the xref:../ugvro/ugvro.adoc[REST API].
+To get Apache Isis to ignore a property (exclude it from its metamodel), annotate the getter using `@Programmatic`.
+
+Similarly, you can tell JDO/DataNucleus to ignore a property using the `@javax.jdo.annotations.NotPersistent` annotation.
+This is independent of Apache Isis; in other words that property will still be rendered in the UI (unless also annotated with `@Programmatic`).
+
+For view models, you can tell JAXB to ignore a property using the `@javax.xml.bind.annotation.XmlTransient` annotation.
+Again, this is independent of Apache Isis.
+
+
+[[__ugfun_programming-model_properties_derived-properties]]
+== Derived Properties
+
+Derived properties are those with a getter but no setter.
+Provided that the property has not been annotated with `@Programmatic`, these will still be rendered in the UI, but they will be read-only (not editable) and their state will not be persisted.
+
+Subtly different, it is also possible to have non-persisted but still editable properties.
+In this case you will need a getter and a setter, but with the getter annotated using `@NotPersistent`.
+The implementation of these getters and setters will most likely persist state using other properties (which might be hidden from view using `@Programmatic`).
+
+For example:
+
+[source,java]
+----
+@javax.jdo.annotations.NotPersistent
+@Property(editing=Editing.ENABLED)
+public String getAddress() { return addressService.toAddress( getLatLong() ); }             // <1>
+public void setAddress(String address) { setLatLong(addressService.toLatLong(address)); }
+
+@javax.jdo.annotations.Column
+private String latLong;
+@Programmatic
+public String getLatLong() { return latLong; }                                              // <2>
+public void setLatLong(String latLong) { this.latLong = latLong; }
+
+@javax.inject.Inject
+AddressService addressService;                                                              // <3>
+----
+<1> the representation of the address, in human readable form, eg "10 Downing Street, London, UK"
+<2> the lat/long representation of the address, eg "51.503363;-0.127625"
+<3> an injected service that can convert to/from address and latLong.
+
+
+
+[[__ugfun_programming-model_properties_datatypes]]
+== Data types
+
+This section shows specific considerations for various datatypes, in particular how to annotate them for DataNucleus mapping to the persistence object store.
+
+
+
+[[__ugfun_programming-model_properties_datatypes_strings]]
+=== ``String``s (Length)
+
+By default JDO/DataNucleus will map string properties to a `VARCHAR(255)`.
+To limit the length, use the `@Column(length=...)` annotation.
+
+For example:
+
+[source,java]
+----
+@javax.jdo.annotations.Column(length=50)
+@lombok.Getter @lombok.Setter
+private String firstName
+----
+
+This is a good example of a case where Apache Isis infers domain semantics from the JDO annotation.
+
+
+
+[[__ugfun_programming-model_properties_datatypes-joda-dates]]
+=== JODA Dates
+
+Isis' JDO objectstore bundles DataNucleus' http://www.datanucleus.org/documentation/products/plugins.html[built-in support] for Joda `LocalDate` and `LocalDateTime` datatypes, meaning that entity properties of these types will be persisted as appropriate data types in the database tables.
+
+It is, however, necessary to annotate your properties with `@javax.jdo.annotations.Persistent`, otherwise the data won't actually be persisted.
+See the link:http://db.apache.org/jdo/field_types.html[JDO docs] for more details on this.
+
+Moreover, these datatypes are _not_ in the default fetch group, meaning that JDO/DataNucleus will perform an additional `SELECT` query for each attribute.
+To avoid this extra query, the annotation should indicate that the property is in the default fetch group.
+
+For example, the `ToDoItem` (in the https://github.com/isisaddons/isis-app-todoapp[todoapp example app] (not ASF)) defines the `dueBy` property as follows:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent(defaultFetchGroup="true")
+@javax.jdo.annotations.Column(allowsNull="true")
+@Getter @Setter
+private LocalDate dueBy;
+----
+
+
+[[__ugfun_programming-model_properties_datatypes_bigdecimals]]
+=== ``BigDecimal``s (Precision)
+
+Working with `java.math.BigDecimal` properties takes a little care due to scale/precision issues.
+
+For example, suppose we have:
+
+[source,java]
+----
+@lombok.Getter @lombok.Setter
+private BigDecimal impact;
+----
+
+JDO/DataNucleus creates, at least with HSQL, the table with the field type as NUMERIC(19). No decimal digits are admitted. (Further details http://hsqldb.org/doc/2.0/guide/sqlgeneral-chapt.html#sgc_numeric_types[here]).
+
+What this implies is that, when a record is inserted, a log entry similar to this one appears:
+
+[source,java]
+----
+INSERT INTO ENTITY(..., IMPACT, ....) VALUES (...., 0.5, ....)
+----
+
+But when that same record is retrieved, the log will show that a value of "0" is returned, instead of 0.5.
+
+The solution is to explicitly add the scale to the field like this:
+
+[source,java]
+----
+@javax.jdo.annotations.Column(scale=2)
+@lombok.Getter @lombok.Setter
+private BigDecimal impact;
+----
+
+In addition, you should also set the scale of the `BigDecimal`, using `setScale(scale, roundingMode)`.
+
+More information can be found http://www.opentaps.org/docs/index.php/How_to_Use_Java_BigDecimal:_A_Tutorial[here] and http://www.tutorialspoint.com/java/math/bigdecimal_setscale_rm_roundingmode.htm[here].
+
+
+
+[[__ugfun_programming-model_properties_datatypes_blobs]]
+=== ``Blob``s
+
+Apache Isis configures JDO/DataNucleus so that the properties of type `org.apache.isis.applib.value.Blob` and `org.apache.isis.applib.value.Clob` can also be persisted.
+
+As for xref:../ugfun/ugfun.adoc#__ugfun_programming-model_properties_datatypes_joda-dates[Joda dates], this requires the `@javax.jdo.annotations.Persistent` annotation.
+However, whereas for dates one would always expect this value to be retrieved eagerly, for blobs and clobs it is not so clear cut.
+
+For example, in the `ToDoItem` class (of the https://github.com/isisaddons/isis-app-todoapp/blob/0333852ddd18ad67e3356fccf805aa442246790d/dom/src/main/java/todoapp/dom/todoitem/ToDoItem.java#L442[todoapp example app] (non-ASF) the `attachment` property is as follows:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+    @javax.jdo.annotations.Column(name = "attachment_name"),
+    @javax.jdo.annotations.Column(name = "attachment_mimetype"),
+    @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType="BLOB", sqlType = "LONGVARBINARY")
+})
+@Property(
+        optionality = Optionality.OPTIONAL
+)
+@lombok.Getter @lombok.Setter
+private Blob attachment;
+----
+
+The three `@javax.jdo.annotations.Column` annotations are required because the mapping classes that Apache Isis provides (https://github.com/apache/isis/blob/isis-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/isis/objectstore/jdo/datanucleus/valuetypes/IsisBlobMapping.java#L59[IsisBlobMapping] and https://github.com/apache/isis/blob/isis-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/isis/objectstore/jdo/datanucleus/valuetypes/IsisClobMapping.java#L59[IsisClobMapping]) map to 3 columns.
+(It is not an error to omit these `@Column` annotations, but without them the names of the table columns are simply suffixed `_0`, `_1`, `_2` etc.
+
+If the `Blob` is mandatory, then use:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+    @javax.jdo.annotations.Column(name = "attachment_name", allowsNull="false"),
+    @javax.jdo.annotations.Column(name = "attachment_mimetype", allowsNull="false"),
+    @javax.jdo.annotations.Column(name = "attachment_bytes",
+                                  jdbcType="BLOB", sqlType = "LONGVARBINARY",
+                                  allowsNull="false")
+})
+@Property(
+    optionality = Optionality.MANDATORY
+)
+@lombok.Getter @lombok.Setter
+private Blob attachment;
+----
+
+[NOTE]
+====
+If specifying a `sqlType` of "LONGVARBINARY" does not work, try instead "BLOB".
+There can be differences in behaviour between JDBC drivers.
+====
+
+[[__ugfun_programming-model_properties_datatypes_clobs]]
+=== ``Clob``s
+
+
+Mapping `Clob`s works in a very similar way to xref:../ugfun/ugfun.adoc#__ugfun_programming-model_properties_datatypes_blobs[``Blob``]s, but the `jdbcType` and `sqlType` attributes will, respectively, be `CLOB` and `LONGVARCHAR`:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+    @javax.jdo.annotations.Column(name = "attachment_name"),
+    @javax.jdo.annotations.Column(name = "attachment_mimetype"),
+    @javax.jdo.annotations.Column(name = "attachment_chars",
+                                  jdbcType="CLOB", sqlType = "LONGVARCHAR")
+})
+private Clob doc;
+@Property(
+    optionality = Optionality.OPTIONAL
+)
+public Clob getDoc() {
+    return doc;
+}
+public void setDoc(final Clob doc) {
+    this.doc = doc;
+}
+----
+
+[NOTE]
+====
+If specifying a `sqlType` of "LONGVARCHAR" does not work, try instead "CLOB".  There can be differences in behaviour between JDBC drivers.
+====
+
+
+[[__ugfun_programming-model_properties_datatypes_mapping-to-varbinary-or-varchar]]
+=== Mapping to VARBINARY or VARCHAR
+
+Instead of mapping to a sqlType of `LONGVARBINARY` (or perhaps `BLOB`), you might instead decide to map to a `VARBINARY`.
+The difference is whether the binary data is held "on-row" or as a pointer "off-row"; with a `VARBINARY` the data is held on-row and so you will need to specify a length.
+
+For example:
+
+[source,java]
+----
+@javax.jdo.annotations.Column(name = "attachment_bytes", jdbcTypr="BLOB", sqlType = "VARBINARY", length=2048)
+----
+
+The same argument applies to `LONGVARCHAR` (or `CLOB`); you could instead map to a regular `VARCHAR`:
+
+[source,java]
+----
+@javax.jdo.annotations.Column(name = "attachment_chars", sqlType = "VARCHAR", length=2048)
+----
+Support and maximum allowed length will vary by database vendor.
+
+
+
+

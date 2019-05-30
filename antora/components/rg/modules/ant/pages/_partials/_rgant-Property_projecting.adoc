@@ -1,0 +1,38 @@
+[[_rgant-Property_projecting]]
+= `projecting()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+A common use case for view models is to act as a projection of some underlying entity, to decorate that entity with additional behaviour (or remove existing behaviour) for some particular business context.
+
+Very often the object that is of interest to the end-user is the underlying entity, not the view model per se.
+If the view model is displayed within a table (on a home page, say), then when the user clicks the entity/icon link for the view model, they will in fact want to drill-down to the underlying entity and skip the view model completely.
+
+The `projecting()` attribute allows the view model to indicate which of its properties holds a reference to the underlying entity of which it is a projection.
+
+For example:
+
+[source,java]
+----
+@ViewModel
+public InvoiceSummary {
+
+    @Property(
+        projecting = Projecting.PROJECTED   // <1>
+        hidden = Where.EVERYWHERE           // <2>
+    }
+    @Getter @Setter
+    private Invoice invoice;
+
+    public LocalDate getDueDate() {         // <3>
+        return invoice.getDueDate();
+    }
+
+    ...
+}
+----
+<1> indicates that this property holds a reference to the underlying entity
+<2> the underlying entity is typically (though not necessarily) hidden
+<3> typical implementation of the properties of the underlying entity that are being projected in the view model.
+

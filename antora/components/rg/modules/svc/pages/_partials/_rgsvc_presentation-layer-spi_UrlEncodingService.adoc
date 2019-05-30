@@ -1,0 +1,49 @@
+[[_rgsvc_presentation-layer-spi_UrlEncodingService]]
+= `UrlEncodingService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `UrlEncodingService` defines a consistent way to convert strings to/from a form safe for use within a URL.
+The service is used by the framework to map xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model] mementos (derived from the state of the view model itself) into a form that can be used as a view model.
+When the framework needs to recreate the view model (for example to invoke an action on it), this URL is converted back into a view model memento, from which the view model can then be hydrated.
+
+Defining this functionality as an SPI has two use cases:
+
+* first, (though some browsers support longer strings), there is a limit of 2083 characters for URLs.
+For view model mementos that correspond to large strings (as might occur when serializing a JAXB xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated view model), the service provides a hook.
++
+For example, each memento string could be mapped to a GUID held in some cluster-aware cache.
+
+* the service provides the ability, to encrypt the string in order to avoid leakage of potentially sensitive state within the URL.
+
+The framework provides a default implementation of this service, `UrlEncodingServiceWithCompression`, discussed further in the section below.
+
+
+== SPI
+
+The SPI defined by the service is:
+
+[source,java]
+----
+public interface UrlEncodingService {
+    @Programmatic
+    public String encode(final String str);     // <1>
+    @Programmatic
+    public String decode(String str);           // <2>
+}
+----
+<1> convert the string (eg view model memento) into a string safe for use within an URL
+<2> unconvert the string from its URL form into its original form URL
+
+
+
+== Implementation
+
+The framework provides a default implementation -- `UrlEncodingServiceWithCompression` (also in the applib) --that first (gzip) compresses the state and then uses `base-64` encoding of the resulting bytes.
+As already noted, be aware that the maximum length of a URL should not exceed 2083 characters.
+For large view models, there's the possibility that this limit could be exceeded; in such cases register an alternative implementation of this service.
+
+To use an alternative implementation, implement the `UrlEncodingService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+

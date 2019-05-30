@@ -1,0 +1,83 @@
+[[_rgfis_persistence-layer]]
+= Persistence Layer internal SPI
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+These domain services are internal to the framework, controlling various aspects of the persistence layer.
+
+
+The table below summarizes the persistence layer internal SPIs defined by Apache Isis.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
+
+
+
+.Internal Services
+[cols="3,3,2,2a", options="header"]
+|===
+
+|SPI
+|Maven Module +
+Impl'n (g: a:)
+|Implementation
+|Notes
+
+
+
+|xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`o.a.i.c.r.s.auditing.` +
+`AuditingServiceInternal`]
+|Co-ordinates between
+xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] and
+xref:../rgfis/rgfis.adoc#_rgfis_spi_AuditerService[`AuditerService`].
+|concrete class.
+|
+
+
+|xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`o.a.i.c.r.s.changes.` +
+`ChangedObjectsServiceInternal`]
+|Request-scoped service holding objects enlisted into current transaction.
+|concrete class.
+|
+
+
+|xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_PersistenceSessionServiceInternal[`o.a.i.c.m.s.` +
+`persistsession.` +
+`PersistenceSessionServiceInternal`]
+|Acts as a facade to the underlying JDO persistence session / database connection.  As such it provides methods for
+querying and for persisting objects.
+|`PersistenceSessionService-` +
+`InternalDefault` +
+`isis-core-runtime`
+|
+
+
+|xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`o.a.i.c.m.s.publishing.` +
+`PublishingServiceInternal`]
+|Co-ordinates between
+xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] and
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`] and the SPI services, and the
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+|`PublishingService-` +
+`InternalDefault` +
+`isis-core-runtime`
+|
+
+
+
+|===
+
+Key:
+
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
+* `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
+* `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
+
+
+
+
+include::_rgfis_persistence-layer_AuditingServiceInternal.adoc[leveloffset=+1]
+include::_rgfis_persistence-layer_ChangedObjectsServiceInternal.adoc[leveloffset=+1]
+include::_rgfis_persistence-layer_PersistenceSessionServiceInternal.adoc[leveloffset=+1]
+include::_rgfis_persistence-layer_PublishingServiceInternal.adoc[leveloffset=+1]

@@ -1,0 +1,78 @@
+[[_ugvw_features_hints-and-copy-url]]
+= Hints and copy URL
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+While the user can often copy the URL of a domain object directly from the browser's address bar, the Wicket viewer also allows the URL of domain objects to be easily copied from a dialog.
+
+More interestingly, this URL can also contain hints capturing any sorting or page numbering, or hiding/viewing of collections.  End-users can therefore share these URLs as a form of deep linking into a particular view on a domain object.
+
+The copy URL and hinting is automatic.
+
+
+
+
+== Screenshots
+
+The following screenshots are taken from the [Estatio](https://github.com/estatio/estatio) application.
+
+=== Copy URL
+
+This screenshot shows the copy URL button (top right):
+
+image::{_imagesdir}copy-link/010-copy-link-button.png[width="800px",link="{_imagesdir}copy-link/010-copy-link-button.png"]
+
+[NOTE]
+====
+Note that these screenshots show an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+====
+
+Clicking on this button brings up a dialog with the URL preselected:
+
+image::{_imagesdir}copy-link/020-copy-link-dialog.png[width="800px",link="{_imagesdir}copy-link/020-copy-link-dialog.png"]
+
+
+The URL in this case is something like:
+
+    http://localhost:8080/wicket/entity/org.estatio.dom.lease.Lease:0
+
+The user can copy the link (eg `ctrl+C`) into the clipboard, then hit `OK` or `Esc` to dismiss the dialog.
+
+
+=== Hints
+
+Using the viewer the user can hide/show collection tables, can sort the tables by header columns:
+
+image::{_imagesdir}copy-link/030-hints.png[width="800px",link="{_imagesdir}copy-link/030-hints.png"]
+
+
+Also, if the collection spans multiple pages, then the individual page can be selected.
+
+Once the view has been customised, the URL shown in the copy URL dialog is in an extended form:
+
+image::{_imagesdir}copy-link/040-copy-link-with-hints.png[width="800px",link="{_imagesdir}copy-link/040-copy-link-with-hints.png"]
+
+The URL in this case is something like:
+
+    http://localhost:8080/wicket/entity/org.estatio.dom.lease.Lease:0?hint-1:collectionContents-view=3&hint-1:collectionContents:collectionContents-3:table-DESCENDING=value&hint-1:collectionContents:collectionContents-3:table-pageNumber=0&hint-2:collectionContents-view=0&hint-2:collectionContents:collectionContents-2:table-pageNumber=0&hint-3:collectionContents-view=2&hint-3:collectionContents:collectionContents-2:table-pageNumber=0&hint-4:collectionContents-view=3&hint-4:collectionContents:collectionContents-3:table-ASCENDING=exerciseDate&hint-4:collectionContents:collectionContents-3:table-pageNumber=0&hint-5:collectionContents-view=0&hint-5:collectionContents:collectionContents-3:table-pageNumber=0
+
+
+
+=== Copy URL from title
+
+When the user invokes an action on the object, the URL (necessarily) changes to indicate that the action was invoked.  This URL is specific to the user's session and cannot be shared with others.
+
+A quick way for the user to grab a shareable URL is simply by clicking on the object's title:
+
+image::{_imagesdir}copy-link/050-title-url.png[width="800px",link="{_imagesdir}copy-link/050-title-url.png"]
+
+
+
+
+== User Experience
+
+The copy URL dialog is typically obtained by clicking on the icon.
+
+Alternatively, `alt+]` will also open the dialog.  It can be closed with either `OK` or the `Esc` key.

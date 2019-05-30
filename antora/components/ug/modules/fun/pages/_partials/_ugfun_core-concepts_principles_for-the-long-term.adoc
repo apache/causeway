@@ -1,0 +1,65 @@
+[[_ugfun_core-concepts_principles_for-the-long-term]]
+= For the long-term
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+Enterprise applications tend to stick around a long time; a business' core domains don't tend to change all that often.
+What this means in turn is that the application needs to be maintainable, so that it is as easy to modify and extend when it's 10 years old as when it was first written.
+
+That's a tall order for any application to meet, and realistically it _can_ only be met if the application is modular.
+Any application that lacks a coherent internal structure will ultimately degrade into an unmaintable "big ball of mud", and the development team's velocity/capacity to make changes will reduce accordingly.
+
+Apache Isis' architecture allows the internal structure to be maintained in two distinct ways.
+
+* first, the naked objects pattern acts as a "firewall", ensuring that any business logic in the domain layer doesn't leak out into the presentation layer (it can't, because the developer doesn't write any controllers/views).
+
+* second, the framework's provides various features (discussed in more detail below) to allow the different modules _within_ the domain layer to interact with each in a decoupled fashion.
+
+The diagram below illustrates this:
+
+.decoupled applications
+image::{_imagesdir}core-concepts/philosophy/decoupled-applications.png[width="800px",link="{_imagesdir}core-concepts/philosophy/decoupled-applications.png"]
+
+Here, the presentation layer (xref:../ugvw/ugvw.adoc#[Wicket UI] or xref:../ugvro/ugvro.adoc#[REST API]) is handled by the framework, while the developer focusses on just the domain layer.
+The framework encourages splitting this functionality into modules; each such module has its counterpart (typically tables within a given RDBMS database schema) within the persistence layer.
+
+This architecture means that it's impossible for business logic to leach out into the adjacent presentation layer because the developer doesn't (can't) write any code for presentation layer.
+We in effect have a "firewall" between the two layers.
+
+To support the business domain being split into separate modules, the framework provides various features, the most important of which are:
+
+* dependency injection of services +
++
+Both xref:../rgsvc/rgsvc.adoc#[framework-defined domain services] and application-defined services (eg repositories and factories) are injected everywhere, using the regular xref:../rgant/rgant.adoc#_rgant-Inject[`@javax.inject.Inject`] annotation.
+
+* mixins allow functionality defined in one module to appear (in the UI) to be provided by some other module. +
++
+For example, a _Document_ module might allow `Document` objects to be attached to any arbitrary domain object (such as `Order` or `Customer`) in other modules.
+A mixin would allow the UI for a `Customer` to also display these attached ``Document``s, even though the _Customer_ module would have no knowledge of/dependency on the _Workflow_ module.
+
+* internal event bus allows modules to influence other modules. +
++
+A good example is supporting what (in an RDBMS we would call) referential integrity.
+Suppose the _Customer_ module has a `Customer` object and a `EmailAddress` object, with a customer having a collection of email addresses.
+A _Communications_ module might then use those email addresses to create ``EmailCommunication``s. +
+ +
+If the _Customer_ module wants to delete an `EmailAddress` then the _Communications_ module will probably want to veto this because they are "in use" by those ``EmailCommunication``s.
+Or, it might conceivably perform a cascade delete of all associated communications.
+ Either way, the _Communications_ module receives an internal event representing the intention to delete the `EmailAddress`.
+ It can then act accordingly, either vetoing the interaction or performing the cascade delete.
+ The _Customer_ module for its part does not know anything about this other module.
+
+For those cases where a module needs to interact with other modules but does not know about their implementations, the module can either define its own link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] domain services or it can define custom domain events and fire them.
+This technique is also used extensively by the framework itself.
+ For example, the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] SPI enables custom auditing, and the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] SPI enables custom publishing
+
+When building a modular application, it's important to consider the logical layering of the modules: we don't need every module to be completely decoupled from every other.
+The most important requirement is that there are no cyclic dependencies, because otherwise we run the risk of the application degrading into a link:https://en.wikipedia.org/wiki/Big_ball_of_mud["big ball of mud"].
+OO design techniques such as the link:https://en.wikipedia.org/wiki/Dependency_inversion_principle[dependency inversion principle] can be used to any such
+
+[TIP]
+====
+For further discussion on modular monolith's, check out Dan Haywood's link:https://www.infoq.com/articles/monolith-defense-part-1[pair] of link:https://www.infoq.com/articles/monolith-defense-part-2[articles] on InfoQ.
+====

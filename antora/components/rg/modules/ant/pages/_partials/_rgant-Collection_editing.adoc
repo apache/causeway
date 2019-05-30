@@ -1,0 +1,57 @@
+[[_rgant-Collection_editing]]
+= `editing()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `editing()` annotation indicates whether a collection can be added to or removed from within the UI.
+
+The related `editingDisabledReason()` attribute specifies the a hard-coded reason why the collection cannot be modified directly.
+
+[WARNING]
+====
+The xref:../ugvw/ugvw.adoc#[Wicket viewer] does *not* currently support the modification of collections; they are rendered read-only.
+
+The workaround is to create add/remove actions and use xref:../rgant/rgant.adoc#_rgant-MemberOrder[UI hints] to render them close to the collection.
+====
+
+Whether a collection is enabled or disabled depends upon these factors:
+
+* whether the domain object has been configured as immutable through the xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`] attribute
+
+* else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:../rgcfg/rgcfg.adoc#\_rgcfg_configuring-core[configuration property] `isis.objects.editing`.
+If set to `false`, then the object's collections (and properties) are *not* editable
+
+* else, then the value of the `@Collection(editing=...)` attribute itself.
+
+* else, the result of invoking any supporting xref:../rgcms/rgcms.adoc#\_rgcms_methods_prefixes_disable[`disable...()`] supporting methods
+
+
+Thus, to make a collection read-only even if the object would otherwise be editable, use:
+
+
+[source,java]
+----
+public class ToDoItem {
+    @Collection(
+        editing=Editing.DISABLED,
+        editingDisabledReason="Use the add and remove actions to modify"
+    )
+    public SortedSet<ToDoItem> getDependencies() { ... }
+}
+----
+
+[NOTE]
+====
+To reiterate, it is _not_ possible to enable editing for a collection if editing has been disabled at the object-level.
+====
+
+
+== See also
+
+This attribute can also be specified for:
+
+* xref:../rgant/rgant.adoc#_rgant-Property_editing[properties]
+* xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[domain object]
+

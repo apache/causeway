@@ -1,0 +1,78 @@
+[[_rgant-DomainObject_nature]]
+= `nature()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `nature()` attribute is used to characterize the domain object as either an entity (part of the domain layer) or as a view model (part of the application layer).
+If the domain object should be thought of as an entity, it also captures how the persistence of that entity is managed.
+
+For example:
+
+[source,java]
+----
+@DomainObject(nature=Nature.VIEW_MODEL)
+public class PieChartAnalysis {
+    ...
+}
+----
+
+Specifically, the nature must be one of:
+
+* `NOT_SPECIFIED,` +
++
+(the default); specifies no paricular semantics for the domain class.
+
+* `JDO_ENTITY` +
++
+indicates that the domain object is an entity whose persistence is managed internally by Apache Isis, using the JDO/DataNucleus objectstore.
+
+* `EXTERNAL_ENTITY` +
++
+indicates that the domain objecct is a wrapper/proxy/stub (choose your term) to an entity that is managed by some related external system.
+For example, the domain object may hold just the URI to a RESTful resource of some third party REST service, or the id of some system accessible over SOAP.
++
+The identity of an external entity is determined solely by the state of entity's properties.
+The framework will automatically recreate the domain object each time it is interacted with.
+
+* `INMEMORY_ENTITY` +
++
+indicates that the domain object is a wrapper/proxy/stub to a "synthetic" entity, for example one that is constructed from some sort of internal memory data structure.
++
+The identity of an inmemory entity is determined solely by the state of entity's properties.
+The framework will automatically recreate the domain object each time it is interacted with.
+
+* `MIXIN` +
++
+indicates that the domain object is part of the domain layer, and is contributing behaviour to objects of some other type as a mixin (also known as a trait).
++
+Equivalent to annotating with xref:../rgant/rgant.adoc#_rgant-Mixin[`@Mixin`].  For further discussion on using mixins, see xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] in the user guide.
+
+
+* `VIEW_MODEL` +
++
+indicates that the domain object is conceptually part of the application layer, and exists to surfaces behaviour and/or state that is aggregate of one or more domain entities.
+
+Those natures that indicate the domain object is an entity (of some sort or another) mean then that the domain object is considered to be part of the domain model layer.
+As such the domain object's class cannot be annotated with xref:../rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`] or implement the xref:../rgcms/rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface.
+
+
+[NOTE]
+====
+Under the covers Apache Isis' support for `VIEW_MODEL`, `EXTERNAL_ENTITY` and `INMEMORY_ENTITY` domain objects is identical; the state of the object is encoded into its internal OID (represented ultimately as its URL), and is recreated directly from that URL.
+
+Because this particular implementation was originally added to Apache Isis in support of view models, the term was also used for the logically different external entities and inmemory entities.
+
+The benefit of `nature()` is that it allows the developer to properly characterize the layer (domain vs application) that an entity lives, thus avoiding confusion as "view model" (the implementation technique) and "view model" (the application layer concept).
+====
+
+[NOTE]
+====
+On the other hand, view models defined in this way do have some limitations; see xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] for further discussion.
+
+These limitations do _not_ apply to xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB] view models.
+If you are using view models heavily, you may wish to restrict yourself to just the JAXB flavour.
+====
+
+

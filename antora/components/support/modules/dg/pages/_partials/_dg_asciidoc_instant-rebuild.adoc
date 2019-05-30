@@ -1,0 +1,55 @@
+[[_dg_asciidoc_instant-rebuild]]
+= Instant Rebuild (using Ruby)
+
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+
+
+
+The ruby script, `monitor.rb` emulates the `mvn compile` command, regenerating any changed Asciidoctor files to the relevant `target/site` directory.  Moreover if any included files are changed then it rebuilds the parent (per the above naming convention).
+
+== One-time setup
+
+To setup:
+
+* download and install ruby 2.0.0, from link:http://rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]
+* download devkit for the Ruby 2.0 installation, also from link:http://rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]. Then follow the link:https://github.com/oneclick/rubyinstaller/wiki/Development-Kit[installation instructions] on their wiki
+
+
+[NOTE]
+====
+We use Ruby 2.0 rather than 2.1 because the wdm gem (required to monitor the filesystem if running on Windows) is not currently compatible with Ruby 2.1.
+====
+
+To download the required Ruby dependencies, use:
+
+[source,bash]
+----
+gem install bundler
+bundle install
+----
+
+== Instant Rebuild
+
+To run, we typically just use:
+
+[source,bash]
+----
+sh preview-html.sh
+----
+
+This script just runs `mvn compile` for HTML files only, then calls `python` to start the web browser and run a simple web server (on port 8000).
+
+If you want to double-check the PDFs also, then use:
+
+[source,bash]
+----
+sh preview-pdf.sh
+----
+
+
+
+
+

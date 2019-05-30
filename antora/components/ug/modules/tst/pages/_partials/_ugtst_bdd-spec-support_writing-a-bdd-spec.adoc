@@ -1,0 +1,158 @@
+[[_ugtst_bdd-spec-support_writing-a-bdd-spec]]
+= Writing a BDD spec
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+
+BDD specifications contain:
+
+* a `XxxSpec.feature` file, describing the feature and the scenarios (given/when/then)s that constitute its acceptance criteria
+
+* a `RunSpecs.java` class file to run the specification (all boilerplate).
+This will run all `.feature` files in the same package or subpackages.
+
+* one or several `XxxGlue` constituting the step definitions to be matched against. +
++
+The "glue" (step definitions) are intended to be reused across features.
+We therefore recommend that they reside in a separate package, and are organized by the entity type upon which they act. +
++
+For example, given a feature that involves `Customer` and `Order`, have the step definitions pertaining to `Customer` reside in `CustomerGlue`, and the step definitions pertaining to `Order` reside in `OrderGlue`. +
++
+The `glue` attribute of the Cucumber-JVM JUnit runner allows you to indicate which package(s) should be recursively searched to find any glue.
+
++
+There also needs to be one glue class that is used to bootstrap the runtime.
+
+
+Here's an example of a feature from the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]:
+
+[source,java]
+----
+@DomainAppDemo
+Feature: List and Create New Simple Objects
+
+  Scenario: Existing simple objects can be listed and new ones created
+    Given there are initially 10 simple objects
+    When  I create a new simple object
+    Then  there are 11 simple objects
+----
+
+The "@DomainAppDemo" is a custom tag we've specified to indicate the prerequisite fixtures to be loaded; more on this in a moment.
+
+[IMPORTANT]
+====
+BDD specs are assumed to run only as integration tests.
+====
+
+The `RunBddSpecs` class to run this feature (and any other features in this package or subpackages) is just boilerplate
+
+[source,java]
+----
+@RunWith(Cucumber.class)
+@CucumberOptions(
+        format = {
+                "html:target/cucumber-html-report"
+                ,"json:target/cucumber.json"
+        },
+        glue={
+                "classpath:domainapp.application.bdd.specglue",
+                "classpath:domainapp.modules.simple.specglue"
+        },
+        strict = true,
+        tags = { "~@backlog", "~@ignore" }
+)
+public class RunBddSpecs {
+    // intentionally empty
+}
+----
+
+The JSON formatter allows integration with enhanced reports.
+(Commented out) configuration for this is provided in the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+
+The bootstrapping of Apache Isis itself lives in a `BootstrappingGlue` step definition:
+
+[source,java]
+----
+public class BootstrappingGlue
+                extends HeadlessWithBootstrappingAbstract { // <1>
+
+    public BootstrappingGlue() {
+        super(new DomainAppApplicationModule());            // <2>
+    }
+
+    @Before(order=100)                                      // <3>
+    public void beforeScenario() {
+        super.bootstrapAndSetupIfRequired();
+    }
+    @After
+    public void afterScenario(cucumber.api.Scenario sc) {
+        super.tearDownAllModules();
+    }
+}
+----
+<1> superclass contains much of the bootstrapping logic (and is also used by the integration testing framework)
+<2> the `Module` to use to bootstrap the application in headless mode.
+<3> remainder of the class is just boilerplate.
+
+[NOTE]
+====
+For BDD specs, the `CukeGlueBootstrappingAbstract` was previously provided (as a BDD counterpart to `IntegrationTestAbstract3`) to perform the relevant bootstrapping.
+_However_, it turns out that Cucumber does not allow subclassing of BDD specs.
+Therefore the bootstrapping boilerplate (that ideally would have been factored out into an abstract superclass) must be included within the BDD spec.
+====
+
+The fixture to run also lives in its own step definition, `CatalogOfFixturesGlue`:
+
+[source,java]
+----
+public class CatalogOfFixturesGlue extends CukeGlueAbstract2 {
+    @Before(value={"@DomainAppDemo"}, order=20000)
+    public void runDomainAppDemo() {
+        fixtureScripts.runFixtureScript(new DomainAppDemo(), null); // <1>
+    }
+}
+----
+<1> The `fixtureScripts` service is inherited from the superclass.
+
+This will only activate for feature files tagged with "@DomainAppDemo".
+
+Finally, the step definitions pertaining to `SimpleObject` domain entity then reside in the `SimpleObjectGlue` class.
+This is where the heavy lifting gets done:
+
+[source,java]
+----
+public class SimpleObjectMenuGlue extends CukeGlueAbstract2 {
+
+    @Given("^there are.* (\\d+) simple objects$")                           // <1>
+    public void there_are_N_simple_objects(int n) throws Throwable {
+        final List<SimpleObject> list = wrap(simpleObjectMenu).listAll();   // <2>
+        assertThat(list.size(), is(n));
+    }
+
+    @When("^.*create a .*simple object$")
+    public void create_a_simple_object() throws Throwable {
+        wrap(simpleObjectMenu).create(UUID.randomUUID().toString());
+    }
+
+    @Inject
+    SimpleObjectMenu simpleObjectMenu;                                      // <3>
+}
+----
+<1> regex to match to feature file specification
+<2> the inherited `wrap(...)` method delegates to `WrapperFactory#wrap(...)`
+<3> injected in the usual way
+
+[TIP]
+====
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`] domain service is one way in which glue classes can pass state between each other.
+Or, for more type safety, you could develop your own custom domain services for each scenario, and inject these in as regular services.
+See link:http://www.thinkcode.se/blog/2017/04/01/sharing-state-between-steps-in-cucumberjvm-using-picocontainer[this blog] post for more details.
+====
+
+[TIP]
+====
+If using Java 8, note that Cucumber JVM supports a link:https://cucumber.io/docs/reference/jvm#java-8-lambdas[simplified syntax using lambdas].
+====
+

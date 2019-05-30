@@ -1,0 +1,152 @@
+[[_rgant-DomainObject]]
+= `@DomainObject`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `@DomainObject` annotation applies to domain objects, collecting together all domain semantics within a single annotation.
+
+The table below summarizes the annotation's attributes.
+
+.`@DomainObject` attributes
+[cols="2,2,4a", options="header"]
+|===
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_auditing[`auditing()`]
+|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
+(`AS_CONFIGURED`)
+|indicates whether each of the changed properties of an object should be submitted to the registered
+xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s)
+
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`autoCompleteRepository()`]
+|Domain service class
+|nominate a method on a domain service to be used for looking up instances of the domain object
+
+
+|`autoCompleteAction()`
+|Method name +
+(`autoComplete()`)
+|override the method name to use on the auto-complete repository
+
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_bounding[`bounding()`]
+|`true`, `false` +
+(`false`)
+|Whether the number of instances of this domain class is relatively small (a "bounded" set), such that instances could be selected from a drop-down list box or similar.
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_createdLifecycleEvent[`created-` +
+`LifecycleEvent()`]
+|subtype of `ObjectCreatedEvent` +
+(`ObjectCreatedEvent.Default`)
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance is created
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[`editing()`]
+|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
+(`AS_CONFIGURED`)
+|whether the object's properties and collections can be edited or not (ie whether the instance should be considered to be immutable)
+
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_mixinMethod[`mixinMethod()`]
+|Method name within the mixin
+|How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
+Typical examples are "exec", "execute", "invoke", "apply" and so on.
+The default "reserved" method name is `$$`.
+
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`nature()`]
+|`NOT_SPECIFIED`, `JDO_ENTITY`, `EXTERNAL_ENTITY`, `INMEMORY_ENTITY`, `MIXIN`, `VIEW_MODEL` (`NOT_SPECIFIED`)
+|whether the domain object logically is an entity (part of the domain layer) or is a view model (part of the application layer); or is a mixin.
+If an entity, indicates how its persistence is managed.
+
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_objectType[`objectType()`]
+|(none, which implies fully qualified class name)
+|specify an alias for the domain class used to uniquely identify the object both within the Apache Isis runtime and externally
+
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_persistedLifecycleEvent[`persisted-` +
+`LifecycleEvent()`]
+|subtype of `ObjectPersistedEvent` +
+(`ObjectPersistedEvent.Default`)
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance has just been persisted
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_persistingLifecycleEvent[`persisting-` +
+`LifecycleEvent()`]
+|subtype of `ObjectPersistingEvent` +
+(`ObjectPersistingEvent.Default`)
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance is about to be persisted
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`publishing()`]
+|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
+(`AS_CONFIGURED`)
+|whether changes to the object should be published to the registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_removingLifecycleEvent[`removing-` +
+`LifecycleEvent()`]
+|subtype of `ObjectRemovingEvent` +
+(`ObjectRemovingEvent.Default`)
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance is about to be deleted
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_updatedLifecycleEvent[`updated-` +
+`LifecycleEvent()`]
+|subtype of `ObjectUpdatedEvent` +
+(`ObjectUpdatedEvent.Default`)
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance has just been updated
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject_updatingLifecycleEvent[`updating-` +
+`LifecycleEvent()`]
+|subtype of `ObjectUpdatingEvent` +
+(`ObjectUpdatingEvent.Default`)
+|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance is about to be updated
+
+|===
+
+
+
+For example:
+
+[source,java]
+----
+@DomainObject(
+    auditing=Auditing.ENABLED,
+    autoCompleteRepository=CustomerRepository.class
+    editing=Editing.ENABLED,                            // <1>
+    updatedLifecycleEvent=Customer.UpdatedEvent.class
+
+)
+public class Customer {
+    ...
+}
+----
+<1> default value, so could be omitted
+
+
+
+include::_rgant-DomainObject_auditing.adoc[leveloffset=+1]
+include::_rgant-DomainObject_autoCompleteRepository.adoc[leveloffset=+1]
+include::_rgant-DomainObject_bounding.adoc[leveloffset=+1]
+include::_rgant-DomainObject_createdLifecycleEvent.adoc[leveloffset=+1]
+include::_rgant-DomainObject_editing.adoc[leveloffset=+1]
+include::_rgant-DomainObject_loadedLifecycleEvent.adoc[leveloffset=+1]
+include::_rgant-DomainObject_mixinMethod.adoc[leveloffset=+1]
+include::_rgant-DomainObject_nature.adoc[leveloffset=+1]
+include::_rgant-DomainObject_persistedLifecycleEvent.adoc[leveloffset=+1]
+include::_rgant-DomainObject_persistingLifecycleEvent.adoc[leveloffset=+1]
+include::_rgant-DomainObject_objectType.adoc[leveloffset=+1]
+include::_rgant-DomainObject_publishing.adoc[leveloffset=+1]
+include::_rgant-DomainObject_removingLifecycleEvent.adoc[leveloffset=+1]
+include::_rgant-DomainObject_updatingLifecycleEvent.adoc[leveloffset=+1]
+include::_rgant-DomainObject_updatedLifecycleEvent.adoc[leveloffset=+1]
+
+
+
+
+

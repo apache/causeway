@@ -1,0 +1,25 @@
+[[_ugfun_building-blocks_events]]
+= Events
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+When the framework renders a domain object, and as the end-user interacts with the domain object, the framework it emits multiple events using the intra-process xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[event bus].
+These events enable other domain services (possibly in other modules) to influence how the domain object is rendered, or to perform side-effects or even veto an action invocation.
+
+[TIP]
+====
+It is also possible to simulate the rendering of a domain object by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`].
+This allows business rules to be enforced for programmatic interactions between objects.
+====
+
+To receive the events, the domain service should subscribe to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`], and implement an appropriately annotated method to receive the events.
+
+The framework has several categories of events: domain events, UI events and lifecycle events.
+These are explored in the sections below.
+
+
+include::_ugfun_building-blocks_events_domain-events.adoc[leveloffset=+1]
+include::_ugfun_building-blocks_events_ui-events.adoc[leveloffset=+1]
+include::_ugfun_building-blocks_events_lifecycle-events.adoc[leveloffset=+1]
+

@@ -1,0 +1,29 @@
+[[_release-notes_1.4.1]]
+= 1.4.1
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+
+
+== Wicket Viewer
+
+
+=== Improvement
+* link:https://issues.apache.org/jira/browse/ISIS-732[ISIS-732] - The refresh of a standalone collection after invoking a bulk action should only be done if the original action was safe (query only)
+* link:https://issues.apache.org/jira/browse/ISIS-734[ISIS-734] - In Wicket viewer, if action returns a blob/clob, then currently performing in a new window/tab.
+
+=== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-731[ISIS-731] - execute the action fails
+
+
+== JDO Objectstore
+
+=== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-733[ISIS-733] - If toggle an object twice in standalone list (for bulk action), ends up invoking action (when shouldn&#39;t) and also throwing concurrency exception
+
+
+
+

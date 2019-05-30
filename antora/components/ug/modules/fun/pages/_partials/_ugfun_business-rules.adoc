@@ -1,0 +1,206 @@
+[[_ugfun_business-rules]]
+= Business Rules
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+When a domain object is rendered in the UI or the end-user interacts with the domain object through the UI, the framework applies a series of precondition business rules to each object member (property, collection or action).
+
+When the object is being rendered, the framework checks:
+
+* is the object member visible? +
++
+Members that are not visible are simply omitted from the page.
+If all the members in a fieldset (property group) are hidden, then the fieldset is not shown.
+If all the members in a tab are hidden, then the tab is not shown.
+If all the members of the object are hidden, then a "404" style message ("no such object") is returned to the user.
+
+* if the object member is visible, is the object member enabled? +
++
+An enabled property can be edited (otherwise it is read-only), and an enabled action can be invoked (otherwise it's button is "greyed-out").
+Note that collections are always read-only.
+
+* for enabled object members, if the user then interacts with that member, are the supplied values valid (can the user "do it"). +
++
+For an editable property this means validating the proposed new value of the property.
+For an invokable action this means validating that arguments being used to invoke the action.
+
+
+One way to remember this is: *"see it, use it, do it"*
+
+
+The framework provides a multitude of ways to implement these business rules.
+One decoupled approach is using xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[domain events]; the checks above correspond to the phases of the domain event.
+A simpler approach is to just implement the business rules imperatively in the domain object, or in a mixin for the object.
+
+
+== Visibility ("see it")
+
+To hide an object action:
+
+[source,java]
+----
+public Customer placeOrder(Product p, int quantity) { ... }
+public boolean hidePlaceOrder() { ... }
+----
+
+If the `hideXxx` method returns `true` then the action is hidden.
+Note that the supporting method takes no parameters.
+
+
+A property or collection can be hidden similarly:
+
+[source,java]
+----
+public String getStatus() { ... }
+public void setStatus(String status) { ... }
+
+public boolean hideStatus() { ... }
+----
+
+
+For more information, see the xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`] section in the appropriate reference guide.
+
+
+== Usability ("use it")
+
+To disable an object action:
+
+[source,java]
+----
+public Customer placeOrder(Product p, int quantity) { ... }
+public String disablePlaceOrder() { ... }
+----
+
+Here a non-`null` value is used as the reason why the action is disabled.
+It is also possible to return a localized string by returning a `TranslatableString`.
+
+
+Properties are similar (note that collections are implicitly read-only in the xref:../ugvw/ugvw.adoc#[Wicket viewer]:
+
+
+[source,java]
+----
+public String getStatus() { ... }
+public void setStatus(String status) { ... }
+
+public String disableStatus() { ... }
+----
+
+For more information, see  xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`] section in the appropriate reference guide.
+
+
+It is also possible to make all properties of a domain object unmodifiable, using:
+
+[source,java]
+----
+@DomainObject(
+    editing=Editing.DISABLED
+)
+public class Customer { ... }
+----
+
+This can be made a global policy using a xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[configuration setting]:
+
+.isis.properties
+[source,ini]
+----
+isis.objects.editing=false
+----
+
+
+
+== Validity ("do it")
+
+Action arguments can be validated either singly or as a set.
+For example:
+
+[source,java]
+----
+public Customer placeOrder(Product p, int quantity) { ... }
+public String validate0PlaceOrder(Product p) { ... }               // <1>
+public String validate1PlaceOrder(int quantity) { ... }            // <2>
+public String validatePlaceOrder(Product p, int quantity) { ... }  // <3>
+----
+<1> validates the 0th argument of the action (0-based numbering), ie `Product`
+<2> validates the 1st argument of the action, ie `int quantity`
+<3> validates all the arguments of the action together.
+
+The framework validates each argument separately; only if all are valid does it check all the arguments together.
+
+As for usability check, a non-`null` value is used as the reason why the action arguments are invalid.
+It is also possible to return a localized string by returning a `TranslatableString`.
+
+Similarly, property edits can also be validated:
+
+[source,java]
+----
+public String getStatus() { ... }
+public void setStatus(String status) { ... }
+
+public String validateStatus(String status) { ... }
+----
+
+For more information, see the xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] section in the appropriate reference guide.
+The reference guide also explains how to define validation declaratively, using the xref:../rgant/rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`] or xref:../rgant/rgant.adoc#_rgant-Property_mustSatisfy[`@Property#mustSatisfy()`] attributes.
+
+
+
+== Actions
+
+Of course, the precondition business rules described above are only one type of business rule.
+
+More generally, business rules are implemented in the form of the implementation of actions.
+Rather than have the end-user have to edit individual properties of numerous objects, an action can encode these rules and allow only safe transformations of the application from one consistent state to the next.
+
+
+
+== Side effects
+
+Often when the state of an object is modified there is a business rule for some sort of side-effect.
+For example, suppose that a `Person` has a persisted derived property:
+
+[source,java]
+----
+public class Person {
+
+    @Getter @Setter                     // <1>
+    private LocalDate dateOfBirth;
+
+    @Getter @Setter
+    private int age;                    // <2>
+----
+<1> using Lombok to remove boilerplate.
+<2> persisted derived property based on `dateOfBirth`.
+
+One design would be to only allow the two properties to be modified through an action:
+
+[source,java]
+----
+public Person updateDateOfBirth(LocalDate dateOfBirth) {
+    setDateOfBirth(dateOfBirth);
+    setAge(Years.between(clockService.now(), dateOfBirth));
+    return this;
+}
+----
+
+Alternatively we could allow the property to be edited, and then compute the side-effect.
+
+[source,java]
+----
+public void setDateOfBirth(LocalDate dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
+    setAge(Years.between(clockService.now(), dateOfBirth));
+    return this;
+}
+----
+
+Datanucleus does _not_ call the setter when reloading the object from the database, so there is no issue in having the side-effect code (calling `setAge(...)`).
+
+[NOTE]
+====
+The framework also allows side-effect code to be placed in separate xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`], xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`] supporting methods; if present then these will be called by the framework rather than the setter.
+However, because of DataNucleus' smart handling of setters, these supporting methods are in essence redundant, and so should be considered deprecated.
+====
+
+

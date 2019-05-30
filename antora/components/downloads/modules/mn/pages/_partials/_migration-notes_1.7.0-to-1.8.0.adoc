@@ -1,0 +1,23 @@
+[[_migration-notes_1.7.0-to-1.8.0]]
+= From v1.7.0 to 1.8.0
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+
+Existing projects written against v1.7.0 should run against v1.8.0 without any changes.
+In particular (unlike 1.6.0 and 1.7.0) there should be no need to update `pom.xml` files of existing projects.
+If you *do* encounter any difficulties then let us know via the link:https://isis.apache.org/versions/2.0.0-M1/support.html#[users mailing list], so we can support you and document issues here.
+
+That said, many of the existing annotations have been deprecated in 1.8.0, replaced with a simplified and rationalized  set of annotations; see link:https://isis.apache.org/versions/2.0.0-M1/guides/rgant/rgant.html#[here].
+To help you migrate your application over to the new annotations, there is a new configuration property that can be set in `isis.properties`:
+
+[source,ini]
+----
+isis.reflector.validator.allowDeprecated=false
+----
+
+If this flag is present and set to false, then metamodel validation errors will be thrown on startup if any deprecated annotations are encountered.
+These can be viewed either in the console or by browsing to the app (an error page will be displayed).
+

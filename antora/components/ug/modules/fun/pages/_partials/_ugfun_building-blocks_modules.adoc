@@ -1,0 +1,26 @@
+[[_ugfun_building-blocks_modules]]
+= Modules
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+We tend to use Maven modules as a way to group related domain objects together; we can then reason about all the classes in that module as a single unit.
+By convention there will be a single top-level package corresponding to the module.
+
+For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s document module has a top-level package of `org.incode.module.document`.
+Within the module there may be various subpackages, but it's the module that defines the namespace.
+
+The bootstrapping of Apache Isis also relies on module classes.
+(Currently) the only role of these classes is to identify a fully qualified package name, for example `org.incode.modules.document`.
+The framework then performs classpath scanning across all such packages to locate any domain entities provided by that module (though some modules have no entities), all domain services provided by the module (every module is likely to define at least one), and also any fixture scripts provided by the module.
+
+In the same way that the Java module act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
+
+The module class does not _need_ to implement any specific interface; in this case the framework uses the module class simply to obtain a package to scan for entities and domain services.
+However, it's recommended to implement the xref:../rgcms/rgcms.adoc#_rgcms_classes_Module[`Module`] interface because this allows the module to specify its direct dependencies; from these all transitive dependencies are calculated.
+This should match the compile-time dependencies declared within Maven.
+
+The `Module` interface also allows a module to declare any configuration properties that should be contributed, as well as fixture scripts for reference data, and to tear down (for integration testing).
+
+
+

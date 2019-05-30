@@ -1,0 +1,710 @@
+[[_dg_ide_intellij]]
+= Developing using IntelliJ IDEA
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+
+[NOTE]
+====
+This material does not constitute an endorsement; JetBrains is not affiliated to Apache Software Foundation in any way.  JetBrains does however provide complimentary copies of the IntelliJ IDE to Apache committers.
+====
+
+This section describes how to install and setup JetBrains' IntelliJ IDEA, then how to import an application into IntelliJ and run it.
+
+
+[[__dg_ide_intellij_installing]]
+== Installing and Setting up
+
+This section covers installation and setup. These notes/screenshots were prepared using IntelliJ Community Edition 14.1.x, but are believed to be compatible with more recent versions/other editions of the IDE.
+
+
+[[__dg_ide_intellij_installing_download]]
+=== Download and Install
+
+https://www.jetbrains.com/idea/download/[Download] latest version of IntelliJ Community Edition, and install:
+
+Start the wizard, click through the welcome page:
+
+.IntelliJ Installation Wizard - Welcome page
+image::{_imagesdir}intellij-idea/010-installing/010-welcome-page.png[width="400px",link="{_imagesdir}intellij-idea/010-installing/010-welcome-page.png"]
+
+Choose the location to install the IDE:
+
+.IntelliJ Installation Wizard - Choose Location
+image::{_imagesdir}intellij-idea/010-installing/020-choose-location.png[width="400px",link="{_imagesdir}intellij-idea/010-installing/020-choose-location.png"]
+
+Adjust any installation options as you prefer:
+
+.IntelliJ Installation Wizard - Installation Options
+image::{_imagesdir}intellij-idea/010-installing/030-installation-options.png[width="400px",link="{_imagesdir}intellij-idea/010-installing/030-installation-options.png"]
+
+and the start menu:
+
+.IntelliJ Installation Wizard - Start Menu Folder
+image::{_imagesdir}intellij-idea/010-installing/040-start-menu-folder.png[width="400px",link="{_imagesdir}intellij-idea/010-installing/040-start-menu-folder.png"]
+
+and finish up the wizard:
+
+.IntelliJ Installation Wizard - Completing the Wizard
+image::{_imagesdir}intellij-idea/010-installing/050-completing.png[width="400px",link="{_imagesdir}intellij-idea/010-installing/050-completing.png"]
+
+Later on we'll specify the Apache Isis/ASF code style settings, so for now select `I do not want to import settings`:
+
+.IntelliJ Installation Wizard - Import Settings
+image::{_imagesdir}intellij-idea/010-installing/060-import-settings-or-not.png[width="400px",link="{_imagesdir}intellij-idea/010-installing/060-import-settings-or-not.png"]
+
+Finally, if you are a trendy hipster, set the UI theme to Darcula:
+
+.IntelliJ Installation Wizard Set UI Theme
+image::{_imagesdir}intellij-idea/010-installing/070-set-ui-theme.png[width="600px",link="{_imagesdir}intellij-idea/010-installing/070-set-ui-theme.png"]
+
+
+
+
+[[__dg_ide_intellij_installing_new-project]]
+=== New Project
+
+In IntelliJ a project can contain multiple modules; these need not be physically located together.  (If you are previously an Eclipse user, you can think of it as similar to an Eclipse workspace).
+
+Start off by creating a new project:
+
+.IntelliJ Create New Project
+image::{_imagesdir}intellij-idea/020-create-new-project/010-new-project-create.png[width="400px",link="{_imagesdir}intellij-idea/020-create-new-project/010-new-project-create.png"]
+
+
+We want to create a new *Java* project:
+
+.IntelliJ Create New Project - Create a Java project
+image::{_imagesdir}intellij-idea/020-create-new-project/020-java-project-setup-jdk.png[width="500px",link="{_imagesdir}intellij-idea/020-create-new-project/020-java-project-setup-jdk.png"]
+
+We therefore need to specify the JDK.  Apache Isis supports both Java 7 and Java 8.
+
+
+.IntelliJ Create New Java Project - Select the JDK
+image::{_imagesdir}intellij-idea/020-create-new-project/030-java-project-select-jdk.png[width="250px",link="{_imagesdir}intellij-idea/020-create-new-project/030-java-project-select-jdk.png"]
+
+
+Specify the directory containing the JDK:
+
+.IntelliJ Create New Project - Select the JDK location
+image::{_imagesdir}intellij-idea/020-create-new-project/050-name-and-location.png[width="400px",link="{_imagesdir}intellij-idea/020-create-new-project/050-name-and-location.png"]
+
+
+Finally allow IntelliJ to create the directory for the new project:
+
+.IntelliJ Create New Project
+image::{_imagesdir}intellij-idea/020-create-new-project/060-create-dir.png[width="250px",link="{_imagesdir}intellij-idea/020-create-new-project/060-create-dir.png"]
+
+
+
+[[__dg_ide_intellij_file-templates]]
+=== File templates
+
+
+Next we recommend you import a set of standard file templates.  These are used to create new classes or supporting files:
+
+.File templates
+image::{_imagesdir}intellij-idea/030-import-settings/040-file-templates.png[width="400px",link="{_imagesdir}intellij-idea/030-import-settings/040-file-templates.png"]
+
+The file templates are provided as a settings JAR file, namely *link:resources/intellij/isis-settings-file-templates.jar[isis-settings-file-templates.jar]*.  Download this file.
+
+Next, import using `File > Import Settings`, specifying the directory that you have downloaded the file to:
+
+.IntelliJ Import Settings - Specify JAR file
+image::{_imagesdir}intellij-idea/030-import-settings/010-settings-import-jar.png[width="400px",link="{_imagesdir}intellij-idea/030-import-settings/010-settings-import-jar.png"]
+
+Select all the categories (there should just be one), and hit OK.  then hit restart.
+
+
+[WARNING]
+====
+If importing into IntelliJ 2017.2.3 two categories are shown - "File templates" and "File templates (schemes)". Select all the categories.
+
+Apparently no categories are shown if importing into IntelliJ 2016.1.1 Community Edition (and perhaps other 2016
+versions).  The file does import ok into IntelliJ 15.0.x, so we think this is a bug in the 2016 version.
+
+The workaround is to extract the `.jar` file locally and copy the files into IntelliJ's `config` directory, somewhere
+in your home directory:
+
+* Windows `<User home>\.IdeaIC2016\config`
+* Linux `~/..IdeaIC2016/config`
+* Mac OS `~/Library/Preferences/IdeaIC2016`
+
+====
+
+
+
+[[__dg_ide_intellij_live-templates]]
+=== Live templates
+
+We also recommend you import a set  of live templates.  These are used to add new methods to existing classes:
+
+.Live templates
+image::{_imagesdir}intellij-idea/030-import-settings/050-live-templates.png[width="600px",link="{_imagesdir}intellij-idea/030-import-settings/050-live-templates.png"]
+
+The live templates have a prefix of either:
+
+* `is` : for Apache Isis domain objects
+* `ju` : for JUnit tests
+* `jm` : for JMock mocks or libraries
+* `ad` : for Asciidoc documentation; a full list can be found in the xref:../dg/dg.adoc#_dg_asciidoc-templates[appendix].
+
+The live templates are also provided as a settings JAR file, namely *link:resources/intellij/isis-settings-live-templates.jar[isis-settings-live-templates.jar]*.
+Download and import (as for the previous settings JAR files).
+
+
+
+
+[[__dg_ide_intellij_coding-standards]]
+=== Coding Standards
+
+Next, we suggest you import settings for standard ASF/Apache Isis coding conventions.  This file is also
+provided as a settings file, namely *link:resources/intellij/isis-settings-code-style.jar[isis-settings-code-style.jar]*.  Download and import (as for the above settings JAR files).
+
+
+
+[[__dg_ide_intellij_other-settings-compiler]]
+=== Other Settings (Compiler)
+
+There are also some other settings that influence the compiler.  We highly recommend you set these.
+
+On the *Compiler* Settings page, ensure that `build automatically` is enabled (and optionally `compile independent modules in parallel`):
+
+.IntelliJ Compiler Settings
+image::{_imagesdir}intellij-idea/040-other-settings-compiler/010-build-automatically.png[width="700px",link="{_imagesdir}intellij-idea/040-other-settings-compiler/010-build-automatically.png"]
+
+
+On the *Annotation Processors* page, enable and adjust for the 'default' setting:
+
+.IntelliJ Annotation Processor Settings
+image::{_imagesdir}intellij-idea/040-other-settings-compiler/020-annotation-processor.png[width="700px",link="{_imagesdir}intellij-idea/040-other-settings-compiler/020-annotation-processor.png"]
+
+This setting enables the generation of the `Q*` classes for DataNucleus type-safe queries, as well as being required
+for frameworks such as xref:../dg/dg.adoc#_dg_project-lombok[Project Lombok].
+
+[NOTE]
+====
+IntelliJ may also have inferred these settings for specific projects/modules when importing; review the list on the left to see if the default is overridden and fix/delete as required.
+====
+
+
+
+
+
+[[__dg_ide_intellij_other-settings-maven]]
+=== Other Settings (Maven)
+
+There are also some other settings for Maven that we recommend you adjust (though these are less critical):
+
+First, specify an up-to-date Maven installation, using `File > Settings` (or `IntelliJ > Preferences` if on MacOS):
+
+.IntelliJ Maven Settings - Installation
+image::{_imagesdir}intellij-idea/042-other-settings-maven/010-maven-installation.png[width="700px",link="{_imagesdir}intellij-idea/042-other-settings-maven/010-maven-installation.png"]
+
+Still on the Maven settings page, configure as follows:
+
+.IntelliJ Maven Settings - Configuration
+image::{_imagesdir}intellij-idea/042-other-settings-maven/020-maven-configuration.png[width="700px",link="{_imagesdir}intellij-idea/042-other-settings-maven/020-maven-configuration.png"]
+
+
+=== Other Settings (Misc)
+
+These settings are optional but also recommended.
+
+On the *auto import* page, check the `optimize imports on the fly` and `add unambiguous imports on the fly`
+
+.IntelliJ Maven Settings - Auto Import
+image::{_imagesdir}intellij-idea/044-other-settings-misc/010-auto-import.png[width="700px",link="{_imagesdir}intellij-idea/044-other-settings-misc/010-auto-import.png"]
+
+
+
+
+[[__dg_ide_intellij_importing-maven-modules]]
+== Importing Maven Modules
+
+Let's load in some actual code!  We do this by importing the Maven modules.
+
+First up, open up the Maven tool window (`View > Tool Windows > Maven Projects`).  You can then use the 'plus' button to add Maven modules.  In the screenshot you can see we've loaded in Apache Isis core; the modules are listed in the _Maven Projects_ window and corresponding (IntelliJ) modules are shown in the _Projects_ window:
+
+.IntelliJ Maven Module Management - Importing Maven modules
+image::{_imagesdir}intellij-idea/100-maven-module-mgmt/010-maven-modules-view.png[width="730px",link="{_imagesdir}intellij-idea/100-maven-module-mgmt/010-maven-modules-view.png"]
+
+We can then import another module (from some other directory).  For example, here we are importing the Isis Addons' todoapp example:
+
+
+.IntelliJ Maven Module Management - Importing another Module
+image::{_imagesdir}intellij-idea/100-maven-module-mgmt/020-adding-another-module.png[width="400px",link="{_imagesdir}intellij-idea/100-maven-module-mgmt/020-adding-another-module.png"]
+
+You should then see the new Maven module loaded in the _Projects_ window and also the _Maven Projects_ window:
+
+.IntelliJ Maven Module Management -
+image::{_imagesdir}intellij-idea/100-maven-module-mgmt/030-other-module-added.png[width="730px",link="{_imagesdir}intellij-idea/100-maven-module-mgmt/030-other-module-added.png"]
+
+If any dependencies are already loaded in the project, then IntelliJ will automatically update the CLASSPATH to resolve to locally held modules (rather from `.m2/repository` folder).  So, for example (assuming that the `<version>` is correct, of course), the Isis todoapp will have local dependencies on the Apache Isis core.
+
+You can press F4 (or use `File > Project Structure`) to see the resolved classpath for any of the modules loaded into the project.
+
+If you want to focus on one set of code (eg the Isis todoapp but not Apache Isis core) then you _could_ remove the module; but better is to ignore those modules.  This will remove them from the _Projects_ window but keep them available in the _Maven Projects_ window for when you next want to work on them:
+
+.IntelliJ Maven Module Management - Ignoring Modules
+image::{_imagesdir}intellij-idea/100-maven-module-mgmt/040-ignoring-modules.png[width="730px",link="{_imagesdir}intellij-idea/100-maven-module-mgmt/040-ignoring-modules.png"]
+
+Confirm that it's ok to ignore these modules:
+
+.IntelliJ Maven Module Management - Ignoring Modules (ctd)
+image::{_imagesdir}intellij-idea/100-maven-module-mgmt/050-ignoring-modules-2.png[width="300px",link="{_imagesdir}intellij-idea/100-maven-module-mgmt/050-ignoring-modules-2.png"]
+
+All being well you should see that the _Projects_ window now only contains the code you are working on.  Its classpath dependencies will be adjusted (eg to resolve to Apache Isis core from `.m2/repository`):
+
+.IntelliJ Maven Module Management - Updated Projects Window
+image::{_imagesdir}intellij-idea/100-maven-module-mgmt/060-ignored-modules.png[width="730px",link="{_imagesdir}intellij-idea/100-maven-module-mgmt/060-ignored-modules.png"]
+
+
+
+[[__dg_ide_intellij_running]]
+== Running
+
+Let's see how to run both the app and the tests.
+
+[[__dg_ide_intellij_running_the-app]]
+=== Running the App
+
+Once you've imported your Apache Isis application, we should run it.  We do this by creating a Run configuration, using `Run > Edit Configurations`.
+
+Set up the details as follows:
+
+.IntelliJ Running the App - Run Configuration
+image::{_imagesdir}intellij-idea/110-running-the-app/010-run-configuration.png[width="600px",link="{_imagesdir}intellij-idea/110-running-the-app/010-run-configuration.png"]
+
+We specify the `Main class` to be `org.apache.isis.WebServer`; this is a wrapper around Jetty.  It's possible to pass program arguments to this (eg to automatically install fixtures), but for now leave this blank.
+
+Also note that `Use classpath of module` is the webapp module for your app, and that the `working directory` is `$MODULE_DIR$`.
+
+Next, and most importantly, configure the DataNucleus enhancer to run for your `dom` goal.  This can be done by defining a Maven goal to run before the app:
+
+.IntelliJ Running the App - Datanucleus Enhancer Goal
+image::{_imagesdir}intellij-idea/110-running-the-app/020-datanucleus-enhancer-goal.png[width="400px",link="{_imagesdir}intellij-idea/110-running-the-app/020-datanucleus-enhancer-goal.png"]
+
+The `-o` flag in the goal means run off-line; this will run faster.
+
+[WARNING]
+====
+If you forget to set up the enhancer goal, or don't run it on the correct (dom) module, then you will get all sorts of errors when you startup.  These usually manifest themselves as class cast exception in DataNucleus.
+====
+
+You should now be able to run the app using `Run > Run Configuration`.  The same configuration can also be used to debug the app if you so need.
+
+[TIP]
+====
+Under windows you may get 'Standard error from the DataNucleus tool + org.datanucleus.enhancer.DataNucleusEnhancer : The command line is too long' although 'fork=false' is set in pom.xml. Can be worked around via setting '-Dfork=false' before or after 'datanucleus:enhance -o'.
+====
+
+[[__dg_ide_intellij_running_unit-tests]]
+=== Running the Unit Tests
+
+The easiest way to run the unit tests is just to right click on the `dom` module in the _Project Window_, and choose run unit tests.  Hopefully your tests will pass (!).
+
+.IntelliJ Running the App - Unit Tests Run Configuration
+image::{_imagesdir}intellij-idea/110-running-the-app/030-running-unit-tests.png[width="600px",link="{_imagesdir}intellij-idea/110-running-the-app/030-running-unit-tests.png"]
+
+As a side-effect, this will create a run configuration, very similar to the one we manually created for the main app:
+
+.IntelliJ Running the App - Unit Tests Run Configuration
+image::{_imagesdir}intellij-idea/110-running-the-app/040-running-unit-tests-run-configuration.png[width="600px",link="{_imagesdir}intellij-idea/110-running-the-app/040-running-unit-tests-run-configuration.png"]
+
+Thereafter, you should run units by selecting this configuration (if you use the right click approach you'll end up with lots of run configurations, all similar).
+
+
+[[__dg_ide_intellij_running_integ-tests]]
+=== Running the Integration Tests
+
+Integration tests can be run in the same way as unit tests, however the `dom` module must also have been enhanced.
+
+One approach is to initially run the tests use the right click on the `integtests` module; the tests will fail because the code won't have been enhanced, but we can then go and update the run configuration to run the datanucleus enhancer goal (same as when running the application):
+
+.IntelliJ Running the App - Integration Tests Run Configuration
+image::{_imagesdir}intellij-idea/110-running-the-app/050-running-integration-tests-run-configuration.png[width="600px",link="{_imagesdir}intellij-idea/110-running-the-app/050-running-integration-tests-run-configuration.png"]
+
+
+
+Also make sure that the `search for tests` radio button is set to `In single module`:
+
+image::{_imagesdir}intellij-idea/400-running-integtests/run-debug-configuration-single-module.png[width="600px",link="{_imagesdir}intellij-idea/400-running-integtests/run-debug-configuration-single-module.png"]
+
+If this radio button is set to one of the other options then you may obtain class loading issues; these result from IntelliJ attempting to run unit tests of the `dom` project that depend on test classes in that module, but using the classpath of the `integtests` module whereby the `dom` test-classes (`test-jar` artifact) are not exposed on the Maven classpath.
+
+
+
+
+[[__dg_ide_intellij_hints-and-tips]]
+== Hints and Tips
+
+[[__dg_ide_intellij_hints-and-tips_keyboard-cheat-sheets]]
+=== Keyboard Cheat Sheets
+
+You can download 1-page PDFs cheat sheets for IntelliJ's keyboard shortcuts:
+* for link:https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard.pdf[Windows]
+* for link:https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard_Mac.pdf[MacOS]
+
+Probably the most important shortcut on them is for `Find Action`:
+- `ctrl-shift-A` on Windows
+- `cmd-shift-A` on MacOS.
+
+This will let you search for any action just by typing its name.
+
+### Switch between Tools & Editors
+
+The Tool Windows are the views around the editor (to left, bottom and right).  It's possible to move these around to your preferred locations.
+
+* Use `alt-1` through `alt-9` (or `cmd-1` through `alt-9`) to select the tool windows
+** Press it twice and the tool window will hide itself; so can use to toggle
+* If in the _Project Window_ (say) and hit enter on a file, then it will be shown in the editor, but (conveniently) the focus remains in the tool window.  To switch to the editor, just press `Esc`.
+** If in the _Terminal Window_, you'll need to press `Shift-Esc`.
+* If on the editor and want to locate the file in (say) the _Project Window_, use `alt-F1`.
+* To change the size of any tool window, use `ctrl-shift-arrow`
+
+Using these shortcuts you can easily toggle between the tool windows and the editor, without using the mouse.  Peachy!
+
+[[__dg_ide_intellij_hints-and-tips_navigating-around]]
+=== Navigating Around
+
+For all of the following, you don't need to type every letter, typing "ab" will actually search for ".*a.*b.*".
+
+* to open classes or files or methods that you know the name of:
+** `ctrl-N` to open class
+** `ctrl-shift-N` to open a file
+** (bit fiddly this) `ctrl-shift-alt-N` to search for any symbol.
+* open up dialog of recent files: `ctrl-E`
+* search for any file: `shift-shift`
+
+Navigating around:
+* find callers of a method (the call hierarchy): `ctrl-alt-H`
+* find subclasses or overrides: `ctrl-alt-B`
+* find superclasses/interface/declaration: `ctrl-B`
+
+Viewing the structure (ie outline) of a class
+* `ctrl-F12` will pop-up a dialog showing all members
+** hit `ctrl-F12` again to also see inherited members
+
+
+[[__dg_ide_intellij_hints-and-tips_editing]]
+=== Editing
+
+* Extend selection using `ctrl-W`
+** and contract it down again using `ctrl-shift-W`
+* to duplicate a line, it's `ctrl-D`
+** if you have some text selected (or even some lines), it'll actually duplicate the entire selection
+* to delete a line, it's `ctrl-X`
+* to move a line up or down: `shift-alt-up` and `shift-alt-down`
+** if you have selected several lines, it'll move them all togethe
+* `ctrl-shift-J` can be handy for joining lines together
+** just hit enter to split them apart (even in string quotes; IntelliJ will "do the right thing")
+
+### Intentions and Code Completion
+
+Massively useful is the "Intentions" popup; IntelliJ tries to guess what you might want to do.  You can activate this using`alt-enter`, whenever you see a lightbulb/tooltip in the margin of the current line.
+
+Code completion usually happens whenever you type '.'.  You can also use `ctrl-space` to bring these up.
+
+In certain circumstances (eg in methods0) you can also type `ctrl-shift-space` to get a smart list of methods etc that you might want to call.  Can be useful.
+
+Last, when invoking a method, use `ctrl-P` to see the parameter types.
+
+
+[[__dg_ide_intellij_hints-and-tips_refactoring]]
+=== Refactoring
+
+Loads of good stuff on the `Refactor` menu; most used are:
+
+* Rename (`shift-F6`)
+* Extract
+** method: `ctrl-alt-M`
+** variable: `ctrl-alt-V`
+* Inline method/variable: `ctrl-alt-N`
+* Change signature
+
+If you can't remember all those shortcuts, just use `ctrl-shift-alt-T` (might want to rebind that to something else!) and get a context-sensitive list of refactorings available for the currently selected object
+
+
+[[__dg_ide_intellij_hints-and-tips_plugins]]
+=== Plugins
+
+You might want to set up some additional plugins.  You can do this using `File > Settings > Plugins` (or equivalently `File > Other Settings > Configure Plugins`).
+
+Recommended are:
+
+* link:https://plugins.jetbrains.com/plugin/7179?pr=idea[Maven Helper] plugin
++
+More on this below.
+
+* link:https://github.com/asciidoctor/asciidoctor-intellij-plugin[AsciiDoctor] plugin
++
+Useful if you are doing any authoring of documents.
+
+Some others you might like to explore are:
+
+.IntelliJ Plugins
+image::{_imagesdir}intellij-idea/050-some-plugins/020-some-plugins-confirmation.png[width="600px",link="{_imagesdir}intellij-idea/050-some-plugins/020-some-plugins-confirmation.png"]
+
+
+[[__dg_ide_intellij_hints-and-tips_plugins_maven-helper-plugin]]
+==== Maven Helper Plugin
+
+This plugin provides a couple of great features.  One is better visualization of dependency trees (similar to Eclipse).
+
+If you open a `pom.xml` file, you'll see an additional "Dependencies" tab:
+
+image::{_imagesdir}intellij-idea/050-some-plugins/maven-helper/010-dependency-tab.png[width="600px",link="{_imagesdir}intellij-idea/050-some-plugins/maven-helper/010-dependency-tab.png"]
+
+Clicking on this gives a graphical tree representation of the dependencies, similar to that obtained by `mvn dependency:tree`, but filterable.
+
+image::{_imagesdir}intellij-idea/050-some-plugins/maven-helper/020-dependency-as-tree.png[width="600px",link="{_imagesdir}intellij-idea/050-some-plugins/maven-helper/020-dependency-as-tree.png"]
+
+The plugin also provides the ability to easily run a Maven goal on a project:
+
+image::{_imagesdir}intellij-idea/050-some-plugins/maven-helper/030-maven-run-goal.png[width="600px",link="{_imagesdir}intellij-idea/050-some-plugins/maven-helper/030-maven-run-goal.png"]
+
+This menu can also be bound to a keystroke so that it is available as a pop-up:
+
+image::{_imagesdir}intellij-idea/050-some-plugins/maven-helper/040-maven-quick-run.png[width="600px",link="{_imagesdir}intellij-idea/050-some-plugins/maven-helper/040-maven-quick-run.png"]
+
+
+[[__dg_ide_intellij_troubleshooting]]
+=== Troubleshooting
+
+When a Maven module is imported, IntelliJ generates its own project files (suffix `.ipr`), and the application is actually built from that.
+
+Occasionally these don't keep in sync (even if auto-import of Maven modules has been enabled).
+
+To fix the issue, try:
+* reimport module
+* rebuild selected modules/entire project
+* remove and then re-add the project
+* restart, invalidating caches
+* hit StackOverflow (!)
+
+One thing worth knowing; IntelliJ actively scans the filesystem all the time.  It's therefore (almost always) fine to build the app from the Maven command line; IntelliJ will detect the changes and keep in sync.  If you want to force that, use `File > Synchronize`, `ctrl-alt-Y`.
+
+If you hit an error of "duplicate classes":
+
+image::{_imagesdir}intellij-idea/060-troubleshooting/010-duplicate-classes.png[width="600px",link="{_imagesdir}intellij-idea/060-troubleshooting/010-duplicate-classes.png"]
+
+then make sure you have correctly configured the xref:../dg/dg.adoc#__dg_ide_intellij_other-settings-compiler[annotation processor]
+settings.  Pay attention in particular to the "Production sources directory" and "Test sources directory", that these
+are set up correctly.
+
+
+
+
+[[__dg_ide_intellij_advanced]]
+== Faster turnaround times
+
+In this section are several options that will reduce the time it takes between making a source code edit and seeing the results in the running app. code/build/deploy/review feedback loop.
+
+
+[[__dg_ide_intellij_advanced_gradle-compile-enhance]]
+=== Using Grade to compile/enhance
+
+Running an Apache Isis application requires that the DataNucleus enhancer runs on the compiled bytecode.  As described xref:../dg/dg.adoc#__dg_ide_intellij_running_the-app[above], the recommended way to do this with IntelliJ is to use a Run configuration that runs the enhancer goal prior to launch.
+
+Alternative, you can use the following `build.gradle` script in your `dom` module:
+
+[source,groovy]
+.`build.gradle`
+----
+apply plugin: 'java'
+apply plugin: 'tangram.tools'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+version = (new XmlParser()).parse('pom.xml').parent.version.text()
+buildscript {
+  repositories {
+    maven { url "http://oss.jfrog.org/artifactory/oss-snapshot-local" }
+    jcenter()
+  }
+  dependencies {
+    classpath 'tangram:gradle-plugin:1.1.2'
+  }
+}
+repositories {
+    mavenLocal()
+    maven { url "http://oss.jfrog.org/artifactory/oss-snapshot-local" }
+    jcenter()
+}
+dependencies {
+    compile group: 'org.apache.isis.core', name: 'isis-core-applib', version: version
+}
+task copyClasses << {
+    copy {
+        from 'build/classes/main'
+        into 'target/classes'
+    }
+}
+----
+
+The script is intended to be in the background as a daemon while editing/developing; whenever a change is made to any
+source code, gradle will automatically compile _and_ enhance the code.  In this way it eliminates the need to start up
+Maven and run the enhancer goal.
+
+To use, you must disable the IntelliJ's automatic building of the 'dom' project.  This is done using:
+`File > Settings > Build, Execution, Deployment > Compiler > Excludes`, and then exclude the `.../dom/src/main/java`
+directory:
+
+image::{_imagesdir}intellij-idea/070-advanced/002-compiler-exclude.png[width="800px",link="{_imagesdir}intellij-idea/070-advanced/002-compiler-exclude.png"]
+
+
+The script can be run in the background using:
+
+[source,bash]
+----
+gradle -t --offline &
+----
+
+from the command line (in the `dom` module).
+
+image::{_imagesdir}intellij-idea/070-advanced/004-gradle-output.png[width="600px",link="{_imagesdir}intellij-idea/070-advanced/004-gradle-output.png"]
+
+
+
+
+[[__dg_ide_intellij_advanced_gradle-liveReload]]
+=== Using Gradle for liveReload
+
+Similarly, gradle can be run to reduce the turn-around time when tweaking the UI (defined by the
+ xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[`*.layout.xml`] file for each domain class), when the app is running.
+
+The framework will automatically notice any changes to `.layout.xml` files, but these are read from the classpath (the `target/classes` directory), not the source path.  With IntelliJ these can be copied over manually
+by invoking `Run > Reload Changed Classes`.  Once the browser is refreshed, the new layout will be rendered.
+
+[NOTE]
+====
+We've occasionally noticed that this interferes with Wicket's own javascript - switching tabs becomes unresponsive.
+The work-around is just to reload the page.
+====
+
+
+To reduce the turn-around time there are therefore two steps to be automated:
+
+* the copying of the `.layout.xml` files over to the `target/classes` directory
+* the triggering of a page refresh by the browser.
+
+The `layouts.gradle` script takes care of the first of these; whenever a change is made to any `.layout.xml` file, gradle
+will automatically copy over the file to the `target/classes` directory:
+
+[source,groovy]
+.`layouts.gradle`
+----
+defaultTasks 'copyLayouts'
+task copyLayouts(type:Copy) {
+    from 'src/main/java'
+    into 'target/classes'
+    include '**/*.layout.xml'
+}
+----
+
+Similarly, the `liveReload.gradle` script takes care of the browser refresh:
+
+[source,groovy]
+.`liveReload.gradle`
+----
+defaultTasks 'liveReload'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.kordamp.gradle:livereload-gradle-plugin:0.2.1'
+    }
+}
+apply plugin: 'org.kordamp.gradle.livereload'
+liveReload {
+    docRoot new File('target/classes').canonicalPath
+}
+----
+
+These scripts can be run together using:
+
+[source,bash]
+----
+gradle -t --offline -b layouts.gradle &
+gradle -t --offline -b liveReload.gradle &
+----
+from the command line (in the `dom` module):
+
+
+image::{_imagesdir}intellij-idea/070-advanced/005-gradle-output.png[width="600px",link="{_imagesdir}intellij-idea/070-advanced/005-gradle-output.png"]
+
+
+Live reload also requires that the `isis.viewer.wicket.liveReloadUrl` configuration property is set appropriately:
+
+[source,ini]
+.`viewer_wicket.properties`
+----
+isis.viewer.wicket.liveReloadUrl=http://localhost:35729/livereload.js?snipver=1
+----
+
+You can confirm the script is loaded correctly using the web browser's development tools, eg:
+
+
+image::{_imagesdir}intellij-idea/070-advanced/006-livereload-js.png[width="800px",link="{_imagesdir}intellij-idea/070-advanced/006-livereload-js.png"]
+
+
+
+
+[[__dg_ide_intellij_advanced_dcevm]]
+=== Setting up DCEVM
+
+link:http://github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more
+reliable hot swapping of the implementation of existing methods.
+
+In the context of Apache Isis, this is very useful for contributed actions and mixins and also view models; you should
+then be able to write these actions and have them be picked up without restarting the application.
+
+Changing persisting domain entities is more problematic, for two reasons: the JDO/DataNucleus enhancer needs to run on
+domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.  You may find that adding
+actions will work, but adding new properties or collections is much less likely to.
+
+To set up DCEVM, download the appropriate JAR from the link:https://dcevm.github.io/[github page], and run the
+installer.  For example:
+
+[source,bash]
+----
+java -jar DCEVM-light-8u51-installer.jar
+----
+
+[TIP]
+====
+Be sure to run with appropriate privileges to be able to write to the installation directories of the JDK.  If running
+on Windows, that means running as `Administrator`.
+====
+
+
+After a few seconds this will display a dialog listing all installations of JDK that have been found:
+
+image::{_imagesdir}intellij-idea/070-advanced/010-dcevm-list-of-found-jdk-installations.png[width="600px",link="{_imagesdir}intellij-idea/070-advanced/010-dcevm-list-of-found-jdk-installations.png"]
+
+
+Select the corresponding installation, and select `Replace by DCEVM`.
+
+image::{_imagesdir}intellij-idea/070-advanced/020-dcevm-once-installed.png[width="600px",link="{_imagesdir}intellij-idea/070-advanced/020-dcevm-once-installed.png"]
+
+
+In IntelliJ, register the JDK in `File > Project Structure` dialog:
+
+image::{_imagesdir}intellij-idea/070-advanced/030-dcevm-intellij-project-structure.png[width="600px",link="{_imagesdir}intellij-idea/070-advanced/030-dcevm-intellij-project-structure.png"]
+
+Finally, in the run configuration, select the patched JDK:
+
+image::{_imagesdir}intellij-idea/070-advanced/040-dcevm-run-configuration.png[width="600px",link="{_imagesdir}intellij-idea/070-advanced/040-dcevm-run-configuration.png"]
+
+
+
+
+=== Setting up JRebel
+
+See the repo for the (non-ASF) link:https://github.com/isisaddons/isis-jrebel-plugin[Isis JRebel] plugin.
+
+Note that JRebel is a commercial product, requiring a license.  At the time of writing there is also currently a
+non-commercial free license (though note this comes with some usage conditions).

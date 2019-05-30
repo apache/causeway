@@ -1,0 +1,419 @@
+[[_rgant-Action_command]]
+= Command Persistence and Processing
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Every action invocation (and property edit for that matter) is automatically reified into a concrete `Command` object.
+The `@Action(command=..., commandXxx=...)` attributes provide hints for the persistence of that `Command` object, and the subsequent processing of that persisted command.
+The primary use cases for this are to support the deferring the execution of the action such that it can be invoked in the background, and to replay commands in a master/slave configuration.
+
+Note that for a `Command` to actually be persisted requires an appropriate implementation of `CommandService` SPI.
+The framework does _not_ provide an implementation of this SPI "out-of-the-box".
+However, the (non-ASF) Incode Platform's link:http://platform.incode.org/modules/spi/command/spi-command.html[ command module]) _does_ provide such an implementation.
+
+
+== Design
+
+The annotation works with (and is influenced by the behaviour of) a number of domain services:
+
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`]
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_BackgroundService[`BackgroundService`] and
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]
+
+
+Each action invocation is automatically reified by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service into a `Command` object, capturing details of the target object, the action, the parameter arguments, the user, a timestamp and so on.
+
+If an appropriate `CommandService` is configured (for example using (non-ASF) link:http://platform.incode.org/modules/spi/command/spi-command.html[Incode Platform's command] module), then the `Command` itself is persisted.
+
+By default, actions are invoked in directly in the thread of the invocation.
+If there is an implementation of `BackgroundCommandService` (as the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module does provide), then this means in turn that the `BackgroundService` can be used by the domain object code to programmatically create background ``Command``s.
+
+[NOTE]
+====
+If background ``Command``s are used, then an external scheduler, using xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[headless access], must also be configured.
+====
+
+
+
+[[_rgant-Action_commandPersistence]]
+== `command()` and `commandPersistence()`
+
+The `command()` and `commandPersistence() attributes work together to determine whether a command will actually be persisted.
+There inter-relationship is somewhat complex, so is probably best explained by way of examples:
+
+[cols="1a,1a,1a,1a,1a,2a", options="header"]
+|===
+
+| `command()`
+|`isis.services.
+command.actions` config property
+| action's declared `semantics()`
+| `command
+Persistence()`
+| action dirties objects?
+| is command persisted?
+
+| `ENABLED`
+| (any)
+| (any)
+| `PERSISTED`
+| (either)
+| yes
+
+| `ENABLED`
+| (any)
+| (any)
+| `IF_HINTED`
+| no
+| no
+
+| `ENABLED`
+| (any)
+| (any)
+| `IF_HINTED`
+| yes
+| yes
+
+| `ENABLED`
+| (any)
+| (any)
+| `NOT_PERSISTED`
+| (any)
+| no
+
+| `AS_CONFIGURED`
+| `all`
+| (any)
+| `PERSISTED`
+| no
+| yes
+
+| `AS_CONFIGURED`
+| `all`
+| (any)
+| `IF_HINTED`
+| no
+| no
+
+| `AS_CONFIGURED`
+| `all`
+| (any)
+| `IF_HINTED`
+| yes
+| yes
+
+| `AS_CONFIGURED`
+| `all`
+| (any)
+| `NOT_PERSISTED`
+| (any)
+| no
+
+| `AS_CONFIGURED`
+| `ignoreSafe` or `ignoreQueryOnly`
+| `SAFE`
+| `PERSISTED`
+| no
+| no (!)
+
+| `AS_CONFIGURED`
+| `ignoreSafe` or `ignoreQueryOnly`
+| `SAFE`
+| `IF_HINTED` or `NOT_PERSISTED`
+| no
+| no
+
+| `AS_CONFIGURED`
+| `ignoreSafe` or `ignoreQueryOnly`
+| `SAFE`
+| `PERSISTED` or `IF_HINTED`
+| yes
+| yes
+
+| `AS_CONFIGURED`
+| `ignoreSafe` or `ignoreQueryOnly`
+| `SAFE`
+| `NOT_PERSISTED`
+| yes
+| yes (!)
+
+| `AS_CONFIGURED`
+| `ignoreSafe` or `ignoreQueryOnly`
+| `IDEMPOTENT` or `NON_IDEMPOTENT`
+| `PERSISTED`
+| (any)
+| yes
+
+| `AS_CONFIGURED`
+| `ignoreSafe` or `ignoreQueryOnly`
+| `IDEMPOTENT` or `NON_IDEMPOTENT`
+| `IF_HINTED`
+| no
+| no
+
+| `AS_CONFIGURED`
+| `ignoreSafe` or `ignoreQueryOnly`
+| `IDEMPOTENT` or `NON_IDEMPOTENT`
+| `IF_HINTED`
+| yes
+| yes
+
+| `AS_CONFIGURED`
+| `ignoreSafe` or `ignoreQueryOnly`
+| `IDEMPOTENT` or `NON_IDEMPOTENT`
+| `NOT_PERSISTED`
+| (any)
+| no
+
+| `AS_CONFIGURED`
+| `none`
+| (any)
+| `PERSISTED`
+| no
+| no (!)
+
+| `AS_CONFIGURED`
+| `none`
+| (any)
+| `PERSISTED`
+| yes
+| yes
+
+| `AS_CONFIGURED`
+| `none`
+| (any)
+| `IF_HINTED`
+| no
+| no
+
+| `AS_CONFIGURED`
+| `none`
+| (any)
+| `IF_HINTED`
+| yes
+| yes
+
+| `AS_CONFIGURED`
+| `none`
+| (any)
+| `NOT_PERSISTED`
+| no
+| no
+
+| `AS_CONFIGURED`
+| `none`
+| (any)
+| `NOT_PERSISTED`
+| yes
+| yes (!)
+
+| `DISABLED`
+| (any)
+| (any)
+| `PERSISTED`
+| no
+| no (!)
+
+| `DISABLED`
+| (any)
+| (any)
+| `PERSISTED`
+| yes
+| yes
+
+| `DISABLED`
+| (any)
+| (any)
+| `IF_HINTED`
+| no
+| no
+
+| `DISABLED`
+| (any)
+| (any)
+| `IF_HINTED`
+| yes
+| yes
+
+| `DISABLED`
+| (any)
+| (any)
+| `NOT_PERSISTED`
+| no
+| no
+
+| `DISABLED`
+| (any)
+| (any)
+| `NOT_PERSISTED`
+| yes
+| yes (!)
+
+|===
+
+For example:
+
+[source,java]
+----
+public class Order {
+    @Action(
+        command=CommandReification.ENABLED,
+        commandPersistence=CommandPersistence.PERSISTED
+    )
+    public Invoice generateInvoice(...) { ... }
+}
+----
+
+As can be seen, whether a command is actually persisted does not always follow the value of the `commandPersistence()` attribute.
+This is because the `command()` attribute actually determines whether any command metadata for the action is captured within the framework's internal metamodel.
+If `command` is `DISABLED` or does not otherwise apply due to the action's declared semantics, then the framework decides to persist a command based solely on whether the action dirtied any objects (as if `commandPersistence()` was set to `IF_HINTED`).
+
+
+
+
+
+
+== `commandExecuteIn()`
+
+For persisted commands, the `commandExecuteIn()` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
+
+Background execution means that the command is not executed immediately, but is available for a configured xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.
+See xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here] for further information on this topic.
+
+For example:
+
+[source,java]
+----
+public class Order {
+    @Action(
+        command=CommandReification.ENABLED,
+        commandExecuteIn=CommandExecuteIn.BACKGROUND
+    )
+    public Invoice generateInvoice(...) { ... }
+}
+----
+
+will result in the `Command` being persisted but its execution deferred to a background execution mechanism.
+The returned object from this action invocation is the persisted `Command` itself.
+
+
+
+
+== `commandDtoProcessor()`
+
+The `commandDtoProcessor()` attribute allows an implementation of `CommandDtoProcessor` to be specified.
+This interface has the following API:
+
+[source,java]
+----
+public interface CommandDtoProcessor {
+    CommandDto process(             // <1>
+            Command command,        // <2>
+            CommandDto dto);        // <3>
+}
+----
+<1> The returned `CommandDto`.
+This will typically be the `CommandDto` passed in, but supplemented in some way.
+<2> The `Command` being processed
+<3> The `CommandDto` (XML) obtained already from the `Command` (by virtue of it also implementing `CommandWithDto`, see discussion below).
+
+This interface is used by the framework-provided implementations of `ContentMappingService` for the REST API, allowing ``Command``s implementations that also implement `CommandWithDto` to be further customised as they are serialized out.
+The primary use case for this capability is in support of master/slave replication.
+
+* on the master, ``Command``s are serialized to XML.
+This includes the identity of the target object and the argument values of all parameters.
+
++
+[IMPORTANT]
+====
+However, any ``Blob``s and ``Clob``s are deliberately excluded from this XML (they are instead stored as references).
+This is to prevent the storage requirements for `Command` from becoming excessive.
+A `CommandDtoProcessor` can be provided to re-attach blob information if required.
+====
+
+* replaying ``Command``s requires this missing parameter information to be reinstated.
+The `CommandDtoProcessor` therefore offers a hook to dynamically re-attach the missing `Blob` or `Clob` argument.
+
+
+As a special case, returning `null` means that the command's DTO is effectively excluded when retrieving the list of commands.
+If replicating from master to slave, this effectively allows certain commands to be ignored.
+The `CommandDtoProcessor.Null` class provides a convenience implementation for this requirement.
+
+[NOTE]
+====
+If `commandDtoProcessor()` is specified, then `command()` is assumed to be ENABLED.
+====
+
+
+
+=== Example implementation
+
+Consider the following method:
+
+[source,java]
+----
+@Action(
+    domainEvent = IncomingDocumentRepository.UploadDomainEvent.class,
+    commandDtoProcessor = DeriveBlobArg0FromReturnedDocument.class
+)
+public Document upload(final Blob blob) {
+    final String name = blob.getName();
+    final DocumentType type = DocumentTypeData.INCOMING.findUsing(documentTypeRepository);
+    final ApplicationUser me = meService.me();
+    String atPath = me != null ? me.getAtPath() : null;
+    if (atPath == null) {
+        atPath = "/";
+    }
+    return incomingDocumentRepository.upsertAndArchive(type, atPath, name, blob);
+}
+----
+
+The `Blob` argument will not be persisted in the memento of the `Command`, but the information is implicitly available in the `Document` that is returned by the action.
+The `DeriveBlobArg0FromReturnedDocument` processor retrieves this information and dynamically adds:
+
+[source,java]
+----
+public class DeriveBlobArg0FromReturnedDocument
+        extends CommandDtoProcessorForActionAbstract {
+
+    @Override
+    public CommandDto process(Command command, CommandDto commandDto) {
+        final Bookmark result = commandWithDto.getResult();
+        if(result == null) {
+            return commandDto;
+        }
+        try {
+            final Document document = bookmarkService.lookup(result, Document.class);
+            if (document != null) {
+                ParamDto paramDto = getParamDto(commandDto, 0);
+                CommonDtoUtils.setValueOn(paramDto, ValueType.BLOB, document.getBlob(), bookmarkService);
+            }
+        } catch(Exception ex) {
+            return commandDto;
+        }
+        return commandDto;
+    }
+    @Inject
+    BookmarkService bookmarkService;
+}
+----
+
+
+=== Null implementation
+
+The null implementation can be used to simply indicate that no DTO should be returned for a `Command`.
+The effect is to ignore it for replay purposes:
+
+[source,xml]
+----
+pubc interface CommandDtoProcessor {
+    ...
+    class Null implements CommandDtoProcessor {
+        public CommandDto process(Command command, CommandDto commandDto) {
+            return null;
+        }
+    }
+}
+----

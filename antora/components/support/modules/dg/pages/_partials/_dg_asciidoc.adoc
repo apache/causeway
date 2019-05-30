@@ -1,0 +1,39 @@
+[[_dg_asciidoc]]
+= AsciiDoc Documentation
+
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+
+
+Apache Isis' documentation (meaning the website and the users' guide, the reference guide and this contributors' guide) is written using link:http://www.methods.co.nz/asciidoc/[Asciidoc], specifically the link:http://asciidoctor.org/[Asciidoctor] implementation.
+
+The website and guides are created by running build tools (documented below) which create the HTML version of the site and guides.
+You can therefore easily check the documentation before raising a pull request (as a contributor) or publishing the site (if a committer).
+
+To help write the Asciidoc text itself, we provide some xref:../dg/dg.adoc#_dg_asciidoc-templates[Asciidoc templates].
+
+Publishing is performed by copying the generated HTML to a different git repository (link:https://github.com/apache/isis-site.git[isis-site]).
+Since this can only be done by Apache Isis committers, the process for doing this is described in the xref:../cgcom/cgcom.adoc#_cgcom_asciidoc-publish-procedure[committers' guide].
+This is synced by ASF infrastructure over to link:http://isis.apache.org[isis.apache.org].
+
+
+
+== Where to find the Docs
+
+The (Asciidoc) source code can be found at `adocs/documentation` (relative to root).  Online you'll find it link:https://github.com/apache/isis/tree/master/adocs/documentation[cloned to github here].
+
+
+
+include::_dg_asciidoc_naming-conventions.adoc[leveloffset=+1]
+include::_dg_asciidoc_writing-the-docs.adoc[leveloffset=+1]
+include::_dg_asciidoc_build-and-review.adoc[leveloffset=+1]
+include::_dg_asciidoc_instant-rebuild.adoc[leveloffset=+1]
+include::_dg_asciidoc_publish-procedure.adoc[leveloffset=+1]
+
+
+
+
+
+

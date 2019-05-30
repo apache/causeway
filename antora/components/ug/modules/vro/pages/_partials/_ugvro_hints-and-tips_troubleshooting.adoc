@@ -1,0 +1,88 @@
+include::_attributes.adoc[]
+[[_ugvro_hints-and-tips_troubleshooting]]
+= Troubleshooting
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+== Exception
+
+When invoking a REST service and getting a response with an embeded stacktrace like:
+
+[source,json]
+----
+{
+	"httpStatusCode": 500,
+	"message": "com.sun.xml.bind.v2.runtime.IllegalAnnotationsException: 1 counts of IllegalAnnotationExceptions
+Klasse enthält zwei Eigenschaften mit demselben Namen \"name\"
+	this problem is related to the following location:
+		at public java.lang.String ife.dep.ServiceName.getName()
+		at ife.dep.ServiceName
+		at public ife.dep.ServiceName ife.dep.ProvidedService.getServiceName()
+		at ife.dep.ProvidedService
+		at public java.util.SortedSet ife.dep.Release.getCapabilities()
+		at ife.dep.Release
+		at public ife.dep.Release ife.cfg.Configuration.getRelease()
+		at ife.cfg.Configuration
+		at public ife.cfg.Configuration ife.cfg.ConfigEntry.getConfiguration()
+		at ife.cfg.ConfigEntry
+		at public java.util.SortedSet ife.cfg.Endpoint.getCfgEntries()
+		at ife.cfg.Endpoint
+	this problem is related to the following location:
+		at public java.lang.String ife.dep.ServiceName.name
+		at ife.dep.ServiceName
+		at public ife.dep.ServiceName ife.dep.ProvidedService.getServiceName()
+		at ife.dep.ProvidedService
+		at public java.util.SortedSet ife.dep.Release.getCapabilities()
+		at ife.dep.Release
+		at public ife.dep.Release ife.cfg.Configuration.getRelease()
+		at ife.cfg.Configuration
+		at public ife.cfg.Configuration ife.cfg.ConfigEntry.getConfiguration()
+		at ife.cfg.ConfigEntry
+		at public java.util.SortedSet ife.cfg.Endpoint.getCfgEntries()
+		at ife.cfg.Endpoint
+",
+[...]
+}
+----
+
+== Solution
+Add `@XmlAccessorType(XmlAccessType.FIELD)` to your domain entity:
+
+[source,java]
+----
+@javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
+@javax.jdo.annotations.DatastoreIdentity(strategy = javax.jdo.annotations.IdGeneratorStrategy.NATIVE, column = "id")
+@javax.jdo.annotations.Version(strategy = VersionStrategy.VERSION_NUMBER, column = "version")
+@DomainObject(objectType = "ServiceName", bounded = true)
+@DomainObjectLayout(cssClassFa = "tag", describedAs = "")
+@XmlAccessorType(XmlAccessType.FIELD)
+@SuppressWarnings("javadoc")
+public class ServiceName implements Capability, Comparable<ServiceName> {
+
+	public String title() {
+		return getName();
+	}
+
+	public int compareTo(ServiceName o) {
+		return name.compareTo(o.name);
+	}
+
+	@Override
+	public String toString() {
+		return title();
+	}
+
+	@MemberOrder(sequence = "1")
+	@javax.jdo.annotations.Column(allowsNull = "false")
+	@Getter	@Setter
+	public String name;
+
+	public boolean isSynchronous() {
+		return !isAsynchonous();
+	}
+
+	public boolean isAsynchonous() {
+		return name.startsWith(Constants.ESB_JMS_PREFIX);
+	}
+}
+----
+

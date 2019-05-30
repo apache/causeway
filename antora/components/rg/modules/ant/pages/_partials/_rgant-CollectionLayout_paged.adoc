@@ -1,0 +1,45 @@
+[[_rgant-CollectionLayout_paged]]
+= `paged()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `paged()` attribute specifies the number of rows to display in a (parented) collection.
+
+
+
+[WARNING]
+====
+The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] currently does not support paging.
+The xref:../ugvw/ugvw.adoc#[Wicket viewer] _does_ support paging, but note that the paging is performed client-side rather than server-side.
+
+We therefore recommend that large collections should instead be modelled as actions (to allow filtering to be applied to limit the number of rows).
+====
+
+
+For example:
+
+[source,java]
+----
+public class Order {
+    @CollectionLayout(paged=15)
+    public SortedSet<OrderLine> getDetails() {...}
+}
+----
+
+
+It is also possible to specify a global default for the page size of standalone collections, using the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.viewer.paged.parented`.
+
+
+
+== Alternatives
+
+As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+
+
+== See also
+
+This attribute can also be applied to:
+
+* xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_paged[domain objects]
+* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_paged[view models].

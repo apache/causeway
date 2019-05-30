@@ -1,0 +1,36 @@
+[[_ugvw_incode-platform]]
+= Appendix: Incode Platform (not ASF)
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The (non-ASF) link:http://platform.incode.org[Incode Platform^] provides a number of extensions to the Wicket viewer (leveraging the APIs described in xref:../ugvw/ugvw.adoc#_ugvw_extending[Extending the Wicket viewer] section, later.
+While you are free to fork and adapt any of them to your needs, they are also intended for use "out-of-the-box".
+
+At the time of writing the addons available are:
+
+* Excel Wicket component - to export a collection of domain objects as an Excel spreadsheet
+
+** see also the related Excel library module which can be used to read/import a spreadsheet as an collection of view models or entities
+
+* ullcalendar2 Wicket component - to view a collection of domain objects (with a date) on a full-page calendar
+
+* Gmap3 Wicket component - to view a collection of domain objects with a location on a google map
+
+* pdf.js Wicket component - to view a `Blob` containing a PDF as an image
+
+* Summernote Wicket component - to edit a string property using an RTF editor
+
+** (not yet compatible with `1.15.0`)
+
+* Wickedcharts Wicket component - low-level integration with Highcharts charting library
+
+
+Check the link:http://platform.incode.org[website^] for the most up-to-date list.
+
+
+[NOTE]
+====
+Note that the Incode Platform, while maintained by Apache Isis committers, are not part of the ASF.
+====
+

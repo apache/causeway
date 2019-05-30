@@ -1,0 +1,279 @@
+[[_rgsvc_persistence-layer-api_IsisJdoSupport]]
+= `IsisJdoSupport`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `IsisJdoSupport` service provides a number of general purpose methods for working with the JDO/DataNucleus objectstore.
+In general these act at a lower-level of abstraction than the APIs normally used (specifically, those of xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]), but nevertheless deal with some of the most common use cases.
+For service also provides access to the underlying JDO `PersistenceManager` for full control.
+
+The following sections discuss the functionality provided by the service, broken out into categories.
+
+
+
+
+[[__rgsvc_persistence-layer-api_IsisJdoSupport_executing-sql]]
+== Executing SQL
+
+You can use the `IsisJdoSupportService` to perform arbitrary SQL SELECTs or UPDATEs:
+
+[source,java]
+----
+public interface IsisJdoSupport {
+    @Programmatic
+    List<Map<String, Object>> executeSql(String sql);
+    @Programmatic
+    Integer executeUpdate(String sql);
+    ...
+}
+----
+
+
+The `executeSql(...)` method allows arbitrary SQL `SELECT` queries to be submitted:
+
+[source,java]
+----
+List<Map<String, Object>> results = isisJdoSupport.executeSql("select * from custMgmt.customers");
+----
+
+The result set is automatically converted into a list of maps, where the map key is the column name.
+
+
+In a similar manner, the `executeUpdate(...)` allows arbitrary SQL ``UPDATE``s to be performed.
+
+[source,java]
+----
+int count = isisJdoSupport.executeUpdate("select count(*) from custMgmt.customers);
+----
+
+The returned value is the number of rows updated.
+
+[TIP]
+====
+As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[type-safe JDO query API], discussed xref:../rgsvc/rgsvc.adoc#__rgsvc_persistence-layer-api_IsisJdoSupport_type-safe-query-api[below].
+====
+
+
+
+
+[[__rgsvc_persistence-layer-api_IsisJdoSupport_type-safe-jdoql-queries]]
+== Type-safe JDOQL Queries
+
+DataNucleus provides an link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[extension to JDO],  so that JDOQL queries can be built up and executed using a set of type-safe classes.
+
+The types in question for type safe queries are not the domain entities, but rather are companion "Q..." query classes.
+These classes are generated dynamically by an link:https://www.jcp.org/en/jsr/detail?id=269[annotation processor] as a side-effect of compilation, one "Q..." class for each of the xref:../rgant/rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`] domain entity in your application.
+For example, a `ToDoItem` domain entity will give rise to a `QToDoItem` query class.
+These "Q..." classes mirror the structure of domain entity, but expose properties that allow predicates to be built up for querying instances, as well as other functions in support of order by, group by and other clauses.
+
+[NOTE]
+====
+The IntelliJ IDE automatically enables annotation processing by default, as does Maven.
+Using Eclipse IDE you may need to configure annotation processing manually; see the xref:../dg/dg.adoc#__dg_ide_eclipse_enable-annotation-processing[Developers' Guide].
+The DataNucleus' link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[documentation] offers some guidance on confirming that APT is enabled.
+====
+
+The `IsisJdoSupport` service offers two methods at different levels of abstraction:
+
+[source,java]
+----
+public interface IsisJdoSupport {
+    @Programmatic
+    <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression be);
+    @Programmatic
+    <T> T executeQueryUnique(final Class<T> cls, final BooleanExpression be);
+    @Programmatic
+    <T> TypesafeQuery<T> newTypesafeQuery(Class<T> cls);
+    ...
+}
+----
+
+
+The `executeQuery(...)` method supports the common case of obtaining a set of objects that meet some criteria, filtered using the provided `BooleanExpression`.
+To avoid memory leaks, the returned list is cloned and the underlying query closed.
+
+For example, in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] there is an implementation of `ToDoItemRepository` using type-safe queries.
+The following JDOQL:
+
+[source,sql]
+----
+SELECT
+FROM todoapp.dom.module.todoitem.ToDoItem
+WHERE atPath.indexOf(:atPath) == 0
+   && complete == :complete")
+----
+
+can be expressed using type-safe queries as follows:
+
+[source,java]
+----
+public List<ToDoItem> findByAtPathAndCategory(final String atPath, final Category category) {
+    final QToDoItem q = QToDoItem.candidate();
+    return isisJdoSupport.executeQuery(ToDoItem.class,
+            q.atPath.eq(atPath).and(
+            q.category.eq(category)));
+}
+----
+
+[NOTE]
+====
+You can find the full example of the JDOQL equivalent in the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`]
+====
+
+
+The `executeUniqueQuery(...)` method (introduced in `1.15.0`) is similar to `executeQuery(...)`, however expects the query to return at most a single object, which it returns (or `null` if none).
+
+The `newTypesafeQuery(...)` method is a lower-level API that allows a type safe query to be instantiated for most sophisticated querying, eg using group by or order by clauses.
+See the
+DataNucleus link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[documentation] for full details of using this.
+
+One thing to be aware of is that after the query has been executed, it should be closed, using `query.closeAll()`.
+If calling `query.executeList()` we also recommend cloning the resultant list first.
+The following utility method does both of these tasks:
+
+[source,java]
+----
+private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
+    final List<T> elements = query.executeList();
+    final List<T> list = Lists.newArrayList(elements);
+    query.closeAll();
+    return list;
+}
+----
+
+
+
+[[__rgsvc_persistence-layer-api_IsisJdoSupport_fixture-support]]
+== Fixture support
+
+When writing xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:../rgsvc/rgsvc.adoc#__rgsvc_persistence-layer-api_IsisJdoSupport_executing-sql[above].
+
+Alternatively, the `deleteAll(...)` method will let your test delete all instances of a class without resorting to SQL:
+
+[source,java]
+----
+public interface IsisJdoSupport {
+    @Programmatic
+    void deleteAll(Class<?>... pcClasses);
+    ...
+}
+----
+
+For example:
+
+[source,java]
+----
+public class TearDownAll extends FixtureScriptAbstract {
+    @Override
+    protected void execute(final ExecutionContext ec) {
+        isisJdoSupport.deleteAll(Order.class);
+        isisJdoSupport.deleteAll(CustomerAddress.class);
+        isisJdoSupport.deleteAll(Customer.class);
+    }
+    @Inject
+    IsisJdoSupport isisJdoSupport;
+}
+----
+
+[NOTE]
+====
+It can occasionally be the case that Apache Isis' internal adapter for the domain object is still in memory.
+JDO/DataNucleus seems to bump up the version of the object prior to its deletion, which under normal circumstances would cause Apache Isis to throw a concurrency exception.
+Therefore to prevent this from happening (ie to _force_ the deletion of all instances), concurrency checking is temporarily disabled while this method is performed.
+====
+
+
+
+
+[[__rgsvc_persistence-layer-api_IsisJdoSupport_reloading-entities]]
+== Reloading entities
+
+An link:http://www.datanucleus.org:15080/products/accessplatform_5_0/jdo/mapping.html#one_many_relations[(intentional) limitation] of JDO/DataNucleus is that persisting a child entity (in a 1:n bidirectional relationship) does not cause the parent's collection to be updated.
+
+[source,java]
+----
+public interface IsisJdoSupport {
+    @Programmatic
+    <T> T refresh(T domainObject);
+    @Programmatic
+    void ensureLoaded(Collection<?> collectionOfDomainObjects);
+    ...
+}
+----
+
+
+
+The `refresh(T domainObject)` method can be used to reload the parent object (or indeed any object).  Under the covers it uses the JDO `PersistenceManager#refresh(...)` API.
+
+
+For example:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
+public class OrderContributions {
+    public Order newOrder(final Customer customer) {
+        Order order = new Order(customer);
+        repositoryService.persistAndFlush(customer);    // <1>
+        isisJdoSupport.refresh(customer);               // <2>
+        return order;
+    }
+    @Inject
+    RepositoryService repositoryService;
+    @Inject
+    IsisJdoSupport isisJdoSupport;
+}
+----
+<1> flush to database, ensuring that the database row corresponding to the `Order` exists in its `order` table.
+<2> reload the parent (customer) from the database, so that its collection of ``Order``s is accurate.
+
+
+[NOTE]
+====
+The particular example that led to this method being added was a 1:m bidirectional relationship, analogous to `Customer 1<-->* Order`.
+Persisting the child `Order` object did not cause the parent ``Customer``'s collection of orders to be updated.
+In fact, JDO does not make any such guarantee to do so.
+Options are therefore either to maintain the collection in code, or to refresh the parent.
+====
+
+
+The `ensureLoaded(...)` method allows a collection of domain objects to be loaded from the database in a single hit.
+This can be valuable as a performance optimization to avoid multiple roundtrips to the database.
+Under the covers it uses the `PersistenceManager#retrieveAll(...)` API.
+
+
+
+
+
+[[__rgsvc_persistence-layer-api_IsisJdoSupport_jdo-persistencemanager]]
+== JDO `PersistenceManager`
+
+The functionality provided by `IsisJdoSupport` focus only on the most common use cases.
+If you require more flexibility than this, eg for dynamically constructed queries, then you can use the service to access the underlying JDO `PersistenceManager` API:
+
+[source,java]
+----
+public interface IsisJdoSupport {
+    @Programmatic
+    PersistenceManager getJdoPersistenceManager();
+    ...
+}
+----
+
+For example:
+
+[source,java]
+----
+public List<Order> findOrders(...) {
+    javax.jdo.PersistenceManager pm = isisJdoSupport.getPersistenceManager();
+
+    // knock yourself out...
+
+    return someListOfOrders;
+}
+----
+
+
+
+

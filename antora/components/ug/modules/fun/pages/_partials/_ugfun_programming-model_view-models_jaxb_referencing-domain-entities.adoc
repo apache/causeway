@@ -1,0 +1,64 @@
+[[_ugfun_programming-model_view-models_jaxb_referencing-domain-entities]]
+= Referencing Domain Entities
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+It's quite common for view models to be "backed by" (be projections of) some underlying domain entity.
+For example, the `CompareCustomers` view model described above actually references two underlying ``Customer`` entities.
+
+It wouldn't make sense to serialize out the state of a persistent entity (even more so when the view model is also being used as a DTO).
+However, the identity of the underlying entity can be well defined; Apache Isis defines the xref:../rgcms/rgcms.adoc#_rgcms_schema-common[common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class): the object's type and its identifier.
+This is basically a formal XML equivalent to the `Bookmark` object obtained from the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`].
+
+There is only one requirement to make this work: every referenced domain entity must be annotated with xref:../rgant/rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`], specifying the framework-provided `PersistentEntityAdapter`.
+And this class is similar to the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`]: it knows how to create an `OidDto` from an object reference.
+
+Thus, in our view model we can legitimately write:
+
+[source,java]
+----
+public class CompareCustomers {
+
+    @XmlElement(required = true)
+    @Getter @Setter
+    Customer customer1;
+    ...
+}
+----
+
+All we need to do is remember to add that `@XmlJavaTypeAdapter` annotation to the referenced entity:
+
+[source,java]
+----
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+public class Customer ...  {
+    ...
+}
+----
+
+
+It's also possible for a DTO view models to hold collections of objects.
+These can be of any type, either simple properties, or references to other objects.
+The only bit of boilerplate that is required is the `@XmlElementWrapper` annotation.
+This instructs JAXB to create an XML element (based on the field name) to contain each of the elements.
+(If this is omitted then the contents of the collection are at the same level as the properties; almost certainly not what is required).
+
+For example, we could perhaps generalize the view model to hold a set of ``Customer``s to be compared:
+
+[source,java]
+----
+public class CompareCustomers {
+    ...
+    @XmlElementWrapper
+    @XmlElement(name = "customers")
+    @Getter @Setter
+    protected List<Customer> customersToCompare = Lists.newArrayList();
+}
+----
+
+This capability is particularly useful when the JAXB view model is being used as a xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_dto[DTO].
+
+
+

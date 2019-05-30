@@ -1,0 +1,71 @@
+[[_rgsvc_presentation-layer-spi_GridService]]
+= `GridService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `GridService` provides the ability to load the XML layout (grid) for a domain class.
+To do this it delegates:
+
+* to xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] to load a pre-existing layout for the domain class, if possible
+
+* to xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`] to normalize the grid with respect to Apache
+Isis' internal metamodel, in other words to ensure that all of the domain objects' properties, collections and actions are associated with regions of the grid.
+
+Once a grid has been loaded for a domain class, this is cached internally by Apache Isis' internal meta model (in the
+`GridFacet` facet).
+If running in prototype mode, any subsequent changes to the XML will be detected and the grid rebuilt.
+This allows for dynamic reloading of layouts, providing a far faster feedback (eg if tweaking the UI while working with end-users).
+Dynamic reloading is disabled in production mode.
+
+== SPI
+
+The SPI defined by this service is:
+
+[source,java]
+----
+public interface GridService {
+    boolean supportsReloading();                // <1>
+    void remove(Class<?> domainClass);          // <2>
+    boolean existsFor(Class<?> domainClass);    // <3>
+    Grid load(final Class<?> domainClass);      // <4>
+    Grid defaultGridFor(Class<?> domainClass);  // <5>
+    Grid normalize(final Grid grid);            // <6>
+    Grid complete(Grid grid);                   // <7>
+    Grid minimal(Grid grid);                    // <8>
+}
+----
+<1> whether dynamic reloading of layouts is enabled.
+The default implementation enables reloading for prototyping, disables in production
+<2> support metamodel invalidation/rebuilding of spec, eg as called by this xref:../rgcms/rgcms.adoc#__rgcms_classes_mixins_Object_rebuildMetamodel[Object mixin] action.
+<3> whether any persisted layout metadata (eg a `.layout.xml` file) exists for this domain class.
+Just delegates to corresponding method in xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`].
+<4> returns a new instance of a xref:../rgcms/rgcms.adoc#__rgcms_classes_layout_component[`Grid`] for the specified domain class, eg as loaded from a `layout.xml` file.
+If none exists, will return null (and the calling xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] will use xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`] to obtain a default grid for the domain class).
+<5> returns a default grid, eg two columns in ratio 4:8.
+Used when no existing grid layout exists for a domain class.
+<6> validates and normalizes a grid, modifying the grid so that all of the domain object's members (properties, collections, actions) are bound to regions of the grid.
+This is done using existing metadata, most notably that of the xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotation.
+Such a grid, if persisted as the layout XML file for the domain class, allows the `@MemberOrder` annotation to be removed from the source code of the domain class (but other annotations must be retained).
+<7> Takes a normalized grid and enriches it with additional metadata (taken from Apache Isis' internal metadata) that can be represented in the layout XML.
+Such a grid, if persisted as the layout XML file for the domain class, allows all layout annotations (xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] and xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]) to be removed from the source code of the domain class.
+<8> Takes a normalized grid and strips out removes all members, leaving only the grid structure.
+Such a grid, if persisted as the layout XML file for the domain class, requires that the xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotation is retained in the source code of said class in order to bind members to the regions of the grid.
+
+The first four methods just delegate to the corresponding methods in xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`], while the last four delegate to the  corresponding method in xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`].
+The service inspects the ``Grid``'s concrete class to determine which actual `GridSystemService` instance to delegate to.
+
+
+== Implementation
+
+The framework provides a default implementation of this service, namely `GridServiceDefault`.
+
+
+
+== Related Services
+
+This service calls xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`].
+
+This service is called by xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`], exposed in the UI through `LayoutServiceMenu` (to download the layout XML as a zip file for all domain objects) and the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[`downloadLayoutXml()`] mixin (to download the layout XML for a single domain
+object).

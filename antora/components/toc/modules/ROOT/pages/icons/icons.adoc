@@ -1,0 +1,22 @@
+[[icons]]
+= Icons
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+
+
+
+Most Apache Isis viewers use icons to help identify domain objects in the user interface.
+It's a good idea to ensure that these are styled consistently.
+Here are some open source icon sets for both personal and commercial use (though some require a link back to the authors website):
+
+* http://icons8.com/[icons8] (as used in the link:../powered-by/powered-by.html[Estatio] app) - styled for Win8, Android and MacOS
+* http://tango.freedesktop.org/Tango_Icon_Library[tango desktop] icon set - as used in Linux GNOME and KDE desktops
+* http://thenounproject.com/[the noun project] community of icon providers (both free and commercial)
+* http://www.flaticon.com/[flaticon] - free vector icons
+* http://google.github.io/material-design-icons/[Google material design] and http://www.google.com/design/spec/resources/sticker-sheets.html#[zip here]
+* http://adamwhitcroft.com/batch/[batch] (300+ icons)
+
+
+If you know of any others freely usable and easily accessible, let us know through the xref:../../support.adoc#[mailing list].

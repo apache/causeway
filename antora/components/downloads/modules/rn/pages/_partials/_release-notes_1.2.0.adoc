@@ -1,0 +1,135 @@
+[[_release-notes_1.2.0]]
+= 1.2.0
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+
+
+
+== Core
+
+=== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-323[ISIS-323] - Provide the capability to publish events, either changed objects or invoked actions
+* link:https://issues.apache.org/jira/browse/ISIS-327[ISIS-327] - Initialize and shutdown domain services
+* link:https://issues.apache.org/jira/browse/ISIS-344[ISIS-344] - Automatically exclude &quot;parent references&quot; from parented collections.
+* link:https://issues.apache.org/jira/browse/ISIS-351[ISIS-351] - fatal, for rendering to the user.
+* link:https://issues.apache.org/jira/browse/ISIS-356[ISIS-356] - Allow &#39;inject&#39; to be used as a prefix for injecting services into entities, fixtures or other services.
+* link:https://issues.apache.org/jira/browse/ISIS-360[ISIS-360] - About page on wicket viewer should show version, build number and other details.
+* link:https://issues.apache.org/jira/browse/ISIS-367[ISIS-367] - Refactor to support JTA transactions
+* link:https://issues.apache.org/jira/browse/ISIS-377[ISIS-377] - Publishing Service implementation that writes to a queue (using JDO).
+* link:https://issues.apache.org/jira/browse/ISIS-378[ISIS-378] - a service for prototyping that allows access into the internals of the Apache Isis runtime
+* link:https://issues.apache.org/jira/browse/ISIS-380[ISIS-380] - Enhance BookmarkService API to allow objects to be looked up directly (rather than by dint of a BookmarkHolder)
+* link:https://issues.apache.org/jira/browse/ISIS-407[ISIS-407] - Annotation to automatically adjust end dates of ranges so that they are shown as inclusive vs exclusive.
+* link:https://issues.apache.org/jira/browse/ISIS-409[ISIS-409] - Move the &#39;wrapper&#39; progmodel component into core, reworked as an optional service
+
+
+=== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-208[ISIS-208] - If two services accidentally have the same Id, then should throw an exception.
+* link:https://issues.apache.org/jira/browse/ISIS-326[ISIS-326] - Make Datanucleus JNDI aware
+* link:https://issues.apache.org/jira/browse/ISIS-330[ISIS-330] - Wicket viewer calls choices method while figuring out how to render properties.  Should call less often (if not at all).
+* link:https://issues.apache.org/jira/browse/ISIS-331[ISIS-331] - Explicitly specify project.build.sourceEncoding for both Isis and the quickstart archetype
+* link:https://issues.apache.org/jira/browse/ISIS-343[ISIS-343] - Introduce @Render annotation and deprecate @Resolve
+* link:https://issues.apache.org/jira/browse/ISIS-345[ISIS-345] - Move the Bookmark service in the applib to a different package
+* link:https://issues.apache.org/jira/browse/ISIS-353[ISIS-353] - compareTo methods (when implement Comparable) should be automatically hidden
+* link:https://issues.apache.org/jira/browse/ISIS-358[ISIS-358] - Should be able to delete objects even if they are not versioned.
+* link:https://issues.apache.org/jira/browse/ISIS-362[ISIS-362] - Upgrade to JMock 2.6.0
+* link:https://issues.apache.org/jira/browse/ISIS-364[ISIS-364] - Suppress components of title when rendered in a parented collection.
+* link:https://issues.apache.org/jira/browse/ISIS-366[ISIS-366] - Core unit testing support JUnitRuleMockery2 does not support autoinjection of setters
+* link:https://issues.apache.org/jira/browse/ISIS-386[ISIS-386] - Provide the ability to force a reload of an object by the JDO objectstore, and provide a domain service for clients.
+* link:https://issues.apache.org/jira/browse/ISIS-387[ISIS-387] - Enhance PublishingService and AuditingService for created and deleted objects (as well as just updated objects).
+* link:https://issues.apache.org/jira/browse/ISIS-396[ISIS-396] - Wicket/JDO handling of BigDecimal properties should honour the @Column&#39;s scale attribute.
+* link:https://issues.apache.org/jira/browse/ISIS-397[ISIS-397] - Change default AuditingService impl to write to stderr, not stdout
+* link:https://issues.apache.org/jira/browse/ISIS-398[ISIS-398] - Extend applib&#39;s Clock interface to also return time as Joda LocalDate or LocalDateTime
+* link:https://issues.apache.org/jira/browse/ISIS-403[ISIS-403] - Improve the bookmarks in the Wicket viewer.
+
+
+=== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-359[ISIS-359] - arg...
+* link:https://issues.apache.org/jira/browse/ISIS-408[ISIS-408] - persistable properties (annotated with @NotPersisted).
+
+
+
+== Wicket Viewer
+
+
+=== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-328[ISIS-328] - Wicket viewer should shutdown Apache Isis core on completion
+* link:https://issues.apache.org/jira/browse/ISIS-344[ISIS-344] - Automatically exclude &quot;parent references&quot; from parented collections.
+* link:https://issues.apache.org/jira/browse/ISIS-351[ISIS-351] - fatal, for rendering to the user.
+* link:https://issues.apache.org/jira/browse/ISIS-360[ISIS-360] - About page on wicket viewer should show version, build number and other details.
+* link:https://issues.apache.org/jira/browse/ISIS-363[ISIS-363] - Wicket viewer should abbreviate title to different lengths for parented vs standalone collections.
+* link:https://issues.apache.org/jira/browse/ISIS-384[ISIS-384] - Provide automatic totalling of collections.
+* link:https://issues.apache.org/jira/browse/ISIS-400[ISIS-400] - In the wicket viewer, allow actions to be associated with properties (similar to how this can be done with collections)
+* link:https://issues.apache.org/jira/browse/ISIS-407[ISIS-407] - Annotation to automatically adjust end dates of ranges so that they are shown as inclusive vs exclusive.
+
+
+=== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-314[ISIS-314] - The wicket viewer should honour precision and scale when rendering BigDecimal values.
+* link:https://issues.apache.org/jira/browse/ISIS-320[ISIS-320] - Be more verbose when wicket page fails to render
+* link:https://issues.apache.org/jira/browse/ISIS-330[ISIS-330] - Wicket viewer calls choices method while figuring out how to render properties.  Should call less often (if not at all).
+* link:https://issues.apache.org/jira/browse/ISIS-335[ISIS-335] - Don&#39;t include (or perhaps abbreviate) the title text in collections
+* link:https://issues.apache.org/jira/browse/ISIS-337[ISIS-337] - Reduce size of font in breadcrumbs
+* link:https://issues.apache.org/jira/browse/ISIS-338[ISIS-338] - Right align number fields (byte, short, int, long, float, double, BigInteger, BigDecimal)
+* link:https://issues.apache.org/jira/browse/ISIS-339[ISIS-339] - Wicket Autocomplete should only fire if at least 1 character has been entered.
+* link:https://issues.apache.org/jira/browse/ISIS-340[ISIS-340] - Wicket viewer bookmarks should show icon as well as title
+* link:https://issues.apache.org/jira/browse/ISIS-343[ISIS-343] - Introduce @Render annotation and deprecate @Resolve
+* link:https://issues.apache.org/jira/browse/ISIS-349[ISIS-349] - Show notifications, warning messages and error messages in Wicket
+* link:https://issues.apache.org/jira/browse/ISIS-350[ISIS-350] - Provide a fallback error page in case of runtime exception being thrown.
+* link:https://issues.apache.org/jira/browse/ISIS-357[ISIS-357] - Gracefully handle objects that have been deleted.
+* link:https://issues.apache.org/jira/browse/ISIS-362[ISIS-362] - Upgrade to JMock 2.6.0
+* link:https://issues.apache.org/jira/browse/ISIS-364[ISIS-364] - Suppress components of title when rendered in a parented collection.
+* link:https://issues.apache.org/jira/browse/ISIS-365[ISIS-365] - Should not add same object to bookmarks (breadcrumbs) twice if its title has changed.
+* link:https://issues.apache.org/jira/browse/ISIS-392[ISIS-392] - In Wicket, provide a datepicker for all of the date/datetime value types.
+* link:https://issues.apache.org/jira/browse/ISIS-393[ISIS-393] - Upgrade to Wicket 6.7.0
+* link:https://issues.apache.org/jira/browse/ISIS-394[ISIS-394] - Use JQuery UI date picker rather than the YUI picker.
+* link:https://issues.apache.org/jira/browse/ISIS-395[ISIS-395] - Allow Wicket viewer&#39;s date pattern to be globally configurable
+* link:https://issues.apache.org/jira/browse/ISIS-396[ISIS-396] - Wicket/JDO handling of BigDecimal properties should honour the @Column&#39;s scale attribute.
+* link:https://issues.apache.org/jira/browse/ISIS-403[ISIS-403] - Improve the bookmarks in the Wicket viewer.
+
+
+=== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-295[ISIS-295] - NullPointerException when view aggregated entity using Wicket viewer
+* link:https://issues.apache.org/jira/browse/ISIS-321[ISIS-321] - gracefully handle any constraint violation thrown by the DataNucleus persistence mechanism (to be handled by JDO ObjectStore &amp; Wicket)
+* link:https://issues.apache.org/jira/browse/ISIS-334[ISIS-334] - method String iconName() is never called in entities
+* link:https://issues.apache.org/jira/browse/ISIS-336[ISIS-336] - Fix CSS for Wicket viewer so that disabled application actions (on menu bar) are shown greyed out.
+* link:https://issues.apache.org/jira/browse/ISIS-341[ISIS-341] - if search and get no results, then click on the OK, then get a stack trace
+* link:https://issues.apache.org/jira/browse/ISIS-342[ISIS-342] - Bootstrapping Wicket application should load supplementary config files for viewers.
+* link:https://issues.apache.org/jira/browse/ISIS-354[ISIS-354] - Issues with Wicket viewer and tck examples
+* link:https://issues.apache.org/jira/browse/ISIS-359[ISIS-359] - arg...
+* link:https://issues.apache.org/jira/browse/ISIS-382[ISIS-382] - Quickly pressing enter multiple times on an object form creates multiple instances.
+* link:https://issues.apache.org/jira/browse/ISIS-385[ISIS-385] - In the wicket viewer, actions rendered by collections are never shown as disabled.
+* link:https://issues.apache.org/jira/browse/ISIS-388[ISIS-388] - Bulk actions in Wicket viewer not correctly redirecting to error page if an unexpected error occurs
+* link:https://issues.apache.org/jira/browse/ISIS-390[ISIS-390] - Fix NPE in Wicket viewer if tries to render an action that is invisible.
+* link:https://issues.apache.org/jira/browse/ISIS-402[ISIS-402] - Wicket viewer, show bulk actions for prototype or exploring modes.
+
+
+
+
+
+
+
+== RestfulObjects Viewer
+
+=== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-323[ISIS-323] - Provide the capability to publish events, either changed objects or invoked actions
+* link:https://issues.apache.org/jira/browse/ISIS-410[ISIS-410] - RO viewer support @Render(EAGERLY) for collections
+
+
+=== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-233[ISIS-233] - viewer up to RO spec 1.0.0
+* link:https://issues.apache.org/jira/browse/ISIS-362[ISIS-362] - Upgrade to JMock 2.6.0
+* link:https://issues.apache.org/jira/browse/ISIS-387[ISIS-387] - Enhance PublishingService and AuditingService for created and deleted objects (as well as just updated objects).
+
+
+
+
+

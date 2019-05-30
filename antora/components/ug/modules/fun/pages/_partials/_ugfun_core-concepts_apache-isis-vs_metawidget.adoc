@@ -1,0 +1,19 @@
+[[_ugfun_core-concepts_apache-isis-vs_metawidget]]
+= vs MetaWidget
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+MetaWidget (mentioned xref:../ugfun/ugfun.adoc#_ugfun_core-concepts_philosophy_naked-objects-pattern_object-interface-mapping[earlier] has a number of ideas in common with Apache Isis, specifically the runtime generation of a UI for domain objects.
+And like Apache Isis, MetaWidget builds its own metamodel of the domain objects and uses this to render the object.
+
+However, there is a difference in philosophy in that MW is not a full-stack framework and does not (in their words) try to "own the UI".
+Rather they support a huge variety of UI technologies and allow the domain object to be rendered in any of them.
+
+In contrast, Apache Isis is full-stack and does generate a complete UI; we then allow you to customize or extend this UI (as per the various (non-ASF) link:http://platform.incode.org[Incode Platform^] modules), and we also provide a full REST API through the xref:../ugvro/ugvro.adoc#[Restful Objects viewer]
+
+Also, it's worth noting that MetaWidget does have an elegant pipeline architecture, with APIs to allow even its metamodel to be replaced.
+It would be feasible and probably quite straightforward to use Apache Isis' own metamodel as an implementation of the MetaWidget API.
+This would allow MetaWidget to be able to render an Apache Isis domain application.
+
+

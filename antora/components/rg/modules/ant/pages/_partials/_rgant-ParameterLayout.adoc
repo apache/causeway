@@ -1,0 +1,113 @@
+[[_rgant-ParameterLayout]]
+= `@ParameterLayout`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `@ParameterLayout` annotation applies to action parameters, collecting together all UI hints within a single annotation.
+
+The table below summarizes the annotation's attributes.
+
+.`@ParameterLayout` attributes
+[cols="2,2,4a", options="header"]
+|===
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[`cssClass()`]
+|Any string valid as a CSS class
+|the css class that a parameter should have, to allow more targetted styling in xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]
+
+
+|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[`describedAs()`]
+|String
+|description of this parameter, eg to be rendered in a tooltip.
+
+
+|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_labelPosition[`labelPosition()`]
+|`LEFT`, `TOP`, `RIGHT`, `NONE` +
+(`LEFT`)
+|in forms, the positioning of the label relative to the property value. +
+
+Default is `LEFT`, unless xref:../rgant/rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine`] in which case `TOP`.
+The value `RIGHT` is only supported for boolean parameters.
+
+
+|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine()`]
+|Positive integer
+|for string parameters, render as a text area over multiple lines. +
+
+If set > 1, then then xref:../rgant/rgant.adoc#_rgant-ParameterLayout_labelPosition[`labelPosition`] defaults to `TOP`.
+
+
+|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[`named()`]
+|String
+|the name of this parameter. +
+
+For Java 7 this is generally required. For Java 8, the name can often be inferred from the code so this attribute allows the name to be overridden.
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
+
+
+|`namedEscaped()`
+|`true`, `false` (`true`)
+|whether to HTML escape the name of this parameter.
+
+
+|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_renderedAsDayBefore[`renderedAsDayBefore()`]
+|
+|for date parameters only, render the date as one day prior to the actually stored date (eg the end date of an open interval into a closed interval)
+
+
+|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_typicalLength[`typicalLength()`]
+|
+|the typical entry length of a field, use to determine the optimum width for display
+
+|===
+
+
+
+
+
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    public ToDoItem updateDescription(
+                        @ParameterLayout(
+                            cssClass="x-key",
+                            describedAs="What needs to be done",
+                            labelPosition=LabelPosition.LEFT,
+                            named="Description of this <i>item</i>",
+                            namedEscaped=false,
+                            typicalLength=80)
+                        final String description) {
+        setDescription(description);
+        return this;
+    }
+    ...
+}
+----
+
+
+
+[NOTE]
+====
+Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[`.layout.xml`] file (only for properties, collections and actions are supported).
+====
+
+
+
+include::_rgant-ParameterLayout_cssClass.adoc[leveloffset=+1]
+include::_rgant-ParameterLayout_describedAs.adoc[leveloffset=+1]
+include::_rgant-ParameterLayout_labelPosition.adoc[leveloffset=+1]
+include::_rgant-ParameterLayout_multiLine.adoc[leveloffset=+1]
+include::_rgant-ParameterLayout_named.adoc[leveloffset=+1]
+include::_rgant-ParameterLayout_renderedAsDayBefore.adoc[leveloffset=+1]
+include::_rgant-ParameterLayout_typicalLength.adoc[leveloffset=+1]
+
+

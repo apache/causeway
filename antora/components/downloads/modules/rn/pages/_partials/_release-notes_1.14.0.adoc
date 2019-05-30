@@ -1,0 +1,73 @@
+[[_release-notes_1.14.0]]
+= 1.14.0
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+
+Apache Isis 1.14.0 introduces one significant new feature, namely the ability to invoke actions with collection parameters.
+This is rendered by the Wicket viewer as a multi-select drop-down.
+It is also captured in the DTO/XML for both commands and published interaction events.
+Note though that Restful Objects viewer currently does not provide any support.
+
+Also included in the release are a number of minor improvements.
+In particular, there are now a number of metamodel validations intended to make it apps already in production easier to refactor.
+These include a new `objectType` attribute for `@DomainService`, analogous to the same attribute on `@DomainObject`.
+The `EmailService` has been improved so it is easier to use in system test (non-prod) environments.
+Finally, a new `TableColumnOrderService` to allow column order to be fine-tuned.
+
+The release also has a number of bug fixes.
+
+Most applications written against v1.13.x should run against v1.14.0 with few if any changes.
+That said, we do recommend that you read and keep in mind the link:https://isis.apache.org/versions/1.14.0/migration-notes/migration-notes.html#_migration-notes_1.13.0-to-1.14.0[migration notes] when you upgrade your app.
+
+
+
+
+
+== New Feature
+
+* link:https://issues.apache.org/jira/browse/ISIS-1529[ISIS-1529] - TableColumnOrderService, to allow column order to be fine-tuned (or columns suppressed)
+* link:https://issues.apache.org/jira/browse/ISIS-709[ISIS-709] - Support multi-select for the drop-down box
+* link:https://issues.apache.org/jira/browse/ISIS-785[ISIS-785] - Invoke action parameter with a collection of entities.
+
+
+== Improvement
+
+* link:https://issues.apache.org/jira/browse/ISIS-1587[ISIS-1587] - Extend "explicitObjectType" checking to also take in view models.
+* link:https://issues.apache.org/jira/browse/ISIS-1586[ISIS-1586] - Rationalize the way that service instances are referenced by RO vs rest of the framework
+* link:https://issues.apache.org/jira/browse/ISIS-1584[ISIS-1584] - Metamodel validation to flag for any contributed services (rather than mixins)
+* link:https://issues.apache.org/jira/browse/ISIS-1582[ISIS-1582] - Extend 'explicitObjectType' checking to domain services
+* link:https://issues.apache.org/jira/browse/ISIS-1581[ISIS-1581] - MetaModel validator should (if configured) check that an object type has been explicitly specified.
+* link:https://issues.apache.org/jira/browse/ISIS-1580[ISIS-1580] - Should throw a metamodel validation exception if JDOQL FROM clause or VARIABLES clause invalid.
+* link:https://issues.apache.org/jira/browse/ISIS-1567[ISIS-1567] - Replace jetty-uber with jetty-servlet and jetty-webapp
+* link:https://issues.apache.org/jira/browse/ISIS-1557[ISIS-1557] - Enhance EmailServiceDefault, to optionally throw exception if fail, and optionally allow overrides
+* link:https://issues.apache.org/jira/browse/ISIS-1555[ISIS-1555] - DomainChangeJdoAbstract (super of command, audit etc) shouldn't throw exception if target class is unknown.
+* link:https://issues.apache.org/jira/browse/ISIS-1512[ISIS-1512] - MetaModelValidator should detect domain services that have collections, and fail-fast.
+* link:https://issues.apache.org/jira/browse/ISIS-1501[ISIS-1501] - MetaModel validator for mixin that doesn't have a public constructor with a single parameter
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-1578[ISIS-1578] - Should throw a metamodel validation exception if a disable or hide method has any params.
+* link:https://issues.apache.org/jira/browse/ISIS-1577[ISIS-1577] - The transactionId within a command XML does not correspond with the transactionId of the command's metadata.
+* link:https://issues.apache.org/jira/browse/ISIS-1574[ISIS-1574] - Throws exception if layout.xml references unknown property.
+* link:https://issues.apache.org/jira/browse/ISIS-1573[ISIS-1573] - ISIS_OPTS incorrectly ignores values that have an '=' sign in them.
+* link:https://issues.apache.org/jira/browse/ISIS-1571[ISIS-1571] - Should throw metamodel validation error if omit choices or autoComplete for parameter collection type.
+* link:https://issues.apache.org/jira/browse/ISIS-1570[ISIS-1570] - CSS spacing incorrect for action buttons placed below when there are also action placed to right
+* link:https://issues.apache.org/jira/browse/ISIS-1566[ISIS-1566] - Allow datanucleus.ConnectionPasswordDecrypter to be used to decrypt password.
+* link:https://issues.apache.org/jira/browse/ISIS-1565[ISIS-1565] - Fixes @MemberOrder so that the 4 default mixin actions are automatically associated with the 3 default mixin properties
+* link:https://issues.apache.org/jira/browse/ISIS-1564[ISIS-1564] - Attempt to invoke no-arg bookmarked action, throws stacktraceexception.
+* link:https://issues.apache.org/jira/browse/ISIS-1526[ISIS-1526] - WebServer --port option not working
+* link:https://issues.apache.org/jira/browse/ISIS-1478[ISIS-1478] - Setting Editing.ENABLED does not seem to override configuration property set to disabled.
+
+
+
+== Documentation
+
+* link:https://issues.apache.org/jira/browse/ISIS-1532[ISIS-1532] - Move DN OS cfg props to DN OS guide
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-1561[ISIS-1561] - Release 1.14.0
+

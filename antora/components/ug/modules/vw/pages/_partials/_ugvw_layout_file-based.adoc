@@ -1,0 +1,466 @@
+[[_ugvw_layout_file-based]]
+= File-based Layouts
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+Metadata providing UI hints can be specified either xref:../ugvw/ugvw.adoc#_ugvw_layout_annotation-based[using annotations], or using an `Xxx.layout.xml` file (where `Xxx` is the entity or view model object to be rendered).
+
+File-based layouts offer a number of benefits:
+
+* Probably most significantly, the layout can be updated without requiring a recompile of the code and redeploy of the app; fine-tuning the layout with your end users is easy to do
+
+* Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
+
+* UI hints can be provided for xref:../ugfun/ugfun.adoc#_ugfun_how-tos_contributed-members[contributed associations and actions] that are synthesised at runtime.
+
+It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (exposed on the prototyping menu) or using a xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] contributed to every domain object.
+
+There are some downsides, though:
+
+* file-based layouts are not typesafe: a typo will result in the metadata not being picked up for the element.
+
+* they suffer from syntactic fragility: an invalid XML document will result in no metadata for the entire class.
+
+* there is no notion of inheritance, so a `.layout.xml` is required for all concrete classes and also for any abstract classes (if used as a collection type).
+In contrast, the dewey-decimal format `@MemberOrder` annotation allows the metadata of the subclass its superclasses to fit together relatively seamlessly.
+
+The `Xxx.layout.xml` file is just the serialized form of a xref:../rgcms/rgcms.adoc#_rgcms_classes_layout[`Grid`] layout class defined within Apache Isis' applib.
+These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making iteasy to author such layout files.
+
+
+== Alternative Layouts
+
+A domain object may also have multiple layouts.
+For example, there may be the capability to switch into an "edit" mode, which perhaps hides some class members, shows others (perhaps mixins specific to data entry).
+Another reason might be to support different tenancies/user groups, where different business processes might require a slightly different UI representation.
+
+One way in which the domain object can specify an alternate layout is through its xref:rgcms.adoc#_rgcms_methods_reserved_layout[`layout()`] method.
+If this returns a non-null value, say "edit", then this is used to locate an alternative layout, in the form `Xxx-edit.layout.xml`.
+
+
+== Search Algorithm (Library Support)
+
+For a given domain object `Xxx`, if it has specified a layout `yyy`, then the framework will search for a file `Xxx.yyy.layout.xml` on the classpath.
+
+If no layout has been specified (or if the specified layout cannot be found), then the framework searches for a file called `Xxx.layout.xml`.
+
+Finally, if this can't be found, then the framework will search for a file named `Xxx.layout.fallback.xml`.
+If present, this will be used instead.
+
+The "fallback" layout this therefore allows libraries that provide a domain entities/view models (for example, the (non-ASF) link:http://platform.incode.org[Incode Platform] modules) to define the UI of these objects using a layout file, while still allowing the consuming application to override that layout if it so requires.
+
+
+
+
+== Grids vs Components
+
+The layout file distinguishes between two types of element:
+
+* those that define a grid structure, of: rows, columns, tab groups and tabs. +
++
+The rows and columns are closely modelled on link:http://getbootstrap.com[Bootstrap 3] (used in the implementation of the xref:../ugvw/ugvw.adoc#[Wicket viewer]).
+
+* those that defines common components, of: fieldsets (previously called member groups or property groups), properties, collections, actions and also the title/icon of the domain object itself.
+
+More information about these classes can be found in xref:../rgcms/rgcms.adoc#_rgcms_classes_layout[the reference guide].  More information on Bootstrap 3's grid system can be found link:http://getbootstrap.com/css/#grid[here].
+
+
+
+== Screencast
+
+This link:https://www.youtube.com/watch?v=MxewC5Pve5k[screencast] describes the feature.
+
+
+
+
+== Examples
+
+Probably the easiest way to understand dynamic XML layouts is by example.
+For this we'll use the `ToDoItem` from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
+
+image::{_imagesdir}layout-dynamic-xml/ToDoItem.png[width="940px",link="{_imagesdir}layout-dynamic-xml/ToDoItem.png"]
+
+
+=== Namespaces
+
+First things first; every `.layout.xml` file must properly declare the XSD namespaces and schemas.
+There are two: one for the grid classes, and one for the common component classes:
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bs3:grid
+  xsi:schemaLocation="http://isis.apache.org/applib/layout/component
+                      http://isis.apache.org/applib/layout/component/component.xsd
+                      http://isis.apache.org/applib/layout/grid/bootstrap3
+                      http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd"
+  xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3"
+  xmlns:c="http://isis.apache.org/applib/layout/component"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    ...
+</bs3:grid>
+----
+
+Most IDEs will automatically download the XSD schemas from the specified schema locations, thereby providing
+"intellisense" help as you edit the file.
+
+
+=== Rows, full-width cols, and tabs
+
+The example layout consists of three rows: a row for the object/icon, a row containing a properties, and a row containing collections.
+In all three cases the row contains a single column spanning the full width of the page.
+For the property and collection rows, the column contains a tab group.
+
+This corresponds to the following XML:
+
+[source,xml]
+----
+<bs3:row>
+    <bs3:col span="12" unreferencedActions="true">
+        <c:domainObject bookmarking="AS_ROOT"/>
+    </bs3:col>
+</bs3:row>
+<bs3:row>
+    <bs3:col span="12">
+        <bs3:tabGroup>
+            <bs3:tab name="Properties">...</bs3:tab>
+            <bs3:tab name="Other">...</bs3:tab>
+            <bs3:tab name="Metadata">...</bs3:tab>
+        </bs3:tabGroup>
+    </bs3:col>
+</bs3:row>
+<bs3:row>
+    <bs3:col span="12">
+        <bs3:tabGroup unreferencedCollections="true">
+            <bs3:tab name="Similar to">...</bs3:tab>
+            <bs3:tab name="Dependencies">...</bs3:tab>
+        </bs3:tabGroup>
+    </bs3:col>
+</bs3:row>
+----
+
+
+You will notice that one of the ``col``umns has an ``unreferencedActions`` attribute, while one of the ``tabGroup``s has a similar ``unreferencedCollections`` attribute.
+This topic is discussed in more detail xref:../ugfun/ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
+
+
+
+=== Fieldsets
+
+The first tab containing properties is divided into two columns, each of which holds a single fieldset of multiple properties.
+Those properties in turn can have associated actions.
+
+This corresponds to the following XML:
+
+[source,xml]
+----
+<bs3:tab name="Properties">
+    <bs3:row>
+        <bs3:col span="6">
+            <c:fieldSet name="General" id="general" unreferencedProperties="true">
+                <c:action id="duplicate" position="PANEL_DROPDOWN"/>
+                <c:action id="delete"/>
+                <c:property id="description"/>
+                <c:property id="category"/>
+                <c:property id="subcategory">
+                    <c:action id="updateCategory"/>
+                    <c:action id="analyseCategory" position="RIGHT"/>
+                </c:property>
+                <c:property id="complete">
+                    <c:action id="completed" cssClassFa="fa-thumbs-up"/>
+                    <c:action id="notYetCompleted" cssClassFa="fa-thumbs-down"/>
+                </c:property>
+            </c:fieldSet>
+        </bs3:col>
+        <bs3:col span="6">
+            ...
+        </bs3:col>
+    </bs3:row>
+</bs3:tab>
+----
+
+The tab defines two columns, each span of 6 (meaning half the width of the page).
+
+In the first column there is a single fieldset.
+Notice how actions - such as `duplicate` and `delete` - can be associated with this fieldset directly, meaning that they should be rendered on the fieldset's top panel.
+
+Thereafter the fieldset lists the properties in order.
+Actions can be associated with properties too; here they are rendered underneath or to the right of the field.
+
+Note also the `unreferencedProperties` attribute for the fieldset; this topic is discussed in more detail xref:../ugfun/ugfun.adoc#__ugvw_layout_file-based_unreferenced[below].
+
+[NOTE]
+====
+The ``<fieldset>``'s "name" attribute is optional.
+If omitted, then the title panel is suppressed, freeing more real estate.
+
+Do be aware though that if there are any actions that have been placed on the fieldset's panel, then these _will *not* be displayed_.
+====
+
+
+
+=== Collections
+
+In the final row the collections are placed in tabs, simply one collection per tab.  This corresponds to the following XML:
+
+[source,xml]
+----
+<bs3:tab name="Similar to">
+    <bs3:row>
+        <bs3:col span="12">
+            <c:collection defaultView="table" id="similarTo"/>
+        </bs3:col>
+    </bs3:row>
+</bs3:tab>
+<bs3:tab name="Dependencies">
+    <bs3:row>
+        <bs3:col span="12">
+            <c:collection defaultView="table" id="dependencies">
+                <c:action id="add"/>
+                <c:action id="remove"/>
+            </c:collection>
+        </bs3:col>
+    </bs3:row>
+</bs3:tab>
+----
+
+As with properties, actions can be associated with collections; this indicates that they should be rendered in the collection's header.
+
+
+
+[[__ugvw_layout_file-based_unreferenced]]
+== Unreferenced Members
+
+As noted in the preceding discussion, several of the grid's regions have either an ``unreferencedActions``, ``unreferencedCollections`` or ``unreferencedProperties`` attribute.
+
+The rules are:
+
+* `unreferencedActions` attribute can be specified either on a column or on a fieldset.  +
++
+It would normally be typical to use the column holding the `<domainObject/>` icon/title, that is as shown in the example.
+The unreferenced actions then appear as top-level actions for the domain object.
+
+* `unreferencedCollections` attribute can be specified either on a column or on a tabgroup. +
++
+If specified on a column, then that column will contain each of the unreferenced collections, stacked one on top of the other.
+If specified on a tab group, then a separate tab will be created for each collection, with that tab containing only that single collection.
+
+* `unreferencedProperties` attribute can be specified only on a fieldset.
+
+The purpose of these attributes is to indicate where in the layout any unreferenced members should be rendered.
+Every grid _must_ nominate one region for each of these three member types, the reason being that to ensure that the layout can be used even if it is incomplete with respect to the object members inferred from the Java source code.
+This might be because the developer forgot to update the layout, or it might be because of a new mixin (property, collection or action) contributed to many objects.
+
+
+The framework ensures that in any given grid exactly one region is specified for each of the three `unreferenced...` attributes.
+If the grid fails this validation, then a warning message will be displayed, and the invalid XML logged.  The layout XML will then be ignored.
+
+
+
+== More advanced features
+
+This section decribes a number of more features useful in more complex layouts.
+
+
+=== Multiple references to a feature
+
+One feature worth being aware of is that it is possible to render a single feature more than once.
+
+For example, the dashboard home page for the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] shows
+the "not yet complete" collection of todo items twice, once as a table and also as a calendar:
+
+image::{_imagesdir}layout-dynamic-xml/ToDoAppDashboard.png[width="940px",link="{_imagesdir}layout-dynamic-xml/ToDoAppDashboard.png"]
+
+
+This is accomplished using the following (slightly abbreviated) layout:
+
+[source,xml]
+----
+<grid ...>
+    <row>
+        <col span="2" unreferencedActions="true">
+            ...
+        </col>
+        <col span="5" unreferencedCollections="true" cssClass="custom-padding-top-20">
+            <ns2:collection id="notYetComplete" defaultView="calendar"/>                <!--1-->
+        </col>
+        <col span="5" cssClass="custom-padding-top-20">
+            <ns2:collection id="notYetComplete" defaultView="table" paged="5"/>         <!--2-->
+            <ns2:collection id="complete" defaultView="table"/>
+        </col>
+        <col span="0">
+            <ns2:fieldSet name="General" id="general" unreferencedProperties="true"/>
+        </col>
+    </row>
+</grid>
+----
+<1> render the collection in "calendar" view
+<2> also render the collection in "table" view
+
+In the middle column the `notYetComplete` collection is rendered in "calendar" view, while in the right-most column it is rendered in "table" view.
+
+
+It is also possible to reference object properties and actions more than once.
+This might be useful for a complex domain object with multiple tabs; certain properties or actions might appear on a summary tab (that shows the most commonly used info), but also on detail tabs.
+
+
+=== Custom CSS
+
+The ToDoApp's dashboard (above) also shows how custom CSS styles can be associated with specific regions of the layout:
+
+[source,xml]
+----
+<grid ...>
+    <row>
+        <col span="2" unreferencedActions="true">
+            <ns2:domainObject/>
+            <row>
+                <col span="12" cssClass="custom-width-100">                             <!--1-->
+                    <ns2:action id="exportToWordDoc"/>
+                </col>
+            </row>
+            ...
+        </col>
+        <col span="5" unreferencedCollections="true" cssClass="custom-padding-top-20">  <!--2-->
+            ...
+        </col>
+        <col span="5" cssClass="custom-padding-top-20">                                 <!--3-->
+            ...
+        </col>
+    </row>
+</grid>
+----
+<1> Render the column with the `custom-width-100` CSS class.
+<2> Render the column with the `custom-padding-top-20` CSS class.
+<3> Ditto
+
+For example the `custom-width-100` style is used to "stretch" the button for the `exportToWordDoc` action in the left-most column.
+This is accomplished with the following CSS in `application.css`:
+
+[source,css]
+----
+.custom-width-100 ul,
+.custom-width-100 ul li,
+.custom-width-100 ul li a.btn {
+    width: 100%;
+}
+----
+
+Similarly, the middle and right columns are rendered using the `custom-padding-top-20` CSS class.  This shifts them down
+from the top of the page slightly, using the following CSS:
+
+[source,css]
+----
+.custom-padding-top-20 {
+    padding-top: 20px;
+}
+----
+
+
+
+
+== Migrating from earlier versions
+
+As noted earlier on, it is possible to download layout XML files using the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (exposed on the prototyping menu); this will download a ZIP file of layout XML files for all domain entities and view models.
+Alternatively the layout XML for a single domain object can be downloaded using the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] (contributed to every domain object).
+
+There are four "styles":
+
+* current
+* complete
+* normalized
+* minimal
+
+
+Ignoring the "current" style (which merely downloads the currently cached layout), the other three styles allow the developer to choose how much metadata is to be specified in the XML, and how much (if any) will be obtained from annotations in the metamodel.
+The table below summarises the choices:
+
+.Table caption
+[cols="<.>,^.>,^.>,^.>", options="header"]
+|===
+
+| Style
+|xref:../rgant/rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]
+| xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
+| xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]
+
+
+|`COMPLETE`
+|serialized as XML
+|serialized as XML
+|serialized as XML
+
+
+|`NORMALIZED`
+|serialized as XML
+|serialized as XML
+|not in the XML
+
+
+|`MINIMAL`
+|serialized as XML
+|not in the XML
+|not in the XML
+
+|===
+
+As a developer, you therefore have a choice as to how you provide the metadata required for customised layouts:
+
+* if you want all layout metadata to be read from the `.layout.xml` file, then download the "complete" version, and copy the file alongside the domain class.
+You can then remove all `@MemberGroupLayout`, `@MemberOrder`, `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations from the source code of the domain class.
+
+* if you want to use layout XML file to describe the grid (columns, tabs etc) and specify which object members are associated with those regions of the grid, then download the "normalized" version.
+You can then remove the `@MemberGroupLayout` and `@MemberOrder` annotations from the source code of the domain class, but retain the `@ActionLayout`, `@PropertyLayout` and `@CollectionLayout` annotations.
+
+* if you want to use layout XML file ONLY to describe the grid, then download the "minimal" version.
+The grid regions will be empty in this version, and the framework will use the `@MemberOrder` annotation to bind object members to those regions.
+The only annotation that can be safely removed from the source code with this style is the `@MemberGroupLayout` annotation.
+
+
+Download either for a single domain object, or download all domain objects (entities and view models).
+
+
+== Domain Services
+
+For more information about layouts, see:
+
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (whose functionality is exposed on the prototyping menu as an action) and lso the a xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixin action]
+
+* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] and its supporting services, xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`]
+
+* xref:../rgcms/rgcms.adoc#_rgcms_classes_layout[grid layout classes], defined in the Apache Isis applib
+
+
+
+
+== Required updates to the dom project's pom.xml
+
+Any `.layout.xml` files must be compiled and available in the classpath.
+Ensure the following is defined in the dom project's `pom.xml`:
+
+[source.xml]
+----
+<resources>
+    <resource>
+        <filtering>false</filtering>
+        <directory>src/main/resources</directory>
+    </resource>
+    <resource>
+        <filtering>false</filtering>
+        <directory>src/main/java</directory>
+        <includes>
+            <include>**</include>
+        </includes>
+        <excludes>
+            <exclude>**/*.java</exclude>
+        </excludes>
+    </resource>
+</resources>
+----
+
+If using an Apache Isis xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes, then the POM is already correctly configured.
+
+
+

@@ -1,0 +1,42 @@
+[[_migration-notes_1.8.0-to-1.9.0_exception-recognizer]]
+= `ExceptionRecognizerCompositeForJdoObjectStore`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `ExceptionRecognizerCompositeForJdoObjectStore` service (an implementation of the link:https://isis.apache.org/versions/1.9.0/guides/rgsvc/rgsvc.html#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`ExceptionRecognizer`] SPI) recognizes certain expected exceptions thrown by the JDO objectstore (for example, violations of uniqueness) and converts them into meaningful messages for the end-user.
+
+Prior to 1.9.0 this implementation was _not_ annotated with link:https://isis.apache.org/versions/1.9.0/guides/rgant/rgant.html#_rgant-DomainService[`@DomainService`] and thus needed to be explicitly registered in `isis.properties`.
+
+In 1.9.0 the service has been annotated with `@DomainService` meaning that:
+
+* it must be removed from `isis.services` property in `isis.properties` configuration file
+
+* in integration tests, if the service is explicitly registered, then it should be removed; for example: +
++
+[source,java]
+----
+public class EstatioIntegTestBuilder extends IsisSystemForTest.Builder {
+    public EstatioIntegTestBuilder() {
+        ...
+        withServices(
+        //    new ExceptionRecognizerCompositeForJdoObjectStore()   // <1>
+        );
+    }
+    ...
+}
+----
+<1> remove this line (or comment it out, as shown)
+
+If you fail to do this you will get an exception to the effect of duplicate service Ids being registered.
+
+Now that the `ExceptionRecognizerCompositeForJdoObjectStore` no longer needs to be explicitly registered, you might (very rarely) require the opposite situation, namely to disable the service.  As this can't be done by just removing it from `isis.properties`, you instead can set a new link:https://isis.apache.org/versions/1.9.0/guides/rgcfg/rgcfg.html#_rgcfg_configuring-core[configuration property] `isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable`:
+
+[source,ini]
+----
+#isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable=false
+----
+
+If you did not register this service directly but instead registered a subclass of this service, then you should refactor your code so that your implementation is in a separate service, eg by subclassing `ExceptionRecognizerComposite`.  You should probably also annotate with `@DomainService`.
+

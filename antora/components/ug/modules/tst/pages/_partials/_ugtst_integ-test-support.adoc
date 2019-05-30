@@ -1,0 +1,25 @@
+[[_ugtst_integ-test-support]]
+= Integration Test Support
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+As discussed in the introductory overview of this chapter, Apache Isis allows you to integration test your domain objects from within JUnit.  There are several parts to this:
+
+* configuring the Apache Isis runtime so it can be bootstrapped (mostly boilerplate)
+* defining a base class to perform said bootstrapping
+* using fixture scripts to set up the app
+* using `WrapperFactory` so that the UI can be simulated.
+
+We'll get to all that shortly, but let's start by taking a look at what a typical integration test looks like.
+
+
+include::_ugtst_integ-test-support_typical-usage.adoc[leveloffset=+1]
+include::_ugtst_integ-test-support_bootstrapping.adoc[leveloffset=+1]
+include::_ugtst_integ-test-support_abstract-class.adoc[leveloffset=+1]
+include::_ugtst_integ-test-support_configuration-properties.adoc[leveloffset=+1]
+include::_ugtst_integ-test-support_wrapper-factory.adoc[leveloffset=+1]
+include::_ugtst_integ-test-support_maven-configuration.adoc[leveloffset=+1]
+
+
+

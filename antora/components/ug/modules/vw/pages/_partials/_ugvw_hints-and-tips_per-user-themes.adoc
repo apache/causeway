@@ -1,0 +1,90 @@
+include::_attributes.adoc[]
+[[_ugvw_hints-and-tips_per-user-themes]]
+= Per-user Themes
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+From link:http://isis.markmail.org/thread/kb4442niwwbnghey[this thread] on the Apache Isis users mailing list:
+
+* _Is it possible to have each of our resellers (using our Apache Isis application) use there own theme/branding with their own logo and colors?
+Would this also be possible for the login page, possibly depending on the used host name?_
+
+
+Yes, you can do this, by installing a custom implementation of the Wicket Bootstrap's `ActiveThemeProvider`.
+
+The http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] (non-ASF) actually link:https://github.com/isisaddons/isis-app-todoapp/tree/61b8114a8e01dbb3c380b31cf09eaed456407570[does this], storing the info via the (non-ASF) http://platform.incode.org/modules/dom/settings/dom-settings.html[Incode Platform's settings module] :
+
+
+[source,java]
+.IActiveThemeProvider implementation
+----
+public class UserSettingsThemeProvider implements ActiveThemeProvider {
+    ...
+    @Override
+    public ITheme getActiveTheme() {
+        if(IsisContext.getSpecificationLoader().isInitialized()) {
+            final String themeName = IsisContext.doInSession(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    final UserSettingsService userSettingsService =
+                        lookupService(UserSettingsService.class);
+                    final UserSetting activeTheme = userSettingsService.find(
+                            IsisContext.getAuthenticationSession().getUserName(),
+                            ACTIVE_THEME);
+                    return activeTheme != null ? activeTheme.valueAsString() : null;
+                }
+            });
+            return themeFor(themeName);
+        }
+        return new SessionThemeProvider().getActiveTheme();
+    }
+    @Override
+    public void setActiveTheme(final String themeName) {
+        IsisContext.doInSession(new Runnable() {
+            @Override
+            public void run() {
+                final String currentUsrName =
+                    IsisContext.getAuthenticationSession().getUserName();
+                final UserSettingsServiceRW userSettingsService =
+                        lookupService(UserSettingsServiceRW.class);
+                final UserSettingJdo activeTheme =
+                        (UserSettingJdo) userSettingsService.find(
+                                                currentUsrName, ACTIVE_THEME);
+                if(activeTheme != null) {
+                    activeTheme.updateAsString(themeName);
+                } else {
+                    userSettingsService.newString(
+                        currentUsrName, ACTIVE_THEME, "Active Bootstrap theme for user", themeName);
+                }
+            }
+        });
+    }
+    private ITheme themeFor(final String themeName) {
+        final ThemeProvider themeProvider = settings.getThemeProvider();
+        if(themeName != null) {
+            for (final ITheme theme : themeProvider.available()) {
+                if (themeName.equals(theme.name()))
+                    return theme;
+            }
+        }
+        return themeProvider.defaultTheme();
+    }
+    ...
+}
+----
+
+and
+
+[source,java]
+.Using the ActiveThemeProvider
+----
+@Override
+protected void init() {
+    super.init();
+
+    final IBootstrapSettings settings = Bootstrap.getSettings();
+    settings.setThemeProvider(new BootswatchThemeProvider(BootswatchTheme.Flatly));
+
+    settings.setActiveThemeProvider(new UserSettingsThemeProvider(settings));
+}
+----

@@ -1,0 +1,34 @@
+[[_rgant-MemberOrder]]
+= `@MemberOrder`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `@MemberOrder` annotation is used to specify the relative order of domain object members, that is: properties, collections and actions.  It works in conjunction with the xref:../rgant/rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`] annotation.
+
+The annotation defines four attributes:
+
+* `columnSpans()` -- of type `int[]` -- which specifies the relative column sizes of the three columns that render properties as well as a fourth column that renders only collections
+
+* `left()` -- of type `String[]` - that specifies the order of the property groups (inferred from `@MemberOrder#name()`) as applied to properties) in the left-most column
+
+* `middle()` -- of type `String[]` - that specifies the order of the property groups (if any) as applied to properties) in the middle column
+
+* `right()` -- of type `String[]` - that specifies the order of the property groups (if any) as applied to properties) in the right-most column
+
+Collections are always rendered in the "last" column.  This can appear either below the columns holding properties (if their column spans = 12), or can be rendered to the right of the property columns (if the spans of the property columns come to <12 leaving enough room for the span of the collection column).
+
+[IMPORTANT]
+====
+As this is an important topic, there is a xref:../ugvw/ugvw.adoc#_ugvw_layout[separate chapter] that discussed object layout in full.
+====
+
+
+[TIP]
+====
+The annotation is one of a handful (others including xref:../rgant/rgant.adoc#_rgant-Collection[`@Collection`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`], xref:../rgant/rgant.adoc#_rgant-Property[`@Property`])
+ and xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] that can also be applied to the field, rather than the getter method.  This is specifically
+so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
+====
+
+

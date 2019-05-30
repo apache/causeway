@@ -1,0 +1,104 @@
+= Annotations
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+:numbered:
+:generate_pdf:
+
+
+== Annotations
+
+This guide describes the various annotations used by Apache Isis to provide additional metadata about the domain objects.
+Most of these are defined by Isis itself, but some are from other libraries.  It also identifies a number of
+annotations that are now deprecated, and indicates their replacement.
+
+=== Other Guides
+
+Apache Isis documentation is broken out into a number of user, reference and "supporting procedures" guides.
+
+The user guides available are:
+
+* xref:../ugfun/ugfun.adoc#[Fundamentals]
+* xref:../ugvw/ugvw.adoc#[Wicket viewer]
+* xref:../ugvro/ugvro.adoc#[Restful Objects viewer]
+* xref:../ugodn/ugodn.adoc#[DataNucleus object store]
+* xref:../ugsec/ugsec.adoc#[Security]
+* xref:../ugtst/ugtst.adoc#[Testing]
+* xref:../ugbtb/ugbtb.adoc#[Beyond the Basics]
+
+The reference guides are:
+
+* xref:../rgant/rgant.adoc#[Annotations] (this guide)
+* xref:../rgsvc/rgsvc.adoc#[Domain Services]
+* xref:../rgcfg/rgcfg.adoc#[Configuration Properties]
+* xref:../rgcms/rgcms.adoc#[Classes, Methods and Schema]
+* xref:../rgmvn/rgmvn.adoc#[Apache Isis Maven plugin]
+* xref:../rgfis/rgfis.adoc#[Framework Internal Services]
+
+The remaining guides are:
+
+* xref:../dg/dg.adoc#[Developers' Guide] (how to set up a development environment for Apache Isis and contribute back to the project)
+* xref:../cgcom/cgcom.adoc#[Committers' Guide] (release procedures and related practices)
+
+
+
+=== Examples
+
+To give just a few examples of annotations supported by Apache Isis:
+
+* if a property is read-only, then this can be annotated with `@Property(editing=EditingDISABLED)`.
+* if a class has a small fixed set of instances (eg a picklist), then it can be annotated using `@DomainObject(bounded=true)`
+* if a class is a domain service and should be automatically instantiated as a singleton, then it can be annotated using `@DomainService`
+* if an action is idempotent, then it can be annotated using `@Action(semantics=SemanticsOf.IDEMPOTENT)`.
+* if an action parameter is optional, it can be annotated using `@Parameter(optionality=Optionality.OPTIONAL)`
+
+Some annotations act as UI hints, for example:
+
+* if a collection should be rendered "open" rather than collapsed, it can be annotated using `@CollectionLayout(defaultView="table")`
+* if an action has a tooltip, it can be annotated using `@ActionLayout(describedAs=...)`
+* if a domain object is bookmarkable, it can be annotated using `@DomainObjectLayout(bookmarking=BookmarkPolicy.AS_ROOT`).
+
+
+
+
+include::_rgant_aaa.adoc[leveloffset=+1]
+
+include::_rgant-Action.adoc[leveloffset=+1]
+include::_rgant-ActionLayout.adoc[leveloffset=+1]
+include::_rgant-Collection.adoc[leveloffset=+1]
+include::_rgant-CollectionLayout.adoc[leveloffset=+1]
+include::_rgant-Column.adoc[leveloffset=+1]
+include::_rgant-Digits.adoc[leveloffset=+1]
+include::_rgant-Discriminator.adoc[leveloffset=+1]
+include::_rgant-DomainObject.adoc[leveloffset=+1]
+include::_rgant-DomainObjectLayout.adoc[leveloffset=+1]
+include::_rgant-DomainService.adoc[leveloffset=+1]
+include::_rgant-DomainServiceLayout.adoc[leveloffset=+1]
+include::_rgant-Facets.adoc[leveloffset=+1]
+include::_rgant-HomePage.adoc[leveloffset=+1]
+include::_rgant-Inject.adoc[leveloffset=+1]
+include::_rgant-MemberGroupLayout.adoc[leveloffset=+1]
+include::_rgant-MemberOrder.adoc[leveloffset=+1]
+include::_rgant-Mixin.adoc[leveloffset=+1]
+include::_rgant-NotPersistent.adoc[leveloffset=+1]
+include::_rgant-Nullable.adoc[leveloffset=+1]
+include::_rgant-MinLength.adoc[leveloffset=+1]
+include::_rgant-Parameter.adoc[leveloffset=+1]
+include::_rgant-ParameterLayout.adoc[leveloffset=+1]
+include::_rgant-Pattern.adoc[leveloffset=+1]
+include::_rgant-PersistenceCapable.adoc[leveloffset=+1]
+include::_rgant-PostConstruct.adoc[leveloffset=+1]
+include::_rgant-PreDestroy.adoc[leveloffset=+1]
+include::_rgant-PrimaryKey.adoc[leveloffset=+1]
+include::_rgant-Programmatic.adoc[leveloffset=+1]
+include::_rgant-Property.adoc[leveloffset=+1]
+include::_rgant-PropertyLayout.adoc[leveloffset=+1]
+include::_rgant-RequestScoped.adoc[leveloffset=+1]
+include::_rgant-Title.adoc[leveloffset=+1]
+include::_rgant-ViewModel.adoc[leveloffset=+1]
+include::_rgant-ViewModelLayout.adoc[leveloffset=+1]
+include::_rgant-XmlJavaTypeAdapter.adoc[leveloffset=+1]
+include::_rgant-XmlRootElement.adoc[leveloffset=+1]
+
+
+
+

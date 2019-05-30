@@ -1,0 +1,43 @@
+[[_ugfun_programming-model_domain-services_event-subscribers]]
+= Event Subscribers
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+
+Domain services acting as event subscribers can subscribe to xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[domain], xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events_ui-events[UI] and xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle] events, influencing the rendering and behaviour of other objects.
+
+All subscribers must subscribe to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`]; as this amounts to a few lines of boilerplate it's easiest to inherit from the convenience `AbstractSubscriber` class.
+
+We suggest naming such classes `XxxSubscriptions`, for example:
+
+[source,java]
+----
+@DomainService(
+    nature=NatureOfService.DOMAIN                      // <1>
+)
+@DomainServiceLayout(
+    menuOrder="10",
+    name="...",
+}
+public class CustomerOrderSubscriptions
+                    extends AbstractSubscriber {        // <2>
+
+    @org.axonframework.eventhandling.EventHandler       // if using axon
+    @com.google.common.eventbus.Subscribe               // if using guava
+    public void on(final Customer.DeletedEvent ev) {    // <3>
+        Customer customer = ev.getSource();
+        orderRepository.delete(customer);
+    }
+
+    @Inject
+    OrderRepository orderRepository;
+}
+----
+<1> subscriptions do not appear in the UI at all, so should use the domain nature of service
+<2> subclass from the `AbstractSubscriber` convenience superclass
+<3> the parameter type of the method corresponds to the event emitted on the event bus.
+The actual method name does not matter (though it must have `public` visibility).
+
+

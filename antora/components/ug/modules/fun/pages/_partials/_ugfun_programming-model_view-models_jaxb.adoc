@@ -1,0 +1,68 @@
+[[_ugfun_programming-model_view-models_jaxb]]
+= JAXB View Models
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Here's a typical example of a JAXB view model, to allow (certain properties of) two ``Customer``s to be compared:
+
+[source,java]
+----
+@XmlRootElement(name = "compareCustomers")          // <1>
+@XmlType(
+        propOrder = {                               // <2>
+            "customer1",
+            "customer2"
+        }
+)
+@XmlAccessorType(XmlAccessType.FIELD)               // <3>
+public class CompareCustomers {
+
+    @XmlElement(required = true)                    // <4>
+    @Getter @Setter
+    Customer customer1;
+
+    @XmlElement(required = true)                    // <4>
+    @Getter @Setter
+    Customer customer2;
+
+    @XmlTransient                                   // <5>
+    public String getCustomer1Name() {
+        return getCustomer1().getName();
+    }
+
+    @XmlTransient                                   // <5>
+    public String getCustomer1Address() {
+        return getCustomer1().getAddress();
+    }
+
+    ...
+}
+----
+<1> The JAXB `@XmlRootElement` annotation indicates this is a view model to Apache Isis, which then uses JAXB to serialize the state of the view model between interactions
+<2> All properties of the view model must be listed using the `XmlType#propOrder` attribute.
+<3> Specifying field accessor type allows the Lombok `@Getter` and `@Setter` annotations to be used.
+<4> The `XmlElement` indicates the property is part of the view model's state.
+For collections, the `@XmlElementWrapper` would also typically be used.
+<5> The `@XmlTransient` indicates that the property is derived and should be ignored by JAXB.
+
+Use JAXB elements such as `@XmlElement` for properties and the combination of `@XmlElementWrapper` and `@XmlElement` for collections.
+Properties can be ignored (for serialization) using `@XmlTransient`.
+
+The derived properties could also have been implemented using xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins].
+
+
+[IMPORTANT]
+====
+Be aware that all the state will become the DTO's memento, ultimately converted into a URL-safe form, by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_UrlEncodingService[`UrlEncodingService`].
+
+There are limits to the lengths of URLs, however.
+If the URL does exceed limits or contains invalid characters, then provide a custom implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_UrlEncodingService[`UrlEncodingService`] to handle the memento string in some other fashion (eg substituting it with a GUID, with the memento cached somehow on the server).
+a URL.
+====
+
+
+include::_ugfun_programming-model_view-models_jaxb_referencing-domain-entities.adoc[leveloffset=+1]
+include::_ugfun_programming-model_view-models_jaxb_joda-datatypes.adoc[leveloffset=+1]
+
+

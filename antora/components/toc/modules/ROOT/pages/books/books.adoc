@@ -1,0 +1,67 @@
+[[books]]
+= Books
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+
+Although it has evolved since, the _Apache Isis_ framework started out as an open source implementation of the naked objects pattern.
+Indeed, the generic user interfaces provided by Apache Isis xref:../../guides/ugvw/ugvw.adoc#[Wicket] viewer and the xref:../../guides/ugvro/ugvro.adoc#[Restful Objects] viewer are both "just" naked objects implementations; the first serves up a default generic representation of domain objects for human interaction, the latter serving up representation intended for machine consumption rather than human beings.
+
+If the idea of naked objects is of interest, then there are a couple of books on the topic that you might want to read.
+
+[[__books_Naked-Objects]]
+== Naked Objects
+
+Richard Pawson and Robert Matthews, Wiley 2002
+
+
+image::{_imagesdir}books/nakedobjects-book.jpg[width="159px",link="{_imagesdir}books/nakedobjects-book.jpg"]
+
+
+This book describes the original ideas of Naked Objects.
+Although based on a very early version of the framework, it's still definitely worth a read (and beautifully produced).
+
+Amazon quotes: (avg 5 stars)
+
+* Brilliant argument and toolkit for information systems
+* Most thoughtful and beautiful technical book I have read
+* Excellent presentation of an innovative practical idea
+
+The book is freely available online http://www.nakedobjects.org/book/[here]. Or, you can get a hardcopy of the book at http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0470844205.html[Wiley (publisher)] and http://www.amazon.com/Naked-Objects-Richard-Pawson/dp/0470844205[Amazon].
+
+
+
+
+[[__books_DDD-using-NO]]
+== Domain Driven Design using Naked Objects
+
+Dan Haywood, Pragmatic Bookshelf 2009
+
+image::{_imagesdir}books/dhnako.jpg[width="167px",link="{_imagesdir}books/dhnako.jpg"]
+
+This more recent book draws the parallel between domain-driven design and Naked Objects (4.0).
+In the spirit of the Pragmatic Bookshelf, it's a practical, hands-on sort of book, building up a case study as it goes and encouraging you to build your own app as you go.
+
+
+Amazon quotes: (avg 4.5 stars)
+
+* Important Contribution to Domain-Driven Design
+* The easy-to-learn Naked Objects Framework .. provide[s] a masterful exposition on DDD
+* Clear and passionate book about a great subject
+* Excellent book and a great framework
+
+You can find the book at http://www.pragprog.com/titles/dhnako/domain-driven-design-using-naked-objects[Pragmatic Bookshelf (publisher)] and http://www.amazon.com/Domain-Driven-Design-Objects-Pragmatic-Programmers/dp/1934356441[Amazon].
+
+
+
+
+[[__books_RO-spec]]
+== Restful Objects Specification
+
+Dan Haywood
+
+The http://restfulobjects.org[Restful Objects specification] defines a set of RESTful resources, and corresponding JSON representations, for accessing and manipulating a domain object model.
+
+This is a comprehensive specification, running to over 200 pages in length.
+It is implemented by Apache Isis' xref:../../guides/ugvro/ugvro.adoc#[Restful Objects] viewer, and is also implemented by another (non-Apache) open source project, http://nakedobjects.codeplex.com[Naked Objects MVC].

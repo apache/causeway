@@ -1,0 +1,257 @@
+[[_dg_git-cookbook]]
+= Appendix: Git Cookbook
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+
+
+
+This appendix describes the commands often used while working with git.  In addition to these basic commands, please make sure you have read:
+
+* xref:../dg/dg.adoc#_dg_building-isis[building Apache Isis]
+* xref:../dg/dg.adoc#_dg_contributing[Contributing]
+* xref:../cgcom/cgcom.adoc#_cgcom_policies_git-policy[Git policy]
+
+
+
+
+== Modifying existing files
+
+To modify existing files:
+
+[source,bash]
+----
+git add filename
+git commit -m "ISIS-nnn: yada yada"
+----
+
+The `git add` command adds the changes to the file(s) to the git index (aka staging area).  If you were to make subsequent changes to the file these would not be committed.
+ 
+The `git commit` takes all the staged changes and commits them locally.  Note that these changes are not shared public with Apache Isis' central git repo.
+
+You can combine these two commands using `-am` flag to git commit:
+
+[source,bash]
+----
+git commit -am "ISIS-nnn: yada yada"
+----
+
+
+
+
+== Adding new files
+
+To add a new file:
+
+[source,bash]
+----
+git add .
+git commit -m "ISIS-nnn: yada yada"
+----
+
+
+Note that this sequence of commands is identical to modifying an existing file.  However, it isn't possible to combine the two steps using `git commit -am`; the `git add` is always needed when adding new files to the repo.
+
+
+
+
+== Deleting files
+
+To delete a file:
+
+[source,bash]
+----
+git rm filename
+git commit -m "ISIS-nnn: yada yada"
+----
+
+
+
+== Renaming or moving files
+
+To rename or move a file:
+
+
+[source,bash]
+----
+git mv <i>filename</i> <i>newfilename</i>
+git commit -m "ISIS-nnn: yada yada"
+----
+
+
+
+
+== Common Workflows
+
+The xref:../dg/dg.adoc#_dg_contributing[contributing] page describes the workflow for non-committers.  The xref:../cgcom/cgcom.adoc#_cgcom_policies_git-policy[Git policy] page describes a workflow for Apache Isis **committers**.
+
+
+
+
+
+== Backing up a local branch
+
+If committing to a local branch, the changes are still just that: local, and run risk of a disk failure or other disaster.
+
+To create a new, similarly named branch on the central repo, use:
+
+[source,bash]
+----
+git push -u origin <i>branchname</i>
+----
+
+Using `gitk --all` will show you this new branch, named *origin/branchname*.
+
+Thereafter, you can push subsequent commits using simply:
+
+[source,bash]
+----
+git push
+----
+
+
+Doing this also allows others to collaborate on this branch, just as they would for `master`.
+
+When, eventually, you have reintegrated this branch, you can delete the remote branch using:
+
+[source,bash]
+----
+git push origin --delete <i>branchname</i>
+----
+
+
+For more detail, see this link:http://stackoverflow.com/questions/2003505/how-do-i-delete-a-git-branch-both-locally-and-in-github[stackoverflow post].
+
+
+
+== Quick change: stashing changes
+
+If you are working on something but are not ready to commit, then use:
+
+[source,bash]
+----
+git stash
+----
+
+
+If you use `gitk --all` then you'll see new commits are made that hold the current state of your working directory and staging area.
+
+You can then, for example, pull down the latest changes using `git pull --rebase` (see above).
+
+To reapply your stash, then use:
+
+[source,bash]
+----
+git stash pop
+----
+
+Note that stashing works even if switching branches
+
+
+## Ignoring files
+
+Put file patterns into `.gitignore`.  There is one at the root of the git repo, but they can additionally appear in subdirectories (the results are cumulative).
+
+See also:
+
+- link:https://help.github.com/articles/ignoring-files[github's help page]
+- link:http://www.kernel.org/pub/software/scm/git/docs/gitignore.html[man page]
+
+
+
+
+== More advanced use cases
+
+=== If accidentally push to remote
+
+Suppose you committed to `master`, and then pushed the change, and then decided that you didn't intend to do that:
+
+[source,bash]
+----
+C1  -  C2  -  C3  -  C4  -  C5  -  C6  -  C7
+                                          ^
+                                          master
+                                          ^
+                                          origin/master
+----
+
+To go back to an earlier commit, first we wind back the local `master`:
+
+[source,bash]
+----
+git reset --hard C5
+----
+
+where `C5` is the long sha-id for that commit.
+
+This gets us to:
+
+[source,bash]
+----
+C1  -  C2  -  C3  -  C4  -  C5  -  C6  -  C7
+                            ^
+                            master
+                                          ^
+                                          origin/master
+----
+
+Then, do a force push:
+
+[source,bash]
+----
+git push origin master --force
+----
+
+If this doesn't work, it may be that the remote repo has disabled this feature.  There are other hacks to get around this, see for example link:http://stackoverflow.com/questions/1377845/git-reset-hard-and-a-remote-repository[here].
+
+
+
+
+== If you've accidentally worked on `master` branch
+
+If at any time the `git pull` from your upstream fails, it most likely means that you must have made commits on the `master` branch.  You can use `gitk --all` to confirm; at some point in time both `master` and `origin\master` will have a common ancestor.
+
+You can retrospectively create a topic branch for the work you've accidentally done on `master`.  
+
+First, create a branch for your current commit:
+
+[source,bash]
+----
+git branch <i>newbranch</i>
+----
+
+
+Next, make sure you have no outstanding edits.  If you do, you should commit them or stash them:
+
+
+[source,bash]
+----
+git stash
+----
+
+
+Finally, locate the shaId of the commit you want to roll back to (easily obtained in `gitk -all`), and wind `master` branch back to that commit:
+
+
+[source,bash]
+----
+git checkout master
+git reset --hard <i>shaId</i>      # move master branch shaId of common ancestor
+----
+
+
+
+== If you've forgotten to prefix your commits (but not pushed)
+
+One of our committers, Alexander Krasnukhin, has put together some git scripts to help his workflow.  Using one of these, `git prefix`, you can just commit with proper message without bothering about prefix and add prefix only in the end *before* the final push.
+ 
+For example, to prefix all not yet prefixed commits `master..isis/666` with `ISIS-666` prefix, use:
+
+[source,bash]
+----
+git prefix ISIS-666 master..isis/666
+----
+
+
+You can grab this utility, and others, from link:https://github.com/themalkolm/git-boots[this repo].

@@ -1,0 +1,45 @@
+[[_ugfun_programming-model_mixins_contributed-services]]
+= Contributed services (deprecated)
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+Contributed services are very similar to mixins; indeed mixins are an evolution and refinement of the contributions concept.
+As such, contributions should be considered as deprecated, and eventually removed in a future version of the framework, to be replaced entirely by mixins.
+
+The main difference between contributed services and mixins is that the actions of a contributed service will contribute to _all_ the parameters of its actions, whereas a mixin only contributes to the type accepted in its constructor.
+
+Also, contributed services are long-lived singletons, whereas mixins are instantiated as required (by the framework) and then discarded almost immediately.
+
+== Syntax
+
+Any n-parameter action provided by a service will automatically be contributed to the list of actions for each of its (entity) parameters.
+From the viewpoint of the entity the action is called a contributed action.
+
+For example, given a service:
+
+[source,java]
+----
+public interface Library {
+    public Loan borrow(Loanable l, Borrower b);
+}
+----
+
+and the entities:
+
+[source,java]
+----
+public class Book implements Loanable { ... }
+----
+
+and
+
+[source,java]
+----
+public class LibraryMember implements Borrower { ... }
+----
+
+then the `borrow(...)` action will be contributed to both `Book` and to `LibraryMember`.
+

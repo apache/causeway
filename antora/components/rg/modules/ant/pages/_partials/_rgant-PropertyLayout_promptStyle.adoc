@@ -1,0 +1,28 @@
+[[_rgant-PropertyLayout_promptStyle]]
+= `promptStyle()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `promptStyle()` attribute is used to specify whether, when editing a domain object property, the new value for the property is prompted by way of a dialog box, or is prompted using an inline panel (replacing the property on the page).
+
+If the attribute is not set, then the value of the xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties[configuration property] `isis.viewer.wicket.promptStyle` is used.
+If this is itself not set, then an inline prompt is used.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    @PropertyLayout(
+        promptStyle=PromptStyle.INLINE          // <1>
+    )
+    public int getNotes(){ ... }
+    public void setNotes(String notes) { ... }
+}
+----
+<1> prompt for the new value for the property using an inline panel
+Note that the value `INLINE_AS_IF_EDIT` does not make sense for properties; if specified then it will be interpreted as just `INLINE`.
+
+Alternatively, the `promptStyle()` can be specified using xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layouts].
+

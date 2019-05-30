@@ -1,0 +1,69 @@
+[[_ugbtb_programming-model_finetuning]]
+= Finetuning
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The core metamodel defines APIs and implementations for building the Apache Isis metamodel: a description of the set of entities, domain services and values that make up the domain model.
+
+
+The description of each domain class consists of a number of elements:
+
+https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/spec/ObjectSpecification.java[ObjectSpecification]::
+Analogous to `java.lang.Class`; holds information about the class itself and holds collections of each of the three types of class' members (below);
+
+https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/spec/feature/OneToOneAssociation.java[OneToOneAssociation]::
+Represents a class member that is a single-valued property of the class. The property's type is either a reference to another entity, or is a value type.
+
+https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/spec/feature/OneToManyAssociation.java[OneToManyAssociation]::
+Represents a class member that is a collection of references to other entities. Note that Apache Isis does not currently support collections of values.
+
+https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/spec/feature/ObjectAction.java[ObjectAction]::
+Represents a class member that is an operation that can be performed on the action. Returns either a single value, a collection of entities, or is `void`.
+
+
+The metamodel is built up through the https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/progmodel/ProgrammingModel.java[ProgrammingModel], which defines an API for registering a set of https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facets/FacetFactory.java[FacetFactory]s.  Two special `FacetFactory` implementations - https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facets/properties/accessor/PropertyAccessorFacetViaAccessorFactory.java[PropertyAccessorFacetFactory] and https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facets/collections/accessor/CollectionAccessorFacetViaAccessorFactory.java[CollectionAccessorFacetFactory] - are used to identify the class members.
+Pretty much all the other ``FacetFactory``s are responsible for installing https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/core/metamodel/facetapi/Facet.java[Facet]s onto the metamodel elements.
+
+There are many many such ``Facet``s, and are used to do such things get values from properties or collections, modify properties or collections, invoke action, hide or disable class members, provide UI hints for class members, and so on. In short, the ``FacetFactory``s registered defines the Apache Isis programming conventions.
+
+
+
+== Modifying the Prog. Model
+
+The default implementation of `ProgrammingModel` is https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/progmodels/dflt/ProgrammingModelFacetsJava5.java[ProgrammingModelFacetsJava5], which registers a large number of ``FacetFactory``s.
+
+By editing `isis.properties` you can modify the programming conventions either by (a) using the default programming model, but tweaking it to include new `FacetFactory`s or exclude existing, or (b) by specifying a completely different programming model implementation.
+
+Let's see how this is done.
+
+=== Including or excluding facets
+
+Suppose that you wanted to completely remove support for some existing facet, eg to support the "persisting()" and "persisted()" callback methods.
+This would be done using:
+
+[source,ini]
+----
+isis.reflector.facets.exclude=\
+    org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackFacetFactory
+----
+
+Or, suppose you wanted to use add some custom facet factory of your own, use:
+
+[source,ini]
+----
+isis.reflector.facets.include=com.mycompany.isis.facets.MyCoolFacetFactory
+----
+
+To include/exclude more than one `FacetFactory`, specify as a comma-separated list.
+
+[TIP]
+====
+This http://isis.markmail.org/thread/472c3mrvcgnripst[thread] from the users mailing list (in Apr 2014) shows a typical customization (to enable per-instance security) (though note that xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_multi-tenancy[Multi-Tenancy] is now a better solution to that particular use-case.
+====
+
+
+
+
+
+

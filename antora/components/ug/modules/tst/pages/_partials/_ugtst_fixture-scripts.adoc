@@ -1,0 +1,51 @@
+[[_ugtst_fixture-scripts]]
+= Fixture Scripts
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+When writing integration tests (and implementing the glue for BDD specs) it can be difficult to keep the "given" short; there could be a lot of prerequisite data that needs to exist before you can actually exercise your system.
+Moreover, however we do set up that data, but we also want to do so in a way that is resilient to the system changing over time.
+
+On a very simple system you could probably get away with using SQL to insert directly into the database, or you could use a toolkit such as link:http://dbunit.sourceforge.net/howto.html[dbunit] to upload data from flat files.
+Such approaches aren't particularly maintainable though.
+If in the future the domain entities (and therefore corresponding database tables) change their structure, then all of those data sets will need updating.
+
+Even more significantly, there's no way to guarantee that the data that's being loaded is logically consistent with the business behaviour of the domain objects themselves.
+That is, there's nothing to stop your test from putting data into the database that would be invalid if one attempted to add it through the app.
+
+The solution that Apache Isis provides is a small library called *_fixture scripts_*.
+A fixture script is basically a command object for executing arbitrary work, where the work in question is almost always invoking one or more business actions.
+In other words, the database is populating through the functionality of the domain object model itself.
+
+[TIP]
+====
+If you want to learn more on this topic (with live coding!), check out this https://skillsmatter.com/skillscasts/5638-to-those-whom-much-is-given-much-is-expected[presentation] given at BDD Exchange 2014.
+====
+
+There is another benefit to Apache Isis' fixture script approach; the fixtures can be (in prototyping mode) run from your application.
+This means that fixture scripts can actually help all the way through the development lifecycle:
+
+* when specifying a new feature, you can write a fixture script to get the system into the "given" state, and then start exploring the required functionality with the domain expert actually _within_ the application +
++
+And if you can't write a fixture script for the story, it probably means that there's some prerequisite feature that needs implementing that you hadn't previously recognized
+
+* when the developer implements the story, s/he has a precanned script to run when they manually verify the functionality works
+
+* when the developer automates the story's acceptance test as an integration test, they already have the "given" part of the test implemented
+
+* when you want to pass the feature over to the QA/tester for additional manual exploratory testing, they have a fixture script to get them to a jumping off point for their explorations
+
+* when you want to demonstrate the implemented feature to your domain expert, your demo can use the fixture script so you don't bore your audience in performing lots of boring setup before getting to the actual feature
+
+* when you want to roll out training to your users, you can write fixture scripts as part of their training exercises
+
+
+The following  sections explain the API and how to go about using the API.
+
+
+include::_ugtst_fixture-scripts_api-and-usage.adoc[leveloffset=+1]
+include::_ugtst_fixture-scripts_ticking-clock-fixture.adoc[leveloffset=+1]
+include::_ugtst_fixture-scripts_sudo-service.adoc[leveloffset=+1]
+

@@ -1,0 +1,60 @@
+[[_ugbtb_deployment_tomcat]]
+= Deploying to Tomcat
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Some pointers on how to xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[externalize configuration] when deploying to Tomcat.
+Other servlet containers have similar mechanisms.
+
+
+== Tomcat 8.0
+
+If deploying Tomcat 8.0, create a file called `$TOMCAT_HOME/conf/Catalina/localhost/todoapp.xml`, where `todoapp.xml` corresponds to the name of the webapp being deployed, eg `todoapp.war`.
+
+The contents of this file would be something like:
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <Manager pathname="" />
+
+    <Parameter name="shiroConfigLocations"
+               value="file:/var/todoapp/dev/shiro.ini"
+               override="false" />
+
+    <Parameter name="isis.config.dir"
+               value="/var/todoapp/dev/"
+               override="false" />
+
+    <Parameter name="spring.config.file"
+               value="file:/var/todoapp/dev/spring.properties"
+               override="false" />
+
+    <Parameter name="wicket.configuration"
+               value="development"
+               override="false" />
+
+</Context>
+----
+
+[IMPORTANT]
+====
+Note that the `override` key should be set to "false", not "true".
+It indicates whether the application's own `web.xml` can override the setting.
+In most cases, you probably want to disallow that.
+====
+
+Thus, when `todoapp.war` is deployed to `$CATALINA_HOME/webapp`, then this configuration will be used.
+
+For more detail, see the Tomcat 8.0 documentation on link:http://tomcat.apache.org/tomcat-8.0-doc/config/context.html#Defining_a_context[defining a context] and on link:http://tomcat.apache.org/tomcat-8.0-doc/config/context.html#Context_Parameters[context parameters].
+
+== Tomcat 7.0
+
+If using Tomcat 7.0, the process is similar to that of Tomcat 8.0, however the override file resides in `$TOMCAT_HOME/conf`, rather than `$TOMCAT_HOME/conf/Catalina/localhost`.
+
+For more detail, see the Tomcat 7.0 documentation on link:http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Defining_a_context[defining a context] and on link:http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Context_Parameters[context parameters].
+

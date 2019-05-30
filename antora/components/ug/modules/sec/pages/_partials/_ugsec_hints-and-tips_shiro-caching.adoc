@@ -1,0 +1,40 @@
+include::_attributes.adoc[]
+[[_ugsec_hints-and-tips_shiro-caching]]
+= Caching and other Shiro Features
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+We don't want to repeat the entire link:http://shiro.apache.org/documentation.html[Shiro documentation set] here, but we should flag a number of other features that are worth checking out.
+
+
+
+
+== Caching
+
+To ensure that security operations does not impede performance, Shiro supports caching.  For example, this sets up a simple memory-based cache manager:
+
+[source,ini]
+----
+memoryCacheManager = org.apache.shiro.cache.MemoryConstrainedCacheManager
+securityManager.cacheManager = $memoryCacheManager
+----
+
+Other implementations can be plugged in; see the Shiro link:http://shiro.apache.org/caching.html[documentation] for further details.
+
+
+
+
+== Further Reading
+
+
+* Shiro's documentation page can be found link:http://shiro.apache.org/documentation.html[here].
+
+* community-contributed articles can be found link:http://shiro.apache.org/articles.html[here]. +
++
+These include for instance link:http://meri-stuff.blogspot.co.uk/2011/04/apache-shiro-part-2-realms-database-and.html[this interesting article] describing how to perform certificate-based authentication (ie login using Google or Facebook credentials).
+
+
+
+
+
+

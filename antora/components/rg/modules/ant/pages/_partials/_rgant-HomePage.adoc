@@ -1,0 +1,51 @@
+[[_rgant-HomePage]]
+= `@HomePage`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `@HomePage` annotation allows a _single_ (no-arg, query-only) action on a _single_ domain service to be nominated as the action to invoke for the default home page.  This often returns a view model that acts as some sort of dashboard, presenting key information and makeing the most commonly used actions easy to invoke.
+
+For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses `@HomePage` to return a dashboard of todo items to complete:
+
+image::{_imagesdir}reference-annotations/HomePage/HomePage.png[width="800px",link="{_imagesdir}reference-annotations/HomePage/HomePage.png"]
+
+
+The corresponding code is:
+
+[source,java]
+----
+@DomainService(nature = NatureOfService.DOMAIN)
+public class ToDoAppDashboardService  {
+    @Action(
+            semantics = SemanticsOf.SAFE
+    )
+    @HomePage
+    public ToDoAppDashboard lookup() {
+        return serviceRegistry.injectServicesInto(new ToDoAppDashboard());
+    }
+    @Inject
+    ServiceRegistry serviceRegistry;
+}
+----
+
+where `ToDoAppDashboard` is:
+
+[source,java]
+----
+@DomainObject(nature = Nature.VIEW_MODEL)
+public class ToDoAppDashboard {
+    public String title() { return "Dashboard"; }
+
+    public List<ToDoItem> getNotYetComplete() { ... }
+    public List<ToDoItem> getComplete() { ... }
+
+    public Blob exportToWordDoc() { ... }  // <1>
+}
+----
+<1> associated using xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] with the `notYetComplete` collection.
+
+The other two actions shown in the above screenshot -- `exportAsXml` and `downloadLayout` -- are actually contributed to the `ToDoAppDashboard` through various domain services, as is the `downloadLayout` action.
+
+

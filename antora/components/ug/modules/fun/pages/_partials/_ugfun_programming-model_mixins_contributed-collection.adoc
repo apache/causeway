@@ -1,0 +1,37 @@
+[[_ugfun_programming-model_mixins_contributed-collection]]
+= Contributed Collection
+
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The example below shows how to contribute a collection:
+
+[source,java]
+----
+@Mixin(method="coll")
+public class DocumentHolder_documents {
+
+    private final DocumentHolder holder;
+    public DocumentHolderDocuments(DocumentHolder holder) { this.holder = holder; }
+
+    @Action(semantics=SemanticsOf.SAFE)                         // <1>
+    @ActionLayout(contributed = Contributed.AS_ASSOCIATION)     // <2>
+    @CollectionLayout(defaultView="table")
+    public List<Document> coll() {                              // <3>
+        ...
+    }
+    public boolean hideColl() { ... }                           // <4>
+}
+----
+<1> required; actions that have side-effects cannot be contributed as collections
+<2> required; otherwise the mixin will default to being rendered as an action
+<3> must accept no arguments.
+The mixin is a collection rather than a property because the return type is a collection, not a scalar.
+<4> supporting methods follow the usual naming conventions.
+(That said, in the case of collections, because the collection is derived/read-only, the only supporting method that is relevant is `hideColl()`).
+
+The above will result in a contributed collection "documents" for all types that implement/extend from `DocumentHolder`.
+
+

@@ -1,0 +1,192 @@
+[[_rgcms_classes_AppManifest2-bootstrapping]]
+= `AppManifest2` (and `Module`)
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The bootstrapping of an Apache Isis application has been modularized using the `Module` interface, with `AppManifest2` (an extension of the original xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] interface) defined in terms of ``Module``s also.
+
+A `Module` represents a collection of entities and domain services that provide a set of coherent functionality under a single package (and subpackages underneath), with the module class itself residing at the top-level package.
+
+Each `Module` can express its immediate dependencies (using `Module#getDependencies()` method); from this the framework computes the full set of modules (and therefore entities and domain services) that make up the application.
+
+Each `Module` can also optionally define additional dependencies on "legacy" modules (that is, those that do not implement `Module`) using `Module#getAdditionalModules()` method.
+These legacy modules simply define a package to search for entities and domain services.
+Legacy domain services can also be explicitly identified using `Module#getAdditionalServices()` method; such services do _not_ need to be annotated with xref:../rgant/rgant.adoc#_rgant-DomainService[`@DomainService`].
+
+A `Module` can also declare additional configuration properties (using either `Module#getIndividualConfigProps()` or `Module#getPropertyResources()`) that should be      contributed to the overall set of configuration properties used to bootstrap the application.
+
+Finally, each `Module` can also optionally define a reference-data fixture (for reference data entities of the module) and also a tear-down fixture (using `Module#{@link #getRefDataSetupFixture()` and `Module#getTeardownFixture()` respectively).
+These are executed automatically (and in the correct order) within integration tests, simplifying setup and teardown of such tests.
+
+
+[IMPORTANT]
+====
+Implementations of `Module` are expected to have value-semantics.
+Each `Module` can declare its respective dependencies (using `Module#getDependencies()`) simply by instantiating the ``Module``s on which it depends.
+Any duplicates from the computed graph of all dependencies are automatically eliminated.
+====
+
+
+The application (or integration test) is still bootstrapped using an `AppManifest`, but using the `AppManifest2` sub-interface and corresponding `AppManifestAbstract2` abstract adapter.
+This latter class provides a `Builder` that allows an app manifest to be created from a single top-level `Module`.
+
+There are a number of similarities between a `Module` and an `AppManifestAbstract2.Builder`: both identify the set of modules that make up the application, along with additional services and configuration properties, and can derive a fixture script for start-up and tear-down.
+Because of this, the `IntegrationTestAbstract3` superclass actually requires just a `Module` to bootstrap rather than an `AppManifest`.
+(Underneath the covers `AppManifestAbstract2.Builder` can be instantiated from a `Module` instance, from whence the `AppManifest` to bootstrap the integration test is obtained).
+
+However there are some differences too, these relate to the difference between the running webapp vs integration tests.
+Specifically, only the `Builder` can specify the authentication mechanism, and only the `Builder` can specify an additional fixture script to run when the application starts (usually, to run up a demo app).
+
+
+[[_rgcms_classes_AppManifest2-bootstrapping_api]]
+== API
+
+The `AppManifest2` interface extends xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping_api[`AppManifest`], additionally declaring the top-level `Module` that was used to create the app manifest, and fixtures for reference data setup and for teardown:
+
+[source,java]
+----
+public interface AppManifest2 extends AppManifest {
+    Module getModule();
+    FixtureScript getTeardownFixture();
+    FixtureScript getRefDataSetupFixture();
+}
+----
+
+The (inherited) `AppManifest#getModules()` - a list of classes representing the packages to be scanned for domain services and entities - is still used to actually bootstrap the application.
+It should therefore be computed from the transitive set of dependencies of the declared `Module`.
+The `AppManifestAbstract2` (or more precisely, its `Builder`) provides a suitable implementation of this.
+
+The `AppManifestAbstract2.Builder` is defined as:
+
+[source,java]
+----
+public abstract class AppManifestAbstract2 extends AppManifestAbstract implements AppManifest2 {
+    ...
+    public static class Builder extends AppManifestAbstract.BuilderAbstract<Builder> {
+
+        private Builder(Module module) { ... }
+        public Module getModule() { ... }
+
+        public Builder withAdditionalDependency(final Module dependency) { ... }
+        public Builder withAdditionalDependencies(final Set<Module> dependencies) { ... }
+
+        ...
+    }
+}
+----
+
+Additional `withXxx(...)` builder methods are inherited from xref:rgcms.adoc#__rgcms_classes_AppManifest-bootstrapping_bootstrapping[`AppManifestAbstract.Builder`].
+
+
+For example:
+
+[source,java]
+----
+public class DomainAppAppManifest extends AppManifestAbstract2 {
+
+    public DomainAppAppManifest() {
+        super(Builder
+                .forModule(new DomainAppApplicationModule())
+                .withConfigurationPropertiesFile(DomainAppAppManifest.class,
+                                                 "isis.properties",
+                                                 "authentication_shiro.properties",
+                                                 "persistor_datanucleus.properties",
+                                                 "viewer_restfulobjects.properties",
+                                                 "viewer_wicket.properties")
+                .withAuthMechanism("shiro"));
+    }
+}
+----
+
+The `Module` interface is defined as:
+
+[source,java]
+----
+public interface Module {
+    Set<Module> getDependencies();                  // <1>
+    Set<Class<?>> getAdditionalModules();           // <2>
+    Set<Class<?>> getAdditionalServices();          // <3>
+
+    FixtureScript getRefDataSetupFixture();         // <4>
+    FixtureScript getTeardownFixture();             // <5>
+
+    Map<String,String> getIndividualConfigProps();  // <6>
+    List<PropertyResource> getPropertyResources();
+}
+----
+<1> As per Maven's `<dependencies></dependencies> element.
+The framework calculates a full set of transitive dependencies from this.
+<2> Support for "legacy" modules that do not implement `Module`.
+These are added to the set of packages to scan for entities and domain services.
+<3>Each `Module` can define additional "legacy" domain services that have not been defined within modules,or that have not been annotated with xref:../rgant/rgant.adoc#_rgant-DomainService[`@DomainService`].
+<4> Optionally each `Module` can define a xref:rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`] which holds immutable "reference data".
+These are automatically executed whenever running integration tests (but are ignored when bootstrapping the runtime as a webapp.
+<5> Similarly, optionally each `Module` can define a tear-down xref:rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`], used to remove the contents of _all_ entities (both reference data and operational/transactional data).
+<6> Optionally each module can define additional configuration properties.
+These can either be specified as key-value pair, or by way of the `PropertyResource` class.
+The `PropertyResource` class identifies a property configuration file to load from the classpath, with respect to some other context class.
+
+Rather than implementing directly it's generally easiest for applications to inherit from the `ModuleAbstract` adapter.
+
+
+[source,java]
+----
+/**
+ * Adapter for {@link Module} which has a default no-op implementation.
+ *
+ * <p>
+ *     Subclasses can either override the methods, or can use the various {@link #withAdditionalModules(Class[])}.
+ * </p>
+ */
+public abstract class ModuleAbstract                                        // <1>
+        implements Module {
+
+    public ModuleAbstract withAdditionalModules(...) { ... }                // <2>
+    public ModuleAbstract withAdditionalServices(...) { ... }               // <3>
+
+    public ModuleAbstract withConfigurationProperties(...) { ... }          // <4>
+    public ModuleAbstract withConfigurationPropertiesFile(...) { ... }
+    public ModuleAbstract withConfigurationPropertyResources(...) { ... }
+    public ModuleAbstract withConfigurationPropertyResource(...) { ... }
+    public ModuleAbstract withConfigurationProperty(...) { ... }
+
+    public Set<Module> getDependencies() { return Collections.emptySet(); } // <5>
+
+    public Set<Class<?>> getAdditionalModules() { ... }                     // <2>
+    public Set<Class<?>> getAdditionalServices() { ... }                    // <3>
+
+    public FixtureScript getRefDataSetupFixture() { ... }                   // <6>
+    public FixtureScript getTeardownFixture() { ... }
+
+    public Map<String,String> getIndividualConfigProps() { ... }            // <4>
+    public List<PropertyResource> getPropertyResources() { ... }
+}
+----
+<1> This is slightly simplified; in fact `ModuleAbstract` inherits from an internal class (`ModuleOrBuilderAbstract`).
+The functionality of this superclass is listed above.
+<2> Builder-like methods to specify additional "legacy" ``Module``s.
+Alternatively, could override `getAdditonalModules()`.
+<3> Builder-like methods to specify additional "legacy" domain services.
+Alternatively, could override `getAdditonalServices()`.
+<4> Builder-like methods to specify additional configuration propeties specific to this module
+<5> Set of other ``Module``s on which this module depends (from which a full graph of transitive dependencies is calculated).
+<6> Optional reference data and teardown fixture scripts for the module.
+
+
+
+[[__rgcms_classes_AppManifest2-bootstrapping_bootstrapping]]
+== Bootstrapping
+
+One of the overarching goals is to ensure that integration tests and the webapp are bootstrapped in as similar a way as possible.
+xref:rgcms.adoc#__rgcms_classes_AppManifest-bootstrapping_bootstrapping[Previously] this was done by using a single `AppManifest` for both the tests and the webapp.
+
+However, this approach does have a significant drawback.
+The `AppManifest` implementation must (necessarily) reference all the modules wthin the application, and this therefore means that the integration tests are also scoped (or at least, have access to) the entire application.
+
+(As noted above), the `IntegrationTestAbstract3` adapter class is bootstrapped from a `Module` rather than an `AppManifest`.
+This therefore allows the integration tests to reside alongside the module that they exercise, and to bootstrap only the subset of the application required (that is, the module being tested and any of its transitive dependencies)..
+
+For more on `IntegrationTestAbstract3`, see the xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support_bootstrapping[testing user guide].
+
+

@@ -1,0 +1,86 @@
+[[_ugfun_core-concepts_philosophy_how-eases-ddd]]
+= How Apache Isis eases DDD
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The case for _DDD_ might be compelling, but that doesn't necessarily make it easy to do.
+Let's take a look at some of the challenges that  _DDD_ throws up and see how Apache Isis (and its implementation of the naked objects pattern) helps address them.
+
+
+
+== DDD takes a conscious effort
+
+Here's what Eric Evans says about ubiquitous language:
+
+____
+With a conscious effort by the [development] team the domain model can provide the backbone for [the] common [ubiquitous] language...connecting team communication to the software implementation.
+____
+
+
+The word to pick up on here is *conscious*.
+It takes a _conscious_ effort by the entire team to develop the ubiquitous language.
+Everyone in the team must challenge the use of new or unfamiliar terms, must clarify concepts when used in a new context, and in general must be on the lookout for sloppy thinking.
+This takes willingness on the part of all involved, not to mention some practice.
+
+With Apache Isis, though, the ubiquitous language evolves with scarcely any effort at all.
+For the business experts, the Apache Isis viewers show the domain concepts they identify and the relationships between those concepts in a straightforward fashion.
+Meanwhile, the developers can devote themselves to encoding those domain concepts directly as domain classes.
+There's no technology to get distracted by; there is literally nothing else for the developers to work on.
+
+
+== DDD must be grounded
+
+Employing a model-driven design isn't necessarily straightforward, and the development processes used by some organizations positively hinder it.
+It's not sufficient for the business analysts or architects to come up with some idealized representation of the business domain and then chuck it over the wall for the programmers to do their best with.
+
+Instead, the concepts in the model must have a very literal representation in code.
+If we fail to do this, then we open up the communication divide, and our ubiquitous language is lost.
+There is literally no point having a domain model that cannot be represented in code.
+We cannot invent our ubiquitous language in a vacuum, and the developers must ensure that the model remains grounded in the doable.
+
+In Apache Isis, we have a very pure one-to-one correspondence between the domain concepts and its implementation.
+Domain concepts are represented as classes and interfaces, easily demonstrated back to the business.
+If the model is clumsy, then the application will be clumsy too, and so the team can work together to find a better implementable model.
+
+
+
+== Model must be understandable
+
+If we are using code as the primary means of expressing the model, then we need to find a way to make this model understandable to the business.
+
+We could generate UML diagrams and the like from code. That will work for some members of the business community, but not for everyone. Or we could generate a PDF document from Javadoc comments, but comments aren't code and so the document may be inaccurate.  Anyway, even if we do create such a document, not everyone will read it.
+
+A better way to represent the model is to show it in action as a working prototype. As we show in the xref:../ugfun/ugfun.adoc#_ugfun_getting-started[Getting Started] section, Apache Isis enables this with ease. Such prototypes bring the domain model to life, engaging the audience in a way that a piece of paper never can.
+
+Moreover, with Apache Isis prototypes, the domain model will come shining through. If there are mistakes or misunderstandings in the domain model (inevitable when building any complex system), they will be obvious to all.
+
+
+
+
+== Architecture must be robust
+
+_DDD_ rightly requires that the domain model lives in its own layer within the architecture. The other layers of the application (usually presentation, application, and persistence) have their own responsibilities, and are completely separate.
+
+However, there are two immediate issues. The first is rather obvious: custom coding each of those other layers is an expensive proposition. Picking up on the previous point, this in itself can put the kibosh on using prototyping to represent the model, even if we wanted to do so.
+
+The second issue is more subtle. It takes real skill to ensure the correct separation of concerns between these layers, if indeed you can get an agreement as to what those concerns actually are. Even with the best intentions, it's all too easy for custom-written layers to blur the boundaries and put (for example) validation in the user interface layer when it should belong to the domain layer. At the other extreme, it's quite possible for custom layers to distort or completely subvert the underlying domain model.
+
+Because of Apache Isis' generic  __OOUI__s, there's no need to write the other layers of the architecture.  Of course, this reduces the development cost. But more than that, there will be no leakage of concerns outside the domain model. All the validation logic *must* be in the domain model because there is nowhere else to put it.
+
+Moreover, although Apache Isis does provide a complete runtime framework, there is no direct coupling of your domain model to the framework. That means it is very possible to take your domain model prototyped in Naked Objects and then deploy it on some other  _J(2)EE_ architecture, with a custom _UI_ if you want.  Apache Isis guarantees that your domain model is complete.
+
+
+
+
+== Extending the reach of DDD
+
+Domain-driven design is often positioned as  being applicable only to complex domains; indeed, the subtitle of Evans book is  "Tackling Complexity in the Heart of Software". The corollary is that DDD is overkill for simpler domains. The trouble is that we immediately have to make a choice: is the domain complex enough to warrant a domain-driven approach?
+
+This goes back to the previous point, building and maintaining a layered architecture. It doesn't seem cost effective to go to all the effort of a DDD approach if the underlying domain is simple.
+
+However, with Apache Isis, we don't write these other layers, so we don't have to make a call on how complex our domain is. We can start working solely on our domain, even if we suspect it will be simple. If it is indeed a simple domain, then there's no hardship, but if unexpected subtleties arise, then we're in a good position to handle them.
+
+If you're just starting out writing domain-driven applications, then Apache Isis should significantly ease your journey into applying _DDD_. On the other hand, if you've used _DDD_ for a while, then you should find Isis a very useful new tool in your arsenal.
+

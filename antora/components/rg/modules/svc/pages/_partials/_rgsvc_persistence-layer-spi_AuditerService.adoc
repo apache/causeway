@@ -1,0 +1,108 @@
+[[_rgsvc_persistence-layer-spi_AuditerService]]
+= `AuditerService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+
+The `AuditerService` auditing service provides a simple mechanism to capture changes to data.
+It is called for each property that has changed on any domain object, as a set of pre- and post-values.
+
+
+
+== SPI
+
+The SPI for the service is:
+
+[source,java]
+----
+public interface AuditerService {
+    boolean isEnabled();                                    // <1>
+    public void audit(
+            UUID transactionId, int sequence,               // <2>
+            String targetClassName,
+            Bookmark target,                                // <3>
+            String memberIdentifier,
+            String propertyName,                            // <4>
+            String preValue, String postValue,              // <5>
+            String user, java.sql.Timestamp timestamp);     // <6>
+  }
+----
+<1> whether this implementation is enabled.
+If all configured implementations are disabled, then auditing is suppressed (a minor performance optimization).
+<2> together the `transactionId` (misnamed; really is the request/interaction Id) and the `sequence` uniquely identify
+the transaction in which the object was changed.
+<3> identifies the object that has changed
+<4> the property of the object that has changed.
+The combination of the `transactionId`, `sequence`, `target` and `propertyName` is unique.
+<5> the before and after values of the property (in string format).
+If the object was created then "[NEW]" is used as the pre-value; if the object was deleted then "[DELETED]" is used as the post-value.
+<6> the user that changed the object, and the date/time that this occurred.
+
+The framework will call this for each and every domain object property that is modified within a transaction.
+
+
+
+== Implementations
+
+The framework allows multiple implementations of this service to be registered; all will be called.
+The framework provides one implementation of its own, `AuditerServiceLogging` (in `o.a.i.applib.services.audit` package); this
+logs simple messages to an SLF4J logger.
+
+
+For example, this can be configured to write to a separate log file by adding the following to `logging.properties`:
+
+[source,ini]
+----
+log4j.appender.AuditerServiceLogging=org.apache.log4j.FileAppender
+log4j.appender.AuditerServiceLogging.File=./logs/AuditerServiceLogging.log
+log4j.appender.AuditerServiceLogging.Append=false
+log4j.appender.AuditerServiceLogging.layout=org.apache.log4j.PatternLayout
+log4j.appender.AuditerServiceLogging.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss.SSS} %m%n
+
+log4j.logger.org.apache.isis.applib.services.audit.AuditerServiceLogging=DEBUG,AuditerServiceLogging
+log4j.additivity.org.apache.isis.applib.services.audit.AuditerServiceLogging=false
+----
+
+
+
+
+== Usage
+
+The typical way to indicate that an object should be audited is to annotate it with the xref:../rgant/rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
+
+
+== Alternative Implementations
+
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module provides an implementation of this service (`AuditerService`), and also provides a number of related domain services (`AuditingServiceMenu`, `AuditingServiceRepository` and `AuditingServiceContributions`).
+
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module also provides an implementation, `org.isisaddons.module.audit.dom.AuditerServiceUsingJdo`.
+This creates an audit record for each changed property (ie every time that `AuditerService#audit(...)` is called.
+
+The module also provides:
+
+* `AuditingServiceMenu` service which provides actions to search for ``AuditEntry``s, underneath an 'Activity' menu on
+the secondary menu bar.
+
+* `AuditingServiceRepository` service to to search for persisted `AuditEntry``s.
+None of its actions are visible in the user interface (they are all `@Programmatic`).
+
+* `AuditingServiceContributions` which contributes collections to the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[ `HasTransactionId`] interface.
+This will therefore display all audit entries that occurred in a given request/transaction, in other words whenever a command, a published event or another audit entry is displayed.
+
+
+These services can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
+
+If menu items or contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
+
+
+
+== Related Services
+
+The auditing service works very well with implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] that persist the ``Interaction.Execution`` objects obtained from the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service.
+The interaction execution captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditerService` audit entries capture the _effect_ of that interaction in terms of changed state.
+
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can also be combined with the auditer service, however
+``Command``s are primarily concerned with capture the _intent_ of an action, not the actual action invocation itself.
+

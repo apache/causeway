@@ -1,0 +1,99 @@
+[[_rgsvc_integration-api]]
+= Integration API
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The integration APIs provide functionality to the domain objects to integrate with other bounded contexts, for example sending an email or serializing an object out to XML.
+
+
+The table below summarizes the integration APIs defined by Apache Isis.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
+
+
+.Integration API
+[cols="2,4a,1,1", options="header"]
+|===
+
+|API
+|Description
+|Implementation
+|Notes
+
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`o.a.i.applib.` +
+`services.bookmark` +
+`BookmarkService`]
+|Convert object reference to a serializable "bookmark", and vice versa.
+|`BookmarkServiceDefault` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|related services:
+`BookmarkHolder-` +
+`ActionContributions`,
+`BookmarkHolder-` +
+`Association-` +
+`Contributions`
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`o.a.i.applib.` +
+`services.email` +
+`EmailService`]
+|Send a HTML email, optionally with attachments.
+|`EmailServiceDefault` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|
+
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`o.a.i.applib.` +
+`services.jaxb` +
+`JaxbService`]
+|Marshal and unmarshal JAXB-annotated view models to/from XML.
+|`JaxbServiceDefault` +
+``o.a.i.core`` +
+``isis-core-schema``
+|
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_MementoService[`o.a.i.applib.` +
+`services.memento` +
+`MementoService`]
+|Capture a serializable memento of a set of primitives or xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[bookmarks].  Primarily used internally, eg in support of commands/auditing.
+|`MementoServiceDefault` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_XmlSnapshotService[`o.a.i.applib.` +
+`services.xmlsnapshot` +
+`XmlSnapshotService`]
+|Generate an XML representation of an object and optionally a graph of related objects.
+|`XmlSnapshotServiceDefault` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|
+
+
+
+|===
+
+
+
+Key:
+
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
+* `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
+* `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
+
+
+
+include::_rgsvc_integration-api_BookmarkService.adoc[leveloffset=+1]
+include::_rgsvc_integration-api_EmailService.adoc[leveloffset=+1]
+include::_rgsvc_integration-api_JaxbService.adoc[leveloffset=+1]
+include::_rgsvc_integration-api_MementoService.adoc[leveloffset=+1]
+include::_rgsvc_integration-api_XmlSnapshotService.adoc[leveloffset=+1]

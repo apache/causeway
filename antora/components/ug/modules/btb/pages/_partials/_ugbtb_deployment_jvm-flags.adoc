@@ -1,0 +1,51 @@
+[[_ugbtb_deployment_jvm-flags]]
+= JVM Flags
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+NOTE: FIXME
+
+
+The default JVM configuration will most likely not be appropriate for running Isis as a webapp.  The table below suggests some JVM args that you will probably want to modify:
+
+.JVM args
+[cols="1,1", options="header"]
+|===
+
+|Flag
+|Description
+
+|-server
+|Run the JVM in server mode, meaning that the JVM should spend more time on the optimization of the fragments of codes that are most often used (hotspots). This leads to better performance at the price of a higher overhead at startup.
+
+|-Xms128m
+Minimum heap size
+
+
+|-Xmx768m
+|Maximum heap size
+
+
+|-XX:PermSize=64m
+|Minimum perm size (for class definitions)
+
+
+|-XX:MaxPermSize=256m
+|Maximum perm size (for class definitions)
+
+
+|-XX:+DisableExplicitGC
+|Causes any explicit calls to <tt>System.gc()</tt> to be ignored.  +
++
+See link:http://stackoverflow.com/questions/12847151/setting-xxdisableexplicitgc-in-production-what-could-go-wrong[this stackoverflow] question.
+
+|===
+
+There are also a whole bunch of GC-related flags, that you might want to explore; see this detailed link:http://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html[Hotspot JVM] documentation and also this link:http://blog.ragozin.info/2011/09/hotspot-jvm-garbage-collection-options.html[blog post].
+
+
+
+## Configuring in Tomcat
+
+If using Tomcat, update the `CATALINA_OPTS` variable.  (This variable is also updated if xref:../ugbtb/ugbtb.adoc#__ugbtb_deployment_externalized-configuration_Log4j[configuring logging to run externally]).
+

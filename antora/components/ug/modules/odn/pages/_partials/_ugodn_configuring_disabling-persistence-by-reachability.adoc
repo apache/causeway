@@ -1,0 +1,92 @@
+[[_ugodn_configuring_disabling-persistence-by-reachability]]
+= Persistence by Reachability
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+By default, JDO/DataNucleus supports the concept of link:http://www.datanucleus.org/products/datanucleus/jdo/persistence.html#persistence_by_reachability[persistence-by-reachability].
+That is, if a non-persistent entity is associated with an already-persistent entity, then DataNucleus will detect this and will automatically persist the associated object.
+Put another way: there is no need to call Apache Isis' `RepositoryService#persist(.)` or `RepositoryService#persistAndFlush(.)` methods.
+
+However, convenient though this feature is, you may find that it causes performance issues.
+
+[WARNING]
+====
+DataNucleus' persistence-by-reachability may cause performance issues.
+We strongly recommend that you disable it.
+====
+
+One scenario in particular where this performance issues can arise is if your entities implement the `java.lang.Comparable` interface, and you have used Apache Isis' xref:../rgcms/rgcms.adoc#_rgcms_classes_utility_ObjectContracts[`ObjectContracts`] utility class.
+The issue here is that `ObjectContracts` implementation can cause DataNucleus to recursively rehydrate a larger number of associated entities.
+(More detail below).
+
+We therefore recommend that you disable persistence-by-reachability by adding the following to `persistor_datanucleus.properties`:
+
+[source,ini]
+----
+isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=false
+----
+
+This change has been made to both the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] and xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes.
+
+If you do disable this feature, then you will (of course) need to ensure that you explicitly persist all entities using the `RepositoryService#persist(.)` or `RepositoryService#persistAndFlush(.)` methods.
+
+
+
+== The issue in more detail
+
+Consider these entities (http://yuml.me/edit/b8681268[yuml.me/b8681268]):
+
+image::{_imagesdir}runtime/configuring-datanucleus/disabling-persistence-by-reachability/party-agreementrole-agreement.png[width="750px",link="{_imagesdir}runtime/configuring-datanucleus/disabling-persistence-by-reachability/party-agreementrole-agreement.png"]
+
+
+
+In the course of a transaction, the `Agreement` entity is loaded into memory (not necessarily modified), and then new ``AgreementRole``s are associated to it.
+
+All these entities implement `Comparable` using `ObjectContracts`, and the implementation of ``AgreementRole``'s (simplified) is:
+
+[source,java]
+----
+public class AgreementRole {
+    ...
+    public int compareTo(AgreementRole other) {
+        return ObjectContracts.compareTo(this, other, "agreement","startDate","party");
+    }
+}
+----
+
+while ``Agreement``'s is implemented as:
+
+[source,java]
+----
+public class Agreement {
+    ...
+    public int compareTo(Agreement other) {
+        return ObjectContracts.compareTo(this, other, "reference");
+    }
+}
+----
+
+and ``Party``'s is similarly implemented as:
+
+[source,java]
+----
+public class Party {
+    ...
+    public int compareTo(Party other) {
+        return ObjectContracts.compareTo(this, other, "reference");
+    }
+}
+----
+
+DataNucleus's persistence-by-reachability algorithm adds the `AgreementRole` instances into a `SortedSet`, which causes `AgreementRole#compareTo()` to fire:
+
+* the evaluation of the "agreement" property delegates back to the `Agreement`, whose own `Agreement#compareTo()` uses the scalar `reference` property.
+As the `Agreement` is already in-memory, this does not trigger any further database queries
+
+* the evaluation of the "startDate" property is just a scalar property of the `AgreementRole`, so will already in-memory
+
+* the evaluation of the "party" property delegates back to the `Party`, whose own `Party#compareTo()` requires the uses the scalar `reference` property.
+However, since the `Party` is not yet in-memory, using the `reference` property triggers a database query to "rehydrate" the `Party` instance.
+
+In other words, in figuring out whether `AgreementRole` requires the persistence-by-reachability algorithm to run, it causes the adjacent associated entity `Party` to also be retrieved.

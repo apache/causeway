@@ -1,0 +1,69 @@
+include::_attributes.adoc[]
+[[_ugvro_hints-and-tips_view-model-as-parameter]]
+= View Model as Parameter
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+As discussed link:https://lists.apache.org/thread.html/cbd18320bbf6e5c5e767283f9e675cf56e7f4692c109e1e79dbaa90a@%3Cusers.isis.apache.org%3E[on the mailing list].
+
+== Query
+
+I must provide a REST service accepting more complex view model as input
+parameter.
+
+My view model parameter would look like
+
+[source,java]
+----
+@DomainObject(
+    nature = Nature.VIEW_MODEL,
+    objectType = "OfferTemplateFilter"
+)
+@XmlRootElement(name = "OfferTemplateFilter")
+@XmlAccessorType(XmlAccessType.FIELD)
+@Getter @Setter
+public class OfferTemplateFilter {
+    public List<String> selectedDeviceManufacturer = new ArrayList<>();
+    public List<String> selectedDeviceSizes = new ArrayList<>();
+}
+----
+
+My REST domain service would be someting like
+
+[source,java]
+----
+
+@DomainService(
+    nature = NatureOfService.VIEW_REST_ONLY,
+    objectType = "OfferRestService"
+)
+public class OfferRestService {
+
+    @Action(semantics = SemanticsOf.IDEMPOTENT)
+    public OfferTemplateSelectorForCustomer
+        offerSelectorForCustomer(
+            final String subscriberNumber,
+            final OfferTemplateFilter filter) {
+        return offerSelectorRepository.create(subscriberNumber, filter);
+    }
+    ...
+}
+----
+
+I'm wondering how this could be achieved without custom rest service.
+Ideally the service consumer would post a kind of JSON structure where my
+view model OfferTemplateFilter would be created?
+
+
+== Possible Answer...
+
+Rather than try to "upload" the `OfferTemplateFilter` view model as a parameter, instead treat it as a resource.
+
+That is:
+
+* have a new service to create an instance of the filter, and then
+* update this filter (adding/removing from its two collections).
+* When done, pass a reference to the filter to the original REST service, as a regular reference.
+
+Obviously the URL passed in the last step will be rather long and messy, but that's not a problem per-se.
+

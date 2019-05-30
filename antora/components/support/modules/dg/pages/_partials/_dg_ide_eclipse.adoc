@@ -1,0 +1,222 @@
+[[_dg_ide_eclipse]]
+= Developing using Eclipse
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+[NOTE]
+====
+This material does not constitute an endorsement; Eclipse foundation is not affiliated to Apache Software Foundation in any way.
+====
+
+If you are an http://www.eclipse.org[Eclipse] user, then we recommend you download the "Eclipse JEE package" configuration.
+
+When running an Apache Isis application, it's necessary to setup the development environment so that the Java bytecode can be enhanced by the link:http://www.datanucleus.org[DataNucleus] enhancer.
+If working in Eclipse, then JDO enhancement is most easily done by installing the http://www.datanucleus.org/products/accessplatform/jpa/tools.html#eclipse[DataNucleus' Eclipse plugin].
+This hooks the bytecode enhancement of your domain objects into Eclipse's normal incremental compilation.
+
+This plugin needs to be configured for each of your domain modules (usually just one in any given app).
+
+
+
+
+
+[[__dg_ide_eclipse_editor-templates]]
+== Editor Templates
+
+We provide a set of editor templates.  These are used to add new methods to existing classes.  (These are equivalent to the xref:../dg/dg.adoc#__dg_ide_intellij_live-templates[IntelliJ live templates]):
+
+* `is` (Apache Isis domain objects).  link:./resources/eclipse/isis-templates.xml[Download]
+* `ju` (for JUnit tests) link:./resources/eclipse/junit4-templates.xml[Download]
+* `jm` (for JMock mocks or libraries) link:./resources/eclipse/jmock2-templates.xml[Download]
+
+
+To install, download each XML file, then go to `Windows > Preferences > Java > Editor > Templates` and choose `Import`.
+
+
+
+[[__dg_ide_eclipse_configure-lombok]]
+== Install Project Lombok
+
+The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] uses link:http://projectlombok.org[Project Lombok] annotations (`@Getter` and `@Setter` and so on) to reduce the boilerplate.
+For Eclipse IDE this requires an link:https://projectlombok.org/setup/eclipse[installation step]:
+
+* Locate the `lombok.jar` jar file:
+
++
+image::{_imagesdir}eclipse/2017-oxygen/010-lombok-locate-jar.png[width="600px",link="{_imagesdir}eclipse/2017-oxygen/010-lombok-locate-jar.png"]
+
+* Run using `java -jar` (or double click on Windows):
+
++
+image::{_imagesdir}eclipse/2017-oxygen/020-lombok-install-into-eclipse.png[width="600px",link="{_imagesdir}eclipse/2017-oxygen/020-lombok-install-into-eclipse.png"]
+
+Then restart Eclipse.
+
+
+[[__dg_ide_eclipse_install-datanucleus-plugin]]
+== Install the DataNucleus plugin
+
+The DataNucleus plugin hooks into the Eclipse compiler and will automatically enhance the compiled class files:
+
+* Use Help > Install New Software:
+
++
+image::{_imagesdir}eclipse/2017-oxygen/030-datanucleus-install-new-software.png[width="600px",link="{_imagesdir}eclipse/2017-oxygen/030-datanucleus-install-new-software.png"]
+
+* Specify the DataNucleus plugin repository:
+
++
+image::{_imagesdir}eclipse/2017-oxygen/040-datanucleus-specify-repository.png[width="400px",link="{_imagesdir}eclipse/2017-oxygen/040-datanucleus-specify-repository.png"]
+
+* Select the plugin
+
++
+image::{_imagesdir}eclipse/2017-oxygen/050-datanucleus-select-plugin.png[width="600px",link="{_imagesdir}eclipse/2017-oxygen/050-datanucleus-select-plugin.png"]
+
+* Press Next and Finish to complete the installation of the plugin
+
+Then restart Eclipse
+
+
+[[__dg_ide_eclipse_importing-the-project]]
+== Importing the Project
+
+Use File > Import, then Maven > Existing Maven Projects.
+
+However, you will have some compile errors until you enable annotation processing, discussed below.
+
+
+[[__dg_ide_eclipse_enable-annotation-processing]]
+=== Enable Annotation Processing
+
+Both DataNucleus and Project Lombok use annotation processors that must be enabled in Eclipse.
+
+For each project, open its _Properties_ page and then _Java Compiler > Annotation Processing_ to specify the generated source directory of `target/generated-sources/annotations`:
+
+image::{_imagesdir}eclipse/2017-oxygen/060-enable-annotation-processor.png[width="600px",link="{_imagesdir}eclipse/2017-oxygen/060-enable-annotation-processor.png"]
+
+Eclipse should automatically add this directory as a source path; at this point all remaining compiler errors should disappear.
+
+
+[[__dg_ide_eclipse_add-datanucleus-support]]
+== Configure DataNucleus
+
+[TIP]
+====
+Make sure you are in the 'Java' Perspective, not the 'Java EE' Perspective.
+====
+
+
+In Eclipse, for the _domain object model_ project(s), first add DataNucleus support:
+
+image::{_imagesdir}eclipse/eclipse-100-project-support.png[width="600px",link="{_imagesdir}eclipse/eclipse-100-project-support.png"]
+
+
+Then turn on Auto-Enhancement:
+
+image::{_imagesdir}eclipse/eclipse-110-project-support.png[width="600px",link="{_imagesdir}eclipse/eclipse-110-project-support.png"]
+
+
+=== Update the classpath
+
+DataNucleus' enhancer uses the domain object model's own classpath to reference DataNucleus JARs.
+So, even though your domain objects are unlikely to depend on DataNucleus, these references must still be present.
+
+See the section in xref:dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[DataNucleus enhancer] for details of the contents of the `pom.xml`.
+Chances are it is already set up from running the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] or the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetype.
+
+
+Then, tell DataNucleus to use the project classpath:
+
+image::{_imagesdir}eclipse/eclipse-010-windows-preferences.png[width="750px",link="{_imagesdir}eclipse/eclipse-010-windows-preferences.png"]
+
+When the enhancer runs, it will print out to the console:
+
+image::{_imagesdir}eclipse/eclipse-120-console.png[width="500px",link="{_imagesdir}eclipse/eclipse-120-console.png"]
+
+
+[[__dg_ide_eclipse_workaround-for-path-limits]]
+=== Workaround for path limits (the DN plugin to use the persistence.xml)
+
+If running on Windows then the DataNucleus plugin is very likely to hit the Windows path limit.
+
+To fix this, we configure the enhancer to read from the `persistence.xml` file.
+
+As a prerequisite, first make sure that your domain object model has a `persistence.xml` file.  Then specify the `persistence-unit` in the project properties:
+
+image::{_imagesdir}eclipse/eclipse-025-project-properties.png[width="750px",link="{_imagesdir}eclipse/eclipse-025-project-properties.png"]
+
+
+=== Workaround: If the enhancer fails
+
+On occasion it appears that Eclipse can attempt to run two instances of the DataNucleus enhancer. This is probably due to multiple Eclipse builders being defined; we've noticed multiple entries in the Eclipse's `Debug` view:
+
+
+image::{_imagesdir}eclipse/eclipse-210-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}eclipse/eclipse-210-enhancer-fails-duplicates.png"]
+
+
+At any rate, you'll know you've encountered this error if you see the following in the console:
+
+
+image::{_imagesdir}eclipse/eclipse-200-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}eclipse/eclipse-200-enhancer-fails-duplicates.png"]
+
+
+
+The best solution is to remove DataNucleus support and then to re-add it:
+
+
+image::{_imagesdir}eclipse/eclipse-220-enhancer-fails-duplicates.png[width="600px",link="{_imagesdir}eclipse/eclipse-220-enhancer-fails-duplicates.png"]
+
+
+If you consistently hit problems, then the final recourse is to disable the automatic enhancement and to remember to manually enhance your domain object model before each run.
+
+Not ideal, we know. Please feel free to contribute a better solution :-)
+
+
+
+[[__dg_ide_eclipse_running-the-app]]
+== Running the App
+
+The simpleapp archetype automatically provides a `.launch` configurations in the `webapp` module. You can therefore very simply run the application by right-clicking on one of these files, and choosing "Run As…" or "Debug As…".
+
+
+[NOTE]
+====
+The screencast above shows this in action.
+====
+
+
+
+
+
+== Other domain projects.
+
+There is nothing to prevent you having multiple domain projects.
+You might want to do such that each domain project corresponds to a http://www.methodsandtools.com/archive/archive.php?id=97p2[DDD module], thus guaranteeing that there are no cyclic dependencies between your modules.
+
+If you do this, make sure that each project has its own `persistence.xml` file.
+And, remember also to configure Eclipse's DataNucleus plugin for these other domain projects.
+
+
+
+== Advanced
+
+In this section are a couple of options that will reduce the length of the change code/build/deploy/review feedback loop.
+
+
+=== Setting up DCEVM
+
+link:http://github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more
+reliable hot swapping of the implementation of existing methods.
+
+In the context of Apache Isis, this is very useful for contributed actions and mixins and also view models; you should
+then be able to write these actions and have them be picked up without restarting the application.
+
+Changing persisting domain entities is more problematic, for two reasons: the JDO/DataNucleus enhancer needs to run on
+domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.  You may find that adding
+actions will work, but adding new properties or collections is much less likely to.
+
+For details of setting up DCEVM, see the xref:../dg/dg.adoc#__dg_ide_intellij_advanced_dcevm[corresponding section] in the IntelliJ documentation.
+

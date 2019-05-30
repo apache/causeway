@@ -1,0 +1,70 @@
+[[_rgant-DomainObject_publishing]]
+= `publishing()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `publishing()` attribute determines whether and how a modified object instance is published via the registered implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+
+A common use case is to notify external "downstream" systems of changes in the state of the Apache Isis application.
+
+The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.publish.objects` is used to determine the whether the action is published:
+
+* `all` +
++
+all changed objects are published
+
+* `none` +
++
+no changed objects are published
+
+If there is no configuration property in `isis.properties` then publishing is automatically disabled for domain objects.
+
+This default can be overridden on an object-by-object basis; if `publishing()` is set to `ENABLED` then changed instances of the domain class are published irrespective of the configured value; if set to `DISABLED` then the changed instances are _not_ published, again irrespective of the configured value.
+
+For example:
+
+[source,java]
+----
+@DomainObject(
+    publishing=Publishing.ENABLED  // <1>
+)
+public class InterestRate {
+    ...
+}
+----
+<1> because set to enabled, will be published irrespective of the configured value.
+
+
+
+
+<<<<<<< HEAD
+=======
+== `publishingPayloadFactory()`
+
+The (optional) related `publishingPayloadFactory()` specifies the class to use to create the (payload of the) event to be published by the publishing factory.
+
+Rather than simply broadcast that the object was changed, the payload factory allows a "fatter" payload to be instantiated that can eagerly push commonly-required information to all subscribers.
+For at least some subscribers this should avoid the necessity to query back for additional information.
+
+
+[WARNING]
+====
+Be aware that this attribute is only honoured by the (deprecated) xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublishingService[`PublishingService`], so should itself be considered as deprecated.
+It is ignored by the replacement xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`],
+====
+
+
+== See also
+
+This attribute is also supported for:
+
+* xref:../rgant/rgant.adoc#_rgant-Action_publishing[actions]
++
+where it controls whether action invocations are published as events, and for
+
+* xref:../rgant/rgant.adoc#_rgant-Property_publishing[properties]
++
+where it controls whether property edits are published as events.
+>>>>>>> master

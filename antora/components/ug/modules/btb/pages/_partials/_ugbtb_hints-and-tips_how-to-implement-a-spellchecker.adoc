@@ -1,0 +1,28 @@
+include::_attributes.adoc[]
+[[_ugbtb_hints-and-tips_how-to-implement-a-spellchecker]]
+= How to implement a spellchecker?
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+
+From this link:http://isis.markmail.org/thread/dduarjscrbnodfsi[thread] on the Apache Isis users mailing list:
+
+* _What is the easiest way to add a spell checker to the text written in a field in
+   a domain object, for instance to check English syntax?_
+
+One way to implement is to use the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[event bus]:
+
+* Set up a xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent[domain event] xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] that can veto the changes.
+
+* if the change is made through an action, you can use xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`].
+
+if if the change is made through an edit, you can use xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`].
+
+You'll need some way to know which fields should be spell checked.  Two ways spring to mind:
+
+* either look at the domain event's identifier
+
+* or subclass the domain event (recommended anyway) and have those subclass events implement some sort of marker interface, eg a `SpellCheckEvent`.
+
+And you'll (obviously) also need some sort of spell checker implementation to call.
+

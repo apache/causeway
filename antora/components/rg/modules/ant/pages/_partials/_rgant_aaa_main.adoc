@@ -1,0 +1,102 @@
+[[_rgant_aaa_main]]
+= Core annotations
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+In Apache Isis every domain object is either a domain entity, a view model or a domain service.  And each of these are made up of properties, collections and actions (domain services only have actions).
+
+For each of these domain types and members there are two annotations.  One covers the semantics intrinsic to the domain (eg whether an action parameter is optional or not), then other (suffix `...Layout`) captures semantics relating to the UI/presentation layer.
+
+[TIP]
+====
+Most UI semantics can also be specified using xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[dynamic object layout].
+====
+
+
+The table below summarizes these most commonly used annotations in Apache Isis.
+
+
+.Core annotations for domain objects, services and members
+[cols="2,4a,1,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Layer
+|xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[File-based layout]?
+
+|xref:../rgant/rgant.adoc#_rgant-Action[`@Action`]
+|Domain semantics for actions
+|Domain
+|
+
+|xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`]
+|User interface hints for actions
+|UI
+|Yes
+
+|xref:../rgant/rgant.adoc#_rgant-Collection[`@Collection`]
+|Domain semantics for collections
+|Domain
+|
+
+|xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]
+|User interface hints for collections
+|UI
+|Yes
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObject[`@DomainObject`]
+|Domain semantics for domain object (entities and optionally view models, see also `@ViewModel)`
+|Domain
+|
+
+|xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`]
+|User interface hints for domain object (entities and optionally view models, see also `@ViewModelLayout)`
+|UI
+|Yes
+
+|xref:../rgant/rgant.adoc#_rgant-DomainService[`@DomainService`]
+|Class is a domain service (rather than an entity or view model)
+|Domain
+|
+
+|xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout[`@DomainServiceLayout`]
+|User interface hints for domain services
+|UI
+|
+
+|xref:../rgant/rgant.adoc#_rgant-Parameter[`@Parameter`]
+|Domain semantics for action parameters
+|Domain
+|
+
+|xref:../rgant/rgant.adoc#_rgant-ParameterLayout[`@ParameterLayout`]
+|Layout hints for an action parameter (currently: its label position either to top or the left).
+|UI
+|Yes
+
+|xref:../rgant/rgant.adoc#_rgant-Property[`@Property`]
+|Domain semantics for properties
+|Domain
+|
+
+|xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`]
+|Layout hints for a property
+|UI
+|Yes
+
+|xref:../rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`]
+|Specify that a class is a view model (as opposed to an entity or domain service); equivalent to `@DomainObject(nature`=VIEW_MODEL).
+|Domain, Persistence
+|
+
+|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout[`@ViewModelLayout`]
+|User interface hints for view models.
+For use with `@ViewModel`. If specifying view models using `@DomainObject(nature=VIEW_MODEL)` then use `@DomainObjectLayout`)
+|UI
+|Yes
+
+|===
+
+
+

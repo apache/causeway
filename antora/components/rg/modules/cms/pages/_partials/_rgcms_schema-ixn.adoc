@@ -1,0 +1,201 @@
+[[_rgcms_schema-ixn]]
+= Interaction Execution
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The interaction ("ixn") schema defines the serialized form of an action invocation or a property edit.
+In fact, it actually defines a call-graph of such executions for those cases where the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] is used to execute sub-actions/property edits.
+
+Each execution identifies the target object, the member to invoke, and the arguments.
+It also captures metrics about the execution, and the result of the execution (eg return value of an action invocation).
+
+[NOTE]
+====
+Mixin actions are represented as regular actions on the mixed-in object.
+In other words, the fact that the actual implementation of the action is defined by a mixin is an implementation detail only.
+====
+
+
+[[__rgcms_schema-ixn_interactionDto]]
+== `interactionDto`
+
+The `interactionDto` root element is defined as:
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/ixn"              <!--1-->
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://isis.apache.org/schema/ixn"
+           xmlns:cmd="http://isis.apache.org/schema/cmd"
+           xmlns:com="http://isis.apache.org/schema/common">
+
+    <xs:import namespace="http://isis.apache.org/schema/common"             <!--2-->
+               schemaLocation="../common/common-1.0.xsd"/>
+    <xs:import namespace="http://isis.apache.org/schema/cmd"
+               schemaLocation="../cmd/cmd-1.0.xsd"/>
+
+    <xs:element name="interactionDto">                                      <!--3-->
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="majorVersion" type="xs:string"            <!--4-->
+                            minOccurs="0" maxOccurs="1" default="1"/>
+                <xs:element name="minorVersion" type="xs:string"
+                            minOccurs="0" maxOccurs="1" default="0"/>
+
+                <xs:element name="transactionId" type="xs:string"/>         <!--5-->
+                <xs:element name="execution" type="memberExecutionDto"/>    <!--6-->
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
+----
+<1> the interaction schema has a namespace URI of "http://isis.apache.org/schema/ixn".
+Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
+<2> uses complex types defined in the xref:../rgcms/rgcms.adoc#_rgcms_schema_common["common" schema] and also the xref:../rgcms/rgcms.adoc#_rgcms_schema_cmd["cmd" schema]
+<3> definition of the `interactionDto` root element.
+The corresponding XML will use this as its top-level element.
+<4> each instance of this schema indicates the version of the schema it is compatible with (following semantic versioning)
+<5> unique identifier for the transaction in which this interaction is being executed.
+The transaction Id is used to correlate back to the xref:../rgcms/rgcms.adoc#_rgcms_schema_command[command] that represented the intention to perform this execution, as well as to any xref:../rgcms/rgcms.adoc#_rgcms_schema_changes[changes] to domain objects that occur as a side-effect of the interaction.
+<6> the top-level `memberExecutionDto`, defined below, either an action invocation or edit of a property.
+
+The `InteractionDto` DTO corresponding to the `interactionDto` root element can be marshalled to/from XML using the `InteractionDtoUtils` class.
+
+
+
+[[__rgcms_schema-ixn_memberExecutionDto]]
+== `memberExecutionDto`
+
+The `memberExecutionDto` complex type is an abstract type representing either the invocation an action or the editing of a property.
+It corresponds to the xref:../rgcms/rgcms.adoc#__rgcms_schema-cmd_memberDto[`memberDto`] of the "cmd" schema; some elements are copied directly:
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/ixn" ... >
+    ...
+    <xs:complexType name="memberExecutionDto" abstract="true">              <!--1-->
+        <xs:sequence>
+            <xs:element name="sequence" type="xs:int"/>                     <!--2-->
+            <xs:element name="target" type="com:oidDto"/>                   <!--3-->
+            <xs:element name="memberIdentifier" type="xs:string"/>          <!--4-->
+            <xs:element name="logicalMemberIdentifier" type="xs:string"/>   <!--5-->
+            <xs:element name="user" type="xs:string"/>                      <!--6-->
+            <xs:element name="title" type="xs:string"/>                     <!--7-->
+            <xs:element name="metrics" type="metricsDto"/>                  <!--8-->
+            <xs:element name="threw" type="exceptionDto"                    <!--9-->
+                        minOccurs="0" maxOccurs="1"/>
+            <xs:element name="childExecutions" minOccurs="0" maxOccurs="1"> <!--10-->
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="execution" type="memberExecutionDto"
+                                    minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute  name="interactionType" type="com:interactionType"/>  <!--11-->
+    </xs:complexType>
+    ...
+</xs:schema>
+----
+<1> the `memberExecutionDto` is an abstract type
+<2> uniquely identifies this execution within the transaction.
+Can be combined with `transactionId` to create a unique identifier (across all other interaction executions and also changed objects events) of this particular interaction execution.
+<3> the target object, corresponding to one of the elements of the `targets` element of the xref:../rgcms/rgcms.adoc#__rgcms_schema-cmd_memberDto[`memberDto`]
+<4> the member identifier; corresponds to `memberIdentifier` of the `member` element of the xref:../rgcms/rgcms.adoc#__rgcms_schema-cmd_memberDto[`memberDto`]
+<5> the _logical_ member identifier; corresponds to `logicalMemberIdentifier` of the `member` element of the xref:../rgcms/rgcms.adoc#__rgcms_schema-cmd_memberDto[`memberDto`]
+<6> the user executing the action invocation/property edit; corresponds to the `user` element of the xref:../rgcms/rgcms.adoc#__rgcms_schema-cmd_memberDto[`memberDto`]
+<7> the current "human-friendly" title of the target object
+<8> the set of metrics captured for this execution, of type `metricsDto` defined xref:../rgcms/rgcms.adoc#__rgcms_schema-ixn_ancillary[below].
+<9> if the action invocation/property edit threw an exception, then this is captured here.
+<10> if any sub-actions or sub-edits were performed via the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`], then these are captured in the `childExecutions` element.
+<11> the `interactionType` attribute indicates whether the member is an action or a property (similar attribute exists for the "cmd" schema).
+
+In general the `logicalMemberIdentifier` should be used in preference to the `memberIdentifier` because will not (necessarily) have to change if the class is moved during a refactoring.
+
+The `actionInvocationDto` and `propertyEditDto` are the concrete subtypes:
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/ixn" ... >
+    ...
+    <xs:complexType name="actionInvocationDto">                             <!--1-->
+        <xs:complexContent>
+            <xs:extension base="memberExecutionDto">
+                <xs:sequence>
+                    <xs:element name="parameters" type="cmd:paramsDto"/>    <!--2-->
+                    <xs:element name="returned"                             <!--3-->
+                                type="com:valueWithTypeDto"
+                                minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    ...
+    <xs:complexType name="propertyEditDto">                                 <!--4-->
+        <xs:complexContent>
+            <xs:extension base="memberExecutionDto">
+                <xs:sequence>
+                    <xs:element name="newValue"                             <!--5-->
+                                type="com:valueWithTypeDto"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    ...
+</xs:schema>
+----
+<1> the `actionInvocationDto` inherits from `memberExecutionDto`.
+It corresponds to the similar
+xref:../rgcms/rgcms.adoc#__rgcms_schema-cmd_memberDto[`actionDto`] complex type of the "cmd" schema
+<2> the `parameters` element captures the parameter and argument values; for the top-level execution it is a direct copy of the corresponding `parameters` element of the `actionDto` complex type of the "cmd" schema.
+<3> the `returned` element captures the returned value (if not void).
+It is not valid for both this element and the inherited `threw` element to both be populated.
+<4> the `propertyEditDto` inherits from `memberExecutionDto`.
+It corresponds to the similar xref:../rgcms/rgcms.adoc#__rgcms_schema-cmd_memberDto[`propertyDto`] complex type of the "cmd" schema
+<5> the `newValue` element captures the new value; for the top-level execution it is a direct
+copy of the corresponding `newValue` element of the `propertyDto` complex type of the "cmd" schema.
+
+
+[[__rgcms_schema-ixn_ancillary]]
+== Ancillary types
+
+The schema also defines a small number of supporting types:
+
+[source,xml]
+----
+<xs:schema targetNamespace="http://isis.apache.org/schema/ixn" ... >
+    ...
+    <xs:complexType name="metricsDto">                                      <!--1-->
+        <xs:sequence>
+            <xs:element name="timings" type="com:periodDto"/>
+            <xs:element name="objectCounts" type="objectCountsDto"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="objectCountsDto">                                 <!--2-->
+        <xs:sequence>
+            <xs:element name="loaded" type="com:differenceDto"/>
+            <xs:element name="dirtied" type="com:differenceDto"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="exceptionDto"/>                                   <!--3-->
+        <xs:sequence>
+            <xs:element name="message" type="xs:string"/>
+            <xs:element name="stackTrace" type="xs:string"/>
+            <xs:element name="causedBy" type="exceptionDto" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
+----
+<1> the `metricsDto` captures the time to perform an execution, and also the differences in various object counts.
+<2> the `objectCountsDto` complex type is the set of before/after differences, one for each execution; the framework tracks number of objects loaded (read from) the database and the number of objects dirtied (will need to be saved back to the database).
+Together these metrics give an idea of the "size" of this  particular execution.
+<3> the `exceptionDto` complex type defines a structure for capturing the stack trace of any exception that might occur in the course of invoking an action or editing a property.
+
+The xref:../rgcms/rgcms.adoc#_rgcms_schema_changes[changes] schema also provides metrics on the number of objects loaded/changed, but relates to the entire interaction rather than just one (sub)execution of an interaction.

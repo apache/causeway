@@ -1,0 +1,263 @@
+[[_ugfun_programming-model_actions]]
+= Actions
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+While xref:../ugfun/ugfun.adoc#_ugfun_programming-model_properties[properties] and xref:../ugfun/ugfun.adoc#_ugfun_programming-model_collections[collections] define the state held by a domain object (its "know what" responsibilities), actions define the object's behaviour (its "know how-to" responsibilities).
+
+An application whose domain objects have only/mostly "know-what" responsibilities is pretty dumb: it requires that the end-user know the business rules and doesn't modify the state of the domain objects such that they are invalid (for example, an "end date" being before a "start date").
+Such applications are often called CRUD applications (create/read/update/delete).
+
+In more complex domains, it's not realistic/feasible to expect the end-user to have to remember all the different business rules that govern the valid states for each domain object.
+So instead actions allow those business rules to be encoded programmatically.
+An Apache Isis application doesn't try to constrain the end-user as to way in which they interact with the user (it doesn't attempt to define a rigid business process) but it does aim to ensure that business rule invariants are maintained, that is that business objects aren't allowed to go into an invalid state.
+
+For simple domain applications, you may want to start prototyping only with properties, and only later introduce actions (representing the most common business operations).
+But an alternative approach, recommended for more complex applications, is actually to start the application with all properties non-editable.
+Then, as the end-user requires the ability to modify some state, there is a context in which to ask the question "why does this state need to change?" and "are their any side-effects?" (ie, other state that changes at the same time, or other behaviour that should occur).
+If the state change is simple, for example just being able to correct an invalid address, or adding a note or comment, then that can probably be modelled as a simple editable property.
+But if the state change is more complex, then most likely an action should be used instead.
+
+
+[[__ugfun_programming-model_actions_defining-actions]]
+== Defining actions
+
+Broadly speaking, actions are all the `public` methods that are not getters or setters which represent properties or collections.
+This is a slight simplification; there are a number of other method prefixes (such as `hide` or `validate`) that represent xref:../ugfun/ugfun.adoc#_ugfun_business-rules[business rules]); these also not treated as actions.
+And, any method that are annotated with `@Programmatic` will also be excluded.
+But by and large, all other methods such as `placeOrder(...)` or `approveInvoice(...)` will be treated as actions.
+
+For example:
+
+[source,java]
+----
+@Action(semantics=SemanticsOf.IDEMPOTENT)       // <1>
+public ShoppingBasket addToBasket(
+        Product product,
+        @ParameterLayout(named="Quantity")      // <2>
+        int quantity
+        ) {
+    ...
+    return this;
+}
+----
+<1> `@Action` annotation is optional but used to specify additional domain semantics (such as being idempotent).
+<2> The names of action parameters (as rendered in the UI) will by default be the parameter types, not the paramter names.
+For the `product` parameter this is reasonable, but not so for the `quantity` parameter (which would by default show up with a name of "int".
+The `@ParameterLayout` annotation provides a UI hint to the framework.
+
+[TIP]
+====
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension allows the parameter name to be used in the UI, rather than the type.
+====
+
+
+[[__ugfun_programming-model_actions_reference-parameter-types]]
+== (Reference) Parameter types
+
+Parameter types can be value types or reference types.
+In the case of primitive types, the end-user can just enter the value directly through the parameter field.
+In the case of reference types however (such as `Product`), a drop-down must be provided from which the end-user to select.
+This is done using either a supporting xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_choices[`choices`] or xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete`] method.
+The "choices" is used when there is a limited set of options, while "autoComplete" is used when there are large set of options such that the end-user must provide some characters to use for a search.
+
+For example, the `addToBasket(...)` action shown above might well have a :
+
+[source,java]
+----
+@Action(semantics=SemanticsOf.IDEMPOTENT)
+public ShoppingBasket addToBasket(
+        Product product,
+        @ParameterLayout(named="Quantity")
+        int quantity
+        ) {
+    ...
+    return this;
+}
+public List<Product> autoComplete0AddToBasket(              // <1>
+    @MinLength(3)                                           // <2>
+    String searchTerm) {
+    return productRepository.find(searchTerm);              // <3>
+}
+@javax.inject.Inject
+ProductRepository productRepository;
+----
+<1> Supporting `autoComplete` method.
+The "0" in the name means that this corresponds to parameter 0 of the "addToBasket" action (ie `Product`).
+It is also required to return a Collection of that type.
+<2> The xref:../rgant/rgant.adoc#_rgant-MinLength[`@MinLength`] annotation defines how many characters the end-user must enter before performing a search.
+<3> The implementation delegates to an injected repository service.  This is typical.
+
+Note that it is also valid to define "choices" and "autoComplete" for value types (such as `quantity`, above); it just isn't as common to do so.
+
+[[__ugfun_programming-model_actions_reference-parameter-types_removing-boilerplate]]
+=== Removing boilerplate
+
+To save having to define an `autoCompleteNXxx(...)` method everywhere that a reference to a particular type (such as `Product`) appears as an action parameter, it is also possible to use the `@DomainObject` annotation on `Product` itself:
+
+[source,java]
+----
+@DomainObject(
+    autoCompleteRepository=ProductRepository.class          // <1>
+    autoCompleteAction="find"                               // <2>
+)
+public class Product ... {
+    ...
+}
+----
+<1> Whenever an action parameter requiring a `Product` is defined, provide an autoComplete drop-down automatically
+<2> Use the "find" method of `ProductRepository` (rather than the default name of "autoComplete")
+
+(As noted above), if the number of available instances of the reference type is a small number (in other words, all of which could comfortably be shown in a drop-down) then instead the `choicesNXxx()` supporting method can be used.
+This too can be avoided by annotating the referenced class.
+
+For example, suppose we have an action to specify the `PaymentMethodType`, where there are only 10 or so such (Visa, Mastercard, Amex, Paypal etc).
+We could define this as:
+
+[source,java]
+----
+public Order payUsing(PaymentMethodType type) {
+    ...
+}
+----
+
+where `PaymentMethodType` would be annotated using:
+
+[source,java]
+----
+@DomainObject(
+    bounded=true                            // <1>
+)
+public class PaymentMethodType ... {
+    ...
+}
+----
+<1> only a small (ie "bounded") number of instances available, meaning that the framework should render all in a drop-down.
+
+
+[[__ugfun_programming-model_actions_collection-parameter-types]]
+== Collection Parameter types
+
+Action parameters can also be collections of values (for example `List<String>`), or can be collections of references (such as `List<Customer>`).
+
+For example:
+
+[source,java]
+----
+@Action(semantics=SemanticsOf.IDEMPOTENT)
+public ShoppingBasket addToBasket(
+        List<Product> products,
+        @ParameterLayout(named="Quantity") int quantity
+        ) {
+    ...
+    return this;
+}
+public List<Product> autoComplete0AddToBasket(@MinLength(3) String searchTerm) {
+    return ...
+}
+----
+
+As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:../rgant/rgant.adoc#_rgant-DomainObject[`@DomainObject`] on the referenced type (described xref:../ugfun/ugfun.adoc#__ugfun_programming-model_actions_reference-parameter-types_removing-boilerplate[above]).
+
+
+[[__ugfun_programming-model_actions_optional-parameters]]
+== Optional Parameters
+
+Whereas the xref:../ugfun/ugfun.adoc#__ugfun_programming-model_properties_optional-properties[optionality of properties] is defined using xref:../rgant/rgant.adoc#_rgant-Column_allowsNull[`@javax.jdo.annotations.Column#allowsNull()`], that JDO annotation cannot be applied to parameter types.
+Instead, either the xref:../rgant/rgant.adoc#_rgant-Nullable[`@Nullable`] annotation or the xref:../rgant/rgant.adoc#_rgant_Parameter_optionality[`@Parameter#optionality()`]  annotation/attribute is used.
+
+For example:
+
+[source,java]
+----
+@javax.jdo.annotations.Column(allowsNull="true")                // <1>
+@lombok.Getter @lombok.Setter
+private LocalDate shipBy;
+
+public Order invoice(
+                PaymentMethodType paymentMethodType,
+                @Nullable                                       // <2>
+                @ParameterLayout(named="Ship no later than")
+                LocalDate shipBy) {
+    ...
+    setShipBy(shipBy)
+    return this;
+}
+----
+<1> Specifies the property is optional.
+<2> Specifies the corresponding parameter is optional.
+
+See also xref:../ugfun/ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[properties vs parameters].
+
+[[__ugfun_programming-model_actions_string-parameters]]
+== ``String`` Parameters (Length)
+
+Whereas the xref:../ugfun/ugfun.adoc#__ugfun_programming-model_properties_datatypes_strings[length of string properties] is defined using xref:../rgant/rgant.adoc#_rgant-Column_length[`@javax.jdo.annotations.Column#length()`], that JDO annotation cannot be applied to parameter types.
+Instead, the xref:../rgant/rgant.adoc#_rgant-Parameter_maxLength[`@Parameter#maxLength()`] annotation/attribute is used.
+
+For example:
+
+[source,java]
+----
+@javax.jdo.annotations.Column(length=50)                // <1>
+@lombok.Getter @lombok.Setter
+private String firstName;
+
+@javax.jdo.annotations.Column(length=50)
+@lombok.Getter @lombok.Setter
+private String lastName;
+
+public Customer updateName(
+                @Parameter(maxLength=50)                // <2>
+                @ParameterLayout(named="First name")
+                String firstName,
+                @Parameter(maxLength=50)
+                @ParameterLayout(named="Last name")
+                String lastName) {
+    setFirstName(firstName);
+    setLastName(lastName);
+    return this;
+}
+----
+<1> Specifies the property length using the JDO xref:../rgant/rgant.adoc#_rgant-Column_length[`@Column#length()`] annotation
+<2> Specifies the parameter length using the (Apache Isis) xref:../rgant/rgant.adoc#_rgant-Parameter_maxLength[`@Parameter#maxLength()`] annotation
+
+[IMPORTANT]
+====
+Incidentally, note in the above example that the new value is assigned to the properties using the setter methods; the action does not simply set the instance field directly.
+This is important, because it allows JDO/DataNucleus to keep track that this instance variable is "dirty" and so needs flushing to the database table before the transaction completes.
+====
+
+See also xref:../ugfun/ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[properties vs parameters].
+
+[[__ugfun_programming-model_actions_bigdecimal-parameters]]
+== ``BigDecimal``s (Precision)
+
+Whereas the xref:../ugfun/ugfun.adoc#__ugfun_programming-model_properties_datatypes_bigdecimals[precision of BigDecimal properties] is defined using xref:../rgant/rgant.adoc#_rgant_Column_scale[`@javax.jdo.annotations.Column#scale()`], that JDO annotation cannot be applied to parameter types.
+Instead, the xref:../rgant/rgant.adoc#_rgant-Digits[`@javax.validation.constraints.Digits#fraction()`] annotation/attribute is used.
+
+For example:
+
+[source,java]
+----
+@javax.jdo.annotations.Column(scale=2)                              // <1>
+@lombok.Getter @lombok.Setter
+private BigDecimal discountRate;
+
+public Order updateDiscount(
+                @javax.validation.constraints.Digits(fraction=2)    // <2>
+                @ParameterLayout(named="Discount rate")
+                String discountRate) {
+    setDiscountRate(discountRate);
+    return this;
+}
+----
+<1> Specifies the property precision using xref:../rgant/rgant.adoc#_rgant_Column_scale[`@Column#scale()`]
+<2> Specifies the corresponding parameter precision using xref:../rgant/rgant.adoc#_rgant-Digits[`@Digits#fraction()`].
+
+See also xref:../ugfun/ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[properties vs parameters].
+
+
+

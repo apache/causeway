@@ -1,0 +1,24 @@
+[[_release-notes_1.12.1]]
+= 1.12.1
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+
+Apache Isis 1.12.1 is a bug fix release for Apache Isis 1.12.0.  The primary issue it addresses are spurious concurrency exceptions that can be thrown when editing an object.  It also addresses a subtle issue where the new support in JAXB view models for auto-edit can cause some dirty objects not to be updated.
+
+
+
+== Bug
+
+* link:https://issues.apache.org/jira/browse/ISIS-1355[ISIS-1355] - concurrency exception after property edit when attempting to render...
+* link:https://issues.apache.org/jira/browse/ISIS-1357[ISIS-1357] - Update dependency from guava-19.0.20150826 to guava-19.0
+* link:https://issues.apache.org/jira/browse/ISIS-1361[ISIS-1361] - View model that changes two domain objects only has one of them updated.
+* link:https://issues.apache.org/jira/browse/ISIS-1363[ISIS-1363] - ConfigurationServiceMenu is defined under the prototyping menu, but is not restricted to prototyping.  Suggest place under the tertiary menu instead.
+
+
+== Task
+
+* link:https://issues.apache.org/jira/browse/ISIS-1362[ISIS-1362] - Release activities for v1.12.1
+
+

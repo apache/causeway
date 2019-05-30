@@ -1,0 +1,101 @@
+[[_rgant-DomainObject_autoCompleteRepository]]
+= `autoCompleteRepository()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The `autoCompleteRepository()` attribute nominates a single method on a domain service as the fallback means for looking up instances of the domain object using a simple string.
+
+For example, this might search for a customer by their name or number.
+Or it could search for a country based on its ISO-3 code or user-friendly name.
+
+
+[TIP]
+====
+If you require additional control - for example restricting the returned results based on the object being interacted with - then use the xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] supporting method instead.
+====
+
+
+For example:
+
+[source,java]
+----
+@DomainObject(
+    autoCompleteRepository=CustomerRepository.class
+)
+public class Customer {
+   ....
+}
+----
+
+where:
+
+[source,java]
+----
+@DomainService
+public class CustomerRepository {
+    List<Customer> autoComplete(String search);  // <1>
+    ...
+}
+----
+<1> is assumed to be called "autoComplete", and accepts a single string
+
+
+
+== `autoCompleteAction()`
+
+As noted above, by default the method invoked on the repository is assumed to be called "autoComplete".  The optional `autoCompleteAction()` attribute allows the method on the repository to be overridden.
+
+
+For example:
+
+[source,java]
+----
+@DomainObject(
+    autoCompleteRepository=Customers.class,
+    autoCompleteAction="findByName"
+)
+public class Customer {
+   ....
+}
+----
+
+where in this case `findByName` might be an existing action already defined:
+
+[source,java]
+----
+@DomainService(natureOfService=VIEW_MENU_ONLY)
+public class Customers {
+    @Action(semantics=SemanticsOf.SAFE)
+    public List<Customer> findByName(
+        @MinLength(3)                       // <1>
+        @ParameterLayout(named="name")
+        String name);
+    ...
+}
+----
+<1> end-user must enter minimum number of characters to trigger the query
+
+The autocomplete action can also be a regular method, annotated using xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`]:
+
+[source,java]
+----
+@DomainService(natureOfService=VIEW_MENU_ONLY)
+public class Customers {
+    @Programmatic
+    public List<Customer> findByName(
+        @MinLength(3)
+        String name);
+    ...
+}
+----
+
+
+[IMPORTANT]
+====
+The method specified must be an action, that is, part of the Isis metamodel.
+Said another way: it must not be annotated with xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`].
+However, it *can* be hidden or placed on a domain service with xref:../rgant/rgant.adoc#_rgant-DomainService_nature[nature] of `DOMAIN`, such that the action would not be rendered otherwise in the UI.
+Also, the action cannot be xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[restricted to] prototyping only.
+====

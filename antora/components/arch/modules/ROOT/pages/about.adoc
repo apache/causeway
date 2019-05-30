@@ -1,4 +1,4 @@
-= Other Guides
+= Maven Archetypes
 include::_attributes.adoc[]
 
 CAUTION: TODO ... convert over from 1.x branch

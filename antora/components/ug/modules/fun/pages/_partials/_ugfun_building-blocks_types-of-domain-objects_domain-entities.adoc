@@ -1,0 +1,36 @@
+[[_ugfun_building-blocks_types-of-domain-objects_domain-entities]]
+= Domain Entities
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+Most domain objects that the end-user interacts with are _domain entities_, such as `Customer`, `Order`, `Product` and so on.
+These are persistent objects and which are mapped to a database (usually relational), using JDO/DataNucleus annotations.
+
+Some domain entities are really aggregates, a combination of multiple objects.
+A commonly cited example of this is an `Order`, which really consists of both a root `Order` entity and a collection of ``OrderItem``s.
+From the end-users' perspective, when they talk of "order" they almost always mean the aggregate rather than just the `Order` root entity.
+
+Eric Evans' link:http://books.google.com/books/about/Domain_Driven_Design.html?id=hHBf4YxMnWMC[Domain Driven Design] has a lot to say about aggregate roots and their responsibilities: in particular that it is the responsibility of the aggregate root to maintain the invariants of its component pieces, and that roots may only reference other roots.
+There's good logic here: requiring only root-to-root relationships reduces the number of moving parts that the developer has to think about.
+
+On the other hand, this constraint can substantially complicate matters when mapping domain layer to the persistence layer.
+DDD tends to de-emphasise such matters: it aims to be completely agnostic about the persistence layer, with the responsibilities for managing relationships moved (pretty much by definition) into the domain layer.
+
+As a framework though Apache Isis is less dogmatic about such things.
+Generally the domain objects are mapped to a relational database and so we can lean on the referential integrity capabilities of the persistence layer to maintain referential invariants.
+Said another way: we don't tend to require that only roots can maintain roots: we don't see anything wrong in an `InvoiceItem` referencing an `OrderItem`, for example.
+
+Nonetheless the concepts of "aggregate" and "aggregate root" are worth holding onto.
+You'll likely find that you'll define a repository service (discussed in more detail below) for each aggregate root: for example `Order` will have a corresponding `OrderRepository` service.
+Similarly, you may also have a factory service, for example `OrderFactory`.
+However, you are less likely to have a repository service for the parts of an aggregate root: the role of retrieving ``OrderItem``s should fall to the `Order` (typically by way of lazy loading of an "items" collection) rather than through an `OrderItemRepository` service.
+Again, this isn't a hard-n-fast rule, but a good rule of thumb.
+
+
+[TIP]
+====
+Details on how to actually write a domain entity (the programming model for domain entities) is
+xref:../ugfun/ugfun.adoc#_ugfun_programming-model_domain-entities[here].
+====
+

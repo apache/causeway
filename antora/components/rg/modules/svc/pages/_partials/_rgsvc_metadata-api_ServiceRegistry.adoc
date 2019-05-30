@@ -1,0 +1,56 @@
+[[_rgsvc_metadata-api_ServiceRegistry]]
+= `ServiceRegistry`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The `ServiceRegistry2` domain service (and its various supertypes)collects together methods for injecting or looking up domain services (either provided by the framework or application-specific) currently known to the runtime.
+
+
+
+== API
+
+The API of `ServiceRegistry` is:
+
+[source,java]
+----
+public interface ServiceRegistry {
+    <T> T injectServicesInto(final T domainObject);     // <1>
+    <T> T lookupService(Class<T> service);              // <2>
+    <T> Iterable<T> lookupServices(Class<T> service);   // <3>
+    List<Object> getRegisteredServices();               // <4>
+}
+----
+<1> injects services into domain object; used extensively internally by the framework (eg to inject to other services, or to entities, or integration test instances, or fixture scripts).
+<2> returns the first registered service that implements the specified class
+<3> returns an `Iterable` in order to iterate over all registered services that implement the specified class
+<4> returns the list of all domain services that constitute the running application (including internal domain services).
+
+Service injection is done automatically if objects are created using the
+xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`].
+
+
+
+== Usage
+
+The primary use case is to instantiate domain objects using a regular constructor ("new is the new new"), and then using the `#injectServicesInto(...)` API to set up any dependencies.
+
+For example:
+
+[source,java]
+----
+Customer cust = serviceRegistry.injectServicesInto( new Customer());
+cust.setFirstName("Freddie");
+cust.setLastName("Mercury");
+repositoryService.persist(cust);
+----
+
+The alternative is to use the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`] API which performs both steps in a single factory method.
+
+
+
+== Implementation
+
+The core framework provides a default implementation of this service (`o.a.i.core.runtime.services.registry.ServiceRegistryDefault`).
+
+

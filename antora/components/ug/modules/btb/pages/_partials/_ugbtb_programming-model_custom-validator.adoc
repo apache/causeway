@@ -1,0 +1,106 @@
+[[_ugbtb_programming-model_custom-validator]]
+= Custom validator
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+Apache Isis' programming model includes a validator component that detects and prevents (by failing fast) a number of situations where the domain model is logically inconsistent.
+
+For example, the validator will detect any orphaned supporting methods (eg `hideXxx()`) if the corresponding property or action has been renamed or deleted but the supporting method was not also updated.  Another example is that a class cannot have a title specified both using `title()` method and also using `@Title` annotation.
+
+[NOTE]
+====
+The support for xref:../rgant/rgant.adoc#_rgant-aaa_deprecated[disallowing deprecated annotations] is also implemented using the metamodel validator.
+====
+
+You can also impose your own application-specific rules by installing your own metamodel validator.  To give just one example, you could impose naming standards such as ensuring that a domain-specific abbreviation such as "ISBN" is always consistently capitalized wherever it appears in a class member.
+
+[TIP]
+====
+Isis' xref:../rgmvn/rgmvn.adoc#[Maven plugin] will also validate the domain object model during build time.
+====
+
+
+== API and Implementation
+
+There are several ways to go about implementing a validator.
+
+=== `MetaModelValidator`
+
+Any custom validator must implement Apache Isis' internal `MetaModelValidator` interface, so the simplest option is just to implement `MetaModelValidator` directly:
+
+
+[source,java]
+----
+public interface MetaModelValidator
+        implements SpecificationLoaderSpiAware { // <1>
+    public void validate(
+        ValidationFailures validationFailures);  // <2>
+}
+----
+<1> the `SpecificationLoader` is the internal API providing access to the Apache Isis metamodel.
+<2> add any metamodel violations to the `ValidationFailures` parameter (the link:http://c2.com/cgi/wiki?CollectingParameter[collecting parameter] pattern)
+
+
+=== `Visitor`
+
+More often than not, you'll want to visit every element in the metamodel, and so for this you can instead subclass from `MetaModelValidatorVisiting.Visitor`:
+
+[source,java]
+----
+public final class MetaModelValidatorVisiting ... {
+    public static interface Visitor {
+        public boolean visit(                       // <1>
+            ObjectSpecification objectSpec,         // <2>
+            ValidationFailures validationFailures); // <3>
+    }
+    ...
+}
+----
+<1> return `true` continue visiting specs.
+<2> `ObjectSpecification` is the internal API representing a class
+<3> add any metamodel violations to the `ValidationFailures` parameter
+
+
+You can then create your custom validator by subclassing `MetaModelValidatorComposite` and adding the visiting validator:
+
+[source,java]
+----
+public class MyMetaModelValidator extends MetaModelValidatorComposite {
+    public MyMetaModelValidator() {
+        add(new MetaModelValidatorVisiting(new MyVisitor()));
+    }
+}
+----
+
+If you have more than one rule then each can live in its own visitor.
+
+=== `SummarizingVisitor`
+
+As a slight refinement, you can also subclass from `MetaModelValidatorVisiting.SummarizingVisitor`:
+
+[source,java]
+----
+public final class MetaModelValidatorVisiting ... {
+    public static interface SummarizingVisitor extends Visitor {
+        public void summarize(ValidationFailures validationFailures);
+    }
+    ...
+}
+----
+
+A `SummarizingVisitor` will be called once after every element in the metamodel has been visited.  This is great for performing checks on the metamodel as a whole.  For example, Apache Isis uses this to check that there is at least one `@Persistable` domain entity defined.
+
+
+
+
+== Configuration
+
+Once you have implemented your validator, you must register it with the framework by defining the appropriate configuration property:
+
+[source,ini]
+----
+isis.reflector.validator=com.mycompany.myapp.MyMetaModelValidator
+----
+
+
+

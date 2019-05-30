@@ -1,0 +1,19 @@
+[[_ugtst_bdd-spec-support_how-it-works]]
+= How it works
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+At a high level, here's how Cucumber works
+
+* specifications are written in the https://github.com/cucumber/cucumber/wiki/Gherkin[Gherkin] DSL, following the https://github.com/cucumber/cucumber/wiki/Given-When-Then["given/when/then"] format.
+
+* Cucumber-JVM itself is a JUnit runner, and searches for https://github.com/cucumber/cucumber/wiki/Feature-Introduction[feature files] on the classpath.
+
+* These in turn are matched to link:https://github.com/cucumber/cucumber/wiki/Step-Definitions[step definition]s through regular expressions. +
++
+It is the step definitions (the "glue") that exercise the system.
+
+The code that goes in step definitions is broadly the same as the code that goes in an integration test method.  One benefit of using step definitions (rather than integration tests) is that the step definitions are reusable across scenarios, so there may be less code overall to maintain.  For example, if you have a step definition that maps to "given an uncompleted todo item", then this can be used for all the scenarios that start with that as their precondition.
+

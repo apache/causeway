@@ -1,0 +1,171 @@
+[[_rgsvc_application-layer-api]]
+= Application Layer API
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+Domain service APIs for the application layer allow the domain objects to control aspects of the application layer, such as sending info messages back to the end-user.
+
+
+The table below summarizes the application layer APIs defined by Apache Isis.
+It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules.
+
+.Application Layer API
+[cols="2,4a,1,1", options="header"]
+|===
+
+|API
+|Description
+|Implementation
+|Notes
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_ActionInvocationContext[`o.a.i.applib.` +
+`services.actinv` +
+`ActionInvocation-` +
+`Context`]
+|Request-scoped access to whether action is invoked on object and/or on collection of objects
+|`ActionInvocationContext` +
+``o.a.i.core`` +
+``isis-core-applib``
+|API is also concrete class
+
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`o.a.i.applib.` +
+`services.background` +
+`BackgroundService`]
+|Programmatic persistence of commands to be persisted (so can be executed by a background mechanism, eg scheduler)
+|`BackgroundService-`
+`Default` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|depends on: +
+xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommand-Service`]
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`o.a.i.applib.` +
+`services.command` +
+`CommandContext`]
+|Request-scoped access to capture the users's __intention__ to invoke an action or to edit a property.
+|`CommandContext` +
+``o.a.i.core`` +
+``isis-core-applib``
+|API is also a concrete class. +
+depends on: +
+xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] for persistent `Command`, else in-memory impl. used.
+
+The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] manages the actual execution of the command.
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandExecutorService[`o.a.i.applib.` +
+`services.command` +
+`CommandExecutorService`]
+|Executes the specified `Command`.
+|`CommandExecutorService-`
+`Default` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_DtoMappingHelper[`o.a.i.applib.` +
+`services.dto` +
+`DtoMappingHelper`]
+|Maps domain objects internal identifier to an `OidDto` for use in serialized representations.
+|`DtoMappingHelper` +
+``o.a.i.core`` +
+``isis-core-applib``
+|API is also a concrete class.
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`o.a.i.applib.` +
+`services.iactn` +
+`InteractionContext`]
+|Request-scoped access to the current member execution (action invocation or property edit),
+represented as the `Interaction` context.
+|`InteractionContext` +
+``o.a.i.core`` +
+``isis-core-applib``
+|API is also a concrete class.
+
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_MessageService[`o.a.i.applib.` +
+`services.message` +
+`MessageService`]
+|Methods to inform or warn the user, or to raise errors.
+|`FactoryService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_SessionManagementService[`o.a.i.applib.` +
+`services.sessmgmt` +
+`SessionManagementService`]
+|Methods for batching long-running work (eg data migration) into multiple sessions.
+|`SessionManagementService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TitleService[`o.a.i.applib.` +
+`services.title` +
+`TitleService`]
+|Methods to programmatically obtain the title or icon of a domain object.
+|`TitleService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|
+
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`o.a.i.applib.` +
+`services.xactn` +
+`TransactionService`]
+|Methods for managing transactions.
+|`TransactionService-` +
+``Default`` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|
+
+
+
+|xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`o.a.i.applib.` +
+`services.wrapper` +
+`WrapperFactory`]
+|Interact with another domain object "as if" through the UI (enforcing business rules, firing domain events)
+|`WrapperFactoryDefault` +
+``o.a.i.core`` +
+``isis-core-wrapper``
+|
+
+
+
+|===
+
+Key:
+
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
+* `o.a.i.c.m.s` is an abbreviation for `org.apache.isis.core.metamodel.services`
+* `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
+
+
+
+include::_rgsvc_application-layer-api_ActionInvocationContext.adoc[leveloffset=+1]
+include::_rgsvc_application-layer-api_BackgroundService.adoc[leveloffset=+1]
+include::_rgsvc_application-layer-api_CommandContext.adoc[leveloffset=+1]
+include::_rgsvc_application-layer-api_DtoMappingHelper.adoc[leveloffset=+1]
+include::_rgsvc_application-layer-api_InteractionContext.adoc[leveloffset=+1]
+include::_rgsvc_application-layer-api_MessageService.adoc[leveloffset=+1]
+include::_rgsvc_application-layer-api_SessionManagementService.adoc[leveloffset=+1]
+include::_rgsvc_application-layer-api_TitleService.adoc[leveloffset=+1]
+include::_rgsvc_application-layer-api_TransactionService.adoc[leveloffset=+1]
+include::_rgsvc_application-layer-api_WrapperFactory.adoc[leveloffset=+1]

@@ -1,0 +1,140 @@
+[[_ugodn_db-schemas]]
+= Database Schemas
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
+
+All the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules do this.
+For example:
+
+
+[source,java]
+----
+@javax.jdo.annotations.PersistenceCapable( ...
+        schema = "isissecurity",
+        table = "ApplicationUser")
+public class ApplicationUser ... { ... }
+----
+
+results in a `CREATE TABLE` statement of:
+
+[source,sql]
+----
+CREATE TABLE isissecurity."ApplicationUser" (
+    ...
+)
+----
+
+
+while:
+
+[source,java]
+----
+@javax.jdo.annotations.PersistenceCapable( ...
+        schema = "isisaudit",
+        table="AuditEntry")
+public class AuditEntry ... { ... }
+----
+
+similarly results in:
+
+[source,sql]
+----
+CREATE TABLE isisaudit."AuditEntry" (
+    ...
+)
+----
+
+
+[TIP]
+====
+If for some reason you don't want to use schemas (though we strongly recommend that you do), then note that you can override the `@PersistenceCapable` annotation by providing XML metadata (the `mappings.jdo` file).
+See the section on xref:../ugodn/ugodn.adoc#_ugodn_configuring[configuring DataNucleus Overriding Annotations] for more details.
+====
+
+
+
+
+== Listener to create schema
+
+Apache Isis automatically creates owning schema objects for the tables that correspond to each entity class in the JDO metamodel.
+
+This is done by installing a listener, `CreateSchemaObjectFromClassMetadata`, on a callback provided by JDO/DataNucleus.
+The listener is invoked on the initialization of each class.
+It checks for the schema's existence, and creates the schema if required.
+
+The guts of its implementation is:
+
+[source,java]
+----
+public class CreateSchemaObjectFromClassMetadata
+        implements MetaDataListener,
+                   DataNucleusPropertiesAware {
+    @Override
+    public void loaded(final AbstractClassMetaData cmd) { ... }
+
+    protected String buildSqlToCheck(final AbstractClassMetaData cmd) {
+        final String schemaName = schemaNameFor(cmd);
+        return String.format(
+            "SELECT count(*) FROM INFORMATION_SCHEMA.SCHEMATA where SCHEMA_NAME = '%s'", schemaName);
+    }
+    protected String buildSqlToExec(final AbstractClassMetaData cmd) {
+        final String schemaName = schemaNameFor(cmd);
+        return String.format("CREATE SCHEMA \"%s\"", schemaName);
+    }
+}
+----
+
+where `MetaDataListener` is the DataNucleus listener API:
+
+[source,java]
+----
+public interface MetaDataListener {
+    void loaded(AbstractClassMetaData cmd);
+}
+----
+
+Although not formal API, the default `CreateSchemaObjectFromClassMetadata` has been designed to be easily overrideable if you need to tweak it to support other RDBMS'.
+Any implementation must implement `org.datanucleus.metadata.MetaDataListener`:
+
+The implementation provided has has been tested for HSQLDB, PostgreSQL and MS SQL Server, and is used automatically unless an alternative implementation is specified (as described in the section below).
+
+
+
+
+
+== Alternative implementation
+
+An alternative implementation can be registered and used through the following configuration property:
+
+[source,ini]
+----
+isis.persistor.datanucleus.classMetadataLoadedListener=\
+        org.apache.isis.objectstore.jdo.datanucleus.CreateSchemaObjectFromClassMetadata
+----
+
+
+Because this pertains to the JDO Objectstore we suggest you put this configuration property in `WEB-INF/persistor_datanucleus.properties`; but putting it in `isis.properties` will also work.
+
+Any implementation must implement `org.datanucleus.metadata.MetaDataListener`.
+In many cases simply subclassing from `CreateSchemaObjectFromClassMetadata` and overriding `buildSqlToCheck(...)` and `buildSqlToExec(...)` should suffice.
+
+If you _do_ need more control, your implementation can also optionally implement `org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPropertiesAware`:
+
+[source,java]
+----
+public interface DataNucleusPropertiesAware {
+    public void setDataNucleusProperties(final Map<String, String> properties);
+}
+----
+
+This provides access to the properties passed through to JDO/DataNucleus.
+
+
+[IMPORTANT]
+====
+If you do extend Apache Isis' `CreateSchemaObjectFromClassMetadata` class for some other database, please https://issues.apache.org/jira/browse/ISIS[contribute back] your improvements.
+====
+

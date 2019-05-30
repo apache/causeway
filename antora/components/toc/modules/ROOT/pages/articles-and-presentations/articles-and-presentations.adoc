@@ -1,0 +1,90 @@
+[[articles-and-presentations]]
+= Articles, Conference Sessions, Podcasts
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+Some articles and recorded material relating to either Apache Isis (or its predecessor, the Naked Objects framework), or its 'sister' open source project on the .NET platform, Naked Objects .NET. We've *highlighted* some of the better ones…
+
+
+
+== 2017
+
+* Presentation, IMWorld 2017, Bucharest: link:https://www.youtube.com/watch?v=KdFUwDhf1o8&feature=youtu.be[Thinking outside the box - why you should build, not buy] (45 min video)
+* *Article, infoq.com: "In Defence of the Monolith" (link:https://www.infoq.com/articles/monolith-defense-part-1[part 1] and link:https://www.infoq.com/articles/monolith-defense-part-2[part 2]), also re-published in an link:https://www.infoq.com/minibooks/emag-microservices-monoliths[e-book]*.
+
+
+
+== 2016
+
+* presentation, JAX London: link:https://jaxlondon.com/software-architecture-design/apache-isis-closing-the-architecturecode-gap/[Apache Isis: closing the architecture/code gap].
+Not videotaped, but slides/demos available *link:http://www.danhaywood.com/jaxlondon2016/[here]*.
+
+* presentation/live coding, Skillsmatter: link:https://skillsmatter.com/skillscasts/7892-closing-the-feedback-loop-with-apache-isis[Closing the Feedback loop with Apache Isis]
+
+* tutorial, SPA 2016: "Naked Objects, 14 years on".
+Slides available *link:http://www.danhaywood.com/spa2016/#/[here]*
+
+
+== 2014
+
+* Presentation, BDD Exchange: link:https://skillsmatter.com/skillscasts/5638-to-those-whom-much-is-given-much-is-expected[To those whom much is given, much is expected… ] (45 min. video)
+* Presentation, JEEConf: link:https://www.youtube.com/watch?v=BNGUqZ6YE-M[Extremely rapid application development with Apache Isis] (50 min. video)
+
+
+== 2013
+
+* Presentation, Oredev: link:http://oredev.org/oredev2013/2013/wed-fri-conference/rrraddd-ridiculously-rapid-domain-driven-and-restful-apps-with-apache-isis.html[RRRADDD! Ridiculously Rapid Domain-driven (and Restful) Apps With Apache Isis] (50 min. video)
+* *Article, Methods and Tools : link:http://www.methodsandtools.com/PDF/mt201302.pdf[Introducing Apache Isis]*
+* Article, SDJournal : link:http://sdjournal.org[Introducing Apache Isis]
+* Article, SDJournal: link:http://sdjournal.org[Restful Objects on Apache Isis]
+* A Prezi link:http://prezi.com/cunfhjsf8dqg/braiv-apache-isis/[presentation on Naked Objects and Apache Isis], mixed by Thomas Eck
+* Article, Linux Magzin (german): link:http://www.linux-magazin.de/Ausgaben/2013/07/Apache-Isis[Domain-Driven Design mit Apache Isis] by Frank Pientka
+
+
+== 2012
+
+* *Article, InfoQ: link:http://www.infoq.com/articles/Intro_Restful_Objects[Introducing Restful Objects]*
+* Presentation, Skillsmatter: link:http://skillsmatter.com/podcast/java-jee/restful-objects[Restful Objects - A Hypermedia API For Domain Object Models]
+
+
+== 2011
+
+* *Presentation, InfoQ: link:http://www.infoq.com/presentations/Large-scale-Pure-OO-Irish-Government[Case study: Large-scale Pure OO at the Irish Government]* (1 hr video)
+* Article, InfoQ: link:http://www.infoq.com/articles/haywood-ddd-no[Interview and Book Excerpt: Dan Haywood's Domain Driven Design using Naked Objects]
+
+
+== 2010
+
+* Presentation, Skillsmatter: link:http://skillsmatter.com/podcast/java-jee/have-your-ddd-cake-eat-it-too[How to have your domain-driven design cake and eat it, too] (1 hr video)
+* Article, InfoQ: link:http://www.infoq.com/articles/Nacked-MVC[Fulfilling the Promise of MVC] (Naked Objects .NET)
+* *Podcast, Hanselminutes: link:http://www.hanselman.com/blog/HanselminutesPodcast233InsideTheNakedObjectsFrameworkWithRichardPawson.aspx[Inside the Naked Objects Framework with Richard Pawson]* (Naked Objects .NET) (30 min)
+
+
+== 2009
+
+* *Article, Methods and Tools: link:http://www.methodsandtools.com/archive/archive.php?id=97[An Introduction to Domain Driven Design]*
+* Presentation, Skillsmatter: link:http://skillsmatter.com/podcast/design-architecture/exploring-domains-and-collaborating-with-domain-experts[Exploring Domains and Collaborating with Domain Experts] (1 hr video)
+* Article, PragPub: link:http://pragprog.com/magazines/2009-12[Going Naked]
+* *Book: xref:../books/books.adoc#__books_DDD-using-NO[Domain Driven Design using Naked Objects], Dan Haywood*
+
+
+== 2008:
+
+* Article, InfoQ: link:http://www.infoq.com/articles/RAD-Naked-Objects[Rapid Application Development using Naked Objects for .NET] (Naked Objects .NET)
+
+
+== 2004:
+
+* *Richard Pawson's link:../../guides/ugfun/resources/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD thesis on Naked Objects]*
+* Article series, TheServerSide
+* Part 1 - link:http://www.theserverside.com/news/1365562/Part-1-The-Case-for-Naked-Objects-Getting-Back-to-the-Object-Oriented-Ideal[The Case for Naked Objects - Getting Back to the Object-Oriented Ideal]
+* *Part 2 - link:http://www.theserverside.com/news/1365568/Part-2-Challenging-the-Dominant-Design-of-the-4-Layer-Architecture[Challenging the Dominant Design of the 4-Layer Architecture]*
+* Part 3 - link:http://www.theserverside.com/news/1365570/Part-3-Write-an-application-in-Java-and-deploy-it-on-Net[Write an application in Java and deploy it on .Net]
+* Part 4 - link:http://www.theserverside.com/news/1366868/Part-4-Modeling-simultaneously-in-UML-Java-and-User-Perspectives[Modeling simultaneously in UML, Java, and User Perspectives]
+* Part 5 - link:http://www.theserverside.com/news/1366871/Part-5-Building-Rich-Internet-Applications-with-Naked-Objects[Building Rich Internet Applications with Naked Objects]
+
+
+== 2002:
+
+* *Book: xref:../books/books.adoc#__books_Naked-Objects[Naked Objects], Richard Pawson and Robert Matthews.*

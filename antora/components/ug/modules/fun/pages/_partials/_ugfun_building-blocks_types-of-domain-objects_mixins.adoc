@@ -1,0 +1,55 @@
+[[_ugfun_building-blocks_types-of-domain-objects_mixins]]
+= Mixins
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+The final type of domain object is the *mixin*.
+These are similar to traits or extension methods in other programming languages, in that they contribute (or rather, mixin) both behaviour or (derived) state to entities/view models.
+
+A mixin object allows one class to contribute behaviour - actions, (derived) properties and (derived) collections - to another domain object, either a domain entity or view model.
+
+The allows the app to stay decoupled, so that it doesn't degrade into the proverbial link:http://www.laputan.org/mud/mud.html#BigBallOfMud["big ball of mud"].
+Mixins allow dependencies to be inverted, so that the dependencies between modules can be kept acyclic and under control.
+
+For example, the contributee (eg `Customer`, being mixed into) is in one module, while the contributor mixin (`DocumentHolder_documents`) is in some other module.
+The `customer` module knows about the `document` module, but not vice versa.
+
+Mixins are also a convenient mechanism for grouping functionality even for a concrete type, helping to rationalize about the dependency between the data and the behaviour.
+Each mixin is in effect a single behavioural "responsibility" of the domain object.
+
+
+There are also practical reasons for moving behaviour out of entities even within the same module, because structuring your application this way helps support hot-reloading of Java classes (so that you can modify and recompile your application without having to restart it).
+This can provide substantial productivity gains.
+
+The Hotspot JVM has limited support for hot reloading; generally you can change method implementations but you cannot introduce new methods.
+However, the link:https://dcevm.github.io/[DCEVM] open source project will patch the JVM to support much more complete hot reloading support.
+There are also, of course, commercial products such as JRebel.
+
+The main snag in all this is the DataNucleus enhancer... any change to entities is going to require the entity to be re-enhanced, and the JDO metamodel recreated, which invariably breaks things.
+So hot-reloading of an app whose fundamental structure is changing is likely to remain a no-no.
+
+However, chances are that the structure of your domain objects (the data) will change much less rapidly than the behaviour of those domain objects.
+Thus, it's the behaviour that you're most likely wanting to change while the app is still running.
+If you move that behaviour out into mixins, then these can be reloaded happily.
+(And when running in prototype mode), Apache Isis will automatically recreate the portion of the metamodel for any domain object as it is rendered.
+
+[TIP]
+====
+Details on how to actually write a mixin (the programming model for mixins) is
+xref:../ugfun/ugfun.adoc#_ugfun_programming-model_mixins[here].
+====
+
+
+.DCI Architecture
+****
+Mixins are an implementation of the link:http://www.artima.com/articles/dci_vision.html[DCI architecture] architecture, as formulated and described by link:https://en.wikipedia.org/wiki/Trygve_Reenskaug[Trygve Reenskaug] and link:https://en.wikipedia.org/wiki/Jim_Coplien[Jim Coplien].
+Reenskaug was the inventor of the MVC pattern (and also the external examiner for Richard Pawson's PhD thesis), while Coplien has a long history in object-orientation, C++ and patterns.
+
+DCI stands for Data-Context-Interaction and is presented as an evolution of object-oriented programming, but one where behaviour is bound to objects dynamically rather than statically in some context or other.
+The mixin pattern is Apache Isis' straightforward take on the same basic concept.
+
+You might also wish to check out link:http://zest.apache.org[Apache Zest] (formerly Qi4J), which implements a much more general purpose implementation of the same concepts.
+****
+
+

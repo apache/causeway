@@ -1,0 +1,120 @@
+[[_ugvw_features_blob-attachments]]
+= File upload/download
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+include::_attributes.adoc[]
+
+
+
+The Apache Isis application library provides the xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob[Blob] value type (binary large objects) and also the xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[Clob]
+value type (character large object), each of which also includes metadata about the data (specifically the filename and mime type).
+
+A class can define a property using either of these types, for example:
+
+
+
+
+== Screenshots
+
+The following screenshots are taken from the Isis addons example https://github.com/isisaddons/isis-app-todoapp[todoapp] (not ASF):
+
+
+
+=== View mode, empty
+
+`Blob` field rendered as attachment (with no data):
+
+image::{_imagesdir}blob-attachments/010-attachment-field-940.png[width="800px",link="{_imagesdir}blob-attachments/010-attachment-field.png"]
+
+[NOTE]
+====
+Note that these screenshots show an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+====
+
+
+=== Edit mode
+
+Hit edit; 'choose file' button appears:
+
+image::{_imagesdir}blob-attachments/020-edit-choose-file-940.png[width="800px",link="{_imagesdir}blob-attachments/020-edit-choose-file.png"]
+
+
+
+=== Choose file
+
+Choose file using the regular browser window:
+
+image::{_imagesdir}blob-attachments/030-choose-file-using-browser-520.png[width="520px",link="{_imagesdir}blob-attachments/030-choose-file-using-browser.png"]
+
+
+Chosen file is indicated:
+
+image::{_imagesdir}blob-attachments/040-edit-chosen-file-indicated-940.png[width="800px",link="{_imagesdir}blob-attachments/040-edit-chosen-file-indicated.png"]
+
+
+
+=== Image rendered
+
+Back in view mode (ie once hit OK) if the `Blob` is an image, then it is shown:
+
+image::{_imagesdir}blob-attachments/050-ok-if-image-then-rendered-940.png[width="800px",link="{_imagesdir}blob-attachments/050-ok-if-image-then-rendered.png"]
+
+
+
+=== Download
+
+`Blob` can be downloaded:
+
+image::{_imagesdir}blob-attachments/060-download-940.png[width="800px",link="{_imagesdir}blob-attachments/060-download.png"]
+
+
+
+=== Clear
+
+Back in edit mode, can choose a different file or clear (assuming property is not mandatory):
+
+image::{_imagesdir}blob-attachments/070-edit-clear-940.png[width="800px",link="{_imagesdir}blob-attachments/070-edit-clear.png"]
+
+
+
+
+
+== Domain Code
+
+To define a `Blob`, use:
+
+[source,java]
+----
+private Blob attachment;
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false")
+    @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+            @javax.jdo.annotations.Column(name = "attachment_name"),
+            @javax.jdo.annotations.Column(name = "attachment_mimetype"),
+            @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType = "BLOB", sqlType = "BLOB")
+    })
+@Property(
+        domainEvent = AttachmentDomainEvent.class,
+        optionality = Optionality.OPTIONAL
+)
+public Blob getAttachment() { return attachment; }
+public void setAttachment(final Blob attachment) { this.attachment = attachment; }
+----
+
+To define a `Clob`, use:
+
+[source,java]
+----
+private Clob doc;
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+        @javax.jdo.annotations.Column(name = "doc_name"),
+        @javax.jdo.annotations.Column(name = "doc_mimetype"),
+        @javax.jdo.annotations.Column(name = "doc_chars", jdbcType = "CLOB", sqlType = "CLOB")
+})
+@Property(
+        optionality = Optionality.OPTIONAL
+)
+public Clob getDoc() { return doc; }
+public void setDoc(final Clob doc) { this.doc = doc; }
+----
+
+The `Blob` and `Clob` types can also be used as parameters to actions.
+
