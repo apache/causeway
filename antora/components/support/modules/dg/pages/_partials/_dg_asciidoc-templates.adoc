@@ -5,673 +5,673 @@ include::_attributes.adoc[]
 
 
 
-This appendix lists the (IntelliJ) live templates available for xref:support:dg:dg.adoc#_dg_asciidoc[writing documentation] using Asciidoc.  Instructions for installing the templates can be found xref:support:dg:dg.adoc#__dg_ide_intellij_live-templates[here].
-
-In the examples below the text `xxx`, `yyy`, `zzz` are correspond to template variables (ie placeholders).
-
-== Admonitions (Callouts)
-
-
-[cols="1,4a,2a", options="header"]
-|===
-| Abbrev.
-| Produces
-| Example
-
-|`adadmimportant`
-|....
-[IMPORTANT]
-====
-xxx
-====
-....
-
-|[IMPORTANT]
-====
-xxx
-====
-
-|`adadmnote`
-|....
-[NOTE]
-====
-xxx
-====
-....
-
-|[NOTE]
-====
-xxx
-====
-....
-
-|`adadmtip`
-|....
-[TIP]
-====
-xxx
-====
-....
-
-|[TIP]
-====
-xxx
-====
-....
-
-|`adadmwarning`
-|....
-[WARNING]
-====
-xxx
-====
-....
-
-|[WARNING]
-====
-xxx
-====
-
-|===
-
-
-== TODO notes
-
-Add as a placeholder for documentation still to be written or which is work-in-progress.
-
-[cols="1,4a,2a", options="header"]
-|===
-| Abbrev.
-| Produces
-| Example
-
-|`adtodo`
-|....
-NOTE: TODO
-....
-
-|NOTE: TODO
-
-|`adwip`
-|....
-NOTE: WIP - xxx
-....
-
-where:
-
-* `xxx` is additional explanatory text
-
-|NOTE: WIP - cool new feature
-
-|===
-
-
-
-
-== Xref to Guides
-
-Cross-references (links) to the various guides
-
-[cols="1,4a,2a", options="header"]
-|===
-| Abbrev.
-| Produces
-| Example
-
-
-|`adcgcom`
-|`\xref:support:cgcom:cgcom.adoc#xxx[ttt]`
-
-a hyperlink to a bookmark within the committers' guide, where:
-
-* `xxx` is the bookmark's anchor
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-`\xref:support:dg:dg.adoc#_cgcom_cutting-a-release[Cutting a release\]`
-
-|`addg`
-|`\xref:support:dg:dg.adoc#xxx[ttt]`
-
-a hyperlink to a bookmark within the developers' guide, where:
-
-* `xxx` is the bookmark's anchor
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-`\xref:support:dg:dg.adoc#_dg_asciidoc-templates[Asciidoc templates\]`
-
-|xref:support:dg:dg.adoc#_dg_asciidoc-templates[Asciidoc templates]
-
-
-
-|`adrgant`
-|`\xref:rg:ant:rgant.adoc#xxx[ttt]`
-
-a hyperlink to a bookmark within the reference guide for annotations, where:
-
-* `xxx` is the bookmark
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-`\xref:rg:ant:rgant.adoc#_rgant_aaa_main[Core annotations]`
-
-|xref:rg:ant:rgant.adoc#_rgant_aaa_main[Core annotations]
-
-
-
-|`adrgcfg`
-|`\xref:rg:cfg:rgcfg.adoc#xxx[ttt]`
-
-a hyperlink to a bookmark within the reference guide for configuration properties guide, where:
-
-* `xxx` is the bookmark
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-`\xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]`
-
-|xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]
-
-
-
-|`adrgcms`
-|`\xref:rg:cms:rgcms.adoc#xxx[ttt]`
-
-a hyperlink to a bookmark within the reference guide for classes, methods and schema, where:
-
-* `xxx` is the bookmark
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-`\xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]`
-
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]
-
-
-
-|`adrgsvc`
-|`\xref:rg:svc:rgsvc.adoc#xxx[ttt]`
-
-a hyperlink to a bookmark within the reference guide for domain services, where:
-
-* `xxx` is the bookmark
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-`\xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]`
-
-|xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]
-
-
-
-|`adrgmvn`
-|`\xref:rg:mvn:rgmvn.adoc#xxx[ttt]`
-
-a hyperlink to a bookmark within the reference guide for the maven plugin, where:
-
-* `xxx` is the bookmark
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-`\xref:rg:mvn:rgmvn.adoc#_rgmvn_validate[validate goal]`
-
-|xref:rg:mvn:rgmvn.adoc#_rgmvn_validate[validate goal]
-
-
-
-|`adrgna`
-|`\xref:rg:ant:rgant.adoc#_rgant-xxx[`@xxx`]`
-
-a hyperlink to the "man page" for an annotation within the reference guide for annotations, where:
-
-* `xxx` is the annotation type (eg `@Action`)
-
-for example:
-
-`\xref:rg:ant:rgant.adoc#_rgant-Action[`@Action`]`
-
-|xref:rg:ant:rgant.adoc#_rgant-Action[`@Action`]
-
-
-
-|`adrgnt`
-|`\xref:rg:ant:rgant.adoc#_rgant-xxx_ttt[`@xxx#ttt()`]`
-
-a hyperlink to the "man page" for the specific attribute (field) of an annotation within the reference guide for annotations, where:
-
-* `xxx` is the annotation type (eg `@Action`)
-* `ttt` is the attribute (eg `@semantics`)
-
-for example:
-
-`\xref:rg:ant:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]`
-
-|xref:rg:ant:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]
-
-
-
-|`adrgsa`
-|`\xref:rg:svc:rgsvc.adoc#_rgsvc_api_xxx[`xxx`]`
-
-a hyperlink to the "man page" for an (API) domain service within the reference guide for domain services, where:
-
-* `xxx` is the domain service (eg `RepositoryService`)
-
-for example:
-
-`\xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]`
-
-|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]
-
-
-
-|`adrgss`
-|`\xref:rg:svc:rgsvc.adoc#_rgsvc_spi_xxx[`xxx`]`
-
-a hyperlink to the "man page" for an (SPI) domain service within the reference guide for domain services, where:
-
-* `xxx` is the domain service (eg `ContentMappingService`)
-
-for example:
-
-`\xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`]`
-
-|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingServicef[`ContentMappingService`]
-
-
-
-
-|`adugfun`
-|`\xref:ug:fun:ugfun.adoc#xxx[ttt]`
-
-a hyperlink to a bookmark within the fundamentals users' guide, where:
-
-* `xxx` is the bookmark's anchor
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-`\xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[Core concepts]`
-
-|xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[Core concepts]
-
-
-
-
-|`adugvw`
-|`\xref:ug:vw:ugvw.adoc#xxx[ttt]`
-
-A hyperlink to a bookmark within the Wicket viewer guide, where:
-
-* `xxx` is the bookmark's anchor
-* `ttt` is the text to display as the hyperlink.
-
-for example:
-
-`\xref:ug:vw:ugvw.adoc#_ugvw_customisation[Customisation]`
-
-|xref:ug:vw:ugvw.adoc#_ugvw_customisation[Customisation]
-
-
-|`adugvro`
-|`\xref:ug:vro:ugvro.adoc#xxx[ttt]`
-
-A hyperlink to a bookmark within the Restful Objects viewer guide, where:
-
-* `xxx` is the bookmark's anchor
-* `ttt` is the text to display as the hyperlink.
-
-for example:
-
-`\xref:ug:vro:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]`
-
-|xref:ug:vro:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]
-
-
-
-|`adugsec`
-|`\xref:ug:sec:ugsec.adoc#xxx[ttt]`
-
-A hyperlink to a bookmark within the Secrurity guide, where:
-
-* `xxx` is the bookmark's anchor
-* `ttt` is the text to display as the hyperlink.
-
-for example:
-
-`\xref:ug:sec:ugsec.adoc#_ugsec_hints-and-tips_shiro-caching[Caching and other Shiro Features]`
-
-|xref:ug:sec:ugsec.adoc#_ugsec_hints-and-tips_shiro-caching[Caching and other Shiro Features]
-
-
-|`adugtst`
-|`\xref:ug:tst:ugtst.adoc#xxx[ttt]`
-
-A hyperlink to a bookmark within the Testing guide, where:
-
-* `xxx` is the bookmark's anchor
-* `ttt` is the text to display as the hyperlink.
-
-for example:
-
-`\xref:ug:tst:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]`
-
-|xref:ug:tst:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]
-
-
-|`adugbtb`
-|`\xref:ug:btb:ugbtb.adoc#xxx[ttt]`
-
-A hyperlink to a bookmark within the 'Beyond the Basics' user guide, where:
-
-* `xxx` is the bookmark's anchor
-* `ttt` is the text to display as the hyperlink.
-
-for example:
-
-`\xref:ug:btb:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]`
-
-|xref:ug:btb:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]
-
-
-
-
-|===
-
-
-
-
-== Source code
-
-[cols="1,4a,2a", options="header"]
-|===
-| Abbrev.
-| Produces
-| Example
-
-|`adsrcjava`
-|....
-[source,java]
-----
-xxx
-----
-....
-
-where:
-
-* `xxx` is the source code snippet.
-
-|[source,java]
-----
-public class Foo {
-    ...
-}
-----
-
-
-|`adsrcjavac`
-|as for `adsrcjava`, but with a caption above
-|
-
-
-
-|`adsrcjavascript`
-|....
-[source,javascript]
-----
-xxx
-----
-....
-
-where:
-
-* `xxx` is the source code snippet.
-
-|[source,javascript]
-----
-$(document).ready(function() {
-	...
-});
-----
-
-
-
-|`adsrcjavascriptc`
-|as for `adsrcjavascript`, but with a caption above
-
-|
-
-|`adsrcother`
-|....
-[source,nnn]
-----
-xxx
----
-....
-
-where:
-
-* `nnn` is the programming language
-* `xxx` is the source code snippet.
-
-|
-
-|`adsrcotherc`
-|as for `adsrcother`, but with a caption above
-
-
-|
-
-|`adsrcxml`
-|....
-[source,javascript]
-----
-xxx
-----
-....
-
-
-where:
-
-* `xxx` is the source code snippet.
-
-|[source,xml]
-----
-<html>
-    <title>
-       hello world!
-    </title>
-</html>
-----
-
-
-|`adsrcxmlc`
-|as for `adsrcxml`, but with a caption above
-|
-
-|===
-
-
-== Images
-
-[cols="1,4a,2a", options="header"]
-|===
-| Abbrev.
-| Produces
-| Example
-
-|`adimgfile`
-|`\image:xxx/yyy.png[width="WWWpx",link="{imagesdir}xxx/yyy.png"]`
-
-embeds specified image, where:
-
-* `xxx` is the subdirectory under the `images/` directory
-* `yyy` is the image
-* `WWW` is the width, in pixels.
-
-for example:
-
-`\image:layouts/estatio-Lease.png[width="300px",link="{imagesdir}layouts/estatio-Lease.png"]`
-
-|image:layouts/estatio-Lease.png[width="300px",link="{imagesdir}layouts/estatio-Lease.png"]
-
-
-
-|`adimgfilec`
-|as for `adimgfile`, but with a caption above
-|
-
-
-|`adimgurl`
-|`\image:xxx[width="WWWpx",link="xxx"]`
-
-embeds image from specified URL, where:
-
-* `xxx` is the URL to the image
-* `WWW` is the width, in pixels.
-
-|
-
-
-
-|`adimgurlc`
-|as for `adimgurl`, but with a caption above
-|
-
-
-|===
-
-
-
-== YouTube (screencasts)
-
-Embedded youtube screencasts.  (Don't use these in guides, as they cannot be rendered as PDF).
-
-[cols="1,4a,2a", options="header"]
-|===
-| Abbrev.
-| Produces
-| Example
-
-|`adyoutube`
-|`video:xxx[youtube,width="WWWpx",height="HHHpx"]`
-
-where:
-
-* `xxx` is the youtube reference
-* `WWW` is the width, in pixels
-* `HHH` is the height, in pixels
-
-for example:
-
-`video::bj8735nBRR4[youtube,width="210px",height="118px"]`
-
-|video::bj8735nBRR4[youtube,width="210px",height="118px"]
-
-
-|`adyoutubec`
-|as for `youtube`, but with a caption above
-|
-
-|===
-
-
-== Tables
-
-[cols="1,4a,2a", options="header"]
-|===
-| Abbrev.
-| Produces
-| Example
-
-|`adtbl3`
-|Table with 3 columns, 3 rows.
-|
-
-
-|===
-
-
-== Misc.
-
-[cols="1,4a,2a", options="header"]
-|===
-| Abbrev.
-| Produces
-| Example
-
-|`adai`
-|`Apache Isis` +
-
-That is, the literal text "Apache Isis".
-|Apache Isis
-
-
-
-|`adlink`
-|`\link:xxx[ttt]`
-
-, where:
-
-* `xxx` is
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-`\link:\http://isis.apache.org[[Apache Isis website]]`
-
-|link:http://isis.apache.org[Apache Isis website]
-
-
-
-
-|`adanchany`
-|`= anchor:[xxx]`
-
-defines an inline anchor to any heading, where:
-
-* `xxx` is the anchor text.
-
-For example:
-
-`= anchor:[_ugfun_i18n] Internationalization`
-
-An alternative (more commonly used in our documentation) is to use the `[[...]]` directly above the heading:
-
-....
-= Internationalization
-....
-
-|
-
-
-|`adxrefany`
-|`\xref:[xxx]`
-
-cross-reference to any document/anchor, where:
-
-* `xxx` is the fully qualified document with optional anchor
-
-|
-
-
-|`adfootnote`
-|`\footnote:[xxx]`
-
-defines a footnote
-
-|footnote:[this is a footnote]
-
-
-
-|===
+//This appendix lists the (IntelliJ) live templates available for xref:support:dg:dg.adoc#_dg_asciidoc[writing documentation] using Asciidoc.  Instructions for installing the templates can be found xref:support:dg:dg.adoc#__dg_ide_intellij_live-templates[here].
+//
+//In the examples below the text `xxx`, `yyy`, `zzz` are correspond to template variables (ie placeholders).
+//
+//== Admonitions (Callouts)
+//
+//
+//[cols="1,4a,2a", options="header"]
+//|===
+//| Abbrev.
+//| Produces
+//| Example
+//
+//|`adadmimportant`
+//|....
+//[IMPORTANT]
+//====
+//xxx
+//====
+//....
+//
+//|[IMPORTANT]
+//====
+//xxx
+//====
+//
+//|`adadmnote`
+//|....
+//[NOTE]
+//====
+//xxx
+//====
+//....
+//
+//|[NOTE]
+//====
+//xxx
+//====
+//....
+//
+//|`adadmtip`
+//|....
+//[TIP]
+//====
+//xxx
+//====
+//....
+//
+//|[TIP]
+//====
+//xxx
+//====
+//....
+//
+//|`adadmwarning`
+//|....
+//[WARNING]
+//====
+//xxx
+//====
+//....
+//
+//|[WARNING]
+//====
+//xxx
+//====
+//
+//|===
+//
+//
+//== TODO notes
+//
+//Add as a placeholder for documentation still to be written or which is work-in-progress.
+//
+//[cols="1,4a,2a", options="header"]
+//|===
+//| Abbrev.
+//| Produces
+//| Example
+//
+//|`adtodo`
+//|....
+//NOTE: TODO
+//....
+//
+//|NOTE: TODO
+//
+//|`adwip`
+//|....
+//NOTE: WIP - xxx
+//....
+//
+//where:
+//
+//* `xxx` is additional explanatory text
+//
+//|NOTE: WIP - cool new feature
+//
+//|===
+//
+//
+//
+//
+//== Xref to Guides
+//
+//Cross-references (links) to the various guides
+//
+//[cols="1,4a,2a", options="header"]
+//|===
+//| Abbrev.
+//| Produces
+//| Example
+//
+//
+//|`adcgcom`
+//|`\xref:support:cgcom:cgcom.adoc#xxx[ttt]`
+//
+//a hyperlink to a bookmark within the committers' guide, where:
+//
+//* `xxx` is the bookmark's anchor
+//* `ttt` is the text to display as the hyperlink
+//
+//for example:
+//
+//`\xref:support:dg:dg.adoc#_cgcom_cutting-a-release[Cutting a release\]`
+//
+//|`addg`
+//|`\xref:support:dg:dg.adoc#xxx[ttt]`
+//
+//a hyperlink to a bookmark within the developers' guide, where:
+//
+//* `xxx` is the bookmark's anchor
+//* `ttt` is the text to display as the hyperlink
+//
+//for example:
+//
+//`\xref:support:dg:dg.adoc#_dg_asciidoc-templates[Asciidoc templates\]`
+//
+//|xref:support:dg:dg.adoc#_dg_asciidoc-templates[Asciidoc templates]
+//
+//
+//
+//|`adrgant`
+//|`\xref:rg:ant:rgant.adoc#xxx[ttt]`
+//
+//a hyperlink to a bookmark within the reference guide for annotations, where:
+//
+//* `xxx` is the bookmark
+//* `ttt` is the text to display as the hyperlink
+//
+//for example:
+//
+//`\xref:rg:ant:rgant.adoc#_rgant_aaa_main[Core annotations]`
+//
+//|xref:rg:ant:rgant.adoc#_rgant_aaa_main[Core annotations]
+//
+//
+//
+//|`adrgcfg`
+//|`\xref:rg:cfg:rgcfg.adoc#xxx[ttt]`
+//
+//a hyperlink to a bookmark within the reference guide for configuration properties guide, where:
+//
+//* `xxx` is the bookmark
+//* `ttt` is the text to display as the hyperlink
+//
+//for example:
+//
+//`\xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]`
+//
+//|xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]
+//
+//
+//
+//|`adrgcms`
+//|`\xref:rg:cms:rgcms.adoc#xxx[ttt]`
+//
+//a hyperlink to a bookmark within the reference guide for classes, methods and schema, where:
+//
+//* `xxx` is the bookmark
+//* `ttt` is the text to display as the hyperlink
+//
+//for example:
+//
+//`\xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]`
+//
+//|xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]
+//
+//
+//
+//|`adrgsvc`
+//|`\xref:rg:svc:rgsvc.adoc#xxx[ttt]`
+//
+//a hyperlink to a bookmark within the reference guide for domain services, where:
+//
+//* `xxx` is the bookmark
+//* `ttt` is the text to display as the hyperlink
+//
+//for example:
+//
+//`\xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]`
+//
+//|xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]
+//
+//
+//
+//|`adrgmvn`
+//|`\xref:rg:mvn:rgmvn.adoc#xxx[ttt]`
+//
+//a hyperlink to a bookmark within the reference guide for the maven plugin, where:
+//
+//* `xxx` is the bookmark
+//* `ttt` is the text to display as the hyperlink
+//
+//for example:
+//
+//`\xref:rg:mvn:rgmvn.adoc#_rgmvn_validate[validate goal]`
+//
+//|xref:rg:mvn:rgmvn.adoc#_rgmvn_validate[validate goal]
+//
+//
+//
+//|`adrgna`
+//|`\xref:rg:ant:rgant.adoc#_rgant-xxx[`@xxx`]`
+//
+//a hyperlink to the "man page" for an annotation within the reference guide for annotations, where:
+//
+//* `xxx` is the annotation type (eg `@Action`)
+//
+//for example:
+//
+//`\xref:rg:ant:rgant.adoc#_rgant-Action[`@Action`]`
+//
+//|xref:rg:ant:rgant.adoc#_rgant-Action[`@Action`]
+//
+//
+//
+//|`adrgnt`
+//|`\xref:rg:ant:rgant.adoc#_rgant-xxx_ttt[`@xxx#ttt()`]`
+//
+//a hyperlink to the "man page" for the specific attribute (field) of an annotation within the reference guide for annotations, where:
+//
+//* `xxx` is the annotation type (eg `@Action`)
+//* `ttt` is the attribute (eg `@semantics`)
+//
+//for example:
+//
+//`\xref:rg:ant:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]`
+//
+//|xref:rg:ant:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]
+//
+//
+//
+//|`adrgsa`
+//|`\xref:rg:svc:rgsvc.adoc#_rgsvc_api_xxx[`xxx`]`
+//
+//a hyperlink to the "man page" for an (API) domain service within the reference guide for domain services, where:
+//
+//* `xxx` is the domain service (eg `RepositoryService`)
+//
+//for example:
+//
+//`\xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]`
+//
+//|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]
+//
+//
+//
+//|`adrgss`
+//|`\xref:rg:svc:rgsvc.adoc#_rgsvc_spi_xxx[`xxx`]`
+//
+//a hyperlink to the "man page" for an (SPI) domain service within the reference guide for domain services, where:
+//
+//* `xxx` is the domain service (eg `ContentMappingService`)
+//
+//for example:
+//
+//`\xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`]`
+//
+//|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingServicef[`ContentMappingService`]
+//
+//
+//
+//
+//|`adugfun`
+//|`\xref:ug:fun:ugfun.adoc#xxx[ttt]`
+//
+//a hyperlink to a bookmark within the fundamentals users' guide, where:
+//
+//* `xxx` is the bookmark's anchor
+//* `ttt` is the text to display as the hyperlink
+//
+//for example:
+//
+//`\xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[Core concepts]`
+//
+//|xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[Core concepts]
+//
+//
+//
+//
+//|`adugvw`
+//|`\xref:ug:vw:ugvw.adoc#xxx[ttt]`
+//
+//A hyperlink to a bookmark within the Wicket viewer guide, where:
+//
+//* `xxx` is the bookmark's anchor
+//* `ttt` is the text to display as the hyperlink.
+//
+//for example:
+//
+//`\xref:ug:vw:ugvw.adoc#_ugvw_customisation[Customisation]`
+//
+//|xref:ug:vw:ugvw.adoc#_ugvw_customisation[Customisation]
+//
+//
+//|`adugvro`
+//|`\xref:ug:vro:ugvro.adoc#xxx[ttt]`
+//
+//A hyperlink to a bookmark within the Restful Objects viewer guide, where:
+//
+//* `xxx` is the bookmark's anchor
+//* `ttt` is the text to display as the hyperlink.
+//
+//for example:
+//
+//`\xref:ug:vro:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]`
+//
+//|xref:ug:vro:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]
+//
+//
+//
+//|`adugsec`
+//|`\xref:ug:sec:ugsec.adoc#xxx[ttt]`
+//
+//A hyperlink to a bookmark within the Secrurity guide, where:
+//
+//* `xxx` is the bookmark's anchor
+//* `ttt` is the text to display as the hyperlink.
+//
+//for example:
+//
+//`\xref:ug:sec:ugsec.adoc#_ugsec_hints-and-tips_shiro-caching[Caching and other Shiro Features]`
+//
+//|xref:ug:sec:ugsec.adoc#_ugsec_hints-and-tips_shiro-caching[Caching and other Shiro Features]
+//
+//
+//|`adugtst`
+//|`\xref:ug:tst:ugtst.adoc#xxx[ttt]`
+//
+//A hyperlink to a bookmark within the Testing guide, where:
+//
+//* `xxx` is the bookmark's anchor
+//* `ttt` is the text to display as the hyperlink.
+//
+//for example:
+//
+//`\xref:ug:tst:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]`
+//
+//|xref:ug:tst:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]
+//
+//
+//|`adugbtb`
+//|`\xref:ug:btb:ugbtb.adoc#xxx[ttt]`
+//
+//A hyperlink to a bookmark within the 'Beyond the Basics' user guide, where:
+//
+//* `xxx` is the bookmark's anchor
+//* `ttt` is the text to display as the hyperlink.
+//
+//for example:
+//
+//`\xref:ug:btb:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]`
+//
+//|xref:ug:btb:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]
+//
+//
+//
+//
+//|===
+//
+//
+//
+//
+//== Source code
+//
+//[cols="1,4a,2a", options="header"]
+//|===
+//| Abbrev.
+//| Produces
+//| Example
+//
+//|`adsrcjava`
+//|....
+//[source,java]
+//----
+//xxx
+//----
+//....
+//
+//where:
+//
+//* `xxx` is the source code snippet.
+//
+//|[source,java]
+//----
+//public class Foo {
+//    ...
+//}
+//----
+//
+//
+//|`adsrcjavac`
+//|as for `adsrcjava`, but with a caption above
+//|
+//
+//
+//
+//|`adsrcjavascript`
+//|....
+//[source,javascript]
+//----
+//xxx
+//----
+//....
+//
+//where:
+//
+//* `xxx` is the source code snippet.
+//
+//|[source,javascript]
+//----
+//$(document).ready(function() {
+//	...
+//});
+//----
+//
+//
+//
+//|`adsrcjavascriptc`
+//|as for `adsrcjavascript`, but with a caption above
+//
+//|
+//
+//|`adsrcother`
+//|....
+//[source,nnn]
+//----
+//xxx
+//---
+//....
+//
+//where:
+//
+//* `nnn` is the programming language
+//* `xxx` is the source code snippet.
+//
+//|
+//
+//|`adsrcotherc`
+//|as for `adsrcother`, but with a caption above
+//
+//
+//|
+//
+//|`adsrcxml`
+//|....
+//[source,javascript]
+//----
+//xxx
+//----
+//....
+//
+//
+//where:
+//
+//* `xxx` is the source code snippet.
+//
+//|[source,xml]
+//----
+//<html>
+//    <title>
+//       hello world!
+//    </title>
+//</html>
+//----
+//
+//
+//|`adsrcxmlc`
+//|as for `adsrcxml`, but with a caption above
+//|
+//
+//|===
+//
+//
+//== Images
+//
+//[cols="1,4a,2a", options="header"]
+//|===
+//| Abbrev.
+//| Produces
+//| Example
+//
+//|`adimgfile`
+//|`\image:xxx/yyy.png[width="WWWpx",link="{imagesdir}xxx/yyy.png"]`
+//
+//embeds specified image, where:
+//
+//* `xxx` is the subdirectory under the `images/` directory
+//* `yyy` is the image
+//* `WWW` is the width, in pixels.
+//
+//for example:
+//
+//`\image:layouts/estatio-Lease.png[width="300px",link="{imagesdir}layouts/estatio-Lease.png"]`
+//
+//|image:layouts/estatio-Lease.png[width="300px",link="{imagesdir}layouts/estatio-Lease.png"]
+//
+//
+//
+//|`adimgfilec`
+//|as for `adimgfile`, but with a caption above
+//|
+//
+//
+//|`adimgurl`
+//|`\image:xxx[width="WWWpx",link="xxx"]`
+//
+//embeds image from specified URL, where:
+//
+//* `xxx` is the URL to the image
+//* `WWW` is the width, in pixels.
+//
+//|
+//
+//
+//
+//|`adimgurlc`
+//|as for `adimgurl`, but with a caption above
+//|
+//
+//
+//|===
+//
+//
+//
+//== YouTube (screencasts)
+//
+//Embedded youtube screencasts.  (Don't use these in guides, as they cannot be rendered as PDF).
+//
+//[cols="1,4a,2a", options="header"]
+//|===
+//| Abbrev.
+//| Produces
+//| Example
+//
+//|`adyoutube`
+//|`video:xxx[youtube,width="WWWpx",height="HHHpx"]`
+//
+//where:
+//
+//* `xxx` is the youtube reference
+//* `WWW` is the width, in pixels
+//* `HHH` is the height, in pixels
+//
+//for example:
+//
+//`video::bj8735nBRR4[youtube,width="210px",height="118px"]`
+//
+//|video::bj8735nBRR4[youtube,width="210px",height="118px"]
+//
+//
+//|`adyoutubec`
+//|as for `youtube`, but with a caption above
+//|
+//
+//|===
+//
+//
+//== Tables
+//
+//[cols="1,4a,2a", options="header"]
+//|===
+//| Abbrev.
+//| Produces
+//| Example
+//
+//|`adtbl3`
+//|Table with 3 columns, 3 rows.
+//|
+//
+//
+//|===
+//
+//
+//== Misc.
+//
+//[cols="1,4a,2a", options="header"]
+//|===
+//| Abbrev.
+//| Produces
+//| Example
+//
+//|`adai`
+//|`Apache Isis` +
+//
+//That is, the literal text "Apache Isis".
+//|Apache Isis
+//
+//
+//
+//|`adlink`
+//|`\link:xxx[ttt]`
+//
+//, where:
+//
+//* `xxx` is
+//* `ttt` is the text to display as the hyperlink
+//
+//for example:
+//
+//`\link:\http://isis.apache.org[[Apache Isis website]]`
+//
+//|link:http://isis.apache.org[Apache Isis website]
+//
+//
+//
+//
+//|`adanchany`
+//|`= anchor:[xxx]`
+//
+//defines an inline anchor to any heading, where:
+//
+//* `xxx` is the anchor text.
+//
+//For example:
+//
+//`= anchor:[_ugfun_i18n] Internationalization`
+//
+//An alternative (more commonly used in our documentation) is to use the `[[...]]` directly above the heading:
+//
+//....
+//= Internationalization
+//....
+//
+//|
+//
+//
+//|`adxrefany`
+//|`\xref:[xxx]`
+//
+//cross-reference to any document/anchor, where:
+//
+//* `xxx` is the fully qualified document with optional anchor
+//
+//|
+//
+//
+//|`adfootnote`
+//|`\footnote:[xxx]`
+//
+//defines a footnote
+//
+//|footnote:[this is a footnote]
+//
+//
+//
+//|===
 
 

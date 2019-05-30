@@ -29,5 +29,4 @@ If instead you want to redirect users directly to the Wicket viewer, then this f
 </head>
 </html>
 ----
-====
 

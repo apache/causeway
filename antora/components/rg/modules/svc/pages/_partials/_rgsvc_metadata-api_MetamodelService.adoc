@@ -40,7 +40,7 @@ public interface MetaModelService {
     CommandDtoProcessor commandDtoProcessorFor(         // <8>
                         String memberIdentifier);
 
-    MetamodelDto pexportMetaModel(final Config config);
+    MetamodelDto exportMetaModel(final Config config);  // <9>
 
     public static class Config {
         public Config withIgnoreNoop() { ... }

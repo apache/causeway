@@ -103,7 +103,7 @@ Apache Isis 1.8.0 incorporates the Wicket viewer, which was previously a separat
 * link:https://issues.apache.org/jira/browse/ISIS-1010[ISIS-1010] - &quot;Session already open&quot; error if attempting to login in a second browser tab
 * link:https://issues.apache.org/jira/browse/ISIS-1011[ISIS-1011] - Select2 component doesn&#39;t filter the suggestions
 * link:https://issues.apache.org/jira/browse/ISIS-1017[ISIS-1017] - @PreDestroy annotated method is not called
-* link:https://issues.apache.org/jira/browse/ISIS-1029[ISIS-1029] - Hidden{where} in layout is not honored by table representations
+* link:https://issues.apache.org/jira/browse/ISIS-1029[ISIS-1029] - Hidden#where in layout is not honored by table representations
 * link:https://issues.apache.org/jira/browse/ISIS-1030[ISIS-1030] - Not possible for a declarative view model (@ViewModel) to reference another view model/
 * link:https://issues.apache.org/jira/browse/ISIS-1041[ISIS-1041] - Under certain circumstances, appears that auditing can cause the same tuple to be audited within a single transaction.
 * link:https://issues.apache.org/jira/browse/ISIS-1042[ISIS-1042] - Dropdown of Enums does not honour title() method

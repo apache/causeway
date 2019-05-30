@@ -8,7 +8,7 @@ This guide describes the internal architecture and design of the framework.
 
 == Maven modules
 
-//[monotree]
+////[monotree]
 ----
 > adocs/
 >> documentation/
@@ -25,7 +25,7 @@ The core modules ....
 
 All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
 
-//[monotree]
+////[monotree]
 ----
 > core/
 >> .m2/                              # used in gitlab CI
@@ -141,7 +141,7 @@ The `core/plugins` modules ...
 All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
 
 .Plugin Modules
-//[monotree]
+////[monotree]
 ----
 > core/
 >> plugins/
@@ -203,7 +203,7 @@ The `core/mavendeps` modules ...
 All of these have the same Maven `groupId`, namely `org.apache.isis.mavendeps`.
 
 .mavendeps Modules
-//[monotree]
+////[monotree]
 ----
 > core
 >> mavendeps/
@@ -268,7 +268,7 @@ The `core/legacy` modules ...
 All of these have the same Maven `groupId`, namely `org.apache.isis.core`.
 
 .Legacy Modules
-//[monotree]
+////[monotree]
 ----
 > core/
 >> legacy/
@@ -296,7 +296,7 @@ There is a single Maven plugin module.
 Its Maven `groupId` is `org.apache.isis.tools`.
 
 .Plugin Modules
-//[monotree]
+////[monotree]
 ----
 > core/
 >> maven-plugin/                # isis-maven-plugin
@@ -319,7 +319,7 @@ This plugin can validate the metamodel and generate Swagger specs for a domain m
 
 === archetypes
 
-//[monotree]
+////[monotree]
 ----
 > example/
 >> application/

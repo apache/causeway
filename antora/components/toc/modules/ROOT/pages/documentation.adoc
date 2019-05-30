@@ -96,11 +96,10 @@ Other academia:
 
 *Experiments:*
 
-* https://github.com/isisaddons/isis-app-neoapp[Neo4J Example] footnoteref:[ASF]
+* https://github.com/isisaddons/isis-app-neoapp[Neo4J Example] footnoteref:[ASF]p
 * https://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example] footnoteref:[ASF]
 
 3+|For bug reports and feature requests see: *link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban board]* (JIRA)
 
-
-|====
+|===
 

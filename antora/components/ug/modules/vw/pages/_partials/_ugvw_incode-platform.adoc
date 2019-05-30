@@ -12,7 +12,7 @@ At the time of writing the addons available are:
 
 ** see also the related Excel library module which can be used to read/import a spreadsheet as an collection of view models or entities
 
-* ullcalendar2 Wicket component - to view a collection of domain objects (with a date) on a full-page calendar
+* fullcalendar2 Wicket component - to view a collection of domain objects (with a date) on a full-page calendar
 
 * Gmap3 Wicket component - to view a collection of domain objects with a location on a google map
 
@@ -28,8 +28,5 @@ At the time of writing the addons available are:
 Check the link:http://platform.incode.org[website^] for the most up-to-date list.
 
 
-[NOTE]
-====
-Note that the Incode Platform, while maintained by Apache Isis committers, are not part of the ASF.
-====
+NOTE: The Incode Platform, although maintained by Apache Isis committers, is not part of the ASF.
 

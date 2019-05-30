@@ -167,7 +167,7 @@ public final class TranslatableString {
 <2> returns a translatable string with different patterns for singular and plural forms; the one to use is determined by the 'number' argument
 <3> translates the string using the provided `TranslationService`, using the appropriate singular/regular or plural form, and interpolating any arguments.
 
-The interpolation uses the format `{xxx}`, where the placeholder can occur multiple times.
+The interpolation uses the format `\{xxx}`, where the placeholder can occur multiple times.
 
 For example:
 
@@ -649,7 +649,6 @@ This can sometimes be useful in integration tests.
 [source,ini]
 ----
 isis.services.translation.po.mode=disable
-----
 ----
 
 == Supporting services

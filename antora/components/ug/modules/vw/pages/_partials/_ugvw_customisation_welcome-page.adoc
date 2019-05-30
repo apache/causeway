@@ -10,7 +10,7 @@ This is done by specifying the appropriate configuration properties:
 [source,properties]
 ----
 isis.viewer.wicket.application.name=My Wonderful App
-isis.viewer.wicket.welcome.file=welcome.html
+isis.viewer.wicket.welcome.file=welcome.html                # <1>
 isis.viewer.wicket.application.about=My Wonderful App v1.0
 ----
 <1> the `welcome.html` file is resolved relative to `src/main/webapp`.

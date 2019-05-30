@@ -38,7 +38,7 @@ The `metamodelDto` root element is defined as:
 Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
 <2> definition of the `metamodelDto` root element.
 The corresponding XML will use this as its top-level element.
-<6> consists of a list of `domainClassDto`, defined below.
+<3> consists of a list of `domainClassDto`, defined below.
 
 
 

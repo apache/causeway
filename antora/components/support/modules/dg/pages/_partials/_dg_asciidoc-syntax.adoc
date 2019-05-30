@@ -847,26 +847,26 @@ Asciidoctor includes support for the link:http://plantuml.com/[plantuml], allowi
 For example:
 
 ....
-[plantuml,images/asciidoctor/plantuml-demo,png]
---
+[plantuml]
+----
 class Car
 
 Driver - Car : drives >
 Car *- Wheel : have 4 >
 Car -- Person : < owns
---
+----
 ....
 
 renders as:
 
-[plantuml,images/asciidoctor/plantuml-demo,png]
---
+[plantuml]
+----
 class Car
 
 Driver - Car : drives >
 Car *- Wheel : have 4 >
 Car -- Person : < owns
---
+----
 
 
 

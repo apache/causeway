@@ -1,8 +1,6 @@
 = SimpleApp Archetype
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
-:toc:
-include::../../__versions.adoc[]
 
 The quickest way to get started building an application "for real" is to run the `simpleapp` archetype.
 Like the xref:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[helloworld archetype], this too will generate a very simple one-class domain model (an entity called `SimpleObject` with a couple of properties).
@@ -95,7 +93,7 @@ Of course, you are always free to move the classes to a different package if you
 
 The production classes for `myapp-application` module (in `src/main/java`) are:
 
-[monotree]
+//[monotree]
 ----
 > src/
 >> main/
@@ -222,7 +220,7 @@ This is just used to configure the run fixture script menu item shown on the "Pr
 The module also defines a number of BDD specs and integration tests, in `src/test/java`.
 The BDD specs (run using Cucumber) reside under `domain.application.bdd`:
 
-[monotree]
+//[monotree]
 ----
 > src/
 >> test/
@@ -261,7 +259,7 @@ This is just standard Cucumber bootstrapping.
 
 The integration tests meanwhile are in `domainapp.application.integtests`:
 
-[monotree]
+//[monotree]
 ----
 > src/
 >> test/
@@ -316,7 +314,7 @@ Initially though you should probably just use regular Java packages to separate 
 The classes for the simple module reside in the `domainapp.modules.simple` package.
 Under `src/main/java` we have:
 
-[monotree]
+//[monotree]
 ----
 > src/
 >> main/
@@ -369,7 +367,7 @@ These fixtures are also used by "local" integration tests, which reside under `s
 
 There are also unit tests and "glue" for the BDD specs:
 
-[monotree]
+//[monotree]
 ----
 > src/
 >> test/
@@ -406,7 +404,7 @@ This is used to run Isis' own xref:rg:mvn:rgmvn.adoc#[maven plugin] to xref:rg:m
 Finally, in the `myapp-webapp` module we have the configuration to package and bootstrap the application as a webapp.
 Under `src/main/webapp` are various resources, used either to configure the webapp, or that are served up by the running webapp:
 
-[monotree]
+//[monotree]
 ----
 > src/
 >> main/
@@ -489,7 +487,7 @@ This uses the Dockerfile residing in `docker/Dockerfile` (under `src/main/resour
 
 Under `src/main/resources` there is:
 
-[monotree]
+//[monotree]
 ----
 > src/
 >> main/
