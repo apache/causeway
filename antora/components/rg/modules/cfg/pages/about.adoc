@@ -1,4 +1,52 @@
 = Core Configuration Properties
 include::_attributes.adoc[]
 
-CAUTION: TODO ... convert over from 1.x branch
+
+Apache Isis' own configuration properties are simple key-value pairs, typically held in the `WEBINF/isis.properties`
+file and other related files.
+This guide describes how to configure an Apache Isis application.
+
+[NOTE]
+====
+This guide covers only the core configuration properties (relating to Apache Isis' metamodel and runtime management).
+Configuration properties for the viewers can be found in the xref:../ugvw/ugvw.adoc#[Wicket Viewer] guide and the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] guide.
+Likewise details of configuring security (Apache Shiro) can be
+found in the xref:../ugsec/ugsec.adoc#[Security] guide, and details for configuring the DataNucleus Object Store can be found in the xref:../ugodn/ugodn.adoc#[DataNucleus] guide.
+====
+
+[TIP]
+====
+By default the configuration values are part of the built WAR file.
+Details on how to override these configuration properties externally for different environments can be found in the xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment[Beyond the Basics] guide, (deployment chapter).
+====
+
+
+
+== Other Guides
+
+Apache Isis documentation is broken out into a number of user, reference and "supporting procedures" guides.
+
+The user guides available are:
+
+* xref:ug:fun:about.adoc[Fundamentals]
+* xref:ug:vw:about.adoc[Wicket viewer]
+* xref:ug:vro:about.adoc[Restful Objects viewer]
+* xref:ug:odn:about.adoc[DataNucleus object store]
+* xref:ug:sec:about.adoc[Security]
+* xref:ug:tst:about.adoc[Testing]
+* xref:ug:btb:about.adoc[Beyond the Basics]
+
+The reference guides are:
+
+* xref:rg:ant:about.adoc[Annotations]
+* xref:rg:svc:about.adoc[Domain Services]
+* xref:rg:cfg:about.adoc[Configuration Properties] (this guide)
+* xref:rg:cms:about.adoc[Classes, Methods and Schema]
+* xref:rg:mvn:about.adoc[Apache Isis Maven plugin]
+* xref:rg:fis:about.adoc[Framework Internal Services]
+
+The remaining guides are:
+
+* xref:support:dg:about.adoc[Developers' Guide] (how to set up a development environment for Apache Isis and contribute back to the project)
+* xref:support:cgcom:about.adoc[Committers' Guide]
+

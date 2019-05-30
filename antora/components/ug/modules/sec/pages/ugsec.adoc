@@ -1,4 +1,3 @@
-[[_ugsec]]
 = Security
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -6,83 +5,6 @@ include::_attributes.adoc[]
 :generate_pdf:
 
 
-[[__ugsec]]
-== Security
-
-This guide describes the authentication and authorization features available to secure your Apache Isis application.
-
-
-=== Other Guides
-
-Apache Isis documentation is broken out into a number of user, reference and "supporting procedures" guides.
-
-The user guides available are:
-
-* xref:../ugfun/ugfun.adoc#[Fundamentals]
-* xref:../ugvw/ugvw.adoc#[Wicket viewer]
-* xref:../ugvro/ugvro.adoc#[Restful Objects viewer]
-* xref:../ugodn/ugodn.adoc#[DataNucleus object store]
-* xref:../ugsec/ugsec.adoc#[Security] (this guide)
-* xref:../ugtst/ugtst.adoc#[Testing]
-* xref:../ugbtb/ugbtb.adoc#[Beyond the Basics]
-
-The reference guides are:
-
-* xref:../rgant/rgant.adoc#[Annotations]
-* xref:../rgsvc/rgsvc.adoc#[Domain Services]
-* xref:../rgcfg/rgcfg.adoc#[Configuration Properties]
-* xref:../rgcms/rgcms.adoc#[Classes, Methods and Schema]
-* xref:../rgmvn/rgmvn.adoc#[Apache Isis Maven plugin]
-* xref:../rgfis/rgfis.adoc#[Framework Internal Services]
-
-The remaining guides are:
-
-* xref:../dg/dg.adoc#[Developers' Guide] (how to set up a development environment for Apache Isis and contribute back to the project)
-* xref:../cgcom/cgcom.adoc#[Committers' Guide] (release procedures and related practices)
-
-
-=== Terminology
-
-Apache Isis has built-in support for authentication and authorization:
-
-* By "authentication" we mean logging into the application using some credentials, typically a username and password.
-Authentication also means looking up the set of roles to which a user belongs.
-
-* By "authorization" we mean permissions: granting roles to have access to features (object member) of the app.
-
-Isis has two levels of permissions.
-_Read_ permission means that the user can view the object member; it will be rendered in the UI.  An action with only read permission will be shown disabled ("greyed out".
-_Write_ permission means that the object member can be changed.  For actions this means that they can be invoked.
-
-Isis provides an API for both authentication and authorization, and provides an implementation that integrates with link:http://shiro.apache.org[Apache Shiro].
-Shiro in turn uses the concept of a _realm_ as a source for both authentication and optionally authorization.
-
-Shiro ships with a simple text-based realm -- the `IniRealm` -- which reads users (and password), user roles and role permissions from the `WEB-INF/shiro.ini` file.
-The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] and xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes are both configured to use this realm.
-
-Shiro also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.
-Apache Isis in turn extends this with its `IsisLdapRealm`, which provides more flexibility for both group/role and role/permissions management.
-
-In addition, the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules provides the security module, which also provides an implementation of the Shiro `Realm` API.
-However, the security module also represents users, roles and permissions as domain objects, allowing them to be administered through Apache Isis itself.
-Moreover, the security module can optionally delegate password management to a subsidiary (delegate) realm (usually LDAP as discussed above).
-
-In addition to Apache Isis' Shiro-based implementation of its authentication and authorization APIs, Isis also provides a "bypass" implementation, useful for quick-n-dirty prototyping when you want to in effect disable (bypass) security completely.
-
-[NOTE]
-.What about auditing?
-====
-A further aspect of security is auditing: recording what data was modified by which user.
-
-Apache Isis provides the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]
-can be used to track the actions being invoked, and the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]
-captures what data was modified as a result (auditing).
-When ``Interaction``s are persisted (eg by way of (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module) this provides excellent
-traceability.
-The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module provides an implementation of the `AuditerService`.
-
-For xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can be also be used to capture actions.
-====
 
 
 

@@ -1,4 +1,57 @@
 = Annotations
 include::_attributes.adoc[]
 
-CAUTION: TODO ... convert over from 1.x branch
+
+This guide describes the various annotations used by Apache Isis to provide additional metadata about the domain objects.
+Most of these are defined by Isis itself, but some are from other libraries.  It also identifies a number of
+annotations that are now deprecated, and indicates their replacement.
+
+
+== Other Guides
+
+Apache Isis documentation is broken out into a number of user, reference and "supporting procedures" guides.
+
+The user guides available are:
+
+* xref:ug:fun:about.adoc[Fundamentals]
+* xref:ug:vw:about.adoc[Wicket viewer]
+* xref:ug:vro:about.adoc[Restful Objects viewer]
+* xref:ug:odn:about.adoc[DataNucleus object store]
+* xref:ug:sec:about.adoc[Security]
+* xref:ug:tst:about.adoc[Testing]
+* xref:ug:btb:about.adoc[Beyond the Basics]
+
+The reference guides are:
+
+* xref:rg:ant:about.adoc[Annotations] (this guide)
+* xref:rg:svc:about.adoc[Domain Services]
+* xref:rg:cfg:about.adoc[Configuration Properties]
+* xref:rg:cms:about.adoc[Classes, Methods and Schema]
+* xref:rg:mvn:about.adoc[Apache Isis Maven plugin]
+* xref:rg:fis:about.adoc[Framework Internal Services]
+
+The remaining guides are:
+
+* xref:support:dg:about.adoc[Developers' Guide] (how to set up a development environment for Apache Isis and contribute back to the project)
+* xref:support:cgcom:about.adoc[Committers' Guide]
+
+
+
+
+== Examples
+
+To give just a few examples of annotations supported by Apache Isis:
+
+* if a property is read-only, then this can be annotated with `@Property(editing=EditingDISABLED)`.
+* if a class has a small fixed set of instances (eg a picklist), then it can be annotated using `@DomainObject(bounded=true)`
+* if a class is a domain service and should be automatically instantiated as a singleton, then it can be annotated using `@DomainService`
+* if an action is idempotent, then it can be annotated using `@Action(semantics=SemanticsOf.IDEMPOTENT)`.
+* if an action parameter is optional, it can be annotated using `@Parameter(optionality=Optionality.OPTIONAL)`
+
+Some annotations act as UI hints, for example:
+
+* if a collection should be rendered "open" rather than collapsed, it can be annotated using `@CollectionLayout(defaultView="table")`
+* if an action has a tooltip, it can be annotated using `@ActionLayout(describedAs=...)`
+* if a domain object is bookmarkable, it can be annotated using `@DomainObjectLayout(bookmarking=BookmarkPolicy.AS_ROOT`).
+
+

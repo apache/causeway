@@ -1,5 +1,80 @@
 = Security
 include::_attributes.adoc[]
 
-CAUTION: TODO ... convert over from 1.x branch
+This guide describes the authentication and authorization features available to secure your Apache Isis application.
+
+
+== Other Guides
+
+Apache Isis documentation is broken out into a number of user, reference and "supporting procedures" guides.
+
+The user guides available are:
+
+* xref:ug:fun:about.adoc[Fundamentals]
+* xref:ug:vw:about.adoc[Wicket viewer]
+* xref:ug:vro:about.adoc[Restful Objects viewer]
+* xref:ug:odn:about.adoc[DataNucleus object store]
+* xref:ug:sec:about.adoc[Security] (this guide)
+* xref:ug:tst:about.adoc[Testing]
+* xref:ug:btb:about.adoc[Beyond the Basics]
+
+The reference guides are:
+
+* xref:rg:ant:about.adoc[Annotations]
+* xref:rg:svc:about.adoc[Domain Services]
+* xref:rg:cfg:about.adoc[Configuration Properties]
+* xref:rg:cms:about.adoc[Classes, Methods and Schema]
+* xref:rg:mvn:about.adoc[Apache Isis Maven plugin]
+* xref:rg:fis:about.adoc[Framework Internal Services]
+
+The remaining guides are:
+
+* xref:support:dg:about.adoc[Developers' Guide] (how to set up a development environment for Apache Isis and contribute back to the project)
+* xref:support:cgcom:about.adoc[Committers' Guide]
+
+
+
+
+== Terminology
+
+Apache Isis has built-in support for authentication and authorization:
+
+* By "authentication" we mean logging into the application using some credentials, typically a username and password.
+Authentication also means looking up the set of roles to which a user belongs.
+
+* By "authorization" we mean permissions: granting roles to have access to features (object member) of the app.
+
+Isis has two levels of permissions.
+_Read_ permission means that the user can view the object member; it will be rendered in the UI.  An action with only read permission will be shown disabled ("greyed out".
+_Write_ permission means that the object member can be changed.  For actions this means that they can be invoked.
+
+Isis provides an API for both authentication and authorization, and provides an implementation that integrates with link:http://shiro.apache.org[Apache Shiro].
+Shiro in turn uses the concept of a _realm_ as a source for both authentication and optionally authorization.
+
+Shiro ships with a simple text-based realm -- the `IniRealm` -- which reads users (and password), user roles and role permissions from the `WEB-INF/shiro.ini` file.
+The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] and xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes are both configured to use this realm.
+
+Shiro also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.
+Apache Isis in turn extends this with its `IsisLdapRealm`, which provides more flexibility for both group/role and role/permissions management.
+
+In addition, the (non-ASF) link:http://platform.incode.org[Incode Platform^] modules provides the security module, which also provides an implementation of the Shiro `Realm` API.
+However, the security module also represents users, roles and permissions as domain objects, allowing them to be administered through Apache Isis itself.
+Moreover, the security module can optionally delegate password management to a subsidiary (delegate) realm (usually LDAP as discussed above).
+
+In addition to Apache Isis' Shiro-based implementation of its authentication and authorization APIs, Isis also provides a "bypass" implementation, useful for quick-n-dirty prototyping when you want to in effect disable (bypass) security completely.
+
+[NOTE]
+.What about auditing?
+====
+A further aspect of security is auditing: recording what data was modified by which user.
+
+Apache Isis provides the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]
+can be used to track the actions being invoked, and the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]
+captures what data was modified as a result (auditing).
+When ``Interaction``s are persisted (eg by way of (non-ASF) link:http://platform.incode.org[Incode Platform^]'s publishmq module) this provides excellent
+traceability.
+The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s audit module provides an implementation of the `AuditerService`.
+
+For xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can be also be used to capture actions.
+====
 

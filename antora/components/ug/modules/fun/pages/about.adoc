@@ -1,6 +1,40 @@
 = Fundamentals
 include::_attributes.adoc[]
 
-CAUTION: TODO ... convert over from 1.x branch
+This guide introduces the xref:../ugfun/ugfun.adoc#_ugfun_core-concepts[core concepts] and ideas behind Apache Isis,
+and tells you how to xref:../ugfun/ugfun.adoc#_ugfun_getting-started[get started] with a Maven archetype.
+
+It also describes a number of xref:../ugfun/ugfun.adoc#_ugfun_how-tos[how-to]s, describes how to influence the
+xref:../ugvw/ugvw.adoc#_ugvw_layout[UI layout] of your domain objects (this is ultimately just a type of metadata), and it
+ catalogues various xref:../dg/dg.adoc#_dg_hints-and-tips.adoc[FAQ]s.
+
+
+== Other Guides
+
+Apache Isis documentation is broken out into a number of user, reference and "supporting procedures" guides.
+
+The user guides available are:
+
+* xref:ug:fun:about.adoc[Fundamentals] (this guide)
+* xref:ug:vw:about.adoc[Wicket viewer]
+* xref:ug:vro:about.adoc[Restful Objects viewer]
+* xref:ug:odn:about.adoc[DataNucleus object store]
+* xref:ug:sec:about.adoc[Security]
+* xref:ug:tst:about.adoc[Testing]
+* xref:ug:btb:about.adoc[Beyond the Basics]
+
+The reference guides are:
+
+* xref:rg:ant:about.adoc[Annotations]
+* xref:rg:svc:about.adoc[Domain Services]
+* xref:rg:cfg:about.adoc[Configuration Properties]
+* xref:rg:cms:about.adoc[Classes, Methods and Schema]
+* xref:rg:mvn:about.adoc[Apache Isis Maven plugin]
+* xref:rg:fis:about.adoc[Framework Internal Services]
+
+The remaining guides are:
+
+* xref:support:dg:about.adoc[Developers' Guide] (how to set up a development environment for Apache Isis and contribute back to the project)
+* xref:support:cgcom:about.adoc[Committers' Guide]
 
 
