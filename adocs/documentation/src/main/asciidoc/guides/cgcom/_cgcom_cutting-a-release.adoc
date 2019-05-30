@@ -108,9 +108,9 @@ The only mention of `SNAPSHOT` should be in the `revision` property of the root 
 == Bump `revision` property to `$ISISREL`
 
 Previously we used the `maven-release-plugin` which took responsibility for bumping the `<version>` from -SNAPSHOT to release, and then onto the next -SNAPSHOT.
-However, this plugin does not seem to be compatible with the support for `${revision}` property introduced in Maven 3.5.0 in order https://maven.apache.org/maven-ci-friendly.html[to support CI/CD use cases]; at least we couldn't make it work.
+However, this plugin does not seem to be compatible with the support for `$\{revision}` property introduced in Maven 3.5.0 in order https://maven.apache.org/maven-ci-friendly.html[to support CI/CD use cases]; at least we couldn't make it work.
 
-So, instead, we perform the edit of `${revision}` in the three `pom.xml` files (for `core` and the two archetypes):
+So, instead, we perform the edit of `$\{revision}` in the three `pom.xml` files (for `core` and the two archetypes):
 
 Change all of these to the release version, using:
 
@@ -268,7 +268,7 @@ mvn clean install -o
 === Deploy
 
 Previously the release procedures used `mvn release:prepare` and `mvn release:perform`.
-These are however not compatible with `${revision}` that we now use https://maven.apache.org/maven-ci-friendly.html[for CI/CD].
+These are however not compatible with `$\{revision}` that we now use https://maven.apache.org/maven-ci-friendly.html[for CI/CD].
 
 We therefore just use `mvn deploy` directly, activating the (inherited) `apache-release` profile that, amongst other things, brings in the `gpg` plugin for code signing.
 
@@ -536,7 +536,7 @@ Back in the original session, we upload (deploy) the archetype to the staging re
 [NOTE]
 ====
 Previously we used `mvn release:prepare` and `mvn release:perform` to do this.
-However not compatible with `${revision}` that we now use https://maven.apache.org/maven-ci-friendly.html[for CI/CD].
+However not compatible with `$\{revision}` that we now use https://maven.apache.org/maven-ci-friendly.html[for CI/CD].
 We therefore now just use `mvn deploy` directly, activating the (inherited) `apache-release` profile that, amongst other things, brings in the `gpg` plugin for code signing.
 ====
 

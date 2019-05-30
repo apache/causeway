@@ -175,7 +175,7 @@ If we provide a file `application-version.properties` is in the same package as 
 [source,ini]
 .application-version.properties
 ----
-isis.viewer.wicket.application.version=${revision}
+isis.viewer.wicket.application.version=$\{revision}
 ----
 
 then Maven will automatically interpolate the actual revision when this file is copied over to the build (ie `target/classes`) directory.

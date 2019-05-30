@@ -409,7 +409,7 @@ Therefore:
 +
 [source,html,subs="attributes+"]
 ----
-<p class="nav navbar-text navbar-right small">{isisdevafter}</p>
+<p class="nav navbar-text navbar-right small">{isisnextafter}-SNAPSHOT</p>
 ----
 
 * publish the website once more (from the `isis` main repo).
