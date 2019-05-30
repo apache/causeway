@@ -1,5 +1,0 @@
-= Table of Contents
-include::_attributes.adoc[]
-
-CAUTION: TODO ... convert over from 1.x branch
-

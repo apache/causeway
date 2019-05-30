@@ -1,7 +1,7 @@
 site:
   title: Apache Isis
   url: https://isis.apache.org/
-  start_page: toc:ROOT:about.adoc
+  start_page: toc:ROOT:documentation.adoc
 
 content:
   sources:
@@ -48,6 +48,7 @@ asciidoc:
     isiscurr: "2.0.0-M2"
     isisnext: "2.0.0-M3"
     isisnextafter: "2.0.0-M4"
+    :isisdevafter: "2.0.0-M4-SNAPSHOT"
 
 output:
   dir: antora/target/site

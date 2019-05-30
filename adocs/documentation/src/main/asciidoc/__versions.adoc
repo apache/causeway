@@ -1,4 +1,0 @@
-:isiscurr: 2.0.0-M2
-:isisnext: 2.0.0-M3
-:isisnextafter: 2.0.0-M4
-:isisdevafter: {isisnextafter}-SNAPSHOT
