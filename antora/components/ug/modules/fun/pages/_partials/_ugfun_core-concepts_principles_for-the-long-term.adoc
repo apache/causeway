@@ -20,7 +20,7 @@ Apache Isis' architecture allows the internal structure to be maintained in two 
 The diagram below illustrates this:
 
 .decoupled applications
-image::{_imagesdir}core-concepts/philosophy/decoupled-applications.png[width="800px",link="{_imagesdir}core-concepts/philosophy/decoupled-applications.png"]
+image::core-concepts/philosophy/decoupled-applications.png[width="800px",link="{_imagesdir}core-concepts/philosophy/decoupled-applications.png"]
 
 Here, the presentation layer (xref:../ugvw/ugvw.adoc#[Wicket UI] or xref:../ugvro/ugvro.adoc#[REST API]) is handled by the framework, while the developer focusses on just the domain layer.
 The framework encourages splitting this functionality into modules; each such module has its counterpart (typically tables within a given RDBMS database schema) within the persistence layer.

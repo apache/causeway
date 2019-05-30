@@ -56,7 +56,7 @@ xref:../ugfun/ugfun.adoc#_ugfun_programming-model_domain-services[here].
 It's worth extending the xref:../ugfun/ugfun.adoc#_ugfun_core-concepts_philosophy_hexagonal-architecture[Hexagonal Architecture] to show where domain services fit in:
 
 .The hexagonal architecture with Isis addons
-image::{_imagesdir}core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px"]
+image::core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px"]
 
 The (non-ASF) link:http://platform.incode.org[Incode Platform^] provide SPI implementations of the common cross-cutting concerns.
 They also provide a number of APIs for domain objects to invoke (not shown in the diagram).

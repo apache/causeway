@@ -34,26 +34,26 @@ To get an idea of how these are rendered (in the xref:../ugvw/ugvw.adoc#[Wicket 
 
 The default `LEFT` label positioning is used by the `cost` property:
 
-image::{_imagesdir}reference-annotations/PropertyLayout/labelPosition-LEFT.png[width="720px",link="{_imagesdir}reference-annotations/PropertyLayout/labelPosition-LEFT.png"]
+image::reference-annotations/PropertyLayout/labelPosition-LEFT.png[width="720px",link="{_imagesdir}reference-annotations/PropertyLayout/labelPosition-LEFT.png"]
 
 
 The `TOP` label positioning is used by the `category` property:
 
-image::{_imagesdir}reference-annotations/PropertyLayout/labelPosition-TOP.png[width="720px",link="{_imagesdir}reference-annotations/PropertyLayout/labelPosition-TOP.png"]
+image::reference-annotations/PropertyLayout/labelPosition-TOP.png[width="720px",link="{_imagesdir}reference-annotations/PropertyLayout/labelPosition-TOP.png"]
 
 
 Labels are suppressed, using `NONE`, for the `subcategory` property:
 
-image::{_imagesdir}reference-annotations/PropertyLayout/labelPosition-NONE.png[width="720px",link="{_imagesdir}reference-annotations/PropertyLayout/labelPosition-NONE.png"]
+image::reference-annotations/PropertyLayout/labelPosition-NONE.png[width="720px",link="{_imagesdir}reference-annotations/PropertyLayout/labelPosition-NONE.png"]
 
 
 The todoapp's `complete` (boolean) property renders the label to the LEFT (the default):
 
-image::{_imagesdir}reference-annotations/PropertyLayout/labelPosition-boolean-LEFT.png[width="720px",link="{_imagesdir}reference-annotations/PropertyLayout/labelPosition-boolean-LEFT.png"]
+image::reference-annotations/PropertyLayout/labelPosition-boolean-LEFT.png[width="720px",link="{_imagesdir}reference-annotations/PropertyLayout/labelPosition-boolean-LEFT.png"]
 
 Moving the label to the `RIGHT` looks like:
 
-image::{_imagesdir}reference-annotations/PropertyLayout/labelPosition-boolean-RIGHT.png[width="720px",link="{_imagesdir}reference-annotations/PropertyLayout/labelPosition-boolean-RIGHT.png"]
+image::reference-annotations/PropertyLayout/labelPosition-boolean-RIGHT.png[width="720px",link="{_imagesdir}reference-annotations/PropertyLayout/labelPosition-boolean-RIGHT.png"]
 
 
 

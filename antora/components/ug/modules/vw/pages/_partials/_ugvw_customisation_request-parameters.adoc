@@ -13,12 +13,12 @@ Currently this support consists simply of being able to suppress the header and/
 
 For example, the regular view is:
 
-image::{_imagesdir}embedded-view/regular.png[width="720px",link="{_imagesdir}embedded-view/regular.png"]
+image::embedded-view/regular.png[width="720px",link="{_imagesdir}embedded-view/regular.png"]
 
 
 With the header and footer both suppressed only the main content is shown:
 
-image::{_imagesdir}embedded-view/no-header-no-footer.png[width="720px",link="{_imagesdir}embedded-view/no-header-no-footer.png"]
+image::embedded-view/no-header-no-footer.png[width="720px",link="{_imagesdir}embedded-view/no-header-no-footer.png"]
 
 
 It is also possible to suppress just the header, or just the footer.

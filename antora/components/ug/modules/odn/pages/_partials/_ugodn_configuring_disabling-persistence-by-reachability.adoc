@@ -37,7 +37,7 @@ If you do disable this feature, then you will (of course) need to ensure that yo
 
 Consider these entities (http://yuml.me/edit/b8681268[yuml.me/b8681268]):
 
-image::{_imagesdir}runtime/configuring-datanucleus/disabling-persistence-by-reachability/party-agreementrole-agreement.png[width="750px",link="{_imagesdir}runtime/configuring-datanucleus/disabling-persistence-by-reachability/party-agreementrole-agreement.png"]
+image::runtime/configuring-datanucleus/disabling-persistence-by-reachability/party-agreementrole-agreement.png[width="750px",link="{_imagesdir}runtime/configuring-datanucleus/disabling-persistence-by-reachability/party-agreementrole-agreement.png"]
 
 
 

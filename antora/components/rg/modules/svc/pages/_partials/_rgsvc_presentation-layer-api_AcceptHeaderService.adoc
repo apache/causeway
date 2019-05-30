@@ -50,7 +50,7 @@ compatibility of existing clients.  The `AcceptHeaderService` allows the respons
 
 The diagram below illustrated this:
 
-image::{_imagesdir}reference-services-api/acceptheaderservice.png[width="700px",link="{_imagesdir}reference-services-api/acceptheaderservice.png"]
+image::reference-services-api/acceptheaderservice.png[width="700px",link="{_imagesdir}reference-services-api/acceptheaderservice.png"]
 
 The REST request is submitted to a domain service with a xref:../rgant/rgant.adoc#_rgant-DomainService_nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).  This uses the `AcceptHeaderService` to obtain the values of the
 HTTP `Accept` header.  Based on this it delegates to the appropriate underlying domain service (with a nature of

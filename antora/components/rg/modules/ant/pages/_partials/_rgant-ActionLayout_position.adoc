@@ -41,25 +41,25 @@ public class Customer {
 
 The default is `BELOW`, which is rendered (by the xref:../ugvw/ugvw.adoc#[Wicket viewer]) as shown below:
 
-image::{_imagesdir}reference-annotations/ActionLayout/position-BELOW.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-BELOW.png"]
+image::reference-annotations/ActionLayout/position-BELOW.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-BELOW.png"]
 
 
 If the action is positioned as `RIGHT`, then the action's button is rendered to the right of the property's field, in a compact drop-down.  This is ideal if there are many actions associated with a property:
 
-image::{_imagesdir}reference-annotations/ActionLayout/position-RIGHT.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-RIGHT.png"]
+image::reference-annotations/ActionLayout/position-RIGHT.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-RIGHT.png"]
 
 
 
 If the action is positioned as `PANEL`, then the action's button is rendered on the header of the panel that contains the property:
 
-image::{_imagesdir}reference-annotations/ActionLayout/position-PANEL.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-PANEL.png"]
+image::reference-annotations/ActionLayout/position-PANEL.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-PANEL.png"]
 
 
 
 And finally, if the action is positioned as `PANEL_DROPDOWN`, then the action's button is again rendered on the panel header, but as a drop-down:
 
 
-image::{_imagesdir}reference-annotations/ActionLayout/position-PANEL_DROPDOWN.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-PANEL_DROPDOWN.png"]
+image::reference-annotations/ActionLayout/position-PANEL_DROPDOWN.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-PANEL_DROPDOWN.png"]
 
 
 

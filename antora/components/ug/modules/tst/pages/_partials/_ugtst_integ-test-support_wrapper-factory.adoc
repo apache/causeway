@@ -33,7 +33,7 @@ Otherwise an exception is thrown.
 The type of exception depends upon what sort of check failed.
 It's straightforward enough: if the member is invisible then a `HiddenException` is thrown; if it's not usable then you'll get a `DisabledException`, if the args are not valid then catch an `InvalidException`.
 
-image::{_imagesdir}testing/wrapper-factory.png[width="600px",link="{_imagesdir}testing/wrapper-factory.png"]
+image::testing/wrapper-factory.png[width="600px",link="{_imagesdir}testing/wrapper-factory.png"]
 
 Let's look in a bit more detail at what the test can do with the wrapper.
 

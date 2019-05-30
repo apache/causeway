@@ -8,7 +8,7 @@ The `Markup` value type (introduced in `1.15.1`) is intended to be used as a rea
 
 For example:
 
-image::{_imagesdir}value-types/markup.png[width="px",link="{_imagesdir}value-types/markup.png"]
+image::value-types/markup.png[width="px",link="{_imagesdir}value-types/markup.png"]
 
 Corresponds to:
 

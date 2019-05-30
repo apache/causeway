@@ -10,7 +10,7 @@ This attribute is also supported for  xref:../rgant/rgant.adoc#_rgant-Action_boo
 
 (In the Wicket viewer), a link to a bookmarked object is shown in the bookmarks panel:
 
-image::{_imagesdir}reference-annotations/DomainObjectLayout/bookmarking.png[width="720px",link="{_imagesdir}reference-annotations/DomainObjectLayout/bookmarking.png"]
+image::reference-annotations/DomainObjectLayout/bookmarking.png[width="720px",link="{_imagesdir}reference-annotations/DomainObjectLayout/bookmarking.png"]
 
 [NOTE]
 ====
@@ -33,7 +33,7 @@ indicates that the `ToDoItem` class is bookmarkable:
 It is also possible to nest bookmarkable entities.
 For example, this screenshot is taken from http://github.com/estatio/estatio[Estatio]:
 
-image::{_imagesdir}reference-annotations/DomainObjectLayout/bookmarking-nested.png[width="720px",link="{_imagesdir}reference-annotations/DomainObjectLayout/bookmarking-nested.png"]
+image::reference-annotations/DomainObjectLayout/bookmarking-nested.png[width="720px",link="{_imagesdir}reference-annotations/DomainObjectLayout/bookmarking-nested.png"]
 
 
 [NOTE]

@@ -13,7 +13,7 @@ The domain services also group into various broad categories.
 Many support functionality of the various layers of the system (presentation layer, application layer, core domain, persistence layer); others exist to allow the domain objects to integrate with other bounded contexts, or provide various metadata (eg for development-time tooling).
 The diagram below shows these categories:
 
-image::{_imagesdir}reference-services/categories.png[width="600px",link="{_imagesdir}reference-services/categories.png"]
+image::reference-services/categories.png[width="600px",link="{_imagesdir}reference-services/categories.png"]
 
 
 A small number of domain services can be considered both API and SPI; a good example is the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:../ugvw/ugvw.adoc#_ugvw_features_user-registration[user registration] functionality supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer].
@@ -156,7 +156,7 @@ These services capture information which can then be used for various purposes, 
 The diagram below shows how these services fit together.
 The outline boxes are services while the coloured boxes represent data structures - defined in the applib and therefore accessible to domain applications - which hold various information about the executions.
 
-image::{_imagesdir}reference-services/commands-and-events.png[width="960px",link="{_imagesdir}reference-services/commands-and-events.png"]
+image::reference-services/commands-and-events.png[width="960px",link="{_imagesdir}reference-services/commands-and-events.png"]
 
 
 To explain:

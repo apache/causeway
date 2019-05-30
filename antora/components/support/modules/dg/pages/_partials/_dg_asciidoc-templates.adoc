@@ -510,7 +510,7 @@ where:
 | Example
 
 |`adimgfile`
-|`\image:{_imagesdir}xxx/yyy.png[width="WWWpx",link="{_imagesdir}xxx/yyy.png"]`
+|`\image:xxx/yyy.png[width="WWWpx",link="{_imagesdir}xxx/yyy.png"]`
 
 embeds specified image, where:
 
@@ -520,9 +520,9 @@ embeds specified image, where:
 
 for example:
 
-`\image:{_imagesdir}layouts/estatio-Lease.png[width="300px",link="{_imagesdir}layouts/estatio-Lease.png"]`
+`\image:layouts/estatio-Lease.png[width="300px",link="{_imagesdir}layouts/estatio-Lease.png"]`
 
-|image:{_imagesdir}layouts/estatio-Lease.png[width="300px",link="{_imagesdir}layouts/estatio-Lease.png"]
+|image:layouts/estatio-Lease.png[width="300px",link="{_imagesdir}layouts/estatio-Lease.png"]
 
 
 

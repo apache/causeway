@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 (As of DN 4.1) set a break point in `FetchRequest#execute(...)`:
 
-image::{_imagesdir}hints-n-tips/diagnosing-n-plus-1.png[width="800px",link="{_imagesdir}hints-n-tips/diagnosing-n-plus-1.png"]
+image::hints-n-tips/diagnosing-n-plus-1.png[width="800px",link="{_imagesdir}hints-n-tips/diagnosing-n-plus-1.png"]
 
 The "Variables" pane will tell you which field(s) are being loaded, and the stack trace should help explain why the field is required.
 

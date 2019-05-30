@@ -80,7 +80,7 @@ This link:https://www.youtube.com/watch?v=MxewC5Pve5k[screencast] describes the 
 Probably the easiest way to understand dynamic XML layouts is by example.
 For this we'll use the `ToDoItem` from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
 
-image::{_imagesdir}layout-dynamic-xml/ToDoItem.png[width="940px",link="{_imagesdir}layout-dynamic-xml/ToDoItem.png"]
+image::layout-dynamic-xml/ToDoItem.png[width="940px",link="{_imagesdir}layout-dynamic-xml/ToDoItem.png"]
 
 
 === Namespaces
@@ -271,7 +271,7 @@ One feature worth being aware of is that it is possible to render a single featu
 For example, the dashboard home page for the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] shows
 the "not yet complete" collection of todo items twice, once as a table and also as a calendar:
 
-image::{_imagesdir}layout-dynamic-xml/ToDoAppDashboard.png[width="940px",link="{_imagesdir}layout-dynamic-xml/ToDoAppDashboard.png"]
+image::layout-dynamic-xml/ToDoAppDashboard.png[width="940px",link="{_imagesdir}layout-dynamic-xml/ToDoAppDashboard.png"]
 
 
 This is accomplished using the following (slightly abbreviated) layout:

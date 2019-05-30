@@ -12,7 +12,7 @@ The `bookmarking()` attribute indicates if an action (with safe xref:../rgant/rg
 
 In the xref:../ugvw/ugvw.adoc#[Wicket viewer], a link to a bookmarked object is shown in the bookmarks panel:
 
-image::{_imagesdir}reference-annotations/ActionLayout/bookmarking.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/bookmarking.png"]
+image::reference-annotations/ActionLayout/bookmarking.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/bookmarking.png"]
 
 [NOTE]
 ====

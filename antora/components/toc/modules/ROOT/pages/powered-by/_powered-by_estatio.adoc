@@ -18,7 +18,7 @@ It would also be able to expand its scope over time to support more of the compa
 
 The application developed, and deployed initially in Italy, is called Estatio:
 
-image::{_imagesdir}powered-by/estatio/estatio-1.png[width="900px",link="{_imagesdir}powered-by/estatio/estatio-1.png"]
+image::powered-by/estatio/estatio-1.png[width="900px",link="{_imagesdir}powered-by/estatio/estatio-1.png"]
 
 The development team for the original implementation consisted of just two developers (both of whom are Apache Isis committers); the first version of the application was developed over 2 years and 2 man-years effort.
 Since the initial release - as the scope of the application has grown - the team has expanded to take on a further part-time developer and also some interns.

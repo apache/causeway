@@ -15,13 +15,13 @@ The value returned by the `iconName()` method is added as a suffix to the base i
 
 For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add an overlay for todo items that have been completed:
 
-image::{_imagesdir}reference-methods/reserved/iconName/differing.png[width="200px",link="{_imagesdir}reference-methods/reserved/iconName/differing.png"]
+image::reference-methods/reserved/iconName/differing.png[width="200px",link="{_imagesdir}reference-methods/reserved/iconName/differing.png"]
 
 
 
 The screenshot below shows the location of these `.png` icon files:
 
-image::{_imagesdir}reference-methods/reserved/iconName/png-files.png[width="200px",link="{_imagesdir}reference-methods/reserved/iconName/png-files.png"]
+image::reference-methods/reserved/iconName/png-files.png[width="200px",link="{_imagesdir}reference-methods/reserved/iconName/png-files.png"]
 
 
 

@@ -10,7 +10,7 @@ This "one-pager" cheat sheet summarises the main programming conventions to foll
 pass:[<br/>]
 
 
-image::{_imagesdir}cheat-sheets/cover.png[width="800px",link="resources/cheat-sheets/IsisCheatSheet.pdf"]
+image::cheat-sheets/cover.png[width="800px",link="resources/cheat-sheets/IsisCheatSheet.pdf"]
 
 
 pass:[<br/>]

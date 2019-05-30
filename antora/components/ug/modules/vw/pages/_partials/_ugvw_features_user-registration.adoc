@@ -33,32 +33,32 @@ There is _no_ default implementation of the user registration service in the cor
 
 The user is presented with a login page:
 
-image::{_imagesdir}user-registration/login-page-default.png[width="300px",link="{_imagesdir}user-registration/login-page-default.png"]
+image::user-registration/login-page-default.png[width="300px",link="{_imagesdir}user-registration/login-page-default.png"]
 
 
 Navigate to the sign up page. Complete the page, and verify:
 
-image::{_imagesdir}user-registration/sign-up-page.png[width="300px",link="{_imagesdir}user-registration/sign-up-page.png"]
+image::user-registration/sign-up-page.png[width="300px",link="{_imagesdir}user-registration/sign-up-page.png"]
 
 
 Back to the login page:
 
-image::{_imagesdir}user-registration/sign-up-login-page-after-sign-up.png[width="300px",link="{_imagesdir}user-registration/sign-up-login-page-after-sign-up.png"]
+image::user-registration/sign-up-login-page-after-sign-up.png[width="300px",link="{_imagesdir}user-registration/sign-up-login-page-after-sign-up.png"]
 
 
 Email arrives, with link:
 
-image::{_imagesdir}user-registration/sign-up-email-with-verification-link.png[width="500px",link="{_imagesdir}user-registration/sign-up-email-with-verification-link.png"]
+image::user-registration/sign-up-email-with-verification-link.png[width="500px",link="{_imagesdir}user-registration/sign-up-email-with-verification-link.png"]
 
 
 Follow the link, complete the page:
 
-image::{_imagesdir}user-registration/sign-up-registration-page.png[width="300px",link="{_imagesdir}user-registration/sign-up-registration-page.png"]
+image::user-registration/sign-up-registration-page.png[width="300px",link="{_imagesdir}user-registration/sign-up-registration-page.png"]
 
 
 Automatically logged in:
 
-image::{_imagesdir}user-registration/sign-up-after-registration.png[width="800px",link="{_imagesdir}user-registration/sign-up-after-registration.png"]
+image::user-registration/sign-up-after-registration.png[width="800px",link="{_imagesdir}user-registration/sign-up-after-registration.png"]
 
 
 

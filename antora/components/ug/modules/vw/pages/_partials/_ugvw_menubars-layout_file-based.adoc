@@ -28,12 +28,12 @@ is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making it 
 
 An initial `menubars.layout.xml` - capturing any existing metadata either implicit or explicitly specified through annotations can be downloaded from the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_MenuBarsService[`MenuBarsService`] (exposed on the prototyping menu):
 
-image::{_imagesdir}/menubars/010-download.png[width="300px",link="{_imagesdir}/menubars/010-download.png"]
+image::/menubars/010-download.png[width="300px",link="{_imagesdir}/menubars/010-download.png"]
 
 
 This action allows either the "Default" or the "Fallback" layout to be downloaded.
 
-image::{_imagesdir}/menubars/020-download.png[width="400px",link="{_imagesdir}/menubars/020-download.png"]
+image::/menubars/020-download.png[width="400px",link="{_imagesdir}/menubars/020-download.png"]
 
 The "Default" layout is that currently in use, while the "Fallback" layout is that provided only from the annotations.
 Initially these are identical.
