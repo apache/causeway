@@ -18,7 +18,7 @@ See also hints-n-tips chapters in the:
 
 * the xref:ug:sec:ugsec.adoc#_ugsec_hints-and-tips[Security] guide
 
-* the xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips[Beyond the Basics] guide.
+* the xref:ug:btb:ugbtb.adoc#_ugbtb_hints-and-tips[Beyond the Basics] guide.
 
 
 Since the Restful Objects viewer is designed for computer programs to interact with (rather than human beings), it can be a little difficult to explore and generally "grok" how it works.
@@ -28,12 +28,12 @@ This section provides a few hints-and-tips to help you on your way.
 
 // tag::inclusions[]
 
-include::_ugvro_hints-and-tips_using-chrome-devtools.adoc[leveloffset=+1,lines=3..-1]
-include::_ugvro_hints-and-tips_angular-tips.adoc[leveloffset=+1,lines=3..-1]
-include::_ugvro_hints-and-tips_pretty-printing.adoc[leveloffset=+1,lines=3..-1]
-include::_ugvro_hints-and-tips_restful-image-property.adoc[leveloffset=+1,lines=3..-1]
-include::_ugvro_hints-and-tips_view-model-as-parameter.adoc[leveloffset=+1,lines=3..-1]
-include::_ugvro_hints-and-tips_troubleshooting.adoc[leveloffset=+1,lines=3..-1]
+include::partial$_ugvro_hints-and-tips_using-chrome-devtools.adoc[leveloffset=+1,lines=3..-1]
+include::partial$_ugvro_hints-and-tips_angular-tips.adoc[leveloffset=+1,lines=3..-1]
+include::partial$_ugvro_hints-and-tips_pretty-printing.adoc[leveloffset=+1,lines=3..-1]
+include::partial$_ugvro_hints-and-tips_restful-image-property.adoc[leveloffset=+1,lines=3..-1]
+include::partial$_ugvro_hints-and-tips_view-model-as-parameter.adoc[leveloffset=+1,lines=3..-1]
+include::partial$_ugvro_hints-and-tips_troubleshooting.adoc[leveloffset=+1,lines=3..-1]
 
 // end::inclusions[]
 

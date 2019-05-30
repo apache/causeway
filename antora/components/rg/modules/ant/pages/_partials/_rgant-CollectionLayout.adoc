@@ -104,13 +104,13 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 
 
-include::_rgant-CollectionLayout_cssClass.adoc[leveloffset=+1]
-include::_rgant-CollectionLayout_defaultView.adoc[leveloffset=+1]
-include::_rgant-CollectionLayout_describedAs.adoc[leveloffset=+1]
-include::_rgant-CollectionLayout_hidden.adoc[leveloffset=+1]
-include::_rgant-CollectionLayout_named.adoc[leveloffset=+1]
-include::_rgant-CollectionLayout_paged.adoc[leveloffset=+1]
-include::_rgant-CollectionLayout_sortedBy.adoc[leveloffset=+1]
+include::partial$_rgant-CollectionLayout_cssClass.adoc[leveloffset=+1]
+include::partial$_rgant-CollectionLayout_defaultView.adoc[leveloffset=+1]
+include::partial$_rgant-CollectionLayout_describedAs.adoc[leveloffset=+1]
+include::partial$_rgant-CollectionLayout_hidden.adoc[leveloffset=+1]
+include::partial$_rgant-CollectionLayout_named.adoc[leveloffset=+1]
+include::partial$_rgant-CollectionLayout_paged.adoc[leveloffset=+1]
+include::partial$_rgant-CollectionLayout_sortedBy.adoc[leveloffset=+1]
 
 
 

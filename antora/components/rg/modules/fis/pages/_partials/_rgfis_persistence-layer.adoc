@@ -77,7 +77,7 @@ Key:
 
 
 
-include::_rgfis_persistence-layer_AuditingServiceInternal.adoc[leveloffset=+1]
-include::_rgfis_persistence-layer_ChangedObjectsServiceInternal.adoc[leveloffset=+1]
-include::_rgfis_persistence-layer_PersistenceSessionServiceInternal.adoc[leveloffset=+1]
-include::_rgfis_persistence-layer_PublishingServiceInternal.adoc[leveloffset=+1]
+include::partial$_rgfis_persistence-layer_AuditingServiceInternal.adoc[leveloffset=+1]
+include::partial$_rgfis_persistence-layer_ChangedObjectsServiceInternal.adoc[leveloffset=+1]
+include::partial$_rgfis_persistence-layer_PersistenceSessionServiceInternal.adoc[leveloffset=+1]
+include::partial$_rgfis_persistence-layer_PublishingServiceInternal.adoc[leveloffset=+1]

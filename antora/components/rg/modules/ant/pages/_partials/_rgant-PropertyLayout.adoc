@@ -136,16 +136,16 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 
 
-include::_rgant-PropertyLayout_cssClass.adoc[leveloffset=+1]
-include::_rgant-PropertyLayout_describedAs.adoc[leveloffset=+1]
-include::_rgant-PropertyLayout_labelPosition.adoc[leveloffset=+1]
-include::_rgant-PropertyLayout_multiLine.adoc[leveloffset=+1]
-include::_rgant-PropertyLayout_named.adoc[leveloffset=+1]
-include::_rgant-PropertyLayout_navigable.adoc[leveloffset=+1]
-include::_rgant-PropertyLayout_promptStyle.adoc[leveloffset=+1]
-include::_rgant-PropertyLayout_renderedAsDayBefore.adoc[leveloffset=+1]
-include::_rgant-PropertyLayout_typicalLength.adoc[leveloffset=+1]
-include::_rgant-PropertyLayout_unchanging.adoc[leveloffset=+1]
+include::partial$_rgant-PropertyLayout_cssClass.adoc[leveloffset=+1]
+include::partial$_rgant-PropertyLayout_describedAs.adoc[leveloffset=+1]
+include::partial$_rgant-PropertyLayout_labelPosition.adoc[leveloffset=+1]
+include::partial$_rgant-PropertyLayout_multiLine.adoc[leveloffset=+1]
+include::partial$_rgant-PropertyLayout_named.adoc[leveloffset=+1]
+include::partial$_rgant-PropertyLayout_navigable.adoc[leveloffset=+1]
+include::partial$_rgant-PropertyLayout_promptStyle.adoc[leveloffset=+1]
+include::partial$_rgant-PropertyLayout_renderedAsDayBefore.adoc[leveloffset=+1]
+include::partial$_rgant-PropertyLayout_typicalLength.adoc[leveloffset=+1]
+include::partial$_rgant-PropertyLayout_unchanging.adoc[leveloffset=+1]
 
 
 

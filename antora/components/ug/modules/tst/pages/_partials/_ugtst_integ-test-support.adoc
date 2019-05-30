@@ -14,12 +14,12 @@ As discussed in the introductory overview of this chapter, Apache Isis allows yo
 We'll get to all that shortly, but let's start by taking a look at what a typical integration test looks like.
 
 
-include::_ugtst_integ-test-support_typical-usage.adoc[leveloffset=+1]
-include::_ugtst_integ-test-support_bootstrapping.adoc[leveloffset=+1]
-include::_ugtst_integ-test-support_abstract-class.adoc[leveloffset=+1]
-include::_ugtst_integ-test-support_configuration-properties.adoc[leveloffset=+1]
-include::_ugtst_integ-test-support_wrapper-factory.adoc[leveloffset=+1]
-include::_ugtst_integ-test-support_maven-configuration.adoc[leveloffset=+1]
+include::partial$_ugtst_integ-test-support_typical-usage.adoc[leveloffset=+1]
+include::partial$_ugtst_integ-test-support_bootstrapping.adoc[leveloffset=+1]
+include::partial$_ugtst_integ-test-support_abstract-class.adoc[leveloffset=+1]
+include::partial$_ugtst_integ-test-support_configuration-properties.adoc[leveloffset=+1]
+include::partial$_ugtst_integ-test-support_wrapper-factory.adoc[leveloffset=+1]
+include::partial$_ugtst_integ-test-support_maven-configuration.adoc[leveloffset=+1]
 
 
 

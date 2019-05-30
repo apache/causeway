@@ -7,4 +7,4 @@ include::_attributes.adoc[]
 The `org.apache.isis.applib.services.i18n` package contains a single class to support i18n.
 
 
-include::_rgcms_classes_i18n_TranslatableString.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_i18n_TranslatableString.adoc[leveloffset=+1]

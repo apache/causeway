@@ -18,7 +18,7 @@ Typically modification/invocation is vetoed based on the state of the domain obj
 
 
 The reason for vetoing a modification/invocation is normally returned as a string.
-However, Apache Isis' xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that reasons can be internationalized.
+However, Apache Isis' xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that reasons can be internationalized.
 
 
 

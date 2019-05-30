@@ -5,13 +5,13 @@ include::_attributes.adoc[]
 
 This chapter provides guidance on some common deployment scenarios.
 
-include::_ugbtb_deployment_cmd-line.adoc[leveloffset=+1]
-include::_ugbtb_deployment_externalized-configuration.adoc[leveloffset=+1]
-include::_ugbtb_deployment_tomcat.adoc[leveloffset=+1]
-include::_ugbtb_deployment_docker.adoc[leveloffset=+1]
-include::_ugbtb_deployment_gae.adoc[leveloffset=+1]
-include::_ugbtb_deployment_neo4j.adoc[leveloffset=+1]
-include::_ugbtb_deployment_jvm-flags.adoc[leveloffset=+1]
+include::partial$_ugbtb_deployment_cmd-line.adoc[leveloffset=+1]
+include::partial$_ugbtb_deployment_externalized-configuration.adoc[leveloffset=+1]
+include::partial$_ugbtb_deployment_tomcat.adoc[leveloffset=+1]
+include::partial$_ugbtb_deployment_docker.adoc[leveloffset=+1]
+include::partial$_ugbtb_deployment_gae.adoc[leveloffset=+1]
+include::partial$_ugbtb_deployment_neo4j.adoc[leveloffset=+1]
+include::partial$_ugbtb_deployment_jvm-flags.adoc[leveloffset=+1]
 
 
 

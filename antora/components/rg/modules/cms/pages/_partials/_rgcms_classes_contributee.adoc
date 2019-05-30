@@ -7,6 +7,6 @@ include::_attributes.adoc[]
 The interfaces listed in this chapter act as contributees; they allow domain services to contribute actions/properties/collections to any domain objects that implement these interfaces.
 
 
-include::_rgcms_classes_contributee_HasTransactionId.adoc[leveloffset=+1]
-include::_rgcms_classes_contributee_HasUserName.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_contributee_HasTransactionId.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_contributee_HasUserName.adoc[leveloffset=+1]
 

@@ -176,7 +176,7 @@ and these properties may optionally be configured (each has a default to use gma
 * `isis.service.email.port`
 * `isis.service.email.tls.enabled`
 
-These configuration properties can be specified either in `isis.properties` or in an xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_externalized-configuration[external configuration file], or programmatically using the xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`].
+These configuration properties can be specified either in `isis.properties` or in an xref:ug:btb:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[external configuration file], or programmatically using the xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`].
 
 TODO: v2: confirm this is the case.
 

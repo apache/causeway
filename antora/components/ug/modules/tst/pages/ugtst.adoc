@@ -10,9 +10,9 @@ include::_attributes.adoc[]
 
 
 
-include::_ugtst_overview.adoc[leveloffset=+1]
-include::_ugtst_unit-test-support.adoc[leveloffset=+1]
-include::_ugtst_integ-test-support.adoc[leveloffset=+1]
-include::_ugtst_bdd-spec-support.adoc[leveloffset=+1]
-include::_ugtst_fixture-scripts.adoc[leveloffset=+1]
+include::partial$_ugtst_overview.adoc[leveloffset=+1]
+include::partial$_ugtst_unit-test-support.adoc[leveloffset=+1]
+include::partial$_ugtst_integ-test-support.adoc[leveloffset=+1]
+include::partial$_ugtst_bdd-spec-support.adoc[leveloffset=+1]
+include::partial$_ugtst_fixture-scripts.adoc[leveloffset=+1]
 

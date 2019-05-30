@@ -4,22 +4,13 @@
 include::_attributes.adoc[]
 
 
-include::_migration-notes_1.16.0-to-2.0.0-M1_meta-annotations.adoc[leveloffset=+1]
-
-include::_migration-notes_1.16.0-to-2.0.0-M1_updated-annotations.adoc[leveloffset=+1]
-
-include::_migration-notes_1.16.0-to-2.0.0-M1_removed-annotations.adoc[leveloffset=+1]
-
-include::_migration-notes_1.16.0-to-2.0.0-M1_moved-types.adoc[leveloffset=+1]
-
-include::_migration-notes_1.16.0-to-2.0.0-M1_removed-configuration-properties.adoc[leveloffset=+1]
-
-include::_migration-notes_1.16.0-to-2.0.0-M1_updated-classes.adoc[leveloffset=+1]
-
-include::_migration-notes_1.16.0-to-2.0.0-M1_removed-types.adoc[leveloffset=+1]
-
-
-include::_migration-notes_1.16.0-to-2.0.0-M1_legacy-modules.adoc[leveloffset=+1]
-
-include::_migration-notes_1.16.0-to-2.0.0-M1_other-changes.adoc[leveloffset=+1]
+include::partial$_migration-notes_1.16.0-to-2.0.0-M1_meta-annotations.adoc[leveloffset=+1]
+include::partial$_migration-notes_1.16.0-to-2.0.0-M1_updated-annotations.adoc[leveloffset=+1]
+include::partial$_migration-notes_1.16.0-to-2.0.0-M1_removed-annotations.adoc[leveloffset=+1]
+include::partial$_migration-notes_1.16.0-to-2.0.0-M1_moved-types.adoc[leveloffset=+1]
+include::partial$_migration-notes_1.16.0-to-2.0.0-M1_removed-configuration-properties.adoc[leveloffset=+1]
+include::partial$_migration-notes_1.16.0-to-2.0.0-M1_updated-classes.adoc[leveloffset=+1]
+include::partial$_migration-notes_1.16.0-to-2.0.0-M1_removed-types.adoc[leveloffset=+1]
+include::partial$_migration-notes_1.16.0-to-2.0.0-M1_legacy-modules.adoc[leveloffset=+1]
+include::partial$_migration-notes_1.16.0-to-2.0.0-M1_other-changes.adoc[leveloffset=+1]
 

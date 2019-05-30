@@ -7,9 +7,9 @@ The `org.apache.isis.applib.util` package has a number of simple utility
 classes designed to simplify the coding of some common tasks.
 
 
-include::_rgcms_classes_utility_Enums.adoc[leveloffset=+1]
-include::_rgcms_classes_utility_ObjectContracts.adoc[leveloffset=+1]
-include::_rgcms_classes_utility_Reasons.adoc[leveloffset=+1]
-include::_rgcms_classes_utility_TitleBuffer.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_utility_Enums.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_utility_ObjectContracts.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_utility_Reasons.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_utility_TitleBuffer.adoc[leveloffset=+1]
 
 

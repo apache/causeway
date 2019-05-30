@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-IMPORTANT: FIXME - see xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[user guide, i18n].
+IMPORTANT: FIXME - see xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[user guide, i18n].
 
 The `TranslatableString` utility class ...
 

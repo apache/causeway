@@ -14,7 +14,7 @@ Apache Isis supports recognises four main types of domain classes:
 * *view models* - domain objects that are a projection of some state held by the database, in support a particular use case; for example `CustomerDashboard` (to pull together commonly accessed information about a customer).
 
 * *mixins* - allow functionality to be "contributed" in the UI by one module to another object, similar to traits or extension methods provided in some programming languages.
-This is an important capability to help keep large applications xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling[decoupled].
+This is an important capability to help keep large applications xref:ug:btb:ugbtb.adoc#_ugbtb_decoupling[decoupled].
 
 From the end-user's perspective the UI displays a single domain object instance that has state (that is, a domain entity or a view model) per page.
 The end-user can then inspect and modify its state, and navigate to related objects.
@@ -28,7 +28,7 @@ There is a smattering of other Java/JEE annotations that are also supported, suc
 The following subsections explain this in further detail.
 
 
-include::_ugfun_building-blocks_types-of-domain-objects_domain-entities.adoc[leveloffset=+1]
-include::_ugfun_building-blocks_types-of-domain-objects_domain-services.adoc[leveloffset=+1]
-include::_ugfun_building-blocks_types-of-domain-objects_view-models.adoc[leveloffset=+1]
-include::_ugfun_building-blocks_types-of-domain-objects_mixins.adoc[leveloffset=+1]
+include::partial$_ugfun_building-blocks_types-of-domain-objects_domain-entities.adoc[leveloffset=+1]
+include::partial$_ugfun_building-blocks_types-of-domain-objects_domain-services.adoc[leveloffset=+1]
+include::partial$_ugfun_building-blocks_types-of-domain-objects_view-models.adoc[leveloffset=+1]
+include::partial$_ugfun_building-blocks_types-of-domain-objects_mixins.adoc[leveloffset=+1]

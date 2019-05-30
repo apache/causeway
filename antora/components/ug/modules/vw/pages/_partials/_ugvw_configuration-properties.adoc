@@ -119,7 +119,7 @@ See below for further discussion on this topic.
 (_`welcome.html`_)
 |Location of the HTML file (relative to `src/main/webapp`) whose contents should be displayed on the application's home page.
 
-Note though that if a xref:../../guides/rgant/rgant.adoc#_rgant-HomePage[@HomePage] action exists, then that will take precedence.
+Note though that if a xref:rg:ant:rgant.adoc#_rgant-HomePage[@HomePage] action exists, then that will take precedence.
 
 If no welcome file exists, then the value of `welcome.text` is shown as a fallback.
 
@@ -128,7 +128,7 @@ If no welcome file exists, then the value of `welcome.text` is shown as a fallba
 |Text
 |To be displayed on the application's home page, used as a fallback if `welcome.file` is not specified.
 
-Note though that if a xref:../../guides/rgant/rgant.adoc#_rgant-HomePage[@HomePage] action exists, then that will take precedence.
+Note though that if a xref:rg:ant:rgant.adoc#_rgant-HomePage[@HomePage] action exists, then that will take precedence.
 
 
 |===

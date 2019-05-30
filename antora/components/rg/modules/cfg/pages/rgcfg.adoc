@@ -7,10 +7,10 @@ include::_attributes.adoc[]
 
 
 
-include::_rgcfg_deployment-types.adoc[leveloffset=+1]
-include::_rgcfg_configuration-files.adoc[leveloffset=+1]
-include::_rgcfg_specifying-components.adoc[leveloffset=+1]
-include::_rgcfg_configuring-core.adoc[leveloffset=+1]
+include::partial$_rgcfg_deployment-types.adoc[leveloffset=+1]
+include::partial$_rgcfg_configuration-files.adoc[leveloffset=+1]
+include::partial$_rgcfg_specifying-components.adoc[leveloffset=+1]
+include::partial$_rgcfg_configuring-core.adoc[leveloffset=+1]
 
 
 

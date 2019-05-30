@@ -121,7 +121,7 @@ Cross-references (links) to the various guides
 
 
 |`adcgcom`
-|`\xref:../cgcom/cgcom.adoc#xxx[ttt]`
+|`\xref:support:cgcom:cgcom.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the committers' guide, where:
 
@@ -369,7 +369,7 @@ for example:
 
 
 |`adugbtb`
-|`\xref:../ugbtb/ugbtb.adoc#xxx[ttt]`
+|`\xref:ug:btb:ugbtb.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the 'Beyond the Basics' user guide, where:
 
@@ -378,9 +378,9 @@ A hyperlink to a bookmark within the 'Beyond the Basics' user guide, where:
 
 for example:
 
-`\xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]`
+`\xref:ug:btb:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]`
 
-|xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]
+|xref:ug:btb:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]
 
 
 

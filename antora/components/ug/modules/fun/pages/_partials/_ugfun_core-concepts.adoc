@@ -9,10 +9,10 @@ Parts of this chapter have been adapted from Dan Haywood's 2009 book, 'Domain Dr
 We've also added some new insights and made sure the material we've used is relevant to Apache Isis.
 
 
-include::_ugfun_core-concepts_philosophy.adoc[leveloffset=+1]
-include::_ugfun_core-concepts_principles.adoc[leveloffset=+1]
-include::_ugfun_core-concepts_apache-isis-vs.adoc[leveloffset=+1]
+include::partial$_ugfun_core-concepts_philosophy.adoc[leveloffset=+1]
+include::partial$_ugfun_core-concepts_principles.adoc[leveloffset=+1]
+include::partial$_ugfun_core-concepts_apache-isis-vs.adoc[leveloffset=+1]
 
-include::_ugfun_core-concepts_deployment-options.adoc[leveloffset=+1]
+include::partial$_ugfun_core-concepts_deployment-options.adoc[leveloffset=+1]
 
 

@@ -44,10 +44,10 @@ If not provided, then the class name is used to locate an image.
 
 
 
-include::_rgcms_methods_reserved_cssClass.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved_disable.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved_getId.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved_hide.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved_iconName.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved_title.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved_validate.adoc[leveloffset=+1]
+include::partial$_rgcms_methods_reserved_cssClass.adoc[leveloffset=+1]
+include::partial$_rgcms_methods_reserved_disable.adoc[leveloffset=+1]
+include::partial$_rgcms_methods_reserved_getId.adoc[leveloffset=+1]
+include::partial$_rgcms_methods_reserved_hide.adoc[leveloffset=+1]
+include::partial$_rgcms_methods_reserved_iconName.adoc[leveloffset=+1]
+include::partial$_rgcms_methods_reserved_title.adoc[leveloffset=+1]
+include::partial$_rgcms_methods_reserved_validate.adoc[leveloffset=+1]

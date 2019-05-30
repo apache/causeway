@@ -52,7 +52,7 @@ _How to import an Apache Isis maven-based application into Eclipse and configure
 
 NB: when configuring DataNucleus for the *dom* project, make sure you are in the 'Java perspective', not the 'Java EE perspective'). +
 
-Learn more xref:../../guides/dg/dg.adoc#[here]
+Learn more xref:support:dg:dg.adoc#[here]
 
 |video::RgcYfjQ8yJA[youtube,width="420px",height="315px"]
 
@@ -62,7 +62,7 @@ Learn more xref:../../guides/dg/dg.adoc#[here]
 
 _How to import an Apache Isis maven-based application into IntelliJ and run the app._ +
 
-Learn more xref:../../guides/dg/dg.adoc#_dg_ide_intellij[here]
+Learn more xref:support:dg:dg.adoc#_dg_ide_intellij[here]
 
 |video::lwKsyTbTSnA[youtube,width="420px",height="315px"]
 
@@ -81,7 +81,7 @@ Learn more xref:../../guides/dg/dg.adoc#_dg_ide_intellij[here]
 
 |Commands and Auditing (v1.6.0) +
 
-_Configuring the command and auditing add-on modules for the xref:../../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
+_Configuring the command and auditing add-on modules for the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
 
 Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command and audit SPI modules
 
@@ -90,7 +90,7 @@ Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s 
 
 |Security (v1.6.0) +
 
-_Configuring the security add-on module for for the xref:../../guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
+_Configuring the security add-on module for for the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
 
 Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security SPI module.
 

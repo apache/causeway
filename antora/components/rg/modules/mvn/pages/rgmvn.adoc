@@ -6,11 +6,11 @@ include::_attributes.adoc[]
 
 
 
-include::_rgmvn_intro.adoc[leveloffset=+1]
+include::partial$_rgmvn_intro.adoc[leveloffset=+1]
 
 
-include::_rgmvn_validate.adoc[leveloffset=+1]
-include::_rgmvn_swagger.adoc[leveloffset=+1]
-include::_rgmvn_xsd.adoc[leveloffset=+1]
+include::partial$_rgmvn_validate.adoc[leveloffset=+1]
+include::partial$_rgmvn_swagger.adoc[leveloffset=+1]
+include::partial$_rgmvn_xsd.adoc[leveloffset=+1]
 
 

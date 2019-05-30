@@ -74,7 +74,7 @@ Key:
 
 
 
-include::_rgsvc_presentation-layer-api_AcceptHeaderService.adoc[leveloffset=+1]
-include::_rgsvc_presentation-layer-api_BookmarkUiService.adoc[leveloffset=+1]
-include::_rgsvc_presentation-layer-api_DeepLinkService.adoc[leveloffset=+1]
-include::_rgsvc_presentation-layer-api_GuiceBeanProvider.adoc[leveloffset=+1]
+include::partial$_rgsvc_presentation-layer-api_AcceptHeaderService.adoc[leveloffset=+1]
+include::partial$_rgsvc_presentation-layer-api_BookmarkUiService.adoc[leveloffset=+1]
+include::partial$_rgsvc_presentation-layer-api_DeepLinkService.adoc[leveloffset=+1]
+include::partial$_rgsvc_presentation-layer-api_GuiceBeanProvider.adoc[leveloffset=+1]

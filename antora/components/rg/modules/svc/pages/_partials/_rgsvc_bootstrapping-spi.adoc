@@ -44,4 +44,4 @@ Key:
 
 
 
-include::_rgsvc_bootstrapping-spi_ClassDiscoveryService.adoc[leveloffset=+1]
+include::partial$_rgsvc_bootstrapping-spi_ClassDiscoveryService.adoc[leveloffset=+1]

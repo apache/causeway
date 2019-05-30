@@ -19,11 +19,11 @@ xref:ug:vro:ugvro.adoc#_ugvro_architecture[architecture] chapter.
 
 
 
-include::_ugvro_simplified-representations_apache-isis-profile.adoc[leveloffset=+1]
-include::_ugvro_simplified-representations_domain-object.adoc[leveloffset=+1]
-include::_ugvro_simplified-representations_object-collection.adoc[leveloffset=+1]
-include::_ugvro_simplified-representations_action-invocation.adoc[leveloffset=+1]
-include::_ugvro_simplified-representations_other-representations.adoc[leveloffset=+1]
-include::_ugvro_simplified-representations_configuration-properties.adoc[leveloffset=+1]
+include::partial$_ugvro_simplified-representations_apache-isis-profile.adoc[leveloffset=+1]
+include::partial$_ugvro_simplified-representations_domain-object.adoc[leveloffset=+1]
+include::partial$_ugvro_simplified-representations_object-collection.adoc[leveloffset=+1]
+include::partial$_ugvro_simplified-representations_action-invocation.adoc[leveloffset=+1]
+include::partial$_ugvro_simplified-representations_other-representations.adoc[leveloffset=+1]
+include::partial$_ugvro_simplified-representations_configuration-properties.adoc[leveloffset=+1]
 
 

@@ -7,8 +7,8 @@ include::_attributes.adoc[]
 The interfaces listed in this chapter are role interfaces; they define a contract for the framework to interact with those domain objects that implement these interfaces.
 
 
-include::_rgcms_classes_roles_HoldsUpdatedAt.adoc[leveloffset=+1]
-include::_rgcms_classes_roles_HoldsUpdatedBy.adoc[leveloffset=+1]
-include::_rgcms_classes_roles_Timestampable.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_roles_HoldsUpdatedAt.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_roles_HoldsUpdatedBy.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_roles_Timestampable.adoc[leveloffset=+1]
 
 

@@ -55,7 +55,7 @@ will take precedence.
 
 
 
-include::_rgcms_classes_uievent_TitleUiEvent.adoc[leveloffset=+1]
-include::_rgcms_classes_uievent_IconUiEvent.adoc[leveloffset=+1]
-include::_rgcms_classes_uievent_CssClassUiEvent.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_uievent_TitleUiEvent.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_uievent_IconUiEvent.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_uievent_CssClassUiEvent.adoc[leveloffset=+1]
 

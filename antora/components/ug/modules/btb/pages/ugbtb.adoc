@@ -6,10 +6,10 @@ include::_attributes.adoc[]
 
 
 
-include::_ugbtb_i18n.adoc[leveloffset=+1]
-include::_ugbtb_headless-access.adoc[leveloffset=+1]
-include::_ugbtb_hints-and-tips.adoc[leveloffset=+1]
-include::_ugbtb_programming-model.adoc[leveloffset=+1]
-include::_ugbtb_deployment.adoc[leveloffset=+1]
-include::_ugbtb_web-xml.adoc[leveloffset=+1]
+include::partial$_ugbtb_i18n.adoc[leveloffset=+1]
+include::partial$_ugbtb_headless-access.adoc[leveloffset=+1]
+include::partial$_ugbtb_hints-and-tips.adoc[leveloffset=+1]
+include::partial$_ugbtb_programming-model.adoc[leveloffset=+1]
+include::partial$_ugbtb_deployment.adoc[leveloffset=+1]
+include::partial$_ugbtb_web-xml.adoc[leveloffset=+1]
 

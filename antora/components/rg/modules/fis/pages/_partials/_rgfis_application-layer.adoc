@@ -70,6 +70,6 @@ Key:
 
 
 
-include::_rgfis_application-layer_AuthenticationSessionProvider.adoc[leveloffset=+1]
-include::_rgfis_application-layer_CommandDtoServiceInternal.adoc[leveloffset=+1]
-include::_rgfis_application-layer_InteractionDtoServiceInternal.adoc[leveloffset=+1]
+include::partial$_rgfis_application-layer_AuthenticationSessionProvider.adoc[leveloffset=+1]
+include::partial$_rgfis_application-layer_CommandDtoServiceInternal.adoc[leveloffset=+1]
+include::partial$_rgfis_application-layer_InteractionDtoServiceInternal.adoc[leveloffset=+1]

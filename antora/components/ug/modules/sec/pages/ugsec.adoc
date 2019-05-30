@@ -8,15 +8,15 @@ include::_attributes.adoc[]
 
 
 
-include::_ugsec_configuring-isis-to-use-shiro.adoc[leveloffset=+1]
+include::partial$_ugsec_configuring-isis-to-use-shiro.adoc[leveloffset=+1]
 
-include::_ugsec_shiro-realm-implementations.adoc[leveloffset=+1]
+include::partial$_ugsec_shiro-realm-implementations.adoc[leveloffset=+1]
 
-include::_ugsec_shiro-isis-enhanced-wildcard-permission.adoc[leveloffset=+1]
+include::partial$_ugsec_shiro-isis-enhanced-wildcard-permission.adoc[leveloffset=+1]
 
-include::_ugsec_hints-and-tips.adoc[leveloffset=+1]
+include::partial$_ugsec_hints-and-tips.adoc[leveloffset=+1]
 
-include::_ugsec_api-for-applications.adoc[leveloffset=+1]
+include::partial$_ugsec_api-for-applications.adoc[leveloffset=+1]
 
-include::_ugsec_usage-by-isis-viewers.adoc[leveloffset=+1]
+include::partial$_ugsec_usage-by-isis-viewers.adoc[leveloffset=+1]
 

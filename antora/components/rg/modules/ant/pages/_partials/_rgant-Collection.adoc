@@ -93,11 +93,11 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 
 
-include::_rgant-Collection_domainEvent.adoc[leveloffset=+1]
-include::_rgant-Collection_editing.adoc[leveloffset=+1]
-include::_rgant-Collection_hidden.adoc[leveloffset=+1]
-include::_rgant-Collection_notPersisted.adoc[leveloffset=+1]
-include::_rgant-Collection_typeOf.adoc[leveloffset=+1]
+include::partial$_rgant-Collection_domainEvent.adoc[leveloffset=+1]
+include::partial$_rgant-Collection_editing.adoc[leveloffset=+1]
+include::partial$_rgant-Collection_hidden.adoc[leveloffset=+1]
+include::partial$_rgant-Collection_notPersisted.adoc[leveloffset=+1]
+include::partial$_rgant-Collection_typeOf.adoc[leveloffset=+1]
 
 
 

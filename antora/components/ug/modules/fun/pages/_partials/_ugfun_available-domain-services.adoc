@@ -10,7 +10,7 @@ Some of these are provided by the framework, while others are third-party (but s
 This chapter surveys some of the domain services currently available.
 
 
-include::_ugfun_available-domain-services_framework-provided.adoc[leveloffset=+1]
-include::_ugfun_available-domain-services_incode-platform.adoc[leveloffset=+1]
+include::partial$_ugfun_available-domain-services_framework-provided.adoc[leveloffset=+1]
+include::partial$_ugfun_available-domain-services_incode-platform.adoc[leveloffset=+1]
 
 

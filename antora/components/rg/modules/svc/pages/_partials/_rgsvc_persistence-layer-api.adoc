@@ -84,8 +84,8 @@ Key:
 
 
 
-include::_rgsvc_persistence-layer-api_HsqlDbManagerMenu.adoc[leveloffset=+1]
-include::_rgsvc_persistence-layer-api_IsisJdoSupport.adoc[leveloffset=+1]
-include::_rgsvc_persistence-layer-api_MetricsService.adoc[leveloffset=+1]
-include::_rgsvc_persistence-layer-api_QueryResultsCache.adoc[leveloffset=+1]
-include::_rgsvc_persistence-layer-api_RepositoryService.adoc[leveloffset=+1]
+include::partial$_rgsvc_persistence-layer-api_HsqlDbManagerMenu.adoc[leveloffset=+1]
+include::partial$_rgsvc_persistence-layer-api_IsisJdoSupport.adoc[leveloffset=+1]
+include::partial$_rgsvc_persistence-layer-api_MetricsService.adoc[leveloffset=+1]
+include::partial$_rgsvc_persistence-layer-api_QueryResultsCache.adoc[leveloffset=+1]
+include::partial$_rgsvc_persistence-layer-api_RepositoryService.adoc[leveloffset=+1]

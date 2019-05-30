@@ -62,7 +62,7 @@ a URL.
 ====
 
 
-include::_ugfun_programming-model_view-models_jaxb_referencing-domain-entities.adoc[leveloffset=+1]
-include::_ugfun_programming-model_view-models_jaxb_joda-datatypes.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_view-models_jaxb_referencing-domain-entities.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_view-models_jaxb_joda-datatypes.adoc[leveloffset=+1]
 
 

@@ -12,7 +12,7 @@ These translations provide for both singular and plural forms.
 
 [NOTE]
 ====
-For the "big picture" and further details on Apache Isis' i18n support, see xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[here].
+For the "big picture" and further details on Apache Isis' i18n support, see xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[here].
 ====
 
 
@@ -55,12 +55,12 @@ It relies on the `LocaleProvider` service (to return the `Locale` of the current
 
 The framework also provides a supporting `TranslationServicePoMenu` provides menu items under the "Prototyping" secondary menu for controlling this service and downloading `.pot` files for translation.
 
-If the menu items are not required then these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
+If the menu items are not required then these can be suppressed either using security or by implementing a xref:ug:btb:ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
-For more details on the implementation, see xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support].
+For more details on the implementation, see xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[i18n support].
 
 
-If the menu items are not required then these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
+If the menu items are not required then these can be suppressed either using security or by implementing a xref:ug:btb:ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 === Configuration Properties
 
@@ -81,7 +81,7 @@ The default implementation of this domain service recognises the following confi
 It can also be disabled.
 This can be useful for integration tests.
 
-See xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translation service.
+See xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translation service.
 
 |===
 

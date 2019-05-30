@@ -27,7 +27,7 @@ In this section we discuss the mechanics of writing domain objects that comply w
 In fact, the Apache Isis programming model is extensible; you can teach Apache Isis new programming conventions and you can remove existing ones; ultimately they amount to syntax.
 The only real fundamental that can't be changed is the notion that objects consist of properties, collections and actions.
 
-You can learn more about extending Apache Isis programming model xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model[here].
+You can learn more about extending Apache Isis programming model xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model[here].
 ====
 
 
@@ -68,21 +68,21 @@ These provide hints relating to the layout of the domain object in the user inte
 
 
 
-include::_ugfun_programming-model_domain-entities.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_domain-entities.adoc[leveloffset=+1]
 
-include::_ugfun_programming-model_domain-services.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_domain-services.adoc[leveloffset=+1]
 
-include::_ugfun_programming-model_properties.adoc[leveloffset=+1]
-include::_ugfun_programming-model_collections.adoc[leveloffset=+1]
-include::_ugfun_programming-model_actions.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_properties.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_collections.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_actions.adoc[leveloffset=+1]
 
-include::_ugfun_programming-model_inject-services.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_inject-services.adoc[leveloffset=+1]
 
-include::_ugfun_programming-model_properties-vs-parameters.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_properties-vs-parameters.adoc[leveloffset=+1]
 
-include::_ugfun_programming-model_view-models.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_view-models.adoc[leveloffset=+1]
 
-include::_ugfun_programming-model_mixins.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_mixins.adoc[leveloffset=+1]
 
 
 

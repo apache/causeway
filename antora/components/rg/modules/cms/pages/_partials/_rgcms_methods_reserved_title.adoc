@@ -20,7 +20,7 @@ The signature of this method is usually:
 public String title() { ... }
 ----
 
-Note that Apache Isis' xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that titles can also be internationalized.
+Note that Apache Isis' xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that titles can also be internationalized.
 
 For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add an overlay for todo items that have been completed:
 

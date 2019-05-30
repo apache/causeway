@@ -122,16 +122,16 @@ Note that there is (currently) no support for specifying UI hints for domain obj
 
 
 
-include::_rgant-DomainObjectLayout_bookmarking.adoc[leveloffset=+1]
-include::_rgant-DomainObjectLayout_cssClass.adoc[leveloffset=+1]
-include::_rgant-DomainObjectLayout_cssClassFa.adoc[leveloffset=+1]
-include::_rgant-DomainObjectLayout_cssClassUiEvent.adoc[leveloffset=+1]
-include::_rgant-DomainObjectLayout_describedAs.adoc[leveloffset=+1]
-include::_rgant-DomainObjectLayout_iconUiEvent.adoc[leveloffset=+1]
-include::_rgant-DomainObjectLayout_layoutUiEvent.adoc[leveloffset=+1]
-include::_rgant-DomainObjectLayout_named.adoc[leveloffset=+1]
-include::_rgant-DomainObjectLayout_paged.adoc[leveloffset=+1]
-include::_rgant-DomainObjectLayout_plural.adoc[leveloffset=+1]
-include::_rgant-DomainObjectLayout_titleUiEvent.adoc[leveloffset=+1]
+include::partial$_rgant-DomainObjectLayout_bookmarking.adoc[leveloffset=+1]
+include::partial$_rgant-DomainObjectLayout_cssClass.adoc[leveloffset=+1]
+include::partial$_rgant-DomainObjectLayout_cssClassFa.adoc[leveloffset=+1]
+include::partial$_rgant-DomainObjectLayout_cssClassUiEvent.adoc[leveloffset=+1]
+include::partial$_rgant-DomainObjectLayout_describedAs.adoc[leveloffset=+1]
+include::partial$_rgant-DomainObjectLayout_iconUiEvent.adoc[leveloffset=+1]
+include::partial$_rgant-DomainObjectLayout_layoutUiEvent.adoc[leveloffset=+1]
+include::partial$_rgant-DomainObjectLayout_named.adoc[leveloffset=+1]
+include::partial$_rgant-DomainObjectLayout_paged.adoc[leveloffset=+1]
+include::partial$_rgant-DomainObjectLayout_plural.adoc[leveloffset=+1]
+include::partial$_rgant-DomainObjectLayout_titleUiEvent.adoc[leveloffset=+1]
 
 

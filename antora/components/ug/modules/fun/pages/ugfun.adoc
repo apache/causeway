@@ -8,22 +8,22 @@ include::_attributes.adoc[]
 
 
 
-include::_ugfun_core-concepts.adoc[leveloffset=+1]
+include::partial$_ugfun_core-concepts.adoc[leveloffset=+1]
 
-include::_ugfun_building-blocks.adoc[leveloffset=+1]
+include::partial$_ugfun_building-blocks.adoc[leveloffset=+1]
 
-include::_ugfun_getting-started_helloworld-archetype.adoc[leveloffset=+1]
+include::partial$_ugfun_getting-started_helloworld-archetype.adoc[leveloffset=+1]
 
-include::_ugfun_getting-started_simpleapp-archetype.adoc[leveloffset=+1]
+include::partial$_ugfun_getting-started_simpleapp-archetype.adoc[leveloffset=+1]
 
-include::_ugfun_programming-model.adoc[leveloffset=+1]
-include::_ugfun_ui-hints.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model.adoc[leveloffset=+1]
+include::partial$_ugfun_ui-hints.adoc[leveloffset=+1]
 
-include::_ugfun_crud.adoc[leveloffset=+1]
+include::partial$_ugfun_crud.adoc[leveloffset=+1]
 
-include::_ugfun_business-rules.adoc[leveloffset=+1]
+include::partial$_ugfun_business-rules.adoc[leveloffset=+1]
 
-include::_ugfun_drop-downs-and-defaults.adoc[leveloffset=+1]
+include::partial$_ugfun_drop-downs-and-defaults.adoc[leveloffset=+1]
 
-include::_ugfun_available-domain-services.adoc[leveloffset=+1]
+include::partial$_ugfun_available-domain-services.adoc[leveloffset=+1]
 

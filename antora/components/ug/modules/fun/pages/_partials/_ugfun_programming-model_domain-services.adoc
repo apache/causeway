@@ -6,13 +6,13 @@ include::_attributes.adoc[]
 
 This section looks at the programming model for writing your own domain services.
 
-include::_ugfun_programming-model_domain-services_organizing-services.adoc[leveloffset=+1]
-include::_ugfun_programming-model_domain-services_repository-and-factory.adoc[leveloffset=+1]
-include::_ugfun_programming-model_domain-services_menu.adoc[leveloffset=+1]
-include::_ugfun_programming-model_domain-services_event-subscribers.adoc[leveloffset=+1]
-include::_ugfun_programming-model_domain-services_contributions.adoc[leveloffset=+1]
-include::_ugfun_programming-model_domain-services_scoped-services.adoc[leveloffset=+1]
-include::_ugfun_programming-model_domain-services_registering.adoc[leveloffset=+1]
-include::_ugfun_programming-model_domain-services_initialization.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_domain-services_organizing-services.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_domain-services_repository-and-factory.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_domain-services_menu.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_domain-services_event-subscribers.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_domain-services_contributions.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_domain-services_scoped-services.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_domain-services_registering.adoc[leveloffset=+1]
+include::partial$_ugfun_programming-model_domain-services_initialization.adoc[leveloffset=+1]
 
 

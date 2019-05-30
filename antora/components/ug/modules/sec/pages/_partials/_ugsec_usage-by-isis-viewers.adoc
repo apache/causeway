@@ -50,7 +50,7 @@ Similarly, for those object members that _are_ visible, the viewer also checks i
 
 As well as providing a sign-in screen, the Wicket viewer also provides the ability for users to self-register.
 By and large this operates outside of Apache Isis' security mechanisms; indeed the various pages (sign-up, sign-up verification, password reset) are all rendered _without_ there being any current user session.
-These pages all "reach inside" Apache Isis framework using a mechanism similar to xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access[Headless access] in order to actually do their stuff.
+These pages all "reach inside" Apache Isis framework using a mechanism similar to xref:ug:btb:ugbtb.adoc#_ugbtb_headless-access[Headless access] in order to actually do their stuff.
 
 [TIP]
 ====

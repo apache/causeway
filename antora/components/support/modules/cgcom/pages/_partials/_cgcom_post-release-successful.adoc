@@ -9,11 +9,11 @@
 
 The release process consists of:
 
-* the release manager xref:../cgcom/cgcom.adoc#_cgcom_cutting-a-release[cutting the release]
+* the release manager xref:support:cgcom:cgcom.adoc#cutting-a-release[cutting the release]
 
-* members of the Apache Isis PMC xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verifying] and voting on the release
+* members of the Apache Isis PMC xref:support:cgcom:cgcom.adoc#verifying-releases[verifying] and voting on the release
 
-* the release manager performing post-release tasks, for either a successful or an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] vote (former documented below)
+* the release manager performing post-release tasks, for either a successful or an xref:support:cgcom:cgcom.adoc#post-release-unsuccessful[unsuccessful] vote (former documented below)
 
 For a vote to succeed, there must be +3 votes from PMC members, and the vote must have been open at least 72 hours.
 If there are not +3 votes after this time then it is perfectly permissible to keep the vote open longer.
@@ -324,7 +324,7 @@ In the main `isis` repo (ie containing the asciidoc source):
 +
 Also add a summary line for the release.
 
-* Update the xref:../../__versions.adoc#[`__versions.adoc`] file that declares the current and next releases.
+* Update the [`site.yml`] file that declares the current and next releases.
 
 * Update any pages (`.adoc`, `.md`, `.html` etc) that describe how to run the archetype, and ensure they reference the correct version.
 +

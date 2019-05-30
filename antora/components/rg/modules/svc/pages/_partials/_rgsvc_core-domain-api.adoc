@@ -107,9 +107,9 @@ Key:
 
 
 
-include::_rgsvc_core-domain-api_ClockService.adoc[leveloffset=+1]
-include::_rgsvc_core-domain-api_ConfigurationService.adoc[leveloffset=+1]
-include::_rgsvc_core-domain-api_EventBusService.adoc[leveloffset=+1]
-include::_rgsvc_core-domain-api_FactoryService.adoc[leveloffset=+1]
-include::_rgsvc_core-domain-api_Scratchpad.adoc[leveloffset=+1]
-include::_rgsvc_core-domain-api_UserService.adoc[leveloffset=+1]
+include::partial$_rgsvc_core-domain-api_ClockService.adoc[leveloffset=+1]
+include::partial$_rgsvc_core-domain-api_ConfigurationService.adoc[leveloffset=+1]
+include::partial$_rgsvc_core-domain-api_EventBusService.adoc[leveloffset=+1]
+include::partial$_rgsvc_core-domain-api_FactoryService.adoc[leveloffset=+1]
+include::partial$_rgsvc_core-domain-api_Scratchpad.adoc[leveloffset=+1]
+include::partial$_rgsvc_core-domain-api_UserService.adoc[leveloffset=+1]

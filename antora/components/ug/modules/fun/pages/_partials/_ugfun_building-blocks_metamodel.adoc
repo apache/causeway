@@ -8,7 +8,7 @@ At its core, Apache Isis is a metamodel that is built at runtime from the domain
 
 The contents of this metamodel is inferred from the Java classes discovered on the classpath: the entities and supporting services, as well the members of those classes.
 The detail of the metamodel is generally explicit, usually represented by Java annotations such as `@Title` or `@Action`.
-Notably the metamodel is xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model[extensible]; it is possible to teach Apache Isis new programming conventions/rules (and conversely to remove those that are built in).
+Notably the metamodel is xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model[extensible]; it is possible to teach Apache Isis new programming conventions/rules (and conversely to remove those that are built in).
 
 Most of the annotations recognized by the framework are defined by the Apache Isis framework itself.
 For example the `@Title` annotation -- which identifies how the framework should derive a human-readable label for each rendered domain object -- is part of the `org.apache.isis.applib.annotations` package.

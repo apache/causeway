@@ -31,7 +31,7 @@ public interface MessageService {
 }
 ----
 <1> display as a transient message to the user (not requiring acknowledgement).  In the xref:ug:vw:ugvw.adoc#[Wicket viewer] this is implemented as a toast that automatically disappears after a period of time.
-<2> ditto, but with translatable string, for xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support].
+<2> ditto, but with translatable string, for xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[i18n support].
 <3> warn the user about a situation with the specified message.  In the xref:ug:vw:ugvw.adoc#[Wicket viewer] this is implemented as a toast that must be closed by the end-user.
 <4> ditto, but with translatable string, for i18n support.
 <5> show the user an unexpected application error.  In the xref:ug:vw:ugvw.adoc#[Wicket viewer] this is implemented as a toast (with a different colour) that must be closed by the end-user.

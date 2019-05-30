@@ -94,7 +94,7 @@ This will therefore display all audit entries that occurred in a given request/t
 
 These services can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
-If menu items or contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
+If menu items or contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug:btb:ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 
 

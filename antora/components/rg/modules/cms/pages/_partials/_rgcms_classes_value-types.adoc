@@ -63,9 +63,9 @@ A simple wrapper around a string, but never shown in plain-text.
 
 
 
-include::_rgcms_classes_value-types_Blob.adoc[leveloffset=+1]
-include::_rgcms_classes_value-types_Clob.adoc[leveloffset=+1]
-//include::_rgcms_classes_value-types_Color.adoc[leveloffset=+1]
-include::_rgcms_classes_value-types_Markup.adoc[leveloffset=+1]
-//include::_rgcms_classes_value-types_Money.adoc[leveloffset=+1]
-//include::_rgcms_classes_value-types_Password.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_value-types_Blob.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_value-types_Clob.adoc[leveloffset=+1]
+//include::partial$_rgcms_classes_value-types_Color.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_value-types_Markup.adoc[leveloffset=+1]
+//include::partial$_rgcms_classes_value-types_Money.adoc[leveloffset=+1]
+//include::partial$_rgcms_classes_value-types_Password.adoc[leveloffset=+1]

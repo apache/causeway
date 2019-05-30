@@ -9,8 +9,8 @@
 The release process consists of:
 
 * the release manager cutting the release (documented below)
-* Members of the Apache Isis PMC xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verifying] and voting on the release
-* the release manager performing post-release tasks, for either a xref:../cgcom/cgcom.adoc#_cgcom_post-release-successful[successful] or an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] vote.
+* Members of the Apache Isis PMC xref:support:cgcom:cgcom.adoc#_cgcom_verifying-releases[verifying] and voting on the release
+* the release manager performing post-release tasks, for either a xref:support:cgcom:cgcom.adoc#_cgcom_post-release-successful[successful] or an xref:support:cgcom:cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] vote.
 
 Apache Isis itself consists of three separately releasable modules; relative to the link:https://github.com/apache/isis[source code root] there are:
 
@@ -19,9 +19,9 @@ Apache Isis itself consists of three separately releasable modules; relative to 
 * `component/example/archetypes/simpleapp`
 
 This section details the process for formally releasing Isis modules.  It describes the process for both `core` and then the archetypes.
-The subsequent sections describe how other committers can xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verify a release] and how the release manager can then perform xref:../cgcom/cgcom.adoc#_cgcom_post-release[post-release] activities and set up for the next development iteration.
+The subsequent sections describe how other committers can xref:support:cgcom:cgcom.adoc#_cgcom_verifying-releases[verify a release] and how the release manager can then perform xref:support:cgcom:cgcom.adoc#_cgcom_post-release[post-release] activities and set up for the next development iteration.
 
-If you've not performed a release before, then note that there are some configuration xref:../cgcom/cgcom.adoc#_cgcom_release-process-prereqs[prerequisites] that must be configured first.
+If you've not performed a release before, then note that there are some configuration xref:support:cgcom:cgcom.adoc#_cgcom_release-process-prereqs[prerequisites] that must be configured first.
 In particular, you'll need signed public/private keys, and the ASF Nexus staging repo inlocal `~/.m2/settings.xml` file.
 
 These release notes using bash command line tools.
@@ -33,11 +33,11 @@ They should work on Linux and MacOS; for Windows, use mSysGit.
 [[__cgcom_cutting-a-release_obtain-consensus]]
 == Obtain Consensus
 
-Before releasing `core`, ensure there is consensus on the xref:../../support.adoc#[dev mailing list] that this is the right time for a release.
+Before releasing `core`, ensure there is consensus on the xref:toc:ROOT:support.adoc#[dev mailing list] that this is the right time for a release.
 The discussion should include confirming the version number to be used, and to confirm content.
 
 These discussions should also confirm the version number of the module being released.
-This should be in line with our xref:../cgcom/cgcom.adoc#_cgcom_versioning-policy[semantic versioning policy].
+This should be in line with our xref:support:cgcom:cgcom.adoc#_cgcom_versioning-policy[semantic versioning policy].
 
 
 Make sure you have a JIRA ticket open against which to perform all commits.
@@ -64,10 +64,10 @@ env | grep ISIS | sort
 ----
 <1> adjust by platform
 <2> set to an "umbrella" ticket for all release activities.
-(One should exist already, xref:../cgcom/cgcom.adoc#__cgcom_post-release-successful_update-jira_create-new-jira[created at] the beginning of the development cycle now completing).
+(One should exist already, xref:support:cgcom:cgcom.adoc#__cgcom_post-release-successful_update-jira_create-new-jira[created at] the beginning of the development cycle now completing).
 <3> adjust as required (Tomcat is used to smoke test the simpleapp archetype)
 
-Obviously, alter ``$ISISREL`` as required, and bump ``$ISISRC`` for re-releasing following an xref:../cgcom/cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] release.
+Obviously, alter ``$ISISREL`` as required, and bump ``$ISISRC`` for re-releasing following an xref:support:cgcom:cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] release.
 
 [IMPORTANT]
 ====
@@ -774,7 +774,7 @@ Use `gpg --keyserver hkp://pgp.mit.edu --recv-keys nnnnnnnn` to confirm that the
 
 [NOTE]
 ====
-Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See xref:../cgcom/cgcom.adoc#_cgcom_key-generation[Key Generation] for more details.
+Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See xref:support:cgcom:cgcom.adoc#_cgcom_key-generation[Key Generation] for more details.
 ====
 
 
@@ -911,7 +911,7 @@ Remember to update:
 * the release candidate number (`RC1` or whatever)
 * the `NEXUSREPONUM` to the repository id as provided by Nexus earlier (`10xx` or whatever)
 
-Note that the email also references the procedure for other committers to xref:../cgcom/cgcom.adoc#_cgcom_verifying-releases[verify the release].
+Note that the email also references the procedure for other committers to xref:support:cgcom:cgcom.adoc#_cgcom_verifying-releases[verify the release].
 
 
 

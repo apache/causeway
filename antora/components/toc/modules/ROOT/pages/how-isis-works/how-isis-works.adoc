@@ -12,6 +12,6 @@ video::ludOLyi6VyY[youtube,width="840px",height="630px"]
 
 [NOTE]
 ====
-Note that this screencast shows an earlier version of the xref:../../guides/ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screencast shows an earlier version of the xref:ug:vw:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 

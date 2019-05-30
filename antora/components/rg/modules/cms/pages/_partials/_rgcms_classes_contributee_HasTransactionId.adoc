@@ -42,9 +42,9 @@ public interface RepresentsInteractionMemberExecution extends HasTransactionId {
 }
 ----
 
-Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:../../rgcms/rgcms.adoc#_rgcms_schema-ixn[`InteractionDto`]) that has at least one member execution (cf xref:rg:cms:rgcms.adoc#__rgcms_schema-ixn_memberExecutionDto[`memberExecutionDto`]).
+Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:rg:cms:rgcms.adoc#schema-ixn[`InteractionDto`]) that has at least one member execution (cf xref:rg:cms:rgcms.adoc#schema-ixn_memberExecutionDto[`memberExecutionDto`]).
 
-If the interaction (almost certainly an action) calls other actions by way of xref:../../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`]), then there may be several member executions, each with a unique sequence number, within the same transaction Id.
+If the interaction (almost certainly an action) calls other actions by way of xref:rg:svc:rgsvc.adoc#WrapperFactory[`WrapperFactory`]), then there may be several member executions, each with a unique sequence number, within the same transaction Id.
 
 The purpose of this interface is to allow mixins to be defined, though the framework itself defines none.
 

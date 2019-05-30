@@ -7,6 +7,6 @@ include::_attributes.adoc[]
 This chapter explains the main APIs to extend or alter the programming conventions that Apache Isis understands to
 build up its metamodel.
 
-include::_ugbtb_programming-model_custom-validator.adoc[leveloffset=+1]
-include::_ugbtb_programming-model_finetuning.adoc[leveloffset=+1]
+include::partial$_ugbtb_programming-model_custom-validator.adoc[leveloffset=+1]
+include::partial$_ugbtb_programming-model_finetuning.adoc[leveloffset=+1]
 

@@ -124,7 +124,7 @@ In such cases, exposing domain entities over xref:ug:vro:ugvro.adoc#[RestfulObje
 
 To support this use case, a view model can be defined such that it can act as a DTO.
 This is done by annotating the class using JAXB annotations; this allows the consumer to obtain the DTO in XML format along with a corresponding XSD schema describing the structure of that XML.
-A discussion of how that might be done using an ESB such as link:http://camel.apache.org[Apache Camel(TM)] follows xref:../ugbtb/ugbtb.adoc#__ugfun_building-blocks_view-models_dtos_consumers[below].
+A discussion of how that might be done using an ESB such as link:http://camel.apache.org[Apache Camel(TM)] follows xref:ug:btb:ugbtb.adoc#__ugfun_building-blocks_view-models_dtos_consumers[below].
 
 In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:ug:vw:ugvw.adoc#[Wicket viewer] just like any other.
 In fact (as the xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.

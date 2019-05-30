@@ -6,8 +6,8 @@ include::_attributes.adoc[]
 Isis Core provides a number of unit test helpers for you to use (if you wish) to unit test your domain objects.
 
 
-include::_ugtst_unit-test-support_contract-tests.adoc[leveloffset=+1]
-include::_ugtst_unit-test-support_jmock-extensions.adoc[leveloffset=+1]
-include::_ugtst_unit-test-support_soap-fake-server-junit-rule.adoc[leveloffset=+1]
-include::_ugtst_unit-test-support_maven-configuration.adoc[leveloffset=+1]
+include::partial$_ugtst_unit-test-support_contract-tests.adoc[leveloffset=+1]
+include::partial$_ugtst_unit-test-support_jmock-extensions.adoc[leveloffset=+1]
+include::partial$_ugtst_unit-test-support_soap-fake-server-junit-rule.adoc[leveloffset=+1]
+include::partial$_ugtst_unit-test-support_maven-configuration.adoc[leveloffset=+1]
 

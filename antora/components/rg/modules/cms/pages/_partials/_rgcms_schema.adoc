@@ -26,8 +26,8 @@ corresponding applib objects (`Command`, `Interaction.Execution` and `PublishedO
 
 The sections below discuss these schemas in more detail.
 
-include::_rgcms_schema-mml.adoc[leveloffset=+1]
-include::_rgcms_schema-cmd.adoc[leveloffset=+1]
-include::_rgcms_schema-ixn.adoc[leveloffset=+1]
-include::_rgcms_schema-chg.adoc[leveloffset=+1]
-include::_rgcms_schema-common.adoc[leveloffset=+1]
+include::partial$_rgcms_schema-mml.adoc[leveloffset=+1]
+include::partial$_rgcms_schema-cmd.adoc[leveloffset=+1]
+include::partial$_rgcms_schema-ixn.adoc[leveloffset=+1]
+include::partial$_rgcms_schema-chg.adoc[leveloffset=+1]
+include::partial$_rgcms_schema-common.adoc[leveloffset=+1]

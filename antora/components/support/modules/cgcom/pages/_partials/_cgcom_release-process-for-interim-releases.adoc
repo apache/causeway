@@ -10,12 +10,12 @@
 The intent of an "interim" release is to allow a developer team to release their application based on a `-SNAPSHOT` version of the framework.
 Since `-SNAPSHOT` changes on a day-to-day basis, the idea is to tag a particular revision and to release this, thereby providing stability/traceability for the application being developed.
 
-Whereas xref:../cgcom/cgcom.adoc#\_cgcom_cutting-a-release.adoc[formal release]s and xref:../cgcom/cgcom.adoc#\_cgcom_release-process-for-snapshots.adoc[snapshot release]s are public (released through the Maven repository maintained by Apache Software Foundation), interim releases are non-public and rely on infrastructure provided by a developer team.
-The tagged release resides __not__ in the xref:../../downloads.adoc#\__downloads_source_code[official Apache Isis git repository], but instead in a fork/clone maintained by the developer team.
+Whereas xref:support:cgcom:cgcom.adoc#\_cgcom_cutting-a-release.adoc[formal release]s and xref:support:cgcom:cgcom.adoc#\_cgcom_release-process-for-snapshots.adoc[snapshot release]s are public (released through the Maven repository maintained by Apache Software Foundation), interim releases are non-public and rely on infrastructure provided by a developer team.
+The tagged release resides __not__ in the xref:toc:ROOT:downloads.adoc#\__downloads_source_code[official Apache Isis git repository], but instead in a fork/clone maintained by the developer team.
 
 [NOTE]
 ====
-The procedure developed here was put together for the team working on the xref:../../pages/powered-by/powered-by.adoc#_powered-by_estatio[Estatio app], which maintains its own link:https://github.com/incodehq/isis[fork on github] and uses link:https://www.cloudbees.com/[CloudBees] as a Jenkins build server/private Maven repo.
+The procedure developed here was put together for the team working on the xref:toc:ROOT:powered-by/powered-by.adoc#_powered-by_estatio[Estatio app], which maintains its own link:https://github.com/incodehq/isis[fork on github] and uses link:https://www.cloudbees.com/[CloudBees] as a Jenkins build server/private Maven repo.
 ====
 
 

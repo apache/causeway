@@ -54,7 +54,7 @@ In the (non-ASF) link:http://platform.incode.org[Incode Platform^] the gmap3 wic
 
 
 
-include::_ugfun_core-concepts_philosophy_naked-objects-pattern_object-interface-mapping.adoc[leveloffset=+1]
+include::partial$_ugfun_core-concepts_philosophy_naked-objects-pattern_object-interface-mapping.adoc[leveloffset=+1]
 
 
 

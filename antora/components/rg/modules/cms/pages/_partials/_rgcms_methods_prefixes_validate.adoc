@@ -10,7 +10,7 @@ It allows the proposed new value for a property to be rejected, or the proposed 
 
 
 The reason for vetoing a modification/invocation is normally returned as a string.
-However, Apache Isis' xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that reasons can be internationalized if required.
+However, Apache Isis' xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[i18n support] extends this so that reasons can be internationalized if required.
 
 
 

@@ -167,18 +167,18 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 ====
 
 
-include::_rgant-Property_command.adoc[leveloffset=+1]
-include::_rgant-Property_domainEvent.adoc[leveloffset=+1]
-include::_rgant-Property_editing.adoc[leveloffset=+1]
-include::_rgant-Property_fileAccept.adoc[leveloffset=+1]
-include::_rgant-Property_hidden.adoc[leveloffset=+1]
-include::_rgant-Property_maxLength.adoc[leveloffset=+1]
-include::_rgant-Property_mustSatisfy.adoc[leveloffset=+1]
-include::_rgant-Property_notPersisted.adoc[leveloffset=+1]
-include::_rgant-Property_optionality.adoc[leveloffset=+1]
-include::_rgant-Property_projecting.adoc[leveloffset=+1]
-include::_rgant-Property_publishing.adoc[leveloffset=+1]
-include::_rgant-Property_regexPattern.adoc[leveloffset=+1]
+include::partial$_rgant-Property_command.adoc[leveloffset=+1]
+include::partial$_rgant-Property_domainEvent.adoc[leveloffset=+1]
+include::partial$_rgant-Property_editing.adoc[leveloffset=+1]
+include::partial$_rgant-Property_fileAccept.adoc[leveloffset=+1]
+include::partial$_rgant-Property_hidden.adoc[leveloffset=+1]
+include::partial$_rgant-Property_maxLength.adoc[leveloffset=+1]
+include::partial$_rgant-Property_mustSatisfy.adoc[leveloffset=+1]
+include::partial$_rgant-Property_notPersisted.adoc[leveloffset=+1]
+include::partial$_rgant-Property_optionality.adoc[leveloffset=+1]
+include::partial$_rgant-Property_projecting.adoc[leveloffset=+1]
+include::partial$_rgant-Property_publishing.adoc[leveloffset=+1]
+include::partial$_rgant-Property_regexPattern.adoc[leveloffset=+1]
 
 
 

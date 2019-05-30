@@ -8,5 +8,5 @@ include::_attributes.adoc[]
 
 
 Only Apache Isis committers can publish to link:http://isis.apache.org[isis.apache.org].
-See the xref:../cgcom/cgcom.adoc#_cgcom_asciidoc-publish-procedure[committers' guide] for further details.
+See the xref:support:cgcom:cgcom.adoc#_cgcom_asciidoc-publish-procedure[committers' guide] for further details.
 

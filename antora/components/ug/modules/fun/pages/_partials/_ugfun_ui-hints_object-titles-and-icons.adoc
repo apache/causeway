@@ -98,7 +98,7 @@ public class Author extends Customer {
 }
 ----
 
-A variation on this approach also supports localized names; see xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[beyond-the-basics] guide for further details.
+A variation on this approach also supports localized names; see xref:ug:btb:ugbtb.adoc#_ugbtb_i18n[beyond-the-basics] guide for further details.
 
 
 === Using a UI subscriber

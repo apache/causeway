@@ -404,7 +404,7 @@ Metamodel validation is only done if full introspection is configured, see the `
 |`FQCN`
 |Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
 
-See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] to learn more.
+See xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] to learn more.
 
 |`isis.reflector.validator.` +
 `actionCollection` +
@@ -608,27 +608,27 @@ See xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_action-icons-and-css[UI hints] for mo
 |This property is now IGNORED.
 
 It was previously used to customize the programming model, this should now be done using `facets.exclude` and `facets.include`.
-See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+See xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.facets.` +
 `exclude`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
 
-See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+See xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.facets.` +
 `include`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
-See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+See xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.` +
 `layoutMetadataReaders`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout]s. +
 
-See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
+See xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
 
 
 

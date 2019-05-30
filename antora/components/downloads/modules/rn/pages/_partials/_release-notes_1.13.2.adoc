@@ -1,4 +1,3 @@
-[[_release-notes_1.13.2]]
 = 1.13.2
 
 This is a maintenance release with a number of minor improvements and bug fixes.

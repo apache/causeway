@@ -11,13 +11,13 @@ These range from their title (so an end-user can distinguish one object from ano
 
 // tag::inclusions[]
 
-include::_ugfun_ui-hints_layout.adoc[leveloffset=+1,lines=3..-1]
+include::partial$_ugfun_ui-hints_layout.adoc[leveloffset=+1,lines=3..-1]
 
-include::_ugfun_ui-hints_object-titles-and-icons.adoc[leveloffset=+1,lines=3..-1]
-include::_ugfun_ui-hints_action-icons-and-css.adoc[leveloffset=+1,lines=3..-1]
+include::partial$_ugfun_ui-hints_object-titles-and-icons.adoc[leveloffset=+1,lines=3..-1]
+include::partial$_ugfun_ui-hints_action-icons-and-css.adoc[leveloffset=+1,lines=3..-1]
 
-include::_ugfun_ui-hints_names-and-descriptions.adoc[leveloffset=+1,lines=3..-1]
+include::partial$_ugfun_ui-hints_names-and-descriptions.adoc[leveloffset=+1,lines=3..-1]
 
-include::_ugfun_ui-hints_eager-rendering.adoc[leveloffset=+1,lines=3..-1]
+include::partial$_ugfun_ui-hints_eager-rendering.adoc[leveloffset=+1,lines=3..-1]
 
 // end::inclusions[]

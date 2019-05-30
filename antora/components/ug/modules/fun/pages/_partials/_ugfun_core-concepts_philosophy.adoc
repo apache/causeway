@@ -5,17 +5,17 @@ include::_attributes.adoc[]
 
 This section describes some of the core ideas and architectural patterns upon which Apache Isis builds.
 
-include::_ugfun_core-concepts_philosophy_domain-driven-design.adoc[leveloffset=+1]
+include::partial$_ugfun_core-concepts_philosophy_domain-driven-design.adoc[leveloffset=+1]
 
-include::_ugfun_core-concepts_philosophy_naked-objects-pattern.adoc[leveloffset=+1]
+include::partial$_ugfun_core-concepts_philosophy_naked-objects-pattern.adoc[leveloffset=+1]
 
-include::_ugfun_core-concepts_philosophy_hexagonal-architecture.adoc[leveloffset=+1]
+include::partial$_ugfun_core-concepts_philosophy_hexagonal-architecture.adoc[leveloffset=+1]
 
-include::_ugfun_core-concepts_philosophy_aop.adoc[leveloffset=+1]
+include::partial$_ugfun_core-concepts_philosophy_aop.adoc[leveloffset=+1]
 
 // FIXME
-// include::_ugfun_core-concepts_philosophy_dci.adoc[leveloffset=+1]
+// include::partial$_ugfun_core-concepts_philosophy_dci.adoc[leveloffset=+1]
 
-include::_ugfun_core-concepts_philosophy_how-eases-ddd.adoc[leveloffset=+1]
+include::partial$_ugfun_core-concepts_philosophy_how-eases-ddd.adoc[leveloffset=+1]
 
 

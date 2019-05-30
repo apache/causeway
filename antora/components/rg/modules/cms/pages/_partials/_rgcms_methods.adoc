@@ -10,7 +10,7 @@ The Apache Isis metamodel is built up from declaratively (ie, xref:rg:ant:rgant.
 This chapter documents the supporting methods and the reserved methods.  It also documents (separately) the reserved methods that act as callback hooks into the persistence lifecycle of domain entities.
 
 
-include::_rgcms_methods_prefixes.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved.adoc[leveloffset=+1]
-include::_rgcms_methods_lifecycle.adoc[leveloffset=+1]
+include::partial$_rgcms_methods_prefixes.adoc[leveloffset=+1]
+include::partial$_rgcms_methods_reserved.adoc[leveloffset=+1]
+include::partial$_rgcms_methods_lifecycle.adoc[leveloffset=+1]
 

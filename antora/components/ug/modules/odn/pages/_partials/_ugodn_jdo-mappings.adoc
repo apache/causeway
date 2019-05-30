@@ -6,6 +6,6 @@ include::_attributes.adoc[]
 
 
 
-include::_ugodn_jdo-mappings_1-to-m-bidirectional-relationships.adoc[leveloffset=+1]
-include::_ugodn_jdo-mappings_mandatory-properties-in-subtypes.adoc[leveloffset=+1]
-include::_ugodn_jdo-mappings_mapping-to-a-view.adoc[leveloffset=+1]
+include::partial$_ugodn_jdo-mappings_1-to-m-bidirectional-relationships.adoc[leveloffset=+1]
+include::partial$_ugodn_jdo-mappings_mandatory-properties-in-subtypes.adoc[leveloffset=+1]
+include::partial$_ugodn_jdo-mappings_mapping-to-a-view.adoc[leveloffset=+1]

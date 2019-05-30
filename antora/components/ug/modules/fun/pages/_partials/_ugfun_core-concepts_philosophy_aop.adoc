@@ -47,7 +47,7 @@ Again, this is all transparent to the user.
 
 Apache Isis also has an internal event bus (you can switch between an underlying implementation of Gauva or Axon).
 A domain event is fired whenever an object is interacted with, and this allows any subscribers to influence the operation (or even veto it).
-This is a key mechanism in ensuring that Apache Isis applications are maintainable, and we discuss it in depth in the section on  xref:../ugbtb/ugbtb.adoc#_ugbtb_decoupling[Decoupling].
+This is a key mechanism in ensuring that Apache Isis applications are maintainable, and we discuss it in depth in the section on  xref:ug:btb:ugbtb.adoc#_ugbtb_decoupling[Decoupling].
 But fundamentally its relying on this AOP concept of interceptors.
 
 Finally, Isis also a feature that is akin to AOP mix-ins.

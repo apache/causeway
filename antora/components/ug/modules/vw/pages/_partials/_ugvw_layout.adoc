@@ -11,8 +11,8 @@ This chapter describes how this is done both for domain objects using either ann
 The chapter also describes how to customising which columns of associated objects appear in tables.
 The layout of application menu items is described in a xref:ugvw.adoc#_ugvw_menubars-layout[separate chapter].
 
-include::_ugvw_layout_annotation-based.adoc[leveloffset=+1]
-include::_ugvw_layout_file-based.adoc[leveloffset=+1]
-include::_ugvw_layout_table-columns.adoc[leveloffset=+1]
+include::partial$_ugvw_layout_annotation-based.adoc[leveloffset=+1]
+include::partial$_ugvw_layout_file-based.adoc[leveloffset=+1]
+include::partial$_ugvw_layout_table-columns.adoc[leveloffset=+1]
 
 

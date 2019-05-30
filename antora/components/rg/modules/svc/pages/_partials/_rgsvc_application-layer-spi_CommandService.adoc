@@ -77,7 +77,7 @@ xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`BackgroundCo
 
 All of these can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
-If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug:btb:ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 
 
@@ -86,7 +86,7 @@ If contributions are not required in the UI, these can be suppressed either usin
 The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`CommandService`), and also provides a number of related domain services (`CommandJdoRepository` and `CommandServiceJdoContributions`).
 This module also provides service implementations of the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`BackgroundCommandService`].
 
-If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug:btb:ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
 
 
 

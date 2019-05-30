@@ -16,8 +16,8 @@ The first two of these options are discussed in the xref:ug:vw:ugvw.adoc#[Wicket
 
 The chapter wraps up with a technique for prototyping, allowing user/passwords to be specified as query arguments.
 
-include::_ugvw_extending_custom-bootstrap-theme.adoc[leveloffset=+1]
-include::_ugvw_extending_replacing-page-elements.adoc[leveloffset=+1]
-include::_ugvw_extending_custom-pages.adoc[leveloffset=+1]
-include::_ugvw_extending_login-via-query-args-prototyping.adoc[leveloffset=+1]
+include::partial$_ugvw_extending_custom-bootstrap-theme.adoc[leveloffset=+1]
+include::partial$_ugvw_extending_replacing-page-elements.adoc[leveloffset=+1]
+include::partial$_ugvw_extending_custom-pages.adoc[leveloffset=+1]
+include::partial$_ugvw_extending_login-via-query-args-prototyping.adoc[leveloffset=+1]
 

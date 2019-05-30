@@ -68,9 +68,9 @@ Note that there is (currently) no support for specifying UI hints for domain ser
 
 
 
-include::_rgant-DomainServiceLayout_menuBar.adoc[leveloffset=+1]
-include::_rgant-DomainServiceLayout_menuOrder.adoc[leveloffset=+1]
-include::_rgant-DomainServiceLayout_named.adoc[leveloffset=+1]
+include::partial$_rgant-DomainServiceLayout_menuBar.adoc[leveloffset=+1]
+include::partial$_rgant-DomainServiceLayout_menuOrder.adoc[leveloffset=+1]
+include::partial$_rgant-DomainServiceLayout_named.adoc[leveloffset=+1]
 
 
 

@@ -76,12 +76,12 @@ All the business rules are on a Domain fully implemented in Apache Isis.
 The GRC application require a more sophisticating and customizable viewer than is provided "out-of-the-box" by Apache Isis.
 We chose http://wavemaker.com[Wavemaker] for implementing the viewer, also leveraging and integrating with various Wavemaker services.
 
-Even so, while GRC does (as the figures above show) include custom views, the majority of the views exposed by GRC are automatically generated from the underlying domain entities; the GRC viewer is a proprietary version of Isis' own xref:../../guides/ugvw/ugvw.adoc#[Wicket viewer].
+Even so, while GRC does (as the figures above show) include custom views, the majority of the views exposed by GRC are automatically generated from the underlying domain entities; the GRC viewer is a proprietary version of Isis' own xref:ug:vw:ugvw.adoc#[Wicket viewer].
 At the last count more than 400 domain entities, across 6 different Bounded Contexts, are surfaced in the UI in this this way.
 
-At the Domain level, we also extensively use the xref:../../guides/ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[domain events] functionality available in Apache Isis, along with many of the (non-ASF) link:http://platform.incode.org[Incode Platform^] (such as audit, security and excel modules).
+At the Domain level, we also extensively use the xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_events_domain-events[domain events] functionality available in Apache Isis, along with many of the (non-ASF) link:http://platform.incode.org[Incode Platform^] (such as audit, security and excel modules).
 
-The GRC platform currently has more than 5600 automated tests, about 2000 being xref:../../guides/ugtst/ugtst.adoc#_ugtst_bdd-spec-support[BDD tests] and 3600 xref:../../guides/ugtst/ugtst.adoc#_ugtst_integ-test-support[integration tests], all leveraging Apache Isis' extensive testing capabilities.
+The GRC platform currently has more than 5600 automated tests, about 2000 being xref:ug:tst:ugtst.adoc#_ugtst_bdd-spec-support[BDD tests] and 3600 xref:ug:tst:ugtst.adoc#_ugtst_integ-test-support[integration tests], all leveraging Apache Isis' extensive testing capabilities.
 
 
 == Summing up

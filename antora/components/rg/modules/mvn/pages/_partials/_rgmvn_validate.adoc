@@ -159,7 +159,7 @@ If one were to attempt to run the application, the same error would appear in th
 
 == Custom validation rules
 
-It is also possible to customize the validation, explained xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_custom-validator[here].
+It is also possible to customize the validation, explained xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model_custom-validator[here].
 For example, you could enforce project-specific conventions by implementing a custom `MetaModelValidator`, and registering using a configuration property.
 
 To support this using `AppManifest`s, override its `getConfigurationProperties()` method:

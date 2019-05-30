@@ -69,10 +69,10 @@ Impl'n (g: a:)
 
 
 
-include::_rgcms_classes_super_AbstractService.adoc[leveloffset=+1]
-include::_rgcms_classes_super_AbstractSubscriber.adoc[leveloffset=+1]
-include::_rgcms_classes_super_AbstractViewModel.adoc[leveloffset=+1]
-include::_rgcms_classes_super_FixtureScript.adoc[leveloffset=+1]
-include::_rgcms_classes_super_FixtureScripts.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_super_AbstractService.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_super_AbstractSubscriber.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_super_AbstractViewModel.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_super_FixtureScript.adoc[leveloffset=+1]
+include::partial$_rgcms_classes_super_FixtureScripts.adoc[leveloffset=+1]
 
 

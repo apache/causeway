@@ -6,6 +6,6 @@ include::_attributes.adoc[]
 
 
 
-include::_rgcms_methods.adoc[leveloffset=+1]
-include::_rgcms_classes.adoc[leveloffset=+1]
-include::_rgcms_schema.adoc[leveloffset=+1]
+include::partial$_rgcms_methods.adoc[leveloffset=+1]
+include::partial$_rgcms_classes.adoc[leveloffset=+1]
+include::partial$_rgcms_schema.adoc[leveloffset=+1]

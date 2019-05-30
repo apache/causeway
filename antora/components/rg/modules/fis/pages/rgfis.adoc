@@ -8,6 +8,6 @@ include::_attributes.adoc[]
 
 
 
-include::_rgfis_presentation-layer.adoc[leveloffset=+1]
-include::_rgfis_application-layer.adoc[leveloffset=+1]
-include::_rgfis_persistence-layer.adoc[leveloffset=+1]
+include::partial$_rgfis_presentation-layer.adoc[leveloffset=+1]
+include::partial$_rgfis_application-layer.adoc[leveloffset=+1]
+include::partial$_rgfis_persistence-layer.adoc[leveloffset=+1]
