@@ -9,15 +9,15 @@ The Shiro security mechanism is an integration wih Apache Shiro that implements 
 
 [TIP]
 ====
-Both the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] and xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes are pre-configured to use Apache Shiro, so much of what follows may well have been set up already.
+Both the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] and xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes are pre-configured to use Apache Shiro, so much of what follows may well have been set up already.
 ====
 
 
 == Telling Apache Isis to use Shiro
 
-To tell Apache Isis to use Shiro when using an xref:../rgcms/rgcms.adoc#__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract[`AppManifestAbstract.BUILDER`], simply specify the "authMechanism" as "shiro".
+To tell Apache Isis to use Shiro when using an xref:rg:cms:rgcms.adoc#__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract[`AppManifestAbstract.BUILDER`], simply specify the "authMechanism" as "shiro".
 
-For example, the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld archetype] bootstraps using:
+For example, the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld archetype] bootstraps using:
 
 [source,java]
 ----
@@ -49,7 +49,7 @@ This can be configured in `authentication_shiro.properties` file:
 isis.authentication.shiro.autoLogoutIfAlreadyAuthenticated=false
 ----
 
-This configuration property only comes into effect for the xref:../ugvro/ugvro.adoc#[Restful Objects viewer]; if set then the Shiro subject - if found to be still authenticated - will be logged out anyway and then re-authenticated.
+This configuration property only comes into effect for the xref:ug:vro:ugvro.adoc#[Restful Objects viewer]; if set then the Shiro subject - if found to be still authenticated - will be logged out anyway and then re-authenticated.
 
 [WARNING]
 ====

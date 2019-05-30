@@ -84,7 +84,7 @@ Horizontally arranged text links separated by the 'greater than' symbol (>) are 
 == Related functionality
 
 
-The navigable tree-structure, as provided by the 'Where am I' feature, is declared at compile-time (predefined by the programmer), whereas related features (xref:../ugvw/ugvw.adoc#_ugvw_features_recent-pages[Recent Pages] and xref:../ugvw/ugvw.adoc#_ugvw_features_bookmarked-pages[Bookmarked Pages]) are populated at runtime only after user interaction.
+The navigable tree-structure, as provided by the 'Where am I' feature, is declared at compile-time (predefined by the programmer), whereas related features (xref:ug:vw:ugvw.adoc#_ugvw_features_recent-pages[Recent Pages] and xref:ug:vw:ugvw.adoc#_ugvw_features_bookmarked-pages[Bookmarked Pages]) are populated at runtime only after user interaction.
 
 
 == Configuration

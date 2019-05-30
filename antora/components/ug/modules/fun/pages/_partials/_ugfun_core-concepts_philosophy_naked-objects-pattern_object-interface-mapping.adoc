@@ -10,5 +10,5 @@ We sometimes use this idea to explain naked objects to a bunch of developers.
 Just as an ORM (such as link:http://datanucleus.org[DataNucleus] or link:http://hibernate.org[Hibernate]) maps domain entities to a database, you can think of the naked objects pattern as representing the concept of mapping domain objects to a user interface.
 
 This is the way that the link:http://metawidget.org/[MetaWidget] team, in particular Richard Kennard, the primary contributor, likes to describe their tool.
-MetaWidget has a number of ideas in common with Apache Isis (we compare Apache Isis' with MetaWidget xref:../ugfun/ugfun.adoc#_ugfun_core-concepts_principles_apache-isis-vs_metawidget[here]), in particular the runtime generation of a UI for domain objects.
+MetaWidget has a number of ideas in common with Apache Isis (we compare Apache Isis' with MetaWidget xref:ug:fun:ugfun.adoc#_ugfun_core-concepts_principles_apache-isis-vs_metawidget[here]), in particular the runtime generation of a UI for domain objects.
 You can hear more from Kennard and others on this http://devchat.tv/js-jabber/150-jsj-oims[Javascript Jabber podcast].

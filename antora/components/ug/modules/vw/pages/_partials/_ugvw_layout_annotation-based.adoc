@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-Metadata providing UI hints can be specified either using annotations, or using a xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[`layout.xml`] file.
+Metadata providing UI hints can be specified either using annotations, or using a xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[`layout.xml`] file.
 
 In most cases you will probably want to use the file-based approach: changes to file layouts are picked up dynamically, and using a file also allows tabs and tab groups to be specified: this is not supported using annotations.
 
@@ -14,21 +14,21 @@ This section explains how.
 
 == `@MemberOrder`
 
-The xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]  annotation is used to specify the relative order of domain class properties, collections and actions.
+The xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]  annotation is used to specify the relative order of domain class properties, collections and actions.
 
-The annotation defines two attributes, xref:../rgant/rgant.adoc#_rgant-MemberOrder_name[`name()`] and xref:../rgant/rgant.adoc#_rgant-MemberOrder_sequence[`sequence()`].  Their usage depends on the member type:
+The annotation defines two attributes, xref:rg:ant:rgant.adoc#_rgant-MemberOrder_name[`name()`] and xref:rg:ant:rgant.adoc#_rgant-MemberOrder_sequence[`sequence()`].  Their usage depends on the member type:
 
 * for properties, the `name()` is used to group properties together into a member group (also called a property group
 or a fieldset.  The `sequence()` then orders properties within these groups. If no `name()` is specified then the
 property is placed in a fallback "General" group, called "General". +
 +
-The name of these member groups/fieldsets are then referenced by xref:../rgant/rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`].
+The name of these member groups/fieldsets are then referenced by xref:rg:ant:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`].
 
 * for collections, the `name()` attribute is (currently) unused.  The `sequence()` orders collections relative to one another
 
 * for actions, the `name()` attribute associates an action with either a property or with a collection. +
 
-** If the `name()` attribute matches a property name, then the action's button is rendered close to the property, according to xref:../rgant/rgant.adoc#_rgant-ActionLayout_position[`@ActionLayout#position()`] attribute. +
+** If the `name()` attribute matches a property name, then the action's button is rendered close to the property, according to xref:rg:ant:rgant.adoc#_rgant-ActionLayout_position[`@ActionLayout#position()`] attribute. +
 
 ** On the other hand if the `name() attribute matches a collection name, then the action's button is rendered on the collection's header.
 
@@ -63,7 +63,7 @@ public class ToDoItem {
 
 This defines three property (or member) groups, "General", "Detail" and "Misc"; "General" is the default if no `name` attribute is specified. Properties in the same member group are rendered together, as a fieldset.
 
-In addition, actions can optionally be associated (rendered close to) either properties or actions. This is done by overloading the ``@MemberOrder``'s xref:../rgant/rgant.adoc#_rgant-MemberOrder_name[`name()`] attribute, holding the value of the property or collection.
+In addition, actions can optionally be associated (rendered close to) either properties or actions. This is done by overloading the ``@MemberOrder``'s xref:rg:ant:rgant.adoc#_rgant-MemberOrder_name[`name()`] attribute, holding the value of the property or collection.
 
 For example:
 
@@ -90,7 +90,7 @@ public class ToDoItem {
 will associate the `completed()` and `notYetCompleted()` actions with the `complete` property, and will associate the `add()` and `remove()` actions with the `dependencies` collection.
 
 
-The value of xref:../rgant/rgant.adoc#_rgant-MemberOrder_sequence[`sequence()`] is a string.  The simplest convention (as shown in the example above) is to use numbers -- 1, 2, 3 -- though it is a better idea to leave gaps in the numbers -- 10, 20, 30 perhaps -- such that a new member may be added without having to edit existing numbers.
+The value of xref:rg:ant:rgant.adoc#_rgant-MemberOrder_sequence[`sequence()`] is a string.  The simplest convention (as shown in the example above) is to use numbers -- 1, 2, 3 -- though it is a better idea to leave gaps in the numbers -- 10, 20, 30 perhaps -- such that a new member may be added without having to edit existing numbers.
 
 Even better is to adopt the 'dewey-decimal' notation -- 1, 1.1, 1.2, 2, 3, 5.1.1, 5.2.2, 5.2, 5.3 -- which allows for an indefinite amount of future insertion.  It also allows subclasses to insert their class members as required.
 
@@ -99,17 +99,17 @@ Even better is to adopt the 'dewey-decimal' notation -- 1, 1.1, 1.2, 2, 3, 5.1.1
 
 == `@MemberGroupLayout`
 
-The xref:../rgant/rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`] annotation specifies the relative positioning of property groups/fieldsets as being either in a left column, a middle column or in a right column.  The annotation also specifies the relative width of the columns.
+The xref:rg:ant:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`] annotation specifies the relative positioning of property groups/fieldsets as being either in a left column, a middle column or in a right column.  The annotation also specifies the relative width of the columns.
 
 The property groups/fieldsets in this case are those that are inferred from the `@MemberOrder#name()` attribute.
 
 [TIP]
 ====
-It is also possible to combine `@MemberOrder` with a xref:../ugvw/ugvw.adoc#_ugvw_layout_xml[file-based layout].
+It is also possible to combine `@MemberOrder` with a xref:ug:vw:ugvw.adoc#_ugvw_layout_xml[file-based layout].
 The layout file defines only the regions of a grid structure (fieldsets/columns etc), but does __not__ specify the properties/collections/actions within those grid regions.
 The `@MemberOrder` annotation in effect "binds" the properties or collections to those regions of the grid.
 
-When file-based layouts are used this way, the xref:../rgant/rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`] annotation is essentially ignored, but the metadata from the xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotation (and the other layout annotations, xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] and xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]) are all still honoured.
+When file-based layouts are used this way, the xref:rg:ant:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`] annotation is essentially ignored, but the metadata from the xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotation (and the other layout annotations, xref:rg:ant:rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:rg:ant:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] and xref:rg:ant:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]) are all still honoured.
 ====
 
 For example:
@@ -175,8 +175,8 @@ image::reference-layout/4-0-8-0.png[width="720px",link="{_imagesdir}reference-la
 
 Layout semantics can also be specified using the various `XxxLayout` annotations:
 
-* for domain services: xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout[`@DomainServiceLayout`]
-* for domain objects: xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout[`@ViewModelLayout`]
-* for actions: xref:../rgant/rgant.adoc#_rgant-ActionLayout, [`@ActionLayout`] and xref:../rgant/rgant.adoc#_rgant-ParameterLayout[`@ParameterLayout`]
-* for properties: xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`]
-* for collections: xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]
+* for domain services: xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout[`@DomainServiceLayout`]
+* for domain objects: xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`] and xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout[`@ViewModelLayout`]
+* for actions: xref:rg:ant:rgant.adoc#_rgant-ActionLayout, [`@ActionLayout`] and xref:rg:ant:rgant.adoc#_rgant-ParameterLayout[`@ParameterLayout`]
+* for properties: xref:rg:ant:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`]
+* for collections: xref:rg:ant:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]

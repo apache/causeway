@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 The `editing()` attribute determines whether a domain object's properties and collections are not editable (are read-only).
 
-The default is `AS_CONFIGURED`, meaning that the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.objects.editing` is used to determine the whether the object is modifiable:
+The default is `AS_CONFIGURED`, meaning that the xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.objects.editing` is used to determine the whether the object is modifiable:
 
 * `true` +
 +

@@ -12,7 +12,7 @@ Referencing those via their message id inside a .po file didn't work either.
 Can this be done?_
 
 
-Yes, it _is_ possible to internationalize both the Wicket viewer's labels as well as the regular translations of the domain object metadata using the `.po` translation files as supported by the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`].
+Yes, it _is_ possible to internationalize both the Wicket viewer's labels as well as the regular translations of the domain object metadata using the `.po` translation files as supported by the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`].
 
 Full details of the ``msgId``s that must be added to the `translations.po` file can be found in xref:../ugbtb/ugbtb.adoc#__ugbtb_i18n_wicket-viewer[i18n] section of the xref:../ugbtb/ugbtb.adoc#[beyond the basics] guide.
 

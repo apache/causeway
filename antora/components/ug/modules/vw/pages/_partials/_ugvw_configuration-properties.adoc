@@ -476,10 +476,10 @@ Some of the properties below use the prefix `isis.viewers.` (rather than the usu
 `defaultView`
 |`hidden`, `table` +
 (`hidden`)
-|Default for the default view for all (parented) collections if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
+|Default for the default view for all (parented) collections if not explicitly specified using xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]
 
 By default the framework renders (parented) collections as "hidden", ie collapsed.
-These can be overridden on a case-by-case basis using the xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`] or the corresponding `<collectionLayout defaultView="...">` element in the `Xxx.layout.xml` layout file.
+These can be overridden on a case-by-case basis using the xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`] or the corresponding `<collectionLayout defaultView="...">` element in the `Xxx.layout.xml` layout file.
 
 If the majority of collections should be displayed as "table" form, then it is more convenient to specify the default view globally.
 
@@ -501,7 +501,7 @@ If the majority of collections should be displayed as "table" form, then it is m
 `labelPosition`
 |`TOP`, `LEFT` +
 (`LEFT`)
-|Default for label position for all properties if not explicitly specified using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_labelPosition[`@PropertyLayout#labelPosition()`]
+|Default for label position for all properties if not explicitly specified using xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_labelPosition[`@PropertyLayout#labelPosition()`]
 
 
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
@@ -539,7 +539,7 @@ At the time of writing, this means labels are to the left for all datatypes exce
 For actions, `inline_as_if_edit` will suppress the action's button, and instead let the action be invoked as if editing the property.
 The net effect is that being able to "edit" complex properties with multiple parts (eg a date) using a multi-argument editor (this editor, in fact, being the action's argument panel).
 
-The property can be overridden on a property-by-property basis using xref:../rgant/rgant.adoc#_rgant-PropertyLayout_promptStyle[`@Property#promptStyle()`]) or  xref:../rgant/rgant.adoc#_rgant-ActionLayout_promptStyle[`@Action#promptStyle()`]).
+The property can be overridden on a property-by-property basis using xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_promptStyle[`@Property#promptStyle()`]) or  xref:rg:ant:rgant.adoc#_rgant-ActionLayout_promptStyle[`@Action#promptStyle()`]).
 
 Note that `inline_as_if_edit` does not make sense for a configuration property default, and will instead be interpreted as `inline`.
 
@@ -550,7 +550,7 @@ Note that `inline_as_if_edit` does not make sense for a configuration property d
 (`_sidebar_`)
 | Whether an action on a domain object (entity or view model) which prompts with a style of `DIALOG` - as in, `@ActionLayout(promptStyle="DIALOG")` - should be rendered using a sidebar or alternatively in a modal dialog box.
 
-See the discussion on the xref:../ugvw/ugvw.adoc#_ugvw_features_sidebar-vs-modal-dialogs[sidebar vs modal dialogs] feature for further details.
+See the discussion on the xref:ug:vw:ugvw.adoc#_ugvw_features_sidebar-vs-modal-dialogs[sidebar vs modal dialogs] feature for further details.
 
 |`isis.viewer.wicket.` +
 `dialogModeForMenu`
@@ -558,7 +558,7 @@ See the discussion on the xref:../ugvw/ugvw.adoc#_ugvw_features_sidebar-vs-modal
 (`_sidebar_`)
 | Whether an action for a domain service should be rendered using a sidebar or alternatively in a modal dialog box.
 
-See the discussion on the xref:../ugvw/ugvw.adoc#_ugvw_features_sidebar-vs-modal-dialogs[sidebar vs modal dialogs] feature for further details.
+See the discussion on the xref:ug:vw:ugvw.adoc#_ugvw_features_sidebar-vs-modal-dialogs[sidebar vs modal dialogs] feature for further details.
 
 
 
@@ -566,7 +566,7 @@ See the discussion on the xref:../ugvw/ugvw.adoc#_ugvw_features_sidebar-vs-modal
 
 
 Objects whose title is overly long can be cumbersome in titles.
-The Wicket viewer has a xref:../ugvw/ugvw.adoc#_ugvw_features_titles-in-tables[mechanism to automatically shorten] the titles of objects specified using `@Title`.
+The Wicket viewer has a xref:ug:vw:ugvw.adoc#_ugvw_features_titles-in-tables[mechanism to automatically shorten] the titles of objects specified using `@Title`.
 As an alternative/in addition, the viewer can also be configured to simply truncate titles longer than a certain length.
 
 The properties themselves are:
@@ -728,7 +728,7 @@ where the value is the list of themes (from http://bootswatch.com[bootswatch.com
 
 [TIP]
 ====
-You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the xref:../ugvw/ugvw.adoc#_ugvw_extending_custom-bootstrap-theme[Extending] chapter for further details.
+You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the xref:ug:vw:ugvw.adoc#_ugvw_extending_custom-bootstrap-theme[Extending] chapter for further details.
 ====
 
 
@@ -826,7 +826,7 @@ This feature is primarily just to help track any memory leakage issues that migh
 |`isis.viewer.wicket.` +
 `liveReloadUrl`
 | URL
-|Specifies the URL if xref:../dg/dg.adoc#__dg_ide_intellij_advanced_gradle-liveReload[live reload] is set up, eg: +
+|Specifies the URL if xref:support:dg:dg.adoc#__dg_ide_intellij_advanced_gradle-liveReload[live reload] is set up, eg: +
 
 `http://localhost:35729/livereload.js?snipver=1`
 

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-The `ContentNegotiationService` is a plug-in point for the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] so that it can generate representations according to HTTP `Accept` header of the request.  This idea is discussed in section 34.1 of the link:http://restfulobjects.org[Restful Objects spec] v1.0.
+The `ContentNegotiationService` is a plug-in point for the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] so that it can generate representations according to HTTP `Accept` header of the request.  This idea is discussed in section 34.1 of the link:http://restfulobjects.org[Restful Objects spec] v1.0.
 
 The principal motivation is to allow more flexible representations to be generated for REST clients that (perhaps through their use of a certain Javascript library, say) expect, or at least works best with, a certain style of representation.
 
@@ -13,11 +13,11 @@ Another use case is to support "third party" REST clients over which you have no
 
 Instead you need to create some sort of stable facade over your domain entities, one which you will preserve even if the domain entities change.  There are three ways in which you can do this:
 
-* first is to solve the problem at the domain layer by defining a regular Apache Isis xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model].  This is then surfaced over the RO viewer.  +
+* first is to solve the problem at the domain layer by defining a regular Apache Isis xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model].  This is then surfaced over the RO viewer.  +
 +
 If the underlying entities change, then care must be taken to ensure that structure of the view model nevertheless is unchanged.
 
-* a second option is to solve the problem at the persistence layer, but defining a (SQL) view in the database and then xref:../ugodn/ugodn.adoc#_ugodn_jdo-mappings_mapping-to-a-view[mapping this] to a (read-only) entity.  Again this is surfaced by the RO viewer.  +
+* a second option is to solve the problem at the persistence layer, but defining a (SQL) view in the database and then xref:ug:odn:ugodn.adoc#_ugodn_jdo-mappings_mapping-to-a-view[mapping this] to a (read-only) entity.  Again this is surfaced by the RO viewer.  +
 +
 If the underlying tables change (as the result of a change in their corresponding domain entities) then once more the view must be refactored so that it still presents the same structure.
 
@@ -25,7 +25,7 @@ If the underlying tables change (as the result of a change in their correspondin
 +
 The `ContentNegotiationService` is responsible for inspecting the HTTP `Accept` header, and use this to select the correct representation to render.  +
 +
-The Apache Isis framework provides three implementations of `ContentNegotiationService` which inspects different elements of the HTTP `Accept` header.  One of these implementations, `ContentNegotiationServiceXRoDomainType` will further delegate down to the companion xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] service (if configured/available), based on the value of the "x-ro-domain-type" parameter of the header. +
+The Apache Isis framework provides three implementations of `ContentNegotiationService` which inspects different elements of the HTTP `Accept` header.  One of these implementations, `ContentNegotiationServiceXRoDomainType` will further delegate down to the companion xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] service (if configured/available), based on the value of the "x-ro-domain-type" parameter of the header. +
 +
 A typical implementation of `ContentMappingService` will convert the domain object into some sort of DTO (data transfer object) as specified by the "x-ro-domaintype".  If this DTO is annotated with JAXB or Jackson mappings, then the RO viewer (courtesy of the underlying link:http://resteasy.jboss.org/[RestEasy] framework) can serialize these directly. +
 +
@@ -112,7 +112,7 @@ As discussed in the introduction, the framework also provides three implementati
 ** `application/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=...`
 
 
-The value of the `x-ro-domain-type` parameter corresponds to the DTO to be mapped into by the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`].
+The value of the `x-ro-domain-type` parameter corresponds to the DTO to be mapped into by the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`].
 
 If the DTO is annotated with JAXB, then also note that the runtime type must be annotated with the JAXB `javax.xml.bind.annotation.XmlRootElement` so that RestEasy is able to unambiguously serialize it.
 
@@ -132,7 +132,7 @@ This can be useful for generic viewers.
 
 * `ContentNegotiationServiceOrgApacheIsisV1` +
 +
-which returns xref:../ugvro/ugvro.adoc#_ugvro_simplified-representations[simplified representations]
+which returns xref:ug:vro:ugvro.adoc#_ugvro_simplified-representations[simplified representations]
 
 
 
@@ -178,14 +178,14 @@ image::ContentNegotiationService/accept-json.png[width="700px",link="{_imagesdir
 [_rgfis_presentation-layer_ContentNegotiationService_Configuration]]
 == Configuration
 
-The default `ContentNegotiationServiceXRoDomainType` implementation provides a xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] which controls whether a mapped domain object is pretty-printed (formatted, indented) or not:
+The default `ContentNegotiationServiceXRoDomainType` implementation provides a xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[configuration property] which controls whether a mapped domain object is pretty-printed (formatted, indented) or not:
 
 [source,ini]
 ----
 isis.services.ContentNegotiationServiceXRoDomainType.prettyPrint=true
 ----
 
-If the property is not set, then the default depends on the xref:../rgcfg/rgcfg.adoc#_rgcfg_deployment-types[deployment type]; production mode will disable pretty printing, while prototyping mode will enable it.
+If the property is not set, then the default depends on the xref:rg:cfg:rgcfg.adoc#_rgcfg_deployment-types[deployment type]; production mode will disable pretty printing, while prototyping mode will enable it.
 
 
 
@@ -195,12 +195,12 @@ If the property is not set, then the default depends on the xref:../rgcfg/rgcfg.
 
 Apache Isis' default implementations of `ContentNegotiationService` service are automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
-To use an alternative implementation, use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, use xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 
 == Related Services
 
-The default implementation of `ContentNegotiationService` delegates to xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] (if present) to convert domain entities into a stable form (eg DTO).
+The default implementation of `ContentNegotiationService` delegates to xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] (if present) to convert domain entities into a stable form (eg DTO).
 
-The `ContentNegotiationService` is itself called by the (default implementation of) xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_RepresentationService[`RepresentationService`].
+The `ContentNegotiationService` is itself called by the (default implementation of) xref:rg:fis:rgfis.adoc#_rgfis_presentation-layer_RepresentationService[`RepresentationService`].

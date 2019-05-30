@@ -22,7 +22,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_ClockService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_ClockService[`o.a.i.applib.` +
 `services.clock` +
 `ClockService`]
 |Access the current time (and for testing, allow the time to be changed)
@@ -33,7 +33,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_ConfigurationService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_ConfigurationService[`o.a.i.applib.` +
 `services.config` +
 `ConfigurationService`]
 |Access configuration properties (eg from `isis.properties` file)
@@ -44,20 +44,20 @@ It also lists their corresponding implementation, either a default implementatio
 |The ``ConfigurationServiceMenu`` exposes the ``allConfigurationProperties`` action in the user interface. +
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`o.a.i.applib.` +
 `services.eventbus` +
 `EventBusService`]
 |Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain events:
 
-* xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`Action#domainEvent()`]
-* xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`Property#domainEvent()`]
-* xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`Collection#domainEvent()`]
+* xref:rg:ant:rgant.adoc#_rgant-Action_domainEvent[`Action#domainEvent()`]
+* xref:rg:ant:rgant.adoc#_rgant-Property_domainEvent[`Property#domainEvent()`]
+* xref:rg:ant:rgant.adoc#_rgant-Collection_domainEvent[`Collection#domainEvent()`]
 |`EventBusServiceJdo` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`o.a.i.applib.` +
 `services.factory` +
 `FactoryService`]
 |Methods to instantiate and initialize domain objects
@@ -70,7 +70,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`o.a.i.applib.` +
 `services.scratchpad` +
 `Scratchpad`]
 |Request-scoped service for interchanging information between and aggregating over multiple method calls; in particular for use by "bulk" actions (invoking of an action for all elements of a collection)
@@ -82,7 +82,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_UserService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_UserService[`o.a.i.applib.` +
 `services.xactn` +
 `UserService`]
 |Methods to access the currently-logged on user.

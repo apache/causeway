@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-If using the text-based xref:../ugsec/ugsec.adoc#_ugsec_shiro-realm-implementations_ini-realm[`IniRealm`] or xref:../ugsec/ugsec.adoc#_ugsec_shiro-realm-implementations_isis-ldap-realm[Isis' LDAP realm], then note that Shiro also allows the string representation of the permissions to be mapped (resolved) to alternative `Permission` instances.  Apache Isis provides its own `IsisPermission` which introduces the concept of a "veto".
+If using the text-based xref:ug:sec:ugsec.adoc#_ugsec_shiro-realm-implementations_ini-realm[`IniRealm`] or xref:ug:sec:ugsec.adoc#_ugsec_shiro-realm-implementations_isis-ldap-realm[Isis' LDAP realm], then note that Shiro also allows the string representation of the permissions to be mapped (resolved) to alternative `Permission` instances.  Apache Isis provides its own `IsisPermission` which introduces the concept of a "veto".
 
 A vetoing permission is one that prevents access to a feature, rather than grants it.  This is useful in some situations where most users have access to most features, and only a small number of features are particularly sensitive.  The configuration can therefore be set up to grant fairly broad-brush permissions and then veto permission for the sensitive features for those users that do not have access.
 

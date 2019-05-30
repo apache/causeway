@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-This chapter describes the usage of various classes and interfaces that are not otherwise associated with xref:../rgsvc/rgsvc.adoc#[domain services], xref:../ugvw/ugvw.adoc#_ugvw_layout[object layout] or xref:../rgcfg/rgcfg.adoc#_rgcfg[configuration].
+This chapter describes the usage of various classes and interfaces that are not otherwise associated with xref:rg:svc:rgsvc.adoc#[domain services], xref:ug:vw:ugvw.adoc#_ugvw_layout[object layout] or xref:rg:cfg:rgcfg.adoc#_rgcfg[configuration].
 
 
 include::_rgcms_classes_AppManifest-bootstrapping.adoc[leveloffset=+1]

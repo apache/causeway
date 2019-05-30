@@ -13,7 +13,7 @@ Or it could search for a country based on its ISO-3 code or user-friendly name.
 
 [TIP]
 ====
-If you require additional control - for example restricting the returned results based on the object being interacted with - then use the xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] supporting method instead.
+If you require additional control - for example restricting the returned results based on the object being interacted with - then use the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] supporting method instead.
 ====
 
 
@@ -77,7 +77,7 @@ public class Customers {
 ----
 <1> end-user must enter minimum number of characters to trigger the query
 
-The autocomplete action can also be a regular method, annotated using xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`]:
+The autocomplete action can also be a regular method, annotated using xref:rg:ant:rgant.adoc#_rgant-Programmatic[`@Programmatic`]:
 
 [source,java]
 ----
@@ -95,7 +95,7 @@ public class Customers {
 [IMPORTANT]
 ====
 The method specified must be an action, that is, part of the Isis metamodel.
-Said another way: it must not be annotated with xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`].
-However, it *can* be hidden or placed on a domain service with xref:../rgant/rgant.adoc#_rgant-DomainService_nature[nature] of `DOMAIN`, such that the action would not be rendered otherwise in the UI.
-Also, the action cannot be xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[restricted to] prototyping only.
+Said another way: it must not be annotated with xref:rg:ant:rgant.adoc#_rgant-Programmatic[`@Programmatic`].
+However, it *can* be hidden or placed on a domain service with xref:rg:ant:rgant.adoc#_rgant-DomainService_nature[nature] of `DOMAIN`, such that the action would not be rendered otherwise in the UI.
+Also, the action cannot be xref:rg:ant:rgant.adoc#_rgant-Action_restrictTo[restricted to] prototyping only.
 ====

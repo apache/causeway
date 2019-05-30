@@ -26,7 +26,7 @@ image::copy-link/010-copy-link-button.png[width="800px",link="{_imagesdir}copy-l
 
 [NOTE]
 ====
-Note that these screenshots show an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that these screenshots show an earlier version of the xref:ug:vw:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 Clicking on this button brings up a dialog with the URL preselected:

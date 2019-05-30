@@ -29,7 +29,7 @@ public class Customer {
 == Alternatives
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 The framework also provides a separate, powerful mechanism for xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[internationalization].
 
@@ -39,9 +39,9 @@ The framework also provides a separate, powerful mechanism for xref:../ugbtb/ugb
 
 This attribute can also be specified for:
 
-* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_named[collections]
-* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_named[properties]
-* xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[parameters]
-* xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_named[domain objects]
-* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_named[view models]
-* xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[domain services].
+* xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_named[collections]
+* xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_named[properties]
+* xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_named[parameters]
+* xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_named[domain objects]
+* xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_named[view models]
+* xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_named[domain services].

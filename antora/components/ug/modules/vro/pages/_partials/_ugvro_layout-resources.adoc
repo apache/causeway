@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-Apache Isis' Restful Objects viewer provides a number of additional resource endpoints that provide representations of the object layout (as per xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`]) and of the menu layout (as per xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsService[`MenuBarsService`]).
+Apache Isis' Restful Objects viewer provides a number of additional resource endpoints that provide representations of the object layout (as per xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`]) and of the menu layout (as per xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsService[`MenuBarsService`]).
 
 This chapter provides details of these resources, the link ``Rel``s to access them, and the resultant representations.
 
@@ -13,9 +13,9 @@ This chapter provides details of these resources, the link ``Rel``s to access th
 [[_ugvro_layout-resources_menubars]]
 == MenuBars
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsService[`MenuBarsService`] provides the `menu.layout.xml` XML document which defines how to group the various domain service actions into menubars, menus and menu sections.
+The xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsService[`MenuBarsService`] provides the `menu.layout.xml` XML document which defines how to group the various domain service actions into menubars, menus and menu sections.
 
-For example, the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[Hello World archetype] has the following layout:
+For example, the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[Hello World archetype] has the following layout:
 
 [source,xml]
 ----
@@ -136,10 +136,10 @@ Note that because of dynamic icons (the xref:../../guides/rgcms/rgcms.adoc#_rgcm
 [[_ugvro_layout-resources_domain-object-layout]]
 == Domain Object Layout
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] provides an XML document which defines the layout of any of domain object.
+The xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] provides an XML document which defines the layout of any of domain object.
 Typically this is the contents of the `Xxx.layout.xml` file (where `Xxx` is the domain type).
 
-For example, in the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[Hello World archetype] the `HelloWorld` domain object has a layout defined by `HelloWorld.layout.xml`.
+For example, in the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[Hello World archetype] the `HelloWorld` domain object has a layout defined by `HelloWorld.layout.xml`.
 
 The representation returned by the domain object resource (section 14.4 of the RO spec v1.0) has been extended to provide a link to this resource:
 
@@ -243,7 +243,7 @@ The representation of the domain types resource (section 22.2 of RO spec v1.0) h
 ----
 
 
-The representation returned by this resource is essentially exactly the same as the layout returned by xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] (it is not dynamically extended with links).
+The representation returned by this resource is essentially exactly the same as the layout returned by xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] (it is not dynamically extended with links).
 
 
 

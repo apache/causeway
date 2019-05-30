@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-The `TitleBuffer` utility class is intended to make it easy to construct title strings (returned from the xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`] method).
+The `TitleBuffer` utility class is intended to make it easy to construct title strings (returned from the xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] method).
 
 For example, it has overloaded versions of methods called `append()` and `concat()`.
 

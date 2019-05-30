@@ -14,5 +14,5 @@ All remaining `public` methods (that do not use one of the Apache Isis prefixes)
 Any methods "left over" that _do_ use one of the Apache Isis prefixes, are interpreted to be orphaned.  Apache Isis "fails-fast" and will not boot, instead printing an error message to the log so that the issue can be easily diagnosed.
 
 
-See also xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_set[`set...()`].
+See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_set[`set...()`].
 

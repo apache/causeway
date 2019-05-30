@@ -4,10 +4,10 @@
 include::_attributes.adoc[]
 
 
-The `GuiceBeanProvider` domain service acts as a bridge between Apache Isis' xref:../ugvw/ugvw.adoc#[Wicket viewer] internal bootstrapping using link:https://github.com/google/guice[Google Guice].
+The `GuiceBeanProvider` domain service acts as a bridge between Apache Isis' xref:ug:vw:ugvw.adoc#[Wicket viewer] internal bootstrapping using link:https://github.com/google/guice[Google Guice].
 
 This service operates at a very low-level, and you are unlikely to have a need for it.
-It is used internally by the framework, in the default implementation of the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-api_DeepLinkService[`DeepLinkService`].
+It is used internally by the framework, in the default implementation of the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-api_DeepLinkService[`DeepLinkService`].
 
 [NOTE]
 ====
@@ -31,16 +31,16 @@ public interface GuiceBeanProvider {
 }
 ----
 
-The xref:../ugvw/ugvw.adoc#[Wicket viewer] this provides a default implementation of this service.
+The xref:ug:vw:ugvw.adoc#[Wicket viewer] this provides a default implementation of this service.
 
-To use an alternative implementation, implement the `GuideBeanProvider` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, implement the `GuideBeanProvider` interface and use xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 
 
 == Usage
 
-Using the xref:../ugvw/ugvw.adoc#[Wicket viewer] requires subclassing of `IsisWicketApplication`.
+Using the xref:ug:vw:ugvw.adoc#[Wicket viewer] requires subclassing of `IsisWicketApplication`.
 In the subclass it is commonplace to override `newIsisWicketModule()`, for example:
 
 [source,java]

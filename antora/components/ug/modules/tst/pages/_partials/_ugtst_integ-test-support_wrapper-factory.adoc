@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.
+The xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.
 And the role of this wrapper is to simulate the UI.
 
 [NOTE]
@@ -91,7 +91,7 @@ It can also call `add(...)` or `remove(...)` on the collection (returned by the 
 +
 [NOTE]
 ====
-In this respect the wrapper is more functional than the xref:../ugvw/ugvw.adoc#[Wicket viewer] (which does not expose the ability to mutate collections directly).
+In this respect the wrapper is more functional than the xref:ug:vw:ugvw.adoc#[Wicket viewer] (which does not expose the ability to mutate collections directly).
 ====
 
 * for *_object actions_* the test can call the action method itself.
@@ -154,7 +154,7 @@ public void subscriberReceivesEvents() throws Exception {
     then(evHolder[0].getIdentifier().getMemberName()).isEqualTo("completed");
 }
 ----
-<1> inject xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] into this test
+<1> inject xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] into this test
 <2> holder for subscriber to capture event to
 <3> subscriber's callback, using the guava subscriber syntax
 <4> invoking the domain object using the wrapper

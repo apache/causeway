@@ -16,6 +16,6 @@ The class itself is instantiated automatically by the framework whenever interac
 
 [NOTE]
 ====
-if the domain object defines its own xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`] supporting
+if the domain object defines its own xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`] supporting
 method then this will take precedence.
 ====

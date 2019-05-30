@@ -44,7 +44,7 @@ public class ToDoAppDashboard {
     public Blob exportToWordDoc() { ... }  // <1>
 }
 ----
-<1> associated using xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] with the `notYetComplete` collection.
+<1> associated using xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] with the `notYetComplete` collection.
 
 The other two actions shown in the above screenshot -- `exportAsXml` and `downloadLayout` -- are actually contributed to the `ToDoAppDashboard` through various domain services, as is the `downloadLayout` action.
 

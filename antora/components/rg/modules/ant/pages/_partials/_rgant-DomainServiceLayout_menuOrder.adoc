@@ -10,8 +10,8 @@ The `menuOrder()` attribute determines the ordering of a domain service's action
 
 The algorithm works as follows:
 
-* first, the xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuBar[`menuBar()`] determines which of the three menu bars the service's actions should be rendered
-* then, the domain service's top-level name (typically explicitly specified using xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[`named()`]) is used to determine the top-level menu item to be rendered on the menu bar
+* first, the xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuBar[`menuBar()`] determines which of the three menu bars the service's actions should be rendered
+* then, the domain service's top-level name (typically explicitly specified using xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_named[`named()`]) is used to determine the top-level menu item to be rendered on the menu bar
 * finally, if there is more than domain service that has the same name, then the `menuOrder` attribute is used to order those actions on the menu item drop-down.
 
 For example, the screenshot below shows the "prototyping" menu from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
@@ -19,7 +19,7 @@ For example, the screenshot below shows the "prototyping" menu from the (non-ASF
 image::reference-annotations/DomainServiceLayout/menuOrder.png[width="500px",link="{_imagesdir}reference-annotations/DomainServiceLayout/menuOrder.png"]
 
 
-The xref:../ugvw/ugvw.adoc#[Wicket viewer] automatically places separators between actions from different domain services.  From this we can infer that there are actually five different domain services that are all rendered on the "prototyping" top-level menu.
+The xref:ug:vw:ugvw.adoc#[Wicket viewer] automatically places separators between actions from different domain services.  From this we can infer that there are actually five different domain services that are all rendered on the "prototyping" top-level menu.
 
 One of these is the todoapp's `DemoDomainEventSubscriptions` service:
 

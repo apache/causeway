@@ -36,7 +36,7 @@ This convention can be overridden using `@Property(where=Where.NOWHERE)`.
 
 == Lombok support
 
-If xref:../dg/dg.adoc#_dg_ide_project-lombok[Project Lombok] is being used, then `@Title` can be specified on the backing field.
+If xref:support:dg:dg.adoc#_dg_ide_project-lombok[Project Lombok] is being used, then `@Title` can be specified on the backing field.
 
 For example:
 

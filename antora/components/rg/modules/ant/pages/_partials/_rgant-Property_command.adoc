@@ -13,13 +13,13 @@ The primary use cases for this are to support the deferring the execution of the
 
 The annotation works with (and is influenced by the behaviour of) a number of domain services:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_BackgroundService[`BackgroundService`] and
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_spi_BackgroundService[`BackgroundService`] and
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`]
 
 
-Each property edit is automatically reified by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service into a `Command` object, capturing details of the target object, the property, the proposed new value fo the property, the user, a timestamp and so on.
+Each property edit is automatically reified by the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service into a `Command` object, capturing details of the target object, the property, the proposed new value fo the property, the user, a timestamp and so on.
 
 If an appropriate `CommandService` is configured (for example using (non-ASF) link:http://platform.incode.org/modules/spi/command/spi-command.html[Incode Platform's command] module), then the `Command` itself is persisted.
 
@@ -194,7 +194,7 @@ If `command` is `DISABLED` or does not otherwise apply due to the action's decla
 
 For persisted commands, the `commandExecuteIn()` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
 
-Background execution means that the command is not executed immediately, but is available for a configured xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.  See xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here] for further information on this topic.
+Background execution means that the command is not executed immediately, but is available for a configured xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.  See xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here] for further information on this topic.
 
 For example:
 

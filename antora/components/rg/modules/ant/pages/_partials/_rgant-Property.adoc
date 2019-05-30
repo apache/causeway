@@ -19,23 +19,23 @@ It is also possible to apply the annotation to actions of domain services that a
 | Description
 
 
-|xref:../rgant/rgant.adoc#_rgant-Property_command[`command()`]
+|xref:rg:ant:rgant.adoc#_rgant-Property_command[`command()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |whether the property edit should be reified into a `o.a.i.applib.` +
-`services.command.Command` object through the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service.
+`services.command.Command` object through the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service.
 
 
 |`commandExecuteIn()`
 |`FOREGROUND`,`BACKGROUND` +
 (`FOREGROUND`)
-|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
+|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
 
 
 |`commandPersistence()`
 |`PERSISTED`, `NOT_PERSISTED`, `IF_HINTED` +
 (`PERSISTED`)
-|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured).
+|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured).
 
 
 
@@ -46,45 +46,45 @@ It is also possible to apply the annotation to actions of domain services that a
 
 
 
-|xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`domainEvent()`]
+|xref:rg:ant:rgant.adoc#_rgant-Property_domainEvent[`domainEvent()`]
 |subtype of `PropertyDomainEvent` +
 (`PropertyDomainEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
+|the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
 
 
-|xref:../rgant/rgant.adoc#_rgant-Property_editing[`editing()`]
+|xref:rg:ant:rgant.adoc#_rgant-Property_editing[`editing()`]
 |`ENABLED`, `DISABLED`, `AS_CONFIGURED` +
 (`AS_CONFIGURED`)
 |whether a property can be modified or cleared from within the UI
 
 
-|xref:../rgant/rgant.adoc#_rgant-Property_fileAccept[`fileAccept()`]
+|xref:rg:ant:rgant.adoc#_rgant-Property_fileAccept[`fileAccept()`]
 |Media type or file extension
-|Hints the files to be uploaded to a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
- or xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`]. +
+|Hints the files to be uploaded to a xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
+ or xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`]. +
  +
 Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
 
 
-|xref:../rgant/rgant.adoc#_rgant-Property_hidden[`hidden()`]
+|xref:rg:ant:rgant.adoc#_rgant-Property_hidden[`hidden()`]
 |`EVERYWHERE`, `OBJECT_FORMS`, `PARENTED_TABLES`, `STANDALONE_TABLES`, `ALL_TABLES`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the property should be hidden from the user.
 
 
-|xref:../rgant/rgant.adoc#_rgant-Property_maxLength[`maxLength()`]
+|xref:rg:ant:rgant.adoc#_rgant-Property_maxLength[`maxLength()`]
 |
 |maximum number of characters for string parameters; ignored otherwise +
 
-In many/most cases you should however use xref:../rgant/rgant.adoc#_rgant-Column[`@Column#length()`]
+In many/most cases you should however use xref:rg:ant:rgant.adoc#_rgant-Column[`@Column#length()`]
 
 
-|xref:../rgant/rgant.adoc#_rgant-Property_mustSatisfy[`mustSatisfy()`]
+|xref:rg:ant:rgant.adoc#_rgant-Property_mustSatisfy[`mustSatisfy()`]
 |implementation of `o.a.i.applib.spec.Specification`
 |allows arbitrary validation to be applied
 
 
-|xref:../rgant/rgant.adoc#_rgant-Property_notPersisted[`notPersisted()`]
+|xref:rg:ant:rgant.adoc#_rgant-Property_notPersisted[`notPersisted()`]
 |`true`, `false` +
 (`false`)
 |whether to exclude from snapshots. +
@@ -95,28 +95,28 @@ Property must also be annotated with `@javax.jdo.annotations.NotPersistent` in o
 ====
 
 
-|xref:../rgant/rgant.adoc#_rgant-Property_optionality[`optionality()`]
+|xref:rg:ant:rgant.adoc#_rgant-Property_optionality[`optionality()`]
 |
 |specifies a property is optional rather than mandatory +
 
-In many/most cases you should however use xref:../rgant/rgant.adoc#_rgant-Column[`@Column#allowsNull()`]
+In many/most cases you should however use xref:rg:ant:rgant.adoc#_rgant-Column[`@Column#allowsNull()`]
 
 
 
-|xref:../rgant/rgant.adoc#_rgant-Property_projecting[`projecting()`]
+|xref:rg:ant:rgant.adoc#_rgant-Property_projecting[`projecting()`]
 |
 |indicates that owning object is a view model that is acting as a projection of the underlying entity referenced by this property.
 
 
 
-|xref:../rgant/rgant.adoc#_rgant-Property_publishing[`publishing()`]
+|xref:rg:ant:rgant.adoc#_rgant-Property_publishing[`publishing()`]
 |
 |determines whether the editing of a property should be published.
 
 
 
 
-|xref:../rgant/rgant.adoc#_rgant-Property_regexPattern[`regexPattern()`]
+|xref:rg:ant:rgant.adoc#_rgant-Property_regexPattern[`regexPattern()`]
 |regular expression
 |validates the contents of a string parameter against the regular expression pattern
 
@@ -162,7 +162,7 @@ public class Customer {
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:../rgant/rgant.adoc#_rgant-Collection[`@Collection`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`] and xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
+The annotation is one of a handful (others including xref:rg:ant:rgant.adoc#_rgant-Collection[`@Collection`], xref:rg:ant:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`] and xref:rg:ant:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
 so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 

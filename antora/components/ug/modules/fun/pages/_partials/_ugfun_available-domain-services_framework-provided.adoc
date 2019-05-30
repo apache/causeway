@@ -13,90 +13,90 @@ In these cases there is (usually) no default implementation; it is up to the app
 
 General purpose:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_ClockService[`ClockService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_ConfigurationService[`ConfigurationService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_ClockService[`ClockService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_ConfigurationService[`ConfigurationService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]
 
 Commands/Interactions/Background/Auditing/Publishing/Profiling:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`]
 
 
 Information Sharing:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_ActionInvocationContext[`ActionInvocationContext`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_ActionInvocationContext[`ActionInvocationContext`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`]
 
 UserManagement:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_UserProfileService[`UserProfileService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`UserRegistrationService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_EmailNotificationService[`EmailNotificationService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_UserProfileService[`UserProfileService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`UserRegistrationService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_EmailNotificationService[`EmailNotificationService`] (SPI)
 
 Bookmarks and Mementos:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_MementoService[`MementoService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-api_DeepLinkService[`DeepLinkService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_XmlSnapshotService[`XmlSnapshotService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_MementoService[`MementoService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-api_DeepLinkService[`DeepLinkService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_XmlSnapshotService[`XmlSnapshotService`]
 
 Layout and UI Management:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_HomePageProviderService[`HomePageProviderService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_HintStore[`HintStore`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_MessageService[`MessageService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_RoutingService[`RoutingService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TitleService[`TitleService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_UrlEncodingService[`UrlEncodingService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_HomePageProviderService[`HomePageProviderService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_HintStore[`HintStore`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_MessageService[`MessageService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_RoutingService[`RoutingService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_TitleService[`TitleService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_UrlEncodingService[`UrlEncodingService`] (SPI)
 
 REST Support:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-api_AcceptHeaderService[`AcceptHeaderService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_SwaggerService[`SwaggerService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-api_AcceptHeaderService[`AcceptHeaderService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_SwaggerService[`SwaggerService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] (SPI)
 
 Metamodel:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ApplicationFeatureRepository[`ApplicationFeatureRepository`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_MetamodelService[`MetamodelService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_ApplicationFeatureRepository[`ApplicationFeatureRepository`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_MetamodelService[`MetamodelService`]
 
 Other API:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-api_GuiceBeanProvider[`GuiceBeanProvider`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_SudoService[`SudoService`]
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-api_GuiceBeanProvider[`GuiceBeanProvider`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_testing_SudoService[`SudoService`]
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`]
 
 Other SPI:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_bootstrapping-spi_ClassDiscoveryService[`ClassDiscoveryService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ErrorReportingService[`ErrorReportingService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`ExceptionRecognizer`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocaleProvider`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationsResolver[`TranslationsResolver`] (SPI)
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationsResolver[`TranslationsResolver`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_bootstrapping-spi_ClassDiscoveryService[`ClassDiscoveryService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ErrorReportingService[`ErrorReportingService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`ExceptionRecognizer`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocaleProvider`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationsResolver[`TranslationsResolver`] (SPI)
+* xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationsResolver[`TranslationsResolver`] (SPI)
 
 
-A full list of services can be found in the xref:../rgsvc/rgsvc.adoc#_rgsvc[Domain Services] reference guide.
+A full list of services can be found in the xref:rg:svc:rgsvc.adoc#_rgsvc[Domain Services] reference guide.
 

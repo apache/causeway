@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-The `describedAs()` attribute is used to provide a short description of the action parameter to the user.  In the xref:../ugvw/ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.  The `describedAs()` attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-CollectionLayout_describedAs[collections],  xref:../rgant/rgant.adoc#_rgant-PropertyLayout_describedAs[properties], xref:../rgant/rgant.adoc#_rgant-ActionLayout_describedAs[actions], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_describedAs[domain objects] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
+The `describedAs()` attribute is used to provide a short description of the action parameter to the user.  In the xref:ug:vw:ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.  The `describedAs()` attribute can also be specified for xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_describedAs[collections],  xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_describedAs[properties], xref:rg:ant:rgant.adoc#_rgant-ActionLayout_describedAs[actions], xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_describedAs[domain objects] and xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
 
 Descriptions may be provided for objects, members (properties, collections and actions), and for individual parameters within an action method.
 

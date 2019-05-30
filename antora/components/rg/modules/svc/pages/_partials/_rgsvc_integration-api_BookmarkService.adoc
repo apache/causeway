@@ -8,7 +8,7 @@ The `BookmarkService2` domain service (and its various supertypes) provides the 
 
 For example, a `Customer` object with:
 
-* an object type of "custmgmt.Customer" (as per xref:../rgant/rgant.adoc#_rgant-DomainObject_objectType[`DomainObject#objectType()`] or equivalent) , and
+* an object type of "custmgmt.Customer" (as per xref:rg:ant:rgant.adoc#_rgant-DomainObject_objectType[`DomainObject#objectType()`] or equivalent) , and
 * an id=123
 
 could correspond to a `Bookmark` with a string representation of `custmgmt.Customer|123`.
@@ -21,7 +21,7 @@ For example, a `Bookmark` could be converted into a barcode, and then this used 
 ====
 
 ``Bookmark``s are used by several other domain services as a means of storing a reference to an arbitrary object
-(a polymorphic relationship).  For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s auditing module's implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] uses bookmarks to capture the object that is being audited.
+(a polymorphic relationship).  For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s auditing module's implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`] uses bookmarks to capture the object that is being audited.
 
 [TIP]
 ====
@@ -56,7 +56,7 @@ public interface BookmarkService {
 
 The core framework provides a default implementation of this API, namely `o.a.i.core.metamodel.services.bookmarks.BookmarkServiceInternalDefault`
 
-To use an alternative implementation, implement `BookmarkService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, implement `BookmarkService` interface and use xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 
@@ -100,10 +100,10 @@ A more sophisticated implementation could look inside the passed `ev` argument a
 
 == Usage by other services
 
-Bookmarks are used by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's implementation of  xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
+Bookmarks are used by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's implementation of  xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
 
 Bookmarks are also used by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s auditing module's implementation of
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`].
+xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`].
 
 
 

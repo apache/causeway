@@ -10,13 +10,13 @@ Apache Isis distinguishes between the application being run in development mode 
 
 (For mostly historical reasons) development mode is actually called `SERVER_PROTOTYPE`, while production mode is called just `SERVER`.
 
-When running in development/prototyping mode, certain capabilities are enabled; most notably any actions restricted to prototyping mode (using xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`]) will be available.
+When running in development/prototyping mode, certain capabilities are enabled; most notably any actions restricted to prototyping mode (using xref:rg:ant:rgant.adoc#_rgant-Action_restrictTo[`@Action#restrictTo()`]) will be available.
 
 
 
 == Using the Wicket Viewer
 
-Most of the you're likely to run Apache Isis using the xref:../ugvw/ugvw.adoc#[Wicket viewer].  In this case Apache Isis' "deployment type" concept maps to Wicket's "configuration" concept:
+Most of the you're likely to run Apache Isis using the xref:ug:vw:ugvw.adoc#[Wicket viewer].  In this case Apache Isis' "deployment type" concept maps to Wicket's "configuration" concept:
 
 .Apache Isis' deployment type corresponds to Apache Wicket's configuration
 [cols="1,1,2", options="header"]
@@ -65,7 +65,7 @@ Wicket's mechanism for specifying the "configuration" is to use a context parame
 
 == Restful Objects viewer only
 
-Most Apache Isis applications will consist of at least the xref:../ugvw/ugvw.adoc#[Wicket viewer] and optionally the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].  When both viewers are deployed in the same app, then the bootstrapping is performed by Wicket, and so the deployment type is configured as described in the previous section.
+Most Apache Isis applications will consist of at least the xref:ug:vw:ugvw.adoc#[Wicket viewer] and optionally the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].  When both viewers are deployed in the same app, then the bootstrapping is performed by Wicket, and so the deployment type is configured as described in the previous section.
 
 In some cases though you may be using Apache Isis to provide a REST API only, that is, you won't have deployed the Wicket viewer.  In these cases your app will be bootstrapped using  Apache Isis' xref:../ugbtb/ugbtb.adoc#__ugbtb_web-xml_servlet-context-listeners[ `IsisWebAppBootstrapper`].
 

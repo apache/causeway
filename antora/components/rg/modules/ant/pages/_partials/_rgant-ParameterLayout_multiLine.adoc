@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-The `multiLine()` attribute specifies that the text field for a string parameter should span multiple lines.  It is ignored for other parameter types.  The attribute is also supported for xref:../rgant/rgant.adoc#_rgant-PropertyLayout_multiLine[properties].
+The `multiLine()` attribute specifies that the text field for a string parameter should span multiple lines.  It is ignored for other parameter types.  The attribute is also supported for xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_multiLine[properties].
 
 For example:
 
@@ -26,6 +26,6 @@ public class BugReport {
 
 [NOTE]
 ====
-If set > 1 (as would normally be the case), then the default xref:../rgant/rgant.adoc#_rgant-ParameterLayout_labelPosition[`labelPosition`] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
+If set > 1 (as would normally be the case), then the default xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_labelPosition[`labelPosition`] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
 ====
 

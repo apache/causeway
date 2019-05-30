@@ -5,23 +5,23 @@ include::_attributes.adoc[]
 
 
 
-The `bookmarking()` attribute indicates if an action (with safe xref:../rgant/rgant.adoc#_rgant-Action_semantics[action semantics]) is automatically bookmarked.
+The `bookmarking()` attribute indicates if an action (with safe xref:rg:ant:rgant.adoc#_rgant-Action_semantics[action semantics]) is automatically bookmarked.
 
 
 
 
-In the xref:../ugvw/ugvw.adoc#[Wicket viewer], a link to a bookmarked object is shown in the bookmarks panel:
+In the xref:ug:vw:ugvw.adoc#[Wicket viewer], a link to a bookmarked object is shown in the bookmarks panel:
 
 image::reference-annotations/ActionLayout/bookmarking.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/bookmarking.png"]
 
 [NOTE]
 ====
-Note that this screenshot shows an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screenshot shows an earlier version of the xref:ug:vw:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 [TIP]
 ====
-The xref:../ugvw/ugvw.adoc#[Wicket viewer] supports `alt-[` as a shortcut for opening the bookmark panel.  `Esc` will close.
+The xref:ug:vw:ugvw.adoc#[Wicket viewer] supports `alt-[` as a shortcut for opening the bookmark panel.  `Esc` will close.
 ====
 
 
@@ -45,15 +45,15 @@ indicates that the `notYetComplete()` action is bookmarkable.
 
 [NOTE]
 ====
-The enum value `AS_CHILD` has no meaning for actions; it relates only to bookmarked xref:../rgant/rgant.adoc#_rgant-DomainObject_bookmarking[domain object]s.
+The enum value `AS_CHILD` has no meaning for actions; it relates only to bookmarked xref:rg:ant:rgant.adoc#_rgant-DomainObject_bookmarking[domain object]s.
 ====
 
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 
 == See also
 
-This attribute is also supported for xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_bookmarking[domain objects].
+This attribute is also supported for xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_bookmarking[domain objects].

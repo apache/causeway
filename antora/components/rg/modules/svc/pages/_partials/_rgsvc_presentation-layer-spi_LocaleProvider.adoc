@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-The `LocaleProvider` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`].
+The `LocaleProvider` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`].
 
 The role of the service itself is simply to return the `Locale` of the current user.
 
@@ -29,18 +29,18 @@ public interface LocaleProvider {
 }
 ----
 
-This is notionally request-scoped, returning the `Locale` of the current user; _not_ that of the server.  (Note that the implementation is not required to actually be xref:../rgant/rgant.adoc#_rgant-RequestScoped[`@RequestScoped`], however).
+This is notionally request-scoped, returning the `Locale` of the current user; _not_ that of the server.  (Note that the implementation is not required to actually be xref:rg:ant:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`], however).
 
 
 
 
 == Implementation
 
-Isis' xref:../ugvw/ugvw.adoc#[Wicket viewer] provides an implementation of this service (`LocaleProviderWicket`) which leverages Apache Wicket APIs.
+Isis' xref:ug:vw:ugvw.adoc#[Wicket viewer] provides an implementation of this service (`LocaleProviderWicket`) which leverages Apache Wicket APIs.
 
 [NOTE]
 ====
-Currently there is no equivalent implementation for the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
+Currently there is no equivalent implementation for the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
 ====
 
 
@@ -50,7 +50,7 @@ Currently there is no equivalent implementation for the xref:../ugvro/ugvro.adoc
 
 == Related Services
 
-This service works in conjunction with xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationsResolver[`TranslationsResolver`] in order to provide i18n support.
+This service works in conjunction with xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`] and xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationsResolver[`TranslationsResolver`] in order to provide i18n support.
 
 
 

@@ -25,7 +25,7 @@ This plugin needs to be configured for each of your domain modules (usually just
 [[__dg_ide_eclipse_editor-templates]]
 == Editor Templates
 
-We provide a set of editor templates.  These are used to add new methods to existing classes.  (These are equivalent to the xref:../dg/dg.adoc#__dg_ide_intellij_live-templates[IntelliJ live templates]):
+We provide a set of editor templates.  These are used to add new methods to existing classes.  (These are equivalent to the xref:support:dg:dg.adoc#__dg_ide_intellij_live-templates[IntelliJ live templates]):
 
 * `is` (Apache Isis domain objects).  link:./resources/eclipse/isis-templates.xml[Download]
 * `ju` (for JUnit tests) link:./resources/eclipse/junit4-templates.xml[Download]
@@ -39,7 +39,7 @@ To install, download each XML file, then go to `Windows > Preferences > Java > E
 [[__dg_ide_eclipse_configure-lombok]]
 == Install Project Lombok
 
-The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] uses link:http://projectlombok.org[Project Lombok] annotations (`@Getter` and `@Setter` and so on) to reduce the boilerplate.
+The xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] uses link:http://projectlombok.org[Project Lombok] annotations (`@Getter` and `@Setter` and so on) to reduce the boilerplate.
 For Eclipse IDE this requires an link:https://projectlombok.org/setup/eclipse[installation step]:
 
 * Locate the `lombok.jar` jar file:
@@ -125,7 +125,7 @@ DataNucleus' enhancer uses the domain object model's own classpath to reference 
 So, even though your domain objects are unlikely to depend on DataNucleus, these references must still be present.
 
 See the section in xref:dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[DataNucleus enhancer] for details of the contents of the `pom.xml`.
-Chances are it is already set up from running the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] or the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetype.
+Chances are it is already set up from running the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] or the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetype.
 
 
 Then, tell DataNucleus to use the project classpath:
@@ -218,5 +218,5 @@ Changing persisting domain entities is more problematic, for two reasons: the JD
 domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.  You may find that adding
 actions will work, but adding new properties or collections is much less likely to.
 
-For details of setting up DCEVM, see the xref:../dg/dg.adoc#__dg_ide_intellij_advanced_dcevm[corresponding section] in the IntelliJ documentation.
+For details of setting up DCEVM, see the xref:support:dg:dg.adoc#__dg_ide_intellij_advanced_dcevm[corresponding section] in the IntelliJ documentation.
 

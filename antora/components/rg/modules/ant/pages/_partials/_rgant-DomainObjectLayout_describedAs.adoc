@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 The `describedAs()` attribute is used to provide a short description of the domain object to the user.
-In the xref:../ugvw/ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.
+In the xref:ug:vw:ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.
 
 For example:
 
@@ -25,9 +25,9 @@ public class ProspectiveSale {
 
 The attribute can also be specified for:
 
-* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_describedAs[collections]
-* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_describedAs[properties]
-* xref:../rgant/rgant.adoc#_rgant-ActionLayout_describedAs[actions]
-* xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[parameters] and
-* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
+* xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_describedAs[collections]
+* xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_describedAs[properties]
+* xref:rg:ant:rgant.adoc#_rgant-ActionLayout_describedAs[actions]
+* xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_describedAs[parameters] and
+* xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
 

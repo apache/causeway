@@ -30,7 +30,7 @@ One way to remember this is: *"see it, use it, do it"*
 
 
 The framework provides a multitude of ways to implement these business rules.
-One decoupled approach is using xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events_domain-events[domain events]; the checks above correspond to the phases of the domain event.
+One decoupled approach is using xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_events_domain-events[domain events]; the checks above correspond to the phases of the domain event.
 A simpler approach is to just implement the business rules imperatively in the domain object, or in a mixin for the object.
 
 
@@ -59,7 +59,7 @@ public boolean hideStatus() { ... }
 ----
 
 
-For more information, see the xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`] section in the appropriate reference guide.
+For more information, see the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`] section in the appropriate reference guide.
 
 
 == Usability ("use it")
@@ -76,7 +76,7 @@ Here a non-`null` value is used as the reason why the action is disabled.
 It is also possible to return a localized string by returning a `TranslatableString`.
 
 
-Properties are similar (note that collections are implicitly read-only in the xref:../ugvw/ugvw.adoc#[Wicket viewer]:
+Properties are similar (note that collections are implicitly read-only in the xref:ug:vw:ugvw.adoc#[Wicket viewer]:
 
 
 [source,java]
@@ -87,7 +87,7 @@ public void setStatus(String status) { ... }
 public String disableStatus() { ... }
 ----
 
-For more information, see  xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`] section in the appropriate reference guide.
+For more information, see  xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`] section in the appropriate reference guide.
 
 
 It is also possible to make all properties of a domain object unmodifiable, using:
@@ -100,7 +100,7 @@ It is also possible to make all properties of a domain object unmodifiable, usin
 public class Customer { ... }
 ----
 
-This can be made a global policy using a xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[configuration setting]:
+This can be made a global policy using a xref:rg:cfg:rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[configuration setting]:
 
 .isis.properties
 [source,ini]
@@ -141,8 +141,8 @@ public void setStatus(String status) { ... }
 public String validateStatus(String status) { ... }
 ----
 
-For more information, see the xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] section in the appropriate reference guide.
-The reference guide also explains how to define validation declaratively, using the xref:../rgant/rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`] or xref:../rgant/rgant.adoc#_rgant-Property_mustSatisfy[`@Property#mustSatisfy()`] attributes.
+For more information, see the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] section in the appropriate reference guide.
+The reference guide also explains how to define validation declaratively, using the xref:rg:ant:rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`] or xref:rg:ant:rgant.adoc#_rgant-Property_mustSatisfy[`@Property#mustSatisfy()`] attributes.
 
 
 
@@ -199,7 +199,7 @@ Datanucleus does _not_ call the setter when reloading the object from the databa
 
 [NOTE]
 ====
-The framework also allows side-effect code to be placed in separate xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`], xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`] supporting methods; if present then these will be called by the framework rather than the setter.
+The framework also allows side-effect code to be placed in separate xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`], xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`] supporting methods; if present then these will be called by the framework rather than the setter.
 However, because of DataNucleus' smart handling of setters, these supporting methods are in essence redundant, and so should be considered deprecated.
 ====
 

@@ -5,13 +5,13 @@ include::_attributes.adoc[]
 
 
 Apache Isis autowires (automatically injects) domain services into each entity, as well as into the domain services themselves, using either method injection or field injection.
-The framework defines many additional services (such as xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`]); these are injected in exactly the same manner.
+The framework defines many additional services (such as xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`]); these are injected in exactly the same manner.
 
 Sometimes there may be multiple services that implement a single type.
 This is common for example for SPI service, whereby one module defines an SPI service, and other module(s) in the application implement that service.
 To support this, the framework also allows lists of services to be injected.
 
-When there are multiple service implementations of a given type, the framework will inject the service with highest priority, as defined through xref:../rgant/rgant.adoc#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`] (even for domain services that are not menus), lowest first.
+When there are multiple service implementations of a given type, the framework will inject the service with highest priority, as defined through xref:rg:ant:rgant.adoc#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`] (even for domain services that are not menus), lowest first.
 If a list of services is injected, then that list will be ordered according to `menuOrder`, again lowest first.
 
 

@@ -10,7 +10,7 @@ The `hidden()` attribute indicates where (in the UI) the collection should be hi
 
 [TIP]
 ====
-It is also possible to use xref:../rgant/rgant.adoc#_rgant-Collection_hidden[`@Collection#hidden()`] to hide an action at the domain layer.
+It is also possible to use xref:rg:ant:rgant.adoc#_rgant-Collection_hidden[`@Collection#hidden()`] to hide an action at the domain layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
@@ -51,12 +51,12 @@ The other values of the `Where` enum have no meaning for a collection.
 == Alternatives
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 
 == See also
 
 This attribute can also be applied to:
 
-* xref:../rgant/rgant.adoc#_rgant-ActionLayout_hidden[actions]
-* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_hidden[properties].
+* xref:rg:ant:rgant.adoc#_rgant-ActionLayout_hidden[actions]
+* xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_hidden[properties].

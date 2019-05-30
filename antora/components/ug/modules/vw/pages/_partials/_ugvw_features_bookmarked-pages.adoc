@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-The Wicket viewer supports the bookmarking of both domain objects and query-only (xref:../rgant/rgant.adoc#_rgant-Action_semantics[@Action(semantics=...)]) actions.
+The Wicket viewer supports the bookmarking of both domain objects and query-only (xref:rg:ant:rgant.adoc#_rgant-Action_semantics[@Action(semantics=...)]) actions.
 
 Domain objects, if bookmarkable, can be nested.
 
@@ -22,7 +22,7 @@ image::bookmarked-pages/panel.png[width="800px",link="{_imagesdir}bookmarked-pag
 
 [NOTE]
 ====
-Note that these screenshots show an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that these screenshots show an earlier version of the xref:ug:vw:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 Note how the list contains both domain objects and an action ("not yet complete").
@@ -38,7 +38,7 @@ Some - like `Property`, `Lease` and `Party` - are root nodes. However, `LeaseIte
 
 == Domain Code
 
-To indicate a class is bookmarkable, use the xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout[@DomainObjectLayout] annotation:
+To indicate a class is bookmarkable, use the xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout[@DomainObjectLayout] annotation:
 
 [source,java]
 ----
@@ -58,7 +58,7 @@ To indicate a class is bookmarkable but only as a child of some parent bookmark,
 public class LeaseItem { ... }
 ----
 
-To indicate that a safe (query only) action is bookmarkable, use the xref:../rgant/rgant.adoc#_rgant-ActionLayout[@ActionLayout] annotation:
+To indicate that a safe (query only) action is bookmarkable, use the xref:rg:ant:rgant.adoc#_rgant-ActionLayout[@ActionLayout] annotation:
 
 [source,java]
 ----
@@ -91,7 +91,7 @@ Alternatively, `alt+[` will toggle open/close the panel; it can also be closed u
 
 === Related functionality
 
-The xref:../ugvw/ugvw.adoc#_ugvw_features_recent-pages[Recent Pages] also lists recently visited pages, selected from a drop-down.
+The xref:ug:vw:ugvw.adoc#_ugvw_features_recent-pages[Recent Pages] also lists recently visited pages, selected from a drop-down.
 
 
 

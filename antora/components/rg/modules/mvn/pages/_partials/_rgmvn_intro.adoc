@@ -13,19 +13,19 @@ This runs the `MetaModelValidator` that is also run when the application is star
 
 * `swagger` +
 +
-Uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_SwaggerService[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
+Uses the xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_SwaggerService[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
 
 * `xsd` +
 +
-Uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] to generate XSD schemas from any JAXB-annotated view models/DTOs. +
+Uses the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] to generate XSD schemas from any JAXB-annotated view models/DTOs. +
 +
-This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen] tool, because it uses the framework's support (via xref:../rgant/rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`]) to translate any references to domain objects into ``OidDto``s (as defined by the Apache Isis xref:../rgcms/rgcms.adoc#_rgcms_schema-common[common schema]).
+This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen] tool, because it uses the framework's support (via xref:rg:ant:rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`]) to translate any references to domain objects into ``OidDto``s (as defined by the Apache Isis xref:rg:cms:rgcms.adoc#_rgcms_schema-common[common schema]).
 
 The `validate` goal is by default bound to the `test` phase, and the `swagger` goal is by default bound to the `package` phase; both are typically of your application's `dom` sub-module.
 The `xsd` goal meanwhile defaults to the `generate-resources` phase, and this is generally used in a completely separate sub-module.
 An example can be found in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] example app; the separate submodule that uses the `xsd` goal is (also) called `todoapp-xsd`.
 
-All of these goals require an xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] to point the plugin at, so that it knows how to bootstrap an Isis runtime.
+All of these goals require an xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] to point the plugin at, so that it knows how to bootstrap an Isis runtime.
 This is discussed below, followed by sections on configuring the two goals.
 
 
@@ -33,12 +33,12 @@ This is discussed below, followed by sections on configuring the two goals.
 [[__rgmvn_intro_app-manifest]]
 == `AppManifest`
 
-As noted in the introduction, all the goals require an xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] to point the plugin at, so that it knows how to bootstrap an Isis runtime.
+As noted in the introduction, all the goals require an xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] to point the plugin at, so that it knows how to bootstrap an Isis runtime.
 
 This can be extremely minimal; it isn't necessary to use the main `AppManifest` (in the `app` module) used to bootstrap the application, you can instead use a cut-down one.
 This then allows the plugins to be run during the build of the `dom` module, rather than having to run in the context of the `integtest` module.
 
-For example, the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]'s
+For example, the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]'s
 manifest is:
 
 [source,java]
@@ -84,6 +84,6 @@ We recommend the following:
 
 * run the `xsd` plugin in a new `xsd` submodule; contributed actions are irrelevant for this particular goal; having a separate submodule allows the configuration of both the `xsd` goal (to generate the XSD schemas) and any other XSD-related configuration to be kept in a single place.
 
-The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] reflects these recommendations for the `validate` and `swagger` goals.
+The xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] reflects these recommendations for the `validate` and `swagger` goals.
 You can find an example of the `xsd` plugin in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] application.
 

@@ -9,11 +9,11 @@ properties or collections.
 
 Its immediate subclasses are:
 
-* xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent_ActionDomainEvent[`ActionDomainEvent`]
+* xref:rg:cms:rgcms.adoc#_rgcms_classes_domainevent_ActionDomainEvent[`ActionDomainEvent`]
 
-* xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent_PropertyDomainEvent[`PropertyDomainEvent`]
+* xref:rg:cms:rgcms.adoc#_rgcms_classes_domainevent_PropertyDomainEvent[`PropertyDomainEvent`]
 
-* xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent_CollectionDomainEvent[`CollectionDomainEvent`]
+* xref:rg:cms:rgcms.adoc#_rgcms_classes_domainevent_CollectionDomainEvent[`CollectionDomainEvent`]
 
 The main purpose of the class is to define the protocol by which subscribers can influence an interaction (eg hide a
 collection, disable a property, validate action arguments).  It class also provides a simple mechanism to allow

@@ -7,12 +7,12 @@ include::_attributes.adoc[]
 TODO: v2: a lot of this has changed, because we now use `WebModule_Xxx` instead of `web.xml`, ie set this stuff up programmatically.
 
 
-Apache Isis provides two different viewers, the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
+Apache Isis provides two different viewers, the xref:ug:vw:ugvw.adoc#[Wicket viewer] and the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
 You can deploy both of these concurrently, or deploy just the Wicket viewer, or deploy just the Restful Objects viewer.
 The configuration in `web.xml` varies accordingly, both in terms of the servlet context listeners, filters and servlets.
 
 If you are using Apache Isis' integration with Apache Shiro (for security) then this also needs configuring in `web.xml`.
-See the xref:../ugsec/ugsec.adoc#_ugsec_configuring-isis-to-use-shiro[security chapter] for full details on this topic.
+See the xref:ug:sec:ugsec.adoc#_ugsec_configuring-isis-to-use-shiro[security chapter] for full details on this topic.
 
 The servlets and filters are mapped to three main pipelines:
 
@@ -390,7 +390,7 @@ This filter reads one context parameter:
     <param-value>deployment</param-value>   <!--1-->
 </context-param>
 ----
-<1> alternatively set to "development"; see xref:../rgcfg/rgcfg.adoc#_rgcfg_deployment-types[deployment types] for further discussion.
+<1> alternatively set to "development"; see xref:rg:cfg:rgcfg.adoc#_rgcfg_deployment-types[deployment types] for further discussion.
 
 
 === `IsisSessionFilter`
@@ -437,7 +437,7 @@ Discussed in more detail below.
 Originally introduced to allow the `SwaggerSpec` resource (which does not require a session) to be invoked.
 <4> A comma separated list of paths that are allowed through even if not authenticated.
 The servlets mapped to these paths are expected to be able to deal with there being no session.
-Typically they will be logon pages, or for health checks (as per xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_HealthCheckService[`HealthCheckService`] SPI.
+Typically they will be logon pages, or for health checks (as per xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_HealthCheckService[`HealthCheckService`] SPI.
 See below for further details.
 <5> where to redirect to if an exception occurs.
 
@@ -470,7 +470,7 @@ This filter should be mapped to the `servlet-name` for the RestEasy `HttpServlet
 
 === `IsisTransactionFilterForRestfulObjects`
 
-The `IsisTransactionFilterForRestfulObjects` filter simply ensures that a transaction is in progress for all calls routed to the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
+The `IsisTransactionFilterForRestfulObjects` filter simply ensures that a transaction is in progress for all calls routed to the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
 
 Its definition is:
 

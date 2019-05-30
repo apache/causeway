@@ -10,13 +10,13 @@ From this link:http://isis.markmail.org/thread/dduarjscrbnodfsi[thread] on the A
 * _What is the easiest way to add a spell checker to the text written in a field in
    a domain object, for instance to check English syntax?_
 
-One way to implement is to use the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[event bus]:
+One way to implement is to use the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[event bus]:
 
-* Set up a xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent[domain event] xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] that can veto the changes.
+* Set up a xref:rg:cms:rgcms.adoc#_rgcms_classes_domainevent[domain event] xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] that can veto the changes.
 
-* if the change is made through an action, you can use xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`].
+* if the change is made through an action, you can use xref:rg:ant:rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`].
 
-if if the change is made through an edit, you can use xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`].
+if if the change is made through an edit, you can use xref:rg:ant:rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`].
 
 You'll need some way to know which fields should be spell checked.  Two ways spring to mind:
 

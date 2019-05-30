@@ -138,6 +138,6 @@ RepositoryService repositoryService;
 
 [TIP]
 ====
-See the xref:../ugodn/ugodn.adoc#[DataNucleus objectstore guide] for further information on annotating domain entities.
+See the xref:ug:odn:ugodn.adoc#[DataNucleus objectstore guide] for further information on annotating domain entities.
 ====
 

@@ -17,7 +17,7 @@ The framework provides a single such grid implementation, namely for Bootstrap3.
 Unlike most other domain services, the framework will check _all_ available implementations of `GridSystemService` to
 obtain available grid systems, rather than merely the first implementation found; in other words it uses the
 chain-of-responsibility pattern.  Services are called in the order defined by
-xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
+xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
 
 Note though that each concrete implementation must also provide corresponding Wicket viewer components capable of
 interpreting the grid layout.
@@ -41,23 +41,23 @@ public interface GridSystemService<G extends Grid> {
 }
 ----
 <1> The concrete subclass of `Grid` supported by this implementation. As noted in the introduction, there can be multiple implementations of this service,  but there can only be one implementation per concrete subclass.  As is normal practice,
-the service with the lowest xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] takes precedence.
+the service with the lowest xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] takes precedence.
 <2> the target namespace for this grid system.  This is used when generating the XML.  The Bootstrap3 grid system provided by the framework returns the value `http://isis.apache.org/applib/layout/grid/bootstrap3`.
 <3> the schema location for the XSD.  The Bootstrap3 grid system provided by the framework returns the value `http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd`.
 <4> a default grid, eg two columns in ratio 4:8.  Used when no existing grid layout exists for a domain class.
-<5> Validates and normalizes a grid, modifying the grid so that all of the domain object's members (properties, collections, actions) are bound to regions of the grid.  This is done using existing metadata, most notably that of the xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotation.  Such a grid, if persisted as the layout XML file for the domain class, allows the
+<5> Validates and normalizes a grid, modifying the grid so that all of the domain object's members (properties, collections, actions) are bound to regions of the grid.  This is done using existing metadata, most notably that of the xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotation.  Such a grid, if persisted as the layout XML file for the domain class, allows the
  `@MemberOrder` annotation to be removed from the source code of the domain class (but other annotations must be retained).
-<6> Takes a normalized grid and enriches it with additional metadata (taken from Apache Isis' internal metadata) that can be represented in the layout XML.  Such a grid, if persisted as the layout XML file for the domain class, allows all layout annotations (xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] and xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]) to be removed from the source code of the domain class.
-<7> Takes a normalized grid and strips out removes all members, leaving only the grid structure.  Such a grid, if persisted as the layout XML file for the domain class, requires that the xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotation is retained in the source code of said class in order to bind members to the regions of the grid.
+<6> Takes a normalized grid and enriches it with additional metadata (taken from Apache Isis' internal metadata) that can be represented in the layout XML.  Such a grid, if persisted as the layout XML file for the domain class, allows all layout annotations (xref:rg:ant:rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:rg:ant:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] and xref:rg:ant:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]) to be removed from the source code of the domain class.
+<7> Takes a normalized grid and strips out removes all members, leaving only the grid structure.  Such a grid, if persisted as the layout XML file for the domain class, requires that the xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotation is retained in the source code of said class in order to bind members to the regions of the grid.
 
 
 == Implementation
 
 The framework provides `GridSystemServiceBS3`, an implementation that encodes the bootstrap3 grid system.
-(The framework also provides xref:../ugvw/ugvw.adoc#[Wicket viewer] components that are capable of interpreting and rendering this metadata).
+(The framework also provides xref:ug:vw:ugvw.adoc#[Wicket viewer] components that are capable of interpreting and rendering this metadata).
 
 
 
 == Related Services
 
-This service is used by xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`].
+This service is used by xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`].

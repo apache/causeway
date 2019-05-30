@@ -9,7 +9,7 @@ The `hidden()` attribute indicates where (in the UI) the action should be hidden
 
 [TIP]
 ====
-It is also possible to use xref:../rgant/rgant.adoc#_rgant-Action_hidden[`@Action#hidden()`] to hide an action at the domain layer.
+It is also possible to use xref:rg:ant:rgant.adoc#_rgant-Action_hidden[`@Action#hidden()`] to hide an action at the domain layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
@@ -40,13 +40,13 @@ The other values of the `Where` enum have no meaning for a collection.
 
 [NOTE]
 ====
-For actions of domain services the visibility is dependent upon its xref:../rgant/rgant.adoc#_rgant-DomainService_nature[`@DomainService#nature()`] and also on whether it is contributed (as per  xref:../rgant/rgant.adoc#_rgant-ActionLayout_contributedAs[`@ActionLayout#contributedAs()`]).
+For actions of domain services the visibility is dependent upon its xref:rg:ant:rgant.adoc#_rgant-DomainService_nature[`@DomainService#nature()`] and also on whether it is contributed (as per  xref:rg:ant:rgant.adoc#_rgant-ActionLayout_contributedAs[`@ActionLayout#contributedAs()`]).
 ====
 
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 
 
@@ -56,5 +56,5 @@ As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_u
 == See also
 
 This attribute can also be applied to:
-* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_hidden[properties]
-* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_hidden[collections].
+* xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_hidden[properties]
+* xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_hidden[collections].

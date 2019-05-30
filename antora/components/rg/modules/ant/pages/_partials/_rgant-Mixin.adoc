@@ -10,7 +10,7 @@ The `@Mixin` annotation indicates that the class acts as a mixin, contributing b
 Mixins were originally introduced as a means of allowing contributions from one module to the types of another module; in such cases the mixin type is often an interface type (eg `DocumentHolder`) that might be implemented by numerous different concrete types.
 However, mixins are also a convenient mechanism for grouping functionality even for a concrete type.
 
-For further discussion on using mixins, see xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] in the user guide.
+For further discussion on using mixins, see xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] in the user guide.
 
 The table below summarizes the annotation's attributes.
 
@@ -24,7 +24,7 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:../rgant/rgant.adoc#_rgant-Mixin_method[`method()`]
+|xref:rg:ant:rgant.adoc#_rgant-Mixin_method[`method()`]
 |Method name within the mixin
 |How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
 Typical examples are "exec", "execute", "invoke", "apply" and so on.
@@ -33,7 +33,7 @@ The default "reserved" method name is `$$`.
 |===
 
 An alternative and equivalent approach is to use the
-xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] annotation with a nature of `MIXIN`.
+xref:rg:ant:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] annotation with a nature of `MIXIN`.
 
 
 include::_rgant-Mixin_method.adoc[leveloffset=+1]

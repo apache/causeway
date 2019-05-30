@@ -9,4 +9,4 @@ include::_attributes.adoc[]
 The `set...()` prefix is simply the normal JavaBean setter prefix that denotes writeable properties or collections.
 
 
-See also xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_get[`get...()`].
+See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_get[`get...()`].

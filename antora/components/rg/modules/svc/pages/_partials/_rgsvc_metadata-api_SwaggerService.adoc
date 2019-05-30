@@ -5,13 +5,13 @@ include::_attributes.adoc[]
 
 
 
-The `SwaggerService` generates link:http://swagger.io/[Swagger] spec files to describe the public and/or private RESTful APIs exposed by the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
+The `SwaggerService` generates link:http://swagger.io/[Swagger] spec files to describe the public and/or private RESTful APIs exposed by the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
 
 These spec files can then be used with the link:http://swagger.io/swagger-ui/[Swagger UI] page to explore the REST API, or used to generate client-side stubs using the link:http://swagger.io/swagger-codegen/[Swagger codegen] tool, eg for use in a custom REST client app.
 
 [NOTE]
 ====
-Not all of the REST API exposed by the xref:../ugvro/ugvro.adoc#[Restful Objects viewer] is included in the Swagger schema definition files; the emphasis is those REST resources that are used to develop custom apps: domain objects, domain object collections and action invocations.  When combined with Apache Isis' own xref:../ugvro/ugvro.adoc#_ugvro_simplified-representations[simplified representations], these are pretty much all that is needed  for this use case.
+Not all of the REST API exposed by the xref:ug:vro:ugvro.adoc#[Restful Objects viewer] is included in the Swagger schema definition files; the emphasis is those REST resources that are used to develop custom apps: domain objects, domain object collections and action invocations.  When combined with Apache Isis' own xref:ug:vro:ugvro.adoc#_ugvro_simplified-representations[simplified representations], these are pretty much all that is needed  for this use case.
 ====
 
 
@@ -37,9 +37,9 @@ public interface SwaggerService {
 }
 ----
 <1> Generate a Swagger spec for use by third-party clients, ie public use.  This specification is restricted only to
-xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model]s and to domain services with a xref:../rgant/rgant.adoc#_rgant-DomainService_nature[nature] of `VIEW_REST_ONLY`.
+xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model]s and to domain services with a xref:rg:ant:rgant.adoc#_rgant-DomainService_nature[nature] of `VIEW_REST_ONLY`.
 <2> Generate a Swagger spec for use only by internally-managed clients, ie private internal use.  This specification includes domain entities and all menu domain services (as well as any view models).
-<3> Generate a Swagger spec that is the same as private case (above), but also including any xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[prototype] actions.
+<3> Generate a Swagger spec that is the same as private case (above), but also including any xref:rg:ant:rgant.adoc#_rgant-Action_restrictTo[prototype] actions.
 <4> Swagger specs can be written either in JSON or YAML format.
 
 
@@ -61,6 +61,6 @@ This service is provided as a convenience for applications, it is not (currently
 
 A `SwaggerServiceMenu` domain service provides a prototype action that enables the swagger spec to be downloaded from the Wicket viewer's UI.
 
-Apache Isis' xref:../rgmvn/rgmvn.adoc#[Maven plugin] also provides a xref:../rgmvn/rgmvn.adoc#_rgmvn_swagger[swagger goal] which allows the spec file(s) to be generated at build time.  this then allows client-side stubs can then be generated in turn as part of a build pipeline.
+Apache Isis' xref:rg:mvn:rgmvn.adoc#[Maven plugin] also provides a xref:rg:mvn:rgmvn.adoc#_rgmvn_swagger[swagger goal] which allows the spec file(s) to be generated at build time.  this then allows client-side stubs can then be generated in turn as part of a build pipeline.
 
 

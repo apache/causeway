@@ -21,26 +21,26 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:../rgant/rgant.adoc#_rgant-DomainService_nature[`nature()`]
+|xref:rg:ant:rgant.adoc#_rgant-DomainService_nature[`nature()`]
 |`VIEW`, `VIEW_MENU_ONLY`, `VIEW_CONTRIBUTIONS_ONLY`, `VIEW_REST_ONLY`, `DOMAIN` (`VIEW`)
-|the nature of this service: providing actions for menus, or as contributed actions, or for the xref:../ugvro/ugvro.adoc#[RestfulObjects REST API], or neither
+|the nature of this service: providing actions for menus, or as contributed actions, or for the xref:ug:vro:ugvro.adoc#[RestfulObjects REST API], or neither
 
 
-|xref:../rgant/rgant.adoc#_rgant-DomainService_objectType[`objectType()`]
+|xref:rg:ant:rgant.adoc#_rgant-DomainService_objectType[`objectType()`]
 |
-|equivalent to xref:../rgant/rgant.adoc#_rgant-DomainObject_objectType[`@DomainObject#objectType()`], specifies the objectType of the service.
+|equivalent to xref:rg:ant:rgant.adoc#_rgant-DomainObject_objectType[`@DomainObject#objectType()`], specifies the objectType of the service.
 
 The instanceId for services is always "1".
 
 
-|xref:../rgant/rgant.adoc#_rgant-DomainService_repositoryFor[`repositoryFor()`]
+|xref:rg:ant:rgant.adoc#_rgant-DomainService_repositoryFor[`repositoryFor()`]
 |
 |if this domain service acts as a repository for an entity type, specify that entity type.  This is used to determine an icon to use for the service (eg as shown in action prompts).
 
 
 |`menuOrder()`
 |
-|Deprecated in 1.8.0; use instead xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]
+|Deprecated in 1.8.0; use instead xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]
 
 |===
 

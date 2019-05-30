@@ -5,11 +5,11 @@ include::_attributes.adoc[]
 
 
 
-The framework provides default implementations for many of the xref:../rgsvc/rgsvc.adoc#[domain services].
+The framework provides default implementations for many of the xref:rg:svc:rgsvc.adoc#[domain services].
 This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 
-For example, suppose you wanted to provide your own implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocaleProvider`].
-The trick is to use the xref:../rgant/rgant.adoc#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`] attribute, specifying a low number (typically `"1"`).
+For example, suppose you wanted to provide your own implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocaleProvider`].
+The trick is to use the xref:rg:ant:rgant.adoc#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`] attribute, specifying a low number (typically `"1"`).
 
 Here's how:
 
@@ -56,10 +56,10 @@ then all implementations will be present in the list, ordered by priority; your 
 
 [NOTE]
 ====
-It is also possible to use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] attribute, rather than xref:../rgant/rgant.adoc#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`].
+It is also possible to use xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] attribute, rather than xref:rg:ant:rgant.adoc#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`].
 The general convention is to use the former only for services that are rendered in the UI, the latter for programmatic services.
 
-If both attributes are present, then the value of xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] is used.
+If both attributes are present, then the value of xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] is used.
 ====
 
 

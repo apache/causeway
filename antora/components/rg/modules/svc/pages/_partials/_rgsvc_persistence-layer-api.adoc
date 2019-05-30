@@ -22,7 +22,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Notes
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`o.a.i.applib.` +
 `services.jdosupport` +
 `IsisJdoSupport`]
 |Lower level access to the JDO Persistence API.
@@ -32,7 +32,7 @@ It also lists their corresponding implementation, either a default implementatio
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`o.a.i.applib.` +
 `services.metrics` +
 `MetricsService`]
 |Gathers and provides metrics on the numbers of objects used within a transaction.
@@ -42,7 +42,7 @@ It also lists their corresponding implementation, either a default implementatio
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`o.a.i.applib.` +
 `services.` +
 `queryresultscache` +
 `QueryResultsCache`]
@@ -54,7 +54,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`o.a.i.applib.` +
 `services.repository` +
 `RepositoryService`]
 |Methods to help implement repositories: query for existing objects, persist new or delete existing objects

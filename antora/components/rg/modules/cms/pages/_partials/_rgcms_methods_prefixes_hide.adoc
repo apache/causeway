@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 The `hide...()` supporting method is called for properties, collections and actions.
 It allows the property/collection to be completely hidden from view.
 
-It's comparatively rare for properties or collections to be imperatively hidden from view, but actions are sometimes hidden or shown visible (as opposed to being just xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_disable[disabled], ie greyed out).
+It's comparatively rare for properties or collections to be imperatively hidden from view, but actions are sometimes hidden or shown visible (as opposed to being just xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_disable[disabled], ie greyed out).
 
 
 The signature of the supporting method is simply:
@@ -64,6 +64,6 @@ public class Customer {
 In the case of actions, the framework will also search for supporting method that has the exact same parameter types as the action itself.
 Enabling `isis.reflector.validator.noParamsOnly` configuration property switches this off, so that the framework will only search for supporting method with no parameters.
 
-Note that enabling this configuration property in effect means that xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] must be used instead of xref:../ugfun/ugfun.adoc#_ugfun_programming-model_domain-services_contributions[contributed services] (because contributed actions are the one case where the value of a parameter to a supporting method may be non-null).
+Note that enabling this configuration property in effect means that xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] must be used instead of xref:ug:fun:ugfun.adoc#_ugfun_programming-model_domain-services_contributions[contributed services] (because contributed actions are the one case where the value of a parameter to a supporting method may be non-null).
 ====
 

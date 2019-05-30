@@ -4,13 +4,13 @@
 include::_attributes.adoc[]
 
 
-This chapter shows the idioms for creating, reading, updating and deleting xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_domain-entities[domain entities].
+This chapter shows the idioms for creating, reading, updating and deleting xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_domain-entities[domain entities].
 
-It also shows how to instantiate xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view models] and how to programmatically instantiate xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] (useful primarily for xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support[integration testing]).
+It also shows how to instantiate xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view models] and how to programmatically instantiate xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] (useful primarily for xref:ug:tst:ugtst.adoc#_ugtst_integ-test-support[integration testing]).
 
 [NOTE]
 ====
-The main domain services used are xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`].
+The main domain services used are xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`] and xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`].
 ====
 
 

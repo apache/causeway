@@ -316,7 +316,7 @@ where `myapp` is the `artifactId` entered above.
 [[__ugfun_getting-started_helloworld-archetype_running-the-app]]
 == Running the App
 
-The `helloworld` archetype generates a single WAR file, configured to run both the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[Restful Objects viewer].
+The `helloworld` archetype generates a single WAR file, configured to run both the xref:ug:vw:ugvw.adoc#[Wicket viewer] and the xref:ug:vro:ugvro.adoc#[Restful Objects viewer].
 The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
 
 Once you've built the app, you can run the WAR in a variety of ways.
@@ -351,14 +351,14 @@ The default configuration does not require any configuration of the servlet cont
 === From within the IDE
 
 Most of the time, though, you'll probably want to run the app from within your IDE.
-The mechanics of doing this will vary by IDE; see the xref:../dg/dg.adoc#_dg_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.
-Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:../dg/dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+The mechanics of doing this will vary by IDE; see the xref:support:dg:dg.adoc#_dg_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.
+Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:support:dg:dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
 image::getting-started/helloworld.png[width="600px",link="{_imagesdir}getting-started/helloworld.png"]
 
-with the maven goal to run the DataNucleus enhancer (discussed in more detail xref:../dg/dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[here]) before launch defined as:
+with the maven goal to run the DataNucleus enhancer (discussed in more detail xref:support:dg:dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[here]) before launch defined as:
 
 image::getting-started/helloworld-before-launch.png[width="600px",link="{_imagesdir}getting-started/helloworld-before-launch.png"]
 
@@ -367,7 +367,7 @@ image::getting-started/helloworld-before-launch.png[width="600px",link="{_images
 [[__ugfun_getting-started_helloworld-archetype_using-the-app]]
 == Using the App
 
-When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:../ugvw/ugvw.adoc#[Wicket viewer] or the xref:../ugvro/ugvro.adoc#[Restful Objects viewer]:
+When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:ug:vw:ugvw.adoc#[Wicket viewer] or the xref:ug:vro:ugvro.adoc#[Restful Objects viewer]:
 
 image::getting-started/using-hello-world/010-root-page.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/010-root-page.png"]
 
@@ -375,7 +375,7 @@ The Wicket viewer provides a human usable web UI (implemented, as you might have
 
 image::getting-started/using-hello-world/020-login-to-wicket-viewer.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/020-login-to-wicket-viewer.png"]
 
-The app itself is configured to run using xref:../ugsec/ugsec.adoc#[shiro security], as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
+The app itself is configured to run using xref:ug:sec:ugsec.adoc#[shiro security], as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
 
 * username: _sven_
 * password: _pass_
@@ -508,7 +508,7 @@ The REST API implemented by Apache Isis is specified in the link:http://www.rest
 Once you are familiar with the generated app, try modifying it.
 There is plenty more guidance on this site; start with this guide (fundamentals) and then look at the other guides available the main xref:../../documentation.adoc#[documentation] page.
 
-If you use IntelliJ IDEA or Eclipse, do also install the xref:../dg/dg.adoc#__dg_ide_intellij_live-templates[live templates (for IntelliJ)] / xref:../dg/dg.adoc#__dg_ide_eclipse_editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
+If you use IntelliJ IDEA or Eclipse, do also install the xref:support:dg:dg.adoc#__dg_ide_intellij_live-templates[live templates (for IntelliJ)] / xref:support:dg:dg.adoc#__dg_ide_eclipse_editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
 
 If you run into issues, please don't hesitate to ask for help on the link:http://isis.apache.org/help.html[users mailing list].
 

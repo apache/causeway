@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-The xref:../ugvw/ugvw.adoc#[Wicket viewer] allows additional views to be configured to render collections of objects; at the time of writing thesee include the excel, fullcalendar2 and gmap3 provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^].
+The xref:ug:vw:ugvw.adoc#[Wicket viewer] allows additional views to be configured to render collections of objects; at the time of writing thesee include the excel, fullcalendar2 and gmap3 provided by the (non-ASF) link:http://platform.incode.org[Incode Platform^].
 If the objects to be rendered have the correct "shape", then the appropriate view will be made available.  For example, objects with a date can be rendered using `calendar`; objects with locations can be rendered using `map`.
 
 The `defaultView()` attribute is used to select which of these views should be used by default for a given collection.
@@ -26,7 +26,7 @@ public class BusRoute {
 
 [NOTE]
 ====
-This attribute takes precedence over any value for the xref:../rgant/rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout#render()`] attribute.  For example, if the
+This attribute takes precedence over any value for the xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout#render()`] attribute.  For example, if the
 `defaultView` attribute is defined to "table", then the table will be show even if `render` is set to `LAZILY`.
 ====
 
@@ -34,5 +34,5 @@ This attribute takes precedence over any value for the xref:../rgant/rgant.adoc#
 == Alternatives
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 

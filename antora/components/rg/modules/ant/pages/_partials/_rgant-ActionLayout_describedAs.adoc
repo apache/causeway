@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-The `describedAs()` attribute is used to provide a short description of the action to the user.  In the xref:../ugvw/ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.
+The `describedAs()` attribute is used to provide a short description of the action to the user.  In the xref:ug:vw:ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.
 
 
 For example:
@@ -23,7 +23,7 @@ public class Customer {
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 
 
@@ -31,9 +31,9 @@ As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_u
 
 This attribute can also be specified for:
 
-* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_describedAs[collections]
-* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_describedAs[properties]
-* xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[parameters]
-* xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_describedAs[domain objects]
-* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
+* xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_describedAs[collections]
+* xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_describedAs[properties]
+* xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_describedAs[parameters]
+* xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_describedAs[domain objects]
+* xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
 

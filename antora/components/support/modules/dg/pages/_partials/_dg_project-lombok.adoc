@@ -30,9 +30,9 @@ private String name;
 ----
 
 Under the covers it is implemented as an annotation processor; it basically hooks into the Java compiler
-so that it can emit additional bytecode (eg for the getter and setter).  See xref:../dg/dg.adoc#__dg_ide_intellij_other-settings-compiler[here] for details of setting up in IntelliJ (Eclipse has very similar support).
+so that it can emit additional bytecode (eg for the getter and setter).  See xref:support:dg:dg.adoc#__dg_ide_intellij_other-settings-compiler[here] for details of setting up in IntelliJ (Eclipse has very similar support).
 
-Apache Isis supports link:https://projectlombok.org/[Project Lombok], in that the annotations that would normally be placed on the getter (namely xref:../rgant/rgant.adoc#_rgant-Property[`Property`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:../rgant/rgant.adoc#_rgant-Collection[`@Collection`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`] and xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]) can be placed on the field instead.
+Apache Isis supports link:https://projectlombok.org/[Project Lombok], in that the annotations that would normally be placed on the getter (namely xref:rg:ant:rgant.adoc#_rgant-Property[`Property`], xref:rg:ant:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:rg:ant:rgant.adoc#_rgant-Collection[`@Collection`], xref:rg:ant:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`] and xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]) can be placed on the field instead.
 
 
 There are plugins for Lombok for maven; it's just a matter of adding the required dependency.  To compile the code
@@ -43,7 +43,7 @@ Lombok plugin appropriate to that IDE.  See the link:https://projectlombok.org/d
 
 == Future thoughts
 
-In the future we might extend/fork Lombok so that it understands Isis' own annotations (ie xref:../rgant/rgant.adoc#_rgant-Property[`@Property`] and xref:../rgant/rgant.adoc#_rgant-Collection[`@Collection`])
+In the future we might extend/fork Lombok so that it understands Isis' own annotations (ie xref:rg:ant:rgant.adoc#_rgant-Property[`@Property`] and xref:rg:ant:rgant.adoc#_rgant-Collection[`@Collection`])
 rather than Lombok's own `@Getter` and `@Setter.
 
 It might also be possible to use Lombok to generate the domain event classes for each member.

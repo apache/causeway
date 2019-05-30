@@ -66,14 +66,14 @@ public ExceptionRecognizerTranslate exceptionRecognizerTranslations =    // <4>
     ExceptionRecognizerTranslate.create();
 ----
 <1> ensures an Apache Isis session/transaction running for each test
-<2> sets up a JMock context (using Apache Isis' extension to JMock as described in xref:../ugtst/ugtst.adoc#_ugtst_unit-test-support_jmock-extensions[JMock Extensions].
+<2> sets up a JMock context (using Apache Isis' extension to JMock as described in xref:ug:tst:ugtst.adoc#_ugtst_unit-test-support_jmock-extensions[JMock Extensions].
 <3> standard JUnit rule for writing tests that throw exceptions
 <4> to capture messages that require translation, as described in xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18 support].
 
 All of these rules could be inlined in your own base class; as we say, they are a convenience.
 
 The class also provides a number of injected domain services,  notably
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`], xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`], xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry2`], xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] (to wrap objects simulating interaction through the user interface), xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`] (most commonly used to commit changes after the fixture setup) and xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_SessionManagementService[`SessionManagementService`] (for tests that check interactions over multiple separate sessions).
+xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`], xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`], xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry2`], xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] (to wrap objects simulating interaction through the user interface), xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`] (most commonly used to commit changes after the fixture setup) and xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_SessionManagementService[`SessionManagementService`] (for tests that check interactions over multiple separate sessions).
 
 
 

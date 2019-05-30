@@ -17,33 +17,33 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:../rgant/rgant.adoc#_rgant-Action_associateWith[`associateWith()`]
+|xref:rg:ant:rgant.adoc#_rgant-Action_associateWith[`associateWith()`]
 |_memberId_ +
 ("")
 |associates an action with another property or collection of the action.
 
-|xref:../rgant/rgant.adoc#_rgant-Action_associateWith[`associateWith-Sequence()`]
+|xref:rg:ant:rgant.adoc#_rgant-Action_associateWith[`associateWith-Sequence()`]
 |_memberId_ +
 ("")
 |associates an action with another property or collection of the action.
 
-|xref:../rgant/rgant.adoc#_rgant-Action_command[`command()`]
+|xref:rg:ant:rgant.adoc#_rgant-Action_command[`command()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |whether the action invocation should be reified into a `o.a.i.applib.` +
-`services.command.Command` object through the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service.
+`services.command.Command` object through the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] service.
 
 
 |`commandExecuteIn()`
 |`FOREGROUND`,`BACKGROUND` +
 (`FOREGROUND`)
-|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
+|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
 
 
 |`commandPersistence()`
 |`PERSISTED`, `NOT_PERSISTED`, `IF_HINTED` +
 (`PERSISTED`)
-|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured).
+|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] has been configured).
 
 
 |`commandDtoProcessor()`
@@ -52,21 +52,21 @@ The table below summarizes the annotation's attributes.
 |If the `Command` also implements `CommandWithDto` (meaning that it can return a `CommandDto`, in other words be converted into an XML memento), then optionally specifies a processor that can refine this XML.
 
 
-|xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`domainEvent()`]
+|xref:rg:ant:rgant.adoc#_rgant-Action_domainEvent[`domainEvent()`]
 |subtype of `ActionDomainEvent` +
 (`ActionDomainEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to
+|the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to
 broadcast the action's business rule checking (hide, disable, validate) and its invocation (pre-execute and
 post-execute).
 
 
-|xref:../rgant/rgant.adoc#_rgant-Action_hidden[`hidden()`]
+|xref:rg:ant:rgant.adoc#_rgant-Action_hidden[`hidden()`]
 |`EVERYWHERE`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the action should be hidden from the user.
 
 
-|xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[`invokeOn()`]
+|xref:rg:ant:rgant.adoc#_rgant-Action_invokeOn[`invokeOn()`]
 |`OBJECT_ONLY`, `COLLECTION_ONLY`, `OBJECT_AND_COLLECTION` +
 (`OBJECT_ONLY`)
 |(deprecated - use view models and associated actions instead).
@@ -76,26 +76,26 @@ whether an action can be invoked on a single object and/or on many objects in a 
 Currently this is only supported for no-arg actions.
 
 
-|xref:../rgant/rgant.adoc#_rgant-Action_publishing[`publishing()`]
+|xref:rg:ant:rgant.adoc#_rgant-Action_publishing[`publishing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
-|whether the action invocation should be published to the registered xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+|whether the action invocation should be published to the registered xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 
-|xref:../rgant/rgant.adoc#_rgant-Action_restrictTo[`restrictTo()`]
+|xref:rg:ant:rgant.adoc#_rgant-Action_restrictTo[`restrictTo()`]
 |`NO_RESTRICTIONS`,`PROTOTYPING` +
 (`NO_RESTRICTIONS`)
 |whether the action is only available in prototyping mode, or whether it is available also in production mode.
 
-|xref:../rgant/rgant.adoc#_rgant-Action_semantics[`semantics()`]
+|xref:rg:ant:rgant.adoc#_rgant-Action_semantics[`semantics()`]
 |`SAFE_AND_REQUEST_CACHEABLE`, `SAFE`, +
 `IDEMPOTENT`, `IDEMPOTENT_ARE_YOU_SURE` +
 `NON_IDEMPOTENT`, `NON_IDEMPOTENT_ARE_YOU_SURE` + +
 (`NON_IDEMPOTENT`)
 |the action's semantics (ie whether objects are modified as the result of invoking this action, and if so whether reinvoking the action would result in no further change; if not whether the results can be cached for the remainder of the request).
 
-The `...ARE_YOU_SURE` variants cause a confirmation dialog to be displayed in the xref:../ugvw/ugvw.adoc#[Wicket viewer].
+The `...ARE_YOU_SURE` variants cause a confirmation dialog to be displayed in the xref:ug:vw:ugvw.adoc#[Wicket viewer].
 
-|xref:../rgant/rgant.adoc#_rgant-Action_typeOf[`typeOf()`]
+|xref:rg:ant:rgant.adoc#_rgant-Action_typeOf[`typeOf()`]
 |(none)
 |if the action returns a collection, hints as to the run-time type of the objects within that collection (as a fallback)
 

@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 The `promptStyle()` attribute is used to specify whether, when editing a domain object property, the new value for the property is prompted by way of a dialog box, or is prompted using an inline panel (replacing the property on the page).
 
-If the attribute is not set, then the value of the xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties[configuration property] `isis.viewer.wicket.promptStyle` is used.
+If the attribute is not set, then the value of the xref:ug:vw:ugvw.adoc#_ugvw_configuration-properties[configuration property] `isis.viewer.wicket.promptStyle` is used.
 If this is itself not set, then an inline prompt is used.
 
 For example:
@@ -24,5 +24,5 @@ public class Customer {
 <1> prompt for the new value for the property using an inline panel
 Note that the value `INLINE_AS_IF_EDIT` does not make sense for properties; if specified then it will be interpreted as just `INLINE`.
 
-Alternatively, the `promptStyle()` can be specified using xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layouts].
+Alternatively, the `promptStyle()` can be specified using xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layouts].
 

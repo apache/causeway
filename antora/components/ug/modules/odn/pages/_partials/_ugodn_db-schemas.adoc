@@ -51,7 +51,7 @@ CREATE TABLE isisaudit."AuditEntry" (
 [TIP]
 ====
 If for some reason you don't want to use schemas (though we strongly recommend that you do), then note that you can override the `@PersistenceCapable` annotation by providing XML metadata (the `mappings.jdo` file).
-See the section on xref:../ugodn/ugodn.adoc#_ugodn_configuring[configuring DataNucleus Overriding Annotations] for more details.
+See the section on xref:ug:odn:ugodn.adoc#_ugodn_configuring[configuring DataNucleus Overriding Annotations] for more details.
 ====
 
 

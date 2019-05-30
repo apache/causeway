@@ -11,7 +11,7 @@ This document brings together the hints-n-tips chapters from the various user gu
 == Fundamentals (UI Hints)
 
 Hints and tips for the most commonly used techniques for customising the way that the framework renders domain objects in the user interface.
-Taken from the xref:ugfun/ugfun.adoc[Fundamentals] guide.
+Taken from the xref:ug:fun:ugfun.adoc[Fundamentals] guide.
 
 :_imagesdir: ugfun/images/
 include::ugfun/_ugfun_ui-hints.adoc[leveloffset=+1,tags=inclusions]

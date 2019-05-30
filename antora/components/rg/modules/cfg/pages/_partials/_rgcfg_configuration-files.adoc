@@ -10,9 +10,9 @@ The `WEBINF/isis.properties` file is always read and must exist.
 
 In addition, the following other properties are searched for and if present also read:
 
-* `viewer_wicket.properties` - if the xref:../ugvw/ugvw.adoc#[Wicket viewer] is in use
+* `viewer_wicket.properties` - if the xref:ug:vw:ugvw.adoc#[Wicket viewer] is in use
 
-* `viewer_restfulobjects.properties` - if the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] is in use
+* `viewer_restfulobjects.properties` - if the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] is in use
 
 * `viewer.properties` - for any other viewer configuration (but there are none currently)
 

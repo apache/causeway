@@ -19,7 +19,7 @@ image::recent-pages/recent-pages.png[width="800px",link="{_imagesdir}recent-page
 
 [NOTE]
 ====
-Note that this screenshot show an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screenshot show an earlier version of the xref:ug:vw:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 
@@ -42,7 +42,7 @@ Selecting the domain object from the list causes the viewer to automatically nav
 
 == Related functionality
 
-The xref:../ugvw/ugvw.adoc#_ugvw_features_bookmarked-pages[bookmarked pages] (sliding panel) also provides links to recently visited objects, but only those explicitly marked as `@DomainObject(bookmarking=...)`.  The bookmarks panel also nests related objects together hierarchically (the recent pages drop-down does not).
+The xref:ug:vw:ugvw.adoc#_ugvw_features_bookmarked-pages[bookmarked pages] (sliding panel) also provides links to recently visited objects, but only those explicitly marked as `@DomainObject(bookmarking=...)`.  The bookmarks panel also nests related objects together hierarchically (the recent pages drop-down does not).
 
 
 

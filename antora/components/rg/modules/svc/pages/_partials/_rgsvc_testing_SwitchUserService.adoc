@@ -12,8 +12,8 @@ different users of the system.
 
 [NOTE]
 ====
-This service is deprecated; use xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] and the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_SudoService[`SudoService`] instead.
+This service is deprecated; use xref:ug:tst:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] and the
+xref:rg:svc:rgsvc.adoc#_rgsvc_testing_SudoService[`SudoService`] instead.
 ====
 
 

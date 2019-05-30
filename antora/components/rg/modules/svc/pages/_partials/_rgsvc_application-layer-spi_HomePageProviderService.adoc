@@ -5,9 +5,9 @@ include::_attributes.adoc[]
 
 
 
-This service simply provides access to the home page object (if any) that is returned from the domain service action annotated with xref:../rgant/rgant.adoc#_rgant-HomePage[`@HomePage`].
+This service simply provides access to the home page object (if any) that is returned from the domain service action annotated with xref:rg:ant:rgant.adoc#_rgant-HomePage[`@HomePage`].
 
-It was originally introduced to support the default implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_RoutingService[`RoutingService`], but was factored out to support alternative implementations of that service (and may be useful for other use cases).
+It was originally introduced to support the default implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_RoutingService[`RoutingService`], but was factored out to support alternative implementations of that service (and may be useful for other use cases).
 
 
 == SPI & Implementation

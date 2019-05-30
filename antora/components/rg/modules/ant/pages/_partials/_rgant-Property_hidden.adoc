@@ -10,7 +10,7 @@ Properties can be hidden at the domain-level, indicating that they are not visib
 
 [TIP]
 ====
-It is also possible to use xref:../rgant/rgant.adoc#_rgant-Property_hidden[`@Property#hidden()`] to hide an action at the domain layer.
+It is also possible to use xref:rg:ant:rgant.adoc#_rgant-Property_hidden[`@Property#hidden()`] to hide an action at the domain layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
@@ -58,13 +58,13 @@ This combines `PARENTED_TABLES` and `STANDALONE_TABLES`.
 +
 The property should not be hidden, overriding any other metadata/conventions that would normally cause the property to be hidden. +
 
-For example, if a property is annotated with xref:../rgant/rgant.adoc#_rgant-Title[`@Title`], then normally this should be hidden from all
+For example, if a property is annotated with xref:rg:ant:rgant.adoc#_rgant-Title[`@Title`], then normally this should be hidden from all
 tables. Annotating with `@Property(where=Where.NOWHERE)` overrides this.
 
 
 [NOTE]
 ====
-The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] has only partial support for these `Where` enums.
+The xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] has only partial support for these `Where` enums.
 ====
 
 
@@ -72,5 +72,5 @@ The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] has only partial support fo
 
 This attribute can also be applied to:
 
-* xref:../rgant/rgant.adoc#_rgant-ActionLayout_hidden[actions]
-* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_hidden[collections].
+* xref:rg:ant:rgant.adoc#_rgant-ActionLayout_hidden[actions]
+* xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_hidden[collections].

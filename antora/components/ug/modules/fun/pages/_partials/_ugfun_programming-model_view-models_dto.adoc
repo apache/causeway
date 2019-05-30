@@ -46,16 +46,16 @@ public class ToDoItemV1_1 implements Dto {                          // <5>
     protected List<ToDoItem> similarItems = Lists.newArrayList();
 }
 ----
-<1> package name encodes major version; see discussion on xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_dto_versioning[versioning]
+<1> package name encodes major version; see discussion on xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_dto_versioning[versioning]
 <2> identifies this class as a view model and defines the root element for JAXB serialization
 <3> all properties in the class must be listed; (they can be ignored using `@XmlTransient`)
-<4> demonstrating use of UI events for a subscriber to provide the DTO's title; see xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`].
-<5> class name encodes (major and) minor version; see discussion on xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_dto_versioning[versioning]
-<6> again, see discussion on xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_dto_versioning[versioning]
-<7> again, see discussion on xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_dto_versioning[versioning]
+<4> demonstrating use of UI events for a subscriber to provide the DTO's title; see xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`].
+<5> class name encodes (major and) minor version; see discussion on xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_dto_versioning[versioning]
+<6> again, see discussion on xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_dto_versioning[versioning]
+<7> again, see discussion on xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_dto_versioning[versioning]
 <8> simple scalar properties
-<9> reference to a persistent entity; discussed xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb_referencing-domain-entities[here]
-<10> reference to a collection of persistent entities; again discussed xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb_referencing-domain-entities[here]
+<9> reference to a persistent entity; discussed xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb_referencing-domain-entities[here]
+<10> reference to a collection of persistent entities; again discussed xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb_referencing-domain-entities[here]
 
 
 

@@ -9,7 +9,7 @@ End users interact with view models in the same way as a domain entity, indeed t
 
 However, whereas domain entities are mapped to a datastore, view models are not.
 Instead they are recreated dynamically by serializing their state, ultimately into the URL itself (meaning their state it is in effect implicitly managed by the client browser).
-You will notice that the URL for view models (as shown in xref:../ugvw/ugvw.adoc#[Wicket viewer] or xref:../ugvro/ugvro.adoc#[RestfulObjects viewer]) tends to be quite long.
+You will notice that the URL for view models (as shown in xref:ug:vw:ugvw.adoc#[Wicket viewer] or xref:ug:vro:ugvro.adoc#[RestfulObjects viewer]) tends to be quite long.
 
 This capability opens up a number of more advanced use cases:
 
@@ -27,7 +27,7 @@ We explore these use cases in more detail below.
 [TIP]
 ====
 Details on how to actually write a view model (the programming model for view models) is
-xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models[here].
+xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models[here].
 ====
 
 
@@ -96,7 +96,7 @@ You certainly _shouldn't_ try to build out a domain layer that could support eve
 
 Instead, you should iterate.
 Identify the use case/story/end-user objective that will deliver value to the business.
-Then build out the minimum domain entities to support that use case (refining the xref:../ugfun/ugfun.adoc#__ugfun_core-concepts_philosophy_domain-driven-design_ubiquitous-language[ubiquitous language] as you go).
+Then build out the minimum domain entities to support that use case (refining the xref:ug:fun:ugfun.adoc#__ugfun_core-concepts_philosophy_domain-driven-design_ubiquitous-language[ubiquitous language] as you go).
 Then, identify if there any view models that could be introduced which would simplify the end-user interactions with the system (perhaps automating several related use cases together).
 ****
 
@@ -117,31 +117,31 @@ We strongly recommend that you build your applications from the domain layer up,
 
 DTOs (data transfer objects) are simple classes that (according to link:https://en.wikipedia.org/wiki/Data_transfer_object[wikipedia]) "carry data between processes".
 
-If those two processes are parts of the same overall application (the same team builds and deploys both server and client) then there's generally no need to define a DTO; just access the entities using Apache Isis' xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
+If those two processes are parts of the same overall application (the same team builds and deploys both server and client) then there's generally no need to define a DTO; just access the entities using Apache Isis' xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
 
 On the other hand, if the client consuming the DTO is a different application -- by which we mean developed/deployed by a different (possible third-party) team -- then the DTOs act as a formal contract between the provider and the consumer.
-In such cases, exposing domain entities over xref:../ugvro/ugvro.adoc#[RestfulObjects] would be "A Bad Thing"(TM) because the consumer would in effect have access to implementation details that could then not be easily changed by the producer.
+In such cases, exposing domain entities over xref:ug:vro:ugvro.adoc#[RestfulObjects] would be "A Bad Thing"(TM) because the consumer would in effect have access to implementation details that could then not be easily changed by the producer.
 
 To support this use case, a view model can be defined such that it can act as a DTO.
 This is done by annotating the class using JAXB annotations; this allows the consumer to obtain the DTO in XML format along with a corresponding XSD schema describing the structure of that XML.
 A discussion of how that might be done using an ESB such as link:http://camel.apache.org[Apache Camel(TM)] follows xref:../ugbtb/ugbtb.adoc#__ugfun_building-blocks_view-models_dtos_consumers[below].
 
-In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:../ugvw/ugvw.adoc#[Wicket viewer] just like any other.
-In fact (as the xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
+In case it's not obvious, these DTOs are still usable as "regular" view models; they will render in the xref:ug:vw:ugvw.adoc#[Wicket viewer] just like any other.
+In fact (as the xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[programming model] section below makes clear), these JAXB-annotated view models are in many regards the most powerful of all the alternative ways of writing view models.
 
 It's also worth noting that it is also possible to download the XML (or XSD) straight from the UI, useful during development.
-The view model simply needs to implement the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] marker interface; the framework has xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Dto[mixins] that contribute the download actions to the view model.
+The view model simply needs to implement the xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] marker interface; the framework has xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_Dto[mixins] that contribute the download actions to the view model.
 
 [TIP]
 ====
-Details of how to consume such DTOs can be found xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb_dto-consumers[here].
+Details of how to consume such DTOs can be found xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb_dto-consumers[here].
 ====
 
 
 [[__ugfun_building-blocks_view-models_for-rest-clients]]
 == For REST Clients
 
-The xref:../ugvro/ugvro.adoc#[Restful Objects] viewer automatically provides a REST API for both domain entities.
+The xref:ug:vro:ugvro.adoc#[Restful Objects] viewer automatically provides a REST API for both domain entities.
 Or, you can use it to only expose view models, taking care to map the state of the domain entity/ies into a view model.
 
 Which beckons the question: when is it safe to safe to expose domain entities directly as REST resources, and when should view models be exposed instead.

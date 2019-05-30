@@ -9,7 +9,7 @@ The `@DomainServiceLayout` annotation applies to domain services, collecting tog
 
 [TIP]
 ====
-You will also find some additional material in the xref:../ugvw/ugvw.adoc#_ugvw_layout_application-menu[object layout] chapter.
+You will also find some additional material in the xref:ug:vw:ugvw.adoc#_ugvw_layout_application-menu[object layout] chapter.
 ====
 
 
@@ -24,17 +24,17 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuBar[`menuBar()`]
+|xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuBar[`menuBar()`]
 |`PRIMARY`, `SECONDARY`, `TERTIARY` (`PRIMARY`).
 |the menubar in which the menu that holds this service's actions should reside.
 
 
-|xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`menuOrder()`]
+|xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`menuOrder()`]
 |
 |the order of the service's menu with respect to other service's.
 
 
-|xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_named[`named()`]
+|xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_named[`named()`]
 |string, eg "Customers"
 |name of this class (overriding the name derived from its name in code)
 
@@ -63,7 +63,7 @@ public class ToDoItems {
 
 [NOTE]
 ====
-Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[`.layout.xml`] file (only for properties, collections and actions are supported).
+Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[`.layout.xml`] file (only for properties, collections and actions are supported).
 ====
 
 

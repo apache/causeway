@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 The `cssClassFa()` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered on the action's representation as a button or menu item.    The related `cssClassFaPosition()` attribute specifies the positioning of the icon, to the left or the right of the text.
 
-These attributes can also be applied to xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[domain objects] and to xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClassFa[view models] to specify the object's icon.
+These attributes can also be applied to xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[domain objects] and to xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_cssClassFa[view models] to specify the object's icon.
 
 
 For example:
@@ -32,11 +32,11 @@ There can be multiple "fa-" classes, eg to mirror or rotate the icon. There is n
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 
 [NOTE]
 ====
-The similar xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
+The similar xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
 ====
 

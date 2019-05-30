@@ -21,7 +21,7 @@ It also lists their corresponding implementation, either a default implementatio
 |Notes
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`o.a.i.applb.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`o.a.i.applb.` +
 `services.conmap` +
 `ContentMappingService`]
 |(Attempt to) map the returned data into the representation required by the client's HTTP `Accept` header.
@@ -33,10 +33,10 @@ No default implementation.
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_EmailNotificationService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_EmailNotificationService[`o.a.i.applib.` +
 `services.userreg` +
 `EmailNotificationService`]
-|Notify a user during xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[self-registration] of users.
+|Notify a user during xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[self-registration] of users.
 |`EmailNotificationService-` +
 `Default` +
 ``o.a.i.core`` +
@@ -45,7 +45,7 @@ No default implementation.
 a configured `EmailService`
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ErrorReportingService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ErrorReportingService[`o.a.i.applib.` +
 `services.error` +
 `ErrorReportingService`]
 |Record details of an error occurring in the system (eg in an external incident recording system such as JIRA), and return a more friendly (jargon-free) message to display to the end user, with optional reference (eg `XXX-1234`).
@@ -53,7 +53,7 @@ a configured `EmailService`
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`o.a.i.applib.` +
 `services.exceprecog` +
 `ExceptionRecognizer`]
 |Convert certain exceptions (eg foreign or unique key violation in the database) into a format that can be rendered to the end-user.
@@ -65,7 +65,7 @@ a configured `EmailService`
 |Extensible using composite pattern if required
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`o.a.i.applib.` +
 `services.grid` +
 `GridSystemService`]
 |Validates and normalizes the grid layout for a domain class (with respect to a particular grid
@@ -76,7 +76,7 @@ system such as Bootstrap3), also providing a default grid (for those domain clas
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`o.a.i.applib.` +
 `services.grid` +
 `GridLoaderService`]
 |Responsible for loading a grid layout for a domain class, eg from a `layout.xml` file.
@@ -86,11 +86,11 @@ system such as Bootstrap3), also providing a default grid (for those domain clas
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`o.a.i.applib.` +
 `services.grid` +
 `GridService`]
-|A facade on top of both xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] and
-xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`], thus being able to return normalized
+|A facade on top of both xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] and
+xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`], thus being able to return normalized
 grids for any domain class.
 |`GridServiceDefault` +
 ``o.a.i.core`` +
@@ -98,7 +98,7 @@ grids for any domain class.
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_HintStore[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_HintStore[`o.a.i.applib.` +
 `services.hint` +
 `HintStore`]
 |Stores UI hints on a per-object basis. For example, the viewer remembers which tabs are selected, and for collections which view is selected (eg table or hidden), which page of a table to render, or whether "show all" (rows) is toggled.
@@ -108,29 +108,29 @@ grids for any domain class.
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`o.a.i.applib.` +
 `services.i18n` +
 `LocaleProvider`]
-|Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`].
+|Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`].
 |`LocaleProviderWicket` +
 ``o.a.i.viewer`` +
 ``isis-viewer-wicket-impl``
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_RoutingService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_RoutingService[`o.a.i.applib.` +
 `services.routing` +
 `RoutingService`]
 |Return an alternative object than that returned by an action.
 |`RoutingServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-applib``
-|The default implementation will return the home page (per xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_HomePageProviderService[`HomePageProviderService`]) if a void or null is returned. +
-Used by the xref:../ugvw/ugvw.adoc#[Wicket viewer] only.
+|The default implementation will return the home page (per xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_HomePageProviderService[`HomePageProviderService`]) if a void or null is returned. +
+Used by the xref:ug:vw:ugvw.adoc#[Wicket viewer] only.
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TableColumnOrderService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TableColumnOrderService[`o.a.i.applib.` +
 `services.tablecol` +
 `TableColumn-` +
 `OrderService`]
@@ -142,10 +142,10 @@ Used by the xref:../ugvw/ugvw.adoc#[Wicket viewer] only.
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`o.a.i.applib.` +
 `services.i18n` +
 `TranslationService`]
-|Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocalProvider`].
+|Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocalProvider`].
 |`TranslationServicePo` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
@@ -154,17 +154,17 @@ depends on: +
 `TranslationsResolver`, `LocaleProvider`
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationsResolver[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationsResolver[`o.a.i.applib.` +
 `services.i18n` +
 `TranslationsResolver`]
-|Obtain translations for a particuar phrase and locale, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`]
+|Obtain translations for a particuar phrase and locale, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`]
 |`TranslationsResolverWicket` +
 ``o.a.i.viewer`` +
 ``isis-viewer-wicket-impl``
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_UrlEncodingService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_UrlEncodingService[`o.a.i.applib.` +
 `services.urlencoding` +
 `UrlEncodingService`]
 |Converts strings into a form safe for use within a URL.  Used to convert view models mementos into usable URL form.
@@ -176,7 +176,7 @@ depends on: +
 |
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_UserProfileService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_UserProfileService[`o.a.i.applib.` +
 `services.userprof` +
 `UserProfileService`]
 |Obtain an alternative (usually enriched/customized) name for the current user, to render in the UI.

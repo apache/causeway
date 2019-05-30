@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-The `FixtureScriptsSpecificationProvider` configures the xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`] domain service, providing the location to search for fixture scripts and other settings.
+The `FixtureScriptsSpecificationProvider` configures the xref:rg:svc:rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScripts`] domain service, providing the location to search for fixture scripts and other settings.
 
 The service is used only by the default implementation of `FixtureScripts`, namely `FixtureScriptsDefault`.
 
@@ -50,7 +50,7 @@ The class is immutable but it has a builder (obtained using `FixturescriptsSpeci
 
 == Implementation
 
-The xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has a simple implementation of this service:
+The xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has a simple implementation of this service:
 
 [source,java]
 ----

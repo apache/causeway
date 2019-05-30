@@ -367,7 +367,7 @@ public class SimpleModule extends ModuleAbstract {
 }
 ----
 
-In the `fixture` subpackage is the `SimpleObject_persona` "persona" which uses the corresponding `SimpleObjectBuilder` builder script; further discussion on this pattern xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts_api-and-usage_persona-and-builders[here].
+In the `fixture` subpackage is the `SimpleObject_persona` "persona" which uses the corresponding `SimpleObjectBuilder` builder script; further discussion on this pattern xref:ug:tst:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage_persona-and-builders[here].
 These fixtures are also used by "local" integration tests, which reside under `src/test/java`.
 
 There are also unit tests and "glue" for the BDD specs:
@@ -400,7 +400,7 @@ With regard to the naming of these various BDD specs and integration tests, they
 Integration tests include the name "IntegTest", while unit tests contain merely "Test".
 
 The module also defines its own manifest, `SimpleModuleManifest`.
-This is used to run Isis' own xref:../rgmvn/rgmvn.adoc#[maven plugin] to xref:../rgmvn/rgmvn.adoc#_rgmvn_validate[validate] the domain object model (eg to detect orphaned supported methods).
+This is used to run Isis' own xref:rg:mvn:rgmvn.adoc#[maven plugin] to xref:rg:mvn:rgmvn.adoc#_rgmvn_validate[validate] the domain object model (eg to detect orphaned supported methods).
 
 
 
@@ -488,7 +488,7 @@ The files in `src/main/jettyconsole` provide a splash image (if not run in headl
 +
 This uses the Dockerfile residing in `docker/Dockerfile` (under `src/main/resources`).
 
-* also, the xref:../rgmvn/rgmvn.adoc#[Apache Isis Maven plugin] is also configured to generate a xref:../rgmvn/rgmvn.adoc#_rgmvn_swagger[swagger] spec file for the entire application, in the `xxx-webapp` module
+* also, the xref:rg:mvn:rgmvn.adoc#[Apache Isis Maven plugin] is also configured to generate a xref:rg:mvn:rgmvn.adoc#_rgmvn_swagger[swagger] spec file for the entire application, in the `xxx-webapp` module
 
 Under `src/main/resources` there is:
 
@@ -536,7 +536,7 @@ where `myapp` is the `artifactId` entered above.
 [[__ugfun_getting-started_simpleapp-archetype_running-the-app]]
 == Running the App
 
-The `simpleapp` archetype generates a single WAR file, configured to run both the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[Restful Objects viewer].
+The `simpleapp` archetype generates a single WAR file, configured to run both the xref:ug:vw:ugvw.adoc#[Wicket viewer] and the xref:ug:vro:ugvro.adoc#[Restful Objects viewer].
 The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
 
 Once you've built the app, you can run the WAR in a variety of ways.
@@ -613,14 +613,14 @@ Once more, see link:https://github.com/danhaywood/java-mavenmixin-docker#how-to-
 === From within the IDE
 
 Most of the time, though, you'll probably want to run the app from within your IDE.
-The mechanics of doing this will vary by IDE; see the xref:../dg/dg.adoc#_dg_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.
-Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:../dg/dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+The mechanics of doing this will vary by IDE; see the xref:support:dg:dg.adoc#_dg_ide[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.
+Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:support:dg:dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
 image::getting-started/simpleapp-webapp.png[width="600px",link="{_imagesdir}getting-started/simpleapp-webapp.png"]
 
-with the maven goal to run the DataNucleus enhancer (discussed in more detail xref:../dg/dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[here]) before launch defined as:
+with the maven goal to run the DataNucleus enhancer (discussed in more detail xref:support:dg:dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[here]) before launch defined as:
 
 image::getting-started/simpleapp-webapp-before-launch.png[width="600px",link="{_imagesdir}getting-started/simpleapp-webapp-before-launch.png"]
 
@@ -630,13 +630,13 @@ image::getting-started/simpleapp-webapp-before-launch.png[width="600px",link="{_
 == Running with Fixtures
 
 It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory testing.
-This is done by specifying a xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts[fixture script] on the command line.
+This is done by specifying a xref:ug:tst:ugtst.adoc#_ugtst_fixture-scripts[fixture script] on the command line.
 
 If you are running the app from an IDE, then you can specify the fixture script using the `--fixture` flag.  The archetype provides the `domainapp.fixture.scenarios.RecreateSimpleObjects` fixture script, for example:
 
 image::getting-started/simpleapp-webapp-with-fixtures.png[width="600px",link="{_imagesdir}getting-started/simpleapp-webapp-with-fixtures.png"]
 
-Alternatively, you can run with a different xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] using the `--appManifest` (or `-m`) flag.
+Alternatively, you can run with a different xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] using the `--appManifest` (or `-m`) flag.
 The archetype provides
 `domainapp.app.DomainAppAppManifestWithFixtures` which specifies the aforementioned `RecreateSimpleObjects` fixture.
 
@@ -739,5 +739,5 @@ docker run -p 8080:8080 -d danhaywood/simpleapp:20180315.0935.master.4521215
 Once you are familiar with the generated app, you'll want to start modifying it.
 There is plenty of guidance on this site; start with this guide (fundamentals) and then look at the other guides available the main xref:../../documentation.adoc#[documentation] page.
 
-If you use IntelliJ IDEA or Eclipse, do also install the xref:../dg/dg.adoc#__dg_ide_intellij_live-templates[live templates (for IntelliJ)] / xref:../dg/dg.adoc#__dg_ide_eclipse_editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
+If you use IntelliJ IDEA or Eclipse, do also install the xref:support:dg:dg.adoc#__dg_ide_intellij_live-templates[live templates (for IntelliJ)] / xref:support:dg:dg.adoc#__dg_ide_eclipse_editor-templates[editor templates (for Eclipse)]; these will help you follow the Apache Isis naming conventions.
 

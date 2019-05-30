@@ -18,7 +18,7 @@ public class ToDoItems {
 }
 ----
 
-In the xref:../ugvw/ugvw.adoc#[Wicket viewer], domain services placed on the `PRIMARY` menu bar appears to the left:
+In the xref:ug:vw:ugvw.adoc#[Wicket viewer], domain services placed on the `PRIMARY` menu bar appears to the left:
 
 image::reference-annotations/DomainServiceLayout/menuBar-primary.png[width="720px",link="{_imagesdir}reference-annotations/DomainServiceLayout/menuBar-primary.png"]
 
@@ -32,11 +32,11 @@ Domain services placed on the `TERTIARY` appear in the menu bar associated with 
 image::reference-annotations/DomainServiceLayout/menuBar-tertiary.png[width="720px",link="{_imagesdir}reference-annotations/DomainServiceLayout/menuBar-tertiary.png"]
 
 
-The grouping of multiple domain services actions within a single drop-down is managed by the xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
+The grouping of multiple domain services actions within a single drop-down is managed by the xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
 
 
 [NOTE]
 ====
-The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] does not support this attribute.
+The xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] does not support this attribute.
 ====
 

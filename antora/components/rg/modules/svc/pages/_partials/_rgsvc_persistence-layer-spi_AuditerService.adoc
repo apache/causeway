@@ -70,7 +70,7 @@ log4j.additivity.org.apache.isis.applib.services.audit.AuditerServiceLogging=fal
 
 == Usage
 
-The typical way to indicate that an object should be audited is to annotate it with the xref:../rgant/rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
+The typical way to indicate that an object should be audited is to annotate it with the xref:rg:ant:rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
 
 
 == Alternative Implementations
@@ -88,7 +88,7 @@ the secondary menu bar.
 * `AuditingServiceRepository` service to to search for persisted `AuditEntry``s.
 None of its actions are visible in the user interface (they are all `@Programmatic`).
 
-* `AuditingServiceContributions` which contributes collections to the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[ `HasTransactionId`] interface.
+* `AuditingServiceContributions` which contributes collections to the xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[ `HasTransactionId`] interface.
 This will therefore display all audit entries that occurred in a given request/transaction, in other words whenever a command, a published event or another audit entry is displayed.
 
 
@@ -100,9 +100,9 @@ If menu items or contributions are not required in the UI, these can be suppress
 
 == Related Services
 
-The auditing service works very well with implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] that persist the ``Interaction.Execution`` objects obtained from the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service.
+The auditing service works very well with implementations of xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] that persist the ``Interaction.Execution`` objects obtained from the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`] service.
 The interaction execution captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditerService` audit entries capture the _effect_ of that interaction in terms of changed state.
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can also be combined with the auditer service, however
+The xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] can also be combined with the auditer service, however
 ``Command``s are primarily concerned with capture the _intent_ of an action, not the actual action invocation itself.
 

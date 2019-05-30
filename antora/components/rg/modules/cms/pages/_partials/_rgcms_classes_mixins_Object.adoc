@@ -8,7 +8,7 @@ The framework provides a single mixin that contributes to simply `java.lang.Obje
 It provides the ability to download the layout XML for any domain object (in practical terms: entities and view models).
 
 These mixin actions are all associated with the "Metadata" fieldset.
-A number of other xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Persistable[mixins] also contribute properties or actions to the "Metadata" fieldset.
+A number of other xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_Persistable[mixins] also contribute properties or actions to the "Metadata" fieldset.
 
 
 
@@ -17,7 +17,7 @@ A number of other xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Persistable[mix
 
 When a domain object is rendered the end-user can select different tabs, and for collections can sort the columns,
 navigate to second pages, or select different views of collections.
-If the user revisits that object, the xref:../ugvw/ugvw.adoc#[Wicket viewer] will remember these hints and render the domain object in the same state.
+If the user revisits that object, the xref:ug:vw:ugvw.adoc#[Wicket viewer] will remember these hints and render the domain object in the same state.
 These rendering hints are also included if the user copies the URL using the anchor link (to right hand of the object's title).
 
 The `Object_clearHints` mixin provides the ability for the end-user to discard these hints so that the object is
@@ -32,14 +32,14 @@ public void clearHints() {
 
 === Related Services
 
-This mixin uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_HintStore[`HintStore`] service to store and retrieve UI hints for each rendered object, per user.
+This mixin uses the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_HintStore[`HintStore`] service to store and retrieve UI hints for each rendered object, per user.
 
 
 
 [[__rgcms_classes_mixins_Object_downloadLayoutXml]]
 == `downloadLayoutXml()`
 
-The `Object_downloadLayoutXml` mixin provides an action to download the xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[layout XML] for the current domain object.
+The `Object_downloadLayoutXml` mixin provides an action to download the xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[layout XML] for the current domain object.
 It has the following signature:
 
 [source,java]
@@ -53,13 +53,13 @@ public Object downloadLayoutXml(
 ----
 <1> either current, complete, normalized or minimal.
 
-See the documentation on xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[layout XML] and also
-the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] for more information on these styles
+See the documentation on xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[layout XML] and also
+the xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] for more information on these styles
 
 
 === Related Services
 
-This mixin calls xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] to obtain the layout XML.
+This mixin calls xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] to obtain the layout XML.
 
 
 
@@ -80,14 +80,14 @@ public void rebuildMetamodel() {
 
 === Related Services
 
-This mixin calls xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_MetamodelService[`MetaModelService`] and the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] to invalidate their caches.
+This mixin calls xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_MetamodelService[`MetaModelService`] and the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] to invalidate their caches.
 
 
 
 [[__rgcms_classes_mixins_Object_downloadLayoutXml]]
 == `downloadLayoutXml()`
 
-The `Object_downloadLayoutXml` mixin provides an action to download the xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[layout XML] for the current domain object.
+The `Object_downloadLayoutXml` mixin provides an action to download the xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[layout XML] for the current domain object.
 It has the following signature:
 
 [source,java]
@@ -101,20 +101,20 @@ public Object downloadLayoutXml(
 ----
 <1> either current, complete, normalized or minimal.
 
-See the documentation on xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[layout XML] and also
-the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] for more information on these styles
+See the documentation on xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[layout XML] and also
+the xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] for more information on these styles
 
 
 === Related Services
 
-This mixin calls xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] to obtain the layout XML.
+This mixin calls xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] to obtain the layout XML.
 
 
 
 [[__rgcms_classes_mixins_Object_openRestApi]]
 == `openRestApi()`
 
-The `Object_openRestApi` mixin provides an action to navigate to the URL of the xref:../ugvro/ugvro.adoc#[Restful Objects resource] corresponding to the domain object.
+The `Object_openRestApi` mixin provides an action to navigate to the URL of the xref:ug:vro:ugvro.adoc#[Restful Objects resource] corresponding to the domain object.
 It has the following signature:
 
 [source,java]
@@ -125,7 +125,7 @@ public URL openRestApi() { ... }
 
 === Related Services
 
-This mixin calls xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`] to build the URL.
+This mixin calls xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`] to build the URL.
 
 
 

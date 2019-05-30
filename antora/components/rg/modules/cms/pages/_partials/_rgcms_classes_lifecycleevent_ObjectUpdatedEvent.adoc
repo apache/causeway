@@ -5,8 +5,8 @@ include::_attributes.adoc[]
 
 
 
-Subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object has just been updated in the database.
-This is done either explicitly when the current transaction is flushed using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
+Subclass of xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast when an object has just been updated in the database.
+This is done either explicitly when the current transaction is flushed using the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]'s `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
-`ObjectUpdatedEvent.Default` is the implementation that is used by default, but this can be overridden using xref:../rgant/rgant.adoc#_rgant_DomainObject_updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`].
+`ObjectUpdatedEvent.Default` is the implementation that is used by default, but this can be overridden using xref:rg:ant:rgant.adoc#_rgant_DomainObject_updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`].
 

@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 
-This page explains how you can contribute to Apache Isis. You'll probably also want xref:../dg/dg.adoc#_dg_ide[set up your IDE] and learn xref:../dg/dg.adoc#_dg_building-isis[how to build Apache Isis].
+This page explains how you can contribute to Apache Isis. You'll probably also want xref:support:dg:dg.adoc#_dg_ide[set up your IDE] and learn xref:support:dg:dg.adoc#_dg_building-isis[how to build Apache Isis].
 
 Thanks for considering to help out, your contributions are appreciated!
 
@@ -157,7 +157,7 @@ The command line prompt should also indicate you are on a branch, isolated from 
 
 === Make File Changes and Commit
 
-Next, make changes to your files using the usual commands (see also our xref:../dg/dg.adoc#_dg_git-cookbook[git cookbook] section):
+Next, make changes to your files using the usual commands (see also our xref:support:dg:dg.adoc#_dg_git-cookbook[git cookbook] section):
 
 * `git add`
 * `git mv`

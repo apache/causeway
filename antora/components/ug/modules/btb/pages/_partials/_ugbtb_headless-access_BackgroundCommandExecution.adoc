@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-The `BackgroundCommandExecution` class (a subclass of xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_AbstractIsisSessionTemplate[AbstractIsisSessionTemplate]) is intended to simplify the execution of background ``Command``s persisted by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] and the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`].
+The `BackgroundCommandExecution` class (a subclass of xref:ug:btb:ugbtb.adoc#_ugbtb_headless-access_AbstractIsisSessionTemplate[AbstractIsisSessionTemplate]) is intended to simplify the execution of background ``Command``s persisted by way of the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] and the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`].
 
 Its signature is:
 
@@ -33,9 +33,9 @@ image::headless-access/BackgroundCommandExecution.png[width="400px",link="{_imag
 
 == Background Execution
 
-The `BackgroundCommandExecutionFromBackgroundCommandServiceJdo` is a concrete subclass of `BackgroundCommandExecution` (see the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundCommandService`]), the intended use being for the class to be instantiated regularly (eg every 10 seconds) by a scheduler such as http://quartz-scheduler.org[Quartz]) to poll for ``Command``s to be executed, and then execute them.
+The `BackgroundCommandExecutionFromBackgroundCommandServiceJdo` is a concrete subclass of `BackgroundCommandExecution` (see the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundCommandService`]), the intended use being for the class to be instantiated regularly (eg every 10 seconds) by a scheduler such as http://quartz-scheduler.org[Quartz]) to poll for ``Command``s to be executed, and then execute them.
 
-This implementation queries for ``Command``s persisted by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's  implementations of xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] using the `BackgroundCommandServiceJdoRepository`.
+This implementation queries for ``Command``s persisted by the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module's  implementations of xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] and xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`] using the `BackgroundCommandServiceJdoRepository`.
 
 The diagram below (link:http://yuml.me/edit/25343da1[yuml.me/25343da1]) shows the inheritance hierarchy for this class:
 

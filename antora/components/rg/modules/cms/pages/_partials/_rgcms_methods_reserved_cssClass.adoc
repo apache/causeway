@@ -7,10 +7,10 @@ include::_attributes.adoc[]
 
 The `cssClass()` returns a CSS class for a particular object instance.
 
-The xref:../ugvw/ugvw.adoc#[Wicket viewer] wraps the object's representation in a containing `<div>` with the class added.
+The xref:ug:vw:ugvw.adoc#[Wicket viewer] wraps the object's representation in a containing `<div>` with the class added.
 This is done both for rendering the object either in a table or when rendering the object on its own page.
 
-In conjunction with xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered. +
+In conjunction with xref:rg:cfg:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered. +
 
 
 For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add a strikethrough for completed todo items.
@@ -31,7 +31,7 @@ public class ToDoItem ... {
 }
 ----
 
-In the xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[application.css], the following styles were then added:
+In the xref:rg:cfg:rgcfg.adoc#_rgcfg_application-specific_application-css[application.css], the following styles were then added:
 
 [source,css]
 ----
@@ -48,6 +48,6 @@ tr.done {
 
 See also:
 
-* xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
-* xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`]
-* xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_layout[`layout()`]
+* xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
+* xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`]
+* xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_layout[`layout()`]

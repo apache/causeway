@@ -5,8 +5,8 @@ include::_attributes.adoc[]
 
 
 
-The `SudoService` allows the current user reported by the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`]  to be temporarily changed to some other user.
-This is useful both for xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
+The `SudoService` allows the current user reported by the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`]  to be temporarily changed to some other user.
+This is useful both for xref:ug:tst:ugtst.adoc#_ugtst_integ-test-support[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:ug:tst:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
 
 
 == API
@@ -31,12 +31,12 @@ which will run the provided block of code (a `Runnable` or a `Callable`) in a wa
 `UserService#getUser()` will return the specified user (and roles, if specified).
 (If roles are not specified, then the roles of the current user are preserved).
 
-The current user/role reported by the internal xref:../rgfis/rgfis.adoc#_rgfis_application-layer_AuthenticationSessionProvider[`AuthenticationSessionProvider`] will also return the specified user/roles.
+The current user/role reported by the internal xref:rg:fis:rgfis.adoc#_rgfis_application-layer_AuthenticationSessionProvider[`AuthenticationSessionProvider`] will also return the specified user/roles.
 
 [IMPORTANT]
 ====
-Note however that this the "effective user" does not propagate through to the xref:../ugsec/ugsec.adoc#[Shiro security mechanism], which will continue to be evaluated according to the permissions of the current user.
-See the xref:../rgsvc/rgsvc.adoc#__rgsvc_testing_SudoService_ACCESS-ALL-ROLE[`ACCESS-ALL-ROLE`] below for details of how to circumvent this.
+Note however that this the "effective user" does not propagate through to the xref:ug:sec:ugsec.adoc#[Shiro security mechanism], which will continue to be evaluated according to the permissions of the current user.
+See the xref:rg:svc:rgsvc.adoc#__rgsvc_testing_SudoService_ACCESS-ALL-ROLE[`ACCESS-ALL-ROLE`] below for details of how to circumvent this.
 ====
 
 
@@ -69,11 +69,11 @@ protected void execute(final ExecutionContext ec) {
 [[__rgsvc_testing_SudoService_ACCESS-ALL-ROLE]]
 === ACCESS_ALL_ROLE
 
-When `sudo(...)` is called the "effective user" is reported by both xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`] and by xref:../rgfis/rgfis.adoc#_rgfis_application-layer_AuthenticationSessionProvider[`AuthenticationSessionProvider`], but does not propagate through to the xref:../ugsec/ugsec.adoc#[Shiro security mechanism].
+When `sudo(...)` is called the "effective user" is reported by both xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`] and by xref:rg:fis:rgfis.adoc#_rgfis_application-layer_AuthenticationSessionProvider[`AuthenticationSessionProvider`], but does not propagate through to the xref:ug:sec:ugsec.adoc#[Shiro security mechanism].
 These continue to be evaluated according to the permissions of the current user.
 
 This can be a problem in certain use cases.
-For example if running a fixture script (which uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`]) from within an implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`UserRegistrationService`], this is likely to result in ``HiddenException``s being thrown because there is no effective user.
+For example if running a fixture script (which uses the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`]) from within an implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`UserRegistrationService`], this is likely to result in ``HiddenException``s being thrown because there is no effective user.
 
 In such cases, permission checking can simply be disabled by specifying `SudoService.ACCESS_ALL_ROLE` as one of the roles.
 For example:
@@ -104,7 +104,7 @@ In the future this service may be used more deeply, eg to propagate permissions 
 == SPI
 
 The `SudoService.Spi` service allows implementations of `SudoService` to notify other services/components that the effective user and roles are different.
-The default implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`] has been refactored to leverage this SPI.
+The default implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_UserService[`UserService`] has been refactored to leverage this SPI.
 
 [source,java]
 ----

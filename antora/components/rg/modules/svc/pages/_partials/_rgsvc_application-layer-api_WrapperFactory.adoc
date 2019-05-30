@@ -14,12 +14,12 @@ Said another way: interactions are performed "as if" they are through the viewer
 
 [NOTE]
 ====
-For a discussion of the use of the `WrapperFactory` within integration tests (the primary or at least original use case for this service) can be found xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support_wrapper-factory[here]
+For a discussion of the use of the `WrapperFactory` within integration tests (the primary or at least original use case for this service) can be found xref:ug:tst:ugtst.adoc#_ugtst_integ-test-support_wrapper-factory[here]
 ====
 
 This capability goes beyond enforcing the (imperative) constraints within the `hideXxx()`, `disableXxx()` and `validateXxx()` supporting methods; it also enforces (declarative) constraints such as those represented by annotations, eg `@Parameter(maxLength=...)` or `@Property(mustSatisfy=...)`.
 
-This capability is frequently used within xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support[integration tests], but can also be used in production code. (There are analogies that can be drawn here with the way that JEE beans can interact through an EJB local interface).
+This capability is frequently used within xref:ug:tst:ugtst.adoc#_ugtst_integ-test-support[integration tests], but can also be used in production code. (There are analogies that can be drawn here with the way that JEE beans can interact through an EJB local interface).
 
 
 
@@ -89,7 +89,7 @@ If the object is not wrapped, returns back unchanged.
 
 <8> whether the supplied object has been wrapped.
 
-If the interface is performed (action invoked or property set), then - irrespective of whether the business rules were checked or skipped -  a xref:../rgant/rgant.adoc#_rgant-Action_command[command]s will be created and pre- and post-execute xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[domain event]s) will be fired
+If the interface is performed (action invoked or property set), then - irrespective of whether the business rules were checked or skipped -  a xref:rg:ant:rgant.adoc#_rgant-Action_command[command]s will be created and pre- and post-execute xref:rg:ant:rgant.adoc#_rgant-Action_domainEvent[domain event]s) will be fired
 
 
 The service works by returning a "wrapper" around a supplied domain object (using a byte manipulation library such as link:http://www.javassist.org[javassist] or link:https://bytebuddy.net/[byte buddy]), and it is this wrapper that ensures that the hide/disable/validate rules implies by the Apache Isis programming model are enforced.
@@ -106,8 +106,8 @@ Similarly if an action has a `validateXxx()` method and the supplied arguments a
 
 In addition, the following methods may also be called:
 
-* the xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`] and `toString()` methods
-* any xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`], xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`] or xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] methods
+* the xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] and `toString()` methods
+* any xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`], xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`] or xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] methods
 
 An exception will be thrown if any other methods are thrown.
 
@@ -146,7 +146,7 @@ public class CustomerAgent {
 
 [NOTE]
 ====
-It ought to be possible to implement an xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.
+It ought to be possible to implement an xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ExceptionRecognizer[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.
 This recognizer service would recognize the `InteractionException` and convert to a suitable message.
 
 At the time of writing Apache Isis does not provide an out-of-the-box implementation of such an `ExceptionRecognizer`; but it should be simple enough to write one…

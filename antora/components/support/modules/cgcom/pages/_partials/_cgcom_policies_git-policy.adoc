@@ -95,4 +95,4 @@ ISIS-nnn: brief summary here
 
 where `ISIS-nnn` is a ticket raised in our https://issues.apache.org/jira/browse/ISIS[JIRA issue tracker].
 
-For non-committers we typically expect more detail again; see the xref:../dg/dg.adoc#_dg_contributing[contributing] page for the longer format recommended for contributors to use.
+For non-committers we typically expect more detail again; see the xref:support:dg:dg.adoc#_dg_contributing[contributing] page for the longer format recommended for contributors to use.

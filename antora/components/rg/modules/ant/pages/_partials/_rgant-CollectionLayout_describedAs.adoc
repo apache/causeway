@@ -4,9 +4,9 @@
 include::_attributes.adoc[]
 
 
-The `describedAs()` attribute is used to provide a short description of the collection to the user.  In the xref:../ugvw/ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.
+The `describedAs()` attribute is used to provide a short description of the collection to the user.  In the xref:ug:vw:ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.
 
-The `describedAs()` attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-PropertyLayout_describedAs[properties], xref:../rgant/rgant.adoc#_rgant-ActionLayout_describedAs[actions], xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[parameters], xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_describedAs[domain objects] and xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
+The `describedAs()` attribute can also be specified for xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_describedAs[properties], xref:rg:ant:rgant.adoc#_rgant-ActionLayout_describedAs[actions], xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_describedAs[parameters], xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_describedAs[domain objects] and xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_describedAs[view models].
 
 
 For example:
@@ -26,5 +26,5 @@ public class ToDoItem {
 == Alternatives
 
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 

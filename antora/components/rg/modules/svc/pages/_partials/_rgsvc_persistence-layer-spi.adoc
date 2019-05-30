@@ -23,7 +23,7 @@ It also lists their corresponding implementation, either a default implementatio
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`o.a.i.applib.` +
 `services.audit` +
 `AuditerService`]
 |Create an audit record for every changed property of every changed object within a transaction.
@@ -37,7 +37,7 @@ also +
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`o.a.i.applib.` +
 `services.publish` +
 `PublisherService`]
 |Publish any action invocations/property edits and changed objects, typically for interchange with an external system in a different bounded context.
@@ -53,7 +53,7 @@ also +
 
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`o.a.i.applib.` +
 `services.userreg` +
 `UserRegistrationService`]
 |Create a new user account with the configured security mechanism.
@@ -76,7 +76,7 @@ Key:
 * `o.a.i.c.r.s` is an abbreviation for `org.apache.isis.core.runtime.services`
 
 
-Where an implementation is available (on the classpath) then it is always registered automatically (that is, they are all (with one exception) annotated with xref:../rgant/rgant.adoc#_rgant-DomainService[`@DomainService`].
+Where an implementation is available (on the classpath) then it is always registered automatically (that is, they are all (with one exception) annotated with xref:rg:ant:rgant.adoc#_rgant-DomainService[`@DomainService`].
 
 
 

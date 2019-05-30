@@ -26,7 +26,7 @@ The `glue` attribute of the Cucumber-JVM JUnit runner allows you to indicate whi
 There also needs to be one glue class that is used to bootstrap the runtime.
 
 
-Here's an example of a feature from the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]:
+Here's an example of a feature from the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]:
 
 [source,java]
 ----
@@ -69,7 +69,7 @@ public class RunBddSpecs {
 ----
 
 The JSON formatter allows integration with enhanced reports.
-(Commented out) configuration for this is provided in the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+(Commented out) configuration for this is provided in the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
 
 The bootstrapping of Apache Isis itself lives in a `BootstrappingGlue` step definition:
 
@@ -146,7 +146,7 @@ public class SimpleObjectMenuGlue extends CukeGlueAbstract2 {
 
 [TIP]
 ====
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`] domain service is one way in which glue classes can pass state between each other.
+The xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`] domain service is one way in which glue classes can pass state between each other.
 Or, for more type safety, you could develop your own custom domain services for each scenario, and inject these in as regular services.
 See link:http://www.thinkcode.se/blog/2017/04/01/sharing-state-between-steps-in-cucumberjvm-using-picocontainer[this blog] post for more details.
 ====

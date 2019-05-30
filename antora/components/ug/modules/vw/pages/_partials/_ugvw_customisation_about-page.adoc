@@ -18,7 +18,7 @@ image::about-page/about-page.png[width="800px",link="{_imagesdir}about-page/abou
 
 [NOTE]
 ====
-Note that this screenshot shows an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screenshot shows an earlier version of the xref:ug:vw:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 Note that the `Build-Time` attribute has been used as the version number.

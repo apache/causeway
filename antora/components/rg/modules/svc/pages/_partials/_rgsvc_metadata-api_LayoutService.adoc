@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 The `LayoutService` provides the ability to obtain the XML layout for a single domain object or for all domain
-objects.  This functionality is surfaced through the user interface through a related xref:../rgsvc/rgsvc.adoc#__rgsvc_metadata-api_LayoutService_related-mixins-and-menus[mixin and menu action].
+objects.  This functionality is surfaced through the user interface through a related xref:rg:svc:rgsvc.adoc#__rgsvc_metadata-api_LayoutService_related-mixins-and-menus[mixin and menu action].
 
 
 
@@ -46,9 +46,9 @@ The table below summarises the choices:
 |===
 
 | Style
-|xref:../rgant/rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]
-| xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
-| xref:../rgant/rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]
+|xref:rg:ant:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]
+| xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
+| xref:rg:ant:rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:rg:ant:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:rg:ant:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]
 
 
 |`COMPLETE`
@@ -86,7 +86,7 @@ As a developer, you therefore have a choice as to how you provide the metadata r
 
 The service's functionality is exposed in the UI through a mixin (per object) and a menu action (for all objects):
 
-* the xref:../rgant/rgant.adoc#_rgcms_classes_mixins_Object[`Object` mixin] provides the ability to download the XML layout for
+* the xref:rg:ant:rgant.adoc#_rgcms_classes_mixins_Object[`Object` mixin] provides the ability to download the XML layout for
 any domain object (entity or view model).
 
 * the `LayoutServiceMenu` provides the ability to download all XML layouts as a single ZIP file (in any of the
@@ -100,6 +100,6 @@ desired.
 [[__rgsvc_metadata-api_LayoutService_related-domain-services]]
 == Related Domain Services
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] is responsible for loading and normalizing layout XML for
-a domain class.  It in turn uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] and  xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`]
+The xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] is responsible for loading and normalizing layout XML for
+a domain class.  It in turn uses the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridLoaderService[`GridLoaderService`] and  xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridSystemService[`GridSystemService`]
 services.

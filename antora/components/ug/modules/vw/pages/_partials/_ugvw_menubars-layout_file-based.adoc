@@ -19,14 +19,14 @@ There are some disadvantages to using file-based layouts:
 
 * they also suffer from syntactic fragility: an invalid XML document will result in no metadata for the entire class.
 
-The `menubars.layout.xml` file is just the serialized form of a xref:../rgcms/rgcms.adoc#_rgcms_classes_layout[`MenuBars`] layout class defined within Apache Isis' applib.
+The `menubars.layout.xml` file is just the serialized form of a xref:rg:cms:rgcms.adoc#_rgcms_classes_layout[`MenuBars`] layout class defined within Apache Isis' applib.
 These are JAXB-annotated classes with corresponding XSD schemas; the upshot of that
 is that IDEs such as IntelliJ and Eclipse can provide "intellisense", making it easy to author such layout files.
 
 
 == Obtaining an initial layout
 
-An initial `menubars.layout.xml` - capturing any existing metadata either implicit or explicitly specified through annotations can be downloaded from the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_MenuBarsService[`MenuBarsService`] (exposed on the prototyping menu):
+An initial `menubars.layout.xml` - capturing any existing metadata either implicit or explicitly specified through annotations can be downloaded from the xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_MenuBarsService[`MenuBarsService`] (exposed on the prototyping menu):
 
 image::/menubars/010-download.png[width="300px",link="{_imagesdir}/menubars/010-download.png"]
 

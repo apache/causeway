@@ -4,16 +4,16 @@
 include::_attributes.adoc[]
 
 
-As explained xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_identifiers_title-and-icon[earlier], to allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
+As explained xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_identifiers_title-and-icon[earlier], to allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
 
-xref:../ugfun/ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[Normally] the code to return title and icon of an object is part of the domain object's implementation.
+xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[Normally] the code to return title and icon of an object is part of the domain object's implementation.
 However, UI events allow this title and icon to be provided instead by a subscriber.
 UI events have higher precedence than the other mechanisms of supplying a title.
 
-If annotated with xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`], the appropriate (subclass of) `TitleUiEvent` will be emitted.
- Similarly for xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`iconUiEvent()`] and xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`cssClassUiEvent()`].
+If annotated with xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`], the appropriate (subclass of) `TitleUiEvent` will be emitted.
+ Similarly for xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`iconUiEvent()`] and xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`cssClassUiEvent()`].
 
-This can be particularly useful for xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB-style view models] which are used as DTOs and so must have no dependencies on the rest of the Apache Isis framework.
+This can be particularly useful for xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB-style view models] which are used as DTOs and so must have no dependencies on the rest of the Apache Isis framework.
 
 It can also be more generally useful to allow one module to influence/fine-tune the title of entities provided by some other module.
 The obvious use case is when reusing library modules, eg as provided by (non-ASF) link:http://platform.incode.org[Incode Platform^].

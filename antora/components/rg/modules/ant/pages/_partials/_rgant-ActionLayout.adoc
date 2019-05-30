@@ -17,28 +17,28 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:../rgant/rgant.adoc#_rgant-ActionLayout_bookmarking[`bookmarking()`]
+|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_bookmarking[`bookmarking()`]
 |`AS_ROOT`, `NEVER` +
 (`NEVER`)
-|indicates if an action (with safe xref:../rgant/rgant.adoc#_rgant-Action_semantics[action semantics]) is automatically bookmarked.
+|indicates if an action (with safe xref:rg:ant:rgant.adoc#_rgant-Action_semantics[action semantics]) is automatically bookmarked.
 
 
-|xref:../rgant/rgant.adoc#_rgant-ActionLayout_contributedAs[`contributedAs()`]
+|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_contributedAs[`contributedAs()`]
 |`AS_BOTH`, `AS_ACTION`, `AS_ASSOCIATION`, `AS_NEITHER` +
 (`AS_BOTH`)
 |for a domain service action that can be contributed, whether to contribute as an action or as an association (ie a property or collection). +
 
-For a domain service action to be contributed, the domain services must have a xref:../rgant/rgant.adoc#_rgant-DomainService_nature[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:../rgant/rgant.adoc#_rgant-Action_semantics[safe action semantics], and takes a single argument, namely the contributee domain object.
+For a domain service action to be contributed, the domain services must have a xref:rg:ant:rgant.adoc#_rgant-DomainService_nature[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:rg:ant:rgant.adoc#_rgant-Action_semantics[safe action semantics], and takes a single argument, namely the contributee domain object.
 
 
-|xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`cssClass()`]
+|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClass[`cssClass()`]
 |Any string valid as a CSS class
-|an additional CSS class around the HTML that represents for the action, to allow targetted styling in xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]. +
+|an additional CSS class around the HTML that represents for the action, to allow targetted styling in xref:rg:cfg:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]. +
 
-Supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer] but currently ignored by the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
+Supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer] but currently ignored by the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
 
 
-|xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[`cssClassFa()`]
+|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClassFa[`cssClassFa()`]
 |Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
 |specify a font awesome icon for the action's menu link or icon. +
 
@@ -49,26 +49,26 @@ Supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer] but currently ignored by
 |Positioning of the icon on the button/menu item.
 
 
-|xref:../rgant/rgant.adoc#_rgant-ActionLayout_describedAs[`describedAs()`]
+|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_describedAs[`describedAs()`]
 |String.
 |provides a short description of the action, eg for rendering as a 'tool tip'.
 
 
-|xref:../rgant/rgant.adoc#_rgant-ActionLayout_hidden[`hidden()`]
+|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_hidden[`hidden()`]
 |`EVERYWHERE`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the action should be hidden from the user.
 
 
-|xref:../rgant/rgant.adoc#_rgant-ActionLayout_named[`named()`]
+|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_named[`named()`]
 |String.
 |to override the name inferred from the action's name in code. +
 
 A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
-|xref:../rgant/rgant.adoc#_rgant-ActionLayout_position[`position()`]
+|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_position[`position()`]
 |`BELOW`, `RIGHT`, `PANEL`, `PANEL_DROPDOWN` (`BELOW`)
-|for actions associated (using xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder#named()`]) with properties, the positioning of the action's button with respect to the property
+|for actions associated (using xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder#named()`]) with properties, the positioning of the action's button with respect to the property
 
 
 |===
@@ -99,7 +99,7 @@ public class ToDoItems {
 
 [TIP]
 ====
-As an alternative to using the `@ActionLayout` annotation, a xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
+As an alternative to using the `@ActionLayout` annotation, a xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used (and is generally to be preferred since it is more flexible/powerful).
 ====
 
 

@@ -12,7 +12,7 @@ Bootstrapping an Apache Isis application involves identifying both:
 * the major components (authentication, persistence mechanisms, viewers) of Apache Isis, and also
 * specifying the domain services and persistent entities that make up the application itself.
 
-This is done using an xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`], specified either programmatically or through the configuration properties.
+This is done using an xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`], specified either programmatically or through the configuration properties.
 This allows the components, services and entities to be specified from a single class.
 
 To specify the `AppManifest` as a configuration property, use:
@@ -30,7 +30,7 @@ To specify the `AppManifest` as a configuration property, use:
 |`o.a.i.applib.AppManifest` +
 
 By convention this implementation resides in an `myapp-app` Maven module (as opposed to `myapp-dom` or `myapp-fixture`).
-See the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] for details.
+See the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] for details.
 
 |===
 
@@ -51,7 +51,7 @@ public interface AppManifest {
 
 These can return either:
 
-    * "shiro" - enable integration with Apache Shiro, as described in the xref:../ugsec/ugsec.adoc#[security] user guide
+    * "shiro" - enable integration with Apache Shiro, as described in the xref:ug:sec:ugsec.adoc#[security] user guide
     * "bypass" - bypass security (in effect, configure a no-op implementation that allows everything).
 
 Note that these are actually aliases for concrete implementations.

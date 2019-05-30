@@ -23,15 +23,15 @@ public interface DeepLinkService {
 ----
 <1> Creates a URI that can be used to obtain a representation of the provided domain object in one of the Apache Isis viewers.
 
-The xref:../ugvw/ugvw.adoc#[Wicket viewer] provides an implementation of this service `o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket`.
+The xref:ug:vw:ugvw.adoc#[Wicket viewer] provides an implementation of this service `o.a.i.viewer.wicket.viewer.services.DeepLinkServiceWicket`.
 
-For the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer], a URL can be constructed according to the link:http://www.restfulobjects.org[Restful Objects spec] in conjunction with a `Bookmark` obtained via the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`].
+For the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer], a URL can be constructed according to the link:http://www.restfulobjects.org[Restful Objects spec] in conjunction with a `Bookmark` obtained via the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`].
 
 
 
 == Usage within the framework
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_EmailNotificationService[`EmailNotificationService`] uses this service in order to generate emails as part of xref:../ugvw/ugvw.adoc#_ugvw_features_user-registration[user registration].
+The xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_EmailNotificationService[`EmailNotificationService`] uses this service in order to generate emails as part of xref:ug:vw:ugvw.adoc#_ugvw_features_user-registration[user registration].
 
 
 

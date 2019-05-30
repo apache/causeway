@@ -31,4 +31,4 @@ public class CustomerRepository {
 
 == See also
 
-This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-Property_maxLength[properties].
+This attribute can also be applied to xref:rg:ant:rgant.adoc#_rgant-Property_maxLength[properties].

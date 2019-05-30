@@ -17,32 +17,32 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:../rgant/rgant.adoc#_rgant-Parameter_fileAccept[`fileAccept()`]
+|xref:rg:ant:rgant.adoc#_rgant-Parameter_fileAccept[`fileAccept()`]
 |Media type or file extension
-|Hints the file type to be uploaded for xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
- or xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`]. +
+|Hints the file type to be uploaded for xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
+ or xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`]. +
  +
  Note that this does not prevent the user from uploading some other file type; rather it merely defaults the file type in the file open dialog.
 
 
 
-|xref:../rgant/rgant.adoc#_rgant-Parameter_maxLength[`maxLength()`]
+|xref:rg:ant:rgant.adoc#_rgant-Parameter_maxLength[`maxLength()`]
 |Positive integer
 |maximum number of characters for string parameters; ignored otherwise
 
 
 
-|xref:../rgant/rgant.adoc#_rgant-Parameter_mustSatisfy[`mustSatisfy()`]
+|xref:rg:ant:rgant.adoc#_rgant-Parameter_mustSatisfy[`mustSatisfy()`]
 |implementation of `o.a.i.applib.spec.Specification`
 |allows arbitrary validation to be applied
 
 
-|xref:../rgant/rgant.adoc#_rgant-Parameter_optionality[`optionality()`]
+|xref:rg:ant:rgant.adoc#_rgant-Parameter_optionality[`optionality()`]
 |`MANDATORY`, `OPTIONAL` (`MANDATORY`)
 |specifies a parameter is optional rather than mandatory
 
 
-|xref:../rgant/rgant.adoc#_rgant-Parameter_regexPattern[regexPattern()]
+|xref:rg:ant:rgant.adoc#_rgant-Parameter_regexPattern[regexPattern()]
 |regular expression
 |validates the contents of a string parameter against the regular expression pattern
 

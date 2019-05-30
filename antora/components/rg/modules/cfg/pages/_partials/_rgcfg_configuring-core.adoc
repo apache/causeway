@@ -8,7 +8,7 @@ This section lists the core/runtime configuration properties recognized by Apach
 
 [NOTE]
 ====
-Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:../ugodn/ugodn.adoc#_ugodn_configuring[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties[here for Wicket viewer], and xref:../ugvro/ugvro.adoc#_ugvro_configuration-properties[here for the Restful Objects viewer].
+Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:ug:odn:ugodn.adoc#_ugodn_configuring[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:ug:vw:ugvw.adoc#_ugvw_configuration-properties[here for Wicket viewer], and xref:ug:vro:ugvro.adoc#_ugvro_configuration-properties[here for the Restful Objects viewer].
 ====
 
 
@@ -29,21 +29,21 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `domainEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`] is not specified (is set to `ActionDomainEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`] is not specified (is set to `ActionDomainEvent.Default`).
 
 |`isis.reflector.facet.` +
 `collectionAnnotation.` +
 `domainEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`] is not specified (is set to `CollectionDomainEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`] is not specified (is set to `CollectionDomainEvent.Default`).
 
 |`isis.reflector.facet.` +
 `propertyAnnotation.` +
 `domainEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`] is not specified (is set to `PropertyDomainEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`] is not specified (is set to `PropertyDomainEvent.Default`).
 
 
 
@@ -76,7 +76,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`] is not specified (is set to `ObjectCreatedEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-DomainObject_createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`] is not specified (is set to `ObjectCreatedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -84,7 +84,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_loadedLifecycleEvent[`@DomainObject#loadedLifecycleEvent()`] is not specified (is set to `ObjectLoadedEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-DomainObject_loadedLifecycleEvent[`@DomainObject#loadedLifecycleEvent()`] is not specified (is set to `ObjectLoadedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -92,7 +92,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`] is not specified (is set to `ObjectPersistingEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-DomainObject_persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`] is not specified (is set to `ObjectPersistingEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -100,7 +100,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_persistedLifecycleEvent[`@DomainObject#persistedLifecycleEvent()`] is not specified (is set to `ObjectPersistedEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-DomainObject_persistedLifecycleEvent[`@DomainObject#persistedLifecycleEvent()`] is not specified (is set to `ObjectPersistedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -108,7 +108,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_removingLifecycleEvent[`@DomainObject#removingLifecycleEvent()`] is not specified (is set to `ObjectRemovingEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-DomainObject_removingLifecycleEvent[`@DomainObject#removingLifecycleEvent()`] is not specified (is set to `ObjectRemovingEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -116,7 +116,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`] is not specified (is set to `ObjectUpdatingEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-DomainObject_updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`] is not specified (is set to `ObjectUpdatingEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -124,7 +124,7 @@ In order for these events to fire the action/collection/propert must, at least, 
 `postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObject_updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`] is not specified (is set to `ObjectUpdatedEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-DomainObject_updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`] is not specified (is set to `ObjectUpdatedEvent.Default`).
 
 
 
@@ -155,28 +155,28 @@ In order for these events to fire the class must be annotated using `@DomainObje
 `cssClassUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
 `iconUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
 `layoutUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_layoutUiEvent[`@DomainObjectLayout#layoutUiEvent()`] is not specified (is set to `LayoutUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_layoutUiEvent[`@DomainObjectLayout#layoutUiEvent()`] is not specified (is set to `LayoutUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
 `titleUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
 
 
 |`isis.reflector.facet.` +
@@ -184,28 +184,28 @@ In order for these events to fire the class must be annotated using `@DomainObje
 `cssClassUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClassUiEvent[`@ViewModelLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_cssClassUiEvent[`@ViewModelLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `viewModelLayoutAnnotation.` +
 `iconUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_iconUiEvent[`@ViewModelLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_iconUiEvent[`@ViewModelLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `viewModelLayoutAnnotation.` +
 `layoutUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_layoutUiEvent[`@ViewModelLayout#layoutUiEvent()`] is not specified (is set to `LayoutUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_layoutUiEvent[`@ViewModelLayout#layoutUiEvent()`] is not specified (is set to `LayoutUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `viewModelLayoutAnnotation.` +
 `titleUiEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_titleUiEvent[`@ViewModelLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
+|Whether an event should be posted if xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_titleUiEvent[`@ViewModelLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
 
 
 
@@ -237,7 +237,7 @@ In order for these events to fire the class must be annotated using `@DomainObje
 
 |`isis.services`
 |`FQCN`,`FQCN2`,...
-|NO LONGER REQUIRED; replaced by xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`].
+|NO LONGER REQUIRED; replaced by xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`].
 
 (It used to define the list of fully qualified class names of classes to be instantiated as domain services; this is now inferred from the list of modules provided to the app manifest).
 
@@ -247,14 +247,14 @@ In order for these events to fire the class must be annotated using `@DomainObje
 `objects`
 | `all`, `none` +
 (`all`)
-|Whether the changed properties of objects should be automatically audited (for objects annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
+|Whether the changed properties of objects should be automatically audited (for objects annotated with xref:rg:ant:rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
 
 
 |`isis.services.` +
 `command.` +
 `actions`
 | `all`, `ignoreSafe`, `none` (`none`)
-|Whether action invocations should be automatically reified into commands (for actions annotated with xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
+|Whether action invocations should be automatically reified into commands (for actions annotated with xref:rg:ant:rgant.adoc#_rgant-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
 
 `ignoreQueryOnly` is an alias for `ignoreSafe`.
 
@@ -262,7 +262,7 @@ In order for these events to fire the class must be annotated using `@DomainObje
 `command.` +
 `properties`
 | `all`, `none` (`none`)
-|(Whether property edits should be automatically reified into commands (for properties annotated with xref:../rgant/rgant.adoc#_rgant-Property_command[`@Property(command=CommandReification.AS_CONFIGURED)`].  +
+|(Whether property edits should be automatically reified into commands (for properties annotated with xref:rg:ant:rgant.adoc#_rgant-Property_command[`@Property(command=CommandReification.AS_CONFIGURED)`].  +
 
 
 
@@ -293,20 +293,20 @@ If the setting is changed to disabled then this may reduce application start-up 
 `objects`
 | `all`, `none` +
 (`all`)
-|Whether changed objects should be automatically published (for objects annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
+|Whether changed objects should be automatically published (for objects annotated with xref:rg:ant:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
 
 
 |`isis.services.` +
 `publish.` +
 `actions`
 | `all`, `ignoreSafe`, `none` (`none`)
-|Whether actions should be automatically published (for actions annotated with xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
+|Whether actions should be automatically published (for actions annotated with xref:rg:ant:rgant.adoc#_rgant-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
 
 |`isis.services.` +
 `publish.` +
 `properties`
 | `all`, `none` (`none`)
-|Whether properties should be automatically published (for properties annotated with xref:../rgant/rgant.adoc#_rgant-Action_publishing[`@Property(publishing=Publishing.AS_CONFIGURED)`]. +
+|Whether properties should be automatically published (for properties annotated with xref:rg:ant:rgant.adoc#_rgant-Action_publishing[`@Property(publishing=Publishing.AS_CONFIGURED)`]. +
 
 
 |`isis.services.` +
@@ -315,7 +315,7 @@ If the setting is changed to disabled then this may reduce application start-up 
 `packagePrefix`
 |fully qualified package names (CSV)
 
-|NO LONGER REQUIRED; replaced by xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`].
+|NO LONGER REQUIRED; replaced by xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`].
 
 (It used to define the list of packages to search for domain services; ; this is now inferred from the list of modules provided to the app manifest).
 
@@ -445,7 +445,7 @@ Note that the application must be bootstrapped using an `AppManifest2`.
 (`false`)
 | Whether to check that the class has an object type explicitly specified somehow.
 
-The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:../ugvw/ugvw.adoc#[Wicket viewer] and xref:../ugvro/ugvro.adoc#[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`].
+The object type is used by the framework as an alias for the object's concrete class; it is one part of the object's OID and can be seen in the URLs of the xref:ug:vw:ugvw.adoc#[Wicket viewer] and xref:ug:vro:ugvro.adoc#[Restful Objects viewer], and is encoded in the ``Bookmark``s returned by the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`].
 In this was it may also be persisted, for example in polymorphic associations or command or auditing tables.
 
 If the object type is not specified explicitly, then this can cause data migration issues if the class is subsequently refactored (eg renamed, or moved to a different package).
@@ -457,21 +457,21 @@ This configuration property can be used to enforce a rule that the object type m
 `NotAbstract`
 |`true`,`false` +
 (`true`)
-|Ensures that all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s are not `abstract` (so can be instantiated).
+|Ensures that all xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s are not `abstract` (so can be instantiated).
 
 |`isis.reflector.validator.` +
 `jaxbViewModel` +
 `NotInnerClass`
 |`true`,`false` +
 (`true`)
-| Ensures that all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s are not inner classes (so can be instantiated).
+| Ensures that all xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s are not inner classes (so can be instantiated).
 
 |`isis.reflector.validator.` +
 `jaxbViewModel` +
 `NoArgConstructor`
 |`true`,`false` +
 (`false`)
-| Ensures that all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s have a `public` no-arg constructor. +
+| Ensures that all xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s have a `public` no-arg constructor. +
 
 This isn't actually required (hence not enabled by default) but is arguably good practice.
 
@@ -480,14 +480,14 @@ This isn't actually required (hence not enabled by default) but is arguably good
 `ReferenceTypeAdapter`
 |`true`,`false` +
 (`true`)
-| Ensures that for all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s with properties that reference persistent entities, that those entities are annotated with `@XmlJavaTypeAdapter`.
+| Ensures that for all xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s with properties that reference persistent entities, that those entities are annotated with `@XmlJavaTypeAdapter`.
 
 |`isis.reflector.validator.` +
 `jaxbViewModel` +
 `DateTimeTypeAdapter`
 |`true`,`false` +
 (`true`)
-| Ensures that for all xref:../ugfun/ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s with properties that are dates or times, that those properties are annotated with `@XmlJavaTypeAdapter`.
+| Ensures that for all xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB view model]s with properties that are dates or times, that those properties are annotated with `@XmlJavaTypeAdapter`.
 
 |`isis.reflector.validator.` +
 `jdoqlFromClause`
@@ -519,10 +519,10 @@ This is by way of possibly deprecating and eventually moving contributed service
 `noParamsOnly`
 |`true`,`false` +
 (`false`)
-| When searching for  xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
+| When searching for  xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_disable[`disableXxx()`] or xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_hide[`hideXxx()`] methods, whether to search only for the no-param version (or also for supporting methods that match the parameter types of the action). +
 
 If enabled then will not search for supporting methods with the exact set of arguments as the method it was supporting (and any supporting methods that have additional parameters will be treated as invalid).
-Note that this in effect means that xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] must be used instead of xref:../ugfun/ugfun.adoc#_ugfun_programming-model_domain-services_contributions[contributed services].
+Note that this in effect means that xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] must be used instead of xref:ug:fun:ugfun.adoc#_ugfun_programming-model_domain-services_contributions[contributed services].
 
 
 |`isis.reflector.validator.` +
@@ -578,14 +578,14 @@ To be safe, we recommend that you first run your application using `isis.reflect
 |regex:css1, regex2:css2,...
 |Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@PropertyLayout(cssClass=...)` etc) to all action members matching the regex. +
 
-See xref:../ugfun/ugfun.adoc#_ugfun_ui-hints_action-icons-and-css[UI hints] for more details.
+See xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_action-icons-and-css[UI hints] for more details.
 
 |`isis.reflector.facet.` +
 `cssClassFa.patterns`
 |regex:fa-icon,regex2:fa-icon2,...
 |Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@Propertyayout(cssClassFa=...)` etc) to all action members matching the regex. +
 
-See xref:../ugfun/ugfun.adoc#_ugfun_ui-hints_action-icons-and-css[UI hints] for more details.
+See xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_action-icons-and-css[UI hints] for more details.
 
 
 |===
@@ -626,7 +626,7 @@ See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the 
 |`isis.reflector.` +
 `layoutMetadataReaders`
 |`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout]s. +
+|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout]s. +
 
 See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
 
@@ -651,7 +651,7 @@ See xref:../ugbtb/ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Lay
 `editing`
 |`true`,`false` +
 (`true`)
-|Whether objects' properties and collections can be edited directly (for objects annotated with xref:../rgant/rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]); see xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[below] for further discussion.
+|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rg:ant:rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]); see xref:rg:cfg:rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[below] for further discussion.
 
 |`isis.reflector.` +
 `explicitAnnotations.` +
@@ -672,7 +672,7 @@ Note that properties and collections are still implicitly inferred by virtue of 
 (`true`)
 |Whether objects should be filtered for visibility. +
 
-See xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_filterVisibility[section below] for further discussion.
+See xref:rg:cfg:rgcfg.adoc#__rgcfg_configuring-core_filterVisibility[section below] for further discussion.
 
 
 
@@ -717,7 +717,7 @@ By default this configuration property is enabled.  To disable the visibility fi
 isis.reflector.facet.filterVisibility=false
 ----
 
-Filtering is supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer] and the xref:../ugvro/ugvro.adoc#[Restful Objects viewer], and also by the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is __not__ "skip rules").
+Filtering is supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer] and the xref:ug:vro:ugvro.adoc#[Restful Objects viewer], and also by the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is __not__ "skip rules").
 
 [NOTE]
 ====

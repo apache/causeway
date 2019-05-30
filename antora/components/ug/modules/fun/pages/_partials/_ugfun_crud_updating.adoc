@@ -10,12 +10,12 @@ Rather, the ORM (DataNucleus) automatically keeps track of the state of each obj
 
 That said, it is possible to "flush" pending changes:
 
-* xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`] acts at the Apache Isis layer, and flushes any pending object persistence or object deletions
+* xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`] acts at the Apache Isis layer, and flushes any pending object persistence or object deletions
 
-* using xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`] it is possible to reach down to the underlying JDO API, and perform a flush of pending object updates also.
+* using xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`] it is possible to reach down to the underlying JDO API, and perform a flush of pending object updates also.
 
 
-When an object is updated the framework will emit `ObjectUpdatingEvent` and `ObjectUpdatedEvent` xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle events].
+When an object is updated the framework will emit `ObjectUpdatingEvent` and `ObjectUpdatedEvent` xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle events].
 
 
 

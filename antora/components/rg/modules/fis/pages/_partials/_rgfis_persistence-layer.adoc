@@ -25,23 +25,23 @@ Impl'n (g: a:)
 
 
 
-|xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`o.a.i.c.r.s.auditing.` +
+|xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`o.a.i.c.r.s.auditing.` +
 `AuditingServiceInternal`]
 |Co-ordinates between
-xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] and
-xref:../rgfis/rgfis.adoc#_rgfis_spi_AuditerService[`AuditerService`].
+xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] and
+xref:rg:fis:rgfis.adoc#_rgfis_spi_AuditerService[`AuditerService`].
 |concrete class.
 |
 
 
-|xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`o.a.i.c.r.s.changes.` +
+|xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`o.a.i.c.r.s.changes.` +
 `ChangedObjectsServiceInternal`]
 |Request-scoped service holding objects enlisted into current transaction.
 |concrete class.
 |
 
 
-|xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_PersistenceSessionServiceInternal[`o.a.i.c.m.s.` +
+|xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_PersistenceSessionServiceInternal[`o.a.i.c.m.s.` +
 `persistsession.` +
 `PersistenceSessionServiceInternal`]
 |Acts as a facade to the underlying JDO persistence session / database connection.  As such it provides methods for
@@ -52,12 +52,12 @@ querying and for persisting objects.
 |
 
 
-|xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`o.a.i.c.m.s.publishing.` +
+|xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`o.a.i.c.m.s.publishing.` +
 `PublishingServiceInternal`]
 |Co-ordinates between
-xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] and
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`] and the SPI services, and the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] and
+xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`] and the SPI services, and the
+xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 |`PublishingService-` +
 `InternalDefault` +
 `isis-core-runtime`

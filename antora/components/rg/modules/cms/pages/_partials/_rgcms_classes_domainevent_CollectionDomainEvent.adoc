@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-Subclass of xref:../rgcms/rgcms.adoc#_rgcms_classes_domainevent_AbstractDomainEvent[`AbstractDomainEvent`] for collections.
+Subclass of xref:rg:cms:rgcms.adoc#_rgcms_classes_domainevent_AbstractDomainEvent[`AbstractDomainEvent`] for collections.
 
 The class has a couple of responsibilities (in addition to those it inherits):
 
@@ -37,7 +37,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractDomainEvent<S> 
     public Of getOf();                                          // <5>
 }
 ----
-<1> The `Default` nested static class is the default for the xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`] annotation attribute.
+<1> The `Default` nested static class is the default for the xref:rg:ant:rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`] annotation attribute.
 Whether this raises an event or not depends upon the
 `isis.reflector.facet.collectionAnnotation.domainEvent.postForDefault` configuration property.
 <2> The `Noop` class is provided as a convenience to indicate that an event should _not_ be posted (irrespective of the configuration property setting).

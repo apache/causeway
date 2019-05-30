@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 The `HasTransactionId` interface is a mix-in for any domain objects that reference a transaction id, such as
-auditing entries or commands, or for xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[``Interaction``]s persisted as published events.
+auditing entries or commands, or for xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[``Interaction``]s persisted as published events.
 
 [NOTE]
 ====
@@ -42,11 +42,11 @@ public interface RepresentsInteractionMemberExecution extends HasTransactionId {
 }
 ----
 
-Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:../../rgcms/rgcms.adoc#_rgcms_schema-ixn[`InteractionDto`]) that has at least one member execution (cf xref:../rgcms/rgcms.adoc#__rgcms_schema-ixn_memberExecutionDto[`memberExecutionDto`]).
+Here the (inherited) `getTransactionId()` is intended to be interpreted as an interaction (cf xref:../../rgcms/rgcms.adoc#_rgcms_schema-ixn[`InteractionDto`]) that has at least one member execution (cf xref:rg:cms:rgcms.adoc#__rgcms_schema-ixn_memberExecutionDto[`memberExecutionDto`]).
 
 If the interaction (almost certainly an action) calls other actions by way of xref:../../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`]), then there may be several member executions, each with a unique sequence number, within the same transaction Id.
 
 The purpose of this interface is to allow mixins to be defined, though the framework itself defines none.
 
-Currently the only implementation of this interface is that for `PublishedObjects` applib interface as defined by the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+Currently the only implementation of this interface is that for `PublishedObjects` applib interface as defined by the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 

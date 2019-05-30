@@ -6,4 +6,4 @@ include::_attributes.adoc[]
 This class provides an implementation of the optional `getId()` method for domain services, based upon the classes name.
 
 In practice there is little to gain from subclassing.
-Instead annotate with xref:../rgant/rgant.adoc#_rgant_DomainService[`@DomainService`] and specify its xref:../rgant/rgant.adoc#_rgant_DomainService_objectType[`#objectType()`]
+Instead annotate with xref:rg:ant:rgant.adoc#_rgant_DomainService[`@DomainService`] and specify its xref:rg:ant:rgant.adoc#_rgant_DomainService_objectType[`#objectType()`]

@@ -4,8 +4,8 @@
 include::_attributes.adoc[]
 
 
-The `@ViewModelLayout` annotation is identical to the xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`], but is provided
-for symmetry with domain objects that have been annotated using xref:../rgant/rgant.adoc#_rgant-ViewModel[`@ViewModel`] (rather than xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject(nature=VIEW_MODEL)`]).
+The `@ViewModelLayout` annotation is identical to the xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`], but is provided
+for symmetry with domain objects that have been annotated using xref:rg:ant:rgant.adoc#_rgant-ViewModel[`@ViewModel`] (rather than xref:rg:ant:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject(nature=VIEW_MODEL)`]).
 
 
 The table below summarizes the annotation's attributes.
@@ -19,12 +19,12 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssclass[`cssClass()`]
+|xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_cssclass[`cssClass()`]
 |Any string valid as a CSS class
-|the css class that a domain class (type) should have, to allow more targetted styling in xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]
+|the css class that a domain class (type) should have, to allow more targetted styling in xref:rg:cfg:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]
 
 
-|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClassFa[`cssClassFa()`]
+|xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_cssClassFa[`cssClassFa()`]
 |Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
 |specify a font awesome icon for the action's menu link or icon. +
 
@@ -35,47 +35,47 @@ The table below summarizes the annotation's attributes.
 |Currently unused.
 
 
-|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_cssClassUiEvent[`cssClassUiEvent()`]
+|xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_cssClassUiEvent[`cssClassUiEvent()`]
 |subtype of `CssClassUiEvent` +
 (`CssClassUiEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain a CSS class for the domain object.
+|the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain a CSS class for the domain object.
 
 
-|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_describedAs[`describedAs()`]
+|xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_describedAs[`describedAs()`]
 |String.
 |description of this class, eg to be rendered in a tooltip.
 
-|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_iconUiEvent[`iconUiEvent()`]
+|xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_iconUiEvent[`iconUiEvent()`]
 |subtype of `IconUiEvent` +
 (`IconUiEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the icon (name) for the domain object.
+|the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the icon (name) for the domain object.
 
-|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_layoutUiEvent[`layoutUiEvent()`]
+|xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_layoutUiEvent[`layoutUiEvent()`]
 |subtype of `LayoutUiEvent` +
 (`LayoutUiEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the layout (name) for the domain object.
+|the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the layout (name) for the domain object.
 
-|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_named[`named()`]
+|xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_named[`named()`]
 |String.
 |to override the name inferred from the action's name in code. +
 
 A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 
-|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_paged[`paged()`]
+|xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_paged[`paged()`]
 |Positive integer
 |the page size for instances of this class when rendered within a table (as returned from an action invocation)
 
 
-|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_plural[`plural()`]
+|xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_plural[`plural()`]
 |String.
 |the plural name of the class
 
 
-|xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_titleUiEvent[`titleUiEvent()`]
+|xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_titleUiEvent[`titleUiEvent()`]
 |subtype of `TitleUiEvent` +
 (`TitleUiEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the title for the domain object.
+|the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to obtain the title for the domain object.
 
 |===
 
@@ -96,12 +96,12 @@ For example:
 public class CategoryPieChart { ... }
 ----
 <1> this annotation is intended for use with `@ViewModel`.
-If a view model has been specified using the equivalent xref:../rgant/rgant.adoc#_rgant-DomainObject_nature[`@DomainObject(nature=Nature.VIEW_MODEL)`], then we recommend you use xref:../rgant/rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`] instead.
+If a view model has been specified using the equivalent xref:rg:ant:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject(nature=Nature.VIEW_MODEL)`], then we recommend you use xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`] instead.
 
 
 [NOTE]
 ====
-Note that there is (currently) no support for specifying UI hints for view models through the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[`.layout.xml`] file (only for properties, collections and actions are supported).
+Note that there is (currently) no support for specifying UI hints for view models through the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[`.layout.xml`] file (only for properties, collections and actions are supported).
 ====
 
 

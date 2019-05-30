@@ -34,7 +34,7 @@ There will typically be only one `ComponentFactory` capable of rendering a parti
 
 [NOTE]
 ====
-There is one refinement to the above algorithm where multiple component factories might be used to render an object; this is discussed in xref:../ugvw/ugvw.adoc#__ugvw_extending_replacing-page-elements_collections[Additional Views of Collections], below.
+There is one refinement to the above algorithm where multiple component factories might be used to render an object; this is discussed in xref:ug:vw:ugvw.adoc#__ugvw_extending_replacing-page-elements_collections[Additional Views of Collections], below.
 ====
 
 

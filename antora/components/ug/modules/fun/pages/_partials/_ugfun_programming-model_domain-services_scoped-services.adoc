@@ -8,7 +8,7 @@ By default all domain services are considered to be singletons, and thread-safe.
 
 Sometimes though a service's lifetime is applicable only to a single request; in other words it is request-scoped.
 
-The CDI annotation xref:../rgant/rgant.adoc#_rgant-RequestScoped[`@javax.enterprise.context.RequestScoped`] is used to indicate this fact:
+The CDI annotation xref:rg:ant:rgant.adoc#_rgant-RequestScoped[`@javax.enterprise.context.RequestScoped`] is used to indicate this fact:
 
 [source,java]
 ----
@@ -18,5 +18,5 @@ public class MyService extends AbstractService {
 }
 ----
 
-The framework provides a number of request-scoped services, include a xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`] service query results caching through the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`], and support for co-ordinating bulk actions through the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_ActionInvocationContext[`ActionInvocationContext`] service.  See the xref:../rgsvc/rgsvc.adoc#[domain services] reference guide for further details.
+The framework provides a number of request-scoped services, include a xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`] service query results caching through the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`], and support for co-ordinating bulk actions through the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_ActionInvocationContext[`ActionInvocationContext`] service.  See the xref:rg:svc:rgsvc.adoc#[domain services] reference guide for further details.
 

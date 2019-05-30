@@ -10,7 +10,7 @@ Services can contribute either actions, properties or collections, based on the 
 [WARNING]
 ====
 Contributed services should be considered a deprecated feature.
-Instead, contribute the behaviour using xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_mixins[mixins].
+Instead, contribute the behaviour using xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_mixins[mixins].
 ====
 
 We suggest naming such classes `XxxContributions`, eg:
@@ -40,8 +40,8 @@ public class OrderContributions {
 <2> contributed as an association, in particular as a collection because returns a `List<T>`.
 <3> Only actions with a single argument can be contributed as associations
 
-More information about contributions can be found xref:../ugfun/ugfun.adoc#_ugfun_how-tos_contributed-members[here].  More information
-about using contributions and mixins to keep your domain application decoupled can be found xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[here] and xref:../ugfun/ugfun.adoc#_ugfun_programming-model_domain-services_contributions[contributed services]).
+More information about contributions can be found xref:ug:fun:ugfun.adoc#_ugfun_how-tos_contributed-members[here].  More information
+about using contributions and mixins to keep your domain application decoupled can be found xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[here] and xref:ug:fun:ugfun.adoc#_ugfun_programming-model_domain-services_contributions[contributed services]).
 
 
 

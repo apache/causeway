@@ -18,33 +18,33 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_cssClass[`cssClass()`]
+|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_cssClass[`cssClass()`]
 |Any string valid as a CSS class
-|the css class that a parameter should have, to allow more targetted styling in xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]
+|the css class that a parameter should have, to allow more targetted styling in xref:rg:cfg:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]
 
 
-|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_describedAs[`describedAs()`]
+|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_describedAs[`describedAs()`]
 |String
 |description of this parameter, eg to be rendered in a tooltip.
 
 
-|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_labelPosition[`labelPosition()`]
+|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_labelPosition[`labelPosition()`]
 |`LEFT`, `TOP`, `RIGHT`, `NONE` +
 (`LEFT`)
 |in forms, the positioning of the label relative to the property value. +
 
-Default is `LEFT`, unless xref:../rgant/rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine`] in which case `TOP`.
+Default is `LEFT`, unless xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine`] in which case `TOP`.
 The value `RIGHT` is only supported for boolean parameters.
 
 
-|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine()`]
+|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine()`]
 |Positive integer
 |for string parameters, render as a text area over multiple lines. +
 
-If set > 1, then then xref:../rgant/rgant.adoc#_rgant-ParameterLayout_labelPosition[`labelPosition`] defaults to `TOP`.
+If set > 1, then then xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_labelPosition[`labelPosition`] defaults to `TOP`.
 
 
-|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_named[`named()`]
+|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_named[`named()`]
 |String
 |the name of this parameter. +
 
@@ -57,12 +57,12 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |whether to HTML escape the name of this parameter.
 
 
-|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_renderedAsDayBefore[`renderedAsDayBefore()`]
+|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_renderedAsDayBefore[`renderedAsDayBefore()`]
 |
 |for date parameters only, render the date as one day prior to the actually stored date (eg the end date of an open interval into a closed interval)
 
 
-|xref:../rgant/rgant.adoc#_rgant-ParameterLayout_typicalLength[`typicalLength()`]
+|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_typicalLength[`typicalLength()`]
 |
 |the typical entry length of a field, use to determine the optimum width for display
 
@@ -97,7 +97,7 @@ public class ToDoItem {
 
 [NOTE]
 ====
-Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[`.layout.xml`] file (only for properties, collections and actions are supported).
+Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[`.layout.xml`] file (only for properties, collections and actions are supported).
 ====
 
 

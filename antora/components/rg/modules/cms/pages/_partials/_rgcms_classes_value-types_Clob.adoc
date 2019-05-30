@@ -49,7 +49,7 @@ private Clob someClob;
 
 [TIP]
 ====
-For binary large objects, use xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob][`Blob`] value type.
+For binary large objects, use xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Blob][`Blob`] value type.
 ====
 
 

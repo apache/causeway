@@ -10,7 +10,7 @@ Apache Isis is a Java based framework, so in terms of prerequisites, you'll need
 * Java 7 or 8 JDK
 * link:http://maven.apache.org[Apache Maven] 3.x
 
-You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:../dg/dg.adoc#_dg_ide[Developers' Guide] we have detailed setup instructions for using these two IDEs.
+You'll probably also want to use an IDE; the Apache Isis committers use either IntelliJ or Eclipse; in the xref:support:dg:dg.adoc#_dg_ide[Developers' Guide] we have detailed setup instructions for using these two IDEs.
 If you're a NetBeans user you should have no problems as it too has strong support for Maven.
 
 When building and running within an IDE, you'll also need to configure the Datanucleus enhancer.

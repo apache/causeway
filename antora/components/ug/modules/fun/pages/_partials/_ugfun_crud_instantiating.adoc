@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-Both domain entities and view models can be instantiated using the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`] provided by the framework.
+Both domain entities and view models can be instantiated using the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`] provided by the framework.
 For example:
 
 [source,java]
@@ -20,7 +20,7 @@ or
 Dashboard dashboardVM = factoryService.instantiate(Dashboard.class);
 ----
 
-When the framework instantiates the object, all services are injected into the framework, and an `ObjectCreatedEvent` xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle event] will also be emitted.
+When the framework instantiates the object, all services are injected into the framework, and an `ObjectCreatedEvent` xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle event] will also be emitted.
 
 
 For this to work the target class _must_ have a no-arg constructor.
@@ -40,7 +40,7 @@ public class Customer {
 ----
 
 In such cases, the domain object cannot be instantiated using `FactoryService`.
-Instead the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] service can be used to inject services:
+Instead the xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_ServiceRegistry[`ServiceRegistry`] service can be used to inject services:
 
 [source,java]
 ----

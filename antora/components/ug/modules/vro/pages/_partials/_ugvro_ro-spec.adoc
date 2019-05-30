@@ -129,9 +129,9 @@ For example, the client could use an `Accept` header such as:
 Accept: application/xml;x-ro-domain-type="com.mycompany.viewmodels.v2.CustomerViewModel"
 ----
 
-The server will use the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] to attempt to
+The server will use the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] to attempt to
 transform the domain object into the requested `x-ro-domain-type`.  The whole process is discussed in more detail in
-the xref:../ugvro/ugvro.adoc#_ugvro_architecture[architecture] chapter.
+the xref:ug:vro:ugvro.adoc#_ugvro_architecture[architecture] chapter.
 
 
 [[___ugvro_ro-spec_extensions_content-negotiation_apache-isis-profile]]
@@ -144,7 +144,7 @@ link:http://angular-ui.github.io/bootstrap/[Angular Bootstrap],
 link:http://vitalets.github.io/angular-xeditable/[Angular XEditable],
 link:https://github.com/mgcrea/angular-strap[Angular Strap].
 
-This support is discussed further in the xref:../ugvro/ugvro.adoc#_ugvro_simplified-representations[simplified representations]
+This support is discussed further in the xref:ug:vro:ugvro.adoc#_ugvro_simplified-representations[simplified representations]
 chapter.
 
 
@@ -153,7 +153,7 @@ chapter.
 
 The Restful Objects viewer supports the `x-ro-follow-links` query parameter in a way very similar to that suggested
 in the RO spec, the main point being to avoid the "N+1" problem of too many (slow) network calls.  For example, using
-this feature one can load a grid of data in a single call.  (That said, the xref:../ugvro/ugvro.adoc#_ugvro_simplified-representations[simplified representations]
+this feature one can load a grid of data in a single call.  (That said, the xref:ug:vro:ugvro.adoc#_ugvro_simplified-representations[simplified representations]
 supported by Restful Objects viewer also support this use case, albeit in way that deviates from the RO spec).
 
 This link:https://www.youtube.com/watch?v=hSKnqqBQ7Zo[screencast] demonstrates the Restful Object viewer's support for `x-ro-follow-links` parameter, using the (non-ASF) http://github.com/isisaddons/isis-app-kitchensink[Isis addons' kitchensink] app as the example,

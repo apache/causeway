@@ -11,7 +11,7 @@ It allows the modification of the property/collection to be vetoed (ie made read
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer]; they are always implicitly disabled.
+Directly mutable collections are not currently supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer]; they are always implicitly disabled.
 ====
 
 Typically modification/invocation is vetoed based on the state of the domain object being interacted with, though it could be any reason at all (eg the current date/time of the interaction, or the state of some other related data such as stock levels, or the identity of the calling user).
@@ -88,6 +88,6 @@ public class Customer {
 In the case of actions, the framework will also search for supporting method that has the exact same parameter types as the action itself.
 Enabling `isis.reflector.validator.noParamsOnly` configuration property switches this off, so that the framework will only search for supporting method with no parameters.
 
-Note that enabling this configuration property in effect means that xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] must be used instead of xref:../ugfun/ugfun.adoc#_ugfun_programming-model_domain-services_contributions[contributed services] (because contributed actions are the one case where the value of a parameter to a supporting method may be non-null).
+Note that enabling this configuration property in effect means that xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] must be used instead of xref:ug:fun:ugfun.adoc#_ugfun_programming-model_domain-services_contributions[contributed services] (because contributed actions are the one case where the value of a parameter to a supporting method may be non-null).
 ====
 

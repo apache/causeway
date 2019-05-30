@@ -11,8 +11,8 @@ The `paged()` attribute specifies the number of rows to display in a standalone 
 
 [WARNING]
 ====
-The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] currently does not support paging.
-The xref:../ugvw/ugvw.adoc#[Wicket viewer] _does_ support paging, but note that the paging is performed client-side rather than server-side.
+The xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] currently does not support paging.
+The xref:ug:vw:ugvw.adoc#[Wicket viewer] _does_ support paging, but note that the paging is performed client-side rather than server-side.
 
 We therefore recommend that large collections should instead be modelled as actions (to allow filtering to be applied to limit the number of rows).
 ====
@@ -29,7 +29,7 @@ public class Order {
 ----
 
 
-It is also possible to specify a global default for the page size of standalone collections, using the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.viewer.paged.standalone`.
+It is also possible to specify a global default for the page size of standalone collections, using the xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.viewer.paged.standalone`.
 
 
 
@@ -37,5 +37,5 @@ It is also possible to specify a global default for the page size of standalone 
 
 This attribute can also be applied to:
 
-* xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_paged[view models], and
-* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_paged[collections]
+* xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_paged[view models], and
+* xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_paged[collections]

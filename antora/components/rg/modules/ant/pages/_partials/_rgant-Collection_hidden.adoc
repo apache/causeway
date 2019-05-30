@@ -9,7 +9,7 @@ Collections can be hidden at the domain-level, indicating that they are not visi
 
 [TIP]
 ====
-It is also possible to use xref:../rgant/rgant.adoc#_rgant-CollectionLayout_hidden[`@CollectionLayout#hidden()`] or using xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] such that the collection can be hidden at the view layer.
+It is also possible to use xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_hidden[`@CollectionLayout#hidden()`] or using xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] such that the collection can be hidden at the view layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
@@ -49,14 +49,14 @@ The other values of the `Where` enum have no meaning for a collection.
 
 [NOTE]
 ====
-The xref:../ugvw/ugvw.adoc#[Wicket viewer] suppresses collections when displaying lists of objects.
+The xref:ug:vw:ugvw.adoc#[Wicket viewer] suppresses collections when displaying lists of objects.
 
-The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] by default suppress collections when rendering a domain object.
+The xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] by default suppress collections when rendering a domain object.
 ====
 
 == See also
 
 This attribute can also be applied to:
 
-* xref:../rgant/rgant.adoc#_rgant-Action_hidden[actions]
-* xref:../rgant/rgant.adoc#_rgant-Property_hidden[properties].
+* xref:rg:ant:rgant.adoc#_rgant-Action_hidden[actions]
+* xref:rg:ant:rgant.adoc#_rgant-Property_hidden[properties].

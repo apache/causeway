@@ -6,9 +6,9 @@ include::_attributes.adoc[]
 
 The `CommandDtoServiceInternal` is responsible for creating an memento of the current action
 invocation or property edit, to store in the `Command` object (from
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]).  This memento is a JAXB DTO being an instance of the
-xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd["cmd" schema], so can be reified so that its execution can be deferred until later,
-as a xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[background command].
+xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]).  This memento is a JAXB DTO being an instance of the
+xref:rg:cms:rgcms.adoc#_rgcms_schema-cmd["cmd" schema], so can be reified so that its execution can be deferred until later,
+as a xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[background command].
 
 
 
@@ -37,13 +37,13 @@ public interface CommandDtoServiceInternal {
             final ObjectAdapter valueAdapter);
 }
 ----
-<1> Returns a JAXB DTO being an instance of the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd["cmd" schema] (hence convertible to
+<1> Returns a JAXB DTO being an instance of the xref:rg:cms:rgcms.adoc#_rgcms_schema-cmd["cmd" schema] (hence convertible to
 XML) that represents the __intention__ to invoke an action on a target object (or possibly many targets, for
 bulk actions).  If an action, it can also be either mixin action or a contributed action.
 <2> Returns a JAXB DTO that represents the intention to edit (set or clear) a property on a target (or possibly many
 targets, for symmetry with actions).
-<3> add the arguments of an action to an `ActionDto`.  This is used when the command is actually executed (per xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]) to populate the parameters of the equivalent `ActionInvocationDto`.
-<4> add the new value argument of a property to a `PropertyDto`.  This is used when the command is actually executed (per xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]) to set the the new value of the equivalent `PropertyEditDto`.
+<3> add the arguments of an action to an `ActionDto`.  This is used when the command is actually executed (per xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]) to populate the parameters of the equivalent `ActionInvocationDto`.
+<4> add the new value argument of a property to a `PropertyDto`.  This is used when the command is actually executed (per xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_InteractionContext[`InteractionContext`]) to set the the new value of the equivalent `PropertyEditDto`.
 
 
 The SPI is implemented by `o.a.i.c.r.s.command.CommandDtoServiceInternalServiceDefault`.
@@ -52,5 +52,5 @@ The SPI is implemented by `o.a.i.c.r.s.command.CommandDtoServiceInternalServiceD
 == Related Services
 
 The design of this service is similar to that of
-xref:../rgfis/rgfis.adoc#_rgfis_application-layer_InteractionDtoServiceInternal[`InteractionDtoServiceInternal`], used to create the
-`MemberExecutionDto` (from the xref:../rgcms/rgcms.adoc#_rgcms_schema-ixn["ixn" schema]).
+xref:rg:fis:rgfis.adoc#_rgfis_application-layer_InteractionDtoServiceInternal[`InteractionDtoServiceInternal`], used to create the
+`MemberExecutionDto` (from the xref:rg:cms:rgcms.adoc#_rgcms_schema-ixn["ixn" schema]).

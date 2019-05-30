@@ -5,8 +5,8 @@ include::_attributes.adoc[]
 
 
 The `Dto` role interface is intended to be implemented by JAXB-annotated view models, that is, annotated using
-xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`].
-It enables the ability to download the XML and XSD schema of those objects using two xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins], `Dto_downloadXml` and `Dto_downloadXsd`.
+xref:rg:ant:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`].
+It enables the ability to download the XML and XSD schema of those objects using two xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins], `Dto_downloadXml` and `Dto_downloadXsd`.
 
 The interface is just a marker interface (with no members), and is defined as:
 
@@ -29,7 +29,7 @@ public class Dto_downloadXml {
 <1> provided as an action to any class that (trivially) implements the `Dto` interface
 <2> The action's name is derived from the class name.
 
-This will return the XML text wrapped up in a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
+This will return the XML text wrapped up in a xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
 
 The `Dto_downloadXsd` mixin is similar:
 
@@ -44,12 +44,12 @@ public class Dto_downloadXsd {
 <1> provided as an action to any class that (trivially) implements the `Dto` interface
 <2> The action's name be derived from the class name.
 
-If the domain object's JAXB annotations reference only a single XSD schema then this will return that XML text as a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`] of that XSD.
-If there are multiple XSD schemas referenced then the action will return a zip of those schemas, wrapped up in a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`].
-The `IsisSchemas` parameter to the action can be used to optionally ignore the common xref:../rgcms/rgcms.adoc#_rgcms_schema[Apache Isis schemas] (useful if there is only one other XSD schema referenced by the DTO).
+If the domain object's JAXB annotations reference only a single XSD schema then this will return that XML text as a xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`] of that XSD.
+If there are multiple XSD schemas referenced then the action will return a zip of those schemas, wrapped up in a xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`].
+The `IsisSchemas` parameter to the action can be used to optionally ignore the common xref:rg:cms:rgcms.adoc#_rgcms_schema[Apache Isis schemas] (useful if there is only one other XSD schema referenced by the DTO).
 
 
 
 == Related Services
 
-The `Dto_downloadXml` and `Dto_downloadXsd` delegate to the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] to actually generate the XML/XSD.
+The `Dto_downloadXml` and `Dto_downloadXsd` delegate to the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] to actually generate the XML/XSD.

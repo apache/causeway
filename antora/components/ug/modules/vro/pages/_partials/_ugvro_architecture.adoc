@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-The xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] implements the http://restfulobjects.org[Restful Object spec], meaning
+The xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] implements the http://restfulobjects.org[Restful Object spec], meaning
 that it defines a well-defined set of endpoint URLs as resources, and generates a well-defined set of (JSON)
 representations when these resources are accessed.
 
@@ -16,7 +16,7 @@ the `Content-Type` header which the client can use to know how to process the re
 
 * `RepresentationService` +
 +
-The xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_RepresentationService[`RepresentationService`] is an SPI domain service (plugin-point)
+The xref:rg:fis:rgfis.adoc#_rgfis_presentation-layer_RepresentationService[`RepresentationService`] is an SPI domain service (plugin-point)
 that allows an arbitrary representation to be generated for any of the resources defined in the RO spec. +
 +
 Normally this SPI service need not be replaced, because the default implementation
@@ -28,16 +28,16 @@ is able to handle the request (per the chain of responsibliity pattern).
 * `ContentNegotiationService` +
 +
 As noted above, there can be multiple implementations of the
-xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`], each one handling a particular
+xref:rg:fis:rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`], each one handling a particular
 HTTP `Accept` header.  If the implementation does not recognize the value of the header, if can simply return `null`. +
 +
 The framework provides a number of implementations; an implementation that handles the
-xref:../ugvro/ugvro.adoc#_ugvro_simplified-representations[simplified representation] of the Apache Isis profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a
+xref:ug:vro:ugvro.adoc#_ugvro_simplified-representations[simplified representation] of the Apache Isis profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a
 default/fallback implementation that returns the representations defined by the RO spec.
 
 * `ContentMappingService` +
 +
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] is used by the implementation of
+The xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] is used by the implementation of
 `ContentNegotationService` that recognizes the `x-ro-domain-type`, its role being to transform a domain object
 (usually an entity) into some other form (usually a DTO), as specified by the `x-ro-domain-type` parameter.  There
 can be many such implementations, each handling a different target domain type.

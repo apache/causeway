@@ -22,5 +22,5 @@ public class Child {
 
 == See also
 
-This attribute is also supported for xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_plural[view models].
+This attribute is also supported for xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_plural[view models].
 

@@ -9,7 +9,7 @@ DataNucleus will for itself also and read the `META-INF/persistence.xml`.
 In theory it can hold mappings and even connection strings.
 However, with Apache Isis we tend to use annotations instead and externalize connection strings. so its definition is extremely simply, specifying just the name of the "persistence unit".
 
-Here's the one provided by the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]:
+Here's the one provided by the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]:
 
 [source,xml]
 ----
@@ -27,7 +27,7 @@ Normally all one needs to do is to change the `persistence-unit` name.
 
 [TIP]
 ====
-If you use Eclipse IDE on Windows then xref:../dg/dg.adoc#__dg_ide_eclipse_workaround-for-path-limits[note the importance] of the `persistence.xml` file to make DataNucleus enhancer work correctly.
+If you use Eclipse IDE on Windows then xref:support:dg:dg.adoc#__dg_ide_eclipse_workaround-for-path-limits[note the importance] of the `persistence.xml` file to make DataNucleus enhancer work correctly.
 ====
 
 

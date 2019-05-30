@@ -31,13 +31,13 @@ This class (`o.a.i.applib.services.scratchpad.Scratchpad`) is also the implement
 And, as you can see, the service is just a request-scoped wrapper around a `java.util.Map`.
 
 
-To use an alternative implementation, subclass and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, subclass and use xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 
 == Usage
 
-The most common use-case is for xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[bulk] actions that act upon multiple objects in a list.  The (same) `Scratchpad` service is injected into each of these objects, and so they can use pass information.
+The most common use-case is for xref:rg:ant:rgant.adoc#_rgant-Action_invokeOn[bulk] actions that act upon multiple objects in a list.  The (same) `Scratchpad` service is injected into each of these objects, and so they can use pass information.
 
 For example, the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) demonstrates how the `Scratchpad` service can be used to calculate the total cost of the selected `ToDoItem`s:
 
@@ -60,7 +60,7 @@ public BigDecimal totalCost() {
 Scratchpad scratchpad;
 ----
 
-A more complex example could use a xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model] to enable bulk updates to a set of objects. The view model's job is to gather track of the items to be updated:
+A more complex example could use a xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model] to enable bulk updates to a set of objects. The view model's job is to gather track of the items to be updated:
 
 [source,java]
 ----
@@ -101,7 +101,7 @@ Scratchpad scratchpad;
 <1> look for the `ToDoItemBulkUpdate` in the scratchpad...
 <2> ... and add one if there isn't one (ie for the first object returned).
 
-If using the xref:../ugvw/ugvw.adoc#[Wicket viewer], the `ToDoItemBulkUpdate` view model returned from the last action invoked will be displayed. Thereafter this view model can be used to perform a bulk update of the "enlisted" items.
+If using the xref:ug:vw:ugvw.adoc#[Wicket viewer], the `ToDoItemBulkUpdate` view model returned from the last action invoked will be displayed. Thereafter this view model can be used to perform a bulk update of the "enlisted" items.
 
 
 
@@ -111,4 +111,4 @@ If using the xref:../ugvw/ugvw.adoc#[Wicket viewer], the `ToDoItemBulkUpdate` vi
 
 == Related Services
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`] is useful for caching the results of expensive method calls.
+The xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`] is useful for caching the results of expensive method calls.

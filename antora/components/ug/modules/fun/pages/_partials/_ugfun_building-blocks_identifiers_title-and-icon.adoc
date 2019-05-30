@@ -23,12 +23,12 @@ For example, a shipped `Order` might have a slightly different icon to a yet-to-
 == CSS Class
 
 In addition to the title and icon, it is also possible for a domain object to provide a CSS class hint.
-In conjunction with xref:../ugvw/ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+In conjunction with xref:ug:vw:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 
 [TIP]
 ====
 Details on how to actually write titles, icons and CSS classes can be found
-xref:../ugfun/ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[here].
+xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[here].
 ====
 

@@ -29,7 +29,7 @@ This goal was also released for `1.9.0`, but with a slightly different configura
 
 == `dom` submodule
 
-Update the `pom.xml` (we recommend in your project's `dom` module, and with a xref:../rgmvn/rgmvn.adoc#_rgmvn_intro_app-manifest[minimal AppManifest]):
+Update the `pom.xml` (we recommend in your project's `dom` module, and with a xref:rg:mvn:rgmvn.adoc#_rgmvn_intro_app-manifest[minimal AppManifest]):
 
 [source,xml]
 ----
@@ -77,7 +77,7 @@ Update the `pom.xml` (we recommend in your project's `dom` module, and with a xr
 ----
 <1> the profile is active by default, though can be disabled using `-Dskip.isis-validate`
 <2> set to `1.10.0` (or any later version)
-<3> the manifest discussed xref:../rgmvn/rgmvn.adoc#_rgmvn_intro_app-manifest[previously]; adjust as required
+<3> the manifest discussed xref:rg:mvn:rgmvn.adoc#_rgmvn_intro_app-manifest[previously]; adjust as required
 <4> the `dom` module for the project; adjust as required
 <5> binds the plugin's `validate` goal to the Maven `test` lifecycle phase (ie the goal will be called when `mvn test` is run).
 
@@ -107,7 +107,7 @@ mvn test -Dskip.isis-validate
 
 == Example of failure
 
-In the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] application the `SimpleObject` defines an `updateName` action.
+In the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] application the `SimpleObject` defines an `updateName` action.
 This has a supporting method:
 
 

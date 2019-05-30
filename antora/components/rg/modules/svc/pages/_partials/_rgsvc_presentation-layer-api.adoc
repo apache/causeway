@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 Domain service APIs for the presentation layer allow the domain objects to control aspects of the user interface.
-The implementations are specific to the particular viewer (xref:../ugvw/ugvw.adoc#[Wicket viewer] or xref:../ugvro/ugvro.adoc#[Restful Objects viewer]) so the domain code must guard against them being unavailable in some cases.
+The implementations are specific to the particular viewer (xref:ug:vw:ugvw.adoc#[Wicket viewer] or xref:ug:vro:ugvro.adoc#[Restful Objects viewer]) so the domain code must guard against them being unavailable in some cases.
 
 
 The table below summarizes the presentation layer APIs defined by Apache Isis.
@@ -21,44 +21,44 @@ It also lists their corresponding implementation.
 |Implementation
 |Notes
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-api_AcceptHeaderService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-api_AcceptHeaderService[`o.a.i.applib.` +
 `services.acceptheader` +
 `AcceptHeaderService`]
 |Request-scoped access to HTTP Accept headers.
 |`AcceptHeaderServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-viewer-restfulobjects-rendering``
-|Implementation only usable within the xref:../ugvro/ugvro.adoc#[Restful Objects viewer].
+|Implementation only usable within the xref:ug:vro:ugvro.adoc#[Restful Objects viewer].
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-api_BookmarkUiService[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-api_BookmarkUiService[`o.a.i.applib.` +
 `services.bookmarkui` +
 `BookmarkUiService`]
 |Manage bookmarks and breadcrumbs in the (Wicket) UI.
 |`BookmarkUiServiceWicket` +
 ``o.a.i.core`` +
 ``isis-core-viewer-wicket-impl``
-|(Implementation only usable within the xref:../ugvw/ugvw.adoc#[Wicket viewer].
+|(Implementation only usable within the xref:ug:vw:ugvw.adoc#[Wicket viewer].
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-api_DeepLinkService[`o.a.i.applib` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-api_DeepLinkService[`o.a.i.applib` +
 `services.deeplink` +
 `DeepLinkService`]
 |Obtain a URL to a domain object (eg for use within an email or report)
 |`DeepLinkServiceWicket` +
 ``o.a.i.viewer`` +
 ``isis-core-viewer-wicket-impl``
-|Implementation only usable within the xref:../ugvw/ugvw.adoc#[Wicket viewer].
+|Implementation only usable within the xref:ug:vw:ugvw.adoc#[Wicket viewer].
 
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-api_GuiceBeanProvider[`o.a.i.applib.` +
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-api_GuiceBeanProvider[`o.a.i.applib.` +
 `services.guice` +
 `GuiceBeanProvider`]
 |Access to internal framework services initialized using Guice DI.
 |`GuiceBeanProviderWicket` +
 ``o.a.i.core`` +
 ``isis-core-viewer-wicket-impl``
-|Implementation only usable within the xref:../ugvw/ugvw.adoc#[Wicket viewer].
+|Implementation only usable within the xref:ug:vw:ugvw.adoc#[Wicket viewer].
 
 
 

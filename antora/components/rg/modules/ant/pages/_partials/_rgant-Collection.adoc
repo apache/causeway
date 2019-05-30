@@ -17,13 +17,13 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[`domainEvent()`]
+|xref:rg:ant:rgant.adoc#_rgant-Collection_domainEvent[`domainEvent()`]
 |subtype of `CollectionDomainEvent` +
 (`CollectionDomainEvent.Default`)
-|the event type to be posted to the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
+|the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
 
 
-|xref:../rgant/rgant.adoc#_rgant-Collection_editing[`editing()`]
+|xref:rg:ant:rgant.adoc#_rgant-Collection_editing[`editing()`]
 |`ENABLED`, `DISABLED`, `AS_CONFIGURED` +
 (`AS_CONFIGURED`)
 |whether a collection can be added to or removed from within the UI
@@ -34,13 +34,13 @@ The table below summarizes the annotation's attributes.
 |if `editing()` is `DISABLED`, provides a reason as to why.
 
 
-|xref:../rgant/rgant.adoc#_rgant-Collection_hidden[`hidden()`]
+|xref:rg:ant:rgant.adoc#_rgant-Collection_hidden[`hidden()`]
 |`EVERYWHERE`, `OBJECT_FORMS`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the collection should be hidden from the user.
 
 
-|xref:../rgant/rgant.adoc#_rgant-Collection_notPersisted[`notPersisted()`]
+|xref:rg:ant:rgant.adoc#_rgant-Collection_notPersisted[`notPersisted()`]
 |`true`, `false` +
 (`false`)
 |whether to exclude from snapshots. +
@@ -52,7 +52,7 @@ Collection must also be annotated with `@javax.jdo.annotations.NotPersistent` in
 
 
 
-|xref:../rgant/rgant.adoc#_rgant-Collection_typeOf[`typeOf()`]
+|xref:rg:ant:rgant.adoc#_rgant-Collection_typeOf[`typeOf()`]
 |
 |hints as to the run-time type of the objects within that collection (as a fallback)
 
@@ -87,7 +87,7 @@ public class ToDoItem {
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:../rgant/rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`], xref:../rgant/rgant.adoc#_rgant-Property[`@Property`] and xref:../rgant/rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
+The annotation is one of a handful (others including xref:rg:ant:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`], xref:rg:ant:rgant.adoc#_rgant-Property[`@Property`] and xref:rg:ant:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
 so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 

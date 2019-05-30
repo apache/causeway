@@ -9,7 +9,7 @@ include::_attributes.adoc[]
 The `labelPosition()` attribute determines the positioning of labels for properties.
 
 The positioning of labels is typically `LEFT`, but can be positioned to the `TOP`.
-The one exception is xref:../rgant/rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine()`] string properties, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
+The one exception is xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine()`] string properties, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
 
 For boolean properties a positioning of `RIGHT` is also allowed; this is ignored for all other types.
 
@@ -30,7 +30,7 @@ public class ToDoItem {
 ----
 
 
-To get an idea of how these are rendered (in the xref:../ugvw/ugvw.adoc#[Wicket viewer]), we can look at the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] that happens to have examples of most of these various label positions.
+To get an idea of how these are rendered (in the xref:ug:vw:ugvw.adoc#[Wicket viewer]), we can look at the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] that happens to have examples of most of these various label positions.
 
 The default `LEFT` label positioning is used by the `cost` property:
 
@@ -63,7 +63,7 @@ image::reference-annotations/PropertyLayout/labelPosition-boolean-RIGHT.png[widt
 ====
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
 
-Instead, a default can be specified using a xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] in `isis.properties`:
+Instead, a default can be specified using a xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[configuration property] in `isis.properties`:
 
 [source,ini]
 ----
@@ -83,11 +83,11 @@ If these are not present then Apache Isis will render according to internal defa
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 
 
 == See also
 
-This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-ParameterLayout_labelPosition[parameters].
+This attribute can also be specified for xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_labelPosition[parameters].
 

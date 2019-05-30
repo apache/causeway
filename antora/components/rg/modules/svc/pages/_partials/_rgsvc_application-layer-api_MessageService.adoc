@@ -30,11 +30,11 @@ public interface MessageService {
     ...
 }
 ----
-<1> display as a transient message to the user (not requiring acknowledgement).  In the xref:../ugvw/ugvw.adoc#[Wicket viewer] this is implemented as a toast that automatically disappears after a period of time.
+<1> display as a transient message to the user (not requiring acknowledgement).  In the xref:ug:vw:ugvw.adoc#[Wicket viewer] this is implemented as a toast that automatically disappears after a period of time.
 <2> ditto, but with translatable string, for xref:../ugbtb/ugbtb.adoc#_ugbtb_i18n[i18n support].
-<3> warn the user about a situation with the specified message.  In the xref:../ugvw/ugvw.adoc#[Wicket viewer] this is implemented as a toast that must be closed by the end-user.
+<3> warn the user about a situation with the specified message.  In the xref:ug:vw:ugvw.adoc#[Wicket viewer] this is implemented as a toast that must be closed by the end-user.
 <4> ditto, but with translatable string, for i18n support.
-<5> show the user an unexpected application error.  In the xref:../ugvw/ugvw.adoc#[Wicket viewer] this is implemented as a toast (with a different colour) that must be closed by the end-user.
+<5> show the user an unexpected application error.  In the xref:ug:vw:ugvw.adoc#[Wicket viewer] this is implemented as a toast (with a different colour) that must be closed by the end-user.
 <6> ditto, but with translatable string, for i18n support.
 
 The i18n versions of these methods all have an override which simply creates a single context string from the `contextClass` and `contextMethod` parameters (eg "com.mycompany.Customer#placeOrder").
@@ -60,5 +60,5 @@ public Order addItem(Product product, @ParameterLayout(named="Quantity") int qua
 
 The core framework provides a default implementation of this service, `o.a.i.core.runtime.services.message.MessageServiceDefault`.
 
-To use an alternative implementation, implement the `MessageService` interface and use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, implement the `MessageService` interface and use xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 

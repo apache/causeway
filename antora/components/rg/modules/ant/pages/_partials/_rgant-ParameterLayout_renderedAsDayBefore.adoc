@@ -37,5 +37,5 @@ public class Tenancy {
 
 == See also
 
-This attribute is also supported for xref:../rgant/rgant.adoc#_rgant-PropertyLayout_renderedAsDayBefore[properties].
+This attribute is also supported for xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_renderedAsDayBefore[properties].
 

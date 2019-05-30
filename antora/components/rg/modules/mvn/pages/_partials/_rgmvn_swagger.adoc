@@ -5,8 +5,8 @@ include::_attributes.adoc[]
 
 
 
-The `swagger` goal of the `isis-maven-plugin` uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_metadata-api_SwaggerService[`SwaggerService`] to
-generate link:http://swagger.io[Swagger] spec files to describe the public and/or private RESTful APIs exposed by the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
+The `swagger` goal of the `isis-maven-plugin` uses the xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_SwaggerService[`SwaggerService`] to
+generate link:http://swagger.io[Swagger] spec files to describe the public and/or private RESTful APIs exposed by the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
 
 These spec files, once generated, can then be used in the build pipeline to generate client-side stubs, typically using Swagger's own link:https://github.com/swagger-api/swagger-codegen/tree/master/modules/swagger-codegen-maven-plugin[swagger-codegen-maven] plugin.
 
@@ -87,7 +87,7 @@ Update the `pom.xml` (in your project's `integtest` module):
 ----
 <1> the profile is active by default, though can be disabled using `-Dskip.isis-swagger`
 <2> set to `1.11.0` (or any later version)
-<3> the manifest discussed xref:../rgmvn/rgmvn.adoc#_rgmvn_intro_app-manifest[previously]; adjust as required
+<3> the manifest discussed xref:rg:mvn:rgmvn.adoc#_rgmvn_intro_app-manifest[previously]; adjust as required
 <4> the visibilities to create (one swagger spec file per visibility listed)
 <5> which file format to generate the spec files as.
 <6> the `dom` module for the project; adjust as required

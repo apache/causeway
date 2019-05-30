@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-The `DtoMappingHelper` converts the domain object's internal identifier into a serializable `OidDto` for use in the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd[command] and xref:../rgcms/rgcms.adoc#_rgcms_schema-ixn[interaction] schemas.
+The `DtoMappingHelper` converts the domain object's internal identifier into a serializable `OidDto` for use in the xref:rg:cms:rgcms.adoc#_rgcms_schema-cmd[command] and xref:rg:cms:rgcms.adoc#_rgcms_schema-ixn[interaction] schemas.
 
 
 == API and Usage
@@ -18,7 +18,7 @@ public class DtoMappingHelper {
     public OidDto oidDtoFor(final Object object) { ... }    // <1>
 }
 ----
-<1> Uses the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`] to convert the domain object's internal identifier into a serializable `OidDto`.
+<1> Uses the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`] to convert the domain object's internal identifier into a serializable `OidDto`.
 
 This class (`o.a.i.applib.services.dto.DtoMappingHelper`) is also the implementation.
 

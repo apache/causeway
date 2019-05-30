@@ -4,12 +4,12 @@
 include::_attributes.adoc[]
 
 
-The `created()` lifecycle callback method is called when an object has just been created using xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService#instantiate(...)`] or xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(...)`]
+The `created()` lifecycle callback method is called when an object has just been created using xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService#instantiate(...)`] or xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(...)`]
 
 
 [TIP]
 ====
-Alternatively, consider using a xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[event bus] xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] on the xref:../rgcms/rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectCreatedEvent[`ObjectCreatedEvent`].
+Alternatively, consider using a xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[event bus] xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] on the xref:rg:cms:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectCreatedEvent[`ObjectCreatedEvent`].
 ====
 
 

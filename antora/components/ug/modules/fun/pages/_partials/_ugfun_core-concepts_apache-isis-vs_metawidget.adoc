@@ -4,13 +4,13 @@
 include::_attributes.adoc[]
 
 
-MetaWidget (mentioned xref:../ugfun/ugfun.adoc#_ugfun_core-concepts_philosophy_naked-objects-pattern_object-interface-mapping[earlier] has a number of ideas in common with Apache Isis, specifically the runtime generation of a UI for domain objects.
+MetaWidget (mentioned xref:ug:fun:ugfun.adoc#_ugfun_core-concepts_philosophy_naked-objects-pattern_object-interface-mapping[earlier] has a number of ideas in common with Apache Isis, specifically the runtime generation of a UI for domain objects.
 And like Apache Isis, MetaWidget builds its own metamodel of the domain objects and uses this to render the object.
 
 However, there is a difference in philosophy in that MW is not a full-stack framework and does not (in their words) try to "own the UI".
 Rather they support a huge variety of UI technologies and allow the domain object to be rendered in any of them.
 
-In contrast, Apache Isis is full-stack and does generate a complete UI; we then allow you to customize or extend this UI (as per the various (non-ASF) link:http://platform.incode.org[Incode Platform^] modules), and we also provide a full REST API through the xref:../ugvro/ugvro.adoc#[Restful Objects viewer]
+In contrast, Apache Isis is full-stack and does generate a complete UI; we then allow you to customize or extend this UI (as per the various (non-ASF) link:http://platform.incode.org[Incode Platform^] modules), and we also provide a full REST API through the xref:ug:vro:ugvro.adoc#[Restful Objects viewer]
 
 Also, it's worth noting that MetaWidget does have an elegant pipeline architecture, with APIs to allow even its metamodel to be replaced.
 It would be feasible and probably quite straightforward to use Apache Isis' own metamodel as an implementation of the MetaWidget API.

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-The Apache Isis application library provides the xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Blob[Blob] value type (binary large objects) and also the xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[Clob]
+The Apache Isis application library provides the xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Blob[Blob] value type (binary large objects) and also the xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Clob[Clob]
 value type (character large object), each of which also includes metadata about the data (specifically the filename and mime type).
 
 A class can define a property using either of these types, for example:
@@ -27,7 +27,7 @@ image::blob-attachments/010-attachment-field-940.png[width="800px",link="{_image
 
 [NOTE]
 ====
-Note that these screenshots show an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that these screenshots show an earlier version of the xref:ug:vw:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 

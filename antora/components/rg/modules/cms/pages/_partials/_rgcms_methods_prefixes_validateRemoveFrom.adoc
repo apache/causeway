@@ -10,7 +10,7 @@ The `validateRemoveFrom...()` supporting method is called whenever an object is 
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:../ugvw/ugvw.adoc#[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer].
 The suggested workaround is to simply define an action.
 ====
 
@@ -41,5 +41,5 @@ public class LibraryMember {
 ----
 
 
-See also xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`] and  xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validateAddTo...()`]`
+See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`] and  xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validateAddTo...()`]`
 

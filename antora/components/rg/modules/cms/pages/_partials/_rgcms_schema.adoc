@@ -8,17 +8,17 @@ Most applications need to integrate with other apps in the enterprise.  To facil
 Apache Isis defines a number of standard XSD schemas:
 
 
-* the xref:../rgcms/rgcms.adoc#_rgcms_schema-mml[metamodel] schema, which allows the internal metamodel to be exported in a canonical fashion
+* the xref:rg:cms:rgcms.adoc#_rgcms_schema-mml[metamodel] schema, which allows the internal metamodel to be exported in a canonical fashion
 
-* the xref:../rgcms/rgcms.adoc#_rgcms_schema-cmd[command] schema, which captures the __intention__ of a user
+* the xref:rg:cms:rgcms.adoc#_rgcms_schema-cmd[command] schema, which captures the __intention__ of a user
 to invoke an action or edit a property
 
-* the xref:../rgcms/rgcms.adoc#_rgcms_schema-ixn[interaction execution] schema, which captures the actual execution of an action invocation/property edit
+* the xref:rg:cms:rgcms.adoc#_rgcms_schema-ixn[interaction execution] schema, which captures the actual execution of an action invocation/property edit
 
-* the xref:../rgcms/rgcms.adoc#_rgcms_schema-chg[changes] schema, which captures which objects have been
+* the xref:rg:cms:rgcms.adoc#_rgcms_schema-chg[changes] schema, which captures which objects have been
 created, updated or deleted as the result of an execution of an action invocation/property edit
 
-These each use XSD types defined by the xref:../rgcms/rgcms.adoc#_rgcms_schema-common[common schema] (most notably the `oidDto`
+These each use XSD types defined by the xref:rg:cms:rgcms.adoc#_rgcms_schema-common[common schema] (most notably the `oidDto`
 complex type which identifies a domain object).
 
 The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command and publishmq modules use these schemas to reify

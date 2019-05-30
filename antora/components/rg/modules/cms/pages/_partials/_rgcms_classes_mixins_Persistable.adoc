@@ -8,7 +8,7 @@ All domain entities automatically implement the DataNucleus `Persistable` role i
 So as a developer you do not need to write any code to obtain the mixins that contribute to this interface.
 
 These mixin properties/actions are all associated with the "Metadata" fieldset.
-A number of other xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_Object[mixins] also contribute properties or actions to the "Metadata" fieldset.
+A number of other xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_Object[mixins] also contribute properties or actions to the "Metadata" fieldset.
 
 
 
@@ -26,13 +26,13 @@ public Clob downloadJdoMetadata(                    // <1>
     ...
 }
 ----
-<1> returns the XML text wrapped up in a xref:../rgcms/rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
+<1> returns the XML text wrapped up in a xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`].
 
 
 
 === Related Services
 
-The mixin delegates to the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`] service to obtain a reference to the JDO `PersistenceManagerFactory`.
+The mixin delegates to the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`] service to obtain a reference to the JDO `PersistenceManagerFactory`.
 
 
 [[__rgcms_classes_mixins_Persistable_datanucleusXxx]]

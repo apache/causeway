@@ -49,15 +49,15 @@ For collections, the `@XmlElementWrapper` would also typically be used.
 Use JAXB elements such as `@XmlElement` for properties and the combination of `@XmlElementWrapper` and `@XmlElement` for collections.
 Properties can be ignored (for serialization) using `@XmlTransient`.
 
-The derived properties could also have been implemented using xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins].
+The derived properties could also have been implemented using xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins].
 
 
 [IMPORTANT]
 ====
-Be aware that all the state will become the DTO's memento, ultimately converted into a URL-safe form, by way of the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_UrlEncodingService[`UrlEncodingService`].
+Be aware that all the state will become the DTO's memento, ultimately converted into a URL-safe form, by way of the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_UrlEncodingService[`UrlEncodingService`].
 
 There are limits to the lengths of URLs, however.
-If the URL does exceed limits or contains invalid characters, then provide a custom implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_UrlEncodingService[`UrlEncodingService`] to handle the memento string in some other fashion (eg substituting it with a GUID, with the memento cached somehow on the server).
+If the URL does exceed limits or contains invalid characters, then provide a custom implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_UrlEncodingService[`UrlEncodingService`] to handle the memento string in some other fashion (eg substituting it with a GUID, with the memento cached somehow on the server).
 a URL.
 ====
 

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 The `ChangedObjectsServiceInternal` class is an (internal) request-scoped domain service that is responsible for collecting the details of all changes to domain objects within an interaction.
-This is then used by various other  (internal) domain services, notably xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] and xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`PublishingServiceInternal`].
+This is then used by various other  (internal) domain services, notably xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] and xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`PublishingServiceInternal`].
 
 
 
@@ -33,10 +33,10 @@ public class ChangedObjectsServiceInternal {
 }
 ----
 <1> Enlists an object that has just been created, updated or deleted, capturing the pre-modification values of the properties.
-<2> Used by the framework to determine whether to set the "persist hint" on the `Command` object (as per xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]).
-<3> Used by xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`PublishingServiceInternal`] to obtain details of and
+<2> Used by the framework to determine whether to set the "persist hint" on the `Command` object (as per xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]).
+<3> Used by xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`PublishingServiceInternal`] to obtain details of and
 counters of all objects changed within the transaction.
-<4> Used by xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] to obtain all pairs of
+<4> Used by xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] to obtain all pairs of
 pre/post values of changed properties
 <5> Called by the framework to for clean up after auditing and publishing has completed.
 
@@ -57,4 +57,4 @@ Apache Isis' default implementation of `ChangedObjectsServiceInternal` class is 
 
 == Related Classes
 
-Both the xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] and xref:../rgfis/rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`PublishingServiceInternal`] (internal) domain services query this object.
+Both the xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_AuditingServiceInternal[`AuditingServiceInternal`] and xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_PublishingServiceInternal[`PublishingServiceInternal`] (internal) domain services query this object.

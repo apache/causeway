@@ -9,15 +9,15 @@ This chapter provides some solutions for problems we've encountered ourselves or
 
 See also hints-n-tips chapters in the:
 
-* the xref:../dg/dg.adoc#_dg_hints-and-tips[Developers'] guide
+* the xref:support:dg:dg.adoc#_dg_hints-and-tips[Developers'] guide
 
-* the xref:../ugvw/ugvw.adoc#_ugvw_hints-and-tips[Wicket viewer] guide (this chapter)
+* the xref:ug:vw:ugvw.adoc#_ugvw_hints-and-tips[Wicket viewer] guide (this chapter)
 
-* the xref:../ugvro/ugvro.adoc#_ugvro_hints-and-tips[Restful Objects viewer] guide
+* the xref:ug:vro:ugvro.adoc#_ugvro_hints-and-tips[Restful Objects viewer] guide
 
-* the xref:../ugodn/ugodn.adoc#_ugodn_hints-and-tips[Datanucleus ObjectStore] guide
+* the xref:ug:odn:ugodn.adoc#_ugodn_hints-and-tips[Datanucleus ObjectStore] guide
 
-* the xref:../ugsec/ugsec.adoc#_ugsec_hints-and-tips[Security] guide
+* the xref:ug:sec:ugsec.adoc#_ugsec_hints-and-tips[Security] guide
 
 * the xref:../ugbtb/ugbtb.adoc#_ugbtb_hints-and-tips[Beyond the Basics] guide.
 

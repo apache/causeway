@@ -10,7 +10,7 @@ For the more commonly used collections we want to show the table expanded:
 
 image::programming-model/todoapp-Dashboard.png[width="px",link="{_imagesdir}programming-model/todoapp-Dashboard.png"]
 
-For this we annotate the collection using xref:../rgant/rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]; for example
+For this we annotate the collection using xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`]; for example
 
 [source,java]
 ----

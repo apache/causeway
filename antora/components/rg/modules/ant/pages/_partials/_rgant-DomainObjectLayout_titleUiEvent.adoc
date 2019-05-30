@@ -5,17 +5,17 @@ include::_attributes.adoc[]
 
 
 Whenever a domain object is to be rendered, the framework fires off a title UI event to obtain a title for the object.
-This is as an alternative to implementing xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method, or using the xref:../rgant/rgant.adoc#_rgant-Title[`@Title`] annotation, within the class itself.
+This is as an alternative to implementing xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method, or using the xref:rg:ant:rgant.adoc#_rgant-Title[`@Title`] annotation, within the class itself.
 (If either `title()` or `@Title` are present, then they will take precedence).
 
-Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and can
+Subscribers subscribe through the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and can
 use obtain a reference to the domain object from the event.
 From this they can, if they wish, specify a title for the domain object using the event's API.
 
 [NOTE]
 ====
-The feature was originally introduced so that xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model]s could be kept as minimal as possible, just defining the data.
-UI events allow subscribers to provide UI hints, while xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixin]s can be used to provide the behaviour.
+The feature was originally introduced so that xref:rg:ant:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model]s could be kept as minimal as possible, just defining the data.
+UI events allow subscribers to provide UI hints, while xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixin]s can be used to provide the behaviour.
 ====
 
 By default the event raised is `TitleUiEvent.Default`.
@@ -53,7 +53,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.
 The examples below are compatible with both.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
@@ -104,9 +104,9 @@ And, conversely, the framework also provides `TitleUiEvent.Noop`; if `titleUiEve
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI.
-However, events can be raised programmatically either by calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] API directly, or as a result of calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TitleService[`TitleService`]'s `titleOf(...)` method.
+However, events can be raised programmatically either by calling the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] API directly, or as a result of calling the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_TitleService[`TitleService`]'s `titleOf(...)` method.
 
 
 == See also
 
-This attribute can also be applied to xref:../rgant/rgant.adoc#_rgant-ViewModelLayout_titleUiEvent[view models].
+This attribute can also be applied to xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_titleUiEvent[view models].

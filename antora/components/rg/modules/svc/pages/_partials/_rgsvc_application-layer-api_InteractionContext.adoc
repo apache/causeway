@@ -9,12 +9,12 @@ The `InteractionContext` is a request-scoped domain service that is used to obta
 `Interaction`.
 
 An `Interaction` generally consists of a single top-level `Execution`, either to invoke an action or to edit a
-property.  If that top-level action or property uses xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] to
+property.  If that top-level action or property uses xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] to
 invoke child actions/properties, then those sub-executions are captured as a call-graph.  The `Execution` is thus a
 graph structure.
 
 If a bulk action is performed (as per an action annotated using
-xref:../rgant/rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`]), then this will result in multiple ``Interaction``s, one
+xref:rg:ant:rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`]), then this will result in multiple ``Interaction``s, one
 per selected object (not one `Interaction` with multiple top-level ``Execution``s).
 
 
@@ -24,9 +24,9 @@ It is possible for ``Interaction.Execution``s to be persisted; this is supported
 * they enable profiling of the running application (which actions are invoked then most often, what is their response
 time)
 
-* if auditing is configured (using xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]), they provide better audit information, since the
+* if auditing is configured (using xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`]), they provide better audit information, since the
 `Interaction.Execution` captures the 'cause' of an interaction and can be correlated to the audit records (the "effect"
-of the interaction) by way of the xref:../rgcms/rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`]
+of the interaction) by way of the xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`]
 
 
 
@@ -72,11 +72,11 @@ public class Interaction {
     public int next(final String sequenceId);       // <5>
 }
 ----
-<1> The unique identifier of this interaction.  This will be the same value as held in `Command` (obtainable from xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]).
+<1> The unique identifier of this interaction.  This will be the same value as held in `Command` (obtainable from xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`]).
 <2> The member `Execution` (action invocation or property edit) that preceded the current one.
 <3> The current execution.
 <4> * Returns a (list of) execution}s in the order that they were pushed.  Generally there will be just one entry in this list, but additional entries may arise from the use of mixins/contributions when re-rendering a modified object.
-<5> Generates numbers in a named sequence.  Used by the framework both to number successive interaction ``Execution``s and for events published by the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
+<5> Generates numbers in a named sequence.  Used by the framework both to number successive interaction ``Execution``s and for events published by the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 
 This class is concrete (is also the implementation).
 
@@ -85,7 +85,7 @@ This class is concrete (is also the implementation).
 
 The `Interaction.Execution` (static nested) class represents an action invocation/property edit as a node in a
 call-stack execution graph.  Sub-executions can be performed using the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`].
+xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`].
 
 It has the following public API:
 
@@ -121,23 +121,23 @@ public abstract class Execution {
 <5> A human-friendly description of the class of the target object, and of the name of the action invoked/property
 edited on the target object.
 <6> The parent action/property that invoked this action/property edit (if any), and any actions/property edits made in
-turn via the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`].
-<7> The domain event fired via the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] representing the
+turn via the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`].
+<7> The domain event fired via the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] representing the
 execution of this action invocation/property edit.
 <8> The date/time at which this execution started/completed.
 <9> The object returned by the action invocation/property edit, or the exception thrown.  For `void` methods and for actions returning collections, the value will be `null`.
-<10> A DTO (instance of the xref:../rgcms/rgcms.adoc#_rgcms_schema_ixn["ixn" schema]) being a serializable representation of this action invocation/property edit.
+<10> A DTO (instance of the xref:rg:cms:rgcms.adoc#_rgcms_schema_ixn["ixn" schema]) being a serializable representation of this action invocation/property edit.
 
 
 
 [NOTE]
 ====
 
-Unlike the similar xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] domain service (discussed xref:../rgsvc/rgsvc.adoc#__rgsvc_application-layer-api_InteractionContext_Related-Classes[below]) there is no domain service to different implementations of `Interaction` to be used.
+Unlike the similar xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`] domain service (discussed xref:rg:svc:rgsvc.adoc#__rgsvc_application-layer-api_InteractionContext_Related-Classes[below]) there is no domain service to different implementations of `Interaction` to be used.
 That said, the framework simply instantiates the `Interaction` using the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`].
+xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`].
 If a different implementation of `Interaction` was required, then a custom implementation of
- xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`] could always be supplied.
+ xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService`] could always be supplied.
 ====
 
 
@@ -177,8 +177,8 @@ Apache Isis' default implementation of `InteractionContext` class is automatical
 
 Typically domain objects will have little need to interact with the `InteractionContext` and `Interaction` directly.
 The services are used within the framework however, primarily to support the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] SPI, and to emit domain events over the
-xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].
+xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`] SPI, and to emit domain events over the
+xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].
 
 
 
@@ -188,14 +188,14 @@ xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService
 [[__rgsvc_application-layer-api_InteractionContext_Related-Classes]]
 == Related Classes
 
-This service is very similar in nature to xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`], in that the
+This service is very similar in nature to xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_CommandContext[`CommandContext`], in that the
 `Interaction` object accessed through it is very similar to the `Command` object obtained from the `CommandContext`.
 The principle distinction is that while `Command` represents the __intention__ to invoke an action or edit a property,
 the `Interaction` (and contained ``Execution``s) represents the actual execution.
 
 Most of the time a `Command` will be followed directly by its corresponding `Interaction`.  However, if the `Command`
-is annotated to run in the background (using xref:../rgant/rgant.adoc#_rgant-Action_command[`@Action#commandExecuteIn()`], or
-is explicitly created through the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`], then the actual
+is annotated to run in the background (using xref:rg:ant:rgant.adoc#_rgant-Action_command[`@Action#commandExecuteIn()`], or
+is explicitly created through the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`], then the actual
 interaction/execution is deferred until some other mechanism invokes the command (eg as described
 xref:../ugbtb/ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here]).
 

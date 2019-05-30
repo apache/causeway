@@ -2,10 +2,10 @@
 include::_attributes.adoc[]
 
 
-This guide provides xref:../ugbtb/ugbtb.adoc#_ugbtb_other-techniques[more advanced] guidance on writing maintainable larger
+This guide provides xref:ug:btb:ugbtb.adoc#_ugbtb_other-techniques[more advanced] guidance on writing maintainable larger
 applications.
 
-Later chapters discuss how to xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment[deploy] your app, and discuss other ways in which you can xref:../ugbtb/ugbtb.adoc#[extend] or adapt the framework itself to your particular needs.
+Later chapters discuss how to xref:ug:btb:ugbtb.adoc#_ugbtb_deployment[deploy] your app, and discuss other ways in which you can xref:ug:btb:ugbtb.adoc#[extend] or adapt the framework itself to your particular needs.
 
 == Other Guides
 

@@ -242,15 +242,15 @@ xref:dg.adoc#__dg_asciidoc_links-and-xrefs#[background]
 |Cross-reference to section in same asciidoc document
 
 |....
-xref:../ugfun/ugfun.adoc#[Fundamentals]
+xref:ug:fun:ugfun.adoc#[Fundamentals]
 ....
-|xref:../ugfun/ugfun.adoc#[Fundamentals]
+|xref:ug:fun:ugfun.adoc#[Fundamentals]
 |Cross-reference to top-level of different asciidoc document
 
 |....
-xref:../ugfun/ugfun.adoc#_ugfun_core-concepts[Core Concepts]
+xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[Core Concepts]
 ....
-|xref:../ugfun/ugfun.adoc#_ugfun_core-concepts[Core Concepts]
+|xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[Core Concepts]
 |Cross-reference to section within different asciidoc document
 
 |===

@@ -30,10 +30,10 @@ There are other reasons though why a separate read model might make sense, such 
 In these cases Apache Isis can often provide a reasonable alternative, namely to map domain entities against RDBMS views, either materialized views or dynamic.
 In such cases there is still only a single physical datastore, and so transactional integrity is retained.
 
-Or, the CQRS architecture can be more fully implemented with Apache Isis by introducing a separate read model, synchronized using the xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`], or using xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscribers]  on the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].
-One can then use xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view models] to surface the data in the external read datastore.
+Or, the CQRS architecture can be more fully implemented with Apache Isis by introducing a separate read model, synchronized using the xref:rg:svc:rgsvc.adoc#_rgsvc_spi_PublisherService[`PublisherService`], or using xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscribers]  on the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].
+One can then use xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view models] to surface the data in the external read datastore.
 
-With respect to commands, Apache Isis does of course support the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] which allows each business action to be reified into a `Command`.
+With respect to commands, Apache Isis does of course support the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] which allows each business action to be reified into a `Command`.
 However, names are misleading here: Apache Isis' commands are relatively passive, merely recording the intent of the user to invoke some operation.
 In a CQRS architecture, though, commands take a more active role, locating and acting upon the domain objects.
 More significantly, in CQRS each command has its own class, such as `PlaceOrderCommand`, instantiated by the client and then executed.
@@ -42,7 +42,7 @@ With Apache Isis, though, the end-user merely invokes the `placeOrder(...)` acti
 In CQRS the commands correspond to the business logic that mutates the system.
 Whether this logic is part of the command class (`PlaceOrderCommand`) or whether that command delegates to methods on the domain object is an implementation detail; but it certainly is common for the business logic to be wholly within the command object and for the domain object to be merely a data holder of the data within the command/write datastore.
 
-In Apache Isis this same separation of business logic from the underlying data can be accomplished most straightforwardly using xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] or xref:../ugfun/ugfun.adoc#_ugfun_how-tos_contributed-members[contributions].
-In the UI (surfaced by the xref:../ugvw/ugvw.adoc#[Wicket viewer]) or in the REST API (surfaced by the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer]) the behaviour appears to reside on the domain object; however the behaviour actually resides on separate classes and is mixed in (like a trait) only at runtime.
+In Apache Isis this same separation of business logic from the underlying data can be accomplished most straightforwardly using xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] or xref:ug:fun:ugfun.adoc#_ugfun_how-tos_contributed-members[contributions].
+In the UI (surfaced by the xref:ug:vw:ugvw.adoc#[Wicket viewer]) or in the REST API (surfaced by the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer]) the behaviour appears to reside on the domain object; however the behaviour actually resides on separate classes and is mixed in (like a trait) only at runtime.
 
 

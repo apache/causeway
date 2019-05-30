@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 
-By default, Apache Isis assumes that all parameters of an action are required (mandatory).  The `optionality()` attribute allows this to be relaxed.  The attribute is also supported for xref:../rgant/rgant.adoc#_rgant-Property_optionality[properties].
+By default, Apache Isis assumes that all parameters of an action are required (mandatory).  The `optionality()` attribute allows this to be relaxed.  The attribute is also supported for xref:rg:ant:rgant.adoc#_rgant-Property_optionality[properties].
 
 
 [TIP]
@@ -37,5 +37,5 @@ public class Customer {
 
 [NOTE]
 ====
-It is also possible to specify optionality using xref:../rgant/rgant.adoc#_rgant-Nullable[`@Nullable`] annotation.
+It is also possible to specify optionality using xref:rg:ant:rgant.adoc#_rgant-Nullable[`@Nullable`] annotation.
 ====

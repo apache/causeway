@@ -9,7 +9,7 @@ In such a case it's probably a good idea for the UI to require that the end-user
 
 == Using action semantics
 
-One way to meet this requirement is using the framework's built-in xref:../rgant/rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`] attribute:
+One way to meet this requirement is using the framework's built-in xref:rg:ant:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`] attribute:
 
 [source,java]
 ----
@@ -41,7 +41,7 @@ image::hints-and-tips/are-you-sure.png[link="{_imagesdir}hints-and-tips/are-you-
 
 [NOTE]
 ====
-Note that these screenshots shows an earlier version of the xref:../ugvw/ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that these screenshots shows an earlier version of the xref:ug:vw:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 If the user checks the box:
@@ -71,4 +71,4 @@ public String validateDelete(boolean areYouSure) {
 ----
 <1> invalid to return `this` (cannot render a deleted object)
 
-Note that the action itself does not use the boolean parameter, it is only used by the supporting xref:../rgcms/rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] method.
+Note that the action itself does not use the boolean parameter, it is only used by the supporting xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] method.

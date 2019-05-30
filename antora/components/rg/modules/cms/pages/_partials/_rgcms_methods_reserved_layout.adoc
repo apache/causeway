@@ -4,8 +4,8 @@
 include::_attributes.adoc[]
 
 
-Every object has a xref:../ugvw/ugvw.adoc#layout[layout] .
-This may be specified using annotations such as xref:../rgant/rgant.adoc#_rgant_MemberOrder[`@MemberOrder`]xref:../rgant/rgant.adoc#_rgant_DomainObjectLayout[`@DomainObjectLayout`] and the like,  but it much more commonly specified using an xref:ugvw.adoc#_ugvw_layout_file-based [XML layout file].
+Every object has a xref:ug:vw:ugvw.adoc#layout[layout] .
+This may be specified using annotations such as xref:rg:ant:rgant.adoc#_rgant_MemberOrder[`@MemberOrder`]xref:rg:ant:rgant.adoc#_rgant_DomainObjectLayout[`@DomainObjectLayout`] and the like,  but it much more commonly specified using an xref:ugvw.adoc#_ugvw_layout_file-based [XML layout file].
 
 The `layout` method allows the domain object to specify an alternate layout to its usual layout.
 
@@ -42,6 +42,6 @@ If `switchToEditMode()` action is invoked, then the UI will attempt to render th
 
 See also:
 
-* xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
-* xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`]
-* xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
+* xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
+* xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`]
+* xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]

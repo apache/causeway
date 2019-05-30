@@ -4,7 +4,7 @@
 include::_attributes.adoc[]
 
 
-A property is an instance variable of a domain object, of a scalar type, that holds some state about either a xref:../ugfun/ugfun.adoc#__ugfun_programming-model_class-definition_entities[domain entity] or a xref:../ugfun/ugfun.adoc#__ugfun_programming-model_class-definition_view-models[view model].
+A property is an instance variable of a domain object, of a scalar type, that holds some state about either a xref:ug:fun:ugfun.adoc#__ugfun_programming-model_class-definition_entities[domain entity] or a xref:ug:fun:ugfun.adoc#__ugfun_programming-model_class-definition_view-models[view model].
 
 For example, a ``Customer``'s `firstName` would be a property, as would their `accountCreationDate` that they created their account.
 All properties have at least a "getter" method, and most properties have also a "setter" method (meaning that they are mutable).
@@ -15,7 +15,7 @@ Most properties (those that are editable/modifiable) will also have a setter and
 And most properties will also have a number of annotations:
 
 * Apache Isis defines its own set own `@Property` annotation for capturing domain semantics.
-It also provides a `@PropertyLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:../ugvw/ugvw.adoc#_ugvw_layout[`.layout.xml`] file
+It also provides a `@PropertyLayout` for UI hints (though the information in this annotation may instead be provided by a supplementary xref:ug:vw:ugvw.adoc#_ugvw_layout[`.layout.xml`] file
 
 * the properties of domain entities are often annotated with the JDO/DataNucleus `@javax.jdo.annotations.Column` annotation.
 For property references, there may be other annotations to indicate whether the reference is bidirectional.
@@ -62,7 +62,7 @@ Or to map a reference type:
 private Customer customer;
 ----
 
-It's ok for a xref:../ugfun/ugfun.adoc#__ugfun_programming-model_class-definition_entities[domain entity] to reference another domain entity, and for a xref:../ugfun/ugfun.adoc#__ugfun_programming-model_class-definition_view-models[view model] to reference both view model and domain entities.
+It's ok for a xref:ug:fun:ugfun.adoc#__ugfun_programming-model_class-definition_entities[domain entity] to reference another domain entity, and for a xref:ug:fun:ugfun.adoc#__ugfun_programming-model_class-definition_view-models[view model] to reference both view model and domain entities.
 However, it isn't valid for a domain entity to hold a persisted reference to view model (DataNucleus will not know how to persist that view model).
 
 [NOTE]
@@ -71,7 +71,7 @@ For further details on mapping associations, see the JDO/DataNucleus documentati
 ====
 
 For domain entities, the annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.
-The table in the xref:../ugfun/ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[Properties vs Parameters] section provides a handy reference of each.
+The table in the xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[Properties vs Parameters] section provides a handy reference of each.
 
 
 [[__ugfun_programming-model_properties_optional-properties]]
@@ -122,13 +122,13 @@ For example:
 private String notes;
 ----
 
-If this is omitted then whether editing is enabled or disabled is defined globally, in the `isis.properties` configuration file; see xref:../rgcfg/rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[reference configuration guide] for further details.
+If this is omitted then whether editing is enabled or disabled is defined globally, in the `isis.properties` configuration file; see xref:rg:cfg:rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[reference configuration guide] for further details.
 
 
 [[__ugfun_programming-model_properties_ignoring-properties]]
 == Ignoring Properties
 
-By default Apache Isis will automatically render all properties in the xref:../ugvw/ugvw.adoc#[Wicket UI] or in the xref:../ugvro/ugvro.adoc[REST API].
+By default Apache Isis will automatically render all properties in the xref:ug:vw:ugvw.adoc#[Wicket UI] or in the xref:ug:vro:ugvro.adoc[REST API].
 To get Apache Isis to ignore a property (exclude it from its metamodel), annotate the getter using `@Programmatic`.
 
 Similarly, you can tell JDO/DataNucleus to ignore a property using the `@javax.jdo.annotations.NotPersistent` annotation.
@@ -264,7 +264,7 @@ More information can be found http://www.opentaps.org/docs/index.php/How_to_Use_
 
 Apache Isis configures JDO/DataNucleus so that the properties of type `org.apache.isis.applib.value.Blob` and `org.apache.isis.applib.value.Clob` can also be persisted.
 
-As for xref:../ugfun/ugfun.adoc#__ugfun_programming-model_properties_datatypes_joda-dates[Joda dates], this requires the `@javax.jdo.annotations.Persistent` annotation.
+As for xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_datatypes_joda-dates[Joda dates], this requires the `@javax.jdo.annotations.Persistent` annotation.
 However, whereas for dates one would always expect this value to be retrieved eagerly, for blobs and clobs it is not so clear cut.
 
 For example, in the `ToDoItem` class (of the https://github.com/isisaddons/isis-app-todoapp/blob/0333852ddd18ad67e3356fccf805aa442246790d/dom/src/main/java/todoapp/dom/todoitem/ToDoItem.java#L442[todoapp example app] (non-ASF) the `attachment` property is as follows:
@@ -314,7 +314,7 @@ There can be differences in behaviour between JDBC drivers.
 === ``Clob``s
 
 
-Mapping `Clob`s works in a very similar way to xref:../ugfun/ugfun.adoc#__ugfun_programming-model_properties_datatypes_blobs[``Blob``]s, but the `jdbcType` and `sqlType` attributes will, respectively, be `CLOB` and `LONGVARCHAR`:
+Mapping `Clob`s works in a very similar way to xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_datatypes_blobs[``Blob``]s, but the `jdbcType` and `sqlType` attributes will, respectively, be `CLOB` and `LONGVARCHAR`:
 
 [source,java]
 ----

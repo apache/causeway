@@ -14,29 +14,29 @@ The table below lists the reserved methods that are recognized as part of Apache
 |Method
 |Description
 
-|xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
+|xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
 |Provides a CSS class for this object instance.
-In conjunction with xref:../rgcfg/rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered.
+In conjunction with xref:rg:cfg:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered.
 
-|xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_disable[`disable(...)`]
+|xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_disable[`disable(...)`]
 |Disable all or some of an object's properties
 
-|xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_getId[`getId()`]
+|xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_getId[`getId()`]
 |Provides an optional unique identifier of a service.
 
 If not provided, the service's fully-qualified class name is used.
 
-|xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_hide[`hide(...)`]
+|xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_hide[`hide(...)`]
 |Hide all or some of an object's properties
 
-|xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`]
+|xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`]
 |Provides the name of the image to render, usually alongside the title, to represent the object.
 If not provided, then the class name is used to locate an image.
 
-|xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
+|xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
 |Provides a title for the object. +
 
-|xref:../rgcms/rgcms.adoc#_rgcms_methods_reserved_validate[`validate()`]
+|xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_validate[`validate()`]
 |Validate the object's state prior to persisting.
 
 |===

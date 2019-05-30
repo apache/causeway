@@ -18,5 +18,5 @@ NOTE: FIXME
 
 == Persistence Concerns
 
-NOTE: FIXME -  easiest to simply store using DataNucleus' support for collections, marked as xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`] so that it is ignored by Apache Isis.  Alternatively can store as json/xml in a varchar(4000) or clob and manually unpack.
+NOTE: FIXME -  easiest to simply store using DataNucleus' support for collections, marked as xref:rg:ant:rgant.adoc#_rgant-Programmatic[`@Programmatic`] so that it is ignored by Apache Isis.  Alternatively can store as json/xml in a varchar(4000) or clob and manually unpack.
 

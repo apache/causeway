@@ -36,10 +36,10 @@ public class Tenancy {
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 
 == See also
 
-This attribute is also supported for xref:../rgant/rgant.adoc#_rgant-ParameterLayout_renderedAsDayBefore[parameters].
+This attribute is also supported for xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_renderedAsDayBefore[parameters].
 

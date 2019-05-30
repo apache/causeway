@@ -50,7 +50,7 @@ The following sections describe each of these methods in a little more detail.
 === `getModules()`
 
 The most significant method (the only one which must return a non-`null` value) is the `getModules()` method.
-Each module is identified by a class; the framework simply uses that class' package as the root to search for domain services (annotated with xref:../rgant/rgant.adoc#_rgant-DomainService[`@DomainService`]) and entities (annotated with xref:../rgant/rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`]).
+Each module is identified by a class; the framework simply uses that class' package as the root to search for domain services (annotated with xref:rg:ant:rgant.adoc#_rgant-DomainService[`@DomainService`]) and entities (annotated with xref:rg:ant:rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`]).
 Generally there is one such module class per Maven module.
 
 A module class for a domain module might for example be defined as:
@@ -97,7 +97,7 @@ As can be seen, the various (non-ASF) link:http://platform.incode.org[Incode Pla
 === `getAdditionalServices()`
 
 We normally we recommend that services are defined exclusively through `getModules()`, and that this method should therefore return an empty list.
-However, there are certain use cases where the a service must be explicitly specified either because the service required does not (for whatever reason) have a xref:../rgant/rgant.adoc#_rgant-DomainService[`@DomainService`] annotation.
+However, there are certain use cases where the a service must be explicitly specified either because the service required does not (for whatever reason) have a xref:rg:ant:rgant.adoc#_rgant-DomainService[`@DomainService`] annotation.
 
 For example, the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security module allows the policy to evaluate conflicting permissions to be specified by explicitly registering either the `PermissionsEvaluationServiceAllowBeatsVeto` domain service or the `PermissionsEvaluationServiceVetoBeatsAllow` domain service:
 
@@ -123,7 +123,7 @@ If non-`null`, this method specifies the authentication mechanism to use.
 The valid values are currently `"shiro"`  or `"bypass"`.
 If null is returned then the value of the `isis.authentication` configuration property (in `isis.properties` file) is used instead.
 
-See the xref:../ugsec/ugsec.adoc#[security guide] for further details on configuring shiro or bypass security.
+See the xref:ug:sec:ugsec.adoc#[security guide] for further details on configuring shiro or bypass security.
 
 [NOTE]
 ====
@@ -139,7 +139,7 @@ If non-`null`, this method specifies the authorization mechanism to use.
 The valid values are currently `"shiro"`  or `"bypass"`.
 If null is returned then the value of the `isis.authorization` configuration property (in `isis.properties` file) is used instead.
 
-See the xref:../ugsec/ugsec.adoc#[security guide] for further details on configuring shiro or bypass security.
+See the xref:ug:sec:ugsec.adoc#[security guide] for further details on configuring shiro or bypass security.
 
 [NOTE]
 ====
@@ -195,7 +195,7 @@ public Map<String, String> getConfigurationProperties() {
 
 [NOTE]
 ====
-The recommendations in this section no longer apply if using the xref:../rgcms/rgcms.adoc#__rgcms_classes_AppManifest2-bootstrapping_bootstrapping[`AppManifest2`] interface and ``Module``s to bootstrap your application.
+The recommendations in this section no longer apply if using the xref:rg:cms:rgcms.adoc#__rgcms_classes_AppManifest2-bootstrapping_bootstrapping[`AppManifest2`] interface and ``Module``s to bootstrap your application.
 ====
 
 One of the primary goals of the `AppManifest` is to unify the bootstrapping of both integration tests and the webapp.
@@ -211,7 +211,7 @@ What then remains is to update the bootstrapping code itself.
 
 There are several different contexts in which the framework needs to be bootstrapped:
 
-* the first is as a "regular" webapp (using the xref:../ugvw/ugvw.adoc#[Wicket viewer]).
+* the first is as a "regular" webapp (using the xref:ug:vw:ugvw.adoc#[Wicket viewer]).
 Here the `AppManifest` just needs to be specified as a configuration property, usually done using the `WEB-INF/isis.properties` configuration file: +
 +
 [source,ini]
@@ -231,7 +231,7 @@ java org.apache.isis.WebServer -m com.mycompany.myapp.MyAppAppManifestWithFixtur
 
 * the third case is within an integration test. +
 +
-The code to boostrap an integration test is shown in the xref:../ugtst/ugtst.adoc#_ugtst_integ-test-support_bootstrapping[testing guide], but once again an `AppManifest` is required.
+The code to boostrap an integration test is shown in the xref:ug:tst:ugtst.adoc#_ugtst_integ-test-support_bootstrapping[testing guide], but once again an `AppManifest` is required.
 
 In some cases an integration test uses the exact same `AppManifest` as the regular webapp.
 Sometimes though it is necessary to "tweak" the `AppManifest`:
@@ -266,7 +266,7 @@ In other words these describe how the application chooses to configure the frame
 +
 The classic example here is the JDBC URL.
 
-For example, the xref:../ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]'s `AppManifest` is defined as:
+For example, the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]'s `AppManifest` is defined as:
 
 [source,java]
 ----

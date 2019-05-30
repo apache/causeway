@@ -14,7 +14,7 @@ It is also possible to specify additional CSS for an object's members (not just 
 
 Action icons can be specified in several ways.
 
-One option is to use the xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`].
+One option is to use the xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`].
 For example:
 
 [source,java]
@@ -25,17 +25,17 @@ public void renew() {
 }
 ----
 
-Alternatively, you can specify these hints dynamically in the xref:../ugvw/ugvw.adoc#_ugvw_layout[`Xxx.layout.xml`] for the entity:
+Alternatively, you can specify these hints dynamically in the xref:ug:vw:ugvw.adoc#_ugvw_layout[`Xxx.layout.xml`] for the entity:
 
 [source,xml]
 ----
 <cpt:action id="renew" cssClassFa="refresh"/>
 ----
 
-Rather than annotating every action with xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`] and xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] you can instead specify the UI hint globally using regular expressions.
+Rather than annotating every action with xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`] and xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] you can instead specify the UI hint globally using regular expressions.
 Not only does this save a lot of boilerplate/editing, it helps ensure consistency across all actions.
 
-To declare fa classes globally, use the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.reflector.facet.cssClassFa.patterns` (a comma separated list of key:value pairs).
+To declare fa classes globally, use the xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.reflector.facet.cssClassFa.patterns` (a comma separated list of key:value pairs).
 
 For example:
 
@@ -67,18 +67,18 @@ For example, "fa-plus" is applied to all action members called "newXxx"
 
 Similarly, a CSS class can be specified for object members:
 
-* xref:../rgant/rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] for actions
+* xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] for actions
 
-* xref:../rgant/rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`] for properties, and
+* xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`] for properties, and
 
-* xref:../rgant/rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`] for collections.
+* xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`] for collections.
 
 Again, this CSS class will be attached to an appropriate containing `<div>` or `<span>` on the rendered page.
 
 Possible use cases for this is to highlight the most important properties of a domain object.
 
 
-It is also possible to specify CSS classes globally, using the xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.reflector.facet.cssClass.patterns` configuration property.
+It is also possible to specify CSS classes globally, using the xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.reflector.facet.cssClass.patterns` configuration property.
 
 For example:
 

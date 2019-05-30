@@ -38,4 +38,4 @@ public class Customer {
 
 == See also
 
-This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-Property_regexPattern[properties].
+This attribute can also be specified for xref:rg:ant:rgant.adoc#_rgant-Property_regexPattern[properties].

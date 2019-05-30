@@ -27,26 +27,26 @@ Apache Isis documentation is broken out into a number of user, reference and "su
 
 The user guides available are:
 
-* xref:../ugfun/ugfun.adoc#[Fundamentals]
-* xref:../ugvw/ugvw.adoc#[Wicket viewer]
-* xref:../ugvro/ugvro.adoc#[Restful Objects viewer]
-* xref:../ugodn/ugodn.adoc#[DataNucleus object store]
-* xref:../ugsec/ugsec.adoc#[Security]
-* xref:../ugtst/ugtst.adoc#[Testing]
+* xref:ug:fun:ugfun.adoc#[Fundamentals]
+* xref:ug:vw:ugvw.adoc#[Wicket viewer]
+* xref:ug:vro:ugvro.adoc#[Restful Objects viewer]
+* xref:ug:odn:ugodn.adoc#[DataNucleus object store]
+* xref:ug:sec:ugsec.adoc#[Security]
+* xref:ug:tst:ugtst.adoc#[Testing]
 * xref:../ugbtb/ugbtb.adoc#[Beyond the Basics]
 
 The reference guides are:
 
-* xref:../rgant/rgant.adoc#[Annotations]
-* xref:../rgsvc/rgsvc.adoc#[Domain Services]
-* xref:../rgcfg/rgcfg.adoc#[Configuration Properties]
-* xref:../rgcms/rgcms.adoc#[Classes, Methods and Schema]
-* xref:../rgmvn/rgmvn.adoc#[Apache Isis Maven plugin]
-* xref:../rgfis/rgfis.adoc#[Framework Internal Services]
+* xref:rg:ant:rgant.adoc#[Annotations]
+* xref:rg:svc:rgsvc.adoc#[Domain Services]
+* xref:rg:cfg:rgcfg.adoc#[Configuration Properties]
+* xref:rg:cms:rgcms.adoc#[Classes, Methods and Schema]
+* xref:rg:mvn:rgmvn.adoc#[Apache Isis Maven plugin]
+* xref:rg:fis:rgfis.adoc#[Framework Internal Services]
 
 The remaining guides are:
 
-* xref:../dg/dg.adoc#[Developers' Guide] (this guide)
+* xref:support:dg:dg.adoc#[Developers' Guide] (this guide)
 * xref:../cgcom/cgcom.adoc#[Committers' Guide] (release procedures and related practices)
 
 

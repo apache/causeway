@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 Once a domain entity has been instantiated, it must be persisted.
-This is done using the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`].
+This is done using the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_RepositoryService[`RepositoryService`].
 For example:
 
 [source,java]
@@ -31,7 +31,7 @@ repositoryService.persist(customer);
 
 It's worth being aware that the framework does _not_ eagerly persist the object.
 Rather, it queues up an internal command structure representing the object persistence request.
-This is then executed either at the end of the transaction, or if a xref:../ugfun/ugfun.adoc#_ugfun_crud_finding[query is run], or if the internal queue is manually flushed using xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`]'s `flush()` method.
+This is then executed either at the end of the transaction, or if a xref:ug:fun:ugfun.adoc#_ugfun_crud_finding[query is run], or if the internal queue is manually flushed using xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`]'s `flush()` method.
 
 Alternatively, you can use:
 
@@ -42,7 +42,7 @@ repositoryService.persistAndFlush(customer);
 
 to eagerly perform the object insertion into the database.
 
-When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle events].
+When an object is persisted the framework will emit `ObjectPersistingEvent` and `ObjectPersistedEvent` xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_events_lifecycle-events[lifecycle events].
 
 
 

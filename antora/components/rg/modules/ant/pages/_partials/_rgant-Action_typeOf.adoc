@@ -32,5 +32,5 @@ In general we recommend that you use generics instead, eg `List<Customer>`.
 
 == See also
 
-This attribute can also be specified for xref:../rgant/rgant.adoc#_rgant-Collection_typeOf[collections].
+This attribute can also be specified for xref:rg:ant:rgant.adoc#_rgant-Collection_typeOf[collections].
 

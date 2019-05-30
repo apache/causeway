@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 The `@javax.annotation.PreDestroy` annotation, as defined in link:https://jcp.org/en/jsr/detail?id=250[JSR-250], recognized by Apache Isis as a callback method on domain services to be called just as they go out of scope.
 
 
-For the default application-scoped (singleton) domain services, this means that the method, if present, is called just prior to the termination of the application.  For xref:../rgant/rgant.adoc#_rgant-RequestScoped[`@RequestScoped`] domain services, the method is called at the end of the request.
+For the default application-scoped (singleton) domain services, this means that the method, if present, is called just prior to the termination of the application.  For xref:rg:ant:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`] domain services, the method is called at the end of the request.
 
 The signature of the method is:
 
@@ -17,10 +17,10 @@ The signature of the method is:
 @PreDestroy                         <1>
 public void deinit() { ... }    <2>
 ----
-<1> It is not necessary to annotate the method with xref:../rgant/rgant.adoc#_rgant-Programmatic[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
+<1> It is not necessary to annotate the method with xref:rg:ant:rgant.adoc#_rgant-Programmatic[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
 <2> the method can have any name, but must have `public` visibility, and accept no arguments.
 
-A common use case is for domain services that interact with the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].  For example:
+A common use case is for domain services that interact with the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].  For example:
 
 [source,java]
 ----
@@ -42,11 +42,11 @@ public class MySubscribingService {
 
 [TIP]
 ====
-In this particular use case, it is generally simpler to just subclass from xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[`AbstractSubscriber`].
+In this particular use case, it is generally simpler to just subclass from xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[`AbstractSubscriber`].
 ====
 
 Other use cases include obtaining connections to external datasources, eg subscribing to an ActiveMQ router, say, or initializing/cleaning up a background scheduler such as Quartz.
 
 
 
-See also xref:../rgant/rgant.adoc#_rgant-PostConstruct[`@PostConstruct`]
+See also xref:rg:ant:rgant.adoc#_rgant-PostConstruct[`@PostConstruct`]

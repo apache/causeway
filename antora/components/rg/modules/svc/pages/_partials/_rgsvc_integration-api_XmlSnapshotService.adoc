@@ -194,13 +194,13 @@ The core framework provides an implementation of this service (`o.a.i.core.runti
 
 == Related Services
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`] provides a mechanism for obtaining a string representations of a single domain object.
+The xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`] provides a mechanism for obtaining a string representations of a single domain object.
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_MementoService[`MementoService`] also provides a mechanism for generating string representations of domain objects.
+The xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_MementoService[`MementoService`] also provides a mechanism for generating string representations of domain objects.
 
-The xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] is a simple wrapper around
+The xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_JaxbService[`JaxbService`] is a simple wrapper around
 standard JAXB functionality for generating both XMLs and XSDs from JAXB-annotated classes.  Note that there is built-in support for JAXB classes (ie annotated with
-xref:../rgant/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]) to be used as view models.
+xref:rg:ant:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]) to be used as view models.
 
 
 

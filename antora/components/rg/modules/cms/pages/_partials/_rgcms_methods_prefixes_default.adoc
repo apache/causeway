@@ -8,7 +8,7 @@ include::_attributes.adoc[]
 The `default...()` supporting method is called for action parameters to return the initial argument value.
 This may be some sensible default (eg today's date, or 0 or 1), or -- for an action that is modifying the state of an object -- might default to the current value of a corresponding property.
 
-The method is _also_ called for properties in the case when an object is newly instantiated using xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService#instantiate(...)`] or xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(...)`].
+The method is _also_ called for properties in the case when an object is newly instantiated using xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService#instantiate(...)`] or xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(...)`].
 This is a much less common use case.
 If a default is not specified then properties are initialized to a default based on their type (eg 0 or `false`).
 
@@ -60,7 +60,7 @@ public class ShoppingCartItem {
 
 
 
-Defaults are also supported (of course) for xref:../ugfun/ugfun.adoc#_ugfun_how-tos_contributed-members[contributed actions].
+Defaults are also supported (of course) for xref:ug:fun:ugfun.adoc#_ugfun_how-tos_contributed-members[contributed actions].
 For example, here is a contributed action for updating category/subcategory of the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
 
 [source,java]
@@ -180,7 +180,7 @@ public class ShoppingCartItem {
 
 There are, in fact, two other ways to set properties of a newly instantiated object to default values.
 
-The first is to use the xref:../rgcms/rgcms.adoc#_rgcms_methods_lifecycle_created[`created()`] callback, called by the framework when xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService#instantiate(...)`] or xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(...)`] is called.
+The first is to use the xref:rg:cms:rgcms.adoc#_rgcms_methods_lifecycle_created[`created()`] callback, called by the framework when xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService#instantiate(...)`] or xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_FactoryService[`FactoryService#instantiate(...)`] is called.
 This method is called after any services have been injected into the domain object.
 
 The second is more straightforward: simply initialize properties in the constructor.

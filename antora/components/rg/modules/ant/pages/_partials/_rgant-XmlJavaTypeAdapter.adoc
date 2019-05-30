@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 The JAXB `@XmlJavaTypeAdapter` annotation is used with the framework-provided
 `PersistentEntityAdapter` to instruct JAXB to serialize references to persistent entities using the canonical
 `OidDto` complex type: the object's type and its identifier.  This is the formal XML equivalent to the `Bookmark`
-provided by the xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`].
+provided by the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`].
 
 For example:
 
@@ -21,6 +21,6 @@ public class ToDoItem ...  {
 
 This annotation therefore allows view models/DTOs to have references to persistent entities; a common idiom.
 
-For a more complete discussion of writing JAXB view models/DTOs, see xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[this topic]
+For a more complete discussion of writing JAXB view models/DTOs, see xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[this topic]
 in the user guide.
 

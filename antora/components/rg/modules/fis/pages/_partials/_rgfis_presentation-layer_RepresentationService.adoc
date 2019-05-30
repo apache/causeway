@@ -6,13 +6,13 @@ include::_attributes.adoc[]
 
 
 
-The `RepresentationService` is the main plug-in point for the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer] to generate representations.
+The `RepresentationService` is the main plug-in point for the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer] to generate representations.
 
 The default implementations ultimately generate representations according to the link:http://restfulobjects.org[Restful Objects spec] v1.0.
-However, it also delegates to the xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] which provides a mechanism for altering representations according to the HTTP `Accept` header.
+However, it also delegates to the xref:rg:fis:rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] which provides a mechanism for altering representations according to the HTTP `Accept` header.
 This allows more flexible representations to be generated for REST clients that (perhaps through their use of a certain Javascript library, say) expect, or at least works best with, a certain style of representation.
 
-In all there are three domain services that can influence the representations generated: this service, xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] and the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`].
+In all there are three domain services that can influence the representations generated: this service, xref:rg:fis:rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] and the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`].
 The diagram below shows how these collaborate:
 
 image::RepresentationService/service-collaborations.png[width="700px",link="{_imagesdir}RepresentationService/service-collaborations.png"]
@@ -78,9 +78,9 @@ ie `MemberReprMode`
 == Implementation
 
 As discussed in the introduction, the framework provides a default implementation, `o.a.i.v.ro.rendering.service.RepresentationServiceContentNegotiator`.
-This delegates to xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] to generate an alternative representation; but if none is provided then it falls back on generating the representations as defined in the link:http://restfulobjects.org[Restful Objects spec] v1.0.
+This delegates to xref:rg:fis:rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`] to generate an alternative representation; but if none is provided then it falls back on generating the representations as defined in the link:http://restfulobjects.org[Restful Objects spec] v1.0.
 
-To use an alternative implementation, use xref:../rgant/rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:../rgsvc/rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, use xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Registering the Services
@@ -91,4 +91,4 @@ Apache Isis' default implementation of `RepresentationService` service is automa
 
 == Related Services
 
-The default implementation delegates to xref:../rgfis/rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`], whose default implementation may delegate in turn to xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] (if present).
+The default implementation delegates to xref:rg:fis:rgfis.adoc#_rgfis_presentation-layer_ContentNegotiationService[`ContentNegotiationService`], whose default implementation may delegate in turn to xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`] (if present).

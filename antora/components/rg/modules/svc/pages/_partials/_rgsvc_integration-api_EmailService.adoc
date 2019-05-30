@@ -85,7 +85,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `port` +
 | port number (`_587_`)
-|The port number for the SMTP service on the the external SMTP host (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
+|The port number for the SMTP service on the the external SMTP host (used by xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -94,7 +94,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `sender.address` +
 | email address
-|The email address to use for sending out email (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).
+|The email address to use for sending out email (used by xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).
 *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
@@ -104,7 +104,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `sender.hostname` +
 | host (`_smtp.gmail.com_`)
-|The hostname of the external SMTP provider (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
+|The hostname of the external SMTP provider (used by xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -113,7 +113,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `email.` +
 `sender.password` +
 | email password
-|The corresponding password for the email address to use for sending out email (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).
+|The corresponding password for the email address to use for sending out email (used by xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).
 *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
@@ -158,7 +158,7 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `tls.enabled`
 |`true`,`false` +
 (`true`)
-|Whether to enable TLS for the email SMTP connection (used by xref:../rgsvc/rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
+|Whether to enable TLS for the email SMTP connection (used by xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -170,13 +170,13 @@ Thus, use this service the following properties must be configured:
 * `isis.service.email.sender.address`
 * `isis.service.email.sender.password`
 
-and these properties may optionally be configured (each has a default to use gmail, documented xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[here]):
+and these properties may optionally be configured (each has a default to use gmail, documented xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[here]):
 
 * `isis.service.email.sender.hostname`
 * `isis.service.email.port`
 * `isis.service.email.tls.enabled`
 
-These configuration properties can be specified either in `isis.properties` or in an xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_externalized-configuration[external configuration file], or programmatically using the xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`].
+These configuration properties can be specified either in `isis.properties` or in an xref:../ugbtb/ugbtb.adoc#_ugbtb_deployment_externalized-configuration[external configuration file], or programmatically using the xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`].
 
 TODO: v2: confirm this is the case.
 
@@ -228,7 +228,7 @@ The socket connection timeout, defaulting to 2000ms.
 If you wish to write an alternative implementation, be aware that it should process the message body as HTML (as opposed to plain text or any other format).
 
 Also, note that (unlike most Apache Isis domain services) the implementation is also instantiated and injected by Google Guice.
-This is because `EmailService` is used as part of the xref:../ugvw/ugvw.adoc#_ugvw_features_user-registration[user registration] functionality and is used by Wicket pages that are accessed outside of the usual Apache Isis runtime.
+This is because `EmailService` is used as part of the xref:ug:vw:ugvw.adoc#_ugvw_features_user-registration[user registration] functionality and is used by Wicket pages that are accessed outside of the usual Apache Isis runtime.
 This implies a couple of additional constraints:
 
 * first, implementation class should also be annotated with `@com.google.inject.Singleton`
@@ -242,4 +242,4 @@ To ensure that your alternative implementation takes the place of the default im
 
 == Related Services
 
-The email service is used by the xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_EmailNotificationService[`EmailNotificationService`] which is, in turn, used by xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`UserRegistrationService`].
+The email service is used by the xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_EmailNotificationService[`EmailNotificationService`] which is, in turn, used by xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_UserRegistrationService[`UserRegistrationService`].

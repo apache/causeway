@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 
-This appendix lists the (IntelliJ) live templates available for xref:../dg/dg.adoc#_dg_asciidoc[writing documentation] using Asciidoc.  Instructions for installing the templates can be found xref:../dg/dg.adoc#__dg_ide_intellij_live-templates[here].
+This appendix lists the (IntelliJ) live templates available for xref:support:dg:dg.adoc#_dg_asciidoc[writing documentation] using Asciidoc.  Instructions for installing the templates can be found xref:support:dg:dg.adoc#__dg_ide_intellij_live-templates[here].
 
 In the examples below the text `xxx`, `yyy`, `zzz` are correspond to template variables (ie placeholders).
 
@@ -130,10 +130,10 @@ a hyperlink to a bookmark within the committers' guide, where:
 
 for example:
 
-`\xref:../dg/dg.adoc#_cgcom_cutting-a-release[Cutting a release\]`
+`\xref:support:dg:dg.adoc#_cgcom_cutting-a-release[Cutting a release\]`
 
 |`addg`
-|`\xref:../dg/dg.adoc#xxx[ttt]`
+|`\xref:support:dg:dg.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the developers' guide, where:
 
@@ -142,14 +142,14 @@ a hyperlink to a bookmark within the developers' guide, where:
 
 for example:
 
-`\xref:../dg/dg.adoc#_dg_asciidoc-templates[Asciidoc templates\]`
+`\xref:support:dg:dg.adoc#_dg_asciidoc-templates[Asciidoc templates\]`
 
-|xref:../dg/dg.adoc#_dg_asciidoc-templates[Asciidoc templates]
+|xref:support:dg:dg.adoc#_dg_asciidoc-templates[Asciidoc templates]
 
 
 
 |`adrgant`
-|`\xref:../rgant/rgant.adoc#xxx[ttt]`
+|`\xref:rg:ant:rgant.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the reference guide for annotations, where:
 
@@ -158,14 +158,14 @@ a hyperlink to a bookmark within the reference guide for annotations, where:
 
 for example:
 
-`\xref:../rgant/rgant.adoc#_rgant_aaa_main[Core annotations]`
+`\xref:rg:ant:rgant.adoc#_rgant_aaa_main[Core annotations]`
 
-|xref:../rgant/rgant.adoc#_rgant_aaa_main[Core annotations]
+|xref:rg:ant:rgant.adoc#_rgant_aaa_main[Core annotations]
 
 
 
 |`adrgcfg`
-|`\xref:../rgcfg/rgcfg.adoc#xxx[ttt]`
+|`\xref:rg:cfg:rgcfg.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the reference guide for configuration properties guide, where:
 
@@ -174,14 +174,14 @@ a hyperlink to a bookmark within the reference guide for configuration propertie
 
 for example:
 
-`\xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]`
+`\xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]`
 
-|xref:../rgcfg/rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]
+|xref:rg:cfg:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]
 
 
 
 |`adrgcms`
-|`\xref:../rgcms/rgcms.adoc#xxx[ttt]`
+|`\xref:rg:cms:rgcms.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the reference guide for classes, methods and schema, where:
 
@@ -190,14 +190,14 @@ a hyperlink to a bookmark within the reference guide for classes, methods and sc
 
 for example:
 
-`\xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]`
+`\xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]`
 
-|xref:../rgcms/rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]
+|xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]
 
 
 
 |`adrgsvc`
-|`\xref:../rgsvc/rgsvc.adoc#xxx[ttt]`
+|`\xref:rg:svc:rgsvc.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the reference guide for domain services, where:
 
@@ -206,14 +206,14 @@ a hyperlink to a bookmark within the reference guide for domain services, where:
 
 for example:
 
-`\xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]`
+`\xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]`
 
-|xref:../rgcms/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]
+|xref:rg:cms:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest` bootstrapping]
 
 
 
 |`adrgmvn`
-|`\xref:../rgmvn/rgmvn.adoc#xxx[ttt]`
+|`\xref:rg:mvn:rgmvn.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the reference guide for the maven plugin, where:
 
@@ -222,14 +222,14 @@ a hyperlink to a bookmark within the reference guide for the maven plugin, where
 
 for example:
 
-`\xref:../rgmvn/rgmvn.adoc#_rgmvn_validate[validate goal]`
+`\xref:rg:mvn:rgmvn.adoc#_rgmvn_validate[validate goal]`
 
-|xref:../rgmvn/rgmvn.adoc#_rgmvn_validate[validate goal]
+|xref:rg:mvn:rgmvn.adoc#_rgmvn_validate[validate goal]
 
 
 
 |`adrgna`
-|`\xref:../rgant/rgant.adoc#_rgant-xxx[`@xxx`]`
+|`\xref:rg:ant:rgant.adoc#_rgant-xxx[`@xxx`]`
 
 a hyperlink to the "man page" for an annotation within the reference guide for annotations, where:
 
@@ -237,14 +237,14 @@ a hyperlink to the "man page" for an annotation within the reference guide for a
 
 for example:
 
-`\xref:../rgant/rgant.adoc#_rgant-Action[`@Action`]`
+`\xref:rg:ant:rgant.adoc#_rgant-Action[`@Action`]`
 
-|xref:../rgant/rgant.adoc#_rgant-Action[`@Action`]
+|xref:rg:ant:rgant.adoc#_rgant-Action[`@Action`]
 
 
 
 |`adrgnt`
-|`\xref:../rgant/rgant.adoc#_rgant-xxx_ttt[`@xxx#ttt()`]`
+|`\xref:rg:ant:rgant.adoc#_rgant-xxx_ttt[`@xxx#ttt()`]`
 
 a hyperlink to the "man page" for the specific attribute (field) of an annotation within the reference guide for annotations, where:
 
@@ -253,14 +253,14 @@ a hyperlink to the "man page" for the specific attribute (field) of an annotatio
 
 for example:
 
-`\xref:../rgant/rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]`
+`\xref:rg:ant:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]`
 
-|xref:../rgant/rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]
+|xref:rg:ant:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]
 
 
 
 |`adrgsa`
-|`\xref:../rgsvc/rgsvc.adoc#_rgsvc_api_xxx[`xxx`]`
+|`\xref:rg:svc:rgsvc.adoc#_rgsvc_api_xxx[`xxx`]`
 
 a hyperlink to the "man page" for an (API) domain service within the reference guide for domain services, where:
 
@@ -268,14 +268,14 @@ a hyperlink to the "man page" for an (API) domain service within the reference g
 
 for example:
 
-`\xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]`
+`\xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]`
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]
+|xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]
 
 
 
 |`adrgss`
-|`\xref:../rgsvc/rgsvc.adoc#_rgsvc_spi_xxx[`xxx`]`
+|`\xref:rg:svc:rgsvc.adoc#_rgsvc_spi_xxx[`xxx`]`
 
 a hyperlink to the "man page" for an (SPI) domain service within the reference guide for domain services, where:
 
@@ -283,15 +283,15 @@ a hyperlink to the "man page" for an (SPI) domain service within the reference g
 
 for example:
 
-`\xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`]`
+`\xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService[`ContentMappingService`]`
 
-|xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingServicef[`ContentMappingService`]
+|xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingServicef[`ContentMappingService`]
 
 
 
 
 |`adugfun`
-|`\xref:../ugfun/ugfun.adoc#xxx[ttt]`
+|`\xref:ug:fun:ugfun.adoc#xxx[ttt]`
 
 a hyperlink to a bookmark within the fundamentals users' guide, where:
 
@@ -300,15 +300,15 @@ a hyperlink to a bookmark within the fundamentals users' guide, where:
 
 for example:
 
-`\xref:../ugfun/ugfun.adoc#_ugfun_core-concepts[Core concepts]`
+`\xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[Core concepts]`
 
-|xref:../ugfun/ugfun.adoc#_ugfun_core-concepts[Core concepts]
+|xref:ug:fun:ugfun.adoc#_ugfun_core-concepts[Core concepts]
 
 
 
 
 |`adugvw`
-|`\xref:../ugvw/ugvw.adoc#xxx[ttt]`
+|`\xref:ug:vw:ugvw.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the Wicket viewer guide, where:
 
@@ -317,13 +317,13 @@ A hyperlink to a bookmark within the Wicket viewer guide, where:
 
 for example:
 
-`\xref:../ugvw/ugvw.adoc#_ugvw_customisation[Customisation]`
+`\xref:ug:vw:ugvw.adoc#_ugvw_customisation[Customisation]`
 
-|xref:../ugvw/ugvw.adoc#_ugvw_customisation[Customisation]
+|xref:ug:vw:ugvw.adoc#_ugvw_customisation[Customisation]
 
 
 |`adugvro`
-|`\xref:../ugvro/ugvro.adoc#xxx[ttt]`
+|`\xref:ug:vro:ugvro.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the Restful Objects viewer guide, where:
 
@@ -332,14 +332,14 @@ A hyperlink to a bookmark within the Restful Objects viewer guide, where:
 
 for example:
 
-`\xref:../ugvro/ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]`
+`\xref:ug:vro:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]`
 
-|xref:../ugvro/ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]
+|xref:ug:vro:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]
 
 
 
 |`adugsec`
-|`\xref:../ugsec/ugsec.adoc#xxx[ttt]`
+|`\xref:ug:sec:ugsec.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the Secrurity guide, where:
 
@@ -348,13 +348,13 @@ A hyperlink to a bookmark within the Secrurity guide, where:
 
 for example:
 
-`\xref:../ugsec/ugsec.adoc#_ugsec_hints-and-tips_shiro-caching[Caching and other Shiro Features]`
+`\xref:ug:sec:ugsec.adoc#_ugsec_hints-and-tips_shiro-caching[Caching and other Shiro Features]`
 
-|xref:../ugsec/ugsec.adoc#_ugsec_hints-and-tips_shiro-caching[Caching and other Shiro Features]
+|xref:ug:sec:ugsec.adoc#_ugsec_hints-and-tips_shiro-caching[Caching and other Shiro Features]
 
 
 |`adugtst`
-|`\xref:../ugtst/ugtst.adoc#xxx[ttt]`
+|`\xref:ug:tst:ugtst.adoc#xxx[ttt]`
 
 A hyperlink to a bookmark within the Testing guide, where:
 
@@ -363,9 +363,9 @@ A hyperlink to a bookmark within the Testing guide, where:
 
 for example:
 
-`\xref:../ugtst/ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]`
+`\xref:ug:tst:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]`
 
-|xref:../ugtst/ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]
+|xref:ug:tst:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]
 
 
 |`adugbtb`

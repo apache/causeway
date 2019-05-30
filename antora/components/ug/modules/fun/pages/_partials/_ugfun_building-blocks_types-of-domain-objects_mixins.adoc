@@ -37,7 +37,7 @@ If you move that behaviour out into mixins, then these can be reloaded happily.
 [TIP]
 ====
 Details on how to actually write a mixin (the programming model for mixins) is
-xref:../ugfun/ugfun.adoc#_ugfun_programming-model_mixins[here].
+xref:ug:fun:ugfun.adoc#_ugfun_programming-model_mixins[here].
 ====
 
 

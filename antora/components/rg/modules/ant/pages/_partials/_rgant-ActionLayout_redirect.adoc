@@ -20,7 +20,7 @@ Any properties with xref:rgant.adoc#_rgant-PropertyLayout_unchanging[`@PropertyL
 
 * if set to `EVEN_IF_SAME`, then a redirect occurs and a new web page is rendered.
 
-* if set to `AS_CONFIGURED`, then the default behaviour is as specified by the `isis.viewer.wicket.redirectEvenIfSameObject` xref:../ugvw/ugvw.adoc#_ugvw_configuration-properties[configuration property]).
+* if set to `AS_CONFIGURED`, then the default behaviour is as specified by the `isis.viewer.wicket.redirectEvenIfSameObject` xref:ug:vw:ugvw.adoc#_ugvw_configuration-properties[configuration property]).
 
 One use case for choosing `EVEN_IF_SAME` is if the action "returning this" is intended in some way to require that the object use a different layout, as per multiple layout support, as specified using the xref:rgcms.adoc#_rgcms_methods_reserved_layout[`layout()`] method.
 
@@ -56,6 +56,6 @@ If `switchToEditMode()` action is invoked, then the UI will attempt to render th
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 

@@ -7,7 +7,7 @@ include::_attributes.adoc[]
 
 
 
-The `position()` attribute pertains only to actions that have been associated with properties using xref:../rgant/rgant.adoc#_rgant-MemberOrder[`@MemberOrder#named()`].  For these actions, it specifies the positioning of the action's button with respect to the field representing the object property.
+The `position()` attribute pertains only to actions that have been associated with properties using xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder#named()`].  For these actions, it specifies the positioning of the action's button with respect to the field representing the object property.
 
 The attribute can take one of four values: `BELOW`, `RIGHT`, `PANEL` or `PANEL_DROPDOWN`.
 
@@ -39,7 +39,7 @@ public class Customer {
 <3> give the action an abbreviated name, because the fact that the "status" property is to be updated is implied by its positioning
 
 
-The default is `BELOW`, which is rendered (by the xref:../ugvw/ugvw.adoc#[Wicket viewer]) as shown below:
+The default is `BELOW`, which is rendered (by the xref:ug:vw:ugvw.adoc#[Wicket viewer]) as shown below:
 
 image::reference-annotations/ActionLayout/position-BELOW.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-BELOW.png"]
 
@@ -68,6 +68,6 @@ If there are multiple actions associated with a single property then the positio
 
 == Alternatives
 
-As an alternative to using the annotation, the dynamic xref:../ugvw/ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
+As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] can be used instead.
 
 The fact that the layout is dynamic (does not require a rebuild/restart) is particularly useful in that the look-n-feel can be easily experimented with and adjusted.

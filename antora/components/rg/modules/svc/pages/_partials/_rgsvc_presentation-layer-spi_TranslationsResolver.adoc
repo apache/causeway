@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-The `TranslationsResolver` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`].
+The `TranslationsResolver` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`].
 
 The role of the service itself is locate and return translations.
 
@@ -32,11 +32,11 @@ public interface TranslationsResolver {
 
 == Implementation
 
-Isis' xref:../ugvw/ugvw.adoc#[Wicket viewer] provides an implementation of this service (`TranslationsResolverWicket`) which leverages Apache Wicket APIs.  This searches for translation files in the standard `WEB-INF/` directory.
+Isis' xref:ug:vw:ugvw.adoc#[Wicket viewer] provides an implementation of this service (`TranslationsResolverWicket`) which leverages Apache Wicket APIs.  This searches for translation files in the standard `WEB-INF/` directory.
 
 [NOTE]
 ====
-Currently there is no equivalent implementation for the xref:../ugvro/ugvro.adoc#[RestfulObjects viewer].
+Currently there is no equivalent implementation for the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
 ====
 
 
@@ -48,6 +48,6 @@ Currently there is no equivalent implementation for the xref:../ugvro/ugvro.adoc
 == Related Services
 
 
-This service works in conjunction with xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocaleProvider`] and xref:../rgsvc/rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`] in order to provide i18n support.
+This service works in conjunction with xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_LocaleProvider[`LocaleProvider`] and xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TranslationService[`TranslationService`] in order to provide i18n support.
 
 

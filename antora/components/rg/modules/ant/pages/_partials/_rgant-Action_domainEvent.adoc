@@ -13,7 +13,7 @@ In the cases of the domain object's actions, the events that are fired are:
 * pre-execute phase: before the invocation of the action
 * post-execute: after the invocation of the action
 
-Subscribers subscribe through the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
+Subscribers subscribe through the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
 
 By default the event raised is `ActionDomainEvent.Default`.
 For example:
@@ -56,7 +56,7 @@ This substantially reduces the boilerplate required in subclasses because no exp
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -169,15 +169,15 @@ public class ToDoItem {
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI.
-However, events can be raised programmatically either by calling the xref:../rgsvc/rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] API directly, or by emulating the UI by wrapping the target object using the xref:../rgsvc/rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] domain service.
+However, events can be raised programmatically either by calling the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] API directly, or by emulating the UI by wrapping the target object using the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] domain service.
 
 
 == See also
 
 This attribute is also supported for:
 
-* xref:../rgant/rgant.adoc#_rgant-Collection_domainEvent[collections] and
-* xref:../rgant/rgant.adoc#_rgant-Property_domainEvent[properties].
+* xref:rg:ant:rgant.adoc#_rgant-Collection_domainEvent[collections] and
+* xref:rg:ant:rgant.adoc#_rgant-Property_domainEvent[properties].
 
 
 

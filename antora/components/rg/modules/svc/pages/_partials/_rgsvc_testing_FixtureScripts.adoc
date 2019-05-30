@@ -5,9 +5,9 @@ include::_attributes.adoc[]
 
 
 
-The `FixtureScripts` service provides the ability to execute xref:../ugtst/ugtst.adoc#_ugtst_fixture-scripts_api-and-usage[fixture scripts].
+The `FixtureScripts` service provides the ability to execute xref:ug:tst:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage[fixture scripts].
 
-The default implementation of this service, `FixtureScriptsDefault`, uses the associated xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] to obtain a `FixtureScriptsSpecification`.
+The default implementation of this service, `FixtureScriptsDefault`, uses the associated xref:rg:svc:rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] to obtain a `FixtureScriptsSpecification`.
 This configures this service, for example telling it which package to search for `FixtureScript` classes, how to execute those classes, and hints that influence the UI.
 
 
@@ -51,11 +51,11 @@ The default implementation of this domain service supports the following configu
 |Whether fixture `FixturesInstallingEvent` and `FixturesInstalledEvent` events should be posted while the system is bootstrapping.
 
 Fixture events are fired to indicate the start and end of fixtures are being installed.
-This are listened to by the xref:../rgsvc/rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`] to disable caching during this period.
+This are listened to by the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_QueryResultsCache[`QueryResultsCache`] to disable caching during this period.
 
 |===
 
 
 === Related Services
 
-The default implementation of this domain service interacts with xref:../rgsvc/rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`].
+The default implementation of this domain service interacts with xref:rg:svc:rgsvc.adoc#_rgsvc_testing_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`].

@@ -16,7 +16,7 @@ Similarly, entities might also have a corresponding factory service: a `Customer
 On the other hand, from an end-users' perspective the act of finding an existing object vs creating a new one are quite closely related.
 For this reason, in Apache Isis it's therefore quite common to have a single domain service that acts as both a factory and a repository (and is usually called just a "repository").
 
-The behaviour of these services is rendered in various ways, though the most obvious is as the menu actions on the top-level menu bars in the xref:../ugvw/ugvw.adoc#[Wicket viewer]'s UI.
+The behaviour of these services is rendered in various ways, though the most obvious is as the menu actions on the top-level menu bars in the xref:ug:vw:ugvw.adoc#[Wicket viewer]'s UI.
 
 Domain services can also be used for a number of other purposes:
 
@@ -24,7 +24,7 @@ Domain services can also be used for a number of other purposes:
 
 * to act as a subscribers to the event bus, potentially influencing events fired by some other module (a key technique for decoupling large applications) +
 +
-This is discussed in more detail below, in the section on xref:../ugfun/ugfun.adoc#_ugfun_building-blocks_events[events].
+This is discussed in more detail below, in the section on xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_events[events].
 
 * to implement an link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] of the Apache Isis framework, most notably cross-cutting concerns such as security, command profiling, auditing and publishing.
 
@@ -47,13 +47,13 @@ Domain services are instantiated once and once only by the framework, and are us
 [TIP]
 ====
 Details on how to actually write a domain service (the programming model for domain services) is
-xref:../ugfun/ugfun.adoc#_ugfun_programming-model_domain-services[here].
+xref:ug:fun:ugfun.adoc#_ugfun_programming-model_domain-services[here].
 ====
 
 
 == Hexagonal Arch. + services
 
-It's worth extending the xref:../ugfun/ugfun.adoc#_ugfun_core-concepts_philosophy_hexagonal-architecture[Hexagonal Architecture] to show where domain services fit in:
+It's worth extending the xref:ug:fun:ugfun.adoc#_ugfun_core-concepts_philosophy_hexagonal-architecture[Hexagonal Architecture] to show where domain services fit in:
 
 .The hexagonal architecture with Isis addons
 image::core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px"]
