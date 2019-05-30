@@ -4,7 +4,6 @@ include::_attributes.adoc[]
 
 
 
-[[_ugvro_simplified-representations_apache-isis-profile]]
 = The Apache Isis "Profile"
 
 The RO spec uses the standard `Accept` header for content negotiation, and defines its own "profile" for the standard

@@ -1,4 +1,3 @@
-[[_rgcms_classes_AppManifest-bootstrapping]]
 = `AppManifest` (bootstrapping)
 :toc:
 
@@ -16,7 +15,6 @@ The app manifest can then be used both to bootstrap the application "proper", or
 
 TODO: v2: these two versions of `AppManifestAbstract` and `AppManifestAbstract2` will be unified.
 
-[[__rgcms_classes_AppManifest-bootstrapping_api]]
 == API
 
 
@@ -46,7 +44,6 @@ The following sections describe each of these methods in a little more detail.
 
 
 
-[[__rgcms_classes_AppManifest-bootstrapping_api_getModules]]
 === `getModules()`
 
 The most significant method (the only one which must return a non-`null` value) is the `getModules()` method.
@@ -93,7 +90,6 @@ public List<Class<?>> getModules() {
 As can be seen, the various (non-ASF) link:http://platform.incode.org[Incode Platform^] modules also each provide a module class that can be easily referenced.
 
 
-[[__rgcms_classes_AppManifest-bootstrapping_api_getAdditionalServices]]
 === `getAdditionalServices()`
 
 We normally we recommend that services are defined exclusively through `getModules()`, and that this method should therefore return an empty list.
@@ -116,7 +112,6 @@ If this method returns a non-`null` value, then it overrides the value of `isis.
 
 
 
-[[__rgcms_classes_AppManifest-bootstrapping_api_getAuthenticationMechanism]]
 === `getAuthenticationMechanism()`
 
 If non-`null`, this method specifies the authentication mechanism to use.
@@ -132,7 +127,6 @@ This property is ignored for integration tests (which always uses the `"bypass"`
 
 
 
-[[__rgcms_classes_AppManifest-bootstrapping_api_getAuthorizationMechanism]]
 === `getAuthorizationMechanism()`
 
 If non-`null`, this method specifies the authorization mechanism to use.
@@ -149,7 +143,6 @@ This property is ignored for integration tests (which always uses the `"bypass"`
 
 
 
-[[__rgcms_classes_AppManifest-bootstrapping_api_getFixtures]]
 === `getFixtures()`
 
 If non-`null`, this method specifies the fixture script(s) to be run on startup.
@@ -172,7 +165,6 @@ This can most easily be done using the `getConfigurationProperties()` method, di
 
 
 
-[[__rgcms_classes_AppManifest-bootstrapping_api_getConfigurationProperties]]
 === `getConfigurationProperties()`
 
 This method allow arbitrary other configuration properties to be overridden.
@@ -190,7 +182,6 @@ public Map<String, String> getConfigurationProperties() {
 
 
 
-[[__rgcms_classes_AppManifest-bootstrapping_bootstrapping]]
 == Bootstrapping
 
 [NOTE]
@@ -243,7 +234,6 @@ Sometimes though it is necessary to "tweak" the `AppManifest`:
 The next section describes some helper classes that the framework provides to help achieve this.
 
 
-[[__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract]]
 === AppManifestAbstract
 
 [IMPORTANT]

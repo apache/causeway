@@ -1,4 +1,3 @@
-[[_ugfun_programming-model_properties]]
 = Property
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -29,7 +28,6 @@ Since writing getter and setter methods adds quite a bit of boilerplate, it's co
 The xref:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] and xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes use this approach.
 
 
-[[__ugfun_programming-model_properties_value-vs-reference-types]]
 == Value vs Reference Types
 
 Properties can be either a value type (strings, int, date and so on) or be a reference to another object (for example, an `Order` referencing the `Customer` that placed it).
@@ -74,7 +72,6 @@ For domain entities, the annotations for mapping value types tend to be differen
 The table in the xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[Properties vs Parameters] section provides a handy reference of each.
 
 
-[[__ugfun_programming-model_properties_optional-properties]]
 == Optional Properties
 
 (For domain entities) JDO/DataNucleus' default is that a property is assumed to be mandatory if it is a primitive type (eg `int`, `boolean`), but optional if a reference type (eg `String`, `BigDecimal` etc).
@@ -107,7 +104,6 @@ private LocalDate date;
 
 The framework will search for any incompatibilities in optionality (whether specified explicitly or defaulted implicitly) between Isis' defaults and DataNucleus, and refuse to boot if any are found (fail fast).
 
-[[__ugfun_programming-model_properties_editable-properties]]
 == Editable Properties
 
 Apache Isis provides the capability to allow individual properties to be modified.
@@ -125,7 +121,6 @@ private String notes;
 If this is omitted then whether editing is enabled or disabled is defined globally, in the `isis.properties` configuration file; see xref:rg:cfg:rgcfg.adoc#__rgcfg_configuring-core_isis-objects-editing[reference configuration guide] for further details.
 
 
-[[__ugfun_programming-model_properties_ignoring-properties]]
 == Ignoring Properties
 
 By default Apache Isis will automatically render all properties in the xref:ug:vw:ugvw.adoc#[Wicket UI] or in the xref:ug:vro:ugvro.adoc[REST API].
@@ -138,7 +133,6 @@ For view models, you can tell JAXB to ignore a property using the `@javax.xml.bi
 Again, this is independent of Apache Isis.
 
 
-[[__ugfun_programming-model_properties_derived-properties]]
 == Derived Properties
 
 Derived properties are those with a getter but no setter.
@@ -172,14 +166,12 @@ AddressService addressService;                                                  
 
 
 
-[[__ugfun_programming-model_properties_datatypes]]
 == Data types
 
 This section shows specific considerations for various datatypes, in particular how to annotate them for DataNucleus mapping to the persistence object store.
 
 
 
-[[__ugfun_programming-model_properties_datatypes_strings]]
 === ``String``s (Length)
 
 By default JDO/DataNucleus will map string properties to a `VARCHAR(255)`.
@@ -198,7 +190,6 @@ This is a good example of a case where Apache Isis infers domain semantics from 
 
 
 
-[[__ugfun_programming-model_properties_datatypes-joda-dates]]
 === JODA Dates
 
 Isis' JDO objectstore bundles DataNucleus' http://www.datanucleus.org/documentation/products/plugins.html[built-in support] for Joda `LocalDate` and `LocalDateTime` datatypes, meaning that entity properties of these types will be persisted as appropriate data types in the database tables.
@@ -220,7 +211,6 @@ private LocalDate dueBy;
 ----
 
 
-[[__ugfun_programming-model_properties_datatypes_bigdecimals]]
 === ``BigDecimal``s (Precision)
 
 Working with `java.math.BigDecimal` properties takes a little care due to scale/precision issues.
@@ -259,7 +249,6 @@ More information can be found http://www.opentaps.org/docs/index.php/How_to_Use_
 
 
 
-[[__ugfun_programming-model_properties_datatypes_blobs]]
 === ``Blob``s
 
 Apache Isis configures JDO/DataNucleus so that the properties of type `org.apache.isis.applib.value.Blob` and `org.apache.isis.applib.value.Clob` can also be persisted.
@@ -310,7 +299,6 @@ If specifying a `sqlType` of "LONGVARBINARY" does not work, try instead "BLOB".
 There can be differences in behaviour between JDBC drivers.
 ====
 
-[[__ugfun_programming-model_properties_datatypes_clobs]]
 === ``Clob``s
 
 
@@ -342,7 +330,6 @@ If specifying a `sqlType` of "LONGVARCHAR" does not work, try instead "CLOB".  T
 ====
 
 
-[[__ugfun_programming-model_properties_datatypes_mapping-to-varbinary-or-varchar]]
 === Mapping to VARBINARY or VARCHAR
 
 Instead of mapping to a sqlType of `LONGVARBINARY` (or perhaps `BLOB`), you might instead decide to map to a `VARBINARY`.

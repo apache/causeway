@@ -1,4 +1,3 @@
-[[_dg_building-isis]]
 = Building Apache Isis
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 include::_attributes.adoc[]
@@ -7,13 +6,11 @@ include::_attributes.adoc[]
 
 
 
-[[__dg_building-isis_git]]
 == Git
 
 The Apache Isis source code lives in a git repo.
 
 
-[[__dg_building-isis_git_installation]]
 === Installation
 
 The easiest place to get hold of command-line git is probably the http://git-scm.com/downloads[github download page].
@@ -33,7 +30,6 @@ If using Mac, you might also want to check out Atlassian's http://www.atlassian.
 
 
 
-[[__dg_building-isis_git_installation_cloning-the-apache-isis-repo]]
 ==== Cloning the Apache Isis repo
 
 First, clone the Apache Isis repo:
@@ -44,7 +40,6 @@ git clone https://github.com/apache/isis.git
 ----
 
 
-[[__dg_building-isis_git_installation_configuring-git]]
 ==== Configuring Git
 
 Next up is to configure your user name and password:
@@ -104,7 +99,6 @@ If you don't use git outside of Apache, you can add the `--global` flag so that 
 
 
 
-[[__dg_building-isis_git_getting-help]]
 === Getting help
 
 Three commands of git that in particular worth knowing:
@@ -130,7 +124,6 @@ For further reading, see:
 * http://git-scm.com/docs/gitattributes[.gitattributes git-scm.com docs]
 
 
-[[__dg_building-isis_installing-java]]
 == Installing Java
 
 Apache Isis is compatible with Java 7 and Java 8.  For every-day use, the framework is usually compiled against Java 8.
@@ -145,7 +138,6 @@ If you intend to contribute back patches to Apache Isis, note that while you can
 be sure not to use any Java 8 APIs.
 ====
 
-[[__dg_building-isis_configure-maven-toolchains-plugin]]
 === Configure Maven toolchains plugin
 
 If you are a committer that will be performing releases of Apache Isis, then you _must_ configure the
@@ -194,7 +186,6 @@ The Apache Isis parent `pom.xml` activates this plugin whenever the `apache-rele
 
 
 
-[[__dg_building-isis_installing-maven]]
 == Installing Maven
 
 Install Maven 3.0.x, downloadable http://maven.apache.org/download.html[here].
@@ -209,7 +200,6 @@ export MAVEN_OPTS="-Xms512m -Xmx1024m"
 
 
 
-[[__dg_building-isis_building-all-of-apache-isis]]
 == Building all of Apache Isis
 
 To build the source code from the command line, simply go to the root directory and type:
@@ -236,7 +226,6 @@ When using Eclipse, a Maven profile is configured such that Eclipse compiles to 
 
 
 
-[[__dg_building-isis_checking-for-vulnerabilities]]
 == Checking for Vulnerabilities
 
 Apache Isis configures the link:https://www.owasp.org/index.php/Main_Page[OWASP] link:https://www.owasp.org/index.php/OWASP_Dependency_Check[dependency check] link:http://jeremylong.github.io/DependencyCheck/dependency-check-maven/index.html[Maven plugin] to determine whether the framework uses libraries that are known to have security vulnerabilities.
@@ -260,7 +249,6 @@ To disable, either run in offline mode (add `-o` or `--offline`) or omit the `ow
 
 
 
-[[__dg_building-isis_checking-for-use-of-internal-jdk-apis]]
 == Checking for use of internal JDK APIs
 
 Apache Isis configures the link:https://maven.apache.org/plugins-archives/maven-jdeps-plugin-3.0.0/[jdeps maven plugin] to check for any usage of internal JDK APIs.  This is in preparation for Java 9 module system (Jigsaw) which will prevent such usage of APIs.

@@ -45,7 +45,6 @@ The Markmail archives span both our current (TLP) mailing lists and also our ori
 
 
 
-[[__support_how-to-subscribe]]
 == How to subscribe
 
 To subscribe to the `users` mailing list:
@@ -59,7 +58,6 @@ Then, to ask questions, simply mail to link:mailto:users@isis.apache.org[users@i
 If you ever want to unsubscribe, then you can send a mail to the `users-unsubscribe` email address.
 
 
-[[__support_mailing-list-etiquette]]
 == Mailing list etiquette
 
 Just a couple of rules/suggestions:

@@ -10,7 +10,6 @@ Indeed, the generic user interfaces provided by Apache Isis xref:ug:vw:ugvw.adoc
 
 If the idea of naked objects is of interest, then there are a couple of books on the topic that you might want to read.
 
-[[__books_Naked-Objects]]
 == Naked Objects
 
 Richard Pawson and Robert Matthews, Wiley 2002
@@ -33,7 +32,6 @@ The book is freely available online http://www.nakedobjects.org/book/[here]. Or,
 
 
 
-[[__books_DDD-using-NO]]
 == Domain Driven Design using Naked Objects
 
 Dan Haywood, Pragmatic Bookshelf 2009
@@ -56,7 +54,6 @@ You can find the book at http://www.pragprog.com/titles/dhnako/domain-driven-des
 
 
 
-[[__books_RO-spec]]
 == Restful Objects Specification
 
 Dan Haywood

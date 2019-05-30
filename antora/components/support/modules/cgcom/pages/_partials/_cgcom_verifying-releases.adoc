@@ -1,4 +1,3 @@
-[[_cgcom_verifying-releases]]
 = Verifying a Release
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 
@@ -17,7 +16,6 @@ This section describes some guidance on what a voter (members of the Apache Isis
 
 
 
-[[__cgcom_verifying-releases_background]]
 == Background
 
 Whenever a release manager announces a vote on a release (as per the xref:support:cgcom:cgcom.adoc#_cgcom_release-process[release process]) on the xref:toc:ROOT:support.adoc#[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.
@@ -35,7 +33,6 @@ Details of how to do this are also documented below.
 
 
 
-[[__cgcom_verifying-releases_prerequisites]]
 == Prerequisites
 
 You will also require the following commands/tools:
@@ -64,7 +61,6 @@ to build the code
 
 
 
-[[__cgcom_verifying-releases_verifying-source-artifacts]]
 == Verifying source artifacts
 
 The easiest way to verify the source artifacts is to use a script that automates the steps.
@@ -133,7 +129,6 @@ Alternatively, you can xref:cgcom.adoc#__cgcom_verifying-releases_casting-a-vote
 
 
 
-[[__cgcom_verifying-releases_binary-artifacts]]
 == (Optional) Verifying binary artifacts
 
 You can verify the binary releases by configuring your local Maven install to point to the Maven staging repository (or repositories) and then using them, eg to run the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld archetype] or the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] and running the resultant app.
@@ -179,7 +174,6 @@ If you forget to deactive the profile, there should be no adverse effects; Maven
 
 
 
-[[__cgcom_verifying-releases_creadur]]
 == (Optional) Creadur Tools
 
 The http://creadur.apache.org[Apache Creadur] project exists to provide a set of tools to ensure compliance with Apache's licensing standards.
@@ -201,7 +195,6 @@ In this report, each binary will have three links listed after its name '(licens
 
 
 
-[[__cgcom_verifying-releases_casting-a-vote]]
 == Casting a Vote
 
 When you have made the above checks (and any other checks you think may be relevant), cast your vote by replying to the email thread on the mailing list.

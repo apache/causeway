@@ -1,4 +1,3 @@
-[[_ugvw_configuration-properties]]
 = Configuration Properties
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -41,7 +40,6 @@ where `isis-non-changing.properties` is on the classpath in the same package as 
 Whichever approach is used, the configuration properties from all config files are merged together.
 
 
-[[_ugvw_configuration-properties_application]]
 == Application Identity
 
 Configuration properties that identify the application, in the sign-in page, welcome and about pages.
@@ -200,7 +198,6 @@ public class MyAppManifest extends AppManifestAbstract2 {
 
 
 
-[[_ugvw_configuration-properties_sign-in]]
 == Sign-in, Sign-up and Remember Me
 
 Configuration properties that influence the behaviour and appearance of the sign-in page.
@@ -282,7 +279,6 @@ Further discussion xref:ugvw.adoc#_ugvw_configuration-properties_sign-in_sign-up
 
 
 
-[[_ugvw_configuration-properties_sign-in_remember-me]]
 === Remember Me
 
 The 'remember me' checkbox on the login page can be suppressed, if required, by setting a configuration flag:
@@ -306,7 +302,6 @@ image::suppress-remember-me/login-page-suppress-remember-me.png[width="300px",li
 
 
 
-[[_ugvw_configuration-properties_sign-in_sign-up]]
 === Sign-up
 
 If user registration has been configured, then the Wicket viewer allows the user to sign-up a new account and to reset their password from the login page.
@@ -329,7 +324,6 @@ image::suppress-sign-up/login-page-suppress-sign-up.png[width="300px",link="{ima
 
 
 
-[[_ugvw_configuration-properties_sign-in_password-reset]]
 === Password Reset
 
 If user registration has been configured, then the Wicket viewer allows the user to sign-up a new account and to reset their password from the login page.
@@ -355,7 +349,6 @@ image::suppress-password-reset/login-page-suppress-password-reset.png[width="300
 
 
 
-[[_ugvw_configuration-properties_header-and-footer]]
 == Header and Footer
 
 Configuration properties that influence the appearance of the header and footer panels.
@@ -452,7 +445,6 @@ Optional.
 
 
 
-[[_ugvw_configuration-properties_presentation]]
 == Presentation
 
 These configuration properties that effect the overall presentation and appearance of the viewer.
@@ -594,7 +586,6 @@ If no properties are provided, then the Wicket viewer defaults to abbreviating t
 
 
 
-[[_ugvw_configuration-properties_bookmarks-and-breadcrumbs]]
 == Bookmarks and Breadcrumbs
 
 These configuration properties enable or disable the mechanisms for locating previously accessed objects.
@@ -639,7 +630,6 @@ These configuration properties enable or disable the mechanisms for locating pre
 
 
 
-[[_ugvw_configuration-properties_themes]]
 == Themes
 
 These configuration properties control the switching of themes.
@@ -733,7 +723,6 @@ You can also develop and install a custom themes (eg to fit your company's look-
 
 
 
-[[_ugvw_configuration-properties_date-formatting]]
 == Date Formatting & Date Picker
 
 These configuration properties influence the way in which date/times are rendered and can be selected using the date/time pickers.
@@ -794,7 +783,6 @@ The string must be in ISO date format (see link:https://github.com/moment/moment
 |===
 
 
-[[_ugvw_configuration-properties_debugging]]
 == Debugging
 
 These configuration properties can assist with debugging the behaviour of the Wicket viewer itself.
@@ -864,7 +852,6 @@ Enabling this setting can significantly slow down rendering performance of the W
 
 
 
-[[_ugvw_configuration-properties_feature-toggles]]
 == Feature Toggles
 
 These configuration properties are used to enable/disable features that are either on the way to becoming the default behaviour (but can temporarily be disabled) or conversely for features that are to be removed (but can temporarily be left as enabled).

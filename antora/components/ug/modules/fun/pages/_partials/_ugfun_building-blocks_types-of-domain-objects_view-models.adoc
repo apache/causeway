@@ -1,4 +1,3 @@
-[[_ugfun_building-blocks_types-of-domain-objects_view-models]]
 = View Models
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -32,7 +31,6 @@ xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models[here].
 
 
 
-[[__ugfun_building-blocks_view-models_externally-managed-entities]]
 == Externally-managed entities
 
 Sometimes the entities that make up your application are persisted not in the local JDO/DataNucleus database but reside in some other system, for example accessible only through a SOAP web service.
@@ -52,7 +50,6 @@ An implementation that supported only reading from an external entity ought to b
 ====
 
 
-[[__ugfun_building-blocks_view-models_in-memory-entities]]
 == In-memory entities
 
 As a variation on the above, sometimes there are domain objects that are, conceptually at least entities, but whose state is not actually persisted anywhere, merely held in-memory (eg in a hash).
@@ -60,7 +57,6 @@ As a variation on the above, sometimes there are domain objects that are, concep
 A simple example might be read-only configuration data that is read from a config file (eg log4j appender definitions) but thereafter is presented in the UI just like any other entity.
 
 
-[[__ugfun_building-blocks_view-models_application-layer-view-models]]
 == Application-layer view models
 
 Domain entities (whether locally persisted using JDO/DataNucleus or managed externally) are the bread-and-butter of Apache Isis applications: the focus after all, should be on the business domain concepts and ensuring that they are solid.
@@ -112,7 +108,6 @@ We strongly recommend that you build your applications from the domain layer up,
 ====
 
 
-[[__ugfun_building-blocks_view-models_dtos]]
 == DTOs
 
 DTOs (data transfer objects) are simple classes that (according to link:https://en.wikipedia.org/wiki/Data_transfer_object[wikipedia]) "carry data between processes".
@@ -138,7 +133,6 @@ Details of how to consume such DTOs can be found xref:ug:fun:ugfun.adoc#_ugfun_p
 ====
 
 
-[[__ugfun_building-blocks_view-models_for-rest-clients]]
 == For REST Clients
 
 The xref:ug:vro:ugvro.adoc#[Restful Objects] viewer automatically provides a REST API for both domain entities.

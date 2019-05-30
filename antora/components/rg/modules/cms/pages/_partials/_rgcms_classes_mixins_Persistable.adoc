@@ -1,4 +1,3 @@
-[[_rgcms_classes_mixins_Persistable]]
 = `Persistable`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -12,7 +11,6 @@ A number of other xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_Object[mixins] al
 
 
 
-[[__rgcms_classes_mixins_Persistable_downloadJdoMetadata]]
 == `downloadJdoMetadata()`
 
 The `Persistable_downloadJdoMetadata` mixin provides an action which allows the JDO link:http://www.datanucleus.org/products/datanucleus/jdo/metadata_xml.html[class metadata] to be downloaded as XML.
@@ -35,7 +33,6 @@ public Clob downloadJdoMetadata(                    // <1>
 The mixin delegates to the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_IsisJdoSupport[`IsisJdoSupport`] service to obtain a reference to the JDO `PersistenceManagerFactory`.
 
 
-[[__rgcms_classes_mixins_Persistable_datanucleusXxx]]
 == `datanucleusXxx`
 
 The framework provides a number of mixins that expose the datanucleus Id and version of a persistable domain entity.

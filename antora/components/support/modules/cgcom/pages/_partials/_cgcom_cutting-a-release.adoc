@@ -1,4 +1,3 @@
-[[_cgcom_cutting-a-release]]
 = Cutting a Release
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 
@@ -30,7 +29,6 @@ They should work on Linux and MacOS; for Windows, use mSysGit.
 
 
 
-[[__cgcom_cutting-a-release_obtain-consensus]]
 == Obtain Consensus
 
 Before releasing `core`, ensure there is consensus on the xref:toc:ROOT:support.adoc#[dev mailing list] that this is the right time for a release.
@@ -45,7 +43,6 @@ In most cases a JIRA ticket will have been created at the beginning of the previ
 
 
 
-[[__cgcom_cutting-a-release_set-environment-variables]]
 == Set environment variables
 
 We use environment variables to parameterize as many of the steps as possible.
@@ -76,7 +73,6 @@ Note that the branch name is intentionally *not* the same any of the eventual ta
 
 
 
-[[__cgcom_cutting-a-release_pull-down-code-to-release]]
 == Pull down code to release
 
 Set the HEAD of your local git repo to the commit to be released.
@@ -104,7 +100,6 @@ The only mention of `SNAPSHOT` should be in the `revision` property of the root 
 
 
 
-[[__cgcom_cutting-a-release_bump-revision-to-ISISREL]]
 == Bump `revision` property to `$ISISREL`
 
 Previously we used the `maven-release-plugin` which took responsibility for bumping the `<version>` from -SNAPSHOT to release, and then onto the next -SNAPSHOT.
@@ -134,7 +129,6 @@ After release, there is a xref:cgcom.adoc#__cgcom_cutting-a-release_reset-revisi
 
 
 
-[[__cgcom_cutting-a-release_releasing-core]]
 == Releasing Core
 
 First, we release `core`.
@@ -145,7 +139,6 @@ Switch to the appropriate directory:
 cd core
 ----
 
-[[__cgcom_cutting-a-release_releasing-core_set-environment-variables]]
 === Set environment variables
 
 Set additional environment variables for the core "artifact":
@@ -159,7 +152,6 @@ env | grep ISIS | sort
 
 
 
-[[__cgcom_cutting-a-release_releasing-core_license-headers]]
 === License headers
 
 The Apache Release Audit Tool `RAT` (from the http://creadur.apache.org[Apache Creadur] project) checks for missing license header files.
@@ -194,7 +186,6 @@ for a in `find . -name rat.txt -print`; do grep '!???' $a; done
 ----
 
 
-[[__cgcom_cutting-a-release_releasing-core_missing-license-check]]
 === Missing License Check
 
 Although Apache Isis has no dependencies on artifacts with incompatible licenses, the POMs for some of these dependencies (in the Maven central repo) do not necessarily contain the required license information.
@@ -240,7 +231,6 @@ If any missing entries are listed or are spurious, then update `supplemental-mod
 
 
 
-[[__cgcom_cutting-a-release_releasing-core_commit-changes]]
 === Commit changes
 
 Commit any changes from the preceding steps:
@@ -251,7 +241,6 @@ git commit -am "$ISISJIRA: updates to pom.xml etc for release"
 ----
 
 
-[[__cgcom_cutting-a-release_releasing-core_sanity-check]]
 === Sanity check
 
 Perform one last sanity check on the codebase.
@@ -264,7 +253,6 @@ mvn clean install -o
 ----
 
 
-[[__cgcom_cutting-a-release_releasing-core_deploy]]
 === Deploy
 
 Previously the release procedures used `mvn release:prepare` and `mvn release:perform`.
@@ -295,7 +283,6 @@ This requires `gpg` v2.1 or later.
 
 
 
-[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype]]
 == Releasing `simpleapp` archetype
 
 The Apache Isis archetypes are reverse engineered from example applications.
@@ -320,7 +307,6 @@ Switch to the directory containing the `simpleapp` example:
 cd ../example/application/simpleapp
 ----
 
-[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_setup-environment-variables]]
 === Setup environment variables
 
 Set additional environment variables for the `simpleapp-archetype` artifact:
@@ -339,7 +325,6 @@ env | grep ISIS | sort
 Usually this is the same as `$ISISREL`.
 
 
-[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_check-the-example-app]]
 === Check the example app
 
 Double check that the app:
@@ -453,7 +438,6 @@ docker container kill simpleapp
 docker container rm simpleapp
 ----
 
-[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_create-the-archetype]]
 === Recreate the archetype
 
 Make sure you are in the correct directory and environment variables are correct.
@@ -478,7 +462,6 @@ The script automatically commits changes; if you wish use `git log` and
 `git diff` (or a tool such as SourceTree) to review changes made.
 
 
-[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_sanity-check]]
 === Sanity check
 
 _In a different session_, create a new app from the archetype.
@@ -528,7 +511,6 @@ docker container kill myapp
 docker container rm myapp
 ----
 
-[[__cgcom_cutting-a-release_releasing-the-simpleapp-archetype_deploy]]
 === Deploy
 
 Back in the original session, we upload (deploy) the archetype to the staging repository.
@@ -563,7 +545,6 @@ This requires `gpg` v2.1 or later.
 
 
 
-[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype]]
 == Releasing `helloworld` archetype
 
 We now repeat the archetype release procedure, this time for the `helloworld` example app.
@@ -575,7 +556,6 @@ Start by switching to the directory containing the `helloworld` example:
 cd ../../../example/application/helloworld
 ----
 
-[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_setup-environment-variables]]
 === Setup environment variables
 
 Update additional environment variables for the `helloworld-archetype` artifact:
@@ -592,7 +572,6 @@ env | grep ISIS | sort
 ----
 
 
-[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_check-the-example-app]]
 === Check the example app
 
 Check that the app:
@@ -639,7 +618,6 @@ This too should be accessed at link:http://localhost:8080[localhost:8080].
 In each case, check the about page and confirm has been built against non-SNAPSHOT versions of the Apache Isis jars.
 
 
-[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_create-the-archetype]]
 === Recreate the archetype
 
 Make sure you are in the correct directory and environment variables are correct.
@@ -665,7 +643,6 @@ If you wish use `git log` and `git diff` (or a tool such as SourceTree) to revie
 
 
 
-[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_sanity-check]]
 === Sanity check
 
 _In a different session_, create a new app from the archetype.
@@ -704,7 +681,6 @@ mvn clean install -o
 mvn jetty:run
 ----
 
-[[__cgcom_cutting-a-release_releasing-the-helloworld-archetype_deploy]]
 === Deploy
 
 Back in the original session, we upload (deploy) the archetype to the staging repository.
@@ -731,7 +707,6 @@ This requires `gpg` v2.1 or later.
 
 
 
-[[__cgcom_cutting-a-release_check-close-staging-repo]]
 == Check/Close Staging Repo
 
 The `mvn deploy` commands will have uploaded release artifacts for both `core` and the `simpleapp` archetype into a newly created staging repository on the ASF Nexus repository server.
@@ -781,7 +756,6 @@ Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See 
 
 
 
-[[__cgcom_cutting-a-release_reset-revision]]
 == Reset `revision` property
 
 At the beginning of the release process we bumped the `revision` property to the release version, ie `$ISISREL`.
@@ -801,7 +775,6 @@ sh scripts/version-reset.sh $ISISJIRA
 ----
 
 
-[[__cgcom_cutting-a-release_push-branches]]
 == Push branches
 
 Push the release branch to origin:
@@ -828,14 +801,12 @@ The remote tags aren't visible locally but can be seen link:https://github.com/a
 
 
 
-[[__cgcom_cutting-a-release_voting]]
 == Voting
 
 Once the artifacts have been uploaded, you can call a vote.
 
 In all cases, votes last for 72 hours and require a +3 (binding) vote from members.
 
-[[__cgcom_cutting-a-release_voting-start-voting-thread]]
 === Start voting thread on dev mailing list
 
 That is, link:mailto:dev@apache.isis.org[]

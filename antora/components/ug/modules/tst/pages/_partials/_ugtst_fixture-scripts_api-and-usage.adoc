@@ -1,4 +1,3 @@
-[[_ugtst_fixture-scripts_api-and-usage]]
 = API and Usage
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -13,7 +12,6 @@ You can also subclass from `FixtureScript` to create helpers; more on this below
 
 Let's look at `FixtureScripts` domain service in more detail first.
 
-[[_ugtst_fixture-scripts_api-and-usage_FixtureScripts]]
 == `FixtureScripts`
 
 The framework provides a default implementation of `FixtureScripts` domain service, namely the xref:rg:svc:rgsvc.adoc#_rgsvc_testing_FixtureScripts[`FixtureScriptsDefault`] domain service.
@@ -94,7 +92,6 @@ Let's now look at the `FixtureScript` class, where there's a bit more going on.
 
 
 
-[[_ugtst_fixture-scripts_api-and-usage_FixtureScript]]
 == `FixtureScript`
 
 A fixture script is ultimately just a block of code that can be executed, so it's up to you how you implement it to set up the system.
@@ -167,7 +164,6 @@ So, in this case, when the fixture script is executed we actually get 6 objects 
 
 
 
-[[_ugtst_fixture-scripts_api-and-usage_using-within-tests]]
 == Using within Tests
 
 Fixture scripts can be called from integration tests just the same way that fixture scripts can call one another.
@@ -211,7 +207,6 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
 
 
 
-[[_ugtst_fixture-scripts_api-and-usage_persona-and-builders]]
 == Personas and Builders
 
 Good integration tests are probably the best way to understand the behaviour of the domain model: better, even, than reading the code itself.

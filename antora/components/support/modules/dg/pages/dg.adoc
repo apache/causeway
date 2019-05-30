@@ -6,7 +6,6 @@ include::_attributes.adoc[]
 :generate_pdf:
 
 
-[[__dg]]
 == Developers' Guide
 
 This developers' guide is for:

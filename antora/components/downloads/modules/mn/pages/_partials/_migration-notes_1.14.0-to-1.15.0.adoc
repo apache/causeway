@@ -1,4 +1,3 @@
-[[_migration-notes_1.14.0-to-1.15.0]]
 = From v1.14.x to 1.15.0
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -8,7 +7,6 @@ include::_attributes.adoc[]
 
 
 
-[[_migration-notes_1.14.0-to-1.15.0_isis-mavendeps]]
 == `isis-mavendeps` Aggregator POMs
 
 To remove boilerplate in your application's `pom.xml`, three new maven "aggregator projects have been defined:
@@ -29,7 +27,6 @@ This is defined in a profile which is actived only when running under the Intell
 The link:https://isis.apache.org/versions/1.15.0/ugfun/ugfun.html#_ugfun_getting-started_helloworld-archetype[HelloWorld] and link:https://isis.apache.org/versions/1.15.0/ugfun/ugfun.html#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes both make use of these new aggregators.
 
 
-[[_migration-notes_1.14.0-to-1.15.0_ISIS-1528]]
 == Rename of isis-viewer-wicket artifacts (link:https://issues.apache.org/jira/browse/ISIS-1528[ISIS-1528])
 
 The `<groupId>` and `<artifactId>` of the link:https://isis.apache.org/versions/1.15.0/guides/ugvw/ugvw.html#[Wicket viewer] have been made consistent with other artifacts:
@@ -55,7 +52,6 @@ has been renamed to:
 ----
 
 
-[[_migration-notes_1.14.0-to-1.15.0_ISIS-1611]]
 == Overriding framework services (link:https://issues.apache.org/jira/browse/ISIS-1611[ISIS-1611])
 
 Domain services fall into three categories:
@@ -74,7 +70,6 @@ Of course, your application can still override `menuOrder` if it wishes.
 A small change (made in (link:https://issues.apache.org/jira/browse/ISIS-1688[ISIS-1688]) is that if both are set, then the minimum value is used.
 
 
-[[_migration-notes_1.14.0-to-1.15.0_ISIS-1504]]
 == Metamodel validators (link:https://issues.apache.org/jira/browse/ISIS-1504[ISIS-1504], link:https://issues.apache.org/jira/browse/ISIS-1622[ISIS-1622], link:https://issues.apache.org/jira/browse/ISIS-1669[ISIS-1669])
 
 The metamodel validator has been extended with several new checks relating to link:https://isis.apache.org/versions/1.15.0/ugfun.html#_ugfun_programming-model_view-models_jaxb[JAXB view models]:
@@ -91,7 +86,6 @@ The metamodel validator has been extended with several new checks relating to li
 These checks are enabled by default but can be disabled with a link:https://isis.apache.org/versions/1.15.0/rgcfg.html#__rgcfg_configuring-core_metamodel-validation[configuration property] if required.
 
 
-[[_migration-notes_1.14.0-to-1.15.0_ISIS-1613]]
 == Logging workaround (link:https://issues.apache.org/jira/browse/ISIS-1613[ISIS-1613])
 
 `ISIS-1613` improves the UI so that the framework does not repaint the entire page after a property edit or after invoking an action that returns the same object (`this`).
@@ -109,7 +103,6 @@ log4j.additivity.org.apache.wicket.page.XmlPartialPageUpdate=false
 ----
 
 
-[[_migration-notes_1.14.0-to-1.15.0_ISIS-1686]]
 == Less boilerplate when bootstrapping (link:https://issues.apache.org/jira/browse/ISIS-1686[ISIS-1686])
 
 Bootstrapping the application can now be accomplished with less boilerplate, both for the regular webapp and in integration tests.
@@ -118,7 +111,6 @@ For more information, see the link:https://isis.apache.org/versions/1.15.0/ugtst
 
 
 
-[[_migration-notes_1.14.0-to-1.15.0_ISIS-1630]]
 == Fix for view models optionality (link:https://issues.apache.org/jira/browse/ISIS-1630[ISIS-1630])
 
 This ticket fixed a bug whereby - in the absence of an explicit `@Property(optionality=...)` or `@Nullable` annotation, a view model's properties would be defaulted as optional rather than mandatory.
@@ -130,7 +122,6 @@ You should therefore inspect all properties of your view models and ensure that 
 
 
 
-[[_migration-notes_1.14.0-to-1.15.0_ISIS-1595]]
 == Fix to config variable (link:https://issues.apache.org/jira/browse/ISIS-1595[ISIS-1595])
 
 The configuration property link:https://isis.apache.org/versions/1.15.0/guides/rgcfg/rgcfg.html#__rgcfg_configuring-core_metamodel-validation[ `isis.reflector.validator.jdoqlVariablesClause`] was incorrectly named `variablesClause`.
@@ -139,7 +130,6 @@ This has now been corrected.
 Any applications that used this configuration property should be updated.
 
 
-[[_migration-notes_1.14.0-to-1.15.0_ISIS-1690]]
 == `@PostConstruct` always called (link:https://issues.apache.org/jira/browse/ISIS-1690[ISIS-1690])
 
 In previous versions, if any domain service threw an exception in their initialization method (annotated `@PostConstruct`) then none of the remaining domain services would be initialized.
@@ -150,7 +140,6 @@ The first exception encountered is then re-thrown (to preserve similar behaviour
 
 
 
-[[_migration-notes_1.14.0-to-1.15.0_incode-platform]]
 == (non-ASF) Incode Platform
 
 The various (non-ASF) link:http://isisaddons.org[Isis Addons] and link:http://catalog.incode.org[Incode Catalog] have also been combined into a single link:http://platform.incode.org["Incode Platform"].

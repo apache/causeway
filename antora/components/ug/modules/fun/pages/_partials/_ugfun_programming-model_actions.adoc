@@ -1,4 +1,3 @@
-[[_ugfun_programming-model_actions]]
 = Actions
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -21,7 +20,6 @@ If the state change is simple, for example just being able to correct an invalid
 But if the state change is more complex, then most likely an action should be used instead.
 
 
-[[__ugfun_programming-model_actions_defining-actions]]
 == Defining actions
 
 Broadly speaking, actions are all the `public` methods that are not getters or setters which represent properties or collections.
@@ -54,7 +52,6 @@ The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 meta
 ====
 
 
-[[__ugfun_programming-model_actions_reference-parameter-types]]
 == (Reference) Parameter types
 
 Parameter types can be value types or reference types.
@@ -92,7 +89,6 @@ It is also required to return a Collection of that type.
 
 Note that it is also valid to define "choices" and "autoComplete" for value types (such as `quantity`, above); it just isn't as common to do so.
 
-[[__ugfun_programming-model_actions_reference-parameter-types_removing-boilerplate]]
 === Removing boilerplate
 
 To save having to define an `autoCompleteNXxx(...)` method everywhere that a reference to a particular type (such as `Product`) appears as an action parameter, it is also possible to use the `@DomainObject` annotation on `Product` itself:
@@ -137,7 +133,6 @@ public class PaymentMethodType ... {
 <1> only a small (ie "bounded") number of instances available, meaning that the framework should render all in a drop-down.
 
 
-[[__ugfun_programming-model_actions_collection-parameter-types]]
 == Collection Parameter types
 
 Action parameters can also be collections of values (for example `List<String>`), or can be collections of references (such as `List<Customer>`).
@@ -162,7 +157,6 @@ public List<Product> autoComplete0AddToBasket(@MinLength(3) String searchTerm) {
 As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:rg:ant:rgant.adoc#_rgant-DomainObject[`@DomainObject`] on the referenced type (described xref:ug:fun:ugfun.adoc#__ugfun_programming-model_actions_reference-parameter-types_removing-boilerplate[above]).
 
 
-[[__ugfun_programming-model_actions_optional-parameters]]
 == Optional Parameters
 
 Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_optional-properties[optionality of properties] is defined using xref:rg:ant:rgant.adoc#_rgant-Column_allowsNull[`@javax.jdo.annotations.Column#allowsNull()`], that JDO annotation cannot be applied to parameter types.
@@ -191,7 +185,6 @@ public Order invoice(
 
 See also xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[properties vs parameters].
 
-[[__ugfun_programming-model_actions_string-parameters]]
 == ``String`` Parameters (Length)
 
 Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_datatypes_strings[length of string properties] is defined using xref:rg:ant:rgant.adoc#_rgant-Column_length[`@javax.jdo.annotations.Column#length()`], that JDO annotation cannot be applied to parameter types.
@@ -232,7 +225,6 @@ This is important, because it allows JDO/DataNucleus to keep track that this ins
 
 See also xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[properties vs parameters].
 
-[[__ugfun_programming-model_actions_bigdecimal-parameters]]
 == ``BigDecimal``s (Precision)
 
 Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_datatypes_bigdecimals[precision of BigDecimal properties] is defined using xref:rg:ant:rgant.adoc#_rgant_Column_scale[`@javax.jdo.annotations.Column#scale()`], that JDO annotation cannot be applied to parameter types.

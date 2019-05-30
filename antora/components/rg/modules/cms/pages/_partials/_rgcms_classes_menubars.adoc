@@ -1,4 +1,3 @@
-[[_rgcms_classes_menubars]]
 = MenuBars Layout
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -22,7 +21,6 @@ Each such link is populated by the framework automatically when exposing the men
 This design greatly assists in the implementation of generic REST clients.
 
 
-[[_rgcms_classes_menubars_menus]]
 == Menus
 
 The menu classes reside in the `org.apache.isis.applib.layout.menubars.bootstrap3` package, consisting of:
@@ -50,7 +48,6 @@ The xref:ug:vw:ugvw.adoc#[Wicket viewer] renders a separator between each sectio
 consisting of one or many actions (``ServiceActionLayoutData``s)
 
 
-[[_rgcms_classes_menubars_components]]
 == Components
 
 The service action class reside in the `org.apache.isis.applib.layout.component` package, consisting of just:
@@ -65,7 +62,6 @@ This is similar to `ActionLayoutData` (of the xref:rgcms.adoc#_rgcms_classes_lay
 
 
 
-[[__rgcms_classes_layout_link]]
 == Link
 
 The link classes reside in the `org.apache.isis.applib.layout.links` package, and consist of just the `Link` class:

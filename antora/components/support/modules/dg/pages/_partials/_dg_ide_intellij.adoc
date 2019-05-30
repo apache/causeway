@@ -1,4 +1,3 @@
-[[_dg_ide_intellij]]
 = Developing using IntelliJ IDEA
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 include::_attributes.adoc[]
@@ -14,13 +13,11 @@ This material does not constitute an endorsement; JetBrains is not affiliated to
 This section describes how to install and setup JetBrains' IntelliJ IDEA, then how to import an application into IntelliJ and run it.
 
 
-[[__dg_ide_intellij_installing]]
 == Installing and Setting up
 
 This section covers installation and setup. These notes/screenshots were prepared using IntelliJ Community Edition 14.1.x, but are believed to be compatible with more recent versions/other editions of the IDE.
 
 
-[[__dg_ide_intellij_installing_download]]
 === Download and Install
 
 https://www.jetbrains.com/idea/download/[Download] latest version of IntelliJ Community Edition, and install:
@@ -63,7 +60,6 @@ image::intellij-idea/010-installing/070-set-ui-theme.png[width="600px",link="{im
 
 
 
-[[__dg_ide_intellij_installing_new-project]]
 === New Project
 
 In IntelliJ a project can contain multiple modules; these need not be physically located together.  (If you are previously an Eclipse user, you can think of it as similar to an Eclipse workspace).
@@ -99,7 +95,6 @@ image::intellij-idea/020-create-new-project/060-create-dir.png[width="250px",lin
 
 
 
-[[__dg_ide_intellij_file-templates]]
 === File templates
 
 
@@ -136,7 +131,6 @@ in your home directory:
 
 
 
-[[__dg_ide_intellij_live-templates]]
 === Live templates
 
 We also recommend you import a set  of live templates.  These are used to add new methods to existing classes:
@@ -157,7 +151,6 @@ Download and import (as for the previous settings JAR files).
 
 
 
-[[__dg_ide_intellij_coding-standards]]
 === Coding Standards
 
 Next, we suggest you import settings for standard ASF/Apache Isis coding conventions.  This file is also
@@ -165,7 +158,6 @@ provided as a settings file, namely *link:resources/intellij/isis-settings-code-
 
 
 
-[[__dg_ide_intellij_other-settings-compiler]]
 === Other Settings (Compiler)
 
 There are also some other settings that influence the compiler.  We highly recommend you set these.
@@ -193,7 +185,6 @@ IntelliJ may also have inferred these settings for specific projects/modules whe
 
 
 
-[[__dg_ide_intellij_other-settings-maven]]
 === Other Settings (Maven)
 
 There are also some other settings for Maven that we recommend you adjust (though these are less critical):
@@ -221,7 +212,6 @@ image::intellij-idea/044-other-settings-misc/010-auto-import.png[width="700px",l
 
 
 
-[[__dg_ide_intellij_importing-maven-modules]]
 == Importing Maven Modules
 
 Let's load in some actual code!  We do this by importing the Maven modules.
@@ -263,12 +253,10 @@ image::intellij-idea/100-maven-module-mgmt/060-ignored-modules.png[width="730px"
 
 
 
-[[__dg_ide_intellij_running]]
 == Running
 
 Let's see how to run both the app and the tests.
 
-[[__dg_ide_intellij_running_the-app]]
 === Running the App
 
 Once you've imported your Apache Isis application, we should run it.  We do this by creating a Run configuration, using `Run > Edit Configurations`.
@@ -301,7 +289,6 @@ You should now be able to run the app using `Run > Run Configuration`.  The same
 Under windows you may get 'Standard error from the DataNucleus tool + org.datanucleus.enhancer.DataNucleusEnhancer : The command line is too long' although 'fork=false' is set in pom.xml. Can be worked around via setting '-Dfork=false' before or after 'datanucleus:enhance -o'.
 ====
 
-[[__dg_ide_intellij_running_unit-tests]]
 === Running the Unit Tests
 
 The easiest way to run the unit tests is just to right click on the `dom` module in the _Project Window_, and choose run unit tests.  Hopefully your tests will pass (!).
@@ -317,7 +304,6 @@ image::intellij-idea/110-running-the-app/040-running-unit-tests-run-configuratio
 Thereafter, you should run units by selecting this configuration (if you use the right click approach you'll end up with lots of run configurations, all similar).
 
 
-[[__dg_ide_intellij_running_integ-tests]]
 === Running the Integration Tests
 
 Integration tests can be run in the same way as unit tests, however the `dom` module must also have been enhanced.
@@ -338,10 +324,8 @@ If this radio button is set to one of the other options then you may obtain clas
 
 
 
-[[__dg_ide_intellij_hints-and-tips]]
 == Hints and Tips
 
-[[__dg_ide_intellij_hints-and-tips_keyboard-cheat-sheets]]
 === Keyboard Cheat Sheets
 
 You can download 1-page PDFs cheat sheets for IntelliJ's keyboard shortcuts:
@@ -367,7 +351,6 @@ The Tool Windows are the views around the editor (to left, bottom and right).  I
 
 Using these shortcuts you can easily toggle between the tool windows and the editor, without using the mouse.  Peachy!
 
-[[__dg_ide_intellij_hints-and-tips_navigating-around]]
 === Navigating Around
 
 For all of the following, you don't need to type every letter, typing "ab" will actually search for ".*a.*b.*".
@@ -389,7 +372,6 @@ Viewing the structure (ie outline) of a class
 ** hit `ctrl-F12` again to also see inherited members
 
 
-[[__dg_ide_intellij_hints-and-tips_editing]]
 === Editing
 
 * Extend selection using `ctrl-W`
@@ -413,7 +395,6 @@ In certain circumstances (eg in methods0) you can also type `ctrl-shift-space` t
 Last, when invoking a method, use `ctrl-P` to see the parameter types.
 
 
-[[__dg_ide_intellij_hints-and-tips_refactoring]]
 === Refactoring
 
 Loads of good stuff on the `Refactor` menu; most used are:
@@ -428,7 +409,6 @@ Loads of good stuff on the `Refactor` menu; most used are:
 If you can't remember all those shortcuts, just use `ctrl-shift-alt-T` (might want to rebind that to something else!) and get a context-sensitive list of refactorings available for the currently selected object
 
 
-[[__dg_ide_intellij_hints-and-tips_plugins]]
 === Plugins
 
 You might want to set up some additional plugins.  You can do this using `File > Settings > Plugins` (or equivalently `File > Other Settings > Configure Plugins`).
@@ -449,7 +429,6 @@ Some others you might like to explore are:
 image::intellij-idea/050-some-plugins/020-some-plugins-confirmation.png[width="600px",link="{imagesdir}intellij-idea/050-some-plugins/020-some-plugins-confirmation.png"]
 
 
-[[__dg_ide_intellij_hints-and-tips_plugins_maven-helper-plugin]]
 ==== Maven Helper Plugin
 
 This plugin provides a couple of great features.  One is better visualization of dependency trees (similar to Eclipse).
@@ -471,7 +450,6 @@ This menu can also be bound to a keystroke so that it is available as a pop-up:
 image::intellij-idea/050-some-plugins/maven-helper/040-maven-quick-run.png[width="600px",link="{imagesdir}intellij-idea/050-some-plugins/maven-helper/040-maven-quick-run.png"]
 
 
-[[__dg_ide_intellij_troubleshooting]]
 === Troubleshooting
 
 When a Maven module is imported, IntelliJ generates its own project files (suffix `.ipr`), and the application is actually built from that.
@@ -498,13 +476,11 @@ are set up correctly.
 
 
 
-[[__dg_ide_intellij_advanced]]
 == Faster turnaround times
 
 In this section are several options that will reduce the time it takes between making a source code edit and seeing the results in the running app. code/build/deploy/review feedback loop.
 
 
-[[__dg_ide_intellij_advanced_gradle-compile-enhance]]
 === Using Grade to compile/enhance
 
 Running an Apache Isis application requires that the DataNucleus enhancer runs on the compiled bytecode.  As described xref:support:dg:dg.adoc#__dg_ide_intellij_running_the-app[above], the recommended way to do this with IntelliJ is to use a Run configuration that runs the enhancer goal prior to launch.
@@ -569,7 +545,6 @@ image::intellij-idea/070-advanced/004-gradle-output.png[width="600px",link="{ima
 
 
 
-[[__dg_ide_intellij_advanced_gradle-liveReload]]
 === Using Gradle for liveReload
 
 Similarly, gradle can be run to reduce the turn-around time when tweaking the UI (defined by the
@@ -653,7 +628,6 @@ image::intellij-idea/070-advanced/006-livereload-js.png[width="800px",link="{ima
 
 
 
-[[__dg_ide_intellij_advanced_dcevm]]
 === Setting up DCEVM
 
 link:http://github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more
