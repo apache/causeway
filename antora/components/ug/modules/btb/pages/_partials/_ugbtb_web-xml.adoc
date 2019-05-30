@@ -22,11 +22,11 @@ The servlets and filters are mapped to three main pipelines:
 
 With the following key:
 
-image::runtime/web-xml/key.png[width="800px",link="{_imagesdir}runtime/web-xml/key.png"]
+image::runtime/web-xml/key.png[width="800px",link="{imagesdir}runtime/web-xml/key.png"]
 
 the diagram below shows the components to be configured if deploying both the Wicket viewer and Restful Objects viewer:
 
-image::runtime/web-xml/wicket-and-ro.png[width="800px",link="{_imagesdir}runtime/web-xml/wicket-and-ro.png"]
+image::runtime/web-xml/wicket-and-ro.png[width="800px",link="{imagesdir}runtime/web-xml/wicket-and-ro.png"]
 
 Here the Wicket viewer is responsible for the main bootstrapping of Apache Isis itself, in other words the shared (global) metadata; this is done by the `IsisWicketApplication` class (extending the `WicketApplication` Wicket API).
 This class is also responsible for Apache Isis' own session and transaction management.
@@ -37,12 +37,12 @@ This pipeline uses the `IsisSessionFilter` and `IsisTransactionFilterForRestfulO
 
 If only the Wicket viewer is deployed, then the diagram is more or less the same: the RestEasy servlet, context listener and supporting filters are simply removed:
 
-image::runtime/web-xml/wicket-only.png[width="800px",link="{_imagesdir}runtime/web-xml/wicket-only.png"]
+image::runtime/web-xml/wicket-only.png[width="800px",link="{imagesdir}runtime/web-xml/wicket-only.png"]
 
 Finally, if only the Restful Objects viewer is deployed, then things change a little more subtly.  Here, the Wicket filter is no longer needed.
 In its place, though the `IsisWebAppBootstrapper` context listener is required: this is responsible for seting up the shared (global) metadata.
 
-image::runtime/web-xml/ro-only.png[width="800px",link="{_imagesdir}runtime/web-xml/ro-only.png"]
+image::runtime/web-xml/ro-only.png[width="800px",link="{imagesdir}runtime/web-xml/ro-only.png"]
 
 The following sections detail these various listeners, filters and servlets in more detail.
 

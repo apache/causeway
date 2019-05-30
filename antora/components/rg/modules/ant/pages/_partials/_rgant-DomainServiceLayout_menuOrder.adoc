@@ -16,7 +16,7 @@ The algorithm works as follows:
 
 For example, the screenshot below shows the "prototyping" menu from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
 
-image::reference-annotations/DomainServiceLayout/menuOrder.png[width="500px",link="{_imagesdir}reference-annotations/DomainServiceLayout/menuOrder.png"]
+image::reference-annotations/DomainServiceLayout/menuOrder.png[width="500px",link="{imagesdir}reference-annotations/DomainServiceLayout/menuOrder.png"]
 
 
 The xref:ug:vw:ugvw.adoc#[Wicket viewer] automatically places separators between actions from different domain services.  From this we can infer that there are actually five different domain services that are all rendered on the "prototyping" top-level menu.

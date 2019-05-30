@@ -19,4 +19,4 @@ isis.authorization=bypass
 
 This installs the appropriate no-op implementations for both authentication and authorization:
 
-image::security/security-apis-impl/configure-isis-to-use-bypass.PNG[width="600px",link="{_imagesdir}security/security-apis-impl/configure-isis-to-use-bypass.PNG"]
+image::security/security-apis-impl/configure-isis-to-use-bypass.PNG[width="600px",link="{imagesdir}security/security-apis-impl/configure-isis-to-use-bypass.PNG"]

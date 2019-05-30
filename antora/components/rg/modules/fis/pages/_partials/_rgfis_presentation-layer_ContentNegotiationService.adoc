@@ -33,7 +33,7 @@ What all that means is that, if the underlying entities change, we are required 
 
 This diagram illustrates the three options available:
 
-image::ContentNegotiationService/facade-choices.png[width="700px",link="{_imagesdir}ContentNegotiationService/facade-choices.png"]
+image::ContentNegotiationService/facade-choices.png[width="700px",link="{imagesdir}ContentNegotiationService/facade-choices.png"]
 
 
 
@@ -158,7 +158,7 @@ application/xml;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-typ
 
 will result in an XML serialization of that class:
 
-image::ContentNegotiationService/accept-xml.png[width="700px",link="{_imagesdir}ContentNegotiationService/accept-xml.png"]
+image::ContentNegotiationService/accept-xml.png[width="700px",link="{imagesdir}ContentNegotiationService/accept-xml.png"]
 
 
 while similarly hitting the same URL with an `Accept` header of:
@@ -170,7 +170,7 @@ application/json;profile=urn:org.restfulobjects:repr-types/object;x-ro-domain-ty
 
 will result in the JSON serialization of that class:
 
-image::ContentNegotiationService/accept-json.png[width="700px",link="{_imagesdir}ContentNegotiationService/accept-json.png"]
+image::ContentNegotiationService/accept-json.png[width="700px",link="{imagesdir}ContentNegotiationService/accept-json.png"]
 
 
 

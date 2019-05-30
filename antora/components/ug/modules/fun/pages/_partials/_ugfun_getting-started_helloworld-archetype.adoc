@@ -356,11 +356,11 @@ Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuri
 
 Here's what the setup looks like in IntelliJ IDEA:
 
-image::getting-started/helloworld.png[width="600px",link="{_imagesdir}getting-started/helloworld.png"]
+image::getting-started/helloworld.png[width="600px",link="{imagesdir}getting-started/helloworld.png"]
 
 with the maven goal to run the DataNucleus enhancer (discussed in more detail xref:support:dg:dg.adoc#_dg_hints-and-tips_datanucleus-enhancer[here]) before launch defined as:
 
-image::getting-started/helloworld-before-launch.png[width="600px",link="{_imagesdir}getting-started/helloworld-before-launch.png"]
+image::getting-started/helloworld-before-launch.png[width="600px",link="{imagesdir}getting-started/helloworld-before-launch.png"]
 
 
 
@@ -369,11 +369,11 @@ image::getting-started/helloworld-before-launch.png[width="600px",link="{_images
 
 When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:ug:vw:ugvw.adoc#[Wicket viewer] or the xref:ug:vro:ugvro.adoc#[Restful Objects viewer]:
 
-image::getting-started/using-hello-world/010-root-page.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/010-root-page.png"]
+image::getting-started/using-hello-world/010-root-page.png[width="600px",link="{imagesdir}getting-started/using-hello-world/010-root-page.png"]
 
 The Wicket viewer provides a human usable web UI (implemented, as you might have guessed from its name, using link:http://wicket.apache.org[Apache Wicket]), so choose that and navigate to the login page:
 
-image::getting-started/using-hello-world/020-login-to-wicket-viewer.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/020-login-to-wicket-viewer.png"]
+image::getting-started/using-hello-world/020-login-to-wicket-viewer.png[width="600px",link="{imagesdir}getting-started/using-hello-world/020-login-to-wicket-viewer.png"]
 
 The app itself is configured to run using xref:ug:sec:ugsec.adoc#[shiro security], as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
 
@@ -383,21 +383,21 @@ The app itself is configured to run using xref:ug:sec:ugsec.adoc#[shiro security
 
 Once you've logged in you'll see the default home page:
 
-image::getting-started/using-hello-world/030-home-page.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/030-home-page.png"]
+image::getting-started/using-hello-world/030-home-page.png[width="600px",link="{imagesdir}getting-started/using-hello-world/030-home-page.png"]
 
 
 The application is configured to run with an in-memory database, so initially there is no data.
 Create an object using the menu:
 
-image::getting-started/using-hello-world/040-create-object-from-menu.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/040-create-object-from-menu.png"]
+image::getting-started/using-hello-world/040-create-object-from-menu.png[width="600px",link="{imagesdir}getting-started/using-hello-world/040-create-object-from-menu.png"]
 
 which brings up a modal dialog:
 
-image::getting-started/using-hello-world/050-create-object-from-menu-prompt.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/050-create-object-from-menu-prompt.png"]
+image::getting-started/using-hello-world/050-create-object-from-menu-prompt.png[width="600px",link="{imagesdir}getting-started/using-hello-world/050-create-object-from-menu-prompt.png"]
 
 hitting OK returns the created object:
 
-image::getting-started/using-hello-world/060-created-object.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/060-created-object.png"]
+image::getting-started/using-hello-world/060-created-object.png[width="600px",link="{imagesdir}getting-started/using-hello-world/060-created-object.png"]
 
 The above functionality is implemented by link:https://github.com/apache/isis/blob/master/example/application/helloworld/src/main/java/domainapp/dom/impl/HelloWorldObjects.java#L43[this code]:
 
@@ -422,7 +422,7 @@ The `HelloWorldObject` contains a couple of properties, and a single action to u
 +
 For example:
 +
-image::getting-started/using-hello-world/070-update-name.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/070-update-name.png"]
+image::getting-started/using-hello-world/070-update-name.png[width="600px",link="{imagesdir}getting-started/using-hello-world/070-update-name.png"]
 +
 The above functionality is implemented by link:https://github.com/apache/isis/blob/master/example/application/helloworld/src/main/java/domainapp/dom/impl/HelloWorldObject.java#L73[this code]: +
 +
@@ -446,16 +446,16 @@ public HelloWorldObject updateName(
 +
 For example:
 +
-image::getting-started/using-hello-world/080-edit-notes.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/080-edit-notes.png"]
+image::getting-started/using-hello-world/080-edit-notes.png[width="600px",link="{imagesdir}getting-started/using-hello-world/080-edit-notes.png"]
 
 It's also possible to delete an object:
 
-image::getting-started/using-hello-world/090-delete-object.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/090-delete-object.png"]
+image::getting-started/using-hello-world/090-delete-object.png[width="600px",link="{imagesdir}getting-started/using-hello-world/090-delete-object.png"]
 
 The viewer displays a message confirming that the object has been deleted:
 
 
-image::getting-started/using-hello-world/100-object-deleted.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/100-object-deleted.png"]
+image::getting-started/using-hello-world/100-object-deleted.png[width="600px",link="{imagesdir}getting-started/using-hello-world/100-object-deleted.png"]
 
 The above functionality is implemented by link:https://github.com/apache/isis/blob/master/example/application/helloworld/src/main/java/domainapp/dom/impl/HelloWorldObject.java#L87[this code]:
 
@@ -474,28 +474,28 @@ This uses three services provided by the framework; these are injected into the 
 
 Going back to the home page (link:http://localhost:8080[localhost:8080]) we can use link:https://swagger.io/[Swagger UI] as a front-end to the REST API provided by the Restful Objects viewer.
 
-image::getting-started/using-hello-world/200-swagger-ui-before-reload.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/200-swagger-ui-before-reload.png"]
+image::getting-started/using-hello-world/200-swagger-ui-before-reload.png[width="600px",link="{imagesdir}getting-started/using-hello-world/200-swagger-ui-before-reload.png"]
 
 The Swagger UI is created dynamically from a Swagger schema definition (the schema definition file itself can be downloaded from the Wicket viewer's "Prototyping" menu).
  This Swagger schema definition groups resources according to Apache Isis metadata:
 
-image::getting-started/using-hello-world/210-helloworld-resources.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/210-helloworld-resources.png"]
+image::getting-started/using-hello-world/210-helloworld-resources.png[width="600px",link="{imagesdir}getting-started/using-hello-world/210-helloworld-resources.png"]
 
 For example, an object can be created using the resource that represents the `HelloWorldObjects#create` action:
 
-image::getting-started/using-hello-world/220-create-object-thru-rest-api.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/220-create-object-thru-rest-api.png"]
+image::getting-started/using-hello-world/220-create-object-thru-rest-api.png[width="600px",link="{imagesdir}getting-started/using-hello-world/220-create-object-thru-rest-api.png"]
 
 The response indicates that the object was successfully created:
 
-image::getting-started/using-hello-world/230-create-object-thru-rest-api-response.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/230-create-object-thru-rest-api-response.png"]
+image::getting-started/using-hello-world/230-create-object-thru-rest-api-response.png[width="600px",link="{imagesdir}getting-started/using-hello-world/230-create-object-thru-rest-api-response.png"]
 
 The Swagger UI also provides a resource to retrieve any object:
 
-image::getting-started/using-hello-world/240-retrieve-object-using-rest-api.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/240-retrieve-object-using-rest-api.png"]
+image::getting-started/using-hello-world/240-retrieve-object-using-rest-api.png[width="600px",link="{imagesdir}getting-started/using-hello-world/240-retrieve-object-using-rest-api.png"]
 
 This results in a representation of the domain object (as per the requested `Response Content Type`, ie `ACCEPT` header):
 
-image::getting-started/using-hello-world/250-retrieve-object-using-rest-api-response.png[width="600px",link="{_imagesdir}getting-started/using-hello-world/250-retrieve-object-using-rest-api-response.png"]
+image::getting-started/using-hello-world/250-retrieve-object-using-rest-api-response.png[width="600px",link="{imagesdir}getting-started/using-hello-world/250-retrieve-object-using-rest-api-response.png"]
 
 
 The Swagger UI is provided as a convenience; the REST API is actually a complete hypermedia API (in other words you can follow the links to access all the behaviour exposed in the regular Wicket app).

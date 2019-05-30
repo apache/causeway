@@ -10,7 +10,7 @@ The optional xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_TableColumnOrd
 
 For example, suppose there is a `Customer` and an `Order`:
 
-[plantuml, {_imagesdir}layouts/customer-order, png]
+[plantuml, {imagesdir}layouts/customer-order, png]
 ....
 Customer "1" *--> "many" Order : orders
 

@@ -18,7 +18,7 @@ Bookmarking is automatic; whenever a bookmarkable object/action is visited, then
 
 The following screenshot, taken from https://github.com/isisaddons/isis-app-todoapp[Isisaddons example todoapp] (not ASF) shows how the bookmarks are listed in a sliding panel.
 
-image::bookmarked-pages/panel.png[width="800px",link="{_imagesdir}bookmarked-pages/panel.png"]
+image::bookmarked-pages/panel.png[width="800px",link="{imagesdir}bookmarked-pages/panel.png"]
 
 [NOTE]
 ====
@@ -29,7 +29,7 @@ Note how the list contains both domain objects and an action ("not yet complete"
 
 Bookmarks can also form a hierarchy.  The following screenshot, also taken from the https://github.com/estatio/estatio[Estatio] application, shows a variety of different bookmarked objects with a nested structure:
 
-image::bookmarked-pages/panel-estatio.png[width="800px",link="{_imagesdir}bookmarked-pages/panel-estatio.png"]
+image::bookmarked-pages/panel-estatio.png[width="800px",link="{imagesdir}bookmarked-pages/panel-estatio.png"]
 
 Some - like `Property`, `Lease` and `Party` - are root nodes. However, `LeaseItem` is bookmarkable as a child of `Lease`, and `LeaseTerm` is bookmarkable only as a child of `LeaseItem`. This parent/child relationship is reflected in the layout.
 

@@ -12,11 +12,11 @@ This can be changed to display a png logo instead.
 
 The screenshot below shows the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) with a 'brand logo' image in its header:
 
-image::brand-logo/brand-logo.png[width="750px",link="{_imagesdir}brand-logo/brand-logo.png"]
+image::brand-logo/brand-logo.png[width="750px",link="{imagesdir}brand-logo/brand-logo.png"]
 
 A custom brand logo (typically larger) can also be specified for the signin page:
 
-image::brand-logo/brand-logo-signin.png[width="750px",link="{_imagesdir}brand-logo/brand-logo-signin.png"]
+image::brand-logo/brand-logo-signin.png[width="750px",link="{imagesdir}brand-logo/brand-logo-signin.png"]
 
 
 

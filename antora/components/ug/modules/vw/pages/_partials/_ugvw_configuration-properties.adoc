@@ -295,11 +295,11 @@ isis.viewer.wicket.rememberMe.suppress=true
 
 With 'remember me' not suppressed (the default):
 
-image::suppress-remember-me/login-page-default.png[width="300px",link="{_imagesdir}suppress-remember-me/login-page-default.png"]
+image::suppress-remember-me/login-page-default.png[width="300px",link="{imagesdir}suppress-remember-me/login-page-default.png"]
 
 and with the checkbox suppressed:
 
-image::suppress-remember-me/login-page-suppress-remember-me.png[width="300px",link="{_imagesdir}suppress-remember-me/login-page-suppress-remember-me.png"]
+image::suppress-remember-me/login-page-suppress-remember-me.png[width="300px",link="{imagesdir}suppress-remember-me/login-page-suppress-remember-me.png"]
 
 
 
@@ -321,11 +321,11 @@ isis.viewer.wicket.suppressSignUp=true
 
 With 'sign up' not suppressed (the default):
 
-image::suppress-sign-up/login-page-default.png[width="300px",link="{_imagesdir}suppress-sign-up/login-page-default.png"]
+image::suppress-sign-up/login-page-default.png[width="300px",link="{imagesdir}suppress-sign-up/login-page-default.png"]
 
 and with the link suppressed:
 
-image::suppress-sign-up/login-page-suppress-sign-up.png[width="300px",link="{_imagesdir}suppress-sign-up/login-page-suppress-sign-up.png"]
+image::suppress-sign-up/login-page-suppress-sign-up.png[width="300px",link="{imagesdir}suppress-sign-up/login-page-suppress-sign-up.png"]
 
 
 
@@ -344,11 +344,11 @@ isis.viewer.wicket.suppressPasswordReset=true
 
 With 'password reset' not suppressed (the default):
 
-image::suppress-password-reset/login-page-default.png[width="300px",link="{_imagesdir}suppress-password-reset/login-page-default.png"]
+image::suppress-password-reset/login-page-default.png[width="300px",link="{imagesdir}suppress-password-reset/login-page-default.png"]
 
 and with the link suppressed:
 
-image::suppress-password-reset/login-page-suppress-password-reset.png[width="300px",link="{_imagesdir}suppress-password-reset/login-page-suppress-password-reset.png"]
+image::suppress-password-reset/login-page-suppress-password-reset.png[width="300px",link="{imagesdir}suppress-password-reset/login-page-suppress-password-reset.png"]
 
 
 
@@ -708,11 +708,11 @@ isis.viewer.wicket.themes.showChooser=true
 ----
 
 .Example 1
-image::theme-chooser/example-1.png[width="720px",link="{_imagesdir}theme-chooser/example-1.png"]
+image::theme-chooser/example-1.png[width="720px",link="{imagesdir}theme-chooser/example-1.png"]
 
 
 .Example 2:
-image::theme-chooser/example-2.png[width="720px",link="{_imagesdir}theme-chooser/example-2.png"]
+image::theme-chooser/example-2.png[width="720px",link="{imagesdir}theme-chooser/example-2.png"]
 
 
 It is also possible to restrict the themes shown to some subset of those in bootswatch.

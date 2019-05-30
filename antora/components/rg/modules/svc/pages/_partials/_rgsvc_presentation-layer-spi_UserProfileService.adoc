@@ -38,7 +38,7 @@ This simply returns the user's name as the user's profile name.
 An example implementation can also be found in the (non-ASF)
 http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
 
-image::reference-services-spi/UserProfileService/todoapp.png[width="800px",link="{_imagesdir}reference-services-spi/UserProfileService/todoapp.png"]
+image::reference-services-spi/UserProfileService/todoapp.png[width="800px",link="{imagesdir}reference-services-spi/UserProfileService/todoapp.png"]
 
 
 [NOTE]

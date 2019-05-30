@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 Isis ships with an implementation of http://shiro.apache.org[Apache Shiro]'s `Realm` class that allows user authentication and authorization to be performed against an LDAP server.
 
-image::security/security-apis-impl/configure-shiro-to-use-isis-ldap-realm.PNG[width="600px",link="{_imagesdir}security/security-apis-impl/configure-shiro-to-use-isis-ldap-realm.PNG"]
+image::security/security-apis-impl/configure-shiro-to-use-isis-ldap-realm.PNG[width="600px",link="{imagesdir}security/security-apis-impl/configure-shiro-to-use-isis-ldap-realm.PNG"]
 
 The LDAP database stores the user/passwords and user groups, while the `shiro.ini` file is used to map the LDAP groups to roles, and to map the roles to permissions.
 
@@ -124,22 +124,22 @@ The setup here was initially based on http://krams915.blogspot.co.uk/2011/01/lda
 
 To start, create a partition in order to hold the mojo node (holding the groups):
 
-image::configuration/configuring-shiro/ldap/activeds-ldap-mojo-partition.png[link="{_imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-mojo-partition.png"]
+image::configuration/configuring-shiro/ldap/activeds-ldap-mojo-partition.png[link="{imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-mojo-partition.png"]
 
 Create the `ou=groups,o=mojo` hierarchy:
 
-image::configuration/configuring-shiro/ldap/activeds-ldap-mojo-root-dse.png[link="{_imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-mojo-root-dse.png"]
+image::configuration/configuring-shiro/ldap/activeds-ldap-mojo-root-dse.png[link="{imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-mojo-root-dse.png"]
 
 Configure SASL authentication. This means that the checking of user/password is done implicitly by virtue of Apache Isis connecting to LDAP using these credentials:
 
-image::configuration/configuring-shiro/ldap/activeds-ldap-sasl-authentication.png[link="{_imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-sas"]
+image::configuration/configuring-shiro/ldap/activeds-ldap-sasl-authentication.png[link="{imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-sas"]
 
 In order for SASL to work, it seems to be necessary to put users under `o=system`. (This is why the setup is slightly different than the tutorial mentioned above):
 
-image::configuration/configuring-shiro/ldap/activeds-ldap-users.png[link="{_imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-users.png"]
+image::configuration/configuring-shiro/ldap/activeds-ldap-users.png[link="{imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-users.png"]
 
 Configure the users into the groups:
 
-image::configuration/configuring-shiro/ldap/activeds-ldap-groups.png[link="{_imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-groups.png"]
+image::configuration/configuring-shiro/ldap/activeds-ldap-groups.png[link="{imagesdir}configuration/configuring-shiro/ldap/activeds-ldap-groups.png"]
 
 

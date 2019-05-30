@@ -9,7 +9,7 @@ The `@HomePage` annotation allows a _single_ (no-arg, query-only) action on a _s
 
 For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses `@HomePage` to return a dashboard of todo items to complete:
 
-image::reference-annotations/HomePage/HomePage.png[width="800px",link="{_imagesdir}reference-annotations/HomePage/HomePage.png"]
+image::reference-annotations/HomePage/HomePage.png[width="800px",link="{imagesdir}reference-annotations/HomePage/HomePage.png"]
 
 
 The corresponding code is:

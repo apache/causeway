@@ -23,7 +23,7 @@ This allows for different implementations of the `CommandService` and `Backgroun
 The diagram below (http://yuml.me/edit/363b335f[yuml.me/363b335f]) shows the dependencies between these various classes:
 
 .Inheritance Hierarchy for `BackgroundCommandExecution`
-image::headless-access/BackgroundCommandExecution.png[width="400px",link="{_imagesdir}headless-access/BackgroundCommandExecution.png"]
+image::headless-access/BackgroundCommandExecution.png[width="400px",link="{imagesdir}headless-access/BackgroundCommandExecution.png"]
 
 
 

@@ -14,7 +14,7 @@ If you are happy to use a database then we strongly recommend you use the (non-A
 
 If you go down this route, then the architecture is as follows:
 
-image::security/security-apis-impl/configure-shiro-to-use-custom-jdbc-realm.png[width="600px",link="{_imagesdir}security/security-apis-impl/configure-shiro-to-use-custom-jdbc-realm.png"]
+image::security/security-apis-impl/configure-shiro-to-use-custom-jdbc-realm.png[width="600px",link="{imagesdir}security/security-apis-impl/configure-shiro-to-use-custom-jdbc-realm.png"]
 
 
 

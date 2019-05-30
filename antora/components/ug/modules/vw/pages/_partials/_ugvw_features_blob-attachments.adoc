@@ -23,7 +23,7 @@ The following screenshots are taken from the Isis addons example https://github.
 
 `Blob` field rendered as attachment (with no data):
 
-image::blob-attachments/010-attachment-field-940.png[width="800px",link="{_imagesdir}blob-attachments/010-attachment-field.png"]
+image::blob-attachments/010-attachment-field-940.png[width="800px",link="{imagesdir}blob-attachments/010-attachment-field.png"]
 
 [NOTE]
 ====
@@ -35,7 +35,7 @@ Note that these screenshots show an earlier version of the xref:ug:vw:ugvw.adoc#
 
 Hit edit; 'choose file' button appears:
 
-image::blob-attachments/020-edit-choose-file-940.png[width="800px",link="{_imagesdir}blob-attachments/020-edit-choose-file.png"]
+image::blob-attachments/020-edit-choose-file-940.png[width="800px",link="{imagesdir}blob-attachments/020-edit-choose-file.png"]
 
 
 
@@ -43,12 +43,12 @@ image::blob-attachments/020-edit-choose-file-940.png[width="800px",link="{_image
 
 Choose file using the regular browser window:
 
-image::blob-attachments/030-choose-file-using-browser-520.png[width="520px",link="{_imagesdir}blob-attachments/030-choose-file-using-browser.png"]
+image::blob-attachments/030-choose-file-using-browser-520.png[width="520px",link="{imagesdir}blob-attachments/030-choose-file-using-browser.png"]
 
 
 Chosen file is indicated:
 
-image::blob-attachments/040-edit-chosen-file-indicated-940.png[width="800px",link="{_imagesdir}blob-attachments/040-edit-chosen-file-indicated.png"]
+image::blob-attachments/040-edit-chosen-file-indicated-940.png[width="800px",link="{imagesdir}blob-attachments/040-edit-chosen-file-indicated.png"]
 
 
 
@@ -56,7 +56,7 @@ image::blob-attachments/040-edit-chosen-file-indicated-940.png[width="800px",lin
 
 Back in view mode (ie once hit OK) if the `Blob` is an image, then it is shown:
 
-image::blob-attachments/050-ok-if-image-then-rendered-940.png[width="800px",link="{_imagesdir}blob-attachments/050-ok-if-image-then-rendered.png"]
+image::blob-attachments/050-ok-if-image-then-rendered-940.png[width="800px",link="{imagesdir}blob-attachments/050-ok-if-image-then-rendered.png"]
 
 
 
@@ -64,7 +64,7 @@ image::blob-attachments/050-ok-if-image-then-rendered-940.png[width="800px",link
 
 `Blob` can be downloaded:
 
-image::blob-attachments/060-download-940.png[width="800px",link="{_imagesdir}blob-attachments/060-download.png"]
+image::blob-attachments/060-download-940.png[width="800px",link="{imagesdir}blob-attachments/060-download.png"]
 
 
 
@@ -72,7 +72,7 @@ image::blob-attachments/060-download-940.png[width="800px",link="{_imagesdir}blo
 
 Back in edit mode, can choose a different file or clear (assuming property is not mandatory):
 
-image::blob-attachments/070-edit-clear-940.png[width="800px",link="{_imagesdir}blob-attachments/070-edit-clear.png"]
+image::blob-attachments/070-edit-clear-940.png[width="800px",link="{imagesdir}blob-attachments/070-edit-clear.png"]
 
 
 

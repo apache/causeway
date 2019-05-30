@@ -45,7 +45,7 @@ can be many such implementations, each handling a different target domain type.
 
 This diagram shows how these services collaborate:
 
-image::../rgfis/{_imagesdir}RepresentationService/service-collaborations.png[width="800px",link="../rgfis/{_imagesdir}RepresentationService/service-collaborations.png"]
+image::../rgfis/{imagesdir}RepresentationService/service-collaborations.png[width="800px",link="../rgfis/{imagesdir}RepresentationService/service-collaborations.png"]
 
 
 Taken together these domain services offer a lot of flexibility in terms of the representations that can be generated

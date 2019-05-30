@@ -21,12 +21,12 @@ For these reasons the sidebar mode is now the default.
 
 For example, here's what invoking an action (to create a new object) looks like using the original modal dialog:
 
-image::dialog-mode/modal.png[width="800px",link="{_imagesdir}dialog-mode/modal.png"]
+image::dialog-mode/modal.png[width="800px",link="{imagesdir}dialog-mode/modal.png"]
 
 
 And here's what it looks like with the sidebar dialog:
 
-image::dialog-mode/sidebar.png[width="800px",link="{_imagesdir}dialog-mode/sidebar.png"]
+image::dialog-mode/sidebar.png[width="800px",link="{imagesdir}dialog-mode/sidebar.png"]
 
 
 
