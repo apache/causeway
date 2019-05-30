@@ -1,0 +1,7 @@
+name: apps
+title: Applications
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc
+- modules/demoapp/nav.adoc

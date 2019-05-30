@@ -1,0 +1,11 @@
+name: downloads
+title: Downloads
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc
+- modules/cgcom/nav.adoc
+- modules/dg/nav.adoc
+- modules/ad/nav.adoc
+- modules/mn/nav.adoc
+- modules/rn/nav.adoc

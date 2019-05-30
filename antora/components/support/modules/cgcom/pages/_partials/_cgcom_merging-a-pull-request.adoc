@@ -1,0 +1,137 @@
+[[_cgcom_merging-a-pull-request]]
+= Merging a Pull Request
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+
+
+
+
+
+The process for merging in github pull requests (so that they can be tested locally before committing) has been scripted in the `github-pr.sh` script.
+
+The script will merge the fork into a temporary branch, and then run a build.  Once you are happy, you can commit.
+
+
+
+
+
+== Process and Usage
+
+The overall process is as follows:
+
+* locate/raise corresponding JIRA ticket, eg ISIS-1162
+* checkout branch from which PR was forked (usually just 'master')
+* merge PR into temporary branch using the `github-pr.sh` script
+* test the change locally (run the app, rebuild, manual regression tests etc)
+* if required, tidy up/refactor code as required
+* merge temporary branch into mainline, and commit
+
+This link:https://youtu.be/CKSLZBBHjME[screencast] also shows the process.
+
+
+== Prerequisites
+
+The script uses 'jq' to parse JSON.  To install:
+
+* on Linux: +
++
+[source,bash]
+----
+aptitude install jq
+----
+
+* on MacOS: +
++
+[source,bash]
+----
+brew install jq
+----
+
+* on Windows: +
++
+Download exe from http://stedolan.github.io/jq/download/[website]
+
+
+
+== Syntax
+
+The syntax is:
+
+[source,bash]
+----
+github-pr.sh -j 1162 -g 31 [-s] [-p ISIS]
+----
+
+where:
+
+* `-j 1162` +
++
+is the JIRA ticket number
+
+* `-g 31`   +
++
+is the github PR issue number
+
+* `-s` +
++
+will optionally skip the build and auto-merge
+
+* `-p ISIS` +
++
+optionally overrids the JIRA project (defaults to 'ISIS')
+
+
+
+== Example transcript
+
+The listing below shows the steps taken by the script:
+
+[source,bash]
+----
+$ sh github-pr.sh isis 1162 31
+
+Found JIRA ticket
+Found github PR
+branch_name_local: master
+username         : sebadiaz
+repo_full_name   : sebadiaz/isis
+repo_clone_url   : https://github.com/sebadiaz/isis.git
+branch_name_fork : master
+
+merging into: ISIS-1162_pr-31
+
+Deleting branch 'ISIS-1162_pr-31'
+Deleted branch ISIS-1162_pr-31 (was bd2e3c2).
+Creating the branch ISIS-1162_pr-31
+Switched to a new branch 'ISIS-1162_pr-31'
+Pulling the changes from https://github.com/sebadiaz/isis.git master
+From https://github.com/sebadiaz/isis
+ * branch            master     -> FETCH_HEAD
+Auto-merging core/pom.xml
+Merge made by the 'recursive' strategy.
+ core/pom.xml                                       |   3 +-
+ .../apache/isis/security/shiro/IsisLdapRealm.java  | 198 +++++++++++++++++++--
+ 2 files changed, 186 insertions(+), 15 deletions(-)
+
+Merged the PR; hit enter to build
+----
+
+The build now commences.  Once done, the script continues:
+
+[source,bash]
+----
+If build successful and happy to merge, execute:
+
+git checkout master && git merge --no-ff ISIS-1162_pr-31 && git branch -d ISIS-1162_pr-31
+----
+
+The screenshot belows shows the history we end up with:
+
+image::committers/github-pr-history.png[link="{imagesdir}/committers/github-pr-history.png"]
+
+This shows the fork being merged into the temporary branch ("ISIS-1162_pr-31"), then some further tidy-up, and finally the merging of the temporary branch into mainline.
+
+Note that there is no rebasing in this model.  This is intentional: when the merged branch is pushed, github will automatically close the original pull request.
+
+
+
+

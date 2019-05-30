@@ -1,0 +1,4 @@
+* Simple App
+
+** xref:about.adoc[About]
+

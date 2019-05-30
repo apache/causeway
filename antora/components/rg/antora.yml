@@ -1,0 +1,12 @@
+name: rg
+title: Reference Guides
+version: master
+start_page: ROOT:about.adoc
+nav:
+- modules/ROOT/nav.adoc
+- modules/ant/nav.adoc
+- modules/svc/nav.adoc
+- modules/cfg/nav.adoc
+- modules/cms/nav.adoc
+- modules/mvn/nav.adoc
+- modules/fis/nav.adoc

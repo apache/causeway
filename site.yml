@@ -1,0 +1,53 @@
+site:
+  title: Apache Isis
+  url: https://isis.apache.org/
+  start_page: toc:ROOT:about.adoc
+
+content:
+  sources:
+  - url: .
+    start_path: antora/components/ug
+    branches: HEAD
+  - url: .
+    branches: HEAD
+    start_path: antora/components/rg
+  - url: .
+    branches: HEAD
+    start_path: antora/components/demoapp
+  - url: .
+    branches: HEAD
+    start_path: antora/components/arch
+  - url: .
+    branches: HEAD
+    start_path: antora/components/downloads
+  - url: .
+    branches: HEAD
+    start_path: antora/components/support
+  - url: .
+    branches: HEAD
+    start_path: antora/components/toc
+
+ui:
+  bundle:
+    url: antora/theme/ui-bundle.zip
+    snapshot: true
+  supplemental_files: antora/supplemental-ui
+
+asciidoc:
+  extensions:
+    - asciidoctor-plantuml
+    - ./antora/lib/lorem
+    - ./antora/lib/jira-issue
+    - ./antora/lib/powershell
+  attributes:
+    experimental: ""
+    idprefix: ""
+    idseparator: "-"
+    plantuml-server-url: "http://www.plantuml.com/plantuml"
+    page-toc: ""
+    isiscurr: "2.0.0-M2"
+    isisnext: "2.0.0-M3"
+    isisnextafter: "2.0.0-M4"
+
+output:
+  dir: antora/target/site

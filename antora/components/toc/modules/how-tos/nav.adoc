@@ -1,0 +1,7 @@
+* How-tos
+
+** xref:how-to-subscribe.adoc[How to subscribe]
+
+//** Antora
+//*** xref:antora/prereqs.adoc[Prereqs]
+//*** xref:antora/preview-site.adoc[Preview site]

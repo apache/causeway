@@ -1,0 +1,87 @@
+[[_cgcom_release-process-for-snapshots]]
+= Snapshot Releases
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+
+
+
+
+
+
+Snapshot releases allows the current `-SNAPSHOT` version of the `core` modules  of the framework to be released to the Maven snapshot repository maintained by Apache Software Foundation.
+
+[NOTE]
+====
+Unless otherwise stated, you should assume that the steps described here are performed in the base directory of the module being released.
+====
+
+
+== Prerequisites
+
+Before you start, make sure you've defined the snapshots repo in your local `~/.m2/settings.xml` file:
+
+[source,xml]
+----
+<settings>
+  <servers>
+    <!-- To publish a snapshot of some part of Maven -->
+    <server>
+      <id>apache.snapshots.https</id>
+      <username>xxxxxxx</username>
+      <password>yyyyyyy</password>
+    </server>
+    ...
+  </servers>
+  ...
+</settings>
+----
+
+where `xxxxxxx` and `yyyyyyy` are your Apache LDAP username and password. For more information, see these http://www.apache.org/dev/publishing-maven-artifacts.html#dev-env[ASF docs].
+
+{note
+It is also possible to configure to use `.ssh` secure keys, and thereby avoid hardcoding your Apache LDAP password into your `.m2/settings.xml` file. A description of how to do this can be found, for example, http://bval.apache.org/release-setup.html[here].
+}
+
+
+
+== Sanity Check
+
+Before deploying the snapshot, perform a quick sanity check.
+
+First, delete all Isis artifacts from your local Maven repo:
+
+[source,bash]
+----
+rm -rf ~/.m2/repository/org/apache/isis
+----
+
+Next, check that the framework builds ok:
+
+[source,bash]
+----
+cd core
+mvn clean install -o
+----
+
+Confirm that the versions of the Isis artifacts now cached in your local repository are correct (both those pulled down from Maven central repo, as well as those of the component built locally).
+
+
+
+== Deploy
+
+Deploy the framework using:
+
+[source,bsah]
+----
+cd core
+mvn -D deploy=snapshot deploy
+----
+
+This will deploy all the modules that make up a release.
+
+[TIP]
+====
+Expect this to take about 10 minutes, give or take.
+====
+
+To confirm that they are present, browse to Apache's https://repository.apache.org[Nexus repository manager] and search for "isis".
+

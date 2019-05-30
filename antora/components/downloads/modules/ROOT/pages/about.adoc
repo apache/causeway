@@ -1,0 +1,5 @@
+= Downloads
+include::_attributes.adoc[]
+
+CAUTION: TODO ... convert over from 1.x branch.  Include link to github mirror etc.
+

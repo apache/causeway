@@ -1,0 +1,24 @@
+= Committers' Guide
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+include::_attributes.adoc[]
+
+
+include::partial$_cgcom_applying-patches.adoc[leveloffset=+1]
+
+include::partial$_cgcom_merging-a-pull-request.adoc[leveloffset=+1]
+include::partial$_cgcom_cutting-a-release.adoc[leveloffset=+1]
+include::partial$_cgcom_verifying-releases.adoc[leveloffset=+1]
+include::partial$_cgcom_post-release-successful.adoc[leveloffset=+1]
+include::partial$_cgcom_post-release-unsuccessful.adoc[leveloffset=+1]
+include::partial$_cgcom_release-process-for-snapshots.adoc[leveloffset=+1]
+include::partial$_cgcom_release-process-for-interim-releases.adoc[leveloffset=+1]
+
+include::partial$_cgcom_asciidoc-publish-procedure.adoc[leveloffset=+1]
+
+include::partial$_cgcom_key-generation.adoc[leveloffset=+1]
+
+include::partial$_cgcom_release-process-prereqs.adoc[leveloffset=+1]
+
+include::partial$_cgcom_policies.adoc[leveloffset=+1]
+include::partial$_cgcom_pmc-notes.adoc[leveloffset=+1]
+
