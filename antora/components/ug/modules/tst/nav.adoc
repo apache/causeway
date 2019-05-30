@@ -1,4 +1,5 @@
 * Testing
 
 ** xref:about.adoc[About]
+** xref:ugtst.adoc[Guide]
 

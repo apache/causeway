@@ -1,4 +1,5 @@
 * Fundamentals
 
 ** xref:about.adoc[About]
+** xref:ugfun.adoc[Guide]
 

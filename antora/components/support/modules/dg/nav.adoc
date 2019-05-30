@@ -1,4 +1,5 @@
 * Developers' Guide
 
 ** xref:about.adoc[About]
+** xref:dg.adoc[Guide]
 

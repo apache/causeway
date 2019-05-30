@@ -1,2 +1,6 @@
-* xref:ad.adoc[Architecture/Design]
+* Architecture/Design
+
+** xref:about.adoc[About]
+** xref:ad.adoc[Guide]
+
 

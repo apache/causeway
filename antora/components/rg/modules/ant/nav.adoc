@@ -1,4 +1,6 @@
 * Annotations
 
 ** xref:about.adoc[About]
+** xref:rgant.adoc[Guide]
+
 

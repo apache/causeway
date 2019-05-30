@@ -1,4 +1,5 @@
 * Restful Objects Viewer
 
 ** xref:about.adoc[About]
+** xref:ugvro.adoc[Guide]
 

@@ -1,4 +1,5 @@
 * DataNucleus Object Store
 
 ** xref:about.adoc[About]
+** xref:ugodn.adoc[Guide]
 

@@ -1,4 +1,5 @@
 * Domain Services
 
 ** xref:about.adoc[About]
+** xref:rgsvc.adoc[Guide]
 

@@ -1,4 +1,5 @@
 * Maven plugin
 
 ** xref:about.adoc[About]
+** xref:rgmvn.adoc[Guide]
 

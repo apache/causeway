@@ -1,4 +1,5 @@
 * Framework Internal Services
 
 ** xref:about.adoc[About]
+** xref:rgfis.adoc[Guide]
 

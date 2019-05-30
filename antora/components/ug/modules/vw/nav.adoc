@@ -1,4 +1,5 @@
 * Wicket Viewer
 
 ** xref:about.adoc[About]
+** xref:ugvw.adoc[Guide]
 
