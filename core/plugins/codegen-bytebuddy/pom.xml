@@ -83,6 +83,7 @@
 					<artifactId>byte-buddy</artifactId>
 				</exclusion>
 			</exclusions>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
