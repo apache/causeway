@@ -26,81 +26,81 @@ data class Value(
         override val descriptor: SerialDescriptor =
                 StringDescriptor.withName("Value")
 
-        override fun deserialize(input: Decoder): Value {
+        override fun deserialize(decoder: Decoder): Value {
             //TODO can function and type be passed on in order to be less verbose?
 
-            var result: Any? = asNull(input)
+            var result: Any? = asNull(decoder)
             if (result == null) {
-                result = asInt(input)
+                result = asInt(decoder)
             }
             if (result == null) {
-                result = asLong(input)
+                result = asLong(decoder)
             }
             // Sequence is important, Link has to be checked before String
             if (result == null) {
-                result = asLink(input)
+                result = asLink(decoder)
             }
             if (result == null) {
-                result = asString(input)
+                result = asString(decoder)
             }
             return Value(result)
         }
 
-        private fun asLink(input: Decoder): Link? {
+        private fun asLink(decoder: Decoder): Link? {
             var result: Link? = null
             try {
-                result = input.decodeSerializableValue(Link.serializer())
+                result = decoder.decodeSerializableValue(Link.serializer())
             } catch (jpe: JsonParsingException) {
             }
             return result
         }
 
-        private fun asLong(input: Decoder): Long? {
+        private fun asLong(decoder: Decoder): Long? {
             var result: Long? = null
             try {
-                result = input.decodeLong()
+                result = decoder.decodeLong()
             } catch (jpe: JsonParsingException) {
             } catch (nfe: NumberFormatException) {
             }
             return result
         }
 
-        private fun asInt(input: Decoder): Int? {
+        private fun asInt(decoder: Decoder): Int? {
             var result: Int? = null
             try {
-                result = input.decodeInt()
+                result = decoder.decodeInt()
             } catch (jpe: JsonParsingException) {
             } catch (nfe: NumberFormatException) {
             }
             return result
         }
 
-        private fun asString(input: Decoder): String? {
+        private fun asString(decoder: Decoder): String? {
             var result: String? = null
             try {
-                result = input.decodeString()
+                result = decoder.decodeString()
             } catch (jpe: JsonParsingException) {
-                console.log("[Value.asString] input:Decoder can not find String")
-                result = decodeStringMayBeWrong(input)
+                console.log("[Value.asString] Decoder.decodeString didn't find String")
+                result = decodeStringMayBeWrong(decoder)
             }
             return result
         }
 
-        private fun asNull(input: Decoder): Any? {
+        private fun asNull(decoder: Decoder): Any? {
             var result: Any? = null
             try {
-                result = input.decodeNull()
+                result = decoder.decodeNull()
             } catch (jpe: JsonParsingException) {
             }
             return result
         }
 
-        private fun decodeStringMayBeWrong(input: Decoder): String {
+        private fun decodeStringMayBeWrong(decoder: Decoder): String {
             val keyword = "value"
             val nl = "\\n"
             val delim = ":"
 
-            val inputAsJsonStr = JSON.stringify(input.asJsObject())
+            val inputAsJsonStr = JSON.stringify(decoder.asJsObject())
             val lines = inputAsJsonStr.split("{")
             var source: String = ""
             for (l in lines) {
