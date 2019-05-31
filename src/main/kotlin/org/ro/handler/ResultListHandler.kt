@@ -1,6 +1,6 @@
 package org.ro.handler
 
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 import org.ro.core.TransferObject
 import org.ro.core.event.ListObserver
 import org.ro.to.ResultList
@@ -15,6 +15,6 @@ class ResultListHandler : BaseHandler(), IResponseHandler {
 
     //@UseExperimental(kotlinx.serialization.UnstableDefault::class)
     override fun parse(jsonStr: String): TransferObject? {
-        return JSON.parse(ResultList.serializer(), jsonStr)
+        return Json.parse(ResultList.serializer(), jsonStr)
     }
 }

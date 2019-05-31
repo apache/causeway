@@ -1,12 +1,11 @@
 package org.ro.to
 
-import kotlinext.js.asJsObject
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@Ignore 
+@Ignore
 // This test fails due to an unkown reason.
 // Passing the same strings indirectly via Member(Test) works, so there is no additional coverage.
 // Left in here for further inspection.
@@ -21,7 +20,7 @@ class ValueTest {
         }"""
         val v = parse(jsonStr)
         val raw = v.content.toString()
-        val actual = JSON.nonstrict.parse(Link.serializer(), raw)
+        val actual = Json.nonstrict.parse(Link.serializer(), raw)
         console.log("[VT.testParseLink] actual $actual")
         val expected = Link()
         assertEquals(expected::class, actual::class)
@@ -64,16 +63,26 @@ class ValueTest {
         assertEquals(expected, actual)
     }
 
-    private fun parse(jsonStr: String): Value {
-        val obj =  jsonStr.asJsObject()
-        console.log("[${this::class.simpleName}.parse] obj ${obj}")
-        val dyn =  obj.asDynamic()
-        console.log("[${this::class.simpleName}.parse] dyn ${dyn}")
-        console.log("[${this::class.simpleName}.parse] dyn ${dyn::class}")
-        val str = dyn as String
-        console.log("[${this::class.simpleName}.parse] string ${str}")
+    private fun parseNew(jsonStr: String): Value {
+//        val obj =  jsonStr.asJsObject()
+//        console.log("[${this::class.simpleName}.parse] obj ${obj}")
+//        val dyn =  obj.asDynamic()
+//        console.log("[${this::class.simpleName}.parse] dyn ${dyn}")
+//        console.log("[${this::class.simpleName}.parse] dyn ${dyn::class}")
+//        val str = dyn as String
+//        console.log("[${this::class.simpleName}.parse] string ${str}")
+//        return JSON.nonstrict.parse(Value.serializer(), str)
 
-        return JSON.nonstrict.parse(Value.serializer(), str) 
+        val newStr = jsonStr.replace("value", "content")
+
+        val obj: Any? = kotlin.js.JSON.parse(newStr)
+        console.log("[${this::class.simpleName}.parse] obj ${obj}")
+        return obj as Value
+
+    }
+
+    private fun parse(jsonStr: String): Value {
+        return Json.nonstrict.parse(Value.serializer(), jsonStr)
     }
 
 }

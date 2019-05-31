@@ -1,6 +1,6 @@
 package org.ro.handler
 
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 import org.ro.core.TransferObject
 import org.ro.to.HttpError
 import org.ro.view.ErrorAlert
@@ -14,6 +14,6 @@ class HttpErrorHandler : BaseHandler(), IResponseHandler {
 
     //@UseExperimental(kotlinx.serialization.UnstableDefault::class)
     override fun parse(jsonStr: String): TransferObject? {
-        return JSON.parse(HttpError.serializer(), jsonStr)
+        return Json.parse(HttpError.serializer(), jsonStr)
     }
 }

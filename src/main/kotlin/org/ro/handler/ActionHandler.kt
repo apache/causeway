@@ -1,6 +1,6 @@
 package org.ro.handler
 
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 import org.ro.core.TransferObject
 import org.ro.to.Action
 import org.ro.to.Link
@@ -34,7 +34,7 @@ class ActionHandler : BaseHandler(), IResponseHandler {
 
     //@UseExperimental(kotlinx.serialization.UnstableDefault::class)
     override fun parse(jsonStr: String): TransferObject? {
-        return JSON.parse(Action.serializer(), jsonStr)
+        return Json.parse(Action.serializer(), jsonStr)
     }
 }
 

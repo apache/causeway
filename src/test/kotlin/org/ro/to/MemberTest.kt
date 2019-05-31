@@ -1,6 +1,6 @@
 package org.ro.to
 
-import kotlinx.serialization.json.JSON
+import kotlinx.serialization.json.Json
 import org.ro.handler.MemberHandler
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -61,7 +61,7 @@ class MemberTest() {
     }
 
     private fun parse(jsonStr: String): Member {
-        return JSON.parse(Member.serializer(), jsonStr)
+        return Json.parse(Member.serializer(), jsonStr)
     }
 
     private fun getJsonWith(value: Any): String {
