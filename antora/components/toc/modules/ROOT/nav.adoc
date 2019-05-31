@@ -1,2 +1,2 @@
-* xref:documentation.adoc[Table of Contents]
+* xref:about.adoc[Table of Contents]
 

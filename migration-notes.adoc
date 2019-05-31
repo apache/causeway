@@ -1,7 +1,5 @@
 = Migration Notes
 
-:toc:
-
 Search also for: "TODO: v2: " in the .adoc documentation.
 
 == 2.0.0-M2 to 2.0.0-M3

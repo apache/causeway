@@ -2,7 +2,7 @@ site:
   title: Apache Isis
   url: https://isis.apache.org/
   start_page: ug:fun:about.adoc
-#  start_page: toc:ROOT:documentation.adoc
+#  start_page: toc:ROOT:about.adoc
 
 content:
   sources:

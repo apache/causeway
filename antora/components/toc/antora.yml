@@ -1,7 +1,7 @@
 name: toc
 title: Table of Contents
 version: master
-start_page: ROOT:documentation.adoc
+start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc
 - modules/how-tos/nav.adoc

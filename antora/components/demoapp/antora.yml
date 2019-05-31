@@ -1,7 +1,6 @@
-name: apps
-title: Applications
+name: demoapp
+title: Demo App
 version: master
 start_page: ROOT:about.adoc
 nav:
 - modules/ROOT/nav.adoc
-- modules/demoapp/nav.adoc

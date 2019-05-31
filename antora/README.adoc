@@ -1,5 +1,4 @@
 = Antora Template
-:toc:
 
 The documentation for this template is published on http://docserver/ReleaseEngineering/AntoraTemplate[docserver]
 It includes a checklist on how to use this template in your own repositories.
