@@ -6,7 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @Ignore
-// This test fails due to an unkown reason.
+// This test fails due to an unknown reason.
 // Passing the same strings indirectly via Member(Test) works, so there is no additional coverage.
 // Left in here for further inspection.
 // IIRC ValueTest used to work when Value.content type was JsonObject.
