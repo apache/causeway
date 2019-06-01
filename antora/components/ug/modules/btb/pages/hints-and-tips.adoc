@@ -21,23 +21,3 @@ See also hints-n-tips chapters in the:
 * the xref:ug:btb:ugbtb.adoc#_ugbtb_hints-and-tips[Beyond the Basics] guide (this chapter).
 
 
-// tag::inclusions[]
-
-include::partial$_ugbtb_hints-and-tips_are-you-sure.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugbtb_hints-and-tips_replacing-default-service-implementations.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugbtb_hints-and-tips_vetoing-visibility.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugbtb_hints-and-tips_transactions-and-errors.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugbtb_hints-and-tips_persisted-title.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugbtb_hints-and-tips_view-model-instantiation.adoc[leveloffset=+1,lines=3..-1]
-
-include::partial$_ugbtb_hints-and-tips_simulating-collections-of-values.adoc[leveloffset=+1,lines=3..-1]
-
-include::partial$_ugbtb_hints-and-tips_how-to-handle-void-and-null-results.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugbtb_hints-and-tips_multi-tenancy.adoc[leveloffset=+1,lines=3..-1]
-
-include::partial$_ugbtb_hints-and-tips_subclass-properties-in-tables.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugbtb_hints-and-tips_pushing-changes.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugbtb_hints-and-tips_how-to-implement-a-spellchecker.adoc[leveloffset=+1,lines=3..-1]
-
-
-// end::inclusions[]

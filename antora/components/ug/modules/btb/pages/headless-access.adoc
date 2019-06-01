@@ -18,8 +18,3 @@ The API described in this chapter is reasonably low-level, allowing code to inte
 
 
 
-include::partial$_ugbtb_headless-access_AbstractIsisSessionTemplate.adoc[leveloffset=+1]
-include::partial$_ugbtb_headless-access_BackgroundCommandExecution.adoc[leveloffset=+1]
-
-
-
