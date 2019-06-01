@@ -4,10 +4,3 @@ include::_attributes.adoc[]
 
 
 
-include::partial$_ugsec_shiro-realm-implementations_ini-realm.adoc[leveloffset=+1]
-
-include::partial$_ugsec_shiro-realm-implementations_isis-ldap-realm.adoc[leveloffset=+1]
-
-include::partial$_ugsec_shiro-realm-implementations_isisaddons-security-module-realm.adoc[leveloffset=+1]
-
-include::partial$_ugsec_shiro-realm-implementations_jdbc-realm.adoc[leveloffset=+1]
