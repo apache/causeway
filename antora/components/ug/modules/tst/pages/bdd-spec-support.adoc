@@ -10,8 +10,5 @@ Since domain experts are usually non-technical (at least, they are unlikely to b
 There are many BDD tools out there; Apache Isis provides an integration with link:https://cucumber.io/docs/reference/jvm#java[Cucumber JVM] (see also the https://github.com/cucumber/cucumber-jvm[github site]):
 
 
-include::partial$_ugtst_bdd-spec-support_how-it-works.adoc[leveloffset=+1]
-include::partial$_ugtst_bdd-spec-support_writing-a-bdd-spec.adoc[leveloffset=+1]
-include::partial$_ugtst_bdd-spec-support_maven-configuration.adoc[leveloffset=+1]
 
 
