@@ -60,8 +60,3 @@ public class ToDoItemV1_1 implements Dto {                          // <5>
 
 
 
-include::partial$_ugfun_programming-model_view-models_dto_versioning.adoc[leveloffset=+1]
-
-include::partial$_ugfun_programming-model_view-models_dto_generating-xsds.adoc[leveloffset=+1]
-
-include::partial$_ugfun_programming-model_view-models_dto_dto-consumers.adoc[leveloffset=+1]

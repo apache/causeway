@@ -5,6 +5,3 @@ include::_attributes.adoc[]
 
 This section discusses some of the principles and values we apply to the development of the Apache Isis framework itself.
 
-
-include::partial$_ugfun_core-concepts_principles_isis-itself_full-stack-but-extensible.adoc[leveloffset=+1]
-include::partial$_ugfun_core-concepts_principles_isis-itself_focuses-on-its-usp.adoc[leveloffset=+1]

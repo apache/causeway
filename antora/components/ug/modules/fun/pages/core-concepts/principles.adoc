@@ -11,11 +11,4 @@ This section describes some of the core principles and values that the framework
 
 
 
-include::partial$_ugfun_core-concepts_principles_build-not-buy.adoc[leveloffset=+1]
-include::partial$_ugfun_core-concepts_principles_for-the-long-term.adoc[leveloffset=+1]
-
-// FIXME: incomplete
-//include::partial$_ugfun_core-concepts_principles_testable.adoc[leveloffset=+1]
-//include::partial$_ugfun_core-concepts_principles_lego-blocks.adoc[leveloffset=+1]
-//include::partial$_ugfun_core-concepts_principles_isis-itself.adoc[leveloffset=+1]
 

@@ -67,22 +67,6 @@ These provide hints relating to the layout of the domain object in the user inte
 
 
 
-include::partial$_ugfun_programming-model_domain-entities.adoc[leveloffset=+1]
-
-include::partial$_ugfun_programming-model_domain-services.adoc[leveloffset=+1]
-
-include::partial$_ugfun_programming-model_properties.adoc[leveloffset=+1]
-include::partial$_ugfun_programming-model_collections.adoc[leveloffset=+1]
-include::partial$_ugfun_programming-model_actions.adoc[leveloffset=+1]
-
-include::partial$_ugfun_programming-model_inject-services.adoc[leveloffset=+1]
-
-include::partial$_ugfun_programming-model_properties-vs-parameters.adoc[leveloffset=+1]
-
-include::partial$_ugfun_programming-model_view-models.adoc[leveloffset=+1]
-
-include::partial$_ugfun_programming-model_mixins.adoc[leveloffset=+1]
-
 
 
 

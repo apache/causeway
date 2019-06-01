@@ -15,7 +15,7 @@ This also creates a minimal application, but provides more structure and example
 ====
 
 
-include::partial$_ugfun_getting-started_prerequisites.adoc[leveloffset=+1]
+include::_prerequisites.adoc[leveloffset=+1]
 
 
 == Generating the App
