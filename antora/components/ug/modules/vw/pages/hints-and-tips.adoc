@@ -21,13 +21,4 @@ See also hints-n-tips chapters in the:
 * the xref:ug:btb:ugbtb.adoc#_ugbtb_hints-and-tips[Beyond the Basics] guide.
 
 
-// tag::inclusions[]
-
-include::partial$_ugvw_hints-and-tips_per-user-themes.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugvw_hints-and-tips_i18n-label-in-wicket-viewer.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugvw_hints-and-tips_highlight-current-row.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugvw_hints-and-tips_svg-support.adoc[leveloffset=+1,lines=3..-1]
-
-
-// end::inclusions[]
 

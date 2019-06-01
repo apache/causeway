@@ -1,5 +1,67 @@
 * Wicket Viewer
 
 ** xref:about.adoc[About]
-** xref:ugvw.adoc[Guide]
+
+** xref:features.adoc[Features]
+*** xref:features/recent-pages.adoc[Recent Pages]
+*** xref:features/bookmarked-pages.adoc[Bookmarked Pages]
+*** xref:features/sidebar-vs-modal-dialogs.adoc[Sidebar vs Modal Dialogs]
+*** xref:features/hints-and-copy-url.adoc[Hints-and-copy URL]
+*** xref:features/where-am-i.adoc[Where am I]
+*** xref:features/titles-in-tables.adoc[Titles in Tables]
+*** xref:features/blob-attachments.adoc[Blob Attachments]
+*** xref:features/user-registration.adoc[User Registration]
+
+
+
+** xref:layout.adoc[Layout]
+*** xref:layout/annotation-based.adoc[Annotation based]
+*** xref:layout/file-based.adoc[File based]
+*** xref:layout/table-columns.adoc[Table Columns]
+
+
+
+** xref:menubars-layout.adoc[Menubars Layout]
+*** xref:menubars-layout/annotation-based.adoc[Annotation-based]
+*** xref:menubars-layout/file-based.adoc[File-based]
+
+
+
+** xref:configuration-properties.adoc[Configuration Properties]
+
+
+
+** xref:customisation.adoc[Customisation]
+*** xref:customisation/top-level-index-page.adoc[Top-level Index Page]
+*** xref:customisation/brand-logo.adoc[Brand Logo]
+*** xref:customisation/welcome-page.adoc[Welcome Page]
+*** xref:customisation/about-page.adoc[About Page]
+*** xref:customisation/tweaking-css-classes.adoc[Tweaking CSS Classes]
+*** xref:customisation/cheap-n-cheerful-theme.adoc[Cheap-n-Cheerful Theme]
+*** xref:customisation/using-different-css-file.adoc[Using Different CSS File]
+*** xref:customisation/custom-javascript.adoc[Custom Javascript]
+*** xref:customisation/auto-refresh.adoc[Auto Refresh]
+*** xref:customisation/request-parameters.adoc[Request Parameters]
+
+
+
+** xref:extending.adoc[Extending]
+*** xref:extending/custom-bootstrap-theme.adoc[Custom Bootstrap Theme]
+*** xref:extending/replacing-page-elements.adoc[Replacing Page Elements]
+*** xref:extending/custom-pages.adoc[Custom Pages]
+*** xref:extending/login-via-query-args-prototyping.adoc[Login via Query Args Prototyping]
+
+
+
+** xref:hints-and-tips.adoc[Hints-n-Tips]
+*** xref:hints-and-tips/per-user-themes.adoc[Per User Themes]
+*** xref:hints-and-tips/i18n-label-in-wicket-viewer.adoc[i18n Label in Wicket Viewer]
+*** xref:hints-and-tips/highlight-current-row.adoc[Highlight Current Row]
+*** xref:hints-and-tips/svg-support.adoc[SVG Support]
+
+
+
+** xref:incode-platform.adoc[Incode Platform]
+
+
 
