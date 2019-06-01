@@ -10,8 +10,3 @@ In theory it could also hold mappings, though in Apache Isis we tend to use anno
 Furthermore, DataNucleus will search for various other XML mapping files, eg `mappings.jdo`.  A full list can be found http://www.datanucleus.org/products/datanucleus/jdo/metadata.html[here].  The metadata in these XML can be used to override the annotations of annotated entities; see xref:ug:btb:ugbtb.adoc#_ugbtb_other-techniques_overriding-jdo-annotations[Overriding JDO Annotatons] for further discussion.
 
 
-include::partial$_ugodn_configuring_properties.adoc[leveloffset=+1]
-include::partial$_ugodn_configuring_bulk-load.adoc[leveloffset=+1]
-include::partial$_ugodn_configuring_disabling-persistence-by-reachability.adoc[leveloffset=+1]
-include::partial$_ugodn_configuring_persistence-xml.adoc[leveloffset=+1]
-include::partial$_ugodn_configuring_using-jndi-data-source.adoc[leveloffset=+1]

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-for a in `ls | grep _ugbtb`
+for a in `ls | grep _ugodn`
 do
 	b=$(echo $a | cut -c8- | sed 's|_|/|g')
 	d=$(dirname $b)

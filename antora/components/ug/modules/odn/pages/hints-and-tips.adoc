@@ -21,15 +21,4 @@ See also hints-n-tips chapters in the:
 
 
 
-// tag::inclusions[]
 
-include::partial$_ugodn_hints-and-tips_overriding-jdo-annotations.adoc[leveloffset=+1,lines=3..-1]
-
-include::partial$_ugodn_hints-and-tips_subtype-entity-not-fully-populated.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugodn_hints-and-tips_java8.adoc[leveloffset=+1,lines=3..-1]
-
-include::partial$_ugodn_hints-and-tips_diagnosing-n-plus-1.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugodn_hints-and-tips_typesafe-queries-and-fetchgroups.adoc[leveloffset=+1,lines=3..-1]
-include::partial$_ugodn_hints-and-tips_jdoql-and-timestamps.adoc[leveloffset=+1,lines=3..-1]
-
-// end::inclusions[]
