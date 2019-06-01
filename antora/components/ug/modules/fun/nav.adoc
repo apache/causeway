@@ -1,5 +1,42 @@
 * Fundamentals
 
 ** xref:about.adoc[About]
-** xref:ugfun.adoc[Guide]
+//** xref:ugfun.adoc[Guide]
+
+//include::partial$_ugfun_core-concepts.adoc[leveloffset=+1]
+** xref:building-blocks.adoc[Building Blocks]
+
+*** xref:building-blocks/metamodel.adoc[Metamodel]
+
+*** xref:building-blocks/types-of-domain-objects.adoc[Types of Domain Objects]
+**** xref:building-blocks/types-of-domain-objects/domain-entities.adoc[Domain Entities]
+**** xref:building-blocks/types-of-domain-objects/domain-services.adoc[Domain Services]
+**** xref:building-blocks/types-of-domain-objects/view-models.adoc[View Models]
+**** xref:building-blocks/types-of-domain-objects/mixins.adoc[Mixins]
+
+*** xref:building-blocks/identifiers.adoc[Identifiers]
+**** xref:building-blocks/identifiers/title-and-icon.adoc[Title and Icon]
+**** xref:building-blocks/identifiers/oid.adoc[OID]
+
+*** xref:building-blocks/object-members.adoc[Object Members]
+
+*** xref:building-blocks/events.adoc[Events]
+**** xref:building-blocks/events/domain-events.adoc[Domain Events]
+**** xref:building-blocks/events/ui-events.adoc[UI Events]
+**** xref:building-blocks/events/lifecycle-events.adoc[Lifecycle Events]
+
+*** xref:building-blocks/modules.adoc[Modules]
+
+
+
+//include::partial$_ugfun_getting-started_helloworld-archetype.adoc[leveloffset=+1]
+//include::partial$_ugfun_getting-started_simpleapp-archetype.adoc[leveloffset=+1]
+//include::partial$_ugfun_programming-model.adoc[leveloffset=+1]
+//include::partial$_ugfun_ui-hints.adoc[leveloffset=+1]
+//include::partial$_ugfun_crud.adoc[leveloffset=+1]
+//include::partial$_ugfun_business-rules.adoc[leveloffset=+1]
+//include::partial$_ugfun_drop-downs-and-defaults.adoc[leveloffset=+1]
+//include::partial$_ugfun_available-domain-services.adoc[leveloffset=+1]
+
+
 

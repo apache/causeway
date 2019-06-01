@@ -27,7 +27,3 @@ There is a smattering of other Java/JEE annotations that are also supported, suc
 The following subsections explain this in further detail.
 
 
-include::partial$_ugfun_building-blocks_types-of-domain-objects_domain-entities.adoc[leveloffset=+1]
-include::partial$_ugfun_building-blocks_types-of-domain-objects_domain-services.adoc[leveloffset=+1]
-include::partial$_ugfun_building-blocks_types-of-domain-objects_view-models.adoc[leveloffset=+1]
-include::partial$_ugfun_building-blocks_types-of-domain-objects_mixins.adoc[leveloffset=+1]

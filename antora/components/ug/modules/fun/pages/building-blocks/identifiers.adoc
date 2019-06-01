@@ -9,6 +9,3 @@ This identity is represented to the end-user in human-readable form so that they
 This section explores these two related concepts.
 
 
-include::partial$_ugfun_building-blocks_identifiers_title-and-icon.adoc[leveloffset=+1]
-
-include::partial$_ugfun_building-blocks_identifiers_oid.adoc[leveloffset=+1]

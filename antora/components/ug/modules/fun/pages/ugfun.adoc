@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 
 
 include::partial$_ugfun_core-concepts.adoc[leveloffset=+1]
-include::partial$_ugfun_building-blocks.adoc[leveloffset=+1]
+//include::partial$_ugfun_building-blocks.adoc[leveloffset=+1]
 include::partial$_ugfun_getting-started_helloworld-archetype.adoc[leveloffset=+1]
 include::partial$_ugfun_getting-started_simpleapp-archetype.adoc[leveloffset=+1]
 include::partial$_ugfun_programming-model.adoc[leveloffset=+1]

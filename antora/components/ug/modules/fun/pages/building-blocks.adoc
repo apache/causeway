@@ -4,16 +4,3 @@ include::_attributes.adoc[]
 
 In this section we run through the main building blocks that make up an Apache Isis application.
 
-include::partial$_ugfun_building-blocks_metamodel.adoc[leveloffset=+1]
-
-include::partial$_ugfun_building-blocks_types-of-domain-objects.adoc[leveloffset=+1]
-
-include::partial$_ugfun_building-blocks_identifiers.adoc[leveloffset=+1]
-
-include::partial$_ugfun_building-blocks_object-members.adoc[leveloffset=+1]
-
-include::partial$_ugfun_building-blocks_events.adoc[leveloffset=+1]
-
-include::partial$_ugfun_building-blocks_modules.adoc[leveloffset=+1]
-
-

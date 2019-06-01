@@ -18,7 +18,4 @@ The framework has several categories of events: domain events, UI events and lif
 These are explored in the sections below.
 
 
-include::partial$_ugfun_building-blocks_events_domain-events.adoc[leveloffset=+1]
-include::partial$_ugfun_building-blocks_events_ui-events.adoc[leveloffset=+1]
-include::partial$_ugfun_building-blocks_events_lifecycle-events.adoc[leveloffset=+1]
 
