@@ -1,5 +1,46 @@
 * Restful Objects Viewer
 
 ** xref:about.adoc[About]
-** xref:ugvro.adoc[Guide]
+
+** xref:ro-spec.adoc[RO Spec]
+
+
+
+** xref:architecture.adoc[Architecture]
+
+
+
+** xref:layout-resources.adoc[Layout Resources]
+
+
+
+** xref:health-check.adoc[Health Check]
+
+
+
+** xref:simplified-representations.adoc[Simplified Representations]
+*** xref:simplified-representations/apache-isis-profile.adoc[Apache Isis Profile]
+*** xref:simplified-representations/domain-object.adoc[Domain Object]
+*** xref:simplified-representations/object-collection.adoc[Object Collection]
+*** xref:simplified-representations/action-invocation.adoc[Action Invocation]
+*** xref:simplified-representations/other-representations.adoc[Other Representations]
+*** xref:simplified-representations/configuration-properties.adoc[Configuration Properties]
+
+
+
+** xref:configuration-properties.adoc[Configuration Properties]
+
+
+
+** xref:hints-and-tips.adoc[Hints-n-Tips]
+
+*** xref:hints-and-tips/using-chrome-devtools.adoc[Using Chrome DevTools]
+*** xref:hints-and-tips/angular-tips.adoc[Angular Tips]
+*** xref:hints-and-tips/pretty-printing.adoc[Pretty Printing]
+*** xref:hints-and-tips/restful-image-property.adoc[Restful Image Property]
+*** xref:hints-and-tips/view-model-as-parameter.adoc[View Model as Parameter]
+*** xref:hints-and-tips/troubleshooting.adoc[Troubleshooting]
+
+//https://lists.apache.org/thread.html/cbd18320bbf6e5c5e767283f9e675cf56e7f4692c109e1e79dbaa90a@%3Cusers.isis.apache.org%3E // FIXME: to add
+
 
