@@ -59,5 +59,3 @@ Key:
 
 
 
-include::partial$_rgfis_presentation-layer_ContentNegotiationService.adoc[leveloffset=+1]
-include::partial$_rgfis_presentation-layer_RepresentationService.adoc[leveloffset=+1]

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-for a in `ls | grep _rgcms`
+for a in `ls | grep _rgfis`
 do
 	b=$(echo $a | cut -c8- | sed 's|_|/|g')
 	d=$(dirname $b)
