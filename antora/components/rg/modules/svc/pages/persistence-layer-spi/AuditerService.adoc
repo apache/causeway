@@ -69,7 +69,7 @@ log4j.additivity.org.apache.isis.applib.services.audit.AuditerServiceLogging=fal
 
 == Usage
 
-The typical way to indicate that an object should be audited is to annotate it with the xref:rg:ant:rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
+The typical way to indicate that an object should be audited is to annotate it with the xref:rg:ant:DomainObject/auditing.adoc[`@DomainObject#auditing()`] annotation.
 
 
 == Alternative Implementations

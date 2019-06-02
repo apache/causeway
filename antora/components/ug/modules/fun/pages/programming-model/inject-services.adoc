@@ -10,7 +10,7 @@ Sometimes there may be multiple services that implement a single type.
 This is common for example for SPI service, whereby one module defines an SPI service, and other module(s) in the application implement that service.
 To support this, the framework also allows lists of services to be injected.
 
-When there are multiple service implementations of a given type, the framework will inject the service with highest priority, as defined through xref:rg:ant:rgant.adoc#_rgant-DomainService_menuOrder[`@DomainService#menuOrder()`] (even for domain services that are not menus), lowest first.
+When there are multiple service implementations of a given type, the framework will inject the service with highest priority, as defined through xref:rg:ant:DomainService/menuOrder.adoc[`@DomainService#menuOrder()`] (even for domain services that are not menus), lowest first.
 If a list of services is injected, then that list will be ordered according to `menuOrder`, again lowest first.
 
 

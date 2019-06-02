@@ -32,8 +32,8 @@ As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugv
 
 This attribute can also be applied to:
 
-* xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_cssClass[domain objects]
-* xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_cssClass[view models]
-* xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClass[actions]
-* xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_cssClass[properties]
-* xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_cssClass[parameters].
+* xref:rg:ant:DomainObjectLayout/cssClass.adoc[domain objects]
+* xref:rg:ant:ViewModelLayout/cssClass.adoc[view models]
+* xref:rg:ant:ActionLayout/cssClass.adoc[actions]
+* xref:rg:ant:PropertyLayout/cssClass.adoc[properties]
+* xref:rg:ant:ParameterLayout/cssClass.adoc[parameters].

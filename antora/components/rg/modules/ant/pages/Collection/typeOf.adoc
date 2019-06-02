@@ -25,4 +25,4 @@ In general we recommend that you use generics instead, eg `SortedSet<Order>`.
 
 == See also
 
-This attribute can also be specified for xref:rg:ant:rgant.adoc#_rgant-Action_typeOf[actions].
+This attribute can also be specified for xref:rg:ant:Action/typeOf.adoc[actions].

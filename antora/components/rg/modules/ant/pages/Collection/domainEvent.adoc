@@ -20,7 +20,7 @@ Subscribers subscribe through the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_
 The xref:ug:vw:ugvw.adoc#[Wicket viewer] does _not_ currently support the modification of collections; they are rendered read-only.
 However, domain events are still relevant to determine if such collections should be hidden.
 
-The workaround is to create add/remove actions and use xref:rg:ant:rgant.adoc#_rgant-MemberOrder[UI hints] to render them close to the collection.
+The workaround is to create add/remove actions and use xref:rg:ant:MemberOrder.adoc[UI hints] to render them close to the collection.
 ====
 
 By default the event raised is `CollectionDomainEvent.Default`. For example:
@@ -167,8 +167,8 @@ However, events can be raised programmatically either by calling the xref:rg:svc
 
 This attribute is also supported for:
 
-* xref:rg:ant:rgant.adoc#_rgant-Action_domainEvent[actions] and
-* xref:rg:ant:rgant.adoc#_rgant-Property_domainEvent[properties].
+* xref:rg:ant:Action/domainEvent.adoc[actions] and
+* xref:rg:ant:Property/domainEvent.adoc[properties].
 
 
 

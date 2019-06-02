@@ -141,7 +141,7 @@ public String validateStatus(String status) { ... }
 ----
 
 For more information, see the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] section in the appropriate reference guide.
-The reference guide also explains how to define validation declaratively, using the xref:rg:ant:rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`] or xref:rg:ant:rgant.adoc#_rgant-Property_mustSatisfy[`@Property#mustSatisfy()`] attributes.
+The reference guide also explains how to define validation declaratively, using the xref:rg:ant:Parameter/mustSatisfy.adoc[`@Parameter#mustSatisfy()`] or xref:rg:ant:Property/mustSatisfy.adoc[`@Property#mustSatisfy()`] attributes.
 
 
 

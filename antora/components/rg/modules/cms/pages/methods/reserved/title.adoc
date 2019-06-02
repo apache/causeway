@@ -49,7 +49,7 @@ public String title() {
 
 As the example above shows, the implementation can be as complex as you like.
 
-In many cases, though, you may be able to use the xref:rg:ant:rgant.adoc#_rgant-Title[`@Title`] annotation.
+In many cases, though, you may be able to use the xref:rg:ant:Title.adoc[`@Title`] annotation.
 
 
 

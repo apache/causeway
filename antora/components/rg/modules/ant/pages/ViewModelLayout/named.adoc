@@ -5,5 +5,5 @@ include::_attributes.adoc[]
 
 The `named()` attribute explicitly specifies the view model's name, overriding the name that would normally be inferred from the Java source code.
 
-This attribute is the same as xref:rgant.adoc#_rgant_DomainObjectLayout_named[`@DomainObjectLayout#named()`], but for view models instead of entities.
+This attribute is the same as xref:rg:ant:DomainObjectLayout/named.adoc[`@DomainObjectLayout#named()`], but for view models instead of entities.
 

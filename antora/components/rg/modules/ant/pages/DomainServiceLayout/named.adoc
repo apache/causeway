@@ -10,7 +10,7 @@ The `named()` attribute explicitly specifies the domain service's name, overridi
 [TIP]
 ====
 The value of this attribute also has an important role to play in the positioning of the domain service's actions relative to the actions of other domain services.
-See xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`menuOrder()`] for a full discussion with examples.
+See xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`menuOrder()`] for a full discussion with examples.
 ====
 
 For example:
@@ -31,9 +31,9 @@ public class CustomerRepository {
 
 This attribute can also be specified for:
 
-* xref:rg:ant:rgant.adoc#_rgant-ActionLayout_named[actions]
-* xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_named[collections]
-* xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_named[properties]
-* xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_named[parameters]
-* xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_named[domain objects]
-* xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_named[view models].
+* xref:rg:ant:ActionLayout/named.adoc[actions]
+* xref:rg:ant:CollectionLayout/named.adoc[collections]
+* xref:rg:ant:PropertyLayout/named.adoc[properties]
+* xref:rg:ant:ParameterLayout/named.adoc[parameters]
+* xref:rg:ant:DomainObjectLayout/named.adoc[domain objects]
+* xref:rg:ant:ViewModelLayout/named.adoc[view models].

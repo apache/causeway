@@ -48,9 +48,9 @@ It also lists their corresponding implementation, either a default implementatio
 `EventBusService`]
 |Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain events:
 
-* xref:rg:ant:rgant.adoc#_rgant-Action_domainEvent[`Action#domainEvent()`]
-* xref:rg:ant:rgant.adoc#_rgant-Property_domainEvent[`Property#domainEvent()`]
-* xref:rg:ant:rgant.adoc#_rgant-Collection_domainEvent[`Collection#domainEvent()`]
+* xref:rg:ant:Action/domainEvent.adoc[`Action#domainEvent()`]
+* xref:rg:ant:Property/domainEvent.adoc[`Property#domainEvent()`]
+* xref:rg:ant:Collection/domainEvent.adoc[`Collection#domainEvent()`]
 |`EventBusServiceJdo` +
 ``o.a.i.core`` +
 ``isis-core-runtime``

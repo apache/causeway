@@ -8,12 +8,12 @@ include::_attributes.adoc[]
 
 By default, Apache Isis assumes that all properties of an domain object or view model are required (mandatory).
 The `optionality()` attribute allows this to be relaxed.
-The attribute is also supported for xref:rg:ant:rgant.adoc#_rgant-Parameter_optionality[parameters].
+The attribute is also supported for xref:rg:ant:Parameter/optionality.adoc[parameters].
 
-That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:rg:ant:rgant.adoc#_rgant-Column[`@Column`] should be specified.
+That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:rg:ant:Column.adoc[`@Column`] should be specified.
 Apache Isis can infer the maxLength directly from the equivalent @Column#length() annotation.
 
-That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:rg:ant:rgant.adoc#_rgant-Column[`@Column`] will in any case need to be specified.
+That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:rg:ant:Column.adoc[`@Column`] will in any case need to be specified.
 Apache Isis can infer the `optionality` semantic directly from the equivalent `@Column#allowsNull()` annotation/attribute.
 
 For example:
@@ -137,6 +137,6 @@ public class Customer {
 
 [NOTE]
 ====
-It is also possible to specify optionality using xref:rg:ant:rgant.adoc#_rgant-Nullable[`@Nullable`] annotation.
+It is also possible to specify optionality using xref:rg:ant:Nullable.adoc[`@Nullable`] annotation.
 ====
 

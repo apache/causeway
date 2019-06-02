@@ -7,7 +7,7 @@ By default all domain services are considered to be singletons, and thread-safe.
 
 Sometimes though a service's lifetime is applicable only to a single request; in other words it is request-scoped.
 
-The CDI annotation xref:rg:ant:rgant.adoc#_rgant-RequestScoped[`@javax.enterprise.context.RequestScoped`] is used to indicate this fact:
+The CDI annotation xref:rg:ant:RequestScoped.adoc[`@javax.enterprise.context.RequestScoped`] is used to indicate this fact:
 
 [source,java]
 ----

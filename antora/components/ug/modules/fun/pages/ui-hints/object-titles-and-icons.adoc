@@ -22,7 +22,7 @@ The title is always shown with an icon, so there is generally no need for the ti
 
 === Declarative style
 
-The xref:rg:ant:rgant.adoc#_rgant-Title[`@Title`] annotation can be used build up the title of an object from its constituent parts.
+The xref:rg:ant:Title.adoc[`@Title`] annotation can be used build up the title of an object from its constituent parts.
 
 For example:
 
@@ -104,7 +104,7 @@ A variation on this approach also supports localized names; see xref:ug:btb:ugbt
 
 A third alternative is to move the responsibility for deriving the title into a separate subscriber object.
 
-In the target object, we define an appropriate event type and use the xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] attribute to specify:
+In the target object, we define an appropriate event type and use the xref:rg:ant:DomainObjectLayout/titleUiEvent.adoc[`@DomainObjectLayout#titleUiEvent()`] attribute to specify:
 
 [source,java]
 ----
@@ -159,7 +159,7 @@ If there is no requirement to customize the icon (the normal case), then the ico
 For example, the icon for a class `org.mydomain.myapp.Customer` will be `org/mydomain/myapp/Customer.png` (if it exists).
 
 Alternatively, font-awesome icon can be used.
-This is specified using the xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`] attribute.
+This is specified using the xref:rg:ant:DomainObjectLayout/cssClassFa.adoc[`@DomainObjectLayout#cssClassFa()`] attribute.
 
 For example:
 
@@ -201,7 +201,7 @@ Otherwise it will just use "Order.png", as normal.
 
 As for title, the determination of which image file to use for the icon can be externalized into a UI event subscriber.
 
-In the target object, we define an appropriate event type and use the xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] attribute to specify.
+In the target object, we define an appropriate event type and use the xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`@DomainObjectLayout#iconUiEvent()`] attribute to specify.
 
 For example
 
@@ -250,7 +250,7 @@ In conjunction with xref:ug:vw:ugvw.adoc#_ugvw_customisation_tweaking-css-classe
 === Declarative style
 
 To render an object with a particular CSS, use
-xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`].
+xref:rg:ant:DomainObjectLayout/cssClass.adoc[`@DomainObjectLayout#cssClass()`].
 
 When the domain object is rendered on its own page, this CSS class will appear on a top-level `<div>`.
 Or, when the domain object is rendered as a row in a collection, then the CSS class will appear in a `<div>` wrapped by the `<tr>` of the row.
@@ -285,7 +285,7 @@ If non-null value is returned then the CSS class will be rendered _in addition_ 
 
 As for title and icon, the determination of which CSS class to render can be externalized into a UI event subscriber.
 
-In the target object, we define an appropriate event type and use the xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] attribute to specify.
+In the target object, we define an appropriate event type and use the xref:rg:ant:DomainObjectLayout/cssClassUiEvent.adoc[`@DomainObjectLayout#cssClassUiEvent()`] attribute to specify.
 
 For example
 

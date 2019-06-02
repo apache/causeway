@@ -55,7 +55,7 @@ public class QueryResultsCache {
 
 This class (`o.a.i.applib.services.queryresultscache.QueryResultsCache`) is also the implementation.
 
-To use an alternative implementation, subclass `QueryResultsCache` and use xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, subclass `QueryResultsCache` and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 
@@ -110,4 +110,4 @@ This refactoring will be worthwhile provided that enough of the orders being pro
 
 == Related Services
 
-The xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them. Those methods could be called from some outer loop in domain code, or by the framework itself if the action invoked has the xref:rg:ant:rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`] annotation attribute set to `OBJECT_AND_COLLECTION` or `COLLECTION_ONLY`.
+The xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_Scratchpad[`Scratchpad`] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them. Those methods could be called from some outer loop in domain code, or by the framework itself if the action invoked has the xref:rg:ant:Action/invokeOn.adoc[`@Action#invokeOn()`] annotation attribute set to `OBJECT_AND_COLLECTION` or `COLLECTION_ONLY`.

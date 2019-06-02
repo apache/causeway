@@ -109,7 +109,7 @@ For example:
 public class Product { ... }
 ----
 
-For more on this, see xref:rg:ant:rgant.adoc#_rgant-DomainObject_bounding[`@DomainObject#bounding()`].
+For more on this, see xref:rg:ant:DomainObject/bounding.adoc[`@DomainObject#bounding()`].
 
 Or, if the data type is an enum, then a drop-down will be provided automatically.
 A payment method is a good example of this:
@@ -148,7 +148,7 @@ public class Customers {
 }
 ----
 
-For more on this, see xref:rg:ant:rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`@DomainObject#autoCompleteRepository()`].
+For more on this, see xref:rg:ant:DomainObject/autoCompleteRepository.adoc[`@DomainObject#autoCompleteRepository()`].
 
 [TIP]
 ====

@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 Whenever a domain object is to be rendered, the framework fires off a title UI event to obtain a title for the object.
-This is as an alternative to implementing xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method, or using the xref:rg:ant:rgant.adoc#_rgant-Title[`@Title`] annotation, within the class itself.
+This is as an alternative to implementing xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method, or using the xref:rg:ant:Title.adoc[`@Title`] annotation, within the class itself.
 (If either `title()` or `@Title` are present, then they will take precedence).
 
 Subscribers subscribe through the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] and can
@@ -13,7 +13,7 @@ From this they can, if they wish, specify a title for the domain object using th
 
 [NOTE]
 ====
-The feature was originally introduced so that xref:rg:ant:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model]s could be kept as minimal as possible, just defining the data.
+The feature was originally introduced so that xref:rg:ant:XmlRootElement.adoc[`@XmlRootElement`]-annotated xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[view model]s could be kept as minimal as possible, just defining the data.
 UI events allow subscribers to provide UI hints, while xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixin]s can be used to provide the behaviour.
 ====
 
@@ -108,4 +108,4 @@ However, events can be raised programmatically either by calling the xref:rg:svc
 
 == See also
 
-This attribute can also be applied to xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_titleUiEvent[view models].
+This attribute can also be applied to xref:rg:ant:ViewModelLayout/titleUiEvent.adoc[view models].

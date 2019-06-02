@@ -76,7 +76,7 @@ Details of setting up the Quartz scheduler to actually execute these persisted c
 
 Background commands can be created either declaratively or imperatively.
 
-The declarative approach involves annotating an action using xref:rg:ant:rgant.adoc#_rgant-Action_command[`@Action#command()`] with `@Action#commandExecuteIn=CommandExecuteIn.BACKGROUND`.
+The declarative approach involves annotating an action using xref:rg:ant:Action/command.adoc[`@Action#command()`] with `@Action#commandExecuteIn=CommandExecuteIn.BACKGROUND`.
 
 The imperative approach involves explicitly calling the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_BackgroundService[`BackgroundService`] from within domain object's action.
 

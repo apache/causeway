@@ -17,12 +17,12 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_cssClass[`cssClass()`]
+|xref:rg:ant:CollectionLayout/cssClass.adoc[`cssClass()`]
 |Any string valid as a CSS class
 |the css class that a collection should have, to allow more targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]
 
 
-|xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_defaultView[`defaultView()`]
+|xref:rg:ant:CollectionLayout/defaultView.adoc[`defaultView()`]
 |`table`, `excel`, `calendar`, `map`, ...
 |Which view is selected by default, if multiple views are available.
 
@@ -30,18 +30,18 @@ See the (non-ASF) link:http://platform.incode.org[Incode Platform^] for further 
 
 
 
-|xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_describedAs[`describedAs()`]
+|xref:rg:ant:CollectionLayout/describedAs.adoc[`describedAs()`]
 |String.
 |description of this collection, eg to be rendered in a tooltip.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_hidden[`hidden()`]
+|xref:rg:ant:CollectionLayout/hidden.adoc[`hidden()`]
 |`EVERYWHERE`, `OBJECT_FORMS`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the collection should be hidden from the user.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_named[named()]
+|xref:rg:ant:CollectionLayout/named.adoc[named()]
 |String.
 |to override the name inferred from the collection's name in code. +
 
@@ -53,12 +53,12 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |whether to HTML escape the name of this property.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_paged[`paged()`]
+|xref:rg:ant:CollectionLayout/paged.adoc[`paged()`]
 |Positive integer
 |the page size for instances of this class when rendered within a table.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_sortedBy[`sortedBy()`]
+|xref:rg:ant:CollectionLayout/sortedBy.adoc[`sortedBy()`]
 |Subclass of `java.util.Comparator` for element type
 |indicates that the elements in the `java.util.SortedSet` collection should be sorted according to a specified `Comparator` rather than their natural sort order.
 
@@ -97,7 +97,7 @@ As an alternative to using the `@CollectionLayout` annotation, a xref:ug:vw:ugvw
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:rg:ant:rgant.adoc#_rgant-Collection[`@Collection`], xref:rg:ant:rgant.adoc#_rgant-Property[`@Property`] and xref:rg:ant:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
+The annotation is one of a handful (others including xref:rg:ant:Collection.adoc[`@Collection`], xref:rg:ant:Property.adoc[`@Property`] and xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
 so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 

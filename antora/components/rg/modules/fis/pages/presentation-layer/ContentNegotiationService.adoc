@@ -194,7 +194,7 @@ If the property is not set, then the default depends on the xref:rg:cfg:deployme
 
 Apache Isis' default implementations of `ContentNegotiationService` service are automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
-To use an alternative implementation, use xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To use an alternative implementation, use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 

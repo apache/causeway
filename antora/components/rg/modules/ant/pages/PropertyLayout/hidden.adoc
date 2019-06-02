@@ -8,7 +8,7 @@ The `hidden()` attribute indicates where (in the UI) the property should be hidd
 
 [TIP]
 ====
-It is also possible to use xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_hidden[`@PropertyLayout#hidden()`] or a xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] such that the property can be hidden at the view layer.
+It is also possible to use xref:rg:ant:PropertyLayout/hidden.adoc[`@PropertyLayout#hidden()`] or a xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout] such that the property can be hidden at the view layer.
 Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
@@ -56,7 +56,7 @@ The property should be hidden when displayed as a column of a table, either an o
 +
 The property should not be hidden, overriding any other metadata/conventions that would normally cause the property to be hidden.
 
-For example, if a property is annotated with xref:rg:ant:rgant.adoc#_rgant-Title[`@Title`], then normally this should be hidden from all
+For example, if a property is annotated with xref:rg:ant:Title.adoc[`@Title`], then normally this should be hidden from all
 tables. Annotating with `@Property(where=Where.NOWHERE)` overrides this.
 
 
@@ -74,6 +74,6 @@ As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugv
 
 This attribute can also be applied to:
 
-* xref:rg:ant:rgant.adoc#_rgant-Action_hidden[actions]
-* xref:rg:ant:rgant.adoc#_rgant-Collection_hidden[collections].
+* xref:rg:ant:Action/hidden.adoc[actions]
+* xref:rg:ant:Collection/hidden.adoc[collections].
 

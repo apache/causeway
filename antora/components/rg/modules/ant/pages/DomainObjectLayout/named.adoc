@@ -26,7 +26,7 @@ public class CustomerImpl implements Customer{
 }
 ----
 
-It's also possible to specify a xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_plural[plural form] of the name, used by the framework when rendering a standalone collection of the domain object.
+It's also possible to specify a xref:rg:ant:DomainObjectLayout/plural.adoc[plural form] of the name, used by the framework when rendering a standalone collection of the domain object.
 
 
 [TIP]
@@ -39,9 +39,9 @@ The framework also provides a separate, powerful mechanism for xref:ug:btb:ugbtb
 
 The attribute can also be specified for:
 
-* xref:rg:ant:rgant.adoc#_rgant-ActionLayout_named[actions]
-* xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_named[collections]
-* xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_named[properties]
-* xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_named[parameters]
-* xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_named[view models]
-* xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_named[domain services].
+* xref:rg:ant:ActionLayout/named.adoc[actions]
+* xref:rg:ant:CollectionLayout/named.adoc[collections]
+* xref:rg:ant:PropertyLayout/named.adoc[properties]
+* xref:rg:ant:ParameterLayout/named.adoc[parameters]
+* xref:rg:ant:ViewModelLayout/named.adoc[view models]
+* xref:rg:ant:DomainServiceLayout/named.adoc[domain services].

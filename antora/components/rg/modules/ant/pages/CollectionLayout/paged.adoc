@@ -40,5 +40,5 @@ As an alternative to using the annotation, the dynamic xref:ug:vw:ugvw.adoc#_ugv
 
 This attribute can also be applied to:
 
-* xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_paged[domain objects]
-* xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_paged[view models].
+* xref:rg:ant:DomainObjectLayout/paged.adoc[domain objects]
+* xref:rg:ant:ViewModelLayout/paged.adoc[view models].

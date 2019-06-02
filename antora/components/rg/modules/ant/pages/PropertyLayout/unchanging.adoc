@@ -13,7 +13,7 @@ Note that for this to work, the viewer will also ensure that none of the propert
 
 [NOTE]
 ====
-Design note: we considered implementing this an "immutable" flag on the xref:rgant.adoc#_rgant-Property[`@Property`] annotation (because this flag is typically appropriate for immutable/unchanging properties of a domain object).
+Design note: we considered implementing this an "immutable" flag on the xref:rg:ant:Property.adoc[`@Property`] annotation (because this flag is typically appropriate for immutable/unchanging properties of a domain object).
 However, we decided not to do that, on the basis that it might be interpreted as having a deeper impact within the framework than simply a hint for rendering.
 ====
 

@@ -11,7 +11,7 @@ It wouldn't make sense to serialize out the state of a persistent entity (even m
 However, the identity of the underlying entity can be well defined; Apache Isis defines the xref:rg:cms:schema/common.adoc[common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class): the object's type and its identifier.
 This is basically a formal XML equivalent to the `Bookmark` object obtained from the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`].
 
-There is only one requirement to make this work: every referenced domain entity must be annotated with xref:rg:ant:rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`], specifying the framework-provided `PersistentEntityAdapter`.
+There is only one requirement to make this work: every referenced domain entity must be annotated with xref:rg:ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`], specifying the framework-provided `PersistentEntityAdapter`.
 And this class is similar to the xref:rg:svc:rgsvc.adoc#_rgsvc_integration-api_BookmarkService[`BookmarkService`]: it knows how to create an `OidDto` from an object reference.
 
 Thus, in our view model we can legitimately write:

@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The `AcceptHeaderService` domain service is a xref:rg:ant:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`] service that
+The `AcceptHeaderService` domain service is a xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] service that
 simply exposes the HTTP `Accept` header to the domain.  Its intended use is to support multiple versions of a REST API, where the responsibility for content negotiation (determining which version of the REST API is to be used) is managed by logic in the domain objects themselves.
 
 [NOTE]
@@ -25,7 +25,7 @@ public interface AcceptHeaderService {
     List<MediaType> getAcceptableMediaTypes();      // <2>
 }
 ----
-<1> is xref:rg:ant:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
+<1> is xref:rg:ant:RequestScoped.adoc[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
 <2> returns the list of media types found in the HTTP Accept header.
 
 
@@ -37,7 +37,7 @@ Note that the service will only return a list when the request is initiated thro
 ====
 
 To use an alternative implementation, use
-xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained
 in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
@@ -51,7 +51,7 @@ The diagram below illustrated this:
 
 image::reference-services-api/acceptheaderservice.png[width="700px",link="{imagesdir}reference-services-api/acceptheaderservice.png"]
 
-The REST request is submitted to a domain service with a xref:rg:ant:rgant.adoc#_rgant-DomainService_nature[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).  This uses the `AcceptHeaderService` to obtain the values of the
+The REST request is submitted to a domain service with a xref:rg:ant:DomainService/nature.adoc[nature] of `VIEW_REST_ONLY` (`MyRestApi` in the diagram).  This uses the `AcceptHeaderService` to obtain the values of the
 HTTP `Accept` header.  Based on this it delegates to the appropriate underlying domain service (with a nature of
 `DOMAIN` so that they are not exposed in the REST API at all).
 

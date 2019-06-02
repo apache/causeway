@@ -17,33 +17,33 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_cssClass[`cssClass()`]
+|xref:rg:ant:ParameterLayout/cssClass.adoc[`cssClass()`]
 |Any string valid as a CSS class
 |the css class that a parameter should have, to allow more targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_describedAs[`describedAs()`]
+|xref:rg:ant:ParameterLayout/describedAs.adoc[`describedAs()`]
 |String
 |description of this parameter, eg to be rendered in a tooltip.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_labelPosition[`labelPosition()`]
+|xref:rg:ant:ParameterLayout/labelPosition.adoc[`labelPosition()`]
 |`LEFT`, `TOP`, `RIGHT`, `NONE` +
 (`LEFT`)
 |in forms, the positioning of the label relative to the property value. +
 
-Default is `LEFT`, unless xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine`] in which case `TOP`.
+Default is `LEFT`, unless xref:rg:ant:ParameterLayout/multiLine.adoc[`multiLine`] in which case `TOP`.
 The value `RIGHT` is only supported for boolean parameters.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_multiLine[`multiLine()`]
+|xref:rg:ant:ParameterLayout/multiLine.adoc[`multiLine()`]
 |Positive integer
 |for string parameters, render as a text area over multiple lines. +
 
-If set > 1, then then xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_labelPosition[`labelPosition`] defaults to `TOP`.
+If set > 1, then then xref:rg:ant:ParameterLayout/labelPosition.adoc[`labelPosition`] defaults to `TOP`.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_named[`named()`]
+|xref:rg:ant:ParameterLayout/named.adoc[`named()`]
 |String
 |the name of this parameter. +
 
@@ -56,12 +56,12 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |whether to HTML escape the name of this parameter.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_renderedAsDayBefore[`renderedAsDayBefore()`]
+|xref:rg:ant:ParameterLayout/renderedAsDayBefore.adoc[`renderedAsDayBefore()`]
 |
 |for date parameters only, render the date as one day prior to the actually stored date (eg the end date of an open interval into a closed interval)
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_typicalLength[`typicalLength()`]
+|xref:rg:ant:ParameterLayout/typicalLength.adoc[`typicalLength()`]
 |
 |the typical entry length of a field, use to determine the optimum width for display
 

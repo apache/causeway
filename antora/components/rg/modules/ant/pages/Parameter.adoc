@@ -16,7 +16,7 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:rgant.adoc#_rgant-Parameter_fileAccept[`fileAccept()`]
+|xref:rg:ant:Parameter/fileAccept.adoc[`fileAccept()`]
 |Media type or file extension
 |Hints the file type to be uploaded for xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
  or xref:rg:cms:rgcms.adoc#_rgcms_classes_value-types_Clob[`Clob`]. +
@@ -25,23 +25,23 @@ The table below summarizes the annotation's attributes.
 
 
 
-|xref:rg:ant:rgant.adoc#_rgant-Parameter_maxLength[`maxLength()`]
+|xref:rg:ant:Parameter/maxLength.adoc[`maxLength()`]
 |Positive integer
 |maximum number of characters for string parameters; ignored otherwise
 
 
 
-|xref:rg:ant:rgant.adoc#_rgant-Parameter_mustSatisfy[`mustSatisfy()`]
+|xref:rg:ant:Parameter/mustSatisfy.adoc[`mustSatisfy()`]
 |implementation of `o.a.i.applib.spec.Specification`
 |allows arbitrary validation to be applied
 
 
-|xref:rg:ant:rgant.adoc#_rgant-Parameter_optionality[`optionality()`]
+|xref:rg:ant:Parameter/optionality.adoc[`optionality()`]
 |`MANDATORY`, `OPTIONAL` (`MANDATORY`)
 |specifies a parameter is optional rather than mandatory
 
 
-|xref:rg:ant:rgant.adoc#_rgant-Parameter_regexPattern[regexPattern()]
+|xref:rg:ant:Parameter/regexPattern.adoc[regexPattern()]
 |regular expression
 |validates the contents of a string parameter against the regular expression pattern
 

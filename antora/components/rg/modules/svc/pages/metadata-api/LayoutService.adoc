@@ -44,9 +44,9 @@ The table below summarises the choices:
 |===
 
 | Style
-|xref:rg:ant:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]
-| xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
-| xref:rg:ant:rgant.adoc#_rgant-ActionLayout[`@ActionLayout`], xref:rg:ant:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], xref:rg:ant:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`]
+|xref:rg:ant:MemberGroupLayout.adoc[`@MemberGroupLayout`]
+| xref:rg:ant:MemberOrder.adoc[`@MemberOrder`]
+| xref:rg:ant:ActionLayout.adoc[`@ActionLayout`], xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`], xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`]
 
 
 |`COMPLETE`

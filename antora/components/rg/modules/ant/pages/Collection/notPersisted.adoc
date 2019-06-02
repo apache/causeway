@@ -57,5 +57,5 @@ public class Customer {
 
 == See also
 
-This attribute is also supported for xref:rg:ant:rgant.adoc#_rgant-Property_notPersisted[properties].
+This attribute is also supported for xref:rg:ant:Property/notPersisted.adoc[properties].
 

@@ -12,7 +12,7 @@ JAXB-annotated object this memento is its XML representation.  JAXB generally re
 XML representation is annotated with `@XmlRootElement`.  Apache Isis makes this a mandatory requirement.
 
 In comparison to using either the xref:rg:cms:rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface or the
-xref:rg:ant:rgant.adoc#_rgant-ViewModel[`@ViewModel`] annotation, using `@XmlRootElement` has a couple of
+xref:rg:ant:ViewModel.adoc[`@ViewModel`] annotation, using `@XmlRootElement` has a couple of
 significant advantages:
 
 * the view model can be used as a "canonical" DTO, for example when accessing data using the
@@ -29,7 +29,7 @@ If using `ViewModel` interface then arbitrary state (including that of collectio
 all the code by hand
 
 The main disadvantages of using JAXB-annotated view models is that any referenced persistent entity must be annotated
-with the xref:rg:ant:rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`], using the
+with the xref:rg:ant:XmlJavaTypeAdapter.adoc[`@XmlJavaTypeAdapter`], using the
 framework-provided `PersistentEntityAdapter`.  This adapter converts any references to such domain entities using the
 `oidDto` complex type (as defined by the Apache Isis xref:rg:cms:schema/common.adoc[common schema]):
 the object's type and its identifier.
@@ -73,7 +73,7 @@ Although (like any other viewmodel) a JAXB-annotated can have behaviour (actions
 the DTO "clean", just focused on specifying the data contract.
 
 Behaviour can therefore be provided using xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_mixins[mixins] (annotated with
-xref:rg:ant:rgant.adoc#_rgant-Mixin[`@Mixin`]), while xref:rg:cms:classes/uievent.adoc[UI events] can be used
+xref:rg:ant:Mixin.adoc[`@Mixin`]), while xref:rg:cms:classes/uievent.adoc[UI events] can be used
 to obtain title, icons and so on.
 
 For a more complete discussion of writing JAXB view models/DTOs, see xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_types-of-domain-objects_view-models[this topic]

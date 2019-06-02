@@ -100,7 +100,7 @@ Then set up a launch configuration and check that you can:
 
 * Run the app from within the IDE
 * Run the app in debug mode
-* Run with different deploymentTypes; note whether prototype actions (those annotated xref:rg:ant:rgant.adoc#_rgant-Action_restrictTo[`@Action(restrictTo=PROTOTYPING`]) are available or not:
+* Run with different deploymentTypes; note whether prototype actions (those annotated xref:rg:ant:Action/restrictTo.adoc[`@Action(restrictTo=PROTOTYPING`]) are available or not:
 * `--type SERVER_PROTOTYPE`
 * `--type SERVER`
 
@@ -208,7 +208,7 @@ We can start developing our app by refactoring that class:
 ** for `Pet`, can leave `name` property as is
 * specify a xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[title]
 * specify an xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[icon]
-* make the entity bookmarkable by adding the xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_bookmarking[`@DomainObjectLayout#bookmarking()`] attribute.
+* make the entity bookmarkable by adding the xref:rg:ant:DomainObjectLayout/bookmarking.adoc[`@DomainObjectLayout#bookmarking()`] attribute.
 * confirm is available from bookmark panel (top-left of Wicket UI)
 
 
@@ -233,7 +233,7 @@ For our app it therefore makes sense to refactor that class into our own first s
 * note the annotations on the corresponding domain class (originally called `SimpleObject`, though renamed by now, eg to `Pet`)
 * rename if you wish
 ** eg `listPets()`
-* note the xref:rg:ant:rgant.adoc#_rgant-DomainService[`@DomainService`] annotation
+* note the xref:rg:ant:DomainService.adoc[`@DomainService`] annotation
 * optional: add an action to a return subset of objects
 ** use the JDO `@Query` annotation
 ** see for example the Isisaddons example https://github.com/isisaddons/isis-app-todoapp[todoapp] (not ASF), see https://github.com/apache/isis/blob/b3e936c9aae28754fb46c2df52b1cb9b023f9ab8/example/application/todoapp/dom/src/main/java/dom/todo/ToDoItem.java#L93[here] and https://github.com/apache/isis/blob/b3e936c9aae28754fb46c2df52b1cb9b023f9ab8/example/application/todoapp/dom/src/main/java/dom/todo/ToDoItems.java#L63[here]
@@ -266,9 +266,9 @@ If a domain entity is returned then that object is rendered immediately; if a co
 Such collections are sometimes called "standalone" collections.
 
 * write an action to update the domain property (originally called `SimpleObject#name`, though renamed by now)
-* use the xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_named[`@ParameterLayout(named=...)`] annotation to specify the name of action parameters
-* use the xref:rg:ant:rgant.adoc#_rgant-Action_semantics[`@Action(semanticsOf=...)`]  annotation to indicate the semantics of the action (safe/query-only, idempotent or non-idempotent)
-* annotate safe action as bookmarkable using xref:rg:ant:rgant.adoc#_rgant-ActionLayout_bookmarking[`@ActionLayout(bookmarking=...)`]
+* use the xref:rg:ant:ParameterLayout/named.adoc[`@ParameterLayout(named=...)`] annotation to specify the name of action parameters
+* use the xref:rg:ant:Action/semantics.adoc[`@Action(semanticsOf=...)`]  annotation to indicate the semantics of the action (safe/query-only, idempotent or non-idempotent)
+* annotate safe action as bookmarkable using xref:rg:ant:ActionLayout/bookmarking.adoc[`@ActionLayout(bookmarking=...)`]
 * confirm is available from bookmark panel (top-left of Wicket UI)
 * optional: add an action to clone an object
 
@@ -299,7 +299,7 @@ The semantics of an action (whether it is safe/query only, whether it is idempot
 In the Wicket viewer this matters in that only query-only actions can be bookmarked or used as contributed properties/collections.
 In the RESTful viewer this matters in that it determines the HTTP verb (GET, PUT or POST) that is used to invoke the action.
 
-* experiment changing xref:rg:ant:rgant.adoc#_rgant-Action_semantics[`@Action(semantics=...)`] on actions
+* experiment changing xref:rg:ant:Action/semantics.adoc[`@Action(semantics=...)`] on actions
 * note the HTTP methods exposed in the REST API change
 * note whether the non-safe actions are bookmarkable (assuming that it has been annotated with `@ActionLayout(bookmarking=...)`, that is).
 
@@ -313,20 +313,20 @@ In this section we explore adding some value properties
 
 * add some xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties[value properties]; also:
 * for string properties
-** use the xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_multiLine[`@PropertyLayout(multiLine=...)`] annotation to render a text area instead of a text box
-** use the xref:rg:ant:rgant.adoc#_rgant-Property_maxLength[`@Property(maxLength=...)`] annotation to specify the maximum number of characters allowable
+** use the xref:rg:ant:PropertyLayout/multiLine.adoc[`@PropertyLayout(multiLine=...)`] annotation to render a text area instead of a text box
+** use the xref:rg:ant:Property/maxLength.adoc[`@Property(maxLength=...)`] annotation to specify the maximum number of characters allowable
 ** use joda date/time properties, bigdecimals and blob/clob properties
-* use the xref:rg:ant:rgant.adoc#_rgant-Property_optionality[`@Column(allowsNull=...)`] annotation specify whether a property is optional or mandatory
+* use the xref:rg:ant:Property/optionality.adoc[`@Column(allowsNull=...)`] annotation specify whether a property is optional or mandatory
 * use enums for properties (eg as used in the Isis addons example https://github.com/isisaddons/isis-app-todoapp[todoapp], see https://github.com/apache/isis/blob/b3e936c9aae28754fb46c2df52b1cb9b023f9ab8/example/application/todoapp/dom/src/main/java/dom/todo/ToDoItem.java#L207[here] and https://github.com/apache/isis/blob/b3e936c9aae28754fb46c2df52b1cb9b023f9ab8/example/application/todoapp/dom/src/main/java/dom/todo/ToDoItem.java#L266[here])
 * update the corresponding domain service for creating new instances
 * for all non-optional properties will either need to prompt for a value, or calculate some suitable default
 * change the implementation of title, if need be
-* revisit the title, consider whether to use the xref:rg:ant:rgant.adoc#_rgant-Title[`@Title`] annotation
+* revisit the title, consider whether to use the xref:rg:ant:Title.adoc[`@Title`] annotation
 ** rather than the xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] method
-* order the properties using the xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`], also `@MemberGroupLayout`
+* order the properties using the xref:rg:ant:MemberOrder.adoc[`@MemberOrder`], also `@MemberGroupLayout`
 ** see also the docs on xref:ug:vw:ugvw.adoc#_ugvw_layout_annotation-based[static layouts]
-* use the xref:rg:ant:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] annotation to position property/action parameter labels either to the LEFT, TOP or NONE
-** do the same for parameters using xref:rg:ant:rgant.adoc#_rgant-ParameterLayout[`@ParameterLayout`]
+* use the xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] annotation to position property/action parameter labels either to the LEFT, TOP or NONE
+** do the same for parameters using xref:rg:ant:ParameterLayout.adoc[`@ParameterLayout`]
 
 
 
@@ -340,7 +340,7 @@ In this section we focus on scalar reference properties.
 * add some xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties[reference properties]
 * update the corresponding domain service (for creation actoin)
 * use different techniques to obtain references (shown in drop-down list box)
-** use the xref:rg:ant:rgant.adoc#_rgant-DomainObject_bounding[`@DomainObjectLayout(bounding=...)`] annotation on the referenced type if there are only a small number (bounded) of instances
+** use the xref:rg:ant:DomainObject/bounding.adoc[`@DomainObjectLayout(bounding=...)`] annotation on the referenced type if there are only a small number (bounded) of instances
 ** use a xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`] supporting method
 *** on a property
 *** on an action parameter
@@ -371,8 +371,8 @@ We sometimes called these "parented" collections (to distinguish from a "standal
 *** you can also implement `equals()`, `hashCode()`, `toString()`
 * Add a xref:ug:fun:ugfun.adoc#_ugfun_programming-model_collections[collection] to one of the entities
 ** Use `SortedSet` as the class
-** Use the xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_render[`@CollectionLayout(render=...)`] annotation to indicate if the collection should be visible or hidden by default
-* optional: use the xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_sortedBy[`@CollectionLayout(sortedBy=...)`] annotation to specify a different comparator than the natural ordering
+** Use the xref:rg:ant:CollectionLayout/render.adoc[`@CollectionLayout(render=...)`] annotation to indicate if the collection should be visible or hidden by default
+* optional: use the xref:rg:ant:CollectionLayout/sortedBy.adoc[`@CollectionLayout(sortedBy=...)`] annotation to specify a different comparator than the natural ordering
 
 
 
@@ -387,9 +387,9 @@ For example: it probably shouldn't be possible to add an object twice into a col
 
 * Add domain actions to add/remove from the collection
 * to create objects, xref:ug:fun:ugfun.adoc#_ugfun_programming-model_inject-services[inject] associated domain service
-** generally we recommend using the xref:rg:ant:rgant.adoc#_rgant-Inject[`@Inject`] annotation with either private or default visibility
+** generally we recommend using the xref:rg:ant:Inject.adoc[`@Inject`] annotation with either private or default visibility
 * the service itself should use xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]
-* use the xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder(name=...)`] annotation to associate an action with a property or with a collection
+* use the xref:rg:ant:MemberOrder.adoc[`@MemberOrder(name=...)`] annotation to associate an action with a property or with a collection
 
 
 
@@ -399,9 +399,9 @@ For example: it probably shouldn't be possible to add an object twice into a col
 CSS classes can be associated with any class member (property, collection, action).
 But for actions in particular:
 
-* the bootstrap "btn" CSS classes can be used using the xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout(cssClass=...)`] annotation
+* the bootstrap "btn" CSS classes can be used using the xref:rg:ant:ActionLayout/cssClass.adoc[`@ActionLayout(cssClass=...)`] annotation
 
-*  the http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome] icons can be used using the xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout(cssClassFa=...)`]
+*  the http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome] icons can be used using the xref:rg:ant:ActionLayout/cssClassFa.adoc[`@ActionLayout(cssClassFa=...)`]
 
 It's also possible to use Font Awesome icons for the xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[domain object icon].
 
@@ -439,27 +439,27 @@ Or, more pithily: "see it, use it, do it"
 
 === See it!
 
-* Use the xref:rg:ant:rgant.adoc#_rgant-Property_hidden[`Property(hidden=...)`] annotation to make properties invisible
-** likewise xref:rg:ant:rgant.adoc#_rgant-Collection_hidden[`@Collection(hidden=...)`] for collections
-** the xref:rg:ant:rgant.adoc#_rgant-Programmatic[`@Programmatic`]  annotation can also be used and in many cases is to be preferred; the difference is that the latter means the member is not part of the Apache Isis metamodel.
+* Use the xref:rg:ant:Property/hidden.adoc[`Property(hidden=...)`] annotation to make properties invisible
+** likewise xref:rg:ant:Collection/hidden.adoc[`@Collection(hidden=...)`] for collections
+** the xref:rg:ant:Programmatic.adoc[`@Programmatic`]  annotation can also be used and in many cases is to be preferred; the difference is that the latter means the member is not part of the Apache Isis metamodel.
 * Use the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`] supporting method on properties, collections and actions to make a property/collection/action invisible according to some imperative rule
 
 
 === Use it!
 
-* Use the xref:rg:ant:rgant.adoc#_rgant-Property_editing[`Property(editing=...)`] annotation to make property read-only
-** likewise xref:rg:ant:rgant.adoc#_rgant-Collection_editing[`@Collection(editing=...)`] for collections
-** alternatively, use xref:rg:ant:rgant.adoc#_rgant-DomainObject_editing[`@DomainObject(editing=...)`] to disable editing for all properties/collections
+* Use the xref:rg:ant:Property/editing.adoc[`Property(editing=...)`] annotation to make property read-only
+** likewise xref:rg:ant:Collection/editing.adoc[`@Collection(editing=...)`] for collections
+** alternatively, use xref:rg:ant:DomainObject/editing.adoc[`@DomainObject(editing=...)`] to disable editing for all properties/collections
 * Use the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`] supporting method on properties and actions to make a property/action disabled according to some imperative rule
 
 
 === Do it!
 
-* use the xref:rg:ant:rgant.adoc#_rgant-Property_regexPattern[`@Property(regexPattern=...)`] annotation to specify a regex pattern for properties, and use xref:rg:ant:rgant.adoc#_rgant-Parameter_regexPattern[`@Parameter(regexPattern=...)`] for parameters
-* use the xref:rg:ant:rgant.adoc#_rgant-Property_maxLength[`@Property(maxLength=...)`] annotation to indicate a maxmum number of characters, and xref:rg:ant:rgant.adoc#_rgant-Parameter_maxLength[`@Parameter(maxLength=...)`] for parameters
+* use the xref:rg:ant:Property/regexPattern.adoc[`@Property(regexPattern=...)`] annotation to specify a regex pattern for properties, and use xref:rg:ant:Parameter/regexPattern.adoc[`@Parameter(regexPattern=...)`] for parameters
+* use the xref:rg:ant:Property/maxLength.adoc[`@Property(maxLength=...)`] annotation to indicate a maxmum number of characters, and xref:rg:ant:Parameter/maxLength.adoc[`@Parameter(maxLength=...)`] for parameters
 * Use the xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] supporting method on properties or action parameter
 * optional: for any data type:
-** use the xref:rg:ant:rgant.adoc#_rgant-Property_mustSatisfy[`Property(mustSatisfy=...)`] and xref:rg:ant:rgant.adoc#_rgant-Parameter_mustSatisfy[`Parameter(mustSatisfy=...)`] annotations to specify arbitrary constraints on properties and parameters
+** use the xref:rg:ant:Property/mustSatisfy.adoc[`Property(mustSatisfy=...)`] and xref:rg:ant:Parameter/mustSatisfy.adoc[`Parameter(mustSatisfy=...)`] annotations to specify arbitrary constraints on properties and parameters
 
 
 
@@ -469,7 +469,7 @@ Or, more pithily: "see it, use it, do it"
 The Wicket UI will automatically invoke the "home page" action, if available.
 This is a no-arg action of one of the domain services, that can return either an object (eg representing the current user) or a standalone action.
 
-* Add the xref:rg:ant:rgant.adoc#_rgant-HomePage[`@HomePage`] annotation to one (no more) of the domain services' no-arg actions
+* Add the xref:rg:ant:HomePage.adoc[`@HomePage`] annotation to one (no more) of the domain services' no-arg actions
 
 
 
@@ -505,7 +505,7 @@ Finally, note that the layout of contributed actions/collections/properties can 
 
 * Write a new domain service
 ** by convention, called "XxxContributions"
-** annotate with xref:rg:ant:rgant.adoc#_rgant-DomainService_nature[`@DomainService(nature=NatureOfService.VIEW_CONTRIBUTIONS_ONLY)`]
+** annotate with xref:rg:ant:DomainService/nature.adoc[`@DomainService(nature=NatureOfService.VIEW_CONTRIBUTIONS_ONLY)`]
 *** indicates that all of the service's actions should _not_ be included in the main application menu bar
 *** should be rendered "as if" an action of the entity
 * Write an action accepting &gt;1 args:
@@ -518,7 +518,7 @@ Finally, note that the layout of contributed actions/collections/properties can 
 * Write a query-only action accepting exactly 1 arg (a domain entity)
 * returning a collection, list or set
 * For this action:
-** add the xref:rg:ant:rgant.adoc#_rgant-ActionLayout_contributedAs[`@ActionLayout(contributedAs=ASSOCIATION)`] annotation
+** add the xref:rg:ant:ActionLayout/contributedAs.adoc[`@ActionLayout(contributedAs=ASSOCIATION)`] annotation
 ** should be rendered in the UI "as if" a collection of the entity
 * use `.layout.json` to position as required
 
@@ -528,7 +528,7 @@ Finally, note that the layout of contributed actions/collections/properties can 
 * As for contributed collections, write a new domain service with a query-only action accepting exactly 1 arg (a domain entity); except:
 ** returning a scalar value rather than a collection
 * For this action:
-** add the xref:rg:ant:rgant.adoc#_rgant-ActionLayout_contributedAs[`@ActionLayout(contributedAs=ASSOCIATION)`] annotation
+** add the xref:rg:ant:ActionLayout/contributedAs.adoc[`@ActionLayout(contributedAs=ASSOCIATION)`] annotation
 * should be rendered in the UI "as if" a property of the entity
 * use `.layout.json` to position as required
 
@@ -541,7 +541,7 @@ Each action invocation, or property modification, can be used to generate a succ
 
 Under the covers Apache Isis uses the https://code.google.com/p/guava-libraries/wiki/EventBusExplained[Guava event bus] and subscribers (always domain services) subscribe by writing methods annotated with `@com.google.common.eventbus.Subscribe` annotation.
 
-By default the events generated are `ActionDomainEvent.Default` (for actions) and `PropertyDomainEvent.Default` (for properties). Subclasses of these can be specified using the xref:rg:ant:rgant.adoc#_rgant-Action_domainEvent[`@Action(domainEvent=...)`] or xref:rg:ant:rgant.adoc#_rgant-Property_domainEvent[`Property(domainEvent=...)`] for properties.
+By default the events generated are `ActionDomainEvent.Default` (for actions) and `PropertyDomainEvent.Default` (for properties). Subclasses of these can be specified using the xref:rg:ant:Action/domainEvent.adoc[`@Action(domainEvent=...)`] or xref:rg:ant:Property/domainEvent.adoc[`Property(domainEvent=...)`] for properties.
 
 
 Using the guidance in the docs for the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`]:
@@ -555,7 +555,7 @@ Using the guidance in the docs for the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain
 == Bulk actions
 
 Bulk actions are actions that can be invoked on a collection of actions, that is on collections returned by invoking an action.
-Actions are specified as being bulk actions using the xref:rg:ant:rgant.adoc#_rgant-Action_invokeOn[`@action(invokeOn=OBJECT_AND_COLLECTION)`] annotation.
+Actions are specified as being bulk actions using the xref:rg:ant:Action/invokeOn.adoc[`@action(invokeOn=OBJECT_AND_COLLECTION)`] annotation.
 
 [NOTE]
 ====
@@ -649,7 +649,7 @@ For some high-volume or specialized uses cases, though, there may be a requireme
 Also, if using Apache Isis' REST API then the REST client may be a native application (on a smartphone or tablet, say) that is deployed by a third party.
 In these cases exposing the entities directly would be inadvisable because a refactoring of the domain entity would change the REST API and probably break that REST client.
 
-To support these use cases, Apache Isis therefore allows you to write a view model, either by annotating the class with xref:rg:ant:rgant.adoc#_rgant-ViewModel[`@ViewModel`] or (for more control) by implementing the xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractViewModel[`ViewModel`] interface.
+To support these use cases, Apache Isis therefore allows you to write a view model, either by annotating the class with xref:rg:ant:ViewModel.adoc[`@ViewModel`] or (for more control) by implementing the xref:rg:cms:rgcms.adoc#_rgcms_classes_super_AbstractViewModel[`ViewModel`] interface.
 
 * build a view model summarizing the state of the app (a "dashboard")
 * write a new `@HomePage` domain service action returning this dashboard viewmodel (and remove the `@HomePage` annotation from any other domain service if present)

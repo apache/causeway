@@ -15,6 +15,6 @@ The class itself is instantiated automatically by the framework whenever interac
 [NOTE]
 ====
 If the domain object defines its own xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] supporting method, or
-has xref:rg:ant:rgant.adoc#_rgant-Title[`@Title`] annotation(s) on its properties, then these will take
+has xref:rg:ant:Title.adoc[`@Title`] annotation(s) on its properties, then these will take
 precedence.
 ====

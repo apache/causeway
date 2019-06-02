@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The `@MemberOrder` annotation is used to specify the relative order of domain object members, that is: properties, collections and actions.  It works in conjunction with the xref:rg:ant:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`] annotation.
+The `@MemberOrder` annotation is used to specify the relative order of domain object members, that is: properties, collections and actions.  It works in conjunction with the xref:rg:ant:MemberGroupLayout.adoc[`@MemberGroupLayout`] annotation.
 
 The annotation defines four attributes:
 
@@ -25,8 +25,8 @@ As this is an important topic, there is a xref:ug:vw:ugvw.adoc#_ugvw_layout[sepa
 
 [TIP]
 ====
-The annotation is one of a handful (others including xref:rg:ant:rgant.adoc#_rgant-Collection[`@Collection`], xref:rg:ant:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`], xref:rg:ant:rgant.adoc#_rgant-Property[`@Property`])
- and xref:rg:ant:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] that can also be applied to the field, rather than the getter method.  This is specifically
+The annotation is one of a handful (others including xref:rg:ant:Collection.adoc[`@Collection`], xref:rg:ant:CollectionLayout.adoc[`@CollectionLayout`], xref:rg:ant:Property.adoc[`@Property`])
+ and xref:rg:ant:PropertyLayout.adoc[`@PropertyLayout`] that can also be applied to the field, rather than the getter method.  This is specifically
 so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
 ====
 

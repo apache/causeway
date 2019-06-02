@@ -35,7 +35,7 @@ public interface BackgroundService2 {
 
 The default implementation is provided by core (`o.a.i.core.runtime.services.background.BackgroundServiceDefault`).
 
-To provide an alternative implementation, subclass and use xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To provide an alternative implementation, subclass and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Usage
@@ -56,14 +56,14 @@ public void submitCustomerInvoices() {
 
 This will create a bunch of background commands executing the `submitInvoice()` action for each of the customers returned from the customer repository.
 
-The action method invoked must be part of the Apache Isis metamodel, which is to say it must be public, accept only scalar arguments, and must not be annotated with xref:rg:ant:rgant.adoc#_rgant-Programmatic[`@Programmatic`] or `@Ignore`.
-However, it may be annotated with xref:rg:ant:rgant.adoc#_rgant-Action_hidden[`@Action#hidden()`] or xref:rg:ant:rgant.adoc#_rgant-ActionLayout_hidden[`@ActionLayout#hidden()`] and it will still be invoked.
+The action method invoked must be part of the Apache Isis metamodel, which is to say it must be public, accept only scalar arguments, and must not be annotated with xref:rg:ant:Programmatic.adoc[`@Programmatic`] or `@Ignore`.
+However, it may be annotated with xref:rg:ant:Action/hidden.adoc[`@Action#hidden()`] or xref:rg:ant:ActionLayout/hidden.adoc[`@ActionLayout#hidden()`] and it will still be invoked.
 
 In fact, when invoked by the background service, no business rules (hidden, disabled, validation) are enforced; the action method must take responsibility for performing appropriate validation and error checking.
 
 [TIP]
 ====
-If you want to check business rules, you can use xref:rg:ant:rgant.adoc#_rgant-WrapperFactory[`@WrapperFactory#wrapNoExecute(...)`].
+If you want to check business rules, you can use xref:rg:ant:WrapperFactory.adoc[`@WrapperFactory#wrapNoExecute(...)`].
 ====
 
 

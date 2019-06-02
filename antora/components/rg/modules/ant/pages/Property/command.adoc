@@ -261,6 +261,6 @@ If `commandDtoProcessor()` is specified, then `command()` is assumed to be ENABL
 
 
 
-For an example application, see xref:rgant.adoc#_rgant-Action_command[`Action#command()`].
+For an example application, see xref:rg:ant:Action/command.adoc[`Action#command()`].
 
 

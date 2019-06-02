@@ -12,7 +12,7 @@ An alternative use is for profiling: for each execution (action invocation/prope
 If the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_WrapperFactory[`WrapperFactory`] is used to call other objects then the metrics are captured for each sub-execution.
 The framework provides a default implementation, `PublisherServiceLogging`, that will log these execution graphs (in XML form, per the xref:rg:cms:schema/ixn.adoc["ixn" schema]) to an SLF4J logger.
 
-Only actions/properties/domain objects annotated for publishing (using xref:rg:ant:rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`], xref:rg:ant:rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`] or xref:rg:ant:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]) are published.
+Only actions/properties/domain objects annotated for publishing (using xref:rg:ant:Action/publishing.adoc[`@Action#publishing()`], xref:rg:ant:Property/publishing.adoc[`@Property#publishing()`] or xref:rg:ant:DomainObject/publishing.adoc[`@DomainObject#publishing()`]) are published.
 
 
 == SPI
@@ -83,9 +83,9 @@ log4j.additivity.org.apache.isis.applib.services.publish.PublisherServiceLogging
 
 To indicate that:
 
-* an action invocation should be published, annotate it with the xref:rg:ant:rgant.adoc#_rgant-Action_publishing[`@Action#publishing()`] annotation.
-* an property edit should be published, annotate it with the xref:rg:ant:rgant.adoc#_rgant-Property_publishing[`@Property#publishing()`] annotation.
-* a changed object should be published is to annotate it with the xref:rg:ant:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`] annotation.
+* an action invocation should be published, annotate it with the xref:rg:ant:Action/publishing.adoc[`@Action#publishing()`] annotation.
+* an property edit should be published, annotate it with the xref:rg:ant:Property/publishing.adoc[`@Property#publishing()`] annotation.
+* a changed object should be published is to annotate it with the xref:rg:ant:DomainObject/publishing.adoc[`@DomainObject#publishing()`] annotation.
 
 
 
@@ -122,7 +122,7 @@ To support these use cases several other services are involved:
 
 * the (internal) xref:rg:fis:rgfis.adoc#_rgfis_persistence-layer_ChangedObjectsServiceInternal[`ChangedObjectsServiceInternal`] domain service is used to obtain the set of objects modified throughout the transaction
 
-* the (internal) xref:rg:fis:rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] domain service filters these down to those changed objects that are also published (as per xref:rg:ant:rgant.adoc#_rgant-DomainObject_publishing[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
+* the (internal) xref:rg:fis:rgfis.adoc#_rgfis_spi_PublisherServiceInternal[`PublisherServiceInternal`] domain service filters these down to those changed objects that are also published (as per xref:rg:ant:DomainObject/publishing.adoc[`@DomainObject#publishing()`]) and delegates to the `PublisherService`.
 
 * the xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-api_MetricsService[`MetricsService`] is used to obtain the objects that are loaded throughout the transaction; this info is used in order to instantiate the `PublishedObjects` object passed through to the `PublisherService`.
 

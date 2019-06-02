@@ -43,10 +43,10 @@ public class Order {
 
 This attribute can also be specified for:
 
-* xref:rg:ant:rgant.adoc#_rgant-DomainObject_publishing[domain objects]
+* xref:rg:ant:DomainObject/publishing.adoc[domain objects]
 +
 where it controls whether changed objects are published as events, and for
 
-* xref:rg:ant:rgant.adoc#_rgant-Action_publishing[actions]
+* xref:rg:ant:Action/publishing.adoc[actions]
 +
 where it controls whether action invocations are published as events.

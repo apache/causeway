@@ -57,22 +57,22 @@ public class CustomerMenu {
     protected CustomerRepository customerRepository;            // <4>
 }
 ----
-<1> The (Apache Isis) xref:rg:ant:rgant.adoc#_rgant-DomainService[`@DomainService`] annotation is used to identify the class as a domain service.
+<1> The (Apache Isis) xref:rg:ant:DomainService.adoc[`@DomainService`] annotation is used to identify the class as a domain service.
 Apache Isis scans the classpath looking for classes with this annotation, so there very little configuration other than to tell the framework which packages to scan underneath.
 The `VIEW_MENU_ONLY` nature indicates that this service's actions should be exposed as menu items.
-<2> The xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout[`@DomainServiceLayout`] annotation provides UI hints.
-The menu is named "Customers" (otherwise it would have defaulted to "Customer Menu", based on the class name, while the xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`menuOrder`] attribute determines the order of the menu with respect to other menu services.
-<3> The `findByName` method is annotated with various Apache Isis annotations (xref:rg:ant:rgant.adoc#_rgant-Action[`@Action`], xref:rg:ant:rgant.adoc#_rgant-ActionLayout[`@ActionLayout`] and xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] and is itself rendered in the UI as a "Find By Name" menu item underneath the "Simple Objects" menu.
-<4> The xref:rg:ant:rgant.adoc#_rgant-ParameterLayout[`@ParameterLayout`] provides metadata for the parameter itself, in this case its name.
+<2> The xref:rg:ant:DomainServiceLayout.adoc[`@DomainServiceLayout`] annotation provides UI hints.
+The menu is named "Customers" (otherwise it would have defaulted to "Customer Menu", based on the class name, while the xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`menuOrder`] attribute determines the order of the menu with respect to other menu services.
+<3> The `findByName` method is annotated with various Apache Isis annotations (xref:rg:ant:Action.adoc[`@Action`], xref:rg:ant:ActionLayout.adoc[`@ActionLayout`] and xref:rg:ant:MemberOrder.adoc[`@MemberOrder`] and is itself rendered in the UI as a "Find By Name" menu item underneath the "Simple Objects" menu.
+<4> The xref:rg:ant:ParameterLayout.adoc[`@ParameterLayout`] provides metadata for the parameter itself, in this case its name.
 <5> the action implementation delegates to an injected repository.
 The framework can inject into not just other domain services but will also automatically into domain entities and view models.
 There is further discussion of service injection xref:ug:fun:ugfun.adoc#_ugfun_programming-model_inject-services[below].
-<6> xref:rg:ant:rgant.adoc#_rgant-Action_restrictTo[Prototype] actions are rendered only in prototyping mode.
+<6> xref:rg:ant:Action/restrictTo.adoc[Prototype] actions are rendered only in prototyping mode.
 A "list all" action such as this can be useful when exploring the domain with a small dataset.
 
 [TIP]
 ====
-Annotating action parameters with xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_named[`@ParameterLayout#named()`] can become somewhat tiresome.
+Annotating action parameters with xref:rg:ant:ParameterLayout/named.adoc[`@ParameterLayout#named()`] can become somewhat tiresome.
 You can avoid doing this by configuring the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s paraname8 metamodel extension.
 ====
 

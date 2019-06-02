@@ -6,7 +6,7 @@ include::_attributes.adoc[]
 This section catalogues the various UI event classes defined by Apache Isis.
 
 These events are broadcast on the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`].  The domain
-events are broadcast as a result of being specified in the xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`],  xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] or xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] attributes.
+events are broadcast as a result of being specified in the xref:rg:ant:DomainObjectLayout/titleUiEvent.adoc[`@DomainObjectLayout#titleUiEvent()`],  xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`@DomainObjectLayout#iconUiEvent()`] or xref:rg:ant:DomainObjectLayout/cssClassUiEvent.adoc[`@DomainObjectLayout#cssClassUiEvent()`] attributes.
 
 They are listed in the table below.
 
@@ -28,7 +28,7 @@ Impl'n (g: a:)
 ``isis-core-applib``
 |(abstract class). +
 `TitleUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#titleUiEvent` attribute is specified
-|Broadcast whenever there is a requirement to obtain a title for a domain object.  Note that if the domain object defines its own xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] supporting method, or has xref:rg:ant:rgant.adoc#_rgant-Title[`@Title`] annotation(s) on its properties, then these will take precedence.
+|Broadcast whenever there is a requirement to obtain a title for a domain object.  Note that if the domain object defines its own xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] supporting method, or has xref:rg:ant:Title.adoc[`@Title`] annotation(s) on its properties, then these will take precedence.
 
 |xref:rg:cms:rgcms.adoc#_rgcms_classes_uievent_IconUiEvent[`o.a.i.applib.` +
 `IconUiEvent`]
@@ -37,7 +37,7 @@ Impl'n (g: a:)
 ``isis-core-applib``
 |(abstract class). +
 `IconUiEvent.Default` is the concrete implementation used if no `@DomainObjectLayout#iconUiEvent` attribute is specified
-|Broadcast whenever there is a requirement to obtain an icon (or rather, the name of an icon) for a domain object.  Note that if the domain object defines its own xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] supporting method, or if it has the xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout#cssClassFa[`@DomainObjectLayout#cssClassFa()`] attribute, then these will take precedence.
+|Broadcast whenever there is a requirement to obtain an icon (or rather, the name of an icon) for a domain object.  Note that if the domain object defines its own xref:rg:cms:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] supporting method, or if it has the xref:rg:ant:DomainObjectLayout#cssClassFa.adoc[`@DomainObjectLayout#cssClassFa()`] attribute, then these will take precedence.
 
 |xref:rg:cms:rgcms.adoc#_rgcms_classes_uievent_CssClassUiEvent[`o.a.i.applib.` +
 `CssClassUiEvent`]

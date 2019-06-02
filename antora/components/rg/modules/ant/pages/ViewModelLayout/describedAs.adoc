@@ -5,5 +5,5 @@ include::_attributes.adoc[]
 
 The `describedAs()` attribute is used to provide a short description of the view model to the user; in the xref:ug:vw:ugvw.adoc#[Wicket viewer] it is displayed as a 'tool tip'.
 
-This attribute is the same as xref:rgant.adoc#_rgant_DomainObjectLayout_describedAs[`@DomainObjectLayout#describedAs()`], but for view models instead of entities.
+This attribute is the same as xref:rg:ant:DomainObjectLayout/describedAs.adoc[`@DomainObjectLayout#describedAs()`], but for view models instead of entities.
 

@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The annotations-based approach for arranging the placement of menu items is achieved through the xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] and xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout[`@DomainServiceLayout`] annotations.
+The annotations-based approach for arranging the placement of menu items is achieved through the xref:rg:ant:MemberOrder.adoc[`@MemberOrder`] and xref:rg:ant:DomainServiceLayout.adoc[`@DomainServiceLayout`] annotations.
 
 == @DomainServiceLayout
 

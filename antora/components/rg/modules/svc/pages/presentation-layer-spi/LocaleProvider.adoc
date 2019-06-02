@@ -28,7 +28,7 @@ public interface LocaleProvider {
 }
 ----
 
-This is notionally request-scoped, returning the `Locale` of the current user; _not_ that of the server.  (Note that the implementation is not required to actually be xref:rg:ant:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`], however).
+This is notionally request-scoped, returning the `Locale` of the current user; _not_ that of the server.  (Note that the implementation is not required to actually be xref:rg:ant:RequestScoped.adoc[`@RequestScoped`], however).
 
 
 

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 
-The `@javax.enterprise.context.RequestScoped` link:https://jcp.org/en/jsr/detail?id=299[JSR-299] CDI annotation is used to specify that a xref:rg:ant:rgant.adoc#_rgant-DomainService[domain service] should be request-scoped rather than a singleton.
+The `@javax.enterprise.context.RequestScoped` link:https://jcp.org/en/jsr/detail?id=299[JSR-299] CDI annotation is used to specify that a xref:rg:ant:DomainService.adoc[domain service] should be request-scoped rather than a singleton.
 
 Although Apache Isis does not (currently) leverage CDI, the semantics are the same as request-scoped service; a new instance is created for each HTTP request, reserved for the exclusive use of all objects interacted with during that request.
 

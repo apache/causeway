@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 The easiest way to register domain services with the framework is to use an xref:rg:cms:classes/AppManifest-bootstrapping.adoc[`AppManifest`].
-This specifies the modules which contain xref:rg:ant:rgant.adoc#_rgant-DomainService[`@DomainService`]-annotated classes.
+This specifies the modules which contain xref:rg:ant:DomainService.adoc[`@DomainService`]-annotated classes.
 
 For example:
 

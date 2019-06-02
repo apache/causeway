@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The `multiLine()` attribute specifies that the text field for a string property should span multiple lines.  It is ignored for other property types.  The attribute is also supported for xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_multiLine[parameters].
+The `multiLine()` attribute specifies that the text field for a string property should span multiple lines.  It is ignored for other property types.  The attribute is also supported for xref:rg:ant:ParameterLayout/multiLine.adoc[parameters].
 
 For example:
 
@@ -24,7 +24,7 @@ Here the `stepsToReproduce` will be displayed in a text area of 10 rows.
 
 [NOTE]
 ====
-If set > 1 (as would normally be the case), then the default xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_labelPosition[`labelPosition`] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
+If set > 1 (as would normally be the case), then the default xref:rg:ant:PropertyLayout/labelPosition.adoc[`labelPosition`] defaults to `TOP` (rather than `LEFT`, as would normally be the case).
 ====
 
 == Alternatives

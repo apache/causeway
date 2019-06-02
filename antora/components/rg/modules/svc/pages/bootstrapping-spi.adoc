@@ -22,7 +22,7 @@ It also lists their corresponding implementation, either a default implementatio
 |xref:rg:svc:rgsvc.adoc#_rgsvc_bootstrapping-spi_ClassDiscoveryService[`o.a.i.applib.` +
 `services.classdiscovery` +
 `ClassDiscoveryService`]
-|Mechanism to locate (from the classpath) classes with a specific annotation (eg xref:rg:ant:rgant.adoc#_rgant-DomainService[`@DomainService`])
+|Mechanism to locate (from the classpath) classes with a specific annotation (eg xref:rg:ant:DomainService.adoc[`@DomainService`])
 
 Subtypes of a given type (eg xref:rg:cms:rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`]).
 |`ClassDiscoveryService-` +

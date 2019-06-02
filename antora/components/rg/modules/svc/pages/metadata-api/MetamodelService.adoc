@@ -67,7 +67,7 @@ public interface MetaModelService {
 <7> returns the `AppManifest` used to bootstrap the application.
 If an `AppManifest2` was used (from a `Module`), then this is also returned (else just `null`).
 
-<8> obtain an implementation of `CommandDtoProcessor` (if any) as per an xref:rg:ant:rgant.adoc#_rgant-Action_command[`@Action#commandDtoProcessor()`] or xref:rg:ant:rgant.adoc#_rgant-Property_command[`@Property#commandDtoProcessor()`].
+<8> obtain an implementation of `CommandDtoProcessor` (if any) as per an xref:rg:ant:Action/command.adoc[`@Action#commandDtoProcessor()`] or xref:rg:ant:Property/command.adoc[`@Property#commandDtoProcessor()`].
 +
 This is used by the xref:rgsvc.adoc#_rgsvc_presentation-layer-spi_ContentMappingService_implementations[framework-provided implementations] of `ContentMappingService`.
 

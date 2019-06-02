@@ -45,9 +45,9 @@ The framework also provides a separate, powerful mechanism for xref:ug:btb:ugbtb
 
 This attribute can also be specified for:
 
-* xref:rg:ant:rgant.adoc#_rgant-ActionLayout_named[actions]
-* xref:rg:ant:rgant.adoc#_rgant-PropertyLayout_named[properties]
-* xref:rg:ant:rgant.adoc#_rgant-ParameterLayout_named[parameters]
-* xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_named[domain objects]
-* xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_named[view models]
-* xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_named[domain services].
+* xref:rg:ant:ActionLayout/named.adoc[actions]
+* xref:rg:ant:PropertyLayout/named.adoc[properties]
+* xref:rg:ant:ParameterLayout/named.adoc[parameters]
+* xref:rg:ant:DomainObjectLayout/named.adoc[domain objects]
+* xref:rg:ant:ViewModelLayout/named.adoc[view models]
+* xref:rg:ant:DomainServiceLayout/named.adoc[domain services].

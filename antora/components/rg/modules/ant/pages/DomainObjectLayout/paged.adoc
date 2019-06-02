@@ -36,5 +36,5 @@ It is also possible to specify a global default for the page size of standalone 
 
 This attribute can also be applied to:
 
-* xref:rg:ant:rgant.adoc#_rgant-ViewModelLayout_paged[view models], and
-* xref:rg:ant:rgant.adoc#_rgant-CollectionLayout_paged[collections]
+* xref:rg:ant:ViewModelLayout/paged.adoc[view models], and
+* xref:rg:ant:CollectionLayout/paged.adoc[collections]

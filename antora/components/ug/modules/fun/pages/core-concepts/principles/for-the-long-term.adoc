@@ -31,7 +31,7 @@ To support the business domain being split into separate modules, the framework 
 
 * dependency injection of services +
 +
-Both xref:rg:svc:rgsvc.adoc#[framework-defined domain services] and application-defined services (eg repositories and factories) are injected everywhere, using the regular xref:rg:ant:rgant.adoc#_rgant-Inject[`@javax.inject.Inject`] annotation.
+Both xref:rg:svc:rgsvc.adoc#[framework-defined domain services] and application-defined services (eg repositories and factories) are injected everywhere, using the regular xref:rg:ant:Inject.adoc[`@javax.inject.Inject`] annotation.
 
 * mixins allow functionality defined in one module to appear (in the UI) to be provided by some other module. +
 +

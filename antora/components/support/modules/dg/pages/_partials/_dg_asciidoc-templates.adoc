@@ -228,7 +228,7 @@ include::_attributes.adoc[]
 //
 //
 //|`adrgna`
-//|`\xref:rg:ant:rgant.adoc#_rgant-xxx[`@xxx`]`
+//|`\xref:rg:ant:xxx.adoc[`@xxx`]`
 //
 //a hyperlink to the "man page" for an annotation within the reference guide for annotations, where:
 //
@@ -236,14 +236,14 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:rg:ant:rgant.adoc#_rgant-Action[`@Action`]`
+//`\xref:rg:ant:Action.adoc[`@Action`]`
 //
-//|xref:rg:ant:rgant.adoc#_rgant-Action[`@Action`]
+//|xref:rg:ant:Action.adoc[`@Action`]
 //
 //
 //
 //|`adrgnt`
-//|`\xref:rg:ant:rgant.adoc#_rgant-xxx_ttt[`@xxx#ttt()`]`
+//|`\xref:rg:ant:xxx/ttt.adoc[`@xxx#ttt()`]`
 //
 //a hyperlink to the "man page" for the specific attribute (field) of an annotation within the reference guide for annotations, where:
 //
@@ -252,9 +252,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:rg:ant:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]`
+//`\xref:rg:ant:Action/semantics.adoc[`@Action#semantics()`]`
 //
-//|xref:rg:ant:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]
+//|xref:rg:ant:Action/semantics.adoc[`@Action#semantics()`]
 //
 //
 //

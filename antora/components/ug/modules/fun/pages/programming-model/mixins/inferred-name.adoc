@@ -31,7 +31,7 @@ public class DocumentHolder_documents {
 ----
 
 
-Alternatively, if the xref:rg:ant:rgant.adoc#_rgant-Mixin_method[`@Mixin#method()`] attribute is specified, then this can nominate a different abbreviation.
+Alternatively, if the xref:rg:ant:Mixin/method.adoc[`@Mixin#method()`] attribute is specified, then this can nominate a different abbreviation.
 
 The examples above (for xref:ug:fun:ugfun.adoc#_ugfun_programming-model_mixins_contributed-property[property], xref:ug:fun:ugfun.adoc#_ugfun_programming-model_mixins_contributed-collection[collection] and xref:ug:fun:ugfun.adoc#_ugfun_programming-model_mixins_contributed-action[action]) demonstrate this.
 

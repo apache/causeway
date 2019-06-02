@@ -16,28 +16,28 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_bookmarking[`bookmarking()`]
+|xref:rg:ant:ActionLayout/bookmarking.adoc[`bookmarking()`]
 |`AS_ROOT`, `NEVER` +
 (`NEVER`)
-|indicates if an action (with safe xref:rg:ant:rgant.adoc#_rgant-Action_semantics[action semantics]) is automatically bookmarked.
+|indicates if an action (with safe xref:rg:ant:Action/semantics.adoc[action semantics]) is automatically bookmarked.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_contributedAs[`contributedAs()`]
+|xref:rg:ant:ActionLayout/contributedAs.adoc[`contributedAs()`]
 |`AS_BOTH`, `AS_ACTION`, `AS_ASSOCIATION`, `AS_NEITHER` +
 (`AS_BOTH`)
 |for a domain service action that can be contributed, whether to contribute as an action or as an association (ie a property or collection). +
 
-For a domain service action to be contributed, the domain services must have a xref:rg:ant:rgant.adoc#_rgant-DomainService_nature[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:rg:ant:rgant.adoc#_rgant-Action_semantics[safe action semantics], and takes a single argument, namely the contributee domain object.
+For a domain service action to be contributed, the domain services must have a xref:rg:ant:DomainService/nature.adoc[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:rg:ant:Action/semantics.adoc[safe action semantics], and takes a single argument, namely the contributee domain object.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClass[`cssClass()`]
+|xref:rg:ant:ActionLayout/cssClass.adoc[`cssClass()`]
 |Any string valid as a CSS class
 |an additional CSS class around the HTML that represents for the action, to allow targetted styling in xref:rg:cfg:application-specific/application-css.adoc[`application.css`]. +
 
 Supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer] but currently ignored by the xref:ug:vro:ugvro.adoc#[RestfulObjects viewer].
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_cssClassFa[`cssClassFa()`]
+|xref:rg:ant:ActionLayout/cssClassFa.adoc[`cssClassFa()`]
 |Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
 |specify a font awesome icon for the action's menu link or icon. +
 
@@ -48,26 +48,26 @@ Supported by the xref:ug:vw:ugvw.adoc#[Wicket viewer] but currently ignored by t
 |Positioning of the icon on the button/menu item.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_describedAs[`describedAs()`]
+|xref:rg:ant:ActionLayout/describedAs.adoc[`describedAs()`]
 |String.
 |provides a short description of the action, eg for rendering as a 'tool tip'.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_hidden[`hidden()`]
+|xref:rg:ant:ActionLayout/hidden.adoc[`hidden()`]
 |`EVERYWHERE`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the action should be hidden from the user.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_named[`named()`]
+|xref:rg:ant:ActionLayout/named.adoc[`named()`]
 |String.
 |to override the name inferred from the action's name in code. +
 
 A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
-|xref:rg:ant:rgant.adoc#_rgant-ActionLayout_position[`position()`]
+|xref:rg:ant:ActionLayout/position.adoc[`position()`]
 |`BELOW`, `RIGHT`, `PANEL`, `PANEL_DROPDOWN` (`BELOW`)
-|for actions associated (using xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder#named()`]) with properties, the positioning of the action's button with respect to the property
+|for actions associated (using xref:rg:ant:MemberOrder.adoc[`@MemberOrder#named()`]) with properties, the positioning of the action's button with respect to the property
 
 
 |===

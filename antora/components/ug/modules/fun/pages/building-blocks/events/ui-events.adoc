@@ -9,8 +9,8 @@ xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[Normally] the cod
 However, UI events allow this title and icon to be provided instead by a subscriber.
 UI events have higher precedence than the other mechanisms of supplying a title.
 
-If annotated with xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`], the appropriate (subclass of) `TitleUiEvent` will be emitted.
- Similarly for xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_iconUiEvent[`iconUiEvent()`] and xref:rg:ant:rgant.adoc#_rgant-DomainObjectLayout_cssClassUiEvent[`cssClassUiEvent()`].
+If annotated with xref:rg:ant:DomainObjectLayout/titleUiEvent.adoc[`@DomainObjectLayout#titleUiEvent()`], the appropriate (subclass of) `TitleUiEvent` will be emitted.
+ Similarly for xref:rg:ant:DomainObjectLayout/iconUiEvent.adoc[`iconUiEvent()`] and xref:rg:ant:DomainObjectLayout/cssClassUiEvent.adoc[`cssClassUiEvent()`].
 
 This can be particularly useful for xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models_jaxb[JAXB-style view models] which are used as DTOs and so must have no dependencies on the rest of the Apache Isis framework.
 

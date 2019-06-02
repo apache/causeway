@@ -75,9 +75,9 @@ does _not_ correspond to an object type, because the `schema()` attribute is mis
 
 The rules of precedence for determining a domain object's object type are:
 
-1. xref:rg:ant:rgant.adoc#_rgant-Discriminator[`@Discriminator`]
+1. xref:rg:ant:Discriminator.adoc[`@Discriminator`]
 2. `@DomainObject#objectType`
-3. xref:rg:ant:rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`], if at least the `schema` attribute is defined.  +
+3. xref:rg:ant:PersistenceCapable.adoc[`@PersistenceCapable`], if at least the `schema` attribute is defined.  +
 +
 If both `schema` and `table` are defined, then the value is "`schema.table`".
 If only `schema` is defined, then the value is "`schema.className`".

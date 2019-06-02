@@ -30,7 +30,7 @@ They are:
 @DomainObject(nature=Nature.EXTERNAL_ENTITY)
 public class CustomerRecordOnSAP { ... }
 ----
-|Annotated with xref:rg:ant:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] and a nature of `EXTERNAL_ENTITY`, with memento derived automatically from the properties of the domain object.  Collections are ignored, as are any properties annotated as xref:rg:ant:rgant.adoc#_rgant-Property_notPersisted[not persisted].
+|Annotated with xref:rg:ant:DomainObject/nature.adoc[`@DomainObject#nature()`] and a nature of `EXTERNAL_ENTITY`, with memento derived automatically from the properties of the domain object.  Collections are ignored, as are any properties annotated as xref:rg:ant:Property/notPersisted.adoc[not persisted].
 
 | In-memory entity
 |[source,java]
@@ -56,7 +56,7 @@ public class Dashboard { ... }
 public class Dashboard { ... }
 ----
 
-|Annotated with xref:rg:ant:rgant.adoc#_rgant-ViewModel[`@ViewModel`] annotation (effectively just an alias)' memento is as preceding: from "persisted" properties, collections ignored
+|Annotated with xref:rg:ant:ViewModel.adoc[`@ViewModel`] annotation (effectively just an alias)' memento is as preceding: from "persisted" properties, collections ignored
 
 |Application view model
 |

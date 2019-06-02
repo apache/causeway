@@ -84,7 +84,7 @@ ProductRepository productRepository;
 <1> Supporting `autoComplete` method.
 The "0" in the name means that this corresponds to parameter 0 of the "addToBasket" action (ie `Product`).
 It is also required to return a Collection of that type.
-<2> The xref:rg:ant:rgant.adoc#_rgant-MinLength[`@MinLength`] annotation defines how many characters the end-user must enter before performing a search.
+<2> The xref:rg:ant:MinLength.adoc[`@MinLength`] annotation defines how many characters the end-user must enter before performing a search.
 <3> The implementation delegates to an injected repository service.  This is typical.
 
 Note that it is also valid to define "choices" and "autoComplete" for value types (such as `quantity`, above); it just isn't as common to do so.
@@ -154,13 +154,13 @@ public List<Product> autoComplete0AddToBasket(@MinLength(3) String searchTerm) {
 }
 ----
 
-As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:rg:ant:rgant.adoc#_rgant-DomainObject[`@DomainObject`] on the referenced type (described xref:ug:fun:ugfun.adoc#__ugfun_programming-model_actions_reference-parameter-types_removing-boilerplate[above]).
+As the example suggests, any collection parameter type must provide a way to select items, either by way of a "choices" or "autoComplete" supporting method or alternatively defined globally using xref:rg:ant:DomainObject.adoc[`@DomainObject`] on the referenced type (described xref:ug:fun:ugfun.adoc#__ugfun_programming-model_actions_reference-parameter-types_removing-boilerplate[above]).
 
 
 == Optional Parameters
 
-Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_optional-properties[optionality of properties] is defined using xref:rg:ant:rgant.adoc#_rgant-Column_allowsNull[`@javax.jdo.annotations.Column#allowsNull()`], that JDO annotation cannot be applied to parameter types.
-Instead, either the xref:rg:ant:rgant.adoc#_rgant-Nullable[`@Nullable`] annotation or the xref:rg:ant:Parameter/optionality.adoc[`@Parameter#optionality()`]  annotation/attribute is used.
+Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_optional-properties[optionality of properties] is defined using xref:rg:ant:Column/allowsNull.adoc[`@javax.jdo.annotations.Column#allowsNull()`], that JDO annotation cannot be applied to parameter types.
+Instead, either the xref:rg:ant:Nullable.adoc[`@Nullable`] annotation or the xref:rg:ant:Parameter/optionality.adoc[`@Parameter#optionality()`]  annotation/attribute is used.
 
 For example:
 
@@ -187,8 +187,8 @@ See also xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameter
 
 == ``String`` Parameters (Length)
 
-Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_datatypes_strings[length of string properties] is defined using xref:rg:ant:rgant.adoc#_rgant-Column_length[`@javax.jdo.annotations.Column#length()`], that JDO annotation cannot be applied to parameter types.
-Instead, the xref:rg:ant:rgant.adoc#_rgant-Parameter_maxLength[`@Parameter#maxLength()`] annotation/attribute is used.
+Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_datatypes_strings[length of string properties] is defined using xref:rg:ant:Column/length.adoc[`@javax.jdo.annotations.Column#length()`], that JDO annotation cannot be applied to parameter types.
+Instead, the xref:rg:ant:Parameter/maxLength.adoc[`@Parameter#maxLength()`] annotation/attribute is used.
 
 For example:
 
@@ -214,8 +214,8 @@ public Customer updateName(
     return this;
 }
 ----
-<1> Specifies the property length using the JDO xref:rg:ant:rgant.adoc#_rgant-Column_length[`@Column#length()`] annotation
-<2> Specifies the parameter length using the (Apache Isis) xref:rg:ant:rgant.adoc#_rgant-Parameter_maxLength[`@Parameter#maxLength()`] annotation
+<1> Specifies the property length using the JDO xref:rg:ant:Column/length.adoc[`@Column#length()`] annotation
+<2> Specifies the parameter length using the (Apache Isis) xref:rg:ant:Parameter/maxLength.adoc[`@Parameter#maxLength()`] annotation
 
 [IMPORTANT]
 ====
@@ -228,7 +228,7 @@ See also xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameter
 == ``BigDecimal``s (Precision)
 
 Whereas the xref:ug:fun:ugfun.adoc#__ugfun_programming-model_properties_datatypes_bigdecimals[precision of BigDecimal properties] is defined using xref:rg:ant:Column/scale.adoc[`@javax.jdo.annotations.Column#scale()`], that JDO annotation cannot be applied to parameter types.
-Instead, the xref:rg:ant:rgant.adoc#_rgant-Digits[`@javax.validation.constraints.Digits#fraction()`] annotation/attribute is used.
+Instead, the xref:rg:ant:Digits.adoc[`@javax.validation.constraints.Digits#fraction()`] annotation/attribute is used.
 
 For example:
 
@@ -247,7 +247,7 @@ public Order updateDiscount(
 }
 ----
 <1> Specifies the property precision using xref:rg:ant:Column/scale.adoc[`@Column#scale()`]
-<2> Specifies the corresponding parameter precision using xref:rg:ant:rgant.adoc#_rgant-Digits[`@Digits#fraction()`].
+<2> Specifies the corresponding parameter precision using xref:rg:ant:Digits.adoc[`@Digits#fraction()`].
 
 See also xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[properties vs parameters].
 

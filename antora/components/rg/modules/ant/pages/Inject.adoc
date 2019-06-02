@@ -9,7 +9,7 @@ In fact, it also injects domain services into xref:ug:tst:ugtst.adoc#_ugtst_inte
 
 [NOTE]
 ====
-One omission: Apache Isis (currently) does not inject services into `o.a.i.applib.spec.Specification` instances (as used by xref:rg:ant:rgant.adoc#_rgant-Property_mustSatisfy[`@Property#mustSatisfy()`] and xref:rg:ant:rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`] annotations.
+One omission: Apache Isis (currently) does not inject services into `o.a.i.applib.spec.Specification` instances (as used by xref:rg:ant:Property/mustSatisfy.adoc[`@Property#mustSatisfy()`] and xref:rg:ant:Parameter/mustSatisfy.adoc[`@Parameter#mustSatisfy()`] annotations.
 ====
 
 Apache Isis supports several syntaxes for injecting domain services.

@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-The `ActionInvocationContext` domain service is a xref:rg:ant:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`] service intended to support the implementation of "bulk" actions annotated with xref:rg:ant:rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`].
+The `ActionInvocationContext` domain service is a xref:rg:ant:RequestScoped.adoc[`@RequestScoped`] service intended to support the implementation of "bulk" actions annotated with xref:rg:ant:Action/invokeOn.adoc[`@Action#invokeOn()`].
 This allows the user to select multiple objects in a table and then invoke the same action against all of them.
 
 When an action is invoked in this way, this service allows each object instance to "know where it is" in the collection; it acts a little like an iterator.
@@ -33,13 +33,13 @@ public static class ActionInvocationContext {
     public boolean isLast() { ... }
 }
 ----
-<1> is xref:rg:ant:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
+<1> is xref:rg:ant:RequestScoped.adoc[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
 <2> an enum set to either `OBJECT` (if action has been invoked on a single object) or `COLLECTION` (if has been invoked on a collection).
 <3> returns the list of domain objects which are being acted upon
 <4> is the 0-based index to the object being acted upon.
 
 
-To provide an alternative implementation, subclass and use xref:rg:ant:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
+To provide an alternative implementation, subclass and use xref:rg:ant:DomainServiceLayout/menuOrder.adoc[`@DomainServiceLayout#menuOrder()`] (as explained in the xref:rg:svc:rgsvc.adoc#__rgsvc_intro_overriding-the-services[introduction] to this guide).
 
 
 == Usage

@@ -17,14 +17,14 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_auditing[`auditing()`]
+|xref:rg:ant:DomainObject/auditing.adoc[`auditing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |indicates whether each of the changed properties of an object should be submitted to the registered
 xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerService`](s)
 
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`autoCompleteRepository()`]
+|xref:rg:ant:DomainObject/autoCompleteRepository.adoc[`autoCompleteRepository()`]
 |Domain service class
 |nominate a method on a domain service to be used for looking up instances of the domain object
 
@@ -35,72 +35,72 @@ xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_AuditerService[`AuditerServi
 |override the method name to use on the auto-complete repository
 
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_bounding[`bounding()`]
+|xref:rg:ant:DomainObject/bounding.adoc[`bounding()`]
 |`true`, `false` +
 (`false`)
 |Whether the number of instances of this domain class is relatively small (a "bounded" set), such that instances could be selected from a drop-down list box or similar.
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_createdLifecycleEvent[`created-` +
+|xref:rg:ant:DomainObject/createdLifecycleEvent.adoc[`created-` +
 `LifecycleEvent()`]
 |subtype of `ObjectCreatedEvent` +
 (`ObjectCreatedEvent.Default`)
 |the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance is created
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_editing[`editing()`]
+|xref:rg:ant:DomainObject/editing.adoc[`editing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |whether the object's properties and collections can be edited or not (ie whether the instance should be considered to be immutable)
 
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_mixinMethod[`mixinMethod()`]
+|xref:rg:ant:DomainObject/mixinMethod.adoc[`mixinMethod()`]
 |Method name within the mixin
 |How to recognize the "reserved" method name, meaning that the mixin's own name will be inferred from the mixin type.
 Typical examples are "exec", "execute", "invoke", "apply" and so on.
 The default "reserved" method name is `$$`.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_nature[`nature()`]
+|xref:rg:ant:DomainObject/nature.adoc[`nature()`]
 |`NOT_SPECIFIED`, `JDO_ENTITY`, `EXTERNAL_ENTITY`, `INMEMORY_ENTITY`, `MIXIN`, `VIEW_MODEL` (`NOT_SPECIFIED`)
 |whether the domain object logically is an entity (part of the domain layer) or is a view model (part of the application layer); or is a mixin.
 If an entity, indicates how its persistence is managed.
 
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_objectType[`objectType()`]
+|xref:rg:ant:DomainObject/objectType.adoc[`objectType()`]
 |(none, which implies fully qualified class name)
 |specify an alias for the domain class used to uniquely identify the object both within the Apache Isis runtime and externally
 
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_persistedLifecycleEvent[`persisted-` +
+|xref:rg:ant:DomainObject/persistedLifecycleEvent.adoc[`persisted-` +
 `LifecycleEvent()`]
 |subtype of `ObjectPersistedEvent` +
 (`ObjectPersistedEvent.Default`)
 |the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance has just been persisted
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_persistingLifecycleEvent[`persisting-` +
+|xref:rg:ant:DomainObject/persistingLifecycleEvent.adoc[`persisting-` +
 `LifecycleEvent()`]
 |subtype of `ObjectPersistingEvent` +
 (`ObjectPersistingEvent.Default`)
 |the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance is about to be persisted
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_publishing[`publishing()`]
+|xref:rg:ant:DomainObject/publishing.adoc[`publishing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |whether changes to the object should be published to the registered xref:rg:svc:rgsvc.adoc#_rgsvc_persistence-layer-spi_PublisherService[`PublisherService`].
 
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_removingLifecycleEvent[`removing-` +
+|xref:rg:ant:DomainObject/removingLifecycleEvent.adoc[`removing-` +
 `LifecycleEvent()`]
 |subtype of `ObjectRemovingEvent` +
 (`ObjectRemovingEvent.Default`)
 |the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance is about to be deleted
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_updatedLifecycleEvent[`updated-` +
+|xref:rg:ant:DomainObject/updatedLifecycleEvent.adoc[`updated-` +
 `LifecycleEvent()`]
 |subtype of `ObjectUpdatedEvent` +
 (`ObjectUpdatedEvent.Default`)
 |the event type to be posted to the xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_EventBusService[`EventBusService`] whenever an instance has just been updated
 
-|xref:rg:ant:rgant.adoc#_rgant-DomainObject_updatingLifecycleEvent[`updating-` +
+|xref:rg:ant:DomainObject/updatingLifecycleEvent.adoc[`updating-` +
 `LifecycleEvent()`]
 |subtype of `ObjectUpdatingEvent` +
 (`ObjectUpdatingEvent.Default`)

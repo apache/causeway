@@ -4,10 +4,10 @@ include::_attributes.adoc[]
 
 
 
-The `@MemberGroupLayout` annotation specifies how an object's properties and collections are grouped together into columns, also specifying the relative positioning of those columns.  It works in conjunction with the xref:rg:ant:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`] annotation.
+The `@MemberGroupLayout` annotation specifies how an object's properties and collections are grouped together into columns, also specifying the relative positioning of those columns.  It works in conjunction with the xref:rg:ant:MemberOrder.adoc[`@MemberOrder`] annotation.
 
 
-The `@MemberOrder` annotation is used to specify the relative order of domain object members, that is: properties, collections and actions.  It works in conjunction with the xref:rg:ant:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`] annotation.
+The `@MemberOrder` annotation is used to specify the relative order of domain object members, that is: properties, collections and actions.  It works in conjunction with the xref:rg:ant:MemberGroupLayout.adoc[`@MemberGroupLayout`] annotation.
 
 The annotation defines two attributes, `name()` and `sequence()`.  Broadly speaking the `name()` attribute is used to group or associate members together, while the `sequence()` attribute orders members once they have been grouped.
 

@@ -56,7 +56,7 @@ See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom..
 |Y
 |Return a list of matching elements for a property or an action parameter. +
 
-Alternatively, can specify for a class using xref:rg:ant:rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`@DomainObject` +
+Alternatively, can specify for a class using xref:rg:ant:DomainObject/autoCompleteRepository.adoc[`@DomainObject` +
 `#autoCompleteRepository`] +
 
 See also xref:rg:cms:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
