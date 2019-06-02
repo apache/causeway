@@ -34,6 +34,7 @@ import org.apache.isis.config.Presets;
 import org.apache.isis.config.beans.IsisBeanScanInterceptorForSpring;
 import org.apache.isis.config.beans.WebAppConfigBean;
 import org.apache.isis.security.shiro.IsisSecurityBootUsingShiro;
+import org.apache.isis.viewer.restfulobjects.IsisWebRestfulBoot;
 import org.apache.isis.viewer.wicket.viewer.IsisWebWicketBoot;
 
 import domainapp.dom.HelloWorldModule;
@@ -48,6 +49,7 @@ import domainapp.dom.HelloWorldModule;
     @PropertySource(name=Presets.NoTranslations, factory = Presets.Factory.class, value = { "" }),
 })
 @Import({
+	IsisWebRestfulBoot.class,
     IsisWebWicketBoot.class,
     IsisSecurityBootUsingShiro.class
 })
