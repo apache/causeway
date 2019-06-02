@@ -30,6 +30,6 @@ Again, this isn't a hard-n-fast rule, but a good rule of thumb.
 [TIP]
 ====
 Details on how to actually write a domain entity (the programming model for domain entities) is
-xref:ug:fun:ugfun.adoc#_ugfun_programming-model_domain-entities[here].
+xref:ug:fun:programming-model/domain-entities.adoc[here].
 ====
 

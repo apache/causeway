@@ -8,7 +8,7 @@ Instead of using JAXB to specify a view model, it is also possible to use Apache
 
 [WARNING]
 ====
-As was explained xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models[earlier], the approach is described here is neither as flexible nor as powerful as using the JAXB-style of view models.
+As was explained xref:ug:fun:programming-model/view-models.adoc[earlier], the approach is described here is neither as flexible nor as powerful as using the JAXB-style of view models.
 As such, it may be deprecated in the future.
 ====
 

@@ -13,7 +13,7 @@ This chapter provides details of these resources, the link ``Rel``s to access th
 
 The xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_MenuBarsService[`MenuBarsService`] provides the `menu.layout.xml` XML document which defines how to group the various domain service actions into menubars, menus and menu sections.
 
-For example, the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[Hello World archetype] has the following layout:
+For example, the xref:ug:fun:getting-started/helloworld-archetype.adoc[Hello World archetype] has the following layout:
 
 [source,xml]
 ----
@@ -135,7 +135,7 @@ Note that because of dynamic icons (the xref:rg:cms:rgcms.adoc#_rgcms_methods_re
 The xref:rg:svc:rgsvc.adoc#_rgsvc_presentation-layer-spi_GridService[`GridService`] provides an XML document which defines the layout of any of domain object.
 Typically this is the contents of the `Xxx.layout.xml` file (where `Xxx` is the domain type).
 
-For example, in the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[Hello World archetype] the `HelloWorld` domain object has a layout defined by `HelloWorld.layout.xml`.
+For example, in the xref:ug:fun:getting-started/helloworld-archetype.adoc[Hello World archetype] the `HelloWorld` domain object has a layout defined by `HelloWorld.layout.xml`.
 
 The representation returned by the domain object resource (section 14.4 of the RO spec v1.0) has been extended to provide a link to this resource:
 

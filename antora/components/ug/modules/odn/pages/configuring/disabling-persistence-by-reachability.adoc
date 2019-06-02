@@ -26,7 +26,7 @@ We therefore recommend that you disable persistence-by-reachability by adding th
 isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=false
 ----
 
-This change has been made to both the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] and xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes.
+This change has been made to both the xref:ug:fun:getting-started/helloworld-archetype.adoc[HelloWorld] and xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp] archetypes.
 
 If you do disable this feature, then you will (of course) need to ensure that you explicitly persist all entities using the `RepositoryService#persist(.)` or `RepositoryService#persistAndFlush(.)` methods.
 

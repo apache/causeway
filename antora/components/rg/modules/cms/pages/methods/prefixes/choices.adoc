@@ -58,7 +58,7 @@ image::reference-methods/prefixes/choices/dependent.png[width="800px",link="{ima
 
 
 
-This functionality is actually implemented as a xref:ug:fun:ugfun.adoc#_ugfun_how-tos_contributed-members[contributed action], so the code for this is:
+This functionality is actually implemented as a xref:ug:fun:how-tos/contributed-members.adoc[contributed action], so the code for this is:
 
 [source,java]
 ----

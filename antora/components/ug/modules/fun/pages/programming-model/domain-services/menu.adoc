@@ -66,7 +66,7 @@ The menu is named "Customers" (otherwise it would have defaulted to "Customer Me
 <4> The xref:rg:ant:ParameterLayout.adoc[`@ParameterLayout`] provides metadata for the parameter itself, in this case its name.
 <5> the action implementation delegates to an injected repository.
 The framework can inject into not just other domain services but will also automatically into domain entities and view models.
-There is further discussion of service injection xref:ug:fun:ugfun.adoc#_ugfun_programming-model_inject-services[below].
+There is further discussion of service injection xref:ug:fun:programming-model/inject-services.adoc[below].
 <6> xref:rg:ant:Action/restrictTo.adoc[Prototype] actions are rendered only in prototyping mode.
 A "list all" action such as this can be useful when exploring the domain with a small dataset.
 

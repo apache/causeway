@@ -81,7 +81,7 @@ Learn more xref:support:dg:dg.adoc#_dg_ide_intellij[here]
 
 |Commands and Auditing (v1.6.0) +
 
-_Configuring the command and auditing add-on modules for the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
+_Configuring the command and auditing add-on modules for the xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp]._ +
 
 Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command and audit SPI modules
 
@@ -90,7 +90,7 @@ Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s 
 
 |Security (v1.6.0) +
 
-_Configuring the security add-on module for for the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]._ +
+_Configuring the security add-on module for for the xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp]._ +
 
 Learn more at the (non-ASF) link:http://platform.incode.org[Incode Platform^]'s security SPI module.
 

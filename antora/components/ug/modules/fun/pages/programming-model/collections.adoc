@@ -23,8 +23,8 @@ This and other annotations can be used to specify if the association is bidirect
 
 Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB and infers some domain semantics from them (for example, the maximum allowable length of a string property).
 
-Unlike xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties[properties], the framework (at least, the xref:ug:vw:ugvw.adoc#[Wicket viewer]) does not allow collections to be "edited".
-Instead, xref:ug:fun:ugfun.adoc#_ugfun_programming-model_actions[action]s can be written that will modify the contents of the collection as a side-effect.
+Unlike xref:ug:fun:programming-model/properties.adoc[properties], the framework (at least, the xref:ug:vw:ugvw.adoc#[Wicket viewer]) does not allow collections to be "edited".
+Instead, xref:ug:fun:programming-model/actions.adoc[action]s can be written that will modify the contents of the collection as a side-effect.
 For example, a `placeOrder(...)` action will likely add an `Order` to the `Customer#orders` collection.
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.

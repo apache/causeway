@@ -569,14 +569,14 @@ To be safe, we recommend that you first run your application using `isis.reflect
 |regex:css1, regex2:css2,...
 |Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@PropertyLayout(cssClass=...)` etc) to all action members matching the regex. +
 
-See xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_action-icons-and-css[UI hints] for more details.
+See xref:ug:fun:ui-hints/action-icons-and-css.adoc[UI hints] for more details.
 
 |`isis.reflector.facet.` +
 `cssClassFa.patterns`
 |regex:fa-icon,regex2:fa-icon2,...
 |Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@Propertyayout(cssClassFa=...)` etc) to all action members matching the regex. +
 
-See xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_action-icons-and-css[UI hints] for more details.
+See xref:ug:fun:ui-hints/action-icons-and-css.adoc[UI hints] for more details.
 
 
 |===

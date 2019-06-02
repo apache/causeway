@@ -106,7 +106,7 @@ mvn test -Dskip.isis-validate
 
 == Example of failure
 
-In the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] application the `SimpleObject` defines an `updateName` action.
+In the xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp] application the `SimpleObject` defines an `updateName` action.
 This has a supporting method:
 
 

@@ -12,7 +12,7 @@ File-based layouts offer a number of benefits:
 
 * Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
 
-* UI hints can be provided for xref:ug:fun:ugfun.adoc#_ugfun_how-tos_contributed-members[contributed associations and actions] that are synthesised at runtime.
+* UI hints can be provided for xref:ug:fun:how-tos/contributed-members.adoc[contributed associations and actions] that are synthesised at runtime.
 
 It is also possible to download an initial `.layout.xml` - capturing any existing layout metadata - using the xref:rg:svc:rgsvc.adoc#_rgsvc_metadata-api_LayoutService[`LayoutService`] (exposed on the prototyping menu) or using a xref:rg:cms:rgcms.adoc#_rgcms_classes_mixins_Object[mixin action] contributed to every domain object.
 
@@ -458,7 +458,7 @@ Ensure the following is defined in the dom project's `pom.xml`:
 </resources>
 ----
 
-If using an Apache Isis xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes, then the POM is already correctly configured.
+If using an Apache Isis xref:ug:fun:getting-started/helloworld-archetype.adoc[HelloWorld] xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp] archetypes, then the POM is already correctly configured.
 
 
 

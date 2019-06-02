@@ -8,7 +8,7 @@ The Shiro security mechanism is an integration wih Apache Shiro that implements 
 
 [TIP]
 ====
-Both the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] and xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes are pre-configured to use Apache Shiro, so much of what follows may well have been set up already.
+Both the xref:ug:fun:getting-started/helloworld-archetype.adoc[HelloWorld] and xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp] archetypes are pre-configured to use Apache Shiro, so much of what follows may well have been set up already.
 ====
 
 
@@ -16,7 +16,7 @@ Both the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[Hell
 
 To tell Apache Isis to use Shiro when using an xref:rg:cms:rgcms.adoc#__rgcms_classes_AppManifest-bootstrapping_bootstrapping_AppManifestAbstract[`AppManifestAbstract.BUILDER`], simply specify the "authMechanism" as "shiro".
 
-For example, the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld archetype] bootstraps using:
+For example, the xref:ug:fun:getting-started/helloworld-archetype.adoc[HelloWorld archetype] bootstraps using:
 
 [source,java]
 ----

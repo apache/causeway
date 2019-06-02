@@ -13,7 +13,7 @@ Use for prototyping or production.
 
 == Getting Started
 
-If you just want to get going quickly, we suggest using our xref:guides/ugfun/ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[Maven archetype].
+If you just want to get going quickly, we suggest using our xref:ug:fun:getting-started/simpleapp-archetype.adoc[Maven archetype].
 
 
 

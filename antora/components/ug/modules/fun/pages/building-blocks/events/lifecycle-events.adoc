@@ -15,7 +15,7 @@ The lifecycle events supported are:
 
 * object created - just instantiated. +
 +
-Note that this requires that the object is instantiated using the framework, see xref:ug:fun:ugfun.adoc#_ugfun_crud_instantiating[here] for further discussion
+Note that this requires that the object is instantiated using the framework, see xref:ug:fun:crud/instantiating.adoc[here] for further discussion
 
 * updated loaded - just retrieved from the database
 

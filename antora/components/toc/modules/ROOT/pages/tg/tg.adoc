@@ -206,8 +206,8 @@ We can start developing our app by refactoring that class:
 ** eg rename to `Pet`
 * if required, rename the `SimpleObject` class' `name` property
 ** for `Pet`, can leave `name` property as is
-* specify a xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[title]
-* specify an xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[icon]
+* specify a xref:ug:fun:ui-hints/object-titles-and-icons.adoc[title]
+* specify an xref:ug:fun:ui-hints/object-titles-and-icons.adoc[icon]
 * make the entity bookmarkable by adding the xref:rg:ant:DomainObjectLayout/bookmarking.adoc[`@DomainObjectLayout#bookmarking()`] attribute.
 * confirm is available from bookmark panel (top-left of Wicket UI)
 
@@ -311,7 +311,7 @@ In the RESTful viewer this matters in that it determines the HTTP verb (GET, PUT
 Domain entities have state: either values (primitives, strings) or references to other entities.
 In this section we explore adding some value properties
 
-* add some xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties[value properties]; also:
+* add some xref:ug:fun:programming-model/properties.adoc[value properties]; also:
 * for string properties
 ** use the xref:rg:ant:PropertyLayout/multiLine.adoc[`@PropertyLayout(multiLine=...)`] annotation to render a text area instead of a text box
 ** use the xref:rg:ant:Property/maxLength.adoc[`@Property(maxLength=...)`] annotation to specify the maximum number of characters allowable
@@ -337,7 +337,7 @@ Domain entities can also reference other domain entities.
 These references may be either scalar (single-valued) or vector (multi-valued).
 In this section we focus on scalar reference properties.
 
-* add some xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties[reference properties]
+* add some xref:ug:fun:programming-model/properties.adoc[reference properties]
 * update the corresponding domain service (for creation actoin)
 * use different techniques to obtain references (shown in drop-down list box)
 ** use the xref:rg:ant:DomainObject/bounding.adoc[`@DomainObjectLayout(bounding=...)`] annotation on the referenced type if there are only a small number (bounded) of instances
@@ -369,7 +369,7 @@ We sometimes called these "parented" collections (to distinguish from a "standal
 * Ensure that all domain classes implement `java.lang.Comparable`
 ** use the xref:rg:cms:rgcms.adoc#_rgcms_classes_utility_ObjectContracts[`ObjectContracts`] utility class to help implement `Comparable`
 *** you can also implement `equals()`, `hashCode()`, `toString()`
-* Add a xref:ug:fun:ugfun.adoc#_ugfun_programming-model_collections[collection] to one of the entities
+* Add a xref:ug:fun:programming-model/collections.adoc[collection] to one of the entities
 ** Use `SortedSet` as the class
 ** Use the xref:rg:ant:CollectionLayout/render.adoc[`@CollectionLayout(render=...)`] annotation to indicate if the collection should be visible or hidden by default
 * optional: use the xref:rg:ant:CollectionLayout/sortedBy.adoc[`@CollectionLayout(sortedBy=...)`] annotation to specify a different comparator than the natural ordering
@@ -386,7 +386,7 @@ Moreover, these actions can provide some additional business logic.
 For example: it probably shouldn't be possible to add an object twice into a collection, so it should not be presented in the list of choices/autoComplete; conversely, only those objects in the collection should be offered as choices to be removed.
 
 * Add domain actions to add/remove from the collection
-* to create objects, xref:ug:fun:ugfun.adoc#_ugfun_programming-model_inject-services[inject] associated domain service
+* to create objects, xref:ug:fun:programming-model/inject-services.adoc[inject] associated domain service
 ** generally we recommend using the xref:rg:ant:Inject.adoc[`@Inject`] annotation with either private or default visibility
 * the service itself should use xref:rg:svc:rgsvc.adoc#_rgsvc_core-domain-api_RepositoryService[`RepositoryService`]
 * use the xref:rg:ant:MemberOrder.adoc[`@MemberOrder(name=...)`] annotation to associate an action with a property or with a collection
@@ -403,7 +403,7 @@ But for actions in particular:
 
 *  the http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome] icons can be used using the xref:rg:ant:ActionLayout/cssClassFa.adoc[`@ActionLayout(cssClassFa=...)`]
 
-It's also possible to use Font Awesome icons for the xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[domain object icon].
+It's also possible to use Font Awesome icons for the xref:ug:fun:ui-hints/object-titles-and-icons.adoc[domain object icon].
 
 So:
 - for some of the actions of your domain services or entities, annotate using `@ActionLayout(cssClass=...)` or `@ActionLayout(cssClassFa=...)`

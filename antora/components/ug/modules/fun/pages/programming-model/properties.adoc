@@ -25,7 +25,7 @@ It's also possible (using annotations) to define a link table to hold foreign ke
 Apache Isis recognises some of these annotations for JDO/DataNucleus and JAXB and infers some domain semantics from them (for example, the maximum allowable length of a string property).
 
 Since writing getter and setter methods adds quite a bit of boilerplate, it's common to use link:https://projectlombok.org/[Project Lombok] to code generate these methods at compile time (using Java's annotation processor) simply by adding the `@lombok.Getter` and `@lombok.Setter` annotations to the field.
-The xref:ugfun.adoc#_ugfun_getting-started_helloworld-archetype[HelloWorld] and xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp] archetypes use this approach.
+The xref:ug:fun:getting-started/helloworld-archetype.adoc[HelloWorld] and xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp] archetypes use this approach.
 
 
 == Value vs Reference Types
@@ -69,7 +69,7 @@ For further details on mapping associations, see the JDO/DataNucleus documentati
 ====
 
 For domain entities, the annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.
-The table in the xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[Properties vs Parameters] section provides a handy reference of each.
+The table in the xref:ug:fun:programming-model/properties-vs-parameters.adoc[Properties vs Parameters] section provides a handy reference of each.
 
 
 == Optional Properties

@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-While xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties[properties] and xref:ug:fun:ugfun.adoc#_ugfun_programming-model_collections[collections] define the state held by a domain object (its "know what" responsibilities), actions define the object's behaviour (its "know how-to" responsibilities).
+While xref:ug:fun:programming-model/properties.adoc[properties] and xref:ug:fun:programming-model/collections.adoc[collections] define the state held by a domain object (its "know what" responsibilities), actions define the object's behaviour (its "know how-to" responsibilities).
 
 An application whose domain objects have only/mostly "know-what" responsibilities is pretty dumb: it requires that the end-user know the business rules and doesn't modify the state of the domain objects such that they are invalid (for example, an "end date" being before a "start date").
 Such applications are often called CRUD applications (create/read/update/delete).
@@ -183,7 +183,7 @@ public Order invoice(
 <1> Specifies the property is optional.
 <2> Specifies the corresponding parameter is optional.
 
-See also xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[properties vs parameters].
+See also xref:ug:fun:programming-model/properties-vs-parameters.adoc[properties vs parameters].
 
 == ``String`` Parameters (Length)
 
@@ -223,7 +223,7 @@ Incidentally, note in the above example that the new value is assigned to the pr
 This is important, because it allows JDO/DataNucleus to keep track that this instance variable is "dirty" and so needs flushing to the database table before the transaction completes.
 ====
 
-See also xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[properties vs parameters].
+See also xref:ug:fun:programming-model/properties-vs-parameters.adoc[properties vs parameters].
 
 == ``BigDecimal``s (Precision)
 
@@ -249,7 +249,7 @@ public Order updateDiscount(
 <1> Specifies the property precision using xref:rg:ant:Column/scale.adoc[`@Column#scale()`]
 <2> Specifies the corresponding parameter precision using xref:rg:ant:Digits.adoc[`@Digits#fraction()`].
 
-See also xref:ug:fun:ugfun.adoc#_ugfun_programming-model_properties-vs-parameters[properties vs parameters].
+See also xref:ug:fun:programming-model/properties-vs-parameters.adoc[properties vs parameters].
 
 
 

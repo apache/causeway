@@ -45,7 +45,7 @@ Searching and using the Apache Isis docs
 
 
 |link:https://www.youtube.com/watch?v=OTNHR5EdAs8[001^] +
-Generating an app using the xref:ug:fun:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]
+Generating an app using the xref:ug:fun:getting-started/simpleapp-archetype.adoc[SimpleApp archetype]
 
 |x||||||||||
 

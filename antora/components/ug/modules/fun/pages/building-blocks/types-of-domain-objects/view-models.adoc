@@ -26,7 +26,7 @@ We explore these use cases in more detail below.
 [TIP]
 ====
 Details on how to actually write a view model (the programming model for view models) is
-xref:ug:fun:ugfun.adoc#_ugfun_programming-model_view-models[here].
+xref:ug:fun:programming-model/view-models.adoc[here].
 ====
 
 

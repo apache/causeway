@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 As explained xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_identifiers_title-and-icon[earlier], to allow the end-user to distinguish one domain object from another, it is rendered with a title and an icon.
 
-xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_object-titles-and-icons[Normally] the code to return title and icon of an object is part of the domain object's implementation.
+xref:ug:fun:ui-hints/object-titles-and-icons.adoc[Normally] the code to return title and icon of an object is part of the domain object's implementation.
 However, UI events allow this title and icon to be provided instead by a subscriber.
 UI events have higher precedence than the other mechanisms of supplying a title.
 

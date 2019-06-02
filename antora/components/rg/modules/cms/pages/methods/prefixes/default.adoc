@@ -59,7 +59,7 @@ public class ShoppingCartItem {
 
 
 
-Defaults are also supported (of course) for xref:ug:fun:ugfun.adoc#_ugfun_how-tos_contributed-members[contributed actions].
+Defaults are also supported (of course) for xref:ug:fun:how-tos/contributed-members.adoc[contributed actions].
 For example, here is a contributed action for updating category/subcategory of the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
 
 [source,java]

@@ -23,7 +23,7 @@ Domain services can also be used for a number of other purposes:
 
 * to act as a subscribers to the event bus, potentially influencing events fired by some other module (a key technique for decoupling large applications) +
 +
-This is discussed in more detail below, in the section on xref:ug:fun:ugfun.adoc#_ugfun_building-blocks_events[events].
+This is discussed in more detail below, in the section on xref:ug:fun:building-blocks/events.adoc[events].
 
 * to implement an link:https://en.wikipedia.org/wiki/Service_provider_interface[SPI] of the Apache Isis framework, most notably cross-cutting concerns such as security, command profiling, auditing and publishing.
 
@@ -46,7 +46,7 @@ Domain services are instantiated once and once only by the framework, and are us
 [TIP]
 ====
 Details on how to actually write a domain service (the programming model for domain services) is
-xref:ug:fun:ugfun.adoc#_ugfun_programming-model_domain-services[here].
+xref:ug:fun:programming-model/domain-services.adoc[here].
 ====
 
 

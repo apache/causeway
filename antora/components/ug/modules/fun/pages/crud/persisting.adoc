@@ -30,7 +30,7 @@ repositoryService.persist(customer);
 
 It's worth being aware that the framework does _not_ eagerly persist the object.
 Rather, it queues up an internal command structure representing the object persistence request.
-This is then executed either at the end of the transaction, or if a xref:ug:fun:ugfun.adoc#_ugfun_crud_finding[query is run], or if the internal queue is manually flushed using xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`]'s `flush()` method.
+This is then executed either at the end of the transaction, or if a xref:ug:fun:crud/finding.adoc[query is run], or if the internal queue is manually flushed using xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-api_TransactionService[`TransactionService`]'s `flush()` method.
 
 Alternatively, you can use:
 
