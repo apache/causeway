@@ -347,9 +347,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:ug:sec:ugsec.adoc#_ugsec_hints-and-tips_shiro-caching[Caching and other Shiro Features]`
+//`\xref:ug:sec:hints-and-tips/shiro-caching.adoc[Caching and other Shiro Features]`
 //
-//|xref:ug:sec:ugsec.adoc#_ugsec_hints-and-tips_shiro-caching[Caching and other Shiro Features]
+//|xref:ug:sec:hints-and-tips/shiro-caching.adoc[Caching and other Shiro Features]
 //
 //
 //|`adugtst`
