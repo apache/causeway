@@ -6,7 +6,7 @@ This section lists the core/runtime configuration properties recognized by Apach
 
 [NOTE]
 ====
-Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:ug:odn:ugodn.adoc#_ugodn_configuring[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:ug:vw:ugvw.adoc#_ugvw_configuration-properties[here for Wicket viewer], and xref:ug:vro:ugvro.adoc#_ugvro_configuration-properties[here for the Restful Objects viewer].
+Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:ug:odn:configuring.adoc[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:ug:vw:ugvw.adoc#_ugvw_configuration-properties[here for Wicket viewer], and xref:ug:vro:ugvro.adoc#_ugvro_configuration-properties[here for the Restful Objects viewer].
 ====
 
 
@@ -396,7 +396,7 @@ Metamodel validation is only done if full introspection is configured, see the `
 |`FQCN`
 |Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
 
-See xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] to learn more.
+See xref:ug:btb:programming-model/custom-validator.adoc[Custom Validator] to learn more.
 
 |`isis.reflector.validator.` +
 `actionCollection` +
@@ -598,27 +598,27 @@ See xref:ug:fun:ugfun.adoc#_ugfun_ui-hints_action-icons-and-css[UI hints] for mo
 |This property is now IGNORED.
 
 It was previously used to customize the programming model, this should now be done using `facets.exclude` and `facets.include`.
-See xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+See xref:ug:btb:programming-model/finetuning.adoc[finetuning the programming model] for more details.
 
 |`isis.reflector.facets.` +
 `exclude`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
 
-See xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+See xref:ug:btb:programming-model/finetuning.adoc[finetuning the programming model] for more details.
 
 |`isis.reflector.facets.` +
 `include`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
-See xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
+See xref:ug:btb:programming-model/finetuning.adoc[finetuning the programming model] for more details.
 
 |`isis.reflector.` +
 `layoutMetadataReaders`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:ug:vw:ugvw.adoc#_ugvw_layout_file-based[file-based layout]s. +
 
-See xref:ug:btb:ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
+See xref:ug:btb:programming-model/layout-metadata-reader.adoc[Layout Metadata Reader] for more information.
 
 
 

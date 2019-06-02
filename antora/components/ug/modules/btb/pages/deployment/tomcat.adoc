@@ -3,7 +3,7 @@
 include::_attributes.adoc[]
 
 
-Some pointers on how to xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[externalize configuration] when deploying to Tomcat.
+Some pointers on how to xref:ug:btb:deployment/externalized-configuration.adoc[externalize configuration] when deploying to Tomcat.
 Other servlet containers have similar mechanisms.
 
 

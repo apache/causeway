@@ -31,7 +31,7 @@ If there is an implementation of `BackgroundCommandService` (as the (non-ASF) li
 
 [NOTE]
 ====
-If background ``Command``s are used, then an external scheduler, using xref:ug:btb:ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[headless access], must also be configured.
+If background ``Command``s are used, then an external scheduler, using xref:ug:btb:headless-access/BackgroundCommandExecution.adoc[headless access], must also be configured.
 ====
 
 
@@ -278,7 +278,7 @@ If `command` is `DISABLED` or does not otherwise apply due to the action's decla
 For persisted commands, the `commandExecuteIn()` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
 
 Background execution means that the command is not executed immediately, but is available for a configured xref:rg:svc:application-layer-spi/BackgroundCommandService.adoc[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.
-See xref:ug:btb:ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here] for further information on this topic.
+See xref:ug:btb:headless-access/BackgroundCommandExecution.adoc[here] for further information on this topic.
 
 For example:
 

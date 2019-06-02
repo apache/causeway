@@ -102,7 +102,7 @@ This implementation:
 This service can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 The module also provide services that contribute to the UI.
-If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug:btb:ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug:btb:hints-and-tips/vetoing-visibility.adoc[vetoing subscriber].
 
 
 

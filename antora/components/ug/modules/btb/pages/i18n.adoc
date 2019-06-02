@@ -617,7 +617,7 @@ The basename for translation files is always `translations`; this cannot be alte
 === Externalized translation files
 
 Normally Apache Isis configuration files are read from the `WEB-INF` file.
-However, Apache Isis can be configured to read config files from an xref:ug:btb:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[external directory]; this is also supported for translations.
+However, Apache Isis can be configured to read config files from an xref:ug:btb:deployment/externalized-configuration.adoc[external directory]; this is also supported for translations.
 
 Thus, if in `web.xml` the external configuration directory has been set:
 

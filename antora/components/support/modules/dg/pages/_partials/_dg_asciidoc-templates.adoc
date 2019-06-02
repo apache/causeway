@@ -377,9 +377,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:ug:btb:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]`
+//`\xref:ug:btb:deployment/externalized-configuration.adoc[Externalized Configuration]`
 //
-//|xref:ug:btb:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]
+//|xref:ug:btb:deployment/externalized-configuration.adoc[Externalized Configuration]
 //
 //
 //

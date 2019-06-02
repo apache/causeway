@@ -37,7 +37,7 @@ serviceRegistry.injectServicesInto(vm);
 
 [TIP]
 ====
-See this xref:ug:btb:ugbtb.adoc#_ugbtb_hints-and-tips_view-model-instantiation[tip] for further discussion about instantiating view models.
+See this xref:ug:btb:hints-and-tips/view-model-instantiation.adoc[tip] for further discussion about instantiating view models.
 ====
 
 View models must have a no-arg constructor; this is used internally by the framework for subsequent "recreation".

@@ -5,7 +5,7 @@ include::_attributes.adoc[]
 
 
 Fetch groups provide a means to hint to DataNucleus that it should perform a SQL join when querying.
-A common use case is to avoid the xref:ugodn.adoc#_ugodn_hints-and-tips_diagnosing-n-plus-1[n+1] issue.
+A common use case is to avoid the xref:ug:odn:hints-and-tips/diagnosing-n-plus-1.adoc[n+1] issue.
 
 (So far as I could ascertain) it isn't possible to specify fetch group hints using JDOQL, but it is possible to specify them using the programmatic API or using typesafe queries.
 

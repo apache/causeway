@@ -36,7 +36,7 @@ public interface BackgroundCommandService2 {
 
 == "Internal" SPI
 
-The `BackgroundCommandExecution` (in isis-core) is an abstract template class for  xref:ug:btb:ugbtb.adoc#_ugbtb_headless-access_AbstractIsisSessionTemplate[headless access], that defines an abstract hook method to obtain background `Command`s to be executed:
+The `BackgroundCommandExecution` (in isis-core) is an abstract template class for  xref:ug:btb:headless-access/AbstractIsisSessionTemplate.adoc[headless access], that defines an abstract hook method to obtain background `Command`s to be executed:
 
 [source,java]
 ----
@@ -88,7 +88,7 @@ The imperative approach involves explicitly calling the xref:rg:svc:rgsvc.adoc#_
 The (non-ASF) link:http://platform.incode.org[Incode Platform^]'s command module provides an implementation of this service (`BackgroundCommandService`), and also provides a number of related domain services (`BackgroundCommandServiceJdo`, `BackgroundCommandJdoRepository` and `BackgroundCommandServiceJdoContributions`).
 This module also provides service implementations of the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`].
 
-If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug:btb:ugbtb.adoc#_ugbtb_hints-and-tips_vetoing-visibility[vetoing subscriber].
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug:btb:hints-and-tips/vetoing-visibility.adoc[vetoing subscriber].
 
 
 

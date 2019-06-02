@@ -4,7 +4,7 @@ include::_attributes.adoc[]
 
 
 
-The `BackgroundCommandExecution` class (a subclass of xref:ug:btb:ugbtb.adoc#_ugbtb_headless-access_AbstractIsisSessionTemplate[AbstractIsisSessionTemplate]) is intended to simplify the execution of background ``Command``s persisted by way of the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] and the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`].
+The `BackgroundCommandExecution` class (a subclass of xref:ug:btb:headless-access/AbstractIsisSessionTemplate.adoc[AbstractIsisSessionTemplate]) is intended to simplify the execution of background ``Command``s persisted by way of the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_CommandService[`CommandService`] and the xref:rg:svc:rgsvc.adoc#_rgsvc_application-layer-spi_BackgroundCommandService[`BackgroundCommandService`].
 
 Its signature is:
 
