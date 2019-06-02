@@ -131,7 +131,7 @@ This can be useful for generic viewers.
 
 * `ContentNegotiationServiceOrgApacheIsisV1` +
 +
-which returns xref:ug:vro:ugvro.adoc#_ugvro_simplified-representations[simplified representations]
+which returns xref:ug:vro:simplified-representations.adoc[simplified representations]
 
 
 

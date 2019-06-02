@@ -31,7 +31,7 @@ xref:rg:fis:presentation-layer/ContentNegotiationService.adoc[`ContentNegotiatio
 HTTP `Accept` header.  If the implementation does not recognize the value of the header, if can simply return `null`. +
 +
 The framework provides a number of implementations; an implementation that handles the
-xref:ug:vro:ugvro.adoc#_ugvro_simplified-representations[simplified representation] of the Apache Isis profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a
+xref:ug:vro:simplified-representations.adoc[simplified representation] of the Apache Isis profile; an implementation that provides support for the `x-ro-domain-type` parameter, and a
 default/fallback implementation that returns the representations defined by the RO spec.
 
 * `ContentMappingService` +

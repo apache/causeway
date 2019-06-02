@@ -331,9 +331,9 @@ include::_attributes.adoc[]
 //
 //for example:
 //
-//`\xref:ug:vro:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]`
+//`\xref:ug:vro:ro-spec.adoc[RestfulObjects specification]`
 //
-//|xref:ug:vro:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]
+//|xref:ug:vro:ro-spec.adoc[RestfulObjects specification]
 //
 //
 //

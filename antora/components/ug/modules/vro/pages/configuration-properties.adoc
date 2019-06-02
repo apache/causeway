@@ -35,7 +35,7 @@ The following configuration properties are supported:
 `ContentNegotiationServiceForRestfulObjectsV1_0` service). Will otherwise accept anything.  +
 
 This is convenient because it allows the `Accept` header to be set to that of the
-xref:ug:vro:ugvro.adoc#_ugvro_simplified-representations[Apache Isis profile] for all resources, rather than simply the
+xref:ug:vro:simplified-representations.adoc[Apache Isis profile] for all resources, rather than simply the
 handful of resources that supported that profile.
 
 |===

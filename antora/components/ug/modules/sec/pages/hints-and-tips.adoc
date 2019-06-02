@@ -13,7 +13,7 @@ See also hints-n-tips chapters in the:
 
 * the xref:ug:vw:ugvw.adoc#_ugvw_hints-and-tips[Wicket viewer] guide
 
-* the xref:ug:vro:ugvro.adoc#_ugvro_hints-and-tips[Restful Objects viewer] guide
+* the xref:ug:vro:hints-and-tips.adoc[Restful Objects viewer] guide
 
 * the xref:ug:odn:hints-and-tips.adoc[Datanucleus ObjectStore] guide
 

@@ -6,7 +6,7 @@ This section lists the core/runtime configuration properties recognized by Apach
 
 [NOTE]
 ====
-Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:ug:odn:configuring.adoc[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:ug:vw:ugvw.adoc#_ugvw_configuration-properties[here for Wicket viewer], and xref:ug:vro:ugvro.adoc#_ugvro_configuration-properties[here for the Restful Objects viewer].
+Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:ug:odn:configuring.adoc[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:ug:vw:ugvw.adoc#_ugvw_configuration-properties[here for Wicket viewer], and xref:ug:vro:configuration-properties.adoc[here for the Restful Objects viewer].
 ====
 
 
